@@ -1,0 +1,37 @@
+<!doctype html><meta charset="utf-8">
+<div id="list"><div id="a" style="height:20px">A</div><div id="b" style="height:20px">B</div></div>
+<span id="label">Draft</span> <span id="num">9</span>
+<div id="pop" hidden style="width:50px;height:20px">pop</div>
+<div style="position:relative;width:300px"><b id="ind" style="position:absolute;left:0;width:50px;height:4px;background:#000"></b></div>
+<script type="module">
+import { swap, digits, flip, enter, exit, edges, track } from '../../dist/dom/index.js';
+import { setMotionState } from '../../dist/core/spring.js';
+const out = window.__out = {};
+const sample = (el, prop) => getComputedStyle(el)[prop];
+// swap
+swap(document.getElementById('label'), 'Published');
+await new Promise(r => setTimeout(r, 40)); out.swapMid = document.getElementById('label').style.opacity;
+await new Promise(r => setTimeout(r, 600)); out.swapEnd = [document.getElementById('label').textContent, document.getElementById('label').getAttribute('style')];
+// digits
+digits(document.getElementById('num'), 10);
+await new Promise(r => setTimeout(r, 700)); out.digits = [document.getElementById('num').textContent, document.getElementById('num').children.length];
+// flip
+const list = document.getElementById('list');
+flip(list, () => list.prepend(document.getElementById('b')));
+await new Promise(r => setTimeout(r, 30)); out.flipMid = document.getElementById('b').style.transform;
+await new Promise(r => setTimeout(r, 700)); out.flipEnd = document.getElementById('b').getAttribute('style');
+// presence
+const pop = document.getElementById('pop');
+enter(pop); await new Promise(r => setTimeout(r, 50)); out.enterMid = pop.style.opacity;
+exit(pop); await new Promise(r => setTimeout(r, 600)); out.exitEnd = pop.hidden;
+// edges
+const ind = document.getElementById('ind'); ind.style.left = '200px';
+edges(ind, { left: ind.getBoundingClientRect().left - 200, right: ind.getBoundingClientRect().right - 200 });
+await new Promise(r => setTimeout(r, 50)); out.edgesMid = ind.style.transform;
+await new Promise(r => setTimeout(r, 700)); out.edgesEnd = ind.style.transform;
+// reduced motion jumps
+setMotionState(() => ({ reduced: true }));
+swap(document.getElementById('label'), 'Instant'); out.reduced = document.getElementById('label').textContent;
+setMotionState(null);
+out.done = true;
+</script>
