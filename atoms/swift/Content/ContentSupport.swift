@@ -56,3 +56,41 @@ struct BasicsHeightReveal<Content: View>: View {
             .accessibilityHidden(!open)
     }
 }
+
+/// Like `EdgesIndicator` but vertical: the leading edge (top or bottom) moves first and the trailing edge follows `Motion.lag` later.
+struct BasicsVerticalEdges<S: Shape>: View {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+    let frame: CGRect
+    let shape: S
+    let style: AnyShapeStyle
+    @State private var minY: CGFloat?
+    @State private var maxY: CGFloat?
+
+    init(frame: CGRect, shape: S, style: some ShapeStyle) {
+        self.frame = frame
+        self.shape = shape
+        self.style = AnyShapeStyle(style)
+    }
+
+    var body: some View {
+        let lo = minY ?? frame.minY, hi = maxY ?? frame.maxY
+        shape.fill(style)
+            .frame(width: frame.width, height: max(0, hi - lo))
+            .position(x: frame.midX, y: (lo + hi) / 2)
+            .onAppear {
+                minY = frame.minY
+                maxY = frame.maxY
+            }
+            .onChange(of: frame) { old, new in
+                guard !reduce else {
+                    minY = new.minY
+                    maxY = new.maxY
+                    return
+                }
+                let down = new.minY >= old.minY
+                withAnimation(.motion(.base).delay(down ? Motion.lag : 0)) { minY = new.minY }
+                withAnimation(.motion(.base).delay(down ? 0 : Motion.lag)) { maxY = new.maxY }
+            }
+            .allowsHitTesting(false)
+    }
+}
