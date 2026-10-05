@@ -28,3 +28,36 @@ struct DataVelocity {
         lastX = x; lastT = t; primed = true
     }
 }
+
+/// A segmented control whose indicator uses the lagging-edge rule (`EdgesIndicator`).
+struct DataSegmented: View {
+    let labels: [String]
+    @Binding var selection: Int
+    var spread = false
+    @State private var frames: [AnyHashable: CGRect] = [:]
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            if frames.count == labels.count, let f = frames[selection] {
+                EdgesIndicator(frame: f, shape: Capsule(), style: .background)
+            }
+            HStack(spacing: 0) {
+                ForEach(labels.indices, id: \.self) { i in
+                    Button { selection = i } label: {
+                        Text(labels[i]).font(.subheadline.weight(.medium)).padding(.horizontal, 12).padding(.vertical, 7).frame(maxWidth: spread ? .infinity : nil)
+                    }
+                    .buttonStyle(.plain).reportFrame(i, in: "dataSegmented")
+                    .accessibilityAddTraits(i == selection ? .isSelected : [])
+                }
+            }
+        }
+        .padding(3).coordinateSpace(name: "dataSegmented")
+        .onPreferenceChange(FramePreferenceKey.self) { frames = $0 }
+        .background(.quaternary, in: Capsule())
+    }
+}
+
+/// Fraction (0...1) of a spring step that began at `start`, evaluated at time `t`.
+func dataStep(_ t: Double, start: Double, _ preset: SpringPreset = .base) -> Double {
+    1 - Motion.resp(t - start, x0: 1, v0: 0, preset)
+}
