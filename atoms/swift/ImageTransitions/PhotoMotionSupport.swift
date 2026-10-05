@@ -38,7 +38,7 @@ struct PhFollow<Content: View>: View {
 
     var body: some View {
         let c = clock ?? PhClock(target, preset)
-        let _ = c.sync(target, epoch: epoch, reduce: reduce)
+        let _ = { c.preset = preset; c.sync(target, epoch: epoch, reduce: reduce) }()
         TimelineView(.animation(paused: idle)) { _ in content(c.value) }
             .onAppear { if clock == nil { clock = c } }
             .task(id: "\(target)-\(epoch)") {
@@ -237,6 +237,8 @@ func phSoftEdge(_ p: Double, soft: Double = 0.25, start: UnitPoint = .top, end: 
 struct PhDrag<Content: View>: View {
     var preset: SpringPreset = .base
     var enabled = true
+    /// A resting offset commanded from outside (undo, buttons). The offset springs there from wherever it is.
+    var rest: CGSize = .zero
     var decide: (CGSize, CGSize) -> CGSize = { _, _ in .zero }
     var onRelease: (CGSize) -> Void = { _ in }
     @ViewBuilder var content: (CGSize, Bool) -> Content
@@ -267,6 +269,12 @@ struct PhDrag<Content: View>: View {
                 key += 1
                 onRelease(to)
             }, including: enabled ? .all : .none)
+        .onChange(of: rest) { _, r in
+            if cx.track.target == r.width && cy.track.target == r.height { return }
+            cx.release(from: cx.value, velocity: 0, to: r.width, reduce: reduce, preset: preset)
+            cy.release(from: cy.value, velocity: 0, to: r.height, reduce: reduce, preset: preset)
+            key += 1
+        }
         .task(id: key) {
             idle = false
             try? await Task.sleep(nanoseconds: UInt64((preset.settleTime() + 0.2) * 1_000_000_000))
