@@ -1,0 +1,36 @@
+/* motion-kit tokens. Durations are the 99% settle time of a critically damped spring; --motion-ease-spring
+   matches that response within 2%, so CSS transitions feel the same as the JS springs. Nothing overshoots. */
+:root {
+  --motion-duration-snap: 200ms;
+  --motion-duration-base: 300ms;
+  --motion-duration-soft: 440ms;
+  --motion-duration-lazy: 740ms;
+  --motion-duration-exit: 100ms;
+  --motion-lag: 60ms;
+  --motion-stagger-max: 300ms;
+  --motion-arrive-opacity: 0.45;
+  --motion-drift: 4px;
+  --motion-ease-spring: cubic-bezier(.2, .15, .2, 1);
+  --motion-ease-exit: cubic-bezier(.4, 0, 1, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) {
+    --motion-duration-snap: 0s;
+    --motion-duration-base: 0s;
+    --motion-duration-soft: 0s;
+    --motion-duration-lazy: 0s;
+    --motion-duration-exit: 0s;
+    --motion-lag: 0s;
+  }
+}
+
+:root[data-motion="reduced"],
+:root[data-reduced-motion="true"] {
+  --motion-duration-snap: 0s;
+  --motion-duration-base: 0s;
+  --motion-duration-soft: 0s;
+  --motion-duration-lazy: 0s;
+  --motion-duration-exit: 0s;
+  --motion-lag: 0s;
+}

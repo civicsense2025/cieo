@@ -1,0 +1,25 @@
+
+
+atom({ id:'speeddial', cat:'Navigation', name:'Action button fan-out', block:'cta-button, Material speed dial', fam:['M','X','E'], tall:true, big:true,
+  html:`<div class="col" style="align-items:center;gap:10px;width:100%"><div class="seg sd" style="display:flex"><div class="ind"></div><button>Up</button><button>Left</button><button>Arc</button></div><div class="fr card" style="position:relative;width:min(300px,86%);height:262px;flex:none;overflow:hidden;background:var(--bg)"><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><button class="fab" aria-label="Create" aria-expanded="false" style="position:absolute;right:16px;bottom:16px;width:52px;height:52px;border:0;border-radius:16px;background:var(--ink);color:var(--card);cursor:pointer;display:grid;place-items:center;z-index:3;box-shadow:var(--shadow)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div>`,
+  desc:'Opening turns the plus into a cross and fans the actions out from the button, 40ms apart, upward, to the side, or along an arc. Labels follow their buttons in the straight layouts; the arc stays icon-only so labels never collide. Closing gathers them back in reverse order.',
+  api:'item[i].{x,y}.set(open ? layout(dir, i) : 0, S.base, t + i·0.04)   icon.rot.set(open ? 45 : 0)',
+  init(st){
+    const seg = $(st,'.sd'), ind = $(seg,'.ind'), btns = $$(seg,'button'), fr = $(st,'.fr'), fab = $(st,'.fab'), scr = $(st,'.scr'), plus = $(fab,'svg');
+    const ACT = [['Page','<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>'],['Post','<path d="M4 20h4L19 9l-4-4L4 16z"/>'],['Photo','<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2"/><path d="m21 16-5-5-9 8"/>'],['Product','<path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/>']];
+    const items = ACT.map(([n,d]) => { const w = document.createElement('div'); w.style.cssText = 'position:absolute;right:22px;bottom:22px;width:40px;height:40px;z-index:2';
+      w.innerHTML = `<span class="lb small" style="position:absolute;top:50%;white-space:nowrap;background:var(--card);box-shadow:var(--shadow);padding:3px 8px;border-radius:6px;font-weight:500">${n}</span><button aria-label="New ${n.toLowerCase()}" style="width:40px;height:40px;border:0;border-radius:12px;background:var(--card);color:var(--ink);box-shadow:var(--shadow);cursor:pointer;display:grid;place-items:center">${ic(d,18)}</button>`;
+      fr.appendChild(w); return { w, lb:$(w,'.lb'), x:new Track(0), y:new Track(0), o:new Track(0) }; });
+    const e = edges(0,0), rot = new Track(0), so = new Track(0); let mode = 0, open = false;
+    const spot = i => { const s = 48, R = 112; if (mode === 0) return [0, -(i + 1)*s]; if (mode === 1) return [-(i + 1)*s, 0]; const a = (90 + i*30)*Math.PI/180; return [R*Math.cos(a), -R*Math.sin(a)]; };
+    const set = o => { open = o; fab.setAttribute('aria-expanded', o); const t0 = now(), n = items.length; rot.set(o ? 45 : 0); so.set(o ? 1 : 0, o ? S.base : S.snap);
+      items.forEach((it,i) => { const d = (o ? i : n - 1 - i)*.04, [x,y] = o ? spot(i) : [0,0]; it.x.set(x, S.base, t0 + d); it.y.set(y, S.base, t0 + d); it.o.set(o ? 1 : 0, o ? S.base : S.snap, t0 + d); });
+      items.forEach(it => { const side = mode === 0; it.lb.style.display = mode === 2 ? 'none' : ''; Object.assign(it.lb.style, side ? { right:'48px', left:'', top:'50%', bottom:'', transform:'translateY(-50%)' } : { left:'50%', right:'', top:'', bottom:'46px', transform:'translateX(-50%)' }); }); };
+    fab.onclick = () => set(!open); scr.onclick = () => set(false); items.forEach(it => $(it.w,'button').onclick = () => set(false));
+    const sel = (i, inst) => { mode = i; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); if (open) set(true); };
+    btns.forEach((b,i) => b.onclick = () => sel(i)); const init = () => sel(mode, true); document.fonts.ready.then(init); requestAnimationFrame(init);
+    st.addEventListener('keydown', ev => { if (ev.key === 'Escape' && open){ set(false); fab.focus(); } });
+    return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
+      plus.style.transform = `rotate(${rot.at(t).toFixed(2)}deg)`; const s = clamp(so.at(t)); scr.style.opacity = (s*.25).toFixed(3); scr.style.pointerEvents = s > .5 ? 'auto' : 'none';
+      items.forEach(it => { const o = clamp(it.o.at(t)); it.w.style.transform = `translate(${px(it.x.at(t))},${px(it.y.at(t))}) scale(${(.6 + .4*o).toFixed(3)})`; it.w.style.opacity = o.toFixed(3); it.w.style.pointerEvents = o > .5 ? 'auto' : 'none'; it.lb.style.opacity = clamp(o*1.4 - .4).toFixed(3); }); };
+  }});

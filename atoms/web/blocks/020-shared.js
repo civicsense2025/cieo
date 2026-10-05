@@ -1,0 +1,4 @@
+
+
+/* ---------- Media ---------- */
+const scene = (ink) => `<svg viewBox="0 0 360 210" preserveAspectRatio="xMidYMid slice" width="100%" height="100%"><rect width="360" height="210" fill="${ink ? 'var(--raised)' : 'var(--card)'}"/><circle cx="270" cy="62" r="26" fill="${ink ? 'var(--accent)' : 'none'}" stroke="var(--faint)" stroke-width="${ink ? 0 : 1.5}"/><path d="M0 170 L90 90 L160 150 L230 80 L360 180 L360 210 L0 210Z" fill="${ink ? 'var(--ink)' : 'none'}" stroke="var(--faint)" stroke-width="${ink ? 0 : 1.5}"/><path d="M0 190 L120 140 L220 190 L360 150" fill="none" stroke="${ink ? 'var(--muted)' : 'var(--faint)'}" stroke-width="1.5" ${ink ? '' : 'stroke-dasharray="4 4"'}/></svg>`;

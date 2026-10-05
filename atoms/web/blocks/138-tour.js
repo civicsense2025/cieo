@@ -1,0 +1,18 @@
+
+
+atom({ id:'tour', cat:'Guidance', name:'Spotlight tour', block:'onboarding, admin', fam:['M','S','X'], wide:true, tall:true,
+  html:`<div class="ui card" style="position:relative;width:min(600px,94%);height:280px;overflow:hidden"><header class="row" style="height:48px;padding:0 14px;gap:10px;border-bottom:1px solid var(--line-soft)"><b class="t0">Pages</b><span style="flex:1"></span><button class="btn t1">Preview</button><button class="btn ink t2">Publish</button></header><div class="row" style="height:calc(100% - 48px)"><nav class="col t3 small" style="width:140px;padding:12px;gap:8px;border-right:1px solid var(--line-soft);height:100%"><span>Home</span><span>About</span><span>Journal</span></nav><div style="flex:1;padding:16px" class="small muted">Your page canvas</div></div><div class="hole" style="position:absolute;border-radius:10px;box-shadow:0 0 0 9999px color-mix(in oklab, var(--ink) 45%, transparent);pointer-events:none;opacity:0"></div><div class="tip card" style="position:absolute;width:220px;padding:12px;visibility:hidden"><div class="tc" style="position:relative;height:58px"></div><div class="row" style="justify-content:space-between;margin-top:8px"><span class="small muted st num"></span><span class="row" style="gap:6px"><button class="btn bk" style="padding:4px 10px">Back</button><button class="btn ink nx" style="padding:4px 10px">Next</button></span></div></div></div><button class="btn sg" style="position:absolute;top:10px;right:12px">Start tour</button>`,
+  desc:'The spotlight is one hole whose position, size and radius spring from target to target, so the dimmed area never flickers. The tooltip glides alongside and its text swaps with each step.',
+  api:'hole.{x,y,w,h}.set(target rect + 6)   tip.{x,y}.set(beside(target))   copy.to(step)',
+  init(st){
+    const ui = $(st,'.ui'), hole = $(st,'.hole'), tip = $(st,'.tip'), tc = $(st,'.tc'), stx = $(st,'.st');
+    const STEPS = [['.t3','Your pages','Every page lives here. Drag to reorder them.'],['.t1','Preview','See the page as a reader would, on any device.'],['.t2','Publish','Sends every changed page live at once.']];
+    const L = STEPS.map(([,h,p]) => { const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += 'flex-direction:column;align-items:flex-start;justify-content:flex-start;white-space:normal;gap:2px'; e.innerHTML = `<b class="small">${h}</b><span class="small muted">${p}</span>`; tc.appendChild(e); return e; });
+    const H = { x:new Track(0), y:new Track(0), w:new Track(0), h:new Track(0) }, tx = new Track(0), ty = new Track(0), o = new Track(0), sw = new Swap(0); let i = -1;
+    const go = (n, inst) => { if (n >= STEPS.length || n < 0){ o.set(0, S.snap); i = -1; return; } i = n; const r = relRect(ui, $(ui, STEPS[n][0]).getBoundingClientRect()), k = inst ? 'jump' : 'set';
+      H.x[k](r.x - 6); H.y[k](r.y - 6); H.w[k](r.w + 12); H.h[k](r.h + 12); const right = r.x + r.w + 240 < ui.clientWidth; tx[k](right ? r.x + r.w + 14 : Math.max(8, r.x + r.w - 220)); ty[k](right ? Math.max(8, r.y) : r.y + r.h + 14);
+      inst ? (sw.cur = n, sw.prev = null, sw.t = -9) : sw.to(n); stx.textContent = `${n + 1} of ${STEPS.length}`; $(st,'.nx').textContent = n === STEPS.length - 1 ? 'Done' : 'Next'; o.set(1); };
+    $(st,'.sg').onclick = () => go(0, true); $(st,'.nx').onclick = () => go(i + 1); $(st,'.bk').onclick = () => i > 0 && go(i - 1);
+    return t => { const p = clamp(o.at(t)); Object.assign(hole.style, { left:px(H.x.at(t)), top:px(H.y.at(t)), width:px(H.w.at(t)), height:px(H.h.at(t)), opacity:p.toFixed(3) });
+      tip.style.left = px(tx.at(t)); tip.style.top = px(ty.at(t)); pop(tip, p, -6); L.forEach((e,k) => sw.apply(e,k,t)); };
+  }});

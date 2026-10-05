@@ -1,0 +1,18 @@
+
+
+atom({ id:'colorpicker', cat:'Design tools', name:'Color picker', block:'section (background), theme settings', fam:['D','M'], tall:true,
+  html:`<div class="card col" style="width:240px;padding:12px;gap:10px"><div class="sv" style="position:relative;height:130px;border-radius:8px;cursor:crosshair;touch-action:none"><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(90deg,#fff,transparent)"></div><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(0deg,#000,transparent)"></div><i class="k1" style="position:absolute;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><div class="hu" style="position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;touch-action:none"><i class="k2" style="position:absolute;top:-2px;width:16px;height:16px;margin-left:-8px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><div class="row" style="gap:8px"><i class="sw" style="width:28px;height:28px;border-radius:7px;border:1px solid var(--line)"></i><code class="hx small num" style="flex:1"></code></div><div class="row ps" style="gap:6px"></div></div>`,
+  desc:'Both handles follow the pointer exactly while dragging. Picking a preset springs both handles to that color, so you can see where it lives in the space.',
+  api:'held ? pointer : {s,v,h}.set(preset)   swatch = hsv(h, s, v)',
+  init(st){
+    const sv = $(st,'.sv'), hu = $(st,'.hu'), k1 = $(st,'.k1'), k2 = $(st,'.k2'), sw = $(st,'.sw'), hx = $(st,'.hx'), ps = $(st,'.ps');
+    const H = new Track(72), Sa = new Track(.75), V = new Track(.37); let held = null;
+    const hex = (h, s, v) => { const f = n => { const k = (n + h/60) % 6, c = v - v*s*Math.max(0, Math.min(k, 4 - k, 1)); return Math.round(c*255).toString(16).padStart(2,'0'); }; return '#' + f(5) + f(3) + f(1); };
+    const toHsv = hx2 => { const r = parseInt(hx2.slice(1,3),16)/255, g = parseInt(hx2.slice(3,5),16)/255, b = parseInt(hx2.slice(5,7),16)/255, mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx - mn; let h = 0;
+      if (d){ h = mx === r ? ((g - b)/d) % 6 : mx === g ? (b - r)/d + 2 : (r - g)/d + 4; h *= 60; if (h < 0) h += 360; } return [h, mx ? d/mx : 0, mx]; };
+    drag(sv, { down:p => { held = 'sv'; Sa.jump(clamp(p.x/p.w)); V.jump(clamp(1 - p.y/p.h)); }, move:p => { Sa.jump(clamp(p.x/p.w)); V.jump(clamp(1 - p.y/p.h)); }, up:() => held = null });
+    drag(hu, { down:p => { held = 'hu'; H.jump(clamp(p.x/p.w)*360); }, move:p => H.jump(clamp(p.x/p.w)*360), up:() => held = null });
+    ['#595D17','#B0342F','#B45309','#2F5DB0','#10141A'].forEach(c => { const b = document.createElement('button'); b.setAttribute('aria-label', 'Preset ' + c); b.style.cssText = `width:24px;height:24px;border-radius:6px;border:1px solid var(--line);background:${c};cursor:pointer`; b.onclick = () => { const [h,s,v] = toHsv(c); H.set(h); Sa.set(s); V.set(v); }; ps.appendChild(b); });
+    return t => { const h = H.at(t), s = clamp(Sa.at(t)), v = clamp(V.at(t)), c = hex(((h % 360) + 360) % 360, s, v);
+      sv.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; k1.style.left = (s*100).toFixed(2) + '%'; k1.style.top = ((1 - v)*100).toFixed(2) + '%'; k1.style.background = c; k2.style.left = (clamp(h/360)*100).toFixed(2) + '%'; k2.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; sw.style.background = c; hx.textContent = c.toUpperCase(); };
+  }});

@@ -1,0 +1,3 @@
+
+
+const mapBg = `<svg viewBox="0 0 600 280" preserveAspectRatio="xMidYMid slice" width="100%" height="100%" style="position:absolute;inset:0"><rect width="600" height="280" fill="var(--raised)"/><path d="M0 190 C120 170 180 230 300 200 S480 140 600 170 L600 280 L0 280Z" fill="var(--accent-tint)"/><path d="M-10 90 L620 120 M140 -10 L190 300 M380 -10 L340 300 M0 240 L600 60" stroke="var(--card)" stroke-width="7" fill="none"/></svg>`;

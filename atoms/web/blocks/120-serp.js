@@ -1,0 +1,14 @@
+
+
+atom({ id:'serp', cat:'SEO', name:'Search result preview', block:'doc-meta (SEO settings)', fam:['M'], wide:true, tall:true,
+  html:`<div class="row" style="width:min(620px,94%);gap:18px;align-items:flex-start;flex-wrap:wrap"><div class="col" style="flex:1;min-width:240px;gap:10px"><label class="small" for="seo-t" style="font-weight:500">Title</label><input id="seo-t" value="Spring launch: new member tiers and yearly pricing" style="border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:14px var(--sans);outline:none"><div class="lm" style="height:4px;border-radius:2px;background:var(--raised);overflow:hidden"><i style="display:block;height:100%"></i></div><label class="small" for="seo-d" style="font-weight:500">Description</label><textarea id="seo-d" rows="3" style="resize:none;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);outline:none">Members now get first-day access to every drop, and yearly plans save 20%. Here is everything that changes on Thursday.</textarea><div class="lm" style="height:4px;border-radius:2px;background:var(--raised);overflow:hidden"><i style="display:block;height:100%"></i></div></div><div class="card col" style="flex:1;min-width:240px;padding:14px;gap:2px"><span class="small muted">lamina.site › journal › spring-launch</span><b class="pt" style="font-size:17px;font-weight:500;line-height:1.3;color:var(--accent)"></b><span class="pd small" style="color:var(--muted);line-height:1.5"></span></div></div>`,
+  desc:'The preview truncates exactly where a search engine would, as you type. Under each field a length bar fills on a spring and shifts from success to warning to danger as you near and pass the limit.',
+  api:'shown = cut(text, limit) + "…"   bar.set(len/limit)   color = band(len/limit)',
+  init(st){
+    const [ti, de] = [$(st,'#seo-t'), $(st,'#seo-d')], bars = $$(st,'.lm i'), pt = $(st,'.pt'), pd = $(st,'.pd');
+    const F = [[ti, 60, pt], [de, 155, pd]].map(([el, lim, out], i) => ({ el, lim, out, bar:bars[i], v:new Track(0), k1:new Track(0), k2:new Track(0) }));
+    const upd = inst => F.forEach(f => { const n = f.el.value.length, r = n/f.lim, k = inst ? 'jump' : 'set'; f.v[k](Math.min(1, r)); f.k1[k](r > .7 ? 1 : 0); f.k2[k](r > .7 && r <= 1 ? 1 : 0);
+      f.out.textContent = n > f.lim ? f.el.value.slice(0, f.lim - 1).replace(/\s+\S*$/, '') + ' …' : f.el.value; f.el.setAttribute('aria-invalid', n > f.lim); });
+    F.forEach(f => f.el.oninput = () => upd()); upd(true);
+    return t => F.forEach(f => { f.bar.style.width = (clamp(f.v.at(t))*100).toFixed(2) + '%'; f.bar.style.background = f.k1.at(t) < .02 ? 'var(--success)' : bandColor(clamp(f.k1.at(t)), clamp(f.k2.at(t))); });
+  }});

@@ -1,0 +1,12 @@
+
+
+atom({ id:'charring', cat:'Social', name:'Character limit ring', block:'form (long answer), comments', fam:['M','S'],
+  html:`<div class="card col" style="width:min(320px,90%);padding:12px;gap:10px"><textarea id="post-ta" rows="3" placeholder="What’s new?" style="resize:none;border:0;background:none;color:var(--ink);font:15px/1.5 var(--sans);outline:none">Spring launch is Thursday. Members get first-day access to every drop, and yearly plans now save 20%.</textarea><div class="row" style="justify-content:flex-end;gap:10px"><span style="position:relative;width:26px;height:26px"><svg viewBox="0 0 26 26" width="26" height="26" aria-hidden="true"><circle cx="13" cy="13" r="10" fill="none" stroke="var(--raised)" stroke-width="2.5"/><circle class="rg" cx="13" cy="13" r="10" fill="none" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 13 13)"/></svg><span class="lft num" style="position:absolute;inset:0;display:grid;place-items:center;font:600 10px var(--sans)"></span></span><button class="btn ink pb">Post</button></div></div>`,
+  desc:'The ring fills with the length of the post. Under 20 characters left it grows slightly and shows the countdown inside; past the limit it turns danger, the number goes negative and Post is disabled.',
+  api:'ring.set(len/280)   size.set(left < 20)   color = band(left)',
+  init(st){
+    const ta = $(st,'textarea'), rg = $(st,'.rg'), lft = $(st,'.lft'), pb = $(st,'.pb'), MAX = 140, v = new Track(0), k1 = new Track(0), k2 = new Track(0), big = new Track(0);
+    const upd = inst => { const n = ta.value.length, left = MAX - n, k = inst ? 'jump' : 'set'; v[k](Math.min(1, n/MAX)); k1[k](left < 20 ? 1 : 0); k2[k](left < 0 ? 1 : 0); big[k](left < 20 ? 1 : 0); lft.textContent = left < 20 ? left : ''; pb.disabled = left < 0 || !n; ta.setAttribute('aria-invalid', left < 0); };
+    ta.oninput = () => upd(); upd(true);
+    return t => { const a = clamp(k1.at(t)), b = clamp(k2.at(t)); rg.style.strokeDashoffset = (1 - clamp(v.at(t))).toFixed(4); rg.style.stroke = `color-mix(in oklab, var(--danger) ${(b*100).toFixed(1)}%, ${mix(a,'var(--warning)','var(--accent)')})`; rg.parentNode.style.transform = `scale(${(1 + .2*clamp(big.at(t))).toFixed(4)})`; lft.style.color = b > .5 ? 'var(--danger)' : 'var(--muted)'; };
+  }});

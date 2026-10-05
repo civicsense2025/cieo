@@ -1,0 +1,16 @@
+
+
+atom({ id:'offline', cat:'Guidance', name:'Offline banner', block:'announcement, alert', fam:['X','S','T'], tall:true,
+  html:`<div class="card" style="position:relative;width:min(340px,90%);height:220px;overflow:hidden"><div class="bn small" role="status" style="position:absolute;left:0;right:0;top:0;height:38px;display:flex;align-items:center;padding:0 14px;gap:8px"><span class="tx" style="position:relative;flex:1;height:20px"></span></div><div class="small muted bdy" style="padding:16px;line-height:1.6">Your draft keeps saving to this device while you are offline, and syncs when the connection returns.</div></div><button class="btn tg" style="position:absolute;top:10px;right:12px">Go offline</button>`,
+  desc:'Losing the connection drops a warning banner that pushes content down. Reconnecting swaps the text to a spinner, then to a success message, and the banner leaves after a moment.',
+  api:'offline: y.set(0), tone warning   reconnect: to("syncing") → +1.2s "online", success → +1.6s y.set(−H)',
+  init(st){
+    const bn = $(st,'.bn'), tx = $(st,'.tx'), bdy = $(st,'.bdy'), tg = $(st,'.tg');
+    const M = { off:`<span style="display:inline-flex;align-items:center;gap:8px"><i class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--warning)"></i>You’re offline. Changes will sync later.</span>`, sync:`<span style="display:inline-flex;align-items:center;gap:8px"><svg class="spn" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 3a9 9 0 0 1 9 9"/></svg>Reconnecting and syncing 3 changes…</span>`, on:`<span style="display:inline-flex;align-items:center;gap:6px;color:var(--success);font-weight:500">${ic(I.check,14,3)}Back online. All changes synced.</span>` }, L = {};
+    for (const k in M){ const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.innerHTML = M[k]; tx.appendChild(e); L[k] = e; }
+    const y = new Track(0), tone = new Track(0), sw = new Swap('off'), dot = $(L.off,'.dot'), spn = $(L.sync,'.spn'); let state = 'online', q = [];
+    tg.onclick = () => { if (state === 'online'){ state = 'off'; sw.cur = 'off'; sw.prev = null; sw.t = -9; tone.jump(0); y.set(1); tg.textContent = 'Reconnect'; }
+      else if (state === 'off'){ state = 'sync'; sw.to('sync'); const t0 = now(); q = [[t0 + 1.2, () => { sw.to('on'); tone.set(1); }], [t0 + 2.8, () => { y.set(0); state = 'online'; tg.textContent = 'Go offline'; }]]; } };
+    return t => { while (q.length && q[0][0] <= t) q.shift()[1](); const v = clamp(y.at(t)), k = clamp(tone.at(t)); bn.style.transform = `translateY(${px((v - 1)*38)})`; bdy.style.transform = `translateY(${px(v*38)})`;
+      bn.style.background = mix(k,'var(--success-tint)','var(--warning-tint)'); for (const n in L) sw.apply(L[n], n, t); dot.style.opacity = (.55 + .45*Math.cos(t*4)).toFixed(3); spn.style.transform = `rotate(${(t*420 % 360).toFixed(1)}deg)`; };
+  }});

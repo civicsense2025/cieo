@@ -1,0 +1,18 @@
+
+
+atom({ id:'range', cat:'Forms', name:'Range slider', block:'collection-browser (price filter), form', fam:['D','M'], wide:true,
+  html:`<div class="col" style="width:min(520px,92%);gap:6px"><div class="row" style="justify-content:space-between"><b class="small">Price</b><span class="small num out"></span></div><div class="hs" style="display:flex;align-items:flex-end;gap:3px;height:60px;padding:0 9px"></div><div class="rr" style="position:relative;height:28px;touch-action:none;cursor:pointer"><i style="position:absolute;left:9px;right:9px;top:12px;height:4px;border-radius:2px;background:var(--raised)"></i><i class="fl" style="position:absolute;top:12px;height:4px;background:var(--ink)"></i><button class="th a" role="slider" aria-label="Minimum price" aria-valuemin="0" aria-valuemax="500" style="position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--card);padding:0;cursor:grab"></button><button class="th b" role="slider" aria-label="Maximum price" aria-valuemin="0" aria-valuemax="500" style="position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--card);padding:0;cursor:grab"></button></div></div>`,
+  desc:'Each thumb follows its drag exactly and stops at the other thumb. Histogram bars inside the range ink in while the rest fade, each on its own spring.',
+  api:'lo = clamp(pointer, 0, hi − step)   bar[i].in.set(lo ≤ x ≤ hi)',
+  init(st){
+    const hs = $(st,'.hs'), rr = $(st,'.rr'), fl = $(st,'.fl'), ta = $(st,'.th.a'), tb = $(st,'.th.b'), out = $(st,'.out'), MAX = 500, STEP = 10;
+    const H = [3,6,10,14,18,22,25,24,20,17,14,12,10,9,7,6,5,4,3,2].map(h => { const b = document.createElement('i'); b.style.cssText = `flex:1;height:${h*2.2}px;border-radius:2px 2px 0 0`; hs.appendChild(b); return { b, k:new Track(1) }; });
+    let lo = 80, hi = 320; const lt = new Track(lo), ht = new Track(hi); let held = null, hv = 0;
+    const toV = p => clamp(Math.round((p.x - 9)/(p.w - 18)*MAX/STEP)*STEP, 0, MAX);
+    const upd = () => { H.forEach((x,i) => { const c = (i + .5)/H.length*MAX; x.k.set(c >= lo && c <= hi ? 1 : 0); }); out.textContent = `$${lo} – $${hi}`; ta.setAttribute('aria-valuenow', lo); tb.setAttribute('aria-valuenow', hi); };
+    drag(rr, { down:p => { const v = toV(p); held = Math.abs(v - lo) <= Math.abs(v - hi) ? 'lo' : 'hi'; hv = v; }, move:p => { hv = toV(p); if (held === 'lo'){ lo = Math.min(hv, hi - STEP); lt.jump(lo); } else { hi = Math.max(hv, lo + STEP); ht.jump(hi); } upd(); }, up:() => held = null });
+    rr.addEventListener('pointerdown', ev => { const r = rr.getBoundingClientRect(), v = toV({ x:ev.clientX - r.left, w:r.width }); if (held === 'lo'){ lo = Math.min(v, hi - STEP); lt.set(lo); } else { hi = Math.max(v, lo + STEP); ht.set(hi); } upd(); });
+    [[ta,'lo'],[tb,'hi']].forEach(([b,k]) => b.onkeydown = e => { const d = e.key === 'ArrowRight' ? STEP : e.key === 'ArrowLeft' ? -STEP : 0; if (!d) return; e.preventDefault(); if (k === 'lo'){ lo = clamp(lo + d, 0, hi - STEP); lt.set(lo); } else { hi = clamp(hi + d, lo + STEP, MAX); ht.set(hi); } upd(); });
+    upd();
+    return t => { const W = rr.clientWidth - 18, a = 9 + lt.at(t)/MAX*W, b = 9 + ht.at(t)/MAX*W; ta.style.left = px(a); tb.style.left = px(b); fl.style.left = px(a); fl.style.width = px(b - a); H.forEach(x => x.b.style.background = mix(x.k.at(t),'var(--ink)','var(--raised)')); };
+  }});

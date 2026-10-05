@@ -1,0 +1,125 @@
+<title>Motion Atoms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F5F7; --tile:#FAFCFE; --card:#FFFFFF; --raised:#ECEEF0;
+  --ink:#10141A; --muted:#5B5E63; --faint:#85888C; --line:#DCDEE0; --line-soft:#EBEDEF;
+  --accent:#595D17; --accent-tint:#EAECE7; --success:#595D17; --success-tint:#EAECE7; --danger:#B0342F; --danger-tint:#F6E6E4; --warning:#B45309; --warning-tint:#FBEEDF;
+  --shadow:0 1px 2px rgba(16,20,26,.07),0 6px 18px rgba(16,20,26,.06);
+  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0C1016; --tile:#11161C; --card:#171B21; --raised:#23272C;
+  --ink:#EFF2F6; --muted:#ABAEB3; --faint:#82868A; --line:#2A2F36; --line-soft:#1E2228;
+  --accent:#939668; --accent-tint:#23261A; --success:#A3A76E; --success-tint:#23261A; --danger:#D0584F; --danger-tint:#2E1A19; --warning:#D6822F; --warning-tint:#2D2114;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0C1016; --tile:#11161C; --card:#171B21; --raised:#23272C;
+  --ink:#EFF2F6; --muted:#ABAEB3; --faint:#82868A; --line:#2A2F36; --line-soft:#1E2228;
+  --accent:#939668; --accent-tint:#23261A; --success:#A3A76E; --success-tint:#23261A; --danger:#D0584F; --danger-tint:#2E1A19; --warning:#D6822F; --warning-tint:#2D2114;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35); color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);padding-inline:20px;padding-block:40px 96px;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit}
+.wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+.top{display:flex;flex-direction:column;gap:14px;max-width:760px}
+h1{font-size:44px;line-height:1;letter-spacing:-.035em;font-weight:600;margin:0;text-wrap:balance}
+.lede{color:var(--muted);margin:0;max-width:64ch}
+.legend{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 20px;margin:6px 0 0;padding:0;list-style:none;font-size:13.5px;color:var(--muted)}
+.legend b{color:var(--ink);font-weight:600}
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in oklab,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding-block:10px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;border-bottom:1px solid var(--line)}
+.seg{position:relative;display:flex;flex-wrap:wrap;background:var(--raised);border-radius:10px;padding:3px}
+.seg .ind{position:absolute;left:0;top:0;background:var(--card);border-radius:7px;box-shadow:var(--shadow)}
+.seg button{position:relative;background:none;border:0;border-radius:7px;padding:5px 11px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+.toolbar .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.toolbar{flex-wrap:nowrap;gap:10px;align-items:center}
+.toolbar .tools{display:flex;gap:10px;align-items:center;min-width:0;flex:1;overflow-x:auto;scrollbar-width:none}
+.toolbar .tools::-webkit-scrollbar{display:none}
+.toolbar .tools>*{flex:none}
+.seg{flex-wrap:nowrap}
+.jumpbtn{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.jumpbtn svg{width:14px;height:14px;transition:none}
+.jump{position:absolute;left:0;right:0;top:100%;max-height:min(70vh,560px);overflow-y:auto;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px 24px;margin-top:6px}
+.jump h4{margin:0 0 6px;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.jump a{display:flex;justify-content:space-between;gap:8px;padding:6px 8px;margin:0 -8px;border-radius:7px;color:var(--ink);text-decoration:none;font-size:14px}
+.jump a:hover,.jump a:focus-visible{background:var(--raised)}
+.jump a span{color:var(--faint);font-variant-numeric:tabular-nums}
+.jump a[hidden],.jump div[hidden]{display:none}
+@media (max-width:700px){.toolbar .count{display:none}.jump{grid-template-columns:1fr 1fr;gap:14px 16px;padding:12px 14px}}
+.group{display:flex;flex-direction:column;gap:14px;scroll-margin-top:72px}
+.group>h2{font-size:13px;font-weight:600;letter-spacing:.02em;margin:0;display:flex;gap:12px;align-items:center;color:var(--muted)}
+.group>h2::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){.grid{grid-template-columns:1fr} h1{font-size:34px}}
+[hidden]{display:none!important}
+.tile{background:var(--tile);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-width:0}
+.tile.wide{grid-column:1/-1}
+.tile>header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px 0}
+.tile h3{font-size:15px;font-weight:600;margin:0;letter-spacing:-.01em}
+.fam{display:flex;gap:4px}
+.fam span{font-size:11px;font-weight:600;min-width:20px;height:20px;padding:0 5px;border-radius:6px;display:grid;place-items:center;background:var(--raised);color:var(--muted)}
+.tile .block{font-size:12px;color:var(--faint);padding:2px 16px 0}
+.stage{position:relative;height:250px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;user-select:none;-webkit-user-select:none;overflow:hidden;margin-top:6px}
+.tile.tall .stage{height:330px}
+.tile.big .stage{height:340px}
+.tile.wide.tall .stage{height:560px}
+@media (max-width:1100px){.tile.wide.tall .stage{height:600px}}
+@media (max-width:700px){.tile.wide.tall .stage{height:680px}}
+.tile>footer{padding:0 16px 14px;display:flex;flex-direction:column;gap:8px;margin-top:auto}
+.tile footer p{margin:0;color:var(--muted);font-size:13.5px}
+.tile pre{margin:0;font:12px/1.55 var(--mono);background:var(--bg);border:1px solid var(--line-soft);border-radius:8px;padding:8px 10px;overflow-x:auto}
+.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--faint);pointer-events:none}
+.ro{position:absolute;top:10px;right:14px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+button:focus-visible,input:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 12px;font-size:13px;font-weight:500;cursor:pointer}
+.btn.ink{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.card{background:var(--card);border-radius:14px;box-shadow:var(--shadow)}
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.digits{display:inline-flex;font-variant-numeric:tabular-nums}
+.dslot{position:relative;display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom}
+.dslot .dl{position:absolute;left:0;right:0;top:0;text-align:center}
+.pill{position:absolute;border-radius:999px}
+.row{display:flex;align-items:center;gap:10px}
+.col{display:flex;flex-direction:column;gap:10px}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Motion Atoms</h1>
+    <p class="lede">Every motion pattern the Lamina block library and admin primitives need, as live atoms. Each frame is a pure function of time. Springs are closed-form and critically damped, so nothing overshoots. Click, drag, hover and type in any tile. Agent marks, icons and illustrations live on their own page: <a href="https://claude.ai/artifact/EXMReRkwJ9b7bYdvEsR8yJ" target="_blank" rel="noopener">Agent Identity</a>.</p>
+    <ul class="legend">
+      <li><b>M · Morph</b> one element changes size, radius and color</li>
+      <li><b>S · Swap</b> content blurs out, then in, never overlapping</li>
+      <li><b>D · Drag</b> 1:1 with the pointer, settles from release velocity</li>
+      <li><b>E · Edges</b> leading edge moves first, trailing edge lags 60ms</li>
+      <li><b>X · Enter/exit</b> popovers, toasts and sheets arrive and leave</li>
+      <li><b>T · Time</b> loops and counts computed from the clock</li>
+      <li><b style="color:var(--success)">Success</b> · <b style="color:var(--warning)">Warning</b> · <b style="color:var(--danger)">Danger</b> end states, from Lamina’s status tokens</li>
+    </ul>
+  </header>
+
+  <div class="toolbar">
+    <button class="jumpbtn" id="jumpbtn" aria-expanded="false" aria-controls="jump"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h8"/></svg>Jump to</button>
+    <div class="tools">
+    <div class="seg" id="famseg" role="group" aria-label="Filter by motion family"><div class="ind"></div>
+      <button data-f="*">All</button><button data-f="M">Morph</button><button data-f="S">Swap</button><button data-f="D">Drag</button><button data-f="E">Edges</button><button data-f="X">Enter/exit</button><button data-f="T">Time</button>
+    </div>
+    <div class="seg" id="spdseg" role="group" aria-label="Clock speed"><div class="ind"></div>
+      <button data-s="1">1×</button><button data-s="0.25">¼×</button><button data-s="0.1">⅒×</button>
+    </div>
+    <span class="count" id="count"></span>
+    </div>
+    <div id="jump" class="jump" hidden></div>
+  </div>
+
+  <main id="groups" class="col" style="gap:40px"></main>
+</div>
+
+<script>

@@ -1,0 +1,2530 @@
+[
+ {
+  "id": "step",
+  "category": "Foundations",
+  "name": "Spring presets",
+  "summary": "Critically damped step responses solved in closed form. No integration, no drift, no overshoot.",
+  "file": "blocks/001-step.js",
+  "api": "x = to + resp(t − t0, from − to, v0, S.base)"
+ },
+ {
+  "id": "retarget",
+  "category": "Foundations",
+  "name": "Retarget as a sum",
+  "summary": "Each new target adds one spring from its own start time. The value stays a pure sum you can scrub or render offline.",
+  "file": "blocks/002-retarget.js",
+  "api": "value(t) = to + Σ resp(t − tᵢ, prevᵢ − toᵢ, 0, cfg)"
+ },
+ {
+  "id": "stagger",
+  "category": "Foundations",
+  "name": "Stagger",
+  "summary": "The same spring started 40ms apart per item. Order reads left to right without any keyframes.",
+  "file": "blocks/003-stagger.js",
+  "api": "items.forEach((x, i) => x.set(v[i], S.base, t + i*0.04))"
+ },
+ {
+  "id": "tabs",
+  "category": "Content",
+  "name": "Tabs with panel",
+  "summary": "Indicator edges lag each other. The panel text swaps with blur while the panel height morphs to fit.",
+  "file": "blocks/004-tabs.js",
+  "api": "ind.go(l, r)   panel.h.set(measure(next))   swap.to(i)"
+ },
+ {
+  "id": "accordion",
+  "category": "Content",
+  "name": "Accordion",
+  "summary": "Height springs to the measured body. The chevron turns on the same spring and the body fades in with height.",
+  "file": "blocks/005-accordion.js",
+  "api": "body.h.set(open ? inner.scrollHeight : 0)"
+ },
+ {
+  "id": "tooltip",
+  "category": "Content",
+  "name": "Tooltip",
+  "summary": "Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Lamina’s current Tooltip has no enter or exit motion; this is the proposed behavior.",
+  "file": "blocks/006-tooltip.js",
+  "api": "o.set(open ? 1 : 0, open ? S.base : S.snap)"
+ },
+ {
+  "id": "alert",
+  "category": "Content",
+  "name": "Dismissible alert",
+  "summary": "Fades and blurs out first, then the space collapses so content below never jumps while text is still visible.",
+  "file": "blocks/007-alert.js",
+  "api": "o.set(0, S.snap); h.set(0, S.base, t + EXIT)"
+ },
+ {
+  "id": "flip",
+  "category": "Content",
+  "name": "Flip card",
+  "summary": "One rotation track on the soft spring. The card sinks 3% at the midpoint so the flip has depth without a bounce.",
+  "file": "blocks/008-flip.js",
+  "api": "rot.set(front ? 0 : 180, S.soft)"
+ },
+ {
+  "id": "stepper",
+  "category": "Content",
+  "name": "Stepper",
+  "summary": "The connector fills first, then the next node inks in after the lag. Completed nodes swap their number for a check.",
+  "file": "blocks/009-stepper.js",
+  "api": "line.set(step); node[i].set(step >= i, S.base, t + LAG)"
+ },
+ {
+  "id": "rating",
+  "category": "Content",
+  "name": "Rating",
+  "summary": "While the pointer is over it, the fill follows the cursor exactly. On leave it settles back to the saved value.",
+  "file": "blocks/010-rating.js",
+  "api": "fill = hovering ? pointerX : v.at(t)"
+ },
+ {
+  "id": "badge",
+  "category": "Content",
+  "name": "Count badge",
+  "summary": "Digits roll up one slot at a time and slot widths spring, so 9 to 10 widens smoothly. The badge scales in from 60%.",
+  "file": "blocks/011-badge.js",
+  "api": "digits.set(n)   badge.o.set(n > 0 ? 1 : 0)"
+ },
+ {
+  "id": "chip",
+  "category": "Content",
+  "name": "Blur swap label",
+  "summary": "Outgoing text blurs up and out in 100ms. Incoming text starts after it, while the pill width springs to fit.",
+  "file": "blocks/012-chip.js",
+  "api": "w.set(measure(next)); swap.to(next)"
+ },
+ {
+  "id": "counter",
+  "category": "Data",
+  "name": "Counter",
+  "summary": "The number itself rides the lazy spring, so it decelerates into the final value instead of ticking linearly.",
+  "file": "blocks/013-counter.js",
+  "api": "label = format(round(v.at(t)))"
+ },
+ {
+  "id": "progress",
+  "category": "Data",
+  "name": "Progress bars",
+  "summary": "Fills stagger by 40ms and percentages count with the same spring, so number and bar always agree.",
+  "file": "blocks/014-progress.js",
+  "api": "bar[i].set(v, S.base, t + i*0.04)"
+ },
+ {
+  "id": "line",
+  "category": "Data",
+  "name": "Line chart",
+  "summary": "The line draws on the lazy spring through stroke-dashoffset. The dot and tooltip follow the nearest point on the snap spring.",
+  "file": "blocks/015-line.js",
+  "api": "dashoffset = L·(1 − draw.at(t))   tip.x.set(xᵢ, S.snap)"
+ },
+ {
+  "id": "bars",
+  "category": "Data",
+  "name": "Bar chart",
+  "summary": "Switching datasets retargets every bar mid-flight with a stagger. Labels stay on a fixed 0–100 scale.",
+  "file": "blocks/016-bars.js",
+  "api": "bar[i].h.set(data[i], S.base, t + i*0.03)"
+ },
+ {
+  "id": "donut",
+  "category": "Data",
+  "name": "Donut",
+  "summary": "Segments sweep in together on one spring. Hovering a segment thickens it and swaps the center label.",
+  "file": "blocks/017-donut.js",
+  "api": "seg.len = vᵢ·draw(t)   seg.width.set(hover ? 22 : 16)"
+ },
+ {
+  "id": "timeline",
+  "category": "Data",
+  "name": "Timeline",
+  "summary": "The spine fills to the current milestone first. The node inks in after the lag, then its row brightens.",
+  "file": "blocks/018-timeline.js",
+  "api": "spine.set(y[i]); node[i].set(1, S.base, t + LAG)"
+ },
+ {
+  "id": "countdown",
+  "category": "Data",
+  "name": "Countdown",
+  "summary": "Remaining time is computed from the clock each frame. Only digits that change roll, each on its own swap.",
+  "file": "blocks/019-countdown.js",
+  "api": "digits.set(format(T − t))"
+ },
+ {
+  "id": "beforeafter",
+  "category": "Media",
+  "name": "Before / after",
+  "summary": "The divider sits exactly under the pointer while dragging. Clicking elsewhere springs it there instead.",
+  "file": "blocks/021-beforeafter.js",
+  "api": "x = held ? pointer : x.at(t)"
+ },
+ {
+  "id": "carousel",
+  "category": "Media",
+  "name": "Carousel",
+  "summary": "Drag follows the pointer 1:1 with rubber-banding at the ends. Release projects the velocity forward to pick a slide, then settles from that velocity.",
+  "file": "blocks/022-carousel.js",
+  "api": "i = round((x − v·0.2)/step); x.release(x, v, i·step)"
+ },
+ {
+  "id": "marquee",
+  "category": "Media",
+  "name": "Marquee",
+  "summary": "Offset is the closed-form integral of a speed spring, so slowing on hover is smooth and the position is still a pure function of time.",
+  "file": "blocks/023-marquee.js",
+  "api": "x(t) = v₀t + Σ dᵢ·[(t − tᵢ) − R(t − tᵢ)],  R(T) = 2/ω(1 − e^{−ωT}) − Te^{−ωT}"
+ },
+ {
+  "id": "lightbox",
+  "category": "Media",
+  "name": "Gallery lightbox",
+  "summary": "The thumbnail itself grows to fill the frame: position, size and radius each spring from its measured rect. Closing reverses into the same slot.",
+  "file": "blocks/024-lightbox.js",
+  "api": "box.{x,y,w,h,r}.set(open ? frame : thumbRect)"
+ },
+ {
+  "id": "player",
+  "category": "Media",
+  "name": "Player",
+  "summary": "Play and pause share eight points on one spring. Progress is computed from the play start time, so scrubbing just rewrites that start.",
+  "file": "blocks/025-player.js",
+  "api": "progress(t) = playing ? p0 + (t − t0)/dur : p0"
+ },
+ {
+  "id": "poll",
+  "category": "Interactive",
+  "name": "Poll",
+  "summary": "Each option morphs in place into its result bar. Fills stagger, percentages count up and the chosen row keeps a check.",
+  "file": "blocks/026-poll.js",
+  "api": "opt[i].fill.set(pct[i], S.base, t + i*0.05)"
+ },
+ {
+  "id": "field",
+  "category": "Interactive",
+  "name": "Text field",
+  "summary": "The label floats on focus. On blur the field settles into one of three states: neutral, valid in the success color with a check, or invalid in the danger color with a message.",
+  "file": "blocks/027-field.js",
+  "api": "status.to(valid ? \"ok\" : \"error\")   border = mix(status color, line)"
+ },
+ {
+  "id": "newsletter",
+  "category": "Newsletter",
+  "name": "Subscribe",
+  "summary": "An invalid address rings the field in the danger color and opens a message. A valid one shrinks the button into a spinner, turns it success-colored with a check, then morphs the whole field into a tinted confirmation pill.",
+  "file": "blocks/028-newsletter.js",
+  "api": "err.set(1) → ring(danger)   plan(loading, check → success, done → success-tint)"
+ },
+ {
+  "id": "signature",
+  "category": "Interactive",
+  "name": "Signature pad",
+  "summary": "Ink follows the pointer exactly. Stroke width thins with speed, and Clear fades the ink out on a spring before wiping.",
+  "file": "blocks/029-signature.js",
+  "api": "width = 3.2 − clamp(speed/1800)·2   ink.set(0, S.snap)"
+ },
+ {
+  "id": "slider",
+  "category": "Interactive",
+  "name": "Rubber-band slider",
+  "summary": "While held, the value is the pointer. Past the ends the pill stretches with rising resistance, then springs back from release velocity.",
+  "file": "blocks/030-slider.js",
+  "api": "rb(x, d) = d·(1 − 1/(0.55x/d + 1))   o.release(o, v, 0)"
+ },
+ {
+  "id": "navhover",
+  "category": "Chrome",
+  "name": "Nav hover",
+  "summary": "A hover plate follows the pointer with lagging edges and fades out on leave. The underline marks the current page with the same edge rule.",
+  "file": "blocks/031-navhover.js",
+  "api": "plate.go(l, r); plate.o.set(hovering ? 1 : 0)"
+ },
+ {
+  "id": "longpage",
+  "category": "Chrome",
+  "name": "Header, progress, jump to top",
+  "summary": "The progress bar tracks scroll 1:1. The header compacts once you leave the top. The back-to-top button enters after one screen and scrolls home on a spring that any wheel input cancels.",
+  "file": "blocks/032-longpage.js",
+  "api": "bar = scrollTop / max   hdr.set(scrolled ? 1 : 0)   scroll.set(0, S.soft)"
+ },
+ {
+  "id": "mobilemenu",
+  "category": "Chrome",
+  "name": "Mobile menu",
+  "summary": "The three lines morph into a cross on one spring. The panel height opens and each link enters 40ms after the last.",
+  "file": "blocks/033-mobilemenu.js",
+  "api": "open.set(1); link[i].o.set(1, S.base, t + 0.08 + i*0.04)"
+ },
+ {
+  "id": "search",
+  "category": "Chrome",
+  "name": "Search expand",
+  "summary": "The icon button widens into the field while the brand fades, and the input appears once the shape has mostly opened. As you type, results open below. Matching rows spring into place with the match in bold, misses blur out, and the highlight follows the arrow keys.",
+  "file": "blocks/034-search.js",
+  "api": "w.set(open ? 220 : 36)   results.o.set(query)   row.y.set(k·52)   row.o.set(match)"
+ },
+ {
+  "id": "pricing",
+  "category": "Commerce",
+  "name": "Pricing toggle",
+  "summary": "The segment indicator uses lagging edges. Only the digits that change roll. The billing note swaps and the savings pill enters.",
+  "file": "blocks/035-pricing.js",
+  "api": "digits.set(price)   note.to(mode)   save.o.set(yearly)"
+ },
+ {
+  "id": "cart",
+  "category": "Commerce",
+  "name": "Add to cart",
+  "summary": "The button confirms in place with a blur swap and fills with the success color, then returns. The cart count rolls when the item arrives, 300ms later.",
+  "file": "blocks/036-cart.js",
+  "api": "btn.to(\"added\"); cart.set(n, t + 0.3); btn.to(\"add\", t + 1.6)"
+ },
+ {
+  "id": "checkout",
+  "category": "Commerce",
+  "name": "Checkout totals",
+  "summary": "Quantity digits roll, and every money value springs toward its new total, so subtotal, tax and total move together.",
+  "file": "blocks/037-checkout.js",
+  "api": "total.set(sum); label = money(total.at(t))"
+ },
+ {
+  "id": "switch",
+  "category": "Admin",
+  "name": "Switch",
+  "summary": "The knob leads with one edge and trails with the other. While pressed it widens toward where it will go. The track inks in on the same spring.",
+  "file": "blocks/038-switch.js",
+  "api": "knob.go(l, r)   press.set(down ? 1 : 0, S.snap)"
+ },
+ {
+  "id": "toast",
+  "category": "Admin",
+  "name": "Toast stack",
+  "summary": "Success, warning and error toasts carry their status color on the icon and the action. New toasts push older ones back in depth. Drag one sideways 1:1; a long or fast swipe flings it out from release velocity, a short one springs home.",
+  "file": "blocks/039-toast.js",
+  "api": "x.release(x, vx, |x| > 100 || |vx| > 600 ? ±420 : 0)"
+ },
+ {
+  "id": "dropdown",
+  "category": "Admin",
+  "name": "Dropdown",
+  "summary": "The menu grows from the trigger at 97% scale while items fade in 30ms apart. Picking one swaps the button label.",
+  "file": "blocks/040-dropdown.js",
+  "api": "menu.o.set(open); item[i].o = prog(t, tOpen + i*0.03)"
+ },
+ {
+  "id": "sheet",
+  "category": "Admin",
+  "name": "Bottom sheet (mobile only)",
+  "summary": "For phone layouts only: on wider screens Lamina’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.",
+  "file": "blocks/041-sheet.js",
+  "api": "y.release(y, vy, y > 0.3H || vy > 500 ? H : 0)"
+ },
+ {
+  "id": "palette",
+  "category": "Admin",
+  "name": "Command palette",
+  "summary": "Rows spring to their new slots as the filter changes and hidden rows blur out in place. The highlight moves with lagging edges. Arrow keys and Enter work.",
+  "file": "blocks/042-palette.js",
+  "api": "row.y.set(k·36)   row.o.set(match)   hl.go(top, bottom)"
+ },
+ {
+  "id": "surface",
+  "category": "Admin",
+  "name": "Morph surface",
+  "summary": "Button, loader, check, dynamic island and toast are one element. Width, height, radius and ink ride springs, and the check fills with the success color. Content swaps by the blur rule. The run is a list of timed events.",
+  "file": "blocks/043-surface.js",
+  "api": "plan([[0,\"loader\"],[1.1,\"check\"],[1.9,\"island\"],[3.6,\"toast\"],[5.6,\"button\"]])"
+ },
+ {
+  "id": "copy",
+  "category": "Content",
+  "name": "Copy button",
+  "summary": "The icon button widens to fit “Copied”, turns success-colored and swaps its content, then returns after 1.6 seconds.",
+  "file": "blocks/044-copy.js",
+  "api": "w.set(measure(\"Copied\")); ok.set(1); after(1.6, reset)"
+ },
+ {
+  "id": "tablesort",
+  "category": "Data",
+  "name": "Sortable table",
+  "summary": "Sorting never re-renders the rows. Each row springs to its new slot with a 20ms stagger, and the header arrow turns on the same spring.",
+  "file": "blocks/045-tablesort.js",
+  "api": "row.y.set(rank·36, S.base, t + rank·0.02)   arrow.set(asc ? 0 : 180)"
+ },
+ {
+  "id": "toc",
+  "category": "Content",
+  "name": "Table of contents",
+  "summary": "The active marker tracks the section you are reading, with lagging edges so it stretches between short and long entries. Clicking an entry scrolls there on a spring.",
+  "file": "blocks/046-toc.js",
+  "api": "active = last heading above scrollTop   marker.go(top, bottom)"
+ },
+ {
+  "id": "breadcrumbs",
+  "category": "Content",
+  "name": "Breadcrumbs",
+  "summary": "Middle crumbs fold into one ellipsis button. Each crumb’s width springs to zero while its text fades, so the trail closes from the inside out.",
+  "file": "blocks/047-breadcrumbs.js",
+  "api": "crumb.w.set(collapsed ? 0 : measured, S.base, t + i·0.03)"
+ },
+ {
+  "id": "checklist",
+  "category": "Content",
+  "name": "Checklist",
+  "summary": "The box fills, the check draws, and a strike line runs through the text, each 40ms after the last. The done count rolls.",
+  "file": "blocks/048-checklist.js",
+  "api": "box.set(1); check.set(1, S.base, t + 0.04); strike.set(1, S.base, t + 0.08)"
+ },
+ {
+  "id": "skeleton",
+  "category": "Dynamic",
+  "name": "Skeleton to content",
+  "summary": "Placeholders pulse on a 1.2-second clock while loading. When data lands, each row swaps from skeleton to content 50ms after the one above.",
+  "file": "blocks/049-skeleton.js",
+  "api": "pulse = 0.55 + 0.25·cos(2πt/1.2)   row.swap.to(\"data\", tLoad + i·0.05)"
+ },
+ {
+  "id": "imageload",
+  "category": "Media",
+  "name": "Image blur-up",
+  "summary": "A tiny blurred placeholder holds the space. When the image decodes, blur and a 4% overscale settle together on the lazy spring, so the sharpening reads as focus, not a pop.",
+  "file": "blocks/050-imageload.js",
+  "api": "blur = 14·(1 − p)   scale = 1 + 0.04·(1 − p)   p = load.at(t)"
+ },
+ {
+  "id": "facets",
+  "category": "Dynamic",
+  "name": "Filtered collection",
+  "summary": "Cards that leave the filter blur out in place. Cards that stay spring to their new grid slot, staggered by slot, and the grid height follows.",
+  "file": "blocks/051-facets.js",
+  "api": "card.{x,y}.set(slot(i), S.base, t + i·0.03)   card.o.set(match)"
+ },
+ {
+  "id": "donation",
+  "category": "Commerce",
+  "name": "Donation amount",
+  "summary": "The amount indicator stretches between chips. “Other” opens a field below on a height spring, and the button’s amount rolls digit by digit.",
+  "file": "blocks/052-donation.js",
+  "api": "ind.go(l, r)   other.h.set(1)   digits.set(amount)"
+ },
+ {
+  "id": "booking",
+  "category": "Interactive",
+  "name": "Date and time picker",
+  "summary": "The selection disc glides between days on two axes. Time slots for the new day blur in 40ms apart after the old ones leave.",
+  "file": "blocks/053-booking.js",
+  "api": "disc.{x,y}.set(cell)   slot[i].swap.to(day, t + i·0.04)"
+ },
+ {
+  "id": "paywall",
+  "category": "Newsletter",
+  "name": "Paywall unlock",
+  "summary": "The lock’s shackle swings open first. Then the gate card exits and the fade over the hidden text lifts from top to bottom.",
+  "file": "blocks/054-paywall.js",
+  "api": "shackle.set(1); gate.o.set(0, S.snap, t + 0.25); mask.set(1, S.lazy, t + 0.3)"
+ },
+ {
+  "id": "payment",
+  "category": "Documents",
+  "name": "Pay button",
+  "summary": "Processing keeps the button in place with a spinner. Success fills it with the success color; a decline fills it with danger and opens a fix-it message. Both settle back to a retryable state.",
+  "file": "blocks/055-payment.js",
+  "api": "plan(processing → paid | declined)   fill = mix(success | danger, ink)"
+ },
+ {
+  "id": "diagram",
+  "category": "Data",
+  "name": "Diagram build",
+  "summary": "Each node arrives 180ms after the last, and each connector draws from its source only after that source has landed, so the flow reads in order.",
+  "file": "blocks/056-diagram.js",
+  "api": "node[i].o = prog(t, t0 + i·0.18)   edge.draw = prog(t, t0 + from·0.18 + 0.12)"
+ },
+ {
+  "id": "statement",
+  "category": "Content",
+  "name": "Statement reveal",
+  "summary": "Words enter one by one, 50ms apart, using the same blur-and-rise as a content swap. Nothing moves once the line is complete.",
+  "file": "blocks/057-statement.js",
+  "api": "word[i] = enter(prog(t, t0 + i·0.05))"
+ },
+ {
+  "id": "multistep",
+  "category": "Interactive",
+  "name": "Multi-step form",
+  "summary": "Panels slide sideways in the direction of travel with the blur swap. An empty required field rings in the danger color with a message; the final step confirms in the success color.",
+  "file": "blocks/058-multistep.js",
+  "api": "panel.to(i, dir)   progress.set(i/(n − 1))   err.set(empty)"
+ },
+ {
+  "id": "select",
+  "category": "Inputs",
+  "name": "Select",
+  "summary": "The list grows from the trigger. A highlight plate follows hover and arrow keys with lagging edges. Choosing moves the check, closes the list and swaps the trigger label.",
+  "file": "blocks/065-select.js",
+  "api": "list.o.set(open)   hl.go(top, bottom)   label.to(i)   check[i].set(1)"
+ },
+ {
+  "id": "combobox",
+  "category": "Inputs",
+  "name": "Combobox",
+  "summary": "Typing filters in place. Matches spring into their new rows, misses blur out, and the matched letters bold. With no match, an “Add” row takes the first slot. The list height follows the count.",
+  "file": "blocks/066-combobox.js",
+  "api": "row.y.set(k·34)   row.o.set(match)   list.h.set(min(n, 5)·34 + 12)"
+ },
+ {
+  "id": "popover",
+  "category": "Overlays",
+  "name": "Popover",
+  "summary": "The panel and its arrow grow out of the trigger on one spring. Copy swaps in a success check, then reverts. Clicking outside or pressing Escape closes it faster than it opened.",
+  "file": "blocks/067-popover.js",
+  "api": "pv.o.set(open, open ? S.base : S.snap)   origin = arrow tip"
+ },
+ {
+  "id": "contextmenu",
+  "category": "Overlays",
+  "name": "Context menu",
+  "summary": "Right-click, or long-press on touch, opens the menu at the pointer. It grows from that exact corner and flips when it would overflow. Items fade in 25ms apart; the destructive item is danger-colored.",
+  "file": "blocks/068-contextmenu.js",
+  "api": "menu.at(pointer); origin = flipped ? \"right\" : \"left\"; item[i].o = prog(t, tOpen + i·0.025)"
+ },
+ {
+  "id": "hovercard",
+  "category": "Overlays",
+  "name": "Hover card",
+  "summary": "Opens only after the pointer rests for 400ms, so passing over the link does nothing. Leaving starts a 150ms grace period, and moving into the card cancels it.",
+  "file": "blocks/069-hovercard.js",
+  "api": "openAt = t + 0.4 on enter; closeAt = t + 0.15 on leave; card enter cancels closeAt"
+ },
+ {
+  "id": "dialog",
+  "category": "Overlays",
+  "name": "Confirm dialog",
+  "summary": "The scrim fades while the dialog rises 8px from 96% scale. Confirming closes the dialog first, then the deleted row collapses, so the change happens where you are looking.",
+  "file": "blocks/070-dialog.js",
+  "api": "dlg.o.set(1); on confirm: dlg.o.set(0, S.snap); row.h.set(0, S.base, t + 0.15)"
+ },
+ {
+  "id": "drawer",
+  "category": "Navigation",
+  "name": "Navigation drawer",
+  "summary": "The drawer slides in from the edge while its links follow 35ms apart. It tracks a drag 1:1, rubber-bands when pulled past open, and closes past halfway or on a fast flick.",
+  "file": "blocks/071-drawer.js",
+  "api": "x.release(x, vx, x < −W/2 || vx < −500 ? −W : 0)"
+ },
+ {
+  "id": "navmenu",
+  "category": "Navigation",
+  "name": "Navigation menu",
+  "summary": "Moving between triggers keeps one panel open and morphs its position, width and height to the new content. The content slides in from the side you moved toward.",
+  "file": "blocks/072-navmenu.js",
+  "api": "pn.{x,w,h}.set(target)   content.to(i, dir)"
+ },
+ {
+  "id": "navbar",
+  "category": "Navigation",
+  "name": "Bottom navigation bar",
+  "summary": "The active indicator pill grows outward from the icon’s center while the previous one shrinks back into it. Icon and label ink in on the same spring.",
+  "file": "blocks/073-navbar.js",
+  "api": "pill[i].w.set(active ? 56 : 0)   label.weight = active"
+ },
+ {
+  "id": "pagination",
+  "category": "Navigation",
+  "name": "Pagination",
+  "summary": "The number strip slides to keep the current page centered, clamped at the ends. The active plate moves with lagging edges, so it stretches on long jumps.",
+  "file": "blocks/074-pagination.js",
+  "api": "strip.set(−clamp(i·36 − 72, 0, max))   plate.go(i·36, i·36 + 36)"
+ },
+ {
+  "id": "radio",
+  "category": "Inputs",
+  "name": "Radio group",
+  "summary": "The inner dot grows from the center of the new choice while the old one shrinks, on the same spring. Arrow keys move the choice.",
+  "file": "blocks/075-radio.js",
+  "api": "dot[i].set(i === picked ? 1 : 0)"
+ },
+ {
+  "id": "checkbox",
+  "category": "Inputs",
+  "name": "Checkbox with mixed state",
+  "summary": "The parent box morphs its check into a dash when only some children are on. The three points of the check slide to a flat line on one spring, with no swap.",
+  "file": "blocks/076-checkbox.js",
+  "api": "mark = lerp(CHECK, DASH, mixed.at(t))   fill.set(any checked)"
+ },
+ {
+  "id": "togglegroup",
+  "category": "Inputs",
+  "name": "Toggle group",
+  "summary": "Formatting buttons are independent, so each fills on its own spring. Alignment is single-choice, so one plate slides between options with lagging edges.",
+  "file": "blocks/077-togglegroup.js",
+  "api": "bold.on.set(!on)   align.go(l, r)"
+ },
+ {
+  "id": "otp",
+  "category": "Inputs",
+  "name": "One-time code",
+  "summary": "Each digit rolls into its box and a focus ring slides to the next box with lagging edges. A full code turns every box success or danger; a wrong code clears itself after a beat.",
+  "file": "blocks/078-otp.js",
+  "api": "box[i].to(digit)   ring.go(x[i])   status → success | danger"
+ },
+ {
+  "id": "taginput",
+  "category": "Inputs",
+  "name": "Tag input",
+  "summary": "A new chip opens its own width before its text fades in. Removing reverses it: text out first, then the gap closes, so neighbors slide over instead of jumping.",
+  "file": "blocks/079-taginput.js",
+  "api": "chip.w.set(measured); chip.o.set(1, S.base, t + 0.06)   remove: o→0, then w→0"
+ },
+ {
+  "id": "reorder",
+  "category": "Dynamic",
+  "name": "Drag to reorder",
+  "summary": "The held row lifts and follows the pointer exactly. The others spring aside the moment it crosses their midpoint. On release it settles into its slot from your release velocity.",
+  "file": "blocks/080-reorder.js",
+  "api": "held.y = pointer   others.y.set(slot)   held.y.release(y, vy, slot·50)"
+ },
+ {
+  "id": "dropzone",
+  "category": "Inputs",
+  "name": "File drop zone",
+  "summary": "Dragging a file over the zone inks its border and tints it. Each file opens its row, fills its bar, then ends in a success check or a danger message. Files never leave your browser.",
+  "file": "blocks/081-dropzone.js",
+  "api": "zone.over.set(dragging)   bar = load.at(t)   end → success | danger"
+ },
+ {
+  "id": "fab",
+  "category": "Navigation",
+  "name": "Extended action button",
+  "summary": "Scrolling down hides the label first, then the button shrinks to its icon. Scrolling up reverses the order: the button widens, then the label fades in.",
+  "file": "blocks/082-fab.js",
+  "api": "collapse: label.o→0 now, w→52 at t + 0.1   expand: w now, label at t + 0.12"
+ },
+ {
+  "id": "speeddial",
+  "category": "Navigation",
+  "name": "Action button fan-out",
+  "summary": "Opening turns the plus into a cross and fans the actions out from the button, 40ms apart, upward, to the side, or along an arc. Labels follow their buttons in the straight layouts; the arc stays icon-only so labels never collide. Closing gathers them back in reverse order.",
+  "file": "blocks/083-speeddial.js",
+  "api": "item[i].{x,y}.set(open ? layout(dir, i) : 0, S.base, t + i·0.04)   icon.rot.set(open ? 45 : 0)"
+ },
+ {
+  "id": "avatars",
+  "category": "Content",
+  "name": "Avatar group",
+  "summary": "Hovering the stack fans the avatars apart with a 30ms stagger. Hovering one face shows its name above it with the popover rule.",
+  "file": "blocks/084-avatars.js",
+  "api": "avatar[i].x.set(open ? i·44 : i·24, S.base, t + i·0.03)"
+ },
+ {
+  "id": "loader",
+  "category": "Foundations",
+  "name": "Shape-morph loader",
+  "summary": "Like a drop of water: five ripples of 2 to 6 lobes are always present, and each swells and drifts at its own slow rate. Nothing ever switches or holds, so the outline flows continuously while it turns, and every frame still comes from the clock.",
+  "file": "blocks/085-loader.js",
+  "api": "r(θ,t) = 0.9 + Σ aₖ(t)·cos(kθ + φₖ(t)), drawn as a smooth closed spline"
+ },
+ {
+  "id": "resizable",
+  "category": "Layout",
+  "name": "Resizable panels",
+  "summary": "The divider follows the pointer exactly between its limits and rubber-bands beyond them. Releasing under 70px snaps the sidebar shut from your release velocity; a double-click springs it back.",
+  "file": "blocks/086-resizable.js",
+  "api": "w = clamp(start + dx, 120, max) ± rb   release: w < 70 ? 0 : w"
+ },
+ {
+  "id": "sidebar",
+  "category": "Layout",
+  "name": "Collapsible sidebar",
+  "summary": "Collapsing fades every label first, then narrows the rail to its icons. Expanding widens the rail first, then brings labels back 30ms apart, so text never squeezes.",
+  "file": "blocks/087-sidebar.js",
+  "api": "collapse: labels.o→0, w.set(56, t + 0.1)   expand: w.set(200), labels at t + 0.12 + i·0.03"
+ },
+ {
+  "id": "longanswer",
+  "category": "Forms",
+  "name": "Long answer",
+  "summary": "The box grows a line at a time on a spring instead of jumping. The counter turns warning at 90% of the limit and danger past it.",
+  "file": "blocks/088-longanswer.js",
+  "api": "h.set(mirror.offsetHeight)   counter = mix(warning | danger, muted)"
+ },
+ {
+  "id": "numstep",
+  "category": "Forms",
+  "name": "Number stepper",
+  "summary": "Digits roll up when the value rises and down when it falls, so direction is readable at a glance. Holding a button repeats after 400ms, every 80ms, on the clock.",
+  "file": "blocks/089-numstep.js",
+  "api": "digits.dir = ±1; digits.set(n)   repeat at t0 + 0.4 + k·0.08"
+ },
+ {
+  "id": "phone",
+  "category": "Forms",
+  "name": "Phone number",
+  "summary": "Digits format as you type for the chosen country. Switching country swaps the code with a blur and reformats the number. A complete number earns a success check.",
+  "file": "blocks/090-phone.js",
+  "api": "value = format(digits, country)   cc.to(country)   ok.set(complete)"
+ },
+ {
+  "id": "multiselect",
+  "category": "Forms",
+  "name": "Multi-select",
+  "summary": "Ticking an option adds a chip to the trigger, which opens its width before its text appears. Unticking reverses it. The list stays open so you can pick several.",
+  "file": "blocks/091-multiselect.js",
+  "api": "chip.w.set(1); chip.o.set(1, t + 0.06)   box.fill.set(on)"
+ },
+ {
+  "id": "matrix",
+  "category": "Forms",
+  "name": "Matrix",
+  "summary": "Each row has one dot that slides between columns instead of a fresh fill per cell. A row inks a success check once answered.",
+  "file": "blocks/092-matrix.js",
+  "api": "row.dot.x.set(colX)   row.done.set(1)"
+ },
+ {
+  "id": "timewheel",
+  "category": "Forms",
+  "name": "Time wheel",
+  "summary": "Each column follows a drag exactly, then projects your release velocity forward and settles on the nearest value. Rows fade and shrink with distance from the center band.",
+  "file": "blocks/093-timewheel.js",
+  "api": "i = round((y − v·0.15)/36); y.release(y, v, i·36)"
+ },
+ {
+  "id": "csat",
+  "category": "Forms",
+  "name": "Satisfaction faces",
+  "summary": "One large face holds a continuous mood value. Its mouth curve and eye height follow the hovered or chosen score on a spring, so moving across the scale reads as one expression changing.",
+  "file": "blocks/094-csat.js",
+  "api": "mouth.cy = lerp(−8, 10, mood.at(t))   label.to(score)"
+ },
+ {
+  "id": "nps",
+  "category": "Forms",
+  "name": "NPS scale",
+  "summary": "The selection plate slides across the scale with lagging edges and changes color by band: danger for 0–6, warning for 7–8, success for 9–10. The caption swaps to match.",
+  "file": "blocks/095-nps.js",
+  "api": "plate.go(l, r)   color.set(band)   caption.to(band)"
+ },
+ {
+  "id": "rank",
+  "category": "Forms",
+  "name": "Click to rank",
+  "summary": "Clicking an item gives it the next rank: a numbered badge grows in and the item springs up into ranked order. Clicking a ranked item removes it and closes the gap.",
+  "file": "blocks/096-rank.js",
+  "api": "item.y.set(slot(order))   badge.o.set(ranked)   badge.digits.set(rank)"
+ },
+ {
+  "id": "picturechoice",
+  "category": "Forms",
+  "name": "Picture choice",
+  "summary": "Choosing a card presses it in slightly, inks its border and pops a check badge in the corner. Letter keys pick an option, as in conversational forms.",
+  "file": "blocks/097-picturechoice.js",
+  "api": "card.sel.set(1); badge.o.set(1, S.base, t + 0.05)   keys A–D"
+ },
+ {
+  "id": "conversational",
+  "category": "Forms",
+  "name": "One question at a time",
+  "summary": "Each answer moves the question up and out while the next rises from below. Choices take letter keys and confirm with a short pulse before advancing. Enter submits text, and the progress bar fills per answer.",
+  "file": "blocks/098-conversational.js",
+  "api": "q.to(i)   enter y +24 → 0, exit 0 → −24   pulse, then advance at t + 0.45"
+ },
+ {
+  "id": "signupform",
+  "category": "Newsletter",
+  "name": "Popup, slide-in and bar",
+  "summary": "Three ways to show one sign-up form. A popup scales up over a scrim, a slide-in rises from the corner, and a bar drops from the top without blocking. Each waits 1.2 seconds, and closing is quicker than opening.",
+  "file": "blocks/099-signupform.js",
+  "api": "show at t0 + 1.2   popup: scale .96→1 + scrim · slide-in: y 24→0 · bar: y −100%→0"
+ },
+ {
+  "id": "spinwheel",
+  "category": "Newsletter",
+  "name": "Prize wheel",
+  "summary": "The wheel turns on a slow critically damped spring toward a precomputed angle, so it decelerates smoothly and stops without rocking back. The result swaps in once it settles.",
+  "file": "blocks/100-spinwheel.js",
+  "api": "angle.set(current + 5 turns + slice offset, { w: 1.8 })   on settle: result.to(prize)"
+ },
+ {
+  "id": "password",
+  "category": "Forms",
+  "name": "Password with strength",
+  "summary": "Meter segments fill in order as strength rises, shifting from danger to warning to success. Each requirement draws its own check when met. The eye icon’s slash draws on and off.",
+  "file": "blocks/101-password.js",
+  "api": "seg[i].set(score > i, S.base, t + i·0.04)   req.check.set(met)   slash.set(hidden)"
+ },
+ {
+  "id": "range",
+  "category": "Forms",
+  "name": "Range slider",
+  "summary": "Each thumb follows its drag exactly and stops at the other thumb. Histogram bars inside the range ink in while the rest fade, each on its own spring.",
+  "file": "blocks/102-range.js",
+  "api": "lo = clamp(pointer, 0, hi − step)   bar[i].in.set(lo ≤ x ≤ hi)"
+ },
+ {
+  "id": "seltoolbar",
+  "category": "Writing",
+  "name": "Selection toolbar",
+  "summary": "The toolbar appears above the selection and glides to the next selection instead of jumping. It leaves quickly when the selection collapses.",
+  "file": "blocks/105-seltoolbar.js",
+  "api": "tb.{x,y}.set(selectionCenter)   tb.o.set(hasSelection)"
+ },
+ {
+  "id": "slashmenu",
+  "category": "Writing",
+  "name": "Slash command menu",
+  "summary": "Typing “/” opens the menu right at the caret. Typing more filters it in place, the highlight follows with lagging edges, and Enter inserts a block that opens below.",
+  "file": "blocks/106-slashmenu.js",
+  "api": "menu.at(caretX)   rows.filter(query)   block.h.set(1)"
+ },
+ {
+  "id": "autosave",
+  "category": "Writing",
+  "name": "Autosave status",
+  "summary": "The status moves through Editing, Saving with a spinner, and Saved with a success check, then relaxes to a quiet “Saved just now”. Each change is a blur swap timed from your last keystroke.",
+  "file": "blocks/107-autosave.js",
+  "api": "on input: to(\"editing\"); idle 0.8s → \"saving\"; +0.6s → \"saved\"; +2s → \"idle\""
+ },
+ {
+  "id": "presence",
+  "category": "Writing",
+  "name": "Live collaborators",
+  "summary": "Remote cursors glide word to word with name flags, and each person’s avatar joins the stack with a ring in their color. Positions are scheduled on the clock, so the scene replays identically.",
+  "file": "blocks/108-presence.js",
+  "api": "cursor.{x,y}.set(word[i] rect) every 1.3s   avatar.o.set(1)"
+ },
+ {
+  "id": "suggestion",
+  "category": "Writing",
+  "name": "Suggested edit",
+  "summary": "Accepting fades the struck word and closes its gap, while the inserted word loses its suggestion color. Rejecting does the reverse. The sentence reflows on springs, not jumps.",
+  "file": "blocks/109-suggestion.js",
+  "api": "accept: del.o→0, del.w→0 at t + 0.1; ins.tint→0   reject: mirror"
+ },
+ {
+  "id": "canvaszoom",
+  "category": "Design tools",
+  "name": "Canvas pan and zoom",
+  "summary": "Zoom keeps the point under the pointer fixed, so you zoom into what you are looking at. Pan follows the drag exactly and coasts briefly after release.",
+  "file": "blocks/110-canvaszoom.js",
+  "api": "s′ = s·e^(−Δ·0.002);  t′ = c − (c − t)·s′/s   pan: release(x, v, x + v·0.25)"
+ },
+ {
+  "id": "selectresize",
+  "category": "Design tools",
+  "name": "Select, move and snap",
+  "summary": "Moving and resizing follow the pointer, but within 8px of the other shape’s edges or center the box is pulled into alignment on a stiff spring, and a red guide marks the match.",
+  "file": "blocks/111-selectresize.js",
+  "api": "x = near(raw, guides, 8) ?? raw; box.x.set(x, S.snap)   guide.o.set(snapped)"
+ },
+ {
+  "id": "colorpicker",
+  "category": "Design tools",
+  "name": "Color picker",
+  "summary": "Both handles follow the pointer exactly while dragging. Picking a preset springs both handles to that color, so you can see where it lives in the space.",
+  "file": "blocks/112-colorpicker.js",
+  "api": "held ? pointer : {s,v,h}.set(preset)   swatch = hsv(h, s, v)"
+ },
+ {
+  "id": "layers",
+  "category": "Design tools",
+  "name": "Layer tree",
+  "summary": "Groups open and close on a height spring with their chevrons turning. The selection plate slides between rows with lagging edges, and hiding a layer fades its name while the eye closes.",
+  "file": "blocks/113-layers.js",
+  "api": "group.h.set(open)   sel.go(top, bottom)   row.vis.set(shown)"
+ },
+ {
+  "id": "undoredo",
+  "category": "Design tools",
+  "name": "Undo and redo",
+  "summary": "Undo and redo spring the shape between saved states. A dashed ghost stays at the state you just left and fades out, so you can see what changed.",
+  "file": "blocks/114-undoredo.js",
+  "api": "state = history[i]; props.set(state)   ghost = previous, o: 1 → 0 over 0.5s"
+ },
+ {
+  "id": "swiperow",
+  "category": "Email",
+  "name": "Swipe actions",
+  "summary": "The row follows your finger. The action behind it fills with its color and its icon grows once you pass the 80px threshold. Release past it and the row leaves and its space closes; otherwise it springs home.",
+  "file": "blocks/115-swiperow.js",
+  "api": "x = pointer   armed = |x| > 80   out: x.release(x, v, ±W); h.set(0, t + 0.15)"
+ },
+ {
+  "id": "undosend",
+  "category": "Email",
+  "name": "Undo send",
+  "summary": "Send shrinks the draft away and a toast takes over with a ring that empties over 5 seconds. Undo brings the draft back exactly. When the ring runs out, the toast swaps to a success “Sent”.",
+  "file": "blocks/116-undosend.js",
+  "api": "ring = 1 − (t − tSend)/5   undo: draft.o.set(1)   at 5s: label.to(\"sent\")"
+ },
+ {
+  "id": "threadstack",
+  "category": "Email",
+  "name": "Collapsed thread",
+  "summary": "Earlier messages wait as a short stack of card edges. Opening the thread unfolds each message to full height, 50ms apart from the top, and the stack edges fold away.",
+  "file": "blocks/117-threadstack.js",
+  "api": "msg[i].h.set(open ? full : 0, S.base, t + i·0.05)   edges.o.set(!open)"
+ },
+ {
+  "id": "composemin",
+  "category": "Email",
+  "name": "Minimize to bar",
+  "summary": "Minimizing flies the window down into a bar at the bottom edge. Its position, size and radius each spring from the window’s rect, and the body fades first. Clicking the bar restores it along the same path.",
+  "file": "blocks/118-composemin.js",
+  "api": "win.{x,y,w,h}.set(minimized ? barRect : windowRect)   body.o.set(!minimized)"
+ },
+ {
+  "id": "serp",
+  "category": "SEO",
+  "name": "Search result preview",
+  "summary": "The preview truncates exactly where a search engine would, as you type. Under each field a length bar fills on a spring and shifts from success to warning to danger as you near and pass the limit.",
+  "file": "blocks/120-serp.js",
+  "api": "shown = cut(text, limit) + \"…\"   bar.set(len/limit)   color = band(len/limit)"
+ },
+ {
+  "id": "gauge",
+  "category": "SEO",
+  "name": "Score gauge",
+  "summary": "The arc and the number ride the same lazy spring, so they always agree. The color shifts through danger, warning and success as the value crosses 50 and 80, and the verdict swaps when the run settles.",
+  "file": "blocks/121-gauge.js",
+  "api": "arc = v/100   n = round(v)   color = band(v)   verdict.to(band) on settle"
+ },
+ {
+  "id": "ranks",
+  "category": "SEO",
+  "name": "Keyword ranks",
+  "summary": "On refresh, rows re-sort by rank on springs, rank digits roll, and each change chip swaps to its new value in success or danger.",
+  "file": "blocks/122-ranks.js",
+  "api": "row.y.set(order·36)   rank.digits.set(n)   delta.to(±k)"
+ },
+ {
+  "id": "like",
+  "category": "Social",
+  "name": "Like",
+  "summary": "The heart presses to 80% and settles back as it fills. The count rolls up on like and down on unlike, so the direction of change is visible.",
+  "file": "blocks/123-like.js",
+  "api": "fill.set(on); press.jump(1).set(0)   digits.dir = ±1; digits.set(n)"
+ },
+ {
+  "id": "follow",
+  "category": "Social",
+  "name": "Follow button",
+  "summary": "Follow turns into an outlined Following with its width springing to fit. Hovering Following previews Unfollow in the danger color, so the destructive action is never a surprise.",
+  "file": "blocks/124-follow.js",
+  "api": "w.set(measure(label)); fill.set(!following); hover && following → label.to(\"unfollow\")"
+ },
+ {
+  "id": "stories",
+  "category": "Social",
+  "name": "Story progress",
+  "summary": "The current segment fills from the clock over 3 seconds; earlier ones stay full and later ones empty. Tapping a side skips with a blur swap, and holding pauses the clock for this story only.",
+  "file": "blocks/125-stories.js",
+  "api": "fill[i] = i < cur ? 1 : i > cur ? 0 : (t − t0)/3   hold: t0 += pause"
+ },
+ {
+  "id": "charring",
+  "category": "Social",
+  "name": "Character limit ring",
+  "summary": "The ring fills with the length of the post. Under 20 characters left it grows slightly and shows the countdown inside; past the limit it turns danger, the number goes negative and Post is disabled.",
+  "file": "blocks/126-charring.js",
+  "api": "ring.set(len/280)   size.set(left < 20)   color = band(left)"
+ },
+ {
+  "id": "newposts",
+  "category": "Social",
+  "name": "New posts pill",
+  "summary": "New posts gather quietly every few seconds and a pill drops in from the top with a rolling count. Clicking it inserts them at the top, each opening on a height spring, and the pill leaves.",
+  "file": "blocks/127-newposts.js",
+  "api": "pending += 1 every 3.5s; pill.o.set(pending > 0)   on click: row.h.set(1, t + i·0.05)"
+ },
+ {
+  "id": "download",
+  "category": "Files and browsing",
+  "name": "Download progress",
+  "summary": "The ring fills as bytes arrive, at an uneven real-world pace, while the icon swaps between download, pause and resume. Finishing turns the ring and icon success and the status rolls to “Open”.",
+  "file": "blocks/128-download.js",
+  "api": "p += rate(t)·dt (paused: 0)   ring.dashoffset = 1 − p   done → icon.to(\"check\"), color success"
+ },
+ {
+  "id": "tabstrip",
+  "category": "Files and browsing",
+  "name": "Browser tabs",
+  "summary": "New tabs open from zero width while their siblings make room; closed tabs fade their label, then collapse. The active surface slides between tabs with lagging edges and the page content swaps.",
+  "file": "blocks/129-tabstrip.js",
+  "api": "tab.w.set(1); label.o.set(1, t + 0.06)   close: o→0, w→0 at t + 0.1   active.go(l, r)"
+ },
+ {
+  "id": "loadbar",
+  "category": "Files and browsing",
+  "name": "Page load bar",
+  "summary": "While a page loads, the bar creeps toward 90% on an easing curve and never stalls at a fixed point. When the page arrives it springs to the end and fades, and the content swaps.",
+  "file": "blocks/130-loadbar.js",
+  "api": "creep = 0.9·(1 − e^(−(t − t0)/0.9))   done: bar.set(1); o.set(0, t + 0.2)"
+ },
+ {
+  "id": "pullrefresh",
+  "category": "Files and browsing",
+  "name": "Pull to refresh",
+  "summary": "The list follows the pull with growing resistance while the arrow turns to say “release”. Past the threshold it holds open on a spinner, a new item arrives, and the list springs shut.",
+  "file": "blocks/131-pullrefresh.js",
+  "api": "y = rb(pull, 80)   arrow.rot = clamp(y/70)·180   release > 70: hold 56 → load → 0"
+ },
+ {
+  "id": "linkpreview",
+  "category": "Files and browsing",
+  "name": "Link preview",
+  "summary": "Resting on a link opens a preview after 300ms. Moving to another link keeps the card open and glides it to the new link while the content swaps, so scanning several links stays calm.",
+  "file": "blocks/132-linkpreview.js",
+  "api": "open at t + 0.3   card.{x,y}.set(link rect)   content.to(i)"
+ },
+ {
+  "id": "streaming",
+  "category": "AI chat",
+  "name": "Streaming answer",
+  "summary": "Words arrive on a schedule and each one fades up out of a slight blur, so the text feels written rather than printed. A soft caret rides the last word. Stop freezes the answer where it is.",
+  "file": "blocks/133-streaming.js",
+  "api": "word[i] visible at t0 + i·0.045   o = prog(t, tᵢ, S.snap)   stop: t0 frozen"
+ },
+ {
+  "id": "chatthread",
+  "category": "AI chat",
+  "name": "Chat send and reply",
+  "summary": "Your message lifts out of the input and travels to the thread as a bubble. A typing indicator then pulses in a wave and morphs into the reply bubble, growing to fit the text before the words fade in.",
+  "file": "blocks/134-chatthread.js",
+  "api": "fly.{x,y}.set(slot)   dots: o = 0.4 + 0.6·wave(t − i·0.15)   bubble.{w,h}.set(measure(reply))"
+ },
+ {
+  "id": "calendar",
+  "category": "Scheduling",
+  "name": "Calendar event",
+  "summary": "The event follows your drag, and its edges are pulled to the 15-minute grid on a stiff spring, so it feels magnetic without fighting you. The time label shows the snapped result.",
+  "file": "blocks/135-calendar.js",
+  "api": "y = snap(raw, 15 min); top.set(y, S.snap)   bottom edge: same, min 30 min"
+ },
+ {
+  "id": "kanban",
+  "category": "Scheduling",
+  "name": "Task board",
+  "summary": "The card lifts and follows the pointer exactly. Hovering over a column opens a gap at the matching position while other cards spring aside. Dropping settles the card into the gap from its release velocity.",
+  "file": "blocks/136-kanban.js",
+  "api": "gap = (col, index) under pointer   others.y.set(slot)   card.release({x,y}, v, slot)"
+ },
+ {
+  "id": "callgrid",
+  "category": "Video calls",
+  "name": "Call grid",
+  "summary": "When someone joins or leaves, every tile springs to its new grid slot and the newcomer scales in. A ring follows whoever is speaking, fading between people. Muting draws a slash through your mic and tints it danger.",
+  "file": "blocks/137-callgrid.js",
+  "api": "tile.{x,y,w,h}.set(slot(i, n))   ring.o.set(speaker === i)   slash.set(muted)"
+ },
+ {
+  "id": "tour",
+  "category": "Guidance",
+  "name": "Spotlight tour",
+  "summary": "The spotlight is one hole whose position, size and radius spring from target to target, so the dimmed area never flickers. The tooltip glides alongside and its text swaps with each step.",
+  "file": "blocks/138-tour.js",
+  "api": "hole.{x,y,w,h}.set(target rect + 6)   tip.{x,y}.set(beside(target))   copy.to(step)"
+ },
+ {
+  "id": "offline",
+  "category": "Guidance",
+  "name": "Offline banner",
+  "summary": "Losing the connection drops a warning banner that pushes content down. Reconnecting swaps the text to a spinner, then to a success message, and the banner leaves after a moment.",
+  "file": "blocks/139-offline.js",
+  "api": "offline: y.set(0), tone warning   reconnect: to(\"syncing\") → +1.2s \"online\", success → +1.6s y.set(−H)"
+ },
+ {
+  "id": "emptystate",
+  "category": "Guidance",
+  "name": "Empty state",
+  "summary": "Archiving clears rows top to bottom, 40ms apart. Only after the last one leaves does the empty state rise in, so the two never share the screen. Loading samples reverses it.",
+  "file": "blocks/140-emptystate.js",
+  "api": "rows[i].o.set(0, S.snap, t + i·0.04)   empty.o.set(1, S.base, t + n·0.04 + 0.1)"
+ },
+ {
+  "id": "pindrop",
+  "category": "Maps",
+  "name": "Drop a pin",
+  "summary": "The pin falls from above onto the spot and lands on a critically damped spring, so it settles without a bounce. Its shadow sharpens as it lands and a single ring fades out from the point.",
+  "file": "blocks/142-pindrop.js",
+  "api": "pin.y.set(0) from −40   shadow = prog   ring: r 0→24, o 1→0 over 0.6s"
+ },
+ {
+  "id": "cluster",
+  "category": "Maps",
+  "name": "Pin cluster",
+  "summary": "Opening the cluster sends each pin out from its center to its own place, 30ms apart, while the count fades. Clicking the map gathers them back in reverse order.",
+  "file": "blocks/143-cluster.js",
+  "api": "pin[i].{x,y}.set(open ? place[i] : center, S.base, t + i·0.03)   cluster.o.set(!open)"
+ },
+ {
+  "id": "listdetail",
+  "category": "Views",
+  "name": "List to detail",
+  "summary": "The card you pick is the detail view. Siblings fade and blur out first, then the same card’s x, y, width, height and radius spring from its measured slot to fill the frame while its image grows. Back appears as it lands, then the heading and two paragraphs enter 50ms apart. Closing runs it backwards: text out, card down into the exact slot, siblings return.",
+  "file": "blocks/144-listdetail.js",
+  "api": "sib.set(0)   box.{x,y,w,h,r}.set(frame, t+.08)   body[i].set(1, t+.5+i*.05)   close: body.set(0); box.set(slot, t+EXIT); sib.set(1)"
+ },
+ {
+  "id": "inbox",
+  "category": "Views",
+  "name": "Master–detail inbox",
+  "summary": "Choosing a thread moves the selection plate with lagging edges, the leading edge going first. The thread pane exits, then the next thread enters from the direction of its place in the list. Then the unread dot shrinks away and the count rolls down. Compose slides a sheet over the thread pane. Send closes it first, then a new row opens at the top. Under 520px the list and thread become one column and the thread slides in from the right behind a Back button.",
+  "file": "blocks/144-listdetail.js",
+  "api": "plate.go(row)   pane.to(id, dir)   dot.set(0, t+.08)   count.roll(-1, t+.18)   sheet.x.set(open ? 0 : 1)   close sheet; row.h.set(1, t+EXIT)"
+ },
+ {
+  "id": "pagetransition",
+  "category": "Views",
+  "name": "Page transitions",
+  "summary": "The header never moves. The underline slides to the new link with lagging edges. The outgoing page exits on the Swap rule, 100ms ease-in with a small blur, and only then do the incoming heading, paragraph and image enter 50ms apart. Cross-fade only fades. Slide also travels 28px, toward the side the link sits on in the nav.",
+  "file": "blocks/144-listdetail.js",
+  "api": "underline.go(l, r)   out.exit(EXIT)   in.parts[h,p,img].set(1, t+EXIT+i*.05)   mode: fade | slide(dir = sign(next - prev))"
+ },
+ {
+  "id": "pageeditor",
+  "category": "Editor",
+  "name": "Page editor",
+  "summary": "The first click on a block springs a selection ring onto it, lights the outline plate and slides the inspector in from the right (a bottom sheet when narrow), without swapping fields. After that the ring morphs between blocks with x, y, width and height springs, the outline plate follows with lagging edges, and the inspector fields blur-swap to the new block. Typing in Heading edits the canvas live; a Background swatch morphs that block’s color. Escape, or a click on empty canvas, fades the ring and sends the inspector away.",
+  "file": "blocks/145-pageeditor.js",
+  "api": "ring.{x,y,w,h}.set(block rect)   plate.go(a, b)   inspector.to(type)   bg.set(swatch)   Esc: ring.o, inspector.o → 0"
+ },
+ {
+  "id": "savebar",
+  "category": "Editor",
+  "name": "Unsaved changes bar",
+  "summary": "The first edit raises the bar from below and a small “Edited” marker fades in beside that field. Editing a field back to its saved value drops the marker and lowers the bar. Discard springs the language indicator and switch knob back and blur-swaps the name text at the same moment, then the bar leaves. Save morphs the button into a spinner, then a success check, the markers clear, the bar swaps to “Saved”, and leaves 1.1 seconds later.",
+  "file": "blocks/146-savebar.js",
+  "api": "dirty = fields ≠ saved   bar.o.set(dirty)   save: btn.to(spin) → +0.9 check, markers 0 → +1.3 bar.to(saved) → +2.4 bar.o.set(0)"
+ },
+ {
+  "id": "siteheader",
+  "category": "Editor",
+  "name": "Site header",
+  "summary": "Scroll the page: the progress bar tracks the scroll position one to one, and once you pass 16px the header compacts, with its height, logo scale and shadow all moving on one spring. Hovering a link slides a plate between links with lagging edges. The search button widens into a field, folding the nav (or the logo, when narrow) out of its way. Narrow: the menu button morphs into a cross and the panel opens below the header, then each link enters 40ms after the last.",
+  "file": "blocks/147-siteheader.js",
+  "api": "bar = scrollTop / max   hdr.set(scrollTop > 16)   plate.go(l, r)   search.w.set(open ? W : 36)   link[i].o.set(1, S.base, t + .08 + i·.04)"
+ },
+ {
+  "id": "productpage",
+  "category": "Storefront",
+  "name": "Product page",
+  "summary": "Selecting a thumbnail slides the main image in the direction of travel, and the selection plate stretches to it with the leading edge first. The main image also follows a drag 1:1 and settles from release velocity. A color change morphs the garment’s fill, price digits roll, and the stock line blur-swaps. Add to cart runs in order: button confirms, a copy of the image arcs to the cart icon, the badge count rolls on arrival 400ms later, then the drawer slides in from the right when opened.",
+  "file": "blocks/148-productpage.js",
+  "api": "gallery.x.release(x, v, i·W)   plate.go(l, r)   price.set(n)   fly(p = prog(t − t0)); cart.set(n, t0 + .4)   drawer.x.set(open ? 0 : W)"
+ },
+ {
+  "id": "checkoutflow",
+  "category": "Storefront",
+  "name": "Checkout",
+  "summary": "One bar fills as you move Cart, Details, Payment, Receipt, and panels slide sideways in the direction of travel with the blur swap. Changing a quantity rolls its digit first, then every money value springs to the new total together; shipping goes free at $100. Empty required fields ring in danger. Pay shows a spinner, then fills success and slides to the receipt, where the check draws and the total counts up. With Simulate decline the button and bar flash danger, a message swaps in, and you stay on Payment.",
+  "file": "blocks/148-productpage.js",
+  "api": "panel.to(i, dir)   bar.set((i + 1)/4)   totals.set(sum)   pay: busy → ok | bad   receipt: check.draw(t0 + .3); total.set(sum, t0 + .25)"
+ },
+ {
+  "id": "pricingsection",
+  "category": "Storefront",
+  "name": "Pricing section",
+  "summary": "The segment indicator stretches to the new side, leading edge first. Then the three cards change in one wave from left to right, 60ms apart: price digits roll and the billing note blur-swaps. The Save 20% pill enters once the wave has passed (it leaves at once on monthly). The Studio card rests lifted with its button filled. Hovering or focusing another card moves the lift and fill to it, and leaving returns them to Studio.",
+  "file": "blocks/148-productpage.js",
+  "api": "ind.go(l, r)   cards.forEach((c, i) => at(t0 + i·.06, c.price.set(plan), c.note.to(mode)))   pill.w.set(yearly, t0 + .18)   lift.set(i === (hover ?? featured))"
+ },
+ {
+  "id": "dashboard",
+  "category": "Workspace",
+  "name": "Analytics dashboard",
+  "summary": "Change the range or the source and three regions answer in order, 80ms apart. First the stat numbers spring and each delta chip blurs over to its new sign and color. Then the line morphs point by point, left to right, onto a rescaled axis whose labels swap. Last the table rows spring to their new ranks while the view counts roll.",
+  "file": "blocks/149-dashboard.js",
+  "api": "stats.set(v, S.soft, t)   point[i].set(v, S.base, t + .08 + i·.006)   row.y.set(rank·29, S.base, t + .16 + rank·.02)"
+ },
+ {
+  "id": "notifcenter",
+  "category": "Workspace",
+  "name": "Notification center",
+  "summary": "The bell opens a panel that pops out of its own corner. Clicking a row shrinks its dot, mixes its text to muted and rolls the badge down. Mark all read clears the dots top to bottom 40ms apart, rolls the badge to 0, then the badge exits. Every 5 seconds on the clock a notification arrives: the badge rolls up and, if the panel is open, the row enters at the top on a height spring that pushes the rest down.",
+  "file": "blocks/149-dashboard.js",
+  "api": "dot[i].set(0, S.base, t + i·.04)   badge.set(0) → badge.o.set(0, S.snap, t + .3)   row.h.set(1) · row.o.set(1, S.base, t + .06)"
+ },
+ {
+  "id": "onboarding",
+  "category": "Workspace",
+  "name": "Onboarding checklist",
+  "summary": "Start setup swaps the welcome card for the checklist while the card height springs to fit. Opening a task slides its body out in place. Mark done runs in order: box fills, check draws, strike runs through, then 40ms later the ring fills and the count rolls, then the task closes and the next one opens. When the fourth lands the checklist fades, the card shrinks around the finished state, and the success circle draws, then its check, then the message, then Continue. No confetti.",
+  "file": "blocks/149-dashboard.js",
+  "api": "box.set(1)   check.set(1, S.base, t + .04)   strike.set(1, S.base, t + .08)   ring.set(n/4, S.base, t + .12)   if (n === 4) swap.to(\"done\"); H.set(h, S.base, t + EXIT)"
+ },
+ {
+  "id": "heroentrance",
+  "category": "Landing",
+  "name": "Hero entrance",
+  "summary": "Order: eyebrow, then the headline words 40ms apart, then the supporting line, then both buttons together, then the product image rises 28px with a slight scale from 0.98. Everything settles in about one second and then holds perfectly still. It plays again whenever it scrolls back into view.",
+  "file": "blocks/150-heroentrance.js",
+  "api": "t = [eyebrow 0, words .10 + i·.04, support .40, buttons .52, image .62 (soft)]   item.set(prog(t, t0 + delay))"
+ },
+ {
+  "id": "scrollfeatures",
+  "category": "Landing",
+  "name": "Scroll-linked features",
+  "summary": "Whichever feature crosses the panel’s middle brightens and the rest dim. The sticky visual retargets from the scroll position: its shape, size, radius and color morph to the new feature on a soft spring while the inner content swaps out then in. The step indicator’s leading edge moves first and the trailing edge follows 60ms later.",
+  "file": "blocks/150-heroentrance.js",
+  "api": "i = round(scrollTop / itemH)   w[k].set(k === i, S.soft)   shape = Σ w[k]·state[k] / Σ w   ind.go(l, r)"
+ },
+ {
+  "id": "testimonialwall",
+  "category": "Landing",
+  "name": "Testimonial wall",
+  "summary": "Choosing a filter blurs out the cards that no longer match, right where they are. The remaining cards spring to their new slots, staggered 30ms by slot, and the wall height follows. Opening a quote first collapses any other open one, then grows the card in place; only the cards beneath it in the same column move.",
+  "file": "blocks/150-heroentrance.js",
+  "api": "card.{x,y}.set(slot(i), S.base, t + i·.03)   card.o.set(match)   other.open → close, then card.e.set(1); card.h = h0 + e·(h1 − h0)"
+ },
+ {
+  "id": "sidesheet",
+  "category": "Admin kit",
+  "name": "Side detail sheet",
+  "summary": "A row click dims the list and slides the sheet in from the right on the base spring. The rows behind stay live, so picking another row swaps the sheet content (exit, then enter) without sliding again. Drag the sheet right 1:1 with a rubber band on the left; release past 35% or with a fast flick and it leaves from that velocity, otherwise it settles back. Escape, the close button or an outside click close it and focus returns to the row.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "x.set(0, S.base)   swap.to(row)   release: x.release(x, vx/W, x > .35 || vx > 500 ? 1 : 0)   focus(opener)"
+ },
+ {
+  "id": "seg",
+  "category": "Admin kit",
+  "name": "Segmented control",
+  "summary": "A measured two-edge indicator, same rules as Lamina’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? \"fwd\" : \"back\"   lead.set(v); trail.set(v, t + LAG)"
+ },
+ {
+  "id": "statuschip",
+  "category": "Admin kit",
+  "name": "Status chip",
+  "summary": "One chip morphs through Draft, Scheduled, Live and Error: the background and dot colours cross-fade through weighted state colours, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "w[i].set(i === next ? 1 : 0)   width.set(measure(label))   label.to(next)   retry.set(next === error)"
+ },
+ {
+  "id": "scrollfade",
+  "category": "Admin kit",
+  "name": "Scroll-fade row",
+  "summary": "The row keeps real scroll position, and each frame it asks whether there is content beyond either edge. Only then does that edge’s fade mask grow in, on a spring, and it shrinks away as you reach the end. With four chips nothing overflows, so no mask exists; switch to eleven and the end mask arrives, then the start mask once you scroll. The arrows scroll on the same spring.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "start = scrollable && scrollLeft > 0   end = scrollable && scrollLeft + W < scrollWidth − 1   --fade-start.set(start ? 28 : 0)"
+ },
+ {
+  "id": "inlineedit",
+  "category": "Admin kit",
+  "name": "Inline editable field",
+  "summary": "The value and the input are the same box: same padding and type, so nothing shifts. Click and the border and fill morph in while the text swaps to the input and the trailing check and cancel buttons arrive. Enter saves behind a short spinner, then the new value swaps in with a Saved check. Escape swaps the typed text out and the original back in. Invalid input turns the border danger and swaps in the message.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "box.edit.set(1)   text.to(\"edit\")   trail.to(\"act\")   Enter: trail.to(\"spin\") → text.to(\"disp\"); trail.to(\"ok\")   Esc: text.to(\"disp\")"
+ },
+ {
+  "id": "themetoggle",
+  "category": "Admin kit",
+  "name": "Theme toggle",
+  "summary": "One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every colour between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "pts[i] = lerp(sun[i], moon[i], p)   ray.r = lerp(R0, 4, p)   card.color = mix(dark, light, theme.at(t))   pref = next === system ? \"system\" : next"
+ },
+ {
+  "id": "devicetoggle",
+  "category": "Admin kit",
+  "name": "Device toggle",
+  "summary": "The three icon buttons share one indicator whose edges lag: leading edge first, trailing 60ms later. The preview frame is a single element whose width, corner radius, bezel and chrome height spring together from one device value, so going Desktop to Phone passes through tablet like a real resize. The page inside is container-queried: columns collapse, the nav folds to a menu and cards stack as the width crosses each breakpoint.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "u.set(device)   width = piece([avail, min(820, .72·avail), min(390, .4·avail)], u)   radius = piece([10, 18, 30], u)   ind.go(l, r)"
+ },
+ {
+  "id": "timer",
+  "category": "Admin kit",
+  "name": "Running timer",
+  "summary": "Start morphs one button: the width springs to the new label, the fill goes from ink to danger, and Start and Stop swap by the blur rule while the task select swaps to its title. The h:mm:ss readout is read from the clock, and each digit that changes rolls in as its own swap. Stop rolls the digits down to zero, and the entry enters at the top of the log while the older rows spring down a slot and the last one fades out.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "secs = floor(now() − start + skip)   digit.set(char)   btn.w.set(measure(label))   rows.forEach(r => r.y.set(r.y + 32))   new.o.set(1)"
+ },
+ {
+  "id": "disclosure",
+  "category": "Admin kit",
+  "name": "Disclosure group",
+  "summary": "Each group is its own spring, never tied to a sibling: the body height follows the measured content, the chevron turns a quarter on the same spring and the content fades in with the height. Spacing holds two nested groups that open and close independently, and the parent’s height follows whatever they are doing. Like the editor’s preference store, only your toggles are remembered; Reset returns every group to its default.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "g.h.set(open ? 1 : 0)   body.h = h·inner.offsetHeight   chev = rotate((h − 1)·90)   collapsed[key] = !open"
+ },
+ {
+  "id": "delayspinner",
+  "category": "Admin kit",
+  "name": "Delayed spinner",
+  "summary": "The load starts a 300ms timer. If the result lands first, nothing shows: the list swaps and that is all. If not, the spinner fades in and blurs up on the base spring at 300ms, then stays at least 500ms so it never flashes, fading out on the snap spring once the result has swapped in. The strip below draws the same clock: the tick is the 300ms threshold and the accent span is how long the spinner was visible.",
+  "file": "blocks/151-sidesheet.js",
+  "api": "showAt = start + .3   if (end > showAt) o.set(1, S.base, showAt); o.set(0, S.snap, max(end, showAt + .5))   list.to(next) at end"
+ },
+ {
+  "id": "betweeninsert",
+  "category": "Editor",
+  "name": "Between-blocks insert",
+  "summary": "Hovering the gap draws a thin line with a plus. Clicking morphs the plus into a row of block choices, and the gap opens to make room. Picking one grows the new block from zero height at that gap while everything below slides down on the same spring.",
+  "file": "blocks/152-betweeninsert.js",
+  "api": "gap.hv.set(hover)   click: gap.h.set(54), plus → picker (morph + swap)   pick: block.h.set(H), rows below shift"
+ },
+ {
+  "id": "blocktoolbar",
+  "category": "Editor",
+  "name": "Floating block toolbar",
+  "summary": "Selecting a block raises one toolbar at its top edge. Choosing another block glides the same toolbar over: whichever edge leads the move goes first, the other lags 60ms. The block-type actions swap by the blur rule (text, image, button) while the toolbar widens or narrows, and move, duplicate and delete stay put at the end.",
+  "file": "blocks/152-betweeninsert.js",
+  "api": "tb.{left,right} = edges(block.right − width(type))   tb.y.set(block.y − 11)   typeActions.to(kind)"
+ },
+ {
+  "id": "blocklibrary",
+  "category": "Editor",
+  "name": "Block library panel",
+  "summary": "Typing filters the tiles in place: misses fade out while the matches spring into the freed slots. Dragging a tile lifts a ghost that stays exactly under the pointer. Over the page, one accent line slides between blocks to show where it will land. On release the ghost settles into the slot and the new block opens to full height while the blocks below slide down.",
+  "file": "blocks/152-betweeninsert.js",
+  "api": "tiles: o.set(match), slot.set(rank)   drag: ghost = pointer − grab   line.y.set(slotY(indexAt(y)))   drop: ghost.release(v) → block.h.set(H)"
+ },
+ {
+  "id": "quickcreate",
+  "category": "Editor",
+  "name": "Quick create",
+  "summary": "The New button is one surface. Clicking grows it into a menu of kinds, whose rows rise in 35ms apart. Choosing a kind morphs the same surface into a one-line form that stretches across the header and fades the title out. Submitting turns it into a green Created pill, and only then does the new row open at the top of the list while the others slide down.",
+  "file": "blocks/152-betweeninsert.js",
+  "api": "surface.{w,h,r,tone}.set(state)   menuRows[i].set(1, t + i·0.035)   submit: to(\"done\") → +0.16s row.h.set(40), others y.set(+40) → +1.7s to(\"btn\")"
+ },
+ {
+  "id": "shortcuts",
+  "category": "Editor",
+  "name": "Shortcuts overlay",
+  "summary": "Pressing ? dims the canvas and lifts the sheet in. The rows then rise in one after another, 35ms apart. Typing filters in place: non-matching rows fade out, group headings leave with their last row, and the remaining rows glide up. Escape closes it and hands focus back.",
+  "file": "blocks/152-betweeninsert.js",
+  "api": "sheet.o.set(open)   rows[i].e.set(1, t + .1 + i·0.035)   filter: row.o.set(match), row.y.set(rank·30)   Esc → open.set(0)"
+ },
+ {
+  "id": "stepup",
+  "category": "Workflow",
+  "name": "Step-up re-authentication",
+  "summary": "Delete site is blocked until you prove it is you. A scrim fades in while the dialog rises 8px from 97% scale, with focus in the code row and the ring sliding box to box. A wrong code turns the boxes danger, says why, then clears itself. A right code turns the boxes and button success, the dialog leaves, and only then does the blocked action resume: the button reads Deleting…, the row fades out and its space collapses, and a status line swaps in.",
+  "file": "blocks/153-stepup.js",
+  "api": "dialog.o.set(1)   code → verify → ok | bad   ok: dialog.o.set(0, snap); t+.45 resume: row.o→0, row.h→0 (t+EXIT), status.to(done)"
+ },
+ {
+  "id": "conflict",
+  "category": "Workflow",
+  "name": "Conflict recovery",
+  "summary": "While you edit, a newer version arrives: the banner’s height springs open first, pushing the draft down, then its content fades in 70ms later. Compare swaps the draft for mine and theirs side by side, and the changed lines light up one after another. Keep mine or Use theirs swaps back to the draft (theirs blur-swaps the two changed lines), then the banner fades out, its space collapses and the chip turns Saved.",
+  "file": "blocks/153-stepup.js",
+  "api": "banner.h.set(1); banner.o.set(1, t+.07)   compare: body.to(\"cmp\"); hl[i].set(1, t+.25+i·.07)   resolve: body.to(\"edit\"); line[i].to(\"t\"); banner.o→0; banner.h→0 (t+EXIT)"
+ },
+ {
+  "id": "approval",
+  "category": "Workflow",
+  "name": "Approval card",
+  "summary": "Deciding does two things in order. The status strip springs taller and its tint and outline morph from warning to success or danger while the label swaps. Then the Approve and Deny row fades out and its space collapses 100ms later, so the card ends as a stamp, not a form. Reset reverses it.",
+  "file": "blocks/153-stepup.js",
+  "api": "strip.{h,tint,ring}.set(decision); label.to(k)   actions.o.set(0, snap); actions.h.set(0, base, t + EXIT)"
+ },
+ {
+  "id": "fielddiff",
+  "category": "Workflow",
+  "name": "Field diff rows",
+  "summary": "Each row shows the old value and Theo’s new one. Choosing a value draws a strike across the other and fades it, then the chosen one’s plate fills success 60ms later and the badge swaps. Accept all and Revert all run the same change down the list 70ms apart, the decided count rolls, and a header button turns ink once every row agrees.",
+  "file": "blocks/153-stepup.js",
+  "api": "rejected.strike.set(1); rejected.o.set(.55)   chosen.plate.set(1, t + LAG)   rows.forEach((r, i) => decide(r, d, t + i·.07))"
+ },
+ {
+  "id": "invite",
+  "category": "Workflow",
+  "name": "Invite member",
+  "summary": "Invite opens a form row at the top of the list and its height springs open. Send keeps that same row: the form swaps out for the member, the height morphs to fit and the chip reads Pending. Resend turns the chip success and Sent for 1.6 seconds, widening it on the same spring. Revoke fades the row out first, then its space collapses.",
+  "file": "blocks/153-stepup.js",
+  "api": "slot.h.set(form); send: slot.to(\"member\"); slot.h.set(row)   resend: chip.to(\"sent\"); w.set(44); after(1.6) back   revoke: slot.to(\"none\"); slot.h.set(0, t + EXIT)"
+ },
+ {
+  "id": "refpicker",
+  "category": "Workflow",
+  "name": "Reference row picker",
+  "summary": "The list rises from the field with a plate that follows hover and arrow keys on lagging edges. Picking a row measures its rect and the chip starts there at the row’s size and radius, then x, y, width, height and radius spring to the chip’s slot in the field while the row’s text swaps for the chip’s. The row fades out and the rows below slide up; the field grows to wrap the next chip. Removing a chip fades it, then the others slide over and the row returns to the list.",
+  "file": "blocks/153-stepup.js",
+  "api": "chip.{x,y,w,h,r}.jump(rowRect).set(slot, S.soft)   face.to(chip)   row.o.set(0); rows.y.set(i·40)   field.h.set(rows)"
+ },
+ {
+  "id": "noticebanner",
+  "category": "Status and records",
+  "name": "Notice banner",
+  "summary": "The notice slides down inside a slot whose height springs open, so the dashboard rows are pushed down rather than covered. Next notice cross-morphs the banner fill and border between info, warning and danger while the old copy exits and the new copy enters, never overlapping. Dismiss fades the copy out first, then collapses the slot height after 100ms, and the rows rise to fill it.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "slot.h = H·natural   sev[k].set(k === next)   swap.to(next)   dismiss: text.set(0); H.set(0, t + EXIT)"
+ },
+ {
+  "id": "consent",
+  "category": "Status and records",
+  "name": "Consent banner",
+  "summary": "The banner rises from the bottom edge. Customize does not open a dialog: the intro fades and its height collapses while the four categories grow in place and the title swaps, and the middle button swaps to Save preferences. Every optional switch starts off, the three buttons carry equal weight, and focus lands on Necessary only. After a choice the copy exits first, then the same surface morphs its size, radius and position into a small tab in the corner; the tab label enters last. Clicking the tab reverses it.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "rise: y.set(0)   customize: intro.h.set(0), cats.h.set(measure), title.swap()   choose: copy.set(0); box.{w,h,x,r}.set(tab, t + EXIT); label.set(1, t + EXIT + .1)"
+ },
+ {
+  "id": "bulkbar",
+  "category": "Status and records",
+  "name": "Bulk selection bar",
+  "summary": "Selecting the first row opens a slot above the table: its height springs open and pushes the rows down, then the bar rises into it 50ms later with the count in rolling digits. The header checkbox morphs between empty, check and a dash for mixed. Delete removes the selected rows top-down, 100ms apart: each row fades, then its height collapses, and the count rolls down; the bar leaves only after the last row has gone. Archive swaps each status chip and Clear releases the rows the same way.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "bar.h.set(n > 0); bar.o.set(n > 0, t + .05); count.set(n)   delete: rows[k].o.set(0, t + k·.1); .h.set(0, t + k·.1 + EXIT); bar.leave(after last)"
+ },
+ {
+  "id": "snackbar",
+  "category": "Status and records",
+  "name": "Snackbar with action",
+  "summary": "The snackbar rises from the bottom edge while a thin bar under it drains over six seconds. Hovering or focusing the snackbar pauses the countdown and resuming pushes the deadline back by exactly the paused time. Open swaps its label to Done with a tint morph, the countdown freezes, and the snackbar leaves 0.9s later. Dismiss and the timeout use the same exit.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "o.set(1); remaining = deadline − t   hover: pausedAt = t; leave: deadline += t − pausedAt   action: swap.to(1); out at t + .9"
+ },
+ {
+  "id": "avatarpicker",
+  "category": "Status and records",
+  "name": "Avatar picker",
+  "summary": "Choosing a preset cross-fades the picture: the new image fades in over the old one, which stays opaque underneath until the new one is whole, so the circle is never blank. The selection ring moves between presets with lagging edges. Upload draws a progress ring around the avatar while the picture dims, then the ring fades, the photo cross-fades in, and the status line swaps its message.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "new.o.set(1) over old (old held until new ≥ .995)   ring.go(l, r)   upload: ring.p.set(.18 → .52 → .83 → 1); photo.o.set(1); status.swap()"
+ },
+ {
+  "id": "daterange",
+  "category": "Status and records",
+  "name": "Date range selector",
+  "summary": "The range is one tint plate per week row. When the end day moves, each row’s plate retargets with two edges: the leading edge goes first and the trailing edge lags 60ms, and rows farther from the start row begin 30ms later, so the highlight pours along the weeks. Hovering after the first click previews the range. Preset buttons animate the same plates, the endpoint discs scale in, the count rolls, and the label swaps.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "rows[r].edges.go(left, right, t + |r − startRow|·.03)   end discs: s.set(isEnd)   count.set(days)   label.swap()"
+ },
+ {
+  "id": "scrubber",
+  "category": "Status and records",
+  "name": "Timeline scrubber",
+  "summary": "The playhead follows the pointer 1:1. The record panel above always shows the latest step on or before the playhead date: when the playhead passes a step, the panel copy swaps (exit, then enter) and the two counters roll. Release projects the throw forward by the release velocity and springs to the nearest dated step. Arrow keys step between dates.",
+  "file": "blocks/154-noticebanner.js",
+  "api": "u = held ? p.x / w : pos.at(t)   state = last(step ≤ u)   release: pos.release(u, v/w, nearest(u + v·.15), S.soft)"
+ },
+ {
+  "id": "revisions",
+  "category": "Workflow",
+  "name": "Revision history",
+  "summary": "Each saved version shows a live relative time and its author. Hover or focus a version and the preview swaps (old text out in 100ms, then the new text in) to show what restoring would change: added words in a success tint, removed words struck in danger. Selecting a row opens Restore in place, which swaps to an inline confirmation, then to Restoring. Last, the removed words collapse and the tints fade so the current draft becomes the restored text, and a new entry enters at the top.",
+  "file": "blocks/155-revisions.js",
+  "api": "body.swap(diff(current, version))   row.ah.set(H[restore|confirm|busy])   m.set(1): del.w→0, ins.tint→0   entry.e.set(1)"
+ },
+ {
+  "id": "annotate",
+  "category": "Workflow",
+  "name": "Annotation review canvas",
+  "summary": "Click the design: a dot marks the spot, the pin falls onto it, and only then does a comment card grow out of the pin. Pins follow the pointer 1:1 when dragged and settle from release velocity, and the card travels with the pin it belongs to. Resolving collapses the card into its pin as the pin turns to a success check. The side list shares selection: its highlight plate moves between rows with the leading edge first.",
+  "file": "blocks/155-revisions.js",
+  "api": "pin.fy.set(0) after fy=−28   card.o.set(1): rect lerp(pin 24×24 → card)   pin.rs.set(1) + card.o.set(0) on resolve   plate.go(top, bottom)"
+ },
+ {
+  "id": "authshell",
+  "category": "Workflow",
+  "name": "Auth shell",
+  "summary": "One card holds every pane, so the frame never changes. Going to Forgot password or Enter code, the old pane slides out 18px and fades (100ms), then the next pane arrives from the direction of travel. The card’s height springs to the new pane on the same tick, so it never jumps. An error opens a danger line inside the card and adds its height to the same spring. The primary button swaps its label while it works. Everything here is demo text and nothing is sent.",
+  "file": "blocks/155-revisions.js",
+  "api": "pane.swap(next, dir)   card.h.set(measure(next))   error.set(1): h += e·errH   btn.label.to(working)"
+ },
+ {
+  "id": "funnel",
+  "category": "Workspace",
+  "name": "Funnel report",
+  "summary": "Four bars grow from the baseline left to right, 120ms apart, and each stage count rolls up as its bar rises. The drop-off chip between two stages counts up just after the bar it follows. Changing the date range morphs every bar to its new height in the same stage order while the numbers roll, and the period text swaps. Hovering a stage dims the others and raises a tooltip that glides between bar tops and swaps its text.",
+  "file": "blocks/156-funnel.js",
+  "api": "bar[i].set(v[i]/v[0], soft, t + i·.12)   count[i].set(v[i], soft, same)   drop[i].set(d, soft, t + i·.12 + .1)   dim[j].set(j === hot ? 1 : .4, snap)"
+ },
+ {
+  "id": "settingsshell",
+  "category": "Workspace",
+  "name": "Settings shell",
+  "summary": "The nav plate edges between items, leading edge first, and tints to danger on Danger zone. Panes swap by nav order: going down they leave upward and the next arrives from below, going up the reverse, never overlapping, while the content area height springs to the next pane. Changing any control starts that pane’s own Saving… then Saved flash inline, then fades. Danger zone reveals a typed confirmation that grows the pane, arms the button only once the site name matches, and replaces itself with a scheduled message and Undo. Narrow: the nav becomes a top segmented row.",
+  "file": "blocks/156-funnel.js",
+  "api": "plate.go(l, r) + go(t, b)   dir = next > cur ? 1 : -1   pane.swap(dir·10)   height.set(measure(pane))   saved: saving → (due) → saved → (due) → idle"
+ },
+ {
+  "id": "connectorlist",
+  "category": "MCP and agents",
+  "name": "Connected servers",
+  "summary": "Each row is one server. Its chip morphs fill, label and width between connected, connecting, error and disconnected while the action button swaps its label, so Reconnect never pops in. An error opens a message panel under the row. New rows grow in from zero height, then their content fades up; the list stays pinned to the new row as it grows. Replay re-enters the rows 60ms apart.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "chip.set(state)   act.put(label)   err.h.set(state === error)   row.open(true, t + i·0.06)   connect: busy → queue +1.5s → ok | error"
+ },
+ {
+  "id": "oauthgrant",
+  "category": "MCP and agents",
+  "name": "OAuth consent screen",
+  "summary": "Each scope toggle springs its knob, and the Allow count rolls. Turning on a sensitive scope grows a warning line under it. Allow morphs the button row: Deny shrinks to zero width while Allow grows, fills green and swaps to Connected, then the scopes you left off collapse 40ms apart and the toggles of the kept ones swap to checks. Deny runs the mirror image and fades red. The link between the two tiles fills as the grant lands.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "switch[i].set(v)   count.set(n)   allow: deny.w.set(0) → off-rows.h.set(0, t + i·0.04) → kept.toggle.swap(check)   line.fill.set(1)"
+ },
+ {
+  "id": "toolapproval",
+  "category": "MCP and agents",
+  "name": "Tool call approval",
+  "summary": "The card holds one request at a time. Next request swaps the whole request block, and the card height eases from the old height to the new one. Show all arguments grows the preview on the base spring and swaps its label. Allow once or Always allow swaps the buttons for a running line with a live timer, then swaps that for the result; Deny goes straight to the result. The card height follows each swap without a jump.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "req.to(next)   args.h.set(open ? full : 3 lines)   zone.swap(ask → run, t + EXIT)   queue +dur → zone.swap(result)"
+ },
+ {
+  "id": "toolcalllog",
+  "category": "MCP and agents",
+  "name": "Tool call log",
+  "summary": "Calls stream in on a run clock, newest at the top. Each row grows from zero height and its content fades up; the spinner turns on that clock, then swaps to a check or an error as the call finishes, and the duration stops counting. Several calls overlap, so more than one spinner can run. Pause freezes the run clock without losing the queue. Click a row to grow its arguments and result; failed rows open on the error.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "rt += dt (unless paused)   at ≥ call.at → row.open(true)   at ≥ call.at + dur → icon.swap(check | error)   expand: detail.h.set(open)"
+ },
+ {
+  "id": "toolpermissions",
+  "category": "MCP and agents",
+  "name": "Server tool permissions",
+  "summary": "Switches spring one by one. Enable all read-only turns on every read tool still off, 60ms apart from the top, and the button swaps to a Read-only tools enabled label once none are left; flipping any read tool off brings the original label back. The filter indicator edges lag each other, and tools outside the filter collapse in height rather than disappearing. Enabling a destructive tool grows a warning line under it.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "tool[i].sw.set(1, t + i·0.06)   bulk.swap(allRead ? done : enable)   filter: ind.go(l, r), row.open(match)   destructive: warn.h.set(on)"
+ },
+ {
+  "id": "apikeyreveal",
+  "category": "MCP and agents",
+  "name": "API key reveal and rotate",
+  "summary": "Create key grows the form open and swaps its own label to Cancel. Creating collapses the form, grows the one-time reveal panel in its place and drops the new row in from zero height with a New tag. Copy swaps to Copied with a green fill and falls back after 1.8s. Done closes the panel and fades the tag. Rotate and Revoke open an inline confirmation under the row; Rotate swaps the masked prefix and reopens the reveal, Revoke dims the row, swaps its line to Revoked, then collapses it.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "form.open(v)   create: form.open(0) → reveal.open(1, +0.3), row.open(1)   copy: label.swap(Copied), +1.8s swap back   revoke: row.dim → +0.7s row.open(0)"
+ },
+ {
+  "id": "serverstatus",
+  "category": "MCP and agents",
+  "name": "Server connection health",
+  "summary": "Connecting walks four steps in order: each swaps its ring for a spinner, then a check, 450 to 600ms apart, and the chip morphs to Connected when the last lands. The latency number rolls digit by digit with each ping while the sparkline shifts one bar left and every bar springs to its neighbor’s height. Simulate outage drops the bars flat and morphs everything to the error state; a countdown rolls down, the first auto retry fails at Initialize, and the second succeeds. Retry now skips the wait.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "steps[i]: wait → run → done | fail   latency.set(ms)   bars[i].set(vals[i+1])   outage: bars.set(0, t + i·0.02), err.open(1)   countdown = ceil(retryAt − t)"
+ },
+ {
+  "id": "agentaccess",
+  "category": "MCP and agents",
+  "name": "Agent permission matrix",
+  "summary": "Each cell is a checkbox. Toggling springs the fill and check, and the cell takes a full outline (ink for added, red with a faint check for removed) so the change is visible before saving. The pending panel grows up from the bottom edge and each change enters as its own row. The header chip morphs to Can publish or delete as soon as one of those grants is on. Save swaps to a spinner, then Saved, collapses the rows and settles every outline; Discard springs everything back.",
+  "file": "blocks/157-connectorlist.js",
+  "api": "cell.p.set(draft)   cell.q.set(draft ≠ saved)   diff.open(any)   diff[key].open(add | remove)   save: label.swap(spin → Saved), q.set(0), panel.open(0, +0.7)"
+ },
+ {
+  "id": "mega-columns",
+  "category": "Mega menus",
+  "name": "Link groups with descriptions",
+  "summary": "Hovering a top item waits 120 ms before the panel opens, with a hairline filling the wait. The panel grows from the bar, then its links rise one after another. Moving to another item keeps the panel open: its height morphs at once, the old links leave in 100 ms, then the new ones enter. At phone width the same groups become accordions in one sheet.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "ctl.hover(i) → wait 120ms → panel.o.set(1) → links.stagger(+25ms)   ctl.hover(j) → H.set(h) → swap(j)"
+ },
+ {
+  "id": "mega-featured",
+  "category": "Mega menus",
+  "name": "Featured card with links",
+  "summary": "Hover waits 120 ms, then the panel grows from the bar. The promo card rises first, the links follow in a 30 ms stagger. Switching top items keeps the panel: its height morphs, the old content leaves in 100 ms, the new promo and links enter in the same order. At phone width the links become accordions and the promo moves to the bottom of the sheet.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "panel.o.set(1) → promo.rise(t0) → links.rise(t0 + 60ms + i·30ms)   swap(j): H.set(h), exit 100ms, enter"
+ },
+ {
+  "id": "mega-tabs",
+  "category": "Mega menus",
+  "name": "Vertical tabs, hover to swap",
+  "summary": "Hovering a row on the left waits 70 ms so a quick pass across the list changes nothing. The selection plate then moves with lagging edges, leading edge first, and the right pane swaps: old content out in 100 ms, new content in from the direction of travel. Arrow keys follow the same path. At phone width each category becomes a nested accordion.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "rail.hover(k) → wait 70ms → plate.go(top, bottom) → detail.to(k, dir)   ArrowRight → focus first link"
+ },
+ {
+  "id": "mega-icons",
+  "category": "Mega menus",
+  "name": "Icon grid of products",
+  "summary": "Tiles arrive on a diagonal: top-left first, each neighbor 30 ms later. One plate glides between tiles with lagging edges, and the hovered icon fills with the accent on the same spring. Switching from Products to Integrations morphs the panel height and swaps the grid. At phone width the grids sit inside accordions as compact tiles.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "tile[r,c].rise(t0 + 30ms·(r + c))   plate.go(rect)   icon.fill.set(hover)   H.set(h)"
+ },
+ {
+  "id": "mega-search",
+  "category": "Mega menus",
+  "name": "Search inside the menu",
+  "summary": "Opening search grows the panel from the bar and puts the caret in the field. Each keystroke filters at once: rows that no longer match blur out in 100 ms, the survivors slide up into the gap, and rows that now match arrive last. The panel height follows the list. The highlight plate trails the arrow keys. On a phone, search takes over the whole screen instead.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "q → filter → leaving.o.set(0) → stay.y.set(rank·52) → entering.o.set(1)   panel.H.set(base + n·52)"
+ },
+ {
+  "id": "mega-cards",
+  "category": "Mega menus",
+  "name": "Full-width image cards",
+  "summary": "The panel unrolls from the header edge on one spring. Cards then arrive left to right: each picture rises first, its words follow 60 ms later. One plate trails the pointer between cards, and the picture under it eases up. Moving to another top item swaps the cards in place. At phone width the cards become a swipeable row inside each accordion.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "panel.reveal.set(1) → thumb[i].rise(t0 + 40ms·i) → body[i].rise(t0 + 60ms + 40ms·i)   plate.go(card)"
+ },
+ {
+  "id": "mega-flyout",
+  "category": "Mega menus",
+  "name": "Nested flyout, three levels",
+  "summary": "Hover waits 120 ms before the first level opens. Each row waits 100 ms before its submenu flies out to the right. While you travel toward an open submenu the pointer is inside a safe triangle between where you left the row and the submenu’s edge: rows you cross on the way do not switch for 350 ms. Leave the triangle and the switch comes in 50 ms. Arrow keys follow the menu pattern; Escape closes one level at a time.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "row.hover → wait 100ms → sub.o.set(1)   in triangle(aim, sub.top, sub.bottom) → hold 350ms   Esc → close level, focus parent row"
+ },
+ {
+  "id": "mega-morph",
+  "category": "Mega menus",
+  "name": "Morphing dropdown with caret",
+  "summary": "There is one panel. Hover waits 120 ms, then it fades in with its caret under the item. Moving to another item never closes it: the caret slides first, the panel follows with lagging edges, width and height morph together, the old content leaves in 100 ms and the new content enters from the direction of travel. Leaving the bar closes it after 220 ms.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "caret.x.set(trigger.cx)   panel.{x, w, h}.set(pane)   content.to(k, dir)   open: one fade, never a second panel"
+ },
+ {
+  "id": "mega-command",
+  "category": "Mega menus",
+  "name": "Command menu",
+  "summary": "Hover Go to, Create or Account waits 120 ms, then the palette opens already scoped to that group. Moving to another group keeps it open: rows that leave blur out in 100 ms, the rest slide into the gap, the group’s own rows arrive last. ⌘K or Ctrl+K opens it with the keyboard; the plate follows the arrow keys and Enter runs the command. On a phone it is a bottom sheet with touch-sized rows.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "scope.set(g) → rows.leave(o→0) → rows.stay(y→rank) → rows.enter(o→1)   ⌘K → open, focus input   Enter → run, close, focus trigger"
+ },
+ {
+  "id": "mega-drill",
+  "category": "Mega menus",
+  "name": "Drill-down menu with back",
+  "summary": "The menu button opens one panel (on hover after 120 ms, or on click). A row with a chevron pushes the next level in from the right while the current one slides back 30% and fades. The header title swaps in the direction of travel and the Back button fades in with the parent’s name. Back, Escape and a drag from the left edge all pop a level: the drag follows the finger 1:1 and settles from its release velocity.",
+  "file": "blocks/158-mega-columns.js",
+  "api": "push: next.x.set(0), cur.x.set(−1)   header.to(title, dir)   back: reverse   drag: x.jump(dx/W) → release(v)"
+ },
+ {
+  "id": "header-spread",
+  "category": "Headers",
+  "name": "Header: logo, links, call to action",
+  "summary": "Click a link and the underline slides to it, the leading edge first and the trailing edge 60ms behind. Change the alignment and the link group glides across the free space between logo and actions. Sign in morphs the account zone: the width springs to the avatar while the buttons blur out and the avatar blurs in. Narrow: the burger becomes a cross, a drawer slides in from the right over a dimmed page, then each link enters 40ms after the last and Product opens as an accordion.",
+  "file": "blocks/159-header-spread.js",
+  "api": "underline.go(l, r)   links.x.set(align × freeSpace)   acts.w.set(signed ? avatar : buttons)   drawer.x.set(0)   link[i].o.set(1, S.base, t + .08 + i·.04)"
+ },
+ {
+  "id": "header-split",
+  "category": "Headers",
+  "name": "Header: logo centered, links split",
+  "summary": "The logo stays optically centered while the links split around it. Hover grows a short underline from each link’s center; click widens it to a full underline on the same spring. The alignment option slides each half toward the logo or toward the edges, using whatever room is left after the account zone morphs. Narrow: burger on the left, logo centered, and the menu opens as a dropdown whose height morphs open under the header with links entering in order.",
+  "file": "blocks/159-header-spread.js",
+  "api": "half.x.set(align × (box − links))   underline.scaleX = max(current, .4 × hover)   panel.h.set(natural)"
+ },
+ {
+  "id": "header-three",
+  "category": "Headers",
+  "name": "Header: links, logo centered, actions",
+  "summary": "Each link fills with a soft plate on its own spring when hovered or focused, so moving across the row leaves a short trail. Signing in swaps Sign in and the button for a notifications bell and the avatar; the bell’s unread dot scales away when clicked. The avatar opens a menu whose rows enter 30ms apart. Narrow: the burger opens a drawer from the left edge over a dimmed page, and the account zone stays in the bar.",
+  "file": "blocks/159-header-spread.js",
+  "api": "link.plate.set(hover)   acts.w.set(signed ? bell + avatar : buttons)   menu.rows[i].o.set(1, S.base, t + i·.03)   drawer.x.set(0)"
+ },
+ {
+  "id": "header-stacked",
+  "category": "Headers",
+  "name": "Header: utility bar and main row",
+  "summary": "Scroll past 40px and the utility row collapses in two beats: its text fades first, then its height springs to zero 60ms later, so the main row rides up to the top edge and the shadow fades in. Scrolling back to the top reverses it: height opens first, the text follows 100ms behind. The page never shifts because the header floats over it. Narrow: the utility row disappears and its links move to the bottom of the dropdown menu.",
+  "file": "blocks/159-header-spread.js",
+  "api": "util.o.set(0); util.h.set(0, S.base, t + .06)   expand: util.h.set(1); util.o.set(1, S.base, t + .1)   shadow.o.set(scrolled)"
+ },
+ {
+  "id": "header-shrink",
+  "category": "Headers",
+  "name": "Header: shrinks on scroll",
+  "summary": "Past 16px of scroll the header compacts on a single spring: the bar goes from 88px to 56px, the logo scales from 1.18 to 1, the tagline folds away, the button height eases down, and the border and shadow fade in together. Back at the top it reverses on the same spring. Narrow: starts at 64px and shrinks to 52px, and the menu drops from beneath whichever height it is at.",
+  "file": "blocks/159-header-spread.js",
+  "api": "k.set(scrollTop > 16)   h = lerp(88, 56, k)   logo.scale = lerp(1.18, 1, k)   tagline.h = (1 − k)·16   shadow.o = k"
+ },
+ {
+  "id": "header-autohide",
+  "category": "Headers",
+  "name": "Header: hides on scroll down",
+  "summary": "Scroll down past 80px and the header slides up out of the frame on a fast spring, leading with its bottom edge. The first upward scroll of 4px brings it back on a softer spring, so it leaves quickly and arrives gently. It also returns whenever focus moves into it, when a menu is open, and at the very top. The label below reads the current state.",
+  "file": "blocks/159-header-spread.js",
+  "api": "dy = scrollTop − last   hide.set(dy > 4 && y > 80, S.snap)   show.set(dy < −4 || focusin || menuOpen, S.base)   header.y = −hide × (h + 2)"
+ },
+ {
+  "id": "header-overlay",
+  "category": "Headers",
+  "name": "Header: transparent over hero",
+  "summary": "Over the dark hero the header has no background, no border, and light ink. Scrolling 24px fills the background, fades in the border and shadow, and turns the logo, links and button ink from light to dark, all as one blend on one spring. Opening the narrow menu forces the solid state first so the panel never opens against a transparent bar. The button’s fill and text colors invert with the same blend.",
+  "file": "blocks/159-header-spread.js",
+  "api": "k.set(scrollTop > 24 || menuOpen)   bg = card × k   ink = lerp(#EFF2F6, ink, k)   button.fill = lerp(#EFF2F6, ink, k)"
+ },
+ {
+  "id": "header-pill",
+  "category": "Headers",
+  "name": "Header: floating pill with plate",
+  "summary": "One plate slides between links with lagging edges: it follows the pointer or keyboard focus, then returns to the current page when you leave. Scrolling lifts the pill’s shadow, tucks it 6px closer to the top, and folds the wordmark away so the pill narrows. The Pill option morphs the width between fit-to-content and full. Narrow: the same pill is a bar; the burger morphs it taller in place, its corner radius easing from 26px to 22px, and the links appear inside it one after another.",
+  "file": "blocks/159-header-spread.js",
+  "api": "plate.go(l, r) on hover / focus, back to current on leave   pill.w.set(fit | full)   wordmark.w.set(scrolled ? 0 : natural)   pill.h.set(52 + panel)   links[i].o.set(1, S.base, t + .08 + i·.04)"
+ },
+ {
+  "id": "header-rail",
+  "category": "Headers",
+  "name": "Header: side rail",
+  "summary": "Hover or focus the rail and it widens from 64px to 232px first; the labels fade in 60ms later, each 20ms after the last, so text never spills out of a half-open rail. Leaving reverses it: labels go first, then the width closes. The active plate slides between rows with lagging edges. Pinned keeps it open and the page slides over to make room. Narrow: the rail becomes a drawer opened from a top bar, with labels already showing.",
+  "file": "blocks/159-header-spread.js",
+  "api": "rail.w.set(hover ? 232 : 64)   label[i].o.set(1, S.base, t + .06 + i·.02)   exit: labels.o.set(0); rail.w.set(64, S.base, t + .05)   page.pad.set(pinned ? 232 : 64)"
+ },
+ {
+  "id": "header-search",
+  "category": "Headers",
+  "name": "Header: search expands in place",
+  "summary": "Press the search icon (or “/”) and the pill widens in place to 320px while the links, centered in the room left over, are pushed toward the logo; when they no longer fit they blur out instead of wrapping. The results panel drops from the field with its height following the number of matches; typing collapses non-matching rows and keeps the rest. Narrow: the field takes the whole bar, the logo and menu button fold away together, and Cancel slides in.",
+  "file": "blocks/159-header-spread.js",
+  "api": "search.w.set(open ? 320 : 36)   links.x.set(align × (room − links)); links.o.set(fits)   rows[i].h.set(match ? 40 : 0)   panel.h.set(30 + Σ rows)   narrow: chrome.w.set(0); field.grow = open"
+ },
+ {
+  "id": "header-announce",
+  "category": "Headers",
+  "name": "Header: announcement bar",
+  "summary": "Dismiss the bar and its text blurs out first (100ms), then the slot’s height springs to zero 60ms later, so the header and the whole page ride up into the freed space rather than leaving a gap. Show again opens the slot first and brings the text in 100ms behind. It lives above a sticky header, so once you scroll it leaves with the page and the header stays pinned. Narrow: the message left-aligns and wraps to two lines, and the slot measures itself.",
+  "file": "blocks/159-header-spread.js",
+  "api": "dismiss: text.o.set(0, S.snap); slot.h.set(0, S.base, t + .06)   restore: slot.h.set(natural); text.o.set(1, S.base, t + .1)   focus → logo"
+ },
+ {
+  "id": "header-minimal",
+  "category": "Headers",
+  "name": "Header: minimal with fullscreen menu",
+  "summary": "The page header is only a wordmark, the account zone and a Menu button, at every width. Opening swaps the label Menu to Close, folds the two lines into a cross, and expands a dark layer as a circle growing out from the button until it covers the page. The header recolors to light ink at the same moment, then each link enters 60ms after the last, and hovering one dims the others. Escape closes it and focus returns to the button.",
+  "file": "blocks/159-header-spread.js",
+  "api": "overlay.r = open × reach(button → far corner)   header.ink = lerp(ink, card, open)   link[i].o.set(1, S.base, t + .14 + i·.06)   hover: others.o.set(.4)"
+ },
+ {
+  "id": "footer-minimal",
+  "category": "Footers",
+  "name": "Minimal footer",
+  "summary": "Hovering or tabbing to a link draws its underline left to right on a snap spring while the text darkens; leaving wipes the line out toward the right. Back to top nudges its arrow up, then the page scrolls home on a soft spring and focus lands on the page heading. Wheel, touch or any key cancels the scroll mid-flight.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "link.p.set(hover ? 1 : 0, S.snap)   underline.scaleX = p, origin = hover ? left : right   scroll.jump(y).set(0, S.soft)"
+ },
+ {
+  "id": "footer-centered",
+  "category": "Footers",
+  "name": "Centered footer with social icons",
+  "summary": "Links draw their underline on hover. The social icons share one plate: entering the row fades it in under the nearest icon, moving along the row stretches it with the leading edge first and the trailing edge 60ms behind, and each glyph inks up as the plate passes under it. Back to top springs the page home.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "plate.go(l, r)   plate.o.set(hovering ? 1 : 0)   icon.color = mix(overlap(plate, icon))"
+ },
+ {
+  "id": "footer-columns",
+  "category": "Footers",
+  "name": "Four-column footer",
+  "summary": "Brand block and four link groups. As the footer scrolls into view each block fades up 10px, left to right, 45ms apart; scrolling back out resets them so the entrance replays. Links draw underlines, and Changelog, Status and Careers carry a pill or an arrow that nudges on hover. Layout is container-driven: five columns, then brand over four columns, then two by two.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "block[i].set(top < viewBottom − 24 ? 1 : 0, S.soft, now + i·45ms)   link.underline.scaleX = hover"
+ },
+ {
+  "id": "footer-newsletter",
+  "category": "Footers",
+  "name": "Footer with newsletter signup",
+  "summary": "Submit an invalid address and the field rings danger red while a message opens beneath. A valid one shrinks the button to a spinner, then resolves one of three ways: success turns the button green with a check, then the whole field morphs into a tinted confirmation; a server failure turns the button red with Try again; an address already on the list rings the field amber. Columns rise into view in order as the footer scrolls in.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "plan(busy → ok | err | warn)   ring = mix(ok, warning, danger)   button.w.set(44)   field.bg → success-tint   msg.to(i)"
+ },
+ {
+  "id": "footer-accordion",
+  "category": "Footers",
+  "name": "Accordion footer on mobile",
+  "summary": "Below 520px each column becomes a disclosure: the chevron rotates 180° and the panel’s height springs open while its links rise in one after another, 70ms apart. Other sections keep their own state. If the footer was at the bottom of the page the scroll stays pinned there, so the opening list is never pushed off screen. At wider widths the same markup is plain columns and the buttons disappear.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "o[i].set(open ? 1 : 0)   panel.h = o·content.h   chevron.rotate = o·180°   li[j].a = clamp((o − j·0.07)/0.5)"
+ },
+ {
+  "id": "footer-region-theme",
+  "category": "Footers",
+  "name": "Footer with language picker and theme toggle",
+  "summary": "The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every colour in the page below cross-fades on one spring; System keeps following the real page theme.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "pop.o.set(open)   hl.go(top, bottom)   strings[i].swap(at = now + i·12ms)   page.color = mix(dark, light, theme.at(t))"
+ },
+ {
+  "id": "footer-status",
+  "category": "Footers",
+  "name": "Footer with live status",
+  "summary": "The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes colour 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there as the list opens.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "g.set(0 | 1 | 2)   dot, tint = mix(g)   label.to(i)   pill.w.set(measure(label))   row[i].c.set(v, now + i·45ms)"
+ },
+ {
+  "id": "footer-reveal",
+  "category": "Footers",
+  "name": "Sticky reveal footer",
+  "summary": "The page is one layer sitting above a footer that is pinned to the bottom of the viewport. Scrolling is the only input: once the page’s bottom edge reaches the viewport bottom, reveal progress is (scroll + view − page) ÷ footer height. The page’s bottom corners round in over the first tenth, and the footer content drifts down 40px and brightens as it is uncovered. Until it shows, the footer is inert so Tab cannot land under the page.",
+  "file": "blocks/160-footer-minimal.js",
+  "api": "r = clamp((scrollTop + viewH − main.h) / footer.h)   main.radius = 18·clamp(10r)   content.y = (r − 1)·40   footer.inert = r < .02"
+ },
+ {
+  "id": "fz1-wordmark",
+  "category": "Footers",
+  "name": "Giant wordmark footer",
+  "summary": "The wordmark is sized to the width of the footer and rises letter by letter as the page scrolls it into view. Each letter follows the scroll position on the soft spring, starting 35ms after the one before it, so p leads and l trails, and scrolling back up lowers them again. Link underlines wipe in from the left and leave to the right, and Back to top scrolls on a spring that any wheel or touch cancels.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "v = clamp((scrollTop + H − wordmarkTop) / wordmarkH)   letter[i].set(v, S.soft, t + i·0.035)   top.set(0)"
+ },
+ {
+  "id": "fz2-ctaband",
+  "category": "Footers",
+  "name": "Call-to-action band footer",
+  "summary": "Once 96px of the band is on screen, the eyebrow fades up first, then the headline words rise out of their masks 45ms apart, then the actions and reassurances follow in the same order. The button is one element that morphs on hover: it widens to make room for the arrow, its corners round from 14 to a full pill, its fill turns from light to the accent, and it presses in 3% on the snap spring. Link underlines wipe in from the left and leave to the right.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "v = scrollTop + H − bandTop > 96 ? 1 : 0   item[i].set(v, S.soft, t + i·0.045)   btn: w, r, fill = hover.set(1)   press: d.set(1, S.snap)"
+ },
+ {
+  "id": "fz3-sitemap",
+  "category": "Footers",
+  "name": "Mega footer with sitemap search",
+  "summary": "Typing filters the whole map at once. Every link that does not match steps back to 16% opacity with a slight blur, 5ms apart in reading order, while matches stay full and underline from the left. A column with no match dims its heading, the count rolls its digits, and no results opens a one-line hint below the field. Enter or the down arrow moves focus to the first match, Escape clears, and the slash key focuses the field from anywhere in the footer.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "link.o.set(hit ? 1 : .16, S.base, t + i·0.005)   link.m.set(hit ? 1 : 0)   heading.o.set(any ? 1 : .35)   count.set(n)"
+ },
+ {
+  "id": "fz4-live",
+  "category": "Footers",
+  "name": "Footer with live widgets",
+  "summary": "Time, conditions and the ticker are all computed from the clock. Picking an office rolls the hours, minutes and seconds digit by digit, rolls the temperature, and blur-swaps the icon and the condition text, 100ms out then in. Seconds roll once a second. The now-playing ticker moves at constant speed on a velocity track: hovering, focusing or pressing pause eases the speed to zero on a critically damped spring and resumes the same way, with no jump. Titles fade at the two ends by position, not with a gradient.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "digits.set(hhmmss(tz, t))   cruise.set(playing && !hover ? 26 : 0, S.soft)   x = −(P(t) mod L)   item.o = min(clamp((x + 96) / 96), clamp((VW − x) / 96))"
+ },
+ {
+  "id": "fz5-app",
+  "category": "Footers",
+  "name": "App download and trust footer",
+  "summary": "Reaching the app block ripples the QR modules in from the top left corner on the lazy spring, one diagonal at a time. The trust badges rise 60ms apart; hovering or focusing a badge rings it in ink and pops a detail card above it from 97% scale, and Escape closes it. The store buttons morph their corner radius and fill on hover, social pills fill with ink and send the arrow up and right, and Copy link blur-swaps to Copied and back. Below 520px the QR is dropped because the phone is already the device.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "qr.cell(x, y) = clamp(2p − (x + y)/48)   badge[i].set(1, S.soft, t + i·0.06)   tip.set(hover ? 1 : 0)   copy.swap(1) → t + 1.6 → swap(0)"
+ },
+ {
+  "id": "fz6-disclosure",
+  "category": "Footers",
+  "name": "Footer with more links and sticky strip",
+  "summary": "More links opens a drawer under the toggle: the drawer height springs to its measured content, the chevron turns on the same spring, the three link groups rise 60ms apart, and the page scrolls just far enough to show the bottom of it. The label blur-swaps between More links and Fewer links. The strip stuck to the bottom of the page is one element that morphs between a cookie prompt and a one-line legal bar: the prompt text leaves in 100ms, the strip springs to the new height, and the legal row enters, with focus handed to Cookie settings so keyboard users keep their place.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "body.h.set(open ? inner : 0)   group[i].set(open, S.soft, t + i·0.06)   strip.h.set(measure(next), t + (shrink ? EXIT : 0))   swap.to(next)"
+ },
+ {
+  "id": "fz7-hours",
+  "category": "Footers",
+  "name": "Footer with map, contact and opening hours",
+  "summary": "Today comes from the clock and is marked by a tint plate that slides between rows with its leading edge first. The status chip is one pill that morphs between open (success), closing soon in the last hour (warning) and closed (danger): it blends color, resizes to its new text, and the text blur-swaps. The Preview buttons set another time so you can see each state. The map placeholder drags 1:1 with a rubber band at the edges and glides on release velocity; plus and minus zoom on the soft spring, and the pin widens into its address label on hover or focus. Get directions fills from the left and empties to the right.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "plate.go(rowTop, rowBottom)   chip: w, color = blend(open, soon, closed)   swap.to(text)   pos.release(p, v, clamp(p + v/ω))   pin.w.set(hover ? label : 30)"
+ },
+ {
+  "id": "fz8-full",
+  "category": "Footers",
+  "name": "Full footer with staggered entrance",
+  "summary": "The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labelled string out in 100ms and the new text in, one group after another.",
+  "file": "blocks/161-fz1-wordmark.js",
+  "api": "item[i].set(1, S.soft, t + i·0.055)   letter[j].set(1, S.soft, t + n·0.055 + j·0.04)   bar[k].set(1, S.soft, …k·0.012)   text.o.set(0, S.snap) → swap copy → o.set(1)"
+ },
+ {
+  "id": "agentcursor",
+  "category": "Agent activity",
+  "name": "Agent cursor",
+  "summary": "The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in Velo. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "agent.x/y.set(target)  w:11   land → outline.set(1)   press.set(1) → set(0) after 90ms   comment: pin.o.set(1)   you: jump(pointer)"
+ },
+ {
+  "id": "agentnav",
+  "category": "Agent activity",
+  "name": "Agent navigation",
+  "summary": "When a page is requested, a thin load bar runs, the old page slides out toward where you came from and the new one slides in from the other side. Back reverses the direction. The URL path swaps with it, a chip joins the visited trail (leading edge first), and navigating after going back drops the forward pages. The badge says who drove it: the agent, or you with Back, Forward or a chip.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "sw.to(route, dir)   path.put(url, dir)   chip.e.set(1) → trail.off.set(end)   truncate: forward chips e.set(0)   ld: 0 → .75 → 1"
+ },
+ {
+  "id": "followmode",
+  "category": "Agent activity",
+  "name": "Follow the agent",
+  "summary": "With Follow on, your viewport is a second, softer spring chasing the agent’s scroll, so it trails by a beat and never jerks. The moment you scroll yourself (wheel, touch, keys or scrollbar) follow breaks: the toggle turns off, the frame loses its accent edge and a Resume chip springs in, pointing up or down toward the agent. Resume glides from where you are to where the agent is.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "agent.scroll.set(stop)  w:6   view.scroll = follow ? F.set(stop) w:4.6 : native   userScroll → follow=false, chip.set(1)   resume → F.jump(you); F.set(agent)"
+ },
+ {
+  "id": "agentinspect",
+  "category": "Agent activity",
+  "name": "Agent inspect element",
+  "summary": "The outline snaps to the element’s box with its leading edge first and the trailing edge a beat behind, so the box visibly stretches between elements while the size readout counts to the new values. The label chip follows the top-left corner, then the inspector swaps and its accessibility checks arrive 45ms apart with the failing ones marked by shape (check, bang, cross). Inspected elements keep a result badge. Click any element, or switch Agent drives off, to take over.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "ol.x = edges(l, r).go()   ol.y = edges(t, b).go()   label.put(role · name)   rows[i]: prog(t, t0 + EXIT + i·0.045)   badge.set(1)"
+ },
+ {
+  "id": "presencebar",
+  "category": "Agent activity",
+  "name": "Presence bar",
+  "summary": "Each participant is a button: people are round, agents are rounded squares with a star and a square “Agent” tag, so nothing relies on color. Joining grows the slot first, then the avatar arrives; leaving fades first, then the slot closes. Activity chips swap text and morph width. Tap anyone to jump to the page they are on (the view slides toward their route and their cursor appears); it keeps following as they move. “My view” returns.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "join: slot.e.set(1) → cell.a.set(1) +80ms   leave: cell.a.set(0) → slot.e.set(0) +EXIT   tap: view.to(route, dir)   activity.put(text) · width morph"
+ },
+ {
+  "id": "sitecoverage",
+  "category": "Agent activity",
+  "name": "Site coverage",
+  "summary": "The agent crawls one page at a time. The current row lights and spins; on arrival its links are discovered, so new rows open under it and join the queue 120ms apart. When the visit ends the dot morphs to a check, findings roll into the counters and the bar fills. Blocked pages (sign-in, downloads) end in a skipped state with the reason. Click a queued page to move it to the front.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "visit(n): row.c.set(1) → kids.open(+.12·i) → row.v.set(1), digits.set(n)   bar.set(done/found)   queue[i].y.set(i·ROW)   click → queue.unshift(item)"
+ },
+ {
+  "id": "agentscroll-map",
+  "category": "Agent activity",
+  "name": "Agent scroll map",
+  "summary": "The map is the whole page squeezed into a strip. The agent’s window (tinted) stretches with its leading edge first as it scrolls; every band it covers fills from the left, the Seen counter rolls, and findings drop a square pin on both the map and the page. Your own window is outlined: drag it 1:1 and it settles from your release velocity, or click the map or a section chip to glide there.",
+  "file": "blocks/162-agentcursor.js",
+  "api": "agent.win = edges(top, bottom).go(scroll·k)   band[i].fill.set(1) when covered   seen = Σ fill / N   you.win: drag() → scroll = y/k · release(v)"
+ },
+ {
+  "id": "agentpin",
+  "category": "Agent activity",
+  "name": "Agent pin and comment",
+  "summary": "The agent scrolls the page to the element, its cursor glides over, and a selector frame snaps around the target with the leading edges first. Then the pin falls onto the element and only then does the comment card grow out of the pin, carrying the agent’s name, an Agent badge shaped differently from a person’s round avatar, a severity chip and the element selector. Resolving collapses the card back into the pin, which turns to a check.",
+  "file": "blocks/163-agentpin.js",
+  "api": "page.sc.set(y)   box.go(prev → target)   cursor.cp.set(1)   pin.fy.set(0) after fy = −28   card.o.set(1): rect lerp(pin 26×26 → card)   pin.rs.set(1) + card.o.set(0)"
+ },
+ {
+  "id": "agentthread",
+  "category": "Agent activity",
+  "name": "Agent and human thread",
+  "summary": "The pin falls on the field and its thread grows out of it with the agent’s finding and a person’s question already in place. The agent’s three-dot indicator breathes on the clock, then its answer reveals word by word while the thread’s height eases open to follow it. Once it finishes, Accept and Dismiss fade in; either swaps to a one-line outcome with Undo. A reply from you appends a person’s message and the agent answers the same way. Resolve collapses the whole thread back into the pin.",
+  "file": "blocks/163-agentpin.js",
+  "api": "pin.fy.set(0)   card.o.set(1)   msg.dots(t) = sin(2π(t·1.1 − i·.18))   word[i].o = prog(t, ts + i·50ms)   list.h.set(natural)   dec.swap(wait→choose→acc|dis)   card.o.set(0) on resolve"
+ },
+ {
+  "id": "evidencecapture",
+  "category": "Agent activity",
+  "name": "Evidence capture",
+  "summary": "The agent scrolls to the element and a capture frame snaps in around it, leading edges first with the trailing edges 60ms behind, while the rest of the page dims. The region flashes once, lifts off the page as a snapshot, and shrinks and travels into the tray, landing in the slot that has just opened for it. Only when it lands does the saved-screenshots count roll up. Open any thumbnail and it grows from its own slot into a viewer with who captured it and the element it shows; arrows swap between shots.",
+  "file": "blocks/163-agentpin.js",
+  "api": "box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centred)"
+ },
+ {
+  "id": "suggestededit",
+  "category": "Agent activity",
+  "name": "Suggested edit",
+  "summary": "The agent frames the element and a suggestion card pops in beside it. Its words reveal in order: removed words get a danger tint and a strike that draws left to right, added words a success tint. Accept and Reject are one row that morphs: the chosen button grows to fill it and turns to a one-line outcome with Undo while the other collapses. On the page, accepting makes removed words close up and added words open out, and a style edit eases the button’s fill to the new value. Undo runs the same morph backwards.",
+  "file": "blocks/163-agentpin.js",
+  "api": "frame.go(prev → target)   card.pop(o)   word[i].o = prog(t, t0 + i·35ms)   strike.s = prog   row: acc.w = W − rej.w − gap, rej.w → 0   page: del.w = nat·(1−a), ins.w = nat·a   cta.bg = mix(a, accent, pale)"
+ },
+ {
+  "id": "reviewsummary",
+  "category": "Agent activity",
+  "name": "Review summary",
+  "summary": "Findings arrive one at a time, 130ms apart: each row fades up and opens its height while the severity counts roll up digit by digit and the Reviewing chip morphs to Completed. Severity chips are full-border chips and double as filters. Switching a filter closes unmatched rows to nothing while the rest slide up, and the Showing count rolls. Opening a finding eases its height open to the saved screenshot, the steps to reproduce, and expected against observed; opening another closes the first.",
+  "file": "blocks/163-agentpin.js",
+  "api": "row.en.set(1, t + i·130ms); digits.set(count)   chip.p.set(1): width, fill, label swap   row.vis.set(match ? 1 : 0)   row.h = (head + body·ex)·vis·en"
+ },
+ {
+  "id": "agentqueue",
+  "category": "Agent activity",
+  "name": "Agent comment queue",
+  "summary": "When the run finishes the snackbar rises and its count rolls up as five pins drop onto the page 90ms apart. Review morphs that same snackbar into a sheet that steps through the pins: the page scrolls so the pin sits in the visible part above the sheet, the selector frame travels to it with leading edges first, the text swaps with blur, the count rolls and the progress plate slides to the new tick. Arrow keys and ticks jump directly; Escape or Done folds the sheet back to the snackbar.",
+  "file": "blocks/163-agentpin.js",
+  "api": "pins[i].fy.set(0, t + i·90ms)   digits.set(n)   bar.m.set(1): rect lerp(snackbar → sheet)   page.sc.set(y)   box.go(prev → pin)   plate.go(l, r)   swap.to(detail)"
+ },
+ {
+  "id": "handoff",
+  "category": "Agent activity",
+  "name": "Needs a human decision",
+  "summary": "The agent pauses on a pin it cannot settle alone. The pin falls with a question mark and a warning dot, and its card grows out of it with a Needs a human decision chip. Choosing an option slides a plate between the three rows (leading edge first). Send answer closes the options and the button away, echoes your choice, and the agent’s acknowledgement reveals word by word. Meanwhile both status chips morph in place from warning to success to running, the pin’s question mark swaps for its number, and a one-line run status steps through what the agent does next.",
+  "file": "blocks/163-agentpin.js",
+  "api": "pin.fy.set(0); pin.qm.set(1)   plate.go(top, bottom)   ans.set(1): options.h → 0   ack.words reveal   chip.v.set(0 → 1 → 2): width, fill, label   pin.qm.set(0)   run.swap(i)"
+ },
+ {
+  "id": "agentstatus",
+  "category": "Agent activity",
+  "name": "Agent status pill",
+  "summary": "One pill carries the whole run. On every change the shape morphs first (pill, rounded box, square, notched), the icon swaps, the label swaps and its width springs, and the action text grows out of the pill when there is one. Border weight and color blend with it, so state never relies on color alone. The elapsed timer restarts with rolling digits, and the button beside it swaps to the next sensible action.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "pill.r = Σ wᵢ·rᵢ   label.swap(state) → width.set(measure)   action.w.set(text ? measure : 0)   timer.digits.set(m:ss)   button.swap(Start | Pause | Review | Resume | Retry)"
+ },
+ {
+  "id": "activityfeed",
+  "category": "Agent activity",
+  "name": "Agent activity feed",
+  "summary": "Each action lands at the top: its row grows from zero height, then the content fades up, while the agent cursor glides to the matching spot on the page. Consecutive actions of one kind fold into a single group whose title swaps and whose count rolls. Filter chips close non-matching groups instead of removing them. Click any row and the ring moves to that spot, leading edge first, and the page shows that moment; Back to live returns to following the newest action.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "event → group = head.kind === kind ? merge(head) : insert(top, slot.open)   cursor.go(spot)   chip.count.roll()   row.click → ring.go(spot), page.view(row.view)"
+ },
+ {
+  "id": "takeover",
+  "category": "Agent activity",
+  "name": "Take over from the agent",
+  "summary": "Take over freezes Claude where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to Claude’s next target, turns into Claude’s, the banner closes, and the queue starts ticking again.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "takeOver: agent.fade, human.at(agent.pos) → human.follow(pointer); banner.h.set(1) · queue.open · page.editable(true)   handBack: human.go(next.spot) → agent.at(human.pos); banner.h.set(0)"
+ },
+ {
+  "id": "planprogress",
+  "category": "Agent activity",
+  "name": "Agent plan progress",
+  "summary": "Steps tick on a spring: the mark swaps from ring to spinner to check, and the row’s substeps tick one by one under the current step, which is the only one open. When a step fails it stops the run, opens on the error and offers Retry or Skip; retrying runs only that step. Add step grows an input row, and the new step slides in after the current one while the bar fill and the rolling percent move to the new total.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "sub.tick → sd++   step.done → mark.set(check), detail.close, next.mark.set(spin), next.detail.open   fail → halt, error.open   total = rows.length → fill.set(done/total), digits.set(pct)"
+ },
+ {
+  "id": "approvalinline",
+  "category": "Agent activity",
+  "name": "Approval on the page",
+  "summary": "Claude’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "cursor.go(spot) → scrim.set(1), ring.go(spot), pop(el, p, ±6)   ask.swap(result) + follow(height)   risky ? allow.enabled = (input === phrase) : true   always → rules.insert(slot.open)"
+ },
+ {
+  "id": "runreplay",
+  "category": "Agent activity",
+  "name": "Agent run replay",
+  "summary": "The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centred, and clicking a row glides the playhead there on a spring.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "ph = drag ? pointer.x : coast(release.v) | play ? ph + dt·speed : ph   state = derive(ph)   page.view/url/fields/pins = state   cursor.at(ph) = lerp(spotᵢ, spotᵢ₊₁, ease)   row.now = last(at ≤ ph)"
+ },
+ {
+  "id": "agentlanes",
+  "category": "Agent activity",
+  "name": "Multi-agent lanes",
+  "summary": "Bars grow on the run clock, so a running task is a bar whose right edge is the playhead. When a task finishes, a handoff arrow draws from its end to the start of the next agent’s task, and that bar starts growing as the arrow lands. When two agents touch /signup at once, a warning band opens across both lanes with a marker; Queue Reviewer after slides the Reviewer’s bars later on a spring until the band closes. Clicking a lane grows it and swaps the detail panel to that agent.",
+  "file": "blocks/164-agentstatus.js",
+  "api": "bar.w = clamp((rt − a)/(b − a))·(b − a)·pps   arrow.p = prog(rt − b)   conflict = overlap(formₐ, reviewerₐ) → band.set(1)   resolve → shift.set(2.8s)   lane.click → h.set(focused), detail.swap(lane)"
+ },
+ {
+  "id": "irisab",
+  "category": "Image transitions",
+  "name": "Iris A/B: counter-scale vs clip-path",
+  "summary": "A device test for an iris that opens from a ballot oval. The left pane scales a round window up while scaling the photo inside it down by the inverse (two Web Animations, transform only, so the compositor runs them). The right pane animates clip-path: circle(), which Safari and most browsers repaint on the main thread. Turn on Busy main thread to burn 12ms of every frame: the transform iris keeps its pace while the clip-path iris stutters. The drift readout shows how far the photo inside the counter-scaled window wanders between keyframe samples, and Ratio-bounded places keyframes so no two neighbours differ by more than 6% in scale, which keeps drift under a tenth of a percent. Open this on the real phone; the frame gaps shown are main-thread gaps.",
+  "file": "blocks/166-irisab.js",
+  "api": "mask: scale(s)  media: scale(1/s) about the focal point · keyframe whenever s changes 6% · drift = (r−1)²/4r · clip-path: circle(r at fx fy) for comparison"
+ },
+ {
+  "id": "filmscrub",
+  "category": "Image transitions",
+  "name": "Interruptible film scrub",
+  "summary": "A four-chapter film on one Web Animations clock (push, iris, ink flood) with a chapter rail you can drag. Pressing the rail pauses every animation and hands the playhead to a critically damped follower, so dragging feels smooth even when the pointer jitters, and a fast flick coasts a little further. Releasing resumes playback only if the film was playing. Only animations whose scene overlaps the playhead get currentTime written each frame, which keeps a long film cheap to scrub. Chapter clicks can glide or cut; arrow keys step a second, Home and End jump to the ends.",
+  "file": "blocks/166-irisab.js",
+  "api": "down: pause all, target = x→ms · frame: cur += (target − cur)(1 − e^(−18dt)); a.currentTime = cur for live scenes · up: target += v·0.15, resume if was playing"
+ },
+ {
+  "id": "txi-iris",
+  "category": "Image transitions",
+  "name": "Focal iris",
+  "summary": "The next photo opens in a circle centred on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "next.clip = circle(R·p at focus(next)); next.scale = 1.1 − .1p; prev.scale = 1 + .05·pNext about focus(next)"
+ },
+ {
+  "id": "txi-depth",
+  "category": "Image transitions",
+  "name": "Depth wipe",
+  "summary": "The current photo slides off like a sheet and uncovers the next one behind it. The new photo travels less than the sheet’s edge, and its ground travels further than its sky, the parallax of a camera trucking sideways; a soft shadow from the sheet’s edge falls on it. Use it for places seen in order, like a travel story or a property tour, where direction means moving on.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "edge = p; next.x = dir·(.2 + .3·nearness(y))·(1 − p); prev.x = −dir·(.12 + .2·nearness)·p"
+ },
+ {
+  "id": "txi-blinds",
+  "category": "Image transitions",
+  "name": "Blinds",
+  "summary": "Vertical slats turn one after another, starting on the side you swiped from: each face narrows and darkens as it turns away while the new face widens. A fast flick turns the slats almost together; a slow drag spreads the wave out. Use it when photos are browsed by hand, like a lookbook, and the gesture should be felt in the change.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "slat j: lp = (p − order(j, dir)·σ)/(1 − σ); σ = .52 − .05·|release velocity|; face width = lp"
+ },
+ {
+  "id": "txi-develop",
+  "category": "Image transitions",
+  "name": "Develop",
+  "summary": "The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its colour after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; colour = mix(grey, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)"
+ },
+ {
+  "id": "txi-rack",
+  "category": "Image transitions",
+  "name": "Rack focus",
+  "summary": "Focus pulls off the current photo, which softens and breathes 4% larger like a real lens, while the next photo sharpens from its foreground back to its horizon. Use it to move attention between related shots, like a detail and the wide view, without implying a direction.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "blur = R·(1 − ss(d(y), d(y) + .72, p)) + R·ss(0, .65, pNext); scale = (1 + .05(1 − p))(1 + .045·pNext)"
+ },
+ {
+  "id": "txi-split",
+  "category": "Image transitions",
+  "name": "Horizon split",
+  "summary": "The photo parts along its own horizon, the next caption shows in the seam, the seam slides to the new photo’s horizon, then the halves close on the new photo, which drifts in from the side of travel. Exit, then enter, never overlapping. Use it for chaptered stories, where each photo opens a new section.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "open = tri(p); seam = lerp(horizon(from), horizon(to), ss(.3,.7,p)); content = from → to at p = .5"
+ },
+ {
+  "id": "txi-tiles",
+  "category": "Image transitions",
+  "name": "Tile wave",
+  "summary": "The next photo grows in as dots that open into squares, in a wave that starts exactly where you clicked, tapped or started your swipe; keys start it from the side you are heading to. Use it when the change comes from a place the person pointed at, like choosing a hotspot or a map region.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "tile: lp = (p − .56·dist(tile, pointer)/maxDist)/.44; square = ss(lp)·cell, radius = (1 − ss)·cell/2"
+ },
+ {
+  "id": "txi-page",
+  "category": "Image transitions",
+  "name": "Page turn",
+  "summary": "The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalogue or a printed story.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "fold.x = W(1 − q); tilt = .1·sin πq; flap = mirror(page right of fold)·scaleX(.58) + paper wash; shadow along fold"
+ },
+ {
+  "id": "txi-relight",
+  "category": "Image transitions",
+  "name": "Relight",
+  "summary": "The same scene moves from midday to afternoon to golden hour along a light front that spreads out from the sun’s path, sky before ground; stepping to another place falls back to a plain dissolve so the light front only ever means “same place, new light”. Use it when only the time or the conditions change, like a lighting preview or a day-to-evening product shot.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "arrive(px) = (p − .62·dist(px, sun) − .14·ground(px))/.24; other scene: alpha = ss(0, 1, p)"
+ },
+ {
+  "id": "txi-flip",
+  "category": "Image transitions",
+  "name": "Thumbnail to hero",
+  "summary": "The thumbnail you choose lifts out of the strip and grows into the hero along a curved path: it rises first, then widens as it lands, while its slot stays outlined until it arrives and the old hero dims beneath. Use it for galleries with a visible strip or grid, so people see where the big photo came from.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "rect = { cx: lerp(th, hero, p), cy: lerp(th, hero, 1 − (1 − p)^1.8), size: lerp(th, hero, p^1.25) }"
+ },
+ {
+  "id": "txi-ink",
+  "category": "Image transitions",
+  "name": "Ink edge",
+  "summary": "The next photo spreads in from the side of travel behind a calm, low-frequency ink contour that drifts slowly as it advances, with a faint darker rim like wash drying on paper. Use it for slower editorial pacing, where a hard wipe would feel mechanical.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "contour = .74·travel(x) + .42·(fbm(x·1.8 + drift(p)) − .5); reveal where contour < mix(−.16, 1.1, p); rim darkens 16%"
+ },
+ {
+  "id": "txi-flyto",
+  "category": "Image transitions",
+  "name": "Fly-to strip",
+  "summary": "The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.",
+  "file": "blocks/167-txi-iris.js",
+  "api": "pos.set(i); zoom = 1 − min(.44, .1·|d pos/dt|^.85); view = translate(center − pos·(W + gap)·zoom) scale(zoom)"
+ },
+ {
+  "id": "txc-film",
+  "category": "Carousels",
+  "name": "Momentum filmstrip",
+  "summary": "The strip follows the pointer 1:1. On release the velocity is projected about 0.4 s ahead and the strip settles on the nearest frame edge from that same velocity, so a hard flick travels several frames and a nudge moves one. Past either end it rubber-bands and the scroll bar shortens. Inspired by Keen Slider free-snap and Flickity freeScroll; changed: frames keep their real aspect ratios and the counter reports the range in view. Use when photos come in mixed formats and people skim them fast, like a contact sheet.",
+  "file": "blocks/168-txc-film.js",
+  "api": "target = nearest edge(x + v·0.42); x.release(x, min(v, ω·d), target)   bar.w −= overscroll"
+ },
+ {
+  "id": "txc-para",
+  "category": "Carousels",
+  "name": "Inner parallax slides",
+  "summary": "The frame follows the finger 1:1 while its photo drifts the other way inside it, and the caption runs slightly ahead, so three depths separate as you drag. The dot plate stretches from its leading edge and the trailing edge catches up. Inspired by Swiper parallax and Codrops slideshows; changed: every offset is computed from the slide’s distance to center, so it holds mid-flick, in reverse and when interrupted. Use when each slide is a place or a story and a sense of depth helps it read as a window.",
+  "file": "blocks/168-txc-film.js",
+  "api": "d = (i·step − x)/step;  photo.x = −clamp(d)·0.22w;  caption.x = d·44;  plate = stretch(x/step)"
+ },
+ {
+  "id": "txc-focus",
+  "category": "Carousels",
+  "name": "Center-focus rail",
+  "summary": "Each print scales and fades only by its distance from center, and spacing is integrated from that same scale curve, so gaps stay even and nothing rotates or overlaps. The caption under the center crossfades by distance while you drag. Inspired by Keen Slider’s distance-driven slides and Apple TV shelves; changed: positions come from integrating the scale, so the center print moves exactly 1:1 under the pointer. Use when one item is the subject and its neighbours are context, such as a print shop or a plan picker.",
+  "file": "blocks/168-txc-film.js",
+  "api": "d = (i·step − x)/step;  s = 1 − .16·min(|d|,1) − .08·clamp(|d|−1);  pos = ∫₀ᵈ s(u) du · step"
+ },
+ {
+  "id": "txc-deck",
+  "category": "Carousels",
+  "name": "Swipe deck",
+  "summary": "The top card follows the pointer 1:1 and tilts with its offset, toward the half you grabbed. Release projects position plus velocity: past 40% of the card it is thrown off at its own speed, otherwise it settles home without overshoot. The next card rises first and the rest of the stack follows 45 ms apart. Undo brings the last card back from the side it left. Use when every item needs a quick yes or no, such as triage, shortlists or review queues.",
+  "file": "blocks/168-txc-film.js",
+  "api": "score = x + vx·0.15;  |score| > 0.4w ? x.release(x, vx, ±off) : x.release(x, cap(vx), 0);  depth[k].set(k, t + k·45ms)"
+ },
+ {
+  "id": "txc-story",
+  "category": "Carousels",
+  "name": "Stories with hold to pause",
+  "summary": "Segments fill from the clock. Holding anywhere pauses at once and, after 300 ms, fades the chrome so the photo can be read. A tap on the left third goes back, anywhere else goes forward, with an exit-then-enter swap; each photo drifts slowly while its segment runs. Inspired by Instagram stories; changed: pausing, holding and time spent off screen are all subtracted from one start time, so the bar never jumps. Use when short, ordered moments should play hands-free but stay under the viewer’s control.",
+  "file": "blocks/168-txc-film.js",
+  "api": "e = (frozen ? tp : t) − t0;  fill[cur] = e/5;  unfreeze: t0 += t − tp;  e ≥ 5 → next"
+ },
+ {
+  "id": "txc-sync",
+  "category": "Carousels",
+  "name": "Synced thumbnail rail",
+  "summary": "The main photo drags 1:1. The thumbnail plate is a pure function of that position: its leading edge reaches the next thumb first and its trailing edge follows, so it stretches mid-move in either direction and can never drift out of sync. The rail recenters on the active thumb and can be flicked on its own. Inspired by Swiper thumbs and Flickity asNavFor; changed: one position drives both, instead of two carousels messaging each other. Use when people compare similar photos and need detail and overview at once, such as product galleries.",
+  "file": "blocks/168-txc-film.js",
+  "api": "p = x/step;  [a, b] = stretch(p, thumbL, thumbR);  rail.settle(center(thumb[round p]))"
+ },
+ {
+  "id": "txc-loop",
+  "category": "Carousels",
+  "name": "Infinite loop",
+  "summary": "Each slide is placed modulo the loop length from one unbounded position, so the track never resets, velocity carries across the seam and a flick can be caught anywhere. Across the seam the dot indicator drains out of the last slot while it fills the first, so it never jumps back across the row. Autoplay steps every four seconds and holds while hovered or focused. Inspired by Embla’s slide looper; changed: placement is computed per slide, never by cloning or teleporting the track. Use when a set has no natural end, such as postcards, testimonials or logos.",
+  "file": "blocks/168-txc-film.js",
+  "api": "rel = ((i·step − x) mod L + 1.5L) mod L − L/2;  seam: dot[n−1] drains as dot[0] fills"
+ },
+ {
+  "id": "txc-peek",
+  "category": "Carousels",
+  "name": "Peek and pull shelf",
+  "summary": "Cards align to the left margin and the next one peeks in, so a phone screen always shows there is more. Dragging past the last card rubber-bands into a ring that fills with the stretch; past the mark the label swaps to Release, and letting go opens the full list as a sheet while the shelf settles back. Inspired by the App Store and Airbnb shelves; changed: the “see all” target lives inside the overscroll instead of a separate button. Use when a horizontal shelf sits inside a vertically scrolling phone screen.",
+  "file": "blocks/168-txc-film.js",
+  "api": "pull = band(x) − max;  ring = pull/52;  release: pull > 52 → sheet.set(1); x.release(x, v, max)"
+ },
+ {
+  "id": "txc-compare",
+  "category": "Carousels",
+  "name": "Before and after lens",
+  "summary": "The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centred on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.",
+  "file": "blocks/168-txc-film.js",
+  "api": "x = held ? pointer + catch(t) : x.at(t);  lens: L = 40 + 108·open, zoom = 1 + 1.25·open;  after.clip = inset(0 0 0 x)"
+ },
+ {
+  "id": "txc-reel",
+  "category": "Carousels",
+  "name": "Vertical reel",
+  "summary": "Vertical drag is 1:1 and a flick moves at most one reel, like Reels and Shorts; captions trail their photo slightly so the move reads as depth. Pulling up past the last reel fills a ring; released past the mark, the next four are appended and the same release velocity carries straight into the first of them. The arrow keys and buttons do the same, including loading the next set. Use when each item fills a phone screen and people move through them one at a time.",
+  "file": "blocks/168-txc-film.js",
+  "api": "i = clamp(nearest(y + v·0.2), i₀ ± 1);  pull > 60 → append(4), y.release(y, v, (n₀)·h)"
+ },
+ {
+  "id": "txc-mason",
+  "category": "Carousels",
+  "name": "Masonry row carousel",
+  "summary": "Photos keep their exact aspect ratios: tall ones span both rows and wide ones pair up in a column whose width makes both fit exactly. The rail free-scrolls with momentum and snaps to column edges; selecting shrinks the photo inside its frame and fills the check. Tab walks every photo and the rail follows focus. Inspired by Google Photos’ justified grid; changed: packed by column so it scrolls sideways. Use when portrait and landscape photos must be picked quickly without cropping them.",
+  "file": "blocks/168-txc-film.js",
+  "api": "pair w = (H − g)/(1/a₁ + 1/a₂);  tall w = H·a;  target = nearest column(x + v·0.4)"
+ },
+ {
+  "id": "txc-route",
+  "category": "Carousels",
+  "name": "Route-linked carousel",
+  "summary": "The carousel position is the hiker’s place on the trail: the marker, the inked part of the route, the clock and the mile counter are all computed from the same scroll value, and each stop’s photo is lit for its hour, warming from midday to golden hour. Dragging the marker along the map scrubs the carousel, and arrow keys step stop to stop on either one. Inspired by Strava route replays and Apple Maps guides; changed: the map is a second handle on one rail, not a separate view. Use when slides happen in a place or in sequence and showing where you are matters, such as itineraries, tours or timelines.",
+  "file": "blocks/168-txc-film.js",
+  "api": "p = x/step;  marker = path[k].at(f·len);  dashoffset[k] = len·(1 − clamp(p − k));  clock = lerp(time[k], time[k+1], f)"
+ },
+ {
+  "id": "gal-grid-lightbox",
+  "category": "Galleries",
+  "name": "Grid to lightbox, shared element",
+  "summary": "Press a tile and that same photo grows out of it: position, size, crop and corner radius all spring from the tile to the viewer, while the grid behind it dims. The caption and controls arrive only after the photo is most of the way there. Stepping to the next photo is a Swap, so the old one leaves in the direction of travel before the new one arrives. Closing runs the controls out first, then flies the photo back into whichever tile it ended on. Use when a grid of thumbnails needs a viewer that keeps the user oriented.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "photo.rect.set(open ? fit : tileRect); scrim.set(1); chrome.set(1, delay .16); step: exit 100ms, then enter from dir*40px"
+ },
+ {
+  "id": "gal-swipe-dismiss",
+  "category": "Galleries",
+  "name": "Swipe down to dismiss",
+  "summary": "Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to centre. Use when a viewer needs the natural, touch-first way out.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "photo = fit + finger; scale = 1 − .42·pull; scrim = 1 − dy/(.55H); release: proj = dy + vy·.22 > .2H ? flyTo(tile, vy) : settle(0, vy)"
+ },
+ {
+  "id": "gal-zoom-pan",
+  "category": "Galleries",
+  "name": "Lightbox with pinch, wheel and double-tap zoom",
+  "summary": "The photo is a transform, not a layout: two fingers scale it about their midpoint while the midpoint drags it, a double-tap zooms to the exact point tapped, and Ctrl plus wheel (a trackpad pinch) zooms about the cursor without taking over normal scrolling. Pull past an edge and the image resists on a rubber band that grows harder the further you go; let go and a critically damped spring returns it, carrying the flick as glide that stops at the edge instead of bouncing off it. A locator in the corner shows which part you are looking at. Switching photos is a Swap that resets the zoom while the picture is invisible. Use when photographs need inspecting at pixel level.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "view = {s, x, y}; release: s → clamp(1, 5), x → glide(x + v/ω, ±bound(s)); tap², wheel: x′ = f − (f − x)·s′/s"
+ },
+ {
+  "id": "gal-masonry-filter",
+  "category": "Galleries",
+  "name": "Filterable masonry that reflows",
+  "summary": "Choosing a subject runs three beats in order. Photos that no longer match shrink to their own centre in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own centre, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "leave: s→0 (snap, k·20ms) · stay: x,y→slot (soft, 80ms + k·30ms) · enter: s→1 (base, 200ms + k·35ms) · height.set(newH)"
+ },
+ {
+  "id": "gal-collection-morph",
+  "category": "Galleries",
+  "name": "Collection to collection morph",
+  "summary": "Twelve photographs are one set of elements that every collection arranges differently: a lead image with a grid, a plain grid, justified rows, tall columns. Switching runs in order. Photos not in the next collection shrink away first. Photos that are in both travel to their new slots, re-cropping as they go (a landscape becomes a tall column without a jump cut), starting 80ms later and staggered by their new position. Photos that are new to the collection grow in last. The title swaps on the same schedule: out, then in. Use when albums, smart collections or saved sets share photos and the user should see what carried over.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "next = layout(kind, ids); leave: s→0 · stay: rect→next (soft, k·30ms) · enter: s→1 (200ms+) · title: swap"
+ },
+ {
+  "id": "gal-contact-loupe",
+  "category": "Galleries",
+  "name": "Contact sheet with a loupe",
+  "summary": "A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens centre, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the centre crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "lens.xy.set(pointer, snap); content = sheet·scale(3.4) translated so lens centre = sheet point; label.swap(frameUnderLens)"
+ },
+ {
+  "id": "gal-photo-stack",
+  "category": "Galleries",
+  "name": "Photo stack that fans out",
+  "summary": "Seven prints sit in a loose pile, each tilted a few degrees. Hover (or tap) and the top print leaves first, then each one beneath it 35ms later, all swinging out about the base of the pile into an arc. The print under the pointer lifts along its own axis while its neighbours lean away from it, and which print that is comes from the angle to the base, not from what is under the cursor, so a lifting print never flickers. Pick one and it travels to the top of the pile as the rest close from the bottom up. Use when a collection needs a compact, tactile preview that opens in place.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "fan: card.f.set(1, delay (n−1−slot)·35ms) · hover: lift along local axis, neighbours rotate ±3° · pick: slot→top, f.set(0, delay slot·25ms)"
+ },
+ {
+  "id": "gal-hover-focus",
+  "category": "Galleries",
+  "name": "Hover-focus grid",
+  "summary": "The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of colour, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "hover(i): others.r.set(1, soft, delay d(i,j)·.14ms/px) · i.r.set(0) · leave: all.r.set(0, lazy) · r → saturate, brightness, scale"
+ },
+ {
+  "id": "gal-info-drawer",
+  "category": "Galleries",
+  "name": "Caption and metadata drawer",
+  "summary": "The drawer is one number, how far it is open, and everything reads from it. The drawer rises on a soft spring (or follows your finger one to one on its handle, and release velocity picks open or closed); the photo, 50ms behind it, slides up and shrinks just enough that the marked subject ends 16px above the drawer’s top edge, and not a pixel more. Turn on the subject marker to see the area it protects. Detail rows then fade up one after another as the drawer passes each threshold. Changing photo is a Swap, and the new photo gets its own subject maths. Use when a lightbox needs captions and EXIF without covering what the picture is about.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "open ∈ [0,1]; photo.y = lerp(y₀, y₁, open), y₁ = min(y₀, H − D − 16 − subject.bottom·s); s = min(1, (H − D − 16 − top)/subject.bottom)"
+ },
+ {
+  "id": "gal-cull-deck",
+  "category": "Galleries",
+  "name": "Cull deck: keep or reject by throwing",
+  "summary": "The top photo follows the pointer one to one and tilts with how far it has travelled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.",
+  "file": "blocks/169-gal-grid-lightbox.js",
+  "api": "pos = index + clamp(|dx|/.55w); card(i).depth = max(0, i − pos); release: |dx + vx·.2| > .38w ? fly(tray slot | off-edge, vx) : return(0, vx)"
+ },
+ {
+  "id": "txs-zoomhero",
+  "category": "Scroll stories",
+  "name": "Pinned hero zoom-out",
+  "summary": "Use when a landing page should open on one striking detail and then reveal the whole image. The photo starts zoomed to the lit ridge and full bleed; scrolling pulls the camera back (log-scale zoom) while the window shrinks into a framed print with rounded corners. Only after the zoom settles do the three headline lines rise out of their masks, 8% of scroll apart, then the caption. Reduced motion shows the framed end state and fades the lines in.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "p = (y − top)/(3H − H)   e = sine(p/.78)   s = s0^(1−e)   clip = lerp(viewport, frameRect, e)   line[i].y = (1 − (p − .5 − .08i)/.18)·110%"
+ },
+ {
+  "id": "txs-hgallery",
+  "category": "Scroll stories",
+  "name": "Pinned horizontal gallery",
+  "summary": "Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the centre. Reduced motion keeps the 1:1 travel and drops the inner drift.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "x = −p·(trackW − W)   img[i].x = −(cx[i] − W/2)/W·.18·cardW   bar.scaleX = p   section.h = H + travel"
+ },
+ {
+  "id": "txs-stackcards",
+  "category": "Scroll stories",
+  "name": "Stacking cards",
+  "summary": "Use when an ordered process of three to five steps should replace one step with the next while the earlier ones stay visible. Cards pin 12px apart; as the next card rises over one, that card scales down from its top edge (5% per card above it) and dims, so the stack recedes in depth while its edges stay readable. Coverage is computed from the next card’s distance to its own pin, so scrolling back lifts them out in reverse. Reduced motion keeps the dimming and drops the scale.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "cover[i] = 1 − ((top[i+1] − y) − pin[i+1])/(cardH + gap − 12)   depth[i] = Σ cover[j≥i]   card.scale = 1 − .05·depth   dim = .14·depth"
+ },
+ {
+  "id": "txs-clipwindow",
+  "category": "Scroll stories",
+  "name": "Clip window to full bleed",
+  "summary": "Use when a page should move from editorial text into an immersive photo without a hard cut. The photo sits behind a small rounded window; scrolling opens the clip-path toward full bleed with the top and bottom edges leading and the sides lagging 8% of scroll behind, while the photo eases from 1.18× to 1×. The headline rides the top edge out, the note rides the bottom edge, and the caption tag fades in last. Reduced motion cuts from window to full bleed at the midpoint.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "ev = ease(p/.6)  eh = ease((p − .08)/.6)   clip = inset(lerp(t0,0,ev) lerp(l0,0,eh) … round lerp(14,0,eh))   img.scale = lerp(1.18, 1, ev)"
+ },
+ {
+  "id": "txs-chapters",
+  "category": "Scroll stories",
+  "name": "Chapter scrollytelling",
+  "summary": "Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centred, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "f = i + (focus − c[i])/(c[i+1] − c[i])   q = ease((frac(f) − .3)/.4)   next.clip = inset((1−q)·80% 0 0 0)   next.y = (1−q)·20%   prev.y = −q·18%"
+ },
+ {
+  "id": "txs-depthplanes",
+  "category": "Scroll stories",
+  "name": "Parallax depth planes",
+  "summary": "Use when a hero should feel spatial without 3D assets. One PhotoKit scene is cut into planes in the page: per column, flat runs are found from the bottom up and clustered into ridge tones; the sky is the back plane. Scrolling moves each plane by its depth (sky 8%, far ridge 25%, near slope 100% of a 16% range), and the headline sits between the far and middle ridges, so it rises from behind the hills. Reduced motion holds the planes still and fades the headline in.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "planes = split(PhotoKit.get(ridge))   plane[k].y = (.5 − p)·.16H·depth[k]   headline: z between plane 1 and 2, y = lerp(.62H, .2H, ease(p/.6))"
+ },
+ {
+  "id": "txs-relight",
+  "category": "Scroll stories",
+  "name": "Relight as you read",
+  "summary": "Use when the photo should keep pace with long-form reading: an essay, a case study, a place. As you read, the city relights from noon to golden hour. The warm exposure arrives as a soft band sweeping from the sun’s corner (top right) toward the bottom left, so light visibly travels across the scene; the time tag counts with it and the paragraph being read brightens. Reduced motion replaces the sweep with an even cross-fade.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "p = y/(scrollH − H)   golden.mask = linear-gradient(225deg, #000 (p·150 − 35)%, transparent (+35)%)   clock = lerp(12:10, 19:35, p)"
+ },
+ {
+  "id": "txs-sequence",
+  "category": "Scroll stories",
+  "name": "Scroll-scrubbed sequence",
+  "summary": "Use when a product or place reveal should feel like video but stay under the reader’s control. 24 frames are generated from one PhotoKit scene with the sun sinking (tod 0 → 1), lazily and nearest-to-the-playhead first. Scroll position is the playhead: the follower-smoothed index picks two neighbouring frames and blends them by the fraction between, so slow scrolling never steps. The tick rail and clock follow the same index. Reduced motion shows the nearest frame without blending.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "i = p·(N − 1)   draw(frame[floor i]); alpha = frac(i); draw(frame[ceil i])   frames generated one per render, nearest first"
+ },
+ {
+  "id": "txs-chapterrail",
+  "category": "Scroll stories",
+  "name": "Chapter rail with gentle snap",
+  "summary": "Use when readers of a long guide or documentation page jump between sections. The rail shows every chapter with a bar that fills as you read it (one bar per chapter, sized to its length); clicking a chapter glides there on a soft spring. Snap is off by default; when on, it waits until you have stopped scrolling for 180ms and only pulls if a chapter start is within 22% of the view, so it settles rather than grabs, and any wheel, touch or key cancels it. Narrow, the rail becomes a segmented bar across the top. Reduced motion jumps.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "fill[i] = clamp((y + .3H − c[i])/(c[i+1] − c[i]))   idle > 180ms && |c[k] − y| < .22H ⇒ glide.set(c[k], S.soft)   input ⇒ glide.cancel()"
+ },
+ {
+  "id": "txs-contactsheet",
+  "category": "Scroll stories",
+  "name": "Contact sheet to print",
+  "summary": "Use when a case study or portfolio piece should show the edit, not just the result. Three acts on one pinned sheet: a loupe travels the contact sheet frame by frame in reading order and settles on the keeper (0–32%); a grease-pencil box draws around it (32–46%); then the sheet pushes in around that frame and fades while the frame itself grows into the full-bleed print, so the print visibly comes from its cell (46–92%), and the caption arrives last. All of it is scrubbed by scroll. Reduced motion cuts between the three states.",
+  "file": "blocks/170-txs-zoomhero.js",
+  "api": "loupe = path(cells[0..PICK], ease(p/.32))   mark.dash = (p − .32)/.14   e = sine((p − .46)/.46)   print = lerp(cellRect, viewport, e)   sheet.scale = lerp(1, 1.6, e) about cell[PICK]"
+ },
+ {
+  "id": "fxp-load",
+  "category": "Photo effects",
+  "name": "Progressive photo load",
+  "summary": "A blurred 0.6 KB placeholder holds the layout from the first frame. When the real file lands it develops like a print in the tray: shadows come up first, then midtones, highlights last, over one second. Cached photos skip the reveal entirely, because animating something already there reads as lag. Use when: a feed, gallery or hero loads large photos over slow networks and the layout must not jump.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "a(px) = smoothstep(0, .3, dev·1.32 − (0.85·lum + 0.15·grain))   dev = (t − arrival)/1.1s; cached ⇒ dev = 1"
+ },
+ {
+  "id": "fxp-rack",
+  "category": "Photo effects",
+  "name": "Hover rack focus",
+  "summary": "Depth comes from the photo itself: each tree row is a flat tone and farther rows are hazier, so luminance sorts into planes. Point anywhere and focus pulls to that plane on a slow critically damped spring while the reticle tightens; blur everywhere else scales with distance from the focal plane and the aperture. Use when: a hero or product shot should guide the eye to what the pointer or the copy is talking about.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "focus.set(depth(pointer), S.lazy)   blur(px) = |depth − focus| · aperture · maxR   (36-tap gather, occlusion-aware)"
+ },
+ {
+  "id": "fxp-duo",
+  "category": "Photo effects",
+  "name": "Brand tint to colour",
+  "summary": "Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full colour on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with colour reserved for the item you are on.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "duo = gradientMap(lum, [dark, tint, light])   card.colour.set(hover || focus ? 1 : 0, S.soft)"
+ },
+ {
+  "id": "fxp-relight",
+  "category": "Photo effects",
+  "name": "Relight with the sun",
+  "summary": "Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centred on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "mask = g + (pool(sun) − .45)·.7·sin(πg)   colour = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)"
+ },
+ {
+  "id": "fxp-depth",
+  "category": "Photo effects",
+  "name": "Depth parallax",
+  "summary": "The photo is split into planes by aerial perspective (farther ridges are lighter). The pointer offsets each plane by its depth around a pivot at the middle ridge: sky and far ridge drift against the pointer, the foreground follows it, at most about 1% of the width. Planes ride a lazy spring and drift home when the pointer leaves. Use when: a landing hero needs a sense of place without video, and the photo must stay fully readable.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "q = s + off·(depth(q) − .4)  (4 fixed-point steps)   off.{x,y}.set(pointer·amt, S.lazy)"
+ },
+ {
+  "id": "fxp-screen",
+  "category": "Photo effects",
+  "name": "Halftone to photo",
+  "summary": "The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colours. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s colour, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "cell = c0·(1.4/c0)^smoothstep(0,.9,p)   dot r = √(coverage/π)   out = mix(screen, photo, smoothstep(.62,1,p))"
+ },
+ {
+  "id": "fxp-grade",
+  "category": "Photo effects",
+  "name": "Grade with live histogram",
+  "summary": "Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a grey-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "lin = srgb^2.2 · wb(T) · 2^EV   hist = Σ LUT(px)   ev.set(auto, S.soft) | ev.jump(slider)"
+ },
+ {
+  "id": "fxp-paint",
+  "category": "Photo effects",
+  "name": "Paint in colour",
+  "summary": "A soft brush paints the colour photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the colour drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the centre outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colourisation changed.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   colour = mix(mono, photo, smoothstep(.08,.6,m))"
+ },
+ {
+  "id": "fxp-burns",
+  "category": "Photo effects",
+  "name": "Face-safe Ken Burns",
+  "summary": "Each photo carries a focal box (the face, or the subject). The planner works out the largest zoom that still contains the box at this frame’s aspect ratio, then pans and zooms between two valid framings over seven seconds, clamping every frame so the face is never cut. If the frame is too wide even at full size, it zooms out over a blurred extension of the same photo instead of cropping the head. Slides cross-fade for 1.2 s while still moving. Use when: a hero slideshow or story cover animates portraits that must survive phone, tablet and desktop crops.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "zMax = min(1.16, cropW/boxW, cropH/boxH)   centre = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2"
+ },
+ {
+  "id": "fxp-flick",
+  "category": "Photo effects",
+  "name": "Fade flicker compare",
+  "summary": "Blink comparison without the flash: versions dissolve in linear light over about 200 ms, so brightness never dips mid-fade and the eye still catches what moved. Hold Space or press on the photo to peek at the other version; Flicker alternates every 1.2 s until stopped; Difference paints only what changed. The version label swaps (exit, then enter) in step. Use when: reviewers approve an edit, a re-export or a new version and the change is subtle.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "a.set(version, S.base)   out = (mix(before^2.2, after^2.2, a))^(1/2.2)   flicker: a.set(⌊(t−t0)/1.2⌋ mod 2)"
+ },
+ {
+  "id": "fxp-frost",
+  "category": "Photo effects",
+  "name": "Frost behind captions",
+  "summary": "The whole photo starts frosted, then clears in a wave that runs from the far corners toward the caption, leaving frost hugging only the actual lines of text (measured from the live DOM, so it follows wrapping and edits). The frost is blurred, grain-dithered, and toned just enough to reach 6:1 contrast under its worst patch, and the readout shows the ratio with and without it. Use when: captions or headlines sit on busy photos and must pass contrast without a heavy box or gradient.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "field = max(blur(lineRects), .4·falloff(box))   frost = smoothstep(th, th+.25, field), th = −.3 + .72·p   tone k solves contrast ≥ 6:1"
+ },
+ {
+  "id": "fxp-palette",
+  "category": "Photo effects",
+  "name": "Theme from photo",
+  "summary": "Original: the cover photo proposes the site’s accent. Five colours are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to grey), and choosing it morphs the preview button to that colour, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colours that actually belong to their imagery.",
+  "file": "blocks/171-fxp-load.js",
+  "api": "palette = kmeans(oklab(px), 5)   spot = mix(px, grey, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)"
+ },
+ {
+  "id": "agentbehaviours",
+  "category": "Agent identity",
+  "name": "Agent behaviours",
+  "summary": "One agent performs eighteen behaviours inside a small web page, each a short loop that ends where it began. It hops to get around and every landing squashes and recovers without bouncing. What it carries trails its body and tilts against the motion. It leans into whatever it pushes, and its face changes mood brows first, then lids, then mouth. The page answers on the same clock: a button squashes, an outline snaps leading edge first, a pin goes in, text is struck through. Asking permission waits for your real Allow or Deny.",
+  "api": "",
+  "file": "identity/agentbehaviours.js"
+ },
+ {
+  "id": "agentduet",
+  "category": "Agent identity",
+  "name": "Agent duet",
+  "summary": "Two agents and Maya’s cursor work one checkout page. The review agent lifts its lens to the total, the outline snaps around it, and it plants a pin. It turns to the fix agent, they catch each other’s eye, and the note flies across on a spring. The fix agent hops over, its pencil nudges the total back into line, and the reviewer watches and smiles. Maya’s cursor comes in, both agents look up at it, and her click resolves the pin. They hop, staggered. Drag either agent to interrupt: the other stops to watch, and once it lands they pick up the beat they were on.",
+  "api": "",
+  "file": "identity/agentbehaviours.js"
+ },
+ {
+  "id": "agentactions",
+  "category": "Agent identity",
+  "name": "Agent action and state icons",
+  "summary": "",
+  "api": "",
+  "file": "identity/agenticons-actions.js"
+ },
+ {
+  "id": "agentroles",
+  "category": "Agent identity",
+  "name": "Agent role icons",
+  "summary": "",
+  "api": "",
+  "file": "identity/agenticons-roles.js"
+ },
+ {
+  "id": "agentillustrations",
+  "category": "Agent identity",
+  "name": "Agent spot illustrations",
+  "summary": "",
+  "api": "",
+  "file": "identity/agentillos.js"
+ },
+ {
+  "id": "agentmarks",
+  "category": "Agent identity",
+  "name": "Agent mark concepts",
+  "summary": "Five agent marks drawn from Meridian’s own vocabulary instead of a generic sparkle: a turning meridian, Velo’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.",
+  "api": "",
+  "file": "identity/agentmark.js"
+ },
+ {
+  "id": "agentmarkstates",
+  "category": "Agent identity",
+  "name": "Agent mark states",
+  "summary": "The Meridian mark carried through seven agent states. Thinking turns the meridian at a constant speed; Browsing sends a square marker along the equator while the meridian leans toward it; Commenting grows Velo’s comment tail so the mark doubles as a pin; Waiting stands the meridian upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.",
+  "api": "",
+  "file": "identity/agentmark.js"
+ },
+ {
+  "id": "agentcharacter",
+  "category": "Agent identity",
+  "name": "Agent character",
+  "summary": "One agent on a floor. Its eyes follow your pointer anywhere on the page, with the face sliding a beat later like a head turning. Pick an expression and the brows move first, then the lids, then the mouth, then the body settles. Click it and it squeezes, hops and smiles; drag it 1:1 and let go to throw it, and it leans into the throw, stretches as it flies, the antenna trails behind, and the landing squash recovers without bouncing. Idle, it breathes, blinks, glances and now and then fidgets. The 24, 48 and 96px copies mirror it frame for frame.",
+  "api": "",
+  "file": "identity/agentrig.js"
+ },
+ {
+  "id": "agentcrowd",
+  "category": "Agent identity",
+  "name": "Agent crowd",
+  "summary": "Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its meridian keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.",
+  "api": "",
+  "file": "identity/agentrig.js"
+ },
+ {
+  "id": "agentcasta",
+  "category": "Agent identity",
+  "name": "Agent cast: checkers and writers",
+  "summary": "Twelve role agents stand in a lineup, all the same species (one square body, one face, one meridian antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.",
+  "api": "",
+  "file": "identity/cast-a.js"
+ },
+ {
+  "id": "agentcastb",
+  "category": "Agent identity",
+  "name": "Agent cast: operate and people roles",
+  "summary": "Twelve role characters on one rig stand in a row, each idling in character: the scheduler checks its ticking watch, support nods while it listens, the designer draws a square in the air that lingers then fades, the developer types on keys that dip, the archivist lifts its box lid and lets it settle. Tap one and the others step back in a ripple from the one you chose while it hops forward and lands with a squash; then its name and job swap in, it switches to its action mood and plays its signature move. Props trail the body on lagging springs, so every hop, lean and landing carries through them. On a phone the row scrolls sideways with snap above the focused stage.",
+  "api": "",
+  "file": "identity/cast-b.js"
+ }
+]
