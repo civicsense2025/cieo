@@ -18,7 +18,8 @@ final class PhClock {
         if reduce { track.jump(target) } else { track.set(target, preset: preset, at: now) }
         lastSet = now
     }
-    func release(from: Double, velocity: Double, to: Double, reduce: Bool) {
+    func release(from: Double, velocity: Double, to: Double, reduce: Bool, preset p: SpringPreset? = nil) {
+        if let p { preset = p }
         if reduce { track.jump(to) } else { track.release(from: from, velocity: velocity, to: to, preset: preset, at: now) }
         lastSet = now
     }
@@ -123,6 +124,12 @@ struct PhPager<Content: View>: View {
     var axis: Axis = .horizontal
     var preset: SpringPreset = .soft
     var maxStep = 8
+    /// Optional two-way link to the current item; also lets outside controls move the pager.
+    var index: Binding<Int>?
+    /// Bump by n to step n items (used by buttons and autoplay).
+    var advance = 0
+    /// Called on release with the unclamped position; returns how many items to append (infinite feeds).
+    var onRelease: (Double) -> Int = { _ in 0 }
     @ViewBuilder var content: (_ pos: Double, _ size: CGSize, _ item: CGFloat) -> Content
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var clock = PhClock(0, .soft)
@@ -153,12 +160,30 @@ struct PhPager<Content: View>: View {
             .accessibilityElement()
             .accessibilityLabel("Carousel")
             .accessibilityValue("Item \(Int((clock.value).rounded()) + 1) of \(count)")
-            .accessibilityAdjustableAction { d in
-                let to = clock.track.target + (d == .increment ? 1 : -1)
-                clock.release(from: clock.value, velocity: 0, to: loop ? to : min(max(to, 0), Double(count - 1)), reduce: reduce)
-                key += 1
-            }
+            .accessibilityAdjustableAction { d in step(d == .increment ? 1 : -1) }
+            .onChange(of: advance) { o, n in step(Double(n - o)) }
+            .onChange(of: index?.wrappedValue) { _, n in goTo(n) }
         }
+    }
+
+    private func settle(from raw: Double, velocity: Double, to: Double) {
+        clock.release(from: raw, velocity: velocity, to: to, reduce: reduce)
+        key += 1
+        index?.wrappedValue = ((Int(to.rounded()) % count) + count) % count
+    }
+
+    private func step(_ n: Double) {
+        let to = clock.track.target + n
+        settle(from: clock.value, velocity: 0, to: loop ? to : min(max(to, 0), Double(count - 1)))
+    }
+
+    private func goTo(_ n: Int?) {
+        guard let n else { return }
+        let cur = clock.track.target, m = Double(count)
+        if Int(cur.rounded()) == n { return }
+        var d = Double(n) - cur
+        if loop { d = d.truncatingRemainder(dividingBy: m); if d > m / 2 { d -= m }; if d < -m / 2 { d += m } }
+        settle(from: clock.value, velocity: 0, to: cur + d)
     }
 
     private func drag(_ item: CGFloat) -> some Gesture {
@@ -173,12 +198,14 @@ struct PhPager<Content: View>: View {
                 let e = axis == .horizontal ? v.predictedEndTranslation.width : v.predictedEndTranslation.height
                 let proj = Double((e - d) / item)
                 let raw = live ?? clock.value
+                let extra = onRelease(raw)
                 var to = (raw - proj).rounded()
                 to = min(max(to, base - Double(maxStep)), base + Double(maxStep))
-                if !loop { to = min(max(to, 0), Double(count - 1)) }
+                if !loop { to = min(max(to, 0), Double(count - 1 + extra)) }
                 live = nil
                 clock.release(from: raw, velocity: -proj * 2.5, to: to, reduce: reduce)
                 key += 1
+                index?.wrappedValue = ((Int(to.rounded()) % count) + count) % count
             }
     }
 }
@@ -203,4 +230,47 @@ func phSoftEdge(_ p: Double, soft: Double = 0.25, start: UnitPoint = .top, end: 
     let hi = phClamp(p * (1 + soft))
     let lo = phClamp(p * (1 + soft) - soft)
     return LinearGradient(stops: [.init(color: .white, location: lo), .init(color: .clear, location: max(hi, lo))], startPoint: start, endPoint: end)
+}
+
+/// A 2D drag that follows the finger 1:1. On release `decide(offset, projectedExtra)` picks the resting offset
+/// and the offset springs there carrying the flick's velocity.
+struct PhDrag<Content: View>: View {
+    var preset: SpringPreset = .base
+    var enabled = true
+    var decide: (CGSize, CGSize) -> CGSize = { _, _ in .zero }
+    var onRelease: (CGSize) -> Void = { _ in }
+    @ViewBuilder var content: (CGSize, Bool) -> Content
+    @Environment(\.accessibilityReduceMotion) private var reduce
+    @State private var cx = PhClock(0, .base)
+    @State private var cy = PhClock(0, .base)
+    @State private var live: CGSize?
+    @State private var base = CGSize.zero
+    @State private var idle = true
+    @State private var key = 0
+
+    var body: some View {
+        TimelineView(.animation(paused: idle && live == nil)) { _ in
+            content(live ?? CGSize(width: cx.value, height: cy.value), live != nil)
+        }
+        .gesture(DragGesture(minimumDistance: 3)
+            .onChanged { v in
+                if live == nil { base = CGSize(width: cx.value, height: cy.value) }
+                live = CGSize(width: base.width + v.translation.width, height: base.height + v.translation.height)
+            }
+            .onEnded { v in
+                let raw = live ?? base
+                let extra = CGSize(width: v.predictedEndTranslation.width - v.translation.width, height: v.predictedEndTranslation.height - v.translation.height)
+                let to = decide(raw, extra)
+                live = nil
+                cx.release(from: raw.width, velocity: extra.width * 2.5, to: to.width, reduce: reduce, preset: preset)
+                cy.release(from: raw.height, velocity: extra.height * 2.5, to: to.height, reduce: reduce, preset: preset)
+                key += 1
+                onRelease(to)
+            }, including: enabled ? .all : .none)
+        .task(id: key) {
+            idle = false
+            try? await Task.sleep(nanoseconds: UInt64((preset.settleTime() + 0.2) * 1_000_000_000))
+            idle = true
+        }
+    }
 }
