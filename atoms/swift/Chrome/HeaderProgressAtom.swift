@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 private struct ScrollMetrics: Equatable { var offset: CGFloat = 0; var content: CGFloat = 0 }
 private struct ScrollMetricsKey: PreferenceKey {

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct GalleryLightboxAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "lightbox", category: "Media", name: "Gallery lightbox",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ColorPickerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "colorpicker", category: "Design tools", name: "Color picker",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BrandTintToColourAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-duo", category: "Photo effects", name: "Brand tint to colour",

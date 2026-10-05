@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PaywallUnlockAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "paywall", category: "Newsletter", name: "Paywall unlock",

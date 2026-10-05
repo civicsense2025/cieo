@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BlindsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-blinds", category: "Image transitions", name: "Blinds",

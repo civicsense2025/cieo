@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ToggleGroupAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "togglegroup", category: "Inputs", name: "Toggle group",

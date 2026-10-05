@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CtaBandFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz2-ctaband", category: "Footers", name: "Call-to-action band footer",

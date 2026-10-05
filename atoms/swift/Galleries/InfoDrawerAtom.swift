@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct InfoDrawerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-info-drawer", category: "Galleries", name: "Caption and metadata drawer",

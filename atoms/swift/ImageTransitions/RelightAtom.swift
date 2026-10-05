@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RelightAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-relight", category: "Image transitions", name: "Relight",

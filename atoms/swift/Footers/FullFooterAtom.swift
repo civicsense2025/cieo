@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FullFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz8-full", category: "Footers", name: "Full footer with staggered entrance",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DropAPinAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "pindrop", category: "Maps", name: "Drop a pin",

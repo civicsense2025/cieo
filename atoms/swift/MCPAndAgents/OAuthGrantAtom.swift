@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct OAuthGrantAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "oauthgrant", category: "MCP and agents", name: "OAuth consent screen",

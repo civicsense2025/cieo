@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FloatingBlockToolbarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "blocktoolbar", category: "Editor", name: "Floating block toolbar",

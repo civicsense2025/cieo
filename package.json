@@ -1,5 +1,5 @@
 {
-  "name": "motion-kit",
+  "name": "cieo",
   "version": "0.1.0",
   "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
   "private": true,

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LiveWidgetsFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz4-live", category: "Footers", name: "Footer with live widgets",

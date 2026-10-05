@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StoriesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-story", category: "Carousels", name: "Stories with hold to pause",

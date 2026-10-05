@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// Tiles that move between two layouts in three beats: leavers shrink (100 ms, 20 ms apart), stayers travel on a
 /// soft spring (30 ms apart, reading order), newcomers grow in last. Every value is a pure function of time since `start`.

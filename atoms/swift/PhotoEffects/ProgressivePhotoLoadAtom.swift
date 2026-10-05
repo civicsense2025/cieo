@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ProgressivePhotoLoadAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-load", category: "Photo effects", name: "Progressive photo load",

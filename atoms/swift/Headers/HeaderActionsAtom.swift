@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderActionsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-three", category: "Headers", name: "Header: links, logo centered, actions",

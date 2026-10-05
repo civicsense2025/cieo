@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RelightAsYouReadAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-relight", category: "Scroll stories", name: "Relight as you read",

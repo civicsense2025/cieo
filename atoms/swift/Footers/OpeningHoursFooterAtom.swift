@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct OpeningHoursFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz7-hours", category: "Footers", name: "Footer with map, contact and opening hours",

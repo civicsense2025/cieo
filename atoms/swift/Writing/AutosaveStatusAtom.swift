@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AutosaveStatusAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "autosave", category: "Writing", name: "Autosave status",

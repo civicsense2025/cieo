@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CollapsibleSidebarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "sidebar", category: "Layout", name: "Collapsible sidebar",

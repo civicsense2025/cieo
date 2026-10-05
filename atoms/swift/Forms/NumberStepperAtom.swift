@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct NumberStepperAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "numstep", category: "Forms", name: "Number stepper",

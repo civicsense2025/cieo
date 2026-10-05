@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct NavHoverAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "navhover", category: "Chrome", name: "Nav hover",

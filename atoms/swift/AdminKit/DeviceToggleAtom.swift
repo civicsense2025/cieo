@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DeviceToggleAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "devicetoggle", category: "Admin kit", name: "Device toggle",

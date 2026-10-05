@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AgentAccessAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentaccess", category: "MCP and agents", name: "Agent permission matrix",

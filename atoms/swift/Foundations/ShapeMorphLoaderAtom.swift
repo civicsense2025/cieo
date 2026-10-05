@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ShapeMorphLoaderAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "loader", category: "Foundations", name: "Shape-morph loader",

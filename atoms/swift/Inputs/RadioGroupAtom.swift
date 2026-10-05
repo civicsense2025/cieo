@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RadioGroupAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "radio", category: "Inputs", name: "Radio group",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FilterableMasonryAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-masonry-filter", category: "Galleries", name: "Filterable masonry that reflows",

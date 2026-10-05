@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 private struct PlayPauseShape: Shape {
     var k: Double

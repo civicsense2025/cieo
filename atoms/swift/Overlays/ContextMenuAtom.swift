@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ContextMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "contextmenu", category: "Overlays", name: "Context menu",

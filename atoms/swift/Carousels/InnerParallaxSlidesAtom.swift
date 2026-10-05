@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct InnerParallaxSlidesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-para", category: "Carousels", name: "Inner parallax slides",

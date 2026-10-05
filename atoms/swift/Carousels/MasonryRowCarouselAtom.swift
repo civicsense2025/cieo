@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MasonryRowCarouselAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-mason", category: "Carousels", name: "Masonry row carousel",

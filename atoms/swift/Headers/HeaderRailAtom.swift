@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderRailAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-rail", category: "Headers", name: "Header: side rail",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ContactSheetToPrintAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-contactsheet", category: "Scroll stories", name: "Contact sheet to print",

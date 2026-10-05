@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BlurSwapLabelAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "chip", category: "Content", name: "Blur swap label",

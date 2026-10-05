@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LineChartAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "line", category: "Data", name: "Line chart",

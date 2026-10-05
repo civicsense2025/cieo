@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ApiKeyRevealAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "apikeyreveal", category: "MCP and agents", name: "API key reveal and rotate",

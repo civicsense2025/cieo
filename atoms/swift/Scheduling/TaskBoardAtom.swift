@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TaskBoardAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "kanban", category: "Scheduling", name: "Task board",

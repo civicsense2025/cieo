@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderStackedAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-stacked", category: "Headers", name: "Header: utility bar and main row",

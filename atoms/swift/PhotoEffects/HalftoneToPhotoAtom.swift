@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HalftoneToPhotoAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-screen", category: "Photo effects", name: "Halftone to photo",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LinkGroupsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-columns", category: "Mega menus", name: "Link groups with descriptions",

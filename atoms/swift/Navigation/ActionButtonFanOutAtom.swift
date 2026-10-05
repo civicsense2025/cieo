@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ActionButtonFanOutAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "speeddial", category: "Navigation", name: "Action button fan-out",

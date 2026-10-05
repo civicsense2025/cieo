@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CalendarEventAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "calendar", category: "Scheduling", name: "Calendar event",

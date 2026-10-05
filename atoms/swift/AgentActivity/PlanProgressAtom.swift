@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PlanProgressAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "planprogress", category: "Agent activity", name: "Agent plan progress",

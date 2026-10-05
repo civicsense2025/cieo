@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PinnedHorizontalGalleryAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-hgallery", category: "Scroll stories", name: "Pinned horizontal gallery",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderSpreadAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-spread", category: "Headers", name: "Header: logo, links, call to action",

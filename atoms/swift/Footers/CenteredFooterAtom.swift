@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CenteredFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-centered", category: "Footers", name: "Centered footer with social icons",

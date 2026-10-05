@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AgentBehavioursAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentbehaviours", category: "Agent identity", name: "Agent behaviours",

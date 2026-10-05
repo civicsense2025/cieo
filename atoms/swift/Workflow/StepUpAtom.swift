@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StepUpAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "stepup", category: "Workflow", name: "Step-up re-authentication",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StatusFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-status", category: "Footers", name: "Footer with live status",

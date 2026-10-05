@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FeaturedCardAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-featured", category: "Mega menus", name: "Featured card with links",

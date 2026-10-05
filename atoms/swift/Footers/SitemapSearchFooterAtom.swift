@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SitemapSearchFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz3-sitemap", category: "Footers", name: "Mega footer with sitemap search",

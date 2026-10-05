@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ServerStatusAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "serverstatus", category: "MCP and agents", name: "Server connection health",

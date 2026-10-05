@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FilmScrubAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "filmscrub", category: "Image transitions", name: "Interruptible film scrub",

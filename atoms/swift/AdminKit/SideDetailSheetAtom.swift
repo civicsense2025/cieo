@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SideDetailSheetAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "sidesheet", category: "Admin kit", name: "Side detail sheet",

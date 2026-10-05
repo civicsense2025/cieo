@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BrowserTabsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "tabstrip", category: "Files and browsing", name: "Browser tabs",

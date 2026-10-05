@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ConnectorListAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "connectorlist", category: "MCP and agents", name: "Connected servers",

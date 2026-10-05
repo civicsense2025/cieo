@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RetargetAsASumAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "retarget", category: "Foundations", name: "Retarget as a sum",

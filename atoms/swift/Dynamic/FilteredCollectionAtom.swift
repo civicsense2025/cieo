@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FilteredCollectionAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "facets", category: "Dynamic", name: "Filtered collection",

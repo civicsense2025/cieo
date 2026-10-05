@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ProgressBarsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "progress", category: "Data", name: "Progress bars",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 struct FootBackToTopKey: EnvironmentKey { static let defaultValue: () -> Void = {} }
 struct FootVisibleKey: EnvironmentKey { static let defaultValue = true }

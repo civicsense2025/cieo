@@ -102,19 +102,19 @@ export function useSwap(value, fallbackMs = 700) {
     }, [s.leaving, s.key, done, fallbackMs]);
     return { ...s, done };
 }
-const SWAP_CSS = `.mk-swap{display:inline-grid;vertical-align:baseline}.mk-swap>*{grid-area:1/1}
-.mk-swap-out{pointer-events:none;animation:mk-out var(--motion-duration-exit,100ms) cubic-bezier(.4,0,1,1) both}
-.mk-swap-in[data-swap]{animation:mk-in var(--motion-duration-base,300ms) var(--motion-ease-spring,cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit,100ms) both}
-@keyframes mk-out{to{opacity:0;transform:translateY(calc(var(--motion-drift,4px)*-1))}}
-@keyframes mk-in{from{opacity:0;transform:translateY(var(--motion-drift,4px))}}
-@media (prefers-reduced-motion:reduce){.mk-swap-out,.mk-swap-in[data-swap]{animation-duration:0s;animation-delay:0s}}`;
+const SWAP_CSS = `.cieo-swap{display:inline-grid;vertical-align:baseline}.cieo-swap>*{grid-area:1/1}
+.cieo-swap-out{pointer-events:none;animation:cieo-out var(--motion-duration-exit,100ms) cubic-bezier(.4,0,1,1) both}
+.cieo-swap-in[data-swap]{animation:cieo-in var(--motion-duration-base,300ms) var(--motion-ease-spring,cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit,100ms) both}
+@keyframes cieo-out{to{opacity:0;transform:translateY(calc(var(--motion-drift,4px)*-1))}}
+@keyframes cieo-in{from{opacity:0;transform:translateY(var(--motion-drift,4px))}}
+@media (prefers-reduced-motion:reduce){.cieo-swap-out,.cieo-swap-in[data-swap]{animation-duration:0s;animation-delay:0s}}`;
 let swapCss = false;
 function ensureSwapCss() {
     if (swapCss || typeof document === 'undefined')
         return;
     swapCss = true;
     const el = document.createElement('style');
-    el.setAttribute('data-motion-kit', 'swap');
+    el.setAttribute('data-cieo', 'swap');
     el.textContent = SWAP_CSS;
     document.head.appendChild(el);
 }
@@ -127,7 +127,7 @@ export function SwapText({ value, className, render }) {
         if (e.target === e.currentTarget)
             done(key);
     };
-    return (_jsxs("span", { className: className ? `mk-swap ${className}` : 'mk-swap', children: [leaving !== null ? (_jsx("span", { className: "mk-swap-out", "aria-hidden": "true", children: draw(leaving) }, `o${key}`)) : null, _jsx("span", { className: "mk-swap-in", "data-swap": leaving !== null ? '' : undefined, onAnimationEnd: onEnd, children: draw(shown) }, `i${key}`)] }));
+    return (_jsxs("span", { className: className ? `cieo-swap ${className}` : 'cieo-swap', children: [leaving !== null ? (_jsx("span", { className: "cieo-swap-out", "aria-hidden": "true", children: draw(leaving) }, `o${key}`)) : null, _jsx("span", { className: "cieo-swap-in", "data-swap": leaving !== null ? '' : undefined, onAnimationEnd: onEnd, children: draw(shown) }, `i${key}`)] }));
 }
 /** Rolling number: only changed digits roll, in the direction of change. The first render is instant. */
 export function Digits({ value, className, kind }) {

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CharacterLimitRingAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "charring", category: "Social", name: "Character limit ring",

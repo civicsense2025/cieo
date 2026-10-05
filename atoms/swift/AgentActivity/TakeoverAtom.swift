@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TakeoverAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "takeover", category: "Agent activity", name: "Take over from the agent",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SelectionToolbarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "seltoolbar", category: "Writing", name: "Selection toolbar",

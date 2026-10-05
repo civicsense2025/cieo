@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// A 2D drag that follows the finger 1:1. On release `decide(offset, projectedExtra)` picks the resting offset
 /// and the offset springs there carrying the flick's velocity.

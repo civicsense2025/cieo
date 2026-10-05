@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)

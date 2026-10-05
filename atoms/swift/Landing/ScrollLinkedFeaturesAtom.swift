@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ScrollLinkedFeaturesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "scrollfeatures", category: "Landing", name: "Scroll-linked features",

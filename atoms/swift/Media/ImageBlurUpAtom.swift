@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ImageBlurUpAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "imageload", category: "Media", name: "Image blur-up",

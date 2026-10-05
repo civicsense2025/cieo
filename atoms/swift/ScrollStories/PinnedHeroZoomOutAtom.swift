@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PinnedHeroZoomOutAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-zoomhero", category: "Scroll stories", name: "Pinned hero zoom-out",

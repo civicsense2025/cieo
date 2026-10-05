@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PayButtonAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "payment", category: "Documents", name: "Pay button",

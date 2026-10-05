@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RouteLinkedCarouselAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-route", category: "Carousels", name: "Route-linked carousel",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AgentScrollMapAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentscroll-map", category: "Agent activity", name: "Agent scroll map",

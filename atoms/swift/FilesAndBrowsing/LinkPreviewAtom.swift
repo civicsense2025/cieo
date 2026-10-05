@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LinkPreviewAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "linkpreview", category: "Files and browsing", name: "Link preview",

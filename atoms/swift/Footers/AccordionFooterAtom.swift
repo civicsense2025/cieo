@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AccordionFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-accordion", category: "Footers", name: "Accordion footer on mobile",

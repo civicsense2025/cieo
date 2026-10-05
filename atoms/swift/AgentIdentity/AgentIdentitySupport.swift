@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// Face parts, each continuous so a mood change can move brows first, then lids, then mouth.
 struct AgFace: Equatable {

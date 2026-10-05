@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// Shared by the Data atoms: a wall clock for `Track`, and a retarget that respects Reduce Motion.
 enum DataMotion {

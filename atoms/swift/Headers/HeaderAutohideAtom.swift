@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderAutohideAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-autohide", category: "Headers", name: "Header: hides on scroll down",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SignaturePadAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "signature", category: "Interactive", name: "Signature pad",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StatusChipAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "statuschip", category: "Admin kit", name: "Status chip",

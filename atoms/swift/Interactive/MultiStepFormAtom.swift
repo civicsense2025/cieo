@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MultiStepFormAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "multistep", category: "Interactive", name: "Multi-step form",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HoverRackFocusAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-rack", category: "Photo effects", name: "Hover rack focus",

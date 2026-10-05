@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FlyToStripAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-flyto", category: "Image transitions", name: "Fly-to strip",

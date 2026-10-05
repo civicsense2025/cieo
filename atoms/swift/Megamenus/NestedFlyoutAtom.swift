@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct NestedFlyoutAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-flyout", category: "Mega menus", name: "Nested flyout, three levels",

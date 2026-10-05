@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ComboboxAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "combobox", category: "Inputs", name: "Combobox",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// Height of each panel's content, keyed by top item, so the panel can morph to the next one's height.
 struct MegaHeightKey: PreferenceKey {

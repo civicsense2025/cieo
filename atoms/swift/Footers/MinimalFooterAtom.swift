@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MinimalFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-minimal", category: "Footers", name: "Minimal footer",

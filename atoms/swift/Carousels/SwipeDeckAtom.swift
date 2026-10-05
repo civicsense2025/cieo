@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SwipeDeckAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-deck", category: "Carousels", name: "Swipe deck",

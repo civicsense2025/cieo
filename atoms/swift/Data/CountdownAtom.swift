@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CountdownAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "countdown", category: "Data", name: "Countdown",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ChapterScrollytellingAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-chapters", category: "Scroll stories", name: "Chapter scrollytelling",

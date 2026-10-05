@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 private struct ToastItem: Identifiable { let id = UUID(); let kind: Int; let text: String }
 

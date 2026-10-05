@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SyncedThumbnailRailAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-sync", category: "Carousels", name: "Synced thumbnail rail",

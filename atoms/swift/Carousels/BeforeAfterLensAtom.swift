@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BeforeAfterLensAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-compare", category: "Carousels", name: "Before and after lens",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DownloadProgressAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "download", category: "Files and browsing", name: "Download progress",

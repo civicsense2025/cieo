@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DelayedSpinnerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "delayspinner", category: "Admin kit", name: "Delayed spinner",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SignupFormAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "signupform", category: "Newsletter", name: "Popup, slide-in and bar",

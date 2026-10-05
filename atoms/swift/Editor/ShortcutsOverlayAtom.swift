@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ShortcutsOverlayAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "shortcuts", category: "Editor", name: "Shortcuts overlay",

@@ -2,15 +2,15 @@
 import PackageDescription
 
 let package = Package(
-    name: "MotionKit",
+    name: "Cieo",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
-        .library(name: "MotionKit", targets: ["MotionKit"]),
-        .library(name: "MotionKitAtoms", targets: ["MotionKitAtoms"]),
+        .library(name: "Cieo", targets: ["Cieo"]),
+        .library(name: "CieoAtoms", targets: ["CieoAtoms"]),
     ],
     targets: [
-        .target(name: "MotionKit"),
-        .target(name: "MotionKitAtoms", dependencies: ["MotionKit"], path: "atoms/swift"),
-        .testTarget(name: "MotionKitTests", dependencies: ["MotionKit"]),
+        .target(name: "Cieo"),
+        .target(name: "CieoAtoms", dependencies: ["Cieo"], path: "atoms/swift"),
+        .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
     ]
 )

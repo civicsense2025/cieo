@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TooltipAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "tooltip", category: "Content", name: "Tooltip",

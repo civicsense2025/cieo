@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ScrubberAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "scrubber", category: "Status and records", name: "Timeline scrubber",

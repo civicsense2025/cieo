@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct QuickCreateAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "quickcreate", category: "Editor", name: "Quick create",

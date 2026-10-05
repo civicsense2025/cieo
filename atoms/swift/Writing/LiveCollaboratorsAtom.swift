@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LiveCollaboratorsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "presence", category: "Writing", name: "Live collaborators",

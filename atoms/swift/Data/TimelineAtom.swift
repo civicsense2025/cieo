@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TimelineAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "timeline", category: "Data", name: "Timeline",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct EmptyStateAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "emptystate", category: "Guidance", name: "Empty state",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MenuSearchAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-search", category: "Mega menus", name: "Search inside the menu",

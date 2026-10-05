@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MinimizeToBarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "composemin", category: "Email", name: "Minimize to bar",

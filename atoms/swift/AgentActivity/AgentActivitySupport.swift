@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// The agent's square mark: a rounded square with a star. People are round, agents are square, so nothing relies on colour.
 struct AgentMark: View {

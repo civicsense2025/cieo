@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RubberBandSliderAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "slider", category: "Interactive", name: "Rubber-band slider",

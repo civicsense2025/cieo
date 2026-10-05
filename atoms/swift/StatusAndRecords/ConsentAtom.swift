@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ConsentAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "consent", category: "Status and records", name: "Consent banner",

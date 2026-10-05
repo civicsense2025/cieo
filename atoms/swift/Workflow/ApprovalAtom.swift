@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ApprovalAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "approval", category: "Workflow", name: "Approval card",

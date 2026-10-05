@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StaggerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "stagger", category: "Foundations", name: "Stagger",

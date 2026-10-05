@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CullDeckAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-cull-deck", category: "Galleries", name: "Cull deck: keep or reject by throwing",

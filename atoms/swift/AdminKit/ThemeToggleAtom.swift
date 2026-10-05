@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ThemeToggleAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "themetoggle", category: "Admin kit", name: "Theme toggle",

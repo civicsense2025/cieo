@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SpotlightTourAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "tour", category: "Guidance", name: "Spotlight tour",

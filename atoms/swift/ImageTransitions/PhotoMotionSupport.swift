@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// A value that chases a target on a critically damped spring, read once per frame. Not a View: owned by `PhFollow`.
 final class PhClock {

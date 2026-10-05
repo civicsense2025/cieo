@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct GradeWithHistogramAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-grade", category: "Photo effects", name: "Grade with live histogram",

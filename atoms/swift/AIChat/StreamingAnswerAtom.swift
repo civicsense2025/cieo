@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StreamingAnswerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "streaming", category: "AI chat", name: "Streaming answer",

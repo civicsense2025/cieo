@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LightboxZoomPanAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-zoom-pan", category: "Galleries", name: "Lightbox with pinch, wheel and double-tap zoom",

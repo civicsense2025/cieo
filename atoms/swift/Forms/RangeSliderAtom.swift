@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RangeSliderAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "range", category: "Forms", name: "Range slider",

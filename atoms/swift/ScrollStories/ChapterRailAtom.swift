@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ChapterRailAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-chapterrail", category: "Scroll stories", name: "Chapter rail with gentle snap",

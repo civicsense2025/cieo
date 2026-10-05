@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct IconGridAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-icons", category: "Mega menus", name: "Icon grid of products",

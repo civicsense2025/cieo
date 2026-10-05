@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FocalIrisAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-iris", category: "Image transitions", name: "Focal iris",

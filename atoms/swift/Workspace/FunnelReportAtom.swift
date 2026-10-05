@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FunnelReportAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "funnel", category: "Workspace", name: "Funnel report",

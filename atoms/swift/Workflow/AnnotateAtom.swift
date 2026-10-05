@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AnnotateAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "annotate", category: "Workflow", name: "Annotation review canvas",

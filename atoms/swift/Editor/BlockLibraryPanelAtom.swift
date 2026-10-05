@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BlockLibraryPanelAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "blocklibrary", category: "Editor", name: "Block library panel",

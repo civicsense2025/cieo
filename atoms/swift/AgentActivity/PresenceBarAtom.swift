@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PresenceBarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "presencebar", category: "Agent activity", name: "Presence bar",

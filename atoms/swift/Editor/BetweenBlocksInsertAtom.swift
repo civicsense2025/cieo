@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BetweenBlocksInsertAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "betweeninsert", category: "Editor", name: "Between-blocks insert",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct InfiniteLoopAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-loop", category: "Carousels", name: "Infinite loop",

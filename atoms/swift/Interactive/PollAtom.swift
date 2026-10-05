@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PollAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "poll", category: "Interactive", name: "Poll",

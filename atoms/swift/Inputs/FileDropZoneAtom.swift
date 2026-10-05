@@ -1,6 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
-import MotionKit
+import Cieo
 
 public struct FileDropZoneAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "dropzone", category: "Inputs", name: "File drop zone",

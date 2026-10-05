@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AnalyticsDashboardAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "dashboard", category: "Workspace", name: "Analytics dashboard",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 private struct SuggestionWord: View {
     @Environment(\.accessibilityReduceMotion) private var reduce

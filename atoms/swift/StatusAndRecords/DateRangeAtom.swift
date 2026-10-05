@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DateRangeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "daterange", category: "Status and records", name: "Date range selector",

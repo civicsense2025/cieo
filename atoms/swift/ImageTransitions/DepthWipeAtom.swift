@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DepthWipeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-depth", category: "Image transitions", name: "Depth wipe",

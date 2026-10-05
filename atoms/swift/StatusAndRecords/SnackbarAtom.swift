@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SnackbarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "snackbar", category: "Status and records", name: "Snackbar with action",

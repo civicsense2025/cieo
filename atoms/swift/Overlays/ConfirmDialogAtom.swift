@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ConfirmDialogAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "dialog", category: "Overlays", name: "Confirm dialog",

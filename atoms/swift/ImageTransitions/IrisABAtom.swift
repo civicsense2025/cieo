@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct IrisABAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "irisab", category: "Image transitions", name: "Iris A/B: counter-scale vs clip-path",

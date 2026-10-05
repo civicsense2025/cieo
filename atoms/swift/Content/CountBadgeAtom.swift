@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CountBadgeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "badge", category: "Content", name: "Count badge",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ThemeFromPhotoAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-palette", category: "Photo effects", name: "Theme from photo",

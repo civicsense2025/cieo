@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TileWaveAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-tiles", category: "Image transitions", name: "Tile wave",

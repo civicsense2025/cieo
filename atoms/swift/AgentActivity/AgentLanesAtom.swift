@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AgentLanesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentlanes", category: "Agent activity", name: "Multi-agent lanes",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ScrollScrubbedSequenceAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-sequence", category: "Scroll stories", name: "Scroll-scrubbed sequence",

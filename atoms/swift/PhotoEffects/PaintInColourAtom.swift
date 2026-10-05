@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PaintInColourAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-paint", category: "Photo effects", name: "Paint in colour",

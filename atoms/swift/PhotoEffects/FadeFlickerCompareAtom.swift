@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FadeFlickerCompareAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-flick", category: "Photo effects", name: "Fade flicker compare",

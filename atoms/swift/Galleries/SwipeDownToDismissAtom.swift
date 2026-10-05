@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SwipeDownToDismissAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-swipe-dismiss", category: "Galleries", name: "Swipe down to dismiss",

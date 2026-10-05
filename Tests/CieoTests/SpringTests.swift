@@ -1,5 +1,5 @@
 import XCTest
-@testable import MotionKit
+@testable import Cieo
 
 final class SpringTests: XCTestCase {
     func testNoOvershoot() {

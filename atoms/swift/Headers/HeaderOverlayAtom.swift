@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderOverlayAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-overlay", category: "Headers", name: "Header: transparent over hero",

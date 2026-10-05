@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ApprovalInlineAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "approvalinline", category: "Agent activity", name: "Approval on the page",

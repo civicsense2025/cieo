@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct OnboardingChecklistAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "onboarding", category: "Workspace", name: "Onboarding checklist",

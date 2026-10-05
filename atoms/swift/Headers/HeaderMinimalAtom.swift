@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderMinimalAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-minimal", category: "Headers", name: "Header: minimal with fullscreen menu",

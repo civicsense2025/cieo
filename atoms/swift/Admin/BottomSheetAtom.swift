@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BottomSheetAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "sheet", category: "Admin", name: "Bottom sheet (mobile only)",

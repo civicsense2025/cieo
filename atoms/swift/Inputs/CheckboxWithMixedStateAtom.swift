@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CheckboxWithMixedStateAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "checkbox", category: "Inputs", name: "Checkbox with mixed state",

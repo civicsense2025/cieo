@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PeekShelfAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-peek", category: "Carousels", name: "Peek and pull shelf",

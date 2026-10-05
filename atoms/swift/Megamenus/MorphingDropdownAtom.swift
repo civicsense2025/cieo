@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MorphingDropdownAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-morph", category: "Mega menus", name: "Morphing dropdown with caret",

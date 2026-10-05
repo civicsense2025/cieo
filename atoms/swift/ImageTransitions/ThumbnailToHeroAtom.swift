@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ThumbnailToHeroAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-flip", category: "Image transitions", name: "Thumbnail to hero",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DepthParallaxPhotoAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-depth", category: "Photo effects", name: "Depth parallax",

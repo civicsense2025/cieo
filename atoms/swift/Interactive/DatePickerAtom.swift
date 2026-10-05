@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DatePickerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "booking", category: "Interactive", name: "Date and time picker",

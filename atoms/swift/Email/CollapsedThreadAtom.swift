@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CollapsedThreadAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "threadstack", category: "Email", name: "Collapsed thread",

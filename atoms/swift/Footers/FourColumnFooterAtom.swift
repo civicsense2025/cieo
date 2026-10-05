@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FourColumnFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-columns", category: "Footers", name: "Four-column footer",

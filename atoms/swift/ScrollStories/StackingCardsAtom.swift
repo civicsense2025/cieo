@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct StackingCardsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-stackcards", category: "Scroll stories", name: "Stacking cards",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CommandPaletteAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "palette", category: "Admin", name: "Command palette",

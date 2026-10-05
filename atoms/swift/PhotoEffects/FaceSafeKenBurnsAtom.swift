@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FaceSafeKenBurnsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-burns", category: "Photo effects", name: "Face-safe Ken Burns",

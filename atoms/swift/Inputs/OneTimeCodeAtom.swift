@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct OneTimeCodeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "otp", category: "Inputs", name: "One-time code",

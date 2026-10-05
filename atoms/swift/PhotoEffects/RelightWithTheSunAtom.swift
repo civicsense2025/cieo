@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RelightWithTheSunAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-relight", category: "Photo effects", name: "Relight with the sun",

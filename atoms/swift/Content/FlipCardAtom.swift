@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FlipCardAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "flip", category: "Content", name: "Flip card",

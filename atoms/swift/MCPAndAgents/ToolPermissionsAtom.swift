@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ToolPermissionsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "toolpermissions", category: "MCP and agents", name: "Server tool permissions",

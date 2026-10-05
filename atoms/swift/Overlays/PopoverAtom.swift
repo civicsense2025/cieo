@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PopoverAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "popover", category: "Overlays", name: "Popover",

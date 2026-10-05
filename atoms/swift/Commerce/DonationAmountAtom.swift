@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DonationAmountAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "donation", category: "Commerce", name: "Donation amount",

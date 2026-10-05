@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MobileMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mobilemenu", category: "Chrome", name: "Mobile menu",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ContactSheetLoupeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-contact-loupe", category: "Galleries", name: "Contact sheet with a loupe",

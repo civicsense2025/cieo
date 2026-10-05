@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct UndoRedoAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "undoredo", category: "Design tools", name: "Undo and redo",

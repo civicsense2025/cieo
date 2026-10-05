@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ToolCallLogAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "toolcalllog", category: "MCP and agents", name: "Tool call log",

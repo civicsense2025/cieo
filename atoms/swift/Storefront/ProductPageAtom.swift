@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ProductPageAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "productpage", category: "Storefront", name: "Product page",

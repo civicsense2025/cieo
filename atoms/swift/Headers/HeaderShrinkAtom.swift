@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderShrinkAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-shrink", category: "Headers", name: "Header: shrinks on scroll",

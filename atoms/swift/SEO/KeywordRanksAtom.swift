@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct KeywordRanksAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "ranks", category: "SEO", name: "Keyword ranks",

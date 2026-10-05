@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DisclosureFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz6-disclosure", category: "Footers", name: "Footer with more links and sticky strip",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct FrostBehindCaptionsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-frost", category: "Photo effects", name: "Frost behind captions",

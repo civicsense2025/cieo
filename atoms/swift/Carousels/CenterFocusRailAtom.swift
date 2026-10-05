@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CenterFocusRailAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-focus", category: "Carousels", name: "Center-focus rail",

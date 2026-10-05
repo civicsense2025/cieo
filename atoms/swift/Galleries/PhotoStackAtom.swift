@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PhotoStackAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-photo-stack", category: "Galleries", name: "Photo stack that fans out",

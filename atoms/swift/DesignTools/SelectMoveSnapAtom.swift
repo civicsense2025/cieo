@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SelectMoveSnapAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "selectresize", category: "Design tools", name: "Select, move and snap",

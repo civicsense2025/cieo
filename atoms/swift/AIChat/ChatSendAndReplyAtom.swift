@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ChatSendAndReplyAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "chatthread", category: "AI chat", name: "Chat send and reply",

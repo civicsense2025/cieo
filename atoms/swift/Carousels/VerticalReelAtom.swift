@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct VerticalReelAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-reel", category: "Carousels", name: "Vertical reel",

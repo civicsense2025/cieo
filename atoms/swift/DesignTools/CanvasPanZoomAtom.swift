@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CanvasPanZoomAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "canvaszoom", category: "Design tools", name: "Canvas pan and zoom",

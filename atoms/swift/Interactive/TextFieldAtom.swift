@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TextFieldAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "field", category: "Interactive", name: "Text field",

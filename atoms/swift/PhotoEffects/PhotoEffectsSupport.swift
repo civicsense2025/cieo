@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// A small sampled copy of an AtomPhoto, for effects that need real pixel values (halftone, histogram, palette).
 struct PhPixels {

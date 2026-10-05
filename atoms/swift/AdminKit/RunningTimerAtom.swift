@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct RunningTimerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "timer", category: "Admin kit", name: "Running timer",

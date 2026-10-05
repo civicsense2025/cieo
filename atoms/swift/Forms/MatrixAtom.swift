@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MatrixAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "matrix", category: "Forms", name: "Matrix",

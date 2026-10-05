@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct NavigationMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "navmenu", category: "Navigation", name: "Navigation menu",

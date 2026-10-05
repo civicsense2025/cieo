@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HoverCardAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "hovercard", category: "Overlays", name: "Hover card",

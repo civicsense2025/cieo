@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderPillAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-pill", category: "Headers", name: "Header: floating pill with plate",

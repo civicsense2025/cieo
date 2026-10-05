@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MultiSelectAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "multiselect", category: "Forms", name: "Multi-select",

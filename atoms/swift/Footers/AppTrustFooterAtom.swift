@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AppTrustFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz5-app", category: "Footers", name: "App download and trust footer",

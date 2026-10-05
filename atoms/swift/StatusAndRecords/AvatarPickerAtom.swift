@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AvatarPickerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "avatarpicker", category: "Status and records", name: "Avatar picker",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PinClusterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "cluster", category: "Maps", name: "Pin cluster",

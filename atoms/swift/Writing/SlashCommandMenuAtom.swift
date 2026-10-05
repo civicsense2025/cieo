@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SlashCommandMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "slashmenu", category: "Writing", name: "Slash command menu",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BottomNavigationBarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "navbar", category: "Navigation", name: "Bottom navigation bar",

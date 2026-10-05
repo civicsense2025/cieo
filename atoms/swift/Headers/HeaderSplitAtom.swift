@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderSplitAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-split", category: "Headers", name: "Header: logo centered, links split",

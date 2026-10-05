@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MomentumFilmstripAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-film", category: "Carousels", name: "Momentum filmstrip",

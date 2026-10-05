@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CommandMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-command", category: "Mega menus", name: "Command menu",

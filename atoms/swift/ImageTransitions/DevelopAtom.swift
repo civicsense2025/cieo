@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DevelopAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-develop", category: "Image transitions", name: "Develop",

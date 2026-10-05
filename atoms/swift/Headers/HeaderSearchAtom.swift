@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderSearchAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-search", category: "Headers", name: "Header: search expands in place",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HorizonSplitAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-split", category: "Image transitions", name: "Horizon split",

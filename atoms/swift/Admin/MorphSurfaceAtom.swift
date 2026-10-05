@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct MorphSurfaceAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "surface", category: "Admin", name: "Morph surface",

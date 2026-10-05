@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct InviteAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "invite", category: "Workflow", name: "Invite member",

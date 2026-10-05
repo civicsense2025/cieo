@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ClipWindowAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-clipwindow", category: "Scroll stories", name: "Clip window to full bleed",

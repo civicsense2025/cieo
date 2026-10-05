@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct VerticalTabsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-tabs", category: "Mega menus", name: "Vertical tabs, hover to swap",

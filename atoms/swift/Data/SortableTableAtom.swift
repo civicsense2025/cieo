@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SortableTableAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "tablesort", category: "Data", name: "Sortable table",

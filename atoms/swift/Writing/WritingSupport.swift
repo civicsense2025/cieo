@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 /// Wraps its subviews like words in a paragraph. Shared by the Writing atoms that need word positions.
 struct WritingFlow: Layout {

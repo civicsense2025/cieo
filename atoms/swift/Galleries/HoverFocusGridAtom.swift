@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HoverFocusGridAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-hover-focus", category: "Galleries", name: "Hover-focus grid",

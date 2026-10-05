@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BeforeAfterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "beforeafter", category: "Media", name: "Before / after",

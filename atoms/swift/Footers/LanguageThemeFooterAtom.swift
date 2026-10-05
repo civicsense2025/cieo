@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct LanguageThemeFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-region-theme", category: "Footers", name: "Footer with language picker and theme toggle",

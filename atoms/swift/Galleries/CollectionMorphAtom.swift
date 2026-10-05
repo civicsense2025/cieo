@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CollectionMorphAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-collection-morph", category: "Galleries", name: "Collection to collection morph",

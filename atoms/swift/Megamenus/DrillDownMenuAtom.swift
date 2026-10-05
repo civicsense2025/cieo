@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct DrillDownMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "mega-drill", category: "Mega menus", name: "Drill-down menu with back",

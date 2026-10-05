@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct InlineEditableFieldAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "inlineedit", category: "Admin kit", name: "Inline editable field",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ScrollFadeRowAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "scrollfade", category: "Admin kit", name: "Scroll-fade row",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ResizablePanelsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "resizable", category: "Layout", name: "Resizable panels",

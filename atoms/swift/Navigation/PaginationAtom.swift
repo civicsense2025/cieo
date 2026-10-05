@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PaginationAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "pagination", category: "Navigation", name: "Pagination",

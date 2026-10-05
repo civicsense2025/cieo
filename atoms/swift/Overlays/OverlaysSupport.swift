@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 extension AnyTransition {
     /// Overlay enter and exit: grows from `anchor` at 97% and rises `rise` points. Enters on base, leaves faster on snap.

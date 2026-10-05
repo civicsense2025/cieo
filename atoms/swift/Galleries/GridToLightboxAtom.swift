@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct GridToLightboxAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-grid-lightbox", category: "Galleries", name: "Grid to lightbox, shared element",

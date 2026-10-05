@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BarChartAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "bars", category: "Data", name: "Bar chart",

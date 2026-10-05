@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct AuthShellAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "authshell", category: "Workflow", name: "Auth shell",

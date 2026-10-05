@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PasswordWithStrengthAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "password", category: "Forms", name: "Password with strength",

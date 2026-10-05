@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PageEditorAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "pageeditor", category: "Editor", name: "Page editor",

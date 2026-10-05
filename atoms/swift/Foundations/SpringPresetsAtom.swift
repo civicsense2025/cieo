@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SpringPresetsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "step", category: "Foundations", name: "Spring presets",

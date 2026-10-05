@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct CallGridAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "callgrid", category: "Video calls", name: "Call grid",

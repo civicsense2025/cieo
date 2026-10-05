@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TabsWithPanelAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "tabs", category: "Content", name: "Tabs with panel",

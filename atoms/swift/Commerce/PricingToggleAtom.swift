@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PricingToggleAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "pricing", category: "Commerce", name: "Pricing toggle",

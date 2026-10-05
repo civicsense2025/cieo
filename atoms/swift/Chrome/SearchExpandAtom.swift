@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SearchExpandAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "search", category: "Chrome", name: "Search expand",

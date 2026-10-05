@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct WordmarkFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fz1-wordmark", category: "Footers", name: "Giant wordmark footer",

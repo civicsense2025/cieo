@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct NpsScaleAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "nps", category: "Forms", name: "NPS scale",

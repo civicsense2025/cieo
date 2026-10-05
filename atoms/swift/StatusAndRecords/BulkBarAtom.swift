@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct BulkBarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "bulkbar", category: "Status and records", name: "Bulk selection bar",

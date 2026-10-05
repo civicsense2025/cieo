@@ -1,4 +1,4 @@
-/* motion-kit tokens. Durations are the 99% settle time of a critically damped spring; --motion-ease-spring
+/* cieo tokens. Durations are the 99% settle time of a critically damped spring; --motion-ease-spring
    matches that response within 2%, so CSS transitions feel the same as the JS springs. Nothing overshoots. */
 :root {
   --motion-duration-snap: 200ms;

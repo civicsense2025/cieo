@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TimeWheelAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "timewheel", category: "Forms", name: "Time wheel",

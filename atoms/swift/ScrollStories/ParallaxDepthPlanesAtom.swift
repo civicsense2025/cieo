@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ParallaxDepthPlanesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-depthplanes", category: "Scroll stories", name: "Parallax depth planes",

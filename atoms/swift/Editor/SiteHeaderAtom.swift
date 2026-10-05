@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SiteHeaderAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "siteheader", category: "Editor", name: "Site header",

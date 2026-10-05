@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct InkEdgeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-ink", category: "Image transitions", name: "Ink edge",

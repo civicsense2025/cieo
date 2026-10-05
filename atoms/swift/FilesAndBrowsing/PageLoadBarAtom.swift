@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct PageLoadBarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "loadbar", category: "Files and browsing", name: "Page load bar",

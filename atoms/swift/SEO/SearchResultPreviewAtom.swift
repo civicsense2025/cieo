@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SearchResultPreviewAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "serp", category: "SEO", name: "Search result preview",

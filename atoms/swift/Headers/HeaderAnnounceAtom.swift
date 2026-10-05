@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct HeaderAnnounceAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "header-announce", category: "Headers", name: "Header: announcement bar",

@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct ExtendedActionButtonAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fab", category: "Navigation", name: "Extended action button",

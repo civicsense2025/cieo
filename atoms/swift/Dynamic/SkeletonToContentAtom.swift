@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct SkeletonToContentAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "skeleton", category: "Dynamic", name: "Skeleton to content",

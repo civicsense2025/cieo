@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TagInputAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "taginput", category: "Inputs", name: "Tag input",

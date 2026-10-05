@@ -1,5 +1,5 @@
 import SwiftUI
-import MotionKit
+import Cieo
 
 public struct TableOfContentsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "toc", category: "Content", name: "Table of contents",
