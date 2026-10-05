@@ -175,7 +175,7 @@ export interface Job {
 }
 
 const jobs = new Set<Job>();
-let raf = 0;
+let raf: number | null = null;
 let listening = false;
 
 function settle(job: Job): void {
@@ -188,7 +188,7 @@ function settle(job: Job): void {
 }
 
 function tick(): void {
-  raf = 0;
+  raf = null;
   const t = now();
   for (const job of [...jobs]) {
     if (!jobs.has(job)) continue;
@@ -204,15 +204,15 @@ function tick(): void {
     }
     if (!moving && jobs.has(job)) settle(job);
   }
-  if (jobs.size && !raf) raf = requestAnimationFrame(tick);
+  if (jobs.size && raf === null) raf = requestAnimationFrame(tick);
 }
 
 /** When the motion state changes, running springs that are no longer allowed jump to their end state. */
 export function sync(): void {
   for (const job of [...jobs]) if (!allowed(job.kind ?? 'feedback')) settle(job);
-  if (!jobs.size && raf) {
+  if (!jobs.size && raf !== null) {
     cancelAnimationFrame(raf);
-    raf = 0;
+    raf = null;
   }
 }
 
@@ -235,9 +235,14 @@ export function run(step: Job | Job['step'], opts: { kind?: MotionKind; finish?:
   }
   listen();
   jobs.add(job);
-  if (!raf) raf = requestAnimationFrame(tick);
+  if (raf === null) raf = requestAnimationFrame(tick);
   return () => {
     if (jobs.has(job)) settle(job);
+    // Finishing the last job also releases the already-requested browser callback.
+    if (!jobs.size && raf !== null) {
+      cancelAnimationFrame(raf);
+      raf = null;
+    }
   };
 }
 

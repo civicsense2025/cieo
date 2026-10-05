@@ -5,7 +5,7 @@
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": ["./tokens/*.css"],
   "files": [
     "dist",
     "tokens",
@@ -24,6 +24,10 @@
     "./react": {
       "types": "./dist/react/index.d.ts",
       "default": "./dist/react/index.js"
+    },
+    "./live": {
+      "types": "./dist/live/index.d.ts",
+      "default": "./dist/live/index.js"
     },
     "./tokens.css": "./tokens/tokens.css",
     "./tokens.json": "./tokens/tokens.json",

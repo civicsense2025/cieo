@@ -126,7 +126,7 @@ export function allowed(kind = 'feedback', el) {
 /** The preset a helper should use: paused feedback still shows, on the fastest spring. */
 export const config = (kind, cfg = S.base) => (state().paused && kind === 'feedback' ? S.snap : cfg);
 const jobs = new Set();
-let raf = 0;
+let raf = null;
 let listening = false;
 function settle(job) {
     jobs.delete(job);
@@ -138,7 +138,7 @@ function settle(job) {
     }
 }
 function tick() {
-    raf = 0;
+    raf = null;
     const t = now();
     for (const job of [...jobs]) {
         if (!jobs.has(job))
@@ -157,7 +157,7 @@ function tick() {
         if (!moving && jobs.has(job))
             settle(job);
     }
-    if (jobs.size && !raf)
+    if (jobs.size && raf === null)
         raf = requestAnimationFrame(tick);
 }
 /** When the motion state changes, running springs that are no longer allowed jump to their end state. */
@@ -165,9 +165,9 @@ export function sync() {
     for (const job of [...jobs])
         if (!allowed(job.kind ?? 'feedback'))
             settle(job);
-    if (!jobs.size && raf) {
+    if (!jobs.size && raf !== null) {
         cancelAnimationFrame(raf);
-        raf = 0;
+        raf = null;
     }
 }
 function listen() {
@@ -188,11 +188,16 @@ export function run(step, opts = {}) {
     }
     listen();
     jobs.add(job);
-    if (!raf)
+    if (raf === null)
         raf = requestAnimationFrame(tick);
     return () => {
         if (jobs.has(job))
             settle(job);
+        // Finishing the last job also releases the already-requested browser callback.
+        if (!jobs.size && raf !== null) {
+            cancelAnimationFrame(raf);
+            raf = null;
+        }
     };
 }
 export const active = () => jobs.size;
