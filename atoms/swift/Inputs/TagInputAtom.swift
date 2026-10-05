@@ -16,7 +16,7 @@ public struct TagInputAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Return or comma adds · Delete removes the last") {
-            TagFlow {
+            BasicsLeadingFlow {
                 ForEach(tags) { tag in
                     Chip(tag: tag) { remove(tag.id) }
                 }
@@ -97,7 +97,7 @@ public struct TagInputAtom: MotionAtomView {
 }
 
 /// Left-aligned wrapping rows with 6 pt gaps.
-private struct TagFlow: Layout {
+struct BasicsLeadingFlow: Layout {
     func rows(_ width: CGFloat, _ subviews: Subviews) -> [[Int]] {
         var out: [[Int]] = [[]]
         var x: CGFloat = 0
