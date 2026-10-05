@@ -18,7 +18,7 @@ public struct BetweenBlocksInsertAtom: MotionAtomView {
             VStack(spacing: 0) {
                 gap(0)
                 ForEach(Array(items.enumerated()), id: \.element.id) { i, item in
-                    HeightReveal(progress: item.shown ? 1 : 0) {
+                    EditorHeightReveal(progress: item.shown ? 1 : 0) {
                         Text(item.kind).font(.footnote.weight(.medium)).frame(maxWidth: .infinity, minHeight: 40, alignment: .leading).padding(.horizontal, 14)
                             .background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 8))
                     }.clipped()

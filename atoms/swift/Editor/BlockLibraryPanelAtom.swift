@@ -33,7 +33,7 @@ public struct BlockLibraryPanelAtom: MotionAtomView {
                     Divider()
                     ZStack(alignment: .topLeading) {
                         VStack(spacing: 8) { ForEach(blocks) { b in
-                            HeightReveal(progress: b.shown ? 1 : 0) { Text(b.name).font(.footnote).frame(maxWidth: .infinity, minHeight: 44).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 8)) }.clipped()
+                            EditorHeightReveal(progress: b.shown ? 1 : 0) { Text(b.name).font(.footnote).frame(maxWidth: .infinity, minHeight: 44).background(.quaternary.opacity(0.6), in: RoundedRectangle(cornerRadius: 8)) }.clipped()
                         } }.padding(10)
                         if let s = lineSlot { Capsule().fill(Color.accentColor).frame(width: 140, height: 3).offset(x: 10, y: 6 + CGFloat(s) * 52) }
                     }.frame(width: 160, height: 250, alignment: .topLeading).animation(reduce ? nil : .motion(.base), value: lineSlot)

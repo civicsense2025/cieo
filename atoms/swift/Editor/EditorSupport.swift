@@ -2,7 +2,7 @@ import SwiftUI
 
 /// Grows its single child from zero height to its natural height as `progress` goes 0 to 1.
 /// Because it is a Layout, siblings below it spring down with it on the same animation.
-struct HeightReveal: Layout {
+struct EditorHeightReveal: Layout {
     var progress: Double
     var animatableData: Double {
         get { progress }

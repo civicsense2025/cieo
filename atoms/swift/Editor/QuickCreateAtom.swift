@@ -27,7 +27,7 @@ public struct QuickCreateAtom: MotionAtomView {
                     surface
                 }.frame(width: 340, height: 130, alignment: .topLeading).zIndex(1)
                 VStack(spacing: 0) { ForEach(rows) { r in
-                    HeightReveal(progress: r.shown ? 1 : 0) { Text(r.title).font(.footnote).frame(maxWidth: .infinity, minHeight: 40, alignment: .leading).padding(.horizontal, 12).overlay(alignment: .bottom) { Divider() } }.clipped()
+                    EditorHeightReveal(progress: r.shown ? 1 : 0) { Text(r.title).font(.footnote).frame(maxWidth: .infinity, minHeight: 40, alignment: .leading).padding(.horizontal, 12).overlay(alignment: .bottom) { Divider() } }.clipped()
                 } }.frame(width: 340).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
             }
         }
