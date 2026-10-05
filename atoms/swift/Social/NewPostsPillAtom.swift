@@ -40,7 +40,7 @@ public struct NewPostsPillAtom: MotionAtomView {
                         .padding(.horizontal, 12).padding(.vertical, 7).background(Capsule().fill(.primary))
                     }
                     .buttonStyle(.plain).padding(.top, 10)
-                    .transition(reduce ? .identity : .motionPresence)
+                    .motionTransition(.presence)
                     .accessibilityLabel("\(pending.count) new posts")
                 }
             }

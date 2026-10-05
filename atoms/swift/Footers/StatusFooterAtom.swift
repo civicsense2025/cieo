@@ -39,7 +39,7 @@ public struct StatusFooterAtom: MotionAtomView {
                                 Text(services[i]).font(.caption)
                             }
                         }
-                    }.transition(.motionPresence)
+                    }.motionTransition(.presence)
                 }
                 Spacer(minLength: 0)
             }

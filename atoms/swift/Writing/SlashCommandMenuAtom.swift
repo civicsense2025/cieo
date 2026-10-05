@@ -48,7 +48,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
                 }
                 .frame(width: 340).animation(reduce ? nil : .motion(.base), value: blocks.count)
                 if open {
-                    menu.offset(x: min(caretX, 130), y: 40).transition(reduce ? .identity : .motionPresence)
+                    menu.offset(x: min(caretX, 130), y: 40).motionTransition(.presence)
                 }
             }
             .frame(width: 340, height: 280, alignment: .topLeading)

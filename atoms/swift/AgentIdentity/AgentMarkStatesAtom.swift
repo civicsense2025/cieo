@@ -3,7 +3,7 @@ import MotionKit
 
 public struct AgentMarkStatesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentmarkstates", category: "Agent identity", name: "Agent mark states",
-        summary: "The Meridian mark carried through seven agent states. Thinking turns the meridian at a constant speed; Browsing sends a square marker along the equator while the meridian leans toward it; Commenting grows Velo’s comment tail so the mark doubles as a pin; Waiting stands the meridian upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.")
+        summary: "The agent mark carried through seven agent states. Thinking turns the arc at a constant speed; Browsing sends a square marker along the equator while the arc leans toward it; Commenting grows the review tool’s comment tail so the mark doubles as a pin; Waiting stands the arc upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private enum State_: String, CaseIterable { case thinking = "Thinking", browsing = "Browsing", commenting = "Commenting", waiting = "Waiting", done = "Done", error = "Error" }
     @State private var state = State_.thinking
@@ -23,7 +23,7 @@ public struct AgentMarkStatesAtom: MotionAtomView {
                     .onChange(of: state) { _, s in apply(s) }
                 HStack(alignment: .bottom, spacing: 16) {
                     ForEach([96, 32, 24, 16], id: \.self) { s in mark(CGFloat(s)) }
-                    HStack(spacing: 4) { mark(16); Text("Claude").font(.caption); AgentTag() }.padding(6).background(.quaternary, in: Capsule())
+                    HStack(spacing: 4) { mark(16); Text("Assistant").font(.caption); AgentTag() }.padding(6).background(.quaternary, in: Capsule())
                 }
                 Text(state.rawValue).font(.caption).foregroundStyle(.secondary)
             }

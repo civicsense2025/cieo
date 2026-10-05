@@ -27,7 +27,7 @@ public struct AvatarGroupAtom: MotionAtomView {
                                     .padding(.horizontal, 8).padding(.vertical, 4)
                                     .background(RoundedRectangle(cornerRadius: 6).fill(.primary))
                                     .alignmentGuide(.top) { $0[.bottom] + 8 }
-                                    .transition(reduce ? .identity : .motionPresence)
+                                    .motionTransition(.presence)
                             }
                         }
                         .zIndex(focus == i ? 20 : Double(10 - i))

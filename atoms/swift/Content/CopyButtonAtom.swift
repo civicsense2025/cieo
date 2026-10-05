@@ -34,10 +34,10 @@ public struct CopyButtonAtom: MotionAtomView {
             ZStack {
                 if copied {
                     Label("Copied", systemImage: "checkmark").labelStyle(.titleAndIcon)
-                        .transition(reduce ? .identity : .motionSwap(drift: 3))
+                        .motionTransition(.swap(drift: 3))
                 } else {
                     Image(systemName: "doc.on.doc")
-                        .transition(reduce ? .identity : .motionSwap(drift: 3))
+                        .motionTransition(.swap(drift: 3))
                 }
             }
             .font(.caption.weight(.medium))

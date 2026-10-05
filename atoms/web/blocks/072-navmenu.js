@@ -8,7 +8,7 @@ atom({ id:'navmenu', cat:'Navigation', name:'Navigation menu', block:'nav-menu, 
     const nm = $(st,'.nm'), tb = $(st,'.tb'), pn = $(st,'.pn');
     const D = [['Product',[['Editor','Write and lay out pages'],['Members','Paid and free tiers'],['Commerce','Sell from any page'],['Analytics','Private, cookie-free']], 2],
       ['Resources',[['Docs','Guides and reference'],['Templates','Starting points'],['Changelog','What shipped']], 1],
-      ['Company',[['About','Who builds Lamina'],['Careers','Two open roles']], 1]];
+      ['Company',[['About','Who builds Studio'],['Careers','Two open roles']], 1]];
     const trig = D.map(([n]) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'border-color:transparent;background:none;display:flex;gap:4px;align-items:center'; b.innerHTML = n + ic(I.chev,12); tb.appendChild(b); return b; });
     const panes = D.map(([,items,cols]) => { const d = document.createElement('div'); d.style.cssText = `position:absolute;left:0;top:0;padding:12px;display:grid;grid-template-columns:repeat(${cols},190px);gap:4px`;
       d.innerHTML = items.map(([a,b]) => `<a href="#" style="display:block;padding:8px 10px;border-radius:8px;text-decoration:none;color:var(--ink)"><b class="small" style="display:block">${a}</b><span class="small muted">${b}</span></a>`).join(''); pn.appendChild(d);

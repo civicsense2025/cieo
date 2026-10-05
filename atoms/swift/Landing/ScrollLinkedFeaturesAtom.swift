@@ -36,7 +36,7 @@ public struct ScrollLinkedFeaturesAtom: MotionAtomView {
                     .scrollPosition(id: $active).scrollTargetBehavior(.viewAligned).frame(width: 190)
                     ZStack {
                         RoundedRectangle(cornerRadius: features[cur].radius).fill(features[cur].color.opacity(0.25)).frame(width: features[cur].size.width, height: features[cur].size.height)
-                        ZStack { Image(systemName: features[cur].icon).font(.largeTitle).foregroundStyle(features[cur].color).id(cur).transition(reduce ? .identity : .motionSwap()) }
+                        ZStack { Image(systemName: features[cur].icon).font(.largeTitle).foregroundStyle(features[cur].color).id(cur).motionTransition(.swap()) }
                     }.frame(maxWidth: .infinity, maxHeight: .infinity).animation(reduce ? nil : .motion(.soft), value: cur).accessibilityHidden(true)
                 }.frame(width: 360, height: 200).background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 14)).clipShape(RoundedRectangle(cornerRadius: 14))
             }

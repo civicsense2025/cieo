@@ -117,7 +117,7 @@ struct MegaShell<Panel: View>: View {
                 RoundedRectangle(cornerRadius: 10).fill(.quaternary.opacity(0.35)).accessibilityHidden(true)
                 VStack(spacing: 0) {
                     bar
-                    if let open { panelView(open).transition(.motionPresence) }
+                    if let open { panelView(open).motionTransition(.presence) }
                     Spacer(minLength: 0)
                 }
             }

@@ -3,7 +3,7 @@ import MotionKit
 
 public struct TakeoverAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "takeover", category: "Agent activity", name: "Take over from the agent",
-        summary: "Take over freezes Claude where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to Claude’s next target, turns into Claude’s, the banner closes, and the queue starts ticking again.")
+        summary: "Take over freezes the assistant where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to the assistant’s next target, turns into the assistant’s, the banner closes, and the queue starts ticking again.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var mine = false
     @State private var agent = CGPoint(x: 40, y: 40)
@@ -18,12 +18,12 @@ public struct TakeoverAtom: MotionAtomView {
         AtomStage(hint: "Take over, move around, then Hand back") {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 6) {
-                    AgentMark(size: 20); Text(mine ? "You are in control" : "Claude is working").font(.callout.weight(.medium))
+                    AgentMark(size: 20); Text(mine ? "You are in control" : "Assistant is working").font(.callout.weight(.medium))
                     Spacer()
                     Button { mine ? handBack() : takeOver() } label: { SwapText(mine ? "Hand back" : "Take over") }.buttonStyle(AgPress(tone: mine ? .info : nil))
                 }
                 AgReveal(open: mine) {
-                    Label("Claude is paused. Your clicks and typing go to the page.", systemImage: "hand.raised").font(.caption)
+                    Label("Assistant is paused. Your clicks and typing go to the page.", systemImage: "hand.raised").font(.caption)
                         .padding(8).frame(maxWidth: .infinity, alignment: .leading).background(Color.orange.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
                 }
                 ZStack(alignment: .topLeading) {

@@ -1,6 +1,6 @@
-/* ---- agent role icons: 24 roles in the Meridian agent system ----
+/* ---- agent role icons: 24 roles in the agent system ----
    Every role is a square tile (agents are square, people are round) with one glyph inside and a
-   tilted equator underneath it, the same line the Meridian agent mark carries. Brand form: 64 grid,
+   tilted equator underneath it, the same line the agent mark carries. Brand form: 64 grid,
    paper tile, one pale wash, 1.7 ink line. Product form: square outline in currentColor with the stroke
    weight tuned per size; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. */
 (() => {
@@ -228,7 +228,7 @@ atom({ id:'agentroles', cat:'Agent identity', name:'Agent role icons', block:'Ag
 <button type="button" class="air-play">Play all</button><span class="air-count" aria-live="polite"></span></div>
 <div class="air-grid" role="group" aria-label="Agent roles"></div></div>
 <aside class="air-side" aria-label="Selected role" aria-live="polite"></aside></div></div>`,
-  desc:'Twenty-four agent roles drawn as one family: the square tile that means agent, a single glyph inside it and the tilted equator from the Meridian agent mark underneath. Brand form is the 64 grid with a paper tile, one pale wash and a 1.7 ink line. Product form is a square outline in currentColor with the stroke weight tuned for 16, 20, 24 and 32px; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. Hover or focus a role and one part of its drawing moves for under a second: a trace, a slide, a short turn. Play all runs them in a wave across the grid.',
+  desc:'Twenty-four agent roles drawn as one family: the square tile that means agent, a single glyph inside it and the tilted equator from the agent mark underneath. Brand form is the 64 grid with a paper tile, one pale wash and a 1.7 ink line. Product form is a square outline in currentColor with the stroke weight tuned for 16, 20, 24 and 32px; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. Hover or focus a role and one part of its drawing moves for under a second: a trace, a slide, a short turn. Play all runs them in a wave across the grid.',
   api:'role(name, { brand | product, size })   play(t0) → bump = snap↑ − soft↓ (≤1.2s)   draw = retract 90ms, then trace   playAll → t0 + i·30ms',
   init(st){
     const grid = $(st,'.air-grid'), q = $(st,'.air-q'), side = $(st,'.air-side'), count = $(st,'.air-count');

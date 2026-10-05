@@ -45,7 +45,7 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
 <button class="btn wfsu-rs" style="position:absolute;top:10px;right:12px">Reset</button>
 <div class="wfsu-pg"><div class="wfsu-hd">Danger zone</div>
 <div class="card wfsu-cd">
- <div class="wfsu-r1"><div class="wfsu-ri"><div><b>Delete this site</b><small>Removes harbor-studio.lamina.site, its pages and media.</small></div><button class="wfsu-bt" type="button"></button></div></div>
+ <div class="wfsu-r1"><div class="wfsu-ri"><div><b>Delete this site</b><small>Removes harbor-studio.example.site, its pages and media.</small></div><button class="wfsu-bt" type="button"></button></div></div>
  <div class="wfsu-ri"><div><b>Export content</b><small>Download every page as JSON.</small></div><span class="small muted">Available</span></div>
 </div>
 <div class="wfsu-st" role="status" aria-live="polite"></div></div>
@@ -213,9 +213,9 @@ atom({ id:'approval', cat:'Workflow', name:'Approval card', block:'ApprovalDetai
 .wfap-ai .btn{flex:1;padding:8px 12px}
 </style>
 <button class="btn wfap-rs" type="button" style="position:absolute;top:10px;right:12px">Reset</button>
-<div class="card wfap-cd"><h4 class="wfap-t">Claude Desktop wants to publish a page</h4>
+<div class="card wfap-cd"><h4 class="wfap-t">the assistant app wants to publish a page</h4>
  <div class="wfap-sa" tabindex="-1" role="group" aria-label="Request status"></div>
- <dl class="wfap-dl"><dt>Client</dt><dd>Claude Desktop</dd><dt>Authorized by</dt><dd>Maya Okafor</dd><dt>Capability</dt><dd style="font:12.5px var(--mono)">pages.publish</dd><dt>Target</dt><dd>Spring launch · /spring</dd></dl>
+ <dl class="wfap-dl"><dt>Client</dt><dd>the assistant app</dd><dt>Authorized by</dt><dd>Maya Okafor</dd><dt>Capability</dt><dd style="font:12.5px var(--mono)">pages.publish</dd><dt>Target</dt><dd>Spring launch · /spring</dd></dl>
  <div class="wfap-ac"><div class="wfap-ai"><button class="btn ink wfap-yes" type="button">Approve</button><button class="btn wfap-no" type="button">Deny</button></div></div>
  <span class="wfap-sr" role="status" aria-live="polite" style="${wfSr}"></span>
 </div>`,
@@ -224,13 +224,13 @@ atom({ id:'approval', cat:'Workflow', name:'Approval card', block:'ApprovalDetai
   init(st){
     const $s = s => $(st, s), sa = $s('.wfap-sa'), ac = $s('.wfap-ac'), ai = $s('.wfap-ai'), sr = $s('.wfap-sr'), rs = $s('.wfap-rs');
     const L = { p:wfLayer(sa, ic(wfClock,16) + '<div><b>Pending</b></div><span style="margin-left:auto;font-size:12.5px;white-space:nowrap">expires in <span class="num wfap-cnt">14:52</span></span>', 'justify-content:flex-start'),
-      ok:wfLayer(sa, ic(I.check,18,2.5) + '<div><b>Approved</b><small>Claude Desktop can publish it now.</small></div>', 'justify-content:flex-start'),
+      ok:wfLayer(sa, ic(I.check,18,2.5) + '<div><b>Approved</b><small>the assistant app can publish it now.</small></div>', 'justify-content:flex-start'),
       no:wfLayer(sa, ic(I.x,18,2.5) + '<div><b>Denied</b><small>Nothing was published.</small></div>', 'justify-content:flex-start') };
     for (const k in L) L[k].classList.add('wfap-sl');
     const cnt = $(L.p, '.wfap-cnt'), sw = new Swap('p'), sh = new Track(38), ok = new Track(0), no = new Track(0), ring = new Track(0), ah = new Track(1), ao = new Track(1);
     let state = 'p', t0c = null, last = '';
     const decide = k => { if (state !== 'p') return; state = k; const t0 = now(); sw.to(k, t0); sh.set(60, S.base, t0); ok.set(k === 'ok' ? 1 : 0, S.base, t0); no.set(k === 'no' ? 1 : 0, S.base, t0); ring.set(1, S.base, t0);
-      ao.set(0, S.snap, t0); ah.set(0, S.base, t0 + EXIT); ai.inert = true; sr.textContent = k === 'ok' ? 'Approved. Claude Desktop can publish it now.' : 'Denied. Nothing was published.'; sa.focus({ preventScroll:true }); };
+      ao.set(0, S.snap, t0); ah.set(0, S.base, t0 + EXIT); ai.inert = true; sr.textContent = k === 'ok' ? 'Approved. the assistant app can publish it now.' : 'Denied. Nothing was published.'; sa.focus({ preventScroll:true }); };
     $s('.wfap-yes').onclick = () => decide('ok'); $s('.wfap-no').onclick = () => decide('no');
     rs.onclick = () => { if (state === 'p') return; state = 'p'; const t0 = now(); t0c = t0; sw.to('p', t0); sh.set(38, S.base, t0); ok.set(0, S.base, t0); no.set(0, S.base, t0); ring.set(0, S.base, t0);
       ah.set(1, S.base, t0); ao.set(1, S.base, t0 + .15); ai.inert = false; sr.textContent = ''; };

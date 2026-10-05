@@ -25,7 +25,7 @@ public struct SearchExpandAtom: MotionAtomView {
         AtomStage(hint: "Tap the magnifier, type “pri” or “fog”, Esc closes") {
             ZStack(alignment: .top) {
                 bar
-                if open && !q.isEmpty { results.transition(reduce ? .identity : .motionPresence).offset(y: 58) }
+                if open && !q.isEmpty { results.motionTransition(.presence).offset(y: 58) }
             }
             .frame(width: 340).frame(maxHeight: .infinity, alignment: .top).padding(.top, 8)
             .animation(reduce ? nil : .motion(.base), value: q.isEmpty)

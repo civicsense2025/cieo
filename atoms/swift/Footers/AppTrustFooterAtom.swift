@@ -39,7 +39,7 @@ private struct AppFooter: View {
                         .overlay(alignment: .top) {
                             if badge == i {
                                 Text(badges[i].2).font(.caption2).padding(8).frame(width: 150).background(.background, in: RoundedRectangle(cornerRadius: 8))
-                                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary)).alignmentGuide(.top) { $0[.bottom] + 6 }.transition(.motionPresence)
+                                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary)).alignmentGuide(.top) { $0[.bottom] + 6 }.motionTransition(.presence)
                             }
                         }
                         .onHover { h in withMotion(.base, reduceMotion: reduce) { badge = h ? i : (badge == i ? nil : badge) } }

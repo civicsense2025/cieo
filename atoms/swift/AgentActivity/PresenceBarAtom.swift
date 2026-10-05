@@ -7,7 +7,7 @@ public struct PresenceBarAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     private struct Who: Identifiable, Equatable { let id: Int; let name: String; let agent: Bool; var route: String; var activity: String }
     @State private var people = [Who(id: 1, name: "Maya", agent: false, route: "/pricing", activity: "Editing"),
-                                 Who(id: 2, name: "Claude", agent: true, route: "/signup", activity: "Reviewing")]
+                                 Who(id: 2, name: "Assistant", agent: true, route: "/signup", activity: "Reviewing")]
     @State private var next = 3
     @State private var following: Int?
     public init() {}

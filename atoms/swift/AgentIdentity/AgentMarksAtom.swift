@@ -3,13 +3,13 @@ import MotionKit
 
 public struct AgentMarksAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentmarks", category: "Agent identity", name: "Agent mark concepts",
-        summary: "Five agent marks drawn from Meridian’s own vocabulary instead of a generic sparkle: a turning meridian, Velo’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.")
+        summary: "Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var pick = 0
     @State private var working = false
     public init() {}
 
-    private let names = ["Meridian", "Lens", "Orbit eye", "Path", "Invitation"]
+    private let names = ["Arc", "Lens", "Orbit eye", "Path", "Invitation"]
 
     public var body: some View {
         AtomStage(hint: "Pick a mark to see it in context") {
@@ -29,7 +29,7 @@ public struct AgentMarksAtom: MotionAtomView {
                     }
                 }
                 HStack(spacing: 10) {
-                    HStack(spacing: 4) { mark(pick, size: 16, brand: false); Text("Claude"); AgentTag() }.font(.caption).padding(6).background(.quaternary, in: Capsule())
+                    HStack(spacing: 4) { mark(pick, size: 16, brand: false); Text("Assistant"); AgentTag() }.font(.caption).padding(6).background(.quaternary, in: Capsule())
                     AgPinMark(label: "1")
                     HStack(spacing: 4) { Text("MR").font(.caption2.weight(.bold)).frame(width: 20, height: 20).background(.quaternary, in: Circle()); Text("Maya") }.font(.caption)
                 }

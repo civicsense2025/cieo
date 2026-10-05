@@ -27,7 +27,7 @@ const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
 A.forEach(a => {
   const el = document.createElement('article'); el.className = 'tile' + (a.wide ? ' wide' : '') + (a.tall ? ' tall' : '') + (a.big ? ' big' : ''); el.id = a.id;
   el.innerHTML = `<header><h3></h3><div class="fam">${a.fam.map(f => `<span title="${FAMN[f]}">${f}</span>`).join('')}</div></header><div class="block"></div><div class="stage">${a.html}</div><footer><p></p><pre>${esc(a.api)}</pre></footer>`;
-  $(el,'h3').textContent = a.name; $(el,'.block').textContent = 'Lamina: ' + a.block; $(el,'footer p').textContent = a.desc;
+  $(el,'h3').textContent = a.name; $(el,'.block').textContent = a.block; $(el,'footer p').textContent = a.desc;
   const grid = $(groupEls[a.cat],'.grid'); a.wide ? grid.insertBefore(el, grid.querySelector('.tile:not(.wide)')) : grid.appendChild(el); a.el = el; a.visible = true;
   try { a.render = a.init($(el,'.stage')); } catch (err) { console.error(a.id, err); a.render = null; }
 });

@@ -128,7 +128,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-c">Show grid</span><div class="sg sm" role="group" aria-labelledby="sg-c"><div class="sg-i"></div><button type="button">Off</button><button type="button">On</button></div></div>
 <div class="sg-ro" aria-hidden="true"></div></div>`,
-  desc:'A measured two-edge indicator, same rules as Lamina’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
+  desc:'A measured two-edge indicator, same rules as Studio’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
   api:'left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? "fwd" : "back"   lead.set(v); trail.set(v, t + LAG)',
   init(st){
     const kit = (el, start) => {
@@ -468,7 +468,7 @@ atom({ id:'timer', cat:CAT, name:'Running timer', block:'ActiveTimer', fam:['T',
 .tm-rw span:first-child::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--faint);flex:none}
 .tm-rw .num{color:var(--muted);flex:none}
 </style><div class="tm-w"><div class="card tm-c"><div class="tm-t"><span>Time tracking</span><span data-k="idle">Not running</span><button type="button" class="btn tm-sk" data-k="run">Skip 10 min</button></div>
-<div class="tm-tk"><select class="tm-sel" aria-label="Task" data-k="idle"><option>Homepage redesign · Meridian</option><option>Quarterly report · Finch and Co</option><option>Client onboarding call · Orchard</option></select><div class="tm-tt" data-k="run"><i></i><span class="tm-ta"></span></div></div>
+<div class="tm-tk"><select class="tm-sel" aria-label="Task" data-k="idle"><option>Homepage redesign · Arc</option><option>Quarterly report · Finch and Co</option><option>Client onboarding call · Orchard</option></select><div class="tm-tt" data-k="run"><i></i><span class="tm-ta"></span></div></div>
 <div class="tm-bm"><output class="tm-el" role="timer" aria-label="Elapsed 0:00:00"><span class="tm-h"></span><b>:</b><span class="tm-m"></span><b>:</b><span class="tm-s"></span></output><button type="button" class="tm-bt"><span class="tm-bl" data-k="start">${ic(J.play, 15)}Start</span><span class="tm-bl" data-k="stop">${ic(J.stop, 15)}Stop</span></button></div></div>
 <div class="tm-lh">Today</div><div class="tm-lg" role="list" aria-label="Time entries today"></div></div>`,
   desc:'Start morphs one button: the width springs to the new label, the fill goes from ink to danger, and Start and Stop swap by the blur rule while the task select swaps to its title. The h:mm:ss readout is read from the clock, and each digit that changes rolls in as its own swap. Stop rolls the digits down to zero, and the entry enters at the top of the log while the older rows spring down a slot and the last one fades out.',
@@ -590,7 +590,7 @@ atom({ id:'delayspinner', cat:CAT, name:'Delayed spinner', block:'Spinner', fam:
   init(st){
     const sp = $(st,'.ds-sp'), svg = $(sp,'svg'), ls = $(st,'.ds-ls'), fast = $(st,'.ds-f'), slow = $(st,'.ds-s'), el = $(st,'.ds-el'), sv = $(st,'.ds-sv'), tm = $(st,'.ds-tm'), ups = $$(st,'.ds-up>span'), phs = $$(st,'.ds-ph>span');
     const D = [[['INV-1042', 'Orchard Dental', '$1,240.00'], ['INV-1043', 'Finch and Co', '$860.00'], ['INV-1044', 'Northlight Studio', '$2,400.00']],
-      [['INV-1045', 'Harbor Bakery', '$540.00'], ['INV-1046', 'Meridian Labs', '$3,150.00'], ['INV-1047', 'Alder Street Clinic', '$720.00']]];
+      [['INV-1045', 'Harbor Bakery', '$540.00'], ['INV-1046', 'Harbor Labs', '$3,150.00'], ['INV-1047', 'Alder Street Clinic', '$720.00']]];
     const layers = D.map(set => { const l = document.createElement('div'); l.className = 'ds-ly'; set.forEach(([a, b, c]) => { const r = document.createElement('div'); r.className = 'ds-r'; r.innerHTML = '<span></span><span></span><b class="num" style="font-weight:500"></b>'; tx(r.children[0], a); tx(r.children[1], b); r.children[1].style.cssText = 'flex:1;color:var(--ink)'; tx(r.children[2], c); l.appendChild(r); }); ls.appendChild(l); return l; });
     const AX = 2, Q = [], o = new Track(0), lsw = new Swap(0), usw = new Swap('o'), psw = new Swap('idle');
     let runI = null, busy = false, ds = 0, vis = false; sp.setAttribute('aria-hidden', 'true');

@@ -3,7 +3,7 @@ import MotionKit
 
 public struct TooltipAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "tooltip", category: "Content", name: "Tooltip",
-        summary: "Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Lamina’s current Tooltip has no enter or exit motion; this is the proposed behavior.")
+        summary: "Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Studio’s current Tooltip has no enter or exit motion; this is the proposed behavior.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var show = false
     public init() {}

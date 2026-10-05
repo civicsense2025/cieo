@@ -3,7 +3,7 @@ import MotionKit
 
 public struct AgentCrowdAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentcrowd", category: "Agent identity", name: "Agent crowd",
-        summary: "Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its meridian keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.")
+        summary: "Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its arc keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var thrown: Int?
     @State private var dragX: [Int: CGFloat] = [:]

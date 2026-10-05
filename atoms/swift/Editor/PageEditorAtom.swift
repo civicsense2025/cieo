@@ -68,7 +68,7 @@ public struct PageEditorAtom: MotionAtomView {
                     Button { blocks[s].bg = k } label: { Circle().fill(swatches[k].1).overlay(Circle().strokeBorder(blocks[s].bg == k ? Color.accentColor : Color.secondary.opacity(0.4), lineWidth: 2)).frame(width: 22, height: 22) }
                         .buttonStyle(.plain).accessibilityLabel(swatches[k].0)
                 } }
-            }.id(s).transition(reduce ? .identity : .motionSwap())
+            }.id(s).motionTransition(.swap())
         }
         .animation(reduce ? nil : .motion(.base), value: s)
         .padding(12).frame(width: 190, alignment: .topLeading).frame(maxHeight: .infinity, alignment: .top).background(.background)

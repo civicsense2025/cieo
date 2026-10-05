@@ -37,7 +37,7 @@ public struct PageLoadBarAtom: MotionAtomView {
                             VStack(alignment: .leading, spacing: 6) {
                                 Text(pages[page].0).font(.title3.bold())
                                 Text(pages[page].1).font(.footnote).foregroundStyle(.secondary)
-                            }.padding(16).id(page).transition(reduce ? .identity : .motionSwap())
+                            }.padding(16).id(page).motionTransition(.swap())
                         }
                         .animation(reduce ? nil : .motion(.base), value: page)
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

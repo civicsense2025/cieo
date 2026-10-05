@@ -37,7 +37,7 @@ public struct AgentThreadAtom: MotionAtomView {
                             }
                             if let d = decision {
                                 HStack { Text(d).font(.caption.weight(.semibold)); Spacer(); Button("Undo") { withMotion(.base, reduceMotion: reduce) { decision = nil } }.buttonStyle(AgPress()) }
-                                    .transition(reduce ? .identity : .motionSwap())
+                                    .motionTransition(.swap())
                             }
                             HStack {
                                 TextField("Reply", text: $reply).textFieldStyle(.roundedBorder).onSubmit { send() }

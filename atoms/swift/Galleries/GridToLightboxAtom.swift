@@ -34,7 +34,7 @@ public struct GridToLightboxAtom: MotionAtomView {
                         AtomPhoto(seed: s).clipShape(RoundedRectangle(cornerRadius: 14))
                             .matchedGeometryEffect(id: s, in: ns).id(s)
                             .padding(10).frame(maxHeight: 230)
-                            .transition(.motionSwap(drift: 0))
+                            .motionTransition(.swap(drift: 0))
                         // caption and controls arrive only once the photo is most of the way there
                         HStack {
                             Button { step(-1) } label: { Image(systemName: "chevron.left") }.accessibilityLabel("Previous")

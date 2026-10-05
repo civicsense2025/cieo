@@ -4,6 +4,7 @@ import MotionKit
 public struct PaintInColourAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-paint", category: "Photo effects", name: "Paint in colour",
         summary: "A soft brush paints the colour photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the colour drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the centre outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colourisation changed.")
+    @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var painted: [Int: Date] = [:]           // cell -> when it was painted (or will be)
     @State private var live = Date()
     public init() {}
@@ -12,14 +13,16 @@ public struct PaintInColourAtom: MotionAtomView {
     /// Colour amount for a cell is a pure function of its age: holds 1.4 s, then drains over 2.6 s.
     private func amount(_ since: Date, _ now: Date) -> Double {
         let age = now.timeIntervalSince(since)
-        return age < 0 ? 0 : (age < 1.4 ? 1 : 1 - phSmooth((age - 1.4) / 2.6))
+        if age < 0 { return 0 }
+        if reduce { return age < 1.4 ? 1 : 0 }     // Reduce Motion: hold, then drop, no drain
+        return age < 1.4 ? 1 : 1 - phSmooth((age - 1.4) / 2.6)
     }
 
     public var body: some View {
         AtomStage(hint: "Paint over the print; the colour drains back on its own") {
             VStack(spacing: 10) {
                 GeometryReader { g in
-                    TimelineView(.animation(paused: painted.isEmpty)) { ctx in
+                    TimelineView(.animation(minimumInterval: reduce ? 0.25 : nil, paused: painted.isEmpty)) { ctx in
                         ZStack {
                             phPhoto(2, g.size).grayscale(1).contrast(1.1)
                             phPhoto(2, g.size).mask(
@@ -48,7 +51,7 @@ public struct PaintInColourAtom: MotionAtomView {
                     let now = Date()
                     for k in 0..<(cols * rows) {
                         let dx = Double(k % cols) - Double(cols) / 2, dy = Double(k / cols) - Double(rows) / 2
-                        painted[k] = now.addingTimeInterval(sqrt(dx * dx + dy * dy) * 0.04)
+                        painted[k] = reduce ? now : now.addingTimeInterval(sqrt(dx * dx + dy * dy) * 0.04)
                     }
                 }.buttonStyle(.bordered).controlSize(.small)
             }

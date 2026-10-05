@@ -93,7 +93,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,[tabindex]:focus-visibl
 <div class="wrap">
   <header class="top">
     <h1>Agent Identity</h1>
-    <p class="lede">How agents look across Meridian products: the mark, its states, 24 role icons, 24 action icons and 16 illustrations. Agents are square and people are round. Drawn in the Meridian brand hand: one ink line on paper with a pale wash. Every motion is a critically damped spring.</p>
+    <p class="lede">How agents look across Arc products: the mark, its states, 24 role icons, 24 action icons and 16 illustrations. Agents are square and people are round. Drawn in the Arc brand hand: one ink line on paper with a pale wash. Every motion is a critically damped spring.</p>
     <ul class="legend">
       <li><b>M · Morph</b> one element changes size, radius and color</li>
       <li><b>S · Swap</b> content blurs out, then in, never overlapping</li>
@@ -101,7 +101,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,[tabindex]:focus-visibl
       <li><b>E · Edges</b> leading edge moves first, trailing edge lags 60ms</li>
       <li><b>X · Enter/exit</b> popovers, toasts and sheets arrive and leave</li>
       <li><b>T · Time</b> loops and counts computed from the clock</li>
-      <li><b style="color:var(--success)">Success</b> · <b style="color:var(--warning)">Warning</b> · <b style="color:var(--danger)">Danger</b> end states, from Lamina’s status tokens</li>
+      <li><b style="color:var(--success)">Success</b> · <b style="color:var(--warning)">Warning</b> · <b style="color:var(--danger)">Danger</b> end states, from Studio’s status tokens</li>
     </ul>
   </header>
 
@@ -125,7 +125,7 @@ button:focus-visible,input:focus-visible,a:focus-visible,[tabindex]:focus-visibl
 <script>
 /* ================================================================ core */
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
-// critically damped presets (Lamina: calm, no overshoot)
+// critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4;
 const clock = { t:0, scale:1, last:performance.now() };
@@ -234,11 +234,11 @@ const atom = o => A.push(o);
 /* ---------- Foundations ---------- */
 const ic = (d, s = 16, w = 2) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const I = { check:'<path d="M5 12.5 10 17.5 19 7"/>', chev:'<path d="m6 9 6 6 6-6"/>', x:'<path d="M6 6l12 12M18 6 6 18"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>', home:'<path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>', search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', lib:'<path d="M4 4h4v16H4zM10 4h4v16h-4zM16 5l4 1-3 14-4-1z"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', file:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>', pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/>', grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>', up:'<path d="M12 19V5M6 11l6-6 6 6"/>', link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>', alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/>', alL:'<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>', alC:'<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>', alR:'<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>', side:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>' };
-/* ---- agent rig: the shared character rig for Meridian agents (Wave 6) ----
-   One soft square (agents are square, people are round) drawn in the Meridian hand: paper fill, one
+/* ---- agent rig: the shared character rig for agents (Wave 6) ----
+   One soft square (agents are square, people are round) drawn in the house hand: paper fill, one
    pale wash, an ink line with round caps. A face made of a small parameter set (lids, squint, eye size,
    brows, mouth curve/width/open/roundness/wave/skew) blended by critically damped springs, so any two
-   moods morph. A meridian-globe antenna (axis, turning meridian, tilted equator) is the identity and the
+   moods morph. A globe antenna (axis, turning arc, tilted equator) is the identity and the
    follow-through appendage. Physics: lean into horizontal speed, squash and stretch from vertical speed
    and contact, gravity when thrown, landing absorbed by a squash that recovers without rebounding.
    Idle life (breath, blinks, glances, a small fidget) is a pure function of the clock and a seed.
@@ -262,11 +262,11 @@ const cd = (x, v, to, w, dt) => { const x0 = x - to, e = Math.exp(-w*dt), k = v 
 const sp = (s, to, w, dt) => { const r = cd(s[0], s[1], to, w, dt); s[0] = r[0]; s[1] = r[1]; };
 
 const INK = '#1d1d1b', PAPER = '#fffaf2';
-const WASH = { blue:'#dce8fb', lavender:'#ede4fb', green:'#e3eedc', warm:'#f1e6d4', rose:'#f6e0da', velo:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0' };
+const WASH = { blue:'#dce8fb', lavender:'#ede4fb', green:'#e3eedc', warm:'#f1e6d4', rose:'#f6e0da', violet:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0' };
 // body: 54-unit soft square, origin at bottom centre, y up is negative
 const U = 54, HW = 27, RAD = 16;
 const F = { y:-26, ex:10.6, ey:-3, rw:3.6, rh:5.0, my:8.6, mw:5.2, bx:10.8 };
-// the wash: the body's lower hemisphere below a tilted equator (the same -10° tilt as the Meridian mark)
+// the wash: the body's lower hemisphere below a tilted equator (the same -10° tilt as the agent mark)
 const EQL = -9, EQR = -17.5;
 const GRAV = 2600, REST = .66;
 
@@ -276,7 +276,7 @@ const GRAV = 2600, REST = .66;
    mouth mc curve (+ smile) · mw width · mo open · mr round · mv wave · mk skew (+ right corner up) · mx shift
    gaze  gx gy bias · gw how strongly the mood holds the gaze (0 follows you, 1 ignores you)
    body  fx fy face shift · ft face tilt (deg) · bs stretch · bl puff · lean · ad antenna droop · ap antenna perk
-   life  spin meridian turning · sway · br breath depth · bk blink rate · gl glance rate */
+   life  spin arc turning · sway · br breath depth · bk blink rate · gl glance rate */
 const D = { eo:1, es:1, sq:0, lt:0, ea:0, bv:0, by:0, ba:0, bb:0, mc:.14, mw:.62, mo:0, mr:0, mv:0, mk:0, mx:0,
   gx:0, gy:0, gw:0, fx:0, fy:0, ft:0, bs:0, bl:0, lean:0, ad:0, ap:0, spin:0, sway:0, br:1, bk:1, gl:1 };
 const KEYS = Object.keys(D);
@@ -289,11 +289,11 @@ const EXPRESSIONS = [
     p:{ eo:.92, sq:.48, mc:.95, mw:.92, mo:.16, bv:.55, by:.5, fy:-.8, bs:.02, ap:.3 } },
   { k:'delighted', name:'Delighted', note:'A result worth celebrating.', beat:'hop',
     p:{ eo:1, sq:1, mc:1, mw:1.08, mo:.9, bv:.85, by:1.2, fy:-1.3, bs:.06, bl:.4, ap:.8, gl:.4 } },
-  { k:'focused', name:'Focused', note:'Heads down on a task. The meridian turns slowly while it works.',
+  { k:'focused', name:'Focused', note:'Heads down on a task. The arc turns slowly while it works.',
     p:{ eo:.8, es:.92, lt:-.12, bv:.9, by:-.65, ba:-.3, mc:.02, mw:.38, mk:.2, gy:.6, gx:.15, gw:.75, fy:1, lean:.03, spin:.35, bk:.45, gl:.15 } },
   { k:'curious', name:'Curious', note:'Noticed something and wants a closer look.', beat:'pop',
     p:{ eo:1.12, es:1.08, bv:1, by:.55, bb:1, mc:.1, mw:.38, mo:.42, mr:1, ft:9, gx:.3, gw:.15, lean:.06, ap:.6, gl:1.5 } },
-  { k:'thinking', name:'Thinking', note:'Working out an answer. The meridian turns on its axis.',
+  { k:'thinking', name:'Thinking', note:'Working out an answer. The arc turns on its axis.',
     p:{ eo:.88, bv:1, by:.35, bb:-.9, ba:.1, mc:-.18, mw:.4, mk:.55, mx:2.6, gx:.72, gy:-.85, gw:.9, ft:-5, fy:-.7, spin:1, gl:0 } },
   { k:'surprised', name:'Surprised', note:'Something unexpected just happened.', beat:'pop',
     p:{ eo:1.3, es:1.1, bv:1, by:1.8, ba:.2, mc:0, mw:.56, mo:1, mr:1, fy:-1.4, bs:.08, ap:1, gl:.2 } },
@@ -368,7 +368,7 @@ const geom = (pz, X, Y, u, sw, lift, washOn = true) => {
     const s = hw*(.42 + .62*P.mr), sl = hw*(.42 + .62*P.mr + .4*P.mo*(1 - P.mr)), mid = cy + P.mc*1.9, wv = P.mv*1.5, yU = mid - oh*P.mr*.5, yD = mid + oh*(1 - P.mr*.5)*(1 - .18*P.mo*(1 - P.mr));
     return `M${fp(L[0], L[1])}C${fp(cx - s, yU + wv)} ${fp(cx + s, yU - wv)} ${fp(R[0], R[1])}C${fp(cx + sl, yD - wv)} ${fp(cx - sl, yD + wv)} ${fp(L[0], L[1])}Z`;
   };
-  // antenna: stalk from the top edge, globe at the (lagging) tip, meridian turning on the globe's axis
+  // antenna: stalk from the top edge, globe at the (lagging) tip, arc turning on the globe's axis
   const B = W(0, -H), ar = antRest(P, sx, sy, sh, pz.side), C = [B[0] + ar.ctl[0]*u, B[1] + ar.ctl[1]*u], T = [B[0] + pz.tipO[0]*u, B[1] + pz.tipO[1]*u];
   let dx = T[0] - C[0], dy = T[1] - C[1]; const dn = Math.hypot(dx, dy) || 1; dx /= dn; dy /= dn;
   const rg = 7*u, G = [T[0] + dx*rg*.94, T[1] + dy*rg*.94], phi = Math.atan2(dx, -dy), pc = Math.cos(phi), ps = Math.sin(phi);
@@ -554,7 +554,7 @@ class Character {
       const C = [bx + ar.ctl[0]*u, by + ar.ctl[1]*u], ra = Math.atan2(rest[1] - C[1], rest[0] - C[0]), Ls = Math.hypot(rest[0] - C[0], rest[1] - C[1]);
       let da = Math.atan2(this.tip[2] - C[1], this.tip[0] - C[0]) - ra; da = Math.atan2(Math.sin(da), Math.cos(da)); da = cl(da, -1.13, 1.13);
       this.tip[0] = C[0] + Math.cos(ra + da)*Ls; this.tip[2] = C[1] + Math.sin(ra + da)*Ls; }
-    // the meridian: turns while spin > 0, otherwise eases forward to its resting angle
+    // the arc: turns while spin > 0, otherwise eases forward to its resting angle
     if (P.spin > .04 && live){ this.thv = P.spin*2.8; this.th += dt*this.thv; this.thR = null; }
     else { if (this.thR === null){ let d = ((REST - this.th) % TAU + TAU) % TAU; if (d > 5.4) d -= TAU; this.thR = this.th + d; }
       if (live){ const r = cd(this.th, this.thv, this.thR, 4.5, dt); this.th = r[0]; this.thv = r[1]; } else this.th = this.thR; }
@@ -609,13 +609,13 @@ const svgString = (k, o = {}) => {
   const css = `@media (prefers-color-scheme:dark){.arg-p{fill:#ece6db}.arg-sk{stroke:#ece6db}.arg-sh{fill:#000;opacity:.42}}`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${Wd} ${Hd}" width="${Wd}" height="${Hd}" fill="none" role="img" aria-labelledby="${id}-title ${id}-desc">
 <title id="${id}-title">Agent, ${esc(ex.name.toLowerCase())}</title>
-<desc id="${id}-desc">${esc(`A square paper agent with a small meridian globe on its antenna. ${ex.note}`)}</desc>
+<desc id="${id}-desc">${esc(`A square paper agent with a small globe on its antenna. ${ex.note}`)}</desc>
 <style>${css}</style>
 <g id="shadow"><ellipse class="arg-sh" cx="${G.shadow.cx}" cy="${G.shadow.cy}" rx="${G.shadow.rx}" ry="${G.shadow.ry}" fill="${INK}" opacity=".09"/></g>
 <g id="antenna" fill="none" stroke="${INK}" stroke-linecap="round" stroke-linejoin="round">
 <path id="stalk" class="arg-sk" d="${G.stalk}" stroke-width="${s(sw)}"/>
 <g id="globe"><circle id="globe-outline" class="arg-p arg-k" cx="${G.globe.cx}" cy="${G.globe.cy}" r="${G.globe.r}" fill="${PAPER}" stroke-width="${s(sw)}"/>
-<path id="axis" class="arg-k" d="${G.globe.axis}" stroke-width="${s(sw*.82)}"/><path id="meridian" class="arg-k" d="${G.globe.arc}" stroke-width="${s(sw*.82)}"${G.globe.arcO < .99 ? ` opacity="${s(G.globe.arcO)}"` : ''}/><path id="equator" class="arg-k" d="${G.globe.eq}" stroke-width="${s(sw*.82)}"/></g></g>
+<path id="axis" class="arg-k" d="${G.globe.axis}" stroke-width="${s(sw*.82)}"/><path id="arc" class="arg-k" d="${G.globe.arc}" stroke-width="${s(sw*.82)}"${G.globe.arcO < .99 ? ` opacity="${s(G.globe.arcO)}"` : ''}/><path id="equator" class="arg-k" d="${G.globe.eq}" stroke-width="${s(sw*.82)}"/></g></g>
 <defs><clipPath id="${id}-clip"><path d="${G.body}"/></clipPath></defs>
 <g id="body"><path id="body-fill" class="arg-p" d="${G.body}" fill="${PAPER}"/><path id="wash" class="arg-w" d="${G.wash}" fill="${wash}" opacity=".85" clip-path="url(#${id}-clip)"/><path id="outline" class="arg-k" d="${G.body}" fill="none" stroke="${INK}" stroke-width="${s(sw)}" stroke-linejoin="round"/></g>
 <g id="face">${brows ? `<g id="brows">${brows}</g>` : ''}<g id="eyes">${G.eyes.map((d, i) => `<path id="eye-${i ? 'right' : 'left'}" class="arg-f" d="${d}" fill="${INK}" stroke="${INK}" stroke-width="${s(sw*.9)}" stroke-linejoin="round"/>`).join('')}</g>
@@ -737,7 +737,7 @@ atom({ id:'agentcrowd', cat:'Agent identity', name:'Agent crowd', block:'AgentCh
 </style><div class="arg-cr"><svg aria-hidden="true"><path class="arg-fl"/></svg>
 <p class="arg-cp">Five agents share a floor. They glance at each other and at your pointer. Throw one near the others.</p>
 <button type="button" class="btn arg-rs">${ic(RESET, 15)}Reset</button><p class="arg-st" aria-live="polite"></p></div>`,
-  desc:'Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its meridian keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.',
+  desc:'Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its arc keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.',
   api:'crowd.forEach(ch.render)  near(thrown, ch) → ch.watch(thrown).react(surprised).impulse(lean away)  glance(i → j) · mutual → react(happy)',
   init(st){
     const svg = $(st,'svg'), fl = $(svg,'.arg-fl'), stat = $(st,'.arg-st'), root = $(st,'.arg-cr');
@@ -785,8 +785,8 @@ atom({ id:'agentcrowd', cat:'Agent identity', name:'Agent crowd', block:'AgentCh
 })();
 
 /* ---- agent cast A: twelve role characters on the shared AgentRig (Wave 6) ----
-   Every character is the same species: the AgentRig square body, face and meridian-globe antenna.
-   What makes each one itself is a signature prop drawn in the Meridian hand (paper fill, ink line,
+   Every character is the same species: the AgentRig square body, face and globe antenna.
+   What makes each one itself is a signature prop drawn in the house hand (paper fill, ink line,
    one pale wash), a signature action, an idle habit and a default mood.
    Props use the rig's prop contract { anchor, build(g, ch), draw(state, ctx) } on the 'front' anchor,
    so they inherit the body's lean and squash; inside, each one adds its own physics in world space:
@@ -813,7 +813,7 @@ const swFor = px => cl(1 + px*.0068, 1.15, 2.5);
 // neutral face parameters (mirrors the rig's defaults) for the static poses
 const D0 = { eo:1, es:1, sq:0, lt:0, ea:0, bv:0, by:0, ba:0, bb:0, mc:.14, mw:.62, mo:0, mr:0, mv:0, mk:0, mx:0,
   gx:0, gy:0, gw:0, fx:0, fy:0, ft:0, bs:0, bl:0, lean:0, ad:0, ap:0, spin:0, sway:0, br:1, bk:1, gl:1 };
-const WASHES = { blue:'#dce8fb', velo:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0', warm:'#f1e6d4' };
+const WASHES = { blue:'#dce8fb', violet:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0', warm:'#f1e6d4' };
 
 /* ---------- drawing: elements come from DOC, which is the page or a tiny string shim for the files ---------- */
 let DOC = typeof document !== 'undefined' ? document : null;
@@ -950,7 +950,7 @@ const PENCIL = { dur:4.4,
   } };
 
 /* Brand checker: a swatch fan in the four role washes. Fans it out and holds one swatch against its own color. */
-const SW_C = [WASHES.velo, WASHES.blue, WASHES.mint, WASHES.peach], SW_R = [-16, -4, 8, 20], SW_O = [-46, -16, 14, 44];
+const SW_C = [WASHES.violet, WASHES.blue, WASHES.mint, WASHES.peach], SW_R = [-16, -4, 8, 20], SW_O = [-46, -16, 14, 44];
 const FAN = { dur:3.9,
   cues:[[0, c => c.react('curious', .8)], [.85, c => c.react('focused', 1.1)], [1.95, c => { c.react('happy', 1.2); c.impulse(0, 1.4); }]],
   build(g, ch){ const S = base(g, ch), r = S.r; S.lh = handEl(r);
@@ -1187,7 +1187,7 @@ const CAST = [
 ];
 // every prop rides the body's own frame; the follow-through is the prop's own physics, not the rig's side lag
 CAST.forEach(c => { c.P.anchor = 'front'; });
-const washOf = c => c.grp === 'check' ? WASHES.blue : WASHES.velo;
+const washOf = c => c.grp === 'check' ? WASHES.blue : WASHES.violet;
 const play = (ch, t) => { const S = ch.propS, p = ch.prop; if (!S || !p) return; S.a0 = t; S.cues = p.cues.map(q => [q[0], q[1]]); S.dur = p.dur; };
 const busy = (ch, t) => { const S = ch.propS; return !!S && S.a0 != null && t - S.a0 < S.dur; };
 
@@ -1221,7 +1221,7 @@ const svgFor = (slug, o = {}) => {
   const tf = `matrix(${n2(u)} 0 0 ${n2(u)} ${n2(X)} ${n2(Y - 9*u)})`, vx = X - 54*u, vy = Y - 86*u, vw = 108*u, vh = 92*u;
   s = s.replace(/viewBox="[^"]*" width="\d+" height="\d+"/, `viewBox="${n2(vx)} ${n2(vy)} ${n2(vw)} ${n2(vh)}" width="${Math.round(vw)}" height="${Math.round(vh)}"`);
   s = s.replace(/<title id="([^"]+)">[^<]*<\/title>/, (m, i) => `<title id="${i}">${escA(c.name)} agent</title>`);
-  s = s.replace(/<desc id="([^"]+)">[^<]*<\/desc>/, (m, i) => `<desc id="${i}">${escA(`A square paper agent with a meridian globe on its antenna, holding ${c.prop.toLowerCase()}. ${c.job}`)}</desc>`);
+  s = s.replace(/<desc id="([^"]+)">[^<]*<\/desc>/, (m, i) => `<desc id="${i}">${escA(`A square paper agent with a globe on its antenna, holding ${c.prop.toLowerCase()}. ${c.job}`)}</desc>`);
   s = s.replace('.arg-sk{stroke:#ece6db}', '.arg-sk,.cka-sol,.cka-halo{stroke:#ece6db}');
   return s.replace(/<\/svg>\s*$/, `<g id="prop" transform="${tf}">${g.kids.map(ser).join('')}</g>\n</svg>\n`);
 };
@@ -1229,7 +1229,7 @@ const svgFor = (slug, o = {}) => {
 const AC = globalThis.AgentCast && typeof globalThis.AgentCast === 'object' ? globalThis.AgentCast : (globalThis.AgentCast = {});
 AC.a = { CAST, play, busy, svg:svgFor, washOf };
 AC.roles = AC.roles || {};
-CAST.forEach(c => { AC.roles[c.k] = { name:c.name, mean:c.job, persona:c.persona, sig:c.sig, expression:c.mood, action:c.sig, wash:c.grp === 'check' ? 'blue' : 'velo', droop:c.droop,
+CAST.forEach(c => { AC.roles[c.k] = { name:c.name, mean:c.job, persona:c.persona, sig:c.sig, expression:c.mood, action:c.sig, wash:c.grp === 'check' ? 'blue' : 'violet', droop:c.droop,
   prop:() => c.P, act:ch => play(ch, ch.t), svg:o => svgFor(c.k, o) }; });
 
 if (typeof atom !== 'function' || typeof document === 'undefined') return;
@@ -1284,7 +1284,7 @@ atom({ id:'agentcasta', cat:'Agent identity', name:'Agent cast: checkers and wri
 <div><p class="cka-h" id="agentcasta-ex">Expression</p><div class="cka-ex" role="group" aria-labelledby="agentcasta-ex"></div></div></div>
 <div class="cka-strip" role="group" aria-label="Agent lineup"><div class="cka-row"><svg aria-hidden="true"><path class="cka-fl"/></svg></div></div>
 </div><svg class="cka-ov" aria-hidden="true"><path class="cka-fl"/></svg><button type="button" class="cka-hit"></button><p class="cka-sr" aria-live="polite"></p></div>`,
-  desc:'Twelve role agents stand in a lineup, all the same species (one square body, one face, one meridian antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.',
+  desc:'Twelve role agents stand in a lineup, all the same species (one square body, one face, one arc antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.',
   api:'ch = AgentRig.create(svg, { prop:AgentCast.roles[k].prop() })   AgentCast.roles[k].act(ch)   choose(i): others.impulse(away).look(i) → old.throw(→slot) → land → new.throw(→stage, size↑) → land → play',
   init(st){
     const root = $(st,'.cka-root'), spotEl = $(st,'.cka-spot'), strip = $(st,'.cka-strip'), row = $(st,'.cka-row'), ssv = $(row,'svg'), sfl = $(ssv,'.cka-fl');
@@ -1393,8 +1393,8 @@ atom({ id:'agentcasta', cat:'Agent identity', name:'Agent cast: checkers and wri
 /* ---- agent cast B: twelve role characters built on AgentRig (Wave 6) ----
    Summarizer, Data analyst, Scheduler, Support, Designer, Developer, QA tester, Content migrator,
    Moderator, Onboarding guide, Release manager, Archivist. Every one is the same species: the shared rig,
-   the same square body and meridian-globe antenna. What changes is a signature prop, a signature idle
-   habit and a default mood. Props are drawn in the Meridian hand (paper, one pale wash, ink line, round
+   the same square body and globe antenna. What changes is a signature prop, a signature idle
+   habit and a default mood. Props are drawn in the house hand (paper, one pale wash, ink line, round
    caps) and carry physics: held things trail the body through a world-space spring (follow-through),
    hanging things swing on a lagging spring, stacks cascade, and everything settles without bouncing.
 
@@ -1442,7 +1442,7 @@ const clipHalf = (ps, c, n) => { const out = [], seg = [];
    k ink line · pk paper shape with ink outline · f ink fill · w wash fill · s free line (ink on light, paper on dark,
    like the antenna stalk; for anything drawn off the body) · wk wash fill with ink outline */
 const CLS = { k:'arg-k', pk:'arg-p arg-k', f:'arg-f', w:'arg-w', s:'arg-sk', wk:'ckb-wk' };
-const WK = { check:'blue', content:'velo', ops:'mint', people:'peach' };
+const WK = { check:'blue', content:'violet', ops:'mint', people:'peach' };
 const WC = R.WASH;
 let cssOn = false;
 const injectCss = () => { if (cssOn || typeof document === 'undefined') return; cssOn = true; const s = document.createElement('style');
@@ -1858,7 +1858,7 @@ const roleSvg = (r, o = {}) => {
   if (back.some(Boolean)) svg = svg.replace('<defs>', grp('prop-back', back) + '<defs>');
   svg = svg.replace('</svg>', grp('prop', front) + '</svg>');
   svg = svg.replace(/(<title id="[^"]*">)[^<]*(<\/title>)/, `$1${esc(r.name)} agent$2`)
-    .replace(/(<desc id="[^"]*">)[^<]*(<\/desc>)/, `$1${esc(`A square paper agent with a meridian globe on its antenna, ${r.prop}. ${r.mean}`)}$2`);
+    .replace(/(<desc id="[^"]*">)[^<]*(<\/desc>)/, `$1${esc(`A square paper agent with a globe on its antenna, ${r.prop}. ${r.mean}`)}$2`);
   return svg; };
 
 /* ---------- registry for later lanes ---------- */
@@ -1915,7 +1915,7 @@ atom({ id:'agentcastb', cat:'Agent identity', name:'Agent cast: operate and peop
       b.setAttribute('aria-label', `${r.name}. ${r.mean}`); b.innerHTML = `<span>${r.name}</span>`; b.onclick = () => focus(i); ln.appendChild(b); return b; });
     ln.appendChild(spR);
     // copy: one layer per role plus an intro layer, swapped exit-then-enter
-    const L = [...ROLES.map(r => [r.name, r.mean, r.persona, r.sig]), ['Twelve agents, one species', 'Each role has its own prop, idle habit and mood.', 'They all share the square body and the meridian antenna.', '']];
+    const L = [...ROLES.map(r => [r.name, r.mean, r.persona, r.sig]), ['Twelve agents, one species', 'Each role has its own prop, idle habit and mood.', 'They all share the square body and the arc antenna.', '']];
     const lays = ['.ckb-nm', '.ckb-jb', '.ckb-ps', '.ckb-sg'].map(q => $(st, q));
     const layers = L.map(row => row.map((txt, j) => { const s = document.createElement('span'); s.textContent = txt; lays[j].appendChild(s); return s; }));
     const sw = new Swap(L.length - 1);
@@ -2032,7 +2032,7 @@ const exv = (k, q) => { const e = globalThis.AgentRig.EXPRESSIONS.find(x => x.k 
 const WC = k => globalThis.AgentRig.WASH[k];
 let uid = 0;
 
-/* ---------- drawing vocabulary: the Meridian hand (paper, one ink line, pale washes) ---------- */
+/* ---------- drawing vocabulary: the house hand (paper, one ink line, pale washes) ---------- */
 const Rr = (g, x, y, w, h, rx = 8, cls = 'abh-kp') => mk('rect', { x:n2(x), y:n2(y), width:n2(Math.max(0, w)), height:n2(Math.max(0, h)), rx, class:cls }, g);
 const Pa = (g, d, cls = 'abh-k') => mk('path', { d, class:cls }, g);
 const Tx = (g, x, y, s, cls = 'abh-tx', anchor) => { const e = mk('text', { x:n2(x), y:n2(y), class:cls }, g); if (anchor) e.setAttribute('text-anchor', anchor); e.textContent = s; return e; };
@@ -2368,7 +2368,7 @@ scene({ k:'comparing', n:'Comparing versions', c:'Comparing', g:0, url:'fieldnot
     X.e.link.style.strokeDashoffset = n2((1 - l)*400); X.e.link.style.opacity = n2(l > .01 ? 1 : 0); } });
 
 scene({ k:'thinking', n:'Thinking', c:'Thinking', g:0, url:'fieldnotes.co/checkout',
-  note:'The meridian on its antenna turns while it glances between three ideas and settles on one.',
+  note:'The arc on its antenna turns while it glances between three ideas and settles on one.',
   build(X){ const { C, F, s, n, top } = X.L, g = X.g, opts = ['Nudge the total up', 'Match the v12 spacing', 'Ask Maya first'];
     const ow = n ? C.w*.78 : Math.min(200, (C.w - 40)/3), oh = 40, y0 = n ? top : Math.max(top, F - 2.05*s - oh - 30);
     X.e.opts = opts.map((s_, i) => { const x = n ? C.x0 + (i % 2 ? C.w - ow : 0) : C.x0 + i*(ow + 20) + (C.w - 3*ow - 40)/2, y = n ? y0 + i*(oh + 14) : y0 + (i === 1 ? -16 : 0);
@@ -2886,49 +2886,49 @@ atom({ id:'agentduet', cat:'Agent identity', name:'Agent duet', block:'AgentChar
   } });
 })();
 
-/* ---- agent mark: Meridian-family identity for agents (replaces the 4-point star) ----
-   Grounded in the Meridian brand package: the umbrella mark is a globe of meridian lines
+/* ---- agent mark: agent-family identity for agents (replaces the 4-point star) ----
+   Grounded in the Arc brand package: the umbrella mark is a globe of arc lines
    with a tilted equator, icons are 1.7 ink lines on a paper tile with one pale wash, and
    the stated AI principle is "AI by invitation". People are round; agents are square. */
 (() => {
-const INK = '#1d1d1b', PAPER = '#faf7f2', WASH = { meridian:'#dce8fb', velo:'#f1e4ff' }, DANGER = '#b0342f';
+const INK = '#1d1d1b', PAPER = '#faf7f2', WASH = { arc:'#dce8fb', violet:'#f1e4ff' }, DANGER = '#b0342f';
 const WASHP = 'M14 52C19 21 45 12 55 20C49 44 34 55 14 52Z';
 const NS = 'http://www.w3.org/2000/svg';
 const sv = (tag, a = {}, kids = []) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); kids.forEach(c => e.appendChild(c)); return e; };
 const f1 = v => v.toFixed(1);
-// arc of a meridian between two poles, bulging by a (cubic peak = .75a)
+// arc of a arc between two poles, bulging by a (cubic peak = .75a)
 const arcD = (x, y0, y1, a) => { const h = y1 - y0; return `M${x} ${y0}C${f1(x + a)} ${f1(y0 + h*.2)} ${f1(x + a)} ${f1(y1 - h*.2)} ${x} ${y1}`; };
 
 /* Concepts, all on the 64 grid of the brand icon set.
-   draw(o, p): p = { t, w (0 rest … 1 working), th (meridian angle) } */
+   draw(o, p): p = { t, w (0 rest … 1 working), th (arc angle) } */
 const CONCEPTS = [
-  { k:'meridian', name:'Meridian', wash:WASH.meridian, rec:true,
-    why:'One meridian from the umbrella mark, turning on its axis. Rests at an angle; turns while the agent works.',
+  { k:'arc', name:'Arc', wash:WASH.arc, rec:true,
+    why:'One arc from the umbrella mark, turning on its axis. Rests at an angle; turns while the agent works.',
     build(g){ return { ax:g.appendChild(sv('path', { d:'M32 15V49' })), arc:g.appendChild(sv('path')), eq:g.appendChild(sv('path', { d:'M15 35L49 29' })) }; },
     draw(o, p){ const a = lerp(14, 24*Math.sin(p.th), p.w), back = p.w*clamp(-Math.cos(p.th)*3);
       o.arc.setAttribute('d', arcD(32, 15, 49, a)); o.arc.style.opacity = f1(1 - .6*back); } },
-  { k:'lens', name:'Lens', wash:WASH.velo,
-    why:'Velo’s lens squared off, with a small meridian inside: the agent looking closely at the page.',
+  { k:'lens', name:'Lens', wash:WASH.violet,
+    why:'The review tool’s lens squared off, with a small arc inside: the agent looking closely at the page.',
     build(g){ g.appendChild(sv('rect', { x:12, y:12, width:28, height:28, rx:8 })); g.appendChild(sv('path', { d:'M40 40L51 51' }));
       return { ax:g.appendChild(sv('path', { d:'M26 19V33' })), arc:g.appendChild(sv('path')) }; },
     draw(o, p){ o.arc.setAttribute('d', arcD(26, 19, 33, lerp(8, 10*Math.sin(p.th), p.w))); } },
-  { k:'orbit', name:'Orbit', wash:WASH.meridian,
-    why:'Meridian’s orbit icon as an eye with a square pupil. The pupil goes where the agent is paying attention.',
+  { k:'orbit', name:'Orbit', wash:WASH.arc,
+    why:'Arc’s orbit icon as an eye with a square pupil. The pupil goes where the agent is paying attention.',
     build(g){ g.appendChild(sv('path', { d:'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z' }));
       return { pu:g.appendChild(sv('rect', { width:11, height:11, rx:3 })), x:new Track(32), y:new Track(32), i:-1 }; },
     draw(o, p){ const P = [[32,32],[24,28],[40,29],[36,36],[26,35]], i = p.w > .5 ? 1 + Math.floor(p.t/1.1) % 4 : 0;
       if (i !== o.i){ o.i = i; o.x.set(P[i][0], S.base, p.t); o.y.set(P[i][1], S.base, p.t); }
       o.pu.setAttribute('x', f1(o.x.at(p.t) - 5.5)); o.pu.setAttribute('y', f1(o.y.at(p.t) - 5.5)); } },
-  { k:'path', name:'Path', wash:WASH.velo,
-    why:'Meridian’s path icon with square nodes. The agent is the lead node and draws its own trail as it moves.',
+  { k:'path', name:'Path', wash:WASH.violet,
+    why:'Arc’s path icon with square nodes. The agent is the lead node and draws its own trail as it moves.',
     build(g){ const pa = g.appendChild(sv('path', { d:'M14 46C20 34 26 30 34 27C40 25 44 20 50 16' }));
       const nd = [[14,46],[34,27]].map(([x, y]) => g.appendChild(sv('rect', { x:x - 3.5, y:y - 3.5, width:7, height:7, rx:2 })));
       const hd = g.appendChild(sv('rect', { width:9, height:9, rx:2.5, class:'amk-fill' })); return { pa, nd, hd, L:0 }; },
     draw(o, p){ if (!o.L) o.L = o.pa.getTotalLength() || 52; const c = (p.t % 2.4)/1.7, q = p.w > .5 ? clamp(prog(c, 0, S.soft)) : 1, s = o.L*q;
       o.pa.style.strokeDasharray = o.L; o.pa.style.strokeDashoffset = f1(o.L - s); const pt = o.pa.getPointAtLength(s);
       o.hd.setAttribute('x', f1(pt.x - 4.5)); o.hd.setAttribute('y', f1(pt.y - 4.5)); o.nd.forEach((n, i) => n.style.opacity = s >= [0, .55][i]*o.L - .5 ? 1 : 0); } },
-  { k:'invite', name:'Invitation', wash:WASH.meridian,
-    why:'The open frame from “AI by invitation” around a small meridian. The frame closes in while the agent works inside what you gave it.',
+  { k:'invite', name:'Invitation', wash:WASH.arc,
+    why:'The open frame from “AI by invitation” around a small arc. The frame closes in while the agent works inside what you gave it.',
     build(g){ return { tl:g.appendChild(sv('path')), br:g.appendChild(sv('path')), ax:g.appendChild(sv('path', { d:'M32 23V41' })), arc:g.appendChild(sv('path')) }; },
     draw(o, p){ const d = 5*p.w; o.tl.setAttribute('d', `M${f1(14+d)} ${f1(27+d)}V${f1(14+d)}H${f1(27+d)}`); o.br.setAttribute('d', `M${f1(50-d)} ${f1(37-d)}V${f1(50-d)}H${f1(37-d)}`);
       o.arc.setAttribute('d', arcD(32, 23, 41, lerp(8, 12*Math.sin(p.th), p.w))); } }
@@ -2969,11 +2969,11 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
 .amk-tag{font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--line);color:var(--muted)}
 @container (max-width:900px){.amk-grid{grid-template-columns:repeat(3,minmax(0,1fr));overflow-y:auto}.amk-why{display:none}}
 @container (max-width:560px){.amk-grid{grid-template-columns:minmax(0,1fr);gap:6px}.amk-c{flex-direction:row;align-items:center;gap:12px;padding:8px 10px}.amk-big svg{width:48px;height:48px}.amk-mid{display:flex;flex-direction:column;gap:6px;min-width:0}.amk-top p{display:none}.amk-ctx{gap:8px 12px}.amk-ctx .amk-by{display:none}}
-</style><div class="amk-root"><div class="amk-top"><p>Five directions drawn from the Meridian brand package. Agents are square and people are round, so who did what never rests on colour.</p>
+</style><div class="amk-root"><div class="amk-top"><p>Five directions drawn from the Arc brand package. Agents are square and people are round, so who did what never rests on colour.</p>
 <div class="amk-sg" role="group" aria-label="Motion"><button type="button" aria-pressed="true" data-w="0">At rest</button><button type="button" aria-pressed="false" data-w="1">Working</button></div></div>
 <div class="amk-grid"></div>
 <div class="amk-ctx" aria-label="Selected mark in context"><span><span class="amk-pe">MR</span>Maya</span><span class="amk-chip" data-x="chip"></span><span data-x="pin"></span><span class="amk-by" data-x="by"></span></div></div>`,
-  desc:'Five agent marks drawn from Meridian’s own vocabulary instead of a generic sparkle: a turning meridian, Velo’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.',
+  desc:'Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.',
   api:'mark(concept, size, brand)   working.set(0 | 1)   draw({ t, w, th })   ctx.render(selected)',
   init(st){
     const grid = $(st,'.amk-grid'), W = new Track(0), marks = []; let sel = 0, th = 0, lt = null;
@@ -2990,7 +2990,7 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
       live = [markEl(c, 18, false), markEl(c, 22, false), markEl(c, 18, false)];
       ctx.chip.replaceChildren(live[0].svg, 'Review agent'); live[0].svg.style.color = 'var(--card)';
       ctx.pin.replaceChildren(live[1].svg, 'Left a pin on /pricing');
-      ctx.by.replaceChildren(live[2].svg); const bb = document.createElement('b'); bb.textContent = 'Claude Code'; const ii = document.createElement('i'); ii.textContent = '7c41d2'; const tg = document.createElement('span'); tg.className = 'amk-tag'; tg.textContent = 'Agent';
+      ctx.by.replaceChildren(live[2].svg); const bb = document.createElement('b'); bb.textContent = 'Assistant'; const ii = document.createElement('i'); ii.textContent = '7c41d2'; const tg = document.createElement('span'); tg.className = 'amk-tag'; tg.textContent = 'Agent';
       ctx.by.append(bb, ' ', ii, ' ', tg); };
     $$(st,'.amk-sg button').forEach(b => b.onclick = () => { $$(st,'.amk-sg button').forEach(x => x.setAttribute('aria-pressed', x === b)); W.set(+b.dataset.w, S.soft); });
     grid.addEventListener('keydown', e => { const k = { ArrowRight:1, ArrowDown:1, ArrowLeft:-1, ArrowUp:-1 }[e.key]; if (!k) return; e.preventDefault(); const n = (sel + k + cards.length) % cards.length; pick(n); cards[n].focus(); });
@@ -3002,11 +3002,11 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
 
 /* ---- the recommended mark through every agent state ---- */
 const STATES = [
-  { k:'idle', l:'Idle', d:'At rest. The meridian holds its angle.' },
-  { k:'think', l:'Thinking', d:'The meridian turns on its axis at a constant, unhurried speed.' },
-  { k:'browse', l:'Browsing', d:'A square marker travels the equator and the meridian leans toward where it is going.' },
-  { k:'comment', l:'Commenting', d:'The tile grows Velo’s comment tail, so the mark becomes its own pin.' },
-  { k:'wait', l:'Waiting for you', d:'The meridian stands upright and the invitation corners open. Nothing moves until you answer.' },
+  { k:'idle', l:'Idle', d:'At rest. The arc holds its angle.' },
+  { k:'think', l:'Thinking', d:'The arc turns on its axis at a constant, unhurried speed.' },
+  { k:'browse', l:'Browsing', d:'A square marker travels the equator and the arc leans toward where it is going.' },
+  { k:'comment', l:'Commenting', d:'The tile grows the review tool’s comment tail, so the mark becomes its own pin.' },
+  { k:'wait', l:'Waiting for you', d:'The arc stands upright and the invitation corners open. Nothing moves until you answer.' },
   { k:'done', l:'Done', d:'The globe folds away and the equator draws a check.' },
   { k:'error', l:'Error', d:'The equator crosses into an X and the line turns danger.' }
 ];
@@ -3038,7 +3038,7 @@ atom({ id:'agentmarkstates', cat:'Agent identity', name:'Agent mark states', blo
 </style><div class="ams-w"><div class="ams-root"><div class="ams-hero"></div><div class="ams-side"><div class="ams-sl" aria-live="polite"></div><div class="ams-d"></div><div class="ams-sz"></div>
 <div class="ams-row"><span class="ams-pe"><i>MR</i>Maya</span><span class="ams-chip"></span></div></div>
 <div class="ams-pk" role="group" aria-label="Agent state"></div></div></div>`,
-  desc:'The Meridian mark carried through seven agent states. Thinking turns the meridian at a constant speed; Browsing sends a square marker along the equator while the meridian leans toward it; Commenting grows Velo’s comment tail so the mark doubles as a pin; Waiting stands the meridian upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.',
+  desc:'The agent mark carried through seven agent states. Thinking turns the arc at a constant speed; Browsing sends a square marker along the equator while the arc leans toward it; Commenting grows the review tool’s comment tail so the mark doubles as a pin; Waiting stands the arc upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.',
   api:'spin.set(0|1)  a = mix(rest, 24·sin θ, spin)  eq = Σ wₖ·shapeₖ  tail.set(0|1)  corners.set(0|1)  label.swap(state)',
   init(st){
     const hero = $(st,'.ams-hero'), sl = $(st,'.ams-sl'), dd = $(st,'.ams-d'), pk = $(st,'.ams-pk'), chip = $(st,'.ams-chip');
@@ -3046,7 +3046,7 @@ atom({ id:'agentmarkstates', cat:'Agent identity', name:'Agent mark states', blo
     const mk = (size, brand) => {
       const svg = sv('svg', { viewBox:'0 0 64 64', width:size, height:size, 'aria-hidden':'true', style:'overflow:visible' }); const sw = brand ? 1.7 : Math.max(1.7, 1.55*64/size);
       const tl = brand ? sv('path', { d:'M10 54V74L26 58Z', fill:PAPER }) : sv('path', { d:`M${f1(4+sw/2)} 54V72L20 60`, fill:'none' });
-      if (brand){ svg.appendChild(tl); svg.appendChild(sv('rect', { width:64, height:64, rx:16, fill:PAPER })); svg.appendChild(sv('path', { d:WASHP, fill:WASH.meridian, opacity:.65 })); }
+      if (brand){ svg.appendChild(tl); svg.appendChild(sv('rect', { width:64, height:64, rx:16, fill:PAPER })); svg.appendChild(sv('path', { d:WASHP, fill:WASH.arc, opacity:.65 })); }
       const g = svg.appendChild(sv('g', { fill:'none', 'stroke-width':f1(sw), 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
       if (!brand){ g.appendChild(tl); g.appendChild(sv('rect', { x:sw/2 + 3, y:sw/2 + 3, width:58 - sw, height:58 - sw, rx:15 })); }
       const o = { svg, g, tl, brand, ax:g.appendChild(sv('path', { d:'M32 15V49' })), arc:g.appendChild(sv('path')), eq:g.appendChild(sv('path')),
@@ -3095,9 +3095,9 @@ atom({ id:'agentmarkstates', cat:'Agent identity', name:'Agent mark states', blo
 });
 })();
 
-/* ---- agent role icons: 24 roles in the Meridian agent system ----
+/* ---- agent role icons: 24 roles in the agent system ----
    Every role is a square tile (agents are square, people are round) with one glyph inside and a
-   tilted equator underneath it, the same line the Meridian agent mark carries. Brand form: 64 grid,
+   tilted equator underneath it, the same line the agent mark carries. Brand form: 64 grid,
    paper tile, one pale wash, 1.7 ink line. Product form: square outline in currentColor with the stroke
    weight tuned per size; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. */
 (() => {
@@ -3325,7 +3325,7 @@ atom({ id:'agentroles', cat:'Agent identity', name:'Agent role icons', block:'Ag
 <button type="button" class="air-play">Play all</button><span class="air-count" aria-live="polite"></span></div>
 <div class="air-grid" role="group" aria-label="Agent roles"></div></div>
 <aside class="air-side" aria-label="Selected role" aria-live="polite"></aside></div></div>`,
-  desc:'Twenty-four agent roles drawn as one family: the square tile that means agent, a single glyph inside it and the tilted equator from the Meridian agent mark underneath. Brand form is the 64 grid with a paper tile, one pale wash and a 1.7 ink line. Product form is a square outline in currentColor with the stroke weight tuned for 16, 20, 24 and 32px; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. Hover or focus a role and one part of its drawing moves for under a second: a trace, a slide, a short turn. Play all runs them in a wave across the grid.',
+  desc:'Twenty-four agent roles drawn as one family: the square tile that means agent, a single glyph inside it and the tilted equator from the agent mark underneath. Brand form is the 64 grid with a paper tile, one pale wash and a 1.7 ink line. Product form is a square outline in currentColor with the stroke weight tuned for 16, 20, 24 and 32px; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. Hover or focus a role and one part of its drawing moves for under a second: a trace, a slide, a short turn. Play all runs them in a wave across the grid.',
   api:'role(name, { brand | product, size })   play(t0) → bump = snap↑ − soft↓ (≤1.2s)   draw = retract 90ms, then trace   playAll → t0 + i·30ms',
   init(st){
     const grid = $(st,'.air-grid'), q = $(st,'.air-q'), side = $(st,'.air-side'), count = $(st,'.air-count');
@@ -3417,9 +3417,9 @@ atom({ id:'agentroles', cat:'Agent identity', name:'Agent role icons', block:'Ag
 });
 })();
 
-/* ---------- Agent identity: 24 action and state icons in the Meridian agent system ----------
+/* ---------- Agent identity: 24 action and state icons in the agent system ----------
    Same grammar as the agent mark: the square tile is the agent, the filled square is the agent's hand,
-   and the world it works in is drawn with a meridian arc and a tilted equator. Brand form = 64 grid,
+   and the world it works in is drawn with a arc arc and a tilted equator. Brand form = 64 grid,
    paper tile, one pale wash, 1.7 ink. Product form = square outline in currentColor, weight tuned per size.
    Every icon is a pure function of (u, size, form): u is seconds into its own loop and u = 0 is the resting
    drawing, so a loop always starts and ends at rest and playing never needs a blend. */
@@ -3465,7 +3465,7 @@ const def = (k, n, g, w, L, st, d, draw) => DEFS.push({ k, n, g, w, L, st, d, dr
 /* ---- Doing ---- */
 def('browsing', 'Browsing', 'Doing', 'm', 2.6, null, 'The square pupil looks from stop to stop along the equator, one page at a time, then settles in the centre.', m => {
   const l = m.lod, x = sq(m.u, 32, [[.3, 22], [.95, 41], [1.55, 26], [2.1, 32]]), y = 32 - (x - 32)*.18;
-  return [['meridians', P(l ? 'M13 32C22 16 42 16 51 32C42 48 22 48 13 32Z' : 'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z')], ['agent', SQ(x, y, l ? 10 : 11, m.c)]]; });
+  return [['arcs', P(l ? 'M13 32C22 16 42 16 51 32C42 48 22 48 13 32Z' : 'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z')], ['agent', SQ(x, y, l ? 10 : 11, m.c)]]; });
 
 const NV = [[[16, 46], [16, 40], [16, 35], [16, 30]], [[16, 30], [16, 22], [22, 22], [30, 22]], [[30, 22], [36, 22], [41, 22], [47, 22]]];
 const NVL = NV.map(sg => sg.map(q => [32 + (q[0] - 32)*.84, 32 + (q[1] - 32)*.84]));
@@ -3488,7 +3488,7 @@ def('scrolling', 'Scrolling', 'Doing', 'm', 2.6, null, 'The page lines slide up 
   const top = 19 + (k/2.2)*(28 - tl), th = l ? P(`M47 ${r1(top)}V${r1(top + tl)}`) : `<path d="M47 ${r1(top)}V${r1(top + tl)}" stroke-width="3.4"/>`;
   return [['page', s], ['track', l ? '' : OP(P('M47 17V47'), .35)], ['thumb', th]]; });
 
-def('inspecting', 'Inspecting element', 'Doing', 'v', 2.4, null, 'The lens drifts over the page while the meridian inside it swings, scanning for the element it wants.', m => {
+def('inspecting', 'Inspecting element', 'Doing', 'v', 2.4, null, 'The lens drifts over the page while the arc inside it swings, scanning for the element it wants.', m => {
   const l = m.lod, dx = sq(m.u, 0, [[.25, 2], [1, -2], [1.7, 0]]), dy = sq(m.u, 0, [[.25, -2], [1, 2], [1.7, 0]]), a = sq(m.u, 8, [[.3, -5], [1.1, 12], [1.8, 8]]);
   return [['lens', TR(R(12, 12, 28, 28, 8) + P(l ? 'M41 41L49 49' : 'M40 40L51 51') + (l ? '' : P('M26 19V33') + P(arcD(26, 19, 33, a))), dx, dy)]]; });
 
@@ -3505,9 +3505,9 @@ def('pinning', 'Pinning', 'Doing', 'v', 2.2, null, 'The pin lifts clear, drops b
   const ring = rs < .8 ? '' : l ? P(`M${r1(40 - rs*1.2)} 48H${r1(40 + rs*1.2)}`) : `<ellipse cx="40" cy="47.5" rx="${r1(rs)}" ry="${r1(rs*.35)}"/>`;
   return [['ripple', ring], ['pin', OP(TR(P('M32 34L40 46') + C(32, 26, l ? 7.5 : 8) + (l ? '' : P('M28 26H36M32 22V30')), 0, dy), o)]]; });
 
-def('thinking', 'Thinking', 'Doing', 'm', 2.2, null, 'The meridian turns on its axis at a steady, unhurried speed: edge-on, full, edge-on again.', m => {
+def('thinking', 'Thinking', 'Doing', 'm', 2.2, null, 'The arc turns on its axis at a steady, unhurried speed: edge-on, full, edge-on again.', m => {
   const l = m.lod, ry = l ? 15 : 17, th0 = Math.asin((l ? 7.5 : 9)/ry), rx = Math.max(.01, ry*Math.abs(Math.sin(th0 + Math.PI*m.u/2.2)));
-  return [['axis', l ? '' : P(`M32 ${32 - ry}V${32 + ry}`)], ['meridian', `<ellipse cx="32" cy="32" rx="${r1(rx)}" ry="${ry}"/>`]]; });
+  return [['axis', l ? '' : P(`M32 ${32 - ry}V${32 + ry}`)], ['arc', `<ellipse cx="32" cy="32" rx="${r1(rx)}" ry="${ry}"/>`]]; });
 
 const PL = [[15, 47], [25, 47], [25, 37], [35, 37], [35, 27], [46, 27]], PT = polyLen(PL);
 def('planning', 'Planning', 'Doing', 'm', 3, null, 'The square steps back to the first stair, then climbs, turning each dotted stair into a solid one.', m => {
@@ -3551,7 +3551,7 @@ def('paused', 'Paused', 'Waiting', 'n', 2.4, null, 'The two bars stand still and
   const t = sq(m.u, 3, [[.3, 0], [1.5, 3]]), l = m.sm;
   return [['pause', P(l ? 'M24 17V47M40 17V47' : 'M24 16V38M40 16V38')], ['equator', l ? '' : P(`M16 ${r1(47 + t)}L48 ${r1(47 - t)}`)]]; });
 
-def('scheduled', 'Scheduled', 'Waiting', 'm', 2.4, null, 'The minute hand ticks round a full turn in four quarter steps while the meridian hand holds at twelve.', m => {
+def('scheduled', 'Scheduled', 'Waiting', 'm', 2.4, null, 'The minute hand ticks round a full turn in four quarter steps while the arc hand holds at twelve.', m => {
   const a = sq(m.u, 120, [[.25, 210], [.7, 300], [1.15, 390], [1.6, 480]])*Math.PI/180, r = m.lod ? 15 : 16, ml = m.lod ? 9 : 11;
   return [['face', C(32, 32, r)], ['hands', P(`M32 32V${m.lod ? 23 : 21}`) + P(`M32 32L${r1(32 + ml*Math.sin(a))} ${r1(32 - ml*Math.cos(a))}`)]]; });
 
@@ -3660,7 +3660,7 @@ atom({ id:'agentactions', cat:'Agent identity', name:'Agent action and state ico
 </style><div class="aax-root"><div class="aax-main"><div class="aax-left"><div class="aax-bar"><div class="aax-sg aax-fm" role="group" aria-label="Icon form"><button type="button" data-f="product" aria-pressed="true">Product</button><button type="button" data-f="brand" aria-pressed="false">Brand</button></div><div class="aax-sg aax-sz" role="group" aria-label="Icon size in pixels"></div><button type="button" class="btn aax-all" aria-pressed="false">Play all</button></div><div class="aax-sheet" role="group" aria-label="Agent action and state icons"></div></div>
 <div class="aax-right"><div class="aax-det" aria-live="polite"><div class="aax-dbig"></div><div><div class="aax-dn"></div><p class="aax-dd"></p></div><div class="aax-ds"></div></div>
 <section class="aax-feed" aria-label="Feed preview"><div class="aax-fh"><h4>Feed preview</h4><div class="aax-now" aria-hidden="true"></div><button type="button" class="btn aax-rp">Replay</button></div><ul class="aax-fl"></ul></section></div></div></div>`,
-  desc:'Twenty-four things an agent does or is, in the Meridian agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.',
+  desc:'Twenty-four things an agent does or is, in the agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.',
   api:'frame(def, { brand, size, u })   u = (t − playStart) % loop   leave: u += 2.4·dt until the loop ends   row.y.set(i·pitch)',
   init(st){
     const SZ = { product:[16, 20, 24, 32], brand:[32, 40, 48, 64] }, size = { product:24, brand:40 }, byK = {};
@@ -3753,7 +3753,7 @@ atom({ id:'agentactions', cat:'Agent identity', name:'Agent action and state ico
    colour (Check blue, Content lavender, Operate green, People peach), a few confident round-capped
    strokes, objects drawn as simple friendly glyphs (page, lens, pin, pencil, key, envelope, clock)
    and the small tilted equator under the subject. Agents are the square tile mark (the role-icon
-   tile: rounded square, leaf wash, meridian); people are round heads. One description per drawing
+   tile: rounded square, leaf wash, arc); people are round heads. One description per drawing
    feeds both the live atom (JS springs) and the standalone SVG files (CSS keyframes sampled from
    the same springs). */
 (() => {
@@ -3802,7 +3802,7 @@ const wash = (cx, cy, w, h, rot, col) => G([N('path', { d:leafD(cx, cy, w, h, ro
 // the equator cue from the role icons: a short line under the subject at the icon's tilt (5 in 32)
 const eqLine = (x, y, len = 128) => P(`M${r1(x)} ${r1(y)}L${r1(x + len)} ${r1(y - len*5/32)}`, 'ink', dr(.15));
 
-// the agent: the role-icon tile at illustration size. Rounded square, leaf wash, meridian (turns about its axis), tilted equator
+// the agent: the role-icon tile at illustration size. Rounded square, leaf wash, arc (turns about its axis), tilted equator
 const tile = (cx, cy, s, col, o = {}) => {
   const u = s/64, x0 = cx - s/2, y0 = cy - s/2, X = v => r1(x0 + v*u), Y = v => r1(y0 + v*u);
   const arc = P(`M${r1(cx)} ${Y(15)}C${r1(cx + 24*u)} ${Y(21.8)} ${r1(cx + 24*u)} ${Y(42.2)} ${r1(cx)} ${Y(49)}`, 'mid');
@@ -3825,7 +3825,7 @@ const page = (x, y, w, h, lines = [], o = {}) => {
 // a lens: ring and handle (handle angle in degrees)
 const lens = (cx, cy, r, ang = 45) => { const c = Math.cos(ang*Math.PI/180), s = Math.sin(ang*Math.PI/180);
   return [Ci(cx, cy, r), P(`M${r1(cx + r*c)} ${r1(cy + r*s)}L${r1(cx + r*1.85*c)} ${r1(cy + r*1.85*s)}`)]; };
-// Velo pin: ink teardrop with a paper eye, tip at (x, y)
+// the review tool pin: ink teardrop with a paper eye, tip at (x, y)
 const pin = (x, y, d, id) => G([P(`M${x} ${y}C${x - 3} ${y - 7} ${x - 12} ${y - 13} ${x - 12} ${y - 23}A12 12 0 1 1 ${x + 12} ${y - 23}C${x + 12} ${y - 13} ${x + 3} ${y - 7} ${x} ${y}Z`, 'solid'), Ci(x, y - 23, 4.2, 'knockFill')], st(d, 0, -18), id);
 // speech bubble with a tail on its bottom edge between ax and bx, pointing to (tx, ty)
 const bubble = (x, y, w, h, r, ax, bx, tx, ty, k = 'node') => P(`M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${bx}L${tx} ${ty}L${ax} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`, k);
@@ -3862,7 +3862,7 @@ const ART = [
       eq:eqLine(84, 384) }; } },
 
 { slug:'reviewing', grp:'check', title:'Reviewing your site', cap:'The agent reads your pages one section at a time.', P:3.2,
-  alt:'A tall page and a magnifying lens that moves down it one line at a time. The agent sits at the lower left, its meridian turning.',
+  alt:'A tall page and a magnifying lens that moves down it one line at a time. The agent sits at the lower left, its arc turning.',
   draw:() => { const C = WASH.check, Y = [0, 28, 92, 120], scan = { a:{ fn:k => ({ ty:Y[k % 4] }), n:4 } };
     return { wash:[wash(160, 222, 200, 262, -6, C)],
       structure:[page(98, 86, 142, 228, [[120, 146, 200], [120, 174, 216], [120, 202, 178], [120, 238, 208], [120, 266, 172]])],
@@ -3950,7 +3950,7 @@ const ART = [
       eq:eqLine(40, 396, 128) }; } },
 
 { slug:'together', grp:'ops', title:'Agents working together', cap:'Three agents split the review and share what they find.', P:3.6,
-  alt:'Three agent tiles of different sizes gathered along the top of one shared page, each adding a line to it, their meridians turning out of step.',
+  alt:'Three agent tiles of different sizes gathered along the top of one shared page, each adding a line to it, their arcs turning out of step.',
   draw:() => { const C = WASH.ops;
     return { wash:[wash(142, 240, 222, 236, 4, C)],
       structure:[page(64, 220, 156, 132, [[86, 268, 186], [86, 294, 160], [86, 320, 174]], { d:.4 })],
@@ -4142,8 +4142,8 @@ atom({ id:'agentillustrations', cat:'Agent identity', name:'Agent spot illustrat
 <div class="ail-info"><p class="ail-n num" aria-live="polite"></p><div class="ail-ts"><div><h4 id="agentillustrations-h0"></h4><p></p></div><div aria-hidden="true"><h4></h4><p></p></div></div>
 <div class="ail-act"><button type="button" class="btn ail-rp">${ic('<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/>', 15)}Replay</button><button type="button" class="ail-ib" data-d="-1" aria-label="Previous illustration">${ic('<path d="M15 6l-6 6 6 6"/>', 16)}</button><button type="button" class="ail-ib" data-d="1" aria-label="Next illustration">${ic('<path d="M9 6l6 6-6 6"/>', 16)}</button></div></div>
 <button type="button" class="ail-ib ail-x" aria-label="Close">${ic(I.x, 16)}</button></div></div>`,
-  desc:'Sixteen spot drawings for agent states, drawn like the role icons at a larger size: a paper plate, one soft leaf wash in the scene\u2019s group colour, a few round-capped strokes, simple glyphs (page, lens, pin, pencil, key, envelope, clock) and the small tilted equator under the subject. Agents are the square role-icon tile and people are round heads. Each card traces its strokes when it first scrolls into view, then pins, seals and tiles settle on a critically damped spring; the wash breathes, the meridian turns in quarter steps and one small part moves (a lens scanning, a plug trying again, a clock ticking) only while you hover, focus or (on a phone) land on that card, and everything holds still off-screen or under reduced motion. Tapping a card grows its plate into a large view, the title and caption follow 80ms later, Previous and Next swap drawings (old one out, new one traces in) and Replay draws it again.',
-  api:'card.enter → stroke.draw(spring) → pin.settle(t + d) · meridian.th += π/2 each step while active · plate.{x,y,w,h}.set(open ? frame : cardRect) · art.swap(i)',
+  desc:'Sixteen spot drawings for agent states, drawn like the role icons at a larger size: a paper plate, one soft leaf wash in the scene\u2019s group colour, a few round-capped strokes, simple glyphs (page, lens, pin, pencil, key, envelope, clock) and the small tilted equator under the subject. Agents are the square role-icon tile and people are round heads. Each card traces its strokes when it first scrolls into view, then pins, seals and tiles settle on a critically damped spring; the wash breathes, the arc turns in quarter steps and one small part moves (a lens scanning, a plug trying again, a clock ticking) only while you hover, focus or (on a phone) land on that card, and everything holds still off-screen or under reduced motion. Tapping a card grows its plate into a large view, the title and caption follow 80ms later, Previous and Next swap drawings (old one out, new one traces in) and Replay draws it again.',
+  api:'card.enter → stroke.draw(spring) → pin.settle(t + d) · arc.th += π/2 each step while active · plate.{x,y,w,h}.set(open ? frame : cardRect) · art.swap(i)',
   init(st){
     const gal = $(st,'.ail-gal'), nav = $(st,'.ail-nav'), lb = $(st,'.ail-lb'), big = $(st,'.ail-big'), info = $(st,'.ail-info'), scrim = $(st,'.ail-scrim');
     const slots = $$(big,':scope>span'), tsl = $$(st,'.ail-ts>div'), num = $(st,'.ail-n'), counter = $(nav,'span');
@@ -4251,7 +4251,7 @@ const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;');
 A.forEach(a => {
   const el = document.createElement('article'); el.className = 'tile' + (a.wide ? ' wide' : '') + (a.tall ? ' tall' : '') + (a.big ? ' big' : ''); el.id = a.id;
   el.innerHTML = `<header><h3></h3><div class="fam">${a.fam.map(f => `<span title="${FAMN[f]}">${f}</span>`).join('')}</div></header><div class="block"></div><div class="stage">${a.html}</div><footer><p></p><pre>${esc(a.api)}</pre></footer>`;
-  $(el,'h3').textContent = a.name; $(el,'.block').textContent = 'Lamina: ' + a.block; $(el,'footer p').textContent = a.desc;
+  $(el,'h3').textContent = a.name; $(el,'.block').textContent = a.block; $(el,'footer p').textContent = a.desc;
   const grid = $(groupEls[a.cat],'.grid'); a.wide ? grid.insertBefore(el, grid.querySelector('.tile:not(.wide)')) : grid.appendChild(el); a.el = el; a.visible = true;
   try { a.render = a.init($(el,'.stage')); } catch (err) { console.error(a.id, err); a.render = null; }
 });

@@ -33,7 +33,7 @@ public struct AgentPinAtom: MotionAtomView {
                     AgPinMark(label: "1", resolved: resolved).position(x: f.maxX, y: f.minY).offset(y: pinDropped ? 0 : -30).opacity(pinDropped ? 1 : 0)
                     if card {
                         VStack(alignment: .leading, spacing: 4) {
-                            HStack(spacing: 4) { AgentMark(size: 14); Text("Claude").font(.caption.weight(.semibold)); AgentTag(); AgChip(text: "Should fix", tone: .warning) }
+                            HStack(spacing: 4) { AgentMark(size: 14); Text("Assistant").font(.caption.weight(.semibold)); AgentTag(); AgChip(text: "Should fix", tone: .warning) }
                             Text(notes[target]?.0 ?? "").font(.caption)
                             Text(notes[target]?.1 ?? "").font(.caption2.monospaced()).foregroundStyle(.secondary)
                             Button("Resolve") { resolve() }.buttonStyle(AgPress(tone: .success)).font(.caption)

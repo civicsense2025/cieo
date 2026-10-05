@@ -56,4 +56,4 @@ node scripts/build-catalogue.mjs    # rebuild docs/catalogue.html from atoms/web
 node scripts/gen-swift-index.mjs    # relist Swift atoms after adding one
 ```
 
-`dist/` is committed so a GitHub install needs no build step; `npm run check` fails if it is stale.
+`dist/` is committed so a git install needs no build step; `npm run check` fails if it is stale.

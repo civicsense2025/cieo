@@ -69,7 +69,7 @@ public struct DonutAtom: MotionAtomView {
                         Text(active < 0 ? "100%" : "\(Int(parts[active].value))%").font(.title2.weight(.semibold)).monospacedDigit()
                         Text(active < 0 ? "Total" : parts[active].name).font(.caption).foregroundStyle(.secondary)
                     }
-                    .id(active).transition(reduce ? .identity : .motionSwap())
+                    .id(active).motionTransition(.swap())
                 }
                 .animation(reduce ? nil : .motion(.base), value: active)
             }

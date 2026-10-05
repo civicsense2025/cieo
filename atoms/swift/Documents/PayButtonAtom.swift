@@ -19,7 +19,7 @@ public struct PayButtonAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 10) {
                 HStack { Text("Invoice INV-0042").font(.caption).foregroundStyle(.secondary); Spacer(); Text("$64.80").fontWeight(.semibold).monospacedDigit() }
                 Button(action: pay) {
-                    ZStack { label.id(phase).transition(reduce ? .identity : .motionSwap()) }
+                    ZStack { label.id(phase).motionTransition(.swap()) }
                         .fontWeight(.medium).foregroundStyle(phase == .paid || phase == .declined ? AnyShapeStyle(Color.white) : AnyShapeStyle(.background))
                         .frame(maxWidth: .infinity).frame(height: 44)
                         .background(fill, in: RoundedRectangle(cornerRadius: 11))
@@ -27,8 +27,8 @@ public struct PayButtonAtom: MotionAtomView {
                 }
                 .buttonStyle(.plain).disabled(phase != .idle)
                 ZStack(alignment: .leading) {
-                    if message == 1 { Text("Receipt sent to billing@northstudio.co").foregroundStyle(.green).transition(reduce ? .identity : .motionSwap()) }
-                    if message == 2 { Text("Your bank declined the card. Try another card.").foregroundStyle(.red).transition(reduce ? .identity : .motionSwap()) }
+                    if message == 1 { Text("Receipt sent to billing@northstudio.co").foregroundStyle(.green).motionTransition(.swap()) }
+                    if message == 2 { Text("Your bank declined the card. Try another card.").foregroundStyle(.red).motionTransition(.swap()) }
                 }
                 .font(.caption).frame(maxWidth: .infinity, minHeight: 20, alignment: .leading)
                 .animation(reduce ? nil : .motion(.base), value: message)

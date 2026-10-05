@@ -28,7 +28,7 @@ public struct HeaderOverlayAtom: MotionAtomView {
                     .padding(.horizontal, 14).frame(height: 52)
                     if menu {
                         VStack(alignment: .leading, spacing: 8) { ForEach(hdrLinks, id: \.self) { Text($0).font(.callout) } }
-                            .frame(maxWidth: .infinity, alignment: .leading).padding(14).transition(.motionPresence)
+                            .frame(maxWidth: .infinity, alignment: .leading).padding(14).motionTransition(.presence)
                     }
                 }
                 .background(.background.opacity(solid ? 1 : 0))

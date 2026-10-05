@@ -64,7 +64,7 @@ private struct Full: View {
                     }.frame(width: phase == 0 || phase == 1 ? 50 : 30, height: 22)
                 }.buttonStyle(.borderedProminent).tint(phase == 3 ? .green : .accentColor).disabled(phase >= 2)
             }
-            if phase == 1 { Text("Enter a valid email address").font(.caption).foregroundStyle(.red).transition(.motionPresence) }
+            if phase == 1 { Text("Enter a valid email address").font(.caption).foregroundStyle(.red).motionTransition(.presence) }
         }
         .frame(maxWidth: 300).animation(reduce ? nil : .motion(.base), value: phase)
     }

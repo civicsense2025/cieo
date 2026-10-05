@@ -32,7 +32,7 @@ public struct DownloadProgressAtom: MotionAtomView {
                             .rotationEffect(.degrees(-90)).padding(3)
                         ZStack {
                             Image(systemName: icon).font(.title3.weight(.semibold)).foregroundStyle(tint).id(icon)
-                                .transition(reduce ? .identity : .motionSwap(drift: 6))
+                                .motionTransition(.swap(drift: 6))
                         }
                         .animation(reduce ? nil : .motion(.base), value: icon)
                     }.frame(width: 64, height: 64)

@@ -3,7 +3,7 @@ import MotionKit
 
 public struct AgentActionsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentactions", category: "Agent identity", name: "Agent action and state icons",
-        summary: "Twenty-four things an agent does or is, in the Meridian agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.")
+        summary: "Twenty-four things an agent does or is, in the agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private enum Kind { case slide, turn, press, rise, pulse }
     private struct Icon: Identifiable { let id: Int; let name: String; let symbol: String; let kind: Kind; let tone: AgTone }

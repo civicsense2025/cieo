@@ -3,7 +3,7 @@
    colour (Check blue, Content lavender, Operate green, People peach), a few confident round-capped
    strokes, objects drawn as simple friendly glyphs (page, lens, pin, pencil, key, envelope, clock)
    and the small tilted equator under the subject. Agents are the square tile mark (the role-icon
-   tile: rounded square, leaf wash, meridian); people are round heads. One description per drawing
+   tile: rounded square, leaf wash, arc); people are round heads. One description per drawing
    feeds both the live atom (JS springs) and the standalone SVG files (CSS keyframes sampled from
    the same springs). */
 (() => {
@@ -52,7 +52,7 @@ const wash = (cx, cy, w, h, rot, col) => G([N('path', { d:leafD(cx, cy, w, h, ro
 // the equator cue from the role icons: a short line under the subject at the icon's tilt (5 in 32)
 const eqLine = (x, y, len = 128) => P(`M${r1(x)} ${r1(y)}L${r1(x + len)} ${r1(y - len*5/32)}`, 'ink', dr(.15));
 
-// the agent: the role-icon tile at illustration size. Rounded square, leaf wash, meridian (turns about its axis), tilted equator
+// the agent: the role-icon tile at illustration size. Rounded square, leaf wash, arc (turns about its axis), tilted equator
 const tile = (cx, cy, s, col, o = {}) => {
   const u = s/64, x0 = cx - s/2, y0 = cy - s/2, X = v => r1(x0 + v*u), Y = v => r1(y0 + v*u);
   const arc = P(`M${r1(cx)} ${Y(15)}C${r1(cx + 24*u)} ${Y(21.8)} ${r1(cx + 24*u)} ${Y(42.2)} ${r1(cx)} ${Y(49)}`, 'mid');
@@ -75,7 +75,7 @@ const page = (x, y, w, h, lines = [], o = {}) => {
 // a lens: ring and handle (handle angle in degrees)
 const lens = (cx, cy, r, ang = 45) => { const c = Math.cos(ang*Math.PI/180), s = Math.sin(ang*Math.PI/180);
   return [Ci(cx, cy, r), P(`M${r1(cx + r*c)} ${r1(cy + r*s)}L${r1(cx + r*1.85*c)} ${r1(cy + r*1.85*s)}`)]; };
-// Velo pin: ink teardrop with a paper eye, tip at (x, y)
+// the review tool pin: ink teardrop with a paper eye, tip at (x, y)
 const pin = (x, y, d, id) => G([P(`M${x} ${y}C${x - 3} ${y - 7} ${x - 12} ${y - 13} ${x - 12} ${y - 23}A12 12 0 1 1 ${x + 12} ${y - 23}C${x + 12} ${y - 13} ${x + 3} ${y - 7} ${x} ${y}Z`, 'solid'), Ci(x, y - 23, 4.2, 'knockFill')], st(d, 0, -18), id);
 // speech bubble with a tail on its bottom edge between ax and bx, pointing to (tx, ty)
 const bubble = (x, y, w, h, r, ax, bx, tx, ty, k = 'node') => P(`M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${bx}L${tx} ${ty}L${ax} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`, k);
@@ -112,7 +112,7 @@ const ART = [
       eq:eqLine(84, 384) }; } },
 
 { slug:'reviewing', grp:'check', title:'Reviewing your site', cap:'The agent reads your pages one section at a time.', P:3.2,
-  alt:'A tall page and a magnifying lens that moves down it one line at a time. The agent sits at the lower left, its meridian turning.',
+  alt:'A tall page and a magnifying lens that moves down it one line at a time. The agent sits at the lower left, its arc turning.',
   draw:() => { const C = WASH.check, Y = [0, 28, 92, 120], scan = { a:{ fn:k => ({ ty:Y[k % 4] }), n:4 } };
     return { wash:[wash(160, 222, 200, 262, -6, C)],
       structure:[page(98, 86, 142, 228, [[120, 146, 200], [120, 174, 216], [120, 202, 178], [120, 238, 208], [120, 266, 172]])],
@@ -200,7 +200,7 @@ const ART = [
       eq:eqLine(40, 396, 128) }; } },
 
 { slug:'together', grp:'ops', title:'Agents working together', cap:'Three agents split the review and share what they find.', P:3.6,
-  alt:'Three agent tiles of different sizes gathered along the top of one shared page, each adding a line to it, their meridians turning out of step.',
+  alt:'Three agent tiles of different sizes gathered along the top of one shared page, each adding a line to it, their arcs turning out of step.',
   draw:() => { const C = WASH.ops;
     return { wash:[wash(142, 240, 222, 236, 4, C)],
       structure:[page(64, 220, 156, 132, [[86, 268, 186], [86, 294, 160], [86, 320, 174]], { d:.4 })],
@@ -392,8 +392,8 @@ atom({ id:'agentillustrations', cat:'Agent identity', name:'Agent spot illustrat
 <div class="ail-info"><p class="ail-n num" aria-live="polite"></p><div class="ail-ts"><div><h4 id="agentillustrations-h0"></h4><p></p></div><div aria-hidden="true"><h4></h4><p></p></div></div>
 <div class="ail-act"><button type="button" class="btn ail-rp">${ic('<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/>', 15)}Replay</button><button type="button" class="ail-ib" data-d="-1" aria-label="Previous illustration">${ic('<path d="M15 6l-6 6 6 6"/>', 16)}</button><button type="button" class="ail-ib" data-d="1" aria-label="Next illustration">${ic('<path d="M9 6l6 6-6 6"/>', 16)}</button></div></div>
 <button type="button" class="ail-ib ail-x" aria-label="Close">${ic(I.x, 16)}</button></div></div>`,
-  desc:'Sixteen spot drawings for agent states, drawn like the role icons at a larger size: a paper plate, one soft leaf wash in the scene\u2019s group colour, a few round-capped strokes, simple glyphs (page, lens, pin, pencil, key, envelope, clock) and the small tilted equator under the subject. Agents are the square role-icon tile and people are round heads. Each card traces its strokes when it first scrolls into view, then pins, seals and tiles settle on a critically damped spring; the wash breathes, the meridian turns in quarter steps and one small part moves (a lens scanning, a plug trying again, a clock ticking) only while you hover, focus or (on a phone) land on that card, and everything holds still off-screen or under reduced motion. Tapping a card grows its plate into a large view, the title and caption follow 80ms later, Previous and Next swap drawings (old one out, new one traces in) and Replay draws it again.',
-  api:'card.enter → stroke.draw(spring) → pin.settle(t + d) · meridian.th += π/2 each step while active · plate.{x,y,w,h}.set(open ? frame : cardRect) · art.swap(i)',
+  desc:'Sixteen spot drawings for agent states, drawn like the role icons at a larger size: a paper plate, one soft leaf wash in the scene\u2019s group colour, a few round-capped strokes, simple glyphs (page, lens, pin, pencil, key, envelope, clock) and the small tilted equator under the subject. Agents are the square role-icon tile and people are round heads. Each card traces its strokes when it first scrolls into view, then pins, seals and tiles settle on a critically damped spring; the wash breathes, the arc turns in quarter steps and one small part moves (a lens scanning, a plug trying again, a clock ticking) only while you hover, focus or (on a phone) land on that card, and everything holds still off-screen or under reduced motion. Tapping a card grows its plate into a large view, the title and caption follow 80ms later, Previous and Next swap drawings (old one out, new one traces in) and Replay draws it again.',
+  api:'card.enter → stroke.draw(spring) → pin.settle(t + d) · arc.th += π/2 each step while active · plate.{x,y,w,h}.set(open ? frame : cardRect) · art.swap(i)',
   init(st){
     const gal = $(st,'.ail-gal'), nav = $(st,'.ail-nav'), lb = $(st,'.ail-lb'), big = $(st,'.ail-big'), info = $(st,'.ail-info'), scrim = $(st,'.ail-scrim');
     const slots = $$(big,':scope>span'), tsl = $$(st,'.ail-ts>div'), num = $(st,'.ail-n'), counter = $(nav,'span');

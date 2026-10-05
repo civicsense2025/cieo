@@ -51,7 +51,7 @@ public struct AnalyticsDashboardAtom: MotionAtomView {
         VStack(alignment: .leading, spacing: 2) {
             Text(title).font(.caption2).foregroundStyle(.secondary)
             value.font(.callout.weight(.semibold))
-            ZStack { Text("\(delta > 0 ? "+" : "")\(delta)%").font(.caption2.weight(.semibold)).foregroundStyle(delta >= 0 ? Color.green : Color.red).id(delta).transition(reduce ? .identity : .motionSwap()) }
+            ZStack { Text("\(delta > 0 ? "+" : "")\(delta)%").font(.caption2.weight(.semibold)).foregroundStyle(delta >= 0 ? Color.green : Color.red).id(delta).motionTransition(.swap()) }
                 .animation(reduce ? nil : .motion(.base), value: delta)
         }.padding(8).frame(maxWidth: .infinity, alignment: .leading).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 8))
     }

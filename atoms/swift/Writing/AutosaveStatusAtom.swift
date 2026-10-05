@@ -17,7 +17,7 @@ public struct AutosaveStatusAtom: MotionAtomView {
                 HStack {
                     Text("Draft · Spring launch").font(.caption.weight(.semibold))
                     Spacer()
-                    ZStack(alignment: .trailing) { status.id(phase).transition(reduce ? .identity : .motionSwap()) }
+                    ZStack(alignment: .trailing) { status.id(phase).motionTransition(.swap()) }
                         .font(.caption).frame(width: 130, height: 20, alignment: .trailing)
                         .animation(reduce ? nil : .motion(.base), value: phase)
                         .accessibilityElement(children: .combine)

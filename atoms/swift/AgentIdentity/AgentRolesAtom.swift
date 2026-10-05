@@ -3,7 +3,7 @@ import MotionKit
 
 public struct AgentRolesAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentroles", category: "Agent identity", name: "Agent role icons",
-        summary: "Twenty-four agent roles drawn as one family: the square tile that means agent, a single glyph inside it and the tilted equator from the Meridian agent mark underneath. Brand form is the 64 grid with a paper tile, one pale wash and a 1.7 ink line. Product form is a square outline in currentColor with the stroke weight tuned for 16, 20, 24 and 32px; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. Hover or focus a role and one part of its drawing moves for under a second: a trace, a slide, a short turn. Play all runs them in a wave across the grid.")
+        summary: "Twenty-four agent roles drawn as one family: the square tile that means agent, a single glyph inside it and the tilted equator from the agent mark underneath. Brand form is the 64 grid with a paper tile, one pale wash and a 1.7 ink line. Product form is a square outline in currentColor with the stroke weight tuned for 16, 20, 24 and 32px; at 16px the glyph is redrawn with fewer strokes and the equator is dropped. Hover or focus a role and one part of its drawing moves for under a second: a trace, a slide, a short turn. Play all runs them in a wave across the grid.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var brand = true
     @State private var size: CGFloat = 40

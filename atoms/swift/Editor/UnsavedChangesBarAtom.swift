@@ -62,7 +62,7 @@ public struct UnsavedChangesBarAtom: MotionAtomView {
 
     private var bar: some View {
         HStack(spacing: 10) {
-            ZStack { Text(phase == .saved ? "Saved" : "You have unsaved changes").id(phase == .saved).transition(reduce ? .identity : .motionSwap()) }
+            ZStack { Text(phase == .saved ? "Saved" : "You have unsaved changes").id(phase == .saved).motionTransition(.swap()) }
                 .font(.footnote.weight(.medium)).foregroundStyle(phase == .saved ? Color.green : .primary).animation(reduce ? nil : .motion(.base), value: phase)
             Spacer()
             if phase == .idle { Button("Discard", action: discard).buttonStyle(.bordered).controlSize(.small).transition(.opacity) }
@@ -73,7 +73,7 @@ public struct UnsavedChangesBarAtom: MotionAtomView {
                     case .spin: ProgressView().controlSize(.small).id(1)
                     case .check: Image(systemName: "checkmark").id(2)
                     }
-                }.frame(minWidth: button == .save ? 40 : 18).transition(reduce ? .identity : .motionSwap()).animation(reduce ? nil : .motion(.base), value: button)
+                }.frame(minWidth: button == .save ? 40 : 18).motionTransition(.swap()).animation(reduce ? nil : .motion(.base), value: button)
             }
             .buttonStyle(.borderedProminent).controlSize(.small).tint(button == .check ? .green : .accentColor).disabled(cur.name.trimmingCharacters(in: .whitespaces).isEmpty)
         }

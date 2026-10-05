@@ -3,7 +3,7 @@ import MotionKit
 
 public struct BottomSheetAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "sheet", category: "Admin", name: "Bottom sheet (mobile only)",
-        summary: "For phone layouts only: on wider screens Lamina’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.")
+        summary: "For phone layouts only: on wider screens Studio’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private let height = 200.0
     @State private var y = Track(210, preset: .base)

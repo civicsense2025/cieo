@@ -198,7 +198,7 @@ ${['General','Domains','Members','Billing','Danger zone'].map((n, i) => `<button
 </section>
 <section class="ss-pane" role="tabpanel" id="ss-pane-1" aria-labelledby="ss-tab-1">
   <div class="sst-hd"><div><h4>Domains</h4><p class="ss-sub">Where your site lives on the web.</p></div><span class="sst-st" role="status" aria-live="polite"><span class="ss-sg">Saving…</span><span class="ss-sd">${ic(I.check,14,2.5)}Saved</span></span></div>
-  <div class="ss-f"><label for="ss-dom">Primary domain</label><select id="ss-dom" class="ss-in"><option>northlight.studio</option><option>www.northlight.studio</option><option>northlight.lamina.site</option></select></div>
+  <div class="ss-f"><label for="ss-dom">Primary domain</label><select id="ss-dom" class="ss-in"><option>northlight.studio</option><option>www.northlight.studio</option><option>northlight.example.site</option></select></div>
   <div class="ss-sr"><div><b id="ss-redir-l">Redirect other domains to the primary</b><small>Visitors on a secondary domain land on the primary one.</small></div><button type="button" class="ss-sw" role="switch" aria-checked="true" aria-labelledby="ss-redir-l"><i></i></button></div>
 </section>
 <section class="ss-pane" role="tabpanel" id="ss-pane-2" aria-labelledby="ss-tab-2">

@@ -37,8 +37,8 @@ public struct TextFieldAtom: MotionAtomView {
                             .autocorrectionDisabled().accessibilityLabel("Email address")
                             .padding(.leading, 12).padding(.trailing, 40).padding(.top, 25)
                         ZStack {
-                            if status == 0 { Image(systemName: "checkmark").foregroundStyle(.green).transition(reduce ? .identity : .motionSwap()) }
-                            if status == 1 { Image(systemName: "exclamationmark.circle").foregroundStyle(.red).transition(reduce ? .identity : .motionSwap()) }
+                            if status == 0 { Image(systemName: "checkmark").foregroundStyle(.green).motionTransition(.swap()) }
+                            if status == 1 { Image(systemName: "exclamationmark.circle").foregroundStyle(.red).motionTransition(.swap()) }
                         }
                         .frame(width: 18, height: 18).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing).padding(.top, 17).padding(.trailing, 12)
                         .animation(reduce ? nil : .motion(.base), value: status)

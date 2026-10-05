@@ -3,7 +3,7 @@ import MotionKit
 
 public struct AgentCursorAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentcursor", category: "Agent activity", name: "Agent cursor",
-        summary: "The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in Velo. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.")
+        summary: "The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in the review tool. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var frames: [String: CGRect] = [:]
     @State private var cursor = CGPoint(x: 20, y: 20)

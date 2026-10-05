@@ -51,7 +51,7 @@ struct AgentCharacter: View {
     var squash = CGSize(width: 1, height: 1)
     var lean = 0.0                  // degrees
     var wash: Color = .green
-    var spin = 0.0                  // meridian turn, degrees
+    var spin = 0.0                  // arc turn, degrees
     var blink = false
 
     var body: some View {

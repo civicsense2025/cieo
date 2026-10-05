@@ -21,7 +21,7 @@ public struct ToolApprovalAtom: MotionAtomView {
         AtomStage(hint: "Allow once, Always allow or Deny; Next request swaps the card") {
             AgCard {
                 VStack(alignment: .leading, spacing: 8) {
-                    HStack { Text("Claude is working in Northwind").font(.caption).foregroundStyle(.secondary); Spacer()
+                    HStack { Text("Assistant is working in Northwind").font(.caption).foregroundStyle(.secondary); Spacer()
                         Button("Next request") { next() }.buttonStyle(AgPress()).font(.caption) }
                     VStack(alignment: .leading, spacing: 6) {
                         Text(r.tool).font(.callout.monospaced().weight(.semibold))
@@ -43,7 +43,7 @@ public struct ToolApprovalAtom: MotionAtomView {
                                     Button("Allow once") { run() }.buttonStyle(AgPress(tone: .info))
                                     Button("Always allow") { run() }.buttonStyle(AgPress())
                                 }
-                                Text("Claude waits for your answer.").font(.caption).foregroundStyle(.secondary)
+                                Text("Assistant waits for your answer.").font(.caption).foregroundStyle(.secondary)
                             }
                         case .running:
                             HStack(spacing: 6) { AgSpinner(size: 12); Text("Running"); Text(String(format: "%.1fs", elapsed)).monospacedDigit() }.font(.callout)

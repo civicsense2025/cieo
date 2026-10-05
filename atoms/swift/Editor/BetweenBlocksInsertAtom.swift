@@ -39,10 +39,10 @@ public struct BetweenBlocksInsertAtom: MotionAtomView {
                         ForEach(kinds, id: \.0) { k in
                             Button { insert(k.0, at: g) } label: { Label(k.0, systemImage: k.1).font(.caption.weight(.medium)).padding(.horizontal, 10).padding(.vertical, 6).background(.background, in: Capsule()).overlay(Capsule().strokeBorder(Color.accentColor)) }.buttonStyle(.plain)
                         }
-                    }.transition(reduce ? .identity : .motionSwap())
+                    }.motionTransition(.swap())
                 } else {
                     Button { withMotion(.base, reduceMotion: reduce) { open = g } } label: { Image(systemName: "plus").font(.caption2.weight(.bold)).foregroundStyle(.white).frame(width: 18, height: 18).background(Circle().fill(Color.accentColor)) }
-                        .buttonStyle(.plain).opacity(hot ? 1 : 0).accessibilityLabel("Insert block here").transition(reduce ? .identity : .motionSwap())
+                        .buttonStyle(.plain).opacity(hot ? 1 : 0).accessibilityLabel("Insert block here").motionTransition(.swap())
                 }
             }
         }

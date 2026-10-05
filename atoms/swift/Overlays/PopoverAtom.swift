@@ -55,9 +55,9 @@ public struct PopoverAtom: MotionAtomView {
         Button(action: copy) {
             ZStack {
                 if copied {
-                    Label("Copied", systemImage: "checkmark").transition(reduce ? .identity : .motionSwap(drift: 3))
+                    Label("Copied", systemImage: "checkmark").motionTransition(.swap(drift: 3))
                 } else {
-                    Text("Copy").transition(reduce ? .identity : .motionSwap(drift: 3))
+                    Text("Copy").motionTransition(.swap(drift: 3))
                 }
             }
             .font(.caption.weight(.medium)).foregroundStyle(copied ? Color.green : Color.primary)

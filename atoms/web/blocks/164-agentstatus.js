@@ -362,7 +362,7 @@ ${gPageCSS('afp')}
       { at:15.4, k:'shot', t:'Took screenshot', sub:'confirmation.png, 1280 by 800', sh:'confirmation.png', spot:'page', sv:'done', v:'done', u:'/signup/done', fx:(p, t) => p.flash(t) } ];
     const PL = { nav:n => `Navigated to ${n} pages`, click:n => `Clicked ${n} elements`, type:n => `Typed in ${n} fields`, shot:n => `Took ${n} screenshots`, comment:n => `Left ${n} comments` };
     const chs = $(st,'.afd-chs'), ls = $(st,'.afd-ls'), em = $(st,'.afd-em'), live = $(st,'.afd-live'), re = $(st,'.afd-re'), lv = $(st,'.afd-lv');
-    const pg = gPage(st, 'afp'), cursor = gCursor(pg.ov, 'Claude', 'ink'), ring = gRing(pg.ov);
+    const pg = gPage(st, 'afp'), cursor = gCursor(pg.ov, 'Assistant', 'ink'), ring = gRing(pg.ov);
     const pst = gText($(st,'.afd-pst'), 'line-height:20px');
     const chipDefs = [{ k:'all', l:'All', i:null }, ...Object.keys(KIND).map(k => ({ k, l:KIND[k].l, i:KIND[k].ic }))];
     const chips = chipDefs.map(d => { const b = gEl('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.innerHTML = (d.i ? gi(d.i, 14, 2) : '') + `<span>${d.l}</span><span class="afd-cn"></span>`; chs.appendChild(b);
@@ -452,10 +452,10 @@ ${gPageCSS('tkp')}
 @container (max-width:639px){.tko-grp{margin-left:0;flex:1 1 100%}.tko-grp .btn{flex:1}}
 </style>
 <div class="tko-root"><div class="tko-bar"><span class="tko-chip"><span class="tko-ico"></span><span class="tko-cl"></span></span><div class="tko-grp"><button type="button" class="btn tko-a"></button><button type="button" class="btn tko-b"></button></div></div>
-<div class="tko-body"><div class="tko-main">${gPageHTML('tkp', { label:'Page Claude is working on. You can type in it while you are in control.' })}</div>
+<div class="tko-body"><div class="tko-main">${gPageHTML('tkp', { label:'Page the assistant is working on. You can type in it while you are in control.' })}</div>
 <aside class="tko-q" aria-label="Queued agent actions"><div class="tko-qi"><div class="tko-qh">Queued actions<span class="tko-qc"></span></div><ul class="tko-ql"></ul><p class="tko-qn"></p></div></aside></div>
 <div class="tko-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
-  desc:'Take over freezes Claude where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to Claude’s next target, turns into Claude’s, the banner closes, and the queue starts ticking again.',
+  desc:'Take over freezes the assistant where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to the assistant’s next target, turns into the assistant’s, the banner closes, and the queue starts ticking again.',
   api:'takeOver: agent.fade, human.at(agent.pos) → human.follow(pointer); banner.h.set(1) · queue.open · page.editable(true)   handBack: human.go(next.spot) → agent.at(human.pos); banner.h.set(0)',
   init(st){
     const STEPS = [
@@ -464,13 +464,13 @@ ${gPageCSS('tkp')}
       { k:'type', t:'Choose team size', sub:'11 to 50', f:'size', v:'11 to 50', at:.7, d:1.4 },
       { k:'click', t:'Click “Create account”', sub:'Submit the form', f:'create', at:.7, d:1.2 },
       { k:'shot', t:'Take screenshot', sub:'confirmation.png', f:'page', at:.5, d:1.0 } ];
-    const pg = gPage(st, 'tkp'), ag = gCursor(pg.ov, 'Claude', 'ink'), hu = gCursor(pg.ov, 'You', 'accent');
+    const pg = gPage(st, 'tkp'), ag = gCursor(pg.ov, 'Assistant', 'ink'), hu = gCursor(pg.ov, 'You', 'accent');
     const chip = $(st,'.tko-chip'), ico = $(st,'.tko-ico'), grp = $(st,'.tko-grp'), A = $(st,'.tko-a'), B = $(st,'.tko-b'), live = $(st,'.tko-live'), q = $(st,'.tko-q'), qi = $(st,'.tko-qi'), ql = $(st,'.tko-ql'), qc = $(st,'.tko-qc'), root = $(st,'.tko-root');
     const cl = gLabel($(st,'.tko-cl')), qn = gText($(st,'.tko-qn'), 'line-height:18px;white-space:normal;right:0');
     const lA = gLabel(gEl('span'), 'line-height:32px'), lB = gLabel(gEl('span'), 'line-height:32px');
     [[A, lA], [B, lB]].forEach(([b, l]) => { b.appendChild(l.host); l.host.style.margin = '0 auto'; l.host.style.height = '32px'; l.host.style.lineHeight = '32px'; });
     B.classList.add('ink'); lB.put('Take over', true);
-    const CH = [ { l:'Claude working', ic:'spin', bg:'var(--raised)', fg:'var(--ink)', bd:'var(--line)', r:17 }, { l:'Claude paused', ic:'pause', bg:'var(--card)', fg:'var(--ink)', bd:'var(--ink)', r:6 },
+    const CH = [ { l:'Assistant working', ic:'spin', bg:'var(--raised)', fg:'var(--ink)', bd:'var(--line)', r:17 }, { l:'Assistant paused', ic:'pause', bg:'var(--card)', fg:'var(--ink)', bd:'var(--ink)', r:6 },
       { l:'You’re driving', ic:'hand', bg:'var(--accent-tint)', fg:'var(--accent)', bd:'var(--accent)', r:17 }, { l:'Run finished', ic:'check', bg:'var(--success-tint)', fg:'var(--success)', bd:'var(--success)', r:17 } ];
     const cly = CH.map(c => { const e = gEl('span', 'position:absolute;inset:0;display:grid;place-items:center'); e.innerHTML = c.ic === 'spin' ? SPIN(17) : gi(c.ic, 17, 2); ico.appendChild(e); return e; });
     const spinEl = cly[0].firstChild, csw = new Swap(0), cW = CH.map(() => new Track(0));
@@ -486,8 +486,8 @@ ${gPageCSS('tkp')}
     const left = () => Math.max(0, STEPS.length - si);
     const setRow = (i, n) => { const r = rows[i]; if (r.cur === n) return; r.cur = n; r.sw.to(n); r.W.forEach((w, k) => w.set(k === n ? 1 : 0, S.base)); };
     const syncRows = () => rows.forEach((r, i) => setRow(i, i < si ? 2 : mode === 'run' && i === si && !handing ? 1 : (mode === 'run' && !handing) || mode === 'done' ? 0 : 3));
-    const note = () => qn.put(mode === 'pause' ? 'Held. Nothing runs until you resume or take over.' : mode === 'human' ? 'Held while you are in control. Hand back to continue from the next one.' : mode === 'done' ? 'Every queued action has run.' : 'Claude runs these in order.');
-    const sub = () => { bs.textContent = left() ? `Claude is paused. ${left()} queued.` : 'Claude has no actions left.'; qc.textContent = `${left()} left`; };
+    const note = () => qn.put(mode === 'pause' ? 'Held. Nothing runs until you resume or take over.' : mode === 'human' ? 'Held while you are in control. Hand back to continue from the next one.' : mode === 'done' ? 'Every queued action has run.' : 'Assistant runs these in order.');
+    const sub = () => { bs.textContent = left() ? `Assistant is paused. ${left()} queued.` : 'Assistant has no actions left.'; qc.textContent = `${left()} left`; };
     const chipTo = (n, inst) => { cl.put(CH[n].l, inst); csw.to(n); if (inst){ csw.cur = n; csw.prev = null; csw.t = -9; } cW.forEach((w, i) => inst ? w.jump(i === n ? 1 : 0) : w.set(i === n ? 1 : 0, S.base)); };
     const labels = (inst) => { lA.put(mode === 'pause' ? 'Resume' : mode === 'done' ? 'Replay' : 'Pause', inst); };
     const ui = () => { const h = mode === 'human'; chipTo(h ? 2 : mode === 'pause' ? 1 : mode === 'done' ? 3 : 0); labels(); bslot.open(h); bT.set(h ? 1 : 0, S.base); qT.set(mode === 'pause' || h ? 1 : 0, S.base); gF.set(h ? 0 : 1, S.base); bF.set(mode === 'done' || h ? 0 : 1, S.base);
@@ -496,14 +496,14 @@ ${gPageCSS('tkp')}
     const aimAgent = inst => { if (si < STEPS.length){ const c = spotC(si); ag.go(c.x, c.y, inst); } };
     const begin = () => { started = false; sc = 0; };
     const freezeTyping = () => { const s = STEPS[si]; if (s && s.k === 'type' && started) pg.freeze(s.f); };
-    const pause = () => { if (mode !== 'run') return; freezeTyping(); mode = 'pause'; ag.show(true); ag.W.set(.55, S.base); ui(); say('Claude paused'); };
-    const resume = () => { if (mode !== 'pause') return; mode = 'run'; ag.W.set(1, S.base); const s = STEPS[si]; if (s && s.k === 'type' && started){ const L = pg.typed(s.f).length; pg.type(s.f, s.v, now() - L/14, 14); } ui(); say('Claude resumed'); };
+    const pause = () => { if (mode !== 'run') return; freezeTyping(); mode = 'pause'; ag.show(true); ag.W.set(.55, S.base); ui(); say('Assistant paused'); };
+    const resume = () => { if (mode !== 'pause') return; mode = 'run'; ag.W.set(1, S.base); const s = STEPS[si]; if (s && s.k === 'type' && started){ const L = pg.typed(s.f).length; pg.type(s.f, s.v, now() - L/14, 14); } ui(); say('Assistant resumed'); };
     const takeOver = () => { if (mode !== 'run' && mode !== 'pause') return; freezeTyping(); const p = ag.pos(now()); mode = 'human'; handing = false;
       hu.go(p.x, p.y, true); hu.show(true); ag.show(false); pg.editable(true); ptr = null; ui(); say(`You are in control. ${left()} actions are queued.`);
       gPush(Q, now() + .25, () => { if (mode === 'human') hb.focus({ preventScroll:true }); }); };
     const handBack = () => { if (mode !== 'human') return; pg.editable(false); pg.vp.scrollTop = 0; const t = now(); handing = true; mode = 'run'; ui();
       const c = si < STEPS.length ? spotC(si) : hu.pos(t); hu.go(c.x, c.y, false, S.base);
-      gPush(Q, t + .45, () => { const p = hu.pos(now()); ag.go(p.x, p.y, true); ag.W.jump(0); ag.show(true); hu.show(false); handing = false; const s = STEPS[si]; if (s && s.k === 'type' && started){ const L = pg.typed(s.f).length; pg.type(s.f, s.v, now() - L/14, 14); } syncRows(); say('Claude resumed from the queue'); }); };
+      gPush(Q, t + .45, () => { const p = hu.pos(now()); ag.go(p.x, p.y, true); ag.W.jump(0); ag.show(true); hu.show(false); handing = false; const s = STEPS[si]; if (s && s.k === 'type' && started){ const L = pg.typed(s.f).length; pg.type(s.f, s.v, now() - L/14, 14); } syncRows(); say('Assistant resumed from the queue'); }); };
     const restart = () => { pg.clear(); pg.view('signup'); pg.url('/signup'); si = 0; sc = 0; started = false; mode = 'run'; handing = false; ag.show(false, true); ag.go(pg.rect('page').w*.8, 50, true); ag.W.jump(0); ag.show(true); rows.forEach(r => { r.cur = -1; }); ui(); say('Replaying the run'); };
     A.onclick = () => mode === 'run' ? pause() : mode === 'pause' ? resume() : mode === 'done' ? restart() : 0;
     B.onclick = takeOver; hb.onclick = handBack;
@@ -700,23 +700,23 @@ ${gPageCSS('aip')}
 .aia-rs{display:flex;align-items:flex-start;gap:10px}.aia-rs b{display:block;font-size:13.5px;line-height:20px}.aia-rs span.aia-rd{display:block;font-size:12.5px;line-height:18px;color:var(--muted)}
 @container (min-width:760px){.aia-body{flex-direction:row;align-items:flex-start}.aia-main{flex:1 1 0}.aia-ru{width:260px}}
 </style>
-<div class="aia-root"><div class="aia-top"><div class="aia-sc" role="group" aria-label="Choose what Claude asks about"><button type="button" data-sc="submit">${gi('send', 14, 2)}<span>Submit a form</span></button><button type="button" data-sc="delete">${gi('trash', 14, 2)}<span>Delete a workspace</span></button></div><button type="button" class="btn aia-again">Ask again</button></div>
-<div class="aia-body"><div class="aia-main">${gPageHTML('aip', { label:'Page Claude is working on' })}</div><aside class="aia-ru" aria-label="Always allowed actions"><h4>Always allowed<span class="aia-rc"></span></h4><ul class="aia-rl"></ul><p class="aia-em">Nothing yet. Choosing Always allow adds a rule here.</p></aside></div>
-<div class="aia-pp" role="dialog" aria-labelledby="aia-ttl" aria-label="Claude is asking for approval"><i class="aia-ar"></i><div class="aia-pb"><div class="aia-l aia-ask"></div><div class="aia-l aia-res"></div></div></div>
+<div class="aia-root"><div class="aia-top"><div class="aia-sc" role="group" aria-label="Choose what the assistant asks about"><button type="button" data-sc="submit">${gi('send', 14, 2)}<span>Submit a form</span></button><button type="button" data-sc="delete">${gi('trash', 14, 2)}<span>Delete a workspace</span></button></div><button type="button" class="btn aia-again">Ask again</button></div>
+<div class="aia-body"><div class="aia-main">${gPageHTML('aip', { label:'Page the assistant is working on' })}</div><aside class="aia-ru" aria-label="Always allowed actions"><h4>Always allowed<span class="aia-rc"></span></h4><ul class="aia-rl"></ul><p class="aia-em">Nothing yet. Choosing Always allow adds a rule here.</p></aside></div>
+<div class="aia-pp" role="dialog" aria-labelledby="aia-ttl" aria-label="Assistant is asking for approval"><i class="aia-ar"></i><div class="aia-pb"><div class="aia-l aia-ask"></div><div class="aia-l aia-res"></div></div></div>
 <div class="aia-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
-  desc:'Claude’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.',
+  desc:'Assistant’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.',
   api:'cursor.go(spot) → scrim.set(1), ring.go(spot), pop(el, p, ±6)   ask.swap(result) + follow(height)   risky ? allow.enabled = (input === phrase) : true   always → rules.insert(slot.open)',
   init(st){
     const SC = {
-      submit:{ spot:'create', view:'signup', ok:'Allowed once', title:'Submit this form?', sub:'Claude · northwind.app/signup', ic:'send', risky:false,
+      submit:{ spot:'create', view:'signup', ok:'Allowed once', title:'Submit this form?', sub:'Assistant · northwind.app/signup', ic:'send', risky:false,
         req:'POST northwind.app/signup', rows:[['Work email', 'maya@northwind.com'], ['Company', 'Northwind Studio'], ['Team size', '11 to 50'], ['Plan', 'Team trial, 14 days']],
-        done:{ once:['Allowed once', 'Claude submitted the form. The account was created.'], always:['Always allowed on northwind.app', 'Claude submitted the form and will not ask again for form submits here.'], deny:['Denied', 'Claude did not submit. It will skip this step and say so in the run summary.'] }, rule:'Submit forms on northwind.app' },
-      delete:{ spot:'delete', view:'settings', title:'Delete this workspace?', sub:'Claude · northwind.app/settings', ic:'trash', risky:true, phrase:'northwind-studio',
+        done:{ once:['Allowed once', 'Assistant submitted the form. The account was created.'], always:['Always allowed on northwind.app', 'Assistant submitted the form and will not ask again for form submits here.'], deny:['Denied', 'Assistant did not submit. It will skip this step and say so in the run summary.'] }, rule:'Submit forms on northwind.app' },
+      delete:{ spot:'delete', view:'settings', title:'Delete this workspace?', sub:'Assistant · northwind.app/settings', ic:'trash', risky:true, phrase:'northwind-studio',
         effects:['Deletes Northwind Studio for all 4 members', 'Removes 214 invoices and 18 clients', 'This cannot be undone'],
-        done:{ once:['Allowed once', 'Claude deleted the workspace. Nothing else was changed.'], deny:['Denied', 'Claude did not delete anything. The workspace is unchanged.'] } } };
+        done:{ once:['Allowed once', 'Assistant deleted the workspace. Nothing else was changed.'], deny:['Denied', 'Assistant did not delete anything. The workspace is unchanged.'] } } };
     const root = $(st,'.aia-root'), pp = $(st,'.aia-pp'), ar = $(st,'.aia-ar'), pb = $(st,'.aia-pb'), askL = $(st,'.aia-ask'), resL = $(st,'.aia-res'), live = $(st,'.aia-live'), again = $(st,'.aia-again'), scs = $$(st,'.aia-sc button');
     const rl = $(st,'.aia-rl'), em = $(st,'.aia-em'), rc = $(st,'.aia-rc');
-    const pg = gPage(st, 'aip'), ag = gCursor(pg.ov, 'Claude', 'ink'), ring = gRing(pg.ov, 5);
+    const pg = gPage(st, 'aip'), ag = gCursor(pg.ov, 'Assistant', 'ink'), ring = gRing(pg.ov, 5);
     const scrim = gEl('div', 'position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none;z-index:5'); pg.ov.appendChild(scrim);
     const fol = gFollow(pb), sw = new Swap(0), pT = new Track(0), scrimT = new Track(0), scW = scs.map(() => new Track(0)), ctr = gEl('div');
     let sc = 'submit', phase = 'idle', side = 'above', rules = [], inputOk = new Track(0), okT = 0, input = null, ckEl = null, allowBtn = null, lastW = 0, closeAt = 0;
@@ -746,7 +746,7 @@ ${gPageCSS('aip')}
       const r = { text, li, slot:gSlot(li, $(li,'.aia-rin'), 0) }; $(li,'.btn').setAttribute('aria-label', `Revoke: ${text}`); $(li,'.btn').onclick = () => { r.slot.open(false); gPush(Q, now() + .5, () => { li.remove(); rules = rules.filter(x => x !== r); setRules(); }); say(`Revoked ${text}`); };
       rl.appendChild(li); r.slot.open(true); rules.push(r); setRules(); };
     const openAsk = () => { build(); phase = 'ask'; sw.cur = 0; sw.prev = null; sw.t = -9; sw.prev = null; sw.t = -9; fol.to(askL, true); chooseSide(); pT.set(1, S.base); scrimT.set(1, S.base);
-      const sp = pg.rect(SC[sc].spot); ring.to(sp); say(`${SC[sc].title} Claude is waiting for your answer.`); gPush(Q, now() + .2, () => { if (phase === 'ask') (input || allowBtn).focus({ preventScroll:true }); }); };
+      const sp = pg.rect(SC[sc].spot); ring.to(sp); say(`${SC[sc].title} Assistant is waiting for your answer.`); gPush(Q, now() + .2, () => { if (phase === 'ask') (input || allowBtn).focus({ preventScroll:true }); }); };
     const close = () => { pT.set(0, S.snap); scrimT.set(0, S.base); ring.hide(); };
     const decide = d => { if (phase !== 'ask') return; phase = 'result'; result(d); sw.to(1); fol.to(resL); const t = now(); say(`${SC[sc].done[d][0]}. ${SC[sc].done[d][1]}`);
       if (d === 'always') addRule(SC.submit.rule);
@@ -759,7 +759,7 @@ ${gPageCSS('aip')}
       scW.forEach((w, i) => w.set(i === (key === 'submit' ? 0 : 1) ? 1 : 0, S.base)); scs.forEach((b, i) => b.setAttribute('aria-pressed', i === (key === 'submit' ? 0 : 1)));
       const fw = pg.rect('page'); ag.go(fw.w*.85, 40, true); ag.W.jump(0); ag.show(true); const t = now();
       gPush(Q, t + .5, () => { const p = pg.center(c.spot); ag.go(p.x, p.y, false); });
-      gPush(Q, t + 1.7, () => { if (key === 'submit' && rules.length){ phase = 'result'; resL.innerHTML = `<div class="aia-rs"><span class="aia-hi" style="background:var(--success-tint);color:var(--success)">${gi('shield', 15, 2)}</span><div><b>Allowed by your rule</b><span class="aia-rd">${SC.submit.rule}. Claude did not need to ask.</span></div></div>`; sw.cur = 1; sw.prev = null; sw.t = -9; fol.to(resL, true); chooseSide(); pT.set(1, S.base); say('Allowed by your rule. Claude submitted the form.');
+      gPush(Q, t + 1.7, () => { if (key === 'submit' && rules.length){ phase = 'result'; resL.innerHTML = `<div class="aia-rs"><span class="aia-hi" style="background:var(--success-tint);color:var(--success)">${gi('shield', 15, 2)}</span><div><b>Allowed by your rule</b><span class="aia-rd">${SC.submit.rule}. Assistant did not need to ask.</span></div></div>`; sw.cur = 1; sw.prev = null; sw.t = -9; fol.to(resL, true); chooseSide(); pT.set(1, S.base); say('Allowed by your rule. Assistant submitted the form.');
           gPush(Q, now() + .6, () => { pg.view('done'); pg.url('/signup/done'); pg.mirror(); }); gPush(Q, now() + 2.4, () => { phase = 'done'; close(); }); } else openAsk(); }); };
     scs.forEach((b, i) => b.onclick = () => start(i === 0 ? 'submit' : 'delete')); again.onclick = () => start(sc);
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && phase === 'ask'){ e.stopPropagation(); decide('deny'); } });
@@ -832,7 +832,7 @@ ${gPageCSS('rpg')}
       { at:19.2, k:'click', t:'Clicked “Create account”', sub:'Submitted the form', spot:'create' },
       { at:20.6, k:'nav', t:'Navigated to /signup/done', sub:'northwind.app/signup/done', spot:'url', v:'done', u:'/signup/done' },
       { at:22.4, k:'shot', t:'Took screenshot', sub:'confirmation.png', spot:'page' } ];
-    const pg = gPage(st, 'rpg'), ag = gCursor(pg.ov, 'Claude', 'ink'), ring = gRing(pg.ov);
+    const pg = gPage(st, 'rpg'), ag = gCursor(pg.ov, 'Assistant', 'ink'), ring = gRing(pg.ov);
     const sb = $(st,'.rrp-sb'), pf = $(st,'.rrp-pf'), tks = $(st,'.rrp-tks'), phE = $(st,'.rrp-ph'), bb = $(st,'.rrp-bb'), ls = $(st,'.rrp-ls'), ck = $(st,'.rrp-ck'), play = $(st,'.rrp-pl'), live = $(st,'.rrp-live'), ec = $(st,'.rrp-ec');
     const spds = $$(st,'.rrp-sp button'), pls = $$(play, ':scope>span'), psw = new Swap(0), bT = new Track(0), sT = spds.map((b, i) => new Track(i ? 0 : 1));
     ec.textContent = `${E.length} events`;

@@ -1,8 +1,8 @@
-/* ---- agent rig: the shared character rig for Meridian agents (Wave 6) ----
-   One soft square (agents are square, people are round) drawn in the Meridian hand: paper fill, one
+/* ---- agent rig: the shared character rig for agents (Wave 6) ----
+   One soft square (agents are square, people are round) drawn in the house hand: paper fill, one
    pale wash, an ink line with round caps. A face made of a small parameter set (lids, squint, eye size,
    brows, mouth curve/width/open/roundness/wave/skew) blended by critically damped springs, so any two
-   moods morph. A meridian-globe antenna (axis, turning meridian, tilted equator) is the identity and the
+   moods morph. A globe antenna (axis, turning arc, tilted equator) is the identity and the
    follow-through appendage. Physics: lean into horizontal speed, squash and stretch from vertical speed
    and contact, gravity when thrown, landing absorbed by a squash that recovers without rebounding.
    Idle life (breath, blinks, glances, a small fidget) is a pure function of the clock and a seed.
@@ -26,11 +26,11 @@ const cd = (x, v, to, w, dt) => { const x0 = x - to, e = Math.exp(-w*dt), k = v 
 const sp = (s, to, w, dt) => { const r = cd(s[0], s[1], to, w, dt); s[0] = r[0]; s[1] = r[1]; };
 
 const INK = '#1d1d1b', PAPER = '#fffaf2';
-const WASH = { blue:'#dce8fb', lavender:'#ede4fb', green:'#e3eedc', warm:'#f1e6d4', rose:'#f6e0da', velo:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0' };
+const WASH = { blue:'#dce8fb', lavender:'#ede4fb', green:'#e3eedc', warm:'#f1e6d4', rose:'#f6e0da', violet:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0' };
 // body: 54-unit soft square, origin at bottom centre, y up is negative
 const U = 54, HW = 27, RAD = 16;
 const F = { y:-26, ex:10.6, ey:-3, rw:3.6, rh:5.0, my:8.6, mw:5.2, bx:10.8 };
-// the wash: the body's lower hemisphere below a tilted equator (the same -10° tilt as the Meridian mark)
+// the wash: the body's lower hemisphere below a tilted equator (the same -10° tilt as the agent mark)
 const EQL = -9, EQR = -17.5;
 const GRAV = 2600, REST = .66;
 
@@ -40,7 +40,7 @@ const GRAV = 2600, REST = .66;
    mouth mc curve (+ smile) · mw width · mo open · mr round · mv wave · mk skew (+ right corner up) · mx shift
    gaze  gx gy bias · gw how strongly the mood holds the gaze (0 follows you, 1 ignores you)
    body  fx fy face shift · ft face tilt (deg) · bs stretch · bl puff · lean · ad antenna droop · ap antenna perk
-   life  spin meridian turning · sway · br breath depth · bk blink rate · gl glance rate */
+   life  spin arc turning · sway · br breath depth · bk blink rate · gl glance rate */
 const D = { eo:1, es:1, sq:0, lt:0, ea:0, bv:0, by:0, ba:0, bb:0, mc:.14, mw:.62, mo:0, mr:0, mv:0, mk:0, mx:0,
   gx:0, gy:0, gw:0, fx:0, fy:0, ft:0, bs:0, bl:0, lean:0, ad:0, ap:0, spin:0, sway:0, br:1, bk:1, gl:1 };
 const KEYS = Object.keys(D);
@@ -53,11 +53,11 @@ const EXPRESSIONS = [
     p:{ eo:.92, sq:.48, mc:.95, mw:.92, mo:.16, bv:.55, by:.5, fy:-.8, bs:.02, ap:.3 } },
   { k:'delighted', name:'Delighted', note:'A result worth celebrating.', beat:'hop',
     p:{ eo:1, sq:1, mc:1, mw:1.08, mo:.9, bv:.85, by:1.2, fy:-1.3, bs:.06, bl:.4, ap:.8, gl:.4 } },
-  { k:'focused', name:'Focused', note:'Heads down on a task. The meridian turns slowly while it works.',
+  { k:'focused', name:'Focused', note:'Heads down on a task. The arc turns slowly while it works.',
     p:{ eo:.8, es:.92, lt:-.12, bv:.9, by:-.65, ba:-.3, mc:.02, mw:.38, mk:.2, gy:.6, gx:.15, gw:.75, fy:1, lean:.03, spin:.35, bk:.45, gl:.15 } },
   { k:'curious', name:'Curious', note:'Noticed something and wants a closer look.', beat:'pop',
     p:{ eo:1.12, es:1.08, bv:1, by:.55, bb:1, mc:.1, mw:.38, mo:.42, mr:1, ft:9, gx:.3, gw:.15, lean:.06, ap:.6, gl:1.5 } },
-  { k:'thinking', name:'Thinking', note:'Working out an answer. The meridian turns on its axis.',
+  { k:'thinking', name:'Thinking', note:'Working out an answer. The arc turns on its axis.',
     p:{ eo:.88, bv:1, by:.35, bb:-.9, ba:.1, mc:-.18, mw:.4, mk:.55, mx:2.6, gx:.72, gy:-.85, gw:.9, ft:-5, fy:-.7, spin:1, gl:0 } },
   { k:'surprised', name:'Surprised', note:'Something unexpected just happened.', beat:'pop',
     p:{ eo:1.3, es:1.1, bv:1, by:1.8, ba:.2, mc:0, mw:.56, mo:1, mr:1, fy:-1.4, bs:.08, ap:1, gl:.2 } },
@@ -132,7 +132,7 @@ const geom = (pz, X, Y, u, sw, lift, washOn = true) => {
     const s = hw*(.42 + .62*P.mr), sl = hw*(.42 + .62*P.mr + .4*P.mo*(1 - P.mr)), mid = cy + P.mc*1.9, wv = P.mv*1.5, yU = mid - oh*P.mr*.5, yD = mid + oh*(1 - P.mr*.5)*(1 - .18*P.mo*(1 - P.mr));
     return `M${fp(L[0], L[1])}C${fp(cx - s, yU + wv)} ${fp(cx + s, yU - wv)} ${fp(R[0], R[1])}C${fp(cx + sl, yD - wv)} ${fp(cx - sl, yD + wv)} ${fp(L[0], L[1])}Z`;
   };
-  // antenna: stalk from the top edge, globe at the (lagging) tip, meridian turning on the globe's axis
+  // antenna: stalk from the top edge, globe at the (lagging) tip, arc turning on the globe's axis
   const B = W(0, -H), ar = antRest(P, sx, sy, sh, pz.side), C = [B[0] + ar.ctl[0]*u, B[1] + ar.ctl[1]*u], T = [B[0] + pz.tipO[0]*u, B[1] + pz.tipO[1]*u];
   let dx = T[0] - C[0], dy = T[1] - C[1]; const dn = Math.hypot(dx, dy) || 1; dx /= dn; dy /= dn;
   const rg = 7*u, G = [T[0] + dx*rg*.94, T[1] + dy*rg*.94], phi = Math.atan2(dx, -dy), pc = Math.cos(phi), ps = Math.sin(phi);
@@ -318,7 +318,7 @@ class Character {
       const C = [bx + ar.ctl[0]*u, by + ar.ctl[1]*u], ra = Math.atan2(rest[1] - C[1], rest[0] - C[0]), Ls = Math.hypot(rest[0] - C[0], rest[1] - C[1]);
       let da = Math.atan2(this.tip[2] - C[1], this.tip[0] - C[0]) - ra; da = Math.atan2(Math.sin(da), Math.cos(da)); da = cl(da, -1.13, 1.13);
       this.tip[0] = C[0] + Math.cos(ra + da)*Ls; this.tip[2] = C[1] + Math.sin(ra + da)*Ls; }
-    // the meridian: turns while spin > 0, otherwise eases forward to its resting angle
+    // the arc: turns while spin > 0, otherwise eases forward to its resting angle
     if (P.spin > .04 && live){ this.thv = P.spin*2.8; this.th += dt*this.thv; this.thR = null; }
     else { if (this.thR === null){ let d = ((REST - this.th) % TAU + TAU) % TAU; if (d > 5.4) d -= TAU; this.thR = this.th + d; }
       if (live){ const r = cd(this.th, this.thv, this.thR, 4.5, dt); this.th = r[0]; this.thv = r[1]; } else this.th = this.thR; }
@@ -373,13 +373,13 @@ const svgString = (k, o = {}) => {
   const css = `@media (prefers-color-scheme:dark){.arg-p{fill:#ece6db}.arg-sk{stroke:#ece6db}.arg-sh{fill:#000;opacity:.42}}`;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${Wd} ${Hd}" width="${Wd}" height="${Hd}" fill="none" role="img" aria-labelledby="${id}-title ${id}-desc">
 <title id="${id}-title">Agent, ${esc(ex.name.toLowerCase())}</title>
-<desc id="${id}-desc">${esc(`A square paper agent with a small meridian globe on its antenna. ${ex.note}`)}</desc>
+<desc id="${id}-desc">${esc(`A square paper agent with a small globe on its antenna. ${ex.note}`)}</desc>
 <style>${css}</style>
 <g id="shadow"><ellipse class="arg-sh" cx="${G.shadow.cx}" cy="${G.shadow.cy}" rx="${G.shadow.rx}" ry="${G.shadow.ry}" fill="${INK}" opacity=".09"/></g>
 <g id="antenna" fill="none" stroke="${INK}" stroke-linecap="round" stroke-linejoin="round">
 <path id="stalk" class="arg-sk" d="${G.stalk}" stroke-width="${s(sw)}"/>
 <g id="globe"><circle id="globe-outline" class="arg-p arg-k" cx="${G.globe.cx}" cy="${G.globe.cy}" r="${G.globe.r}" fill="${PAPER}" stroke-width="${s(sw)}"/>
-<path id="axis" class="arg-k" d="${G.globe.axis}" stroke-width="${s(sw*.82)}"/><path id="meridian" class="arg-k" d="${G.globe.arc}" stroke-width="${s(sw*.82)}"${G.globe.arcO < .99 ? ` opacity="${s(G.globe.arcO)}"` : ''}/><path id="equator" class="arg-k" d="${G.globe.eq}" stroke-width="${s(sw*.82)}"/></g></g>
+<path id="axis" class="arg-k" d="${G.globe.axis}" stroke-width="${s(sw*.82)}"/><path id="arc" class="arg-k" d="${G.globe.arc}" stroke-width="${s(sw*.82)}"${G.globe.arcO < .99 ? ` opacity="${s(G.globe.arcO)}"` : ''}/><path id="equator" class="arg-k" d="${G.globe.eq}" stroke-width="${s(sw*.82)}"/></g></g>
 <defs><clipPath id="${id}-clip"><path d="${G.body}"/></clipPath></defs>
 <g id="body"><path id="body-fill" class="arg-p" d="${G.body}" fill="${PAPER}"/><path id="wash" class="arg-w" d="${G.wash}" fill="${wash}" opacity=".85" clip-path="url(#${id}-clip)"/><path id="outline" class="arg-k" d="${G.body}" fill="none" stroke="${INK}" stroke-width="${s(sw)}" stroke-linejoin="round"/></g>
 <g id="face">${brows ? `<g id="brows">${brows}</g>` : ''}<g id="eyes">${G.eyes.map((d, i) => `<path id="eye-${i ? 'right' : 'left'}" class="arg-f" d="${d}" fill="${INK}" stroke="${INK}" stroke-width="${s(sw*.9)}" stroke-linejoin="round"/>`).join('')}</g>
@@ -501,7 +501,7 @@ atom({ id:'agentcrowd', cat:'Agent identity', name:'Agent crowd', block:'AgentCh
 </style><div class="arg-cr"><svg aria-hidden="true"><path class="arg-fl"/></svg>
 <p class="arg-cp">Five agents share a floor. They glance at each other and at your pointer. Throw one near the others.</p>
 <button type="button" class="btn arg-rs">${ic(RESET, 15)}Reset</button><p class="arg-st" aria-live="polite"></p></div>`,
-  desc:'Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its meridian keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.',
+  desc:'Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its arc keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.',
   api:'crowd.forEach(ch.render)  near(thrown, ch) → ch.watch(thrown).react(surprised).impulse(lean away)  glance(i → j) · mutual → react(happy)',
   init(st){
     const svg = $(st,'svg'), fl = $(svg,'.arg-fl'), stat = $(st,'.arg-st'), root = $(st,'.arg-cr');

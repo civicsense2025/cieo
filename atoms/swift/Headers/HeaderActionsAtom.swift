@@ -26,7 +26,7 @@ public struct HeaderActionsAtom: MotionAtomView {
                 }
                 .padding(10)
                 .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
-                if menu { accountMenu.transition(.motionPresence) }
+                if menu { accountMenu.motionTransition(.presence) }
                 Spacer(minLength: 0)
             }
         }

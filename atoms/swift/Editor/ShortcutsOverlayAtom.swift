@@ -30,7 +30,7 @@ public struct ShortcutsOverlayAtom: MotionAtomView {
                 }.padding(16)
                 if open {
                     Color.black.opacity(0.35).transition(.opacity).onTapGesture { toggle(false) }
-                    sheet.transition(reduce ? .identity : .motionPresence)
+                    sheet.motionTransition(.presence)
                 }
             }
             .frame(width: 380, height: 280).clipShape(RoundedRectangle(cornerRadius: 14)).background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 14))

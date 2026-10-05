@@ -1,46 +1,46 @@
-/* ---- agent mark: Meridian-family identity for agents (replaces the 4-point star) ----
-   Grounded in the Meridian brand package: the umbrella mark is a globe of meridian lines
+/* ---- agent mark: agent-family identity for agents (replaces the 4-point star) ----
+   Grounded in the Arc brand package: the umbrella mark is a globe of arc lines
    with a tilted equator, icons are 1.7 ink lines on a paper tile with one pale wash, and
    the stated AI principle is "AI by invitation". People are round; agents are square. */
 (() => {
-const INK = '#1d1d1b', PAPER = '#faf7f2', WASH = { meridian:'#dce8fb', velo:'#f1e4ff' }, DANGER = '#b0342f';
+const INK = '#1d1d1b', PAPER = '#faf7f2', WASH = { arc:'#dce8fb', violet:'#f1e4ff' }, DANGER = '#b0342f';
 const WASHP = 'M14 52C19 21 45 12 55 20C49 44 34 55 14 52Z';
 const NS = 'http://www.w3.org/2000/svg';
 const sv = (tag, a = {}, kids = []) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); kids.forEach(c => e.appendChild(c)); return e; };
 const f1 = v => v.toFixed(1);
-// arc of a meridian between two poles, bulging by a (cubic peak = .75a)
+// arc of a arc between two poles, bulging by a (cubic peak = .75a)
 const arcD = (x, y0, y1, a) => { const h = y1 - y0; return `M${x} ${y0}C${f1(x + a)} ${f1(y0 + h*.2)} ${f1(x + a)} ${f1(y1 - h*.2)} ${x} ${y1}`; };
 
 /* Concepts, all on the 64 grid of the brand icon set.
-   draw(o, p): p = { t, w (0 rest … 1 working), th (meridian angle) } */
+   draw(o, p): p = { t, w (0 rest … 1 working), th (arc angle) } */
 const CONCEPTS = [
-  { k:'meridian', name:'Meridian', wash:WASH.meridian, rec:true,
-    why:'One meridian from the umbrella mark, turning on its axis. Rests at an angle; turns while the agent works.',
+  { k:'arc', name:'Arc', wash:WASH.arc, rec:true,
+    why:'One arc from the umbrella mark, turning on its axis. Rests at an angle; turns while the agent works.',
     build(g){ return { ax:g.appendChild(sv('path', { d:'M32 15V49' })), arc:g.appendChild(sv('path')), eq:g.appendChild(sv('path', { d:'M15 35L49 29' })) }; },
     draw(o, p){ const a = lerp(14, 24*Math.sin(p.th), p.w), back = p.w*clamp(-Math.cos(p.th)*3);
       o.arc.setAttribute('d', arcD(32, 15, 49, a)); o.arc.style.opacity = f1(1 - .6*back); } },
-  { k:'lens', name:'Lens', wash:WASH.velo,
-    why:'Velo’s lens squared off, with a small meridian inside: the agent looking closely at the page.',
+  { k:'lens', name:'Lens', wash:WASH.violet,
+    why:'The review tool’s lens squared off, with a small arc inside: the agent looking closely at the page.',
     build(g){ g.appendChild(sv('rect', { x:12, y:12, width:28, height:28, rx:8 })); g.appendChild(sv('path', { d:'M40 40L51 51' }));
       return { ax:g.appendChild(sv('path', { d:'M26 19V33' })), arc:g.appendChild(sv('path')) }; },
     draw(o, p){ o.arc.setAttribute('d', arcD(26, 19, 33, lerp(8, 10*Math.sin(p.th), p.w))); } },
-  { k:'orbit', name:'Orbit', wash:WASH.meridian,
-    why:'Meridian’s orbit icon as an eye with a square pupil. The pupil goes where the agent is paying attention.',
+  { k:'orbit', name:'Orbit', wash:WASH.arc,
+    why:'Arc’s orbit icon as an eye with a square pupil. The pupil goes where the agent is paying attention.',
     build(g){ g.appendChild(sv('path', { d:'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z' }));
       return { pu:g.appendChild(sv('rect', { width:11, height:11, rx:3 })), x:new Track(32), y:new Track(32), i:-1 }; },
     draw(o, p){ const P = [[32,32],[24,28],[40,29],[36,36],[26,35]], i = p.w > .5 ? 1 + Math.floor(p.t/1.1) % 4 : 0;
       if (i !== o.i){ o.i = i; o.x.set(P[i][0], S.base, p.t); o.y.set(P[i][1], S.base, p.t); }
       o.pu.setAttribute('x', f1(o.x.at(p.t) - 5.5)); o.pu.setAttribute('y', f1(o.y.at(p.t) - 5.5)); } },
-  { k:'path', name:'Path', wash:WASH.velo,
-    why:'Meridian’s path icon with square nodes. The agent is the lead node and draws its own trail as it moves.',
+  { k:'path', name:'Path', wash:WASH.violet,
+    why:'Arc’s path icon with square nodes. The agent is the lead node and draws its own trail as it moves.',
     build(g){ const pa = g.appendChild(sv('path', { d:'M14 46C20 34 26 30 34 27C40 25 44 20 50 16' }));
       const nd = [[14,46],[34,27]].map(([x, y]) => g.appendChild(sv('rect', { x:x - 3.5, y:y - 3.5, width:7, height:7, rx:2 })));
       const hd = g.appendChild(sv('rect', { width:9, height:9, rx:2.5, class:'amk-fill' })); return { pa, nd, hd, L:0 }; },
     draw(o, p){ if (!o.L) o.L = o.pa.getTotalLength() || 52; const c = (p.t % 2.4)/1.7, q = p.w > .5 ? clamp(prog(c, 0, S.soft)) : 1, s = o.L*q;
       o.pa.style.strokeDasharray = o.L; o.pa.style.strokeDashoffset = f1(o.L - s); const pt = o.pa.getPointAtLength(s);
       o.hd.setAttribute('x', f1(pt.x - 4.5)); o.hd.setAttribute('y', f1(pt.y - 4.5)); o.nd.forEach((n, i) => n.style.opacity = s >= [0, .55][i]*o.L - .5 ? 1 : 0); } },
-  { k:'invite', name:'Invitation', wash:WASH.meridian,
-    why:'The open frame from “AI by invitation” around a small meridian. The frame closes in while the agent works inside what you gave it.',
+  { k:'invite', name:'Invitation', wash:WASH.arc,
+    why:'The open frame from “AI by invitation” around a small arc. The frame closes in while the agent works inside what you gave it.',
     build(g){ return { tl:g.appendChild(sv('path')), br:g.appendChild(sv('path')), ax:g.appendChild(sv('path', { d:'M32 23V41' })), arc:g.appendChild(sv('path')) }; },
     draw(o, p){ const d = 5*p.w; o.tl.setAttribute('d', `M${f1(14+d)} ${f1(27+d)}V${f1(14+d)}H${f1(27+d)}`); o.br.setAttribute('d', `M${f1(50-d)} ${f1(37-d)}V${f1(50-d)}H${f1(37-d)}`);
       o.arc.setAttribute('d', arcD(32, 23, 41, lerp(8, 12*Math.sin(p.th), p.w))); } }
@@ -81,11 +81,11 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
 .amk-tag{font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--line);color:var(--muted)}
 @container (max-width:900px){.amk-grid{grid-template-columns:repeat(3,minmax(0,1fr));overflow-y:auto}.amk-why{display:none}}
 @container (max-width:560px){.amk-grid{grid-template-columns:minmax(0,1fr);gap:6px}.amk-c{flex-direction:row;align-items:center;gap:12px;padding:8px 10px}.amk-big svg{width:48px;height:48px}.amk-mid{display:flex;flex-direction:column;gap:6px;min-width:0}.amk-top p{display:none}.amk-ctx{gap:8px 12px}.amk-ctx .amk-by{display:none}}
-</style><div class="amk-root"><div class="amk-top"><p>Five directions drawn from the Meridian brand package. Agents are square and people are round, so who did what never rests on colour.</p>
+</style><div class="amk-root"><div class="amk-top"><p>Five directions drawn from the Arc brand package. Agents are square and people are round, so who did what never rests on colour.</p>
 <div class="amk-sg" role="group" aria-label="Motion"><button type="button" aria-pressed="true" data-w="0">At rest</button><button type="button" aria-pressed="false" data-w="1">Working</button></div></div>
 <div class="amk-grid"></div>
 <div class="amk-ctx" aria-label="Selected mark in context"><span><span class="amk-pe">MR</span>Maya</span><span class="amk-chip" data-x="chip"></span><span data-x="pin"></span><span class="amk-by" data-x="by"></span></div></div>`,
-  desc:'Five agent marks drawn from Meridian’s own vocabulary instead of a generic sparkle: a turning meridian, Velo’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.',
+  desc:'Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.',
   api:'mark(concept, size, brand)   working.set(0 | 1)   draw({ t, w, th })   ctx.render(selected)',
   init(st){
     const grid = $(st,'.amk-grid'), W = new Track(0), marks = []; let sel = 0, th = 0, lt = null;
@@ -102,7 +102,7 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
       live = [markEl(c, 18, false), markEl(c, 22, false), markEl(c, 18, false)];
       ctx.chip.replaceChildren(live[0].svg, 'Review agent'); live[0].svg.style.color = 'var(--card)';
       ctx.pin.replaceChildren(live[1].svg, 'Left a pin on /pricing');
-      ctx.by.replaceChildren(live[2].svg); const bb = document.createElement('b'); bb.textContent = 'Claude Code'; const ii = document.createElement('i'); ii.textContent = '7c41d2'; const tg = document.createElement('span'); tg.className = 'amk-tag'; tg.textContent = 'Agent';
+      ctx.by.replaceChildren(live[2].svg); const bb = document.createElement('b'); bb.textContent = 'Assistant'; const ii = document.createElement('i'); ii.textContent = '7c41d2'; const tg = document.createElement('span'); tg.className = 'amk-tag'; tg.textContent = 'Agent';
       ctx.by.append(bb, ' ', ii, ' ', tg); };
     $$(st,'.amk-sg button').forEach(b => b.onclick = () => { $$(st,'.amk-sg button').forEach(x => x.setAttribute('aria-pressed', x === b)); W.set(+b.dataset.w, S.soft); });
     grid.addEventListener('keydown', e => { const k = { ArrowRight:1, ArrowDown:1, ArrowLeft:-1, ArrowUp:-1 }[e.key]; if (!k) return; e.preventDefault(); const n = (sel + k + cards.length) % cards.length; pick(n); cards[n].focus(); });
@@ -114,11 +114,11 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
 
 /* ---- the recommended mark through every agent state ---- */
 const STATES = [
-  { k:'idle', l:'Idle', d:'At rest. The meridian holds its angle.' },
-  { k:'think', l:'Thinking', d:'The meridian turns on its axis at a constant, unhurried speed.' },
-  { k:'browse', l:'Browsing', d:'A square marker travels the equator and the meridian leans toward where it is going.' },
-  { k:'comment', l:'Commenting', d:'The tile grows Velo’s comment tail, so the mark becomes its own pin.' },
-  { k:'wait', l:'Waiting for you', d:'The meridian stands upright and the invitation corners open. Nothing moves until you answer.' },
+  { k:'idle', l:'Idle', d:'At rest. The arc holds its angle.' },
+  { k:'think', l:'Thinking', d:'The arc turns on its axis at a constant, unhurried speed.' },
+  { k:'browse', l:'Browsing', d:'A square marker travels the equator and the arc leans toward where it is going.' },
+  { k:'comment', l:'Commenting', d:'The tile grows the review tool’s comment tail, so the mark becomes its own pin.' },
+  { k:'wait', l:'Waiting for you', d:'The arc stands upright and the invitation corners open. Nothing moves until you answer.' },
   { k:'done', l:'Done', d:'The globe folds away and the equator draws a check.' },
   { k:'error', l:'Error', d:'The equator crosses into an X and the line turns danger.' }
 ];
@@ -150,7 +150,7 @@ atom({ id:'agentmarkstates', cat:'Agent identity', name:'Agent mark states', blo
 </style><div class="ams-w"><div class="ams-root"><div class="ams-hero"></div><div class="ams-side"><div class="ams-sl" aria-live="polite"></div><div class="ams-d"></div><div class="ams-sz"></div>
 <div class="ams-row"><span class="ams-pe"><i>MR</i>Maya</span><span class="ams-chip"></span></div></div>
 <div class="ams-pk" role="group" aria-label="Agent state"></div></div></div>`,
-  desc:'The Meridian mark carried through seven agent states. Thinking turns the meridian at a constant speed; Browsing sends a square marker along the equator while the meridian leans toward it; Commenting grows Velo’s comment tail so the mark doubles as a pin; Waiting stands the meridian upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.',
+  desc:'The agent mark carried through seven agent states. Thinking turns the arc at a constant speed; Browsing sends a square marker along the equator while the arc leans toward it; Commenting grows the review tool’s comment tail so the mark doubles as a pin; Waiting stands the arc upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.',
   api:'spin.set(0|1)  a = mix(rest, 24·sin θ, spin)  eq = Σ wₖ·shapeₖ  tail.set(0|1)  corners.set(0|1)  label.swap(state)',
   init(st){
     const hero = $(st,'.ams-hero'), sl = $(st,'.ams-sl'), dd = $(st,'.ams-d'), pk = $(st,'.ams-pk'), chip = $(st,'.ams-chip');
@@ -158,7 +158,7 @@ atom({ id:'agentmarkstates', cat:'Agent identity', name:'Agent mark states', blo
     const mk = (size, brand) => {
       const svg = sv('svg', { viewBox:'0 0 64 64', width:size, height:size, 'aria-hidden':'true', style:'overflow:visible' }); const sw = brand ? 1.7 : Math.max(1.7, 1.55*64/size);
       const tl = brand ? sv('path', { d:'M10 54V74L26 58Z', fill:PAPER }) : sv('path', { d:`M${f1(4+sw/2)} 54V72L20 60`, fill:'none' });
-      if (brand){ svg.appendChild(tl); svg.appendChild(sv('rect', { width:64, height:64, rx:16, fill:PAPER })); svg.appendChild(sv('path', { d:WASHP, fill:WASH.meridian, opacity:.65 })); }
+      if (brand){ svg.appendChild(tl); svg.appendChild(sv('rect', { width:64, height:64, rx:16, fill:PAPER })); svg.appendChild(sv('path', { d:WASHP, fill:WASH.arc, opacity:.65 })); }
       const g = svg.appendChild(sv('g', { fill:'none', 'stroke-width':f1(sw), 'stroke-linecap':'round', 'stroke-linejoin':'round' }));
       if (!brand){ g.appendChild(tl); g.appendChild(sv('rect', { x:sw/2 + 3, y:sw/2 + 3, width:58 - sw, height:58 - sw, rx:15 })); }
       const o = { svg, g, tl, brand, ax:g.appendChild(sv('path', { d:'M32 15V49' })), arc:g.appendChild(sv('path')), eq:g.appendChild(sv('path')),

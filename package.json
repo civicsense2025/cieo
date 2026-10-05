@@ -26,7 +26,8 @@
       "default": "./dist/react/index.js"
     },
     "./tokens.css": "./tokens/tokens.css",
-    "./tokens.json": "./tokens/tokens.json"
+    "./tokens.json": "./tokens/tokens.json",
+    "./atoms/*": "./atoms/web/*"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -43,7 +44,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.json",
     "test": "npm run build && node --test test/*.test.mjs",
-    "check": "npm run test && git diff --exit-code -- dist",
+    "check": "bash scripts/check-brand.sh && npm run test && git diff --exit-code -- dist",
     "test:browser": "python3 test/browser/smoke.py"
   }
 }

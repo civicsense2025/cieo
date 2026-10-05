@@ -19,7 +19,7 @@ public struct OneQuestionAtATimeAtom: MotionAtomView {
         AtomStage {
             VStack(spacing: 0) {
                 ZStack(alignment: .leading) {
-                    pane.id(step).transition(reduce ? .identity : .motionSwap(drift: 24))
+                    pane.id(step).motionTransition(.swap(drift: 24))
                 }
                 .frame(maxWidth: 560).frame(height: 230)
                 Capsule().fill(Color.primary.opacity(0.08)).frame(height: 3)

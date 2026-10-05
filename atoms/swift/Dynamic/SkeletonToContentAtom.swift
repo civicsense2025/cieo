@@ -18,8 +18,8 @@ public struct SkeletonToContentAtom: MotionAtomView {
                     VStack(spacing: 10) {
                         ForEach(posts.indices, id: \.self) { i in
                             ZStack {
-                                if loaded[i] { content(i).transition(reduce ? .identity : .motionSwap()) }
-                                else { placeholder.opacity(pulse / 0.8).transition(reduce ? .identity : .motionSwap()) }
+                                if loaded[i] { content(i).motionTransition(.swap()) }
+                                else { placeholder.opacity(pulse / 0.8).motionTransition(.swap()) }
                             }
                             .frame(height: 64).frame(maxWidth: .infinity)
                             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))

@@ -18,7 +18,7 @@ public struct DrillDownMenuAtom: MotionAtomView {
         AtomStage(hint: "Tap a row with a chevron; drag from the left edge to go back") {
             VStack(spacing: 8) {
                 Button { withMotion(.base, reduceMotion: reduce) { open.toggle() } } label: { Label("Menu", systemImage: "line.3.horizontal") }
-                if open { panel.transition(.motionPresence) }
+                if open { panel.motionTransition(.presence) }
                 Spacer(minLength: 0)
             }
         }

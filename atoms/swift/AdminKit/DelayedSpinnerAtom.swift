@@ -18,7 +18,7 @@ public struct DelayedSpinnerAtom: MotionAtomView {
         AtomStage(hint: "Fast results never show the spinner") {
             VStack(spacing: 12) {
                 ZStack {
-                    ZStack { VStack(alignment: .leading, spacing: 6) { ForEach(lists[list], id: \.self) { Text($0).font(.footnote) } }.frame(maxWidth: .infinity, alignment: .leading).padding(12).id(list).transition(reduce ? .identity : .motionSwap()) }
+                    ZStack { VStack(alignment: .leading, spacing: 6) { ForEach(lists[list], id: \.self) { Text($0).font(.footnote) } }.frame(maxWidth: .infinity, alignment: .leading).padding(12).id(list).motionTransition(.swap()) }
                         .animation(reduce ? nil : .motion(.base), value: list)
                     if spinner { ProgressView().transition(reduce ? .identity : .modifier(active: Veil(), identity: Veil(o: 1, blur: 0))) }
                 }.frame(width: 300, height: 100).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))

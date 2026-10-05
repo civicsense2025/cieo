@@ -577,7 +577,7 @@ ${faux('fz6-', { brand:'Alder', nav:['Product', 'Pricing', 'Customers'], kicker:
   </div>
   <div><button type="button" class="fz6-tg" aria-expanded="false" aria-controls="fz6-more"><span class="fz6-tl"></span><small>Integrations, comparisons and offices</small><span class="fz6-ch">${ic(I.chev, 16, 2)}</span></button>
     <div class="fz6-mb" id="fz6-more" role="group" aria-label="More links"><div class="fz6-in">
-      <div class="fz6-g"><h4 class="fz6-h">Integrations</h4><ul class="fz6-u two">${['Slack', 'GitHub', 'GitLab', 'Figma', 'Google Calendar', 'Google Drive', 'Zoom', 'Zapier', 'Notion import', 'Jira import', 'Microsoft Teams', 'Webhooks'].map(l => `<li><a class="fz6-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>
+      <div class="fz6-g"><h4 class="fz6-h">Integrations</h4><ul class="fz6-u two">${['Slack', 'Source control', 'GitLab', 'Figma', 'Google Calendar', 'Google Drive', 'Zoom', 'Zapier', 'Notion import', 'Jira import', 'Microsoft Teams', 'Webhooks'].map(l => `<li><a class="fz6-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>
       <div class="fz6-g"><h4 class="fz6-h">Compare</h4><ul class="fz6-u">${['Alder vs spreadsheets', 'Alder vs Trello', 'Alder vs Asana', 'Alder vs Jira', 'Switching guide', 'Migration service'].map(l => `<li><a class="fz6-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>
       <div class="fz6-g"><h4 class="fz6-h">Offices</h4><ul class="fz6-u">${['Copenhagen', 'Toronto', 'Singapore', 'Remote handbook', 'Visit the studio', 'Press enquiries'].map(l => `<li><a class="fz6-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>
     </div></div></div>
@@ -819,7 +819,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
     <nav class="fz8-cs" aria-label="Footer">${[['Product', ['Funnels', 'Session replays', 'Experiments', 'Warehouse sync', 'Pricing']], ['Resources', ['Documentation', 'Guides', 'Changelog', 'Research', 'Community']], ['Company', ['About', 'Careers', 'Press', 'Customers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Data processing', 'Subprocessors', 'Security']]].map(([h, ls], i) => `<div class="fz8-c"><h4 class="fz8-h" data-i="h${i}">${h}</h4><ul class="fz8-u">${ls.map(l => `<li><a class="fz8-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>`).join('')}</nav>
   </div>
   <div class="fz8-rw">
-    <div class="fz8-sl">${['LinkedIn', 'YouTube', 'GitHub', 'Mastodon'].map(n => `<a class="fz8-pl" href="#"><span>${n}</span>${UPR}</a>`).join('')}</div>
+    <div class="fz8-sl">${['LinkedIn', 'YouTube', 'Source control', 'Mastodon'].map(n => `<a class="fz8-pl" href="#"><span>${n}</span>${UPR}</a>`).join('')}</div>
     <div class="fz8-ss"><span class="fz8-st"><b></b><span data-i="stt">All systems operational</span></span><span class="fz8-up" role="img" aria-label="Uptime over the last 30 days: 28 days without incidents, 2 days with minor incidents"></span>
       <div class="fz8-lw"><button type="button" class="fz8-lg" aria-haspopup="listbox" aria-expanded="false" aria-controls="fz8-lb" aria-label="Language">${ic('<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9c-2.5-2.7-3.8-5.7-3.8-9S9.5 5.7 12 3z"/>', 15, 1.8)}<span class="lt" data-i="lang">English</span>${ic(I.chev, 14, 2)}</button>
         <ul class="fz8-lb" id="fz8-lb" role="listbox" aria-label="Choose a language" tabindex="-1"></ul></div></div>

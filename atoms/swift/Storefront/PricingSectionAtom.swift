@@ -26,7 +26,7 @@ public struct PricingSectionAtom: MotionAtomView {
                         } }
                     }
                     .coordinateSpace(name: "price-seg").onPreferenceChange(FramePreferenceKey.self) { frames = $0 }.background(Capsule().fill(.quaternary.opacity(0.6))).fixedSize()
-                    if pill { Text("Save 20%").font(.caption.weight(.semibold)).foregroundStyle(.green).padding(.horizontal, 8).padding(.vertical, 3).background(Capsule().fill(Color.green.opacity(0.18))).transition(reduce ? .identity : .motionPresence) }
+                    if pill { Text("Save 20%").font(.caption.weight(.semibold)).foregroundStyle(.green).padding(.horizontal, 8).padding(.vertical, 3).background(Capsule().fill(Color.green.opacity(0.18))).motionTransition(.presence) }
                 }
                 HStack(spacing: 10) { ForEach(plans.indices, id: \.self) { card($0) } }
             }

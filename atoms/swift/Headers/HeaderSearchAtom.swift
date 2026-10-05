@@ -38,7 +38,7 @@ public struct HeaderSearchAtom: MotionAtomView {
                     }
                     .frame(width: 230).background(.background, in: RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
                     .animation(reduce ? nil : .motion(.soft), value: rows)
-                    .transition(.motionPresence)
+                    .motionTransition(.presence)
                 }
                 Spacer(minLength: 0)
             }

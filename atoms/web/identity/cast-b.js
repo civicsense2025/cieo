@@ -1,8 +1,8 @@
 /* ---- agent cast B: twelve role characters built on AgentRig (Wave 6) ----
    Summarizer, Data analyst, Scheduler, Support, Designer, Developer, QA tester, Content migrator,
    Moderator, Onboarding guide, Release manager, Archivist. Every one is the same species: the shared rig,
-   the same square body and meridian-globe antenna. What changes is a signature prop, a signature idle
-   habit and a default mood. Props are drawn in the Meridian hand (paper, one pale wash, ink line, round
+   the same square body and globe antenna. What changes is a signature prop, a signature idle
+   habit and a default mood. Props are drawn in the house hand (paper, one pale wash, ink line, round
    caps) and carry physics: held things trail the body through a world-space spring (follow-through),
    hanging things swing on a lagging spring, stacks cascade, and everything settles without bouncing.
 
@@ -50,7 +50,7 @@ const clipHalf = (ps, c, n) => { const out = [], seg = [];
    k ink line · pk paper shape with ink outline · f ink fill · w wash fill · s free line (ink on light, paper on dark,
    like the antenna stalk; for anything drawn off the body) · wk wash fill with ink outline */
 const CLS = { k:'arg-k', pk:'arg-p arg-k', f:'arg-f', w:'arg-w', s:'arg-sk', wk:'ckb-wk' };
-const WK = { check:'blue', content:'velo', ops:'mint', people:'peach' };
+const WK = { check:'blue', content:'violet', ops:'mint', people:'peach' };
 const WC = R.WASH;
 let cssOn = false;
 const injectCss = () => { if (cssOn || typeof document === 'undefined') return; cssOn = true; const s = document.createElement('style');
@@ -466,7 +466,7 @@ const roleSvg = (r, o = {}) => {
   if (back.some(Boolean)) svg = svg.replace('<defs>', grp('prop-back', back) + '<defs>');
   svg = svg.replace('</svg>', grp('prop', front) + '</svg>');
   svg = svg.replace(/(<title id="[^"]*">)[^<]*(<\/title>)/, `$1${esc(r.name)} agent$2`)
-    .replace(/(<desc id="[^"]*">)[^<]*(<\/desc>)/, `$1${esc(`A square paper agent with a meridian globe on its antenna, ${r.prop}. ${r.mean}`)}$2`);
+    .replace(/(<desc id="[^"]*">)[^<]*(<\/desc>)/, `$1${esc(`A square paper agent with a globe on its antenna, ${r.prop}. ${r.mean}`)}$2`);
   return svg; };
 
 /* ---------- registry for later lanes ---------- */
@@ -523,7 +523,7 @@ atom({ id:'agentcastb', cat:'Agent identity', name:'Agent cast: operate and peop
       b.setAttribute('aria-label', `${r.name}. ${r.mean}`); b.innerHTML = `<span>${r.name}</span>`; b.onclick = () => focus(i); ln.appendChild(b); return b; });
     ln.appendChild(spR);
     // copy: one layer per role plus an intro layer, swapped exit-then-enter
-    const L = [...ROLES.map(r => [r.name, r.mean, r.persona, r.sig]), ['Twelve agents, one species', 'Each role has its own prop, idle habit and mood.', 'They all share the square body and the meridian antenna.', '']];
+    const L = [...ROLES.map(r => [r.name, r.mean, r.persona, r.sig]), ['Twelve agents, one species', 'Each role has its own prop, idle habit and mood.', 'They all share the square body and the arc antenna.', '']];
     const lays = ['.ckb-nm', '.ckb-jb', '.ckb-ps', '.ckb-sg'].map(q => $(st, q));
     const layers = L.map(row => row.map((txt, j) => { const s = document.createElement('span'); s.textContent = txt; lays[j].appendChild(s); return s; }));
     const sw = new Swap(L.length - 1);

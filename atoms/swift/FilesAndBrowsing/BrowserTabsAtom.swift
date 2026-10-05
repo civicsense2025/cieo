@@ -36,7 +36,7 @@ public struct BrowserTabsAtom: MotionAtomView {
                 .background(.quaternary, in: UnevenRoundedRectangle(topLeadingRadius: 12, topTrailingRadius: 12))
                 ZStack(alignment: .topLeading) {
                     if let t = tabs.first(where: { $0.id == active }) {
-                        Text(t.name).font(.headline).padding(16).id(t.id).transition(reduce ? .identity : .motionSwap())
+                        Text(t.name).font(.headline).padding(16).id(t.id).motionTransition(.swap())
                     }
                 }
                 .animation(reduce ? nil : .motion(.base), value: active)

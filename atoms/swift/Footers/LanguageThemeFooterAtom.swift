@@ -76,7 +76,7 @@ public struct LanguageThemeFooterAtom: MotionAtomView {
                 .background(.background, in: RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
                 .foregroundStyle(.primary)
                 .alignmentGuide(.top) { $0[.bottom] + 6 }
-                .transition(.motionPresence)
+                .motionTransition(.presence)
             }
         }
     }

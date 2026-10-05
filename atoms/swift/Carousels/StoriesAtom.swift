@@ -27,7 +27,7 @@ public struct StoriesAtom: MotionAtomView {
                             phPhoto(index, CGSize(width: g.size.width * 1.12, height: g.size.height * 1.12))
                                 .offset(x: reduce ? 0 : CGFloat(t - 0.5) * 14)
                                 .frame(width: g.size.width, height: g.size.height).clipped()
-                                .id(index).transition(.motionSwap(drift: 0))
+                                .id(index).motionTransition(.swap(drift: 0))
                         }
                         VStack {
                             HStack(spacing: 4) {

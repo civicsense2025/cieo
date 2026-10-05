@@ -38,7 +38,7 @@ public struct FunnelReportAtom: MotionAtomView {
                     }
                     if let h = hot {
                         Text("\(stages[h]): \(Int(values[h]).formatted())").font(.caption2).padding(6).background(.background, in: RoundedRectangle(cornerRadius: 6)).shadow(radius: 4)
-                            .id(h).transition(reduce ? .identity : .motionSwap(drift: 2)).offset(x: CGFloat(h) * 70 - 4, y: 17 + 130 - 130 * values[h] / top - 10)
+                            .id(h).motionTransition(.swap(drift: 2)).offset(x: CGFloat(h) * 70 - 4, y: 17 + 130 - 130 * values[h] / top - 10)
                     }
                 }.animation(reduce ? nil : .motion(.snap), value: hot)
             }.frame(width: 340)

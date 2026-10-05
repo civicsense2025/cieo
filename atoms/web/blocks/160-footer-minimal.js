@@ -180,7 +180,7 @@ atom({ id:'footer-centered', cat:CAT, name:'Centered footer with social icons', 
 .${P2}bm p{margin:0;font-size:12.5px;color:var(--faint)}`,
     ft:`<div class="${P2}ft" role="contentinfo"><div class="${P2}in"><a href="#" class="${P2}brand" aria-label="Northlight home">${logo()}Northlight</a><p class="${P2}tag">Publishing tools for small newsrooms and the people who read them.</p>
 <nav aria-label="Footer"><ul class="${P2}ls">${lis(P2, ['Product', 'Pricing', 'Docs', 'Changelog', 'About', 'Contact'])}</ul></nav>
-<ul class="${P2}so" aria-label="Northlight on social media"><i class="${P2}pl"></i>${[['GitHub', K.gh], ['LinkedIn', K.li], ['YouTube', K.yt], ['RSS feed', K.rss]].map(([n, d]) => `<li><a href="#" aria-label="${n}">${ic(d, 18, 1.8)}</a></li>`).join('')}</ul>
+<ul class="${P2}so" aria-label="Northlight on social media"><i class="${P2}pl"></i>${[['Source control', K.gh], ['LinkedIn', K.li], ['YouTube', K.yt], ['RSS feed', K.rss]].map(([n, d]) => `<li><a href="#" aria-label="${n}">${ic(d, 18, 1.8)}</a></li>`).join('')}</ul>
 <div class="${P2}bm"><p>© 2026 Northlight Studio, Inc. · Portland, Oregon</p>${btt(P2)}</div></div></div>` }),
   desc:'Links draw their underline on hover. The social icons share one plate: entering the row fades it in under the nearest icon, moving along the row stretches it with the leading edge first and the trailing edge 60ms behind, and each glyph inks up as the plate passes under it. Back to top springs the page home.',
   api:'plate.go(l, r)   plate.o.set(hovering ? 1 : 0)   icon.color = mix(overlap(plate, icon))',

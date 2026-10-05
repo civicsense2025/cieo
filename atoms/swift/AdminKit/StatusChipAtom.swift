@@ -14,7 +14,7 @@ public struct StatusChipAtom: MotionAtomView {
         AtomStage(hint: "Step through the states") {
             VStack(spacing: 16) {
                 HStack(spacing: 8) {
-                    if cur == 3 { Button("Retry", action: retry).buttonStyle(.bordered).controlSize(.small).transition(reduce ? .identity : .motionPresence) }
+                    if cur == 3 { Button("Retry", action: retry).buttonStyle(.bordered).controlSize(.small).motionTransition(.presence) }
                     HStack(spacing: 6) {
                         Circle().fill(states[cur].1).frame(width: 7, height: 7)
                         SwapText(states[cur].0).font(.footnote.weight(.medium)).frame(maxWidth: .infinity, alignment: .leading)

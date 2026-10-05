@@ -19,7 +19,7 @@ public struct ToolPermissionsAtom: MotionAtomView {
             AgCard {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack {
-                        Text("GitHub tools").font(.headline)
+                        Text("Source control tools").font(.headline)
                         Spacer()
                         Text("\(tools.filter(\.on).count) of \(tools.count) enabled").font(.caption).foregroundStyle(.secondary).monospacedDigit()
                     }
@@ -36,7 +36,7 @@ public struct ToolPermissionsAtom: MotionAtomView {
                                     Spacer()
                                     Toggle(t.name, isOn: bind(t.id)).labelsHidden()
                                 }
-                                AgReveal(open: t.on && t.name == "delete_branch") { Text("This tool deletes data. Claude will ask before using it.").font(.caption).foregroundStyle(.orange) }
+                                AgReveal(open: t.on && t.name == "delete_branch") { Text("This tool deletes data. Assistant will ask before using it.").font(.caption).foregroundStyle(.orange) }
                             }.padding(.vertical, 2)
                         }
                     }

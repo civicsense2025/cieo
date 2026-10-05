@@ -41,7 +41,7 @@ public struct OfflineBannerAtom: MotionAtomView {
                 case .sync: HStack(spacing: 8) { Spin(); Text("Reconnecting and syncing 3 changes…") }
                 case .on: Label("Back online. All changes synced.", systemImage: "checkmark").foregroundStyle(.green).fontWeight(.medium)
                 }
-            }.id(msg).transition(reduce ? .identity : .motionSwap())
+            }.id(msg).motionTransition(.swap())
         }
         .font(.footnote).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading).padding(.horizontal, 14)
         .background(msg == .on ? Color.green.opacity(0.18) : Color.orange.opacity(0.22))

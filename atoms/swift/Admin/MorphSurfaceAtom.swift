@@ -23,7 +23,7 @@ public struct MorphSurfaceAtom: MotionAtomView {
         AtomStage(hint: "Click the button") {
             VStack(spacing: 12) {
                 Button(action: start) {
-                    content.id(phase).transition(reduce ? .identity : .motionSwap())
+                    content.id(phase).motionTransition(.swap())
                         .frame(width: phase.size.width, height: phase.size.height)
                         .foregroundStyle(phase == .check ? AnyShapeStyle(Color.white) : filled ? AnyShapeStyle(.background) : AnyShapeStyle(.primary))
                         .background(phase == .check ? AnyShapeStyle(Color.green) : filled ? AnyShapeStyle(.primary) : AnyShapeStyle(.regularMaterial),

@@ -43,8 +43,8 @@ public struct UndoSendAtom: MotionAtomView {
                 }
                 .frame(width: 20, height: 20).accessibilityHidden(true)
                 ZStack(alignment: .leading) {
-                    if sent { Label("Sent to Maya", systemImage: "checkmark").foregroundStyle(.green).fontWeight(.medium).transition(reduce ? .identity : .motionSwap()) }
-                    else { Text("Sending in \(max(1, Int(left.rounded(.up)))) s").transition(reduce ? .identity : .motionSwap()) }
+                    if sent { Label("Sent to Maya", systemImage: "checkmark").foregroundStyle(.green).fontWeight(.medium).motionTransition(.swap()) }
+                    else { Text("Sending in \(max(1, Int(left.rounded(.up)))) s").motionTransition(.swap()) }
                 }
                 .font(.caption).frame(width: 150, alignment: .leading).animation(reduce ? nil : .motion(.base), value: sent)
                 if !sent { Button("Undo", action: undo).buttonStyle(.bordered).controlSize(.small) }

@@ -22,7 +22,7 @@ public struct OAuthGrantAtom: MotionAtomView {
                         Text("N").frame(width: 30, height: 30).background(.quaternary, in: RoundedRectangle(cornerRadius: 8))
                     }
                     .animation(reduce ? nil : .motion(.base), value: result).accessibilityHidden(true)
-                    SwapText(result == .allowed ? "Claude is connected to Northwind" : result == .denied ? "Request denied" : "Claude wants to connect to Northwind").font(.headline)
+                    SwapText(result == .allowed ? "Assistant is connected to Northwind" : result == .denied ? "Request denied" : "Assistant wants to connect to Northwind").font(.headline)
                     ForEach(names.indices, id: \.self) { i in
                         AgReveal(open: result == .asking || scopes[i]) {
                             VStack(alignment: .leading, spacing: 2) {

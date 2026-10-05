@@ -19,8 +19,8 @@ public struct AddToCartAtom: MotionAtomView {
                     HStack { Text("Canvas tote").font(.subheadline.weight(.semibold)); Spacer(); Text("$32").font(.subheadline).foregroundStyle(.secondary) }
                     Button(action: add) {
                         ZStack {
-                            if added { Label("Added", systemImage: "checkmark").transition(reduce ? .identity : .motionSwap()) }
-                            else { Text("Add to cart").transition(reduce ? .identity : .motionSwap()) }
+                            if added { Label("Added", systemImage: "checkmark").motionTransition(.swap()) }
+                            else { Text("Add to cart").motionTransition(.swap()) }
                         }
                         .fontWeight(.medium).foregroundStyle(added ? AnyShapeStyle(Color.white) : AnyShapeStyle(.background))
                         .frame(maxWidth: .infinity).frame(height: 38)

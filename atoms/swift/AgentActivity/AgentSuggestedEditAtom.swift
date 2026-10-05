@@ -28,7 +28,7 @@ public struct AgentSuggestedEditAtom: MotionAtomView {
                 }
                 .frame(width: 150, alignment: .leading).padding(12)
                 .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
-                if shown { card.transition(reduce ? .identity : .motionPresence) }
+                if shown { card.motionTransition(.presence) }
             }
             .animation(reduce ? nil : .motion(.base), value: shown)
         }
@@ -43,7 +43,7 @@ public struct AgentSuggestedEditAtom: MotionAtomView {
 
     private var card: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 4) { AgentMark(size: 16); Text("Claude suggests").font(.caption.weight(.semibold)) }
+            HStack(spacing: 4) { AgentMark(size: 16); Text("Assistant suggests").font(.caption.weight(.semibold)) }
             HStack(spacing: 4) {
                 Text("Create").font(.caption)
                 Text("workspace").font(.caption).padding(.horizontal, 3).background(Color.red.opacity(0.15), in: RoundedRectangle(cornerRadius: 3))

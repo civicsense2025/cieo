@@ -24,7 +24,7 @@ public struct MenuSearchAtom: MotionAtomView {
                         .buttonStyle(.plain).accessibilityLabel(open ? "Close search" : "Open search")
                 }
                 .padding(.horizontal, 10).padding(.vertical, 4)
-                if open { panel.transition(.motionPresence) }
+                if open { panel.motionTransition(.presence) }
                 Spacer(minLength: 0)
             }
             .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 10))

@@ -4,6 +4,7 @@ import MotionKit
 public struct PeekShelfAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-peek", category: "Carousels", name: "Peek and pull shelf",
         summary: "Cards align to the left margin and the next one peeks in, so a phone screen always shows there is more. Dragging past the last card rubber-bands into a ring that fills with the stretch; past the mark the label swaps to Release, and letting go opens the full list as a sheet while the shelf settles back. Inspired by the App Store and Airbnb shelves; changed: the “see all” target lives inside the overscroll instead of a separate button. Use when a horizontal shelf sits inside a vertically scrolling phone screen.")
+    @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var showAll = false
     public init() {}
     private let count = 5
@@ -42,10 +43,10 @@ public struct PeekShelfAtom: MotionAtomView {
                     VStack(spacing: 8) {
                         Text("All \(count) photos").font(.subheadline.weight(.semibold))
                         HStack { ForEach(0..<count, id: \.self) { phPhoto($0, CGSize(width: 40, height: 40)).clipShape(RoundedRectangle(cornerRadius: 6)) } }
-                        Button("Done") { withAnimation(.motion(.base)) { showAll = false } }.buttonStyle(.bordered).controlSize(.small)
+                        Button("Done") { withMotion(.base, reduceMotion: reduce) { showAll = false } }.buttonStyle(.bordered).controlSize(.small)
                     }
                     .padding(14).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
-                    .transition(.motionPresence)
+                    .motionTransition(.presence)
                 }
             }
             .motion(.base, value: showAll)

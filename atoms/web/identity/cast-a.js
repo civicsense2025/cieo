@@ -1,6 +1,6 @@
 /* ---- agent cast A: twelve role characters on the shared AgentRig (Wave 6) ----
-   Every character is the same species: the AgentRig square body, face and meridian-globe antenna.
-   What makes each one itself is a signature prop drawn in the Meridian hand (paper fill, ink line,
+   Every character is the same species: the AgentRig square body, face and globe antenna.
+   What makes each one itself is a signature prop drawn in the house hand (paper fill, ink line,
    one pale wash), a signature action, an idle habit and a default mood.
    Props use the rig's prop contract { anchor, build(g, ch), draw(state, ctx) } on the 'front' anchor,
    so they inherit the body's lean and squash; inside, each one adds its own physics in world space:
@@ -27,7 +27,7 @@ const swFor = px => cl(1 + px*.0068, 1.15, 2.5);
 // neutral face parameters (mirrors the rig's defaults) for the static poses
 const D0 = { eo:1, es:1, sq:0, lt:0, ea:0, bv:0, by:0, ba:0, bb:0, mc:.14, mw:.62, mo:0, mr:0, mv:0, mk:0, mx:0,
   gx:0, gy:0, gw:0, fx:0, fy:0, ft:0, bs:0, bl:0, lean:0, ad:0, ap:0, spin:0, sway:0, br:1, bk:1, gl:1 };
-const WASHES = { blue:'#dce8fb', velo:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0', warm:'#f1e6d4' };
+const WASHES = { blue:'#dce8fb', violet:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0', warm:'#f1e6d4' };
 
 /* ---------- drawing: elements come from DOC, which is the page or a tiny string shim for the files ---------- */
 let DOC = typeof document !== 'undefined' ? document : null;
@@ -164,7 +164,7 @@ const PENCIL = { dur:4.4,
   } };
 
 /* Brand checker: a swatch fan in the four role washes. Fans it out and holds one swatch against its own color. */
-const SW_C = [WASHES.velo, WASHES.blue, WASHES.mint, WASHES.peach], SW_R = [-16, -4, 8, 20], SW_O = [-46, -16, 14, 44];
+const SW_C = [WASHES.violet, WASHES.blue, WASHES.mint, WASHES.peach], SW_R = [-16, -4, 8, 20], SW_O = [-46, -16, 14, 44];
 const FAN = { dur:3.9,
   cues:[[0, c => c.react('curious', .8)], [.85, c => c.react('focused', 1.1)], [1.95, c => { c.react('happy', 1.2); c.impulse(0, 1.4); }]],
   build(g, ch){ const S = base(g, ch), r = S.r; S.lh = handEl(r);
@@ -401,7 +401,7 @@ const CAST = [
 ];
 // every prop rides the body's own frame; the follow-through is the prop's own physics, not the rig's side lag
 CAST.forEach(c => { c.P.anchor = 'front'; });
-const washOf = c => c.grp === 'check' ? WASHES.blue : WASHES.velo;
+const washOf = c => c.grp === 'check' ? WASHES.blue : WASHES.violet;
 const play = (ch, t) => { const S = ch.propS, p = ch.prop; if (!S || !p) return; S.a0 = t; S.cues = p.cues.map(q => [q[0], q[1]]); S.dur = p.dur; };
 const busy = (ch, t) => { const S = ch.propS; return !!S && S.a0 != null && t - S.a0 < S.dur; };
 
@@ -435,7 +435,7 @@ const svgFor = (slug, o = {}) => {
   const tf = `matrix(${n2(u)} 0 0 ${n2(u)} ${n2(X)} ${n2(Y - 9*u)})`, vx = X - 54*u, vy = Y - 86*u, vw = 108*u, vh = 92*u;
   s = s.replace(/viewBox="[^"]*" width="\d+" height="\d+"/, `viewBox="${n2(vx)} ${n2(vy)} ${n2(vw)} ${n2(vh)}" width="${Math.round(vw)}" height="${Math.round(vh)}"`);
   s = s.replace(/<title id="([^"]+)">[^<]*<\/title>/, (m, i) => `<title id="${i}">${escA(c.name)} agent</title>`);
-  s = s.replace(/<desc id="([^"]+)">[^<]*<\/desc>/, (m, i) => `<desc id="${i}">${escA(`A square paper agent with a meridian globe on its antenna, holding ${c.prop.toLowerCase()}. ${c.job}`)}</desc>`);
+  s = s.replace(/<desc id="([^"]+)">[^<]*<\/desc>/, (m, i) => `<desc id="${i}">${escA(`A square paper agent with a globe on its antenna, holding ${c.prop.toLowerCase()}. ${c.job}`)}</desc>`);
   s = s.replace('.arg-sk{stroke:#ece6db}', '.arg-sk,.cka-sol,.cka-halo{stroke:#ece6db}');
   return s.replace(/<\/svg>\s*$/, `<g id="prop" transform="${tf}">${g.kids.map(ser).join('')}</g>\n</svg>\n`);
 };
@@ -443,7 +443,7 @@ const svgFor = (slug, o = {}) => {
 const AC = globalThis.AgentCast && typeof globalThis.AgentCast === 'object' ? globalThis.AgentCast : (globalThis.AgentCast = {});
 AC.a = { CAST, play, busy, svg:svgFor, washOf };
 AC.roles = AC.roles || {};
-CAST.forEach(c => { AC.roles[c.k] = { name:c.name, mean:c.job, persona:c.persona, sig:c.sig, expression:c.mood, action:c.sig, wash:c.grp === 'check' ? 'blue' : 'velo', droop:c.droop,
+CAST.forEach(c => { AC.roles[c.k] = { name:c.name, mean:c.job, persona:c.persona, sig:c.sig, expression:c.mood, action:c.sig, wash:c.grp === 'check' ? 'blue' : 'violet', droop:c.droop,
   prop:() => c.P, act:ch => play(ch, ch.t), svg:o => svgFor(c.k, o) }; });
 
 if (typeof atom !== 'function' || typeof document === 'undefined') return;
@@ -498,7 +498,7 @@ atom({ id:'agentcasta', cat:'Agent identity', name:'Agent cast: checkers and wri
 <div><p class="cka-h" id="agentcasta-ex">Expression</p><div class="cka-ex" role="group" aria-labelledby="agentcasta-ex"></div></div></div>
 <div class="cka-strip" role="group" aria-label="Agent lineup"><div class="cka-row"><svg aria-hidden="true"><path class="cka-fl"/></svg></div></div>
 </div><svg class="cka-ov" aria-hidden="true"><path class="cka-fl"/></svg><button type="button" class="cka-hit"></button><p class="cka-sr" aria-live="polite"></p></div>`,
-  desc:'Twelve role agents stand in a lineup, all the same species (one square body, one face, one meridian antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.',
+  desc:'Twelve role agents stand in a lineup, all the same species (one square body, one face, one arc antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.',
   api:'ch = AgentRig.create(svg, { prop:AgentCast.roles[k].prop() })   AgentCast.roles[k].act(ch)   choose(i): others.impulse(away).look(i) → old.throw(→slot) → land → new.throw(→stage, size↑) → land → play',
   init(st){
     const root = $(st,'.cka-root'), spotEl = $(st,'.cka-spot'), strip = $(st,'.cka-strip'), row = $(st,'.cka-row'), ssv = $(row,'svg'), sfl = $(ssv,'.cka-fl');

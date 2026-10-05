@@ -22,7 +22,7 @@ public struct AgentAccessAtom: MotionAtomView {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Image(systemName: "square.fill").accessibilityHidden(true)
-                        Text("Claude").font(.headline); Spacer()
+                        Text("Assistant").font(.headline); Spacer()
                         AgChip(text: risky ? "Can publish or delete" : "Read and edit", tone: risky ? .warning : .neutral)
                     }
                     Grid(horizontalSpacing: 10, verticalSpacing: 6) {

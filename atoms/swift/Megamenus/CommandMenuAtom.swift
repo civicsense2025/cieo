@@ -34,7 +34,7 @@ public struct CommandMenuAtom: MotionAtomView {
                         .font(.caption).buttonStyle(.plain).foregroundStyle(.secondary)
                 }
                 .padding(.horizontal, 8)
-                if open { palette.transition(.motionPresence) }
+                if open { palette.motionTransition(.presence) }
                 Spacer(minLength: 0)
             }
             .background(.quaternary.opacity(0.35), in: RoundedRectangle(cornerRadius: 10))

@@ -1,7 +1,7 @@
 
 
 /* ---------- Agent activity (organisms): an agent browses a site while a human watches ---------- */
-/* Grounded in Velo's local review workspace: scoped agents with their own browsers, "Follow screen" / "My view",
+/* Grounded in the review tool's local review workspace: scoped agents with their own browsers, "Follow screen" / "My view",
    Browse and Comment modes, inspect_elements, masked private regions, subagents, and presence awareness
    (activity: selecting / commenting / idle, element-relative cursors, route + viewport). */
 (() => {
@@ -86,7 +86,7 @@ const gCur = (kind, name) => {
       ch.style.transform = `translate(${dx.toFixed(1)}px,${dy}px)`; } };
 };
 
-/* ---- the demo site every atom here reviews (copy mirrors Velo's own demo-site: Demo Shop, Pricing, Notes) ---- */
+/* ---- the demo site every atom here reviews (copy mirrors the review tool's own demo-site: Demo Shop, Pricing, Notes) ---- */
 const pgCss = p => `
 .${p}pg{position:absolute;inset:0;overflow:hidden;background:var(--card);color:var(--ink);font-size:13px;line-height:1.45;container-type:inline-size;display:flex;flex-direction:column}
 .${p}nv{flex:none;display:flex;align-items:center;gap:2px;height:44px;padding:0 10px 0 16px;border-bottom:1px solid var(--line-soft)}
@@ -150,7 +150,7 @@ const AG = 'Review agent';
 /* ================================================================ 1. Agent cursor */
 const AC_ORD = ['pricing', 'start', 'pins', 'seepricing', 'privacy'];
 const AC_FIND = { pricing:'Current page is not marked with aria-current.', start:'Button has no visible focus ring.', pins:'Card text is 12.5px, smaller than body text.', seepricing:'Two buttons sit 8px apart; target gap is tight.', privacy:'Footer links are 12.5px with a 14px gap.' };
-atom({ id:'agentcursor', cat:'Agent activity', name:'Agent cursor', block:'Velo agent browser · live agent view (cursor, Browse / Comment)', fam:['M','E','T'], wide:true, tall:true,
+atom({ id:'agentcursor', cat:'Agent activity', name:'Agent cursor', block:'Review agent browser · live agent view (cursor, Browse / Comment)', fam:['M','E','T'], wide:true, tall:true,
   html:`<style>${pgCss('agc-')}
 .agc-root{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px;container-type:inline-size}
 .agc-bar{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -172,7 +172,7 @@ atom({ id:'agentcursor', cat:'Agent activity', name:'Agent cursor', block:'Velo 
   <div class="agc-foot"><span class="agc-st" style="position:relative;flex:1;min-width:0;height:18px"></span><span class="num" style="white-space:nowrap;display:inline-flex;align-items:center;gap:5px"><span class="agc-d" style="line-height:1.25"></span><span>of 200 actions</span></span></div>
   <div class="agc-live" role="status" aria-live="polite" style="${SR}"></div>
 </div>`,
-  desc:'The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in Velo. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.',
+  desc:'The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in the review tool. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.',
   api:'agent.x/y.set(target)  w:11   land → outline.set(1)   press.set(1) → set(0) after 90ms   comment: pin.o.set(1)   you: jump(pointer)',
   init(st){
     const q = gQ(), q2 = gQ(), view = $(st, '.agc-view'), pg = $(st, '.agc-pg'), ov = $(st, '.agc-ov'), live = $(st, '.agc-live');
@@ -242,7 +242,7 @@ atom({ id:'agentcursor', cat:'Agent activity', name:'Agent cursor', block:'Velo 
 
 /* ================================================================ 2. Agent navigation */
 const AN_SCRIPT = [['go', 'pricing'], ['go', 'signup'], ['back'], ['go', 'blog'], ['go', 'home'], ['back'], ['fwd']];
-atom({ id:'agentnav', cat:'Agent activity', name:'Agent navigation', block:'Velo agent browser · navigate action, history, navigation revision', fam:['S','E','M','T'], wide:true, tall:true,
+atom({ id:'agentnav', cat:'Agent activity', name:'Agent navigation', block:'Review agent browser · navigate action, history, navigation revision', fam:['S','E','M','T'], wide:true, tall:true,
   html:`<style>${pgCss('agn-')}
 .agn-root{position:absolute;inset:0;padding:12px;container-type:inline-size}
 .agn-win{height:100%;display:flex;flex-direction:column;overflow:hidden}
@@ -345,7 +345,7 @@ atom({ id:'agentnav', cat:'Agent activity', name:'Agent navigation', block:'Velo
   }});
 
 /* ================================================================ 3. Follow mode */
-atom({ id:'followmode', cat:'Agent activity', name:'Follow the agent', block:'Velo workspace · Agents view (Follow screen, My view)', fam:['M','E','X','T'], wide:true, tall:true,
+atom({ id:'followmode', cat:'Agent activity', name:'Follow the agent', block:'Review workspace · Agents view (Follow screen, My view)', fam:['M','E','X','T'], wide:true, tall:true,
   html:`<style>${pgCss('agf-')}
 .agf-root{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px;container-type:inline-size}
 .agf-bar{flex:none;display:flex;align-items:center;gap:12px;min-height:30px}
@@ -430,7 +430,7 @@ const AI_EL = [
   { k:'btn', role:'button', name:'Create workspace', sel:'form button[type=submit]', rad:9, checks:[['p', 'Accessible name', 'Create workspace'], ['w', 'Text contrast', 'Below the 4.5:1 minimum'], ['f', 'Focus ring', 'No visible focus style'], ['p', 'Target size', 'Meets the 24 × 24 px minimum']] },
   { k:'lnk', role:'link', name:'Read more', sel:'form a.more', rad:3, checks:[['w', 'Link text', '“Read more” says little out of context'], ['p', 'Contrast', 'Passes the 4.5:1 minimum'], ['w', 'Target size', 'Under the 24 px minimum height']] } ];
 const AI_IC = { p:['check', 'var(--success)'], w:['alert', 'var(--warning)'], f:['x', 'var(--danger)'] };
-atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', block:'Velo agent browser · inspect_elements (selector, rect, accessibility)', fam:['E','S','M','T'], wide:true, tall:true,
+atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', block:'Review agent browser · inspect_elements (selector, rect, accessibility)', fam:['E','S','M','T'], wide:true, tall:true,
   html:`<style>
 .agi-root{position:absolute;inset:0;container-type:inline-size}
 .agi-in{position:absolute;inset:0;padding:12px;display:flex;gap:12px}
@@ -577,7 +577,7 @@ const AP_ACT = {
   lay:[['Checking layout at 330px', 'pricing'], ['Checking layout at 700px', 'pricing'], ['Checking /blog', 'blog']] };
 const AP_SPOT = { home:[[.3, .36], [.22, .62], [.62, .64], [.46, .8]], pricing:[[.3, .56], [.52, .5], [.74, .56], [.4, .82]], blog:[[.42, .5], [.34, .68], [.52, .38]] };
 const AP_ORDER = ['home', 'pricing', 'blog'];
-atom({ id:'presencebar', cat:'Agent activity', name:'Presence bar', block:'Velo workspace · realtime awareness (activity, route, cursor) and Agents list', fam:['X','S','E','T'], wide:true, tall:true,
+atom({ id:'presencebar', cat:'Agent activity', name:'Presence bar', block:'Review workspace · realtime awareness (activity, route, cursor) and Agents list', fam:['X','S','E','T'], wide:true, tall:true,
   html:`<style>${pgCss('agp-')}
 .agp-root{position:absolute;inset:0;container-type:inline-size}
 .agp-in{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px}
@@ -728,7 +728,7 @@ const scLast = i => { for (let j = i + 1; j < SC.length; j++){ if (SC[j].d < SC[
 const scAnc = (i, k) => { for (let j = i; j >= 0; j--) if (SC[j].d === k) return j; return -1; };
 const scName = n => n.d < 2 ? n.id : '/' + n.id.split('/').pop();
 const scFrom = n => { const i = SC.indexOf(n); return SC[scAnc(i, n.d - 1)].id; };
-atom({ id:'sitecoverage', cat:'Agent activity', name:'Site coverage', block:'Velo agent browser · review run (pages visited, findings, blocked origins)', fam:['M','S','T','E'], wide:true, tall:true,
+atom({ id:'sitecoverage', cat:'Agent activity', name:'Site coverage', block:'Review agent browser · review run (pages visited, findings, blocked origins)', fam:['M','S','T','E'], wide:true, tall:true,
   html:`<style>
 .agv-root{position:absolute;inset:0;container-type:inline-size}
 .agv-in{position:absolute;inset:0;padding:12px;display:flex;gap:12px}
@@ -870,7 +870,7 @@ atom({ id:'sitecoverage', cat:'Agent activity', name:'Site coverage', block:'Vel
 const AM_SECS = ['Overview', 'How reviews work', 'Pricing', 'Questions', 'Notes', 'Footer'];
 const AM_STOPS = [0, .24, .5, .76, 1, .42];
 const AM_FIND = ['Get started has no visible focus ring.', 'Team plan card text is 12.5px, smaller than body text.', 'FAQ answers fall below the 4.5:1 contrast minimum.'];
-atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', block:'Velo agent browser · scroll action, coverage minimap', fam:['E','D','T','M'], wide:true, tall:true,
+atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', block:'Review agent browser · scroll action, coverage minimap', fam:['E','D','T','M'], wide:true, tall:true,
   html:`<style>${pgCss('agm-')}
 .agm-root{position:absolute;inset:0;container-type:inline-size}
 .agm-in{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px}

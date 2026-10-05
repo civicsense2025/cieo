@@ -47,7 +47,7 @@ public struct SideDetailSheetAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 6) {
                 HStack { Text(p.0).font(.headline); Spacer(); Button { close() } label: { Image(systemName: "xmark") }.buttonStyle(.plain).accessibilityLabel("Close") }
                 Text(p.1).font(.footnote); Text(p.2).font(.caption).foregroundStyle(.secondary); Spacer()
-            }.padding(14).id(selected).transition(reduce ? .identity : .motionSwap())
+            }.padding(14).id(selected).motionTransition(.swap())
         }
         .animation(reduce ? nil : .motion(.base), value: selected)
         .frame(width: w, height: 200, alignment: .topLeading).background(.background).shadow(color: .black.opacity(0.2), radius: 10)

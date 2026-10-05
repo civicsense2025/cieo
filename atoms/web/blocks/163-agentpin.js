@@ -1,7 +1,7 @@
 
 
 /* ---------- Agent activity (organisms): an AI agent reviews a running site while a person watches ---------- */
-/* Grounded in Velo (/Users/tanho/GitHub_non_cloud/velo): attributed pins (author "label · last six of the agent id · agent"),
+/* Grounded in the review tool: attributed pins (author "label · last six of the agent id · agent"),
    Browse / Comment modes, "Pin this frame", saved screenshots with normalized bounds, "Recorded element" selector,
    pin status open / resolved / conflict, "Follow" / "My view", and the public `report` progress line. Severity chips,
    suggested edits and the decision card are proposed extensions that sit on the same pin discussion. */
@@ -15,7 +15,7 @@ const queue = () => { const q = []; return {
   clear: () => { q.length = 0; } }; };
 
 /* ---- shared vocabulary: agent identity, severity, the page under review ---- */
-const AGENT = { name:'Claude Code', id:'7c41d2' };
+const AGENT = { name:'Assistant', id:'7c41d2' };
 const SPARK = '<path d="M12 4v16M12 4c6 2.5 6 13.5 0 16M4.6 14.1l14.8-3.2"/>';
 const SEV = {
   block:{ l:'Blocking', i:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/>' },
@@ -168,7 +168,7 @@ const FIND = [
   { k:'art', sev:'warn', sel:'img.hero-art', no:8, text:'This image has no alt text, so screen readers read out the file name. Describe the chart, or mark it decorative with alt="".' },
   { k:'plan', sev:'info', sel:'section.pricing article:nth-child(2)', no:9, text:'The Team plan has no marker, but the pricing doc calls it the default. A “Most popular” label would make the choice clear.' } ];
 
-atom({ id:'agentpin', cat:'Agent activity', name:'Agent pin and comment', block:'Attributed pin discussion + Browse / Comment modes (Velo workspace, Agents view)', fam:['M','E','X','S'], wide:true, tall:true,
+atom({ id:'agentpin', cat:'Agent activity', name:'Agent pin and comment', block:'Attributed pin discussion + Browse / Comment modes (Review workspace, Agents view)', fam:['M','E','X','S'], wide:true, tall:true,
   html:`<style>${css('apn')}
 .apn-tf{position:absolute;left:0;top:0;border:1.5px solid var(--ink);border-radius:8px;pointer-events:none!important;z-index:2;visibility:hidden}
 .apn-tg{position:absolute;left:-1.5px;font:11px/1 var(--mono);background:var(--ink);color:var(--card);padding:4px 6px;border-radius:5px;white-space:nowrap}
@@ -277,7 +277,7 @@ const THREAD = [
   { who:'priya', t:'1 min ago', text:'Does the placeholder count as a label?' } ];
 const FIND2 = { k:'email', sev:'warn', sel:'input#work-email', no:8 };
 
-atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', block:'Pin discussion with attributed events (Velo review-detail: “Discussion and activity”)', fam:['M','S','X','T'], wide:true, tall:true,
+atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', block:'Pin discussion with attributed events (the review tool review-detail: “Discussion and activity”)', fam:['M','S','X','T'], wide:true, tall:true,
   html:`<style>${css('agt')}
 .agt-cc{width:100%}
 .agt-hd{display:flex;align-items:center;gap:8px;padding:10px 10px 8px 12px}
@@ -318,8 +318,8 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
     const ck = mk('div'), cc = mk('div'); ck.className = 'agt-ck card'; ck.setAttribute('role', 'dialog'); ck.setAttribute('aria-label', `Thread on pin ${FIND2.no}, ${FIND2.sel}`); cc.className = 'agt-cc';
     cc.innerHTML = `<div class="agt-hd"><span class="agt-pq" aria-hidden="true">${FIND2.no}</span><span class="agt-sel">${FIND2.sel}</span><button type="button" class="btn agt-rs">${ic(I.check, 13, 2.4)}<span>Resolve</span></button><button type="button" class="agt-x" aria-label="Close thread">${ic(I.x, 14)}</button></div>
       <div class="agt-ls" role="log" aria-label="Thread messages"><div class="agt-in"></div></div>
-      <div class="agt-fo"><div class="agt-dr"><div><span class="agt-sl muted">Claude Code is replying…</span></div><div><button type="button" class="btn agt-dm">Dismiss</button><button type="button" class="btn ink agt-ac">Accept fix</button></div><div><span class="agt-ok" style="display:grid">${ic(I.check, 15, 2.4)}</span><span class="agt-sl">Accepted. Claude Code will re-check after your next change.</span><button type="button" class="btn agt-un1">Undo</button></div><div><span class="agt-sl">Dismissed as won’t fix. The pin stays in the history.</span><button type="button" class="btn agt-un2">Undo</button></div><div><span class="agt-sl muted">Thread resolved. Reopen it to keep talking.</span></div></div>
-      <form class="agt-cm"><input class="agt-ip" aria-label="Reply to Claude Code" placeholder="Reply to Claude Code" autocomplete="off"><button type="submit" class="btn ink agt-sn" aria-label="Send reply">${ic(I.up, 15, 2.2)}</button></form></div>`;
+      <div class="agt-fo"><div class="agt-dr"><div><span class="agt-sl muted">Assistant is replying…</span></div><div><button type="button" class="btn agt-dm">Dismiss</button><button type="button" class="btn ink agt-ac">Accept fix</button></div><div><span class="agt-ok" style="display:grid">${ic(I.check, 15, 2.4)}</span><span class="agt-sl">Accepted. Assistant will re-check after your next change.</span><button type="button" class="btn agt-un1">Undo</button></div><div><span class="agt-sl">Dismissed as won’t fix. The pin stays in the history.</span><button type="button" class="btn agt-un2">Undo</button></div><div><span class="agt-sl muted">Thread resolved. Reopen it to keep talking.</span></div></div>
+      <form class="agt-cm"><input class="agt-ip" aria-label="Reply to Assistant" placeholder="Reply to Assistant" autocomplete="off"><button type="submit" class="btn ink agt-sn" aria-label="Send reply">${ic(I.up, 15, 2.2)}</button></form></div>`;
     ck.append(cc); ov.append(ck);
     const hd = $(cc, '.agt-hd'), ls = $(cc, '.agt-ls'), inn = $(cc, '.agt-in'), fo = $(cc, '.agt-fo'), drL = $$(cc, '.agt-dr>div'), rs = $(cc, '.agt-rs'), form = $(cc, '.agt-cm'), ip = $(cc, '.agt-ip'), sn = $(cc, '.agt-sn');
     const co = new Track(0), lh = new Track(0, S.soft), oxT = new Track(0), oyT = new Track(0), tf = new Track(0, S.snap);
@@ -411,7 +411,7 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
 const SHOTS = [ { k:'cta', sel:'button.cta-primary' }, { k:'email', sel:'input#work-email' }, { k:'plan', sel:'section.pricing article:nth-child(2)' }, { k:'sub', sel:'p.hero-sub' } ];
 const SHOT0 = { k:'art', sel:'img.hero-art' };
 
-atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', block:'Saved screenshots + evidence viewer (Velo: “Saved screenshots · N”, “View screenshot”)', fam:['E','M','T','X'], wide:true, tall:true,
+atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', block:'Saved screenshots + evidence viewer (the review tool: “Saved screenshots · N”, “View screenshot”)', fam:['E','M','T','X'], wide:true, tall:true,
   html:`<style>${css('evc')}
 .evc-body{flex:1;min-height:0;display:flex;gap:8px}
 .evc-body .evc-fr{flex:1;min-width:0}
@@ -580,7 +580,7 @@ const EDITS = [
   { k:'sub', kind:'Text edit', sel:'p.hero-sub', ops:[['=', 'Fieldnote'], ['=', 'helps'], ['=', 'teams'], ['-', 'to'], ['=', 'collaborate'], ['=', 'on'], ['=', 'notes'], ['=', 'more'], ['-', 'easier.'], ['+', 'easily.']], note:'Fixes two grammar slips: “to collaborate” and “more easier”.' },
   { k:'cta', kind:'Style edit', sel:'button.cta-primary', code:true, ops:[['L', '.cta-primary {'], ['=', '  background:'], ['-', '#989B6F;'], ['+', 'var(--accent);'], ['L', '}']], note:'Contrast rises from 2.9:1 to 7.0:1, which passes WCAG AA.' } ];
 
-atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'Agent suggestion on a pin (proposed; sits on the Velo pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
+atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
   html:`<style>${css('sge')}
 .sge-tf{position:absolute;left:0;top:0;border:1.5px solid var(--ink);border-radius:8px;pointer-events:none!important;z-index:2;visibility:hidden}
 .sge-ck{position:absolute;left:0;top:0;z-index:30;visibility:hidden;transform-origin:0 0;padding:12px}
@@ -686,7 +686,7 @@ const SPEC = {
   err:'<div style="width:150px"><input class="rvs-em" placeholder="Email" tabindex="-1" style="width:100%;border-color:var(--danger)"><div style="font-size:11.5px;color:var(--danger);margin-top:4px">Enter your work email</div></div>', plan:'<div class="rvs-pc" style="width:128px;padding:10px"><div class="rvs-pn">Team</div><div class="rvs-pr"><span class="rvs-pv" style="font-size:20px">$12</span></div><div class="rvs-pu">per seat per month</div></div>',
   sub:'<p class="rvs-sub" style="margin:0;width:150px;font-size:11.5px">Fieldnote helps teams to collaborate on notes more easier.</p>', ft:'<div class="rvs-sf" style="padding:0;border:0;font-size:12px"><span>Privacy</span><span>Terms</span><span>Status</span></div>' };
 
-atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'Agents view run result + pin list (Velo: “Changes”, findings with status, selector and evidence)', fam:['M','S','T'], wide:true, tall:true,
+atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'Agents view run result + pin list (the review tool: “Changes”, findings with status, selector and evidence)', fam:['M','S','T'], wide:true, tall:true,
   html:`<style>${css('rvs')}
 .rvs-pn{position:absolute;inset:12px;display:flex;flex-direction:column;overflow:hidden}
 .rvs-hd{flex:none;display:flex;align-items:center;gap:10px;padding:12px 14px 4px}
@@ -726,7 +726,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
   <div class="rvs-hd">${agentMark('rvs', 28)}${agentLine('rvs')}<i style="flex:1"></i><span class="rvs-run" role="status" aria-live="polite"><span class="rvs-r0"><i class="rvs-dot"></i>Reviewing</span><span class="rvs-r1">${ic(I.check, 13, 2.4)}Completed</span></span><button type="button" class="btn rvs-rp" style="padding:4px 10px;font-size:12.5px">Replay</button></div>
   <div class="rvs-sm">localhost:3000 · /pricing and /signup · 3 widths · 14 screenshots</div>
   <div class="rvs-fl" role="group" aria-label="Filter findings by severity"><button type="button" class="rvs-f" data-s="*" aria-pressed="true">All <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="block" aria-pressed="false">${ic(SEV.block.i, 13, 2)}Blocking <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="warn" aria-pressed="false">${ic(SEV.warn.i, 13, 2)}Should fix <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="info" aria-pressed="false">${ic(SEV.info.i, 13, 2)}Suggestions <span class="rvs-c"></span></button><span class="rvs-sh" aria-live="polite">Showing <span class="rvs-sn"></span> of <span class="rvs-st2"></span></span></div>
-  <div class="rvs-ls" role="list"><p class="rvs-em0">Claude Code is reviewing /pricing and /signup…</p></div></section>`,
+  <div class="rvs-ls" role="list"><p class="rvs-em0">Assistant is reviewing /pricing and /signup…</p></div></section>`,
   desc:'Findings arrive one at a time, 130ms apart: each row fades up and opens its height while the severity counts roll up digit by digit and the Reviewing chip morphs to Completed. Severity chips are full-border chips and double as filters. Switching a filter closes unmatched rows to nothing while the rest slide up, and the Showing count rolls. Opening a finding eases its height open to the saved screenshot, the steps to reproduce, and expected against observed; opening another closes the first.',
   api:'row.en.set(1, t + i·130ms); digits.set(count)   chip.p.set(1): width, fill, label swap   row.vis.set(match ? 1 : 0)   row.h = (head + body·ex)·vis·en',
   init(st){
@@ -789,7 +789,7 @@ const QUEUE = [
   { k:'plan', sev:'info', sel:'section.pricing article:nth-child(2)', no:10, text:'The Team plan has no “Most popular” marker, though the pricing doc calls it the default.' },
   { k:'email', sev:'warn', sel:'input#work-email', no:11, text:'The email field has no label. A placeholder disappears once you type and is not a reliable label.' } ];
 
-atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:'Agents view: pins from a finished run (Velo “Changes”, pin list, Follow)', fam:['M','E','D','X','T'], wide:true, tall:true,
+atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:'Agents view: pins from a finished run (the review tool “Changes”, pin list, Follow)', fam:['M','E','D','X','T'], wide:true, tall:true,
   html:`<style>${css('agq')}
 .agq-sb{position:absolute;left:0;top:0;z-index:30;overflow:hidden;visibility:hidden}
 .agq-sn,.agq-sl{position:absolute;left:0;top:0}
@@ -908,7 +908,7 @@ const RUN = ['Opening /signup', 'Checking form labels', 'Capturing evidence', 'L
 const FIND7 = { k:'plan', sev:'warn', sel:'section.pricing article:nth-child(2) .price', no:9 };
 const CHIP_W = { c:'var(--warning)', t:'var(--warning-tint)' }, CHIP_S = { c:'var(--success)', t:'var(--success-tint)' }, CHIP_N = { c:'var(--muted)', t:'var(--raised)' };
 
-atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:'Agent hand-off on a pin (proposed; uses Velo run status + pin discussion)', fam:['M','S','T','X'], wide:true, tall:true,
+atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:'Agent hand-off on a pin (proposed; uses the review tool run status + pin discussion)', fam:['M','S','T','X'], wide:true, tall:true,
   html:`<style>${css('hno')}
 .hno-run{position:relative;flex:none;height:24px;border-radius:7px;border:1px solid;overflow:hidden;font-size:12px;font-weight:600;white-space:nowrap}
 .hno-run>span{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:6px;padding:0 9px}
@@ -957,8 +957,8 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
     const ck = mk('div'), cc = mk('div'); ck.className = 'hno-ck card'; ck.setAttribute('role', 'dialog'); ck.setAttribute('aria-label', `Decision needed on pin ${FIND7.no}`); cc.className = 'hno-cc';
     cc.innerHTML = `<div class="hno-hd">${agentMark('hno', 24)}${agentLine('hno')}<span class="hno-sc"><span>${ic(SEV.warn.i, 12, 2)}Needs a human decision</span><span>${ic(I.check, 12, 2.4)}Answered</span><span><i class="hno-dot"></i>Continuing</span></span><button type="button" class="hno-x" aria-label="Close">${ic(I.x, 14)}</button></div>
       <p class="hno-q">The Team plan costs <b>$12 per seat</b> on this page but <b>$15 per seat</b> on /checkout. Which price is current?</p>
-      <div class="hno-ow"><div class="hno-oi" role="radiogroup" aria-label="Which price is current"><div class="hno-pl"></div>${OPTS.map((o, i) => `<button type="button" class="hno-o" role="radio" aria-checked="false" tabindex="${i ? -1 : 0}"><span class="hno-rd"><i></i></span><span><b>${hx(o.t)}</b><span class="s">${hx(o.s)}</span></span></button>`).join('')}<div class="hno-fo"><button type="button" class="btn ink hno-sd" disabled>Send answer</button><span class="hn">Claude Code is paused until you answer.</span></div></div></div>
-      <div class="hno-aw"><div class="hno-ai"><div class="hno-m">${person('hno', 'YO', 22)}<div><b>You</b><span class="hno-yc"></span></div></div><div class="hno-m">${agentMark('hno', 22)}<div><b>Claude Code</b><span class="hno-at"></span></div></div></div></div>
+      <div class="hno-ow"><div class="hno-oi" role="radiogroup" aria-label="Which price is current"><div class="hno-pl"></div>${OPTS.map((o, i) => `<button type="button" class="hno-o" role="radio" aria-checked="false" tabindex="${i ? -1 : 0}"><span class="hno-rd"><i></i></span><span><b>${hx(o.t)}</b><span class="s">${hx(o.s)}</span></span></button>`).join('')}<div class="hno-fo"><button type="button" class="btn ink hno-sd" disabled>Send answer</button><span class="hn">Assistant is paused until you answer.</span></div></div></div>
+      <div class="hno-aw"><div class="hno-ai"><div class="hno-m">${person('hno', 'YO', 22)}<div><b>You</b><span class="hno-yc"></span></div></div><div class="hno-m">${agentMark('hno', 22)}<div><b>Assistant</b><span class="hno-at"></span></div></div></div></div>
       <div class="hno-rn"><div class="hno-ri" role="status" aria-live="polite"><i class="hno-dot"></i>${RUN.map(r => `<span class="l">${r}</span>`).join('')}</div></div>`;
     ck.append(cc); ov.append(ck);
     const sc = new Chip($(cc, '.hno-sc'), [{ ...CHIP_W }, { ...CHIP_S }, { ...CHIP_N }]), hd = $(cc, '.hno-hd'), q = $(cc, '.hno-q'), ow = $(cc, '.hno-ow'), oi = $(cc, '.hno-oi'), pl = $(cc, '.hno-pl'), os = $$(cc, '.hno-o'), sd = $(cc, '.hno-sd'), hn = $(cc, '.hno-fo .hn'), aw = $(cc, '.hno-aw'), ai = $(cc, '.hno-ai'), yc = $(cc, '.hno-yc'), at2 = $(cc, '.hno-at'), rn = $(cc, '.hno-rn'), ri = $(cc, '.hno-ri'), rls = $$(ri, 'span.l'), rdot = $(ri, '.hno-dot');
@@ -969,7 +969,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
     const rowGeo = i => [os[i].offsetTop, os[i].offsetTop + os[i].offsetHeight];
     function choose(i){
       if (answered) return; const first = choice < 0; choice = i; os.forEach((o, j) => { o.setAttribute('aria-checked', j === i); o.tabIndex = j === i ? 0 : -1; rds[j].set(j === i ? 1 : 0); }); const [a, b] = rowGeo(i);
-      first ? (plateE.jump(a, b), po.set(1)) : plateE.go(a, b); sd.disabled = false; sT.set(1); hn.textContent = 'Claude Code will carry on as soon as you send.';
+      first ? (plateE.jump(a, b), po.set(1)) : plateE.go(a, b); sd.disabled = false; sT.set(1); hn.textContent = 'Assistant will carry on as soon as you send.';
     }
     function send(){
       if (choice < 0 || answered) return; answered = true; const o = OPTS[choice]; yc.textContent = `${o.t}. ${o.s}.`; at2.innerHTML = o.say.split(' ').map(w => `<span class="hno-w">${hx(w)} </span>`).join(''); words = $$(at2, '.hno-w'); words.forEach(w => w.style.opacity = 0);
@@ -981,7 +981,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
     function close(focus){ if (!sel) return; sel = false; co.set(0, S.base); pin.label(false); if (site.cover){ site.sc.set(Math.min(site.sc.target, site.ct.offsetHeight - site.pg.clientHeight)); at(.6, () => { if (!sel) site.cover = 0; }); } if (focus) at(.06, () => pin.btn.focus({ preventScroll:true })); }
     function start(){
       clear(); if (pin){ pin.wrap.remove(); pin = null; } sel = false; choice = -1; answered = false; words = []; yc.textContent = ''; at2.textContent = '';
-      [co, ans, ak, rt, sT, po].forEach(x => x.jump(0)); rds.forEach(x => x.jump(0)); sc.v.jump(0); topChip.v.jump(0); os.forEach(b => { b.disabled = false; b.setAttribute('aria-checked', 'false'); }); sd.disabled = true; hn.textContent = 'Claude Code is paused until you answer.';
+      [co, ans, ak, rt, sT, po].forEach(x => x.jump(0)); rds.forEach(x => x.jump(0)); sc.v.jump(0); topChip.v.jump(0); os.forEach(b => { b.disabled = false; b.setAttribute('aria-checked', 'false'); }); sd.disabled = true; hn.textContent = 'Assistant is paused until you answer.';
       layout(); site.cover = narrow ? H - 190 : 0; site.sc.jump(0); runSw.cur = 0; runSw.prev = null; runSw.t = -9; natO = 0;
       const moved = site.go('plan'), d = moved ? .62 : .14;
       at(d, () => { pin = new Pin('hno', ov, FIND7); pin.qm.jump(1); pin.btn.onclick = () => sel ? close(true) : open(); pin.label(false); });

@@ -22,20 +22,20 @@ public struct InlineEditableFieldAtom: MotionAtomView {
                 Text("Site name").font(.caption).foregroundStyle(.secondary)
                 HStack(spacing: 6) {
                     ZStack(alignment: .leading) {
-                        if editing { TextField("Site name", text: $draft).textFieldStyle(.plain).focused($focused).onSubmit(save).transition(reduce ? .identity : .motionSwap()) }
-                        else { Text(value).transition(reduce ? .identity : .motionSwap()).onTapGesture { begin() }.accessibilityAddTraits(.isButton).accessibilityHint("Edit") }
+                        if editing { TextField("Site name", text: $draft).textFieldStyle(.plain).focused($focused).onSubmit(save).motionTransition(.swap()) }
+                        else { Text(value).motionTransition(.swap()).onTapGesture { begin() }.accessibilityAddTraits(.isButton).accessibilityHint("Edit") }
                     }
                     .font(.body).padding(.horizontal, 10).frame(height: 34, alignment: .leading).frame(maxWidth: .infinity, alignment: .leading)
                     .background(RoundedRectangle(cornerRadius: 8).fill(editing ? Color.secondary.opacity(0.12) : .clear))
                     .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(editing ? (invalid ? Color.red : Color.accentColor) : Color.clear, lineWidth: 1.5))
                     .onKeyPress(.escape) { cancel(); return .handled }
                     ZStack {
-                        if mode == .edit { HStack(spacing: 4) { Button(action: save) { Image(systemName: "checkmark") }.disabled(invalid).accessibilityLabel("Save"); Button(action: cancel) { Image(systemName: "xmark") }.accessibilityLabel("Cancel") }.buttonStyle(.bordered).controlSize(.small).transition(reduce ? .identity : .motionSwap()) }
-                        if mode == .saving { ProgressView().controlSize(.small).transition(reduce ? .identity : .motionSwap()) }
-                        if mode == .saved { Label("Saved", systemImage: "checkmark").font(.caption).foregroundStyle(.green).transition(reduce ? .identity : .motionSwap()) }
+                        if mode == .edit { HStack(spacing: 4) { Button(action: save) { Image(systemName: "checkmark") }.disabled(invalid).accessibilityLabel("Save"); Button(action: cancel) { Image(systemName: "xmark") }.accessibilityLabel("Cancel") }.buttonStyle(.bordered).controlSize(.small).motionTransition(.swap()) }
+                        if mode == .saving { ProgressView().controlSize(.small).motionTransition(.swap()) }
+                        if mode == .saved { Label("Saved", systemImage: "checkmark").font(.caption).foregroundStyle(.green).motionTransition(.swap()) }
                     }.frame(width: 76, alignment: .leading)
                 }
-                ZStack(alignment: .leading) { if editing && invalid { Text(draft.count > 24 ? "Use 24 characters or fewer" : "A name is required").font(.caption).foregroundStyle(.red).transition(reduce ? .identity : .motionSwap()) } }.frame(height: 16)
+                ZStack(alignment: .leading) { if editing && invalid { Text(draft.count > 24 ? "Use 24 characters or fewer" : "A name is required").font(.caption).foregroundStyle(.red).motionTransition(.swap()) } }.frame(height: 16)
             }
             .frame(width: 340).animation(reduce ? nil : .motion(.base), value: mode).animation(reduce ? nil : .motion(.base), value: invalid)
         }

@@ -59,13 +59,13 @@ atom({ id:'pageeditor', cat:'Editor', name:'Page editor', block:'section, headin
         f:[['h','Heading','in','Build the page, not the plumbing'],['b','Button label','in','Start free']],
         m:`<div style="${PAD};display:flex;flex-direction:column;gap:8px;align-items:flex-start"><h4 class="pe-h" style="font-size:22px;line-height:1.15;letter-spacing:-.03em;font-weight:600;max-width:20ch;text-wrap:balance"></h4><p style="opacity:.7;max-width:38ch">Drag blocks, edit text and publish in one click.</p><span class="pe-b" style="margin-top:4px;padding:6px 12px;border-radius:8px;background:var(--pe-fg);color:var(--pe-bg);font-weight:500"></span></div>` },
       { n:'Text', ic:I.alL, bg:0,
-        f:[['h','Heading','in','Why we built it'],['p','Body','ta','Lamina keeps layout, content and publishing in one place, so the change you make in the editor is the change visitors see.']],
+        f:[['h','Heading','in','Why we built it'],['p','Body','ta','Studio keeps layout, content and publishing in one place, so the change you make in the editor is the change visitors see.']],
         m:`<div style="padding:14px 18px;display:flex;flex-direction:column;gap:6px"><h4 class="pe-h" style="font-size:15px;letter-spacing:-.01em;font-weight:600"></h4><p class="pe-p" style="opacity:.75;line-height:1.55"></p></div>` },
       { n:'Pricing', ic:'<rect x="4" y="4" width="7" height="16" rx="1.5"/><rect x="13" y="4" width="7" height="16" rx="1.5"/>', bg:3,
         f:[['h','Heading','in','Simple pricing'],['p','Studio price','in','$24']],
         m:`<div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px"><h4 class="pe-h" style="font-size:15px;letter-spacing:-.01em;font-weight:600"></h4><div style="display:flex;gap:8px"><div style="flex:1;border:1px solid color-mix(in oklab,var(--pe-fg) 18%,transparent);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column"><span style="opacity:.7">Starter</span><b style="font-size:17px;letter-spacing:-.02em">Free</b></div><div style="flex:1;border:1px solid color-mix(in oklab,var(--pe-fg) 18%,transparent);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column"><span style="opacity:.7">Studio</span><span><b class="pe-p" style="font-size:17px;letter-spacing:-.02em"></b><span style="opacity:.7"> per month</span></span></div></div></div>` },
       { n:'Footer', ic:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 15h18"/>', bg:4,
-        f:[['t','Footer text','in','© 2026 Harbor Studio · Made with Lamina']],
+        f:[['t','Footer text','in','© 2026 Harbor Studio · Made with Studio']],
         m:`<p class="pe-t" style="padding:14px 18px;opacity:.85"></p>` }
     ];
     // outline, canvas blocks and inspector layers

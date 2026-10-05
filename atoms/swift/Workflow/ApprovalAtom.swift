@@ -13,7 +13,7 @@ public struct ApprovalAtom: MotionAtomView {
     private var tone: AgTone { decision == .approved ? .success : decision == .denied ? .danger : .warning }
     private var title: String { decision == .approved ? "Approved" : decision == .denied ? "Denied" : "Pending" }
     private var detail: String {
-        decision == .approved ? "Claude Desktop can publish it now." : decision == .denied ? "Nothing was published." : "Expires in 14:52"
+        decision == .approved ? "the assistant app can publish it now." : decision == .denied ? "Nothing was published." : "Expires in 14:52"
     }
 
     public var body: some View {
@@ -21,12 +21,12 @@ public struct ApprovalAtom: MotionAtomView {
             AgCard {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
-                        Text("Claude Desktop wants to publish a page").font(.headline)
+                        Text("the assistant app wants to publish a page").font(.headline)
                         Spacer()
                         Button("Reset") { reset() }.buttonStyle(AgPress()).font(.caption)
                     }
                     VStack(alignment: .leading, spacing: 2) {
-                        row("Client", "Claude Desktop"); row("Authorized by", "Maya Okafor")
+                        row("Client", "the assistant app"); row("Authorized by", "Maya Okafor")
                         row("Capability", "pages.publish"); row("Target", "Spring launch · /spring")
                     }
                     HStack(spacing: 8) {

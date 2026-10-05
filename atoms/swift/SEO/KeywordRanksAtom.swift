@@ -49,7 +49,7 @@ public struct KeywordRanksAtom: MotionAtomView {
             if d == 0 { Text("–").foregroundStyle(.secondary) }
             else { Text("\(d > 0 ? "▲" : "▼") \(abs(d))").fontWeight(.semibold).foregroundStyle(d > 0 ? Color.green : Color.red) }
         }
-        .id(d).transition(reduce ? .identity : .motionSwap())
+        .id(d).motionTransition(.swap())
         .animation(reduce ? nil : .motion(.base), value: d)
     }
 

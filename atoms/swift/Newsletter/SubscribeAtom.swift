@@ -23,7 +23,7 @@ public struct SubscribeAtom: MotionAtomView {
                 ZStack {
                     if invalid {
                         Text("Enter an address like name@example.com").font(.footnote).foregroundStyle(.red)
-                            .transition(reduce ? .identity : .motionPresence)
+                            .motionTransition(.presence)
                     }
                 }.frame(height: 18)
                 Button("Replay", action: reset).font(.caption).buttonStyle(.borderless)
@@ -65,7 +65,7 @@ public struct SubscribeAtom: MotionAtomView {
             default: Image(systemName: "checkmark").fontWeight(.bold).id(2)
             }
         }
-        .transition(reduce ? .identity : .motionSwap())
+        .motionTransition(.swap())
         .animation(reduce ? nil : .motion(.base), value: phase)
     }
 

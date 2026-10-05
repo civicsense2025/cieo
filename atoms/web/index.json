@@ -43,7 +43,7 @@
   "id": "tooltip",
   "category": "Content",
   "name": "Tooltip",
-  "summary": "Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Lamina’s current Tooltip has no enter or exit motion; this is the proposed behavior.",
+  "summary": "Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Studio’s current Tooltip has no enter or exit motion; this is the proposed behavior.",
   "file": "blocks/006-tooltip.js",
   "api": "o.set(open ? 1 : 0, open ? S.base : S.snap)"
  },
@@ -315,7 +315,7 @@
   "id": "sheet",
   "category": "Admin",
   "name": "Bottom sheet (mobile only)",
-  "summary": "For phone layouts only: on wider screens Lamina’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.",
+  "summary": "For phone layouts only: on wider screens Studio’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.",
   "file": "blocks/041-sheet.js",
   "api": "y.release(y, vy, y > 0.3H || vy > 500 ? H : 0)"
  },
@@ -1187,7 +1187,7 @@
   "id": "seg",
   "category": "Admin kit",
   "name": "Segmented control",
-  "summary": "A measured two-edge indicator, same rules as Lamina’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.",
+  "summary": "A measured two-edge indicator, same rules as Studio’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.",
   "file": "blocks/151-sidesheet.js",
   "api": "left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? \"fwd\" : \"back\"   lead.set(v); trail.set(v, t + LAG)"
  },
@@ -1811,7 +1811,7 @@
   "id": "agentcursor",
   "category": "Agent activity",
   "name": "Agent cursor",
-  "summary": "The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in Velo. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.",
+  "summary": "The agent pointer glides to each target on a critically damped spring, an outline appears when it lands, and a quiet press-scale marks the click. In Browse mode the target presses; in Comment mode the click is blocked and a square agent pin drops instead, as in the review tool. Your own pointer is the round chip, 1:1 while you move it. Click the page to send the agent there.",
   "file": "blocks/162-agentcursor.js",
   "api": "agent.x/y.set(target)  w:11   land → outline.set(1)   press.set(1) → set(0) after 90ms   comment: pin.o.set(1)   you: jump(pointer)"
  },
@@ -1939,7 +1939,7 @@
   "id": "takeover",
   "category": "Agent activity",
   "name": "Take over from the agent",
-  "summary": "Take over freezes Claude where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to Claude’s next target, turns into Claude’s, the banner closes, and the queue starts ticking again.",
+  "summary": "Take over freezes the assistant where it stands. Its ink cursor fades and your accent cursor appears at the same point, then springs to the pointer, while a banner grows between the address bar and the page and pushes the page down, the buttons fold away and the queued actions slide open. Hand back runs it in reverse: your cursor travels to the assistant’s next target, turns into the assistant’s, the banner closes, and the queue starts ticking again.",
   "file": "blocks/164-agentstatus.js",
   "api": "takeOver: agent.fade, human.at(agent.pos) → human.follow(pointer); banner.h.set(1) · queue.open · page.editable(true)   handBack: human.go(next.spot) → agent.at(human.pos); banner.h.set(0)"
  },
@@ -1955,7 +1955,7 @@
   "id": "approvalinline",
   "category": "Agent activity",
   "name": "Approval on the page",
-  "summary": "Claude’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.",
+  "summary": "Assistant’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.",
   "file": "blocks/164-agentstatus.js",
   "api": "cursor.go(spot) → scrim.set(1), ring.go(spot), pop(el, p, ±6)   ask.swap(result) + follow(height)   risky ? allow.enabled = (input === phrase) : true   always → rules.insert(slot.open)"
  },
@@ -2483,7 +2483,7 @@
   "id": "agentmarks",
   "category": "Agent identity",
   "name": "Agent mark concepts",
-  "summary": "Five agent marks drawn from Meridian’s own vocabulary instead of a generic sparkle: a turning meridian, Velo’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.",
+  "summary": "Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.",
   "api": "",
   "file": "identity/agentmark.js"
  },
@@ -2491,7 +2491,7 @@
   "id": "agentmarkstates",
   "category": "Agent identity",
   "name": "Agent mark states",
-  "summary": "The Meridian mark carried through seven agent states. Thinking turns the meridian at a constant speed; Browsing sends a square marker along the equator while the meridian leans toward it; Commenting grows Velo’s comment tail so the mark doubles as a pin; Waiting stands the meridian upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.",
+  "summary": "The agent mark carried through seven agent states. Thinking turns the arc at a constant speed; Browsing sends a square marker along the equator while the arc leans toward it; Commenting grows the review tool’s comment tail so the mark doubles as a pin; Waiting stands the arc upright and opens the invitation corners; Done and Error morph the equator’s five points into a check or an X. Every change is a critically damped spring, and the same drawing runs at brand size, 32, 24 and 16px and inside the presence chip.",
   "api": "",
   "file": "identity/agentmark.js"
  },
@@ -2507,7 +2507,7 @@
   "id": "agentcrowd",
   "category": "Agent identity",
   "name": "Agent crowd",
-  "summary": "Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its meridian keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.",
+  "summary": "Five agents with different washes idle on one floor: each breathes, blinks and fidgets on its own clock, and every few seconds one glances at a neighbour; when two catch each other’s eye they both smile. The research agent is thinking, so its arc keeps turning. They look at your pointer while it moves. Throw one and every agent it passes turns to watch it, looks surprised, leans away, then goes back to what it was doing; the sleepy one wakes up for a while. Landing on someone makes them shuffle aside.",
   "api": "",
   "file": "identity/agentrig.js"
  },
@@ -2515,7 +2515,7 @@
   "id": "agentcasta",
   "category": "Agent identity",
   "name": "Agent cast: checkers and writers",
-  "summary": "Twelve role agents stand in a lineup, all the same species (one square body, one face, one meridian antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.",
+  "summary": "Twelve role agents stand in a lineup, all the same species (one square body, one face, one arc antenna) and each with its own prop, habit and default mood. Each idles in character: the stopwatch ticks, the caret staff blinks, the speech bubble swaps scripts, the glasses creep down, and every few seconds one of them plays its signature action. Tap one and its neighbours lean away and turn to watch, staggered outward from it; the agent on stage hops back to its place first, then the chosen one jumps forward, growing as it flies, lands with a squash, and plays its signature. Its name, job and habit swap in as it takes off. Props trail the body on lagging springs, hanging parts swing a beat late and settle without swinging back, and every eye follows your pointer.",
   "api": "",
   "file": "identity/cast-a.js"
  },

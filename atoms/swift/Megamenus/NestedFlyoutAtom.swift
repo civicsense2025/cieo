@@ -32,7 +32,7 @@ public struct NestedFlyoutAtom: MotionAtomView {
                     .onTapGesture { withMotion(.base, reduceMotion: reduce) { open.toggle() } }
                     .accessibilityAddTraits(.isButton)
                     .accessibilityValue(open ? "expanded" : "collapsed")
-                if open { FlyColumn(nodes: tree, pointer: $pointer).transition(.motionPresence) }
+                if open { FlyColumn(nodes: tree, pointer: $pointer).motionTransition(.presence) }
                 Spacer(minLength: 0)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -101,7 +101,7 @@ private struct FlyColumn: View {
             .shadow(color: .black.opacity(0.08), radius: 8, y: 3)
             if let id = openID, let node = nodes.first(where: { $0.id == id }) {
                 FlyColumn(nodes: node.kids, pointer: $pointer)
-                    .transition(.motionPresence)
+                    .motionTransition(.presence)
                     .background(GeometryReader { g in Color.clear.onChange(of: g.frame(in: .named("fly")), initial: true) { _, f in child = f } })
             }
         }

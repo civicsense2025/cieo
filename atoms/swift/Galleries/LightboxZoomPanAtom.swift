@@ -32,7 +32,7 @@ public struct LightboxZoomPanAtom: MotionAtomView {
                 GeometryReader { g in
                     ZStack(alignment: .bottomTrailing) {
                         phPhoto(photo, g.size).scaleEffect(scale).offset(offset)
-                            .id(photo).transition(.motionSwap(drift: 0))
+                            .id(photo).motionTransition(.swap(drift: 0))
                         locator(g.size)
                     }
                     .frame(width: g.size.width, height: g.size.height).clipped()

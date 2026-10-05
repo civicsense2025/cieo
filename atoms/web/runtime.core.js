@@ -1,6 +1,6 @@
 /* ================================================================ core */
 const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
-// critically damped presets (Lamina: calm, no overshoot)
+// critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4;
 const clock = { t:0, scale:1, last:performance.now() };

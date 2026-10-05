@@ -59,7 +59,7 @@ public struct SpotlightTourAtom: MotionAtomView {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(steps[s].title).font(.footnote.weight(.semibold))
                         Text(steps[s].body).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                    }.id(s).transition(reduce ? .identity : .motionSwap())
+                    }.id(s).motionTransition(.swap())
                 }
                 HStack {
                     Text("\(s + 1) of \(steps.count)").font(.caption2).foregroundStyle(.secondary)

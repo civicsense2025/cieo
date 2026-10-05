@@ -2,8 +2,8 @@
 
 (() => {
 /* ================================================================ editor organisms, wave 2
-   Evidence: lamina/platform/src/editor/{BetweenInsert,CanvasBlockToolbar,BlockLibraryPanel}.tsx,
-   lamina/platform/src/components/admin/QuickCreate.tsx, gesso/features/editor/keys/ShortcutsOverlay.tsx */
+   Evidence: app/platform/src/editor/{BetweenInsert,CanvasBlockToolbar,BlockLibraryPanel}.tsx,
+   app/platform/src/components/admin/QuickCreate.tsx, gesso/features/editor/keys/ShortcutsOverlay.tsx */
 
 const later = fn => setTimeout(fn, 90/clock.scale);
 const EI = {

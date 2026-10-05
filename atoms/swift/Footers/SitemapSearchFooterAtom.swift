@@ -43,7 +43,7 @@ private struct Sitemap: View {
                     }.frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            if count == 0 { Text("Nothing matches “\(query)”. Try a shorter word.").font(.caption).foregroundStyle(.secondary).transition(.motionPresence) }
+            if count == 0 { Text("Nothing matches “\(query)”. Try a shorter word.").font(.caption).foregroundStyle(.secondary).motionTransition(.presence) }
         }
         .padding(.vertical, 14).overlay(alignment: .top) { Divider() }
         .animation(reduce ? nil : .motion(.base), value: count == 0)

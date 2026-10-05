@@ -48,7 +48,7 @@ public struct EvidenceCaptureAtom: MotionAtomView {
                         Color.black.opacity(0.3).onTapGesture { withMotion(.base, reduceMotion: reduce) { viewing = nil } }
                         VStack(spacing: 8) {
                             RoundedRectangle(cornerRadius: 8).fill(Color.accentColor.opacity(0.4)).frame(width: 220, height: 120).matchedGeometryEffect(id: v, in: ns)
-                            SwapText("Captured by Claude · \(shots[v])").font(.caption)
+                            SwapText("Captured by the assistant · \(shots[v])").font(.caption)
                             HStack {
                                 Button { step(-1) } label: { Image(systemName: "chevron.left") }.accessibilityLabel("Previous")
                                 Button { step(1) } label: { Image(systemName: "chevron.right") }.accessibilityLabel("Next")

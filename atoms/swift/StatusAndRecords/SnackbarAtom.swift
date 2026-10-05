@@ -24,7 +24,7 @@ public struct SnackbarAtom: MotionAtomView {
                     Spacer()
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading).padding(10)
-                if shown { bar.transition(reduce ? .identity : .motionPresence).padding(10) }
+                if shown { bar.motionTransition(.presence).padding(10) }
             }
             .frame(maxWidth: 420, minHeight: 220)
             .animation(reduce ? nil : .motion(.base), value: shown)

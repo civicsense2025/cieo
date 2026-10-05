@@ -48,10 +48,10 @@ public struct StepperAtom: MotionAtomView {
             ZStack {
                 if done {
                     Image(systemName: "checkmark").font(.caption.weight(.bold))
-                        .transition(reduce ? .identity : .motionSwap(drift: 0))
+                        .motionTransition(.swap(drift: 0))
                 } else {
                     Text("\(i + 1)").font(.footnote.weight(.semibold))
-                        .transition(reduce ? .identity : .motionSwap(drift: 0))
+                        .motionTransition(.swap(drift: 0))
                 }
             }
             .foregroundStyle(inked ? AnyShapeStyle(.background) : AnyShapeStyle(.secondary))

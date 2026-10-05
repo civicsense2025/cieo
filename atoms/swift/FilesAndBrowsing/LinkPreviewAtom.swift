@@ -33,7 +33,7 @@ public struct LinkPreviewAtom: MotionAtomView {
                 if let i = current, let f = frames[i] {
                     card(i)
                         .position(x: min(max(f.midX, 125 + 8), 320 - 125 - 8), y: f.maxY + 8 + 68)
-                        .transition(reduce ? .identity : .motionPresence)
+                        .motionTransition(.presence)
                 }
             }
             .coordinateSpace(name: "lp")
@@ -50,7 +50,7 @@ public struct LinkPreviewAtom: MotionAtomView {
                 Text(links[i].1).font(.caption).foregroundStyle(.secondary)
                 Text(links[i].2).font(.footnote.weight(.semibold))
             }
-            .id(i).transition(reduce ? .identity : .motionSwap())
+            .id(i).motionTransition(.swap())
             .padding(10).frame(maxWidth: .infinity, alignment: .leading)
         }
         .frame(width: 250, height: 136, alignment: .top)

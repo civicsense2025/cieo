@@ -7,7 +7,7 @@ public struct ConnectorListAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     private enum State_ { case connected, connecting, error, disconnected }
     private struct Server: Identifiable { let id: Int; let name: String; var state: State_ }
-    @State private var servers = [Server(id: 1, name: "GitHub", state: .connected), Server(id: 2, name: "Postgres", state: .error), Server(id: 3, name: "Linear", state: .disconnected)]
+    @State private var servers = [Server(id: 1, name: "Source control", state: .connected), Server(id: 2, name: "Postgres", state: .error), Server(id: 3, name: "Linear", state: .disconnected)]
     @State private var nextId = 4
     public init() {}
 
@@ -24,7 +24,7 @@ public struct ConnectorListAtom: MotionAtomView {
                         Spacer()
                         Button("Add server") { add() }.buttonStyle(AgPress(tone: .info))
                     }
-                    if servers.isEmpty { Text("No servers yet. Add one to give Claude more tools.").font(.caption).foregroundStyle(.secondary) }
+                    if servers.isEmpty { Text("No servers yet. Add one to give the assistant more tools.").font(.caption).foregroundStyle(.secondary) }
                     ForEach(servers) { s in
                         VStack(alignment: .leading, spacing: 4) {
                             HStack {

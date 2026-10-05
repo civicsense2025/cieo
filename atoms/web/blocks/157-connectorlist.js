@@ -97,7 +97,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
 <div class="cnl-root"><div class="cnl-card">
 <div class="cnl-head"><div style="flex:1 1 150px;min-width:0"><h4>Connected servers</h4><div class="cnl-sub"><span class="cnl-n1"></span><span>of</span><span class="cnl-n2"></span><span>connected</span></div></div>
 <div class="cnl-hb"><button type="button" class="btn cnl-add">Add server</button><button type="button" class="btn cnl-re">Replay</button></div></div>
-<ul class="cnl-list" aria-label="MCP servers"><li class="cnl-empty" hidden>No servers yet. Add one to give Claude more tools.</li></ul></div>
+<ul class="cnl-list" aria-label="MCP servers"><li class="cnl-empty" hidden>No servers yet. Add one to give the assistant more tools.</li></ul></div>
 <div class="cnl-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Each row is one server. Its chip morphs fill, label and width between connected, connecting, error and disconnected while the action button swaps its label, so Reconnect never pops in. An error opens a message panel under the row. New rows grow in from zero height, then their content fades up; the list stays pinned to the new row as it grows. Replay re-enters the rows 60ms apart.',
   api:'chip.set(state)   act.put(label)   err.h.set(state === error)   row.open(true, t + i·0.06)   connect: busy → queue +1.5s → ok | error',
@@ -107,7 +107,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
     const G = { fs:'<path d="M3 6a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>', gh:'<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 3-3 4-12 6"/>', db:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>', hash:'<path d="M5 9h14M5 15h14M10 4 8 20M16 4l-2 16"/>', lst:'<path d="M4 6h10M4 12h10M4 18h6M16 16l2 2 4-4"/>', shield:'<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/>', note:'<path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6"/>', card:'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>', frame:'<path d="M5 5h14v14H5zM5 12h14M12 5v14"/>', dots:'<circle cx="12" cy="8" r="3"/><circle cx="7" cy="16" r="3"/><circle cx="17" cy="16" r="3"/>' };
     const SEED = [
       { n:'Filesystem', ds:'Local · stdio · 11 tools', g:'fs', s:0 },
-      { n:'GitHub', ds:'Remote · HTTP · 24 tools', g:'gh', s:0 },
+      { n:'Source control', ds:'Remote · HTTP · 24 tools', g:'gh', s:0 },
       { n:'Postgres', ds:'analytics-ro · stdio · 6 tools', g:'db', s:0 },
       { n:'Slack', ds:'Remote · HTTP · 9 tools', g:'hash', s:0 },
       { n:'Linear', ds:'Remote · HTTP · 14 tools', g:'lst', s:3 },
@@ -216,7 +216,7 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
 </style>
 <div class="oag-root"><section class="oag-card" aria-labelledby="oag-t">
 <div class="oag-id"><div class="oag-link"><span class="oag-tile" style="background:var(--ink);color:var(--card)" aria-hidden="true">${ic('<path d="M12 4v16M5 8l14 8M19 8 5 16"/>', 20, 2)}</span><span class="oag-ln" aria-hidden="true"><i></i><span class="oag-mid"><span class="oag-m1" style="position:absolute;display:grid;place-items:center;inset:0;color:var(--success);background:var(--card);border-radius:50%">${ic(I.check, 14, 3)}</span><span class="oag-m2" style="position:absolute;display:grid;place-items:center;inset:0;color:var(--danger);background:var(--card);border-radius:50%">${ic(I.x, 13, 3)}</span></span></span><span class="oag-tile" style="background:var(--accent-tint);color:var(--accent)" aria-hidden="true">N</span></div>
-<div class="oag-ttl" id="oag-t" aria-live="polite"><h4>Claude wants to connect to Northwind</h4><h4>Claude is connected to Northwind</h4><h4>Request denied</h4></div>
+<div class="oag-ttl" id="oag-t" aria-live="polite"><h4>Assistant wants to connect to Northwind</h4><h4>Assistant is connected to Northwind</h4><h4>Request denied</h4></div>
 <div class="oag-sub"><span>Signed in as maya@northwind.co</span></div></div>
 <div class="oag-main"><ul class="oag-sc" aria-label="Requested permissions"></ul>
 <div class="oag-sum"><div class="oag-sin"><span class="oag-sl"></span><button type="button" class="oag-ul"></button></div></div>
@@ -232,9 +232,9 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
     const SC = [
       { n:'Read pages and posts', d:'See published content, drafts and page structure.', req:true, on:true },
       { n:'Edit drafts', d:'Create and change drafts. Nothing goes live until you publish.', on:true },
-      { n:'Publish changes', d:'Make drafts live on northwind.co.', bd:'Sensitive', warn:'Claude could change the live site without review.' },
+      { n:'Publish changes', d:'Make drafts live on northwind.co.', bd:'Sensitive', warn:'Assistant could change the live site without review.' },
       { n:'Read form submissions', d:'See names and emails people send through your forms.', bd:'Personal data', warn:'Submissions include personal details of your visitors.' },
-      { n:'Manage members', d:'Invite people, remove them and change their roles.', bd:'Sensitive', warn:'Claude could remove people or raise their access.' } ];
+      { n:'Manage members', d:'Invite people, remove them and change their roles.', bd:'Sensitive', warn:'Assistant could remove people or raise their access.' } ];
     const NS = SC.length, tf = mFollow($(st,'.oag-ttl')); tf.to(ttl[0], true);
     const rows = SC.map((s, i) => { const li = mEl('li'); li.className = 'oag-li';
       li.innerHTML = `<div class="oag-in"><div class="oag-r"><div class="oag-tx"><div class="oag-nm"><span></span></div><span class="oag-ds"></span></div><div class="oag-st"><span class="oag-ck">${ic(I.check, 13, 3)}</span></div></div><div class="oag-wn"><div class="oag-wi">${ic('<path d="M12 4 3 20h18z"/><path d="M12 10v4.5M12 17.5h.01"/>', 15, 2.25)}<span></span></div></div></div>`;
@@ -260,7 +260,7 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
       else { gY.set(0, S.base, t); gap.set(0, S.base, t); gD.set(1, S.base, t); cD.set(1, S.base, t + .05); nsw.put('Request denied'); lnW.set(.3, S.base, t + .1); mx.set(1, S.base, t + .35); dg.set(1);
         rows.forEach((r, i) => r.sl.open(false, t + .25 + i*.04)); }
       cs.open(false, t);
-      const on = nOn(); sl.textContent = k === 1 ? `${on} ${on === 1 ? 'permission' : 'permissions'} granted to Claude.` : 'No permissions were shared with Claude.'; undo.textContent = k === 1 ? 'Revoke access' : 'Ask again';
+      const on = nOn(); sl.textContent = k === 1 ? `${on} ${on === 1 ? 'permission' : 'permissions'} granted to the assistant.` : 'No permissions were shared with the assistant.'; undo.textContent = k === 1 ? 'Revoke access' : 'Ask again';
       sumS.open(true, t, .45); mPush(q, t + .6, () => undo.focus({ preventScroll:true }));
     };
     const reset = () => { const t = now(); state = 0; tsw.to(0); tf.to(ttl[0]); yes.disabled = no.disabled = false;
@@ -322,9 +322,9 @@ atom({ id:'toolapproval', cat:'MCP and agents', name:'Tool call approval', block
 .tap-res .tap-m{display:block;margin-top:4px;color:var(--muted);font-size:12px}
 @container (max-width:420px){.tap-bt .btn{flex:1 1 100%}.tap-tool{font-size:15px}}
 </style>
-<div class="tap-root"><div class="tap-wrap"><div class="tap-bar"><b>Claude is working in Northwind</b><button type="button" class="btn tap-next">Next request</button></div>
+<div class="tap-root"><div class="tap-wrap"><div class="tap-bar"><b>Assistant is working in Northwind</b><button type="button" class="btn tap-next">Next request</button></div>
 <div class="tap-card" role="group" aria-label="Tool call awaiting approval"><div class="tap-req"></div>
-<div class="tap-zn"><div class="tap-ly tap-a"><div class="tap-bt"><button type="button" class="btn tap-no">Deny</button><button type="button" class="btn tap-once ink">Allow once</button><button type="button" class="btn tap-alw">Always allow</button></div><p class="tap-hint">Claude waits for your answer. Always allow applies to this tool in this workspace.</p></div>
+<div class="tap-zn"><div class="tap-ly tap-a"><div class="tap-bt"><button type="button" class="btn tap-no">Deny</button><button type="button" class="btn tap-once ink">Allow once</button><button type="button" class="btn tap-alw">Always allow</button></div><p class="tap-hint">Assistant waits for your answer. Always allow applies to this tool in this workspace.</p></div>
 <div class="tap-ly tap-r"><div class="tap-run"><span class="tap-sp" style="display:flex;color:var(--muted)">${SPIN(16)}</span><span style="flex:1;min-width:0">Running <code class="tap-rn"></code></span><span class="num tap-el" style="color:var(--muted);font-size:12.5px">0.0s</span></div></div>
 <div class="tap-ly tap-d"><div class="tap-res"><span class="tap-ic"></span><div style="flex:1;min-width:0"><b class="tap-rt"></b><span class="tap-d tap-rd"></span><span class="tap-m tap-rm"></span></div></div></div></div></div>
 <div class="tap-live" role="status" aria-live="polite" style="${SR}"></div></div></div>`,
@@ -336,13 +336,13 @@ atom({ id:'toolapproval', cat:'MCP and agents', name:'Tool call approval', block
     const rt = $(st,'.tap-rt'), rd = $(st,'.tap-rd'), rm = $(st,'.tap-rm'), resBox = $(st,'.tap-res'), resIc = $(st,'.tap-res .tap-ic');
     const RISK = { Reads:['var(--raised)','var(--muted)'], Writes:['var(--warning-tint)','var(--warning)'], Destructive:['var(--danger-tint)','var(--danger)'] };
     const REQ = [
-      { sv:'GitHub', g:'<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 3-3 4-12 6"/>', tool:'create_pull_request', risk:'Writes', sum:'Open a pull request in northwind/api from fix/login-timeout into main.',
+      { sv:'Source control', g:'<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 3-3 4-12 6"/>', tool:'create_pull_request', risk:'Writes', sum:'Open a pull request in northwind/api from fix/login-timeout into main.',
         args:[['owner','"northwind"'],['repo','"api"'],['head','"fix/login-timeout"'],['base','"main"'],['title','"Raise login timeout to 30s"'],['body','"Fixes the 504s people see when the SSO redirect is slow."'],['draft','false']],
         run:1.5, rt:'Pull request #482 opened', rd:'northwind/api · fix/login-timeout into main', rm:'Completed in 1.4s' },
       { sv:'Postgres', g:'<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>', tool:'run_query', risk:'Reads', sum:'Run a read-only query on analytics-ro.',
         args:[['database','"analytics-ro"'],['sql','"SELECT date_trunc(\'day\', created_at) AS day, count(*) FROM signups WHERE created_at > now() - interval \'7 days\' GROUP BY 1 ORDER BY 1"'],['timeout_ms','5000'],['max_rows','1000']],
         run:.8, rt:'7 rows returned', rd:'signups per day, last 7 days', rm:'Completed in 38 ms' },
-      { sv:'Slack', g:'<path d="M5 9h14M5 15h14M10 4 8 20M16 4l-2 16"/>', tool:'post_message', risk:'Writes', sum:'Post a message to #launch as Claude.',
+      { sv:'Slack', g:'<path d="M5 9h14M5 15h14M10 4 8 20M16 4l-2 16"/>', tool:'post_message', risk:'Writes', sum:'Post a message to #launch as the assistant.',
         args:[['channel','"#launch"'],['text','"Staging is green. Rolling out the new billing page at 3pm."'],['thread_ts','null']],
         run:1.1, rt:'Message posted to #launch', rd:'Visible to 48 members', rm:'Completed in 0.9s' },
       { sv:'Filesystem', g:'<path d="M3 6a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>', tool:'delete_directory', risk:'Destructive', sum:'Delete the build output folder and everything inside it.',
@@ -375,7 +375,7 @@ atom({ id:'toolapproval', cat:'MCP and agents', name:'Tool call approval', block
     let runStart = 0;
     const finish = (j, ok, kind) => { if (j !== jobId) return; const r = REQ[cur]; state = 2;
       resIc.innerHTML = ic(ok ? I.check : I.x, 16, 2.5); resBox.style.background = ok ? 'var(--success-tint)' : 'var(--danger-tint)'; resBox.style.color = ok ? 'var(--success)' : 'var(--danger)';
-      rt.textContent = ok ? r.rt : `You denied ${r.tool}`; rd.textContent = ok ? r.rd : 'Claude was told you declined and will choose another approach.';
+      rt.textContent = ok ? r.rt : `You denied ${r.tool}`; rd.textContent = ok ? r.rd : 'Assistant was told you declined and will choose another approach.';
       rm.textContent = ok ? (kind === 'alw' ? r.rm + ' · Always allowed for this workspace' : r.rm) : '';
       znSw.to(2); zf.to(D); say(ok ? r.rt : `Denied ${r.tool}`); };
     bNo.onclick = () => decide('no'); bOnce.onclick = () => decide('once'); bAlw.onclick = () => decide('alw');
@@ -434,12 +434,12 @@ atom({ id:'toolcalllog', cat:'MCP and agents', name:'Tool call log', block:'Agen
     const CALLS = [
       { at:.4, dur:.5, tool:'list_files', sv:'Filesystem', args:{ path:'~/Projects/northwind/src' }, res:'42 entries in src/' },
       { at:1.2, dur:.4, tool:'read_file', sv:'Filesystem', args:{ path:'src/auth/session.ts' }, res:'118 lines read' },
-      { at:1.9, dur:1.3, tool:'search_code', sv:'GitHub', args:{ query:'sessionTimeout repo:northwind/api', per_page:10 }, res:'6 matches in 3 files' },
+      { at:1.9, dur:1.3, tool:'search_code', sv:'Source control', args:{ query:'sessionTimeout repo:northwind/api', per_page:10 }, res:'6 matches in 3 files' },
       { at:2.5, dur:.9, tool:'run_query', sv:'Postgres', args:{ sql:'SELECT count(*) FROM sessions WHERE expired_at < now()' }, res:'1 row: 12,408' },
       { at:4.0, dur:1.0, tool:'post_message', sv:'Slack', args:{ channel:'#eng', text:'Found the login timeout bug in session.ts.' }, err:'429 rate_limited. Slack asked to retry after 2 seconds.' },
       { at:5.5, dur:.8, tool:'post_message', sv:'Slack', args:{ channel:'#eng', text:'Found the login timeout bug in session.ts.' }, res:'Message posted to #eng' },
-      { at:6.3, dur:1.7, tool:'create_pull_request', sv:'GitHub', args:{ repo:'northwind/api', head:'fix/login-timeout', base:'main' }, res:'Pull request #482 opened' },
-      { at:8.4, dur:1.1, tool:'get_check_runs', sv:'GitHub', args:{ repo:'northwind/api', ref:'fix/login-timeout' }, res:'3 passed, 0 failed' } ];
+      { at:6.3, dur:1.7, tool:'create_pull_request', sv:'Source control', args:{ repo:'northwind/api', head:'fix/login-timeout', base:'main' }, res:'Pull request #482 opened' },
+      { at:8.4, dur:1.1, tool:'get_check_runs', sv:'Source control', args:{ repo:'northwind/api', ref:'fix/login-timeout' }, res:'3 passed, 0 failed' } ];
     const END = 9.7;
     let rt = 0, last = null, paused = false, next = 0, done = false, nFail = 0, started = 0;
     const rows = [], q = [];
@@ -513,10 +513,10 @@ atom({ id:'toolpermissions', cat:'MCP and agents', name:'Server tool permissions
 .tpm-wi svg{flex:none;margin-top:1px}
 @container (max-width:520px){.tpm-tb .tpm-sp{display:none}.tpm-tb .seg{order:-1;flex:1 1 100%}.tpm-tb .seg button{flex:1}}
 </style>
-<div class="tpm-root"><div class="tpm-card"><div class="tpm-head"><span class="tpm-ic">${ic('<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 3-3 4-12 6"/>', 18, 1.75)}</span><div><h4>GitHub tools</h4><div class="tpm-sub"><span class="tpm-n1"></span><span>of</span><span class="tpm-n2"></span><span>enabled for Claude</span></div></div></div>
+<div class="tpm-root"><div class="tpm-card"><div class="tpm-head"><span class="tpm-ic">${ic('<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 3-3 4-12 6"/>', 18, 1.75)}</span><div><h4>Source control tools</h4><div class="tpm-sub"><span class="tpm-n1"></span><span>of</span><span class="tpm-n2"></span><span>enabled for the assistant</span></div></div></div>
 <div class="tpm-tb"><div class="seg tpm-fs" role="group" aria-label="Filter tools"><div class="ind"></div><button type="button" data-f="all">All</button><button type="button" data-f="read">Read</button><button type="button" data-f="write">Write</button></div><span class="tpm-sp"></span>
 <button type="button" class="btn tpm-bulk"><span class="tpm-bh"></span></button><button type="button" class="btn tpm-off" style="height:32px">Disable all</button></div>
-<ul class="tpm-list" aria-label="GitHub tools"></ul></div><div class="tpm-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
+<ul class="tpm-list" aria-label="Source control tools"></ul></div><div class="tpm-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Switches spring one by one. Enable all read-only turns on every read tool still off, 60ms apart from the top, and the button swaps to a Read-only tools enabled label once none are left; flipping any read tool off brings the original label back. The filter indicator edges lag each other, and tools outside the filter collapse in height rather than disappearing. Enabling a destructive tool grows a warning line under it.',
   api:'tool[i].sw.set(1, t + i·0.06)   bulk.swap(allRead ? done : enable)   filter: ind.go(l, r), row.open(match)   destructive: warn.h.set(on)',
   init(st){
@@ -528,7 +528,7 @@ atom({ id:'toolpermissions', cat:'MCP and agents', name:'Server tool permissions
       { n:'search_code', k:'read', d:'Search code across repositories you can access.' },
       { n:'get_file_contents', k:'read', d:'Read a file or list a directory at any ref.' },
       { n:'create_issue', k:'write', d:'Open an issue with a title, body and labels.', on:true },
-      { n:'add_issue_comment', k:'write', d:'Comment on an issue or pull request as Claude.' },
+      { n:'add_issue_comment', k:'write', d:'Comment on an issue or pull request as the assistant.' },
       { n:'create_pull_request', k:'write', d:'Open a pull request from an existing branch.' },
       { n:'merge_pull_request', k:'write', d:'Merge a pull request using the repository default.' },
       { n:'delete_branch', k:'danger', d:'Delete a branch from the remote repository.', warn:'Deleting a branch cannot be undone from here. Leave this off unless a task needs it.' } ];
@@ -831,8 +831,8 @@ atom({ id:'agentaccess', cat:'MCP and agents', name:'Agent permission matrix', b
   .aam-mx{padding:4px 10px 8px}
 }
 </style>
-<div class="aam-root"><section class="aam-card" aria-label="Claude access to Northwind"><div class="aam-head"><span class="aam-ic">${ic('<path d="M12 4v16M5 8l14 8M19 8 5 16"/>', 18, 2)}</span><div class="aam-hm"><h4>Claude</h4><span class="aam-sb"></span></div><span class="aam-ch"></span></div>
-<div class="aam-mx"><div class="aam-t" role="table" aria-label="What Claude can do on Northwind"></div></div>
+<div class="aam-root"><section class="aam-card" aria-label="Assistant access to Northwind"><div class="aam-head"><span class="aam-ic">${ic('<path d="M12 4v16M5 8l14 8M19 8 5 16"/>', 18, 2)}</span><div class="aam-hm"><h4>Assistant</h4><span class="aam-sb"></span></div><span class="aam-ch"></span></div>
+<div class="aam-mx"><div class="aam-t" role="table" aria-label="What the assistant can do on Northwind"></div></div>
 <div class="aam-df"><div class="aam-dp"><div class="aam-dh"><span>Pending changes</span><span class="aam-nb"><span class="aam-dn"></span></span></div><ul class="aam-dl" aria-label="Pending changes"></ul><div class="aam-db"><button type="button" class="btn aam-dc" style="width:84px">Discard</button><button type="button" class="btn ink aam-sv" style="width:132px"><span style="position:absolute;inset:0"></span></button></div></div></div>
 </section><div class="aam-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Each cell is a checkbox. Toggling springs the fill and check, and the cell takes a full outline (ink for added, red with a faint check for removed) so the change is visible before saving. The pending panel grows up from the bottom edge and each change enters as its own row. The header chip morphs to Can publish or delete as soon as one of those grants is on. Save swaps to a spinner, then Saved, collapses the rows and settles every outline; Discard springs everything back.',
@@ -896,7 +896,7 @@ atom({ id:'agentaccess', cat:'MCP and agents', name:'Agent permission matrix', b
         mPush(q, now() + .7, () => { saving = false; for (const [k, e] of ds){ e.slot.open(false); mPush(q, now() + .5, () => e.li.remove()); } ds.clear(); dn.set('0'); slot.open(false); mPush(q, now() + .5, () => { svT.put('Save changes', true); }); }); }); };
     dc.onclick = () => { if (saving) return; cells.forEach(c => { if (c.d !== c.s){ c.d = c.s; c.b.setAttribute('aria-checked', c.d); c.p.set(c.d ? 1 : 0, S.base); c.qq.set(0, S.base); c.g.set(0, S.base); } });
       rows.forEach(o => { if (o.sc !== o.scS){ o.sc = o.scS; o.ct.put(o.r.sc[o.sc]); o.fit(); o.cp.set(0, S.base); o.chipB.setAttribute('aria-label', `${o.r.n} scope: ${o.r.sc[o.sc]}. Change`); } }); diff(); say('Changes discarded'); };
-    sub.put('Lamina MCP · active 4 minutes ago', true); svT.put('Save changes', true); dn.set('0', true);
+    sub.put('App MCP · active 4 minutes ago', true); svT.put('Save changes', true); dn.set('0', true);
     const fitAll = () => rows.forEach(o => o.fit(true)); document.fonts.ready.then(fitAll); requestAnimationFrame(fitAll);
     return t => {
       mDrain(q, t);

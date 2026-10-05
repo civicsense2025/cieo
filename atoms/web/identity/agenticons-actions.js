@@ -1,6 +1,6 @@
-/* ---------- Agent identity: 24 action and state icons in the Meridian agent system ----------
+/* ---------- Agent identity: 24 action and state icons in the agent system ----------
    Same grammar as the agent mark: the square tile is the agent, the filled square is the agent's hand,
-   and the world it works in is drawn with a meridian arc and a tilted equator. Brand form = 64 grid,
+   and the world it works in is drawn with a arc arc and a tilted equator. Brand form = 64 grid,
    paper tile, one pale wash, 1.7 ink. Product form = square outline in currentColor, weight tuned per size.
    Every icon is a pure function of (u, size, form): u is seconds into its own loop and u = 0 is the resting
    drawing, so a loop always starts and ends at rest and playing never needs a blend. */
@@ -46,7 +46,7 @@ const def = (k, n, g, w, L, st, d, draw) => DEFS.push({ k, n, g, w, L, st, d, dr
 /* ---- Doing ---- */
 def('browsing', 'Browsing', 'Doing', 'm', 2.6, null, 'The square pupil looks from stop to stop along the equator, one page at a time, then settles in the centre.', m => {
   const l = m.lod, x = sq(m.u, 32, [[.3, 22], [.95, 41], [1.55, 26], [2.1, 32]]), y = 32 - (x - 32)*.18;
-  return [['meridians', P(l ? 'M13 32C22 16 42 16 51 32C42 48 22 48 13 32Z' : 'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z')], ['agent', SQ(x, y, l ? 10 : 11, m.c)]]; });
+  return [['arcs', P(l ? 'M13 32C22 16 42 16 51 32C42 48 22 48 13 32Z' : 'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z')], ['agent', SQ(x, y, l ? 10 : 11, m.c)]]; });
 
 const NV = [[[16, 46], [16, 40], [16, 35], [16, 30]], [[16, 30], [16, 22], [22, 22], [30, 22]], [[30, 22], [36, 22], [41, 22], [47, 22]]];
 const NVL = NV.map(sg => sg.map(q => [32 + (q[0] - 32)*.84, 32 + (q[1] - 32)*.84]));
@@ -69,7 +69,7 @@ def('scrolling', 'Scrolling', 'Doing', 'm', 2.6, null, 'The page lines slide up 
   const top = 19 + (k/2.2)*(28 - tl), th = l ? P(`M47 ${r1(top)}V${r1(top + tl)}`) : `<path d="M47 ${r1(top)}V${r1(top + tl)}" stroke-width="3.4"/>`;
   return [['page', s], ['track', l ? '' : OP(P('M47 17V47'), .35)], ['thumb', th]]; });
 
-def('inspecting', 'Inspecting element', 'Doing', 'v', 2.4, null, 'The lens drifts over the page while the meridian inside it swings, scanning for the element it wants.', m => {
+def('inspecting', 'Inspecting element', 'Doing', 'v', 2.4, null, 'The lens drifts over the page while the arc inside it swings, scanning for the element it wants.', m => {
   const l = m.lod, dx = sq(m.u, 0, [[.25, 2], [1, -2], [1.7, 0]]), dy = sq(m.u, 0, [[.25, -2], [1, 2], [1.7, 0]]), a = sq(m.u, 8, [[.3, -5], [1.1, 12], [1.8, 8]]);
   return [['lens', TR(R(12, 12, 28, 28, 8) + P(l ? 'M41 41L49 49' : 'M40 40L51 51') + (l ? '' : P('M26 19V33') + P(arcD(26, 19, 33, a))), dx, dy)]]; });
 
@@ -86,9 +86,9 @@ def('pinning', 'Pinning', 'Doing', 'v', 2.2, null, 'The pin lifts clear, drops b
   const ring = rs < .8 ? '' : l ? P(`M${r1(40 - rs*1.2)} 48H${r1(40 + rs*1.2)}`) : `<ellipse cx="40" cy="47.5" rx="${r1(rs)}" ry="${r1(rs*.35)}"/>`;
   return [['ripple', ring], ['pin', OP(TR(P('M32 34L40 46') + C(32, 26, l ? 7.5 : 8) + (l ? '' : P('M28 26H36M32 22V30')), 0, dy), o)]]; });
 
-def('thinking', 'Thinking', 'Doing', 'm', 2.2, null, 'The meridian turns on its axis at a steady, unhurried speed: edge-on, full, edge-on again.', m => {
+def('thinking', 'Thinking', 'Doing', 'm', 2.2, null, 'The arc turns on its axis at a steady, unhurried speed: edge-on, full, edge-on again.', m => {
   const l = m.lod, ry = l ? 15 : 17, th0 = Math.asin((l ? 7.5 : 9)/ry), rx = Math.max(.01, ry*Math.abs(Math.sin(th0 + Math.PI*m.u/2.2)));
-  return [['axis', l ? '' : P(`M32 ${32 - ry}V${32 + ry}`)], ['meridian', `<ellipse cx="32" cy="32" rx="${r1(rx)}" ry="${ry}"/>`]]; });
+  return [['axis', l ? '' : P(`M32 ${32 - ry}V${32 + ry}`)], ['arc', `<ellipse cx="32" cy="32" rx="${r1(rx)}" ry="${ry}"/>`]]; });
 
 const PL = [[15, 47], [25, 47], [25, 37], [35, 37], [35, 27], [46, 27]], PT = polyLen(PL);
 def('planning', 'Planning', 'Doing', 'm', 3, null, 'The square steps back to the first stair, then climbs, turning each dotted stair into a solid one.', m => {
@@ -132,7 +132,7 @@ def('paused', 'Paused', 'Waiting', 'n', 2.4, null, 'The two bars stand still and
   const t = sq(m.u, 3, [[.3, 0], [1.5, 3]]), l = m.sm;
   return [['pause', P(l ? 'M24 17V47M40 17V47' : 'M24 16V38M40 16V38')], ['equator', l ? '' : P(`M16 ${r1(47 + t)}L48 ${r1(47 - t)}`)]]; });
 
-def('scheduled', 'Scheduled', 'Waiting', 'm', 2.4, null, 'The minute hand ticks round a full turn in four quarter steps while the meridian hand holds at twelve.', m => {
+def('scheduled', 'Scheduled', 'Waiting', 'm', 2.4, null, 'The minute hand ticks round a full turn in four quarter steps while the arc hand holds at twelve.', m => {
   const a = sq(m.u, 120, [[.25, 210], [.7, 300], [1.15, 390], [1.6, 480]])*Math.PI/180, r = m.lod ? 15 : 16, ml = m.lod ? 9 : 11;
   return [['face', C(32, 32, r)], ['hands', P(`M32 32V${m.lod ? 23 : 21}`) + P(`M32 32L${r1(32 + ml*Math.sin(a))} ${r1(32 - ml*Math.cos(a))}`)]]; });
 
@@ -241,7 +241,7 @@ atom({ id:'agentactions', cat:'Agent identity', name:'Agent action and state ico
 </style><div class="aax-root"><div class="aax-main"><div class="aax-left"><div class="aax-bar"><div class="aax-sg aax-fm" role="group" aria-label="Icon form"><button type="button" data-f="product" aria-pressed="true">Product</button><button type="button" data-f="brand" aria-pressed="false">Brand</button></div><div class="aax-sg aax-sz" role="group" aria-label="Icon size in pixels"></div><button type="button" class="btn aax-all" aria-pressed="false">Play all</button></div><div class="aax-sheet" role="group" aria-label="Agent action and state icons"></div></div>
 <div class="aax-right"><div class="aax-det" aria-live="polite"><div class="aax-dbig"></div><div><div class="aax-dn"></div><p class="aax-dd"></p></div><div class="aax-ds"></div></div>
 <section class="aax-feed" aria-label="Feed preview"><div class="aax-fh"><h4>Feed preview</h4><div class="aax-now" aria-hidden="true"></div><button type="button" class="btn aax-rp">Replay</button></div><ul class="aax-fl"></ul></section></div></div></div>`,
-  desc:'Twenty-four things an agent does or is, in the Meridian agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.',
+  desc:'Twenty-four things an agent does or is, in the agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.',
   api:'frame(def, { brand, size, u })   u = (t − playStart) % loop   leave: u += 2.4·dt until the loop ends   row.y.set(i·pitch)',
   init(st){
     const SZ = { product:[16, 20, 24, 32], brand:[32, 40, 48, 64] }, size = { product:24, brand:40 }, byK = {};

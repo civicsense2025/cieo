@@ -22,20 +22,20 @@ public struct OnboardingChecklistAtom: MotionAtomView {
                 switch stage {
                 case .welcome:
                     VStack(spacing: 8) { Text("Welcome aboard").font(.headline); Text("Four quick steps get your site ready.").font(.footnote).foregroundStyle(.secondary)
-                        Button("Start setup") { withMotion(.base, reduceMotion: reduce) { stage = .list } }.buttonStyle(.borderedProminent).controlSize(.small) }.transition(reduce ? .identity : .motionSwap())
+                        Button("Start setup") { withMotion(.base, reduceMotion: reduce) { stage = .list } }.buttonStyle(.borderedProminent).controlSize(.small) }.motionTransition(.swap())
                 case .list:
                     VStack(alignment: .leading, spacing: 0) {
                         HStack { Text("Setup").font(.footnote.weight(.semibold)); Spacer(); Text("\(count) of 4").font(.caption).foregroundStyle(.secondary)
                             Circle().trim(from: 0, to: Double(count) / 4).stroke(Color.accentColor, style: StrokeStyle(lineWidth: 3, lineCap: .round)).rotationEffect(.degrees(-90)).frame(width: 20, height: 20)
                                 .background(Circle().stroke(.quaternary, lineWidth: 3)).animation(reduce ? nil : .motion(.base).delay(0.12), value: count) }.padding(.bottom, 8)
                         ForEach(tasks.indices, id: \.self) { i in task(i) }
-                    }.transition(reduce ? .identity : .motionSwap())
+                    }.motionTransition(.swap())
                 case .done:
                     VStack(spacing: 8) {
                         Image(systemName: "checkmark.circle.fill").font(.system(size: 40)).foregroundStyle(.green).scaleEffect(finished ? 1 : 0.5).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.1), value: finished)
                         Text("You’re all set").font(.headline).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.25), value: finished)
                         Button("Continue") {}.buttonStyle(.borderedProminent).controlSize(.small).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.35), value: finished)
-                    }.transition(reduce ? .identity : .motionSwap())
+                    }.motionTransition(.swap())
                 }
             }
             .padding(16).frame(width: 300).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14)).animation(reduce ? nil : .motion(.base), value: stage).animation(reduce ? nil : .motion(.base), value: open)

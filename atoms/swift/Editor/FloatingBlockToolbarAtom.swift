@@ -26,7 +26,7 @@ public struct FloatingBlockToolbarAtom: MotionAtomView {
                         .accessibilityLabel("\(kinds[i].name) block").accessibilityAddTraits(.isButton)
                 }
                 if selected != nil {
-                    toolbar.frame(width: max(0, maxX - minX), height: 30).offset(x: minX, y: y).transition(reduce ? .identity : .motionPresence)
+                    toolbar.frame(width: max(0, maxX - minX), height: 30).offset(x: minX, y: y).motionTransition(.presence)
                 }
             }
             .frame(width: 340, height: 250, alignment: .topLeading).animation(reduce ? nil : .motion(.base), value: selected == nil)
@@ -37,7 +37,7 @@ public struct FloatingBlockToolbarAtom: MotionAtomView {
         let k = kinds[selected ?? 0]
         return HStack(spacing: 0) {
             ZStack(alignment: .trailing) {
-                HStack(spacing: 10) { ForEach(k.actions, id: \.self) { Image(systemName: $0).font(.footnote) } }.id(selected).transition(reduce ? .identity : .motionSwap())
+                HStack(spacing: 10) { ForEach(k.actions, id: \.self) { Image(systemName: $0).font(.footnote) } }.id(selected).motionTransition(.swap())
             }.frame(maxWidth: .infinity, alignment: .trailing).padding(.horizontal, 8).animation(reduce ? nil : .motion(.base), value: selected)
             Divider().frame(height: 14)
             HStack(spacing: 10) { Image(systemName: "arrow.up.arrow.down"); Image(systemName: "plus.square.on.square"); Image(systemName: "trash") }.font(.footnote).padding(.horizontal, 8)

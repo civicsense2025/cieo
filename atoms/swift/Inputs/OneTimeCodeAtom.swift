@@ -34,7 +34,7 @@ public struct OneTimeCodeAtom: MotionAtomView {
                             ZStack {
                                 if i < code.count {
                                     Text(String(code[code.index(code.startIndex, offsetBy: i)])).id("\(i)-\(code[code.index(code.startIndex, offsetBy: i)])")
-                                        .transition(reduce ? .identity : .motionSwap(drift: 10))
+                                        .motionTransition(.swap(drift: 10))
                                 }
                             }
                             .font(.system(size: 22, weight: .semibold)).monospacedDigit()

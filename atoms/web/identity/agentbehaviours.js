@@ -18,7 +18,7 @@ const exv = (k, q) => { const e = globalThis.AgentRig.EXPRESSIONS.find(x => x.k 
 const WC = k => globalThis.AgentRig.WASH[k];
 let uid = 0;
 
-/* ---------- drawing vocabulary: the Meridian hand (paper, one ink line, pale washes) ---------- */
+/* ---------- drawing vocabulary: the house hand (paper, one ink line, pale washes) ---------- */
 const Rr = (g, x, y, w, h, rx = 8, cls = 'abh-kp') => mk('rect', { x:n2(x), y:n2(y), width:n2(Math.max(0, w)), height:n2(Math.max(0, h)), rx, class:cls }, g);
 const Pa = (g, d, cls = 'abh-k') => mk('path', { d, class:cls }, g);
 const Tx = (g, x, y, s, cls = 'abh-tx', anchor) => { const e = mk('text', { x:n2(x), y:n2(y), class:cls }, g); if (anchor) e.setAttribute('text-anchor', anchor); e.textContent = s; return e; };
@@ -354,7 +354,7 @@ scene({ k:'comparing', n:'Comparing versions', c:'Comparing', g:0, url:'fieldnot
     X.e.link.style.strokeDashoffset = n2((1 - l)*400); X.e.link.style.opacity = n2(l > .01 ? 1 : 0); } });
 
 scene({ k:'thinking', n:'Thinking', c:'Thinking', g:0, url:'fieldnotes.co/checkout',
-  note:'The meridian on its antenna turns while it glances between three ideas and settles on one.',
+  note:'The arc on its antenna turns while it glances between three ideas and settles on one.',
   build(X){ const { C, F, s, n, top } = X.L, g = X.g, opts = ['Nudge the total up', 'Match the v12 spacing', 'Ask Maya first'];
     const ow = n ? C.w*.78 : Math.min(200, (C.w - 40)/3), oh = 40, y0 = n ? top : Math.max(top, F - 2.05*s - oh - 30);
     X.e.opts = opts.map((s_, i) => { const x = n ? C.x0 + (i % 2 ? C.w - ow : 0) : C.x0 + i*(ow + 20) + (C.w - 3*ow - 40)/2, y = n ? y0 + i*(oh + 14) : y0 + (i === 1 ? -16 : 0);

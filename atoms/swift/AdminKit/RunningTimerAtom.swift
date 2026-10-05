@@ -19,13 +19,13 @@ public struct RunningTimerAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 12) {
                     ZStack(alignment: .leading) {
-                        if running { Text(tasks[task]).font(.footnote.weight(.medium)).transition(reduce ? .identity : .motionSwap()) }
-                        else { Picker("Task", selection: $task) { ForEach(tasks.indices, id: \.self) { Text(tasks[$0]).tag($0) } }.labelsHidden().frame(width: 170).transition(reduce ? .identity : .motionSwap()) }
+                        if running { Text(tasks[task]).font(.footnote.weight(.medium)).motionTransition(.swap()) }
+                        else { Picker("Task", selection: $task) { ForEach(tasks.indices, id: \.self) { Text(tasks[$0]).tag($0) } }.labelsHidden().frame(width: 170).motionTransition(.swap()) }
                     }.frame(width: 170, alignment: .leading)
                     HStack(spacing: 0) {
                         RollingDigits(String(secs / 3600)); Text(":"); RollingDigits(String(format: "%02d", secs / 60 % 60)); Text(":"); RollingDigits(String(format: "%02d", secs % 60))
                     }.font(.title3.weight(.medium)).accessibilityElement(children: .ignore).accessibilityLabel("Elapsed").accessibilityValue("\(secs / 60) minutes \(secs % 60) seconds")
-                    Button(action: toggle) { ZStack { Text(running ? "Stop" : "Start").id(running).transition(reduce ? .identity : .motionSwap()) }
+                    Button(action: toggle) { ZStack { Text(running ? "Stop" : "Start").id(running).motionTransition(.swap()) }
                         .font(.footnote.weight(.semibold)).foregroundStyle(Color(white: 1, opacity: 0.95)).frame(width: running ? 60 : 68, height: 30).background(Capsule().fill(running ? Color.red : Color.primary)) }
                         .buttonStyle(.plain)
                 }.animation(reduce ? nil : .motion(.base), value: running)

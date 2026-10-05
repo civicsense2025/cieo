@@ -3,7 +3,7 @@ import MotionKit
 
 public struct ApprovalInlineAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "approvalinline", category: "Agent activity", name: "Approval on the page",
-        summary: "Claude’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.")
+        summary: "Assistant’s cursor walks to the button and stops, the page dims, a ring closes on the button (leading edge first) and the popover grows out of it, above or below depending on room. The popover lists exactly what will be sent. Risky actions add a typed confirmation: the Allow once button stays off until the name matches and a check swaps into the field. A choice swaps the ask for its result and the popover height eases to fit; Always allow also slides a rule into the list.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var frames: [String: CGRect] = [:]
     @State private var risky = false
@@ -19,7 +19,7 @@ public struct ApprovalInlineAtom: MotionAtomView {
 
     public var body: some View {
         let f = frames[risky ? "delete" : "send"] ?? .zero
-        AtomStage(hint: "Pick an action for Claude to ask about") {
+        AtomStage(hint: "Pick an action for the assistant to ask about") {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
                     Button("Submit a form") { start(false) }.buttonStyle(AgPress(tone: risky ? nil : .info))
@@ -33,7 +33,7 @@ public struct ApprovalInlineAtom: MotionAtomView {
                     }.font(.caption).padding(.top, 70).padding(.leading, 16)
                     Color.black.opacity(asking ? 0.12 : 0).clipShape(RoundedRectangle(cornerRadius: 10)).allowsHitTesting(false)
                     if asking { AgFrameRing(frame: f) }
-                    if asking || result != nil { popover(f).transition(reduce ? .identity : .motionPresence) }
+                    if asking || result != nil { popover(f).motionTransition(.presence) }
                     AgCursor().position(x: cursor.x + 7, y: cursor.y + 9)
                 }
                 .agFrames($frames).frame(height: 190)
@@ -47,7 +47,7 @@ public struct ApprovalInlineAtom: MotionAtomView {
 
     private func popover(_ f: CGRect) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            if let r = result { Label(r, systemImage: r.hasPrefix("Denied") ? "xmark.circle" : "checkmark.circle").font(.caption).transition(reduce ? .identity : .motionSwap()) }
+            if let r = result { Label(r, systemImage: r.hasPrefix("Denied") ? "xmark.circle" : "checkmark.circle").font(.caption).motionTransition(.swap()) }
             else {
                 Text(risky ? "Delete workspace Northwind" : "Submit the signup form").font(.caption.weight(.semibold))
                 Text(risky ? "This sends: workspace_id=ws_91, permanent=true" : "This sends: email, plan=Team").font(.caption2).foregroundStyle(.secondary)
