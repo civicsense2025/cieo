@@ -42,9 +42,16 @@ export function useSpring(target: number, onFrame: (value: number) => void, opts
   settle.current = opts.onSettle;
   const track = useRef<Track | null>(null);
   const cancel = useRef<Cancel | null>(null);
+  const quiet = useRef(false);
   const kind = opts.kind ?? 'feedback';
   const cfg = cfgOf(opts.preset ?? 'base');
+  const emit = (v: number, settled: boolean) => {
+    if (quiet.current) return;
+    frame.current(v);
+    if (settled) settle.current?.(v);
+  };
   useIso(() => {
+    quiet.current = false;
     if (!track.current) {
       track.current = new Track(target);
       frame.current(target);
@@ -52,10 +59,11 @@ export function useSpring(target: number, onFrame: (value: number) => void, opts
     }
     const tr = track.current;
     if (!allowed(kind)) {
+      quiet.current = true;
       cancel.current?.();
+      quiet.current = false;
       tr.jump(target);
-      frame.current(target);
-      settle.current?.(target);
+      emit(target, true);
       return;
     }
     tr.set(target, config(kind, cfg), now());
@@ -63,19 +71,24 @@ export function useSpring(target: number, onFrame: (value: number) => void, opts
       cancel.current = run({
         kind,
         step: (t) => {
-          frame.current(tr.at(t));
+          emit(tr.at(t), false);
           return tr.prune(t) > 0;
         },
         finish: () => {
           cancel.current = null;
           tr.jump(tr.target);
-          frame.current(tr.target);
-          settle.current?.(tr.target);
+          emit(tr.target, true);
         },
       });
     }
   }, [target, kind, cfg.w]);
-  useEffect(() => () => cancel.current?.(), []);
+  useEffect(
+    () => () => {
+      quiet.current = true;
+      cancel.current?.();
+    },
+    [],
+  );
 }
 
 /** Like useSpring but returns the value as state (re-renders per frame). Use for small, isolated readouts only. */
@@ -147,17 +160,21 @@ export function SwapText({ value, className, render }: { value: string | number;
 /** Rolling number: only changed digits roll, in the direction of change. The first render is instant. */
 export function Digits({ value, className, kind }: { value: number | string; className?: string; kind?: MotionKind }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const initial = useRef(String(value));
   const first = useRef(true);
   useIso(() => {
     if (!ref.current) return;
     if (first.current) {
       first.current = false;
-      ref.current.textContent = String(value);
       return;
     }
     return digits(ref.current, value, { kind });
   }, [value]);
-  return <span ref={ref} className={className} style={{ fontVariantNumeric: 'tabular-nums' }} />;
+  return (
+    <span ref={ref} className={className} style={{ fontVariantNumeric: 'tabular-nums' }}>
+      {initial.current}
+    </span>
+  );
 }
 
 /** Text that swaps with the DOM helper whenever `value` changes (no wrapper markup left behind). */
@@ -190,10 +207,13 @@ export function useEdges(indicator: RefObject<Element | null>, key: unknown): vo
 /** FLIP reflow: children of `container` slide from where they were to where they are after a render that changed `key`. */
 export function useFlip(container: RefObject<Element | null>, key: unknown, opts?: { stagger?: number; clip?: Element }): void {
   const snapshot = useRef<Map<Element, DOMRect> | null>(null);
-  if (typeof window !== 'undefined' && container.current && snapshot.current === null) {
+  const committed = useRef(key);
+  /* Measure only when this render carries a new key, and always replace an older snapshot. */
+  if (typeof window !== 'undefined' && container.current && !Object.is(committed.current, key)) {
     snapshot.current = new Map([...container.current.children].map((el) => [el, el.getBoundingClientRect()]));
   }
   useIso(() => {
+    committed.current = key;
     const el = container.current;
     const before = snapshot.current;
     snapshot.current = null;
@@ -206,13 +226,15 @@ export function useFlip(container: RefObject<Element | null>, key: unknown, opts
 export function usePresence<T extends HTMLElement>(open: boolean, opts: PresenceOptions = {}): { mounted: boolean; ref: RefObject<T | null> } {
   const [mounted, setMounted] = useState(open);
   const ref = useRef<T>(null);
+  const cancel = useRef<Cancel | null>(null);
   if (open && !mounted) setMounted(true);
+  /* No cleanup per change: enter and exit retarget the element's one presence spring, so reversing is continuous. */
   useIso(() => {
     const el = ref.current;
     if (!el) return;
-    if (open) return enter(el, opts);
-    return exit(el, { ...opts, done: () => setMounted(false) });
+    cancel.current = open ? enter(el, opts) : exit(el, { ...opts, done: () => setMounted(false) });
   }, [open, mounted]);
+  useIso(() => () => cancel.current?.(), []);
   return { mounted, ref };
 }
 

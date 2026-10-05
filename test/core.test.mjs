@@ -54,3 +54,29 @@ test('setMotionState gates kinds; run finishes at once when not allowed', () => 
   assert.equal(allowed('ambient'), false);
   setMotionState(null);
 });
+
+test('run() without a kind obeys the gates (defaults to feedback)', () => {
+  setMotionState(() => ({ reduced: true }));
+  let finished = false;
+  run({ step: () => true, finish: () => { finished = true; } });
+  assert.equal(finished, true);
+  setMotionState(null);
+});
+
+test('state() honours data-motion="full" over reduced-motion media', async () => {
+  const prev = { document: globalThis.document, matchMedia: globalThis.matchMedia };
+  const dataset = { motion: 'full' };
+  let calls = 0;
+  globalThis.document = { documentElement: { dataset }, hidden: false, addEventListener() {} };
+  globalThis.matchMedia = () => { calls += 1; return { matches: true, addEventListener() {} }; };
+  const mod = await import('../dist/core/spring.js?media');
+  assert.equal(mod.state().reduced, false);
+  dataset.motion = '';
+  assert.equal(mod.state().reduced, true);
+  mod.state(); mod.state();
+  assert.equal(calls, 1, 'matchMedia list is cached');
+  globalThis.document = prev.document;
+  globalThis.matchMedia = prev.matchMedia;
+  if (!prev.document) delete globalThis.document;
+  if (!prev.matchMedia) delete globalThis.matchMedia;
+});

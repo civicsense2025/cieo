@@ -84,12 +84,16 @@ interface PresenceRec {
   cancel: Cancel;
 }
 const presences = new WeakMap<Element, PresenceRec>();
+const prehidden = new WeakSet<Element>();
 function presence(el: HTMLElement, to: 0 | 1, opts: PresenceOptions): Cancel {
   const kind = opts.kind || 'feedback';
   const from: From = { x: 0, y: 4, scale: 0.97, opacity: 0, blur: 0, ...opts.from };
   if (to) el.hidden = false;
   let rec = presences.get(el);
+  if (!rec && to && el.style.opacity === '0') prehidden.add(el);
   const final = () => {
+    /* An element pre-hidden with inline opacity:0 must not get that 0 restored once it has entered. */
+    if (prehidden.delete(el) && to) ['opacity', 'transform', 'filter'].forEach((p) => el.style.removeProperty(p));
     if (!to) {
       if (opts.remove) el.remove();
       else el.hidden = true;
@@ -260,9 +264,13 @@ export function digits(el: Element, value: string | number, opts: { kind?: Motio
   const next = String(value);
   owners.get(el)?.();
   const prev = el.textContent ?? '';
-  if (prev === next) return noop;
+  if (prev === next) {
+    opts.done?.();
+    return noop;
+  }
   if (!allowed(kind, el)) {
     el.textContent = next;
+    opts.done?.();
     return noop;
   }
   const dir = opts.dir ?? (parseFloat(next) < parseFloat(prev) ? -1 : 1);

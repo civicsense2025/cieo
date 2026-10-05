@@ -56,6 +56,8 @@ export interface MotionState {
 }
 /** Lets an app supply its own pause / reduced-motion switch. Call setMotionState(null) to restore defaults. */
 export declare function setMotionState(fn: (() => Partial<MotionState>) | null): void;
+/** One cached media query list instead of a matchMedia call per job per frame. */
+export declare function reducedQuery(): MediaQueryList | null;
 export declare function state(): MotionState;
 export declare function onscreen(el?: Element | null): boolean;
 export declare function allowed(kind?: MotionKind, el?: Element | null): boolean;

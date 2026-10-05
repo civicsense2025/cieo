@@ -88,12 +88,21 @@ export function setMotionState(fn) {
     override = fn;
     sync();
 }
+let reducedList;
+/** One cached media query list instead of a matchMedia call per job per frame. */
+export function reducedQuery() {
+    if (reducedList === undefined)
+        reducedList = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
+    return reducedList;
+}
 export function state() {
     const hasDom = typeof document !== 'undefined';
-    const media = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)').matches : false;
+    const root = hasDom ? document.documentElement.dataset : null;
+    /* data-motion="full" overrides the OS setting, as in tokens.css; "reduced" forces it on. */
+    const reduced = root?.motion === 'full' ? false : reducedQuery()?.matches === true || root?.reducedMotion === 'true' || root?.motion === 'reduced';
     const base = {
         paused: false,
-        reduced: media || (hasDom && (document.documentElement.dataset.reducedMotion === 'true' || document.documentElement.dataset.motion === 'reduced')),
+        reduced,
         hidden: hasDom && document.hidden,
     };
     return override ? { ...base, ...override() } : base;
@@ -134,7 +143,7 @@ function tick() {
     for (const job of [...jobs]) {
         if (!jobs.has(job))
             continue;
-        if (job.kind && !allowed(job.kind)) {
+        if (!allowed(job.kind ?? 'feedback')) {
             settle(job);
             continue;
         }
@@ -154,7 +163,7 @@ function tick() {
 /** When the motion state changes, running springs that are no longer allowed jump to their end state. */
 export function sync() {
     for (const job of [...jobs])
-        if (job.kind && !allowed(job.kind))
+        if (!allowed(job.kind ?? 'feedback'))
             settle(job);
     if (!jobs.size && raf) {
         cancelAnimationFrame(raf);
@@ -167,14 +176,13 @@ function listen() {
     listening = true;
     document.addEventListener('motion:change', sync);
     document.addEventListener('visibilitychange', sync);
-    if (typeof matchMedia === 'function')
-        matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', sync);
+    reducedQuery()?.addEventListener('change', sync);
 }
 const noop = () => { };
 /** Schedules a job and returns cancel(), which finishes it at once. Disallowed jobs finish immediately. */
 export function run(step, opts = {}) {
-    const job = typeof step === 'function' ? { step, kind: opts.kind, finish: opts.finish } : step;
-    if ((job.kind && !allowed(job.kind)) || typeof requestAnimationFrame !== 'function') {
+    const job = typeof step === 'function' ? { step, kind: opts.kind ?? 'feedback', finish: opts.finish } : { ...step, kind: step.kind ?? 'feedback' };
+    if (!allowed(job.kind) || typeof requestAnimationFrame !== 'function') {
         settle(job);
         return noop;
     }

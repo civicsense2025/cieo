@@ -51,13 +51,19 @@ const paintFrom = (el, p, f) => {
     paint(el, f.opacity + (1 - f.opacity) * p, f.y * q, f.blur * q, f.x * q, f.scale + (1 - f.scale) * p);
 };
 const presences = new WeakMap();
+const prehidden = new WeakSet();
 function presence(el, to, opts) {
     const kind = opts.kind || 'feedback';
     const from = { x: 0, y: 4, scale: 0.97, opacity: 0, blur: 0, ...opts.from };
     if (to)
         el.hidden = false;
     let rec = presences.get(el);
+    if (!rec && to && el.style.opacity === '0')
+        prehidden.add(el);
     const final = () => {
+        /* An element pre-hidden with inline opacity:0 must not get that 0 restored once it has entered. */
+        if (prehidden.delete(el) && to)
+            ['opacity', 'transform', 'filter'].forEach((p) => el.style.removeProperty(p));
         if (!to) {
             if (opts.remove)
                 el.remove();
@@ -211,10 +217,13 @@ export function digits(el, value, opts = {}) {
     const next = String(value);
     owners.get(el)?.();
     const prev = el.textContent ?? '';
-    if (prev === next)
+    if (prev === next) {
+        opts.done?.();
         return noop;
+    }
     if (!allowed(kind, el)) {
         el.textContent = next;
+        opts.done?.();
         return noop;
     }
     const dir = opts.dir ?? (parseFloat(next) < parseFloat(prev) ? -1 : 1);

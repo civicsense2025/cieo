@@ -4,12 +4,15 @@ import { S, Track, allowed, config, run } from '../core/spring.js';
 import { enter, gapFor, hold, list } from './index.js';
 const noop = () => { };
 const pending = new Map();
+const scrolls = new WeakMap();
 /** Elements inside root that still wait to reveal take their final state at once. Call before a user-requested scrollTo. */
 export function revealNow(root) {
     if (!root)
         return;
     [...pending].forEach(([el, show]) => {
-        if (root === el || root.contains(el))
+        if (!el.isConnected)
+            pending.delete(el);
+        else if (root === el || root.contains(el))
             show(el);
     });
 }
@@ -31,7 +34,8 @@ export function reveal(targets, opts = {}) {
         document.removeEventListener('motion:change', check);
         waiting.forEach((release, el) => {
             release();
-            pending.delete(el);
+            if (pending.get(el) === show)
+                pending.delete(el);
         });
         waiting.clear();
     }
@@ -39,11 +43,20 @@ export function reveal(targets, opts = {}) {
         observer.unobserve(el);
         waiting.get(el)?.();
         waiting.delete(el);
-        pending.delete(el);
+        if (pending.get(el) === show)
+            pending.delete(el);
         if (!waiting.size)
             stop();
     };
     observer = new IntersectionObserver((entries) => {
+        for (const el of [...waiting.keys()]) {
+            if (el.isConnected)
+                continue;
+            observer.unobserve(el);
+            waiting.delete(el);
+            if (pending.get(el) === show)
+                pending.delete(el);
+        }
         const arrived = entries.filter((e) => e.isIntersecting && waiting.has(e.target)).map((e) => e.target);
         arrived.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
         const gap = gapFor(arrived.length, opts.stagger ?? 0.04);
@@ -51,7 +64,8 @@ export function reveal(targets, opts = {}) {
             observer.unobserve(el);
             waiting.get(el)();
             waiting.delete(el);
-            pending.delete(el);
+            if (pending.get(el) === show)
+                pending.delete(el);
             enter(el, { kind, from, cfg: opts.cfg, delay: i * gap });
         });
         if (!waiting.size)
@@ -86,6 +100,7 @@ export function scrollTo(scroller, x, y, opts = {}) {
     const cfg = config(kind, opts.cfg || S.soft);
     const tx = new Track(node.scrollLeft).set(X, cfg);
     const ty = new Track(node.scrollTop).set(Y, cfg);
+    scrolls.get(node)?.();
     const snap = node.style.scrollSnapType;
     let stopped = false;
     let cancel = noop;
@@ -93,6 +108,11 @@ export function scrollTo(scroller, x, y, opts = {}) {
         stopped = true;
         cancel();
     };
+    const cancelThis = () => {
+        stopped = true;
+        cancel();
+    };
+    scrolls.set(node, cancelThis);
     node.style.scrollSnapType = 'none';
     INPUTS.forEach((type) => addEventListener(type, interrupt, { capture: true, passive: true }));
     cancel = run({
@@ -105,14 +125,13 @@ export function scrollTo(scroller, x, y, opts = {}) {
             INPUTS.forEach((type) => removeEventListener(type, interrupt, { capture: true }));
             if (!stopped)
                 go(X, Y);
+            if (scrolls.get(node) === cancelThis)
+                scrolls.delete(node);
             node.style.scrollSnapType = snap;
             if (!node.getAttribute('style'))
                 node.removeAttribute('style');
             opts.done?.();
         },
     });
-    return () => {
-        stopped = true;
-        cancel();
-    };
+    return cancelThis;
 }
