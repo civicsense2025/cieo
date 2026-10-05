@@ -23,7 +23,7 @@ public struct SelectMoveSnapAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the box near the grey one · drag the corner to resize") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(bx, by, bw, bh, gx, gy)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let x = bx.value(at: t), y = by.value(at: t), w = bw.value(at: t), h = bh.value(at: t)
                 ZStack(alignment: .topLeading) {

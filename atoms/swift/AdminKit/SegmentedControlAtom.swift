@@ -3,7 +3,7 @@ import MotionKit
 
 public struct SegmentedControlAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "seg", category: "Admin kit", name: "Segmented control",
-        summary: "A measured two-edge indicator, same rules as Lamina’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.")
+        summary: "A measured two-edge indicator, same rules as the edge indicator hook: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.")
 
     public init() {}
 
@@ -30,7 +30,7 @@ private struct Edges: View {
             HStack(spacing: 0) { ForEach(items.indices, id: \.self) { i in
                 Button(items[i]) { sel = i }.buttonStyle(.plain).font((small ? Font.caption : .footnote).weight(.medium))
                     .padding(.horizontal, small ? 10 : 14).padding(.vertical, small ? 4 : 7).foregroundStyle(sel == i ? Color.primary : .secondary)
-                    .animation(.motion(.snap), value: sel).reportFrame(i, in: "seg").accessibilityAddTraits(sel == i ? .isSelected : [])
+                    .motion(.snap, value: sel).reportFrame(i, in: "seg").accessibilityAddTraits(sel == i ? .isSelected : [])
             } }
         }
         .coordinateSpace(name: "seg").onPreferenceChange(FramePreferenceKey.self) { frames = $0 }

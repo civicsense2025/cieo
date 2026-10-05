@@ -17,7 +17,7 @@ public struct TimelineAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Advance to the next milestone") {
             VStack(spacing: 16) {
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(spine, ink, glow)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     ZStack(alignment: .topLeading) {
                         Capsule().fill(.quaternary).frame(width: 2, height: rowHeight * Double(steps.count) - 12).offset(x: 7, y: 6)

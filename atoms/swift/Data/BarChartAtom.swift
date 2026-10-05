@@ -15,7 +15,7 @@ public struct BarChartAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 10) {
                 Picker("Year", selection: $year) { Text("2025").tag(0); Text("2026").tag(1) }
                     .pickerStyle(.segmented).frame(width: 140)
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(bars)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     Canvas { c, _ in
                         let x0 = 30.0, y0 = 140.0, h = 130.0, bw = 24.0, gap = (320 - x0 - 8 * bw) / 8

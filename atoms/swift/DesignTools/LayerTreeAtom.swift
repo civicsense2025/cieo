@@ -34,7 +34,7 @@ public struct LayerTreeAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Open groups, select rows, hide layers") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(open, visible)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let fs = nodes.indices.map { factor($0, t) }
                 ZStack(alignment: .topLeading) {

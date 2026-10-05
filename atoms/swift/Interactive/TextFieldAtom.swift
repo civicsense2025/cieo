@@ -21,7 +21,7 @@ public struct TextFieldAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Type an address, then press Tab") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(float, focus, ok, bad)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let p = max(0, min(1, float.value(at: t))), g = max(0, min(1, ok.value(at: t))), k = max(0, min(1, bad.value(at: t))), q = max(0, min(1, focus.value(at: t)))
                 VStack(alignment: .leading, spacing: 0) {

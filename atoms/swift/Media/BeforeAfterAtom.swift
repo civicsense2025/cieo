@@ -14,7 +14,7 @@ public struct BeforeAfterAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Drag the handle, or click to spring it") {
             GeometryReader { g in
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(x)) { ctx in
                     let v = held && moved ? hx : x.value(at: ctx.date.timeIntervalSinceReferenceDate)
                     ZStack(alignment: .leading) {
                         AtomPhoto(seed: 2, goldenHour: 0).saturation(0)

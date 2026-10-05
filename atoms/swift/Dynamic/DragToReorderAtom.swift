@@ -18,7 +18,7 @@ public struct DragToReorderAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag a row up or down") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(ys, lift)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 ZStack(alignment: .topLeading) {
                     ForEach(names.indices, id: \.self) { i in

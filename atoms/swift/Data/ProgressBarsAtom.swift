@@ -12,7 +12,7 @@ public struct ProgressBarsAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Shuffle to retarget every bar") {
             VStack(spacing: 18) {
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(tracks)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     VStack(spacing: 14) {
                         ForEach(names.indices, id: \.self) { i in

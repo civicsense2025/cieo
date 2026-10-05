@@ -19,7 +19,7 @@ public struct PullToRefreshAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the list down and let go") {
-            TimelineView(.animation) { tl in
+            TimelineView(.motion(y)) { tl in
                 let t = tl.date.timeIntervalSinceReferenceDate
                 let v = held ? pull : y.value(at: t), k = min(1, max(0, v / 52))
                 ZStack(alignment: .top) {

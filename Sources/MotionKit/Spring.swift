@@ -3,7 +3,10 @@ import Foundation
 /// A critically damped spring. `w` is the natural frequency in rad/s; nothing overshoots.
 public struct SpringPreset: Hashable, Sendable {
     public let w: Double
-    public init(w: Double) { self.w = w }
+    public init(w: Double) {
+        precondition(w > 0, "SpringPreset needs a positive frequency")
+        self.w = w
+    }
 
     /// Presses, checks, knobs, chevrons, exits.
     public static let snap = SpringPreset(w: 34)
@@ -98,4 +101,21 @@ public struct Track: Sendable {
     }
 
     public var isMoving: Bool { !events.isEmpty }
+}
+
+public extension Track {
+    /// Time (seconds since the reference date) after which every spring is within 1e-3 of rest, or nil when nothing is moving.
+    var restTime: Double? {
+        var latest: Double?
+        for e in events {
+            let amplitude = abs(e.x0) + abs(e.v0) / e.p.w
+            var lo = 0.0, hi = 60 / e.p.w
+            for _ in 0..<40 {
+                let mid = (lo + hi) / 2
+                if exp(-e.p.w * mid) * (1 + e.p.w * mid) * amplitude > 1e-3 { lo = mid } else { hi = mid }
+            }
+            latest = max(latest ?? -.infinity, e.t + hi)
+        }
+        return latest
+    }
 }

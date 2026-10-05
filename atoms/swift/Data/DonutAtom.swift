@@ -49,7 +49,7 @@ public struct DonutAtom: MotionAtomView {
     }
 
     private var ring: some View {
-        TimelineView(.animation) { ctx in
+        TimelineView(.motion(draw, widths)) { ctx in
             let t = ctx.date.timeIntervalSinceReferenceDate
             let p = max(0, min(1, draw.value(at: t)))
             ZStack {

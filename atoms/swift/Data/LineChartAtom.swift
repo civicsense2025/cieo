@@ -38,7 +38,7 @@ public struct LineChartAtom: MotionAtomView {
             VStack(spacing: 14) {
                 GeometryReader { g in
                     let s = g.size.width / 520
-                    TimelineView(.animation) { ctx in
+                    TimelineView(.motion(draw, hx, hy, show)) { ctx in
                         let t = ctx.date.timeIntervalSinceReferenceDate
                         let p = max(0, min(1, draw.value(at: t)))
                         let o = max(0, min(1, show.value(at: t))) * (p > 0.98 ? 1 : 0)

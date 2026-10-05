@@ -25,7 +25,7 @@ public struct RubberBandSliderAtom: MotionAtomView {
                     Image(systemName: "speaker.wave.3.fill")
                 }
                 .frame(maxWidth: 320)
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(value)) { ctx in
                     let v = held ? hv : value.value(at: ctx.date.timeIntervalSinceReferenceDate)
                     Text("\(Int((max(0, min(1, v)) * 100).rounded()))%").font(.title3).monospacedDigit()
                 }
@@ -35,7 +35,7 @@ public struct RubberBandSliderAtom: MotionAtomView {
 
     private var track: some View {
         GeometryReader { g in
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(value, over)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let val = max(0, min(1, held ? hv : value.value(at: t))), o = held ? ho : over.value(at: t)
                 let w = g.size.width + abs(o), h = 10 - min(3.5, abs(o) * 0.07)

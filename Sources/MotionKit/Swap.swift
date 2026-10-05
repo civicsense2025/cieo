@@ -1,5 +1,35 @@
 import SwiftUI
 
+/// Which motion transition `View.motionTransition(_:)` applies.
+public enum MotionTransition {
+    case presence
+    case swap(drift: CGFloat = 4)
+}
+
+private struct MotionTransitionModifier: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+    let kind: MotionTransition
+
+    func body(content: Content) -> some View {
+        content.transition(reduce ? .identity : transition)
+    }
+
+    private var transition: AnyTransition {
+        switch kind {
+        case .presence: .motionPresence
+        case .swap(let drift): .motionSwap(drift: drift)
+        }
+    }
+}
+
+public extension View {
+    /// The motion enter/exit for this view. Reads Reduce Motion and uses no transition when it is on.
+    /// Prefer this over `.transition(.motionPresence)` / `.motionSwap`, which animate regardless.
+    func motionTransition(_ kind: MotionTransition) -> some View {
+        modifier(MotionTransitionModifier(kind: kind))
+    }
+}
+
 public extension AnyTransition {
     /// Enter/exit for menus, popovers, sheets and toasts: rise a few points and scale from 0.97.
     /// Insertion springs on base; removal is quicker on snap.
@@ -36,7 +66,7 @@ public struct SwapText: View {
         ZStack {
             Text(text)
                 .id(text)
-                .transition(reduce ? .identity : .motionSwap(drift: drift))
+                .motionTransition(.swap(drift: drift))
         }
         .animation(reduce ? nil : .motion(.base), value: text)
     }
@@ -46,7 +76,6 @@ public struct SwapText: View {
 public struct RollingDigits: View {
     @Environment(\.accessibilityReduceMotion) private var reduce
     let value: String
-    @State private var direction: CGFloat = 1
     @State private var previous: String
 
     public init(_ value: Int) { self.init(String(value)) }
@@ -57,12 +86,13 @@ public struct RollingDigits: View {
 
     public var body: some View {
         let chars = Array(value)
+        let direction: CGFloat = (Double(value) ?? 0) < (Double(previous) ?? 0) ? -1 : 1
         HStack(spacing: 0) {
             ForEach(Array(chars.enumerated()), id: \.offset) { item in
                 ZStack {
                     Text(String(item.element))
                         .id("\(chars.count - item.offset)-\(item.element)")
-                        .transition(reduce ? .identity : .motionSwap(drift: 8 * direction))
+                        .motionTransition(.swap(drift: 8 * direction))
                 }
             }
         }
@@ -70,9 +100,6 @@ public struct RollingDigits: View {
         .animation(reduce ? nil : .motion(.base), value: value)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(value)
-        .onChange(of: value) { old, new in
-            direction = (Double(new) ?? 0) < (Double(old) ?? 0) ? -1 : 1
-            previous = new
-        }
+        .onChange(of: value) { _, new in previous = new }
     }
 }

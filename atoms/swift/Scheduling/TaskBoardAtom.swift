@@ -38,7 +38,7 @@ public struct TaskBoardAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag a card to another column") {
-            TimelineView(.animation) { tl in
+            TimelineView(.motion(xs, ys, lift)) { tl in
                 let t = tl.date.timeIntervalSinceReferenceDate
                 ZStack(alignment: .topLeading) {
                     ForEach(heads.indices, id: \.self) { i in

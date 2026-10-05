@@ -31,7 +31,7 @@ public struct CanvasPanZoomAtom: MotionAtomView {
             GeometryReader { g in
                 let center = CGPoint(x: g.size.width / 2, y: g.size.height / 2)
                 ZStack(alignment: .topLeading) {
-                    TimelineView(.animation) { ctx in
+                    TimelineView(.motion(scale, x, y)) { ctx in
                         let t = ctx.date.timeIntervalSinceReferenceDate
                         world.scaleEffect(scale.value(at: t), anchor: .topLeading)
                             .offset(x: panning ? hx : x.value(at: t), y: panning ? hy : y.value(at: t))

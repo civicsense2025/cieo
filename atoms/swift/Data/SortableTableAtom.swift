@@ -23,7 +23,7 @@ public struct SortableTableAtom: MotionAtomView {
                 HStack(spacing: 0) { ForEach(columns.indices, id: \.self) { header($0) } }
                     .padding(.horizontal, 14).frame(height: 36)
                 Divider()
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(slots)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     ZStack(alignment: .topLeading) {
                         ForEach(rows.indices, id: \.self) { i in
@@ -46,7 +46,7 @@ public struct SortableTableAtom: MotionAtomView {
 
     private func header(_ c: Int) -> some View {
         Button { sort(by: c) } label: {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(rot, shown)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 HStack(spacing: 4) {
                     Text(columns[c]).font(.caption.weight(.semibold))

@@ -17,7 +17,7 @@ private struct ToastCard: View {
     private var color: Color { item.kind == 0 ? .green : item.kind == 1 ? .red : .orange }
 
     var body: some View {
-        TimelineView(.animation) { ctx in
+        TimelineView(.motion(x)) { ctx in
             let px = held ? hx : x.value(at: ctx.date.timeIntervalSinceReferenceDate)
             HStack(spacing: 10) {
                 Image(systemName: item.kind == 0 ? "checkmark" : "exclamationmark.circle").font(.footnote.weight(.bold)).foregroundStyle(color)

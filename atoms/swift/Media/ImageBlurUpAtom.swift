@@ -11,7 +11,7 @@ public struct ImageBlurUpAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Reload to watch it come into focus") {
             VStack(spacing: 16) {
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(load)) { ctx in
                     let p = max(0, min(1, load.value(at: ctx.date.timeIntervalSinceReferenceDate)))
                     ZStack {
                         Rectangle().fill(.quaternary)

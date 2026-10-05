@@ -16,7 +16,7 @@ private struct SwipeRow: View {
 
     var body: some View {
         GeometryReader { g in
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(x, h)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let px = held ? hx : x.value(at: t), a = min(1, abs(px) / 80), right = px > 0
                 ZStack {

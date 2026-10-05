@@ -15,7 +15,7 @@ public struct CollapsedThreadAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Open the earlier messages") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(heights, edges)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let s = max(0, min(1, edges.value(at: t)))
                 VStack(spacing: 6) {

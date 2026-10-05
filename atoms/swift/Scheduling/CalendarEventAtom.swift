@@ -23,7 +23,7 @@ public struct CalendarEventAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the event · drag its bottom edge") {
-            TimelineView(.animation) { tl in
+            TimelineView(.motion(top, bottom)) { tl in
                 let t = tl.date.timeIntervalSinceReferenceDate, a = top.value(at: t) + 8, b = bottom.value(at: t) + 8
                 ZStack(alignment: .topLeading) {
                     ForEach(0...hours, id: \.self) { h in

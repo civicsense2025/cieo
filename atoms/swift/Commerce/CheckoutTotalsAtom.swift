@@ -19,7 +19,7 @@ public struct CheckoutTotalsAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Change a quantity") {
             VStack(spacing: 12) {
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(lines + [sub, tax, total])) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     VStack(spacing: 12) {
                         ForEach(items.indices, id: \.self) { i in

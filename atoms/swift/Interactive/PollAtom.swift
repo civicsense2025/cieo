@@ -16,7 +16,7 @@ public struct PollAtom: MotionAtomView {
         AtomStage(hint: "Pick an option") {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Which block should ship next?").fontWeight(.semibold).padding(.bottom, 4)
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(fill, label, check)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     VStack(spacing: 8) { ForEach(options.indices, id: \.self) { row($0, t) } }
                 }

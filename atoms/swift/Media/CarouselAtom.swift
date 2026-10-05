@@ -22,7 +22,7 @@ public struct CarouselAtom: MotionAtomView {
             VStack(spacing: 14) {
                 GeometryReader { g in
                     let step = g.size.width + 12
-                    TimelineView(.animation) { ctx in
+                    TimelineView(.motion(x)) { ctx in
                         let t = ctx.date.timeIntervalSinceReferenceDate
                         HStack(spacing: 12) {
                             ForEach(quotes.indices, id: \.self) { i in
@@ -66,7 +66,7 @@ public struct CarouselAtom: MotionAtomView {
     }
 
     private var dots: some View {
-        TimelineView(.animation) { ctx in
+        TimelineView(.motion(dotLo, dotHi)) { ctx in
             let t = ctx.date.timeIntervalSinceReferenceDate
             ZStack(alignment: .leading) {
                 HStack(spacing: 8) { ForEach(quotes.indices, id: \.self) { _ in Circle().fill(.quaternary).frame(width: 7, height: 7) } }

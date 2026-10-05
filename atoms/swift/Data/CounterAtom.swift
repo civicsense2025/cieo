@@ -12,7 +12,7 @@ public struct CounterAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Replay to watch it settle") {
             VStack(spacing: 14) {
-                TimelineView(.animation) { ctx in
+                TimelineView(.motion(value, delta)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     let n = Int(value.value(at: t).rounded())
                     VStack(spacing: 4) {

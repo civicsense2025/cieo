@@ -21,7 +21,7 @@ public struct ColorPickerAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag either handle, or pick a preset") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.motion(hue, sat, val)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let h = ((hue.value(at: t).truncatingRemainder(dividingBy: 360)) + 360).truncatingRemainder(dividingBy: 360)
                 let s = max(0, min(1, sat.value(at: t))), v = max(0, min(1, val.value(at: t)))
