@@ -1,7 +1,7 @@
 import SwiftUI
 import MotionKit
 
-public struct SuggestedEditAtom: MotionAtomView {
+public struct AgentSuggestedEditAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "suggestededit", category: "Agent activity", name: "Suggested edit",
         summary: "The agent frames the element and a suggestion card pops in beside it. Its words reveal in order: removed words get a danger tint and a strike that draws left to right, added words a success tint. Accept and Reject are one row that morphs: the chosen button grows to fill it and turns to a one-line outcome with Undo while the other collapses. On the page, accepting makes removed words close up and added words open out, and a style edit eases the button’s fill to the new value. Undo runs the same morph backwards.")
     @Environment(\.accessibilityReduceMotion) private var reduce
