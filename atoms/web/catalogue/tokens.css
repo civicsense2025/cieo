@@ -1,0 +1,32 @@
+/* The legacy aliases below are intentional: every existing atom reads this palette.
+   Layout uses an 8px rhythm. 1px rules, type, and icon strokes are optical exceptions. */
+:root {
+  --u:8px; --page:#f5f5f7; --chrome:#fafafa; --bg:#f5f5f7; --tile:#f0f0f2;
+  --card:#fff; --raised:#ededf0; --ink:#202125; --muted:#66676f; --faint:#767780;
+  --line:#dedee4; --line-soft:#ebebef; --accent:#6654c8; --accent-tint:#eeebfa;
+  --success:#347451; --success-tint:#e8f2eb; --danger:#ad403e; --danger-tint:#fae9e7;
+  --warning:#906315; --warning-tint:#f8efd9; --blue:#e9eff8; --lilac:#eeeaf7;
+  --peach:#faeee7; --mint:#e9f1ec; --butter:#f7f3e6;
+  --shadow:0 2px 4px #23223406,0 12px 32px #2322340c;
+  --float-shadow:0 16px 64px #17142224,0 2px 8px #1714220d;
+  --sans:Inter,"Helvetica Neue",Arial,ui-sans-serif,system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+  --sidebar:240px; --columns:3; --radius:24px; color-scheme:light;
+}
+:root[data-appearance="dark"] {
+  --page:#141416; --chrome:#19191c; --bg:#141416; --tile:#202024; --card:#2a2a30;
+  --raised:#34343c; --ink:#f2f1f6; --muted:#b3b1bf; --faint:#aaa6b8;
+  --line:#41404a; --line-soft:#323139; --accent:#b7a7ff; --accent-tint:#393149;
+  --success:#a0d2b2; --success-tint:#253a2d; --danger:#f0aaaa; --danger-tint:#482b2e;
+  --warning:#e9c887; --warning-tint:#403727; --blue:#232c39; --lilac:#2e293c;
+  --peach:#392e2b; --mint:#26362f; --butter:#383529;
+  --shadow:0 2px 4px #0002,0 12px 32px #0002; --float-shadow:0 16px 64px #0007;
+  color-scheme:dark;
+}
+:root[data-accent="blue"] { --accent:#3268aa; --accent-tint:#e6edf8; }
+:root[data-accent="green"] { --accent:#347451; --accent-tint:#e8f2eb; }
+:root[data-accent="coral"] { --accent:#ae5140; --accent-tint:#faeee7; }
+:root[data-appearance="dark"][data-accent="blue"] { --accent:#a4c7f6; --accent-tint:#27364c; }
+:root[data-appearance="dark"][data-accent="green"] { --accent:#a0d2b2; --accent-tint:#253a2d; }
+:root[data-appearance="dark"][data-accent="coral"] { --accent:#edb5a4; --accent-tint:#482f2c; }
+:root[data-corners="crisp"] { --radius:8px; }

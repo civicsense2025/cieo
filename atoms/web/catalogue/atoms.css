@@ -1,0 +1,36 @@
+/* Existing recipes keep their class names and measured geometry. These rules refine
+   shared surfaces; atom-specific geometry is changed in its source, not forced here. */
+#groups{display:grid;grid-template-columns:repeat(var(--columns),minmax(0,1fr));gap:24px;max-width:1600px;margin:auto;align-items:start}
+.tile{background:transparent;min-width:0;position:relative;display:flex;flex-direction:column;scroll-margin-top:104px}
+.tile.wide{grid-column:1/-1}.tile .stage-shell{position:relative;border-radius:var(--radius);background:var(--tile);overflow:hidden;box-shadow:0 1px 2px #17142103;isolation:isolate}
+.tile[data-tone=blue] .stage-shell{background:var(--blue)}.tile[data-tone=lilac] .stage-shell{background:var(--lilac)}.tile[data-tone=peach] .stage-shell{background:var(--peach)}.tile[data-tone=mint] .stage-shell{background:var(--mint)}.tile[data-tone=butter] .stage-shell{background:var(--butter)}
+.stage{position:relative;height:360px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;overflow:hidden;min-width:0;isolation:isolate}
+.tile.tall .stage{height:384px}.tile.big .stage{height:400px}.tile.wide .stage{height:400px}.tile.wide.tall .stage{height:560px}
+.tile header{display:flex;align-items:center;gap:8px;padding:16px 0 8px}.tile h3{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:-.1px;margin:0;flex:1}.tile header p{margin:4px 0 0;font-size:11px;color:var(--faint)}
+.tile .ui-tile-name{border:0;background:transparent;padding:0;color:var(--ink);text-align:left;font:inherit;font-weight:600;display:block}.tile .ui-tile-name:hover{color:var(--accent)}
+.tile .ui-tile-tools{margin-left:auto;display:flex;gap:0}.tile .ui-tile-tools button{width:32px;height:32px;border:0;background:transparent;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
+.tile .ui-tile-tools button:hover{background:var(--raised)}.tile .ui-tile-tools button[aria-pressed=true]{color:var(--accent);background:var(--accent-tint)}.tile .ui-tile-tools svg{width:16px;height:16px}
+.ui-family-mark{display:flex;gap:4px;pointer-events:none;flex:none}.ui-family-mark span{width:16px;height:24px;display:grid;place-items:center;font:10px var(--mono);color:var(--muted);border-radius:8px;background:transparent}
+.tile .ui-detail{padding:8px 0 16px}.tile .ui-detail p{font-size:12px;color:var(--muted);margin:0 0 8px}.tile pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.6 var(--mono);padding:16px;border-radius:16px;background:var(--card);margin:0}
+.stage .btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 16px;font-size:12px;line-height:1.3;font-weight:500;cursor:pointer;box-shadow:0 2px 4px #17142105}
+.stage .btn:hover{background:var(--raised)}.stage .btn.ink{background:var(--ink);border-color:var(--ink);color:var(--card)}
+.stage .card{background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
+.stage .seg{position:relative;display:flex;align-items:center;background:var(--raised);border-radius:12px;padding:4px}
+.stage .seg .ind{position:absolute;left:0;top:0;background:var(--card);border-radius:8px;box-shadow:0 2px 6px #1714210a;pointer-events:none}
+.stage .seg button{position:relative;border:0;background:none;border-radius:8px;padding:8px 12px;font-size:12px;line-height:16px;min-height:32px;white-space:nowrap;cursor:pointer;font-weight:500}
+.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.digits{display:inline-flex;font-variant-numeric:tabular-nums}.dslot{position:relative;display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom}.dslot .dl{position:absolute;left:0;right:0;top:0;text-align:center}
+.pill{position:absolute;border-radius:999px}.row{display:flex;align-items:center;gap:8px}.col{display:flex;flex-direction:column;gap:8px}.muted{color:var(--muted)}.small{font-size:13px}.num{font-variant-numeric:tabular-nums}
+.hint{position:absolute;bottom:16px;left:16px;right:16px;text-align:center;font-size:11px;color:var(--faint);pointer-events:none}.ro{position:absolute;top:16px;right:16px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.stage input,.stage textarea{font:inherit;color:inherit;accent-color:var(--accent)}.stage button:focus-visible,.stage input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.stage input::placeholder,.stage textarea::placeholder{color:var(--faint)}.stage :is(button,input,textarea){max-width:100%}
+.ui-atom-error{padding:24px;text-align:center;font-size:13px;color:var(--danger)}
+.ui-setting-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px;width:min(336px,calc(100% - 48px));background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
+.ui-setting-row strong{font-size:13px;font-weight:600}.ui-setting-row small{display:block;font-size:11px;color:var(--muted);margin-top:8px}.ui-setting-row .tg{flex:none}
+.ui-command-icon{width:24px;height:24px;border-radius:8px;background:var(--raised);display:grid;place-items:center;color:var(--muted);font-size:12px;flex:none}
+.ui-stage-footer{font-size:10px;color:var(--faint);letter-spacing:.03em}
+:root[data-corners=crisp] .stage :is(.card,.btn){border-radius:8px}
+@media(max-width:767px){#groups{gap:24px}.tile.wide{grid-column:auto}.tile .stage{height:320px}.tile.tall .stage,.tile.big .stage{height:400px}.tile.wide.tall .stage{height:560px}.tile .ui-tile-tools button{width:40px;height:40px}.tile header{padding-top:8px}.stage .btn{min-height:40px}.ui-setting-row{padding:16px;gap:16px}}
+@media(pointer:coarse){.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-chip{min-height:48px}}
+/* Prevent recipe image or SVG intrinsic widths from enlarging the gallery track. */
+.stage > :not(style){max-inline-size:100%}

@@ -1,153 +1,49 @@
 <!doctype html>
+<html lang="en">
+<head>
 <meta charset="utf-8">
-<title>Library</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
-<style>
-:root{
-  --bg:#FFFFFF; --tile:#FFFFFF; --card:#FFFFFF; --raised:#F5F5F5; --surface:#F6F6F4;
-  --ink:#000000; --muted:#525252; --faint:#8A8A8A; --line:rgba(0,0,0,.14); --line-soft:rgba(0,0,0,.08);
-  --accent:#525252; --accent-tint:#F5F5F5; --success:#595D17; --success-tint:#EAECE7; --danger:#B0342F; --danger-tint:#F6E6E4; --warning:#B45309; --warning-tint:#FBEEDF;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(16,20,26,.05),0 12px 32px rgba(16,20,26,.08);
-  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  color-scheme:light;
-}
-:root[data-theme="white"]{
-  --bg:#FFFFFF; --tile:#FFFFFF; --card:#FFFFFF; --raised:#F5F5F5; --surface:#F6F6F4;
-  --ink:#000000; --muted:#525252; --faint:#8A8A8A; --line:rgba(0,0,0,.14); --line-soft:rgba(0,0,0,.08);
-  --accent:#525252; --accent-tint:#F5F5F5; --success:#595D17; --success-tint:#EAECE7; --danger:#B0342F; --danger-tint:#F6E6E4; --warning:#B45309; --warning-tint:#FBEEDF;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(16,20,26,.05),0 12px 32px rgba(16,20,26,.08); color-scheme:light;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="white"]){
-  --bg:#000000; --tile:#000000; --card:#0A0A0A; --raised:#141414; --surface:#141416;
-  --ink:#FFFFFF; --muted:#A3A3A3; --faint:#6B6B6B; --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.08);
-  --accent:#A3A3A3; --accent-tint:#141414; --success:#A3A76E; --success-tint:#23261A; --danger:#D0584F; --danger-tint:#2E1A19; --warning:#D6822F; --warning-tint:#2D2114;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.4); color-scheme:dark;}}
-:root[data-theme="black"]{
-  --bg:#000000; --tile:#000000; --card:#0A0A0A; --raised:#141414; --surface:#141416;
-  --ink:#FFFFFF; --muted:#A3A3A3; --faint:#6B6B6B; --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.08);
-  --accent:#A3A3A3; --accent-tint:#141414; --success:#A3A76E; --success-tint:#23261A; --danger:#D0584F; --danger-tint:#2E1A19; --warning:#D6822F; --warning-tint:#2D2114;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.4); color-scheme:dark;}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);padding-inline:28px;padding-block:64px 160px;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit}
-.wrap{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
-.top{display:flex;flex-direction:column;gap:14px;max-width:760px}
-h1{font-size:44px;line-height:1;letter-spacing:-.035em;font-weight:600;margin:0;text-wrap:balance}
-.lede{color:var(--muted);margin:0;max-width:64ch}
-.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:14px;display:flex;flex-wrap:nowrap;gap:10px;align-items:center}
-.toolbar .tools{display:flex;gap:10px;align-items:center;min-width:0;flex:1;overflow-x:auto;scrollbar-width:none}
-.toolbar .tools::-webkit-scrollbar{display:none}
-.toolbar .tools>*{flex:none}
-.toolbar .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.seg{position:relative;display:flex;flex-wrap:nowrap;background:var(--surface);border-radius:12px;padding:3px}
-.seg .ind{position:absolute;left:0;top:0;background:var(--bg);border-radius:9px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.seg button{position:relative;background:none;border:0;border-radius:7px;padding:5px 11px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
-.jumpbtn{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer}
-.jumpbtn svg{width:14px;height:14px;transition:none}
-.jump{position:absolute;left:0;right:0;top:100%;max-height:min(70vh,560px);overflow-y:auto;background:var(--surface);border-radius:18px;box-shadow:var(--shadow-soft);padding:18px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px 24px;margin-top:8px}
-.jump h4{margin:0 0 6px;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
-.jump a{display:flex;justify-content:space-between;gap:8px;padding:6px 8px;margin:0 -8px;border-radius:7px;color:var(--ink);text-decoration:none;font-size:14px}
-.jump a:hover,.jump a:focus-visible{background:var(--raised)}
-.jump a span{color:var(--faint);font-variant-numeric:tabular-nums}
-.jump a[hidden],.jump div[hidden]{display:none}
-@media (max-width:700px){.toolbar .count{display:none}.jump{grid-template-columns:1fr 1fr;gap:14px 16px;padding:12px 14px}}
-#tweaks{position:fixed;right:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;gap:10px;max-width:min(260px,calc(100vw - 40px));border-radius:20px;padding:16px 18px;background:var(--surface);box-shadow:var(--shadow-soft);will-change:transform}
-#twBody{display:flex;flex-direction:column;gap:12px;overflow:hidden}
-#tweaks label{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
-#tweaks output{font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink)}
-#tweaks input[type="range"]{accent-color:var(--ink)}
-#twToggle{align-self:flex-end;border:0;background:var(--bg);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-@media (max-width:700px){#tweaks{right:12px;bottom:12px;padding:12px 14px}}
-.group{display:flex;flex-direction:column;gap:20px;scroll-margin-top:72px}
-.group>h2{font-size:13px;font-weight:600;letter-spacing:.02em;margin:0;display:flex;gap:12px;align-items:center;color:var(--muted)}
-.grid{display:grid;gap:32px;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr))}
-@media (max-width:1100px){.grid{grid-template-columns:repeat(min(var(--cols,3),2),minmax(0,1fr))}}
-@media (max-width:700px){.grid{grid-template-columns:minmax(0,1fr)} h1{font-size:34px}}
-[hidden]{display:none!important}
-.tile{background:var(--surface);border-radius:18px;box-shadow:var(--shadow-soft);display:flex;flex-direction:column;min-width:0;content-visibility:auto;contain-intrinsic-size:auto 420px}
-.tile.wide{grid-column:1/-1}
-.tile>header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:20px 20px 0}
-.tile h3{font-size:15px;font-weight:600;margin:0;letter-spacing:-.01em}
-.fam{display:flex;gap:4px}
-.fam span{font-size:11px;font-weight:600;min-width:20px;height:20px;padding:0 5px;border-radius:6px;display:grid;place-items:center;background:var(--raised);color:var(--muted)}
-.tile .block{font-size:12px;color:var(--faint);padding:2px 20px 0}
-.stage{position:relative;height:300px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;user-select:none;-webkit-user-select:none;overflow:hidden;margin-top:6px}
-.tile.tall .stage{height:380px}
-.tile.big .stage{height:380px}
-.tile.wide.tall .stage{height:560px}
-@media (max-width:1100px){.tile.wide.tall .stage{height:600px}}
-@media (max-width:700px){.tile.wide.tall .stage{height:680px}}
-.tile[data-agent].focus{position:fixed;left:2.5vw;top:2.5vh;width:95vw;height:95vh;max-height:95vh;z-index:60;margin:0;border-radius:22px;box-shadow:0 32px 96px rgba(0,0,0,.24)}
-.tile[data-agent].focus .stage{height:auto;flex:1;min-height:0}
-.tilePH{min-width:0}
-#focusScrim{position:fixed;inset:0;z-index:55;background:color-mix(in oklab,var(--ink) 32%,transparent);opacity:0;visibility:hidden}
-.tile>footer{padding:0 20px 20px;display:flex;flex-direction:column;gap:8px;margin-top:auto}
-.tile footer p{margin:0;color:var(--muted);font-size:13.5px}
-.tile pre{margin:0;font:12px/1.55 var(--mono);background:var(--bg);border-radius:10px;padding:10px 12px;overflow-x:auto}
-.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--faint);pointer-events:none}
-.ro{position:absolute;top:10px;right:14px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
-button:focus-visible,input:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 12px;font-size:13px;font-weight:500;cursor:pointer}
-.btn.ink{background:var(--ink);color:var(--card);border-color:var(--ink)}
-.card{background:var(--card);border-radius:14px}
-.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-.digits{display:inline-flex;font-variant-numeric:tabular-nums}
-.dslot{position:relative;display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom}
-.dslot .dl{position:absolute;left:0;right:0;top:0;text-align:center}
-.pill{position:absolute;border-radius:999px}
-.row{display:flex;align-items:center;gap:10px}
-.col{display:flex;flex-direction:column;gap:10px}
-.muted{color:var(--muted)}
-.small{font-size:13px}
-.num{font-variant-numeric:tabular-nums}
-.infobtn{flex:none;width:24px;height:24px;border-radius:999px;border:0;background:transparent;color:var(--faint);display:grid;place-items:center;font-size:14px;line-height:1;cursor:pointer;padding:0}
-.infobtn:hover{background:var(--raised);color:var(--ink)}
-.infobtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.tileinfo{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 260ms var(--easeSpring,cubic-bezier(.2,.15,.2,1)),opacity 260ms var(--easeSpring,cubic-bezier(.2,.15,.2,1))}
-.tileinfo>*{min-height:0;overflow:hidden}
-.tileinfo.open{grid-template-rows:1fr;opacity:1}
-.detailrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
-#detailToggle{border:0;background:var(--bg);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1);color:var(--ink)}
-.group[data-agent-group]{padding-block:24px}
-.group[data-agent-group] .grid{gap:48px}
-.group[data-agent-group] .tile{border-radius:20px}
-.group[data-agent-group] .tile[data-agent].focus{border-radius:22px}
-</style>
-
-<div class="wrap">
-  <header class="top">
-    <h1>Library</h1>
-    <p class="lede">Every motion pattern the block library and admin primitives need, as live atoms. Each frame is a pure function of time. Springs are closed-form and critically damped, so nothing overshoots. Click, drag, hover and type in any tile.</p>
-  </header>
-
-  <div class="toolbar">
-    <button class="jumpbtn" id="jumpbtn" aria-expanded="false" aria-controls="jump"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h8"/></svg>Jump to</button>
-    <div class="tools">
-    <div class="seg" id="famseg" role="group" aria-label="Filter by motion family"><div class="ind"></div>
-      <button data-f="*">All</button><button data-f="M">M</button><button data-f="S">S</button><button data-f="D">D</button><button data-f="E">E</button><button data-f="X">X</button><button data-f="T">T</button>
-    </div>
-    <div class="seg" id="spdseg" role="group" aria-label="Clock speed"><div class="ind"></div>
-      <button data-s="1">1×</button><button data-s="0.25">¼×</button><button data-s="0.1">⅒×</button>
-    </div>
-    <span class="count" id="count"></span>
-    </div>
-    <div id="jump" class="jump" hidden></div>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Cieo — The motion collection</title>
+<!-- CATALOGUE_STYLES -->
+</head>
+<body>
+<a class="ui-skip" href="#collection">Skip to the collection</a>
+<aside class="ui-sidebar" aria-label="Catalogue navigation">
+  <a class="ui-brand" href="#all" aria-label="Cieo, all atoms"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M15 3c-7 0-11 4-11 10h11V3Zm3 1v11h11C29 8 25 4 18 4Zm10 14H17v11c7 0 11-4 11-11ZM14 28V17H3c0 7 4 11 11 11Z"/></svg>cieo<span>01</span></a>
+  <nav id="desktop-nav" class="ui-navigation"></nav>
+  <div class="ui-sidebar-footer"><span><i class="ui-status-dot"></i>Made to move</span><button class="ui-button ghost icon" data-open="appearance-dialog" aria-label="Appearance" data-icon="settings"></button></div>
+</aside>
+<main class="ui-main" id="collection" tabindex="-1">
+  <div class="ui-topbar">
+    <button class="ui-button ghost icon ui-mobile-only" data-open="browse-dialog" aria-label="Browse collections" data-icon="sidebar"></button>
+    <div class="ui-breadcrumb">Library <span>/</span> <b id="breadcrumb">Everything</b></div>
+    <label class="ui-search"><span data-icon="search"></span><span class="ui-sr">Search atoms</span><input id="atom-search" type="search" placeholder="Find a little inspiration…" autocomplete="off"><kbd>/</kbd></label>
+    <button class="ui-button ghost icon ui-desktop-only" id="details-toggle" aria-label="Show inline details" aria-pressed="false" data-icon="code"></button>
+    <button class="ui-button ghost icon ui-desktop-only" data-open="appearance-dialog" aria-label="Collection appearance" data-icon="settings"></button>
   </div>
-
-  <aside id="tweaks" aria-label="Mosaic tweaks">
-    <div id="twBody">
-      <label>Columns <input id="colRange" type="range" min="2" max="5" step="1" value="3"> <output id="colOut">3</output></label>
-      <div class="seg" id="themeSeg" role="group" aria-label="Theme"><div class="ind"></div><button data-t="system">System</button><button data-t="white">White</button><button data-t="black">Black</button></div>
-      <div class="detailrow"><span>Details</span><button id="detailToggle" aria-expanded="false">Show all</button></div>
-    </div>
-    <button id="twToggle" aria-expanded="true" aria-controls="twBody">Hide</button>
-  </aside>
-
-  <main id="groups" class="col" style="gap:64px"></main>
-  <div id="focusScrim" hidden></div>
-</div>
-
-<script>
+  <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span>Saved</button></div></div>
+  <div class="ui-toolbar">
+    <div class="ui-families" role="group" aria-label="Motion family" id="family-filter"></div>
+    <div class="ui-viewtools"><span id="count" class="ui-muted ui-result-count" aria-live="polite"></span><div class="row"><button class="ui-button ghost icon" id="pause-motion" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><label><span class="ui-sr">Preview speed</span><select id="motion-speed"><option value="1">1× speed</option><option value="0.25">¼× speed</option><option value="0.1">⅒× speed</option></select></label></div></div>
+  </div>
+  <div id="groups" aria-label="Live motion atoms"></div>
+  <div id="empty-state" class="ui-empty" hidden><span data-icon="search"></span><h2>Nothing here. Yet.</h2><p>Try another search, or save a few atoms to start a collection.</p><button class="ui-button" id="clear-filters">Show all atoms</button></div>
+  <noscript><p>This catalogue needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
+</main>
+<nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span>Saved</button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
+<dialog class="ui-dialog" id="browse-dialog" aria-labelledby="browse-title"><div class="ui-dialog-heading"><h2 id="browse-title">Collections</h2><button class="ui-button ghost icon" data-close aria-label="Close collections" data-icon="close"></button></div><nav id="mobile-nav" aria-label="All categories"></nav></dialog>
+<dialog class="ui-dialog" id="appearance-dialog" aria-labelledby="appearance-title"><div class="ui-dialog-heading"><h2 id="appearance-title">Make room for your taste.</h2><button class="ui-button ghost icon" data-close aria-label="Close appearance" data-icon="close"></button></div>
+  <div class="ui-settings">
+    <fieldset><legend>Appearance</legend><div class="ui-setting-options" id="appearance-options"><button class="ui-button" data-appearance="system">System</button><button class="ui-button" data-appearance="light">Light</button><button class="ui-button" data-appearance="dark">Dark</button></div></fieldset>
+    <fieldset><legend>Accent · applied to the live atoms</legend><div class="ui-swatches" id="accent-options"><button data-accent="iris" style="--swatch:#8a78dc" aria-label="Iris accent"></button><button data-accent="blue" style="--swatch:#73a5d4" aria-label="Blue accent"></button><button data-accent="green" style="--swatch:#7eae91" aria-label="Green accent"></button><button data-accent="coral" style="--swatch:#de947e" aria-label="Coral accent"></button></div></fieldset>
+    <fieldset><legend>Gallery density</legend><div class="ui-setting-options" id="density-options"><button class="ui-button" data-density="comfortable">Comfortable</button><button class="ui-button" data-density="compact">Compact</button></div></fieldset>
+    <fieldset><legend>Surface corners</legend><div class="ui-setting-options" id="corner-options"><button class="ui-button" data-corners="soft">Soft</button><button class="ui-button" data-corners="crisp">Crisp</button></div></fieldset>
+    <p class="ui-muted" style="font-size:12px;margin:0">Appearance and saved atoms stay in this browser. Nothing is sent to a server.</p>
+  </div>
+</dialog>
+<dialog class="ui-dialog" id="inspect-dialog" aria-labelledby="inspect-title"><div class="ui-dialog-heading"><h2 id="inspect-title">Atom details</h2><button class="ui-button ghost icon" data-close aria-label="Close atom details" data-icon="close"></button></div><div class="ui-inspect-body"><div id="inspect-preview"></div><div class="ui-inspect-meta"><p id="inspect-description"></p><div><h3>Motion</h3><div class="ui-meta-tags" id="inspect-families"></div></div><div><h3>Recipe</h3><pre id="inspect-code"></pre><button class="ui-button" id="copy-recipe"><span data-icon="copy"></span>Copy recipe</button></div><a id="inspect-source" target="_blank" rel="noopener noreferrer">View source</a><button id="inspect-save" class="ui-button" aria-pressed="false">Save atom</button><p class="ui-inspect-note">The original live atom, not a video. The recipe uses the catalogue runtime; adapt it through cieo/dom or cieo/react.</p></div></div></dialog>
+<div id="announcer" class="ui-sr" role="status" aria-live="polite"></div><div id="toast" class="ui-toast" hidden></div>
+<!-- CATALOGUE_SCRIPTS -->
+</body>
+</html>

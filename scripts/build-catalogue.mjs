@@ -1,14 +1,11 @@
 #!/usr/bin/env node
-// Reassembles docs/catalogue.html from atoms/web (shell, runtime and every block, in blocks.json order).
-import fs from 'node:fs';
+// Both existing catalogue URLs now show the same real atom collection.
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-
-const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const dir = path.join(root, 'atoms/web');
-const read = (f) => fs.readFileSync(path.join(dir, f), 'utf8');
-const blocks = JSON.parse(read('blocks.json'));
-const html = read('shell.before.html') + read('runtime.core.js') + blocks.map((f) => read(f)).join('') + read('runtime.page.js') + read('shell.after.html');
-const out = process.argv[2] ?? path.join(root, 'docs/catalogue.html');
-fs.mkdirSync(path.dirname(out), { recursive: true });
-fs.writeFileSync(out, html);
-console.log(`build-catalogue: ${blocks.length} blocks -> ${path.relative(root, out)}`);
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const args=process.argv.slice(2);
+const output=args.find(a=>!a.startsWith('--'))||path.join(root,'docs/catalogue.html');
+const result=spawnSync(process.execPath,[path.join(root,'scripts/build-library.mjs'),output,...args.filter(a=>a.startsWith('--'))],{stdio:'inherit'});
+if(result.error)throw result.error;
+process.exitCode=result.status??1;

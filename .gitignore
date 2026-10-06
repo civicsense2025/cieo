@@ -3,3 +3,8 @@ node_modules/
 .swiftpm/
 *.xcodeproj/xcuserdata/
 .DS_Store
+
+# Local catalogue review outputs and optional linked bootstrap.
+review-artifact/
+atoms/web/catalogue/boot.js
+__pycache__/
