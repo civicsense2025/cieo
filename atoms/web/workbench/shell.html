@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" data-cieo-library>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Cieo's live motion catalogue. Explore, try and collect the real components.">
+<title>Cieo — Motion library</title>
+<!-- CIEO_STYLES -->
+</head>
+<body class="cieo-catalogue">
+<a class="lib-skip" href="#library-main">Skip to components</a>
+<div class="lib-shell">
+  <aside class="lib-sidebar" id="library-sidebar" aria-label="Library navigation">
+    <a class="lib-brand" href="#view=featured" aria-label="Cieo home"><span class="lib-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>cieo<span class="lib-brand-dot">.</span></span></a>
+    <div class="lib-nav-top" id="library-navigation"></div>
+    <div class="lib-sidebar-heading"><span>Collections</span><button class="lib-icon-button" data-lib-action="categories" aria-label="Browse every category" title="Browse every category" data-icon="plus"></button></div>
+    <div class="lib-collections" id="library-collections"></div>
+    <nav id="library-categories" class="lib-categories" aria-label="Component categories"></nav>
+    <div class="lib-sidebar-bottom"><span class="lib-live-dot" aria-hidden="true"></span><span>Made to move</span><button class="lib-icon-button" data-lib-action="help" aria-label="Keyboard shortcuts" title="Keyboard shortcuts" data-icon="help"></button></div>
+  </aside>
+  <div class="lib-workspace">
+    <header class="lib-topbar">
+      <button class="lib-icon-button lib-menu-button" data-lib-action="navigation" aria-label="Open library navigation" aria-controls="navigation-dialog" data-icon="menu"></button>
+      <div class="lib-breadcrumb"><span class="lib-breadcrumb-home">Library</span><span aria-hidden="true">/</span><span id="breadcrumb-current">Discover</span></div>
+      <label class="lib-search"><span data-icon="search" aria-hidden="true"></span><input id="library-search" type="search" placeholder="Find a little inspiration…" aria-label="Search all components" autocomplete="off" spellcheck="false"><kbd aria-hidden="true">⌘ K</kbd></label>
+      <div class="lib-top-actions"><button class="lib-icon-button" data-lib-action="playback" aria-label="Pause live previews" aria-pressed="false" title="Pause live previews" data-icon="pause" id="playback-button"></button><button class="lib-button lib-view-button" data-lib-action="settings" aria-controls="settings-dialog"><span data-icon="sliders" aria-hidden="true"></span><span>View</span></button></div>
+    </header>
+    <main id="library-main" class="lib-main" tabindex="-1">
+      <header class="lib-page-heading"><div><div class="lib-page-meta"><span class="lib-live-dot" aria-hidden="true"></span><span id="library-total">Loading the library</span></div><h1 id="library-title">The motion collection</h1><p id="library-description">Small details. A different feeling.</p></div><button class="lib-button lib-quiet-button" data-lib-action="all">Explore everything <span data-icon="arrow" aria-hidden="true"></span></button></header>
+      <section class="lib-spotlights" id="library-spotlights" aria-label="Explore collections"></section>
+      <div class="lib-filterbar"><div class="lib-families" id="family-filter" role="group" aria-label="Filter by motion family"></div><div class="lib-filter-end"><span id="result-count" class="lib-result-count"></span><label class="lib-sort"><span class="lib-sr-only">Sort components</span><select id="library-sort"><option value="curated">Curated</option><option value="name">A–Z</option></select></label></div></div>
+      <p id="playback-note" class="lib-playback-note" hidden>Previews are paused. Press Play to explore their motion.</p>
+      <div id="library-grid" class="lib-grid"></div>
+      <section class="lib-empty" id="library-empty" hidden><span data-icon="search" aria-hidden="true"></span><h2>No components here yet</h2><p id="empty-description"></p><button class="lib-button" data-lib-action="reset-filters">Explore everything</button></section>
+      <div id="library-loading" class="lib-loading" role="status"><span class="lib-mark" aria-hidden="true"><i></i><i></i><i></i></span><p>Opening the collection…</p></div>
+      <footer class="lib-page-footer"><span>Cieo · A little more considered.</span><button data-lib-action="help" class="lib-text-button">Shortcuts <kbd>?</kbd></button></footer>
+    </main>
+  </div>
+</div>
+<dialog id="navigation-dialog" class="lib-dialog lib-navigation-dialog" aria-label="Browse the library"><div class="lib-dialog-top"><strong>Library</strong><button class="lib-icon-button" data-lib-close aria-label="Close navigation" data-icon="close"></button></div><div id="mobile-navigation"></div></dialog>
+<dialog id="settings-dialog" class="lib-dialog lib-settings-dialog" aria-labelledby="settings-title">
+  <div class="lib-dialog-top"><div><h2 id="settings-title">Make room for your taste.</h2><p>The same components, a different atmosphere.</p></div><button class="lib-icon-button" data-lib-close aria-label="Close view settings" data-icon="close"></button></div>
+  <form id="view-settings" class="lib-settings-form">
+    <fieldset><legend>Appearance</legend><div class="lib-choice-row" id="appearance-choices"></div></fieldset>
+    <fieldset><legend>Accent</legend><div class="lib-swatches" id="accent-choices"></div></fieldset>
+    <fieldset><legend>Layout</legend><label class="lib-setting-row">Columns <select name="columns"><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option></select></label><p class="lib-setting-hint">The grid adapts down to fit the screen. Controls never shrink to fit a column.</p><label class="lib-setting-row">Spacing <select name="density"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label><label class="lib-setting-row">Color backdrops <input type="checkbox" name="backdrops" checked></label></fieldset>
+    <fieldset><legend>Motion</legend><label class="lib-setting-row">Preview speed <select name="speed"><option value="1">Normal · 1×</option><option value="0.25">Slow · ¼×</option><option value="0.1">Study · ⅒×</option></select></label><p class="lib-setting-hint">Cieo’s existing springs and recipe runtime. No substitute animation engine.</p></fieldset>
+    <button class="lib-button" type="button" data-lib-action="reset-view">Reset view settings</button>
+  </form>
+</dialog>
+<dialog id="component-dialog" class="lib-dialog lib-component-dialog" aria-labelledby="component-title">
+  <div class="lib-dialog-top"><div><span class="lib-detail-category" id="component-category"></span><h2 id="component-title"></h2></div><div class="lib-detail-actions"><button class="lib-icon-button" id="detail-save" aria-label="Save component" data-icon="bookmark"></button><button class="lib-icon-button" data-lib-close aria-label="Close component" data-icon="close"></button></div></div>
+  <div class="lib-detail-layout"><div class="lib-live-preview" id="component-preview"></div><aside class="lib-inspector"><h3>In the details</h3><p id="component-description"></p><div id="component-families" class="lib-detail-families"></div><h3>Motion recipe</h3><pre id="component-code" tabindex="0"></pre><button class="lib-button lib-primary" id="copy-recipe"><span data-icon="copy" aria-hidden="true"></span>Copy recipe</button><p class="lib-setting-hint">Recipe notation explains the pattern; the source below contains its implementation.</p><a class="lib-source-link" id="component-source" target="_blank" rel="noopener">View source <span data-icon="arrow" aria-hidden="true"></span></a><button class="lib-text-button" id="copy-component-link">Copy component link</button><p class="lib-detail-note">This is the original live component, not a duplicated preview. Its state stays with it.</p></aside></div>
+</dialog>
+<dialog id="help-dialog" class="lib-dialog lib-help-dialog" aria-labelledby="help-title"><div class="lib-dialog-top"><h2 id="help-title">A few shortcuts</h2><button class="lib-icon-button" data-lib-close aria-label="Close shortcuts" data-icon="close"></button></div><dl class="lib-shortcuts"><div><dt>Find a component</dt><dd><kbd>⌘ / Ctrl K</kbd></dd></div><div><dt>Focus search</dt><dd><kbd>/</kbd></dd></div><div><dt>Close a panel</dt><dd><kbd>Esc</kbd></dd></div><div><dt>Show shortcuts</dt><dd><kbd>?</kbd></dd></div></dl><p>Try each live component directly. Save a favorite or open its details to study the motion.</p></dialog>
+<div id="library-announcement" class="lib-announcement" role="status" aria-live="polite" aria-atomic="true"></div>
+<noscript><p class="lib-noscript">This interactive catalogue needs JavaScript. Its recipe sources remain in atoms/web/blocks.</p></noscript>
+<!-- CIEO_SCRIPTS -->
+</body>
+</html>

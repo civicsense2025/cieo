@@ -257,7 +257,16 @@ function measureW(el, text){
 
 /* ================================================================ atoms */
 const A = [];
-const atom = o => A.push(o);
+// Keep each recipe's actual source path when the same stage opens in the inspector.
+// Source attribution is metadata only; every recipe's init/render contract is unchanged.
+const atom = o => {
+  const src = document.currentScript?.getAttribute('src');
+  o.file = src?.includes('/atoms/web/') ? src.split('/atoms/web/')[1] : window.CIEO_SOURCE_HINT;
+  const legacy = document.currentScript?.dataset.cieoRecipeFile || globalThis.__cieoRecipeFile;
+  if (legacy) o.sourceFile = legacy;
+  A.push(o);
+};
+
 
 /* ---------- Foundations ---------- */
 atom({ id:'step', cat:'Foundations', name:'Spring presets', block:'every block', fam:['T'],
@@ -289,43 +298,98 @@ atom({ id:'stagger', cat:'Foundations', name:'Stagger', block:'progress, chart, 
     const tr = sets[0].map(v => new Track(v));
     st.onclick = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + i*.04)); };
     return t => tr.forEach((x,i) => bars[i].style.height = px(x.at(t)*140));
-  }});
-
-/* ---------- Content ---------- */
-atom({ id:'tabs', cat:'Content', name:'Tabs with panel', block:'tabs', fam:['E','S','M'], tall:true,
-  html:`<div class="col" style="width:min(380px,90%);gap:12px"><div class="seg tabsx" role="tablist"><div class="ind"></div><button role="tab">Overview</button><button role="tab">Activity</button><button role="tab">Billing</button></div><div class="card panel" style="position:relative;overflow:hidden"></div></div>`,
-  desc:'Indicator edges lag each other. The panel text swaps with blur while the panel height morphs to fit.',
+  }});/* Content: keep Cieo's edge, height and content-swap springs; improve the actual tab view. */
+atom({
+  id:'tabs', cat:'Content', name:'Tabs with panel', block:'tabs', fam:['E','S','M'], tall:true,
+  html:`<div class="col" style="width:min(380px,90%);gap:16px">
+    <div class="seg tabsx" role="tablist" aria-label="Collection details" style="padding:4px;border-radius:16px">
+      <div class="ind" aria-hidden="true"></div>
+      <button type="button" role="tab">Overview</button><button type="button" role="tab">Activity</button><button type="button" role="tab">Billing</button>
+    </div><div class="card panel" style="position:relative;overflow:hidden;border-radius:16px"></div>
+  </div>`,
+  desc:'The indicator follows two spring edges. Content swaps while the panel adapts to its measured height. Arrow keys move between tabs.',
   api:'ind.go(l, r)   panel.h.set(measure(next))   swap.to(i)',
   init(st){
-    const seg = $(st,'.tabsx'), ind = $(seg,'.ind'), btns = $$(seg,'button'), panel = $(st,'.panel');
-    const TXT = ['Three pages published this week. Traffic is up 18% on the pricing page since the new hero shipped.',
-      'Maya edited “Spring launch”. Theo commented on the pricing table. Two new subscribers joined.',
-      'Studio plan, $24 per month. Next invoice on October 12. Visa ending 4242.'];
-    const layers = TXT.map(s => { const d = document.createElement('div'); d.className = 'layer'; Object.assign(d.style,{whiteSpace:'normal',alignItems:'flex-start',justifyContent:'flex-start',padding:'14px 16px',bottom:'auto'}); d.textContent = s; panel.appendChild(d); return d; });
-    const e = edges(0,0), h = new Track(0), sw = new Swap(0);
-    const geo = b => [b.offsetLeft, b.offsetLeft + b.offsetWidth];
-    const sel = (i, inst) => { const [l,r] = geo(btns[i]); btns.forEach((b,j)=>b.setAttribute('aria-selected', i===j));
-      inst ? (e.jump(l,r), h.jump(layers[i].offsetHeight)) : (e.go(l,r), h.set(layers[i].offsetHeight), sw.to(i)); };
-    btns.forEach((b,i) => b.onclick = () => sel(i));
-    const init = () => sel(sw.cur, true); document.fonts.ready.then(init); requestAnimationFrame(init);
-    return t => { const l = e.A.at(t), r = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(l)},3px)`,width:px(r-l),height:'calc(100% - 6px)'});
-      panel.style.height = px(h.at(t)); layers.forEach((el,k) => sw.apply(el,k,t)); };
-  }});
-
-atom({ id:'accordion', cat:'Content', name:'Accordion', block:'accordion, faq', fam:['M'], tall:true,
-  html:`<div class="card acc" style="width:min(380px,90%);overflow:hidden"></div>`,
-  desc:'Height springs to the measured body. The chevron turns on the same spring and the body fades in with height.',
+    const seg=$(st,'.tabsx'), ind=$(seg,'.ind'), btns=$$(seg,'button'), panel=$(st,'.panel');
+    const content=[
+      ['A little room to create.','Three pages published this week. Everything for the next idea, together in one collection.'],
+      ['The work keeps moving.','Maya edited “Spring launch”. Theo left a note. Two new people joined the collection.'],
+      ['Everything in its place.','Studio plan · $24 per month. Next invoice on October 12. Visa ending 4242.'],
+    ];
+    const prefix=st.closest('[id]')?.id || 'cieo-tabs';
+    const layers=content.map(([title,text],i)=>{
+      const d=document.createElement('div'); d.className='layer';
+      Object.assign(d.style,{whiteSpace:'normal',alignItems:'flex-start',justifyContent:'flex-start',flexDirection:'column',gap:'8px',padding:'24px',bottom:'auto'});
+      const strong=document.createElement('strong'), body=document.createElement('span');
+      strong.textContent=title; body.textContent=text; body.style.color='var(--muted)'; body.style.fontSize='14px'; body.style.lineHeight='1.6';
+      d.append(strong,body); d.id=prefix+'-panel-'+i; d.setAttribute('role','tabpanel');
+      d.setAttribute('aria-labelledby',prefix+'-tab-'+i); d.tabIndex=0; panel.append(d); return d;
+    });
+    const e=edges(0,0), h=new Track(0), sw=new Swap(0);
+    const select=(i,instant=false)=>{
+      const b=btns[i], l=b.offsetLeft, r=l+b.offsetWidth;
+      btns.forEach((button,j)=>{
+        button.id=prefix+'-tab-'+j; button.setAttribute('aria-controls',layers[j].id);
+        button.setAttribute('aria-selected',String(i===j)); button.tabIndex=i===j?0:-1;
+        layers[j].setAttribute('aria-hidden',String(i!==j)); layers[j].inert=i!==j;
+      });
+      if(instant){e.jump(l,r);h.jump(layers[i].offsetHeight);}else{e.go(l,r);h.set(layers[i].offsetHeight);sw.to(i);}
+    };
+    btns.forEach((button,i)=>{
+      button.onclick=()=>select(i);
+      button.onkeydown=event=>{
+        const rtl=getComputedStyle(seg).direction==='rtl'; let next=i;
+        if(event.key==='ArrowRight')next=(i+(rtl?2:1))%3;
+        else if(event.key==='ArrowLeft')next=(i+(rtl?1:2))%3;
+        else if(event.key==='Home')next=0;
+        else if(event.key==='End')next=2;
+        else return;
+        event.preventDefault();select(next);btns[next].focus();
+      };
+    });
+    const measure=()=>select(sw.cur,true);
+    // Width changes include breakpoints and moving this same node into the inspector.
+    const resize=new ResizeObserver(measure);resize.observe(seg);
+    document.fonts.ready.then(measure);requestAnimationFrame(measure);
+    return t=>{
+      const l=e.A.at(t),r=e.B.at(t);
+      Object.assign(ind.style,{transform:`translate(${px(l)},4px)`,width:px(r-l),height:'calc(100% - 8px)'});
+      panel.style.height=px(h.at(t));layers.forEach((el,k)=>sw.apply(el,k,t));
+    };
+  },
+});
+/* The measured-height/chevron spring stays intact; semantics and composition improve. */
+atom({
+  id:'accordion',cat:'Content',name:'Accordion',block:'accordion, faq',fam:['M'],tall:true,
+  html:`<style>
+    #accordion .acc{width:min(384px,calc(100% - 32px));overflow:hidden;border:1px solid var(--line-soft);border-radius:24px;background:var(--card)}
+    #accordion .acc-heading{margin:0;padding:24px 24px 16px;font-size:14px;font-weight:600;letter-spacing:-.02em}
+    #accordion .acc-button{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:none;border:0;padding:16px 24px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:start;color:var(--ink)}
+    #accordion .acc-button svg{flex:none;color:var(--muted)}
+    #accordion .acc-button:hover{background:var(--raised)}
+    #accordion .acc-answer{overflow:hidden;height:0}
+    #accordion .acc-answer p{margin:0;padding:0 24px 24px;font-size:12px;line-height:1.65;color:var(--muted)}
+  </style><div class="acc"><h4 class="acc-heading">A few good questions.</h4></div>`,
+  desc:'Each answer opens on the original measured-height spring. The chevron and text follow the same motion.',
   api:'body.h.set(open ? inner.scrollHeight : 0)',
   init(st){
-    const box = $(st,'.acc'), Q = [['Can I use my own domain?','Yes. Add it under Settings, then point a CNAME at your site. Certificates renew on their own.'],['Is there a free plan?','The Starter plan is free for one site with up to 1,000 monthly visitors.'],['How do refunds work?','Cancel within 14 days of a charge and we refund it in full, no form needed.']];
-    const rows = Q.map(([q,a],i) => { const r = document.createElement('div'); r.style.borderTop = i ? '1px solid var(--line-soft)' : '0';
-      r.innerHTML = `<button style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:none;border:0;padding:13px 16px;font-weight:500;cursor:pointer;text-align:left"><span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div style="overflow:hidden;height:0"><p class="small muted" style="margin:0;padding:0 16px 14px"></p></div>`;
-      r.querySelector('span').textContent = q; r.querySelector('p').textContent = a; box.appendChild(r);
-      return { btn:$(r,'button'), chev:$(r,'svg'), body:$(r,'div'), inner:$(r,'p'), h:new Track(0) }; });
-    let open = -1;
-    rows.forEach((r,i) => r.btn.onclick = () => { open = open === i ? -1 : i; rows.forEach((x,j) => { x.h.set(open === j ? 1 : 0); x.btn.setAttribute('aria-expanded', open === j); }); });
-    return t => rows.forEach(r => { const p = clamp(r.h.at(t)); r.body.style.height = px(p*r.inner.offsetHeight); r.chev.style.transform = `rotate(${(p*180).toFixed(1)}deg)`; fade(r.inner, p, (1-p)*-4); });
-  }});
+    const box=$(st,'.acc');
+    const questions=[['Can I use my own domain?','Yes. Add it under Settings and point a CNAME at the site. Certificates renew automatically.'],['Is there a free plan?','The Starter plan includes one site and up to 1,000 monthly visitors.'],['How do refunds work?','Cancel within 14 days of a charge to receive a full refund. These are example product details.']];
+    const rows=questions.map(([q,a],i)=>{
+      const row=document.createElement('div');row.style.borderTop='1px solid var(--line-soft)';
+      row.innerHTML=`<button type="button" class="acc-button" id="acc-trigger-${i}" aria-expanded="false" aria-controls="acc-answer-${i}"><span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="acc-answer" id="acc-answer-${i}" role="region" aria-labelledby="acc-trigger-${i}" inert><p></p></div>`;
+      row.querySelector('span').textContent=q;row.querySelector('p').textContent=a;box.append(row);
+      return {btn:$(row,'button'),chev:$(row,'svg'),body:$(row,'.acc-answer'),inner:$(row,'p'),h:new Track(0)};
+    });
+    let open=-1;
+    rows.forEach((r,i)=>r.btn.onclick=()=>{
+      open=open===i?-1:i;
+      rows.forEach((x,j)=>{const selected=open===j;x.h.set(selected?1:0);x.btn.setAttribute('aria-expanded',String(selected));x.body.inert=!selected;x.body.setAttribute('aria-hidden',String(!selected));});
+    });
+    return t=>rows.forEach(r=>{const p=clamp(r.h.at(t));r.body.style.height=px(p*r.inner.offsetHeight);r.chev.style.transform=`rotate(${(p*180).toFixed(1)}deg)`;fade(r.inner,p,(1-p)*-4);});
+  }
+});
+
 
 atom({ id:'tooltip', cat:'Content', name:'Tooltip', block:'tooltip', fam:['X'],
   html:`<p style="max-width:300px;text-align:center;margin:0;line-height:1.7">Prices update on the <span class="tt" tabindex="0" style="position:relative;border-bottom:1.5px dotted var(--faint);cursor:help">billing anchor<span class="tip" role="tooltip" style="position:absolute;z-index:30;left:50%;bottom:calc(100% + 8px);width:190px;margin-left:-95px;background:var(--ink);color:var(--card);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:8px;pointer-events:none;transform-origin:50% 100%">The day of the month your first payment went through.</span></span> of each plan.</p><div class="hint">Hover or focus the dotted words</div>`,
@@ -407,7 +471,7 @@ atom({ id:'rating', cat:'Content', name:'Rating', block:'rating, reviews', fam:[
   }});
 
 atom({ id:'badge', cat:'Content', name:'Count badge', block:'badge, nav-menu', fam:['S','X'],
-  html:`<div class="col" style="align-items:center;gap:22px"><div style="position:relative"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="bd" style="position:absolute;left:18px;top:-8px;height:20px;min-width:20px;padding:0 6px;border-radius:10px;background:var(--danger);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1"><span class="d"></span></span></div><div class="row"><button class="btn add">+1</button><button class="btn add9">+9</button><button class="btn clr">Clear</button></div></div>`,
+  html:`<div class="col" style="align-items:center;gap:24px;padding:32px;background:var(--card);border-radius:24px;box-shadow:var(--shadow)"><div style="position:relative"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><span class="bd" aria-live="polite" style="position:absolute;left:18px;top:-8px;height:24px;min-width:24px;padding:0 6px;border-radius:10px;background:var(--danger);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1"><span class="d"></span></span></div><div class="row"><button class="btn add">+1</button><button class="btn add9">+9</button><button class="btn clr">Clear</button></div></div>`,
   desc:'Digits roll up one slot at a time and slot widths spring, so 9 to 10 widens smoothly. The badge scales in from 60%.',
   api:'digits.set(n)   badge.o.set(n > 0 ? 1 : 0)',
   init(st){
@@ -418,21 +482,21 @@ atom({ id:'badge', cat:'Content', name:'Count badge', block:'badge, nav-menu', f
   }});
 
 atom({ id:'chip', cat:'Content', name:'Blur swap label', block:'buttons, cta-button', fam:['S','M'],
-  html:`<div class="col" style="gap:10px;align-items:center"><button class="chipb" style="position:relative;height:44px;border-radius:22px;background:var(--ink);color:var(--card);border:0;cursor:pointer;font-weight:500"></button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp"> loop</label></div><div class="hint">Click to advance</div>`,
+  html:`<div class="col" style="gap:16px;align-items:center"><button class="chipb" style="position:relative;height:48px;border-radius:24px;background:var(--accent);color:var(--card);border:0;cursor:pointer;font-weight:500"></button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp"> loop</label></div><div class="hint">Click to advance</div>`,
   desc:'Outgoing text blurs up and out in 100ms. Incoming text starts after it, while the pill width springs to fit. The last state holds as a success terminal instead of wrapping; tapping it starts over.',
   api:'w.set(measure(next)); swap.to(next)   end: success.set(1), hold',
   init(st){
     const b = $(st,'.chipb'), lp = $(st,'.lp'), T = ['Upload files','Uploading 3 files','Processing','Shared with 4 people'];
     const L = T.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; b.appendChild(e); return e; });
     const sw = new Swap(0), w = new Track(0), sv = new Track(0); let i = 0;
-    const width = k => { const m = document.createElement('span'); m.textContent = T[k]; Object.assign(m.style,{position:'absolute',visibility:'hidden',whiteSpace:'nowrap',font:'500 15px var(--sans)',padding:'0 22px'}); st.appendChild(m); const x = m.offsetWidth; m.remove(); return x; };
+    const width = k => { const m = document.createElement('span'); m.textContent = T[k]; Object.assign(m.style,{position:'absolute',visibility:'hidden',whiteSpace:'nowrap',font:'500 15px var(--sans)',padding:'0 24px'}); st.appendChild(m); const x = m.offsetWidth; m.remove(); return x; };
     b.onclick = () => {
       if (i === T.length - 1 && !lp.checked){ i = 0; sw.to(0); w.set(width(0)); sv.set(0, S.base); return; }
       i = (i+1) % T.length; sw.to(i); w.set(width(i)); sv.set(i === T.length - 1 ? 1 : 0, S.base);
     };
     const init = () => w.jump(width(i)); document.fonts.ready.then(init); init();
     return t => { const s = clamp(sv.at(t)); b.style.width = px(w.at(t));
-      b.style.background = mix(s,'var(--success)','var(--ink)');
+      b.style.background = mix(s,'var(--success)','var(--accent)');
       L.forEach((e,k) => sw.apply(e,k,t)); };
   }});
 
@@ -694,29 +758,46 @@ atom({ id:'poll', cat:'Interactive', name:'Poll', block:'poll', fam:['M','S'], t
     return t => rows.forEach(r => { const v = r.v.at(t), c = clamp(r.c.at(t)); r.fill.style.width = clamp(v/100)*100 + '%';
       r.pct.textContent = Math.round(v) + '%'; fade(r.pct, r.o.at(t), 0);
       r.ck.style.width = px(14*c); r.ck.style.opacity = c; r.b.style.borderColor = mix(c,'var(--ink)','var(--line)'); });
-  }});
-
-atom({ id:'field', cat:'Interactive', name:'Text field', block:'form, newsletter', fam:['M','S'],
-  html:`<div class="col" style="width:min(320px,88%);gap:0"><label class="fw" style="position:relative;display:block;height:54px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);cursor:text"><span class="lb" style="position:absolute;left:13px;top:16px;transform-origin:0 0;color:var(--faint)">Email address</span><input id="fld-email" type="email" autocomplete="off" style="position:absolute;left:12px;right:40px;bottom:7px;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0"><span class="ic" style="position:absolute;right:12px;top:17px;width:18px;height:18px"><svg class="layer" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg><svg class="layer" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2.25" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg></span></label><div class="er" style="position:relative;overflow:hidden;height:0"><span class="small" role="alert" style="display:block;padding-top:6px;color:var(--danger)">Enter an address like name@example.com</span></div></div><div class="hint">Type an address, then press Tab</div>`,
-  desc:'The label floats on focus. On blur the field settles into one of three states: neutral, valid in the success color with a check, or invalid in the danger color with a message.',
+  }});/* Interactive: retain floating-label and validation springs, with explicit accessible text. */
+atom({
+  id:'field',cat:'Interactive',name:'Text field',block:'form, newsletter',fam:['M','S'],
+  html:`<div class="col" style="width:min(336px,88%);gap:0">
+    <label class="fw" style="position:relative;display:block;height:64px;border:1px solid var(--line);border-radius:16px;background:var(--card);cursor:text">
+      <span class="lb" style="position:absolute;left:16px;top:20px;transform-origin:0 0;color:var(--muted)">Email address</span>
+      <input type="email" inputmode="email" autocomplete="email" aria-label="Email address" style="position:absolute;left:16px;right:48px;bottom:8px;border:0;background:none;color:var(--ink);font:16px var(--sans);padding:0;min-width:0">
+      <span class="ic" aria-hidden="true" style="position:absolute;right:16px;top:24px;width:16px;height:16px">
+        <svg class="layer" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>
+        <svg class="layer" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></svg>
+      </span>
+    </label><div class="er" style="position:relative;overflow:hidden;height:0"><span class="small" style="display:block;padding-top:8px;color:var(--danger)">Enter an address like name@example.com</span></div>
+  </div><div class="hint">Type an address, then press Tab</div>`,
+  desc:'The label floats on focus. Validation adds a symbol and a described error, not just a color. The field keeps a full-size type and touch target.',
   api:'status.to(valid ? "ok" : "error")   border = mix(status color, line)',
   init(st){
-    const fw = $(st,'.fw'), lb = $(st,'.lb'), inp = $(st,'input'), er = $(st,'.er'), msg = $(er,'span'), icons = $$(st,'.ic svg');
-    const f = new Track(0), fo = new Track(0), ok = new Track(0), bad = new Track(0), sw = new Swap(-1);
-    const valid = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value);
-    const status = s => { ok.set(s === 0 ? 1 : 0); bad.set(s === 1 ? 1 : 0); sw.to(s); inp.setAttribute('aria-invalid', s === 1); };
-    const sync = () => f.set(document.activeElement === inp || inp.value ? 1 : 0);
-    inp.onfocus = () => { sync(); fo.set(1); };
-    inp.oninput = () => { if (bad.target && valid()) status(0); else if (ok.target && !valid()) status(-1); };
-    inp.onblur = () => { sync(); fo.set(0); status(!inp.value ? -1 : valid() ? 0 : 1); };
-    return t => { const p = clamp(f.at(t)), g = clamp(ok.at(t)), k = clamp(bad.at(t)), q = clamp(fo.at(t));
-      lb.style.transform = `translateY(${px(-9*p)}) scale(${(1 - .2*p).toFixed(4)})`;
-      const base = mix(q,'var(--ink)','var(--line)');
-      fw.style.borderColor = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, ${base}))`;
-      lb.style.color = k > .5 ? 'var(--danger)' : g > .5 ? 'var(--success)' : 'var(--faint)';
-      icons.forEach((el,i) => sw.apply(el, i, t, 0));
-      er.style.height = px(k*msg.offsetHeight); fade(msg, k, (1-k)*-4); };
-  }});
+    const fw=$(st,'.fw'),lb=$(st,'.lb'),inp=$(st,'input'),er=$(st,'.er'),msg=$(er,'span'),icons=$$(st,'.ic svg');
+    const prefix=st.closest('[id]')?.id || 'cieo-field';msg.id=prefix+'-error';er.setAttribute('aria-hidden','true');
+    const f=new Track(0),fo=new Track(0),ok=new Track(0),bad=new Track(0),sw=new Swap(-1);
+    const valid=()=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value);
+    const status=s=>{
+      ok.set(s===0?1:0);bad.set(s===1?1:0);sw.to(s);inp.setAttribute('aria-invalid',String(s===1));
+      er.setAttribute('aria-hidden',String(s!==1));
+      if(s===1)inp.setAttribute('aria-describedby',msg.id);else inp.removeAttribute('aria-describedby');
+    };
+    const sync=()=>f.set(document.activeElement===inp||inp.value?1:0);
+    inp.onfocus=()=>{sync();fo.set(1);};
+    inp.oninput=()=>{sync();if(bad.target&&valid())status(0);else if(ok.target&&!valid())status(-1);};
+    inp.onblur=()=>{sync();fo.set(0);status(!inp.value?-1:valid()?0:1);};
+    return t=>{
+      const p=clamp(f.at(t)),g=clamp(ok.at(t)),k=clamp(bad.at(t)),q=clamp(fo.at(t));
+      lb.style.transform=`translateY(${px(-12*p)}) scale(${(1-.2*p).toFixed(4)})`;
+      const base=mix(q,'var(--accent)','var(--line)');
+      fw.style.borderColor=`color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, ${base}))`;
+      lb.style.color=k>.5?'var(--danger)':g>.5?'var(--success)':'var(--muted)';
+      icons.forEach((el,i)=>sw.apply(el,i,t,0));er.style.height=px(k*msg.offsetHeight);fade(msg,k,(1-k)*-4);
+    };
+  },
+});
+
 
 atom({ id:'newsletter', cat:'Newsletter', name:'Subscribe', block:'newsletter', fam:['M','S'],
   html:`<div class="col" style="align-items:center;gap:8px"><form class="nf" novalidate style="position:relative;display:flex;gap:6px;height:48px;padding:4px;border-radius:24px;background:var(--card);overflow:hidden"><input id="nl-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 14px"><button class="sb" style="position:relative;flex:none;height:40px;border-radius:20px;border:0;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="done layer" style="font-weight:500;color:var(--success)"></div></form><div class="ne small" role="alert" style="color:var(--danger);height:20px"></div></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Reset</button><div class="hint">Try an invalid address first, then a real one</div>`,
@@ -783,14 +864,14 @@ atom({ id:'signature', cat:'Interactive', name:'Signature pad', block:'signature
   }});
 
 atom({ id:'slider', cat:'Interactive', name:'Rubber-band slider', block:'form (range), video volume', fam:['D'],
-  html:`<div class="row" style="width:min(320px,84%);gap:12px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/></svg><div class="vr" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" style="position:relative;flex:1;height:36px;cursor:grab;touch-action:none"><div class="vp" style="position:absolute;left:0;top:50%;border-radius:999px;background:var(--raised);overflow:hidden"><div class="vf" style="position:absolute;left:0;top:0;bottom:0;background:var(--ink)"></div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div><div class="ro num">60%</div><div class="hint">Drag past either end</div>`,
+  html:`<div class="row" style="width:min(320px,calc(100% - 48px));gap:16px;padding:16px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/></svg><div class="vr" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" style="position:relative;flex:1;height:48px;cursor:grab;touch-action:none"><div class="vp" style="position:absolute;left:0;top:50%;border-radius:999px;background:var(--raised);overflow:hidden"><div class="vf" style="position:absolute;left:0;top:0;bottom:0;background:var(--accent)"></div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div><div class="ro num">60%</div><div class="hint">Drag past either end</div>`,
   desc:'While held, the value is the pointer. Past the ends the pill stretches with rising resistance, then springs back from release velocity.',
   api:'rb(x, d) = d·(1 − 1/(0.55x/d + 1))   o.release(o, v, 0)',
   init(st){
     const vr = $(st,'.vr'), vp = $(st,'.vp'), vf = $(st,'.vf'), ro = $(st,'.ro'), v = new Track(.6), o = new Track(0); let held = false, hv = .6, ho = 0;
     const at = p => { if (p.x > p.w){ hv = 1; ho = rb(p.x - p.w, 60); } else if (p.x < 0){ hv = 0; ho = rb(p.x, 60); } else { hv = p.x/p.w; ho = 0; } };
     drag(vr, { down:p => { held = true; at(p); }, move:at, up:(p, vel) => { held = false; v.jump(hv); o.release(ho, ho ? vel.vx*.3 : 0, 0); } });
-    vr.onkeydown = e => { if (e.key === 'ArrowRight') v.set(clamp(v.target + .1)); if (e.key === 'ArrowLeft') v.set(clamp(v.target - .1)); };
+    vr.onkeydown=e=>{const step=e.shiftKey?.1:.01;if(['ArrowRight','ArrowUp','ArrowLeft','ArrowDown','Home','End'].includes(e.key)){e.preventDefault();v.set(e.key==='Home'?0:e.key==='End'?1:clamp(v.target+(['ArrowRight','ArrowUp'].includes(e.key)?step:-step)))}};
     return t => { const W = vr.clientWidth, val = held ? hv : v.at(t), ov = held ? ho : o.at(t);
       vp.style.width = px(W + Math.abs(ov)); vp.style.height = px(10 - Math.min(3.5, Math.abs(ov)*.07)); vp.style.transform = `translate(${px(Math.min(0, ov))}, -50%)`;
       vf.style.width = px(clamp(val)*(W + Math.abs(ov))); const pc = Math.round(clamp(val)*100); ro.textContent = pc + '%'; vr.setAttribute('aria-valuenow', pc); };
@@ -930,35 +1011,49 @@ atom({ id:'checkout', cat:'Commerce', name:'Checkout totals', block:'checkout, l
     function upd(it, d){ const q = clamp(it.q + d, 0, 99); if (q === it.q) return; it.q = q; it.d.set(String(q)); it.v.set(it.p*q); sum(); }
     sum(true);
     return t => { rows.forEach(r => { r.d.render(t); r.lt.textContent = money(r.v.at(t)); }); out[0].textContent = money(sub.at(t)); out[1].textContent = money(tx.at(t)); out[2].textContent = money(tt.at(t)); };
-  }});
-
-/* ---------- Admin ---------- */
-atom({ id:'switch', cat:'Admin', name:'Switch', block:'Switch / Toggle primitive', fam:['E','M'],
-  html:`<button class="tg" role="switch" aria-checked="false" aria-label="Email notifications" style="position:relative;width:64px;height:36px;border-radius:18px;border:0;padding:0;cursor:pointer;background:var(--raised)"><span class="kn" style="position:absolute;top:4px;left:0;height:28px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)"></span></button><div class="hint">Press and hold, then release</div>`,
-  desc:'The knob leads with one edge and trails with the other. While pressed it widens toward where it will go. The track inks in on the same spring.',
+  }});/* Admin: real settings context and a 44px hit area without changing the spring geometry. */
+atom({
+  id:'switch',cat:'Admin',name:'Switch',block:'Switch / Toggle primitive',fam:['E','M'],
+  html:`<div class="card lib-switch-specimen" style="width:min(336px,88%);padding:24px;border-radius:24px">
+    <div class="row" style="justify-content:space-between;gap:24px">
+      <div class="col" style="gap:8px"><strong style="font-size:15px">A little heads-up.</strong><span class="muted" style="font-size:13px">Email notifications</span></div>
+      <button type="button" class="tg" role="switch" aria-checked="false" aria-label="Email notifications" style="position:relative;flex:none;width:64px;height:44px;border:0;padding:0;background:transparent;cursor:pointer;border-radius:24px">
+        <span class="rail" aria-hidden="true" style="position:absolute;inset:4px 0;border-radius:24px;background:var(--raised)"><span class="kn" style="position:absolute;top:4px;left:0;height:28px;border-radius:24px;background:var(--card);box-shadow:var(--shadow)"></span></span>
+      </button>
+    </div><div class="small muted" style="margin-top:24px">Notifications <span class="switch-state">off</span></div>
+  </div><div class="hint">A soft stretch. A clear state.</div>`,
+  desc:'The knob leads with one edge and trails with the other. A native button supplies click and keyboard activation; cancelled presses never toggle the value.',
   api:'knob.go(l, r)   press.set(down ? 1 : 0, S.snap)',
   init(st){
-    const tg = $(st,'.tg'), kn = $(st,'.kn'), OFF = [4,32], ON = [32,60], e = edges(...OFF), pr = new Track(0, S.snap), fl = new Track(0); let on = false;
-    const flip = () => { on = !on; e.go(...(on ? ON : OFF)); fl.set(on ? 1 : 0); tg.setAttribute('aria-checked', on); };
-    tg.onpointerdown = () => pr.set(1); tg.onpointerup = () => { pr.set(0); flip(); }; tg.onpointerleave = () => pr.set(0);
-    tg.onkeydown = ev => { if (ev.key === ' ' || ev.key === 'Enter'){ ev.preventDefault(); flip(); } };
-    return t => { const p = pr.at(t), l = e.A.at(t) - (on ? 6*p : 0), r = e.B.at(t) + (on ? 0 : 6*p);
-      kn.style.transform = `translateX(${px(l)})`; kn.style.width = px(r - l); tg.style.background = mix(fl.at(t), 'var(--ink)', 'var(--raised)'); };
-  }});
+    const tg=$(st,'.tg'),kn=$(st,'.kn'),rail=$(st,'.rail'),label=$(st,'.switch-state');
+    const OFF=[4,32],ON=[32,60],e=edges(...OFF),pr=new Track(0,S.snap),fl=new Track(0);let on=false;
+    tg.onclick=()=>{on=!on;e.go(...(on?ON:OFF));fl.set(on?1:0);tg.setAttribute('aria-checked',String(on));label.textContent=on?'on':'off';};
+    tg.onpointerdown=event=>{if(event.button===0)pr.set(1);};
+    tg.onpointerup=tg.onpointerleave=tg.onpointercancel=tg.onblur=()=>pr.set(0);
+    tg.onkeydown=event=>{if((event.key===' '||event.key==='Enter')&&!event.repeat)pr.set(1);};
+    tg.onkeyup=()=>pr.set(0);
+    return t=>{
+      const p=pr.at(t),l=e.A.at(t)-(on?6*p:0),r=e.B.at(t)+(on?0:6*p);
+      kn.style.transform=`translateX(${px(l)})`;kn.style.width=px(r-l);
+      rail.style.background=mix(fl.at(t),'var(--accent)','var(--raised)');
+    };
+  },
+});
+
 
 atom({ id:'toast', cat:'Admin', name:'Toast stack', block:'Toast primitive', fam:['X','D'], tall:true,
-  html:`<button class="btn ink add" style="position:absolute;top:14px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" style="position:absolute;left:50%;bottom:22px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:52px">Swipe a toast sideways to dismiss</div>`,
+  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
   desc:'Success, warning and error toasts carry their status color on the icon and the action. New toasts push older ones back in depth. Drag one sideways 1:1; a long or fast swipe flings it out from release velocity, a short one springs home.',
   api:'x.release(x, vx, |x| > 100 || |vx| > 600 ? ±420 : 0)',
   init(st){
     const ts = $(st,'.ts'), M = [['ok','Page published'],['err','Couldn’t reach the domain'],['ok','Invite sent to maya@studio.co'],['warn','Storage 90% full'],['ok','Draft saved']]; let list = [], all = [], k = 0;
-    const add = () => { const el = document.createElement('div'); el.className = 'card row'; el.style.cssText += 'position:absolute;left:0;right:0;bottom:0;padding:12px 14px;gap:10px;touch-action:pan-y;cursor:grab;transform-origin:50% 100%';
+    const add = () => { const el = document.createElement('div'); el.className = 'card row'; el.style.cssText += 'position:absolute;left:0;right:0;bottom:0;padding:16px 24px;gap:16px;touch-action:pan-y;cursor:grab;transform-origin:50% 100%';
       const [kind, text] = M[k++ % M.length], col = { ok:'var(--success)', err:'var(--danger)', warn:'var(--warning)' }[kind];
       const icon = kind === 'ok' ? '<path d="M5 12.5 10 17.5 19 7"/>' : '<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/>';
-      if (kind === 'err') el.setAttribute('role','alert');
+      el.setAttribute('role',kind==='err'?'alert':'status');
       el.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${col}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" style="flex:none">${icon}</svg><span class="small" style="flex:1;font-weight:500"></span><span class="small" style="color:${kind === 'ok' ? 'var(--muted)' : col};font-weight:500">${kind === 'ok' ? 'Undo' : kind === 'err' ? 'Retry' : 'Manage'}</span>`;
-      el.querySelector('span').textContent = text; ts.appendChild(el);
-      const T = { el, x:new Track(0), i:new Track(-1), o:new Track(0), held:false, hx:0, gone:false, born:now() }; T.i.jump(-1); list.unshift(T); all.push(T); T.o.set(1);
+      el.querySelector('span').textContent = text; const dismissButton=document.createElement('button');dismissButton.type='button';dismissButton.setAttribute('aria-label','Dismiss notification');dismissButton.textContent='×';dismissButton.style.cssText='width:32px;height:32px;border:0;border-radius:8px;background:none;flex:none;font-size:20px';el.append(dismissButton);ts.appendChild(el);
+      const T = { el, x:new Track(0), i:new Track(-1), o:new Track(0), held:false, hx:0, gone:false, born:now() }; dismissButton.onclick=()=>dismiss(T);dismissButton.onpointerdown=ev=>ev.stopPropagation();T.i.jump(-1); list.unshift(T); all.push(T); T.o.set(1);
       list.forEach((x,j) => x.i.set(j));
       drag(el, { down:p => { T.held = true; T.hx = T.x.at(); T.sx = p.cx - T.hx; }, move:p => { T.hx = p.cx - T.sx; }, up:(p,v) => { T.held = false; const out = Math.abs(T.hx) > 100 || Math.abs(v.vx) > 600;
         T.x.release(T.hx, v.vx, out ? Math.sign(T.hx || v.vx)*420 : 0); if (out) dismiss(T); } });
@@ -970,26 +1065,59 @@ atom({ id:'toast', cat:'Admin', name:'Toast stack', block:'Toast primitive', fam
       for (const T of all){ const i = T.i.at(t), o = clamp(T.o.at(t)), x = T.held ? T.hx : T.x.at(t);
         T.el.style.transform = `translate(${px(x)}, ${px(-i*10 + (1 - o)*16)}) scale(${(1 - Math.max(0,i)*.05).toFixed(4)})`;
         T.el.style.opacity = (o*clamp(3 - i)*(1 - clamp(Math.abs(x)/420))).toFixed(3); T.el.style.zIndex = String(100 - Math.round(i)); T.el.style.pointerEvents = !T.gone && i < .5 ? 'auto' : 'none'; } };
-  }});
-
-atom({ id:'dropdown', cat:'Admin', name:'Dropdown', block:'Select / menu primitive', fam:['X','S'], tall:true,
-  html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%)"><button class="btn dd" aria-haspopup="menu" aria-expanded="false" style="position:relative;display:flex;align-items:center;gap:8px;min-width:170px;justify-content:space-between"><span class="lbw" style="position:relative;height:20px;flex:1;text-align:left"></span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></button><div class="mn card" role="menu" style="position:absolute;top:44px;left:0;min-width:200px;padding:6px;transform-origin:20px 0;visibility:hidden"></div></div>`,
-  desc:'The menu grows from the trigger at 97% scale while items fade in 30ms apart. Picking one swaps the button label.',
+  }});/* Admin: source-owned menu geometry, keyboard navigation and checked selection. */
+atom({
+  id:'dropdown',cat:'Admin',name:'Dropdown',block:'Select / menu primitive',fam:['X','S'],tall:true,
+  html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:min(248px,88%)">
+    <button type="button" class="btn dd" aria-haspopup="menu" aria-expanded="false" style="position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:40px;justify-content:space-between;border-radius:16px">
+      <span class="lbw" style="position:relative;height:24px;flex:1;text-align:left"></span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button><div class="mn card" role="menu" aria-label="Sort collection" aria-hidden="true" inert style="position:absolute;top:48px;left:0;width:100%;padding:8px;border-radius:16px;transform-origin:24px 0;visibility:hidden"></div>
+  </div>`,
+  desc:'A soft menu, anchored to its trigger. Arrow keys, Home, End and typeahead move through options; Escape restores focus. The selected label keeps its original content-swap spring.',
   api:'menu.o.set(open); item[i].o = prog(t, tOpen + i*0.03)',
   init(st){
-    const dd = $(st,'.dd'), mn = $(st,'.mn'), lbw = $(st,'.lbw'), O = ['Newest first','Oldest first','Most viewed','Alphabetical'];
-    const labels = O.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = 'Sort: ' + s; lbw.appendChild(e); return e; });
-    const items = O.map((s,i) => { const b = document.createElement('button'); b.setAttribute('role','menuitem'); b.textContent = s; b.style.cssText = 'display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:8px;font-size:14px;cursor:pointer';
-      b.onpointerenter = () => b.style.background = 'var(--raised)'; b.onpointerleave = () => b.style.background = 'none'; b.onclick = () => { sw.to(i); set(false); dd.focus(); }; mn.appendChild(b); return b; });
-    const sw = new Swap(0), o = new Track(0); let tOpen = -9;
-    const set = v => { o.set(v ? 1 : 0, v ? S.base : S.snap); dd.setAttribute('aria-expanded', v); if (v) tOpen = now(); };
-    dd.onclick = e => { e.stopPropagation(); set(!o.target); }; st.addEventListener('pointerdown', e => { if (!mn.contains(e.target) && !dd.contains(e.target)) set(false); });
-    dd.onkeydown = e => { if (e.key === 'Escape') set(false); };
-    return t => { const p = clamp(o.at(t)); mn.style.opacity = p.toFixed(3); mn.style.visibility = p < .01 ? 'hidden' : 'visible';
-      mn.style.transform = `translateY(${px((1-p)*-4)}) scale(${(.97+.03*p).toFixed(4)})`; mn.style.filter = p < .98 ? `blur(${((1-p)*BLUR).toFixed(2)}px)` : 'none';
-      items.forEach((b,i) => { const q = o.target ? clamp(prog(t, tOpen + .04 + i*.03)) : p; b.style.opacity = q.toFixed(3); });
-      labels.forEach((e,k) => sw.apply(e,k,t)); };
-  }});
+    const dd=$(st,'.dd'),mn=$(st,'.mn'),lbw=$(st,'.lbw');
+    const options=['Newest first','Oldest first','Most viewed','Alphabetical'];
+    mn.id=(st.closest('[id]')?.id||'cieo-dropdown')+'-menu';dd.setAttribute('aria-controls',mn.id);
+    const labels=options.map(text=>{const e=document.createElement('span');e.className='layer';e.style.justifyContent='flex-start';e.textContent=text;lbw.append(e);return e;});
+    const sw=new Swap(0),o=new Track(0);let openedAt=-9,selected=0,active=0,typing='',typedAt=0;
+    const items=options.map((text,i)=>{
+      const b=document.createElement('button');b.type='button';b.setAttribute('role','menuitemradio');b.tabIndex=-1;
+      b.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:40px;text-align:left;border:0;background:none;padding:8px 16px;border-radius:8px;font:14px var(--sans);color:var(--ink);cursor:pointer';
+      const name=document.createElement('span'),mark=document.createElement('span');name.textContent=text;mark.textContent='✓';mark.setAttribute('aria-hidden','true');b.append(name,mark);
+      b.onpointerenter=()=>{active=i;paint();};b.onpointerleave=()=>{active=-1;paint();};
+      b.onclick=()=>{selected=i;sw.to(i);set(false);paint();dd.focus();};mn.append(b);return b;
+    });
+    const paint=()=>items.forEach((b,i)=>{b.setAttribute('aria-checked',String(i===selected));b.lastChild.style.visibility=i===selected?'visible':'hidden';b.style.background=i===active?'var(--raised)':'none';});
+    const focus=i=>{active=(i+items.length)%items.length;items[active].focus();paint();};
+    const set=(value,focusIndex)=>{
+      o.set(value?1:0,value?S.base:S.snap);dd.setAttribute('aria-expanded',String(value));mn.inert=!value;mn.setAttribute('aria-hidden',String(!value));
+      if(value){openedAt=now();mn.style.visibility='visible';if(focusIndex!==undefined)focus(focusIndex);}
+    };
+    dd.onclick=event=>{event.stopPropagation();set(!o.target);};
+    dd.onkeydown=event=>{if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();set(true,event.key==='ArrowDown'?selected:items.length-1);}};
+    mn.onkeydown=event=>{
+      const at=items.indexOf(document.activeElement);
+      if(event.key==='Escape'){event.preventDefault();event.stopPropagation();set(false);dd.focus();}
+      else if(event.key==='ArrowDown'||event.key==='ArrowUp'){event.preventDefault();focus(at+(event.key==='ArrowDown'?1:-1));}
+      else if(event.key==='Home'||event.key==='End'){event.preventDefault();focus(event.key==='Home'?0:items.length-1);}
+      else if(event.key==='Tab'){set(false);dd.focus();}
+      else if(event.key.length===1&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&event.key!==' '){
+        const t=performance.now();typing=(t-typedAt>700?'':typing)+event.key.toLowerCase();typedAt=t;
+        const found=options.findIndex(text=>text.toLowerCase().startsWith(typing));if(found>=0){event.preventDefault();focus(found);}
+      }
+    };
+    document.addEventListener('pointerdown',event=>{if(o.target&&!mn.contains(event.target)&&!dd.contains(event.target))set(false);});
+    paint();
+    return t=>{
+      const p=clamp(o.at(t));mn.style.opacity=p.toFixed(3);mn.style.visibility=p<.01&&!o.target?'hidden':'visible';
+      mn.style.transform=`translateY(${px((1-p)*-4)}) scale(${(.97+.03*p).toFixed(4)})`;mn.style.filter=p<.98?`blur(${((1-p)*BLUR).toFixed(2)}px)`:'none';
+      items.forEach((b,i)=>b.style.opacity=(o.target?clamp(prog(t,openedAt+.04+i*.03)):p).toFixed(3));
+      labels.forEach((e,k)=>{sw.apply(e,k,t);e.setAttribute('aria-hidden',String(k!==sw.cur));});
+    };
+  },
+});
+
 
 atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet primitive on phones. the admin uses the side sheet; see Admin kit', fam:['X','D'], tall:true,
   html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b>Pages</b><span class="small muted">Home · About · Journal · Contact</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px">Page settings</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh" style="position:absolute;left:0;right:0;bottom:0;height:200px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;cursor:grab"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col small" style="padding:0 16px;gap:10px"><b style="font-size:15px">Page settings</b><div class="row" style="justify-content:space-between"><span>Show in navigation</span><span class="muted">On</span></div><div class="row" style="justify-content:space-between"><span>Search indexing</span><span class="muted">Allowed</span></div><div class="row" style="justify-content:space-between"><span>Slug</span><span class="muted">/about</span></div></div></div></div><div class="hint">Drag the sheet down to close</div>`,
@@ -1005,21 +1133,21 @@ atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet 
   }});
 
 atom({ id:'palette', cat:'Admin', name:'Command palette', block:'AdminCommandPalette', fam:['M','E','S','X'], tall:true,
-  html:`<div class="card" style="width:min(380px,90%);overflow:hidden"><input id="palq" placeholder="Type a command…" autocomplete="off" aria-label="Search commands" style="width:100%;border:0;border-bottom:1px solid var(--line-soft);background:none;color:var(--ink);font:15px var(--sans);padding:13px 16px;outline:none"><div class="pll" style="position:relative;overflow:hidden"><div class="hl" style="position:absolute;left:6px;right:6px;border-radius:9px;background:var(--raised)"></div><div class="em layer small muted">No matching commands</div></div><div class="ps" style="position:relative;height:32px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)"></div></div>`,
+  html:`<div class="card" style="width:min(352px,calc(100% - 48px));overflow:hidden"><input id="palq" placeholder="Type a command…" autocomplete="off" aria-label="Search commands" style="width:100%;border:0;border-bottom:1px solid var(--line-soft);background:none;color:var(--ink);font:13px var(--sans);padding:16px 24px;min-height:56px;outline:none"><div class="pll" role="listbox" aria-label="Commands" style="position:relative;overflow:auto;max-height:240px;scrollbar-width:thin"><div class="hl" style="position:absolute;left:8px;right:8px;border-radius:8px;background:var(--raised)"></div><div class="em layer small muted" style="pointer-events:none;font-size:12px">No matching commands</div></div><div class="ps" style="position:relative;height:40px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--faint)"></div></div>`,
   desc:'Rows spring to their new slots as the filter changes and hidden rows blur out in place. The highlight moves with lagging edges. Arrow keys and Enter work.',
   api:'row.y.set(k·36)   row.o.set(match)   hl.go(top, bottom)',
   init(st){
     const q = $(st,'input'), list = $(st,'.pll'), hl = $(st,'.hl'), em = $(st,'.em'), ps = $(st,'.ps');
-    const C = [['New page','⌘N'],['Open site settings','⌘,'],['Invite teammate','⌘I'],['Toggle theme','⌘T'],['Search media','⌘P'],['Export content','⌘E'],['Sign out','⇧⌘Q']], R = 36, P = 6;
-    const rows = C.map(([n,k],i) => { const el = document.createElement('div'); el.style.cssText = 'position:absolute;left:0;right:0;top:0;height:36px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;font-size:14px;cursor:pointer';
-      el.innerHTML = `<span></span><kbd style="font:12px var(--mono);color:var(--faint)"></kbd>`; el.children[0].textContent = n; el.children[1].textContent = k; list.appendChild(el); return { el, n, y:new Track(P + i*R), o:new Track(1) }; });
+    const C = [['New page','⌘N'],['Open site settings','⌘,'],['Invite teammate','⌘I'],['Toggle theme','⌘T'],['Search media','⌘P'],['Export content','⌘E'],['Sign out','⇧⌘Q']], R = 40, P = 8;
+    const rows = C.map(([n,k],i) => { const el = document.createElement('div'); el.style.cssText = 'position:absolute;left:0;right:0;top:0;height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;font-size:12px;cursor:pointer';
+      el.id = `command-option-${i}`; el.setAttribute('role','option'); el.innerHTML = `<span></span><kbd style="font:12px var(--mono);color:var(--faint)"></kbd>`; el.children[0].textContent = n; el.children[1].textContent = k; list.appendChild(el); return { el, n, y:new Track(P + i*R), o:new Track(1) }; });
     const H = new Track(P*2 + C.length*R), e = edges(P, P + R), eo = new Track(0), sw = new Swap(0), msgs = ['↑↓ to move · Enter to run'];
     const mk = k => { const el = document.createElement('div'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.style.paddingLeft = '16px'; el.textContent = msgs[k]; ps.appendChild(el); return el; };
-    const layers = [mk(0)]; let vis = rows.slice(), sel = 0;
+    const layers = [mk(0)]; let vis = rows.slice(), sel = 0; list.id='command-results'; q.setAttribute('role','combobox'); q.setAttribute('aria-controls','command-results'); q.setAttribute('aria-expanded','true'); q.setAttribute('aria-autocomplete','list'); ps.setAttribute('role','status');
     const match = (n, s) => { let j = 0; n = n.toLowerCase(); for (const c of s.toLowerCase()){ j = n.indexOf(c, j); if (j < 0) return false; j++; } return true; };
-    const mv = i => { sel = i; e.go(P + i*R, P + (i+1)*R); };
-    const run = () => { if (!vis[sel]) return; msgs.push(`Ran “${vis[sel].n}”`); layers.push(mk(msgs.length - 1)); sw.to(msgs.length - 1); };
-    q.oninput = () => { const s = q.value.trim(); vis = rows.filter(r => match(r.n, s)); rows.forEach(r => { const k = vis.indexOf(r); r.o.set(k >= 0 ? 1 : 0); if (k >= 0) r.y.set(P + k*R); }); H.set(P*2 + Math.max(1, vis.length)*R); eo.set(vis.length ? 0 : 1); mv(0); };
+    const mv = i => { sel = i; e.go(P + i*R, P + (i+1)*R); rows.forEach(r=>r.el.setAttribute('aria-selected',String(r===vis[i]))); q.setAttribute('aria-activedescendant',vis[i]?.el.id||''); const y=P+i*R; if(y<list.scrollTop)list.scrollTop=y; else if(y+R>list.scrollTop+240)list.scrollTop=y+R-240; };
+    const run = () => { if (!vis[sel]) return; msgs[1]=`Selected “${vis[sel].n}”`; if(!layers[1])layers[1]=mk(1); else layers[1].textContent=msgs[1]; sw.to(1); };
+    q.oninput = () => { const s = q.value.trim(); vis = rows.filter(r => match(r.n, s)); rows.forEach(r => { const k = vis.indexOf(r); r.o.set(k >= 0 ? 1 : 0); r.el.setAttribute('aria-hidden',String(k<0)); if (k >= 0) r.y.set(P + k*R); }); H.set(P*2 + Math.max(1, vis.length)*R); eo.set(vis.length ? 0 : 1); mv(0); };
     q.onkeydown = ev => { if (ev.key === 'ArrowDown'){ ev.preventDefault(); if (vis.length) mv((sel+1) % vis.length); } if (ev.key === 'ArrowUp'){ ev.preventDefault(); if (vis.length) mv((sel + vis.length - 1) % vis.length); } if (ev.key === 'Enter'){ ev.preventDefault(); run(); } };
     rows.forEach(r => { r.el.onpointerenter = () => { const k = vis.indexOf(r); if (k >= 0 && k !== sel) mv(k); }; r.el.onclick = () => { const k = vis.indexOf(r); if (k >= 0){ sel = k; run(); } }; });
     return t => { list.style.height = px(H.at(t)); rows.forEach(r => { r.el.style.transform = `translateY(${px(r.y.at(t))})`; fade(r.el, r.o.at(t), null); r.el.style.transform = `translateY(${px(r.y.at(t))})`; r.el.style.pointerEvents = r.o.target ? 'auto' : 'none'; });
@@ -1050,21 +1178,46 @@ atom({ id:'surface', cat:'Admin', name:'Morph surface', block:'buttons → loade
       chk.style.strokeDashoffset = state === 'check' ? (1 - clamp(prog(t, since + .08, S.soft))).toFixed(3) : 0;
       bars.forEach((b,i) => b.style.height = px(4 + 8*Math.abs(Math.sin(t*6 + i*.9)*Math.sin(t*2.3 + i))));
       if (state === 'island') it.textContent = '0:' + String(Math.floor((t - since)*3) % 60).padStart(2,'0'); };
-  }});
-
-/* ---------- Added from the block manifest ---------- */
-atom({ id:'copy', cat:'Content', name:'Copy button', block:'code', fam:['S','M'],
-  html:`<div class="card" style="position:relative;width:min(340px,88%);padding:14px 56px 14px 16px;font:13px/1.5 var(--mono);overflow-x:auto;white-space:nowrap"><span class="muted">$</span> npm create site@latest<button class="cp" aria-label="Copy command" style="position:absolute;right:8px;top:8px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;overflow:hidden;font:500 12px var(--sans)"></button></div>`,
-  desc:'The icon button widens to fit “Copied”, turns success-colored and swaps its content, then returns after 1.6 seconds.',
-  api:'w.set(measure("Copied")); ok.set(1); after(1.6, reset)',
+  }});/* Content: show success only after the clipboard really succeeds. Keep the original swap/morph. */
+atom({
+  id:'copy',cat:'Content',name:'Copy button',block:'code',fam:['S','M'],
+  html:`<div class="col" style="width:min(352px,90%);gap:16px">
+    <div class="card" style="position:relative;padding:24px 16px 72px;border-radius:24px;min-width:0">
+      <span class="muted" style="font:12px var(--sans)">A small beginning.</span>
+      <code style="display:block;overflow:auto;margin-top:16px;font:12px/1.6 var(--mono);white-space:nowrap">import { Track, S } from 'cieo';</code>
+      <button type="button" class="cp" aria-label="Copy import" style="position:absolute;right:16px;bottom:16px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;overflow:hidden;font:500 13px var(--sans);color:var(--ink)"></button>
+    </div><span class="copy-message small muted" role="status" aria-live="polite"></span>
+  </div>`,
+  desc:'The button widens and swaps only after a successful copy. When clipboard permission is unavailable, the source is selected for manual copying instead of falsely reporting success.',
+  api:'await clipboard.writeText(source)   width.set(96)   swap.to(success)',
   init(st){
-    const cp = $(st,'.cp'), L = ['<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>','<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>Copied'].map(h => { const e = document.createElement('span'); e.className = 'layer'; e.style.gap = '5px'; e.innerHTML = h; cp.appendChild(e); return e; });
-    const sw = new Swap(0), w = new Track(30), ok = new Track(0); let back = 0;
-    cp.onclick = () => { try { navigator.clipboard.writeText('npm create site@latest').catch(() => {}); } catch {} sw.to(1); w.set(84); ok.set(1); back = now() + 1.6; };
-    return t => { if (back && t >= back){ back = 0; sw.to(0); w.set(30); ok.set(0); }
-      const g = clamp(ok.at(t)); cp.style.width = px(w.at(t)); cp.style.color = mix(g,'var(--success)','var(--ink)'); cp.style.borderColor = mix(g,'var(--success)','var(--line)'); cp.style.background = mix(g,'var(--success-tint)','var(--card)');
-      L.forEach((e,i) => sw.apply(e,i,t,3)); };
-  }});
+    const cp=$(st,'.cp'),message=$(st,'.copy-message'),source="import { Track, S } from 'cieo';";
+    const icons=[
+      '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>',
+      '<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>Copied',
+    ].map(html=>{const e=document.createElement('span');e.className='layer';e.style.gap='8px';e.setAttribute('aria-hidden','true');e.innerHTML=html;cp.append(e);return e;});
+    const sw=new Swap(0),width=new Track(40),ok=new Track(0);let back=0,pending=false;
+    cp.onclick=async()=>{
+      if(pending)return;pending=true;cp.setAttribute('aria-busy','true');
+      try{
+        if(!navigator.clipboard?.writeText)throw Error('Clipboard unavailable');
+        await navigator.clipboard.writeText(source);sw.to(1);width.set(96);ok.set(1);back=now()+1.6;
+        message.textContent='Import copied.';cp.setAttribute('aria-label','Import copied');
+      }catch{
+        const selection=getSelection(),range=document.createRange();range.selectNodeContents($(st,'code'));selection.removeAllRanges();selection.addRange(range);
+        message.textContent='Clipboard unavailable. The import is selected; copy it with the browser command.';
+        cp.setAttribute('aria-label','Try copying import again');
+      }finally{pending=false;cp.removeAttribute('aria-busy');window.CieoLibrary?.wake();}
+    };
+    return t=>{
+      if(back&&t>=back){back=0;sw.to(0);width.set(40);ok.set(0);cp.setAttribute('aria-label','Copy import');}
+      const g=clamp(ok.at(t));cp.style.width=px(width.at(t));cp.style.color=mix(g,'var(--success)','var(--ink)');
+      cp.style.borderColor=mix(g,'var(--success)','var(--line)');cp.style.background=mix(g,'var(--success-tint)','var(--card)');
+      icons.forEach((e,i)=>sw.apply(e,i,t,3));
+    };
+  },
+});
+
 
 atom({ id:'tablesort', cat:'Data', name:'Sortable table', block:'table', fam:['M','T'], tall:true,
   html:`<div class="card" style="width:min(380px,92%);overflow:hidden"><div class="th row small" style="height:36px;padding:0 14px;border-bottom:1px solid var(--line);gap:0"></div><div class="tb" style="position:relative;height:180px"></div></div><div class="row small muted" style="gap:6px;justify-content:center;margin-top:8px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" class="dv" checked> dividers</label></div>`,
@@ -1369,7 +1522,7 @@ const outside = (st, els, fn) => st.addEventListener('pointerdown', e => { if (!
 const plate = (el, a, b) => { el.style.transform = `translateY(${px(a)})`; el.style.height = px(Math.max(0, b - a)); };
 
 atom({ id:'select', cat:'Inputs', name:'Select', block:'form, Select primitive', fam:['X','E','S'], tall:true,
-  html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:220px"><button class="btn tr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-label="Status" style="width:100%;display:flex;align-items:center;gap:8px;height:38px"><span class="lw" style="position:relative;flex:1;height:20px"></span>${ic(I.chev,14)}</button><div class="lb card" role="listbox" style="position:absolute;top:44px;left:0;right:0;padding:6px;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:7px;background:var(--raised)"></i></div></div>`,
+  html:`<div style="position:absolute;top:56px;left:50%;transform:translateX(-50%);width:min(264px,calc(100% - 48px))"><button class="btn tr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-label="Status" style="width:100%;display:flex;align-items:center;gap:8px;height:48px"><span class="lw" style="position:relative;flex:1;height:20px"></span>${ic(I.chev,14)}</button><div class="lb card" role="listbox" style="position:absolute;top:56px;left:0;right:0;padding:8px;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:8px;right:8px;top:0;border-radius:7px;background:var(--raised)"></i></div></div>`,
   desc:'The list grows from the trigger. A highlight plate follows hover and arrow keys with lagging edges. Choosing moves the check, closes the list and swaps the trigger label.',
   api:'list.o.set(open)   hl.go(top, bottom)   label.to(i)   check[i].set(1)',
   init(st){
@@ -1377,12 +1530,12 @@ atom({ id:'select', cat:'Inputs', name:'Select', block:'form, Select primitive',
     const O = [['Draft','var(--faint)'],['In review','var(--warning)'],['Scheduled','var(--accent)'],['Published','var(--success)'],['Archived','var(--muted)']];
     const dot = c => `<i style="width:8px;height:8px;border-radius:50%;background:${c};flex:none"></i>`;
     const labels = O.map(([n,c]) => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.innerHTML = dot(c) + n; lw.appendChild(e); return e; });
-    const opts = O.map(([n,c],i) => { const b = document.createElement('div'); b.setAttribute('role','option'); b.style.cssText = 'position:relative;display:flex;align-items:center;gap:8px;padding:7px 10px;font-size:14px;cursor:pointer;border-radius:7px';
+    const opts = O.map(([n,c],i) => { const b = document.createElement('div'); b.setAttribute('role','option'); b.style.cssText = 'position:relative;display:flex;align-items:center;gap:8px;padding:8px 16px;min-height:40px;font-size:12px;cursor:pointer;border-radius:7px';
       b.innerHTML = dot(c) + `<span style="flex:1">${n}</span><span class="ck">${ic(I.check,14,2.5)}</span>`; lb.appendChild(b); return { b, ck:$(b,'.ck'), t:new Track(i === 3 ? 1 : 0) }; });
     const o = new Track(0), e = edges(0,0), sw = new Swap(3); let open = false, sel = 3, hi = 3;
     const geo = i => [opts[i].b.offsetTop, opts[i].b.offsetTop + opts[i].b.offsetHeight];
-    const setOpen = v => { open = v; openSet(o, v); tr.setAttribute('aria-expanded', v); if (v){ hi = sel; e.jump(...geo(hi)); } };
-    const move = i => { hi = (i + O.length) % O.length; e.go(...geo(hi)); };
+    lb.id='select-options';tr.setAttribute('aria-controls','select-options');opts.forEach((x,i)=>{x.b.id=`select-option-${i}`;x.b.setAttribute('aria-selected',String(i===sel))});const setOpen = v => { open = v; openSet(o, v); tr.setAttribute('aria-expanded', v); if (v){ hi = sel; e.jump(...geo(hi)); } };
+    const move = i => { hi = (i + O.length) % O.length;tr.setAttribute("aria-activedescendant",opts[hi].b.id); e.go(...geo(hi)); };
     const choose = i => { sel = i; sw.to(i); opts.forEach((x,j) => { x.t.set(j === i ? 1 : 0); x.b.setAttribute('aria-selected', j === i); }); setOpen(false); tr.focus(); };
     tr.onclick = () => setOpen(!open);
     tr.onkeydown = ev => { const k = ev.key;
@@ -1395,12 +1548,12 @@ atom({ id:'select', cat:'Inputs', name:'Select', block:'form, Select primitive',
   }});
 
 atom({ id:'combobox', cat:'Inputs', name:'Combobox', block:'form, Combobox primitive', fam:['X','E','M'], tall:true,
-  html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:240px"><label class="row" style="height:38px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);padding:0 10px;gap:8px;color:var(--muted)">${ic(I.search,14)}<input id="cbx" role="combobox" aria-autocomplete="list" aria-expanded="false" placeholder="Country" autocomplete="off" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></label><div class="lb card" role="listbox" style="position:absolute;top:44px;left:0;right:0;overflow:hidden;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:7px;background:var(--raised)"></i></div></div>`,
+  html:`<div style="position:absolute;top:56px;left:50%;transform:translateX(-50%);width:min(280px,calc(100% - 48px))"><label class="row" style="height:48px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:0 16px;gap:8px;color:var(--muted)">${ic(I.search,14)}<input id="cbx" role="combobox" aria-autocomplete="list" aria-expanded="false" placeholder="Find a country…" aria-label="Country" aria-controls="country-options" autocomplete="off" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></label><div id="country-options" class="lb card" role="listbox" style="position:absolute;top:56px;left:0;right:0;overflow:hidden;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:8px;right:8px;top:0;border-radius:7px;background:var(--raised)"></i></div></div>`,
   desc:'Typing filters in place. Matches spring into their new rows, misses blur out, and the matched letters bold. With no match, an “Add” row takes the first slot. The list height follows the count.',
   api:'row.y.set(k·34)   row.o.set(match)   list.h.set(min(n, 5)·34 + 12)',
   init(st){
-    const inp = $(st,'input'), lb = $(st,'.lb'), hl = $(st,'.hl'), C = ['Argentina','Australia','Austria','Belgium','Brazil','Canada','Chile','Denmark','Estonia','Finland'], R = 34, P = 6;
-    const mk = () => { const d = document.createElement('div'); d.setAttribute('role','option'); d.style.cssText = 'position:absolute;left:6px;right:6px;top:0;height:34px;display:flex;align-items:center;padding:0 10px;font-size:14px;cursor:pointer;border-radius:7px'; lb.appendChild(d); return d; };
+    const inp = $(st,'input'), lb = $(st,'.lb'), hl = $(st,'.hl'), C = ['Argentina','Australia','Austria','Belgium','Brazil','Canada','Chile','Denmark','Estonia','Finland'], R = 40, P = 8;
+    const mk = () => { const d = document.createElement('div'); d.setAttribute('role','option'); d.style.cssText = 'position:absolute;left:8px;right:8px;top:0;height:40px;display:flex;align-items:center;padding:0 16px;font-size:12px;cursor:pointer;border-radius:7px'; lb.appendChild(d); return d; };
     const rows = C.map(n => ({ el:mk(), n, y:new Track(0), o:new Track(0) })); const add = { el:mk(), n:'', y:new Track(P), o:new Track(0), add:true }; add.el.style.color = 'var(--muted)';
     const o = new Track(0), H = new Track(0), e = edges(P, P + R); let vis = [], hi = 0, open = false;
     const esc2 = s => s.replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]);
@@ -1421,7 +1574,7 @@ atom({ id:'combobox', cat:'Inputs', name:'Combobox', block:'form, Combobox primi
   }});
 
 atom({ id:'popover', cat:'Overlays', name:'Popover', block:'Popover primitive, social-links', fam:['X','S'], tall:true,
-  html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%)"><button class="btn ink tr" aria-haspopup="dialog" aria-expanded="false" style="display:flex;gap:6px;align-items:center">${ic(I.link,14)}Share</button><div class="pv card" role="dialog" aria-label="Share" style="position:absolute;top:46px;left:50%;width:260px;margin-left:-130px;padding:14px;transform-origin:50% 0;visibility:hidden"><i style="position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;background:var(--card);transform:rotate(45deg);border-radius:2px"></i><b class="small" style="display:block">Anyone with the link can view</b><div class="row" style="margin-top:10px;gap:6px"><input id="pv-url" readonly value="example.site/p/spring-launch" aria-label="Link" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn cp" style="position:relative;width:76px;height:32px;padding:0"></button></div></div></div>`,
+  html:`<div style="position:absolute;top:64px;left:50%;transform:translateX(-50%)"><button class="btn ink tr" aria-haspopup="dialog" aria-expanded="false" style="display:flex;gap:8px;align-items:center">${ic(I.link,14)}Share</button><div class="pv card" role="dialog" aria-label="Share" style="position:absolute;top:56px;left:50%;width:280px;margin-left:-140px;padding:24px;transform-origin:50% 0;visibility:hidden"><i style="position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;background:var(--card);transform:rotate(45deg);border-radius:2px"></i><b class="small" style="display:block">Anyone with the link can view</b><div class="row" style="margin-top:16px;gap:8px"><input id="pv-url" readonly value="example.site/p/spring-launch" aria-label="Link" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:8px 8px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn cp" style="position:relative;width:80px;height:40px;padding:0"></button></div></div></div>`,
   desc:'The panel and its arrow grow out of the trigger on one spring. Copy swaps in a success check, then reverts. Clicking outside or pressing Escape closes it faster than it opened.',
   api:'pv.o.set(open, open ? S.base : S.snap)   origin = arrow tip',
   init(st){
@@ -1429,7 +1582,7 @@ atom({ id:'popover', cat:'Overlays', name:'Popover', block:'Popover primitive, s
     const L = ['Copy', ic(I.check,14,2.5) + 'Copied'].map(h => { const e = document.createElement('span'); e.className = 'layer'; e.style.gap = '4px'; e.innerHTML = h; cp.appendChild(e); return e; });
     const set = v => { openSet(o, v); tr.setAttribute('aria-expanded', v); };
     tr.onclick = () => set(!o.target); outside(st, [tr, pv], () => set(false)); st.addEventListener('keydown', ev => { if (ev.key === 'Escape'){ set(false); tr.focus(); } });
-    cp.onclick = () => { try { navigator.clipboard.writeText('https://example.site/p/spring-launch').catch(() => {}); } catch {} sw.to(1); ok.set(1); back = now() + 1.6; };
+    cp.onclick=async()=>{try{await navigator.clipboard.writeText('https://example.site/p/spring-launch');sw.to(1);ok.set(1);back=now()+1.6}catch{const input=$(st,'input');input.focus();input.select();window.CieoCatalogue?.announce('Copy the selected link.')}};
     return t => { if (back && t >= back){ back = 0; sw.to(0); ok.set(0); } pop(pv, o.at(t), -6); L.forEach((e,k) => sw.apply(e,k,t,3)); cp.style.color = mix(ok.at(t),'var(--success)','var(--ink)'); };
   }});
 
@@ -1483,14 +1636,14 @@ atom({ id:'hovercard', cat:'Overlays', name:'Hover card', block:'Hover card prim
   }});
 
 atom({ id:'dialog', cat:'Overlays', name:'Confirm dialog', block:'Dialog / Alert dialog primitive', fam:['X','M'], tall:true,
-  html:`<div class="card col" style="width:min(300px,86%);padding:8px"><div class="rw"></div></div><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="alertdialog" aria-modal="true" aria-labelledby="dl-t" style="position:absolute;left:50%;top:50%;width:min(270px,84%);padding:18px;visibility:hidden"><b id="dl-t" style="display:block;font-size:16px">Delete “About”?</b><p class="small muted" style="margin:6px 0 16px">The page and its 3 drafts will be removed. Links to it will show a not-found page.</p><div class="row" style="justify-content:flex-end"><button class="btn cn">Cancel</button><button class="btn dd" style="background:var(--danger);border-color:var(--danger);color:#fff">Delete page</button></div></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Reset</button>`,
+  html:`<div class="card col" style="width:min(320px,calc(100% - 48px));padding:16px"><div class="rw"></div></div><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="alertdialog" aria-modal="false" aria-labelledby="dl-t" style="position:absolute;left:50%;top:50%;width:min(320px,calc(100% - 32px));padding:24px;visibility:hidden"><b id="dl-t" style="display:block;font-size:16px">Delete “About”?</b><p class="small muted" style="margin:16px 0 24px;line-height:1.7">The page and its 3 drafts will be removed. Links to it will show a not-found page.</p><div class="row" style="justify-content:flex-end"><button class="btn cn">Cancel</button><button class="btn dd" style="background:var(--danger);border-color:var(--danger);color:#fff">Delete page</button></div></div><button class="btn rs" style="position:absolute;top:16px;right:16px">Reset</button>`,
   desc:'The scrim fades while the dialog rises 8px from 96% scale. Confirming closes the dialog first, then the deleted row collapses, so the change happens where you are looking.',
   api:'dlg.o.set(1); on confirm: dlg.o.set(0, S.snap); row.h.set(0, S.base, t + 0.15)',
   init(st){
     const rw = $(st,'.rw'), scr = $(st,'.scr'), dl = $(st,'.dl'), N = ['Home','About','Journal'];
-    const rows = N.map(n => { const r = document.createElement('div'); r.style.overflow = 'hidden'; r.innerHTML = `<div class="row" style="justify-content:space-between;padding:8px 10px"><span class="small" style="font-weight:500">${n}</span>${n === 'About' ? '<button class="btn del" style="color:var(--danger);padding:4px 10px">Delete</button>' : '<span class="small muted">Published</span>'}</div>`; rw.appendChild(r); return { r, in:r.firstChild, h:new Track(1), o:new Track(1) }; });
+    const rows = N.map(n => { const r = document.createElement('div'); r.style.overflow = 'hidden'; r.innerHTML = `<div class="row" style="justify-content:space-between;padding:8px 16px;min-height:48px"><span class="small" style="font-weight:500">${n}</span>${n === 'About' ? '<button class="btn del" style="color:var(--danger);padding:8px 16px">Delete</button>' : '<span class="small muted">Published</span>'}</div>`; rw.appendChild(r); return { r, in:r.firstChild, h:new Track(1), o:new Track(1) }; });
     const o = new Track(0), ab = rows[1];
-    const set = v => { openSet(o, v); if (v) setTimeout(() => $(dl,'.cn').focus(), 0); };
+    const set=v=>{openSet(o,v);if(v)setTimeout(()=>$(dl,'.cn').focus(),0);else $(st,'.del').focus()};dl.addEventListener('keydown',ev=>{if(ev.key==='Tab'){ev.preventDefault();const next=document.activeElement===$(dl,'.cn')?$(dl,'.dd'):$(dl,'.cn');next.focus()}});
     $(st,'.del').onclick = () => set(true); $(dl,'.cn').onclick = () => set(false); scr.onclick = () => set(false);
     $(dl,'.dd').onclick = () => { set(false); const t0 = now(); ab.o.set(0, S.snap, t0 + .12); ab.h.set(0, S.base, t0 + .12 + EXIT); };
     $(st,'.rs').onclick = () => { ab.h.set(1); ab.o.set(1, S.base, now() + .12); };
@@ -1501,17 +1654,17 @@ atom({ id:'dialog', cat:'Overlays', name:'Confirm dialog', block:'Dialog / Alert
   }});
 
 atom({ id:'drawer', cat:'Navigation', name:'Navigation drawer', block:'nav-menu, Drawer / Sheet primitive', fam:['X','D'], tall:true,
-  html:`<div class="ph card" style="position:relative;width:min(260px,82%);height:300px;overflow:hidden"><header class="row" style="height:50px;padding:0 10px;gap:8px;border-bottom:1px solid var(--line-soft)"><button class="hb" aria-label="Open navigation" style="width:36px;height:36px;border:0;background:none;cursor:pointer;display:grid;place-items:center">${ic(I.menu,18)}</button><b style="letter-spacing:-.02em">Common Room</b></header><p class="small muted" style="padding:14px;margin:0">Swipe the drawer left to close it, or tap outside.</p><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><nav class="dw" style="position:absolute;left:0;top:0;bottom:0;width:200px;background:var(--card);box-shadow:var(--shadow);padding:16px 10px;touch-action:none"><b style="display:block;padding:0 10px 10px;letter-spacing:-.02em">Common Room</b></nav></div>`,
+  html:`<div class="ph card" style="position:relative;width:min(288px,calc(100% - 48px));height:304px;overflow:hidden"><header class="row" style="height:56px;padding:0 16px;gap:8px;border-bottom:1px solid var(--line-soft)"><button class="hb" aria-label="Open navigation" style="width:40px;height:40px;border:0;background:none;cursor:pointer;display:grid;place-items:center">${ic(I.menu,18)}</button><b style="letter-spacing:-.02em">Common Room</b></header><p class="small muted" style="padding:24px;margin:0">Swipe the drawer left to close it, or tap outside.</p><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><nav class="dw" style="position:absolute;left:0;top:0;bottom:0;width:224px;background:var(--card);box-shadow:var(--shadow);padding:24px 16px;touch-action:none"><b style="display:block;padding:0 10px 10px;letter-spacing:-.02em">Common Room</b></nav></div>`,
   desc:'The drawer slides in from the edge while its links follow 35ms apart. It tracks a drag 1:1, rubber-bands when pulled past open, and closes past halfway or on a fast flick.',
   api:'x.release(x, vx, x < −W/2 || vx < −500 ? −W : 0)',
   init(st){
-    const dw = $(st,'.dw'), scr = $(st,'.scr'), W = 210, L = ['Home','Events','Members','Library','Settings'];
-    const links = L.map((n,i) => { const a = document.createElement('a'); a.href = '#'; a.textContent = n; a.onclick = e => e.preventDefault(); a.style.cssText = `display:block;padding:9px 10px;border-radius:8px;font-size:14px;font-weight:500;text-decoration:none;color:var(--ink);${i === 0 ? 'background:var(--raised)' : ''}`; dw.appendChild(a); return a; });
+    const dw = $(st,'.dw'), scr = $(st,'.scr'), W = 224, L = ['Home','Events','Members','Library','Settings'];
+    const links = L.map((n,i) => { const a = document.createElement('a'); a.href = '#'; a.textContent = n; a.onclick = e => e.preventDefault(); a.style.cssText = `display:block;padding:8px 16px;min-height:40px;border-radius:8px;font-size:12px;font-weight:500;text-decoration:none;color:var(--ink);${i === 0 ? 'background:var(--raised)' : ''}`; dw.appendChild(a); return a; });
     const x = new Track(-W); let held = false, hx = 0, sx = 0, tOpen = -9;
-    const set = v => { x.set(v ? 0 : -W); if (v) tOpen = now(); };
+    const set=v=>{x.set(v?0:-W);$(st,'.hb').setAttribute('aria-expanded',String(v));if(v)tOpen=now();else $(st,'.hb').focus()};st.addEventListener('keydown',ev=>{if(ev.key==='Escape'){ev.preventDefault();set(false)}});
     $(st,'.hb').onclick = () => set(true); scr.onclick = () => set(false);
     drag(dw, { down:p => { held = true; sx = x.at() - p.cx; hx = x.at(); }, move:p => { const v = sx + p.cx; hx = v > 0 ? rb(v, 30) : v; }, up:(p, v) => { held = false; x.release(hx, v.vx, hx < -W/2 || v.vx < -500 ? -W : 0); } });
-    return t => { const v = held ? hx : x.at(t), p = clamp(1 + v/W); dw.style.transform = `translateX(${px(v)})`; scr.style.opacity = (p*.3).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
+    return t => { const v = held ? hx : x.at(t), p = clamp(1 + v/W); dw.inert=x.target!==0&&!held;dw.style.transform = `translateX(${px(v)})`; scr.style.opacity = (p*.3).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       links.forEach((a,i) => { const q = x.target === 0 ? clamp(prog(t, tOpen + .06 + i*.035)) : 1; a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-10)})`; }); };
   }});
 
@@ -1569,32 +1722,32 @@ atom({ id:'pagination', cat:'Navigation', name:'Pagination', block:'postlist, co
   }});
 
 atom({ id:'radio', cat:'Inputs', name:'Radio group', block:'form, poll', fam:['M'],
-  html:`<div class="col rg" role="radiogroup" aria-label="Email digest" style="gap:10px"><b class="small">Email digest</b></div>`,
+  html:`<div class="col rg" role="radiogroup" aria-label="Email digest" style="gap:8px;width:min(264px,calc(100% - 48px));padding:24px;border-radius:16px;background:var(--card);box-shadow:var(--shadow)"><b class="small">Email digest</b></div>`,
   desc:'The inner dot grows from the center of the new choice while the old one shrinks, on the same spring. Arrow keys move the choice.',
   api:'dot[i].set(i === picked ? 1 : 0)',
   init(st){
     const rg = $(st,'.rg'), O = ['Daily','Weekly','Never'];
-    const it = O.map((n,i) => { const b = document.createElement('button'); b.setAttribute('role','radio'); b.style.cssText = 'display:flex;align-items:center;gap:10px;border:0;background:none;cursor:pointer;padding:0;font-size:14px';
-      b.innerHTML = `<span style="position:relative;width:20px;height:20px;border-radius:50%;border:2px solid var(--line)"><i style="position:absolute;inset:3px;border-radius:50%;background:var(--ink)"></i></span>${n}`; rg.appendChild(b); return { b, ring:$(b,'span'), dot:$(b,'i'), p:new Track(i === 1 ? 1 : 0) }; });
+    const it = O.map((n,i) => { const b = document.createElement('button'); b.setAttribute('role','radio'); b.style.cssText = 'display:flex;align-items:center;gap:16px;border:0;background:none;cursor:pointer;padding:8px 0;min-height:40px;font-size:12px';
+      b.innerHTML = `<span style="position:relative;width:24px;height:24px;border-radius:50%;border:2px solid var(--line)"><i style="position:absolute;inset:3px;border-radius:50%;background:var(--accent)"></i></span>${n}`; rg.appendChild(b); return { b, ring:$(b,'span'), dot:$(b,'i'), p:new Track(i === 1 ? 1 : 0) }; });
     let cur = 1; const pick = i => { cur = (i + O.length) % O.length; it.forEach((x,j) => { x.p.set(j === cur ? 1 : 0); x.b.setAttribute('aria-checked', j === cur); x.b.tabIndex = j === cur ? 0 : -1; }); it[cur].b.focus(); };
     it.forEach((x,i) => { x.b.onclick = () => pick(i); x.b.onkeydown = ev => { if (ev.key === 'ArrowDown' || ev.key === 'ArrowRight'){ ev.preventDefault(); pick(cur + 1); } if (ev.key === 'ArrowUp' || ev.key === 'ArrowLeft'){ ev.preventDefault(); pick(cur - 1); } }; x.b.tabIndex = i === 1 ? 0 : -1; x.b.setAttribute('aria-checked', i === 1); });
-    return t => it.forEach(x => { const p = clamp(x.p.at(t)); x.dot.style.transform = `scale(${p.toFixed(4)})`; x.ring.style.borderColor = mix(p,'var(--ink)','var(--line)'); });
+    return t => it.forEach(x => { const p = clamp(x.p.at(t)); x.dot.style.transform = `scale(${p.toFixed(4)})`; x.ring.style.borderColor = mix(p,'var(--accent)','var(--line)'); });
   }});
 
 atom({ id:'checkbox', cat:'Inputs', name:'Checkbox with mixed state', block:'form, list', fam:['M'],
-  html:`<div class="col cbx" style="gap:8px;min-width:200px"></div>`,
+  html:`<div class="col cbx" style="gap:8px;width:min(280px,calc(100% - 48px));padding:24px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)"></div>`,
   desc:'The parent box morphs its check into a dash when only some children are on. The three points of the check slide to a flat line on one spring, with no swap.',
   api:'mark = lerp(CHECK, DASH, mixed.at(t))   fill.set(any checked)',
   init(st){
     const box = $(st,'.cbx'), CK = [[5,12.5],[10,17.5],[19,7]], DS = [[6,12],[12,12],[18,12]];
-    const mk = (label, child) => { const b = document.createElement('button'); b.setAttribute('role','checkbox'); b.style.cssText = `display:flex;align-items:center;gap:10px;border:0;background:none;cursor:pointer;padding:0;font-size:14px;${child ? 'margin-left:28px' : 'font-weight:600'}`;
-      b.innerHTML = `<span style="width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);display:grid;place-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--card)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path/></svg></span>${label}`;
+    const mk = (label, child) => { const b = document.createElement('button'); b.setAttribute('role','checkbox'); b.style.cssText = `display:flex;align-items:center;gap:16px;border:0;background:none;cursor:pointer;padding:8px 0;min-height:40px;font-size:12px;${child ? 'margin-left:24px' : 'font-weight:600'}`;
+      b.innerHTML = `<span style="width:24px;height:24px;border-radius:8px;border:1px solid var(--line);display:grid;place-items:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--card)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path/></svg></span>${label}`;
       box.appendChild(b); return { b, bx:$(b,'span'), p:$(b,'path'), f:new Track(0), m:new Track(0), on:false }; };
     const par = mk('All files'), kids = ['Photos','Documents','Audio'].map(n => mk(n, true)); kids[0].on = true; kids[0].f.jump(1);
     const sync = () => { const n = kids.filter(k => k.on).length; par.f.set(n ? 1 : 0); par.m.set(n && n < kids.length ? 1 : 0); par.b.setAttribute('aria-checked', n === kids.length ? 'true' : n ? 'mixed' : 'false'); kids.forEach(k => { k.f.set(k.on ? 1 : 0); k.b.setAttribute('aria-checked', k.on); }); };
     kids.forEach(k => k.b.onclick = () => { k.on = !k.on; sync(); }); par.b.onclick = () => { const all = kids.every(k => k.on); kids.forEach(k => k.on = !all); sync(); };
     sync(); par.f.jump(par.f.target); par.m.jump(par.m.target);
-    return t => [par, ...kids].forEach(c => { const f = clamp(c.f.at(t)), m = clamp(c.m.at(t)); c.bx.style.background = mix(f,'var(--ink)','transparent'); c.bx.style.borderColor = mix(f,'var(--ink)','var(--line)');
+    return t => [par, ...kids].forEach(c => { const f = clamp(c.f.at(t)), m = clamp(c.m.at(t)); c.bx.style.background = mix(f,'var(--accent)','transparent'); c.bx.style.borderColor = mix(f,'var(--accent)','var(--line)');
       const pts = CK.map((p,i) => [lerp(p[0], DS[i][0], m), lerp(p[1], DS[i][1], m)]); c.p.setAttribute('d', 'M' + pts.map(p => p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join('L')); c.p.style.opacity = f.toFixed(3); c.p.parentNode.style.transform = `scale(${(.5+.5*f).toFixed(3)})`; });
   }});
 
@@ -1639,15 +1792,15 @@ atom({ id:'otp', cat:'Inputs', name:'One-time code', block:'form, account, Input
   }});
 
 atom({ id:'taginput', cat:'Inputs', name:'Tag input', block:'form, term-list', fam:['M','X'],
-  html:`<label class="tg card" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;width:min(320px,90%);min-height:46px;padding:8px;cursor:text"><input id="tag-in" placeholder="Add a tag" aria-label="Add a tag" style="flex:1;min-width:80px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:4px"></label><div class="hint">Enter or comma adds · Backspace removes</div>`,
+  html:`<label class="tg card" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;width:min(336px,calc(100% - 48px));min-height:64px;padding:16px;cursor:text"><input id="tag-in" placeholder="Add a tag" aria-label="Add a tag" style="flex:1;min-width:80px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:8px;min-height:32px"></label><div class="hint">Enter or comma adds · Backspace removes</div>`,
   desc:'A new chip opens its own width before its text fades in. Removing reverses it: text out first, then the gap closes, so neighbors slide over instead of jumping.',
   api:'chip.w.set(measured); chip.o.set(1, S.base, t + 0.06)   remove: o→0, then w→0',
   init(st){
     const tg = $(st,'.tg'), inp = $(st,'input'); let chips = [];
     const add = (txt, inst) => { txt = txt.trim().toLowerCase(); if (!txt || chips.some(c => c.txt === txt && !c.gone)) return;
-      const c = document.createElement('span'); c.style.cssText = 'display:inline-flex;overflow:hidden;white-space:nowrap;border-radius:999px;background:var(--raised);height:28px';
-      c.innerHTML = `<span class="ci" style="display:inline-flex;align-items:center;gap:4px;padding:0 6px 0 10px;font-size:13px;font-weight:500"></span>`; $(c,'.ci').textContent = txt;
-      const x = document.createElement('button'); x.setAttribute('aria-label', 'Remove ' + txt); x.innerHTML = ic(I.x,12,2.5); x.style.cssText = 'border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center;padding:2px'; $(c,'.ci').appendChild(x);
+      const c = document.createElement('span'); c.style.cssText = 'display:inline-flex;overflow:hidden;white-space:nowrap;border-radius:999px;background:var(--raised);height:32px';
+      c.innerHTML = `<span class="ci" style="display:inline-flex;align-items:center;gap:4px;padding:0 8px 0 16px;font-size:12px;font-weight:500"></span>`; $(c,'.ci').textContent = txt;
+      const x = document.createElement('button'); x.setAttribute('aria-label', 'Remove ' + txt); x.innerHTML = ic(I.x,12,2.5); x.style.cssText = 'border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center;padding:8px'; $(c,'.ci').appendChild(x);
       tg.insertBefore(c, inp); const W = $(c,'.ci').offsetWidth, ch = { c, txt, W, w:new Track(inst ? 1 : 0), o:new Track(inst ? 1 : 0), gone:false };
       if (!inst){ ch.w.set(1); ch.o.set(1, S.base, now() + .06); } x.onclick = e => { e.preventDefault(); rm(ch); }; chips.push(ch); };
     const rm = ch => { if (ch.gone) return; ch.gone = true; ch.o.set(0, S.snap); ch.w.set(0, S.base, now() + EXIT); };
@@ -1676,16 +1829,16 @@ atom({ id:'reorder', cat:'Dynamic', name:'Drag to reorder', block:'collection, n
   }});
 
 atom({ id:'dropzone', cat:'Inputs', name:'File drop zone', block:'form, gallery upload', fam:['X','M','T'], tall:true,
-  html:`<div class="col" style="width:min(340px,90%);gap:8px"><label class="dz" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:18px;border:1.5px dashed var(--line);border-radius:12px;cursor:pointer;text-align:center">${ic(I.up,20)}<span class="small"><b>Drop files</b> or browse</span><span class="small muted">PNG, JPG or PDF · 5 MB max</span><input id="dz-in" type="file" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn sm" style="align-self:flex-end">Use sample files</button><label class="row small muted" style="gap:6px;align-items:center;align-self:flex-end;cursor:pointer"><input type="checkbox" class="thm" checked> Thumbnails</label><div class="fl col" style="gap:6px"></div></div>`,
+  html:`<div class="col" style="width:min(336px,calc(100% - 48px));gap:8px"><label class="dz" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;border:1px dashed var(--line);border-radius:16px;cursor:pointer;text-align:center">${ic(I.up,20)}<span class="small"><b>Drop files</b> or browse</span><span class="small muted">PNG, JPG or PDF · 5 MB max</span><input id="dz-in" type="file" aria-label="Choose files" accept=".png,.jpg,.jpeg,.pdf" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn sm" style="align-self:flex-end">Use sample files</button><label class="row small muted" style="gap:6px;align-items:center;align-self:flex-end;cursor:pointer"><input type="checkbox" class="thm" checked> Thumbnails</label><div class="fl col" role="status" style="gap:8px;max-height:144px;overflow:auto"></div></div>`,
   desc:'Dragging a file over the zone inks its border and tints it. Each file opens its row, fills its bar, then ends in a success check or a danger message. Files never leave your browser.',
   api:'zone.over.set(dragging)   bar = load.at(t)   end → success | danger',
   init(st){
     const dz = $(st,'.dz'), fin = $(st,'input'), fl = $(st,'.fl'), thm = $(st,'.thm'), over = new Track(0); const files = [];
     thm.onchange = () => files.forEach(f => { f.th.style.display = thm.checked ? 'grid' : 'none'; });
     const add = (name, size, file) => { const r = document.createElement('div'); r.style.overflow = 'hidden';
-      r.innerHTML = `<div class="card" style="padding:8px 10px"><div class="row small" style="gap:8px;align-items:center"><span class="th" style="flex:none;width:28px;height:28px;border-radius:7px;overflow:hidden;background:var(--raised);display:grid;place-items:center;color:var(--muted)"></span><span class="nm" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500"></span><span class="muted num sz"></span><span class="st" style="position:relative;flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center"></span></div><div style="height:4px;border-radius:2px;background:var(--raised);margin-top:6px;overflow:hidden"><i class="br" style="display:block;height:100%"></i></div><div class="er small" style="color:var(--danger);height:0;overflow:hidden">Too large · 5 MB max</div></div>`;
+      r.innerHTML = `<div class="card" style="padding:16px"><div class="row small" style="gap:8px;align-items:center"><span class="th" style="flex:none;width:28px;height:28px;border-radius:7px;overflow:hidden;background:var(--raised);display:grid;place-items:center;color:var(--muted)"></span><span class="nm" style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500"></span><span class="muted num sz"></span><span class="st" style="position:relative;flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center"></span></div><div style="height:4px;border-radius:2px;background:var(--raised);margin-top:6px;overflow:hidden"><i class="br" style="display:block;height:100%"></i></div><div class="er small" style="color:var(--danger);height:0;overflow:hidden">Too large · 5 MB max</div></div>`;
       const th = $(r,'.th');
-      if (file && file.type.startsWith('image/')){ const im = document.createElement('img'); im.src = URL.createObjectURL(file); im.alt = ''; im.style.cssText = 'width:100%;height:100%;object-fit:cover'; th.appendChild(im); th.style.background = 'none'; }
+      if (file && file.type.startsWith('image/')){ const im = document.createElement('img'); const objectURL=URL.createObjectURL(file);im.onload=im.onerror=()=>URL.revokeObjectURL(objectURL);im.src=objectURL; im.alt = ''; im.style.cssText = 'width:100%;height:100%;object-fit:cover'; th.appendChild(im); th.style.background = 'none'; }
       else th.innerHTML = ic(I.file, 14, 1.75);
       th.style.display = thm.checked ? 'grid' : 'none';
       $(r,'.nm').textContent = name; $(r,'.sz').textContent = size > 1e6 ? (size/1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(size/1e3)) + ' KB'; fl.prepend(r);
@@ -1693,7 +1846,7 @@ atom({ id:'dropzone', cat:'Inputs', name:'File drop zone', block:'form, gallery 
       f.h.set(1); f.ld.set(bad ? .4 : 1, { w:4 }, now() + .15); f.doneAt = now() + (bad ? .9 : 1.6);
       f.st.innerHTML = `<span class="layer" style="color:var(--success)">${ic(I.check,12,2.5)}</span><span class="layer" style="color:var(--danger)">${ic(I.alert,12)}</span>`; files.push(f); if (files.length > 4) { const old = files.shift(); old.r.remove(); } };
     const hasFiles = ev => [...(ev.dataTransfer?.types || [])].includes('Files');
-    dz.addEventListener('dragenter', ev => { if (hasFiles(ev)) over.set(1); }); dz.addEventListener('dragleave', () => over.set(0)); dz.addEventListener('drop', () => over.set(0));
+    dz.addEventListener('dragenter', ev => { if (hasFiles(ev)) over.set(1); }); dz.addEventListener('dragleave', () => over.set(0)); dz.addEventListener('dragover',ev=>{if(hasFiles(ev))ev.preventDefault()});dz.addEventListener('drop',ev=>{if(hasFiles(ev)){ev.preventDefault();[...ev.dataTransfer.files].forEach(f=>add(f.name,f.size,f))}over.set(0)});
     fin.onchange = () => { [...fin.files].forEach(f => add(f.name, f.size, f)); fin.value = ''; };
     $(st,'.sm').onclick = () => { add('cover-photo.jpg', 1.8e6); setTimeout(() => add('annual-report.pdf', 8.4e6), 250/clock.scale); };
     return t => { const o = clamp(over.at(t)); dz.style.borderColor = mix(o,'var(--ink)','var(--line)'); dz.style.background = mix(o,'var(--raised)','transparent'); dz.style.transform = `scale(${(1 + .01*o).toFixed(4)})`;
@@ -2120,15 +2273,15 @@ const relRect = (st, r) => { const s = st.getBoundingClientRect(); return { x:r.
 const wordSpans = (el, text) => { el.innerHTML = text.split(' ').map(w => `<span>${w}</span>`).join(' '); return $$(el,'span'); };
 
 atom({ id:'seltoolbar', cat:'Writing', name:'Selection toolbar', block:'richtext editor', fam:['X','M'],
-  html:`<style>#seltoolbar .stage{user-select:text;-webkit-user-select:text}</style><p class="tx" style="max-width:320px;margin:0;line-height:1.7;font-size:15px;cursor:text">Select a few words in this paragraph. A small toolbar appears above your selection and glides to follow it when you select somewhere else.</p><div class="tb card row" role="toolbar" aria-label="Format" style="position:absolute;left:0;top:0;padding:4px;gap:2px;visibility:hidden"></div>`,
+  html:`<style>#seltoolbar .stage{user-select:text;-webkit-user-select:text}</style><p class="tx" style="max-width:min(320px,calc(100% - 48px));margin:0;line-height:1.9;font-size:16px;cursor:text">Select a few words in this paragraph. A small toolbar appears above your selection and glides to follow it when you select somewhere else.</p><div class="tb card row" role="toolbar" aria-label="Format" style="position:absolute;left:0;top:0;padding:8px;gap:8px;visibility:hidden"></div>`,
   desc:'The toolbar appears above the selection and glides to the next selection instead of jumping. It leaves quickly when the selection collapses.',
   api:'tb.{x,y}.set(selectionCenter)   tb.o.set(hasSelection)',
   init(st){
     const tx = $(st,'.tx'), tb = $(st,'.tb'), x = new Track(0), y = new Track(0), o = new Track(0);
-    ['<b>B</b>','<i>I</i>','<u>U</u>', ic(I.link,14)].forEach((h,i) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'border:0;width:30px;height:30px;padding:0;display:grid;place-items:center'; b.innerHTML = h; b.setAttribute('aria-pressed','false'); b.setAttribute('aria-label', ['Bold','Italic','Underline','Link'][i]);
+    ['<b>B</b>','<i>I</i>','<u>U</u>', ic(I.link,14)].forEach((h,i) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'border:0;width:40px;height:40px;padding:0;display:grid;place-items:center'; b.innerHTML = h; b.setAttribute('aria-pressed','false'); b.setAttribute('aria-label', ['Bold','Italic','Underline','Link'][i]);
       b.onmousedown = e => e.preventDefault(); b.onclick = () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); b.style.background = on ? 'var(--raised)' : 'none'; }; tb.appendChild(b); });
     const check = () => { const sel = getSelection(); if (!sel.rangeCount || sel.isCollapsed || !tx.contains(sel.anchorNode)){ if (o.target) o.set(0, S.snap); return; }
-      const r = relRect(st, sel.getRangeAt(0).getBoundingClientRect()), W = tb.offsetWidth, nx = clamp(r.x + r.w/2 - W/2, 8, st.clientWidth - W - 8), ny = r.y - 44;
+      const r = relRect(st, sel.getRangeAt(0).getBoundingClientRect()), W = tb.offsetWidth, nx = clamp(r.x + r.w/2 - W/2, 8, st.clientWidth - W - 8), ny = Math.max(8,r.y - 64);
       if (!o.target){ x.jump(nx); y.jump(ny + 6); } x.set(nx); y.set(ny); o.set(1); };
     document.addEventListener('selectionchange', check);
     return t => { const p = clamp(o.at(t)); tb.style.left = px(x.at(t)); tb.style.top = px(y.at(t)); tb.style.opacity = p.toFixed(3); tb.style.visibility = p < .01 ? 'hidden' : 'visible'; tb.style.transform = `scale(${(.96 + .04*p).toFixed(4)})`; tb.style.pointerEvents = p > .5 ? 'auto' : 'none'; };
@@ -2253,30 +2406,30 @@ atom({ id:'selectresize', cat:'Design tools', name:'Select, move and snap', bloc
   }});
 
 atom({ id:'colorpicker', cat:'Design tools', name:'Color picker', block:'section (background), theme settings', fam:['D','M'], tall:true,
-  html:`<div class="card col" style="width:240px;padding:12px;gap:10px"><div class="sv" style="position:relative;height:130px;border-radius:8px;cursor:crosshair;touch-action:none"><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(90deg,#fff,transparent)"></div><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(0deg,#000,transparent)"></div><i class="k1" style="position:absolute;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><div class="hu" style="position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;touch-action:none"><i class="k2" style="position:absolute;top:-2px;width:16px;height:16px;margin-left:-8px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><button class="cp" type="button" aria-label="Copy color value" title="Copy" style="display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;background:none;padding:4px 8px;cursor:pointer;text-align:left"><i class="sw" style="width:28px;height:28px;border-radius:7px;border:1px solid var(--line);flex:none"></i><span class="hxw" style="position:relative;flex:1;height:18px;overflow:hidden"><code class="hx small num layer" style="justify-content:flex-start"></code><span class="ok small layer" style="justify-content:flex-start;color:var(--success);font-weight:600"></span></span></button><div class="row ps" style="gap:6px"></div><div class="row small muted" style="gap:6px">Format<div class="seg fs" role="group" aria-label="Copy format" style="display:inline-flex"><div class="ind"></div><button type="button">Hex</button><button type="button">RGB</button></div></div></div>`,
+  html:`<div class="card col" style="width:min(280px,calc(100% - 48px));padding:16px;gap:16px"><div class="sv" tabindex="0" role="slider" aria-label="Saturation and brightness; left or right adjusts saturation, up or down adjusts brightness" aria-valuemin="0" aria-valuemax="100" style="position:relative;height:128px;border-radius:12px;cursor:crosshair;touch-action:none"><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(90deg,#fff,transparent)"></div><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(0deg,#000,transparent)"></div><i class="k1" style="position:absolute;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><div class="hu" tabindex="0" role="slider" aria-label="Hue" aria-valuemin="0" aria-valuemax="360" style="position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;touch-action:none"><i class="k2" style="position:absolute;top:-2px;width:16px;height:16px;margin-left:-8px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><button class="cp" type="button" aria-label="Copy color value" title="Copy" style="display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;background:none;padding:8px 8px;min-height:40px;cursor:pointer;text-align:left"><i class="sw" style="width:28px;height:28px;border-radius:7px;border:1px solid var(--line);flex:none"></i><span class="hxw" style="position:relative;flex:1;height:24px;overflow:hidden"><code class="hx small num layer" style="justify-content:flex-start"></code><span class="ok small layer" style="justify-content:flex-start;color:var(--success);font-weight:600"></span></span></button><div class="row ps" style="gap:8px"></div><div class="row small muted" style="gap:8px">Format<div class="seg fs" role="group" aria-label="Copy format" style="display:inline-flex"><div class="ind"></div><button type="button">Hex</button><button type="button">RGB</button></div></div></div>`,
   desc:'Both handles follow the pointer exactly while dragging. Picking a preset springs both handles to that color, so you can see where it lives in the space. Tapping the value copies it: the value swaps out for a check and Copied pill, then relaxes back.',
   api:'held ? pointer : {s,v,h}.set(preset)   swatch = hsv(h, s, v)   tap: value.to(copied); pill.ok.set(1); after(1.6) back',
   init(st){
     const sv = $(st,'.sv'), hu = $(st,'.hu'), k1 = $(st,'.k1'), k2 = $(st,'.k2'), sw = $(st,'.sw'), hx = $(st,'.hx'), ps = $(st,'.ps');
     const cp = $(st,'.cp'), ok = $(st,'.ok'), seg = $(st,'.fs'), ind = $(seg,'.ind'), fbtns = $$(seg,'button');
-    const H = new Track(72), Sa = new Track(.75), V = new Track(.37); let held = null;
+    const H = new Track(254), Sa = new Track(.44), V = new Track(.78); let held = null; sv.onkeydown=ev=>{const d=ev.shiftKey?.1:.02;if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(ev.key)){ev.preventDefault();if(ev.key==='ArrowLeft')Sa.set(clamp(Sa.target-d));if(ev.key==='ArrowRight')Sa.set(clamp(Sa.target+d));if(ev.key==='ArrowUp')V.set(clamp(V.target+d));if(ev.key==='ArrowDown')V.set(clamp(V.target-d))}};hu.onkeydown=ev=>{const d=ev.shiftKey?10:1;if(['ArrowLeft','ArrowRight','Home','End'].includes(ev.key)){ev.preventDefault();H.set(ev.key==='Home'?0:ev.key==='End'?360:clamp(H.target+(ev.key==='ArrowRight'?d:-d),0,360))}};
     const hex = (h, s, v) => { const f = n => { const k = (n + h/60) % 6, c = v - v*s*Math.max(0, Math.min(k, 4 - k, 1)); return Math.round(c*255).toString(16).padStart(2,'0'); }; return '#' + f(5) + f(3) + f(1); };
     const rgb = (h, s, v) => { const c = hex(h, s, v); return `rgb(${parseInt(c.slice(1,3),16)}, ${parseInt(c.slice(3,5),16)}, ${parseInt(c.slice(5,7),16)})`; };
     const toHsv = hx2 => { const r = parseInt(hx2.slice(1,3),16)/255, g = parseInt(hx2.slice(3,5),16)/255, b = parseInt(hx2.slice(5,7),16)/255, mx = Math.max(r,g,b), mn = Math.min(r,g,b), d = mx - mn; let h = 0;
       if (d){ h = mx === r ? ((g - b)/d) % 6 : mx === g ? (b - r)/d + 2 : (r - g)/d + 4; h *= 60; if (h < 0) h += 360; } return [h, mx ? d/mx : 0, mx]; };
     drag(sv, { down:p => { held = 'sv'; Sa.jump(clamp(p.x/p.w)); V.jump(clamp(1 - p.y/p.h)); }, move:p => { Sa.jump(clamp(p.x/p.w)); V.jump(clamp(1 - p.y/p.h)); }, up:() => held = null });
     drag(hu, { down:p => { held = 'hu'; H.jump(clamp(p.x/p.w)*360); }, move:p => H.jump(clamp(p.x/p.w)*360), up:() => held = null });
-    ['#595D17','#B0342F','#B45309','#2F5DB0','#10141A'].forEach(c => { const b = document.createElement('button'); b.setAttribute('aria-label', 'Preset ' + c); b.style.cssText = `width:24px;height:24px;border-radius:6px;border:1px solid var(--line);background:${c};cursor:pointer`; b.onclick = () => { const [h,s,v] = toHsv(c); H.set(h); Sa.set(s); V.set(v); }; ps.appendChild(b); });
+    ['#8470C8','#C87966','#A58941','#648EB6','#34363E'].forEach(c => { const b = document.createElement('button'); b.setAttribute('aria-label', 'Preset ' + c); b.style.cssText = `width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:${c};cursor:pointer`; b.onclick = () => { const [h,s,v] = toHsv(c); H.set(h); Sa.set(s); V.set(v); }; ps.appendChild(b); });
     const csw = new Swap('hex'), cok = new Track(0), fe = edges(0,0); let back = 0, fmt = 0;
-    const selfmt = (i, inst) => { fmt = i; const b = fbtns[i]; inst ? fe.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : fe.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); };
+    const selfmt = (i, inst) => { fmt = i;fbtns.forEach((x,j)=>x.setAttribute('aria-pressed',String(i===j))); const b = fbtns[i]; inst ? fe.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : fe.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); };
     fbtns.forEach((b,i) => b.onclick = () => selfmt(i)); requestAnimationFrame(() => selfmt(0, true)); document.fonts && document.fonts.ready.then(() => selfmt(fmt, true));
     ok.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>Copied';
-    cp.onclick = () => { const h = ((H.target % 360) + 360) % 360, s = clamp(Sa.target), v = clamp(V.target), val = fmt ? rgb(h, s, v) : hex(h, s, v).toUpperCase();
-      try { navigator.clipboard.writeText(val).catch(() => {}); } catch {} csw.to('ok'); cok.set(1); back = now() + 1.6; };
+    cp.onclick = async () => { const h = ((H.target % 360) + 360) % 360, s = clamp(Sa.target), v = clamp(V.target), val = fmt ? rgb(h, s, v) : hex(h, s, v).toUpperCase();
+      try { await navigator.clipboard.writeText(val);csw.to('ok');cok.set(1);back=now()+1.6; } catch { window.CieoCatalogue?.announce(`Copy color: ${val}`); } };
     return t => { if (back && t >= back){ back = 0; csw.to('hex'); cok.set(0); }
       const h = H.at(t), s = clamp(Sa.at(t)), v = clamp(V.at(t)), hn = ((h % 360) + 360) % 360, c = hex(hn, s, v);
       sv.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; k1.style.left = (s*100).toFixed(2) + '%'; k1.style.top = ((1 - v)*100).toFixed(2) + '%'; k1.style.background = c; k2.style.left = (clamp(h/360)*100).toFixed(2) + '%'; k2.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; sw.style.background = c;
-      hx.textContent = fmt ? rgb(hn, s, v) : c.toUpperCase();
+      hu.setAttribute('aria-valuenow',String(Math.round(hn)));sv.setAttribute('aria-valuenow',String(Math.round(s*100)));sv.setAttribute('aria-valuetext',`Saturation ${Math.round(s*100)}%, brightness ${Math.round(v*100)}%`);hx.textContent = fmt ? rgb(hn, s, v) : c.toUpperCase();
       csw.apply(hx, 'hex', t, 3); csw.apply(ok, 'ok', t, 3);
       const g = clamp(cok.at(t)); cp.style.borderColor = mix(g,'var(--success)','var(--line)'); cp.style.background = mix(g,'var(--success-tint)','transparent');
       const a = fe.A.at(t), b = fe.B.at(t); Object.assign(ind.style, { transform:`translate(${px(a)},3px)`, width:px(Math.max(0, b - a)), height:'calc(100% - 6px)' }); };
@@ -2284,24 +2437,24 @@ atom({ id:'colorpicker', cat:'Design tools', name:'Color picker', block:'section
 
 
 atom({ id:'layers', cat:'Design tools', name:'Layer tree', block:'page structure panel', fam:['M','E'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center"><div class="card lt" role="tree" aria-label="Layers" style="position:relative;width:min(280px,86%);padding:6px"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:7px;background:var(--raised)"></i></div><div class="row small muted" style="gap:6px">Density<div class="seg ds" role="group" aria-label="Density" style="display:inline-flex"><div class="ind"></div><button type="button">Comfortable</button><button type="button">Dense</button></div><button type="button" class="th" aria-pressed="false" style="border:1px solid var(--line);background:none;border-radius:7px;padding:4px 9px;font-size:12px;cursor:pointer">Thumbs</button></div></div>`,
+  html:`<div class="col" style="gap:16px;align-items:center;width:min(336px,calc(100% - 48px))"><div class="card lt" role="tree" aria-label="Layers" style="position:relative;width:100%;padding:8px"><i class="hl" style="position:absolute;left:8px;right:8px;top:0;border-radius:7px;background:var(--raised)"></i></div><div class="row small muted" style="gap:8px;flex-wrap:wrap;justify-content:center">Density<div class="seg ds" role="group" aria-label="Density" style="display:inline-flex"><div class="ind"></div><button type="button">Comfortable</button><button type="button">Dense</button></div><button type="button" class="th" aria-pressed="false" style="border:1px solid var(--line);background:none;border-radius:7px;padding:4px 9px;font-size:12px;cursor:pointer">Thumbs</button></div></div>`,
   desc:'Groups open and close on a height spring with their chevrons turning. The selection plate slides between rows with lagging edges, and hiding a layer fades its name while the eye closes. Density switches row height; thumbs adds a color chip slot.',
   api:'group.h.set(open)   sel.go(top, bottom)   row.vis.set(shown)   density: rh.set(30|24)   thumbs.th.set(0|1)',
   init(st){
     const lt = $(st,'.lt'), hl = $(st,'.hl'), seg = $(st,'.ds'), ind = $(seg,'.ind'), dbtns = $$(seg,'button'), thb = $(st,'.th');
     const T = { n:'Hero', kids:[{ n:'Heading' },{ n:'Button', kids:[{ n:'Label' },{ n:'Icon' }] },{ n:'Image' }] };
     const TC = { Hero:'#595D17', Heading:'#B45309', Button:'#2F5DB0', Label:'#2F5DB0', Icon:'#85888C', Image:'#B0342F' };
-    const rows = [], e = edges(0,0), rh = new Track(30), tho = new Track(0); let dense = 0, thumbs = 0, sel = 0;
+    const rows = [], e = edges(0,0), rh = new Track(40), tho = new Track(0); let dense = 0, thumbs = 0, sel = 0;
     const de = edges(0,0);
-    const build = (node, depth, parent) => { const wrap = document.createElement('div'); const r = document.createElement('div'); r.setAttribute('role','treeitem'); r.style.cssText = `position:relative;display:flex;align-items:center;gap:6px;height:30px;padding-left:${8 + depth*16}px;padding-right:6px;font-size:13.5px;cursor:pointer;border-radius:7px`;
+    const build = (node, depth, parent) => { const wrap = document.createElement('div'); const r = document.createElement('div'); r.setAttribute('role','treeitem'); r.style.cssText = `position:relative;display:flex;align-items:center;gap:8px;height:40px;padding-left:${8 + depth*16}px;padding-right:8px;font-size:12px;cursor:pointer;border-radius:7px`;
       r.innerHTML = `<span class="tb" style="width:16px;height:16px;border-radius:5px;flex:none;background:${TC[node.n] || 'var(--raised)'};overflow:hidden"></span><span class="cv" style="width:14px;display:grid;place-items:center;color:var(--muted)">${node.kids ? ic(I.chev,12) : ''}</span><span class="nm" style="flex:1">${node.n}</span><button class="ey" aria-label="Hide ${node.n}" style="border:0;background:none;cursor:pointer;color:var(--muted);display:grid;padding:2px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="sl" d="M4 4l16 16" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></button>`;
       wrap.appendChild(r); parent.appendChild(wrap); const row = { r, nm:$(r,'.nm'), cv:$(r,'.cv svg'), sl:$(r,'.sl'), tb:$(r,'.tb'), vis:new Track(1), open:new Track(1), box:null };
       if (node.kids){ const box = document.createElement('div'); box.style.overflow = 'hidden'; wrap.appendChild(box); row.box = box; node.kids.forEach(k => build(k, depth + 1, box)); r.setAttribute('aria-expanded','true');
         $(r,'.cv').onclick = ev => { ev.stopPropagation(); const o = row.open.target ? 0 : 1; row.open.set(o); r.setAttribute('aria-expanded', !!o); }; }
-      $(r,'.ey').onclick = ev => { ev.stopPropagation(); row.vis.set(row.vis.target ? 0 : 1); };
-      r.onclick = () => { sel = rows.indexOf(row); const a = r.getBoundingClientRect(), b = lt.getBoundingClientRect(); e.go(a.top - b.top, a.bottom - b.top); }; rows.push(row); };
+      $(r,'.ey').onclick=ev=>{ev.stopPropagation();const visible=!row.vis.target;row.vis.set(visible?1:0);ev.currentTarget.setAttribute('aria-label',`${visible?'Hide':'Show'} ${node.n}`);ev.currentTarget.setAttribute('aria-pressed',String(!visible))};
+      r.tabIndex=0;r.onkeydown=ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();r.click()}if((ev.key==='ArrowLeft'||ev.key==='ArrowRight')&&row.box){ev.preventDefault();const open=ev.key==='ArrowRight';row.open.set(open?1:0);r.setAttribute('aria-expanded',String(open))}};r.onclick = () => { sel = rows.indexOf(row);rows.forEach(x=>x.r.setAttribute('aria-selected',String(x===row))); const a = r.getBoundingClientRect(), b = lt.getBoundingClientRect(); e.go(a.top - b.top, a.bottom - b.top); }; rows.push(row); };
     build(T, 0, lt); requestAnimationFrame(() => { const a = rows[0].r.getBoundingClientRect(), b = lt.getBoundingClientRect(); e.jump(a.top - b.top, a.bottom - b.top); });
-    const pickDense = (i, inst) => { dense = i; const b = dbtns[i]; inst ? de.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : de.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); rh.set(i ? 24 : 30);
+    const pickDense = (i, inst) => { dense = i; const b = dbtns[i]; inst ? de.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : de.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); rh.set(i ? 32 : 40);
       requestAnimationFrame(() => { const r = rows[sel] && rows[sel].r; if (!r) return; const a = r.getBoundingClientRect(), bb = lt.getBoundingClientRect(); e.go(a.top - bb.top, a.bottom - bb.top); }); };
     dbtns.forEach((b,i) => b.onclick = () => pickDense(i)); requestAnimationFrame(() => pickDense(0, true)); document.fonts && document.fonts.ready.then(() => pickDense(dense, true));
     thb.onclick = () => { thumbs = thumbs ? 0 : 1; tho.set(thumbs); thb.setAttribute('aria-pressed', !!thumbs); thb.style.background = thumbs ? 'var(--ink)' : 'none'; thb.style.color = thumbs ? 'var(--card)' : 'inherit'; thb.style.borderColor = thumbs ? 'var(--ink)' : 'var(--line)'; };
