@@ -6,6 +6,7 @@ public struct CompareAtom: MotionAtomView {
         summary: "The divider follows the pointer one to one. On release it springs to the nearer draft, and the caption swaps to match.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var x = Track(0, preset: .soft)
+    @State private var tweak = true
     @State private var held = false
     @State private var moved = false
     @State private var hx = 0.0
@@ -17,7 +18,7 @@ public struct CompareAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the divider, or pick a version") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 GeometryReader { g in
                     TimelineView(.motion(x)) { ctx in
                         let v = max(0, min(1, held && moved ? hx : x.value(at: ctx.date.timeIntervalSinceReferenceDate)))
@@ -58,14 +59,17 @@ public struct CompareAtom: MotionAtomView {
                 .accessibilityLabel("Version")
                 .accessibilityValue(showing == 0 ? "Draft 1" : "Draft 2")
                 .accessibilityAdjustableAction { pick($0 == .increment ? 1 : 0) }
+                Toggle("Snap to nearer draft", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
                 HStack {
-                    HStack(spacing: 6) {
-                        Button("A") { pick(0) }.buttonStyle(.bordered).tint(showing == 0 ? .accentColor : nil)
-                        Button("B") { pick(1) }.buttonStyle(.bordered).tint(showing == 1 ? .accentColor : nil)
+                    HStack(spacing: 8) {
+                        Button("A") { pick(0) }.buttonStyle(.bordered).frame(minHeight: 32).tint(showing == 0 ? .accentColor : nil)
+                        Button("B") { pick(1) }.buttonStyle(.bordered).frame(minHeight: 32).tint(showing == 1 ? .accentColor : nil)
                     }
                     Spacer()
                     SwapText(showing == 0 ? "Showing draft 1 — 2 changes" : "Showing draft 2 — approved")
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: 360)
             }
@@ -73,20 +77,20 @@ public struct CompareAtom: MotionAtomView {
     }
 
     private var draftA: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Draft 1").font(.caption).foregroundStyle(.secondary)
-            Text("We launch in June.").font(.headline)
-            Text("Three chapters cover pricing, refunds, and support hours.").font(.caption).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Draft 1").font(.system(size: 12.5)).foregroundStyle(.secondary)
+            Text("We launch in June.").font(.system(size: 15, weight: .semibold))
+            Text("Three chapters cover pricing, refunds, and support hours.").font(.system(size: 12.5)).foregroundStyle(.secondary)
         }
         .padding(14).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(.quaternary.opacity(0.5))
     }
 
     private var draftB: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text("Draft 2").font(.caption).foregroundStyle(.secondary)
-            Text("We launch in July.").font(.headline)
-            Text("Three chapters cover pricing, refunds, support hours, and renewals.").font(.caption).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Draft 2").font(.system(size: 12.5)).foregroundStyle(.secondary)
+            Text("We launch in July.").font(.system(size: 15, weight: .semibold))
+            Text("Three chapters cover pricing, refunds, support hours, and renewals.").font(.system(size: 12.5)).foregroundStyle(.secondary)
         }
         .padding(14).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(.background)

@@ -6,6 +6,7 @@ public struct DeckStackAtom: MotionAtomView {
         summary: "Kicker, deck and headline trade places on soft springs with a short trailing edge. The search-result bar fills and inks from green to amber to red as it nears the cut.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private struct Card: Identifiable { let id = UUID(); let kind: String; let text: String }
+    @State private var tweak = true
     @State private var cards = [
         Card(kind: "Kicker", text: "City hall"),
         Card(kind: "Headline", text: "Water bills rise 40 cents in July"),
@@ -19,12 +20,12 @@ public struct DeckStackAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Long stacks ink the bar toward red") {
-            VStack(spacing: 10) {
-                VStack(spacing: 6) {
+            VStack(spacing: 8) {
+                VStack(spacing: 8) {
                     ForEach(cards) { c in
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(c.kind).font(.caption).foregroundStyle(.secondary)
-                            Text(c.text).font(.callout.weight(.semibold))
+                            Text(c.kind).font(.system(size: 12.5)).foregroundStyle(.secondary)
+                            Text(c.text).font(.system(size: 14, weight: .semibold))
                         }
                         .padding(.horizontal, 12).padding(.vertical, 8).frame(maxWidth: .infinity, alignment: .leading)
                         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
@@ -36,18 +37,21 @@ public struct DeckStackAtom: MotionAtomView {
                 }
                 .frame(maxWidth: 340)
                 .animation(reduce ? nil : .motion(.soft), value: cards.map(\.id))
+                Toggle("Cap at 120 chars", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
                 HStack(spacing: 8) {
-                    Text("SERP").font(.caption).foregroundStyle(.secondary)
+                    Text("SERP").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     GeometryReader { g in
                         RoundedRectangle(cornerRadius: 3).fill(.quaternary)
                             .overlay(alignment: .leading) { RoundedRectangle(cornerRadius: 3).fill(barColor).frame(width: g.size.width * min(1, Double(total) / Double(limit))) }
                     }
                     .frame(height: 6)
-                    Text("\(total)/\(limit)").font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                    Text("\(total)/\(limit)").font(.system(size: 12.5)).foregroundStyle(.secondary).monospacedDigit()
                 }
                 .frame(maxWidth: 340)
                 .animation(reduce ? nil : .motion(.base), value: total)
-                Button("Shuffle") { shuffle() }.buttonStyle(.bordered)
+                Button("Shuffle") { shuffle() }.buttonStyle(.bordered).frame(minHeight: 32)
             }
         }
     }

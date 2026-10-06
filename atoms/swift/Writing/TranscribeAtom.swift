@@ -14,11 +14,11 @@ public struct TranscribeAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Tap a word to hear it again") {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 8) {
                 WritingFlow(spacing: 5, lineSpacing: 4) {
                     ForEach(words.indices, id: \.self) { i in
                         if i < shown {
-                            Text(words[i]).font(.body)
+                            Text(words[i]).font(.system(size: 13.5))
                                 .blur(radius: 0)
                                 .scaleEffect(pulsed == i ? 1.15 : 1)
                                 .background(pulsed == i ? Color.accentColor.opacity(0.25) : .clear)
@@ -34,7 +34,7 @@ public struct TranscribeAtom: MotionAtomView {
                 .frame(maxWidth: 340, minHeight: 120, alignment: .topLeading)
                 .accessibilityLabel(words.prefix(shown).joined(separator: " "))
                 Toggle("Live", isOn: $live)
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
                     .onChange(of: live) { _, v in if v { start() } else { timer?.cancel() } }
             }

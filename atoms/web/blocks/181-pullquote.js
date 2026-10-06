@@ -1,16 +1,16 @@
 
 
 atom({ id:'pullquote', cat:'Writing', name:'Pull-quote extractor', block:'quote, manuscript', fam:['D','M'],
-  html:`<div class="col" style="gap:8px;width:min(320px,90%)"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end"><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><div class="hint">Drag the quote into the story</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(320px,90%);padding:12px"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end"><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Drop quotes inline</span></label><div class="hint">Drag the quote into the story</div>`,
   desc:'Drag the quote and it lifts while the paragraphs spring aside. Dropping it grows the block open from zero height. Reset puts it back.',
   api:'drag(q): lift; sib.y.set(gap); drop: h.set(1,base); reset()',
   init(st){
     const list = $(st,'.pq-list'), reset = $(st,'.pq-reset');
     const P = ['Mara kept the lamp lit long after the ferry left.', 'The orchard deal could wait until morning, she said.'];
-    const rows = P.map(s => { const d = document.createElement('div'); d.className = 'card small'; d.style.cssText = 'padding:10px 12px'; d.textContent = s; list.appendChild(d); return { d, y:new Track(0) }; });
+    const rows = P.map(s => { const d = document.createElement('div'); d.className = 'card small'; d.style.cssText = 'padding:14px 16px'; d.textContent = s; list.appendChild(d); return { d, y:new Track(0) }; });
     const q = document.createElement('div');
     q.className = 'card small';
-    q.style.cssText = 'padding:10px 12px;border-left:3px solid var(--ink);cursor:grab;touch-action:none;font-style:italic';
+    q.style.cssText = 'padding:14px 16px;border-left:3px solid var(--ink);cursor:grab;touch-action:none;font-style:italic';
     q.textContent = '“We start over on the first line.”';
     list.appendChild(q);
     const qrow = { d:q, y:new Track(0) };

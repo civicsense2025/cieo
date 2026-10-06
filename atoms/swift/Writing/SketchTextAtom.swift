@@ -6,11 +6,12 @@ public struct SketchTextAtom: MotionAtomView {
         summary: "The ink settles and trades places with typed text. The lines below slide down to make room. Words the reader might doubt blush a warning tint. Retake brings the ink back.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var done = false
+    @State private var tweak = true
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Convert swaps ink for text") {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 8) {
                 ZStack(alignment: .topLeading) {
                     Path { p in
                         p.move(to: CGPoint(x: 12, y: 40))
@@ -23,24 +24,27 @@ public struct SketchTextAtom: MotionAtomView {
                     .animation(reduce ? nil : .motion(.snap), value: done)
                     if done {
                         (Text("Tomorrow: ") + Text("outline the ").foregroundStyle(.orange) + Text("spring essay."))
-                            .font(.callout)
+                            .font(.system(size: 14))
                             .id(done).motionTransition(.swap())
                             .animation(reduce ? nil : .motion(.base), value: done)
                     }
                 }
                 .frame(maxWidth: 320, minHeight: 90)
-                .padding(12)
+                .padding(14)
                 .background(.quaternary.opacity(0.2), in: RoundedRectangle(cornerRadius: 10))
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Tomorrow: outline the spring essay.").font(.caption)
-                    Text("Reminder set for 8 in the morning.").font(.caption).foregroundStyle(.secondary)
+                Toggle("Flag unsure words", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Tomorrow: outline the spring essay.").font(.system(size: 12.5))
+                    Text("Reminder set for 8 in the morning.").font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 .offset(y: reduce ? 0 : (done ? 44 : 0))
                 .animation(reduce ? nil : .motion(.base), value: done)
                 HStack {
-                    Button("Convert") { withMotion(.base, reduceMotion: reduce) { done = true } }.buttonStyle(.borderedProminent)
+                    Button("Convert") { withMotion(.base, reduceMotion: reduce) { done = true } }.buttonStyle(.borderedProminent).frame(minHeight: 32)
                     Spacer()
-                    Button("Retake") { withMotion(.base, reduceMotion: reduce) { done = false } }.buttonStyle(.bordered)
+                    Button("Retake") { withMotion(.base, reduceMotion: reduce) { done = false } }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
             }
             .frame(maxWidth: 320)

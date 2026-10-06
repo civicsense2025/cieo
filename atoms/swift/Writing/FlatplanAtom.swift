@@ -7,6 +7,7 @@ public struct FlatplanAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     private let rowH = 48.0
     @State private var order = ["Cover", "Feature", "Essay", "Ads", "Back"]
+    @State private var tweak = true
     @State private var held: String?
     @State private var startY = 0.0
     @State private var dragY = 0.0
@@ -19,12 +20,12 @@ public struct FlatplanAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag a page into its folio slot") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 HStack {
-                    Text("Issue 12 · folio").font(.caption).foregroundStyle(.secondary)
+                    Text("Issue 12 · folio").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     Spacer()
                     HStack(spacing: 2) { Text("p."); RollingDigits(folio); Text("/ 5") }
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 .frame(width: 300)
                 ZStack(alignment: .topLeading) {
@@ -39,17 +40,21 @@ public struct FlatplanAtom: MotionAtomView {
                     }
                 }
                 .frame(width: 300, height: Double(order.count) * rowH)
-                Button("Shuffle") { shuffle() }.buttonStyle(.bordered).controlSize(.small)
+                Button("Shuffle") { shuffle() }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small)
+
+                Toggle("Snap to folio", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
         }
     }
 
     private func page(_ name: String) -> some View {
         HStack {
-            Text("\(slot(name) + 1)").font(.headline).frame(width: 24)
+            Text("\(slot(name) + 1)").font(.system(size: 15, weight: .semibold)).frame(width: 24)
             Text(name).font(.subheadline)
             Spacer()
-            Text(name == "Ads" ? "ad plate" : "edit plate").font(.caption2).foregroundStyle(.secondary)
+            Text(name == "Ads" ? "ad plate" : "edit plate").font(.system(size: 12)).foregroundStyle(.secondary)
         }
         .padding(.horizontal, 12).frame(width: 300, height: 44, alignment: .leading)
         .background(.background, in: RoundedRectangle(cornerRadius: 10))

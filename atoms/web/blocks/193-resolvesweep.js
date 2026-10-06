@@ -1,7 +1,7 @@
 
 
 atom({ id:'resolvesweep', cat:'Writing', name:'Resolve sweep', block:'comment threads, resolve', fam:['M','E'],
-  html:`<div class="col" style="width:min(340px,92%);gap:10px"><div class="row" style="align-items:center;gap:8px"><span class="small" style="font-weight:600">Open threads</span><span class="dg" aria-label="Open thread count"></span><span class="avs" style="display:flex;align-items:center" aria-hidden="true"></span><span style="flex:1"></span><button class="btn ink all">Resolve all</button></div><div class="col list" style="gap:8px"></div><button class="btn rs" style="align-self:flex-start">Reset</button></div><div class="hint">Resolve a thread, or all at once</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(340px,92%);gap:8px;padding:12px"><div class="row" style="align-items:center;gap:8px"><span class="small" style="font-weight:600">Open threads</span><span class="dg" aria-label="Open thread count"></span><span class="avs" style="display:flex;align-items:center" aria-hidden="true"></span><span style="flex:1"></span><button class="btn ink all">Resolve all</button></div><div class="col list" style="gap:8px"></div><button class="btn rs" style="align-self:flex-start">Reset</button></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Stack avatars</span></label><div class="hint">Resolve a thread, or all at once</div>`,
   desc:'Resolving fades a card and its height springs shut. The open count rolls down after, and the avatar stack fans shut with it.',
   api:'o.set(0,S.snap) h.set(0,S.base,t+EXIT) dg.set(n) fan.set(open/3) · REDUCE: instant',
   init(st){
@@ -15,11 +15,11 @@ atom({ id:'resolvesweep', cat:'Writing', name:'Resolve sweep', block:'comment th
     const fan = new Track(1); const o = [], h = [], H = [], done = [];
     const cards = T.map((c,i) => {
       const w = document.createElement('div'); w.style.cssText = 'overflow:hidden';
-      const b = document.createElement('div'); b.className = 'card'; b.style.cssText = 'padding:10px 12px;display:flex;flex-direction:column;gap:6px';
-      b.innerHTML = `<div class="row" style="gap:8px;align-items:center"><span class="av" style="width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;background:${c.c}">${c.n[0]}</span><span class="small" style="font-weight:600">${c.n}</span><span style="flex:1"></span><button class="btn rv" style="padding:2px 10px;font-size:12px">Resolve</button></div><span class="small">${c.q}</span>`;
+      const b = document.createElement('div'); b.className = 'card'; b.style.cssText = 'padding:14px 16px;display:flex;flex-direction:column;gap:6px';
+      b.innerHTML = `<div class="row" style="gap:8px;align-items:center"><span class="av" style="width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;background:${c.c}">${c.n[0]}</span><span class="small" style="font-weight:600">${c.n}</span><span style="flex:1"></span><button class="btn rv" style="padding:2px 10px;font-size:12px">Resolve</button></div><span class="small">${c.q}</span>`;
       w.appendChild(b); list.appendChild(w);
       const av = document.createElement('span');
-      av.style.cssText = `width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;background:${c.c};border:2px solid var(--card);margin-left:${i ? '-8px' : '0'};z-index:${T.length-i}`;
+      av.style.cssText = `width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;background:${c.c};border:2px solid var(--card);margin-left:${i ? '-8px' : '0'};z-index:${T.length-i}`;
       av.textContent = c.n[0]; avs.appendChild(av);
       o.push(new Track(1, S.snap)); h.push(new Track(0)); H.push(0); done.push(false);
       return { w, b, av, btn:$(b,'.rv') };

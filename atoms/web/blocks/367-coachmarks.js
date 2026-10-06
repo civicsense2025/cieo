@@ -1,0 +1,29 @@
+
+
+atom({ id:'coachmarks', cat:'Guidance', name:'Coachmark sequence', block:'onboarding, coachmarks', fam:['S','E','X'], tall:true,
+  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(340px,94%);padding:14px 16px;min-height:266px"><b style="font-size:15px;font-weight:600;line-height:1.5">Invite the team</b><div class="small muted" style="line-height:1.5">Three dots, three jobs. The card follows its dot.</div><div class="rail" style="display:flex;justify-content:space-between;margin:12px 10px 0"><button class="dt" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);font-size:12px;font-weight:600;display:grid;place-items:center;padding:0;cursor:pointer"><span style="transform:translateY(-.5px)">1</span></button><button class="dt" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);font-size:12px;font-weight:600;display:grid;place-items:center;padding:0;cursor:pointer"><span style="transform:translateY(-.5px)">2</span></button><button class="dt" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);font-size:12px;font-weight:600;display:grid;place-items:center;padding:0;cursor:pointer"><span style="transform:translateY(-.5px)">3</span></button></div><div class="stem" style="position:absolute;top:130px;width:2px;height:8px;background:var(--accent);border-radius:2px"></div><div class="cm" style="position:absolute;top:138px;width:220px;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:12px 14px"><div class="cc" style="position:relative;min-height:64px"></div><div class="row" style="justify-content:space-between;margin-top:8px"><span class="small muted num"><span class="dn"></span> <span class="ofx">of 3</span></span><span class="row" style="gap:6px"><button class="btn bk" style="min-height:32px;padding:6px 12px">Back</button><button class="btn ink nx" style="min-height:32px;padding:6px 12px">Next</button></span></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Steps:</span></div></div><div class="hint">The card trails its dot · copy slides the way you travel</div>`,
+  desc:'The card is one box whose leading edge moves first and trailing edge follows 60ms later, so it stretches toward its dot. Copy slides in the direction you travel. The last card holds as a success terminal.',
+  api:'card.go(x, x + 220) trails .06   copy.to(step, dir·8px)   step.set(n) · REDUCE: jump',
+  init(st){
+    const ui = $(st,'.ui'), cm = $(st,'.cm'), stem = $(st,'.stem'), cc = $(st,'.cc'), nx = $(st,'.nx'), bk = $(st,'.bk'), ofx = $(st,'.ofx'), tw = $(st,'.tw'), dots = $$(st,'.dt'), W = 220;
+    const STEPS = [['Add names','Type one name, or paste the whole hiring loop at once.'],['Pick roles','Editors draft, viewers comment, guests just peek.'],['Send invites','Everyone lands in the right channel together.']];
+    const L = STEPS.map(([h,p]) => { const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += 'flex-direction:column;align-items:flex-start;justify-content:flex-start;white-space:normal;gap:2px;text-align:left'; e.innerHTML = `<b style="font-size:13px;line-height:1.5">${h}</b><span class="small muted" style="line-height:1.5">${p}</span>`; cc.appendChild(e); return e; });
+    const fin = document.createElement('div'); fin.className = 'layer'; fin.style.cssText += 'flex-direction:column;align-items:flex-start;justify-content:flex-start;white-space:normal;gap:2px;text-align:left'; fin.innerHTML = `<b style="font-size:13px;color:var(--success);line-height:1.5">Done — team invited ✓</b><span class="small muted" style="line-height:1.5">Three seats filled. Replay any step below.</span>`; cc.appendChild(fin); L.push(fin);
+    const e = edges(0, W), dg = new Digits($(st,'.dn'), 1), sw = new Swap(0), hl = dots.map(() => new Track(0));
+    let i = 0, dir = 1;
+    const geom = n => { const u = ui.getBoundingClientRect(), r = dots[n].getBoundingClientRect(); const dx = r.left - u.left + r.width/2; return Math.max(8, Math.min(u.width - W - 8, dx - W/2)); };
+    const go = (n, inst) => { const R = REDUCE || inst, last = n >= STEPS.length; dir = n > i ? 1 : -1; i = n;
+      const x = geom(Math.min(n, STEPS.length - 1)); R ? e.jump(x, x + W) : e.go(x, x + W);
+      if (R){ sw.cur = last ? 3 : n; sw.prev = null; sw.t = -9; } else sw.to(last ? 3 : n);
+      dg.set(String(Math.min(n + 1, 3)), R);
+      ofx.textContent = last ? 'of 3 ✓' : 'of 3'; nx.textContent = last ? 'Replay' : (n === STEPS.length - 1 ? 'Done' : 'Next'); bk.style.visibility = n === 0 ? 'hidden' : 'visible';
+      dots.forEach((d,k) => R ? hl[k].jump(k === n ? 1 : 0) : hl[k].set(k === n ? 1 : 0)); };
+    nx.onclick = () => go(i >= STEPS.length ? 0 : i + 1); bk.onclick = () => go(Math.max(0, (i > STEPS.length ? STEPS.length : i) - 1));
+    dots.forEach((d,k) => d.onclick = () => go(k, true));
+    [['1',0],['2',1],['3',2],['Done',3]].forEach(([label,n]) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'min-height:32px;padding:6px 10px;font-size:12px'; b.textContent = label; b.onclick = () => go(n, true); tw.appendChild(b); });
+    go(0, true);
+    addEventListener('resize', () => { const x = geom(Math.min(i, STEPS.length - 1)); e.jump(x, x + W); });
+    return t => { const a = e.A.at(t), b = e.B.at(t); cm.style.left = px(a); cm.style.width = px(Math.max(40, b - a)); stem.style.left = px(a + (b - a)/2 - 1);
+      L.forEach((el,k) => sw.apply(el,k,t,8*dir)); dg.render(t);
+      dots.forEach((d,k) => { const p = clamp(hl[k].at(t)); d.style.borderColor = mix(p,'var(--accent)','var(--line)'); d.style.background = mix(p,'var(--accent-tint)','var(--card)'); d.style.transform = `scale(${(1 + .14*p).toFixed(3)})`; }); };
+  }});

@@ -6,6 +6,7 @@ public struct VoiceNoteAtom: MotionAtomView {
         summary: "The tile lifts under your pointer and follows it. Dropping it over the draft draws the waveform bar by bar on soft and opens the slot on a height spring. Play and Insert do the same without dragging.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var inserted = false
+    @State private var tweak = true
     @State private var playing = false
     @State private var drew = false
     @State private var drag = CGSize.zero
@@ -17,10 +18,10 @@ public struct VoiceNoteAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the note, or use Insert") {
-            VStack(alignment: .leading, spacing: 0) {
-                Text("Spring launch").font(.headline)
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Spring launch").font(.system(size: 15, weight: .semibold))
                 Text("Doors at 6 pm, talk at 7. Press play on the note, or drop it into the draft.")
-                    .font(.callout).foregroundStyle(.secondary)
+                    .font(.system(size: 14)).foregroundStyle(.secondary)
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
                     .foregroundStyle(.quaternary)
@@ -46,13 +47,16 @@ public struct VoiceNoteAtom: MotionAtomView {
                         draw()
                         withMotion(.base, reduceMotion: reduce) { playing.toggle() }
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.bordered).frame(minHeight: 32)
                     Button(inserted ? "Remove" : "Insert") {
                         inserted ? remove() : insert()
                     }
-                    .buttonStyle(.bordered)
+                    .buttonStyle(.bordered).frame(minHeight: 32)
                 }
                 .padding(.top, 10)
+                Toggle("Preview waveform", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 340, minHeight: 300, alignment: .topLeading)
         }
@@ -73,7 +77,7 @@ public struct VoiceNoteAtom: MotionAtomView {
                 }
             }
             .frame(height: 26)
-            Text("0:12").font(.caption).foregroundStyle(.secondary)
+            Text("0:12").font(.system(size: 12.5)).foregroundStyle(.secondary)
         }
         .padding(.horizontal, 12).frame(width: 190, height: 56, alignment: .leading)
         .background(.thickMaterial).clipShape(RoundedRectangle(cornerRadius: 12))

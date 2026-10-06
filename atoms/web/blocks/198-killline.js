@@ -1,5 +1,5 @@
 atom({ id:'killline', cat:'Writing', name:'Kill line', block:'story list', fam:['X','E'], tall:true,
-  html:`<div class="col" style="gap:8px;width:min(360px,92%)"><div class="small muted">Drag the middle story past the cut line</div><div class="stage" style="position:relative"><i class="cut" style="position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--line)"></i><div class="rows col" style="gap:8px"></div></div><div class="row" style="gap:8px;align-items:center"><button class="btn rs">Restore</button><span class="st small muted"></span></div></div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(360px,92%);padding:12px"><div class="small muted">Drag the middle story past the cut line</div><div class="stage" style="position:relative"><i class="cut" style="position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--line)"></i><div class="rows col" style="gap:8px"></div></div><div class="row" style="gap:8px;align-items:center"><button class="btn rs">Restore</button><span class="st small muted"></span></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Confirm cut</span></label>`,
   desc:'Dragging a story past the cut line arms a red snap. Letting go past the mark fades the row out, then its space closes and the rest spring up. Restore brings it back.',
   api:'x.release(v)   arm.set(1)   sw.to(cut), h→0   rest spring up',
   init(st){
@@ -7,7 +7,7 @@ atom({ id:'killline', cat:'Writing', name:'Kill line', block:'story list', fam:[
     const rows = $(st,'.rows'), cut = $(st,'.cut'), info = $(st,'.st');
     const CUT = 190, H0 = 42; cut.style.left = px(CUT);
     const mk = s => { const d = document.createElement('div'); d.className = 'card small';
-      d.style.cssText += 'padding:10px 12px;position:relative;overflow:hidden;touch-action:none;user-select:none';
+      d.style.cssText += 'padding:14px 16px;position:relative;overflow:hidden;touch-action:none;user-select:none';
       d.innerHTML = `<span class="a layer">${s}</span><span class="b layer" style="color:var(--danger)">Cut ✕</span>`;
       rows.appendChild(d); return d; };
     const tops = S0.map(mk);

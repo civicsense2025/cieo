@@ -2846,5 +2846,1557 @@
   "summary": "The card turns over with a small dip at the halfway point. The answer only swaps in once the question has left. Each grade button trails its edge behind it. The next interval rolls its digits forward.",
   "file": "blocks/211-recall.js",
   "api": "flip.set(1, soft); dip=sin(pi p)   qa.to(1) after exit   edge.go(grade) trails .06   iv.set(days)"
+ },
+ {
+  "id": "viewchrome",
+  "category": "Documents",
+  "name": "Viewer chrome",
+  "summary": "The toolbar and counter fade out after two idle seconds. Any pointer movement brings them back on a calm base spring. The page counter rolls its digits; the final page holds a success terminal instead of wrapping.",
+  "file": "blocks/212-viewer-chrome.js",
+  "api": "idle.o.set(0) after 2s   act: o.set(1, base)   pg.set(n)   end: ok.to(1), hold"
+ },
+ {
+  "id": "pagescrub",
+  "category": "Documents",
+  "name": "Page scrubber",
+  "summary": "The knob follows the pointer one-to-one with rubber at the ends and settles on a base spring. The active thumb plate leads while a ghost trails sixty milliseconds behind. The last page tints the caption success.",
+  "file": "blocks/213-page-scrub.js",
+  "api": "drag: pos.jump(x) 1:1   up: pos.release(x, v, round, base)   plate.go(x) trails .06   cap digits roll"
+ },
+ {
+  "id": "docsearch",
+  "category": "Documents",
+  "name": "In-doc search",
+  "summary": "Jumping slides the highlight while its outline trails a beat behind. The match counter rolls digits. A query with no hits blurs out to a quiet empty terminal instead of flashing.",
+  "file": "blocks/214-doc-search.js",
+  "api": "jump: hl.go(top) trails .06   n.set(hits)   miss: term.to(1) Swap-out, hold"
+ },
+ {
+  "id": "redline",
+  "category": "Documents",
+  "name": "Redline compare",
+  "summary": "Deleted lines fade first and only then does their width close; inserted lines open first and fade in after. The paragraph reflows on a soft spring. Accepting lands a success terminal.",
+  "file": "blocks/215-redline.js",
+  "api": "del.o→0 then del.w→0   ins.w→full then ins.o→1   reflow soft   acc: fin.to(1)"
+ },
+ {
+  "id": "sigguide",
+  "category": "Documents",
+  "name": "Signature ceremony",
+  "summary": "A pulse travels down the rail to the next open field. Skipping ahead rings the unfinished field in danger. Signing inks a success check and the ceremony holds a signed terminal.",
+  "file": "blocks/216-sig-guide.js",
+  "api": "pulse.y.set(i*row, base)   skip: ring.set(1) danger   sign: ck.set(1), fin.to(1)"
+ },
+ {
+  "id": "docminimap",
+  "category": "Documents",
+  "name": "TOC minimap",
+  "summary": "The viewport box tracks the drag one-to-one; a click on the rail springs to that page on a base spring. The caption swaps to the section title and the final section lands an end-of-document terminal.",
+  "file": "blocks/217-doc-minimap.js",
+  "api": "drag: box.jump(y) 1:1   click: box.set(y, base)   cap.to(i)   end holds success"
+ },
+ {
+  "id": "exportflow",
+  "category": "Documents",
+  "name": "Export flow",
+  "summary": "The button swaps to a spinner, the bar creeps toward ninety percent on a lazy spring, then springs to full. The pill swaps to a success terminal that holds until the next export.",
+  "file": "blocks/218-export-flow.js",
+  "api": "go: btn.to(1)   bar.set(90, lazy) then .set(100, base)   done: pill.to(2) success"
+ },
+ {
+  "id": "annotthread",
+  "category": "Documents",
+  "name": "Annotation thread",
+  "summary": "Resolving inks the check first and only then collapses the thread height on a base spring, landing on a quiet resolved terminal. Reopening plays the same motion in reverse.",
+  "file": "blocks/219-annot-thread.js",
+  "api": "res: ck.set(1) then h.set(0, base)   open: h.set(full, base), ck.set(0)"
+ },
+ {
+  "id": "fillfield",
+  "category": "Forms",
+  "name": "Fillable field",
+  "summary": "The label floats up the moment typing starts. An empty required field rings danger with its message; a valid one inks a success check and holds a looks-good terminal.",
+  "file": "blocks/220-fill-field.js",
+  "api": "float.set(typing?1:0, base)   invalid: ring danger + msg.to(1)   valid: ck.set(1), msg.to(2)"
+ },
+ {
+  "id": "consentbox",
+  "category": "Forms",
+  "name": "Consent checkbox",
+  "summary": "Checking fills the box first and the check draws after. The Partial state morphs the check into a dash. A recorded consent holds a success terminal.",
+  "file": "blocks/221-consent-box.js",
+  "api": "fill.set(1) then ck.set(1)   mixed: dash.set(1), ck.set(0)   recorded: st.to(2)"
+ },
+ {
+  "id": "clausepick",
+  "category": "Forms",
+  "name": "Clause pick-one",
+  "summary": "The dot grows from the center of the new clause while the old one shrinks on the same spring. The locked pick carries a success check and the summary swaps to a filed terminal.",
+  "file": "blocks/222-clause-pick.js",
+  "api": "dot[i].set(picked?1:0, base) same spring   sum.to(i)   locked holds ✓"
+ },
+ {
+  "id": "initialbox",
+  "category": "Documents",
+  "name": "Initial box",
+  "summary": "Adopt-and-stamp swaps the ghost for your initials and snaps the stamp from ninety-seven percent on a fast snap spring. The success message holds as the terminal; clearing reverses it.",
+  "file": "blocks/223-initial-box.js",
+  "api": "stamp.to(1) Swap   sc.release(.97,0,1,snap)   msg.to(1) success, hold"
+ },
+ {
+  "id": "datesign",
+  "category": "Documents",
+  "name": "Date signed",
+  "summary": "The calendar disc glides to the picked day on a base spring while the date blur-swaps in below. Confirming holds a signed-and-dated success terminal.",
+  "file": "blocks/224-date-sign.js",
+  "api": "disc.x.set(i*cell, base)   date.to(i) Swap-blur   confirm holds success"
+ },
+ {
+  "id": "jurisdiction",
+  "category": "Forms",
+  "name": "Jurisdiction pick",
+  "summary": "The list grows down from the trigger on a base spring while the arrow-key highlight trails sixty milliseconds behind the key. The pick swaps into the trigger and holds a filed success terminal.",
+  "file": "blocks/225-jurisdiction.js",
+  "api": "open.h.set(full, base) from trigger   hi.go(i) trails .06   pick: val.to(i), msg.to(1)"
+ },
+ {
+  "id": "exhibit",
+  "category": "Documents",
+  "name": "Exhibit upload",
+  "summary": "The row opens its height first, the bar fills, and only then does the success check ink — or the row rings danger with a retry. Success holds an attached terminal; retry replays the fill.",
+  "file": "blocks/226-exhibit.js",
+  "api": "row.h.set(full, base) opens   bar.set(100, soft) fills   ok: ck.set(1) / err: retry Swap"
+ },
+ {
+  "id": "spotlight",
+  "category": "Video calls",
+  "name": "Stage spotlight",
+  "summary": "The active tile widens on a soft spring while the previous one shrinks on base. A ring follows the speaker and the label swaps. Once everyone has spoken, a success terminal holds.",
+  "file": "blocks/227-spotlight.js",
+  "api": "tile.g.set(active, grow?S.soft:S.base)   label.to(i)   end: fin.to(1) + success.set(1)"
+ },
+ {
+  "id": "handqueue",
+  "category": "Video calls",
+  "name": "Hand-raise queue",
+  "summary": "Raised hands rise into the queue staggered 40ms apart on base, each with a rolling order digit. Lowering fades a row out; when the last hand lowers, the header swaps to a clear terminal.",
+  "file": "blocks/228-handqueue.js",
+  "api": "row.{y,o}.set(1, S.base, t0 + i*0.04)   badge.set(rank)   last lower: qh.to(1)"
+ },
+ {
+  "id": "breakout",
+  "category": "Video calls",
+  "name": "Breakout shuffle",
+  "summary": "Tiles fly from the lobby to room slots staggered on base, room tags swap to seated counts, and a digit clock counts down. At zero a success terminal holds the rooms open.",
+  "file": "blocks/229-breakout.js",
+  "api": "tile.{x,y}.set(slot, S.base, t0 + i*0.05)   tag.to(1)   clock.set(mm:ss)   end: fin.to(1)"
+ },
+ {
+  "id": "captions",
+  "category": "Video calls",
+  "name": "Captions roll",
+  "summary": "Each new caption rises on base while the oldest swaps out; the speaker name swaps with it. At the end of the segment a success terminal holds the saved transcript.",
+  "file": "blocks/230-captions.js",
+  "api": "line.{y,o}.set(in, S.base)   old: swap.to(out)   spk.to(speaker)   end: fin.to(1)"
+ },
+ {
+  "id": "shareframe",
+  "category": "Video calls",
+  "name": "Screen-share frame",
+  "summary": "The share frame scales in on a lazy ease while the filmstrip highlight trails its edges 60ms behind. The presenter label swaps; stopping lands on an empty terminal.",
+  "file": "blocks/231-shareframe.js",
+  "api": "frame.set(1, S.lazy)   edge.go(x, w) trails .06   label.to(i)   stop: fin.to(1)"
+ },
+ {
+  "id": "waitingroom",
+  "category": "Video calls",
+  "name": "Waiting-room admit",
+  "summary": "Each row springs shut on base when its guest is admitted, while a green dot pops on snap and the waiting count rolls its digits. The last admit swaps in an empty terminal.",
+  "file": "blocks/232-waitingroom.js",
+  "api": "row.h.set(0, S.base); dot.set(1, S.snap)   count.set(n)   empty: fin.to(1)"
+ },
+ {
+  "id": "reactions",
+  "category": "Video calls",
+  "name": "Reactions burst",
+  "summary": "Each tap floats an emoji up on soft while it fades, and the pile below staggers in. Reduced motion skips the float. Five reactions pop a burst terminal; clearing empties the sky.",
+  "file": "blocks/233-reactions.js",
+  "api": "float.{y,o}.set(soft)   pile[i].o.set(1, base, t0 + i*0.05)   REDUCE: jump   end: ok.set(n>=5)"
+ },
+ {
+  "id": "recdot",
+  "category": "Video calls",
+  "name": "Recording dot",
+  "summary": "The dot pulses on the clock while tape rolls. Starting swaps in Rec plus a digit timer; stopping swaps back and lands on a saved terminal.",
+  "file": "blocks/234-recdot.js",
+  "api": "dot.pulse(clock)   start: label.to(1) + timer.set(mm:ss)   stop: label.to(0) + fin.to(1)"
+ },
+ {
+  "id": "rsvp",
+  "category": "Forms",
+  "name": "Call RSVP",
+  "summary": "The plate slides behind your pick with its trailing edge 60ms late, and the headcount rolls its digits. Your answer swaps in a terminal you can change.",
+  "file": "blocks/235-rsvp.js",
+  "api": "plate.go(x, w) trails .06   head.set(n)   pick: fin.to(i+1)"
+ },
+ {
+  "id": "qaupvote",
+  "category": "Forms",
+  "name": "Live Q&A upvote",
+  "summary": "Voting springs each row to its new rank on base while the counts roll digits. Resolving swaps a row to answered; the last one swaps in an empty terminal.",
+  "file": "blocks/236-qaupvote.js",
+  "api": "row.y.set((rank-home)*H, S.base)   votes.set(n)   resolve: slot.to(1)   all: fin.to(1)"
+ },
+ {
+  "id": "postcall",
+  "category": "Video calls",
+  "name": "Post-call checkout",
+  "summary": "Your outcome swaps the follow-up panel; the recap opt-in pops on snap. Submitting swaps in a thanks terminal instead of leaving you hanging.",
+  "file": "blocks/237-postcall.js",
+  "api": "panel.to(outcome)   pop.set(checked, S.snap)   submit: fin.to(1)"
+ },
+ {
+  "id": "breakpoint",
+  "category": "Layout",
+  "name": "Breakpoint morph",
+  "summary": "Cards retarget their grid slots with a 30ms stagger when the breakpoint flips, and the wall height springs to fit. The last layout holds settled as the terminal state.",
+  "file": "blocks/247-breakpoint.js",
+  "api": "cards[i].x/y.set(slot, base, t0+i*.03)   wall.set(h)   nc.set(cols)"
+ },
+ {
+  "id": "splitsnap",
+  "category": "Layout",
+  "name": "Split snap drag",
+  "summary": "The divider follows the pointer exactly with a grip highlight, then releases into the nearest of three snap points on a soft spring. The readout rolls to the landing percent.",
+  "file": "blocks/248-splitsnap.js",
+  "api": "held.x = pointer   up: x.release(x, vx, snap(.25/.5/.75), soft)   pc.set(%)"
+ },
+ {
+  "id": "density",
+  "category": "Layout",
+  "name": "Grid density switch",
+  "summary": "Row height and gap retarget on a soft spring while every row glides to its recomputed slot with a stagger. The pixel measure rolls its digits and the mode swaps over.",
+  "file": "blocks/249-density.js",
+  "api": "h.set(56/40, soft); gap.set(8/4, soft)   rows[i].y.set(i*(h+gap), base, t0+i*.03)   rh.set(h)"
+ },
+ {
+  "id": "masonry",
+  "category": "Layout",
+  "name": "Masonry settle",
+  "summary": "Cards are dealt to the shortest column on a base spring with a stagger. Newcomers arrive from 45 percent opacity with blur, and the wall height trails on a lazy spring. A full wall holds as the terminal state.",
+  "file": "blocks/250-masonry.js",
+  "api": "slot = shortest(colH)   x/y.set(slot, base, t0+i*.03)   o: .45 -> 1   wall.set(h, lazy)"
+ },
+ {
+  "id": "stickystack",
+  "category": "Layout",
+  "name": "Sticky stacking",
+  "summary": "Sticky headers pin and push off one to one while the section name swaps over and a marker trails 60ms behind. Reaching the end holds a done state.",
+  "file": "blocks/251-stickystack.js",
+  "api": "header: position sticky (1:1 pin, push-off)   sa.to(active) after exit   edge.go(x) trails .06"
+ },
+ {
+  "id": "holygrail",
+  "category": "Layout",
+  "name": "Holy-grail reorder",
+  "summary": "Narrow stacks both sidebars below the article on slot springs with a stagger, and focus moves into the article so tab order matches the visual order. Wide restores the three columns.",
+  "file": "blocks/252-holygrail.js",
+  "api": "panes[i].y.set(slot, base, t0+i*.03)   narrow: focus(article)   hl.to(stacked/columns)"
+ },
+ {
+  "id": "emptycol",
+  "category": "Layout",
+  "name": "Empty-column collapse",
+  "summary": "The empty column width springs to zero on a base spring while its siblings expand to fill the freed space. Refilling reverses the motion, and each end state holds settled.",
+  "file": "blocks/253-emptycol.js",
+  "api": "w1.set(0 / share, base)   w0/w2.set(fill)   el.to(hidden/open)"
+ },
+ {
+  "id": "formflow",
+  "category": "Layout",
+  "name": "Multi-column flow",
+  "summary": "Fields reflow between two columns and one with FLIP springs, so nothing jumps. An empty email swaps its error in and pushes the rows below on springs. A clean save holds a success terminal.",
+  "file": "blocks/254-formflow.js",
+  "api": "FLIP: dy.jump(old-new); dy.set(0, base, t0+i*.02)   err.set(1) pushes rows   save: success.set(1), hold"
+ },
+ {
+  "id": "fieldset",
+  "category": "Layout",
+  "name": "Fieldset grouping",
+  "summary": "Toggling the group springs its height with the chevron turning alongside. Validating an empty group snaps an invalid ring on; a checked group settles a success ring as its terminal.",
+  "file": "blocks/255-fieldset.js",
+  "api": "h.set(open ? full : 0, soft/base); chev.turn   invalid.ring.set(1, snap)   valid: ring success, hold"
+ },
+ {
+  "id": "sugchips",
+  "category": "AI chat",
+  "name": "Suggestion chips",
+  "summary": "Chips stagger in 40ms apart. The tapped chip morphs into your bubble while siblings blur out, and the reply fades up as the terminal state.",
+  "file": "blocks/267-sugchips.js",
+  "api": "chip[i] in at t0 + i·0.04 (S.base)   tap: sib.o→0, ub.swap.to(i), reply.o→1 at t + 0.5"
+ },
+ {
+  "id": "tooldisclose",
+  "category": "AI chat",
+  "name": "Tool-call disclosure",
+  "summary": "The row expands on a soft spring while each step trails in. Its spinner swaps to a check on done, and the caption settles on a success terminal.",
+  "file": "blocks/268-tooldisclose.js",
+  "api": "steps.h.set(H, S.soft)   step[i].done at t + 0.3 + i·0.45   edge.go(pct) trails 60ms"
+ },
+ {
+  "id": "confmeter",
+  "category": "AI chat",
+  "name": "Confidence meter",
+  "summary": "The thin meter inks on a lazy spring while digits roll the percent. The band caption swaps between danger, warning and success terminals.",
+  "file": "blocks/269-confmeter.js",
+  "api": "v.set(target, S.lazy)   digits.set(pct)   band = v<55 ? danger : v<80 ? warning : success"
+ },
+ {
+  "id": "voicewave",
+  "category": "AI chat",
+  "name": "Voice waveform",
+  "summary": "Bars pulse live off the clock while held. On release they spring back and the transcript bubble swaps in as the terminal state.",
+  "file": "blocks/270-voicewave.js",
+  "api": "held: bar[i] = rest + live·pulse(t·9 − i·0.55)   release: live.set(0, S.soft), tx.swap.to(1)"
+ },
+ {
+  "id": "humanhandoff",
+  "category": "AI chat",
+  "name": "Human handoff",
+  "summary": "The avatar swaps to your teammate while the queue pill drops in on base. Digits count the wait down, then the transcript unfolds to a joined terminal.",
+  "file": "blocks/271-humanhandoff.js",
+  "api": "ask: avatar.swap.to(1), pill drops (S.base)   wait 03→00, 1.1s each   at 00: joined, tsum.h.set(H)"
+ },
+ {
+  "id": "regendiff",
+  "category": "AI chat",
+  "name": "Regeneration diff",
+  "summary": "The old answer blurs out while the new one swaps in. Changed phrases glow, then fade, and the card height springs to fit.",
+  "file": "blocks/272-regendiff.js",
+  "api": "ans.swap.to(1)   chg glow fades at t + 1.4 (S.soft)   ans.h.set(measure(new), S.soft)"
+ },
+ {
+  "id": "citepop",
+  "category": "AI chat",
+  "name": "Citation popover",
+  "summary": "The number pops on snap while the panel grows on base. Sources stagger 30ms apart, and tapping outside closes everything faster.",
+  "file": "blocks/273-citepop.js",
+  "api": "num.pop snap, panel.p.set(1, S.base)   src[i] at t0 + i·0.03   outside: p.set(0, S.snap)"
+ },
+ {
+  "id": "memtoggle",
+  "category": "AI chat",
+  "name": "Memory toggle",
+  "summary": "The knob slides with trailing edges on base. The saved-fact chip opens its width first, then the text fades in as the terminal state.",
+  "file": "blocks/274-memtoggle.js",
+  "api": "knob.go(l, r) edges trail 60ms   chip.w.set(W, S.base), text.o→1 at t + exit"
+ },
+ {
+  "id": "chatpoll",
+  "category": "Forms",
+  "name": "In-chat poll",
+  "summary": "Each option morphs in place into its result bar. Fills stagger in, percents roll their digits, and the picked row keeps its check.",
+  "file": "blocks/275-chatpoll.js",
+  "api": "opt[i].fill.set(pct[i], S.base, t + i·0.06)   pct digits roll   picked.ck.w→14"
+ },
+ {
+  "id": "thumbsreason",
+  "category": "Forms",
+  "name": "Thumbs plus reason",
+  "summary": "The pressed thumb sinks on snap. The reason field opens its height on soft, and Send swaps the row to a thank-you terminal.",
+  "file": "blocks/276-thumbsreason.js",
+  "api": "press.set(1, S.snap) on down   why.h.set(96, S.soft)   send: ty.swap.to(thanks)"
+ },
+ {
+  "id": "chatcsat",
+  "category": "Forms",
+  "name": "CSAT in chat",
+  "summary": "Faces rise in on soft with a stagger. One mood value drives the big face, so hovering reads as a single expression changing. The caption swaps per score.",
+  "file": "blocks/277-chatcsat.js",
+  "api": "face[i] rises at t0 + i·0.05 (S.soft)   mood → mouth + eyes   caption.swap.to(score)"
+ },
+ {
+  "id": "slotfill",
+  "category": "Forms",
+  "name": "Slot-filling form",
+  "summary": "Missing slots stack compact while the first open one offers picks. Each answer inks a check and collapses, and the progress edge trails to a booked terminal.",
+  "file": "blocks/278-slotfill.js",
+  "api": "answer[i]: ck.set(1), opts.h→0 (S.soft)   edge.go(n/3) trails 60ms   at 3/3: summary.swap.to(done)"
+ },
+ {
+  "id": "slotgrid",
+  "category": "Scheduling",
+  "name": "Slot picker",
+  "summary": "The day plate glides across with its trailing edge lagging behind. Old times blur out while the new day staggers in cell by cell. A picked slot holds its ink border as the terminal.",
+  "file": "blocks/287-slotgrid.js",
+  "api": "plate.go(l, r) trails .06   cells[i].sw.to(day, t+i*.04)   sel.set(1)"
+ },
+ {
+  "id": "tzflip",
+  "category": "Scheduling",
+  "name": "Timezone flip",
+  "summary": "Each time blurs out and its replacement blurs in. The time column measures the longest new label and springs to fit it, so nothing jumps. Filtering to working hours only fades the late row.",
+  "file": "blocks/288-tzflip.js",
+  "api": "rows[i].sw.to(tz)   w.set(measure(longest))   late.o.set(wh?1:0)"
+ },
+ {
+  "id": "heatmap",
+  "category": "Scheduling",
+  "name": "Availability heatmap",
+  "summary": "Cells rest in soft green-amber tints by free count. Hovering swaps the dot for the count; clicking inks a booking ring that holds. Switching team and mine re-tints every cell.",
+  "file": "blocks/289-heatmap.js",
+  "api": "cell.v.set(n/3) soft tint   hover: sw.to(1) count   click: sel.set(1) hold"
+ },
+ {
+  "id": "holdconfirm",
+  "category": "Scheduling",
+  "name": "Hold to confirm",
+  "summary": "Holding fills the ring at a steady pace. Letting go early springs the fill back to zero. A full hold swaps the arrow for a check and the card holds its success tint as the terminal.",
+  "file": "blocks/290-holdconfirm.js",
+  "api": "hold: pv += dt/dur   release: bk.release(pv,0,0) springs back   full: sw.to(1), sv.set(1) hold"
+ },
+ {
+  "id": "reschedrag",
+  "category": "Scheduling",
+  "name": "Reschedule drag",
+  "summary": "The chip follows your finger one to one. A gap opens softly at the landing slot while the others spring aside, and the chip label swaps to the snapped time on drop.",
+  "file": "blocks/291-reschedrag.js",
+  "api": "drag 1:1 hy   rows[i].y springs around gap   chip sw.to(snapped) on drop"
+ },
+ {
+  "id": "grouppoll",
+  "category": "Scheduling",
+  "name": "Group-poll tally",
+  "summary": "Tapping an option morphs every row into its result bar. Fills stagger down the list, counts roll on digits, and the leader inks a success tint that holds as the terminal.",
+  "file": "blocks/292-grouppoll.js",
+  "api": "fill.set(share, base, t+i*.05) stagger   counts Digits roll   leader lk.set(1) success hold"
+ },
+ {
+  "id": "buffersync",
+  "category": "Scheduling",
+  "name": "Buffer editor",
+  "summary": "The right handle drags the event edge one to one while the buffer edge trails sixty milliseconds behind. Syncing pulses the dot, then swaps Scheduled to Synced — or Conflict when the buffer runs under fifteen minutes.",
+  "file": "blocks/293-buffersync.js",
+  "api": "trail.set(v, base, t+.06) 60ms lag   sync: pulse then sw.to(1|2)"
+ },
+ {
+  "id": "attendees",
+  "category": "Scheduling",
+  "name": "Attendee fields",
+  "summary": "Each field validates as you type. A bad value rings the field red and swaps in its message; a good one earns a success check. Sending with errors surfaces every message, and a clean invite holds its success state.",
+  "file": "blocks/294-attendees.js",
+  "api": "err.set(1) danger ring + msg swap   ok.set(1) success check   send: all valid → terminal"
+ },
+ {
+  "id": "intakeq",
+  "category": "Scheduling",
+  "name": "Intake questions",
+  "summary": "Each answer slides the next question up from below while the progress bar fills. Continuing empty snaps the card side to side and swaps in what is missing. The sent summary holds as the terminal.",
+  "file": "blocks/295-intakeq.js",
+  "api": "qa.to(step+1) rises   pr.set(step/3) fills   empty: sh.release shake + need.to(1)"
+ },
+ {
+  "id": "rsvp3",
+  "category": "Scheduling",
+  "name": "RSVP",
+  "summary": "One plate slides between yes, no and maybe. Counts roll on digits with every vote, yes inks success and maybe holds a warning tint instead of ever resolving green.",
+  "file": "blocks/296-rsvp3.js",
+  "api": "plate.go(l, r) single plate   counts Digits roll   maybe: warn.set(1) amber hold"
+ },
+ {
+  "id": "placesheet",
+  "category": "Maps",
+  "name": "Place card sheet",
+  "summary": "The sheet drags through peek, half and full and settles on the nearest stop on a soft spring. Photos cross-fade while the rating rolls its digits. The map never moves.",
+  "file": "blocks/307-placesheet.js",
+  "api": "sheet.y drag + release(soft) to detent   photo.to(i) swap   rate.digits.set(48)"
+ },
+ {
+  "id": "routecompare",
+  "category": "Maps",
+  "name": "Route comparison",
+  "summary": "Rival inks chase each other with the trailing edge 60ms behind. The winner plate lands leading-edge-first. ETAs roll on a base spring and the loser holds dimmed as the terminal.",
+  "file": "blocks/308-routecompare.js",
+  "api": "edge.go(pick) trails .06   eta[i].digits.set(min)   plate.o.set(pick)"
+ },
+ {
+  "id": "geofence",
+  "category": "Maps",
+  "name": "Geofence ring",
+  "summary": "Entering snaps two pulses out from the ring, then the ring settles soft and the label swaps to Inside. Leaving runs the same motion in reverse and rests Outside.",
+  "file": "blocks/309-geofence.js",
+  "api": "breach: pulse.set(1,snap) x2 then ring.set(1,soft)   st.to(inside)   exit reverses"
+ },
+ {
+  "id": "layerswitch",
+  "category": "Maps",
+  "name": "Layer switcher",
+  "summary": "Chips morph a plate whose trailing edge arrives 60ms late. Old tiles cross-fade while the new layer blooms from 0.97 on base. Pins ride above it all.",
+  "file": "blocks/310-layerswitch.js",
+  "api": "plate.go(i) trails .06   tiles.o.set(layer) cross-fade   bloom.set(1,base)"
+ },
+ {
+  "id": "locsearch",
+  "category": "Maps",
+  "name": "Location search",
+  "summary": "Matches stagger in on snap and their pins drop in reading order. A miss swaps to the no-match line and the count rolls to zero. The last result holds as the terminal.",
+  "file": "blocks/311-locsearch.js",
+  "api": "row[i].set(1,snap,t+i*.05)   pin.y.set(0,base,t+i*.05)   miss.to(1) + cnt.digits.set(0)"
+ },
+ {
+  "id": "itinerary",
+  "category": "Maps",
+  "name": "Itinerary timeline",
+  "summary": "One scrub value inks the route, rolls the clock and the miles together. Stop photos swap in lazy as the marker passes them. Releasing at the end holds Done.",
+  "file": "blocks/312-itinerary.js",
+  "api": "scrub v: ink.w=v   clk.digits.set(hh:mm)   mi.digits.set(m)   photo.to(stop) lazy"
+ },
+ {
+  "id": "offlinepack",
+  "category": "Maps",
+  "name": "Offline pack",
+  "summary": "The ring fills on base while the percent rolls with it. At 100 the label swaps to a check, the sheet drops soft and tiles fade in top-down. Done holds as the terminal.",
+  "file": "blocks/313-offlinepack.js",
+  "api": "ring.set(100,base) + pc.digits.set(n)   100: st.to(done) + sheet.y.set(0,soft) + tile.o stagger"
+ },
+ {
+  "id": "crowdheat",
+  "category": "Maps",
+  "name": "Crowd heat overlay",
+  "summary": "Cells bloom in lazy and cross-fade. Dense cells pulse once and rest. Toggling off fades the heat and brings the pins back on base.",
+  "file": "blocks/314-heatmap.js",
+  "api": "cell.o.set(1,lazy,t+i*.04)   dense.pulse once   show.o.set(heat) pins fade back"
+ },
+ {
+  "id": "addressfields",
+  "category": "Forms",
+  "name": "Address fields",
+  "summary": "The verified plate glides with its trailing edge late. Typing swaps the suggestion on snap. A bad ZIP shakes the row on snap and the error holds as the terminal.",
+  "file": "blocks/315-addressfields.js",
+  "api": "plate.go(ok) trails .06   sg.to(i) snap   err: x.shake snap   ok terminal"
+ },
+ {
+  "id": "placerate",
+  "category": "Forms",
+  "name": "Place rating",
+  "summary": "Stars ink left-to-right on base. The chip morphs its width and the count rolls its digits. Skip swaps the hint and rests unrated as the terminal.",
+  "file": "blocks/316-placerate.js",
+  "api": "fill.set(v,base)   chip.w.set(measure) + cd.digits.set(v)   skip: hint.to(1)"
+ },
+ {
+  "id": "trippoll",
+  "category": "Forms",
+  "name": "Trip polls",
+  "summary": "Votes stack their bars soft with trailing edges. The leader tint slides to the new front-runner. Totals roll digits and your vote swaps to a check. The tally holds as the terminal.",
+  "file": "blocks/317-trippoll.js",
+  "api": "bar[i].set(v,soft) trails .06   tint.go(leader)   total.digits.set(n)   mine.to(check)"
+ },
+ {
+  "id": "liveticker",
+  "category": "Dynamic",
+  "name": "Live value ticker",
+  "summary": "Only changed digits roll toward the new value while an up or down tint cross-fades in and drains away. Every slot keeps its width, so the row never shifts.",
+  "file": "blocks/327-liveticker.js",
+  "api": "d.dir = sign; d.set(next)   tint.set(±1); tint.set(0, S.lazy, t + .7)"
+ },
+ {
+  "id": "updateflash",
+  "category": "Dynamic",
+  "name": "Update flash",
+  "summary": "A fresh cell gets a soft tint wash that fades on the lazy spring while its value swaps underneath. Rows keep fixed height, so nothing ever moves.",
+  "file": "blocks/329-updateflash.js",
+  "api": "wash.set(.5); wash.set(0, S.lazy, t + .15)   val.o dip + text swap at midpoint"
+ },
+ {
+  "id": "pauselive",
+  "category": "Dynamic",
+  "name": "Pause-live buffer",
+  "summary": "Freeze raises a paused pill with a rolling backlog count. Resume drains the backlog top-down with stagger, then the pill settles back to live.",
+  "file": "blocks/330-pauselive.js",
+  "api": "backlog.n.set(k)   drain[i].o.set(1, S.base, t + i·.12)"
+ },
+ {
+  "id": "deltaarrows",
+  "category": "Dynamic",
+  "name": "Delta arrows",
+  "summary": "The arrow turns through base as the chip swaps sign, the tint cross-fades success to danger, and the pill width springs to fit. The flat state holds as terminal.",
+  "file": "blocks/331-deltaarrows.js",
+  "api": "arrow.r.set(π·dir)   tint.set(sign)   w.set(measure(next))   end: flat, hold"
+ },
+ {
+  "id": "logtail",
+  "category": "Dynamic",
+  "name": "Streaming log tail",
+  "summary": "A new row opens its height first, then fades up into place while older rows spring down. The tail auto-sticks unless you scrolled up to read back.",
+  "file": "blocks/332-logtail.js",
+  "api": "row.h.set(1, S.base) → o.set(1)   olds.y.release(-8, v, 0)   stick: scrollTop = scrollHeight"
+ },
+ {
+  "id": "heartbeat",
+  "category": "Dynamic",
+  "name": "Heartbeat status",
+  "summary": "The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. The pass ends settled on live.",
+  "file": "blocks/333-heartbeat.js",
+  "api": "health.set(0|1|2, S.soft) every 2.2s   breathe: 1 ± .06·sin(2πt/2.4)"
+ },
+ {
+  "id": "catchup",
+  "category": "Dynamic",
+  "name": "Catch-up burst",
+  "summary": "Reconnect ticks the backlog on in one fast stagger wave: digits roll together, rows flash once, and the pill settles back to live. Dropped state holds until you reconnect.",
+  "file": "blocks/334-catchup.js",
+  "api": "tick[i] at t + i·.06   digits.set(all) together   end: Live, hold"
+ },
+ {
+  "id": "livepoll",
+  "category": "Forms",
+  "name": "Live poll",
+  "summary": "A vote morphs each option into its result bar with stagger. Percentages roll up together, and the chosen row keeps its check. It ends counted and settled.",
+  "file": "blocks/335-livepoll.js",
+  "api": "opt[i].fill.set(pct, S.base, t + i·.06)   pct[i].n.set(votes)   end: counted, hold"
+ },
+ {
+  "id": "prediction",
+  "category": "Forms",
+  "name": "Prediction question",
+  "summary": "A pick presses in, then fills while the odds bar stretches leading-edge-first and the caption swaps to locked. The lock holds as the terminal state.",
+  "file": "blocks/336-prediction.js",
+  "api": "press.set(1) → fill.set(1)   odds.go(ship, slip) leading-first   end: locked, hold"
+ },
+ {
+  "id": "sliderhist",
+  "category": "Dynamic",
+  "name": "Slider with histogram",
+  "summary": "The thumb follows the pointer exactly. Bars at or under the value snap to ink, the rest fade, and the number rolls. Release settles on a set terminal.",
+  "file": "blocks/337-sliderhist.js",
+  "api": "thumb.x.jump(px) dragging   bar[i].o.set(in ? 1 : .25, S.snap)   end: set, hold"
+ },
+ {
+  "id": "healthdial",
+  "category": "SEO",
+  "name": "Audit health dial",
+  "summary": "Two concentric rings fill on the same soft spring while the composite score rolls its digits. The verdict swaps in only once the run settles, and holds as the terminal state.",
+  "file": "blocks/347-healthdial.js",
+  "api": "r1.set(perf, soft) r2.set(tech, soft) dg.set(score) verdict.to(band) on settle"
+ },
+ {
+  "id": "issuelist",
+  "category": "SEO",
+  "name": "Issue severity list",
+  "summary": "Rows arrive staggered 60ms apart on base. Tapping a row expands its measured fix-it panel; resolving fades the card and springs its height shut while the open count rolls down. Zero issues swaps in the terminal all-clear.",
+  "file": "blocks/348-issuelist.js",
+  "api": "row.o.set(1, base, t+i*.06) fix.h.set(measure) resolve: o.snap h.base dg.set(n)"
+ },
+ {
+  "id": "crawlprog",
+  "category": "SEO",
+  "name": "Crawl progress",
+  "summary": "The counter rides the lazy spring toward 90%, creeps there, then snaps to 100% with a success tint. Each log line swaps in as its batch lands, and the status holds on the terminal complete state.",
+  "file": "blocks/349-crawlprog.js",
+  "api": "n.set(1123, lazy) then n.set(1248, snap) bar same · log.swap.to(i) per batch"
+ },
+ {
+  "id": "postracker",
+  "category": "SEO",
+  "name": "Position tracker",
+  "summary": "The sparkline draws on the lazy spring while the rank digits roll up or down. The delta chip swaps to success or danger, and the badge holds the new rank as the terminal state.",
+  "file": "blocks/350-postracker.js",
+  "api": "line.set(0→len, lazy) rank.digits.set(n) delta.to(±k) success/danger"
+ },
+ {
+  "id": "snippeted",
+  "category": "SEO",
+  "name": "Snippet preview editor",
+  "summary": "Desktop and mobile tabs morph the preview height on base while the title and description swap with blur as you type. The rich-result row fades in and out, and the truncated preview holds as the terminal state.",
+  "file": "blocks/351-snippeted.js",
+  "api": "pv.h.set(measure(next)) title.swap.to(text) desc.swap.to(text) rich.o.set(on)"
+ },
+ {
+  "id": "sitemap",
+  "category": "SEO",
+  "name": "Sitemap tree",
+  "summary": "Folders open with height and chevron riding the same base spring, so they never disagree. Orphaned pages carry a warning tint, and the selection pill trails the tapped row on lagging edges.",
+  "file": "blocks/352-sitemap.js",
+  "api": "folder.h.set(kids) chev.set(open) same spring · sel.go(top, bot) trails .06"
+ },
+ {
+  "id": "backflow",
+  "category": "SEO",
+  "name": "Backlink flow",
+  "summary": "Edges draw source-first on the lazy spring, one after another. Hovering a source thickens its edge on snap and swaps the detail card; the last inspected link holds as the terminal state.",
+  "file": "blocks/353-backflow.js",
+  "api": "edge[i].set(100, lazy, t+i*.12) hover: w.set(4, snap) detail.swap.to(i)"
+ },
+ {
+  "id": "vitals",
+  "category": "SEO",
+  "name": "Core vitals bars",
+  "summary": "Bars stagger in on base while each value rolls its millisecond digits. Threshold bands sit behind the bars in danger, warning and success; the verdict swaps once every bar has settled and holds.",
+  "file": "blocks/354-vitals.js",
+  "api": "bar[i].set(v, base, t+i*.04) val.digits.set(ms) verdict.to(allpass) on settle"
+ },
+ {
+  "id": "auditintake",
+  "category": "SEO",
+  "name": "Site-audit intake",
+  "summary": "One question per panel: the old panel slides out with blur before the next slides in, and the progress bar fills on the same spring. A valid URL earns the success check; the final panel holds the queued terminal state.",
+  "file": "blocks/355-auditintake.js",
+  "api": "panel.swap.to(i) pg.set(i/3) url.ok?{ring.success} end: queued.set(1)"
+ },
+ {
+  "id": "redirect",
+  "category": "SEO",
+  "name": "Redirect-rule builder",
+  "summary": "Rows spring to their slots when reordered. The regex toggle swaps its help line with blur, and an invalid source rings the field in danger with its message. All-valid swaps the terminal confirmation.",
+  "file": "blocks/356-redirect.js",
+  "api": "row.y.set(slot) regex.swap.to(on) bad: ring.set(1,danger)+msg · all ok: done.to(1)"
+ },
+ {
+  "id": "coachmarks",
+  "category": "Guidance",
+  "name": "Coachmark sequence",
+  "summary": "The card is one box whose leading edge moves first and trailing edge follows 60ms later, so it stretches toward its dot. Copy slides in the direction you travel. The last card holds as a success terminal.",
+  "file": "blocks/367-coachmarks.js",
+  "api": "card.go(x, x + 220) trails .06   copy.to(step, dir·8px)   step.set(n) · REDUCE: jump"
+ },
+ {
+  "id": "checklistbeacon",
+  "category": "Guidance",
+  "name": "Checklist beacon",
+  "summary": "The pill folds into a list whose height springs open. The segmented bar runs a leading edge now and a trailing edge 60ms behind, and the count rolls. All four done swaps the header to a success pill that holds.",
+  "file": "blocks/368-checklistbeacon.js",
+  "api": "list.h.set(open ? full : 0)   bar: lead.set(f), trail.set(f, t + .06)   all 4: head.to(1) · REDUCE: jump"
+ },
+ {
+  "id": "emptynudge",
+  "category": "Guidance",
+  "name": "Empty nudge",
+  "summary": "The empty art breathes on a slow clock while the CTA rings once, then goes quiet. Tips rotate underneath on a timer. Creating a report swaps the whole card to a success terminal that holds.",
+  "file": "blocks/369-emptynudge.js",
+  "api": "breathe = sin(clock) · pulse = once(t - t0)   tips.to(floor(t / 3.2s))   cta: main.to(done) · REDUCE: still"
+ },
+ {
+  "id": "fbeacon",
+  "category": "Guidance",
+  "name": "Feature beacon",
+  "summary": "The dot breathes on a soft loop. Clicking springs the hint open and freezes the pulse; Esc snaps it shut. Got it closes and checks the dot, a success terminal that holds.",
+  "file": "blocks/370-fbeacon.js",
+  "api": "pulse = soft loop, frozen while open   hint.o.set(1, base) / set(0, snap)   got it: seen.set(1) · REDUCE: still"
+ },
+ {
+  "id": "shortcutsheet",
+  "category": "Guidance",
+  "name": "Shortcut sheet",
+  "summary": "Holding springs the sheet up; each keycap snaps down under the pointer and the grid swaps by category. Letting go snaps shut instantly — the resting state is the terminal.",
+  "file": "blocks/371-shortcutsheet.js",
+  "api": "hold: sheet.o.set(1, base)   key: k.set(1, snap)   cat.to(n)   release: o.set(0, snap) · REDUCE: jump"
+ },
+ {
+  "id": "hintbubble",
+  "category": "Guidance",
+  "name": "Hint bubble",
+  "summary": "The bubble rises beside the focused field and glides field to field with both edges trailing 60ms behind; only its text swaps. Typing snaps it shut — the quiet form is the terminal.",
+  "file": "blocks/372-hintbubble.js",
+  "api": "bubble.{x,y} edges-trail .06   tip.to(field)   typing: o.set(0, snap) · REDUCE: jump"
+ },
+ {
+  "id": "savemeter",
+  "category": "Guidance",
+  "name": "Save meter",
+  "summary": "Every tick moves the leading edge now and drags the trailing edge 60ms behind while the percent rolls. A full form swaps the label to a Saved success pill that holds.",
+  "file": "blocks/373-savemeter.js",
+  "api": "lead.set(f) now, trail.set(f, t + .06)   pct.set(n)   full: label.to(saved) · REDUCE: jump"
+ },
+ {
+  "id": "undotoast",
+  "category": "Guidance",
+  "name": "Undo toast",
+  "summary": "Archiving collapses the step on a height spring while the toast rises; its ring drains over six seconds. Undo restores the height and swaps a check in. Expiry or Undo both land in a quiet terminal.",
+  "file": "blocks/374-undotoast.js",
+  "api": "item.h.set(0) parks behind   toast.o.set(1, base) + ring 6s   undo: h.set(full), check.to(1) · REDUCE: jump"
+ },
+ {
+  "id": "quizrouter",
+  "category": "Forms",
+  "name": "Goal router",
+  "summary": "Tapping a goal dips the card on a fast snap, then swaps to the branch that goal routes to while the step rolls forward. Every path ends in a Got-it terminal with a Start-over.",
+  "file": "blocks/375-quizrouter.js",
+  "api": "press.set(1, snap) dip, then branch.to(goal)   step.set(n)   done holds · REDUCE: jump"
+ },
+ {
+  "id": "prefpick",
+  "category": "Forms",
+  "name": "Preference picker",
+  "summary": "Chips fill-toggle on a calm base spring while the picked count rolls. The digest preview swaps live between empty, light and full — full holds as the success terminal.",
+  "file": "blocks/376-prefpick.js",
+  "api": "chip.f.set(on, base)   count.set(n)   preview.to(band(n)) · REDUCE: jump"
+ },
+ {
+  "id": "setupwizard",
+  "category": "Guidance",
+  "name": "Setup wizard",
+  "summary": "The segmented thumb trails its edges across three or four steps while panels swap in the direction you travel. Team and personal branch apart; Done and Skipped both hold as terminals.",
+  "file": "blocks/377-setupwizard.js",
+  "api": "thumb.go(l, r) trails .06   panel.to(step, dir·10px)   skip.to(skipped) · REDUCE: jump"
+ },
+ {
+  "id": "segswitch",
+  "category": "Views",
+  "name": "Segmented view switch",
+  "summary": "The plate stretches from its leading edge and the trailing edge catches up 60ms later. The old heading leaves before the new heading and rows arrive 50ms apart. The shell height springs to fit, and the count rolls.",
+  "file": "blocks/387-segswitch.js",
+  "api": "edge.go(x0,x1) trails .06   vh.to(i) then vr.to(i,+.05)   h.set(H[i])   ct.set(n)"
+ },
+ {
+  "id": "sheetdetents",
+  "category": "Views",
+  "name": "Bottom-sheet detents",
+  "summary": "The sheet tracks the finger 1:1 and rubber-bands past its stops. Release velocity picks the detent: a fast fling up lands full, down lands half. The dim only fades in at full and the stops hold as terminals.",
+  "file": "blocks/388-sheetdetents.js",
+  "api": "drag 1:1 + rb past stops   vy<-500→full, vy>500→half, else nearest   dim.set(full?1:0)"
+ },
+ {
+  "id": "drillin",
+  "category": "Views",
+  "name": "Drill-in navigation",
+  "summary": "The new pane slides in from the trailing edge while the current one shifts 28px and dims. The back label swaps to the parent title and the tab bar never moves. An edge swipe tracks the finger and commits or cancels on release.",
+  "file": "blocks/389-drillin.js",
+  "api": "x.set(0) in, W out   mst shifts -28 + dims   bk.to(parent)   edge drag commits>90px"
+ },
+ {
+  "id": "tabrestore",
+  "category": "Views",
+  "name": "Tab state restore",
+  "summary": "Tabs swap with no travel: the old pane leaves, then the new one arrives. Each tab restores its scroll position and stack depth instantly. The indicator stretches leading-edge-first and badges roll down to zero.",
+  "file": "blocks/390-tabrestore.js",
+  "api": "sw.apply(amp 0) no travel   scrollTop saved+restored instant   edge.go(tab)   dg.set(0)"
+ },
+ {
+  "id": "splitdiv",
+  "category": "Views",
+  "name": "Split-view divider",
+  "summary": "The divider tracks the finger 1:1 and rubber-bands at the minimum widths. On release both panes spring soft together to the nearest stop. Dragged under 100px the master collapses into an overlay with a dim.",
+  "file": "blocks/391-splitdiv.js",
+  "api": "pos tracks 1:1 + rb   release: soft spring to stop   pos<100 → overlay.set(1)"
+ },
+ {
+  "id": "ptrarm",
+  "category": "Views",
+  "name": "Pull-to-refresh arm",
+  "summary": "The header stretches with rising resistance the further you pull. Past the threshold the arrow turns into a release cue. Let go and the spinner holds while fresh rows height-spring in one by one, landing on an updated terminal.",
+  "file": "blocks/392-ptrarm.js",
+  "api": "pull 1:1 then rb rising   armed past 64   release: spin holds 900ms, rows open soft staggered"
+ },
+ {
+  "id": "vcrossfade",
+  "category": "Views",
+  "name": "View crossfade",
+  "summary": "The header stays pinned while the old and new views overlap and fade through each other with a soft blur. Body text swaps on the way through. Nothing travels, so the frame never shifts.",
+  "file": "blocks/393-vcrossfade.js",
+  "api": "o_new=prog, o_old=1-prog, blur soft   text Swap   header static, no travel"
+ },
+ {
+  "id": "deeplink",
+  "category": "Views",
+  "name": "Deep-link landing",
+  "summary": "Tapping a link builds the full stack instantly with no travel, then the final pane enters heading-first and body 50ms later. The back chain lands on the correct parent every step, ending home.",
+  "file": "blocks/394-deeplink.js",
+  "api": "stack jumps instant   hh.to(2) then tt.to(2,+.05)   bk.to(parent) per depth   end: landed"
+ },
+ {
+  "id": "stepshell",
+  "category": "Forms",
+  "name": "Multi-step form shell",
+  "summary": "The chrome and progress bar never move while panels swap in the direction you travel. The shell height springs to each panel. Going back restores what you typed, and the final step morphs into a success terminal.",
+  "file": "blocks/395-stepshell.js",
+  "api": "panels Swap dir-aware ±28   h.set(H[i]) springs   values persist   end: success.set(1)"
+ },
+ {
+  "id": "stepheader",
+  "category": "Forms",
+  "name": "Stepper header",
+  "summary": "The active plate glides with its leading edge first. The connector fills toward the new step, then the node inks. Finished steps swap their numbers for checks, and extra steps fade at the scrolled edges.",
+  "file": "blocks/396-stepheader.js",
+  "api": "plate edges glide .06   fill.set(i/(n-1)) then node inks   done.to(check)   overflow fades"
+ },
+ {
+  "id": "shelf",
+  "category": "Storefront",
+  "name": "Shelf carousel",
+  "summary": "The shelf follows a drag 1:1 and rubber-bands past the edges, then settles to the nearest card. Dots roll with the shelf and peek cards trail in 60ms apart.",
+  "file": "blocks/407-shelf.js",
+  "api": "shelf.x.release(x, v, i·W)   dots.set(i)   peek.at(t0 + i·.06)"
+ },
+ {
+  "id": "swatch",
+  "category": "Storefront",
+  "name": "Variant swatch morph",
+  "summary": "The selection ring glides with its trailing edge 60ms behind. The sold-out swatch fades and a slash draws across it. The name blur-swaps.",
+  "file": "blocks/408-swatch.js",
+  "api": "ring.go(l, r) trails .06   sold.set(1) + slash.draw   name.to(i)"
+ },
+ {
+  "id": "stockcount",
+  "category": "Storefront",
+  "name": "Stock countdown",
+  "summary": "The bar drains lazily and only changed digits roll. At 5 left the low pill pops in and the message swaps to order soon. Zero holds as sold out.",
+  "file": "blocks/409-stockcount.js",
+  "api": "bar.set(n/12, lazy)   dg.set(n)   pill.set(low, snap); msg.to(low)"
+ },
+ {
+  "id": "offerstack",
+  "category": "Storefront",
+  "name": "Offer banner stack",
+  "summary": "Promos rest pushed back in depth. The top card follows a drag and flings away on velocity, else springs home. Dismissing all holds a done terminal with undo.",
+  "file": "blocks/410-offerstack.js",
+  "api": "card[i].set(depth, base)   top.x.release(x, vx, fling ? off : home)"
+ },
+ {
+  "id": "qrcheckout",
+  "category": "Storefront",
+  "name": "QR checkout",
+  "summary": "The code rests at 96% and springs to full on open while a beam sweeps on the clock. Paid swaps in a check and the total counts up to a held terminal.",
+  "file": "blocks/411-qrcheckout.js",
+  "api": "qr.set(1, base) from .96   beam.clock(t)   paid.to(1); total.set(sum)"
+ },
+ {
+  "id": "loyalty",
+  "category": "Storefront",
+  "name": "Loyalty stamp card",
+  "summary": "A stamp presses to 80% then fills softly while digits roll. The sixth stamp swaps the card into a reward pill that holds as the terminal.",
+  "file": "blocks/412-loyalty.js",
+  "api": "press.set(.8) → fill.set(1, soft)   dg.set(n)   full.to(1) morphs reward"
+ },
+ {
+  "id": "reviewstars",
+  "category": "Forms",
+  "name": "Review stars input",
+  "summary": "Fill follows the pointer while held, then settles on release. The caption swaps to the score and submit morphs into a held thanks.",
+  "file": "blocks/413-reviewstars.js",
+  "api": "fill.jump(held) → fill.set(score, base)   cap.to(score)   submit.to(thanks)"
+ },
+ {
+  "id": "pickuptime",
+  "category": "Storefront",
+  "name": "Pickup time picker",
+  "summary": "The day disc glides under the new day while slots blur-swap 60ms apart. The chosen chip lifts onto a plate that stretches to it.",
+  "file": "blocks/414-pickuptime.js",
+  "api": "day.go(l, r)   slots.forEach(at t0+i·.06, to(day))   chip.lift.set(1); plate.go(l, r)"
+ },
+ {
+  "id": "checkoutfields",
+  "category": "Forms",
+  "name": "Checkout fields",
+  "summary": "Labels snap up on focus or fill. An invalid submit rings danger and swaps in a message; fixing a field swaps it out and stamps a success check that holds.",
+  "file": "blocks/415-checkoutfields.js",
+  "api": "label.set(float, snap)   err.set(1); msg.to(err)   ok.set(valid)"
+ },
+ {
+  "id": "addressform",
+  "category": "Forms",
+  "name": "Address form",
+  "summary": "Switching country cross-fades the field set while the wrapper height springs to fit. Typing a known postcode swaps the city in with blur.",
+  "file": "blocks/416-addressform.js",
+  "api": "set.to(country) + h.set(natural, base)   city.to(match)"
+ },
+ {
+  "id": "reviewform",
+  "category": "Forms",
+  "name": "Review form",
+  "summary": "Photo tiles open their height first and sharpen after. Faces glide with the mood and the label swaps; posting morphs a held thanks.",
+  "file": "blocks/417-reviewform.js",
+  "api": "tile.h.set(open, base) → sharp.set(1)   mood.set(i, soft); label.to(i)   post.to(thanks)"
+ },
+ {
+  "id": "prefquiz",
+  "category": "Forms",
+  "name": "Preference quiz",
+  "summary": "Cards slide in the direction of travel with a blur swap while progress fills. The result swaps into a mini shelf that holds as the terminal.",
+  "file": "blocks/418-prefquiz.js",
+  "api": "card.to(i, dir) slides ±24   prog.set((i+1)/3)   result.to(shelf)"
+ },
+ {
+  "id": "wordrotator",
+  "category": "Landing",
+  "name": "Hero word rotator",
+  "summary": "The keyword slot cycles every 2.8s: the old word blurs up and out, the next rises in, and the pill width springs to fit. With loop off the last word holds as the terminal state.",
+  "file": "blocks/427-wordrotator.js",
+  "api": "swap.to(next)   w.set(measure(next))   end: hold"
+ },
+ {
+  "id": "logomarquee",
+  "category": "Landing",
+  "name": "Logo marquee",
+  "summary": "The strip loops seamlessly with faded edges. Hovering eases the speed to a full stop on a soft spring and leaving restores it; scrolling it offscreen freezes the offset entirely.",
+  "file": "blocks/428-logomarquee.js",
+  "api": "v.set(hover ? 0 : 1, soft)   x += v·dt while visible"
+ },
+ {
+  "id": "statcount",
+  "category": "Landing",
+  "name": "Stat count-up",
+  "summary": "The count fires once when half the tile is visible and rides lazy rolling digits to the total. Only after the number settles does the caption swap from counting to the final label: the settled terminal state.",
+  "file": "blocks/429-statcount.js",
+  "api": "n.set(T, lazy) once @50%   settled → label.to(1)"
+ },
+ {
+  "id": "testimonialdeck",
+  "category": "Landing",
+  "name": "Testimonial deck",
+  "summary": "The stack fans beneath the top card as it is dragged. A fast fling or far drag dismisses it and the next quote swaps in; a short drag springs home. The last card settles into a done state with a restart.",
+  "file": "blocks/430-testimonialdeck.js",
+  "api": "drag → x.jump   fling: x.release(dx, vx, ±420) → swap.to(next)   else x.set(0)"
+ },
+ {
+  "id": "pricetoggle",
+  "category": "Landing",
+  "name": "Pricing toggle morph",
+  "summary": "The thumb glides with a 60ms trailing edge, the changed price rolls on its own digits, and the tier card lifts and tints on yearly while the savings pill pops in: the yearly terminal holds all three.",
+  "file": "blocks/431-pricetoggle.js",
+  "api": "thumb.go(l, r) trail @t+.06   price.set(v)   yearly: lift.set(1) + tint + pill.pop"
+ },
+ {
+  "id": "faqacc",
+  "category": "Landing",
+  "name": "FAQ accordion",
+  "summary": "One row opens at a time with the body height on a spring and the chevron turning on the same spring. Closed rows dim while one is open; a #faq deep link opens its row instantly with no animation.",
+  "file": "blocks/432-faqacc.js",
+  "api": "body.h.set(open ? 1 : 0)   dim others → .55   hash → jump(1)"
+ },
+ {
+  "id": "emailcapture",
+  "category": "Landing",
+  "name": "Email capture",
+  "summary": "Submit settles into neutral, invalid or valid. Invalid rings the field danger with a swapped message; valid spins the button, lands a check, and holds the success pill as the terminal state.",
+  "file": "blocks/433-emailcapture.js",
+  "api": "status.to(ok|err)   btn: join → sending → done(hold)   ring = mix(danger)"
+ },
+ {
+  "id": "stickycta",
+  "category": "Landing",
+  "name": "Sticky CTA reveal",
+  "summary": "Scrolling past the hero drops the bar in on a spring; nearing the footer sends it back up. The bar label swaps with the plan picker, so the call to action always names the chosen terminal plan.",
+  "file": "blocks/434-stickycta.js",
+  "api": "y.set(pastHero && !nearFoot ? 1 : 0)   label.to(plan)"
+ },
+ {
+  "id": "springplay",
+  "category": "Foundations",
+  "name": "Spring playground",
+  "summary": "Snap, base, soft and lazy side by side. Drag the dot and release: velocity carries into every spring, each settling at its own rate.",
+  "file": "blocks/447-springplay.js",
+  "api": "play.release(from, v0, to, S.snap|base|soft|lazy)"
+ },
+ {
+  "id": "easingcompare",
+  "category": "Foundations",
+  "name": "Easing compare",
+  "summary": "The same move on three springs: base arrives clean, emphasized leans in with a breath of overshoot, smooth takes its time.",
+  "file": "blocks/448-easingcompare.js",
+  "api": "x.set(to, cfg) · mid-flight x.set(0.15) retargets as a sum"
+ },
+ {
+  "id": "durationladder",
+  "category": "Foundations",
+  "name": "Duration ladder",
+  "summary": "Four durations from snappy to ambient. Each step runs its own spring; the millisecond labels roll on Digits.",
+  "file": "blocks/449-durationladder.js",
+  "api": "steps.forEach(x => x.set(1, S.snap|base|soft|lazy)) · ms.set(\"300\")"
+ },
+ {
+  "id": "staggerlab",
+  "category": "Foundations",
+  "name": "Stagger lab",
+  "summary": "Compose a stagger: dial the per-item delay and flip the order. Below, kept separate, the 60ms edge trail follows every slide.",
+  "file": "blocks/450-staggerlab.js",
+  "api": "x.set(v, S.base, t0 + i*delay) · edge.go(a, b) trails .06"
+ },
+ {
+  "id": "reducemotion",
+  "category": "Foundations",
+  "name": "Reduced-motion simulator",
+  "summary": "Flip the switch and the same demo goes instant: the dot jumps, the label swaps with no blur. State is kept, motion is not.",
+  "file": "blocks/451-reducemotion.js",
+  "api": "REDUCE ? x.jump(to) : x.set(to) · Swap renders settled, filter none"
+ },
+ {
+  "id": "tokeninspector",
+  "category": "Foundations",
+  "name": "Token inspector",
+  "summary": "Spring, swap, lag and digits tokens in one panel. The probe below runs the picked spring so the numbers stay honest.",
+  "file": "blocks/452-tokeninspector.js",
+  "api": "S.snap|base|soft|lazy · EXIT .1 · LAG .06 · probe.at(t)"
+ },
+ {
+  "id": "curveexport",
+  "category": "Foundations",
+  "name": "Curve exporter",
+  "summary": "Pick a spring and a platform: the same curve as CSS, SwiftUI or Reanimated values, copied in one click.",
+  "file": "blocks/453-curveexport.js",
+  "api": "stiffness w² · damping 2w · ease cubic-bezier(.2,.15,.2,1)"
+ },
+ {
+  "id": "framemeter",
+  "category": "Foundations",
+  "name": "Frame meter",
+  "summary": "Start the spring and watch real frame times roll in. Anything over 25ms counts as dropped.",
+  "file": "blocks/454-framemeter.js",
+  "api": "dt = performance.now() − last · dropped += dt > 25"
+ },
+ {
+  "id": "focusring",
+  "category": "Foundations",
+  "name": "Focus ring",
+  "summary": "A single snap ring frames whichever input has focus. Theme and width stay consistent everywhere by construction.",
+  "file": "blocks/455-focusring.js",
+  "api": "focusin → ring.set(1, S.snap) · focusout → ring.set(0)"
+ },
+ {
+  "id": "pressstates",
+  "category": "Foundations",
+  "name": "Press states",
+  "summary": "The universal press: snap in under the finger, spring back on release. Force only changes how deep it dips.",
+  "file": "blocks/456-pressstates.js",
+  "api": "down → sc.set(dip, S.snap) · up → sc.set(1, S.base)"
+ },
+ {
+  "id": "validationshake",
+  "category": "Foundations",
+  "name": "Validation shake",
+  "summary": "Failed validation shakes the field, rings it in danger and swaps in the message. Distance is the only dial; everything else is fixed.",
+  "file": "blocks/457-validationshake.js",
+  "api": "amp.set(0, S.soft) envelope · ring.set(1, S.snap) → danger"
+ },
+ {
+  "id": "inlinesuccess",
+  "category": "Newsletter",
+  "name": "Inline success",
+  "summary": "A valid address shrinks the button into a spinner, then morphs it into a success pill. The count rides digits to the subscriber total and a referral line swaps in. The success state holds.",
+  "file": "blocks/467-inlinesuccess.js",
+  "api": "sw.to(loading → done) · bw.set(44 → pill, S.base) · digits.set(total) · ref.to(1)"
+ },
+ {
+  "id": "tierpicker",
+  "category": "Newsletter",
+  "name": "Tier picker",
+  "summary": "The plate glides with a trailing edge. Only changed price digits roll, benefits blur-swap and the savings pill pops in on the soft spring. Yearly holds as the terminal.",
+  "file": "blocks/468-tierpicker.js",
+  "api": "e.go(l, r) · digits.set(price) · ben.to(i) · save.set(yearly, S.soft)"
+ },
+ {
+  "id": "referralprog",
+  "category": "Newsletter",
+  "name": "Referral progress",
+  "summary": "The bar fills on the lazy spring, milestone nodes ink 60ms apart, the count rides digits and the reward swaps to a check. Five of five holds.",
+  "file": "blocks/469-referralprog.js",
+  "api": "fill.set(p, S.lazy) · node[i].set(1, S.base, t0 + i*.06) · digits.set(n) · rw.to(done)"
+ },
+ {
+  "id": "issuearchive",
+  "category": "Newsletter",
+  "name": "Issue archive",
+  "summary": "The open row springs to its measured height while its chevron turns. The next row headlines swap with a 40ms stagger. One open row holds.",
+  "file": "blocks/470-issuearchive.js",
+  "api": "row.h.set(open, S.base) · chev = 180·p · head.to(i, t0 + i*.04)"
+ },
+ {
+  "id": "previewtext",
+  "category": "Newsletter",
+  "name": "Preview-text editor",
+  "summary": "Typing past the client cut truncates the preview where phones and desktops stop. The length bar snaps between success, warning and danger. Switching device swaps the frame.",
+  "file": "blocks/471-previewtext.js",
+  "api": "len.set(n, S.snap) · color = ok/warn/danger · view.to(phone|desktop)"
+ },
+ {
+  "id": "embedcard",
+  "category": "Newsletter",
+  "name": "Embed card",
+  "summary": "The card grows from 97% of the trigger. A valid submit blur-swaps to a success check, then collapses to a referral row that holds.",
+  "file": "blocks/472-embedcard.js",
+  "api": "grow.set(1, S.base, .97→1) · ok.to(1) · slim.set(collapsed)"
+ },
+ {
+  "id": "pollblock",
+  "category": "Newsletter",
+  "name": "Reader poll",
+  "summary": "A vote morphs each option into its result bar with a 50ms stagger. Percents ride the lazy spring and the chosen row keeps its check.",
+  "file": "blocks/473-pollblock.js",
+  "api": "opt[i].fill.set(pct, S.base, t0 + i*.05) · pct rides S.lazy · check on chosen"
+ },
+ {
+  "id": "paywallmeter",
+  "category": "Newsletter",
+  "name": "Paywall meter",
+  "summary": "Each read rides the lazy arc down. At one left the verdict swaps to a warning, at zero it locks and the gate lifts top-to-bottom to reveal the offer.",
+  "file": "blocks/474-paywallmeter.js",
+  "api": "left.set(n, S.lazy) · verdict.to(state) · mask.set(1, S.lazy) at locked"
+ },
+ {
+  "id": "signupfields",
+  "category": "Newsletter",
+  "name": "Signup fields",
+  "summary": "Labels float on focus. A complete field snaps a success check; an incomplete one rings danger with a message. A valid form holds subscribed.",
+  "file": "blocks/475-signupfields.js",
+  "api": "float.set(focus||value) · ok.set(1, S.snap) · bad.set(1) → ring + message"
+ },
+ {
+  "id": "prefcenter",
+  "category": "Newsletter",
+  "name": "Preference center",
+  "summary": "The parent morphs between check and dash on one spring for the mixed state. Children stagger in and the frequency note blur-swaps. Saved holds.",
+  "file": "blocks/476-prefcenter.js",
+  "api": "mix.set(0|1|2, S.base) · child[i].set(v, S.base, t0 + i*.05) · note.to(freq)"
+ },
+ {
+  "id": "surveyblock",
+  "category": "Newsletter",
+  "name": "Reader survey",
+  "summary": "Panels slide sideways between questions while progress fills. Thanks morphs to a success tint with a digit count. The count holds.",
+  "file": "blocks/477-surveyblock.js",
+  "api": "slide.set(i, S.base) + Swap(i) · prog.set(i/2) · thanks: tint + digits"
+ },
+ {
+  "id": "cmdpalette",
+  "category": "Chrome",
+  "name": "Command palette drop",
+  "summary": "Palette drops on a soft spring. Rows spring to their slots while misses blur out. The highlight plate trails its edges by 60ms. Running a command holds a success terminal. Reduced motion jumps instantly.",
+  "file": "blocks/487-cmdpalette.js",
+  "api": "drop.set(open?0:-12,S.soft); row.set(match?1:0); hl.go(top,bottom)   end: ran, hold"
+ },
+ {
+  "id": "omnibox",
+  "category": "Chrome",
+  "name": "Omnibox suggestions",
+  "summary": "Suggestion list height springs to the match count. Matches spring in with bolded letters while the plate slides with lagging edges. Opening a result holds a success terminal. Reduced motion jumps instantly.",
+  "file": "blocks/488-omnibox.js",
+  "api": "h.set(count*40,S.base); row.set(in?1:0); hl.go(top,bottom)   end: opened, hold"
+ },
+ {
+  "id": "tabcards",
+  "category": "Chrome",
+  "name": "Tab hover cards",
+  "summary": "Hover rests 300ms, then the card rises on a base spring at 97% rest height. Moving tab-to-tab glides position while the preview swap-blurs. Pinning holds a terminal. Reduced motion jumps instantly.",
+  "file": "blocks/489-tabcards.js",
+  "api": "x.set(tab*W,S.base); y.set(show?0:10); sw.to(tab)   end: pinned, hold"
+ },
+ {
+  "id": "splittoggle",
+  "category": "Chrome",
+  "name": "Split-view toggle",
+  "summary": "Divider tracks the pointer 1:1 while dragging. On release panes spring aside with velocity and the preset pill slides with trailing edges. A preset holds the terminal. Reduced motion jumps instantly.",
+  "file": "blocks/490-splittoggle.js",
+  "api": "drag: pos.jump(px); release: pos.release(from,v,to); pill.go(a,b)   end: preset, hold"
+ },
+ {
+  "id": "downloads",
+  "category": "Chrome",
+  "name": "Downloads shelf",
+  "summary": "The shelf pushes up on a base spring. Rows stagger in every 40ms while each ring fills live, then swap-blurs to a success check with rolling digits. All complete holds the terminal. Reduced motion jumps instantly.",
+  "file": "blocks/491-downloads.js",
+  "api": "shelf.set(open?1:0,S.base); row[i].set(1,delay 40ms); ring tracks bytes   end: complete \\u2713, hold"
+ },
+ {
+  "id": "profileswitch",
+  "category": "Chrome",
+  "name": "Profile switcher",
+  "summary": "Avatar ring inks on a base spring. The panel swaps identity with blur while width springs to the longest name. Esc snaps shut on snap. Switching holds the terminal. Reduced motion jumps instantly.",
+  "file": "blocks/492-profileswitch.js",
+  "api": "ring.set(active?1:0,S.base); w.set(nameW); sw.to(id)   end: switched \\u2713, hold"
+ },
+ {
+  "id": "extpopover",
+  "category": "Chrome",
+  "name": "Extension popover",
+  "summary": "Popover grows from the toolbar icon on base and snaps shut faster on snap. Rows fade in staggered 25ms with the danger row tinted. Choosing holds a terminal. Reduced motion jumps instantly.",
+  "file": "blocks/493-extpopover.js",
+  "api": "grow.set(open?1:0,open?S.base:S.snap); row[i] fades +25ms*i   end: chosen, hold"
+ },
+ {
+  "id": "findbar",
+  "category": "Chrome",
+  "name": "Find-in-page bar",
+  "summary": "Bar drops top-right on snap. Match digits roll up or down by travel direction while the current-match plate stretches with trailing edges. Last match holds the terminal. Reduced motion jumps instantly.",
+  "file": "blocks/494-findbar.js",
+  "api": "drop.set(open?0:-8,S.snap); dg.dir=travel; plate.go(a,b)   end: last match, hold"
+ },
+ {
+  "id": "settingsearch",
+  "category": "Chrome",
+  "name": "Settings search filter",
+  "summary": "Sections filter in place while misses blur out. Closed section heights spring shut and the highlight plate rides the arrow keys. Jumping to a section holds the terminal. Reduced motion jumps instantly.",
+  "file": "blocks/495-settingsearch.js",
+  "api": "sec.set(open?1:0,S.base); row.set(match?1:0); hl.go(top,bottom)   end: jumped, hold"
+ },
+ {
+  "id": "settingsrow",
+  "category": "Chrome",
+  "name": "Settings form row",
+  "summary": "Toggle knob rides on base edges. Helper text swap-blurs between hint, danger, and success states. Invalid tints danger with a message; valid holds a success check terminal. Reduced motion jumps instantly.",
+  "file": "blocks/496-settingsrow.js",
+  "api": "knob.go(off,on); help.to(state); ring.set(err?1:0)   end: valid \\u2713, hold"
+ },
+ {
+  "id": "cartdrawer",
+  "category": "Commerce",
+  "name": "Cart drawer",
+  "summary": "The drawer slides in on the base spring over a fading scrim while rows trail 40ms apart. The free-shipping bar fills and the savings line swaps to its success terminal. Checkout stays pinned.",
+  "file": "blocks/507-cartdrawer.js",
+  "api": "open.set(1); row[i]=prog(t,t0+i*.04)   fill.set(sub/th); save.to(done?1:0)"
+ },
+ {
+  "id": "qtystep",
+  "category": "Commerce",
+  "name": "Quantity stepper",
+  "summary": "Digits roll on the base spring in the step direction. At zero the row collapses its height, then leaves an undo terminal. Every money value springs to the new total together.",
+  "file": "blocks/508-qtystep.js",
+  "api": "q.set(n); h.set(0) then remove → undo   sub.set(sum); tot.set(sum)"
+ },
+ {
+  "id": "promocode",
+  "category": "Commerce",
+  "name": "Promo code",
+  "summary": "The field grows open on the base spring. Apply spins, then the success chip width-springs in while the discount rolls. A bad code rings danger with an inline fix, never only at submit.",
+  "file": "blocks/509-promocode.js",
+  "api": "open.set(H); apply: spin → ok.set(1)/err.ring()   off.set(10); chipW.set(measure)"
+ },
+ {
+  "id": "shipradio",
+  "category": "Commerce",
+  "name": "Shipping method",
+  "summary": "The dot scales in on the base spring while the card lifts and its border inks. The price delta rolls and the ETA swaps. The cheapest option carries the free-over threshold pill.",
+  "file": "blocks/510-shipradio.js",
+  "api": "dot[i].set(picked); lift[i].set(picked)   delta.set(p-min); eta.to(i)"
+ },
+ {
+  "id": "giftwrap",
+  "category": "Commerce",
+  "name": "Gift wrap",
+  "summary": "The knob edges across like a switch while the note height-springs open and the bow draws itself softly. The fee rolls in place without moving the switch.",
+  "file": "blocks/511-giftwrap.js",
+  "api": "on.set(1); knob.release → edge   note.set(H); bow.set(1,soft); fee.set(4.95)"
+ },
+ {
+  "id": "taxest",
+  "category": "Commerce",
+  "name": "Tax estimator",
+  "summary": "The ZIP estimator opens on the base height spring. Estimate swaps in itemized rows 50ms apart while every money value springs to its figure together.",
+  "file": "blocks/512-taxest.js",
+  "api": "open.set(1); est: rows[i]=prog(t,t0+i*.05)   tax.set(rate*sub)"
+ },
+ {
+  "id": "expresspay",
+  "category": "Commerce",
+  "name": "Express pay sheet",
+  "summary": "Wallet buttons fade up staggered once ready. The sheet rises on the base spring carrying line-items, options and coupon inside. Confirm fills toward success and holds its receipt terminal.",
+  "file": "blocks/513-expresspay.js",
+  "api": "ready: btn[i]=prog(t,t0+i*.06)   sheet.set(1); ok.set(1) → receipt hold"
+ },
+ {
+  "id": "tracking",
+  "category": "Commerce",
+  "name": "Tracking timeline",
+  "summary": "The spine fills on the lazy spring to the current stop while each node inks 60ms after arrival. The ETA digits roll down. Delivered draws its check and swaps to the receipt terminal.",
+  "file": "blocks/514-tracking.js",
+  "api": "fill.set(stop/3,lazy); node[i]=prog(t,arrive+.06)   eta.set(days); done: draw+swap.to(receipt)"
+ },
+ {
+  "id": "payfields",
+  "category": "Commerce",
+  "name": "Payment fields",
+  "summary": "Spaces land every four digits while the brand swaps live. Valid fields earn a success check inline; invalid ones ring danger with a fix, as you type — never submit-only. Pay holds its terminal.",
+  "file": "blocks/515-payfields.js",
+  "api": "brand.to(visa|mc|amex|unknown)   ok[i].set(1)/bad[i].ring() live on input"
+ },
+ {
+  "id": "autocomplete",
+  "category": "Commerce",
+  "name": "Address autocomplete",
+  "summary": "Rows filter in place: matches spring into their slots while misses blur out. Picking swaps in the full address and collapses the list height to a receipt terminal.",
+  "file": "blocks/516-autocomplete.js",
+  "api": "vis[i].set(match?1:0) springs slots   pick: full.to(1); listH.set(0)"
+ },
+ {
+  "id": "delivnotes",
+  "category": "Commerce",
+  "name": "Delivery instructions",
+  "summary": "The link opens the textarea on the base height spring while the counter warns past 90%. Save swaps to a compact chip with Edit; saving empty leaves zero trace.",
+  "file": "blocks/517-delivnotes.js",
+  "api": "open.set(1); warn = n>108   save: chip.to(1) or collapse silent"
+ },
+ {
+  "id": "toaststack",
+  "category": "Overlays",
+  "name": "Toast stack pile",
+  "summary": "Newest slides in on base while older ones sink with soft depth. Hovering expands the pile and pauses timers; toasts announce politely, errors assertively.",
+  "file": "blocks/527-toaststack.js",
+  "api": "add: i.set(j, S.soft); hover: spread.set(1); timers pause while hover"
+ },
+ {
+  "id": "hoverintent",
+  "category": "Overlays",
+  "name": "Hover intent card",
+  "summary": "A slow approach that rests opens after a beat; a fast pass never opens. A safe triangle between link and card keeps it open, and keyboard focus pins it.",
+  "file": "blocks/529-hoverintent.js",
+  "api": "rest 0.35s opens (slow only); triangle keeps open; focus pins"
+ },
+ {
+  "id": "submenu",
+  "category": "Overlays",
+  "name": "Context submenu",
+  "summary": "The child slides 12px from the parent edge on base while edges trail 60ms. The parent stays put, the arrow turns, and Esc steps back one level.",
+  "file": "blocks/530-submenu.js",
+  "api": "child.x: edges(A,B) trail .06; arrow rotate with open"
+ },
+ {
+  "id": "triggermodal",
+  "category": "Overlays",
+  "name": "Modal from trigger",
+  "summary": "The modal grows from the trigger rect on base while the scrim fades. Closing snaps back into the trigger faster, and focus returns to it.",
+  "file": "blocks/531-triggermodal.js",
+  "api": "open: scale from trigger rect (base); close: snap into rect"
+ },
+ {
+  "id": "velosheet",
+  "category": "Overlays",
+  "name": "Velocity drawer",
+  "summary": "The drawer tracks the drag 1:1 and release velocity picks open or closed. The scrim fades with position and links stagger only after it settles.",
+  "file": "blocks/532-velosheet.js",
+  "api": "x.release(x, vx, open?); links stagger after |v|<1"
+ },
+ {
+  "id": "carettip",
+  "category": "Overlays",
+  "name": "Caret tooltip",
+  "summary": "The tip anchors to the caret with a snap, then glides word to word on base as you type. Text swaps per word and focus never leaves the field.",
+  "file": "blocks/533-carettip.js",
+  "api": "caret.x snap; glide base; tx.to(word)"
+ },
+ {
+  "id": "holdscrim",
+  "category": "Overlays",
+  "name": "Hold scrim dismiss",
+  "summary": "Pressing dims the scrim deeper as a snap preview. Holding 500ms dismisses; releasing early springs back. Space held works the same.",
+  "file": "blocks/534-holdscrim.js",
+  "api": "press: dim snap preview; hold 0.5s dismiss; early release springs back"
+ },
+ {
+  "id": "dialogform",
+  "category": "Overlays",
+  "name": "Dialog form steps",
+  "summary": "Header and footer stay pinned while only the body swaps on base. Invalid fields turn danger with a message, valid ones show a success check.",
+  "file": "blocks/535-dialogform.js",
+  "api": "body.to(step, base only); invalid: danger + message + focus"
+ },
+ {
+  "id": "bundlesweep",
+  "category": "Email",
+  "name": "Bundle sweep",
+  "summary": "Done archives the promo cluster. Rows blur out in place, then the gap closes on base while the count rolls to zero and a success terminal holds.",
+  "file": "blocks/547-bundlesweep.js",
+  "api": "rows fade stagger .05, then h.set(0, base)   cnt.set(0)   end: archived, hold"
+ },
+ {
+  "id": "snoozesheet",
+  "category": "Email",
+  "name": "Snooze sheet",
+  "summary": "The sheet rises on base and time chips stagger in every 40ms. Picking one collapses the top row, which returns on soft as a snoozed terminal.",
+  "file": "blocks/548-snoozesheet.js",
+  "api": "sheet.set(1, base); chips stagger .04   rh.set(0, base) then (58, soft)   end: snoozed, hold"
+ },
+ {
+  "id": "senddial",
+  "category": "Email",
+  "name": "Send-later dial",
+  "summary": "A long press opens a radial dial on soft. Dragging sets the time 1:1 and the label swaps behind it. Release confirms with a snap to a scheduled terminal.",
+  "file": "blocks/549-senddial.js",
+  "api": "hold .35s -> dial.set(1, soft)   drag angle -> slot, lab.to(i)   up: dial.set(0, snap), confirm"
+ },
+ {
+  "id": "branchfold",
+  "category": "Email",
+  "name": "Branch fold",
+  "summary": "Quoted ancestry collapses into an indented tree. Connectors draw on lazy while the chevron turns on base, and the count swaps between show and hide.",
+  "file": "blocks/550-branchfold.js",
+  "api": "fold.set(0/1, base); conn lazy stagger .03   chev rotate 90deg   end: folded, hold"
+ },
+ {
+  "id": "attachstrip",
+  "category": "Email",
+  "name": "Attachment strip",
+  "summary": "Rail thumbs fan in with a 30ms stagger on base. Tapping one grows the preview radius on a spring, and the overflow count rolls as the set drains.",
+  "file": "blocks/551-attachstrip.js",
+  "api": "thumbs enter stagger .03 base   rad.set(10+i*4, base)   ov.set(n)   end: previewing, hold"
+ },
+ {
+  "id": "nudgebanner",
+  "category": "Email",
+  "name": "Follow-up nudge",
+  "summary": "The no-reply warning drops in and pushes the thread down on base. Setting a reminder swaps a spinner into a success check terminal.",
+  "file": "blocks/552-nudgebanner.js",
+  "api": "ban.set(1, base); thread rides same track   rs.to(spinner) -> (check, base)   end: reminded"
+ },
+ {
+  "id": "splittabs",
+  "category": "Email",
+  "name": "Split tabs",
+  "summary": "Tab edges trail 60ms behind the pick while counts roll down as mail is triaged. The empty split fades in and its width springs shut to fit.",
+  "file": "blocks/553-splittabs.js",
+  "api": "e.go(l, r) trails .06   counts roll on triage   panel h.set(64/156, base)   end: triaged"
+ },
+ {
+  "id": "mailjump",
+  "category": "Email",
+  "name": "Command-K jump",
+  "summary": "An email-scoped palette where rows spring into slots as you type, the highlight trails on lagging edges, and the preview swaps behind the pick.",
+  "file": "blocks/554-mailjump.js",
+  "api": "rows y.set(slot*52, base)   hl.go(top, top+52) lag .06   pvw.to(i)   end: jumped"
+ },
+ {
+  "id": "composefields",
+  "category": "Email",
+  "name": "Compose fields",
+  "summary": "Recipient chips open width-first and the text fades in after. Bad addresses flag danger with a message; good ones settle into a success check terminal.",
+  "file": "blocks/555-composefields.js",
+  "api": "w.set(measure, base) then tx.to(1)   bad: danger + msg   end: ready check, hold"
+ },
+ {
+  "id": "templatevars",
+  "category": "Email",
+  "name": "Template variables",
+  "summary": "The snippet pill inks on base while values swap into fixed-width slots, so nothing jumps. The missing date pulses a warning until it is filled.",
+  "file": "blocks/556-templatevars.js",
+  "api": "ink.set(1, base)   vals swap fixed 8ch   warn pulse -> resolve   end: filled, hold"
+ },
+ {
+  "id": "emailpoll",
+  "category": "Email",
+  "name": "Poll by email",
+  "summary": "Vote bars fill with a base stagger while percents fade in lazy. The pick keeps its check, the tally rolls its digits, and votes can move.",
+  "file": "blocks/557-emailpoll.js",
+  "api": "bars w.set(pct, base) stagger .06   pct fade lazy   tot.set(n)   end: voted check, hold"
+ },
+ {
+  "id": "presencelive",
+  "category": "Dynamic",
+  "name": "Presence avatars",
+  "summary": "A joiner pops in at 60% scale and fans the stack out with stagger. A leaver shrinks in place, then the gap springs closed. The owner keeps a ring.",
+  "file": "blocks/328-presence.js",
+  "api": "slot[i].x.set(i·24, S.base, t + i·.05)   join: sc.jump(.6).set(1)"
+ },
+ {
+  "id": "confirmhold",
+  "category": "Overlays",
+  "name": "Hold to confirm",
+  "summary": "The danger confirm slides in on base after the dialog. Hold-to-confirm runs a digits countdown, then the row collapses only after exit.",
+  "file": "blocks/536-holdconfirm.js",
+  "api": "dlg base; hold 3s Digits; row.h base after exit"
+ },
+ {
+  "id": "sheetlevels",
+  "category": "Overlays",
+  "name": "Sheet detents",
+  "summary": "Sheet rests at peek, half or full detents on base. A fast flick skips the middle detent. The grabber stays visible and the page behind stays inert.",
+  "file": "blocks/528-sheetdetents.js",
+  "api": "y.set(detent); flick: skip middle when |vy|>700; inert: aria-hidden while open"
  }
 ]

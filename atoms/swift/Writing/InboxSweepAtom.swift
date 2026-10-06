@@ -13,6 +13,7 @@ public struct InboxSweepAtom: MotionAtomView {
         Draft(title: "Send checklist", sub: "Proof, art, time, ship")
     ]
     @State private var offsets: [UUID: CGFloat] = [:]
+    @State private var tweak = true
     @State private var collapsed: Set<UUID> = []
     @State private var swept: [(id: UUID, side: CGFloat)] = []
     public init() {}
@@ -23,16 +24,18 @@ public struct InboxSweepAtom: MotionAtomView {
         AtomStage(hint: "Swipe a row past the line to sweep it away") {
             VStack(spacing: 8) {
                 HStack {
-                    Text("Drafts to sweep").font(.caption).foregroundStyle(.secondary)
+                    Text("Drafts to sweep").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     Spacer()
                     HStack(spacing: 2) { RollingDigits(left); Text("left") }
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 ForEach(drafts) { d in row(d) }
-                Button("Undo") { undo() }.buttonStyle(.bordered).controlSize(.small)
+                Button("Undo") { undo() }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small)
                     .disabled(swept.isEmpty).opacity(swept.isEmpty ? 0.45 : 1)
-            }
-            .frame(width: 320)
+                Toggle("Arm past 80px", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
+            }.frame(width: 320)
         }
     }
 
@@ -41,14 +44,14 @@ public struct InboxSweepAtom: MotionAtomView {
         let armed = abs(off) > 80
         return ZStack {
             HStack {
-                Text("‹ Sweep").font(.caption)
+                Text("‹ Sweep").font(.system(size: 12.5))
                 Spacer()
-                Text("Sweep ›").font(.caption)
+                Text("Sweep ›").font(.system(size: 12.5))
             }
             .padding(.horizontal, 18).foregroundStyle(.primary)
             VStack(alignment: .leading, spacing: 2) {
                 Text(d.title).font(.subheadline.weight(.semibold))
-                Text(d.sub).font(.caption).foregroundStyle(.secondary)
+                Text(d.sub).font(.system(size: 12.5)).foregroundStyle(.secondary)
             }
             .padding(.horizontal, 14).padding(.vertical, 10)
             .frame(width: 320, alignment: .leading)

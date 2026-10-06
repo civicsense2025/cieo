@@ -12,15 +12,16 @@ public struct ScriveningsAtom: MotionAtomView {
         "Rain takes the power out; they talk by candlelight until dawn."
     ]
     @State private var sel: Set<Int> = [0, 2]
+    @State private var tweak = true
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Tick scenes to stitch them together") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 HStack {
                     ForEach(scenes.indices, id: \.self) { i in
                         Button(scenes[i]) { toggle(i) }
-                            .buttonStyle(.bordered)
+                            .buttonStyle(.bordered).frame(minHeight: 32)
                             .opacity(sel.contains(i) ? 1 : 0.55)
                             .accessibilityAddTraits(sel.contains(i) ? .isSelected : [])
                     }
@@ -29,15 +30,18 @@ public struct ScriveningsAtom: MotionAtomView {
                     ForEach(ordered, id: \.self) { si in
                         if si != ordered.first {
                             Text("§ \(loopIndex(si) + 1) · \(scenes[si])")
-                                .font(.caption).foregroundStyle(.secondary)
+                                .font(.system(size: 12.5)).foregroundStyle(.secondary)
                                 .id("div\(si)").motionTransition(.swap())
                         }
-                        Text(bodies[si]).font(.callout)
+                        Text(bodies[si]).font(.system(size: 14))
                     }
-                    if ordered.isEmpty { Text("Nothing stitched yet — tick a scene above.").font(.callout).foregroundStyle(.secondary) }
+                    if ordered.isEmpty { Text("Nothing stitched yet — tick a scene above.").font(.system(size: 14)).foregroundStyle(.secondary) }
                 }
-                .padding(12).background(.quaternary.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
+                .padding(14).background(.quaternary.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
                 .animation(reduce ? nil : .motion(.base), value: sel)
+                Toggle("Stitch dividers", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 340)
         }

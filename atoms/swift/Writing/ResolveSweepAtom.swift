@@ -11,6 +11,7 @@ public struct ResolveSweepAtom: MotionAtomView {
         ("Pri", "P", Color(red: 0.18, green: 0.62, blue: 0.43), "Closing date moved — please confirm July."),
     ]
     @State private var fading = [false, false, false]
+    @State private var tweak = true
     @State private var gone = [false, false, false]
     public init() {}
 
@@ -18,13 +19,13 @@ public struct ResolveSweepAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Resolve a thread, or all at once") {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
-                    Text("Open threads").font(.caption.weight(.semibold))
+                    Text("Open threads").font(.system(size: 12.5).weight(.semibold))
                     RollingDigits(open)
                     HStack(spacing: -6) {
                         ForEach(threads.indices, id: \.self) { i in
-                            Text(threads[i].1).font(.system(size: 11, weight: .semibold)).foregroundStyle(.white)
+                            Text(threads[i].1).font(.system(size: 12, weight: .semibold)).foregroundStyle(.white)
                                 .frame(width: 24, height: 24).background(threads[i].2, in: Circle())
                                 .overlay(Circle().stroke(.background, lineWidth: 2))
                                 .zIndex(Double(threads.count - i))
@@ -34,22 +35,22 @@ public struct ResolveSweepAtom: MotionAtomView {
                     .offset(x: open == threads.count ? 0 : -4 * Double(threads.count - open))
                     .animation(reduce ? nil : .motion(.base), value: open)
                     Spacer()
-                    Button("Resolve all") { resolveAll() }.buttonStyle(.borderedProminent).controlSize(.small).disabled(open == 0)
+                    Button("Resolve all") { resolveAll() }.buttonStyle(.borderedProminent).frame(minHeight: 32).controlSize(.small).disabled(open == 0)
                 }
                 VStack(spacing: 8) {
                     ForEach(threads.indices, id: \.self) { i in
                         if !gone[i] {
                             HStack(alignment: .top, spacing: 8) {
-                                Text(threads[i].1).font(.caption.weight(.semibold)).foregroundStyle(.white)
+                                Text(threads[i].1).font(.system(size: 12.5).weight(.semibold)).foregroundStyle(.white)
                                     .frame(width: 22, height: 22).background(threads[i].2, in: Circle())
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(threads[i].0).font(.callout.weight(.semibold))
-                                    Text(threads[i].3).font(.callout).foregroundStyle(.secondary)
+                                    Text(threads[i].0).font(.system(size: 14).weight(.semibold))
+                                    Text(threads[i].3).font(.system(size: 14)).foregroundStyle(.secondary)
                                 }
                                 Spacer()
-                                Button("Resolve") { resolve(i) }.buttonStyle(.bordered).controlSize(.small)
+                                Button("Resolve") { resolve(i) }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small)
                             }
-                            .padding(10)
+                            .padding(14)
                             .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
                             .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))
                             .opacity(fading[i] ? 0 : 1)
@@ -59,7 +60,10 @@ public struct ResolveSweepAtom: MotionAtomView {
                         }
                     }
                 }
-                Button("Reset") { reset() }.buttonStyle(.bordered).controlSize(.small)
+                Button("Reset") { reset() }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small)
+                Toggle("Stack avatars", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 340)
         }
