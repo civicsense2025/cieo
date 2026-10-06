@@ -290,7 +290,7 @@ ${col(P4, 'Product', ['Editor', 'Commerce', 'Members', 'Pricing'])}${col(P4, 'Re
 const P5 = 'ft5-';
 const g5 = (p, name, i) => `<section class="${p}g"><h3 class="${p}hw">${name}</h3><h3 class="${p}hn"><button type="button" class="${p}gh">${name}<i class="${p}cv">${ic(I.chev, 16, 2)}</i></button></h3><div class="${p}gp"><div class="${p}gi"><ul>${lis(p, COLS[name].map(it => Array.isArray(it) && it[1].after ? [it[0], { ...it[1], after:it[1].after === '__new__' ? `<span class="${p}pill">New</span>` : `<span class="${p}pill">3 open</span>` }] : it))}</ul></div></div></section>`;
 atom({ id:'footer-accordion', cat:CAT, name:'Accordion footer on mobile', block:'site-footer, footer-column (accordion at narrow widths)', fam:['M', 'E'], wide:true, tall:true,
-  html:shell(P5, { cap:'Below 520px wide the columns fold into an accordion. Tap a heading.',
+  html:shell(P5, { bs:`<span class="${P5}cap">Below 520px the columns fold. Tap a heading.</span><button type="button" class="btn ${P5}dv" aria-pressed="true">Dividers on</button>`,
     css:COLCSS(P5) + `.${P5}ft{border-top:1px solid var(--line);background:var(--bg)}
 .${P5}in{max-width:1080px;margin:0 auto;padding:36px 24px 0}
 .${P5}gr{display:grid;grid-template-columns:1.6fr repeat(4,minmax(0,1fr));gap:28px 24px}
@@ -300,8 +300,9 @@ atom({ id:'footer-accordion', cat:CAT, name:'Accordion footer on mobile', block:
 .${P5}w[data-n] .${P5}hw{display:none}
 .${P5}w[data-n] .${P5}hn{display:block;margin:0}
 .${P5}w[data-n] .${P5}gr{display:flex;flex-direction:column;gap:0}
+.${P5}w[data-n] .${P5}gr>:not(:last-child){border-bottom:1px solid var(--line)}
+.${P5}w[data-n][data-dd] .${P5}gr>:not(:last-child){border-bottom-color:transparent}
 .${P5}w[data-n] .${P5}br{padding-bottom:20px}
-.${P5}w[data-n] .${P5}g{border-top:1px solid var(--line)}
 .${P5}w[data-n] .${P5}gp{overflow:hidden}
 .${P5}w[data-n] .${P5}gi{padding:0 0 14px}
 .${P5}w[data-n] .${P5}g li{min-height:30px;display:flex;align-items:center}
@@ -318,6 +319,8 @@ ${['Product', 'Resources', 'Company', 'Legal'].map((n, i) => g5(P5, n, i)).join(
   api:'o[i].set(open ? 1 : 0)   panel.h = o·content.h   chevron.rotate = o·180°   li[j].a = clamp((o − j·0.07)/0.5)',
   init(st){
     const k = kit(st, P5), w = k.w, sc = k.sc;
+    const dv = $(st, '.' + P5 + 'dv'); let dd = false;
+    dv.onclick = () => { dd = !dd; w.toggleAttribute('data-dd', dd); dv.setAttribute('aria-pressed', String(!dd)); dv.textContent = dd ? 'Dividers off' : 'Dividers on'; };
     const G = $$(st, '.' + P5 + 'g').map((g, i) => ({ g, b:$(g, 'button'), pn:$(g, '.' + P5 + 'gp'), gi:$(g, '.' + P5 + 'gi'), cv:$(g, '.' + P5 + 'cv'), li:$$(g, '.' + P5 + 'gi li'), o:new Track(0), open:false })); let narrow = null;
     const mode = n => { narrow = n; w.toggleAttribute('data-n', n);
       G.forEach(x => { x.o.jump(x.open ? 1 : 0);
@@ -367,7 +370,7 @@ atom({ id:'footer-region-theme', cat:CAT, name:'Footer with language picker and 
 .${P6}op{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;height:34px;padding:0 10px;border-radius:7px;font-size:13.5px;cursor:pointer}
 .${P6}ck{display:flex;color:var(--accent)}
 .${P6}btt:not(:has(.${P6}t)){width:32px;height:32px}
-[data-k]{display:inline-block}
+.${P6}ft [data-k]{display:inline-block}
 @container (max-width:760px){.${P6}gr{grid-template-columns:repeat(3,minmax(0,1fr))}.${P6}br{grid-column:1/-1}}
 @container (max-width:520px){.${P6}gr{gap:22px 14px}.${P6}in{padding:26px 18px 0}.${P6}bm .${P6}ls{order:1;flex:1;margin-right:0}.${P6}btt{order:2}.${P6}ct{order:3;width:100%;margin-left:0}.${P6}bm p{width:100%}}`,
     ft:`<div class="${P6}ft" role="contentinfo"><div class="${P6}in"><div class="${P6}gr"><div class="${P6}br"><span class="${P6}brn">${logo()}Northlight</span><p class="${P6}tag">${k6('tag')}</p></div>

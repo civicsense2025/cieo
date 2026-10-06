@@ -16,7 +16,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
 .sh-ul{position:absolute;left:0;bottom:3px;height:2px;border-radius:1px;background:var(--ink)}
 .sh-rt{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
 .sh-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:none}
-.sh-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;background:none;cursor:pointer;display:grid;place-items:center}
+.sh-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center}
 .sh-sx input{position:absolute;left:34px;right:12px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;user-select:text;-webkit-user-select:text}
 .sh-cta{height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--card);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
 .sh-mb{display:none;position:relative;width:36px;height:36px;border:0;background:none;cursor:pointer;flex:none}

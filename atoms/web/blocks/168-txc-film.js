@@ -129,6 +129,11 @@ const CSS = `
 .txc-pk-sh header b{font-size:16px}
 .txc-pk-ls{overflow:auto;padding:0 16px 16px;margin:0;list-style:none;flex:1;overscroll-behavior:contain}
 .txc-pk-ls li{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line-soft);font-size:14px}
+.txc-pk-ls li:last-child{border-bottom:1px solid var(--line-soft)}
+.txc-pk-opts{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:0 16px 10px;font-size:13px;color:var(--muted)}
+.txc-pk-opts .btn{padding:3px 10px;font-size:12.5px}
+.txc-pk-opts .btn[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.txc-pk-sh.txc-norules .txc-pk-ls li{border-top-color:transparent;border-bottom-color:transparent}
 /* 9 compare */
 .txc-cm-bar{position:absolute;left:var(--p);right:var(--p);top:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .txc-cm-seg{position:relative;display:flex;background:var(--raised);border-radius:10px;padding:3px;min-width:0}
@@ -500,7 +505,7 @@ atom({ id:'txc-peek', cat:'Carousels', name:'Peek and pull shelf', block:'carous
   html:`<div class="txc-root"><div class="txc-pk-ph"><div class="txc-pk-bar"><div><div class="txc-pk-h">Nearby trails</div><div class="txc-m">Within 20 miles of Truckee</div></div><button type="button" class="txc-pk-all" aria-haspopup="dialog">See all</button></div>
     <div class="txc-vp txc-pk-vp" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Nearby trails"><div class="txc-tr txc-pk-tr"></div><div class="txc-pk-pull" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="none" stroke="var(--line)" stroke-width="2"/><circle class="txc-pk-rg" cx="22" cy="22" r="20" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 22 22)"/><path d="M15 22h14M23 16l6 6-6 6" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="txc-pk-lbl"><span>See all 12</span><span>Release</span></div></div></div>
     <div class="txc-pk-sec"><h4>Saved routes</h4><div class="txc-pk-row"><i>${ic(I.lib, 16)}</i><div><b>Sunrise on Castle Peak</b><span class="txc-m">Saved Tuesday · 6.1 mi</span></div></div><div class="txc-pk-row"><i>${ic(I.user, 16)}</i><div><b>Lakes loop with Ada</b><span class="txc-m">Shared with you · 9.4 mi</span></div></div><div class="txc-pk-row"><i>${ic(I.file, 16)}</i><div><b>Snowshoe, Sagehen</b><span class="txc-m">Winter route · 2.6 mi</span></div></div></div>
-    <div class="txc-pk-scrim"></div><div class="txc-pk-sh" role="dialog" aria-modal="true" aria-label="All trails near Truckee"><header><b>All 12 trails</b><button type="button" class="btn txc-pk-dn">Done</button></header><ul class="txc-pk-ls">${TRAILS.map(x => `<li><span>${x[0]}</span><span class="txc-m">${x[2].split(' · ')[0]}</span></li>`).join('')}${MORE.map(x => `<li><span>${x[0]}</span><span class="txc-m">${x[1]}</span></li>`).join('')}</ul></div></div><div class="txc-sr" aria-live="polite" aria-atomic="true"></div></div>`,
+    <div class="txc-pk-scrim"></div><div class="txc-pk-sh" role="dialog" aria-modal="true" aria-label="All trails near Truckee"><header><b>All 12 trails</b><button type="button" class="btn txc-pk-dn">Done</button></header><div class="txc-pk-opts"><span>Dividers</span><span style="display:flex;gap:6px" role="group" aria-label="Sheet row dividers"><button type="button" class="btn" data-m="on" aria-pressed="true">On</button><button type="button" class="btn" data-m="off" aria-pressed="false">Off</button></span></div><ul class="txc-pk-ls">${TRAILS.map(x => `<li><span>${x[0]}</span><span class="txc-m">${x[2].split(' · ')[0]}</span></li>`).join('')}${MORE.map(x => `<li><span>${x[0]}</span><span class="txc-m">${x[1]}</span></li>`).join('')}</ul></div></div><div class="txc-sr" aria-live="polite" aria-atomic="true"></div></div>`,
   desc:'Cards align to the left margin and the next one peeks in, so a phone screen always shows there is more. Dragging past the last card rubber-bands into a ring that fills with the stretch; past the mark the label swaps to Release, and letting go opens the full list as a sheet while the shelf settles back. Inspired by the App Store and Airbnb shelves; changed: the “see all” target lives inside the overscroll instead of a separate button. Use when a horizontal shelf sits inside a vertically scrolling phone screen.',
   api:'pull = band(x) − max;  ring = pull/52;  release: pull > 52 → sheet.set(1); x.release(x, v, max)',
   init(st){
@@ -514,6 +519,7 @@ atom({ id:'txc-peek', cat:'Carousels', name:'Peek and pull shelf', block:'carous
     const open = from => { opener = from; shT.set(1, S.base); sh.style.visibility = 'visible'; dn.focus({ preventScroll:true }); say(sr, 'All 12 trails, list opened'); };
     const close = () => { shT.set(0, S.snap); (opener || all).focus({ preventScroll:true }); };
     all.onclick = () => open(all); dn.onclick = close; scrim.onclick = close;
+    $$(st,'.txc-pk-opts .btn').forEach(b => b.onclick = () => { sh.classList.toggle('txc-norules', b.dataset.m === 'off'); $$(st,'.txc-pk-opts .btn').forEach(x => x.setAttribute('aria-pressed', x === b)); });
     sh.addEventListener('keydown', e => { if (e.key === 'Escape'){ e.preventDefault(); close(); } if (e.key === 'Tab'){ e.preventDefault(); dn.focus(); } });
     onSize(st, (W, H) => { cw = Math.min(W - 32, 390); const chh = H - 32; Object.assign(ph.style, { width:cw + 'px', height:chh + 'px', left:((W - cw)/2) + 'px', top:'16px' });
       cdw = Math.round((cw - 16)*.8); const phh = Math.round(cdw/1.5), cardH = phh + 70; let x = 16;

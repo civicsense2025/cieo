@@ -468,6 +468,9 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
 .agi-sl{font:12px/1.5 var(--mono);color:var(--muted);margin:4px 0 8px;overflow-wrap:anywhere}
 .agi-ck{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .agi-cr{display:grid;grid-template-columns:18px minmax(0,1fr);gap:0 8px;padding:6px 0;border-top:1px solid var(--line-soft);font-size:13px;line-height:1.4}
+.agi-cr:first-child{border-top:0}
+.agi-cr:last-child{border-bottom:0}
+.agi-compact .agi-cr{padding:2px 0}
 .agi-cr b{font-weight:600}
 .agi-cr span{color:var(--muted);grid-column:2;font-size:12.5px}
 .agi-ft{flex:none;display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:9px 14px;border-top:1px solid var(--line-soft);font-size:12.5px;color:var(--muted)}
@@ -503,7 +506,7 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
     <div class="agi-hd"><b style="font-size:14px">Inspector</b><div class="agi-by" title="Who selected this element"><span class="agi-bs">${starSvg(11)}<span>${AG}</span></span><span class="agi-bu">You</span></div></div>
     <div class="agi-dv"><span class="agi-sw"></span><span>Agent drives</span><span style="flex:1"></span><span class="num" style="display:inline-flex;align-items:center;gap:4px">Inspected <span class="agi-ct"><span class="agi-n1"></span></span> of <span class="agi-ct"><span class="agi-n2"></span></span></span></div>
     <div class="agi-bd"></div>
-    <div class="agi-ft"><span class="agi-ct" style="color:var(--success)">${ic(I.check, 14, 2.4)}<span class="agi-c1"></span></span><span class="agi-ct" style="color:var(--warning)">${ic(I.alert, 14, 2.2)}<span class="agi-c2"></span></span><span class="agi-ct" style="color:var(--danger)">${ic(I.x, 14, 2.4)}<span class="agi-c3"></span></span><span style="flex:1;min-width:0;text-align:right">for this element</span></div>
+    <div class="agi-ft"><span class="agi-ct" style="color:var(--success)">${ic(I.check, 14, 2.4)}<span class="agi-c1"></span></span><span class="agi-ct" style="color:var(--warning)">${ic(I.alert, 14, 2.2)}<span class="agi-c2"></span></span><span class="agi-ct" style="color:var(--danger)">${ic(I.x, 14, 2.4)}<span class="agi-c3"></span></span><span class="row small muted" style="display:inline-flex;align-items:center;gap:6px;margin-left:auto">Density<button type="button" class="btn agi-den" style="height:24px;padding:0 8px" aria-pressed="false">Compact</button></span><span style="flex:1;min-width:0;text-align:right">for this element</span></div>
   </aside>
   <div class="agi-live" role="status" aria-live="polite" style="${SR}"></div>
 </div></div>`,
@@ -514,6 +517,8 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
     const els = {}; $$(st, '[data-k]').forEach(e => els[e.dataset.k] = e);
     const lt = gFit($(st, '.agi-lt'), 'line-height:20px'), byEl = [$(st, '.agi-bs'), $(st, '.agi-bu')], bySw = new Swap(0);
     const sw = gSwitch('Agent drives', true, v => setDrive(v, true)); $(st, '.agi-sw').appendChild(sw.el);
+    const denB = $(st, '.agi-den');
+    if (denB) denB.onclick = () => { const on = st.classList.toggle('agi-compact'); denB.textContent = on ? 'Cozy' : 'Compact'; denB.setAttribute('aria-pressed', on); };
     const n1 = new Digits($(st, '.agi-n1'), 1), n2 = new Digits($(st, '.agi-n2'), 1), c = [1, 2, 3].map(i => new Digits($(st, '.agi-c' + i), 1));
     n2.set(String(AI_EL.length), true);
     const ex = edges(0, 0), ey = edges(0, 0), vis = new Track(0, S.snap), rd = new Track(9), lr = new Track(6), ls = new Track(1), mkt = {};

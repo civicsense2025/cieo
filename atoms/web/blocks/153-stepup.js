@@ -321,23 +321,28 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
 .wfiv-cp{position:relative;flex:none;height:20px;border-radius:999px;font-size:12px;font-weight:500;overflow:hidden}
 .wfiv-ab{display:flex;gap:2px;flex:none}
 .wfiv-ab .btn{border-color:transparent;background:none;padding:4px 8px;font-size:12.5px}
-.wfiv-rw{display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;border-top:1px solid var(--line-soft);font-size:13px}
+.wfiv-rw{display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;font-size:13px}
+.wfiv-rw:not(:last-child){border-bottom:1px solid var(--line-soft)}
+.wfiv-rw.nolines{border-bottom-color:transparent}
 .wfiv-rw b{flex:1;font-weight:500}
+.wfiv-cf{display:flex;align-items:center;gap:6px;padding:6px 14px 10px;font-size:12px;color:var(--muted)}
 </style>
 <div class="card wfiv-cd">
  <div class="wfiv-hd"><div><b>Members</b><small>3 active</small></div><button class="wfiv-bt" type="button" aria-expanded="false"></button></div>
  <div class="wfiv-sl"><form class="wfiv-ly wfiv-fm" novalidate><div class="wfiv-fr"><input class="wfiv-in" id="wfiv-em" type="email" placeholder="name@work.com" aria-label="Email address" autocomplete="off"><select class="wfiv-se" aria-label="Role"><option>Editor</option><option>Viewer</option><option>Admin</option></select><button class="btn ink" type="submit">Send invite</button></div><div class="wfiv-hp"></div></form>
   <div class="wfiv-ly wfiv-mb"><span class="wfiv-av"></span><div class="wfiv-tx"><div class="wfiv-em"></div><div class="wfiv-l2"><span class="wfiv-cp"></span><span class="wfiv-ro"></span></div></div><div class="wfiv-ab"><button class="btn wfiv-rsd" type="button">Resend</button><button class="btn wfiv-rvk" type="button" style="color:var(--danger)">Revoke</button></div></div></div>
- <div class="wfiv-rw"><span class="wfiv-av">M</span><b>Maya Okafor</b><span class="muted">Owner</span></div>
- <div class="wfiv-rw"><span class="wfiv-av">T</span><b>Theo Lindqvist</b><span class="muted">Editor</span></div>
- <div class="wfiv-rw"><span class="wfiv-av">P</span><b>Priya Raman</b><span class="muted">Viewer</span></div>
- <span class="wfiv-sr" role="status" aria-live="polite" style="${wfSr}"></span>
+  <div class="wfiv-rw"><span class="wfiv-av">M</span><b>Maya Okafor</b><span class="muted">Owner</span></div>
+  <div class="wfiv-rw"><span class="wfiv-av">T</span><b>Theo Lindqvist</b><span class="muted">Editor</span></div>
+  <div class="wfiv-rw"><span class="wfiv-av">P</span><b>Priya Raman</b><span class="muted">Viewer</span></div>
+  <div class="wfiv-cf"><span>Lines</span><button class="btn wfiv-tg" type="button" aria-pressed="true" style="padding:3px 10px;font-size:12px">On</button></div>
+  <span class="wfiv-sr" role="status" aria-live="polite" style="${wfSr}"></span>
 </div>`,
+  desc:'Invite opens a form row at the top of the list and its height springs open. Send keeps that same row: the form swaps out for the member, the height morphs to fit and the chip reads Pending. Resend turns the chip success and Sent for 1.6 seconds, widening it on the same spring. Revoke fades the row out first, then its space collapses 100ms later. Dividers live between rows, never on the collapsing slot, so no hairline drags.',
   desc:'Invite opens a form row at the top of the list and its height springs open. Send keeps that same row: the form swaps out for the member, the height morphs to fit and the chip reads Pending. Resend turns the chip success and Sent for 1.6 seconds, widening it on the same spring. Revoke fades the row out first, then its space collapses.',
   api:'slot.h.set(form); send: slot.to("member"); slot.h.set(row)   resend: chip.to("sent"); w.set(44); after(1.6) back   revoke: slot.to("none"); slot.h.set(0, t + EXIT)',
   init(st){
     const q = wfQ(), $s = s => $(st, s);
-    const bt = $s('.wfiv-bt'), sl = $s('.wfiv-sl'), form = $s('.wfiv-fm'), mb = $s('.wfiv-mb'), email = $s('.wfiv-in'), role = $s('.wfiv-se'), hp = $s('.wfiv-hp'), cp = $s('.wfiv-cp'), sr = $s('.wfiv-sr'), rsd = $s('.wfiv-rsd'), rvk = $s('.wfiv-rvk'), sub = $s('.wfiv-hd small');
+    const bt = $s('.wfiv-bt'), sl = $s('.wfiv-sl'), form = $s('.wfiv-fm'), mb = $s('.wfiv-mb'), email = $s('.wfiv-in'), role = $s('.wfiv-se'), hp = $s('.wfiv-hp'), cp = $s('.wfiv-cp'), sr = $s('.wfiv-sr'), rsd = $s('.wfiv-rsd'), rvk = $s('.wfiv-rvk'), sub = $s('.wfiv-hd small'), tg = $s('.wfiv-tg');
     const bL = { invite:wfLayer(bt, 'Invite'), cancel:wfLayer(bt, 'Cancel') };
     const hL = { hint:wfLayer(hp, 'They get an email link that expires in 7 days.', 'justify-content:flex-start;color:var(--muted)'), bad:wfLayer(hp, 'Enter a full email address.', 'justify-content:flex-start;color:var(--danger)') };
     const cL = { p:wfLayer(cp, 'Pending'), s:wfLayer(cp, ic(I.check,12,3) + 'Sent', 'gap:3px') };
@@ -358,6 +363,7 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
       q.after(1.6, tt => { csw.to('p', tt); cg.set(0, S.base, tt); cw.set(64, S.base, tt); sending = false; }); };
     rvk.onclick = () => { if (state !== 'member') return; state = 'closed'; sending = false; q.clear(); const t0 = now(); ssw.to('n', t0); sh.set(0, S.base, t0 + EXIT); dis.set(0, S.base, t0 + EXIT); email.value = ''; bt.removeAttribute('aria-disabled'); sub.textContent = '3 active'; say('Invite revoked.'); setTimeout(() => bt.focus(), 40); };
     st.addEventListener('keydown', ev => { if (ev.key === 'Escape' && state === 'form'){ closeForm(); bt.focus(); } });
+    let lines = true; tg.onclick = () => { lines = !lines; tg.textContent = lines ? 'On' : 'Off'; tg.setAttribute('aria-pressed', lines); $$(st,'.wfiv-rw').forEach(r => r.classList.toggle('nolines', !lines)); };
     wfReset(ssw, 'n'); let first = true;
     return t => { q.run(t);
       const need = state === 'form' ? form.offsetHeight : state === 'member' ? mb.offsetHeight : 0;

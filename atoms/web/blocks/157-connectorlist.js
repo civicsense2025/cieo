@@ -424,7 +424,7 @@ atom({ id:'toolcalllog', cat:'MCP and agents', name:'Tool call log', block:'Agen
 </style>
 <div class="tcl-root"><div class="tcl-card"><div class="tcl-head"><div class="tcl-st"><h4><span class="tcl-hs" style="position:relative;display:block;height:20px"></span></h4><div class="tcl-sub"><b class="tcl-n1"></b><span>calls</span><span>·</span><b class="tcl-n2" style="color:var(--danger)"></b><span>failed</span></div></div>
 <div class="tcl-bt"><button type="button" class="btn tcl-pa"><span style="position:absolute;inset:0"></span></button><button type="button" class="btn tcl-re">Replay</button></div></div>
-<ul class="tcl-list" aria-label="Tool calls, newest first"></ul></div><div class="tcl-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
+<ul class="tcl-list" aria-label="Tool calls, newest first"></ul><div class="tcl-empty" hidden><span class="tcl-es" style="position:relative;display:block;height:18px;overflow:hidden"></span></div></div><div class="row small muted" style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 2px 0;font-size:12.5px;color:var(--muted)"><span style="flex:1">Empty-state preview</span><button type="button" class="btn tcl-prev" style="height:28px">Preview empty</button></div><div class="tcl-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Calls stream in on a run clock, newest at the top. Each row grows from zero height and its content fades up; the spinner turns on that clock, then swaps to a check or an error as the call finishes, and the duration stops counting. Several calls overlap, so more than one spinner can run. Pause freezes the run clock without losing the queue. Click a row to grow its arguments and result; failed rows open on the error.',
   api:'rt += dt (unless paused)   at ≥ call.at → row.open(true)   at ≥ call.at + dur → icon.swap(check | error)   expand: detail.h.set(open)',
   init(st){
@@ -441,30 +441,35 @@ atom({ id:'toolcalllog', cat:'MCP and agents', name:'Tool call log', block:'Agen
       { at:6.3, dur:1.7, tool:'create_pull_request', sv:'Source control', args:{ repo:'northwind/api', head:'fix/login-timeout', base:'main' }, res:'Pull request #482 opened' },
       { at:8.4, dur:1.1, tool:'get_check_runs', sv:'Source control', args:{ repo:'northwind/api', ref:'fix/login-timeout' }, res:'3 passed, 0 failed' } ];
     const END = 9.7;
-    let rt = 0, last = null, paused = false, next = 0, done = false, nFail = 0, started = 0;
+    let rt = 0, last = null, paused = false, next = 0, done = false, nFail = 0, started = 0, emptyMode = 0;
     const rows = [], q = [];
     const say = s => { live.textContent = s; };
-    const header = (k, inst) => { hs.put(k === 0 ? 'Run in progress' : 'Run finished', inst); };
-    hs.put('Run in progress', true); pt.put('Pause', true); n1.set('0', true); n2.set('0', true);
+    const header = (k, inst) => { hs.put(k === 0 ? 'Run in progress' : 'Run finished', inst || REDUCE); };
+    const emptyEl = $(st,'.tcl-empty'), emptyTx = mText($(st,'.tcl-es'), 'line-height:18px;text-align:center'), emptySlot = mSlot(emptyEl, $(st,'.tcl-es'), 0);
+    const prevB = $(st,'.tcl-prev');
+    const emptyLabel = () => emptyMode === 2 ? 'No matches' : 'No calls yet';
+    const syncEmpty = () => { const show = rows.length === 0 || emptyMode > 0; emptyTx.put(emptyLabel(), REDUCE); if (REDUCE) emptySlot.jump(show ? 1 : 0); else emptySlot.open(show); emptyEl.hidden = false; };
+    hs.put('Run in progress', true); pt.put('Pause', true); n1.set('0', true); n2.set('0', true); emptyTx.put('No calls yet', true);
     const add = c => {
       const li = mEl('li'); li.className = 'tcl-li';
       li.innerHTML = `<div class="tcl-in"><button type="button" class="tcl-hd" aria-expanded="false"><span class="tcl-ic"><span class="tcl-a" style="color:var(--muted)">${SPIN(15)}</span><span class="tcl-b">${ic(I.check, 13, 3)}</span><span class="tcl-c">${ic(I.x, 12, 3)}</span></span><span class="tcl-nm"><span class="tcl-t"></span><em></em></span><span class="tcl-ar"></span><span class="tcl-du num">0.0s</span>${ic(I.chev, 14)}</button><div class="tcl-dt"><div class="tcl-di"><div class="tcl-bl"><small>Arguments</small><pre class="tcl-ap"></pre></div><div class="tcl-bl tcl-rb"><small class="tcl-rs"></small><pre class="tcl-rp"></pre></div></div></div></div>`;
       $(li,'.tcl-t').textContent = c.tool; $(li,'em').textContent = c.sv; $(li,'.tcl-ar').textContent = JSON.stringify(c.args); $(li,'.tcl-ap').textContent = J(c.args);
       const r = { c, li, hd:$(li,'.tcl-hd'), du:$(li,'.tcl-du'), dt:$(li,'.tcl-dt'), di:$(li,'.tcl-di'), chev:$(li,'.tcl-hd').lastElementChild, ic:$(li,'.tcl-ic'), L:[$(li,'.tcl-a'), $(li,'.tcl-b'), $(li,'.tcl-c')], sw:new Swap(0), W:[new Track(1), new Track(0), new Track(0)], e:new Track(0), start:rt, end:null, open:false, txt:'0.0s',
         slot:mSlot(li, $(li,'.tcl-in'), 0) };
-      r.slot.open(true); list.insertBefore(li, list.firstChild); rows.unshift(r);
-      r.hd.onclick = () => tog(r, !r.open); started++; n1.set(String(started)); say(`${c.tool} started`);
+      r.slot.open(true); if (REDUCE) r.slot.jump(1); list.insertBefore(li, list.firstChild); rows.unshift(r);
+      r.hd.onclick = () => tog(r, !r.open); started++; n1.set(String(started), REDUCE); say(`${c.tool} started`); syncEmpty();
       r.hd.setAttribute('aria-label', `${c.tool}, ${c.sv}, running`);
     };
     const tog = (r, v) => { r.open = v; r.e.set(v ? 1 : 0, v ? S.base : S.snap); r.hd.setAttribute('aria-expanded', v); };
     const finish = r => { const c = r.c, bad = !!c.err; r.end = r.start + c.dur; r.sw.to(bad ? 2 : 1); r.W.forEach((w, i) => w.set(i === (bad ? 2 : 1) ? 1 : 0, S.base));
       r.du.textContent = c.dur.toFixed(1) + 's'; $(r.li,'.tcl-rs').textContent = bad ? 'Error' : 'Result'; $(r.li,'.tcl-rp').textContent = bad ? c.err : c.res; $(r.li,'.tcl-rb').classList.toggle('tcl-er', bad);
       r.hd.setAttribute('aria-label', `${c.tool}, ${c.sv}, ${bad ? 'failed' : 'finished in ' + c.dur.toFixed(1) + ' seconds'}`);
-      if (bad){ nFail++; n2.set(String(nFail)); say(`${c.tool} failed. ${c.err}`); mPush(q, now() + .5, () => { if (rows.includes(r) && !r.open) tog(r, true); }); } else say(`${c.tool} finished`); };
-    const clear = () => { rows.splice(0).forEach(r => r.li.remove()); next = 0; rt = 0; done = false; nFail = 0; started = 0; q.length = 0; n1.set('0'); n2.set('0'); header(0); };
-    pa.onclick = () => { paused = !paused; pt.put(paused ? 'Resume' : 'Pause'); pa.setAttribute('aria-pressed', paused); };
-    re.onclick = () => { clear(); paused = false; pt.put('Pause'); pa.setAttribute('aria-pressed', false); pa.disabled = false; };
-    pa.setAttribute('aria-pressed', false);
+      if (bad){ nFail++; n2.set(String(nFail), REDUCE); say(`${c.tool} failed. ${c.err}`); mPush(q, now() + .5, () => { if (rows.includes(r) && !r.open) tog(r, true); }); } else say(`${c.tool} finished`); };
+    const clear = () => { rows.splice(0).forEach(r => r.li.remove()); next = 0; rt = 0; done = false; nFail = 0; started = 0; q.length = 0; n1.set('0', REDUCE); n2.set('0', REDUCE); header(0, REDUCE); syncEmpty(); };
+    pa.onclick = () => { paused = !paused; pt.put(paused ? 'Resume' : 'Pause', REDUCE); pa.setAttribute('aria-pressed', paused); };
+    re.onclick = () => { clear(); paused = false; pt.put('Pause', REDUCE); pa.setAttribute('aria-pressed', false); pa.disabled = false; };
+    prevB.onclick = () => { emptyMode = (emptyMode + 1) % 3; prevB.textContent = emptyMode === 0 ? 'Preview empty' : emptyMode === 1 ? 'No calls yet' : 'No matches'; syncEmpty(); };
+    pa.setAttribute('aria-pressed', false); syncEmpty();
     return t => {
       mDrain(q, t);
       const dt = last == null ? 0 : Math.min(.1, Math.max(0, t - last)); last = t;
@@ -481,7 +486,7 @@ atom({ id:'toolcalllog', cat:'MCP and agents', name:'Tool call log', block:'Agen
         const e = clamp(r.e.at(t)); r.dt.style.height = px(e*r.di.offsetHeight); r.dt.style.visibility = e < .004 ? 'hidden' : 'visible'; fade(r.di, e, (1 - e)*-4); r.chev.style.transform = `rotate(${(e*180).toFixed(1)}deg)`;
         r.du.style.color = r.end != null && r.c.err ? 'var(--danger)' : 'var(--muted)';
       }
-      n1.render(t); n2.render(t); hs.render(t); pt.render(t);
+      n1.render(t); n2.render(t); hs.render(t); pt.render(t); emptySlot.render(t); emptyTx.render(t);
     };
   }});
 

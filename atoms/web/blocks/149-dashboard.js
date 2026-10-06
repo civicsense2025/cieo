@@ -273,8 +273,9 @@ atom({ id:'onboarding', cat:'Workspace', name:'Onboarding checklist', block:'onb
 .onb h4{margin:0;font-size:20px;line-height:1.2;letter-spacing:-.02em;font-weight:600}
 .onb p{margin:0}
 .onb .th{display:flex;align-items:center;gap:10px;width:100%;padding:6px 0;border:0;background:none;cursor:pointer;text-align:left;font-size:14px;color:inherit}
-.onb .bx{position:relative;flex:none;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line)}
-.onb .bx svg{position:absolute;left:1.5px;top:1.5px}
+.onb .bx{position:relative;flex:none;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);display:grid;place-items:center}
+.onb .bx svg{position:static;transform:translate(.5px,-.5px)}
+.onb .tl[data-nd] .in p{display:none}
 .onb .tx{position:relative}
 .onb .tx i{position:absolute;left:0;top:52%;height:1.5px;background:var(--muted)}
 .onb .tk+.tk{border-top:1px solid var(--line-soft)}
@@ -296,6 +297,7 @@ ${SRCSS}
       <svg class="rg" width="36" height="36" viewBox="0 0 40 40" role="progressbar" aria-label="Setup progress" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--line)" stroke-width="4"/><circle class="pr" cx="20" cy="20" r="16" fill="none" stroke="var(--ink)" stroke-width="4" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90 20 20)"/></svg>
       <div><b style="font-weight:600">Set up your site</b><div class="small muted"><span class="dn" aria-hidden="true"></span><span class="sr">0</span> of 4 done</div></div>
     </div>
+    <label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="dt-on" checked> Details</label>
     <div class="tl"></div>
   </section>
   <section class="L ld" aria-label="Setup complete" style="text-align:center">
@@ -321,6 +323,7 @@ ${SRCSS}
       return { el, th:$(el,'.th'), bx:$(el,'.bx'), ck:$(el,'.bx path'), tx:$(el,'.tx'), ln:$(el,'i'), cv:$(el,'.cv'), bd:$(el,'.bd'), inn:$(el,'.in'), md:$(el,'.md'), on:0,
         f:new Track(0), c:new Track(0), s:new Track(0), open:new Track(0) }; });
     const setOpen = (r, v, t = now()) => { r.open.set(v ? 1 : 0, S.base, t); r.th.setAttribute('aria-expanded', !!v); };
+    $(st,'.dt-on').onchange = ev => tl.toggleAttribute('data-nd', !ev.target.checked);
     const nat = k => Math.min(LY[k].scrollHeight, st.clientHeight - (st.clientWidth < 520 ? 44 : 14) - 10);
     const showHeight = (k, t0) => H.set(nat(k), S.base, t0 + EXIT);
     const toState = (k, t0) => { sw.to(k, t0); showHeight(k, t0); steadyAt = t0 + EXIT + .55; };
