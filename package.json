@@ -5,7 +5,9 @@
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
-  "sideEffects": ["./tokens/*.css"],
+  "sideEffects": [
+    "./tokens/*.css"
+  ],
   "files": [
     "dist",
     "tokens",
@@ -43,6 +45,8 @@
   },
   "devDependencies": {
     "@types/react": "19.0.4",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "typescript": "6.0.3"
   },
   "scripts": {
