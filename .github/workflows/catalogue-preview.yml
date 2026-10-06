@@ -27,7 +27,7 @@ jobs:
       - name: Package review sources and preview
         run: |
           mkdir -p review-package
-          git ls-files -z | tar --null -T - --exclude='*.woff*' --exclude='*.ttf' --exclude='*.otf' --exclude='*.pdf' -cf - | tar -xf - -C review-package
+          git ls-files -z | tar --exclude='*.woff*' --exclude='*.ttf' --exclude='*.otf' --exclude='*.pdf' --null -T - -cf - | tar -xf - -C review-package
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: cieo-catalogue-preview
