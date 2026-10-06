@@ -1,0 +1,43 @@
+/* Catalogue UI only. The existing --ink/--card/--accent contract reaches the real recipes. */
+:root {
+  color-scheme: light;
+  --bg: #f7f7f9; --tile: #f2f2f5; --card: #fff; --raised: #eeedf2;
+  --ink: #25242a; --muted: #6b6974; --faint: #77747f;
+  --line: #dcdbe3; --line-soft: #ebeaef;
+  --accent: #6950c6; --accent-tint: #eee9fc; --accent-on: #fff;
+  --success: #327651; --success-tint: #e8f3ec;
+  --warning: #936016; --warning-tint: #fff1d9;
+  --danger: #b4474d; --danger-tint: #fbecee;
+  --shadow: 0 2px 4px #29213706, 0 8px 24px #2921370a;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --library-sidebar: 232px; --library-gap: 24px; --library-columns: 3;
+  --library-shell: #fff; --library-sidebar-bg: #faf9fc;
+  --library-violet: #eee8fa; --library-mint: #e7f1ed;
+  --library-peach: #fcf0e7; --library-blue: #eaf0fa;
+  --library-pink: #f7eaf0; --library-lemon: #f5f1de;
+  --library-radius: 24px; --library-control-radius: 12px;
+}
+:root[data-theme="black"] {
+  color-scheme: dark;
+  --bg: #17171b; --tile: #25242b; --card: #302e37; --raised: #393640;
+  --ink: #f4f1f8; --muted: #c1bbc9; --faint: #aaa4b3;
+  --line: #4a4553; --line-soft: #38343e;
+  --accent: #c4b2ff; --accent-tint: #3a2f56; --accent-on: #261b40;
+  --success: #a0d8b7; --success-tint: #273d32;
+  --warning: #efc67c; --warning-tint: #453b29;
+  --danger: #f4afb5; --danger-tint: #482d34;
+  --shadow: 0 2px 4px #0002, 0 8px 24px #0003;
+  --library-shell: #1f1e24; --library-sidebar-bg: #1b1a20;
+  --library-violet: #302b3e; --library-mint: #283630;
+  --library-peach: #3a2f2a; --library-blue: #2b3241;
+  --library-pink: #3b2b34; --library-lemon: #373429;
+}
+:root[data-accent="blue"] { --accent:#3161bd; --accent-tint:#e8effc; --accent-on:#fff; }
+:root[data-accent="green"] { --accent:#347054; --accent-tint:#e9f3ec; --accent-on:#fff; }
+:root[data-accent="coral"] { --accent:#b4474d; --accent-tint:#fbecee; --accent-on:#fff; }
+:root[data-theme="black"][data-accent="blue"] { --accent:#abc8ff; --accent-tint:#2a3b57; --accent-on:#17243d; }
+:root[data-theme="black"][data-accent="green"] { --accent:#a2d5b7; --accent-tint:#2b4032; --accent-on:#1a2e23; }
+:root[data-theme="black"][data-accent="coral"] { --accent:#f3b5ae; --accent-tint:#483131; --accent-on:#382222; }
+:root[data-corners="crisp"] { --library-radius: 8px; --library-control-radius: 8px; }
+:root[data-density="compact"] { --library-gap:16px; }
