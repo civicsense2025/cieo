@@ -1,0 +1,37 @@
+name: Catalogue preview
+on:
+  pull_request:
+    paths:
+      - 'atoms/web/**'
+      - 'docs/**'
+      - 'scripts/**'
+      - 'test/**'
+      - '.github/workflows/catalogue-preview.yml'
+permissions:
+  contents: read
+concurrency:
+  group: catalogue-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Assemble the actual catalogue
+        run: |
+          node scripts/build-library.mjs
+          node scripts/build-catalogue.mjs
+      - name: Package review sources and preview
+        run: |
+          mkdir -p review-package
+          git ls-files -z | tar --null -T - --exclude='*.woff*' --exclude='*.ttf' --exclude='*.otf' --exclude='*.pdf' -cf - | tar -xf - -C review-package
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: cieo-catalogue-preview
+          path: review-package
+          include-hidden-files: true
+          retention-days: 7
+          if-no-files-found: error
