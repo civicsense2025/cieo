@@ -58,7 +58,7 @@ h1{font-size:44px;line-height:1;letter-spacing:-.035em;font-weight:600;margin:0;
 @media (max-width:1100px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:700px){.grid{grid-template-columns:1fr} h1{font-size:34px}}
 [hidden]{display:none!important}
-.tile{background:var(--tile);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-width:0}
+.tile{background:var(--tile);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;min-width:0;content-visibility:auto;contain-intrinsic-size:auto 420px}
 .tile.wide{grid-column:1/-1}
 .tile>header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px 0}
 .tile h3{font-size:15px;font-weight:600;margin:0;letter-spacing:-.01em}
@@ -18484,6 +18484,1263 @@ atom({ id:'fxp-palette', cat:'Photo effects', name:'Theme from photo', block:'si
   }});
 })();
 
+atom({ id:'binder', cat:'Writing', name:'Manuscript binder', block:'writing, binder', fam:['M','E','T'],
+  html:`<div class="row" style="gap:10px"><div class="bl" style="position:relative;width:132px;display:flex;flex-direction:column;gap:2px"><div class="plate" style="position:absolute;left:0;right:0;border-radius:8px;background:var(--wash)"></div></div><div class="art small" style="width:168px;height:148px;overflow:hidden"></div></div><div class="hint">Pick a chapter</div>`,
+  desc:'A chapter list with a highlight plate that glides from chapter to chapter on a calm spring, its lower edge trailing 60ms behind. Each chapter keeps a live word count that rolls over like digits, and picking a chapter springs the article pane to its heading.',
+  api:'pick(i): plate.go(y0,y1); digits[i].set(n); scroll.set(head)',
+  init(st){
+    const C = [['Draft',1240],['Revision',860],['Polish',320]], H = 36, R = REDUCE;
+    const bl = $(st,'.bl'), art = $(st,'.art'), plate = $(st,'.plate');
+    const E = edges(2, H-2), sc = new Track(0);
+    const rows = C.map(([t,n],i) => {
+      const b = document.createElement('button'); b.className = 'row small';
+      b.style.cssText = 'height:34px;gap:6px;background:none;border:0;cursor:pointer;z-index:1;text-align:left';
+      b.innerHTML = `<span style="width:56px">${t}</span><span class="dg"></span>`; b.onclick = () => pick(i); bl.appendChild(b);
+      const dg = new Digits(b.querySelector('.dg'), 4); dg.set(n, true); return { dg, n };
+    });
+    C.forEach(([t]) => { const h = document.createElement('h4'); h.textContent = t; h.style.margin = '10px 0 2px'; art.appendChild(h);
+      const p = document.createElement('p'); p.textContent = 'Words gather here while the draft finds its shape.'; p.style.margin = '0 0 34px'; art.appendChild(p); });
+    const pick = i => { const t = now(), y0 = i*H+2, y1 = i*H+H-2;
+      if (R){ E.jump(y0,y1); sc.jump(i*96); } else { E.go(y0,y1,t); sc.set(i*96, S.base, t); }
+      rows[i].n += 40; rows[i].dg.set(rows[i].n, R); };
+    return t => { plate.style.top = px(E.A.at(t)); plate.style.height = px(Math.max(0, E.B.at(t)-E.A.at(t)));
+      art.scrollTop = sc.at(t); rows.forEach(r => r.dg.render(t)); };
+  }});
+atom({ id:'corkboard', cat:'Writing', name:'Corkboard cards', block:'writing, board', fam:['D','S','T'],
+  html:`<div class="bd" style="position:relative;height:118px"></div><div class="syn small" style="position:relative;height:32px;margin-top:6px"></div><div class="hint">Drag a card, release to snap back</div>`,
+  desc:'Scene cards follow the pointer one to one while held. On release every card springs home to its slot on the same calm spring with a 40ms stagger, and the synopsis line below swaps to the held card with a quick blur out and back in.',
+  api:'down: card.follow(1:1), syn.to(i)   up: cards.release(slot, S.base, +40ms)',
+  init(st){
+    const C = [['Cold open','A door sings in an empty house.'],['Turn','Dust rises; something answers upstairs.'],['Button','Mara decides to stay the night.']];
+    const R = REDUCE, bd = $(st,'.bd'), syn = $(st,'.syn'), W = 96;
+    const sw = new Swap(0); const go = k => { sw.to(k); if (R) sw.t = -9; };
+    const layers = C.map(([,s],i) => { const d = document.createElement('div'); d.textContent = s;
+      d.style.cssText = 'position:absolute;inset:0'; syn.appendChild(d); return d; });
+    const cards = C.map(([t],i) => {
+      const c = document.createElement('div'); c.className = 'small'; c.textContent = t; c.style.touchAction = 'none';
+      c.style.cssText += ';position:absolute;top:8px;width:88px;height:96px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none';
+      bd.appendChild(c);
+      const cx = new Track(i*W), cy = new Track(0); let dx = 0, dy = 0;
+      drag(c, { down: p => { const t = now(); dx = p.x - cx.at(t) - 4; dy = p.y - cy.at(t) - 8; c.style.zIndex = 5; go(i); },
+        move: p => { cx.jump(p.x - dx - 4); cy.jump(p.y - dy - 8); },
+        up: (p, v) => { c.style.zIndex = ''; const t = now();
+          cards.forEach((k,j) => { const T = R ? t : t + j*.04;
+            if (R){ k.cx.jump(j*W); k.cy.jump(0); } else { k.cx.release(k.cx.at(t), v.vx, j*W, S.base, T); k.cy.release(k.cy.at(t), v.vy, 0, S.base, T); } }); } });
+      return { cx, cy };
+    });
+    return t => { cards.forEach((k,i) => { const el = bd.children[i];
+        el.style.transform = `translate(${px(k.cx.at(t))},${px(k.cy.at(t))})`; });
+      layers.forEach((l,i) => sw.apply(l, i, t)); };
+  }});
+atom({ id:'focusline', cat:'Writing', name:'Focus sentence', block:'writing, focus', fam:['M','X'], tall:true,
+  html:`<div class="pg small" style="display:flex;flex-direction:column;gap:8px;max-width:300px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="pv">Prev</button><button class="nx">Next</button></div><div class="hint">Move the caret</div>`,
+  desc:'One sentence at a time carries full ink while the rest sink to a dim grey on the same soft spring. Moving the caret simply retargets that spring, so focus bends mid-flight instead of restarting.',
+  api:'caret.set(i): op.set(k==i?1:.35, S.soft)',
+  init(st){
+    const L = ['The house had been empty for years.', 'Mara pushed the door and it sang.', 'Dust stood up in the light.', 'Somewhere upstairs, a floorboard answered.'];
+    const R = REDUCE, pg = $(st,'.pg'), ops = L.map(() => new Track(.35, S.soft));
+    const els = L.map((s,i) => { const p = document.createElement('p'); p.textContent = s;
+      p.style.cssText = 'margin:0;cursor:pointer'; p.onclick = () => go(i); pg.appendChild(p); return p; });
+    let cur = 1; ops[1].jump(1);
+    const go = i => { cur = (i + L.length) % L.length;
+      ops.forEach((o,k) => R ? o.jump(k === cur ? 1 : .35) : o.set(k === cur ? 1 : .35, S.soft)); };
+    $(st,'.pv').onclick = () => go(cur-1); $(st,'.nx').onclick = () => go(cur+1);
+    return t => els.forEach((e,k) => { const o = ops[k].at(t); e.style.opacity = o.toFixed(3);
+      e.style.filter = o < .98 ? `blur(${((1-o)*2).toFixed(2)}px)` : 'none'; });
+  }});
+atom({ id:'typewriter', cat:'Writing', name:'Typewriter lock', block:'writing, draft', fam:['M','X'], tall:true,
+  html:`<div class="vw small" style="position:relative;height:150px;overflow:hidden;border:1px solid var(--line);border-radius:10px"><div class="caret" style="position:absolute;left:6px;right:6px;height:24px;border-radius:6px;background:var(--wash);border:1px solid var(--line)"></div><div class="paper" style="position:absolute;left:14px;right:14px;top:0"></div></div><div class="row" style="gap:8px;margin-top:8px"><button class="pv">Prev</button><button class="nx">Next</button><label class="row small" style="gap:6px;cursor:pointer"><input type="checkbox" class="lk" checked> lock</label></div><div class="hint">Caret pinned mid-screen, paper moves</div>`,
+  desc:'The caret stays pinned to the middle of the screen while the paper glides beneath it on a soft spring. A lock switch in the tile turns the effect off, so the caret walks the page instead of the page walking to it.',
+  api:'line.set(i): lock?paper.set(mid-i*h):caret.set(i*h)',
+  init(st){
+    const LH = 26, MID = 63, N = 6, R = REDUCE, lock = $(st,'.lk');
+    const paper = $(st,'.paper'), caret = $(st,'.caret');
+    for (let i = 0; i < N; i++){ const d = document.createElement('div');
+      d.textContent = `Line ${i+1} — the draft keeps going.`; d.style.cssText = `height:${LH}px;line-height:${LH}px`; paper.appendChild(d); }
+    const py = new Track(MID), cy = new Track(MID); let cur = 0;
+    const go = i => { cur = (i + N) % N;
+      if (R){ py.jump(lock.checked ? MID-cur*LH : 0); cy.jump(lock.checked ? MID : cur*LH); }
+      else if (lock.checked){ py.set(MID-cur*LH, S.soft); } else { py.set(0, S.soft); cy.set(cur*LH, S.soft); } };
+    $(st,'.pv').onclick = () => go(cur-1); $(st,'.nx').onclick = () => go(cur+1); lock.onchange = () => go(cur);
+    return t => { paper.style.transform = `translateY(${px(py.at(t))})`; caret.style.top = px(cy.at(t)); };
+  }});
+atom({ id:'goalring', cat:'Writing', name:'Goal ring', block:'writing, goals', fam:['M','S','T'],
+  html:`<div class="row" style="gap:12px;align-items:center"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="30" fill="none" stroke="var(--line)" stroke-width="8"/><circle class="fg" cx="38" cy="38" r="30" fill="none" stroke="var(--ink)" stroke-width="8" stroke-linecap="round" transform="rotate(-90 38 38)"/></svg><div class="swap" style="position:relative;width:96px;height:30px"><div class="L0" style="position:absolute;inset:0"></div><div class="L1" style="position:absolute;inset:0;font-weight:600;line-height:30px">Done ✓</div></div></div><div class="row" style="gap:8px;margin-top:8px"><button class="add">Write +125</button><button class="rs">Reset</button></div><div class="hint">500 words a day</div>`,
+  desc:'A ring and its word count climb toward the daily target on a slow lazy spring, digits rolling as they go. At one hundred percent the ring gives a quick snap pulse and swaps to a Done state, and Reset returns it to zero.',
+  api:'write(n): p.set(min(1,v)); done?{pulse.snap; swap.to(Done)}',
+  init(st){
+    const C = 188.5, goal = 500, R = REDUCE, fg = $(st,'.fg'), svg = $(st,'svg');
+    fg.style.strokeDasharray = C.toFixed(1); fg.style.strokeDashoffset = C.toFixed(1);
+    const dg = new Digits($(st,'.L0'), 3); dg.set(0, true);
+    const sw = new Swap(0), p = new Track(0), pu = new Track(1);
+    const L0 = $(st,'.L0'), L1 = $(st,'.L1'); let v = 0, done = false;
+    const go = k => { sw.to(k); if (R) sw.t = -9; };
+    $(st,'.add').onclick = () => { if (done) return; const t = now(); v = Math.min(goal, v+125);
+      R ? p.jump(v/goal) : p.set(v/goal, S.lazy, t); dg.set(v, R);
+      if (v >= goal){ done = true; if (R) pu.jump(1); else { pu.set(1.18, S.snap, t); pu.set(1, S.snap, t+.12); } go(1); } };
+    $(st,'.rs').onclick = () => { v = 0; done = false; p.jump(0); pu.jump(1); dg.set(0, true); go(0); };
+    return t => { fg.style.strokeDashoffset = (C*(1-p.at(t))).toFixed(2);
+      svg.style.transform = `scale(${pu.at(t).toFixed(3)})`;
+      sw.apply(L0, 0, t); sw.apply(L1, 1, t); dg.render(t); };
+  }});
+
+
+atom({ id:'scrivenings', cat:'Writing', name:'Joined scenes', block:'manuscript, scene list', fam:['M','S'], tall:true,
+  html:`<div class="col" style="gap:10px;width:min(340px,92%)"><div class="row sc-chips" style="gap:6px;flex-wrap:wrap"></div><div class="card sc-join" style="overflow:hidden;width:100%"><div class="sc-in col" style="gap:0;padding:12px 14px"></div></div></div><div class="hint">Tick scenes to stitch them together</div>`,
+  desc:'Tick scenes to stitch them into one scroll. Divider titles swap without overlap while the joined height springs to fit.',
+  api:'sel.toggle(i); div.swap(i); h.set(fit)',
+  init(st){
+    const SC = [{ t:'Arrival', b:'Mara reaches the lake house after dark, every light on.' },{ t:'The letter', b:'An unsent letter on the table names the buyer of the orchard.' },{ t:'Storm', b:'Rain takes the power out; they talk by candlelight until dawn.' }];
+    const chips = $(st,'.sc-chips'), join = $(st,'.sc-join'), inn = $(st,'.sc-in');
+    const h = new Track(0); let sel = [0, 2]; const divs = [];
+    const fit = () => h.set(inn.scrollHeight || 1, S.base);
+    const paint = () => {
+      chips.querySelectorAll('button').forEach((b,i) => {
+        const on = sel.includes(i);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.style.opacity = on ? '1' : '.55';
+      });
+    };
+    SC.forEach((s,i) => {
+      const b = document.createElement('button'); b.className = 'chipb small'; b.textContent = s.t;
+      b.style.cssText += 'height:28px;border-radius:14px;padding:0 12px;cursor:pointer';
+      b.onclick = () => { sel = sel.includes(i) ? sel.filter(k => k !== i) : [...sel, i].sort(); render(); };
+      chips.appendChild(b);
+    });
+    const divider = title => {
+      const d = document.createElement('div');
+      d.style.cssText = 'position:relative;height:22px;margin:8px 0 2px';
+      const e = document.createElement('span'); e.className = 'layer small muted'; e.textContent = '';
+      const f = document.createElement('span'); f.className = 'layer small muted'; f.textContent = title;
+      d.appendChild(e); d.appendChild(f);
+      const sw = new Swap(0); sw.to(1);
+      divs.push({ sw, e, f });
+      return d;
+    };
+    const render = () => {
+      divs.length = 0; inn.innerHTML = '';
+      if (!sel.length){ const p = document.createElement('p'); p.className = 'small muted'; p.textContent = 'Nothing stitched yet — tick a scene above.'; inn.appendChild(p); }
+      sel.forEach((si,n) => {
+        if (n > 0) inn.appendChild(divider('§ ' + (n+1) + ' · ' + SC[si].t));
+        const p = document.createElement('p'); p.className = 'small'; p.style.margin = '0 0 8px'; p.textContent = SC[si].b; inn.appendChild(p);
+      });
+      paint(); fit();
+    };
+    render(); h.jump(inn.scrollHeight || 1);
+    return t => { join.style.height = px(Math.max(1, h.at(t))); divs.forEach(d => d.sw.apply(d.e, 0, t) || d.sw.apply(d.f, 1, t)); };
+  }});
+
+
+atom({ id:'barepage', cat:'Writing', name:'Bare-page fade', block:'editor, toolbar', fam:['X','S'],
+  html:`<div class="col" style="gap:8px;align-items:center"><div class="card bp-chrome row" style="gap:6px;padding:6px 10px;font-size:13px">Draft<span class="muted">·</span><span class="muted">Share</span><span class="muted">·</span><b>Enter</b></div><div class="card bp-page" style="overflow:hidden;padding:14px 16px"><p class="small" style="margin:0">The lake was flat. Mara set the lamp down and started over on the first line.</p><div class="bp-side small muted" style="overflow:hidden">812 words · calm air, no comments</div></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="bp-calm" checked> calm</label></div><div class="hint">Enter to write · move to the top for tools</div>`,
+  desc:'Enter fades the chrome out fast, then the page widens on a spring. Moving to the top brings the tools back. The toggle picks calm or busy air.',
+  api:'enter(): chrome.set(0,snap); w.set(wide,base); top:hover → chrome.set(1)',
+  init(st){
+    const chrome = $(st,'.bp-chrome'), page = $(st,'.bp-page'), side = $(st,'.bp-side'), calm = $(st,'.bp-calm');
+    const co = new Track(1), w = new Track(250), sb = new Track(1);
+    w.jump(250); sb.jump(1);
+    let writing = false;
+    chrome.querySelector('b').style.cursor = 'pointer';
+    chrome.querySelector('b').onclick = () => {
+      writing = true; const t = now();
+      co.set(0, S.snap, t); w.set(330, S.base, t + .1);
+    };
+    st.addEventListener('pointermove', e => {
+      const r = st.getBoundingClientRect();
+      if (e.clientY - r.top < 28 && writing){ writing = false; co.set(1, S.base); w.set(250, S.base); }
+    });
+    calm.onchange = () => sb.set(calm.checked ? 1 : 0, S.base);
+    return t => {
+      const c = clamp(co.at(t));
+      chrome.style.opacity = c.toFixed(3);
+      chrome.style.visibility = c < .02 ? 'hidden' : 'visible';
+      chrome.style.filter = c < .98 ? 'blur(' + ((1-c)*4).toFixed(2) + 'px)' : 'none';
+      page.style.width = px(w.at(t));
+      const s = clamp(sb.at(t));
+      side.style.opacity = s.toFixed(3);
+      side.style.maxHeight = px(s*30);
+    };
+  }});
+
+
+atom({ id:'compilerun', cat:'Writing', name:'Compile run', block:'manuscript export, progress bar', fam:['S','T'],
+  html:`<div class="col" style="gap:10px;width:min(320px,90%)"><div class="cp-track" style="height:8px;border-radius:5px;background:var(--raised);overflow:hidden"><div class="cp-bar" style="height:100%;width:0;border-radius:5px;background:var(--ink)"></div></div><div class="row cp-ticks" style="gap:6px"></div><div class="row" style="justify-content:space-between;align-items:center"><span class="cp-st small" style="position:relative;width:170px;height:20px"></span><button class="cp-run" style="height:32px;border-radius:16px;padding:0 16px;cursor:pointer">Run</button></div></div><div class="hint">Run builds the manuscript</div>`,
+  desc:'Run creeps the bar to most of the way on the clock, then springs it shut. Chapter ticks land one after another and the status swaps to open the book.',
+  api:'run(): creep→0.9; done: p.set(1,base); ticks+60ms; swap.to(open)',
+  init(st){
+    const bar = $(st,'.cp-bar'), ticks = $(st,'.cp-ticks'), holder = $(st,'.cp-st'), run = $(st,'.cp-run');
+    const N = 5, tk = []; let t0 = -9, done = -9, live = false;
+    for (let i = 0; i < N; i++){ const d = document.createElement('span'); d.className = 'small muted'; d.textContent = 'ch' + (i+1); d.style.opacity = '.25'; ticks.appendChild(d); tk.push({ d, on:false, f:-9 }); }
+    const mk = html => { const e = document.createElement('span'); e.className = 'layer'; e.innerHTML = html; holder.appendChild(e); return e; };
+    const L0 = mk('<span class="muted">Ready to compile</span>');
+    const L1 = mk('<span class="muted">Weaving chapters…</span>');
+    const L2 = mk('<span style="color:var(--success);font-weight:600">Open manuscript →</span>');
+    const sw = new Swap(0);
+    const fin = new Track(0);
+    run.onclick = () => {
+      if (live) return;
+      live = true; t0 = now(); done = -9; fin.jump(0); sw.to(1);
+      tk.forEach(o => { o.on = false; o.f = -9; o.d.style.opacity = '.25'; });
+      run.style.opacity = '.4';
+    };
+    return t => {
+      let p = 0;
+      if (live){
+        const creep = Math.min(.9, (t - t0)/2.2*.9);
+        tk.forEach((o,i) => { const ft = t0 + .4 + i*.06; if (t >= ft && !o.on){ o.on = true; o.f = t; } });
+        if (creep >= .9 && done < 0){ done = t; fin.set(1, S.base, t); sw.to(2); live = 'done'; }
+        if (done < 0) p = creep; else { p = .9 + .1*clamp(prog(t, done, S.base)); if (p > .999){ live = false; run.style.opacity = '1'; } }
+      } else if (done >= 0) p = 1;
+      bar.style.width = (p*100).toFixed(1) + '%';
+      tk.forEach(o => { if (o.on) o.d.style.opacity = (.25 + .75*clamp(prog(t, o.f, S.base))).toFixed(3); });
+      const f = clamp(fin.at(t)); bar.style.background = f > .5 ? 'var(--success)' : 'var(--ink)';
+      sw.apply(L0, 0, t); sw.apply(L1, 1, t); sw.apply(L2, 2, t);
+    };
+  }});
+
+
+atom({ id:'transcribe', cat:'Writing', name:'Live transcription caret', block:'transcript, live captions', fam:['M','S','T'], tall:true,
+  html:`<div class="col" style="gap:10px;width:min(340px,92%)"><div class="card tr-box" style="padding:12px 14px;min-height:120px;font-size:14px;line-height:1.7"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="tr-live" checked> Live</label></div><div class="hint">Tap a word to hear it again</div>`,
+  desc:'Words blur in one by one while a soft caret rides the last word. Tapping a word pulses it like a replay. Pause stops the stream.',
+  api:'tick: word.blurIn(base); caret.after(last); tap: pulse.set(1); live.toggle()',
+  init(st){
+    const box = $(st,'.tr-box'), live = $(st,'.tr-live');
+    const W = 'The harbor bell rang twice before the gulls rose over the breakwater'.split(' ');
+    const words = W.map(s => { const e = document.createElement('span'); e.textContent = s; e.style.cssText = 'cursor:pointer;border-radius:4px;padding:0 1px'; box.appendChild(e); box.appendChild(document.createTextNode(' ')); return { e, rt:-9, pu:new Track(0) }; });
+    const caret = document.createElement('span');
+    caret.style.cssText = 'display:inline-block;width:2px;height:1em;background:var(--ink);vertical-align:-2px;margin-left:2px;opacity:.6';
+    box.appendChild(caret);
+    let n = 0, t0 = now(), last = -9;
+    const step = () => { if (n < words.length && live.checked){ words[n].rt = now(); last = n; n++; } };
+    const iv = setInterval(step, 180);
+    words.forEach((w2,i) => w2.e.onclick = () => w2.pu.set(1, S.base));
+    return t => {
+      words.forEach((w2,i) => {
+        const p = w2.rt < 0 ? 0 : clamp(prog(t, w2.rt, S.base));
+        w2.e.style.opacity = p.toFixed(3);
+        w2.e.style.filter = p < .98 ? 'blur(' + ((1-p)*4).toFixed(2) + 'px)' : 'none';
+        const k = clamp(w2.pu.at(t));
+        w2.e.style.background = k > .02 ? 'color-mix(in oklab, var(--ink) ' + (k*14).toFixed(1) + '%, transparent)' : 'none';
+        if (k > .98) w2.pu.jump(0);
+      });
+      caret.style.opacity = (.25 + .35*Math.abs(Math.sin(t*3))).toFixed(3);
+      if (last >= 0 && words[last].e.parentNode === box) box.appendChild(caret);
+    };
+  }});
+
+
+atom({ id:'pullquote', cat:'Writing', name:'Pull-quote extractor', block:'quote, manuscript', fam:['D','M'],
+  html:`<div class="col" style="gap:8px;width:min(320px,90%)"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end"><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><div class="hint">Drag the quote into the story</div>`,
+  desc:'Drag the quote and it lifts while the paragraphs spring aside. Dropping it grows the block open from zero height. Reset puts it back.',
+  api:'drag(q): lift; sib.y.set(gap); drop: h.set(1,base); reset()',
+  init(st){
+    const list = $(st,'.pq-list'), reset = $(st,'.pq-reset');
+    const P = ['Mara kept the lamp lit long after the ferry left.', 'The orchard deal could wait until morning, she said.'];
+    const rows = P.map(s => { const d = document.createElement('div'); d.className = 'card small'; d.style.cssText = 'padding:10px 12px'; d.textContent = s; list.appendChild(d); return { d, y:new Track(0) }; });
+    const q = document.createElement('div');
+    q.className = 'card small';
+    q.style.cssText = 'padding:10px 12px;border-left:3px solid var(--ink);cursor:grab;touch-action:none;font-style:italic';
+    q.textContent = '“We start over on the first line.”';
+    list.appendChild(q);
+    const qrow = { d:q, y:new Track(0) };
+    const h = new Track(0); let placed = null, dy = 0, idx = 2;
+    const QH = 44;
+    drag(q, {
+      down(){ q.style.cursor = 'grabbing'; q.style.boxShadow = '0 8px 20px rgba(0,0,0,.18)'; },
+      move(p){ dy = p.y - q.offsetTop - 20; qrow.y.set(dy, S.base);
+        idx = clamp(Math.round((q.offsetTop + dy)/QH), 0, rows.length);
+        rows.forEach((r,i) => r.y.set(i < idx ? -8 : i >= idx && placed === null ? 8 : 0, S.base));
+      },
+      up(){
+        q.style.cursor = 'grab'; q.style.boxShadow = 'none';
+        if (placed) placed.remove();
+        placed = document.createElement('div');
+        placed.className = 'card small';
+        placed.style.cssText = 'overflow:hidden;padding:0 12px;border-left:3px solid var(--ink);font-style:italic';
+        placed.innerHTML = '<div style="padding:10px 0">“We start over on the first line.”</div>';
+        list.insertBefore(placed, list.children[Math.min(idx, list.children.length)]);
+        h.jump(0); h.set(1, S.base);
+        qrow.y.set(0, S.base); dy = 0;
+        rows.forEach(r => r.y.set(0, S.base));
+      }
+    });
+    reset.onclick = () => { if (placed){ placed.remove(); placed = null; } h.jump(0); qrow.y.set(0, S.base); rows.forEach(r => r.y.set(0, S.base)); };
+    return t => {
+      q.style.transform = 'translateY(' + qrow.y.at(t).toFixed(2) + 'px) scale(' + (1 + .03*clamp(Math.abs(qrow.y.at(t))/60)).toFixed(3) + ')';
+      rows.forEach(r => { r.d.style.transform = 'translateY(' + r.y.at(t).toFixed(2) + 'px)'; });
+      if (placed){ const k = clamp(h.at(t)); placed.style.height = px(k*placed.firstChild.offsetHeight); placed.style.opacity = k.toFixed(3); }
+    };
+  }});
+
+
+atom({ id:'deadline', cat:'Writing', name:'Deadline ticker', block:'richtext editor, status bar', fam:['M','S'],
+  html:`<div class="col" style="gap:10px;align-items:center"><div class="card dd" style="position:relative;padding:10px 18px 14px;text-align:center;min-width:238px"><div class="small muted">Submission closes in</div><div class="row" style="justify-content:center;align-items:baseline;gap:3px;font:600 30px var(--mono);font-variant-numeric:tabular-nums"><span class="dm"></span><span>:</span><span class="ds"></span></div><div class="db" style="position:relative;height:3px;margin-top:8px;background:var(--line-soft);border-radius:2px"><i style="position:absolute;top:0;bottom:0;left:0;right:0;background:var(--ink);border-radius:2px"></i></div><div style="margin-top:10px"><button class="btn pp" type="button" style="position:relative;height:32px;min-width:86px"></button></div></div></div><div class="hint">Pauses in place; danger under 10:00</div>`,
+  desc:'The minutes and seconds roll on lazy springs while the plate edges trail 60ms behind. Under ten minutes the tile turns danger. Pause freezes the count in place.',
+  api:'tick: rem-=dt; dm/ds.set(mm:ss, REDUCE)   rem<600: dg.set(1); eg.go(i,i)   pp toggles paused',
+  init(st){
+    const TOTAL = 612, dm = new Digits($(st,'.dm'), 2), ds = new Digits($(st,'.ds'), 2);
+    dm.dir = ds.dir = -1; [...dm.slots, ...ds.slots].forEach(sl => sl.w.cfg = S.lazy);
+    const bar = $(st,'.db i'), tile = $(st,'.dd'), pp = $(st,'.pp'), LE = {};
+    for (const [k, label] of [['run','Pause'],['pause','Resume']]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = label; pp.appendChild(e); LE[k] = e; }
+    const psw = new Swap('run'), dg = new Track(0), eg = edges(0, 0);
+    let rem = TOTAL, last = -1, paused = false, shown = '';
+    pp.onclick = () => { paused = !paused;
+      if (REDUCE){ psw.cur = paused ? 'pause' : 'run'; psw.prev = null; } else psw.to(paused ? 'pause' : 'run', now()); };
+    dm.set('10', true); ds.set('12', true);
+    return t => {
+      if (last < 0) last = t;
+      const dt = Math.min(.25, t - last); last = t;
+      if (!paused && rem > 0) rem = Math.max(0, rem - dt);
+      const s = Math.ceil(rem), key = String(Math.floor(s/60)).padStart(2,'0') + String(s%60).padStart(2,'0');
+      if (key !== shown){ shown = key; dm.set(key.slice(0,2), REDUCE); ds.set(key.slice(2), REDUCE); }
+      dm.render(t); ds.render(t);
+      if (REDUCE) dg.jump(rem < 600 ? 1 : 0); else dg.set(rem < 600 ? 1 : 0);
+      const g = clamp(dg.at(t)), W = bar.parentNode.offsetWidth, i = (1 - rem/TOTAL)*W/2;
+      if (REDUCE) eg.jump(i, i); else eg.go(i, i);
+      bar.style.left = px(eg.A.at(t)); bar.style.right = px(eg.B.at(t));
+      bar.style.background = mix(g, 'var(--danger)', 'var(--ink)');
+      tile.style.borderColor = mix(g, 'var(--danger)', 'var(--line)');
+      tile.style.background = mix(g, 'var(--danger-tint)', 'var(--card)');
+      for (const k in LE) psw.apply(LE[k], k, t, 3);
+    };
+  }});
+
+
+atom({ id:'factcheck', cat:'Writing', name:'Source fact-check chips', block:'richtext editor, source list', fam:['S','M'],
+  html:`<div class="col" style="gap:12px;align-items:center"><div class="fc row" style="gap:8px;flex-wrap:wrap;justify-content:center;max-width:360px"></div><button class="btn va" type="button">Verify all</button></div><div class="hint">Click a chip to toggle it</div>`,
+  desc:'Each source swaps from unverified to verified in 100ms exit-then-enter while the chip width springs to fit. Verify all runs the same change down the row.',
+  api:'chip: sw.to(v); w.set(fit(v)); tint.set(v)   all: each at t+i·.09',
+  init(st){
+    const host = $(st,'.fc');
+    const chips = ['Harbor minutes', 'City budget PDF', 'Founder interview'].map(name => {
+      const b = document.createElement('button'); b.className = 'btn'; b.type = 'button';
+      b.style.cssText = 'position:relative;height:32px;overflow:hidden;white-space:nowrap';
+      b.setAttribute('aria-pressed', 'false');
+      const txt = { u:'\u25CF ' + name, v:'\u2713 ' + name }, L = {};
+      for (const k of ['u','v']){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = txt[k]; b.appendChild(e); L[k] = e; }
+      host.appendChild(b);
+      const c = { b, L, txt, on:false, sw:new Swap('u'), w:new Track(0), tint:new Track(0) };
+      c.w.jump(measureW(b, txt.u));
+      b.onclick = () => go(c, !c.on, now());
+      return c;
+    });
+    const go = (c, v, t) => { c.on = v; c.b.setAttribute('aria-pressed', String(v));
+      const fw = measureW(c.b, c.txt[v ? 'v' : 'u']);
+      if (REDUCE){ c.sw.cur = v ? 'v' : 'u'; c.sw.prev = null; c.w.jump(fw); c.tint.jump(v ? 1 : 0); }
+      else { c.sw.to(v ? 'v' : 'u', t); c.w.set(fw, S.base, t); c.tint.set(v ? 1 : 0, S.base, t); } };
+    $(st,'.va').onclick = () => { const t0 = now(); chips.forEach((c,i) => go(c, true, t0 + (REDUCE ? 0 : i*.09))); };
+    return t => { for (const c of chips){ const g = clamp(c.tint.at(t));
+      c.b.style.width = px(c.w.at(t));
+      c.b.style.background = mix(g, 'var(--success-tint)', 'var(--card)');
+      c.b.style.borderColor = mix(g, 'var(--success)', 'var(--line)');
+      c.b.style.color = mix(g, 'var(--success)', 'var(--ink)');
+      for (const k in c.L) c.sw.apply(c.L[k], k, t, 4); } };
+  }});
+
+
+atom({ id:'embargo', cat:'Writing', name:'Embargo countdown', block:'richtext editor, publish bar', fam:['M','X'],
+  html:`<div class="col" style="gap:10px;align-items:center"><div class="card eb" style="position:relative;height:58px;width:min(280px,88%);overflow:hidden"></div><button class="btn rs" type="button">Reset</button></div><div class="hint">Only changing digits roll</div>`,
+  desc:'Only the digits that change roll each second. At zero the count lifts into a Live pill on a soft spring. Reset puts the count back.',
+  api:'tick: dg.set(pad(floor)); delta only rolls   0: sw.to(live); ly -10→0 soft   rs: jump back',
+  init(st){
+    const TOTAL = 8, box = $(st,'.eb');
+    const mk = html => { const e = document.createElement('div'); e.className = 'layer';
+      e.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:6px'; e.innerHTML = html; box.appendChild(e); return e; };
+    const count = mk('<span class="small muted">Lifts in</span><span class="eg" style="font:600 26px var(--mono)"></span><span class="small muted">sec</span>');
+    const live = mk('<span style="display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--success)"><i style="width:8px;height:8px;border-radius:50%;background:var(--success)"></i>Live · embargo lifted</span>');
+    const dg = new Digits($(count,'.eg'), 2); dg.dir = -1;
+    const sw = new Swap('count'), tint = new Track(0), ly = new Track(0);
+    let rem = TOTAL, last = -1, shown = -1, lifted = false;
+    const lift = t => { lifted = true;
+      if (REDUCE){ sw.cur = 'live'; sw.prev = null; tint.jump(1); ly.jump(0); }
+      else { sw.to('live', t); tint.set(1, S.base, t); ly.set(-10, S.soft, t); ly.set(0, S.soft, t + .14); } };
+    $(st,'.rs').onclick = () => { const t = now(); rem = TOTAL; shown = -1; lifted = false;
+      if (REDUCE){ sw.cur = 'count'; sw.prev = null; tint.jump(0); ly.jump(0); }
+      else { sw.to('count', t); tint.set(0, S.base, t); ly.jump(0); } };
+    dg.set('08', true);
+    return t => {
+      if (last < 0) last = t;
+      const dt = Math.min(.25, t - last); last = t;
+      if (!lifted && rem > 0){ rem = Math.max(0, rem - dt);
+        const s = Math.ceil(rem);
+        if (s !== shown){ shown = s; dg.set(String(s).padStart(2,'0'), REDUCE); }
+        if (rem <= 0) lift(t); }
+      dg.render(t);
+      const g = clamp(tint.at(t));
+      box.style.background = mix(g, 'var(--success-tint)', 'var(--card)');
+      box.style.borderColor = mix(g, 'var(--success)', 'var(--line)');
+      box.style.transform = `translateY(${ly.at(t).toFixed(2)}px)`;
+      sw.apply(count, 'count', t, 10); sw.apply(live, 'live', t, 10);
+    };
+  }});
+
+
+atom({ id:'lede', cat:'Writing', name:'Lede optimizer', block:'richtext editor, headline', fam:['M','E'],
+  html:`<div class="col" style="width:min(360px,90%);gap:10px"><div class="card lv" style="position:relative;height:96px;overflow:hidden"></div><div class="row" style="gap:8px;align-items:center"><button class="btn pv" type="button">Prev</button><button class="btn nx" type="button">Next</button><div style="flex:1;height:6px;border-radius:3px;background:var(--line-soft);overflow:hidden"><i class="gb" style="display:block;height:100%;width:0;background:var(--success);border-radius:3px"></i></div><span class="gs small muted" style="min-width:30px;text-align:right"></span></div></div><div class="hint">Grade bar runs on base</div>`,
+  desc:'Variants swap exit-then-enter while the grade bar eases on base and the score rolls with the direction of travel. Prev and Next walk the list.',
+  api:'go(k,t): sw.to(k); w.set(score); dg.set(score, dir)   ends clamp, no wrap',
+  init(st){
+    const V = [['Harbor opens its doors to first-time founders.', 72], ['Twelve founders, one harbor, zero pitch decks.', 86], ['The harbor where first-time founders ship first.', 94]];
+    const box = $(st,'.lv'), gb = $(st,'.gb');
+    const L = V.map((v,i) => { const e = document.createElement('div'); e.className = 'layer';
+      e.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0 16px;text-align:center';
+      e.innerHTML = `<p style="margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em;line-height:1.4">${v[0]}</p><span class="small muted">Variant ${i+1} of ${V.length}</span>`;
+      box.appendChild(e); return e; });
+    const dg = new Digits($(st,'.gs'), 2), w = new Track(V[0][1]), sw = new Swap(0);
+    let i = 0; dg.set(String(V[0][1]), true); w.jump(V[0][1]);
+    const go = k => { k = Math.max(0, Math.min(V.length-1, k)); if (k === i) return; const t = now();
+      dg.dir = k > i ? 1 : -1; i = k;
+      if (REDUCE){ sw.cur = k; sw.prev = null; w.jump(V[k][1]); dg.set(String(V[k][1]), true); }
+      else { sw.to(k, t); w.set(V[k][1], S.base, t); dg.set(String(V[k][1]), false); } };
+    $(st,'.pv').onclick = () => go(i-1); $(st,'.nx').onclick = () => go(i+1);
+    return t => { L.forEach((e,k) => sw.apply(e, k, t, 8)); dg.render(t);
+      gb.style.width = w.at(t).toFixed(1) + '%'; };
+  }});
+
+
+atom({ id:'voicenote', cat:'Writing', name:'Audio-note insert', block:'richtext editor, audio', fam:['X','M'], tall:true,
+  html:`<style>
+.vn{position:relative;height:320px;width:min(340px,92%);padding:14px;text-align:left;overflow:hidden}
+.vn-doc{font-size:13.5px;line-height:1.6;color:var(--muted)}
+.vn-doc b{color:var(--ink)}
+.vs{position:absolute;left:14px;right:14px;top:118px;height:0;overflow:visible}
+.vs i{position:absolute;left:0;right:0;top:0;display:block;height:0;border:1.5px dashed var(--line);border-radius:12px;opacity:0}
+.vt{position:absolute;left:0;top:0;width:190px;height:56px;border-radius:12px;background:var(--raised);border:1px solid var(--line);display:flex;align-items:center;gap:9px;padding:0 12px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.vb{flex:none;width:3px;border-radius:2px;background:var(--ink)}
+.vn-tray{position:absolute;left:14px;right:14px;bottom:56px;height:72px;border-radius:12px;border:1px solid var(--line-soft)}
+.vn-ctl{position:absolute;left:14px;right:14px;bottom:12px;display:flex;gap:8px}
+</style>
+<div class="card vn"><div class="vn-doc"><b>Spring launch</b><br>Doors at 6 pm, talk at 7. Press play on the note, or drop it into the draft.</div><div class="vs"><i></i></div><div class="vn-tray"></div><div class="vt"><span class="vw" style="display:flex;align-items:center;gap:2.5px;height:26px"></span><span class="small muted">0:12</span></div><div class="vn-ctl"><button class="btn pl" type="button" style="position:relative;height:32px;min-width:70px"></button><button class="btn insb" type="button" style="position:relative;height:32px;min-width:78px"></button></div></div><div class="hint">Drag the note, or use Insert</div>`,
+  desc:'The tile lifts under your pointer and follows it. Dropping it over the draft draws the waveform bar by bar on soft and opens the slot on a height spring. Play and Insert do the same without dragging.',
+  api:'down: lft.set(1)   drop in: x/y.set(slot, soft); bars i·.03 soft; hs.set(64)   pl/ib mirror',
+  init(st){
+    const stage = $(st,'.vn'), tile = $(st,'.vt'), slotBox = $(st,'.vs i');
+    const H = [8,14,20,12,22,16,10,18,24,14,10,16,20,12], vw = $(st,'.vw');
+    const bars = H.map(() => { const b = document.createElement('span'); b.className = 'vb'; b.style.height = '0px'; vw.appendChild(b); return b; });
+    const hi = H.map(() => new Track(0));
+    const X0 = 22, Y0 = 200, TW = 190, TH = 56;
+    const x = new Track(X0), y = new Track(Y0), lft = new Track(0), hs = new Track(0), so = new Track(0);
+    const pl = $(st,'.pl'), ib = $(st,'.insb'), PE = {}, IE = {};
+    for (const [k, label] of [['play','Play'],['pause','Pause']]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = label; pl.appendChild(e); PE[k] = e; }
+    for (const [k, label] of [['out','Insert'],['in','Remove']]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = label; ib.appendChild(e); IE[k] = e; }
+    const psw = new Swap('play'), isw = new Swap('out');
+    let inserted = false, playing = false, drew = false;
+    const slotP = () => ({ x:(stage.clientWidth - TW)/2, y:122 });
+    const draw = t => { if (drew) return; drew = true;
+      hi.forEach((h,k) => REDUCE ? h.jump(H[k]) : h.set(H[k], S.soft, t + k*.03)); };
+    const snapBack = t => { if (REDUCE){ x.jump(X0); y.jump(Y0); } else { x.set(X0, S.soft, t); y.set(Y0, S.soft, t); } };
+    const insert = t => { inserted = true; const p = slotP(); draw(t);
+      if (REDUCE){ x.jump(p.x); y.jump(p.y); hs.jump(64); so.jump(1); isw.cur = 'in'; isw.prev = null; }
+      else { x.set(p.x, S.soft, t); y.set(p.y, S.soft, t); hs.set(64, S.base, t); so.set(1, S.base, t); isw.to('in', t); } };
+    const remove = t => { inserted = false;
+      if (REDUCE){ x.jump(X0); y.jump(Y0); hs.jump(0); so.jump(0); isw.cur = 'out'; isw.prev = null; }
+      else { x.set(X0, S.soft, t); y.set(Y0, S.soft, t); hs.set(0, S.base, t + EXIT); so.set(0, S.snap, t); isw.to('out', t); } };
+    ib.onclick = () => inserted ? remove(now()) : insert(now());
+    pl.onclick = () => { playing = !playing; const t = now(); draw(t);
+      if (REDUCE){ psw.cur = playing ? 'pause' : 'play'; psw.prev = null; } else psw.to(playing ? 'pause' : 'play', t); };
+    drag(tile, {
+      down:() => { if (REDUCE) lft.jump(1); else lft.set(1, S.snap); },
+      move:(p, e) => { const r = stage.getBoundingClientRect();
+        x.jump(e.clientX - r.left - TW/2); y.jump(e.clientY - r.top - TH/2); },
+      up:() => { const t = now(); if (REDUCE) lft.jump(0); else lft.set(0, S.snap);
+        if (y.at(t) < 180) insert(t); else if (inserted) remove(t); else snapBack(t); }
+    });
+    return t => {
+      const lf = clamp(lft.at(t));
+      tile.style.transform = `translate(${x.at(t).toFixed(1)}px, ${(y.at(t) - 8*lf).toFixed(1)}px)`;
+      tile.style.boxShadow = lf > .02 ? '0 10px 24px rgba(0,0,0,.18)' : 'none';
+      tile.style.cursor = lf > .02 ? 'grabbing' : 'grab';
+      slotBox.style.height = px(Math.max(0, hs.at(t)));
+      slotBox.style.opacity = clamp(so.at(t)).toFixed(3);
+      bars.forEach((b,k) => { const wob = playing && !REDUCE ? .72 + .28*Math.sin(t*7 + k*.9) : 1;
+        b.style.height = px(Math.max(0, hi[k].at(t)*wob)); });
+      for (const k in PE) psw.apply(PE[k], k, t, 3);
+      for (const k in IE) isw.apply(IE[k], k, t, 3);
+    };
+  }});
+
+
+atom({ id:'wirefeed', cat:'Writing', name:'Wire-feed ticker', block:'wire feed, entry-list', fam:['M','S','X'],
+  html:`<div class="col" style="width:min(340px,90%);gap:10px"><div class="row" style="justify-content:space-between;align-items:center"><div class="row small" style="gap:8px;align-items:center"><b>Wires</b><span class="bd" style="height:20px;min-width:20px;padding:0 6px;border-radius:10px;background:var(--ink);color:var(--card);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center"><span class="d"></span></span></div><div class="row" style="gap:6px"><button class="btn nw">New wire</button><button class="btn ps">Pause</button></div></div><div class="feed col" style="gap:6px;min-height:158px"></div></div><div class="hint">New wires push the stack</div>`,
+  desc:'New wires slide in at the top and push older wires down, each one following 60ms after the last. The badge count rolls to the new total. Pause stops the feed.',
+  api:'wire.y.set(0,S.base,t+i*0.06); count.set(n)   pause: timer.stop   REDUCE: jump',
+  init(st){
+    const feed = $(st,'.feed'), d = new Digits($(st,'.d'), 2); let n = 0, rows = [], paused = false;
+    d.set(0, true);
+    const add = () => { n++; d.set(n, REDUCE); const el = document.createElement('div'); el.className = 'card small'; el.style.cssText += ';padding:8px 10px;overflow:hidden'; el.innerHTML = '<b>Wire ' + n + '</b> <span class="muted">filed just now</span>'; feed.prepend(el);
+      const r = { d:el, y:new Track(-46), o:new Track(0) }; r.y.jump(-46); r.o.jump(0); rows.unshift(r); if (rows.length > 4) rows.pop().d.remove();
+      const t0 = now(); rows.forEach((x,i) => { if (REDUCE){ x.y.jump(0); x.o.jump(1); } else { x.y.set(0, S.base, t0 + i*.06); x.o.set(1, S.base, t0 + i*.06); } }); };
+    $(st,'.nw').onclick = add; const ps = $(st,'.ps'); ps.onclick = () => { paused = !paused; ps.textContent = paused ? 'Resume' : 'Pause'; };
+    const timer = setInterval(() => { if (!paused && document.body.contains(st)) add(); }, 2600); add(); add();
+    return t => { rows.forEach(r => { r.d.style.transform = `translateY(${r.y.at(t).toFixed(2)}px)`; r.d.style.opacity = clamp(r.o.at(t)).toFixed(3); }); d.render(t); };
+  }});
+
+
+atom({ id:'stylepaint', cat:'Writing', name:'Style gallery painter', block:'style gallery, doc preview', fam:['M','E','S'], tall:true,
+  html:`<div class="col" style="width:min(340px,90%);gap:10px"><div class="pk row card" style="position:relative;gap:2px;padding:4px"></div><div class="row small" style="gap:8px;align-items:center"><span class="muted">Style</span><span class="nm" style="position:relative;display:inline-block;min-width:90px;height:19px;overflow:hidden;font-weight:600"></span></div><div class="doc card" style="padding:14px"><div class="tt" style="font-weight:650;margin-bottom:6px">The spring collection opens Thursday</div><div class="pp small muted" style="line-height:1.6">Members get first-day access to every drop, in stores and online.</div></div></div><div class="hint">Hover a style to preview it</div>`,
+  desc:'Hovering a style plate slides its highlight over, the style name swaps, and the doc preview retargets size and tint. Leaving keeps the last style.',
+  api:'hl.go(l,r,S.base); name.to(i)   doc.size.set(s,S.soft)   REDUCE: jump',
+  init(st){
+    const pk = $(st,'.pk'), nm = $(st,'.nm'), tt = $(st,'.tt'), e = edges(0, 0);
+    const ST = [{ n:'Memo', s:15, c:0 }, { n:'Brief', s:18, c:.5 }, { n:'Manuscript', s:21, c:1 }];
+    const sw = new Swap(0), size = new Track(15, S.soft), tint = new Track(0, S.soft);
+    const layers = ST.map(s => { const l = document.createElement('span'); l.className = 'layer'; l.textContent = s.n; nm.appendChild(l); return l; });
+    const hl = document.createElement('i'); hl.style.cssText = 'position:absolute;top:4px;bottom:4px;border-radius:8px;background:var(--raised);pointer-events:none'; pk.appendChild(hl);
+    const btns = ST.map((s,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = s.n; b.style.cssText += ';position:relative;z-index:1;background:none;border:0;box-shadow:none'; b.onmouseenter = () => pick(i); b.onclick = () => pick(i); pk.appendChild(b); return b; });
+    const pick = i => { const t = now(), b = btns[i], l = b.offsetLeft, r = l + b.offsetWidth;
+      if (REDUCE){ sw.cur = i; sw.prev = null; sw.t = -9; e.jump(l, r); size.jump(ST[i].s); tint.jump(ST[i].c); }
+      else { sw.to(i); e.go(l, r, t); size.set(ST[i].s, S.soft, t); tint.set(ST[i].c, S.soft, t); } };
+    requestAnimationFrame(() => e.jump(btns[0].offsetLeft, btns[0].offsetLeft + btns[0].offsetWidth));
+    return t => { layers.forEach((l,k) => sw.apply(l, k, t)); hl.style.left = px(e.A.at(t)); hl.style.width = px(Math.max(0, e.B.at(t) - e.A.at(t)));
+      tt.style.fontSize = px(size.at(t)); tt.style.color = mix(clamp(tint.at(t)), 'var(--ink)', 'var(--ink)'); tt.style.opacity = (.72 + .28*clamp(tint.at(t))).toFixed(3); };
+  }});
+
+
+atom({ id:'template', cat:'Writing', name:'Template inserter', block:'template picker, doc', fam:['M','X','S'],
+  html:`<div class="col" style="width:min(340px,90%);gap:10px"><div class="grid row" style="gap:6px"></div><div class="doc card" style="padding:12px;min-height:120px"><div class="ph small muted">Pick a template to insert</div><div class="blk card" style="overflow:hidden;padding:0 12px;background:var(--raised)"></div></div></div><div class="hint">Pick a tile to insert it</div>`,
+  desc:'Tiles rise in one after another. Picking one grows the doc block open and swaps its content in. Picking again swaps to the new template.',
+  api:'tile.o.set(1,S.base,t+i*0.06)   blk.h.set(H,S.base); body.to(i)   REDUCE: jump',
+  init(st){
+    const grid = $(st,'.grid'), blk = $(st,'.blk'), ph = $(st,'.ph');
+    const TP = [{ n:'Quote', h:58, b:'“Design is the sentence the product speaks.”' }, { n:'List', h:82, b:'☐ Outline — ☐ Draft — ☑ Ship' }, { n:'Table', h:70, b:'Mon 12 · Tue 8 · Wed 15 pages' }];
+    const sw = new Swap(-1), h = new Track(0); h.jump(0);
+    const bodies = TP.map((p,i) => { const l = document.createElement('div'); l.className = 'layer'; l.style.cssText = 'padding:10px 0;font-size:14px'; l.innerHTML = '<b>' + p.n + '</b><div class="small muted">' + p.b + '</div>'; blk.appendChild(l); return l; });
+    const tiles = TP.map((p,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = p.n; b.style.opacity = '0'; grid.appendChild(b);
+      const o = new Track(0), y = new Track(10); const t0 = now() + i*.06; if (REDUCE){ o.jump(1); y.jump(0); } else { o.set(1, S.base, t0); y.set(0, S.base, t0); }
+      b.onclick = () => { ph.style.display = 'none'; if (REDUCE){ sw.cur = i; sw.prev = null; sw.t = -9; h.jump(p.h); } else { sw.to(i); h.set(p.h, S.base); } }; return { b, o, y }; });
+    return t => { tiles.forEach(r => { r.b.style.opacity = clamp(r.o.at(t)).toFixed(3); r.b.style.transform = `translateY(${r.y.at(t).toFixed(2)}px)`; });
+      const hh = Math.max(0, h.at(t)); blk.style.height = px(hh); blk.style.opacity = hh > 2 ? '1' : '0'; bodies.forEach((l,k) => sw.apply(l, k, t)); };
+  }});
+
+
+atom({ id:'acceptrail', cat:'Writing', name:'Tracked-changes rail', block:'tracked changes, rail', fam:['M','S','X'], tall:true,
+  html:`<div class="col" style="width:min(340px,90%);gap:10px"><div class="row" style="justify-content:space-between;align-items:center"><div class="row small" style="gap:8px;align-items:center"><b>Accepted</b><span class="d" style="font-weight:700"></span></div><button class="btn all">Accept all</button></div><div class="rows col" style="gap:6px"></div></div><div class="hint">Accept clears each row</div>`,
+  desc:'Accepting fades a row out over 100ms, then its height springs shut. The accepted count rolls up. Accept all clears every row in order.',
+  api:'row.o→0; row.h→0 at t+0.1,S.base   count.set(n)   REDUCE: jump',
+  init(st){
+    const host = $(st,'.rows'), d = new Digits($(st,'.d'), 1); let done = 0, rows = []; d.set(0, true);
+    const TX = ['early → first-day', 'shop → store', 'soon → Thursday'];
+    TX.forEach((s,i) => { const w = document.createElement('div'); w.style.cssText = 'overflow:hidden'; w.innerHTML = '<div class="card small row" style="justify-content:space-between;align-items:center"><span>' + s + '</span><button class="btn ok">Accept</button></div>'; host.appendChild(w);
+      const H = 46, o = new Track(1), h = new Track(H); const r = { w, o, h, live:true }; rows.push(r);
+      w.querySelector('.ok').onclick = () => accept(r); });
+    const accept = r => { if (!r.live) return; r.live = false; done++; d.set(done, REDUCE);
+      if (REDUCE){ r.o.jump(0); r.h.jump(0); } else { r.o.set(0, S.snap); setTimeout(() => r.h.set(0, S.base), 100); } };
+    $(st,'.all').onclick = () => rows.forEach((r,i) => setTimeout(() => accept(r), REDUCE ? 0 : i*60));
+    return t => { rows.forEach(r => { r.w.style.height = px(Math.max(0, r.h.at(t))); r.w.style.opacity = clamp(r.o.at(t)).toFixed(3); }); d.render(t); };
+  }});
+
+
+atom({ id:'figbuilder', cat:'Writing', name:'Figure builder', block:'figure list, doc', fam:['M','S','T'],
+  html:`<div class="col" style="width:min(340px,90%);gap:10px"><div class="row" style="justify-content:space-between;align-items:center"><div class="row small" style="gap:8px;align-items:center"><b>Pages</b><span class="d" style="font-weight:700"></span></div><button class="btn add">Add figure</button></div><div class="list card" style="position:relative;overflow:hidden;min-height:44px;padding:4px"></div></div><div class="hint">Figures rank into slots</div>`,
+  desc:'Adding a figure drops its caption in and springs every caption to its ranked slot. The page count rolls up with the list.',
+  api:'cap.y.set(slot,S.base)   pages.set(n)   add: push + rank   REDUCE: jump',
+  init(st){
+    const list = $(st,'.list'), d = new Digits($(st,'.d'), 2); const H = 40; let figs = [], n = 0; d.set(0, true);
+    const rank = () => { const t0 = now(); figs.forEach((f,i) => { if (REDUCE) f.y.jump(i*H); else f.y.set(i*H, S.base, t0); }); list.style.height = px(figs.length*H + 8); };
+    const add = () => { n++; d.set(n, REDUCE); const el = document.createElement('div'); el.style.cssText = 'position:absolute;left:4px;right:4px;top:4px;height:32px;display:flex;align-items:center;gap:8px;padding:0 10px;font-size:13px;background:var(--raised);border-radius:8px'; el.innerHTML = '<b>Fig ' + n + '</b><span class="muted">caption · p.' + n + '</span>'; list.appendChild(el);
+      const f = { d:el, y:new Track(figs.length*H) }; f.y.jump((figs.length - .6)*H); figs.push(f); rank(); if (figs.length > 5) { const old = figs.shift(); old.d.remove(); rank(); } };
+    $(st,'.add').onclick = add; add(); add();
+    return t => { figs.forEach(f => { f.d.style.transform = `translateY(${f.y.at(t).toFixed(2)}px)`; }); d.render(t); };
+  }});
+
+
+atom({ id:'mergestep', cat:'Writing', name:'Merge preview stepper', block:'merge preview, record stepper', fam:['M','S'],
+  html:`<div class="col" style="width:min(340px,92%);gap:10px"><div class="card col" style="padding:14px;gap:8px"><div class="ttl" style="position:relative;height:22px;font-weight:600"></div><div class="recs" style="position:relative;height:180px"><div class="plate" style="position:absolute;left:-6px;right:-6px;background:var(--accent-tint);border-radius:10px;pointer-events:none"></div></div><div class="row small" style="justify-content:space-between;align-items:center"><span class="cnt muted"></span><span class="inv" style="position:relative;height:18px;min-width:150px;color:var(--danger)"></span></div></div><div class="row" style="justify-content:space-between;align-items:center"><button class="btn pv">Prev</button><span class="row" style="gap:6px"><button class="btn t0">1</button><button class="btn t1">2</button><button class="btn t2">3</button></span><button class="btn ink nx">Next</button></div></div><div class="hint">Step through merge candidates</div>`,
+  desc:'The record title swaps while the field plate slides behind the rows with its far edge trailing 60ms. A missing field rings in the danger color with a note.',
+  api:'rec.to(i) plate.go(top,bot,S.snap,t+LAG) err.set(bad) · REDUCE: instant',
+  init(st){
+    const R = [
+      { t:'Acme buyout — draft 3', f:[['Buyer','Acme Corp',0],['Price','$42M',0],['Close date','Missing',1]] },
+      { t:'Acme buyout — draft 4', f:[['Buyer','Acme Corp',0],['Price','$44M',0],['Close date','June 30',0]] },
+      { t:'Globex merger — draft 1', f:[['Buyer','Missing',1],['Price','$9M',0],['Close date','July 12',0]] }
+    ];
+    const SLOT = 62, PH = 56;
+    const ttl = $(st,'.ttl'), recs = $(st,'.recs'), plate = $(st,'.plate'), inv = $(st,'.inv'), cnt = $(st,'.cnt');
+    const sw = new Swap(0), pT = new Track(0, S.snap), pB = new Track(PH, S.snap), err = new Track(0);
+    const badEls = [];
+    R.forEach((r,i) => {
+      const h = document.createElement('span'); h.className = 'layer'; h.textContent = r.t; ttl.appendChild(h);
+      const d = document.createElement('div'); d.className = 'layer'; d.style.cssText = 'flex-direction:column;gap:6px';
+      r.f.forEach(f => {
+        const w = document.createElement('div'); w.style.cssText = 'height:56px;display:flex;flex-direction:column;gap:2px';
+        w.innerHTML = `<span class="small" style="font-weight:500">${f[0]}</span><span class="fv" style="border:1.5px solid var(--line);border-radius:9px;padding:6px 10px;font-size:14px">${f[1]}</span>`;
+        d.appendChild(w); if (f[2]) badEls[i] = $(w,'.fv');
+      });
+      recs.appendChild(d);
+    });
+    const ttlL = $$(ttl,'.layer'), recL = $$(recs,'.layer').filter(e => !e.classList.contains('plate'));
+    const invL = R.map(r => { const e = document.createElement('span'); e.className = 'layer small'; e.textContent = r.f.find(f => f[2]) ? `${r.f.find(f => f[2])[0]} is missing` : ''; inv.appendChild(e); return e; });
+    const tabs = [$(st,'.t0'), $(st,'.t1'), $(st,'.t2')];
+    let cur = 0;
+    const focus = i => Math.max(0, R[i].f.findIndex(f => f[2]));
+    const go = n => {
+      n = Math.max(0, Math.min(R.length - 1, n)); const t0 = now(), f = focus(n), nt = f*SLOT, nb = nt + PH;
+      const bad = R[n].f.some(f => f[2]) ? 1 : 0; cur = n;
+      if (REDUCE){ sw.cur = n; sw.prev = null; sw.t = -9; pT.jump(nt); pB.jump(nb); err.jump(bad); }
+      else {
+        sw.to(n);
+        if (nt >= pT.target){ pB.set(nb, S.snap, t0); pT.set(nt, S.snap, t0 + LAG); }
+        else { pT.set(nt, S.snap, t0); pB.set(nb, S.snap, t0 + LAG); }
+        err.set(bad, S.base, t0);
+      }
+      tabs.forEach((b,i) => { b.classList.toggle('ink', i === n); b.setAttribute('aria-selected', i === n); });
+      cnt.textContent = `Record ${n+1} of ${R.length}`;
+      $(st,'.pv').disabled = n === 0; $(st,'.nx').disabled = n === R.length - 1;
+    };
+    $(st,'.pv').onclick = () => go(cur - 1); $(st,'.nx').onclick = () => go(cur + 1);
+    tabs.forEach((b,i) => b.onclick = () => go(i));
+    go(0); pT.jump(focus(0)*SLOT); pB.jump(focus(0)*SLOT + PH); err.jump(1);
+    return t => {
+      ttlL.forEach((el,k) => sw.apply(el, k, t)); recL.forEach((el,k) => sw.apply(el, k, t, 0));
+      plate.style.top = px(pT.at(t)); plate.style.height = px(Math.max(0, pB.at(t) - pT.at(t)));
+      const e = clamp(err.at(t));
+      badEls.forEach((el,i) => { if (el) el.style.borderColor = mix(i === cur ? e : 0,'var(--danger)','var(--line)'); });
+      invL.forEach((el,k) => sw.apply(el, k, t, 0)); fade(inv, e, (1-e)*-3, false);
+    };
+  }});
+
+
+atom({ id:'resolvesweep', cat:'Writing', name:'Resolve sweep', block:'comment threads, resolve', fam:['M','E'],
+  html:`<div class="col" style="width:min(340px,92%);gap:10px"><div class="row" style="align-items:center;gap:8px"><span class="small" style="font-weight:600">Open threads</span><span class="dg" aria-label="Open thread count"></span><span class="avs" style="display:flex;align-items:center" aria-hidden="true"></span><span style="flex:1"></span><button class="btn ink all">Resolve all</button></div><div class="col list" style="gap:8px"></div><button class="btn rs" style="align-self:flex-start">Reset</button></div><div class="hint">Resolve a thread, or all at once</div>`,
+  desc:'Resolving fades a card and its height springs shut. The open count rolls down after, and the avatar stack fans shut with it.',
+  api:'o.set(0,S.snap) h.set(0,S.base,t+EXIT) dg.set(n) fan.set(open/3) · REDUCE: instant',
+  init(st){
+    const T = [
+      { n:'Maya', c:'#7c5cff', q:'Can we soften the lede? It reads harsh.' },
+      { n:'Theo', c:'#e8734a', q:'The price needs a source before we ship.' },
+      { n:'Pri', c:'#2f9e6e', q:'Closing date moved — please confirm July.' }
+    ];
+    const list = $(st,'.list'), avs = $(st,'.avs');
+    const dg = new Digits($(st,'.dg'), 1); dg.dir = -1; dg.set(String(T.length), true);
+    const fan = new Track(1); const o = [], h = [], H = [], done = [];
+    const cards = T.map((c,i) => {
+      const w = document.createElement('div'); w.style.cssText = 'overflow:hidden';
+      const b = document.createElement('div'); b.className = 'card'; b.style.cssText = 'padding:10px 12px;display:flex;flex-direction:column;gap:6px';
+      b.innerHTML = `<div class="row" style="gap:8px;align-items:center"><span class="av" style="width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;background:${c.c}">${c.n[0]}</span><span class="small" style="font-weight:600">${c.n}</span><span style="flex:1"></span><button class="btn rv" style="padding:2px 10px;font-size:12px">Resolve</button></div><span class="small">${c.q}</span>`;
+      w.appendChild(b); list.appendChild(w);
+      const av = document.createElement('span');
+      av.style.cssText = `width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700;background:${c.c};border:2px solid var(--card);margin-left:${i ? '-8px' : '0'};z-index:${T.length-i}`;
+      av.textContent = c.n[0]; avs.appendChild(av);
+      o.push(new Track(1, S.snap)); h.push(new Track(0)); H.push(0); done.push(false);
+      return { w, b, av, btn:$(b,'.rv') };
+    });
+    requestAnimationFrame(() => cards.forEach((c,i) => { H[i] = c.b.offsetHeight; if (!done[i]) h[i].jump(H[i]); }));
+    const open = () => done.filter(d => !d).length;
+    const after = (dly, fn) => setTimeout(fn, REDUCE ? 0 : dly);
+    const resolve = (i, at) => {
+      if (done[i]) return; done[i] = true; const t0 = at ?? now();
+      if (REDUCE){ o[i].jump(0); h[i].jump(0); }
+      else { o[i].set(0, S.snap, t0); h[i].set(0, S.base, t0 + EXIT); }
+      cards[i].btn.disabled = true;
+      after(EXIT*1000 + 60, () => { dg.dir = -1; dg.set(String(open())); fan.set(open()/T.length, S.base); });
+    };
+    $(st,'.all').onclick = () => { const t0 = now(); let k = 0; done.forEach((d,i) => { if (!d) resolve(i, t0 + (k++)*LAG); }); };
+    cards.forEach((c,i) => c.btn.onclick = () => resolve(i));
+    $(st,'.rs').onclick = () => {
+      done.fill(false); dg.dir = 1;
+      cards.forEach((c,i) => { c.btn.disabled = false;
+        if (REDUCE){ o[i].jump(1); h[i].jump(H[i]); } else { h[i].set(H[i], S.base); o[i].set(1, S.snap, now() + EXIT); }
+      });
+      if (REDUCE) dg.set(String(T.length), true); else after(120, () => dg.set(String(T.length)));
+      fan.set(1, S.base);
+    };
+    const av0 = cards.map(c => c.av);
+    return t => {
+      cards.forEach((c,i) => { c.w.style.height = px(Math.max(0, h[i].at(t))); fade(c.b, o[i].at(t), (1-clamp(o[i].at(t)))*6); });
+      dg.render(t);
+      const f = clamp(fan.at(t));
+      av0.forEach((a,i) => { a.style.transform = `translateX(${(-i*(1-f)*10).toFixed(2)}px) scale(${(0.85+0.15*f).toFixed(3)})`; a.style.opacity = (i < open() || open() === T.length ? 1 : 0.35).toFixed(2); });
+    };
+  }});
+
+
+atom({ id:'compare', cat:'Writing', name:'Version compare slider', block:'version compare, diff', fam:['D','X'],
+  html:`<div class="col" style="width:min(360px,92%);gap:10px"><div class="cmp" style="position:relative;height:150px;border-radius:12px;overflow:hidden;cursor:ew-resize;touch-action:none;border:1px solid var(--line)" role="slider" tabindex="0" aria-label="Version" aria-valuemin="1" aria-valuemax="2"><div class="pa" style="position:absolute;inset:0;padding:14px;background:var(--tile)"><div class="small muted">Draft 1</div><div style="font-weight:600;margin-top:4px">We launch in June.</div><div class="small muted" style="margin-top:4px">Three chapters cover pricing, refunds, and support hours.</div></div><div class="pb" style="position:absolute;inset:0;padding:14px;background:var(--card)"><div class="small muted">Draft 2</div><div style="font-weight:600;margin-top:4px">We launch in July.</div><div class="small" style="margin-top:4px">Three chapters cover <span style="background:var(--accent-tint);border-radius:4px;padding:0 4px">pricing, refunds, support hours, and renewals</span>.</div></div><div class="hd" style="position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--ink)"><span style="position:absolute;top:50%;left:50%;width:28px;height:28px;margin:-14px;border-radius:50%;background:var(--ink);box-shadow:var(--shadow)"></span></div></div><div class="row" style="justify-content:space-between;align-items:center"><span class="row" style="gap:6px"><button class="btn ba">A</button><button class="btn bb">B</button></span><span class="df small muted" style="position:relative;height:18px;min-width:170px;text-align:right"></span></div></div><div class="hint">Drag the divider, or pick a version</div>`,
+  desc:'The divider follows the pointer one to one. On release it springs to the nearer draft, and the caption swaps to match.',
+  api:'x = held ? pointer : x.at(t)   up: x.release(hx,vx,near,S.soft)   cap.to(near)',
+  init(st){
+    const el = $(st,'.cmp'), top = $(st,'.pb'), hd = $(st,'.hd'), df = $(st,'.df');
+    const x = new Track(0); let held = false, hx = 0, moved = false;
+    const sw = new Swap(0);
+    const L = ['Showing draft 1 — 2 changes','Showing draft 2 — approved'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-end'; e.textContent = s; df.appendChild(e); return e; });
+    const ba = $(st,'.ba'), bb = $(st,'.bb');
+    const show = k => {
+      if (REDUCE){ sw.cur = k; sw.prev = null; sw.t = -9; } else sw.to(k);
+      ba.classList.toggle('ink', k === 0); bb.classList.toggle('ink', k === 1);
+    };
+    const pick = k => { if (REDUCE) x.jump(k); else x.set(k, S.soft); show(k); };
+    ba.onclick = () => pick(0); bb.onclick = () => pick(1); show(0); bb.classList.remove('ink'); ba.classList.add('ink');
+    drag(el, { down:p => { held = true; moved = false; hx = clamp(p.x/p.w); if (REDUCE) x.jump(hx); else x.set(clamp(hx), S.soft); },
+      move:p => { moved = true; hx = clamp(p.x/p.w); },
+      up:(p, vel) => { held = false; const near = hx < .5 ? 0 : 1;
+        if (moved){ if (REDUCE) x.jump(near); else x.release(hx, vel.vx/el.clientWidth, near, S.soft); }
+        show(near); } });
+    el.onkeydown = e => { if (e.key === 'ArrowRight') pick(1); if (e.key === 'ArrowLeft') pick(0); };
+    return t => {
+      const v = clamp(held && moved ? hx : x.at(t));
+      top.style.clipPath = `inset(0 ${((1-v)*100).toFixed(2)}% 0 0)`; hd.style.left = (v*100).toFixed(2) + '%';
+      L.forEach((e,k) => sw.apply(e, k, t)); el.setAttribute('aria-valuenow', v < .5 ? 1 : 2);
+    };
+  }});
+
+
+atom({ id:'sigchain', cat:'Writing', name:'Signature chain', block:'signature chain, approvals', fam:['S','X'], tall:true,
+  html:`<div class="col" style="width:min(300px,88%);gap:12px"><div class="chain" style="position:relative;padding-left:46px"></div><div class="st small" style="position:relative;height:20px"></div><div class="row" style="gap:6px"><button class="btn ink ad">Advance seal</button><button class="btn rs">Reset</button></div></div><div class="hint">Each seal inks after the line reaches it</div>`,
+  desc:'Advance fills the connector first, then the next seal inks 60ms later. The status swaps forward, ending in Signed.',
+  api:'line.set(k) seal[i].set(k>=i,S.base,t+LAG) status.to(all?2:k?1:0) · REDUCE: instant',
+  init(st){
+    const N = ['Ava Chen · Author','Ravi Patel · Editor','June Park · Legal','Sam Ortiz · Publisher'];
+    const chain = $(st,'.chain'), stx = $(st,'.st');
+    const rail = document.createElement('div');
+    rail.style.cssText = 'position:absolute;left:15px;top:12px;bottom:12px;width:2px;background:var(--line)';
+    const fill = document.createElement('div');
+    fill.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:0;background:var(--ink)'; rail.appendChild(fill); chain.appendChild(rail);
+    const line = new Track(0), done = new Swap(0);
+    const seals = N.map((n,i) => {
+      const r = document.createElement('div'); r.style.cssText = 'position:relative;height:56px;display:flex;align-items:center;gap:10px';
+      r.innerHTML = `<span class="nd" style="position:absolute;left:-46px;top:13px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:600;border:2px solid var(--line)"><span class="layer">${i+1}</span><span class="layer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span></span><span class="small">${n}</span>`;
+      chain.appendChild(r);
+      return { r, nd:$(r,'.nd'), l:$$(r,'.layer'), ink:new Track(i === 0 ? 1 : 0), sw:new Swap(0) };
+    });
+    const sts = ['Waiting for signatures','Collecting seals…','Signed — ready to file'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; stx.appendChild(e); return e; });
+    let k = 0;
+    const go = n => {
+      n = Math.max(0, Math.min(N.length - 1, n)); const t0 = now(), fwd = n > k; k = n;
+      if (REDUCE){ line.jump(n); seals.forEach((s,i) => { s.ink.jump(i <= n ? 1 : 0); s.sw.cur = i < n || n === N.length-1 && i === n ? 1 : 0; s.sw.prev = null; s.sw.t = -9; }); done.cur = n === N.length-1 ? 2 : n > 0 ? 1 : 0; done.prev = null; done.t = -9; }
+      else {
+        line.set(n); seals.forEach((s,i) => { s.ink.set(i <= n ? 1 : 0, S.base, t0 + (fwd ? LAG : 0)); s.sw.to(i < n || (n === N.length-1 && i === n) ? 1 : 0, t0 + (fwd ? LAG : 0)); });
+        done.to(n === N.length-1 ? 2 : n > 0 ? 1 : 0);
+      }
+      $(st,'.ad').disabled = n === N.length - 1;
+    };
+    $(st,'.ad').onclick = () => go(k + 1); $(st,'.rs').onclick = () => go(0);
+    go(0);
+    return t => {
+      fill.style.height = (clamp(line.at(t)/(N.length-1))*100).toFixed(2) + '%';
+      seals.forEach(s => { const v = clamp(s.ink.at(t));
+        s.nd.style.background = mix(v,'var(--ink)','var(--tile)'); s.nd.style.borderColor = mix(v,'var(--ink)','var(--line)'); s.nd.style.color = mix(v,'var(--card)','var(--muted)');
+        s.l.forEach((el,j) => s.sw.apply(el, j, t)); });
+      sts.forEach((el,j) => done.apply(el, j, t));
+    };
+  }});
+
+
+atom({ id:'budget', cat:'Writing', name:'Assignment budget board', block:'assignment budget, rank board', fam:['M','T'], wide:true, tall:true,
+  html:`<div class="col" style="width:min(560px,96%);gap:10px"><div class="row" style="gap:8px;align-items:center"><span class="small" style="font-weight:600">Funded</span><span class="dg1" aria-label="Funded count"></span><span class="small muted">of 4 ·</span><span class="dg2" aria-label="Funded hours"></span><span class="small muted">hrs</span><span style="flex:1"></span><button class="btn rs">Restore all</button></div><div class="bd" style="position:relative;height:232px"><div class="lead" style="position:absolute;left:0;width:4px;border-radius:2px;background:var(--accent);pointer-events:none"></div></div></div><div class="hint">Kill a row to free its hours</div>`,
+  desc:'Rows spring into their rank slots while the leader plate follows with its far edge trailing 60ms. Killing swaps a row out, then its space collapses; the counts roll to match.',
+  api:'y[i].set(slot,S.base) lead.go(t,b,t+LAG) kill:out.to(1);h.set(0,t+EXIT) dg.set(n) · REDUCE: instant',
+  init(st){
+    const A = [{ n:'Cover story', h:12 }, { n:'Photo essay', h:9 }, { n:'Interview', h:9 }, { n:'Briefs', h:6 }];
+    const SLOT = 60, RH = 52, bd = $(st,'.bd'), lead = $(st,'.lead');
+    const cDg = new Digits($(st,'.dg1'), 1), hDg = new Digits($(st,'.dg2'), 2);
+    cDg.dir = -1; hDg.dir = -1;
+    const y = [], h = [], out = [], dead = [];
+    const rows = A.map((a,i) => {
+      const r = document.createElement('div');
+      r.style.cssText = 'position:absolute;left:12px;right:0;overflow:hidden';
+      const inner = document.createElement('div');
+      inner.className = 'card'; inner.style.cssText = 'height:52px;position:relative;padding:0 12px';
+      const l0 = document.createElement('div'); l0.className = 'layer';
+      l0.style.cssText = 'flex-direction:row;gap:8px;align-items:center';
+      l0.innerHTML = `<span class="rk small muted" style="width:18px">${i+1}</span><span class="small" style="font-weight:600">${a.n}</span><span class="small muted">${a.h}h</span><span style="flex:1"></span>`;
+      const kl = document.createElement('button'); kl.className = 'btn kl'; kl.style.cssText = 'padding:2px 10px;font-size:12px'; kl.textContent = 'Kill';
+      l0.appendChild(kl); inner.appendChild(l0);
+      const l1 = document.createElement('div'); l1.className = 'layer small';
+      l1.style.cssText = 'justify-content:flex-start;color:var(--danger)'; l1.textContent = `Removed — ${a.h}h freed`;
+      inner.appendChild(l1); r.appendChild(inner);
+      bd.appendChild(r);
+      y.push(new Track(i*SLOT)); h.push(new Track(RH)); out.push(new Swap(0)); dead.push(false);
+      return { r, inner, l0, l1, btn:kl, rk:$(l0,'.rk') };
+    });
+    const pT = new Track(0), pB = new Track(RH);
+    cDg.set('4', true); hDg.set('36', true);
+    const alive = () => A.map((_,i) => i).filter(i => !dead[i]);
+    const sums = () => alive().reduce((s,i) => s + A[i].h, 0);
+    const layout = (t0, instant) => {
+      alive().forEach((r,s) => { if (instant) y[r].jump(s*SLOT); else y[r].set(s*SLOT, S.base, t0); });
+      rows.forEach((c,i) => c.rk.textContent = dead[i] ? '–' : (alive().indexOf(i)+1));
+      const L = alive()[0];
+      const nt = L == null ? 0 : alive().indexOf(L)*SLOT, nb = nt + RH;
+      if (instant){ pT.jump(0); pB.jump(0); }
+      else if (nt >= pT.target){ pB.set(nb, S.base, t0); pT.set(nt, S.base, t0 + LAG); }
+      else { pT.set(nt, S.base, t0); pB.set(nb, S.base, t0 + LAG); }
+    };
+    const counts = () => {
+      const n = String(alive().length), s = String(sums());
+      if (REDUCE){ cDg.set(n, true); hDg.set(s, true); } else { cDg.dir = -1; hDg.dir = -1; cDg.set(n); hDg.set(s); }
+    };
+    const kill = i => {
+      if (dead[i]) return; dead[i] = true; const t0 = now();
+      rows[i].btn.textContent = 'Restore';
+      if (REDUCE){ out[i].cur = 1; out[i].prev = null; out[i].t = -9; h[i].jump(0); layout(t0, true); counts(); }
+      else { out[i].to(1, t0); h[i].set(0, S.base, t0 + EXIT); layout(t0 + EXIT, false); setTimeout(counts, EXIT*1000); }
+    };
+    const restore = i => {
+      if (!dead[i]) return; dead[i] = false; const t0 = now();
+      rows[i].btn.textContent = 'Kill';
+      if (REDUCE){ h[i].jump(RH); out[i].cur = 0; out[i].prev = null; out[i].t = -9; layout(t0, true); counts(); }
+      else { h[i].set(RH, S.base, t0); out[i].to(0, t0 + EXIT); layout(t0, false); cDg.dir = 1; hDg.dir = 1; setTimeout(counts, EXIT*1000); }
+    };
+    rows.forEach((c,i) => c.btn.onclick = () => dead[i] ? restore(i) : kill(i));
+    $(st,'.rs').onclick = () => alive().length < A.length && A.forEach((_,i) => restore(i));
+    return t => {
+      rows.forEach((c,i) => {
+        c.r.style.top = px(y[i].at(t)); c.r.style.height = px(Math.max(0, h[i].at(t)));
+        out[i].apply(c.l0, 0, t, 0); out[i].apply(c.l1, 1, t, 0);
+        const vis = clamp(h[i].at(t)/RH); c.inner.style.opacity = vis.toFixed(3);
+        c.r.style.pointerEvents = dead[i] && h[i].target === 0 ? 'none' : 'auto';
+      });
+      lead.style.top = px(pT.at(t)); lead.style.height = px(Math.max(0, pB.at(t) - pT.at(t)));
+      lead.style.opacity = alive().length ? 1 : 0;
+      cDg.render(t); hDg.render(t);
+    };
+  }});
+atom({ id:'headline', cat:'Writing', name:'Headline tester', block:'headline tester', fam:['S','M'],
+  html:`<div class="col" style="gap:10px;width:min(360px,92%)"><div class="card" style="position:relative;overflow:hidden;padding:12px 14px"><i class="win" style="position:absolute;left:0;right:0;top:0;background:color-mix(in oklab, var(--success) 14%, transparent)"></i><div class="hl" style="position:relative;min-height:48px;font-size:17px;font-weight:650;line-height:1.4"></div><div class="row small muted" style="gap:6px;align-items:baseline"><span>CTR</span><b class="ctr" style="font-variant-numeric:tabular-nums"></b><span>%</span><span class="tag" style="margin-left:auto"></span></div></div><div class="row" style="gap:8px"><button class="btn nx">Next variant</button><button class="btn ink tw">Test winner</button></div></div>`,
+  desc:'Each headline swaps out before the next one swaps in. The winner plate stretches open leading edge first. The click rate rolls over like digits.',
+  api:'sw.to(i)   plate.go(top,bot)   ctr.set(rate)',
+  init(st){
+    const V = [['City hall hid the fee hike in a footnote',12],['Your water bill is going up. Here is why',34],['The 40-cent charge nobody voted on',58]];
+    const box = $(st,'.hl'), tag = $(st,'.tag'), win = $(st,'.win');
+    const L = V.map(v => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = v[0]; box.appendChild(e); return e; });
+    const sw = new Swap(0), plate = edges(0, 0), ctr = new Digits($(st,'.ctr'), 2);
+    let i = 0; const best = 2;
+    ctr.set(String(V[0][1]), true); tag.textContent = 'variant 1 of 3';
+    const show = k => { sw.to(k); ctr.set(String(V[k][1]), REDUCE); tag.textContent = k === best ? 'winner' : `variant ${k+1} of 3`; };
+    $(st,'.nx').onclick = () => { i = (i+1) % V.length; show(i); };
+    $(st,'.tw').onclick = () => { i = best; show(i); plate.jump(0, 0); plate.go(0, box.offsetHeight + 34); };
+    show(0);
+    return t => { L.forEach((e,k) => sw.apply(e,k,t));
+      win.style.transform = `translateY(${px(plate.A.at(t))})`; win.style.height = px(Math.max(0, plate.B.at(t) - plate.A.at(t)));
+      ctr.render(t); };
+  }});
+atom({ id:'killline', cat:'Writing', name:'Kill line', block:'story list', fam:['X','E'], tall:true,
+  html:`<div class="col" style="gap:8px;width:min(360px,92%)"><div class="small muted">Drag the middle story past the cut line</div><div class="stage" style="position:relative"><i class="cut" style="position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--line)"></i><div class="rows col" style="gap:8px"></div></div><div class="row" style="gap:8px;align-items:center"><button class="btn rs">Restore</button><span class="st small muted"></span></div></div>`,
+  desc:'Dragging a story past the cut line arms a red snap. Letting go past the mark fades the row out, then its space closes and the rest spring up. Restore brings it back.',
+  api:'x.release(v)   arm.set(1)   sw.to(cut), h→0   rest spring up',
+  init(st){
+    const S0 = ['Water rates explained', 'DRAG ME: the footnote nobody read', 'School board recap'];
+    const rows = $(st,'.rows'), cut = $(st,'.cut'), info = $(st,'.st');
+    const CUT = 190, H0 = 42; cut.style.left = px(CUT);
+    const mk = s => { const d = document.createElement('div'); d.className = 'card small';
+      d.style.cssText += 'padding:10px 12px;position:relative;overflow:hidden;touch-action:none;user-select:none';
+      d.innerHTML = `<span class="a layer">${s}</span><span class="b layer" style="color:var(--danger)">Cut ✕</span>`;
+      rows.appendChild(d); return d; };
+    const tops = S0.map(mk);
+    const mid = tops[1], l0 = mid.querySelector('.a'), l1 = mid.querySelector('.b');
+    const x = new Track(0), h = new Track(1), arm = new Track(0), sw = new Swap(0);
+    let dead = false;
+    if (REDUCE) h.jump(1);
+    drag(mid, {
+      move: p => { if (dead) return; x.jump(clamp(p.x - 14, 0, 250)); arm.set(x.target > CUT ? 1 : 0, S.snap); },
+      up: (p, v) => { if (dead) return;
+        if (x.target > CUT){ dead = true; sw.to(1); h.set(0, S.base, now() + EXIT); arm.set(0, S.snap); info.textContent = 'cut'; }
+        else x.release(x.target, v.vx * .1, 0); }
+    });
+    mid.style.cursor = 'grab';
+    $(st,'.rs').onclick = () => { dead = false; sw.to(0); h.set(1); x.jump(0); arm.jump(0); info.textContent = ''; };
+    return t => { const a = clamp(arm.at(t)), hh = clamp(h.at(t));
+      cut.style.background = mix(a, 'var(--danger)', 'var(--line)');
+      mid.style.borderColor = mix(a, 'var(--danger)', 'var(--line)');
+      mid.style.transform = `translateX(${px(x.at(t))})`;
+      mid.style.height = px(Math.max(0, hh * H0)); mid.style.paddingTop = mid.style.paddingBottom = px(hh * 10);
+      mid.style.opacity = dead ? hh.toFixed(3) : '1'; mid.style.visibility = hh < .02 ? 'hidden' : 'visible';
+      sw.apply(l0, 0, t); sw.apply(l1, 1, t);
+      if (!dead) info.textContent = a > .5 ? 'release to cut' : ''; };
+  }});
+atom({ id:'queryrail', cat:'Writing', name:'Query rail', block:'search rail', fam:['M','X'],
+  html:`<div class="col" style="gap:10px;width:min(360px,92%)"><button class="btn ink aq">Add query</button><div class="rail card" style="overflow:hidden;padding:10px"><div class="chips col" style="gap:6px"></div></div><div class="hint">Click a chip to resolve it</div></div>`,
+  desc:'The rail slides in on a calm spring. New query chips swap in one after another. Resolving one shrinks it away, then the gap closes on the same spring.',
+  api:'rail.set(1)   chip.sw.to(1) @t+i*.04   resolve: w→0, h→0',
+  init(st){
+    const Q = ['who voted for the hike', 'when does it start', 'what streets flood first', 'who pays the fee'];
+    const chips = $(st,'.chips'), rail = $(st,'.rail');
+    const rx = new Track(0); let n = 0; const items = [];
+    const add = () => { if (n >= Q.length) return; const k = n++;
+      const d = document.createElement('button'); d.className = 'chipb small card';
+      d.style.cssText += 'position:relative;overflow:hidden;text-align:left;cursor:pointer;padding:8px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;width:100%';
+      d.innerHTML = `<span class="c layer">${Q[k]}</span><span class="r layer" style="color:var(--success)">Resolved ✓</span>`;
+      chips.appendChild(d);
+      const it = { d, c:d.querySelector('.c'), r:d.querySelector('.r'), sw:new Swap(0), w:new Track(0), h:new Track(0), gone:false };
+      const t0 = now() + k * .04;
+      it.w.set(1, S.base, t0); it.h.set(1, S.base, t0); it.sw.to(0, t0);
+      d.style.width = ''; items.push(it);
+      d.onclick = () => { if (it.gone) return; it.gone = true; const t1 = now();
+        it.sw.to(1, t1); it.w.set(0, S.base, t1 + EXIT); it.h.set(0, S.base, t1 + EXIT);
+        setTimeout(() => d.remove(), REDUCE ? 0 : 700); };
+    };
+    $(st,'.aq').onclick = () => { if (!rx.target) rx.set(1); add(); };
+    rx.set(1); add(); add();
+    return t => { const p = clamp(rx.at(t));
+      rail.style.opacity = p.toFixed(3); rail.style.transform = `translateX(${px((1-p)*-16)})`;
+      items.forEach(it => { const w = clamp(it.w.at(t)), h = clamp(it.h.at(t));
+        it.d.style.opacity = w.toFixed(3);
+        it.d.style.maxHeight = px(h * 40); it.d.style.paddingTop = it.d.style.paddingBottom = px(h * 8);
+        it.d.style.marginBottom = px(-6 * (1 - h)); it.d.style.overflow = 'hidden';
+        it.d.style.visibility = w < .02 && h < .02 ? 'hidden' : 'visible';
+        it.sw.apply(it.c, 0, t); it.sw.apply(it.r, 1, t); }); };
+  }});
+atom({ id:'slug', cat:'Writing', name:'Slug renamer', block:'slug field', fam:['S','E'],
+  html:`<div class="col" style="gap:10px;width:min(360px,92%)"><label class="small muted">Post title <input class="ti" value="The fee hike nobody voted on" style="display:block;width:100%;margin-top:4px;border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:none;color:var(--ink);font:14px var(--sans)"></label><div class="row small" style="gap:6px;align-items:center"><span class="muted">/posts/</span><span class="fld card" style="position:relative;display:inline-block;overflow:hidden;padding:6px 10px;min-height:30px;vertical-align:middle"><span class="o layer"></span><span class="u layer"></span></span><span class="warn" style="color:var(--danger)"></span></div><div class="row" style="gap:8px"><button class="btn ink rn">Rename</button></div><div class="hint">Try “water rates” — that slug is taken</div></div>`,
+  desc:'The field stretches or shrinks to fit as you type. The old slug blurs into the new one. A taken slug rings red and says so.',
+  api:'w.set(fit(live))   sw.to(new)   taken: ring.set(1), msg',
+  init(st){
+    const TAKEN = new Set(['water-rates', 'fee-hike']);
+    const inp = $(st,'.ti'), fld = $(st,'.fld'), o = $(st,'.o'), u = $(st,'.u'), warn = $(st,'.warn');
+    const slugify = s => s.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'untitled';
+    const sw = new Swap(0), w = new Track(120), ring = new Track(0);
+    const layers = [o, u]; let cur = 0, val = slugify(inp.value);
+    o.textContent = val;
+    const fit = s => { const m = document.createElement('span'); m.textContent = s;
+      Object.assign(m.style, { position:'absolute', visibility:'hidden', whiteSpace:'nowrap', font:'13px var(--sans)', padding:'6px 10px' });
+      st.appendChild(m); const x = m.offsetWidth + 22; m.remove(); return Math.max(80, x); };
+    const apply = v => { const t = now(); cur = 1 - cur; layers[cur].textContent = v;
+      sw.to(cur, t); w.set(fit(v), S.base, t);
+      const bad = TAKEN.has(v); ring.set(bad ? 1 : 0, S.snap, t); warn.textContent = bad ? 'taken — try another' : ''; };
+    inp.oninput = () => apply(slugify(inp.value));
+    $(st,'.rn').onclick = () => { inp.value = inp.value === 'Water rates' ? 'The fee hike nobody voted on' : 'Water rates'; apply(slugify(inp.value)); };
+    w.jump(fit(val)); if (REDUCE) { ring.jump(0); }
+    return t => { const r = clamp(ring.at(t));
+      fld.style.width = px(w.at(t));
+      fld.style.borderColor = mix(r, 'var(--danger)', 'var(--line)');
+      fld.style.boxShadow = r > .02 ? `0 0 0 ${(r*3).toFixed(1)}px color-mix(in oklab, var(--danger) ${(r*45).toFixed(0)}%, transparent)` : 'none';
+      layers.forEach((e,k) => sw.apply(e,k,t)); };
+  }});
+atom({ id:'deckstack', cat:'Writing', name:'Deck stacker', block:'headline stack', fam:['M','D'],
+  html:`<div class="col" style="gap:10px;width:min(360px,92%)"><div class="deck col" style="gap:6px"></div><div class="row small muted" style="gap:8px;align-items:center"><span>SERP</span><div class="bar" style="flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i style="display:block;height:100%;width:0"></i></div><span class="len"></span></div><button class="btn sh">Shuffle</button></div><div class="hint">Long stacks ink the bar toward red</div>`,
+  desc:'Kicker, deck and headline trade places on soft springs with a short trailing edge. The search-result bar fills and inks from green to amber to red as it nears the cut.',
+  api:'y.retarget(S.soft)   trail @t+.06   bar: len→color',
+  init(st){
+    const deck = $(st,'.deck'), fill = $(st,'.bar i'), len = $(st,'.len');
+    const C = [['Kicker', 'City hall'], ['Headline', 'Water bills rise 40 cents in July'], ['Deck', 'The fee hid in a footnote; low streets flood first when the pumps stop.']];
+    const H = 46, cards = C.map(([k,v]) => { const d = document.createElement('div'); d.className = 'card small';
+      d.style.cssText += 'padding:8px 12px;position:relative'; d.innerHTML = `<span class="small muted">${k}</span><div style="font-weight:600">${v}</div><i class="tr" style="position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--line)"></i>`;
+      deck.appendChild(d); return { d, k, v, tre:$(d,'.tr'), y:new Track(0, S.soft), tr:new Track(0, S.soft) }; });
+    let order = [0, 1, 2];
+    const layout = first => { const t0 = now();
+      order.forEach((ci, slot) => { const c = cards[ci];
+        if (first){ c.y.jump(slot * (H + 6)); c.tr.jump(slot * (H + 6)); }
+        else { c.y.set(slot * (H + 6), S.soft, t0); c.tr.set(slot * (H + 6), S.soft, t0 + .06); } }); };
+    layout(true);
+    const total = () => cards.reduce((a,c) => a + c.v.length, 0);
+    const LIM = 120;
+    $(st,'.sh').onclick = () => { order = [...order].sort(() => Math.random() - .5); layout(false); };
+    return t => { cards.forEach(c => { const y = c.y.at(t), tr = c.tr.at(t), home = cards.indexOf(c) * (H + 6);
+        c.d.style.transform = `translateY(${px(y - home)})`;
+        c.d.style.zIndex = 10 - Math.round(y);
+        c.tre.style.transform = `scaleX(${clamp(1 - Math.abs(tr - y) / 60).toFixed(3)})`; });
+      const p = clamp(total() / LIM);
+      fill.style.width = (p * 100).toFixed(1) + '%';
+      fill.style.background = p < .6 ? 'var(--success)' : p < .85 ? 'var(--warning)' : 'var(--danger)';
+      len.textContent = `${total()}/${LIM}`; };
+  }});
+atom({ id:'flatplan', cat:'Writing', name:'Flatplan paginator', block:'page-editor, flatplan', fam:['D','T','E','S'], wide:true, tall:true,
+  html:`<div class="col" style="gap:14px;align-items:center"><div class="row small muted" style="width:min(560px,94%);justify-content:space-between"><span>Issue 12 · folio</span><span>p. <span class="dg" style="display:inline-flex;min-width:12px;justify-content:flex-end"></span> / 5</span></div><div class="fp" style="position:relative;width:min(560px,94%);height:150px"><i class="ind" style="position:absolute;left:0;bottom:-14px;height:4px;border-radius:2px;background:var(--ink)"></i></div><button class="btn sh">Shuffle</button></div><div class="hint">Drag a page into its folio slot</div>`,
+  desc:'A held page follows the pointer exactly and bends with rubber-band past the ends. On release it springs into the nearest folio slot, the folio number rolls, and the plate marker trails behind by 60ms. Shuffle re-deals the folio.',
+  api:'held.x = pointer; rb past ends   drop: x.release(x, vx, slot)   dg.set(n)   plates.go(l, r)',
+  init(st){
+    const box = $(st,'.fp'), ind = $(st,'.ind'), dg = new Digits($(st,'.dg'), 1), W = 112, CW = 104;
+    const N = ['Cover','Feature','Essay','Ads','Back'], e = edges(0, CW);
+    const rows = N.map((t,i) => { const r = document.createElement('div'); r.className = 'card small';
+      r.style.cssText += ';position:absolute;top:0;left:0;width:104px;height:150px;padding:10px;touch-action:none;cursor:grab;display:flex;flex-direction:column;gap:6px';
+      r.innerHTML = '<b class="num">' + (i+1) + '</b><span>' + t + '</span><span class="muted" style="margin-top:auto;font-size:11px">' + (t === 'Ads' ? 'ad plate' : 'edit plate') + '</span>';
+      box.appendChild(r);
+      return { r, t, num:$(r,'.num'), x:new Track(i*W), lift:new Track(0, S.snap) }; });
+    let order = rows.slice(), held = null, hx = 0, sx = 0, last = rows[0];
+    const lay = inst => order.forEach((o,i) => { if (o !== held) inst ? o.x.jump(i*W) : o.x.set(i*W); o.num.textContent = i+1; });
+    const mark = o => { const s = order.indexOf(o)*W, n = String(order.indexOf(o)+1);
+      if (REDUCE){ e.jump(s, s+CW); dg.set(n, true); } else { e.go(s, s+CW); dg.set(n); } };
+    rows.forEach(o => drag(o.r, {
+      down:p => { held = o; last = o; sx = o.x.at() - p.cx; hx = o.x.at(); o.lift.set(1); o.r.style.zIndex = 5; },
+      move:p => { let v = sx + p.cx; const max = (N.length-1)*W;
+        if (v < 0) v = rb(v, 28); if (v > max) v = max + rb(v-max, 28); hx = v;
+        const k = clamp(Math.round(v/W), 0, N.length-1), cur = order.indexOf(o);
+        if (k !== cur){ order.splice(cur, 1); order.splice(k, 0, o); lay(); } },
+      up:(p,v) => { const slot = order.indexOf(o)*W;
+        if (REDUCE) o.x.jump(slot); else o.x.release(hx, v.vx, slot);
+        o.lift.set(0); held = null; setTimeout(() => o.r.style.zIndex = '', 300); mark(o); } }));
+    $(st,'.sh').onclick = () => { const t0 = now();
+      order = order.map(o => [Math.random(), o]).sort((a,b) => a[0]-b[0]).map(x => x[1]);
+      order.forEach((o,i) => { if (REDUCE) o.x.jump(i*W); else o.x.set(i*W, S.base, t0 + i*.03); o.num.textContent = i+1; });
+      mark(last); };
+    dg.set('1', true);
+    return t => { rows.forEach(o => { const l = clamp(o.lift.at(t));
+        o.r.style.transform = 'translateX(' + px(o === held ? hx : o.x.at(t)) + ') scale(' + (1+.04*l).toFixed(4) + ')';
+        o.r.style.boxShadow = l > .02 ? '0 ' + px(2+10*l) + ' ' + px(4+20*l) + ' rgba(0,0,0,' + (.08+.12*l).toFixed(3) + ')' : 'var(--shadow)'; });
+      dg.render(t);
+      const a = e.A.at(t), b = e.B.at(t); ind.style.transform = 'translateX(' + px(a) + ')'; ind.style.width = px(b-a); };
+  }});
+atom({ id:'shipcheck', cat:'Writing', name:'Ship checklist', block:'checklist, publish', fam:['M','S','T'],
+  html:`<div class="col" style="width:min(300px,88%);gap:10px"><div class="row small muted" style="justify-content:space-between"><span>Ship readiness</span><span class="row" style="gap:6px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="var(--line)" stroke-width="2.5"/><circle class="arc" cx="10" cy="10" r="8" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="50.3" stroke-dashoffset="50.3" transform="rotate(-90 10 10)"/></svg><span><span class="dn"></span> of 3</span></span></div><div class="cl col" style="gap:4px"></div><div class="row" style="gap:6px"><button class="btn ink sh" style="position:relative;flex:none;height:36px;padding:0;overflow:hidden"></button><button class="btn rs">Reset</button></div></div><div class="hint">Finish all three to stamp it shipped</div>`,
+  desc:'Each check fills its box, draws the tick, then runs the strike 40ms later. The ring fills and the count rolls with every step, and the ship button swaps into a success stamp on the last one. Reset clears the board.',
+  api:'box.set(1); tick.set(1); strike.set(1, S.base, t+.04)   ring.set(n/3); dg.set(n)   all: swap.to(1), w.set(measure)',
+  init(st){
+    const cl = $(st,'.cl'), arc = $(st,'.arc'), sh = $(st,'.sh'), C = 50.3;
+    const dn = new Digits($(st,'.dn'), 1), sw = new Swap(0), w = new Track(0), sv = new Track(0), ring = new Track(0);
+    const L = ['Ship issue','✓ Shipped'].map(s => { const e2 = document.createElement('span'); e2.className = 'layer'; e2.textContent = s; sh.appendChild(e2); return e2; });
+    const width = k => { const m = document.createElement('span'); m.textContent = L[k].textContent; Object.assign(m.style,{position:'absolute',visibility:'hidden',whiteSpace:'nowrap',font:'600 14px var(--sans)',padding:'0 16px'}); st.appendChild(m); const x = m.offsetWidth + 32; m.remove(); return x; };
+    const rows = [['Proof the draft',1],['Set the cover art',0],['Pick the send time',0]].map(([n,d]) => {
+      const b = document.createElement('button'); b.style.cssText = 'display:flex;align-items:center;gap:10px;border:0;background:none;padding:6px 0;cursor:pointer;text-align:left;font-size:14px';
+      b.innerHTML = '<span class="bx" style="position:relative;width:18px;height:18px;border-radius:5px;border:1.5px solid var(--line);flex:none"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--card)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:1.5px;top:1.5px"><path d="M5 12.5 10 17.5 19 7" pathLength="1" stroke-dasharray="1"/></svg></span><span class="tx" style="position:relative"><span></span><i style="position:absolute;left:0;top:52%;height:1.5px;background:var(--muted)"></i></span>';
+      $(b,'.tx span').textContent = n; cl.appendChild(b);
+      const r = { b, bx:$(b,'.bx'), ck:$(b,'path'), tx:$(b,'.tx'), ln:$(b,'i'), on:d, f:new Track(d), c:new Track(d), s:new Track(d) };
+      b.onclick = () => { r.on = r.on ? 0 : 1; const t0 = now();
+        if (REDUCE){ r.f.jump(r.on); r.c.jump(r.on); r.s.jump(r.on); }
+        else if (r.on){ r.f.set(1); r.c.set(1); r.s.set(1, S.base, t0 + .04); }
+        else { r.f.set(0, S.snap); r.c.set(0, S.snap); r.s.set(0, S.snap); }
+        sync(); };
+      return r; });
+    const sync = () => { const n = rows.filter(x => x.on).length, all = n === rows.length ? 1 : 0;
+      if (REDUCE){ ring.jump(n/3); dn.set(String(n), true); sw.cur = all; sw.prev = null; sw.t = -9; w.jump(width(all)); sv.jump(all); }
+      else { ring.set(n/3); dn.set(String(n)); sw.to(all); w.set(width(all)); sv.set(all); } };
+    $(st,'.rs').onclick = () => { rows.forEach(r => { r.on = 0;
+      if (REDUCE){ r.f.jump(0); r.c.jump(0); r.s.jump(0); } else { r.f.set(0, S.snap); r.c.set(0, S.snap); r.s.set(0, S.snap); } }); sync(); };
+    sh.onclick = () => { const r = rows.find(x => !x.on); if (r) r.b.onclick(); };
+    sync(); w.jump(width(sw.cur));
+    return t => { rows.forEach(r => { const f = clamp(r.f.at(t)), c = clamp(r.c.at(t)), s = clamp(r.s.at(t));
+        r.bx.style.background = mix(f,'var(--ink)','transparent'); r.bx.style.borderColor = mix(f,'var(--ink)','var(--line)'); r.ck.style.strokeDashoffset = (1-c).toFixed(3);
+        r.ln.style.width = (s*100).toFixed(1) + '%'; r.tx.style.color = mix(s,'var(--muted)','var(--ink)'); });
+      arc.style.strokeDashoffset = (C*(1-clamp(ring.at(t)))).toFixed(2); dn.render(t);
+      L.forEach((e2,k) => sw.apply(e2,k,t)); sh.style.width = px(w.at(t));
+      sh.style.background = mix(clamp(sv.at(t)),'var(--success)','var(--ink)'); sh.style.color = 'var(--card)'; };
+  }});
+atom({ id:'inboxsweep', cat:'Writing', name:'Inbox sweep', block:'inbox, drafts', fam:['D','X','M','S'], tall:true,
+  html:`<div class="col" style="width:min(340px,92%);gap:8px"><div class="row small muted" style="justify-content:space-between"><span>Drafts to sweep</span><span><span class="dn"></span> left</span></div><div class="sr col" style="gap:0"></div><button class="btn un">Undo</button></div><div class="hint">Swipe a row past the line to sweep it away</div>`,
+  desc:'A row follows the finger and arms past 80 pixels. On release it flies out on the fast spring while its gap closes on the calm one, and the count left rolls down. Undo brings the last swept row back.',
+  api:'x = pointer; armed = |x| > 80   out: x.release(x, v, ±W, S.snap); h.set(0, S.base, t+.15)   undo: h.set(1); x.set(0)',
+  init(st){
+    const sr = $(st,'.sr'), un = $(st,'.un'), dn = new Digits($(st,'.dn'), 1);
+    const M = [['Spring launch','Open with the cover story'],['Pricing rewrite','Shorter, plainer, kinder'],['Member letter','Thank the founding fifty'],['Send checklist','Proof, art, time, ship']];
+    const gone = [];
+    const rows = M.map(([a,b],idx) => { const last = idx === M.length-1;
+      const w = document.createElement('div'); w.style.cssText = 'position:relative;overflow:hidden' + (last ? '' : ';border-bottom:1px solid var(--line-soft)');
+      w.innerHTML = '<div class="bk" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:var(--raised);color:var(--ink)"><span class="small">‹ Sweep</span><span class="small">Sweep ›</span></div><div class="fg" style="position:relative;background:var(--card);padding:12px 14px;touch-action:pan-y;cursor:grab"><b class="small" style="display:block">' + a + '</b><span class="small muted">' + b + '</span></div>';
+      sr.appendChild(w);
+      const r = { w, fg:$(w,'.fg'), bk:$(w,'.bk'), x:new Track(0, S.snap), h:new Track(1), held:false, hx:0, sx:0, H:0, out:0 };
+      drag(r.fg, { down:p => { r.held = true; r.sx = r.x.at() - p.cx; r.hx = r.x.at(); },
+        move:p => r.hx = r.sx + p.cx,
+        up:(p,v) => { r.held = false; const Wd = r.w.clientWidth;
+          if (Math.abs(r.hx) > 80 || Math.abs(v.vx) > 700){ const s = Math.sign(r.hx || v.vx) || 1; r.H = r.w.offsetHeight;
+            if (REDUCE){ r.x.jump(s*Wd); r.h.jump(0); } else { r.x.release(r.hx, v.vx, s*Wd); r.h.set(0, S.base, now() + .15); }
+            r.out = s; gone.push(r); left(); }
+          else if (REDUCE) r.x.jump(0); else r.x.set(0); } });
+      return r; });
+    const left = () => { const n = rows.filter(r => !r.out).length;
+      if (REDUCE) dn.set(String(n), true); else dn.set(String(n));
+      un.disabled = !gone.length; un.style.opacity = gone.length ? '' : '.45'; };
+    un.onclick = () => { const r = gone.pop(); if (!r) return; r.out = 0;
+      if (REDUCE){ r.h.jump(1); r.x.jump(0); } else { r.h.set(1); r.H = 0; r.x.jump(Math.sign(r.x.target || 1)*r.w.clientWidth); r.x.set(0); }
+      left(); };
+    dn.set(String(M.length), true); left();
+    return t => { rows.forEach(r => { const x = r.held ? r.hx : r.x.at(t), a = clamp(Math.abs(x)/80);
+        r.fg.style.transform = 'translateX(' + px(x) + ')';
+        r.bk.style.background = a >= 1 ? 'var(--ink)' : mix(a,'var(--muted)','var(--raised)');
+        r.bk.style.color = a >= 1 ? 'var(--card)' : 'var(--ink)';
+        const h = clamp(r.h.at(t)); r.w.style.height = h < 1 ? px(h*(r.H || r.w.scrollHeight)) : ''; });
+      dn.render(t); };
+  }});
+atom({ id:'backlink', cat:'Writing', name:'Backlink popover', block:'richtext editor, backlinks', fam:['X','S','T','E'],
+  html:`<div class="col" style="width:min(340px,92%);gap:10px"><p class="small" style="line-height:1.7;margin:0">The launch plan lives in <button class="lk" aria-haspopup="dialog" aria-expanded="false" style="border:0;background:none;padding:0;color:var(--accent);font:inherit;cursor:pointer">[[launch notes]]</button> this quarter.</p><div class="pv card" role="dialog" aria-label="Backlinks" style="position:relative;width:100%;padding:10px;transform-origin:50% 0;visibility:hidden"><div class="seg tabsx" role="tablist" style="margin-bottom:8px"><div class="ind"></div><button role="tab">Linked</button><button role="tab">Unlinked</button></div><div class="pans" style="position:relative;overflow:hidden"><i class="hl" style="position:absolute;left:0;right:0;top:0;border-radius:7px;background:var(--raised)"></i></div></div></div><div class="hint">Open [[launch notes]], then switch tabs</div>`,
+  desc:'The popover grows out of the link. Switching tabs swaps the old list out before the new rows rise 30ms apart, and the highlight trails the hovered row by 60ms.',
+  api:'pv.o.set(open, open ? S.base : S.snap)   swap.to(tab)   rows: o.set(1, S.base, t+.1+i*.03)   hi.go(top, top+H)',
+  init(st){
+    const lk = $(st,'.lk'), pv = $(st,'.pv'), pans = $(st,'.pans'), hl = $(st,'.hl');
+    const seg = $(st,'.tabsx'), ind = $(seg,'.ind'), btns = $$(seg,'button');
+    const D = [[['Spring launch','3 links'],['Pricing table','2 links'],['Member letter','1 link']],[['Old roadmap','no links'],['Press kit','no links']]];
+    const o = new Track(0), sw = new Swap(0), ie = edges(0,0), te = edges(0,0), h = new Track(0);
+    const layers = D.map(() => { const d = document.createElement('div'); d.className = 'layer';
+      Object.assign(d.style,{whiteSpace:'normal',alignItems:'stretch',justifyContent:'flex-start',padding:'2px',bottom:'auto'});
+      pans.appendChild(d); return d; });
+    const rowss = D.map((list,li) => list.map(([t,m]) => { const d = document.createElement('div');
+      d.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 10px;font-size:14px;border-radius:7px;cursor:default';
+      d.innerHTML = '<span>' + t + '</span><span class="muted small">' + m + '</span>';
+      layers[li].appendChild(d);
+      const r = { d, o:new Track(li === 0 ? 1 : 0) };
+      d.onpointerenter = () => { if (REDUCE) ie.jump(d.offsetTop, d.offsetTop + d.offsetHeight); else ie.go(d.offsetTop, d.offsetTop + d.offsetHeight); };
+      return r; }));
+    const geo = b => [b.offsetLeft, b.offsetLeft + b.offsetWidth];
+    const sel = (k, inst) => { btns.forEach((b,j) => b.setAttribute('aria-selected', k === j));
+      const t0 = now(), inst2 = inst || REDUCE;
+      if (inst2){ sw.cur = k; sw.prev = null; sw.t = -9; } else sw.to(k);
+      rowss.forEach((rs,li) => rs.forEach((r,i) => {
+        if (li === k) inst2 ? r.o.jump(1) : r.o.set(1, S.base, t0 + EXIT + i*.03);
+        else inst2 ? r.o.jump(0) : r.o.set(0, S.snap); }));
+      const f = rowss[k][0].d, top = f.offsetTop, Hh = f.offsetHeight;
+      inst2 ? ie.jump(top, top + Hh) : ie.go(top, top + Hh);
+      const [l,r2] = geo(btns[k]); inst ? te.jump(l, r2) : te.go(l, r2);
+      inst ? h.jump(layers[k].offsetHeight) : h.set(layers[k].offsetHeight); };
+    const set = v => { if (REDUCE) o.jump(v ? 1 : 0); else openSet(o, v); lk.setAttribute('aria-expanded', v); };
+    lk.onclick = () => set(!o.target);
+    outside(st, [lk, pv], () => set(false));
+    st.addEventListener('keydown', ev => { if (ev.key === 'Escape'){ set(false); lk.focus(); } });
+    btns.forEach((b,i) => b.onclick = () => sel(i));
+    const init2 = () => sel(0, true); document.fonts.ready.then(init2); requestAnimationFrame(init2);
+    return t => { pop(pv, o.at(t), -6);
+      const l = te.A.at(t), r2 = te.B.at(t);
+      Object.assign(ind.style,{transform:'translate(' + px(l) + ',3px)',width:px(r2-l),height:'calc(100% - 6px)'});
+      pans.style.height = px(h.at(t));
+      layers.forEach((el,k) => sw.apply(el,k,t));
+      rowss.forEach(rs => rs.forEach(r => { const v = clamp(r.o.at(t)); fade(r.d, v, (1-v)*8); }));
+      plate(hl, ie.A.at(t), ie.B.at(t)); };
+  }});
+atom({ id:'tagpill', cat:'Writing', name:'Tag pill autocomplete', block:'tag input, editor', fam:['M','X','E'],
+  html:`<div class="col ed" style="width:min(340px,92%);gap:6px"><label class="tg card" style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:46px;padding:8px;cursor:text"><input placeholder="Write something, try #de…" autocomplete="off" aria-label="Editor line" style="flex:1;min-width:120px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:4px"></label></div><div class="mn card" role="listbox" style="position:absolute;left:0;top:0;width:200px;padding:6px;visibility:hidden;transform-origin:0 0"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:7px;background:var(--raised)"></i></div><div class="hint">Type # to filter tags, Enter makes a pill</div>`,
+  desc:'Typing # filters the list inline: matches spring into their slots while misses blur out. The plate trails the top match by 60ms, and Enter morphs the word into a pill that springs open before its text fades in.',
+  api:'rows.filter(#q)   match: y.set(slot); miss: o.set(0)   plate.go(first)   pill: w.set(1); o.set(1, S.base, t+.06)',
+  init(st){
+    const tg = $(st,'.tg'), inp = $(st,'input'), mn = $(st,'.mn'), hl = $(st,'.hl'), R = 32, P = 6;
+    const TAGS = ['design','deadline','draft','launch','research','press'];
+    const rows = TAGS.map(n => { const d = document.createElement('div'); d.setAttribute('role','option');
+      d.innerHTML = '<span style="color:var(--accent)">#</span><span>' + n + '</span>';
+      d.style.cssText += 'position:absolute;left:6px;right:6px;top:0;height:32px;display:flex;align-items:center;gap:2px;padding:0 10px;font-size:14px;cursor:pointer;border-radius:7px';
+      mn.appendChild(d); return { d, n, y:new Track(P), o:new Track(0) }; });
+    const o = new Track(0), H = new Track(P*2), e = edges(P, P+R);
+    let vis = [], hi = 0; const chips = [];
+    const q = () => { const m = inp.value.match(/#(\w*)$/); return m ? m[1].toLowerCase() : null; };
+    const place = () => { const r = relRect(st, inp.getBoundingClientRect());
+      mn.style.left = px(Math.min(r.x, st.clientWidth - 208)); mn.style.top = px(r.y + r.h + 6); };
+    const shut = () => { if (REDUCE) o.jump(0); else o.set(0, S.snap); };
+    const upd = () => { const s = q();
+      if (s === null){ if (o.target) shut(); return; }
+      if (!o.target){ place(); REDUCE ? o.jump(1) : o.set(1); }
+      vis = rows.filter(r => r.n.toLowerCase().startsWith(s));
+      rows.forEach(r => { const k = vis.indexOf(r);
+        if (k >= 0){ if (REDUCE){ r.y.jump(P+k*R); r.o.jump(1); } else { r.y.set(P+k*R); r.o.set(1); } }
+        else if (REDUCE) r.o.jump(0); else r.o.set(0, S.snap); });
+      if (REDUCE) H.jump(P*2 + Math.max(1, vis.length)*R); else H.set(P*2 + Math.max(1, vis.length)*R);
+      hi = 0; if (vis[0]) REDUCE ? e.jump(P, P+R) : e.go(P, P+R); };
+    const add = txt => { const c = document.createElement('span');
+      c.style.cssText = 'display:inline-flex;overflow:hidden;white-space:nowrap;border-radius:999px;background:var(--accent-tint);color:var(--accent);height:28px;font-size:13px;font-weight:600';
+      c.innerHTML = '<span class="ci" style="display:inline-flex;align-items:center;padding:0 10px">#' + txt + '</span>';
+      tg.insertBefore(c, inp);
+      const ch = { c, ci:$(c,'.ci'), W:$(c,'.ci').offsetWidth, w:new Track(0), o:new Track(0) }, t0 = now();
+      if (REDUCE){ ch.w.jump(1); ch.o.jump(1); } else { ch.w.set(1); ch.o.set(1, S.base, t0 + .06); }
+      chips.push(ch); };
+    const pick = r => { inp.value = inp.value.replace(/#\w*$/, ''); shut(); inp.focus(); add(r.n); };
+    inp.oninput = upd; inp.onblur = () => setTimeout(shut, 0);
+    inp.onkeydown = ev => { if (!o.target || !vis.length) return;
+      if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){ ev.preventDefault();
+        hi = (hi + (ev.key === 'ArrowDown' ? 1 : vis.length-1)) % vis.length;
+        if (REDUCE) e.jump(P+hi*R, P+(hi+1)*R); else e.go(P+hi*R, P+(hi+1)*R); }
+      if (ev.key === 'Enter'){ ev.preventDefault(); pick(vis[hi]); }
+      if (ev.key === 'Escape') shut(); };
+    rows.forEach(r => { r.d.onmousedown = ev => ev.preventDefault(); r.d.onclick = () => pick(r); });
+    return t => { pop(mn, o.at(t), 0); mn.style.height = px(H.at(t)); plate(hl, e.A.at(t), e.B.at(t));
+      rows.forEach(r => { const v = clamp(r.o.at(t)); r.d.style.opacity = v.toFixed(3);
+        r.d.style.filter = v < .98 ? 'blur(' + ((1-v)*BLUR).toFixed(2) + 'px)' : 'none';
+        r.d.style.transform = 'translateY(' + px(r.y.at(t) + (1-v)*6) + ')';
+        r.d.style.pointerEvents = r.o.target ? 'auto' : 'none'; });
+      chips.forEach(ch => { const wv = clamp(ch.w.at(t)); ch.c.style.width = px(ch.W*wv);
+        fade(ch.ci, ch.o.at(t), null); }); };
+  }});
+atom({ id:'streak', cat:'Writing', name:'Streak ring', block:'streak ring, habit dots, writing stats', fam:['M','S'],
+  html:`<div class="col" style="align-items:center;gap:12px"><div class="row" style="gap:14px;align-items:center"><svg class="rg" width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="30" fill="none" stroke="var(--line)" stroke-width="9"/><circle class="arc" cx="42" cy="42" r="30" fill="none" stroke="var(--ink)" stroke-width="9" stroke-linecap="round" transform="rotate(-90 42 42)"/></svg><div class="col" style="gap:4px"><b class="ct" style="font-size:30px;letter-spacing:-.02em"></b><span class="lb small muted" style="position:relative;height:18px;display:block;overflow:hidden"></span></div></div><div class="dots row" style="gap:8px"></div><div class="seg pt"><button class="wk">Week</button><button class="mo">Month</button></div></div><div class="hint">Tap Week / Month</div>`,
+  desc:'The ring fills to its new share. The week dots ink one after another. The day count rolls over. Flipping weeks and months swaps the caption while the ring and dots replay.',
+  api:'ring.set(share, soft)   dot[i].set(1, base, t0+i*.04)   count.set(days)   cap.to(mode)',
+  init(st){
+    const arc = $(st,'.arc'), C = 2*Math.PI*30; arc.style.strokeDasharray = C.toFixed(1);
+    const dots = Array.from({length:7}, () => { const d = document.createElement('span'); Object.assign(d.style,{width:'14px',height:'14px',borderRadius:'50%',border:'2px solid var(--ink)'}); $(st,'.dots').appendChild(d); return d; });
+    const dg = new Digits($(st,'.ct'), 2), lb = $(st,'.lb');
+    const L = ['5 days this week','18 days this month'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; lb.appendChild(e); return e; });
+    const ring = new Track(0, S.soft), dk = dots.map(() => new Track(0)), cap = new Swap(0);
+    const D = [[1,1,1,1,1,0,0,'12'],[1,1,1,1,1,1,0,'18']], SH = [.71,.6]; let m = 0;
+    const go = k => { m = k; const t0 = now(); ring.set(SH[k], S.soft); dg.set(D[k][7]); cap.to(k);
+      D[k].slice(0,7).forEach((v,i) => dk[i].set(v, S.base, t0 + i*.04)); };
+    $(st,'.wk').onclick = () => go(0); $(st,'.mo').onclick = () => go(1);
+    dg.set('12', true); go(0);
+    return t => { arc.style.strokeDashoffset = (C*(1-clamp(ring.at(t)))).toFixed(1);
+      dk.forEach((d,i) => { const o = clamp(d.at(t)); dots[i].style.background = mix(o,'var(--ink)','transparent'); dots[i].style.transform = `scale(${(0.7+0.3*o).toFixed(3)})`; });
+      dg.render(t); L.forEach((e,k) => cap.apply(e,k,t)); };
+  }});
+atom({ id:'clipper', cat:'Writing', name:'Clip drop target', block:'clipper, drop target, saved preview', fam:['D','M'], tall:true,
+  html:`<div class="col" style="width:min(320px,90%);gap:12px;align-items:stretch"><div class="card col tg" style="padding:16px;gap:8px;border:2px dashed var(--line)"><b style="font-size:14px">Drop here to save</b><span class="small muted">Drag the quote chip onto this card</span><div class="pv" style="overflow:hidden;height:0"><div class="pic" style="height:96px;border-radius:10px;background:linear-gradient(135deg,var(--accent-tint),var(--line))"></div><div class="tt small" style="position:relative;height:20px;margin-top:8px"></div></div></div><div class="row" style="gap:8px;align-items:center"><span class="chip small" style="border:1px solid var(--line);border-radius:999px;padding:8px 14px;cursor:grab;touch-action:none">“Write what you notice.”</span><button class="btn rs" style="margin-left:auto">Reset</button></div></div><div class="hint">Drag the chip onto the card</div>`,
+  desc:'Dragging over the card warms its tint. Dropping grows the saved preview down from nothing. The cover starts soft and sharpens, then the title trades places with a saved line and its check.',
+  api:'tint.set(1, snap) on snap   h.set(H, base) on drop   sharp.set(1, lazy); title.to(saved)   reset: all.set(0)',
+  init(st){
+    const card = $(st,'.tg'), chip = $(st,'.chip'), pv = $(st,'.pv'), pic = $(st,'.pic'), tt = $(st,'.tt');
+    const L = ['A note on attention','Saved · check'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = (s === 'Saved · check' ? '✓ ' : '') + s; tt.appendChild(e); return e; });
+    const tint = new Track(0), h = new Track(0), sharp = new Track(0), sw = new Swap(0); let H = 150, saved = false;
+    const measure = () => { pv.style.height = 'auto'; H = pv.scrollHeight || 150; if (!saved) pv.style.height = '0px'; }; measure();
+    const drop = () => { if (saved) return; saved = true; const t0 = now();
+      tint.set(1, S.snap); h.set(H, S.base, t0); sharp.set(1, S.lazy, t0 + .25); sw.to(1, t0 + .25); };
+    drag(chip, { move: p => { const r = card.getBoundingClientRect(), c = chip.getBoundingClientRect();
+        const over = c.left + c.width/2 > r.left && c.left + c.width/2 < r.right && c.top > r.top - 60 && c.top < r.bottom;
+        tint.set(over ? 1 : 0, S.snap); },
+      up: (p, v) => { const r = card.getBoundingClientRect();
+        if (p.cx > r.left && p.cx < r.right && p.cy > r.top - 40 && p.cy < r.bottom + 40) drop(); else tint.set(0, S.snap); } });
+    chip.addEventListener('click', drop);
+    $(st,'.rs').onclick = () => { saved = false; tint.set(0); h.set(0); sharp.set(0); sw.to(0); };
+    return t => { const o = clamp(tint.at(t)), s = clamp(sharp.at(t));
+      card.style.background = mix(o,'var(--accent-tint)','var(--card)'); card.style.borderColor = mix(o,'var(--accent)','var(--line)');
+      pv.style.height = px(Math.max(0, h.at(t)));
+      pic.style.filter = s > .98 ? 'none' : `blur(${((1-s)*6).toFixed(2)}px)`; pic.style.opacity = (.4+.6*Math.max(o, s)).toFixed(3);
+      L.forEach((e,k) => sw.apply(e,k,t)); };
+  }});
+atom({ id:'sketchtext', cat:'Writing', name:'Sketch to text', block:'handwriting input, transcription', fam:['S','T'], tall:true,
+  html:`<div class="col" style="width:min(320px,90%);gap:10px"><div class="card" style="padding:16px;position:relative;min-height:120px"><svg class="ink" width="100%" height="60" viewBox="0 0 280 60"><path d="M12 40 C 60 8, 90 52, 140 28 S 230 12, 268 34" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/></svg><p class="ty" style="margin:0;font-size:15px;line-height:1.7;position:absolute;inset:16px"></p></div><div class="ln small" style="color:var(--ink)">Tomorrow: outline the spring essay.</div><div class="ln small muted">Reminder set for 8 in the morning.</div><div class="row"><button class="btn cv">Convert</button><button class="btn rt" style="margin-left:auto">Retake</button></div></div><div class="hint">Convert swaps ink for text</div>`,
+  desc:'The ink settles and trades places with typed text. The lines below slide down to make room. Words the reader might doubt blush a warning tint. Retake brings the ink back.',
+  api:'ink.o.set(0, snap); text.to(1) after .1   below.y.set(H, base)   doubt.tint→1   retake: all back',
+  init(st){
+    const ink = $(st,'.ink'), ty = $(st,'.ty'), lns = [$$(st,'.ln')[0], $$(st,'.ln')[1]];
+    const words = 'Tomorrow: outline the spring essay.'.split(' ').map(w => { const e = document.createElement('span'); e.textContent = w; Object.assign(e.style,{display:'inline-block',marginRight:'.3em'}); ty.appendChild(e); return e; });
+    const io = new Track(1), to = new Track(0), y = new Track(0), tint = new Track(0), sw = new Swap(0); let done = false, H = 44;
+    const go = () => { if (done) return; done = true; const t0 = now();
+      io.set(0, S.snap); sw.to(1, t0); to.set(1, S.base, t0 + EXIT); y.set(H, S.base, t0 + EXIT); tint.set(1, S.base, t0 + .3); };
+    const back = () => { done = false; io.set(1); to.set(0); y.set(0); tint.set(0); sw.to(0); };
+    $(st,'.cv').onclick = go; $(st,'.rt').onclick = back; ink.addEventListener('click', go);
+    return t => { const a = clamp(io.at(t)), b = clamp(to.at(t)), k = clamp(tint.at(t));
+      ink.style.opacity = a.toFixed(3); ink.style.transform = `translateY(${((1-a)*6).toFixed(2)}px)`;
+      ty.style.opacity = b.toFixed(3); ty.style.filter = b < .98 ? `blur(${((1-b)*BLUR).toFixed(2)}px)` : 'none';
+      lns.forEach(el => el.style.transform = `translateY(${px(y.at(t))})`);
+      words.forEach((w,i) => { if (i >= 2 && i <= 3) w.style.color = mix(k,'var(--warning)','var(--ink)'); });
+      sw.apply(ty, 1, t); };
+  }});
+atom({ id:'outline', cat:'Writing', name:'Outline zoom', block:'outline, document map, breadcrumbs', fam:['M','X'],
+  html:`<div class="col" style="width:min(320px,90%);gap:10px"><div class="cr small muted" style="position:relative;height:20px"></div><div class="card col br" style="padding:14px 16px;gap:6px;transform-origin:top left"><b class="ft" style="font-size:15px">Spring essay</b><div class="kids col" style="gap:4px"></div></div><div class="sib small muted">Winter notes · Reading list · Drafts</div><div class="row" style="gap:8px"><button class="btn bk">Back</button><span style="flex:1"></span><button class="btn d1">1</button><button class="btn d2">2</button></div></div><div class="hint">Pick a child to zoom in</div>`,
+  desc:'Zooming swaps the breadcrumb trail. The opened branch grows from almost full size. Its children land one after another while the old siblings wash out. Back walks the same path in reverse.',
+  api:'crumb.to(depth)   br.sc.set(1, base) from .97   kid[i].o.set(1, base, t0+i*.03)   sib.o.set(0)   back: reverse',
+  init(st){
+    const cr = $(st,'.cr'), br = $(st,'.br'), ft = $(st,'.ft'), kids = $(st,'.kids'), sib = $(st,'.sib');
+    const tree = { t:'Spring essay', k:['Opening image','Cold open','Thesis'], c:{ 'Opening image':['Market at dawn','The bell'],'Cold open':['A name','A debt'],'Thesis':['Attention','Care'] } };
+    let path = [];
+    const crumbs = [[`Spring essay`],[`Spring essay / Opening image`]].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; cr.appendChild(e); return e; });
+    const sw = new Swap(0), sc = new Track(1), so = new Track(1); let kidT = [];
+    const draw = () => { kids.innerHTML = ''; const list = path.length ? tree.c[path[0]] : tree.k; const t0 = now();
+      kidT = list.map(() => new Track(0));
+      list.forEach((k,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = k; b.style.textAlign = 'left';
+        b.onclick = () => { if (!path.length && tree.c[k]){ path = [k]; ft.textContent = k; sw.to(1); sc.release(.97, 0, 1, S.base); so.set(0); draw(); } };
+        kids.appendChild(b); kidT[i].set(1, S.base, t0 + i*.03); });
+      if (!path.length) so.set(1);
+    };
+    const back = () => { if (!path.length) return; path = []; ft.textContent = tree.t; sw.to(0); sc.release(.97, 0, 1, S.base); draw(); };
+    $(st,'.bk').onclick = back; $(st,'.d1').onclick = back;
+    $(st,'.d2').onclick = () => { if (!path.length){ path = ['Opening image']; ft.textContent = path[0]; sw.to(1); sc.release(.97, 0, 1, S.base); so.set(0); draw(); } };
+    draw();
+    return t => { crumbs.forEach((e,k) => sw.apply(e,k,t));
+      const s = .97 + .03*clamp(sc.at(t)); br.style.transform = `scale(${s.toFixed(4)})`;
+      [...kids.children].forEach((b,i) => { const o = kidT[i] ? clamp(kidT[i].at(t)) : 1;
+        b.style.opacity = o.toFixed(3); b.style.transform = `translateY(${((1-o)*8).toFixed(2)}px)`; });
+      fade(sib, so.at(t), 0, false); };
+  }});
+atom({ id:'recall', cat:'Writing', name:'Recall flip', block:'flashcards, spaced repetition', fam:['M','S'],
+  html:`<div class="col" style="align-items:center;gap:12px"><div class="card rc" style="width:min(300px,88%);min-height:120px;display:grid;place-items:center;padding:20px;cursor:pointer;position:relative"><b class="qa" style="position:relative;min-height:24px;text-align:center"></b></div><div class="row" style="gap:8px;align-items:center"><button class="btn g0">Again</button><button class="btn g1">Hard</button><button class="btn g2">Easy</button><span class="small muted">in</span><b class="iv"></b></div></div><div class="hint">Tap the card, then grade it</div>`,
+  desc:'The card turns over with a small dip at the halfway point. The answer only swaps in once the question has left. Each grade button trails its edge behind it. The next interval rolls its digits forward.',
+  api:'flip.set(1, soft); dip=sin(pi p)   qa.to(1) after exit   edge.go(grade) trails .06   iv.set(days)',
+  init(st){
+    const card = $(st,'.rc'), qa = $(st,'.qa');
+    const L = ['What opens the spring essay?','The market bell at dawn'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.textAlign = 'center'; e.textContent = s; qa.appendChild(e); return e; });
+    const flip = new Track(0), sw = new Swap(0), dg = new Digits($(st,'.iv'), 2), e = edges(0, 120);
+    const days = ['1d','3d','7d']; let shown = false; dg.set('1d', true); e.jump(0, 120);
+    card.onclick = () => { if (shown) return; shown = true; flip.set(1, S.soft); sw.to(1, now()); };
+    const grade = (i, inst) => { if (inst){ e.jump(0, [1,3,7][i]*40); } else { e.go(0, [1,3,7][i]*40); dg.set(days[i]); }
+      shown = false; flip.set(0, S.soft); sw.to(0); };
+    [$$(st,'.g0')[0], $$(st,'.g1')[0], $$(st,'.g2')[0]].forEach((b,i) => b.onclick = () => grade(i));
+    grade(0, true);
+    return t => { const p = clamp(flip.at(t)), dip = Math.sin(Math.PI*p);
+      card.style.transform = `perspective(700px) rotateY(${(p*180).toFixed(1)}deg) translateY(${(-dip*10).toFixed(2)}px) scale(${(.97+.03*dip).toFixed(4)})`;
+      L.forEach((el,k) => sw.apply(el,k,t)); dg.render(t);
+      card.style.borderColor = mix(clamp(e.A.at(t)/120),'var(--accent)','var(--line)'); };
+  }});
 /* ================================================================ page */
 const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories'];
 const groupsEl = document.getElementById('groups'), groupEls = {};
@@ -18514,12 +19771,15 @@ A.forEach(a => {
   const el = document.createElement('article'); el.className = 'tile' + (a.wide ? ' wide' : '') + (a.tall ? ' tall' : '') + (a.big ? ' big' : ''); el.id = a.id;
   el.innerHTML = `<header><h3></h3><div class="fam">${a.fam.map(f => `<span title="${FAMN[f]}">${f}</span>`).join('')}</div></header><div class="block"></div><div class="stage">${a.html}</div><footer><p></p><pre>${esc(a.api)}</pre></footer>`;
   $(el,'h3').textContent = a.name; $(el,'.block').textContent = a.block; $(el,'footer p').textContent = a.desc;
-  const grid = $(groupEls[a.cat],'.grid'); a.wide ? grid.insertBefore(el, grid.querySelector('.tile:not(.wide)')) : grid.appendChild(el); a.el = el; a.visible = true;
-  try { a.render = a.init($(el,'.stage')); } catch (err) { console.error(a.id, err); a.render = null; }
+  const grid = $(groupEls[a.cat],'.grid'); a.wide ? grid.insertBefore(el, grid.querySelector('.tile:not(.wide)')) : grid.appendChild(el); a.el = el; a.visible = false;
 });
-// only render tiles on screen
-const io = new IntersectionObserver(es => es.forEach(e => { const a = A.find(x => x.el === e.target); if (a) a.visible = e.isIntersecting; }), { rootMargin:'200px' });
-A.forEach(a => io.observe(a.el));
+// lazy tiles: init on first approach, render only while visible
+const io = new IntersectionObserver(es => es.forEach(e => {
+  const a = A.find(x => x.el === e.target); if (!a) return;
+  if (e.isIntersecting && !a.inited) { a.inited = true; try { a.render = a.init($(a.el,'.stage')); } catch (err) { console.error(a.id, err); a.render = null; } }
+  a.visible = e.isIntersecting;
+}), { rootMargin:'400px' });
+A.forEach(a => { a.inited = false; a.render = null; io.observe(a.el); });
 
 // segmented controls on the bar reuse the edge atom
 function segControl(root, onPick, start = 0){
