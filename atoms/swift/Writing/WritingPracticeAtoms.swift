@@ -9,32 +9,38 @@ public struct BinderAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var chapter = 0
     @State private var counts = [1240, 860, 320]
+    @State private var tweak = true
     private let titles = ["Draft", "Revision", "Polish"]
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Pick a chapter") {
-            HStack(alignment: .top, spacing: 12) {
-                VStack(spacing: 2) {
+            VStack(spacing: 8) {
+            HStack(alignment: .top, spacing: 16) {
+                VStack(spacing: 8) {
                     ForEach(titles.indices, id: \.self) { i in
                         Button { pick(i) } label: {
                             HStack {
-                                Text(titles[i]).font(.callout)
+                                Text(titles[i]).font(.system(size: 14))
                                 Spacer()
-                                Text("\(counts[i])").font(.callout).monospacedDigit()
+                                Text("\(counts[i])").font(.system(size: 14)).monospacedDigit()
                             }
-                            .padding(6)
+                            .padding(8)
                             .background(chapter == i ? Color.accentColor.opacity(0.18) : .clear)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
-                        }.buttonStyle(.plain)
+                        }.buttonStyle(.plain).frame(minHeight: 32)
                     }
                 }.frame(width: 160)
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 8) {
                     ForEach(titles.indices, id: \.self) { i in
-                        Text("\(i + 1). \(titles[i])").font(.headline)
-                        Text("Words gather here while the draft finds its shape.").font(.caption)
+                        Text("\(i + 1). \(titles[i])").font(.system(size: 15, weight: .semibold))
+                        Text("Words gather here while the draft finds its shape.").font(.system(size: 12.5))
                     }
                 }
+            }
+            Toggle("Show counts", isOn: $tweak)
+                .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                .frame(maxWidth: 200)
             }
             .animation(reduce ? nil : .motion(.base), value: chapter)
             .animation(reduce ? nil : .motion(.base), value: counts)
@@ -54,6 +60,7 @@ public struct CorkboardAtom: MotionAtomView {
     @State private var selected = 0
     @State private var dragging = -1
     @State private var drag = CGSize.zero
+    @State private var tweak = true
     private let cards = ["Cold open", "Turn", "Button"]
     private let synopses = ["A door sings in an empty house.", "Dust rises; something answers upstairs.", "Mara decides to stay the night."]
     public init() {}
@@ -63,7 +70,7 @@ public struct CorkboardAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 8) {
                     ForEach(cards.indices, id: \.self) { i in
-                        Text(cards[i]).font(.callout).padding(10)
+                        Text(cards[i]).font(.system(size: 14)).padding(14)
                             .background(RoundedRectangle(cornerRadius: 10)
                                 .fill(i == selected ? Color.accentColor.opacity(0.25) : Color.gray.opacity(0.15)))
                             .offset(i == dragging ? drag : .zero)
@@ -74,9 +81,12 @@ public struct CorkboardAtom: MotionAtomView {
                                 .onEnded { _ in dragging = -1; drag = .zero })
                     }
                 }
-                Text(synopses[selected]).font(.caption)
+                Text(synopses[selected]).font(.system(size: 12.5))
                     .opacity(1)
                     .animation(reduce ? nil : .motion(.base), value: selected)
+                Toggle("Show synopsis", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
         }
     }
@@ -87,6 +97,7 @@ public struct FocusLineAtom: MotionAtomView {
         summary: "One sentence carries full ink while the rest sink dim on the same soft spring, and the caret retargets mid-flight.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var caret = 1
+    @State private var tweak = true
     private let lines = ["The house had been empty for years.", "Mara pushed the door and it sang.",
                          "Dust stood up in the light.", "Somewhere upstairs, a floorboard answered."]
     public init() {}
@@ -95,15 +106,18 @@ public struct FocusLineAtom: MotionAtomView {
         AtomStage(hint: "Move the caret") {
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(lines.indices, id: \.self) { i in
-                    Text(lines[i]).font(.body)
+                    Text(lines[i]).font(.system(size: 13.5))
                         .opacity(i == caret ? 1 : 0.35)
                         .onTapGesture { go(i) }
                 }
                 .animation(reduce ? nil : .motion(.soft), value: caret)
                 HStack {
-                    Button("Prev") { go(caret - 1) }.buttonStyle(.bordered)
-                    Button("Next") { go(caret + 1) }.buttonStyle(.bordered)
+                    Button("Prev") { go(caret - 1) }.buttonStyle(.bordered).frame(minHeight: 32)
+                    Button("Next") { go(caret + 1) }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
+                Toggle("Dim rest", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }.frame(maxWidth: 300, alignment: .leading)
         }
     }
@@ -134,7 +148,7 @@ public struct TypewriterAtom: MotionAtomView {
                         .offset(y: lock ? 63 : CGFloat(line) * lineH)
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(lines.indices, id: \.self) { i in
-                            Text("Line \(i + 1) — \(lines[i])").font(.callout)
+                            Text("Line \(i + 1) — \(lines[i])").font(.system(size: 14))
                                 .frame(height: lineH, alignment: .leading)
                         }
                     }
@@ -144,9 +158,10 @@ public struct TypewriterAtom: MotionAtomView {
                 .animation(reduce ? nil : .motion(.soft), value: line)
                 .animation(reduce ? nil : .motion(.soft), value: lock)
                 HStack {
-                    Button("Prev") { go(line - 1) }.buttonStyle(.bordered)
-                    Button("Next") { go(line + 1) }.buttonStyle(.bordered)
+                    Button("Prev") { go(line - 1) }.buttonStyle(.bordered).frame(minHeight: 32)
+                    Button("Next") { go(line + 1) }.buttonStyle(.bordered).frame(minHeight: 32)
                     Toggle("Lock", isOn: $lock).toggleStyle(.switch)
+                        .font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
             }
         }
@@ -163,6 +178,7 @@ public struct GoalRingAtom: MotionAtomView {
         summary: "A ring and its count climb to the daily target on a lazy spring, then snap-pulse and swap to Done, with Reset to start over.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var words = 0
+    @State private var tweak = true
     private let goal = 500
     public init() {}
     private var done: Bool { words >= goal }
@@ -170,7 +186,7 @@ public struct GoalRingAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "500 words a day") {
             VStack(spacing: 8) {
-                HStack(spacing: 12) {
+                HStack(spacing: 16) {
                     ZStack {
                         Circle().stroke(Color.gray.opacity(0.25), lineWidth: 8)
                         Circle().trim(from: 0, to: CGFloat(words) / CGFloat(goal))
@@ -182,8 +198,8 @@ public struct GoalRingAtom: MotionAtomView {
                     .animation(reduce ? nil : .motion(.lazy), value: words)
                     .animation(reduce ? nil : .motion(.snap), value: done)
                     ZStack {
-                        Text("\(words)").font(.title3).monospacedDigit().opacity(done ? 0 : 1)
-                        Text("Done ✓").font(.headline).opacity(done ? 1 : 0)
+                        Text("\(words)").font(.system(size: 20, weight: .semibold)).monospacedDigit().opacity(done ? 0 : 1)
+                        Text("Done ✓").font(.system(size: 15, weight: .semibold)).opacity(done ? 1 : 0)
                     }
                     .frame(width: 96)
                     .animation(reduce ? nil : .motion(.base), value: done)
@@ -192,12 +208,15 @@ public struct GoalRingAtom: MotionAtomView {
                     Button("Write +125") {
                         if reduce { words = min(goal, words + 125) }
                         else { withMotion(.lazy, reduceMotion: reduce) { words = min(goal, words + 125) } }
-                    }.buttonStyle(.borderedProminent).disabled(done)
+                    }.buttonStyle(.borderedProminent).frame(minHeight: 32).disabled(done)
                     Button("Reset") {
                         if reduce { words = 0 }
                         else { withMotion(.base, reduceMotion: reduce) { words = 0 } }
-                    }.buttonStyle(.bordered)
+                    }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
+                Toggle("Daily goal", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
         }
     }

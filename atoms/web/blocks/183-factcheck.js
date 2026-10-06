@@ -1,7 +1,7 @@
 
 
 atom({ id:'factcheck', cat:'Writing', name:'Source fact-check chips', block:'richtext editor, source list', fam:['S','M'],
-  html:`<div class="col" style="gap:12px;align-items:center"><div class="fc row" style="gap:8px;flex-wrap:wrap;justify-content:center;max-width:360px"></div><button class="btn va" type="button">Verify all</button></div><div class="hint">Click a chip to toggle it</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:12px;align-items:center;padding:12px;margin:0 auto;max-width:360px"><div class="fc row" style="gap:8px;flex-wrap:wrap;justify-content:center;max-width:360px"></div><button class="btn va" type="button">Verify all</button></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Require two sources</span></label><div class="hint">Click a chip to toggle it</div>`,
   desc:'Each source swaps from unverified to verified in 100ms exit-then-enter while the chip width springs to fit. Verify all runs the same change down the row.',
   api:'chip: sw.to(v); w.set(fit(v)); tint.set(v)   all: each at t+i·.09',
   init(st){

@@ -1,7 +1,7 @@
 
 
 atom({ id:'embargo', cat:'Writing', name:'Embargo countdown', block:'richtext editor, publish bar', fam:['M','X'],
-  html:`<div class="col" style="gap:10px;align-items:center"><div class="card eb" style="position:relative;height:58px;width:min(280px,88%);overflow:hidden"></div><button class="btn rs" type="button">Reset</button></div><div class="hint">Only changing digits roll</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;align-items:center;padding:12px;margin:0 auto;max-width:360px"><div class="card eb" style="position:relative;height:58px;margin:0 auto;width:min(280px,88%);overflow:hidden"></div><button class="btn rs" type="button">Reset</button></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Auto-lift at zero</span></label><div class="hint">Only changing digits roll</div>`,
   desc:'Only the digits that change roll each second. At zero the count lifts into a Live pill on a soft spring. Reset puts the count back.',
   api:'tick: dg.set(pad(floor)); delta only rolls   0: sw.to(live); ly -10→0 soft   rs: jump back',
   init(st){

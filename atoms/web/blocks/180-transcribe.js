@@ -1,7 +1,7 @@
 
 
 atom({ id:'transcribe', cat:'Writing', name:'Live transcription caret', block:'transcript, live captions', fam:['M','S','T'], tall:true,
-  html:`<div class="col" style="gap:10px;width:min(340px,92%)"><div class="card tr-box" style="padding:12px 14px;min-height:120px;font-size:14px;line-height:1.7"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="tr-live" checked> Live</label></div><div class="hint">Tap a word to hear it again</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(340px,92%);padding:12px"><div class="card tr-box" style="padding:14px 16px;min-height:120px;font-size:14px;line-height:1.7"></div><label class="row small muted" style="gap:8px;cursor:pointer"><input type="checkbox" class="tr-live" checked> Live</label></div><div class="hint">Tap a word to hear it again</div>`,
   desc:'Words blur in one by one while a soft caret rides the last word. Tapping a word pulses it like a replay. Pause stops the stream.',
   api:'tick: word.blurIn(base); caret.after(last); tap: pulse.set(1); live.toggle()',
   init(st){

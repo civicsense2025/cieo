@@ -6,6 +6,7 @@ public struct CompileRunAtom: MotionAtomView {
         summary: "Run creeps the bar most of the way on the clock, then springs it shut. Chapter ticks land one after another and the status swaps to open the book.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var progress: CGFloat = 0
+    @State private var tweak = true
     @State private var ticks = 0
     @State private var done = false
     @State private var running = false
@@ -13,7 +14,7 @@ public struct CompileRunAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Run builds the manuscript") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 GeometryReader { g in
                     Capsule().fill(.quaternary.opacity(0.4))
                         .overlay(alignment: .leading) {
@@ -25,19 +26,22 @@ public struct CompileRunAtom: MotionAtomView {
                 .frame(height: 8)
                 HStack {
                     ForEach(0..<5, id: \.self) { i in
-                        Text("ch\(i + 1)").font(.caption2).foregroundStyle(.secondary)
+                        Text("ch\(i + 1)").font(.system(size: 12)).foregroundStyle(.secondary)
                             .opacity(i < ticks ? 1 : 0.25)
                             .animation(reduce ? nil : .motion(.base).delay(Double(i) * 0.06), value: ticks)
                     }
                 }
                 HStack {
                     ZStack(alignment: .leading) { status.id(done).motionTransition(.swap()) }
-                        .font(.callout).frame(width: 170, height: 20, alignment: .leading)
+                        .font(.system(size: 14)).frame(width: 170, height: 20, alignment: .leading)
                         .animation(reduce ? nil : .motion(.base), value: done)
                     Spacer()
                     Button(running ? "…" : "Run") { run() }
-                        .buttonStyle(.borderedProminent).disabled(running)
+                        .buttonStyle(.borderedProminent).frame(minHeight: 32).disabled(running)
                 }
+                Toggle("Weave footnotes", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 320)
         }

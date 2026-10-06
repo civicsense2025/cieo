@@ -13,21 +13,21 @@ public struct BarePageAtom: MotionAtomView {
         AtomStage(hint: "Enter to write · tap the top for tools") {
             VStack(spacing: 8) {
                 HStack {
-                    Text("Draft").font(.caption).foregroundStyle(.secondary)
-                    Text("Share").font(.caption).foregroundStyle(.secondary)
+                    Text("Draft").font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    Text("Share").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     Spacer()
                     Button(writing ? "Show tools" : "Enter") { set(!writing) }
-                        .font(.caption.weight(.semibold))
+                        .font(.system(size: 12.5).weight(.semibold))
                 }
                 .opacity(writing ? 0 : 1)
                 .animation(reduce ? nil : .motion(.snap), value: writing)
                 .frame(height: 24)
                 .contentShape(Rectangle())
                 .onTapGesture { if writing { set(false) } }
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("The lake was flat. Mara set the lamp down and started over on the first line.").font(.callout)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("The lake was flat. Mara set the lamp down and started over on the first line.").font(.system(size: 14))
                     if calm {
-                        Text("812 words · calm air, no comments").font(.caption).foregroundStyle(.secondary)
+                        Text("812 words · calm air, no comments").font(.system(size: 12.5)).foregroundStyle(.secondary)
                             .motionTransition(.swap())
                     }
                 }
@@ -36,7 +36,7 @@ public struct BarePageAtom: MotionAtomView {
                 .background(.quaternary.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
                 .animation(reduce ? nil : .motion(.base), value: writing)
                 Toggle("Calm", isOn: $calm)
-                    .font(.caption).foregroundStyle(.secondary)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
             }
             .animation(reduce ? nil : .motion(.base), value: calm)

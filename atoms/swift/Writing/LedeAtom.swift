@@ -6,6 +6,7 @@ public struct LedeAtom: MotionAtomView {
         summary: "Variants swap exit-then-enter while the grade bar eases on base and the score rolls with the direction of travel. Prev and Next walk the list.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var index = 0
+    @State private var tweak = true
     private let variants = [
         ("Harbor opens its doors to first-time founders.", 72),
         ("Twelve founders, one harbor, zero pitch decks.", 86),
@@ -15,25 +16,28 @@ public struct LedeAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Grade bar runs on base") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 VStack(spacing: 2) {
                     Text(variants[index].0)
-                        .font(.headline).multilineTextAlignment(.center).lineLimit(3)
+                        .font(.system(size: 15, weight: .semibold)).multilineTextAlignment(.center).lineLimit(3)
                         .id(index).motionTransition(.swap())
-                    Text("Variant \(index + 1) of \(variants.count)").font(.caption).foregroundStyle(.secondary)
+                    Text("Variant \(index + 1) of \(variants.count)").font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 .frame(maxWidth: 360, minHeight: 96)
                 .animation(reduce ? nil : .motion(.base), value: index)
+                Toggle("Score grade", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
                 HStack(spacing: 8) {
-                    Button("Prev") { go(index - 1) }.buttonStyle(.bordered).disabled(index == 0)
-                    Button("Next") { go(index + 1) }.buttonStyle(.bordered).disabled(index == variants.count - 1)
+                    Button("Prev") { go(index - 1) }.buttonStyle(.bordered).frame(minHeight: 32).disabled(index == 0)
+                    Button("Next") { go(index + 1) }.buttonStyle(.bordered).frame(minHeight: 32).disabled(index == variants.count - 1)
                     GeometryReader { g in
                         Capsule().fill(.green)
                             .frame(width: g.size.width * Double(variants[index].1) / 100)
                             .animation(reduce ? nil : .motion(.base), value: index)
                     }
                     .frame(height: 6)
-                    Text("\(variants[index].1)").font(.caption).foregroundStyle(.secondary).monospacedDigit()
+                    Text("\(variants[index].1)").font(.system(size: 12.5)).foregroundStyle(.secondary).monospacedDigit()
                         .contentTransition(.numericText())
                         .animation(reduce ? nil : .motion(.base), value: index)
                         .frame(width: 30, alignment: .trailing)

@@ -6,6 +6,7 @@ public struct KillLineAtom: MotionAtomView {
         summary: "Dragging a story past the cut line arms a red snap. Letting go past the mark fades the row out, then its space closes and the rest spring up. Restore brings it back.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var stories = ["Water rates explained", "The footnote nobody read", "School board recap"]
+    @State private var tweak = true
     @State private var dragX = 0.0
     @State private var armed = false
     @State private var cut = false
@@ -19,10 +20,10 @@ public struct KillLineAtom: MotionAtomView {
                     Rectangle().fill(armed ? Color.red : Color.primary.opacity(0.15)).frame(width: 2)
                         .offset(x: threshold).animation(reduce ? nil : .motion(.snap), value: armed)
                     VStack(spacing: 8) {
-                        Text(stories[0]).font(.callout).padding(10).frame(maxWidth: .infinity, alignment: .leading)
+                        Text(stories[0]).font(.system(size: 14)).padding(14).frame(maxWidth: .infinity, alignment: .leading)
                             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
                         if !cut {
-                            Text(stories[1]).font(.callout).padding(10).frame(maxWidth: .infinity, alignment: .leading)
+                            Text(stories[1]).font(.system(size: 14)).padding(14).frame(maxWidth: .infinity, alignment: .leading)
                                 .background(.background, in: RoundedRectangle(cornerRadius: 10))
                                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(armed ? Color.red : Color.primary.opacity(0.2)))
                                 .offset(x: dragX).zIndex(1)
@@ -35,7 +36,7 @@ public struct KillLineAtom: MotionAtomView {
                                 })
                                 .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 0.94)))
                         }
-                        Text(stories[2]).font(.callout).padding(10).frame(maxWidth: .infinity, alignment: .leading)
+                        Text(stories[2]).font(.system(size: 14)).padding(14).frame(maxWidth: .infinity, alignment: .leading)
                             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
                     }
                     .animation(reduce ? nil : .motion(.base), value: cut)
@@ -43,9 +44,12 @@ public struct KillLineAtom: MotionAtomView {
                 }
                 HStack {
                     Button("Restore") { withMotion(.base, reduceMotion: reduce) { cut = false; dragX = 0; armed = false } }
-                        .buttonStyle(.bordered)
-                    Text(cut ? "cut" : armed ? "release to cut" : "").font(.caption).foregroundStyle(.secondary)
+                        .buttonStyle(.bordered).frame(minHeight: 32)
+                    Text(cut ? "cut" : armed ? "release to cut" : "").font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
+                Toggle("Confirm cut", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 340)
         }

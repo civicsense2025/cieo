@@ -1,0 +1,18 @@
+atom({ id:'qrcheckout', cat:'Storefront', name:'QR checkout', block:'qr, checkout, payment', fam:['M','S','T'],
+  html:`<div class="col" style="gap:8px;width:min(280px,100%);align-items:center;text-align:center"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Scan to pay</h4><div class="qrw" style="position:relative;width:148px;height:148px;border:1px solid var(--line);border-radius:12px;background:var(--card);padding:12px;overflow:hidden"><div class="qr" style="width:100%;height:100%;border-radius:6px"></div><i class="bm" style="position:absolute;left:12px;right:12px;top:12px;height:2px;background:var(--accent);border-radius:1px"></i><div class="ck" style="position:absolute;inset:12px;display:grid;place-items:center;background:var(--card)"><span style="width:44px;height:44px;border-radius:50%;background:var(--success);color:#fff;padding:0;display:grid;place-items:center;transform:translateY(.5px)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span></div></div><b class="tot num" style="font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.5">$24.00</b><span class="st small" style="position:relative;height:18px;width:160px;font-size:12px;color:var(--muted);line-height:1.5"></span><button class="btn pay" style="height:36px;padding:0 16px;border-radius:9px;min-width:140px">Simulate scan</button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="bmc" checked> Beam sweep</label></div><div class="hint">Beam sweeps until paid, then total counts up</div>`,
+  desc:'The code rests at 96% and springs to full on open while a beam sweeps on the clock. Paid swaps in a check and the total counts up to a held terminal.',
+  api:'qr.set(1, base) from .96   beam.clock(t)   paid.to(1); total.set(sum)',
+  init(st){
+    const qr = $(st,'.qr'), bm = $(st,'.bm'), ck = $(st,'.ck'), tot = $(st,'.tot'), pay = $(st,'.pay'), bmc = $(st,'.bmc');
+    let cells = ''; for (let y = 0; y < 9; y++) for (let x = 0; x < 9; x++){ const edge = x < 3 && y < 3 || x > 5 && y < 3 || x < 3 && y > 5; const on = edge ? (x % 3 !== 1 || y % 3 !== 1 ? true : x === 1 && y === 1) : ((x * 7 + y * 3) % 4 < 2); cells += `<span style="background:${on ? 'var(--ink)' : 'transparent'}"></span>`; }
+    qr.style.display = 'grid'; qr.style.gridTemplateColumns = 'repeat(9,1fr)'; qr.style.gap = '2px'; qr.innerHTML = cells;
+    const L = ['Show this code at the register', 'Payment received — thank you'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'center'; e.textContent = s; $(st,'.st').appendChild(e); return e; });
+    const z = new Track(.96), paid = new Track(0), sum = new Track(24), sw = new Swap(0);
+    z.set(1, S.base); pay.onclick = () => { if (paid.target) { paid.jump(0); sum.jump(0); sw.to(0); z.jump(.96); z.set(1, S.base); pay.textContent = 'Simulate scan'; return; }
+      sw.to(1); paid.set(1, S.base); sum.jump(0); sum.set(24, S.soft, now() + .15); pay.textContent = 'Reset demo'; };
+    return t => { qr.style.transform = `scale(${clamp(z.at(t)).toFixed(4)})`;
+      const on = bmc.checked && !paid.target; bm.style.opacity = on ? '1' : '0';
+      if (on){ const p = (t % 2.4) / 2.4; bm.style.transform = `translateY(${(p * 120).toFixed(1)}px)`; }
+      const p = clamp(paid.at(t)); ck.style.opacity = p.toFixed(3); ck.style.visibility = p < .02 ? 'hidden' : 'visible'; ck.style.transform = `scale(${(.8 + .2 * p).toFixed(4)})`;
+      tot.textContent = '$' + sum.at(t).toFixed(2); L.forEach((el, k) => sw.apply(el, k, t)); };
+  }});

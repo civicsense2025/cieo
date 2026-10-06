@@ -12,34 +12,38 @@ public struct FactCheckAtom: MotionAtomView {
         summary: "Each source swaps from unverified to verified in 100ms exit-then-enter while the chip width springs to fit. Verify all runs the same change down the row.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var chips = [FactChip(name: "Harbor minutes"), FactChip(name: "City budget PDF"), FactChip(name: "Founder interview")]
+    @State private var tweak = true
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Tap a chip to toggle it") {
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
                 FlowLayoutShim(spacing: 8) {
                     ForEach($chips) { $chip in
                         Button {
                             withMotion(.base, reduceMotion: reduce) { chip.verified.toggle() }
                         } label: {
-                            HStack(spacing: 6) {
+                            HStack(spacing: 8) {
                                 Circle().fill(chip.verified ? .green : .orange).frame(width: 7, height: 7)
                                 Text((chip.verified ? "✓ " : "● ") + chip.name)
                                     .id(chip.verified).motionTransition(.swap())
                             }
-                            .font(.callout)
+                            .font(.system(size: 14))
                             .padding(.horizontal, 14).frame(height: 32)
                             .background(chip.verified ? Color.green.opacity(0.12) : Color.secondary.opacity(0.08))
                             .foregroundStyle(chip.verified ? .green : .primary)
                             .clipShape(Capsule())
                             .overlay(Capsule().stroke(chip.verified ? Color.green : Color.primary.opacity(0.2)))
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(.plain).frame(minHeight: 32)
                         .animation(reduce ? nil : .motion(.base), value: chip.verified)
                         .accessibilityLabel("\(chip.name), \(chip.verified ? "verified" : "unverified")")
                     }
                 }
-                Button("Verify all") { verifyAll() }.buttonStyle(.bordered)
+                Button("Verify all") { verifyAll() }.buttonStyle(.bordered).frame(minHeight: 32)
+                Toggle("Require two sources", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 360)
         }

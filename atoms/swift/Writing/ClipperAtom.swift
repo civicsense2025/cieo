@@ -6,20 +6,21 @@ public struct ClipperAtom: MotionAtomView {
         summary: "Dragging over the card warms its tint. Dropping grows the saved preview down from nothing. The cover starts soft and sharpens, then the title trades places with a saved line and its check.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var over = false
+    @State private var tweak = true
     @State private var saved = false
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Drag the chip onto the card") {
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Drop here to save").font(.callout.weight(.semibold))
-                    Text("Drag the quote chip onto this card").font(.caption).foregroundStyle(.secondary)
+                    Text("Drop here to save").font(.system(size: 14).weight(.semibold))
+                    Text("Drag the quote chip onto this card").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     if saved {
                         RoundedRectangle(cornerRadius: 10).fill(.quaternary).frame(height: 96)
                             .blur(radius: reduce ? 0 : 0)
                             .transition(.asymmetric(insertion: .move(edge: .top).combined(with: .opacity), removal: .opacity))
-                        Text("✓ Saved").font(.caption)
+                        Text("✓ Saved").font(.system(size: 12.5))
                             .id(saved).motionTransition(.swap())
                     }
                 }
@@ -29,8 +30,11 @@ public struct ClipperAtom: MotionAtomView {
                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(over ? Color.accentColor : Color.primary.opacity(0.2), style: StrokeStyle(lineWidth: 2, dash: [8])))
                 .animation(reduce ? nil : .motion(.snap), value: over)
                 .animation(reduce ? nil : .motion(.base), value: saved)
+                Toggle("Tint on hover", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
                 Text("“Write what you notice.”")
-                    .font(.caption).padding(.horizontal, 14).padding(.vertical, 8)
+                    .font(.system(size: 12.5)).padding(.horizontal, 14).padding(.vertical, 8)
                     .overlay(Capsule().stroke(.quaternary))
                     .gesture(DragGesture(minimumDistance: 4)
                         .onChanged { _ in if !over { withMotion(.snap, reduceMotion: reduce) { over = true } } }
@@ -41,9 +45,9 @@ public struct ClipperAtom: MotionAtomView {
                             }
                         })
                 HStack {
-                    Button("Clip") { withMotion(.base, reduceMotion: reduce) { saved = true } }.buttonStyle(.borderedProminent)
+                    Button("Clip") { withMotion(.base, reduceMotion: reduce) { saved = true } }.buttonStyle(.borderedProminent).frame(minHeight: 32)
                     Spacer()
-                    Button("Reset") { withMotion(.base, reduceMotion: reduce) { saved = false; over = false } }.buttonStyle(.bordered)
+                    Button("Reset") { withMotion(.base, reduceMotion: reduce) { saved = false; over = false } }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
                 .frame(maxWidth: 320)
             }

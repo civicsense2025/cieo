@@ -7,29 +7,33 @@ public struct HeadlineAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     private let variants = [("City hall hid the fee hike in a footnote", 12), ("Your water bill is going up. Here is why", 34), ("The 40-cent charge nobody voted on", 58)]
     @State private var index = 0
+    @State private var tweak = true
     @State private var plateTop = 0.0
     @State private var plateBottom = 0.0
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Try the next variant, then test the winner") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 ZStack(alignment: .topLeading) {
                     RoundedRectangle(cornerRadius: 10).fill(.green.opacity(0.14))
                         .frame(height: max(0, plateBottom - plateTop)).offset(y: plateTop)
-                    Text(variants[index].0).font(.headline).lineLimit(3).fixedSize(horizontal: false, vertical: true)
+                    Text(variants[index].0).font(.system(size: 15, weight: .semibold)).lineLimit(3).fixedSize(horizontal: false, vertical: true)
                         .id(index).motionTransition(.swap())
-                        .frame(maxWidth: .infinity, alignment: .leading).padding(12)
+                        .frame(maxWidth: .infinity, alignment: .leading).padding(14)
                     HStack { Text("CTR").foregroundStyle(.secondary); RollingDigits(variants[index].1); Text("%").foregroundStyle(.secondary); Spacer(); Text(index == 2 ? "winner" : "variant \(index + 1) of 3").foregroundStyle(.secondary) }
-                        .font(.caption).padding(.horizontal, 12).padding(.bottom, 10)
+                        .font(.system(size: 12.5)).padding(.horizontal, 12).padding(.bottom, 10)
                         .frame(maxHeight: .infinity, alignment: .bottom)
                 }
                 .frame(maxWidth: 340).frame(height: 120)
                 .animation(reduce ? nil : .motion(.base), value: index)
+                Toggle("Test winner only", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
                 HStack {
                     Button("Next variant") { withMotion(.base, reduceMotion: reduce) { index = (index + 1) % variants.count } }
-                        .buttonStyle(.bordered)
-                    Button("Test winner") { pickWinner() }.buttonStyle(.borderedProminent)
+                        .buttonStyle(.bordered).frame(minHeight: 32)
+                    Button("Test winner") { pickWinner() }.buttonStyle(.borderedProminent).frame(minHeight: 32)
                 }
             }
             .frame(maxWidth: 340)

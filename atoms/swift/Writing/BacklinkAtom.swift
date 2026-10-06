@@ -18,11 +18,11 @@ public struct BacklinkAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Open [[launch notes]], then switch tabs") {
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text("The launch plan lives in the notes for this quarter.")
-                    .font(.callout)
+                    .font(.system(size: 14))
                 Button("[[launch notes]]") { setOpen(!open) }
-                    .font(.callout).foregroundStyle(Color.accentColor)
+                    .font(.system(size: 14)).foregroundStyle(Color.accentColor)
                     .accessibilityAddTraits(.isButton)
                     .accessibilityValue(open ? "expanded" : "collapsed")
                 if open { panel.motionTransition(.presence) }
@@ -46,7 +46,7 @@ public struct BacklinkAtom: MotionAtomView {
                         HStack {
                             Text(rows[i].0).font(.subheadline)
                             Spacer()
-                            Text(rows[i].1).font(.caption).foregroundStyle(.secondary)
+                            Text(rows[i].1).font(.system(size: 12.5)).foregroundStyle(.secondary)
                         }
                         .padding(.horizontal, 10).frame(height: rowH, alignment: .leading)
                         .contentShape(Rectangle())
@@ -61,7 +61,7 @@ public struct BacklinkAtom: MotionAtomView {
             .animation(reduce ? nil : .motion(.base), value: tab)
             .animation(reduce ? nil : .motion(.base), value: rows.count)
         }
-        .padding(10)
+        .padding(14)
         .background(.background, in: RoundedRectangle(cornerRadius: 12))
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
         .shadow(color: .black.opacity(0.12), radius: 8, y: 3)

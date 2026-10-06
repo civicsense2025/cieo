@@ -6,6 +6,7 @@ public struct EmbargoAtom: MotionAtomView {
         summary: "Only the digits that change roll each second. At zero the count lifts into a Live pill on a soft spring. Reset puts the count back.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var remaining = 8
+    @State private var tweak = true
     @State private var lift: CGFloat = 0
     private let total = 8
     public init() {}
@@ -14,18 +15,18 @@ public struct EmbargoAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Only changing digits roll") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 ZStack {
                     if live {
                         Label("Live · embargo lifted", systemImage: "checkmark.circle.fill")
                             .fontWeight(.semibold).foregroundStyle(.green)
                     } else {
-                        HStack(spacing: 6) {
-                            Text("Lifts in").font(.caption).foregroundStyle(.secondary)
+                        HStack(spacing: 8) {
+                            Text("Lifts in").font(.system(size: 12.5)).foregroundStyle(.secondary)
                             Text(String(format: "%02d", remaining)).font(.system(size: 26, weight: .semibold, design: .monospaced)).monospacedDigit()
                                 .contentTransition(.numericText())
                                 .animation(reduce ? nil : .motion(.lazy), value: remaining)
-                            Text("sec").font(.caption).foregroundStyle(.secondary)
+                            Text("sec").font(.system(size: 12.5)).foregroundStyle(.secondary)
                         }
                     }
                 }
@@ -40,7 +41,10 @@ public struct EmbargoAtom: MotionAtomView {
                 Button("Reset") {
                     withMotion(.base, reduceMotion: reduce) { remaining = total; lift = 0 }
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.bordered).frame(minHeight: 32)
+                Toggle("Auto-lift at zero", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
         }
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in

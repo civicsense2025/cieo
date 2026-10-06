@@ -7,6 +7,7 @@ public struct ShipCheckAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     private let steps = ["Proof the draft", "Set the cover art", "Pick the send time"]
     @State private var done = [false, false, false]
+    @State private var tweak = true
     public init() {}
 
     private var count: Int { done.filter { $0 }.count }
@@ -15,9 +16,9 @@ public struct ShipCheckAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Finish all three to stamp it shipped") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 HStack {
-                    Text("Ship readiness").font(.caption).foregroundStyle(.secondary)
+                    Text("Ship readiness").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     Spacer()
                     ZStack {
                         Circle().stroke(.quaternary, lineWidth: 2.5)
@@ -27,7 +28,7 @@ public struct ShipCheckAtom: MotionAtomView {
                     }
                     .frame(width: 20, height: 20)
                     HStack(spacing: 2) { RollingDigits(count); Text("of 3") }
-                        .font(.caption).foregroundStyle(.secondary)
+                        .font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 ForEach(steps.indices, id: \.self) { i in row(i) }
                 HStack {
@@ -35,10 +36,13 @@ public struct ShipCheckAtom: MotionAtomView {
                         ZStack { SwapText(all ? "✓ Shipped" : "Ship issue") }
                             .frame(minWidth: 110, minHeight: 34)
                     }
-                    .buttonStyle(.borderedProminent).tint(all ? .green : .accentColor)
+                    .buttonStyle(.borderedProminent).frame(minHeight: 32).tint(all ? .green : .accentColor)
                     .animation(reduce ? nil : .motion(.base), value: all)
-                    Button("Reset") { reset() }.buttonStyle(.bordered)
+                    Button("Reset") { reset() }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
+                Toggle("Stamp on complete", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(width: 300)
         }
@@ -46,7 +50,7 @@ public struct ShipCheckAtom: MotionAtomView {
 
     private func row(_ i: Int) -> some View {
         Button { withMotion(.base, reduceMotion: reduce) { done[i].toggle() } } label: {
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .fill(done[i] ? Color.primary : .clear)
@@ -57,7 +61,7 @@ public struct ShipCheckAtom: MotionAtomView {
                         .animation(reduce ? nil : .motion(.base), value: done[i])
                 }
                 .frame(width: 18, height: 18)
-                Text(steps[i]).font(.callout)
+                Text(steps[i]).font(.system(size: 14))
                     .foregroundStyle(done[i] ? .secondary : .primary)
                     .overlay(alignment: .leading) {
                         Rectangle().fill(.secondary).frame(height: 1.5)
@@ -68,7 +72,7 @@ public struct ShipCheckAtom: MotionAtomView {
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.plain).frame(minHeight: 32)
         .accessibilityLabel(steps[i])
         .accessibilityAddTraits(done[i] ? .isSelected : [])
     }

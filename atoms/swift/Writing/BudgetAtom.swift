@@ -8,6 +8,7 @@ public struct BudgetAtom: MotionAtomView {
     private let items = [("Cover story", 12), ("Photo essay", 9), ("Interview", 9), ("Briefs", 6)]
     private let slot = 60.0, rowH = 52.0
     @State private var dead = [false, false, false, false]
+    @State private var tweak = true
     public init() {}
 
     private var alive: [Int] { items.indices.filter { !dead[$0] } }
@@ -17,15 +18,15 @@ public struct BudgetAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Kill a row to free its hours") {
-            VStack(alignment: .leading, spacing: 10) {
-                HStack(spacing: 6) {
-                    Text("Funded").font(.caption.weight(.semibold))
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 8) {
+                    Text("Funded").font(.system(size: 12.5).weight(.semibold))
                     RollingDigits(alive.count)
-                    Text("of \(items.count) ·").font(.caption).foregroundStyle(.secondary)
+                    Text("of \(items.count) ·").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     RollingDigits(hours)
-                    Text("hrs").font(.caption).foregroundStyle(.secondary)
+                    Text("hrs").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     Spacer()
-                    Button("Restore all") { restoreAll() }.buttonStyle(.bordered).controlSize(.small).disabled(alive.count == items.count)
+                    Button("Restore all") { restoreAll() }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small).disabled(alive.count == items.count)
                 }
                 ZStack(alignment: .topLeading) {
                     RoundedRectangle(cornerRadius: 2).fill(Color.accentColor)
@@ -35,15 +36,15 @@ public struct BudgetAtom: MotionAtomView {
                         .opacity(leader == nil ? 0 : 1)
                     ForEach(items.indices, id: \.self) { i in
                         HStack(spacing: 8) {
-                            Text(dead[i] ? "–" : "\(alive.firstIndex(of: i).map { $0 + 1 } ?? 0)").font(.caption).foregroundStyle(.secondary).frame(width: 18)
+                            Text(dead[i] ? "–" : "\(alive.firstIndex(of: i).map { $0 + 1 } ?? 0)").font(.system(size: 12.5)).foregroundStyle(.secondary).frame(width: 18)
                             VStack(alignment: .leading, spacing: 0) {
                                 SwapText(dead[i] ? "Removed — \(items[i].1)h freed" : items[i].0)
-                                    .font(.callout.weight(.medium))
+                                    .font(.system(size: 14).weight(.medium))
                                     .foregroundStyle(dead[i] ? Color.red : Color.primary)
-                                if !dead[i] { Text("\(items[i].1)h").font(.caption).foregroundStyle(.secondary) }
+                                if !dead[i] { Text("\(items[i].1)h").font(.system(size: 12.5)).foregroundStyle(.secondary) }
                             }
                             Spacer()
-                            Button(dead[i] ? "Restore" : "Kill") { toggle(i) }.buttonStyle(.bordered).controlSize(.small)
+                            Button(dead[i] ? "Restore" : "Kill") { toggle(i) }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small)
                         }
                         .padding(.horizontal, 12)
                         .frame(height: rowH)
@@ -60,6 +61,9 @@ public struct BudgetAtom: MotionAtomView {
                     }
                 }
                 .frame(height: Double(items.count) * slot - 8, alignment: .top)
+                Toggle("Count freed hours", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
             .frame(maxWidth: 430)
         }

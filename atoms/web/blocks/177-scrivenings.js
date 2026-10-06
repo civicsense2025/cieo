@@ -1,7 +1,7 @@
 
 
 atom({ id:'scrivenings', cat:'Writing', name:'Joined scenes', block:'manuscript, scene list', fam:['M','S'], tall:true,
-  html:`<div class="col" style="gap:10px;width:min(340px,92%)"><div class="row sc-chips" style="gap:6px;flex-wrap:wrap"></div><div class="card sc-join" style="overflow:hidden;width:100%"><div class="sc-in col" style="gap:0;padding:12px 14px"></div></div></div><div class="hint">Tick scenes to stitch them together</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(340px,92%);padding:12px"><div class="row sc-chips" style="gap:8px;flex-wrap:wrap"></div><div class="card sc-join" style="overflow:hidden;width:100%"><div class="sc-in col" style="gap:0;padding:14px 16px"></div></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Stitch dividers</span></label><div class="hint">Tick scenes to stitch them together</div>`,
   desc:'Tick scenes to stitch them into one scroll. Divider titles swap without overlap while the joined height springs to fit.',
   api:'sel.toggle(i); div.swap(i); h.set(fit)',
   init(st){
@@ -18,7 +18,7 @@ atom({ id:'scrivenings', cat:'Writing', name:'Joined scenes', block:'manuscript,
     };
     SC.forEach((s,i) => {
       const b = document.createElement('button'); b.className = 'chipb small'; b.textContent = s.t;
-      b.style.cssText += 'height:28px;border-radius:14px;padding:0 12px;cursor:pointer';
+      b.style.cssText += 'height:32px;min-height:32px;border-radius:14px;padding:0 12px;cursor:pointer';
       b.onclick = () => { sel = sel.includes(i) ? sel.filter(k => k !== i) : [...sel, i].sort(); render(); };
       chips.appendChild(b);
     });

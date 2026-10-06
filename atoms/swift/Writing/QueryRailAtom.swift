@@ -8,22 +8,23 @@ public struct QueryRailAtom: MotionAtomView {
     private let pool = ["who voted for the hike", "when does it start", "what streets flood first", "who pays the fee"]
     private struct Chip: Identifiable { let id = UUID(); let text: String; var done = false }
     @State private var chips: [Chip] = []
+    @State private var tweak = true
     @State private var railIn = false
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Add a query, tap a chip to resolve it") {
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 Button("Add query") { add() }.buttonStyle(.borderedProminent).frame(maxWidth: 340, alignment: .leading)
-                VStack(spacing: 6) {
+                VStack(spacing: 8) {
                     ForEach(chips) { c in
                         if !c.done {
                             Button { resolve(c) } label: {
-                                HStack { Text(c.text).font(.callout); Spacer(); Image(systemName: "checkmark.circle").foregroundStyle(.secondary) }
+                                HStack { Text(c.text).font(.system(size: 14)); Spacer(); Image(systemName: "checkmark.circle").foregroundStyle(.secondary) }
                                     .padding(.horizontal, 12).padding(.vertical, 9)
                                     .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
                             }
-                            .buttonStyle(.plain)
+                            .buttonStyle(.plain).frame(minHeight: 32)
                             .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 0.92, anchor: .leading)))
                         }
                     }
@@ -32,6 +33,9 @@ public struct QueryRailAtom: MotionAtomView {
                 .offset(x: railIn ? 0 : -16).opacity(railIn ? 1 : 0)
                 .animation(reduce ? nil : .motion(.base), value: railIn)
                 .animation(reduce ? nil : .motion(.base), value: chips.map(\.done))
+                Toggle("Slide rail in", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
             }
         }
         .onAppear { if !railIn { withMotion(.base, reduceMotion: reduce) { railIn = true }; add(); add() } }

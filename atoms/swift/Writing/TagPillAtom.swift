@@ -9,6 +9,7 @@ public struct TagPillAtom: MotionAtomView {
     private let tags = ["design", "deadline", "draft", "launch", "research", "press"]
     private let rowH = 32.0
     @State private var text = ""
+    @State private var tweak = true
     @State private var pills = ["design"]
     @State private var highlight = 0
     @State private var hiTop = 0.0
@@ -25,17 +26,17 @@ public struct TagPillAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Type # to filter tags, Enter makes a pill") {
             ZStack(alignment: .topLeading) {
-                VStack(alignment: .leading, spacing: 10) {
-                    WritingFlow(spacing: 6, lineSpacing: 6) {
+                VStack(alignment: .leading, spacing: 8) {
+                    WritingFlow(spacing: 8, lineSpacing: 6) {
                         ForEach(pills, id: \.self) { p in
-                            Text("#" + p).font(.callout.weight(.semibold))
+                            Text("#" + p).font(.system(size: 14).weight(.semibold))
                                 .padding(.horizontal, 10).padding(.vertical, 5)
                                 .foregroundStyle(Color.accentColor)
                                 .background(Color.accentColor.opacity(0.12), in: Capsule())
                                 .transition(.opacity.combined(with: .scale(scale: 0.9, anchor: .leading)))
                         }
                         TextField("Write something, try #de…", text: $text)
-                            .textFieldStyle(.plain).focused($focused).font(.callout)
+                            .textFieldStyle(.plain).focused($focused).font(.system(size: 14))
                             .frame(minWidth: 120)
                             .onKeyPress(.downArrow) { step(1); return .handled }
                             .onKeyPress(.upArrow) { step(-1); return .handled }
@@ -43,12 +44,14 @@ public struct TagPillAtom: MotionAtomView {
                             .onSubmit { if query != nil, let i = visible[safe: highlight] { pick(i) } }
                             .accessibilityLabel("Editor line")
                     }
-                    .padding(8)
+                    .padding(14)
                     .background(.background, in: RoundedRectangle(cornerRadius: 10))
                     .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary))
                     .animation(reduce ? nil : .motion(.base), value: pills.count)
-                }
-                .frame(width: 320)
+                Toggle("Filter on #", isOn: $tweak)
+                    .font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    .frame(maxWidth: 200)
+                }.frame(width: 320)
                 if query != nil {
                     menu.offset(y: 120).motionTransition(.presence)
                 }
