@@ -1,0 +1,31 @@
+@layer cieo.base {
+  :where(.cieo) {
+    color: var(--cieo-color-text);
+    font-family: var(--cieo-font-sans);
+    font-size: var(--cieo-text-body);
+    line-height: var(--cieo-leading-body);
+    accent-color: var(--cieo-color-accent);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  :where(.cieo, .cieo *, .cieo *::before, .cieo *::after) { box-sizing: border-box; }
+  :where(.cieo) :where(button, input, select, textarea) { font: inherit; color: inherit; }
+  :where(.cieo) :where(button, input, select, textarea, a, summary):focus-visible {
+    outline: var(--cieo-focus-width) solid var(--cieo-color-focus);
+    outline-offset: var(--cieo-focus-offset);
+  }
+  :where(.cieo) :where(h1, h2, h3, p) { margin-block: 0; }
+  :where(.cieo) :where(h1, h2, h3) {
+    line-height: var(--cieo-leading-tight);
+    font-weight: var(--cieo-weight-strong);
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  :where(.cieo) :where(a) { color: var(--cieo-color-accent); text-underline-offset: .2em; }
+  :where(.cieo) :where(img, svg, video) { max-inline-size: 100%; }
+  :where(.cieo) :where(img, video) { block-size: auto; }
+  :where(.cieo) :where(code, pre, kbd) { font-family: var(--cieo-font-mono); }
+  :where(.cieo) :where(pre) { overflow: auto; tab-size: 2; }
+  :where(.cieo) ::selection { background: var(--cieo-color-selection); color: var(--cieo-color-text); }
+  :where(.cieo) :where([hidden]) { display: none !important; }
+}

@@ -39,3 +39,5 @@ export const densities: Readonly<Record<Density, number>>;
 export const radii: Readonly<Record<Radius, readonly number[]>>;
 export const fonts: Readonly<Record<Font, readonly string[]>>;
 export function themeSchema(): Record<string, unknown>;
+export interface SystemPreferences { readonly scheme: Scheme; readonly reduced: boolean; readonly contrast: 'standard' | 'high' }
+export function watchSystemPreferences(listener: (preferences: SystemPreferences) => void, host?: Pick<Window, 'matchMedia'> | Record<string, never>): () => void;

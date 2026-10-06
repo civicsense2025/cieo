@@ -5,13 +5,12 @@ const targets = ['swift', 'rust', 'kotlin', 'dart', 'python', 'c'];
 const upper = (value) => value.replace(/([a-z0-9])([A-Z])/g, '$1_$2').replace(/-/g, '_').toUpperCase();
 const camel = (value) => value.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 const decimal = (value) => Number.isInteger(value) ? `${value}.0` : String(value);
-
 /** Native dimensions are reference units, not a claim that px == device pixels or Dynamic Type. */
 export function toNative(theme, target, input = {}) {
   assertTheme(theme); choice(target, targets, 'native target');
   keys(input, ['namespace', 'referenceFontSize'], 'native option');
   const namespace = input.namespace ?? 'CieoDesignTokens', reference = input.referenceFontSize ?? 16;
-  if (typeof namespace !== 'string' || !/^[A-Z][A-Za-z0-9]{0,63}$/.test(namespace)) throw new TypeError('Namespace must be a PascalCase identifier.');
+  if (typeof namespace !== 'string' || !/^[A-Z][A-Za-z0-9]{0,56}Tokens$/.test(namespace)) throw new TypeError('Namespace must be PascalCase, end in Tokens, and contain at most 63 characters.');
   if (!Number.isFinite(reference) || reference < 1 || reference > 256) throw new RangeError('Reference font size must be 1–256.');
   const rows = Object.entries(theme.tokens).sort(([a], [b]) => a.localeCompare(b, 'en')).map(([key, token]) => {
     let value = token.value;

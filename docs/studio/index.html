@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Shape a Cieo design language. Customize accessible color, type, density and motion, then export portable tokens.">
+  <title>Cieo — Your character. Every surface.</title>
+  <link rel="stylesheet" href="../../design/themes.css">
+  <link rel="stylesheet" href="../../tokens/tokens.css">
+  <link rel="stylesheet" href="../../design/primitives.css">
+  <link rel="stylesheet" href="./studio.css">
+</head>
+<body class="cieo">
+  <a class="cieo-skip" href="#preview">Skip to the live preview</a>
+  <div class="studio-shell">
+    <header class="studio-nav">
+      <a class="wordmark" href="./index.html" aria-label="Cieo design studio home"><span class="mark" aria-hidden="true">c</span>cieo<span class="wordmark-dot" aria-hidden="true">.</span></a>
+      <span class="nav-description">A little character changes everything.</span>
+      <a href="../catalogue.html" class="catalogue-link">Motion catalogue <span aria-hidden="true">↗</span></a>
+    </header>
+    <div class="studio-intro">
+      <div><h1>Your character.<br><span>Every surface.</span></h1><p>A quieter foundation. A sharper identity. Make it yours, then take it anywhere.</p></div>
+      <div class="intro-meta"><span>Color. Space. Type. Motion.</span><span>No account. No cloud. No framework required.</span></div>
+    </div>
+    <div class="workspace">
+      <main id="preview" tabindex="-1" class="preview-column cieo-stack">
+        <section class="product-preview cieo-surface" aria-labelledby="specimen-title">
+          <div class="specimen-header"><span class="product-wordmark"><span aria-hidden="true">◒</span> Fieldwork</span><span class="cieo-badge" data-status="success">✓ All changes saved</span></div>
+          <div class="specimen-hero"><div class="hero-copy"><p class="cieo-muted">A fresh perspective</p><h2 id="specimen-title">Make room<br>for good ideas.</h2><p class="cieo-prose">A workspace with a rhythm of its own. The colors, corners, and controls belong to you.</p><div class="cieo-cluster"><button type="button" class="cieo-button" data-variant="primary" data-size="large" id="launch">Start something <span aria-hidden="true">↗</span></button><button type="button" class="cieo-button" data-variant="quiet" id="replay">Replay motion</button></div></div><div class="motion-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="orbit orbit-three"></div><div class="art-dot"></div></div></div>
+          <div class="specimen-bottom">
+            <section class="cieo-stack" aria-labelledby="focus-heading"><div class="section-heading"><h3 id="focus-heading">Today's focus</h3><span class="cieo-muted cieo-numeric" id="task-count">1 of 3</span></div><label class="task cieo-check"><input type="checkbox" checked> Give the project a name <span class="task-tag">Done</span></label><label class="task cieo-check"><input type="checkbox"> Explore the possibilities</label><label class="task cieo-check"><input type="checkbox"> Share a first direction</label><label class="cieo-sr-only" for="completion">Project completion</label><progress class="cieo-progress" id="completion" value="1" max="3">1 of 3 complete</progress></section>
+            <form class="cieo-stack" id="project-form"><div class="cieo-field"><label for="project-name">Project name</label><input class="cieo-input" id="project-name" name="project" placeholder="Something worth making" maxlength="80" required aria-describedby="project-help"><p id="project-help" class="cieo-help">A small start is still a start.</p></div><div class="cieo-cluster"><button type="submit" class="cieo-button">Create project</button><button type="button" class="cieo-button" disabled>Invite later</button></div></form>
+          </div>
+        </section>
+        <section class="color-strip" aria-label="Semantic color specimen"><div data-swatch="accent"><span>Accent</span><code id="accent-value"></code></div><div data-swatch="surface"><span>Surface</span><code id="surface-value"></code></div><div data-swatch="text"><span>Ink</span><code id="text-value"></code></div><div data-swatch="success"><span>Success</span><code id="success-value"></code></div></section>
+        <section class="details-section" aria-labelledby="details-title"><div class="section-heading"><h2 id="details-title">Small details. Shared rules.</h2><span class="cieo-badge" id="contrast-summary"></span></div><div class="cieo-cluster"><span class="cieo-badge" data-status="success">✓ Ready</span><span class="cieo-badge" data-status="warning">! Needs review</span><span class="cieo-badge" data-status="danger">× Not available</span><span class="cieo-badge" data-status="info">i Good to know</span></div><details class="cieo-disclosure"><summary>One foundation, not one look</summary><p>Brand color doesn't replace status colors. Control density doesn't shrink touch targets. Color-pair checks don't replace a full accessibility review.</p></details><details class="cieo-disclosure"><summary>What travels across platforms?</summary><p>Semantic tokens export to CSS, typed token JSON, and native constants. Host applications still own rendering, layout behavior, accessible semantics, and native text scaling.</p></details></section>
+        <section class="token-section" aria-labelledby="tokens-title"><div class="section-heading"><h2 id="tokens-title">Under the surface</h2><span id="token-count" class="cieo-muted"></span></div><div class="cieo-field"><label for="token-search">Find a token</label><input id="token-search" class="cieo-input" type="search" placeholder="Try accent, radius, or space" autocomplete="off"></div><div class="cieo-table-wrap" tabindex="0" aria-label="Design tokens"><table class="cieo-table"><caption>Resolved values for the current design. Changes export with explicit types.</caption><thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Purpose</th></tr></thead><tbody id="token-rows"></tbody></table></div><p id="empty-tokens" hidden>No matching tokens. Try a color, spacing, or typography term.</p></section>
+      </main>
+      <aside class="inspector" aria-labelledby="inspector-title" data-no-print>
+        <div class="section-heading"><h2 id="inspector-title">Make it yours</h2><button type="button" class="reset-button" id="reset">Reset</button></div>
+        <button type="button" id="customize-toggle" class="cieo-button mobile-customize" aria-expanded="false" aria-controls="inspector-panels">Customize the preview</button>
+        <div id="inspector-panels">
+        <form id="theme-controls" class="cieo-stack">
+          <fieldset class="brand-fieldset"><legend>Character</legend><div class="brand-choices" id="brand-choices"></div></fieldset>
+          <div class="cieo-grid control-pair"><div class="cieo-field"><label for="scheme">Appearance</label><select id="scheme" class="cieo-input"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div><div class="cieo-field"><label for="contrast">Contrast</label><select id="contrast" class="cieo-input"><option value="system">System</option><option value="standard">Standard</option><option value="high">High</option></select></div></div>
+          <div class="cieo-field"><label for="density">Density</label><select id="density" class="cieo-input"><option value="compact">Compact</option><option value="comfortable" selected>Comfortable</option><option value="spacious">Spacious</option></select></div>
+          <div class="cieo-field"><label for="radius">Corners</label><select id="radius" class="cieo-input"><option value="crisp">Crisp</option><option value="soft" selected>Soft</option><option value="round">Round</option></select></div>
+          <div class="cieo-field"><label for="font">Typography</label><select id="font" class="cieo-input"><option value="system">System sans</option><option value="humanist">Humanist</option><option value="mono">Monospace</option></select></div>
+          <div class="cieo-field"><label for="accent">Custom accent seed</label><div class="accent-entry"><input id="accent" class="cieo-input" placeholder="#6246c7" pattern="#[0-9a-fA-F]{6}" maxlength="7" spellcheck="false" aria-describedby="accent-help"><button type="button" id="apply-accent" class="cieo-button">Apply</button></div><p id="accent-help" class="cieo-help">Six-digit hex. Cieo adjusts the seed when a contrast role needs it.</p></div>
+          <div class="cieo-field"><label for="motion">Motion</label><select id="motion" class="cieo-input"><option value="system">Respect system</option><option value="reduced">Reduced</option></select></div>
+          <label class="cieo-check"><input type="checkbox" id="rtl">Preview right to left</label>
+          <label class="cieo-check"><input type="checkbox" id="remember">Remember on this device</label>
+        </form>
+        <div class="export-section cieo-stack"><div class="cieo-field"><label for="format">Take it anywhere</label><select id="format" class="cieo-input"><option value="css">CSS custom properties</option><option value="dtcg">DTCG token JSON</option><option value="json">Portable JSON</option><option value="config">Editable theme configuration</option><option value="swift">Swift constants</option><option value="rust">Rust constants</option><option value="kotlin">Kotlin constants</option><option value="dart">Dart constants</option><option value="python">Python constants</option><option value="c">C header</option></select></div><div class="cieo-cluster"><button type="button" class="cieo-button" data-variant="primary" id="download">Download</button><button type="button" class="cieo-button" id="copy">Copy</button></div><label class="file-import cieo-button" for="import-theme">Import configuration<input type="file" id="import-theme" accept="application/json,.json"></label><button type="button" id="share" class="cieo-button" data-variant="quiet">Copy this configuration link</button><p class="cieo-help">Exports stay on this device. Native exports contain constants, not component implementations.</p></div>
+        </div>
+        <p class="inspector-status" id="status" role="status" aria-live="polite" aria-atomic="true">Ready to make it yours.</p>
+      </aside>
+    </div>
+    <footer class="studio-footer"><span>Cieo. Set good ideas in motion.</span><a href="../design-system.md">Integration notes</a></footer>
+  </div>
+  <dialog id="export-dialog" class="export-dialog"><form method="dialog"><div class="section-heading"><h2>Copy your export</h2><button class="cieo-button" aria-label="Close export">Close</button></div><p>Clipboard access isn't available here. Select the text below and copy it.</p><label class="cieo-sr-only" for="export-text">Export contents</label><textarea id="export-text" class="cieo-input" readonly rows="14"></textarea></form></dialog>
+  <noscript><p class="no-script">The specimen works without JavaScript. Live customization requires JavaScript; prebuilt exports are in the design/generated folder.</p></noscript>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

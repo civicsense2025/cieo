@@ -15,20 +15,17 @@ export function toDTCG(theme) {
   }
   return { $description: 'Cieo semantic design tokens. Motion remains in tokens/tokens.json.', cieo };
 }
-
 /** Preserve units for languages without a Cieo code generator. JSON is the portable contract. */
 export function toPortable(theme) {
   return { version: 1, colorSpace: 'srgb', dimensionUnits: ['px', 'rem'], referenceFontSize: 16, tokens: toDTCG(theme).cieo };
 }
-
 export function serializeTheme(theme) {
   assertTheme(theme);
   const ordered = Object.fromEntries(Object.entries(theme.options.overrides).sort(([a], [b]) => a.localeCompare(b, 'en')));
   return JSON.stringify({ version: 1, options: { ...theme.options, overrides: ordered } }, null, 2) + '\n';
 }
-
 export function parseTheme(source) {
-  if (typeof source !== 'string' || source.length > 32768) throw new TypeError('Theme configuration must be text under 32 KiB.');
+  if (typeof source !== 'string' || new TextEncoder().encode(source).byteLength > 32768) throw new TypeError('Theme configuration must be text under 32 KiB.');
   const value = record(JSON.parse(source), 'theme configuration');
   keys(value, ['version', 'options'], 'configuration key');
   if (value.version !== 1) throw new RangeError('Unsupported theme configuration version.');

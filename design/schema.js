@@ -1,6 +1,5 @@
 import { createTheme } from './theme.js';
 import { brands, densities, radii, fonts } from './presets.js';
-
 /** Structural validation for other languages; semantic contrast still needs an audit. */
 export function themeSchema() {
   const properties = {};

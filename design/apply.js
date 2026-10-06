@@ -11,7 +11,7 @@ export function applyTheme(element, initial) {
   let ownedAttribute;
   const write = (name, value) => {
     if (!previous.has(name)) previous.set(name, [element.style.getPropertyValue(name), element.style.getPropertyPriority(name)]);
-    if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value);
+    if (element.style.getPropertyValue(name) !== value || element.style.getPropertyPriority(name)) element.style.setProperty(name, value);
     last.set(name, value);
   };
   const update = (theme) => {

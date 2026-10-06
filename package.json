@@ -1,16 +1,21 @@
 {
   "name": "cieo",
   "version": "0.1.0",
-  "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
+  "description": "Critically damped motion and a portable, customizable design foundation for web and native hosts.",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist",
     "tokens",
     "atoms/web",
-    "README.md"
+    "README.md",
+    "design",
+    "scripts/export-theme.mjs",
+    "docs/design-system.md"
   ],
   "exports": {
     ".": {
@@ -27,7 +32,17 @@
     },
     "./tokens.css": "./tokens/tokens.css",
     "./tokens.json": "./tokens/tokens.json",
-    "./atoms/*": "./atoms/web/*"
+    "./atoms/*": "./atoms/web/*",
+    "./design": {
+      "types": "./design/index.d.ts",
+      "default": "./design/index.js"
+    },
+    "./design.css": "./design/themes.css",
+    "./primitives.css": "./design/primitives.css",
+    "./design.tokens.json": "./design/generated/default.tokens.json",
+    "./design.portable.json": "./design/generated/default.portable.json",
+    "./theme.schema.json": "./design/theme.schema.json",
+    "./themes/*": "./design/generated/themes/*"
   },
   "peerDependencies": {
     "react": ">=18"
@@ -42,9 +57,21 @@
     "typescript": "6.0.3"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.json",
+    "build": "node scripts/build.mjs",
     "test": "npm run build && node --test test/*.test.mjs",
-    "check": "bash scripts/check-brand.sh && npm run test && git diff --exit-code -- dist",
-    "test:browser": "python3 test/browser/smoke.py"
+    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && git diff --exit-code -- dist design/themes.css design/theme.schema.json",
+    "test:browser": "python3 test/browser/smoke.py",
+    "prepare": "node scripts/build-design.mjs",
+    "prepack": "node scripts/build-design.mjs",
+    "build:design": "node scripts/build-design.mjs",
+    "check:design": "node scripts/build-design.mjs --check && node scripts/check-design-ledger.mjs",
+    "test:design": "node --test test/design-*.test.mjs",
+    "test:design:types": "tsc --strict --noEmit --module NodeNext --moduleResolution NodeNext --target ES2022 test/types/design.ts",
+    "test:design:browser": "python3 test/browser/design_smoke.py",
+    "studio": "node scripts/serve-studio.mjs",
+    "studio:standalone": "node scripts/build-standalone.mjs"
+  },
+  "bin": {
+    "cieo-theme": "scripts/export-theme.mjs"
   }
 }

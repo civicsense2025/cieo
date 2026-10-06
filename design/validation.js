@@ -17,15 +17,16 @@ export function choice(value, values, name) {
 }
 export function options(input = {}) {
   keys(input, ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'accent', 'overrides'], 'theme option');
+  const get = (key, fallback) => input[key] === undefined ? fallback : input[key];
   return {
-    brand: choice(input.brand ?? 'studio', Object.keys(brands), 'brand'),
-    scheme: choice(input.scheme ?? 'light', ['light', 'dark'], 'scheme'),
-    density: choice(input.density ?? 'comfortable', Object.keys(densities), 'density'),
-    radius: choice(input.radius ?? 'soft', Object.keys(radii), 'radius'),
-    contrast: choice(input.contrast ?? 'standard', ['standard', 'high'], 'contrast'),
-    font: choice(input.font ?? 'system', Object.keys(fonts), 'font'),
+    brand: choice(get('brand', 'studio'), Object.keys(brands), 'brand'),
+    scheme: choice(get('scheme', 'light'), ['light', 'dark'], 'scheme'),
+    density: choice(get('density', 'comfortable'), Object.keys(densities), 'density'),
+    radius: choice(get('radius', 'soft'), Object.keys(radii), 'radius'),
+    contrast: choice(get('contrast', 'standard'), ['standard', 'high'], 'contrast'),
+    font: choice(get('font', 'system'), Object.keys(fonts), 'font'),
     ...(input.accent === undefined ? {} : { accent: hex(input.accent) }),
-    overrides: Object.fromEntries(Object.entries(record(input.overrides ?? {}, 'overrides')).map(([key, value]) => [key, Array.isArray(value) ? [...value] : value])),
+    overrides: Object.fromEntries(Object.entries(record(get('overrides', {}), 'overrides')).map(([key, value]) => [key, Array.isArray(value) ? [...value] : value])),
   };
 }
 export function validTokenValue(type, value) {
