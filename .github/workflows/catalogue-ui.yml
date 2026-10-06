@@ -24,6 +24,12 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: node scripts/build-library.mjs
+      - name: Install browser for visual review
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Capture public visual references
+        run: python test/catalogue/capture_references.py
       - name: Package reviewed source without Git credentials or dependencies
         if: always()
         run: |
