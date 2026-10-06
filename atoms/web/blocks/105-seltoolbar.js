@@ -1,7 +1,7 @@
 
 
 atom({ id:'seltoolbar', cat:'Writing', name:'Selection toolbar', block:'richtext editor', fam:['X','M'],
-  html:`<p class="tx" style="max-width:320px;margin:0;line-height:1.7;font-size:15px;cursor:text">Select a few words in this paragraph. A small toolbar appears above your selection and glides to follow it when you select somewhere else.</p><div class="tb card row" role="toolbar" aria-label="Format" style="position:absolute;left:0;top:0;padding:4px;gap:2px;visibility:hidden"></div>`,
+  html:`<style>#seltoolbar .stage{user-select:text;-webkit-user-select:text}</style><p class="tx" style="max-width:320px;margin:0;line-height:1.7;font-size:15px;cursor:text">Select a few words in this paragraph. A small toolbar appears above your selection and glides to follow it when you select somewhere else.</p><div class="tb card row" role="toolbar" aria-label="Format" style="position:absolute;left:0;top:0;padding:4px;gap:2px;visibility:hidden"></div>`,
   desc:'The toolbar appears above the selection and glides to the next selection instead of jumping. It leaves quickly when the selection collapses.',
   api:'tb.{x,y}.set(selectionCenter)   tb.o.set(hasSelection)',
   init(st){
