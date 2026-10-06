@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en" data-theme="white">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Cieo — the motion library</title>
+<link rel="stylesheet" href="../atoms/web/library/palette.css">
+<link rel="stylesheet" href="../atoms/web/library/layout.css">
+<link rel="stylesheet" href="../atoms/web/library/previews.css">
+<link rel="stylesheet" href="../atoms/web/library/polish.css">
+<link rel="stylesheet" href="../atoms/web/library/panels.css">
+<link rel="stylesheet" href="../atoms/web/library/responsive.css">
+</head>
+<body class="library-page">
+<a class="lib-skip" href="#lib-title">Skip to the atoms</a>
+<div class="lib-shell">
+  <aside class="lib-sidebar" aria-label="Library navigation">
+    <a class="lib-brand" href="#collection=explore" aria-label="Cieo, explore"><span class="lib-mark" aria-hidden="true"></span><strong>cieo</strong></a>
+    <p class="lib-brand-caption">A little motion. A lot of feeling.</p>
+    <nav class="lib-nav" data-main-navigation aria-label="Browse"></nav>
+    <h2 class="lib-nav-section">Collections</h2>
+    <nav class="lib-category-list" data-category-navigation aria-label="Atom categories"></nav>
+    <div class="lib-sidebar-footer">
+      <span id="lib-total"></span>
+      <a href="catalogue.html">Original technical catalogue ↗</a>
+      <button type="button" class="lib-nav-button" data-open-dialog="lib-shortcuts"><span data-icon="keyboard"></span>Keyboard shortcuts</button>
+    </div>
+  </aside>
+  <main class="lib-main">
+    <header class="lib-topbar">
+      <button type="button" class="lib-icon-button lib-mobile-only lib-menu-button" data-open-dialog="lib-navigation-dialog" aria-label="Open collections"><span data-icon="menu"></span></button>
+      <div class="lib-location"><span data-icon="layers"></span><span id="lib-location-title">Explore</span></div>
+      <label class="lib-search"><span data-icon="search"></span><span class="lib-sr">Search atoms</span><input id="lib-search" type="search" maxlength="160" placeholder="Find an atom…" autocomplete="off"><kbd aria-hidden="true">⌘ K</kbd></label>
+      <button type="button" class="lib-icon-button lib-settings-button" data-open-dialog="lib-settings" aria-label="Library appearance"><span data-icon="tune"></span></button>
+    </header>
+    <div class="lib-content">
+      <section class="lib-heading" aria-labelledby="lib-title">
+        <div><h1 id="lib-title" tabindex="-1">Good things, in motion.</h1><p id="lib-description">A collection of small interactions that make a big difference.</p></div>
+        <span class="lib-heading-count" id="lib-result-count" role="status" aria-live="polite"></span>
+      </section>
+      <nav class="lib-collections" id="lib-collections" aria-label="Featured collections"></nav>
+      <div class="lib-toolbar">
+        <div class="lib-filter-wrap"><div class="lib-filters" id="lib-filters" role="group" aria-label="Filter by motion family"></div></div>
+        <div class="lib-toolbar-actions">
+          <button type="button" id="lib-pause" class="lib-icon-button" aria-label="Pause animated previews" aria-pressed="false" title="Pause previews"><span data-icon="pause"></span></button>
+          <span class="lib-divider" aria-hidden="true"></span>
+          <button type="button" class="lib-icon-button lib-layout-button" data-open-dialog="lib-settings" aria-label="Layout and appearance"><span data-icon="grid"></span></button>
+        </div>
+      </div>
+      <div id="lib-empty" class="lib-empty" hidden><h2 id="lib-empty-title">No atoms found.</h2><p id="lib-empty-description"></p><button type="button" class="lib-button" id="lib-clear">Browse all atoms</button></div>
+      <div id="lib-grid" class="lib-grid" aria-label="Live motion atoms"></div>
+      <noscript><p>The live recipes require JavaScript. Source files are available in <code>atoms/web/blocks/</code>.</p></noscript>
+    </div>
+  </main>
+</div>
+<dialog id="lib-inspector" class="lib-dialog lib-inspector" aria-labelledby="lib-inspector-title">
+  <header class="lib-dialog-header"><span data-icon="layers"></span><h2 id="lib-inspector-title">Inspect atom</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close inspector" autofocus><span data-icon="close"></span></button></header>
+  <div class="lib-inspector-body">
+    <div class="lib-inspector-canvas" id="lib-inspector-preview"></div>
+    <aside class="lib-inspector-meta" aria-label="Component information">
+      <h3>Small details, up close.</h3><p id="lib-inspector-description"></p>
+      <dl><div><dt>Collection</dt><dd id="lib-inspector-category"></dd></div><div><dt>Motion</dt><dd id="lib-inspector-families"></dd></div><div><dt>Runtime</dt><dd>Original Cieo springs</dd></div></dl>
+      <div class="lib-code-tabs" role="group" aria-label="Snippet type"><button type="button" data-code-mode="recipe" aria-pressed="true">Motion recipe</button><button type="button" data-code-mode="markup" aria-pressed="false">HTML</button></div>
+      <pre id="lib-code" tabindex="0" aria-label="Code snippet"></pre>
+      <div class="lib-source-actions">
+        <button type="button" class="lib-button primary" id="lib-copy-code"><span data-icon="copy"></span>Copy snippet</button>
+        <a class="lib-button" id="lib-source-link" target="_blank" rel="noopener">View source ↗</a>
+        <button type="button" class="lib-button" id="lib-inspector-save" aria-pressed="false">Save atom</button>
+        <button type="button" class="lib-button" id="lib-copy-link"><span data-icon="link"></span>Copy link</button>
+      </div>
+      <p class="lib-inspector-note">This is the live recipe, not a screenshot. Snippets need the catalogue styles and runtime; View source opens the complete recipe.</p>
+    </aside>
+  </div>
+</dialog>
+<dialog id="lib-settings" class="lib-dialog lib-settings" aria-labelledby="lib-settings-title">
+  <header class="lib-dialog-header"><h2 id="lib-settings-title">Make a little room.</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close appearance" autofocus><span data-icon="close"></span></button></header>
+  <div class="lib-settings-body">
+    <fieldset><legend>Appearance</legend><div class="lib-setting-seg"><button type="button" data-pref="theme" data-value="system">System</button><button type="button" data-pref="theme" data-value="white">Light</button><button type="button" data-pref="theme" data-value="black">Dark</button></div></fieldset>
+    <fieldset><legend>A touch of color</legend><div class="lib-swatches"><button type="button" data-pref="accent" data-value="violet" style="--swatch:#8062c9" aria-label="Violet accent"></button><button type="button" data-pref="accent" data-value="blue" style="--swatch:#628dd8" aria-label="Blue accent"></button><button type="button" data-pref="accent" data-value="green" style="--swatch:#78a991" aria-label="Green accent"></button><button type="button" data-pref="accent" data-value="coral" style="--swatch:#ce8489" aria-label="Coral accent"></button></div></fieldset>
+    <fieldset><legend>Preview surfaces</legend><div class="lib-setting-seg"><button type="button" data-pref="surfaces" data-value="color">Soft color</button><button type="button" data-pref="surfaces" data-value="neutral">Neutral</button></div></fieldset>
+    <fieldset><legend>Space between things</legend><div class="lib-setting-seg"><button type="button" data-pref="density" data-value="roomy">Roomy</button><button type="button" data-pref="density" data-value="compact">Compact</button></div></fieldset>
+    <fieldset><legend>Corners</legend><div class="lib-setting-seg"><button type="button" data-pref="corners" data-value="soft">Soft</button><button type="button" data-pref="corners" data-value="crisp">Crisp</button></div></fieldset>
+    <fieldset><legend>Details under each atom</legend><div class="lib-setting-seg"><button type="button" data-pref="details" data-value="shown">Show</button><button type="button" data-pref="details" data-value="hidden">Quiet</button></div></fieldset>
+    <label class="lib-setting-row">Columns<select id="lib-columns"><option value="auto">Automatic</option><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option></select></label>
+    <label class="lib-setting-row">Playback speed<select id="lib-speed"><option value="1">1×</option><option value="0.25">¼×</option><option value="0.1">⅒×</option></select></label>
+    <label class="lib-setting-row">Show the 8px grid<input type="checkbox" id="lib-grid-toggle"></label>
+    <button type="button" class="lib-button" id="lib-reset-preferences">Reset appearance</button>
+  </div>
+</dialog>
+<dialog id="lib-navigation-dialog" class="lib-dialog lib-mobile-nav" aria-labelledby="lib-navigation-title">
+  <header class="lib-dialog-header"><h2 id="lib-navigation-title">Collections</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close collections" autofocus><span data-icon="close"></span></button></header>
+  <div class="lib-mobile-nav-content"><nav class="lib-nav" data-main-navigation aria-label="Browse"></nav><nav class="lib-category-list" data-category-navigation aria-label="Atom categories"></nav></div>
+</dialog>
+<dialog id="lib-shortcuts" class="lib-dialog lib-shortcuts" aria-labelledby="lib-shortcuts-title">
+  <header class="lib-dialog-header"><h2 id="lib-shortcuts-title">A few shortcuts.</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close shortcuts" autofocus><span data-icon="close"></span></button></header>
+  <dl><div><dt>Find an atom</dt><dd><kbd>⌘ / Ctrl K</kbd></dd></div><div><dt>Focus search</dt><dd><kbd>/</kbd></dd></div><div><dt>Close a panel</dt><dd><kbd>Esc</kbd></dd></div><div><dt>Show shortcuts</dt><dd><kbd>?</kbd></dd></div></dl>
+</dialog>
+<div id="lib-notice" class="lib-notice" role="status" aria-live="polite" hidden></div>
+<script>window.CieoSources={"step":"blocks/001-step.js","retarget":"blocks/002-retarget.js","stagger":"blocks/003-stagger.js","tabs":"blocks/004-tabs.js","accordion":"blocks/005-accordion.js","tooltip":"blocks/006-tooltip.js","alert":"blocks/007-alert.js","flip":"blocks/008-flip.js","stepper":"blocks/009-stepper.js","rating":"blocks/010-rating.js","badge":"blocks/011-badge.js","chip":"blocks/012-chip.js","counter":"blocks/013-counter.js","progress":"blocks/014-progress.js","line":"blocks/015-line.js","bars":"blocks/016-bars.js","donut":"blocks/017-donut.js","timeline":"blocks/018-timeline.js","countdown":"blocks/019-countdown.js","beforeafter":"blocks/021-beforeafter.js","carousel":"blocks/022-carousel.js","marquee":"blocks/023-marquee.js","lightbox":"blocks/024-lightbox.js","player":"blocks/025-player.js","poll":"blocks/026-poll.js","field":"blocks/027-field.js","newsletter":"blocks/028-newsletter.js","signature":"blocks/029-signature.js","slider":"blocks/030-slider.js","navhover":"blocks/031-navhover.js","longpage":"blocks/032-longpage.js","mobilemenu":"blocks/033-mobilemenu.js","search":"blocks/034-search.js","pricing":"blocks/035-pricing.js","cart":"blocks/036-cart.js","checkout":"blocks/037-checkout.js","switch":"blocks/038-switch.js","toast":"blocks/039-toast.js","dropdown":"blocks/040-dropdown.js","sheet":"blocks/041-sheet.js","palette":"blocks/042-palette.js","surface":"blocks/043-surface.js","copy":"blocks/044-copy.js","tablesort":"blocks/045-tablesort.js","toc":"blocks/046-toc.js","breadcrumbs":"blocks/047-breadcrumbs.js","checklist":"blocks/048-checklist.js","skeleton":"blocks/049-skeleton.js","imageload":"blocks/050-imageload.js","facets":"blocks/051-facets.js","donation":"blocks/052-donation.js","booking":"blocks/053-booking.js","paywall":"blocks/054-paywall.js","payment":"blocks/055-payment.js","diagram":"blocks/056-diagram.js","statement":"blocks/057-statement.js","multistep":"blocks/058-multistep.js","select":"blocks/065-select.js","combobox":"blocks/066-combobox.js","popover":"blocks/067-popover.js","contextmenu":"blocks/068-contextmenu.js","hovercard":"blocks/069-hovercard.js","dialog":"blocks/070-dialog.js","drawer":"blocks/071-drawer.js","navmenu":"blocks/072-navmenu.js","navbar":"blocks/073-navbar.js","pagination":"blocks/074-pagination.js","radio":"blocks/075-radio.js","checkbox":"blocks/076-checkbox.js","togglegroup":"blocks/077-togglegroup.js","otp":"blocks/078-otp.js","taginput":"blocks/079-taginput.js","reorder":"blocks/080-reorder.js","dropzone":"blocks/081-dropzone.js","fab":"blocks/082-fab.js","speeddial":"blocks/083-speeddial.js","avatars":"blocks/084-avatars.js","loader":"blocks/085-loader.js","resizable":"blocks/086-resizable.js","sidebar":"blocks/087-sidebar.js","longanswer":"blocks/088-longanswer.js","numstep":"blocks/089-numstep.js","phone":"blocks/090-phone.js","multiselect":"blocks/091-multiselect.js","matrix":"blocks/092-matrix.js","timewheel":"blocks/093-timewheel.js","csat":"blocks/094-csat.js","nps":"blocks/095-nps.js","rank":"blocks/096-rank.js","picturechoice":"blocks/097-picturechoice.js","conversational":"blocks/098-conversational.js","signupform":"blocks/099-signupform.js","spinwheel":"blocks/100-spinwheel.js","password":"blocks/101-password.js","range":"blocks/102-range.js","seltoolbar":"blocks/105-seltoolbar.js","slashmenu":"blocks/106-slashmenu.js","autosave":"blocks/107-autosave.js","presence":"blocks/108-presence.js","suggestion":"blocks/109-suggestion.js","canvaszoom":"blocks/110-canvaszoom.js","selectresize":"blocks/111-selectresize.js","colorpicker":"blocks/112-colorpicker.js","layers":"blocks/113-layers.js","undoredo":"blocks/114-undoredo.js","swiperow":"blocks/115-swiperow.js","undosend":"blocks/116-undosend.js","threadstack":"blocks/117-threadstack.js","composemin":"blocks/118-composemin.js","serp":"blocks/120-serp.js","gauge":"blocks/121-gauge.js","ranks":"blocks/122-ranks.js","like":"blocks/123-like.js","follow":"blocks/124-follow.js","stories":"blocks/125-stories.js","charring":"blocks/126-charring.js","newposts":"blocks/127-newposts.js","download":"blocks/128-download.js","tabstrip":"blocks/129-tabstrip.js","loadbar":"blocks/130-loadbar.js","pullrefresh":"blocks/131-pullrefresh.js","linkpreview":"blocks/132-linkpreview.js","streaming":"blocks/133-streaming.js","chatthread":"blocks/134-chatthread.js","calendar":"blocks/135-calendar.js","kanban":"blocks/136-kanban.js","callgrid":"blocks/137-callgrid.js","tour":"blocks/138-tour.js","offline":"blocks/139-offline.js","emptystate":"blocks/140-emptystate.js","pindrop":"blocks/142-pindrop.js","cluster":"blocks/143-cluster.js","listdetail":"blocks/144-listdetail.js","inbox":"blocks/144-listdetail.js","pagetransition":"blocks/144-listdetail.js","pageeditor":"blocks/145-pageeditor.js","savebar":"blocks/146-savebar.js","siteheader":"blocks/147-siteheader.js","productpage":"blocks/148-productpage.js","checkoutflow":"blocks/148-productpage.js","pricingsection":"blocks/148-productpage.js","dashboard":"blocks/149-dashboard.js","notifcenter":"blocks/149-dashboard.js","onboarding":"blocks/149-dashboard.js","heroentrance":"blocks/150-heroentrance.js","scrollfeatures":"blocks/150-heroentrance.js","testimonialwall":"blocks/150-heroentrance.js","sidesheet":"blocks/151-sidesheet.js","seg":"blocks/151-sidesheet.js","statuschip":"blocks/151-sidesheet.js","scrollfade":"blocks/151-sidesheet.js","inlineedit":"blocks/151-sidesheet.js","themetoggle":"blocks/151-sidesheet.js","devicetoggle":"blocks/151-sidesheet.js","timer":"blocks/151-sidesheet.js","disclosure":"blocks/151-sidesheet.js","delayspinner":"blocks/151-sidesheet.js","betweeninsert":"blocks/152-betweeninsert.js","blocktoolbar":"blocks/152-betweeninsert.js","blocklibrary":"blocks/152-betweeninsert.js","quickcreate":"blocks/152-betweeninsert.js","shortcuts":"blocks/152-betweeninsert.js","stepup":"blocks/153-stepup.js","conflict":"blocks/153-stepup.js","approval":"blocks/153-stepup.js","fielddiff":"blocks/153-stepup.js","invite":"blocks/153-stepup.js","refpicker":"blocks/153-stepup.js","noticebanner":"blocks/154-noticebanner.js","consent":"blocks/154-noticebanner.js","bulkbar":"blocks/154-noticebanner.js","snackbar":"blocks/154-noticebanner.js","avatarpicker":"blocks/154-noticebanner.js","daterange":"blocks/154-noticebanner.js","scrubber":"blocks/154-noticebanner.js","revisions":"blocks/155-revisions.js","annotate":"blocks/155-revisions.js","authshell":"blocks/155-revisions.js","funnel":"blocks/156-funnel.js","settingsshell":"blocks/156-funnel.js","connectorlist":"blocks/157-connectorlist.js","oauthgrant":"blocks/157-connectorlist.js","toolapproval":"blocks/157-connectorlist.js","toolcalllog":"blocks/157-connectorlist.js","toolpermissions":"blocks/157-connectorlist.js","apikeyreveal":"blocks/157-connectorlist.js","serverstatus":"blocks/157-connectorlist.js","agentaccess":"blocks/157-connectorlist.js","mega-columns":"blocks/158-mega-columns.js","mega-featured":"blocks/158-mega-columns.js","mega-tabs":"blocks/158-mega-columns.js","mega-icons":"blocks/158-mega-columns.js","mega-search":"blocks/158-mega-columns.js","mega-cards":"blocks/158-mega-columns.js","mega-flyout":"blocks/158-mega-columns.js","mega-morph":"blocks/158-mega-columns.js","mega-command":"blocks/158-mega-columns.js","mega-drill":"blocks/158-mega-columns.js","header-spread":"blocks/159-header-spread.js","header-split":"blocks/159-header-spread.js","header-three":"blocks/159-header-spread.js","header-stacked":"blocks/159-header-spread.js","header-shrink":"blocks/159-header-spread.js","header-autohide":"blocks/159-header-spread.js","header-overlay":"blocks/159-header-spread.js","header-pill":"blocks/159-header-spread.js","header-rail":"blocks/159-header-spread.js","header-search":"blocks/159-header-spread.js","header-announce":"blocks/159-header-spread.js","header-minimal":"blocks/159-header-spread.js","footer-minimal":"blocks/160-footer-minimal.js","footer-centered":"blocks/160-footer-minimal.js","footer-columns":"blocks/160-footer-minimal.js","footer-newsletter":"blocks/160-footer-minimal.js","footer-accordion":"blocks/160-footer-minimal.js","footer-region-theme":"blocks/160-footer-minimal.js","footer-status":"blocks/160-footer-minimal.js","footer-reveal":"blocks/160-footer-minimal.js","fz1-wordmark":"blocks/161-fz1-wordmark.js","fz2-ctaband":"blocks/161-fz1-wordmark.js","fz3-sitemap":"blocks/161-fz1-wordmark.js","fz4-live":"blocks/161-fz1-wordmark.js","fz5-app":"blocks/161-fz1-wordmark.js","fz6-disclosure":"blocks/161-fz1-wordmark.js","fz7-hours":"blocks/161-fz1-wordmark.js","fz8-full":"blocks/161-fz1-wordmark.js","agentcursor":"blocks/162-agentcursor.js","agentnav":"blocks/162-agentcursor.js","followmode":"blocks/162-agentcursor.js","agentinspect":"blocks/162-agentcursor.js","presencebar":"blocks/162-agentcursor.js","sitecoverage":"blocks/162-agentcursor.js","agentscroll-map":"blocks/162-agentcursor.js","agentpin":"blocks/163-agentpin.js","agentthread":"blocks/163-agentpin.js","evidencecapture":"blocks/163-agentpin.js","suggestededit":"blocks/163-agentpin.js","reviewsummary":"blocks/163-agentpin.js","agentqueue":"blocks/163-agentpin.js","handoff":"blocks/163-agentpin.js","agentstatus":"blocks/164-agentstatus.js","activityfeed":"blocks/164-agentstatus.js","takeover":"blocks/164-agentstatus.js","planprogress":"blocks/164-agentstatus.js","approvalinline":"blocks/164-agentstatus.js","runreplay":"blocks/164-agentstatus.js","agentlanes":"blocks/164-agentstatus.js","irisab":"blocks/166-irisab.js","filmscrub":"blocks/166-irisab.js","txi-iris":"blocks/167-txi-iris.js","txi-depth":"blocks/167-txi-iris.js","txi-blinds":"blocks/167-txi-iris.js","txi-develop":"blocks/167-txi-iris.js","txi-rack":"blocks/167-txi-iris.js","txi-split":"blocks/167-txi-iris.js","txi-tiles":"blocks/167-txi-iris.js","txi-page":"blocks/167-txi-iris.js","txi-relight":"blocks/167-txi-iris.js","txi-flip":"blocks/167-txi-iris.js","txi-ink":"blocks/167-txi-iris.js","txi-flyto":"blocks/167-txi-iris.js","txc-film":"blocks/168-txc-film.js","txc-para":"blocks/168-txc-film.js","txc-focus":"blocks/168-txc-film.js","txc-deck":"blocks/168-txc-film.js","txc-story":"blocks/168-txc-film.js","txc-sync":"blocks/168-txc-film.js","txc-loop":"blocks/168-txc-film.js","txc-peek":"blocks/168-txc-film.js","txc-compare":"blocks/168-txc-film.js","txc-reel":"blocks/168-txc-film.js","txc-mason":"blocks/168-txc-film.js","txc-route":"blocks/168-txc-film.js","gal-grid-lightbox":"blocks/169-gal-grid-lightbox.js","gal-swipe-dismiss":"blocks/169-gal-grid-lightbox.js","gal-zoom-pan":"blocks/169-gal-grid-lightbox.js","gal-masonry-filter":"blocks/169-gal-grid-lightbox.js","gal-collection-morph":"blocks/169-gal-grid-lightbox.js","gal-contact-loupe":"blocks/169-gal-grid-lightbox.js","gal-photo-stack":"blocks/169-gal-grid-lightbox.js","gal-hover-focus":"blocks/169-gal-grid-lightbox.js","gal-info-drawer":"blocks/169-gal-grid-lightbox.js","gal-cull-deck":"blocks/169-gal-grid-lightbox.js","txs-zoomhero":"blocks/170-txs-zoomhero.js","txs-hgallery":"blocks/170-txs-zoomhero.js","txs-stackcards":"blocks/170-txs-zoomhero.js","txs-clipwindow":"blocks/170-txs-zoomhero.js","txs-chapters":"blocks/170-txs-zoomhero.js","txs-depthplanes":"blocks/170-txs-zoomhero.js","txs-relight":"blocks/170-txs-zoomhero.js","txs-sequence":"blocks/170-txs-zoomhero.js","txs-chapterrail":"blocks/170-txs-zoomhero.js","txs-contactsheet":"blocks/170-txs-zoomhero.js","fxp-load":"blocks/171-fxp-load.js","fxp-rack":"blocks/171-fxp-load.js","fxp-duo":"blocks/171-fxp-load.js","fxp-relight":"blocks/171-fxp-load.js","fxp-depth":"blocks/171-fxp-load.js","fxp-screen":"blocks/171-fxp-load.js","fxp-grade":"blocks/171-fxp-load.js","fxp-paint":"blocks/171-fxp-load.js","fxp-burns":"blocks/171-fxp-load.js","fxp-flick":"blocks/171-fxp-load.js","fxp-frost":"blocks/171-fxp-load.js","fxp-palette":"blocks/171-fxp-load.js","agentbehaviours":"identity/agentbehaviours.js","agentduet":"identity/agentbehaviours.js","agentactions":"identity/agenticons-actions.js","agentroles":"identity/agenticons-roles.js","agentillustrations":"identity/agentillos.js","agentmarks":"identity/agentmark.js","agentmarkstates":"identity/agentmark.js","agentcharacter":"identity/agentrig.js","agentcrowd":"identity/agentrig.js","agentcasta":"identity/cast-a.js","agentcastb":"identity/cast-b.js","binder":"blocks/172-binder.js","corkboard":"blocks/173-corkboard.js","focusline":"blocks/174-focusline.js","typewriter":"blocks/175-typewriter.js","goalring":"blocks/176-goalring.js","scrivenings":"blocks/177-scrivenings.js","barepage":"blocks/178-barepage.js","compilerun":"blocks/179-compilerun.js","transcribe":"blocks/180-transcribe.js","pullquote":"blocks/181-pullquote.js","deadline":"blocks/182-deadline.js","factcheck":"blocks/183-factcheck.js","embargo":"blocks/184-embargo.js","lede":"blocks/185-lede.js","voicenote":"blocks/186-voicenote.js","wirefeed":"blocks/187-wirefeed.js","stylepaint":"blocks/188-stylepaint.js","template":"blocks/189-template.js","acceptrail":"blocks/190-acceptrail.js","figbuilder":"blocks/191-figbuilder.js","mergestep":"blocks/192-mergestep.js","resolvesweep":"blocks/193-resolvesweep.js","compare":"blocks/194-compare.js","sigchain":"blocks/195-sigchain.js","budget":"blocks/196-budget.js","headline":"blocks/197-headline.js","killline":"blocks/198-killline.js","queryrail":"blocks/199-queryrail.js","slug":"blocks/200-slug.js","deckstack":"blocks/201-deckstack.js","flatplan":"blocks/202-flatplan.js","shipcheck":"blocks/203-shipcheck.js","inboxsweep":"blocks/204-inboxsweep.js","backlink":"blocks/205-backlink.js","tagpill":"blocks/206-tagpill.js","streak":"blocks/207-streak.js","clipper":"blocks/208-clipper.js","sketchtext":"blocks/209-sketchtext.js","outline":"blocks/210-outline.js","recall":"blocks/211-recall.js","viewchrome":"blocks/212-viewer-chrome.js","pagescrub":"blocks/213-page-scrub.js","docsearch":"blocks/214-doc-search.js","redline":"blocks/215-redline.js","sigguide":"blocks/216-sig-guide.js","docminimap":"blocks/217-doc-minimap.js","exportflow":"blocks/218-export-flow.js","annotthread":"blocks/219-annot-thread.js","fillfield":"blocks/220-fill-field.js","consentbox":"blocks/221-consent-box.js","clausepick":"blocks/222-clause-pick.js","initialbox":"blocks/223-initial-box.js","datesign":"blocks/224-date-sign.js","jurisdiction":"blocks/225-jurisdiction.js","exhibit":"blocks/226-exhibit.js","spotlight":"blocks/227-spotlight.js","handqueue":"blocks/228-handqueue.js","breakout":"blocks/229-breakout.js","captions":"blocks/230-captions.js","shareframe":"blocks/231-shareframe.js","waitingroom":"blocks/232-waitingroom.js","reactions":"blocks/233-reactions.js","recdot":"blocks/234-recdot.js","rsvp":"blocks/235-rsvp.js","qaupvote":"blocks/236-qaupvote.js","postcall":"blocks/237-postcall.js","breakpoint":"blocks/247-breakpoint.js","splitsnap":"blocks/248-splitsnap.js","density":"blocks/249-density.js","masonry":"blocks/250-masonry.js","stickystack":"blocks/251-stickystack.js","holygrail":"blocks/252-holygrail.js","emptycol":"blocks/253-emptycol.js","formflow":"blocks/254-formflow.js","fieldset":"blocks/255-fieldset.js","sugchips":"blocks/267-sugchips.js","tooldisclose":"blocks/268-tooldisclose.js","confmeter":"blocks/269-confmeter.js","voicewave":"blocks/270-voicewave.js","humanhandoff":"blocks/271-humanhandoff.js","regendiff":"blocks/272-regendiff.js","citepop":"blocks/273-citepop.js","memtoggle":"blocks/274-memtoggle.js","chatpoll":"blocks/275-chatpoll.js","thumbsreason":"blocks/276-thumbsreason.js","chatcsat":"blocks/277-chatcsat.js","slotfill":"blocks/278-slotfill.js","slotgrid":"blocks/287-slotgrid.js","tzflip":"blocks/288-tzflip.js","heatmap":"blocks/289-heatmap.js","holdconfirm":"blocks/290-holdconfirm.js","reschedrag":"blocks/291-reschedrag.js","grouppoll":"blocks/292-grouppoll.js","buffersync":"blocks/293-buffersync.js","attendees":"blocks/294-attendees.js","intakeq":"blocks/295-intakeq.js","rsvp3":"blocks/296-rsvp3.js","placesheet":"blocks/307-placesheet.js","routecompare":"blocks/308-routecompare.js","geofence":"blocks/309-geofence.js","layerswitch":"blocks/310-layerswitch.js","locsearch":"blocks/311-locsearch.js","itinerary":"blocks/312-itinerary.js","offlinepack":"blocks/313-offlinepack.js","crowdheat":"blocks/314-heatmap.js","addressfields":"blocks/315-addressfields.js","placerate":"blocks/316-placerate.js","trippoll":"blocks/317-trippoll.js","liveticker":"blocks/327-liveticker.js","updateflash":"blocks/329-updateflash.js","pauselive":"blocks/330-pauselive.js","deltaarrows":"blocks/331-deltaarrows.js","logtail":"blocks/332-logtail.js","heartbeat":"blocks/333-heartbeat.js","catchup":"blocks/334-catchup.js","livepoll":"blocks/335-livepoll.js","prediction":"blocks/336-prediction.js","sliderhist":"blocks/337-sliderhist.js","healthdial":"blocks/347-healthdial.js","issuelist":"blocks/348-issuelist.js","crawlprog":"blocks/349-crawlprog.js","postracker":"blocks/350-postracker.js","snippeted":"blocks/351-snippeted.js","sitemap":"blocks/352-sitemap.js","backflow":"blocks/353-backflow.js","vitals":"blocks/354-vitals.js","auditintake":"blocks/355-auditintake.js","redirect":"blocks/356-redirect.js","coachmarks":"blocks/367-coachmarks.js","checklistbeacon":"blocks/368-checklistbeacon.js","emptynudge":"blocks/369-emptynudge.js","fbeacon":"blocks/370-fbeacon.js","shortcutsheet":"blocks/371-shortcutsheet.js","hintbubble":"blocks/372-hintbubble.js","savemeter":"blocks/373-savemeter.js","undotoast":"blocks/374-undotoast.js","quizrouter":"blocks/375-quizrouter.js","prefpick":"blocks/376-prefpick.js","setupwizard":"blocks/377-setupwizard.js","segswitch":"blocks/387-segswitch.js","sheetdetents":"blocks/388-sheetdetents.js","drillin":"blocks/389-drillin.js","tabrestore":"blocks/390-tabrestore.js","splitdiv":"blocks/391-splitdiv.js","ptrarm":"blocks/392-ptrarm.js","vcrossfade":"blocks/393-vcrossfade.js","deeplink":"blocks/394-deeplink.js","stepshell":"blocks/395-stepshell.js","stepheader":"blocks/396-stepheader.js","shelf":"blocks/407-shelf.js","swatch":"blocks/408-swatch.js","stockcount":"blocks/409-stockcount.js","offerstack":"blocks/410-offerstack.js","qrcheckout":"blocks/411-qrcheckout.js","loyalty":"blocks/412-loyalty.js","reviewstars":"blocks/413-reviewstars.js","pickuptime":"blocks/414-pickuptime.js","checkoutfields":"blocks/415-checkoutfields.js","addressform":"blocks/416-addressform.js","reviewform":"blocks/417-reviewform.js","prefquiz":"blocks/418-prefquiz.js","wordrotator":"blocks/427-wordrotator.js","logomarquee":"blocks/428-logomarquee.js","statcount":"blocks/429-statcount.js","testimonialdeck":"blocks/430-testimonialdeck.js","pricetoggle":"blocks/431-pricetoggle.js","faqacc":"blocks/432-faqacc.js","emailcapture":"blocks/433-emailcapture.js","stickycta":"blocks/434-stickycta.js","springplay":"blocks/447-springplay.js","easingcompare":"blocks/448-easingcompare.js","durationladder":"blocks/449-durationladder.js","staggerlab":"blocks/450-staggerlab.js","reducemotion":"blocks/451-reducemotion.js","tokeninspector":"blocks/452-tokeninspector.js","curveexport":"blocks/453-curveexport.js","framemeter":"blocks/454-framemeter.js","focusring":"blocks/455-focusring.js","pressstates":"blocks/456-pressstates.js","validationshake":"blocks/457-validationshake.js","inlinesuccess":"blocks/467-inlinesuccess.js","tierpicker":"blocks/468-tierpicker.js","referralprog":"blocks/469-referralprog.js","issuearchive":"blocks/470-issuearchive.js","previewtext":"blocks/471-previewtext.js","embedcard":"blocks/472-embedcard.js","pollblock":"blocks/473-pollblock.js","paywallmeter":"blocks/474-paywallmeter.js","signupfields":"blocks/475-signupfields.js","prefcenter":"blocks/476-prefcenter.js","surveyblock":"blocks/477-surveyblock.js","cmdpalette":"blocks/487-cmdpalette.js","omnibox":"blocks/488-omnibox.js","tabcards":"blocks/489-tabcards.js","splittoggle":"blocks/490-splittoggle.js","downloads":"blocks/491-downloads.js","profileswitch":"blocks/492-profileswitch.js","extpopover":"blocks/493-extpopover.js","findbar":"blocks/494-findbar.js","settingsearch":"blocks/495-settingsearch.js","settingsrow":"blocks/496-settingsrow.js","cartdrawer":"blocks/507-cartdrawer.js","qtystep":"blocks/508-qtystep.js","promocode":"blocks/509-promocode.js","shipradio":"blocks/510-shipradio.js","giftwrap":"blocks/511-giftwrap.js","taxest":"blocks/512-taxest.js","expresspay":"blocks/513-expresspay.js","tracking":"blocks/514-tracking.js","payfields":"blocks/515-payfields.js","autocomplete":"blocks/516-autocomplete.js","delivnotes":"blocks/517-delivnotes.js","toaststack":"blocks/527-toaststack.js","hoverintent":"blocks/529-hoverintent.js","submenu":"blocks/530-submenu.js","triggermodal":"blocks/531-triggermodal.js","velosheet":"blocks/532-velosheet.js","carettip":"blocks/533-carettip.js","holdscrim":"blocks/534-holdscrim.js","dialogform":"blocks/535-dialogform.js","bundlesweep":"blocks/547-bundlesweep.js","snoozesheet":"blocks/548-snoozesheet.js","senddial":"blocks/549-senddial.js","branchfold":"blocks/550-branchfold.js","attachstrip":"blocks/551-attachstrip.js","nudgebanner":"blocks/552-nudgebanner.js","splittabs":"blocks/553-splittabs.js","mailjump":"blocks/554-mailjump.js","composefields":"blocks/555-composefields.js","templatevars":"blocks/556-templatevars.js","emailpoll":"blocks/557-emailpoll.js","presencelive":"blocks/328-presence.js","confirmhold":"blocks/536-holdconfirm.js","sheetlevels":"blocks/528-sheetdetents.js"};</script>
+<script defer src="../atoms/web/runtime.core.js"></script>
+<script defer src="../atoms/web/blocks/000-shared.js"></script>
+<script defer src="../atoms/web/blocks/001-step.js"></script>
+<script defer src="../atoms/web/blocks/002-retarget.js"></script>
+<script defer src="../atoms/web/blocks/003-stagger.js"></script>
+<script defer src="../atoms/web/blocks/004-tabs.js"></script>
+<script defer src="../atoms/web/blocks/005-accordion.js"></script>
+<script defer src="../atoms/web/blocks/006-tooltip.js"></script>
+<script defer src="../atoms/web/blocks/007-alert.js"></script>
+<script defer src="../atoms/web/blocks/008-flip.js"></script>
+<script defer src="../atoms/web/blocks/009-stepper.js"></script>
+<script defer src="../atoms/web/blocks/010-rating.js"></script>
+<script defer src="../atoms/web/blocks/011-badge.js"></script>
+<script defer src="../atoms/web/blocks/012-chip.js"></script>
+<script defer src="../atoms/web/blocks/013-counter.js"></script>
+<script defer src="../atoms/web/blocks/014-progress.js"></script>
+<script defer src="../atoms/web/blocks/015-line.js"></script>
+<script defer src="../atoms/web/blocks/016-bars.js"></script>
+<script defer src="../atoms/web/blocks/017-donut.js"></script>
+<script defer src="../atoms/web/blocks/018-timeline.js"></script>
+<script defer src="../atoms/web/blocks/019-countdown.js"></script>
+<script defer src="../atoms/web/blocks/020-shared.js"></script>
+<script defer src="../atoms/web/blocks/021-beforeafter.js"></script>
+<script defer src="../atoms/web/blocks/022-carousel.js"></script>
+<script defer src="../atoms/web/blocks/023-marquee.js"></script>
+<script defer src="../atoms/web/blocks/024-lightbox.js"></script>
+<script defer src="../atoms/web/blocks/025-player.js"></script>
+<script defer src="../atoms/web/blocks/026-poll.js"></script>
+<script defer src="../atoms/web/blocks/027-field.js"></script>
+<script defer src="../atoms/web/blocks/028-newsletter.js"></script>
+<script defer src="../atoms/web/blocks/029-signature.js"></script>
+<script defer src="../atoms/web/blocks/030-slider.js"></script>
+<script defer src="../atoms/web/blocks/031-navhover.js"></script>
+<script defer src="../atoms/web/blocks/032-longpage.js"></script>
+<script defer src="../atoms/web/blocks/033-mobilemenu.js"></script>
+<script defer src="../atoms/web/blocks/034-search.js"></script>
+<script defer src="../atoms/web/blocks/035-pricing.js"></script>
+<script defer src="../atoms/web/blocks/036-cart.js"></script>
+<script defer src="../atoms/web/blocks/037-checkout.js"></script>
+<script defer src="../atoms/web/blocks/038-switch.js"></script>
+<script defer src="../atoms/web/blocks/039-toast.js"></script>
+<script defer src="../atoms/web/blocks/040-dropdown.js"></script>
+<script defer src="../atoms/web/blocks/041-sheet.js"></script>
+<script defer src="../atoms/web/blocks/042-palette.js"></script>
+<script defer src="../atoms/web/blocks/043-surface.js"></script>
+<script defer src="../atoms/web/blocks/044-copy.js"></script>
+<script defer src="../atoms/web/blocks/045-tablesort.js"></script>
+<script defer src="../atoms/web/blocks/046-toc.js"></script>
+<script defer src="../atoms/web/blocks/047-breadcrumbs.js"></script>
+<script defer src="../atoms/web/blocks/048-checklist.js"></script>
+<script defer src="../atoms/web/blocks/049-skeleton.js"></script>
+<script defer src="../atoms/web/blocks/050-imageload.js"></script>
+<script defer src="../atoms/web/blocks/051-facets.js"></script>
+<script defer src="../atoms/web/blocks/052-donation.js"></script>
+<script defer src="../atoms/web/blocks/053-booking.js"></script>
+<script defer src="../atoms/web/blocks/054-paywall.js"></script>
+<script defer src="../atoms/web/blocks/055-payment.js"></script>
+<script defer src="../atoms/web/blocks/056-diagram.js"></script>
+<script defer src="../atoms/web/blocks/057-statement.js"></script>
+<script defer src="../atoms/web/blocks/058-multistep.js"></script>
+<script defer src="../atoms/web/blocks/059-shared.js"></script>
+<script defer src="../atoms/web/blocks/060-shared.js"></script>
+<script defer src="../atoms/web/blocks/061-shared.js"></script>
+<script defer src="../atoms/web/blocks/062-shared.js"></script>
+<script defer src="../atoms/web/blocks/063-shared.js"></script>
+<script defer src="../atoms/web/blocks/064-shared.js"></script>
+<script defer src="../atoms/web/blocks/065-select.js"></script>
+<script defer src="../atoms/web/blocks/066-combobox.js"></script>
+<script defer src="../atoms/web/blocks/067-popover.js"></script>
+<script defer src="../atoms/web/blocks/068-contextmenu.js"></script>
+<script defer src="../atoms/web/blocks/069-hovercard.js"></script>
+<script defer src="../atoms/web/blocks/070-dialog.js"></script>
+<script defer src="../atoms/web/blocks/071-drawer.js"></script>
+<script defer src="../atoms/web/blocks/072-navmenu.js"></script>
+<script defer src="../atoms/web/blocks/073-navbar.js"></script>
+<script defer src="../atoms/web/blocks/074-pagination.js"></script>
+<script defer src="../atoms/web/blocks/075-radio.js"></script>
+<script defer src="../atoms/web/blocks/076-checkbox.js"></script>
+<script defer src="../atoms/web/blocks/077-togglegroup.js"></script>
+<script defer src="../atoms/web/blocks/078-otp.js"></script>
+<script defer src="../atoms/web/blocks/079-taginput.js"></script>
+<script defer src="../atoms/web/blocks/080-reorder.js"></script>
+<script defer src="../atoms/web/blocks/081-dropzone.js"></script>
+<script defer src="../atoms/web/blocks/082-fab.js"></script>
+<script defer src="../atoms/web/blocks/083-speeddial.js"></script>
+<script defer src="../atoms/web/blocks/084-avatars.js"></script>
+<script defer src="../atoms/web/blocks/085-loader.js"></script>
+<script defer src="../atoms/web/blocks/086-resizable.js"></script>
+<script defer src="../atoms/web/blocks/087-sidebar.js"></script>
+<script defer src="../atoms/web/blocks/088-longanswer.js"></script>
+<script defer src="../atoms/web/blocks/089-numstep.js"></script>
+<script defer src="../atoms/web/blocks/090-phone.js"></script>
+<script defer src="../atoms/web/blocks/091-multiselect.js"></script>
+<script defer src="../atoms/web/blocks/092-matrix.js"></script>
+<script defer src="../atoms/web/blocks/093-timewheel.js"></script>
+<script defer src="../atoms/web/blocks/094-csat.js"></script>
+<script defer src="../atoms/web/blocks/095-nps.js"></script>
+<script defer src="../atoms/web/blocks/096-rank.js"></script>
+<script defer src="../atoms/web/blocks/097-picturechoice.js"></script>
+<script defer src="../atoms/web/blocks/098-conversational.js"></script>
+<script defer src="../atoms/web/blocks/099-signupform.js"></script>
+<script defer src="../atoms/web/blocks/100-spinwheel.js"></script>
+<script defer src="../atoms/web/blocks/101-password.js"></script>
+<script defer src="../atoms/web/blocks/102-range.js"></script>
+<script defer src="../atoms/web/blocks/103-shared.js"></script>
+<script defer src="../atoms/web/blocks/104-shared.js"></script>
+<script defer src="../atoms/web/blocks/105-seltoolbar.js"></script>
+<script defer src="../atoms/web/blocks/106-slashmenu.js"></script>
+<script defer src="../atoms/web/blocks/107-autosave.js"></script>
+<script defer src="../atoms/web/blocks/108-presence.js"></script>
+<script defer src="../atoms/web/blocks/109-suggestion.js"></script>
+<script defer src="../atoms/web/blocks/110-canvaszoom.js"></script>
+<script defer src="../atoms/web/blocks/111-selectresize.js"></script>
+<script defer src="../atoms/web/blocks/112-colorpicker.js"></script>
+<script defer src="../atoms/web/blocks/113-layers.js"></script>
+<script defer src="../atoms/web/blocks/114-undoredo.js"></script>
+<script defer src="../atoms/web/blocks/115-swiperow.js"></script>
+<script defer src="../atoms/web/blocks/116-undosend.js"></script>
+<script defer src="../atoms/web/blocks/117-threadstack.js"></script>
+<script defer src="../atoms/web/blocks/118-composemin.js"></script>
+<script defer src="../atoms/web/blocks/119-shared.js"></script>
+<script defer src="../atoms/web/blocks/120-serp.js"></script>
+<script defer src="../atoms/web/blocks/121-gauge.js"></script>
+<script defer src="../atoms/web/blocks/122-ranks.js"></script>
+<script defer src="../atoms/web/blocks/123-like.js"></script>
+<script defer src="../atoms/web/blocks/124-follow.js"></script>
+<script defer src="../atoms/web/blocks/125-stories.js"></script>
+<script defer src="../atoms/web/blocks/126-charring.js"></script>
+<script defer src="../atoms/web/blocks/127-newposts.js"></script>
+<script defer src="../atoms/web/blocks/128-download.js"></script>
+<script defer src="../atoms/web/blocks/129-tabstrip.js"></script>
+<script defer src="../atoms/web/blocks/130-loadbar.js"></script>
+<script defer src="../atoms/web/blocks/131-pullrefresh.js"></script>
+<script defer src="../atoms/web/blocks/132-linkpreview.js"></script>
+<script defer src="../atoms/web/blocks/133-streaming.js"></script>
+<script defer src="../atoms/web/blocks/134-chatthread.js"></script>
+<script defer src="../atoms/web/blocks/135-calendar.js"></script>
+<script defer src="../atoms/web/blocks/136-kanban.js"></script>
+<script defer src="../atoms/web/blocks/137-callgrid.js"></script>
+<script defer src="../atoms/web/blocks/138-tour.js"></script>
+<script defer src="../atoms/web/blocks/139-offline.js"></script>
+<script defer src="../atoms/web/blocks/140-emptystate.js"></script>
+<script defer src="../atoms/web/blocks/141-shared.js"></script>
+<script defer src="../atoms/web/blocks/142-pindrop.js"></script>
+<script defer src="../atoms/web/blocks/143-cluster.js"></script>
+<script defer src="../atoms/web/blocks/144-listdetail.js"></script>
+<script defer src="../atoms/web/blocks/145-pageeditor.js"></script>
+<script defer src="../atoms/web/blocks/146-savebar.js"></script>
+<script defer src="../atoms/web/blocks/147-siteheader.js"></script>
+<script defer src="../atoms/web/blocks/148-productpage.js"></script>
+<script defer src="../atoms/web/blocks/149-dashboard.js"></script>
+<script defer src="../atoms/web/blocks/150-heroentrance.js"></script>
+<script defer src="../atoms/web/blocks/151-sidesheet.js"></script>
+<script defer src="../atoms/web/blocks/152-betweeninsert.js"></script>
+<script defer src="../atoms/web/blocks/153-stepup.js"></script>
+<script defer src="../atoms/web/blocks/154-noticebanner.js"></script>
+<script defer src="../atoms/web/blocks/155-revisions.js"></script>
+<script defer src="../atoms/web/blocks/156-funnel.js"></script>
+<script defer src="../atoms/web/blocks/157-connectorlist.js"></script>
+<script defer src="../atoms/web/blocks/158-mega-columns.js"></script>
+<script defer src="../atoms/web/blocks/159-header-spread.js"></script>
+<script defer src="../atoms/web/blocks/160-footer-minimal.js"></script>
+<script defer src="../atoms/web/blocks/161-fz1-wordmark.js"></script>
+<script defer src="../atoms/web/blocks/162-agentcursor.js"></script>
+<script defer src="../atoms/web/blocks/163-agentpin.js"></script>
+<script defer src="../atoms/web/blocks/164-agentstatus.js"></script>
+<script defer src="../atoms/web/blocks/165-shared.js"></script>
+<script defer src="../atoms/web/blocks/166-irisab.js"></script>
+<script defer src="../atoms/web/blocks/167-txi-iris.js"></script>
+<script defer src="../atoms/web/blocks/168-txc-film.js"></script>
+<script defer src="../atoms/web/blocks/169-gal-grid-lightbox.js"></script>
+<script defer src="../atoms/web/blocks/170-txs-zoomhero.js"></script>
+<script defer src="../atoms/web/blocks/171-fxp-load.js"></script>
+<script defer src="../atoms/web/blocks/172-binder.js"></script>
+<script defer src="../atoms/web/blocks/173-corkboard.js"></script>
+<script defer src="../atoms/web/blocks/174-focusline.js"></script>
+<script defer src="../atoms/web/blocks/175-typewriter.js"></script>
+<script defer src="../atoms/web/blocks/176-goalring.js"></script>
+<script defer src="../atoms/web/blocks/177-scrivenings.js"></script>
+<script defer src="../atoms/web/blocks/178-barepage.js"></script>
+<script defer src="../atoms/web/blocks/179-compilerun.js"></script>
+<script defer src="../atoms/web/blocks/180-transcribe.js"></script>
+<script defer src="../atoms/web/blocks/181-pullquote.js"></script>
+<script defer src="../atoms/web/blocks/182-deadline.js"></script>
+<script defer src="../atoms/web/blocks/183-factcheck.js"></script>
+<script defer src="../atoms/web/blocks/184-embargo.js"></script>
+<script defer src="../atoms/web/blocks/185-lede.js"></script>
+<script defer src="../atoms/web/blocks/186-voicenote.js"></script>
+<script defer src="../atoms/web/blocks/187-wirefeed.js"></script>
+<script defer src="../atoms/web/blocks/188-stylepaint.js"></script>
+<script defer src="../atoms/web/blocks/189-template.js"></script>
+<script defer src="../atoms/web/blocks/190-acceptrail.js"></script>
+<script defer src="../atoms/web/blocks/191-figbuilder.js"></script>
+<script defer src="../atoms/web/blocks/192-mergestep.js"></script>
+<script defer src="../atoms/web/blocks/193-resolvesweep.js"></script>
+<script defer src="../atoms/web/blocks/194-compare.js"></script>
+<script defer src="../atoms/web/blocks/195-sigchain.js"></script>
+<script defer src="../atoms/web/blocks/196-budget.js"></script>
+<script defer src="../atoms/web/blocks/197-headline.js"></script>
+<script defer src="../atoms/web/blocks/198-killline.js"></script>
+<script defer src="../atoms/web/blocks/199-queryrail.js"></script>
+<script defer src="../atoms/web/blocks/200-slug.js"></script>
+<script defer src="../atoms/web/blocks/201-deckstack.js"></script>
+<script defer src="../atoms/web/blocks/202-flatplan.js"></script>
+<script defer src="../atoms/web/blocks/203-shipcheck.js"></script>
+<script defer src="../atoms/web/blocks/204-inboxsweep.js"></script>
+<script defer src="../atoms/web/blocks/205-backlink.js"></script>
+<script defer src="../atoms/web/blocks/206-tagpill.js"></script>
+<script defer src="../atoms/web/blocks/207-streak.js"></script>
+<script defer src="../atoms/web/blocks/208-clipper.js"></script>
+<script defer src="../atoms/web/blocks/209-sketchtext.js"></script>
+<script defer src="../atoms/web/blocks/210-outline.js"></script>
+<script defer src="../atoms/web/blocks/211-recall.js"></script>
+<script defer src="../atoms/web/blocks/212-viewer-chrome.js"></script>
+<script defer src="../atoms/web/blocks/213-page-scrub.js"></script>
+<script defer src="../atoms/web/blocks/214-doc-search.js"></script>
+<script defer src="../atoms/web/blocks/215-redline.js"></script>
+<script defer src="../atoms/web/blocks/216-sig-guide.js"></script>
+<script defer src="../atoms/web/blocks/217-doc-minimap.js"></script>
+<script defer src="../atoms/web/blocks/218-export-flow.js"></script>
+<script defer src="../atoms/web/blocks/219-annot-thread.js"></script>
+<script defer src="../atoms/web/blocks/220-fill-field.js"></script>
+<script defer src="../atoms/web/blocks/221-consent-box.js"></script>
+<script defer src="../atoms/web/blocks/222-clause-pick.js"></script>
+<script defer src="../atoms/web/blocks/223-initial-box.js"></script>
+<script defer src="../atoms/web/blocks/224-date-sign.js"></script>
+<script defer src="../atoms/web/blocks/225-jurisdiction.js"></script>
+<script defer src="../atoms/web/blocks/226-exhibit.js"></script>
+<script defer src="../atoms/web/blocks/227-spotlight.js"></script>
+<script defer src="../atoms/web/blocks/228-handqueue.js"></script>
+<script defer src="../atoms/web/blocks/229-breakout.js"></script>
+<script defer src="../atoms/web/blocks/230-captions.js"></script>
+<script defer src="../atoms/web/blocks/231-shareframe.js"></script>
+<script defer src="../atoms/web/blocks/232-waitingroom.js"></script>
+<script defer src="../atoms/web/blocks/233-reactions.js"></script>
+<script defer src="../atoms/web/blocks/234-recdot.js"></script>
+<script defer src="../atoms/web/blocks/235-rsvp.js"></script>
+<script defer src="../atoms/web/blocks/236-qaupvote.js"></script>
+<script defer src="../atoms/web/blocks/237-postcall.js"></script>
+<script defer src="../atoms/web/blocks/247-breakpoint.js"></script>
+<script defer src="../atoms/web/blocks/248-splitsnap.js"></script>
+<script defer src="../atoms/web/blocks/249-density.js"></script>
+<script defer src="../atoms/web/blocks/250-masonry.js"></script>
+<script defer src="../atoms/web/blocks/251-stickystack.js"></script>
+<script defer src="../atoms/web/blocks/252-holygrail.js"></script>
+<script defer src="../atoms/web/blocks/253-emptycol.js"></script>
+<script defer src="../atoms/web/blocks/254-formflow.js"></script>
+<script defer src="../atoms/web/blocks/255-fieldset.js"></script>
+<script defer src="../atoms/web/blocks/267-sugchips.js"></script>
+<script defer src="../atoms/web/blocks/268-tooldisclose.js"></script>
+<script defer src="../atoms/web/blocks/269-confmeter.js"></script>
+<script defer src="../atoms/web/blocks/270-voicewave.js"></script>
+<script defer src="../atoms/web/blocks/271-humanhandoff.js"></script>
+<script defer src="../atoms/web/blocks/272-regendiff.js"></script>
+<script defer src="../atoms/web/blocks/273-citepop.js"></script>
+<script defer src="../atoms/web/blocks/274-memtoggle.js"></script>
+<script defer src="../atoms/web/blocks/275-chatpoll.js"></script>
+<script defer src="../atoms/web/blocks/276-thumbsreason.js"></script>
+<script defer src="../atoms/web/blocks/277-chatcsat.js"></script>
+<script defer src="../atoms/web/blocks/278-slotfill.js"></script>
+<script defer src="../atoms/web/blocks/287-slotgrid.js"></script>
+<script defer src="../atoms/web/blocks/288-tzflip.js"></script>
+<script defer src="../atoms/web/blocks/289-heatmap.js"></script>
+<script defer src="../atoms/web/blocks/290-holdconfirm.js"></script>
+<script defer src="../atoms/web/blocks/291-reschedrag.js"></script>
+<script defer src="../atoms/web/blocks/292-grouppoll.js"></script>
+<script defer src="../atoms/web/blocks/293-buffersync.js"></script>
+<script defer src="../atoms/web/blocks/294-attendees.js"></script>
+<script defer src="../atoms/web/blocks/295-intakeq.js"></script>
+<script defer src="../atoms/web/blocks/296-rsvp3.js"></script>
+<script defer src="../atoms/web/blocks/307-placesheet.js"></script>
+<script defer src="../atoms/web/blocks/308-routecompare.js"></script>
+<script defer src="../atoms/web/blocks/309-geofence.js"></script>
+<script defer src="../atoms/web/blocks/310-layerswitch.js"></script>
+<script defer src="../atoms/web/blocks/311-locsearch.js"></script>
+<script defer src="../atoms/web/blocks/312-itinerary.js"></script>
+<script defer src="../atoms/web/blocks/313-offlinepack.js"></script>
+<script defer src="../atoms/web/blocks/314-heatmap.js"></script>
+<script defer src="../atoms/web/blocks/315-addressfields.js"></script>
+<script defer src="../atoms/web/blocks/316-placerate.js"></script>
+<script defer src="../atoms/web/blocks/317-trippoll.js"></script>
+<script defer src="../atoms/web/blocks/327-liveticker.js"></script>
+<script defer src="../atoms/web/blocks/328-presence.js"></script>
+<script defer src="../atoms/web/blocks/329-updateflash.js"></script>
+<script defer src="../atoms/web/blocks/330-pauselive.js"></script>
+<script defer src="../atoms/web/blocks/331-deltaarrows.js"></script>
+<script defer src="../atoms/web/blocks/332-logtail.js"></script>
+<script defer src="../atoms/web/blocks/333-heartbeat.js"></script>
+<script defer src="../atoms/web/blocks/334-catchup.js"></script>
+<script defer src="../atoms/web/blocks/335-livepoll.js"></script>
+<script defer src="../atoms/web/blocks/336-prediction.js"></script>
+<script defer src="../atoms/web/blocks/337-sliderhist.js"></script>
+<script defer src="../atoms/web/blocks/347-healthdial.js"></script>
+<script defer src="../atoms/web/blocks/348-issuelist.js"></script>
+<script defer src="../atoms/web/blocks/349-crawlprog.js"></script>
+<script defer src="../atoms/web/blocks/350-postracker.js"></script>
+<script defer src="../atoms/web/blocks/351-snippeted.js"></script>
+<script defer src="../atoms/web/blocks/352-sitemap.js"></script>
+<script defer src="../atoms/web/blocks/353-backflow.js"></script>
+<script defer src="../atoms/web/blocks/354-vitals.js"></script>
+<script defer src="../atoms/web/blocks/355-auditintake.js"></script>
+<script defer src="../atoms/web/blocks/356-redirect.js"></script>
+<script defer src="../atoms/web/blocks/367-coachmarks.js"></script>
+<script defer src="../atoms/web/blocks/368-checklistbeacon.js"></script>
+<script defer src="../atoms/web/blocks/369-emptynudge.js"></script>
+<script defer src="../atoms/web/blocks/370-fbeacon.js"></script>
+<script defer src="../atoms/web/blocks/371-shortcutsheet.js"></script>
+<script defer src="../atoms/web/blocks/372-hintbubble.js"></script>
+<script defer src="../atoms/web/blocks/373-savemeter.js"></script>
+<script defer src="../atoms/web/blocks/374-undotoast.js"></script>
+<script defer src="../atoms/web/blocks/375-quizrouter.js"></script>
+<script defer src="../atoms/web/blocks/376-prefpick.js"></script>
+<script defer src="../atoms/web/blocks/377-setupwizard.js"></script>
+<script defer src="../atoms/web/blocks/387-segswitch.js"></script>
+<script defer src="../atoms/web/blocks/388-sheetdetents.js"></script>
+<script defer src="../atoms/web/blocks/389-drillin.js"></script>
+<script defer src="../atoms/web/blocks/390-tabrestore.js"></script>
+<script defer src="../atoms/web/blocks/391-splitdiv.js"></script>
+<script defer src="../atoms/web/blocks/392-ptrarm.js"></script>
+<script defer src="../atoms/web/blocks/393-vcrossfade.js"></script>
+<script defer src="../atoms/web/blocks/394-deeplink.js"></script>
+<script defer src="../atoms/web/blocks/395-stepshell.js"></script>
+<script defer src="../atoms/web/blocks/396-stepheader.js"></script>
+<script defer src="../atoms/web/blocks/407-shelf.js"></script>
+<script defer src="../atoms/web/blocks/408-swatch.js"></script>
+<script defer src="../atoms/web/blocks/409-stockcount.js"></script>
+<script defer src="../atoms/web/blocks/410-offerstack.js"></script>
+<script defer src="../atoms/web/blocks/411-qrcheckout.js"></script>
+<script defer src="../atoms/web/blocks/412-loyalty.js"></script>
+<script defer src="../atoms/web/blocks/413-reviewstars.js"></script>
+<script defer src="../atoms/web/blocks/414-pickuptime.js"></script>
+<script defer src="../atoms/web/blocks/415-checkoutfields.js"></script>
+<script defer src="../atoms/web/blocks/416-addressform.js"></script>
+<script defer src="../atoms/web/blocks/417-reviewform.js"></script>
+<script defer src="../atoms/web/blocks/418-prefquiz.js"></script>
+<script defer src="../atoms/web/blocks/427-wordrotator.js"></script>
+<script defer src="../atoms/web/blocks/428-logomarquee.js"></script>
+<script defer src="../atoms/web/blocks/429-statcount.js"></script>
+<script defer src="../atoms/web/blocks/430-testimonialdeck.js"></script>
+<script defer src="../atoms/web/blocks/431-pricetoggle.js"></script>
+<script defer src="../atoms/web/blocks/432-faqacc.js"></script>
+<script defer src="../atoms/web/blocks/433-emailcapture.js"></script>
+<script defer src="../atoms/web/blocks/434-stickycta.js"></script>
+<script defer src="../atoms/web/blocks/447-springplay.js"></script>
+<script defer src="../atoms/web/blocks/448-easingcompare.js"></script>
+<script defer src="../atoms/web/blocks/449-durationladder.js"></script>
+<script defer src="../atoms/web/blocks/450-staggerlab.js"></script>
+<script defer src="../atoms/web/blocks/451-reducemotion.js"></script>
+<script defer src="../atoms/web/blocks/452-tokeninspector.js"></script>
+<script defer src="../atoms/web/blocks/453-curveexport.js"></script>
+<script defer src="../atoms/web/blocks/454-framemeter.js"></script>
+<script defer src="../atoms/web/blocks/455-focusring.js"></script>
+<script defer src="../atoms/web/blocks/456-pressstates.js"></script>
+<script defer src="../atoms/web/blocks/457-validationshake.js"></script>
+<script defer src="../atoms/web/blocks/467-inlinesuccess.js"></script>
+<script defer src="../atoms/web/blocks/468-tierpicker.js"></script>
+<script defer src="../atoms/web/blocks/469-referralprog.js"></script>
+<script defer src="../atoms/web/blocks/470-issuearchive.js"></script>
+<script defer src="../atoms/web/blocks/471-previewtext.js"></script>
+<script defer src="../atoms/web/blocks/472-embedcard.js"></script>
+<script defer src="../atoms/web/blocks/473-pollblock.js"></script>
+<script defer src="../atoms/web/blocks/474-paywallmeter.js"></script>
+<script defer src="../atoms/web/blocks/475-signupfields.js"></script>
+<script defer src="../atoms/web/blocks/476-prefcenter.js"></script>
+<script defer src="../atoms/web/blocks/477-surveyblock.js"></script>
+<script defer src="../atoms/web/blocks/487-cmdpalette.js"></script>
+<script defer src="../atoms/web/blocks/488-omnibox.js"></script>
+<script defer src="../atoms/web/blocks/489-tabcards.js"></script>
+<script defer src="../atoms/web/blocks/490-splittoggle.js"></script>
+<script defer src="../atoms/web/blocks/491-downloads.js"></script>
+<script defer src="../atoms/web/blocks/492-profileswitch.js"></script>
+<script defer src="../atoms/web/blocks/493-extpopover.js"></script>
+<script defer src="../atoms/web/blocks/494-findbar.js"></script>
+<script defer src="../atoms/web/blocks/495-settingsearch.js"></script>
+<script defer src="../atoms/web/blocks/496-settingsrow.js"></script>
+<script defer src="../atoms/web/blocks/507-cartdrawer.js"></script>
+<script defer src="../atoms/web/blocks/508-qtystep.js"></script>
+<script defer src="../atoms/web/blocks/509-promocode.js"></script>
+<script defer src="../atoms/web/blocks/510-shipradio.js"></script>
+<script defer src="../atoms/web/blocks/511-giftwrap.js"></script>
+<script defer src="../atoms/web/blocks/512-taxest.js"></script>
+<script defer src="../atoms/web/blocks/513-expresspay.js"></script>
+<script defer src="../atoms/web/blocks/514-tracking.js"></script>
+<script defer src="../atoms/web/blocks/515-payfields.js"></script>
+<script defer src="../atoms/web/blocks/516-autocomplete.js"></script>
+<script defer src="../atoms/web/blocks/517-delivnotes.js"></script>
+<script defer src="../atoms/web/blocks/527-toaststack.js"></script>
+<script defer src="../atoms/web/blocks/528-sheetdetents.js"></script>
+<script defer src="../atoms/web/blocks/529-hoverintent.js"></script>
+<script defer src="../atoms/web/blocks/530-submenu.js"></script>
+<script defer src="../atoms/web/blocks/531-triggermodal.js"></script>
+<script defer src="../atoms/web/blocks/532-velosheet.js"></script>
+<script defer src="../atoms/web/blocks/533-carettip.js"></script>
+<script defer src="../atoms/web/blocks/534-holdscrim.js"></script>
+<script defer src="../atoms/web/blocks/535-dialogform.js"></script>
+<script defer src="../atoms/web/blocks/536-holdconfirm.js"></script>
+<script defer src="../atoms/web/blocks/547-bundlesweep.js"></script>
+<script defer src="../atoms/web/blocks/548-snoozesheet.js"></script>
+<script defer src="../atoms/web/blocks/549-senddial.js"></script>
+<script defer src="../atoms/web/blocks/550-branchfold.js"></script>
+<script defer src="../atoms/web/blocks/551-attachstrip.js"></script>
+<script defer src="../atoms/web/blocks/552-nudgebanner.js"></script>
+<script defer src="../atoms/web/blocks/553-splittabs.js"></script>
+<script defer src="../atoms/web/blocks/554-mailjump.js"></script>
+<script defer src="../atoms/web/blocks/555-composefields.js"></script>
+<script defer src="../atoms/web/blocks/556-templatevars.js"></script>
+<script defer src="../atoms/web/blocks/557-emailpoll.js"></script>
+<script defer src="../atoms/web/library/icons.js"></script>
+<script defer src="../atoms/web/library/model.js"></script>
+<script defer src="../atoms/web/library/navigation.js"></script>
+<script defer src="../atoms/web/library/previews.js"></script>
+<script defer src="../atoms/web/library/panels.js"></script>
+<script defer src="../atoms/web/library/preferences.js"></script>
+<script defer src="../atoms/web/library/orchestrate.js"></script>
+</body>
+</html>

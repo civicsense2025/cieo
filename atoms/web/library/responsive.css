@@ -1,0 +1,63 @@
+/* Layout distances follow an 8px grid. Optical strokes/type sizes are not layout spacing. */
+@media (min-width:1800px) { :root { --library-columns:4; } }
+@media (max-width:1279px) {
+  :root { --library-sidebar:208px; --library-columns:2; }
+  .lib-collections { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .lib-content { padding:24px; }.lib-topbar { padding-inline:24px; }
+  .lib-chip { padding-inline:16px; }
+}
+@media (max-width:959px) {
+  .lib-shell { display:block; }.lib-sidebar { display:none; }
+  .lib-main { margin:0; border-radius:0; min-height:100dvh; }
+  .lib-mobile-only { display:grid; }.lib-topbar { padding:16px; gap:8px; }
+  .lib-search { width:min(304px,42vw); }
+  .lib-inspector-body { grid-template-columns:minmax(0,1fr) 280px; }
+  .lib-dialog { max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); }
+}
+@media (max-width:639px) {
+  :root { --library-columns:1; --library-gap:24px; }
+  .lib-topbar { flex-wrap:wrap; padding:8px 16px; min-height:64px; }
+  .lib-location { order:1; }.lib-menu-button { order:0; }.lib-settings-button { order:2; }
+  .lib-search { order:3; width:100%; height:40px; margin:0 0 8px; }
+  .lib-search kbd { display:none; }.lib-content { padding:24px 16px 40px; }
+  .lib-heading { align-items:start; margin-bottom:24px; }.lib-heading h1 { font-size:28px; letter-spacing:-.8px; }
+  .lib-heading p { font-size:13px; }.lib-heading-count { display:none; }
+  .lib-collections { gap:8px; margin-bottom:24px; }.lib-collection { padding:16px 8px; gap:8px; min-height:80px; }
+  .lib-collection-art { width:40px; height:40px; border-radius:12px; }.lib-collection-art::before { border-radius:12px; }
+  .lib-collection strong { font-size:12px; }.lib-collection small { font-size:11px; }
+  .lib-toolbar { flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+  .lib-filter-wrap { flex-basis:calc(100% - 56px); }.lib-toolbar-actions .lib-layout-button,.lib-toolbar-actions .lib-divider { display:none; }
+  .lib-chip { min-height:40px; padding:8px 16px; font-size:13px; }
+  .library-page .tile.wide { grid-column:auto; }
+  .library-page .stage,.library-page .tile[data-featured] .stage { height:304px; }
+  .library-page .tile.wide.tall:not([data-featured]) .stage { height:480px; }
+  .lib-tile-footer { padding:16px 8px 0; }.lib-family-marks { display:none; }
+  .lib-dialog { inset:auto 0 0; margin:0; width:100%; max-width:none; max-height:92dvh; border-radius:24px 24px 0 0; padding-bottom:env(safe-area-inset-bottom,0px); }
+  .lib-dialog-header { padding:16px; min-height:64px; position:sticky; top:0; z-index:3; background:var(--library-shell); }
+  .lib-inspector-body { display:block; max-height:calc(92dvh - 80px); overflow:auto; }
+  .lib-inspector-canvas { padding:16px; min-height:320px; }
+  .lib-inspector-meta { padding:24px; overflow:visible; }.lib-inspector-meta pre { max-height:200px; }
+  .lib-settings-body { padding:24px; max-height:calc(92dvh - 80px); }
+  .lib-mobile-nav-content { max-height:calc(92dvh - 80px); }
+  .lib-notice { inset:auto 16px calc(16px + env(safe-area-inset-bottom,0px)); max-width:none; font-size:13px; }
+}
+@media (pointer:coarse) {
+  .lib-icon-button,.lib-chip,.lib-nav-button,.lib-button,.lib-setting-seg button { min-height:48px; }
+  .lib-icon-button { width:48px; }
+  .lib-tile-toolbar button { width:48px; height:48px; }
+  .library-page .btn { min-height:44px; }
+  .library-page .seg button { min-height:40px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .library-page *, .library-page *::before,.library-page *::after { scroll-behavior:auto!important; }
+  .lib-dialog::backdrop { backdrop-filter:none; }
+}
+@media (forced-colors:active) {
+  .lib-preview,.lib-collection,.lib-nav-button[aria-current],.lib-dialog,.lib-chip[aria-pressed="true"] { border:1px solid CanvasText; }
+  .lib-category-icon,.lib-collection-art { color:CanvasText; }
+  .lib-swatches button { forced-color-adjust:none; }
+}
+@media print {
+  .lib-sidebar,.lib-topbar,.lib-toolbar,.lib-collections,.lib-tile-toolbar,.lib-notice { display:none!important; }
+  .lib-shell { display:block; }.lib-main { margin:0; }.lib-content { padding:0; }.tile { break-inside:avoid; }
+}

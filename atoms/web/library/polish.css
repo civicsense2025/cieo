@@ -1,0 +1,36 @@
+/* Real recipe styling. The selector scope avoids changing the original technical catalogue. */
+.library-page #tabs .tabsx { width:100%; box-shadow:inset 0 1px 2px #201b3008; }
+.library-page #tabs .tabsx button { flex:1; color:var(--muted); }
+.library-page #tabs .tabsx button[aria-selected="true"] { color:var(--ink); }
+.library-page #tabs .panel { font-size:14px; line-height:1.65; }
+.library-page #tabs .panel .layer { padding:24px!important; }
+.library-page #field .fw { border-color:var(--line); box-shadow:0 2px 4px #21132e04; }
+.library-page #field .fw:focus-within { box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 12%,transparent); }
+.library-page #field input:focus-visible { outline:none; }
+.library-page #field .lb { font-size:14px; }
+.library-page #copy .btn { box-shadow:0 2px 4px #21132e05; border-color:var(--line-soft); }
+.library-page #progress .stage { font-variant-numeric:tabular-nums; }
+.library-page #rating .stage button { border-radius:12px; }
+.library-page #dropdown .stage>.col,.library-page #select .stage>.col,.library-page #combobox .stage>.col { max-width:calc(100% - 48px); }
+.library-page #palette input,.library-page #search input { font-size:14px; }
+.library-page #accordion .stage button { text-align:left; }
+.library-page #breadcrumbs .stage,.library-page #pagination .stage { font-size:13px; }
+.library-page #colorpicker .stage { background:radial-gradient(ellipse at 50% 36%,color-mix(in srgb,var(--card) 48%,transparent),transparent 70%); }
+.library-page #stagger .stage { background:radial-gradient(ellipse at 50% 50%,color-mix(in srgb,var(--card) 40%,transparent),transparent 68%); }
+.library-page #tabs .stage>.col { width:min(336px,calc(100% - 48px))!important; gap:16px!important; }
+.library-page #field .stage>.col { width:min(312px,calc(100% - 48px))!important; }
+.library-page .stage :where(button,input,textarea,select) { -webkit-tap-highlight-color:transparent; }
+.library-page .stage :where(input,textarea)::selection { background:var(--accent-tint); }
+.library-page .stage :where(button,[role="button"]):focus-visible { outline:2px solid var(--accent); outline-offset:4px; }
+.library-page .stage :where(button,[role="button"])[aria-disabled="true"] { cursor:not-allowed; }
+.library-page .stage :where(input,textarea)[aria-invalid="true"] { text-decoration-color:var(--danger); }
+.library-page .lib-switch-specimen { display:flex; flex-direction:column; gap:0; width:min(304px,calc(100% - 48px)); padding:24px; border-radius:24px; background:var(--card); box-shadow:var(--shadow); }
+.library-page .lib-switch-copy strong { font-size:14px; font-weight:600; display:block; }.library-page .lib-switch-copy small { font-size:12px; color:var(--muted); display:block; margin-top:4px; }
+.library-page .lib-switch-row { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.library-page .lib-switch-caption { color:var(--muted); font-size:12px; }
+.library-page .lib-switch-specimen .tg { flex:none; }
+.library-page .lib-switch-specimen .hint { position:static; text-align:left; font-size:11px; }
+@media (max-width:639px) {
+  .library-page #tabs .stage>.col,.library-page #field .stage>.col { width:calc(100% - 40px)!important; }
+  .library-page #tabs .tabsx button { padding-inline:8px; }
+}
