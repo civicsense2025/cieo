@@ -18,6 +18,7 @@ public struct HeaderProgressAtom: MotionAtomView {
         "The walk back took half as long. It always does once you know where the path goes.",
         "We stopped at the bakery by the station and ate standing up at the window counter."]
     @State private var metrics = ScrollMetrics()
+    @State private var centered = true
     private let viewport: CGFloat = 290
     public init() {}
 
@@ -27,7 +28,9 @@ public struct HeaderProgressAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Scroll inside the page") {
-            ScrollViewReader { proxy in
+            VStack(spacing: 8) {
+                Toggle("Center icon", isOn: $centered).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
+                ScrollViewReader { proxy in
                 ZStack(alignment: .top) {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 12) {
@@ -47,7 +50,8 @@ public struct HeaderProgressAtom: MotionAtomView {
                         withMotion(.soft, reduceMotion: reduce) { proxy.scrollTo("top", anchor: .top) }
                     } label: {
                         Image(systemName: "arrow.up").font(.callout.weight(.bold)).foregroundStyle(.background)
-                            .frame(width: 36, height: 36).background(.primary, in: Circle())
+                            .frame(width: 36, height: 36, alignment: centered ? .center : .topLeading).lineLimit(1)
+                            .background(.primary, in: Circle())
                     }
                     .buttonStyle(.plain).accessibilityLabel("Back to top")
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing).padding(12)
@@ -58,6 +62,7 @@ public struct HeaderProgressAtom: MotionAtomView {
                 .frame(width: 380, height: viewport)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
                 .clipShape(RoundedRectangle(cornerRadius: 14))
+                }
             }
         }
     }

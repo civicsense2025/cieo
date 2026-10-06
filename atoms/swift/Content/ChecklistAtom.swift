@@ -3,8 +3,9 @@ import Cieo
 
 public struct ChecklistAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "checklist", category: "Content", name: "Checklist",
-        summary: "The box fills, the check draws, and a strike line runs through the text, each 40ms after the last. The done count rolls.")
+        summary: "The box fills, the check draws, and a strike line runs through the text, each 40ms after the last. The done count rolls. All four done swaps the header to a success pill.")
     @State private var done: [Bool] = [true, true, false, false]
+    @State private var celebrate = true
     private let titles = ["Connect a domain", "Write the about page", "Turn on members", "Publish"]
     public init() {}
 
@@ -14,13 +15,27 @@ public struct ChecklistAtom: MotionAtomView {
                 HStack(spacing: 0) {
                     Text("Launch checklist")
                     Spacer()
-                    RollingDigits(done.filter { $0 }.count)
-                    Text(" of 4 done")
+                    ZStack(alignment: .trailing) {
+                        if done.allSatisfy({ $0 }) && celebrate {
+                            Text("All done ✓").font(.caption2.weight(.semibold)).foregroundStyle(Color.accentColor)
+                                .padding(.horizontal, 10).padding(.vertical, 2)
+                                .background(Capsule().fill(Color.accentColor.opacity(0.15)))
+                                .motionTransition(.swap(drift: 0))
+                        } else {
+                            HStack(spacing: 0) {
+                                RollingDigits(done.filter { $0 }.count)
+                                Text(" of 4 done")
+                            }
+                            .motionTransition(.swap(drift: 0))
+                        }
+                    }
+                    .frame(minWidth: 92, alignment: .trailing)
                 }
                 .font(.footnote).foregroundStyle(.secondary)
                 VStack(spacing: 4) {
                     ForEach(titles.indices, id: \.self) { i in Row(title: titles[i], on: $done[i]) }
                 }
+                Toggle("Celebrate", isOn: $celebrate).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
             }
             .frame(maxWidth: 300)
         }

@@ -8,6 +8,7 @@ public struct ExtendedActionButtonAtom: MotionAtomView {
     @State private var wide = true
     @State private var labelOn = true
     @State private var last: CGFloat = 0
+    @State private var dividers = true
     private let rows = [("Maya Chen", "Draft is ready for review"), ("Theo Park", "Comment on pricing table"), ("Field Notes", "Weekly digest"),
                         ("Billing", "Invoice INV-0042 paid"), ("Jonas Weber", "Can we move Thursday?"), ("Ada Kim", "New subscriber"),
                         ("North Studio", "Proof attached"), ("Sam Ruiz", "Photos from Saturday"), ("Priya Shah", "Notes on the about page"), ("Loop Press", "Reprint request")]
@@ -20,7 +21,9 @@ public struct ExtendedActionButtonAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Scroll down, then back up") {
-            ZStack(alignment: .bottomTrailing) {
+            VStack(spacing: 8) {
+                Toggle("Dividers", isOn: $dividers).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
+                ZStack(alignment: .bottomTrailing) {
                 ScrollView {
                     VStack(spacing: 0) {
                         ForEach(rows.indices, id: \.self) { i in
@@ -29,7 +32,9 @@ public struct ExtendedActionButtonAtom: MotionAtomView {
                                 Text(rows[i].1).font(.footnote).foregroundStyle(.secondary)
                             }
                             .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 14).padding(.vertical, 12)
-                            Divider()
+                            if dividers && i < rows.count - 1 {
+                                Divider()
+                            }
                         }
                     }
                     .background(GeometryReader { g in Color.clear.preference(key: OffsetKey.self, value: -g.frame(in: .named("inbox")).minY) })
@@ -52,10 +57,11 @@ public struct ExtendedActionButtonAtom: MotionAtomView {
                     .shadow(color: .black.opacity(0.2), radius: 8, y: 3)
                 }
                 .buttonStyle(.plain).accessibilityLabel("Compose").padding(14)
+                }
+                .frame(width: 270, height: 290)
+                .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
+                .clipShape(RoundedRectangle(cornerRadius: 14))
             }
-            .frame(width: 270, height: 290)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }
 

@@ -15,6 +15,8 @@ public struct SortableTableAtom: MotionAtomView {
     @State private var shown = Array(repeating: Track(0, preset: .base), count: 3)
     @State private var key = -1
     @State private var asc = true
+    @State private var rankOf = [0, 1, 2, 3, 4]
+    @State private var dividers = true
     public init() {}
 
     public var body: some View {
@@ -33,12 +35,16 @@ public struct SortableTableAtom: MotionAtomView {
                                 Text("\(rows[i].ageText) ago").monospacedDigit().foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .trailing)
                             }
                             .font(.caption).padding(.horizontal, 14).frame(height: 36)
-                            .overlay(alignment: .bottom) { Divider() }
+                            .overlay(alignment: .bottom) {
+                                if dividers && rankOf[i] != rows.count - 1 { Divider() }
+                            }
                             .offset(y: slots[i].value(at: t))
                         }
                     }
                     .frame(height: 180, alignment: .top)
                 }
+                Toggle("Dividers", isOn: $dividers)
+                    .font(.caption).foregroundStyle(.secondary).padding(.top, 8)
             }
             .frame(maxWidth: 380).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14)).clipShape(RoundedRectangle(cornerRadius: 14))
         }
@@ -76,6 +82,9 @@ public struct SortableTableAtom: MotionAtomView {
             }
             return asc ? cmp : !cmp
         }
-        for (rank, i) in order.enumerated() { DataMotion.retarget(&slots[i], to: Double(rank) * 36, delay: Double(rank) * 0.02, reduce: reduce) }
+        for (rank, i) in order.enumerated() {
+            rankOf[i] = rank
+            DataMotion.retarget(&slots[i], to: Double(rank) * 36, delay: Double(rank) * 0.02, reduce: reduce)
+        }
     }
 }

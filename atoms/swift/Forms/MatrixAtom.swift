@@ -3,7 +3,7 @@ import Cieo
 
 public struct MatrixAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "matrix", category: "Forms", name: "Matrix",
-        summary: "Each row has one dot that slides between columns instead of a fresh fill per cell. A row inks a success check once answered.")
+        summary: "Each row has one dot that slides between columns instead of a fresh fill per cell. A row inks a success check once answered. Answering every row swaps in a Continue step that resets the matrix.")
     private let columns = ["Poor", "Fair", "Good", "Great"]
     private let rows = ["Page speed", "Editor", "Support"]
     public init() {}
@@ -21,19 +21,30 @@ public struct MatrixAtom: MotionAtomView {
                 .frame(height: 18).font(.footnote).foregroundStyle(.secondary).padding(.bottom, 6)
                 ForEach(rows, id: \.self) { name in
                     Divider()
-                    Row(name: name, columns: columns)
+                    Row(name: name, columns: columns) { answered.insert(name) }
+                }
+                if allDone {
+                    Button("Continue →") { answered = []; resetGen += 1 }
+                        .buttonStyle(.borderedProminent).controlSize(.small)
+                        .motionTransition(.swap(drift: 0))
                 }
             }
+            .id(resetGen)
             .padding(.horizontal, 14).padding(.vertical, 12).frame(maxWidth: 400)
             .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
             .accessibilityElement(children: .contain).accessibilityLabel("Rate each area")
         }
     }
 
+    @State private var answered: Set<String> = []
+    @State private var resetGen = 0
+    private var allDone: Bool { answered.count == rows.count }
+
     private struct Row: View {
         @Environment(\.accessibilityReduceMotion) private var reduce
         let name: String
         let columns: [String]
+        let onAnswer: () -> Void
         @State private var sel: Int?
         @State private var at = 0
 
@@ -71,6 +82,7 @@ public struct MatrixAtom: MotionAtomView {
                 var t = Transaction()
                 t.disablesAnimations = true
                 withTransaction(t) { at = j }
+                onAnswer()
             } else {
                 at = j
             }

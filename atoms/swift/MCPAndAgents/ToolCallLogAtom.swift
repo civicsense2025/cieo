@@ -10,6 +10,7 @@ public struct ToolCallLogAtom: MotionAtomView {
     @State private var calls: [Call] = []
     @State private var paused = false
     @State private var runToken = 0
+    @State private var emptyMode = 0
     public init() {}
 
     private let script = ["pages.list", "pages.read", "pages.update", "media.upload", "pages.publish", "search.query"]
@@ -23,6 +24,15 @@ public struct ToolCallLogAtom: MotionAtomView {
                         Spacer()
                         Button(paused ? "Resume" : "Pause") { paused.toggle() }.buttonStyle(AgPress())
                         Button("Replay") { replay() }.buttonStyle(AgPress())
+                    }
+                    HStack {
+                        Text("Empty-state preview").font(.caption).foregroundStyle(.secondary)
+                        Spacer()
+                        Button(emptyMode == 0 ? "Preview empty" : emptyMode == 1 ? "No calls yet" : "No matches") { emptyMode = (emptyMode + 1) % 3 }.buttonStyle(AgPress()).font(.caption)
+                    }
+                    if calls.isEmpty || emptyMode > 0 {
+                        SwapText(emptyMode == 2 ? "No matches" : "No calls yet").font(.callout).foregroundStyle(.secondary).frame(maxWidth: .infinity).padding(.vertical, 20)
+                            .motionTransition(.swap())
                     }
                     ForEach(calls) { c in
                         VStack(alignment: .leading, spacing: 4) {

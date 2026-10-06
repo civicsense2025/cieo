@@ -14,6 +14,7 @@ public struct FileDropZoneAtom: MotionAtomView {
     @State private var files: [Upload] = []
     @State private var targeted = false
     @State private var importing = false
+    @State private var thumbs = true
     public init() {}
 
     public var body: some View {
@@ -49,8 +50,10 @@ public struct FileDropZoneAtom: MotionAtomView {
                     }
                 }
                 .buttonStyle(.bordered).controlSize(.small).frame(maxWidth: .infinity, alignment: .trailing)
+                Toggle("Thumbnails", isOn: $thumbs).font(.caption).foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
                 VStack(spacing: 6) {
-                    ForEach(files) { f in Row(upload: f.name, size: f.size) }
+                    ForEach(files) { f in Row(upload: f.name, size: f.size, thumbs: thumbs) }
                 }
                 .animation(reduce ? nil : .motion(.base), value: files.count)
                 Spacer(minLength: 0)
@@ -74,23 +77,38 @@ public struct FileDropZoneAtom: MotionAtomView {
         @Environment(\.accessibilityReduceMotion) private var reduce
         let upload: String
         let size: Int
+        let thumbs: Bool
         @State private var open = false
         @State private var load = 0.0
         @State private var end = false
         private var bad: Bool { size > 5_000_000 }
         private var sizeText: String { size > 1_000_000 ? String(format: "%.1f MB", Double(size) / 1e6) : "\(max(1, size / 1000)) KB" }
+        private var tile: String {
+            let lower = upload.lowercased()
+            if lower.hasSuffix(".pdf") { return "doc.fill" }
+            if lower.hasSuffix(".jpg") || lower.hasSuffix(".jpeg") || lower.hasSuffix(".png") || lower.hasSuffix(".gif") || lower.hasSuffix(".webp") { return "photo.fill" }
+            return "doc"
+        }
 
         var body: some View {
             BasicsHeightReveal(open: open) {
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 8) {
+                        if thumbs {
+                            Image(systemName: tile).font(.caption)
+                                .foregroundStyle(.secondary)
+                                .frame(width: 28, height: 28)
+                                .background(Color.primary.opacity(0.08), in: RoundedRectangle(cornerRadius: 7))
+                        }
                         Text(upload).fontWeight(.medium).lineLimit(1).truncationMode(.middle)
                         Spacer(minLength: 0)
                         Text(sizeText).foregroundStyle(.secondary).monospacedDigit()
                         Image(systemName: bad ? "exclamationmark.circle" : "checkmark.circle")
+                            .font(.system(size: 12, weight: .semibold))
                             .foregroundStyle(bad ? Color.red : Color.green)
                             .opacity(end ? 1 : 0).scaleEffect(end ? 1 : 0.6)
-                            .frame(width: 16)
+                            .frame(width: 20, height: 20)
+                            .background((bad ? Color.red : Color.green).opacity(end ? 0.15 : 0), in: Circle())
                     }
                     .font(.footnote)
                     Capsule().fill(Color.primary.opacity(0.1)).frame(height: 4)

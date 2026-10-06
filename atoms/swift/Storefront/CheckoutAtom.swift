@@ -18,6 +18,7 @@ public struct CheckoutAtom: MotionAtomView {
     @State private var pay = Pay.idle
     @State private var decline = false
     @State private var checked = false
+    @State private var thumbs = true
     public init() {}
 
     private var subtotal: Double { Double(shownQty) * 42 }
@@ -46,8 +47,12 @@ public struct CheckoutAtom: MotionAtomView {
         VStack(alignment: .leading, spacing: 8) {
             switch step {
             case 0:
-                HStack { Text("Field tee").font(.footnote.weight(.medium)); Spacer(); Stepper(value: $qty, in: 1...5) { RollingDigits(qty).font(.footnote) }.fixedSize().onChange(of: qty) { _, v in
+                Toggle("Thumbs", isOn: $thumbs).font(.caption).foregroundStyle(.secondary)
+                HStack(spacing: 8) {
+                    if thumbs { RoundedRectangle(cornerRadius: 8).fill(.quaternary).frame(width: 36, height: 44).overlay(Image(systemName: "bag").font(.caption).foregroundStyle(.secondary)).motionTransition(.swap()) }
+                    Text("Field tee").font(.footnote.weight(.medium)); Spacer(); Stepper(value: $qty, in: 1...5) { RollingDigits(qty).font(.footnote) }.fixedSize().onChange(of: qty) { _, v in
                     Task { try? await Task.sleep(for: .seconds(0.12)); withMotion(.base, reduceMotion: reduce) { shownQty = v } } } }
+                Divider()
                 totals
                 Spacer(); Button("Continue") { go(1) }.buttonStyle(.borderedProminent).controlSize(.small)
             case 1:

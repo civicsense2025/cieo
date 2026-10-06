@@ -10,6 +10,7 @@ public struct AgentInspectAtom: MotionAtomView {
     @State private var drives = true
     @State private var checks = 0
     @State private var done: Set<String> = []
+    @State private var compact = false
     public init() {}
 
     private let order = ["heading", "field", "button", "link"]
@@ -36,17 +37,22 @@ public struct AgentInspectAtom: MotionAtomView {
                 }
                 .agFrames($frames).frame(width: 190)
                 AgCard {
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: compact ? 2 : 6) {
                         HStack { AgentMark(size: 14); Text("Inspector").font(.caption.weight(.semibold)); Spacer() }
                         HStack(spacing: 2) { RollingDigits(Int(frames[current]?.width ?? 0)); Text("×"); RollingDigits(Int(frames[current]?.height ?? 0)) }.font(.caption.monospacedDigit())
                         let rs = results[current] ?? []
                         ForEach(rs.indices, id: \.self) { i in
                             if checks > i {
-                                Label(rs[i].0, systemImage: rs[i].1 == "checkmark" ? "checkmark.circle" : rs[i].1 == "xmark" ? "xmark.circle" : "exclamationmark.triangle")
-                                    .font(.caption).foregroundStyle(rs[i].1 == "checkmark" ? Color.green : rs[i].1 == "xmark" ? .red : .orange)
-                                    .transition(.opacity.combined(with: .move(edge: .top)))
+                                VStack(alignment: .leading, spacing: compact ? 1 : 3) {
+                                    Label(rs[i].0, systemImage: rs[i].1 == "checkmark" ? "checkmark.circle" : rs[i].1 == "xmark" ? "xmark.circle" : "exclamationmark.triangle")
+                                        .font(.caption).foregroundStyle(rs[i].1 == "checkmark" ? Color.green : rs[i].1 == "xmark" ? .red : .orange)
+                                    if i != rs.count - 1 { Divider() }
+                                }
+                                .padding(.vertical, compact ? 1 : 3)
+                                .motionTransition(.presence)
                             }
                         }
+                        HStack { Text("Density").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Compact", isOn: $compact).labelsHidden().controlSize(.mini) }
                         Toggle("Agent drives", isOn: $drives).font(.caption).toggleStyle(.switch).controlSize(.mini)
                     }.frame(width: 150, alignment: .leading)
                 }

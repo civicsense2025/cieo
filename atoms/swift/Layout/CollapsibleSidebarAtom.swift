@@ -3,10 +3,12 @@ import Cieo
 
 public struct CollapsibleSidebarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "sidebar", category: "Layout", name: "Collapsible sidebar",
-        summary: "Collapsing fades every label first, then narrows the rail to its icons. Expanding widens the rail first, then brings labels back 30ms apart, so text never squeezes.")
+        summary: "Collapsing fades every label first, then narrows the rail to its icons. Expanding widens the rail first, then brings labels back 30ms apart, so text never squeezes. Rail glyphs sit grid-centered in 18pt boxes with a per-glyph nudge.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = true
+    @State private var nudge = true
     private let items = [("Home", "house"), ("Search", "magnifyingglass"), ("Library", "books.vertical"), ("Account", "person")]
+    private let nudges: [CGSize] = [CGSize(width: 0, height: 0.5), CGSize(width: -0.75, height: -0.75), CGSize(width: -0.5, height: 0), CGSize(width: 0, height: 0)]
     public init() {}
 
     public var body: some View {
@@ -14,9 +16,12 @@ public struct CollapsibleSidebarAtom: MotionAtomView {
             HStack(spacing: 0) {
                 rail
                 Divider()
-                Text("Collapse to icons and expand again. Labels leave before the width shrinks and return after it grows.")
-                    .font(.footnote).foregroundStyle(.secondary)
-                    .padding(14).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Collapse to icons and expand again. Labels leave before the width shrinks and return after it grows.")
+                        .font(.footnote).foregroundStyle(.secondary)
+                    Toggle("Optical nudge", isOn: $nudge).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
+                }
+                .padding(14).frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }
             .frame(maxWidth: 560).frame(height: 210)
             .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
@@ -27,14 +32,15 @@ public struct CollapsibleSidebarAtom: MotionAtomView {
     private var rail: some View {
         VStack(alignment: .leading, spacing: 2) {
             Button { open.toggle() } label: {
-                Image(systemName: "sidebar.left").font(.system(size: 16)).frame(width: 18)
+                Image(systemName: "sidebar.left").font(.system(size: 16)).frame(width: 18, height: 18)
                     .padding(.horizontal, 10).padding(.vertical, 8).foregroundStyle(.secondary)
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain).accessibilityLabel(open ? "Collapse sidebar" : "Expand sidebar")
             ForEach(items.indices, id: \.self) { i in
                 HStack(spacing: 12) {
-                    Image(systemName: items[i].1).font(.system(size: 16)).frame(width: 18)
+                    Image(systemName: items[i].1).font(.system(size: 16)).frame(width: 18, height: 18)
+                        .offset(nudge ? nudges[i] : .zero)
                     Text(items[i].0).font(.footnote.weight(.medium)).fixedSize()
                         .opacity(open ? 1 : 0)
                         .animation(reduce ? nil : (open ? .motion(.base).delay(0.12 + Double(i) * 0.03) : .motion(.snap)), value: open)

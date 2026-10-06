@@ -9,25 +9,40 @@ public struct ContextMenuAtom: MotionAtomView {
     @State private var anchor = UnitPoint.topLeading
     @State private var last = CGPoint.zero
     @State private var message = "Long-press anywhere here"
+    @State private var confirmOn = true
+    @State private var showConfirm = false
+    @State private var trashed = false
     private let size = CGSize(width: 180, height: 214)
     private let items = ["Open", "Rename", "Duplicate", "Move to…", "—", "Delete"]
     public init() {}
 
     public var body: some View {
         AtomStage {
-            GeometryReader { g in
+            VStack(spacing: 8) {
+                Toggle("Confirm delete", isOn: $confirmOn).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
+                GeometryReader { g in
                 ZStack(alignment: .topLeading) {
                     VStack(spacing: 14) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "doc").font(.title3)
-                            VStack(alignment: .leading, spacing: 0) {
-                                Text("Q3-report.pdf").font(.footnote.weight(.semibold))
-                                Text("2.4 MB · edited today").font(.footnote).foregroundStyle(.secondary)
+                        if !trashed {
+                            HStack(spacing: 10) {
+                                Image(systemName: "doc").font(.title3)
+                                VStack(alignment: .leading, spacing: 0) {
+                                    Text("Q3-report.pdf").font(.footnote.weight(.semibold))
+                                    Text("2.4 MB · edited today").font(.footnote).foregroundStyle(.secondary)
+                                }
+                            }
+                            .padding(.horizontal, 16).padding(.vertical, 12)
+                            .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
+                            .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 0.96)))
+                        }
+                        HStack(spacing: 8) {
+                            SwapText(message).font(.caption).foregroundStyle(.secondary)
+                            if trashed {
+                                Button("Undo") { restore() }.font(.caption)
+                                    .transition(reduce ? .identity : .opacity)
                             }
                         }
-                        .padding(.horizontal, 16).padding(.vertical, 12)
-                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
-                        SwapText(message).font(.caption).foregroundStyle(.secondary)
+                        .animation(reduce ? nil : .motion(.base), value: trashed)
                     }
                     .frame(width: g.size.width, height: g.size.height)
                     if let o = origin {
@@ -42,6 +57,13 @@ public struct ContextMenuAtom: MotionAtomView {
                 })
                 .simultaneousGesture(LongPressGesture(minimumDuration: 0.45).onEnded { _ in open(in: g.size) })
                 .onKeyPress(.escape) { close(); return .handled }
+                }
+                .alert("Delete “Q3-report.pdf”?", isPresented: $showConfirm) {
+                    Button("Cancel", role: .cancel) {}
+                    Button("Delete", role: .destructive) { trash() }
+                } message: {
+                    Text("It moves to trash. You can undo right after.")
+                }
             }
         }
     }
@@ -97,6 +119,21 @@ public struct ContextMenuAtom: MotionAtomView {
 
     private func pick(_ name: String) {
         close()
-        message = name == "Delete" ? "Moved Q3-report.pdf to trash" : "\(name.replacingOccurrences(of: "…", with: "")): Q3-report.pdf"
+        guard name == "Delete" else {
+            message = "\(name.replacingOccurrences(of: "…", with: "")): Q3-report.pdf"
+            return
+        }
+        if trashed { return }
+        if confirmOn { showConfirm = true } else { trash() }
+    }
+
+    private func trash() {
+        withMotion(.base, reduceMotion: reduce) { trashed = true }
+        message = "Moved Q3-report.pdf to trash"
+    }
+
+    private func restore() {
+        withMotion(.base, reduceMotion: reduce) { trashed = false }
+        message = "Restored Q3-report.pdf"
     }
 }

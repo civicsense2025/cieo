@@ -6,6 +6,7 @@ public struct PeekShelfAtom: MotionAtomView {
         summary: "Cards align to the left margin and the next one peeks in, so a phone screen always shows there is more. Dragging past the last card rubber-bands into a ring that fills with the stretch; past the mark the label swaps to Release, and letting go opens the full list as a sheet while the shelf settles back. Inspired by the App Store and Airbnb shelves; changed: the “see all” target lives inside the overscroll instead of a separate button. Use when a horizontal shelf sits inside a vertically scrolling phone screen.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var showAll = false
+    @State private var rules = true
     public init() {}
     private let count = 5
 
@@ -40,10 +41,20 @@ public struct PeekShelfAtom: MotionAtomView {
                 }
                 .frame(height: 150)
                 if showAll {
-                    VStack(spacing: 8) {
-                        Text("All \(count) photos").font(.subheadline.weight(.semibold))
-                        HStack { ForEach(0..<count, id: \.self) { phPhoto($0, CGSize(width: 40, height: 40)).clipShape(RoundedRectangle(cornerRadius: 6)) } }
-                        Button("Done") { withMotion(.base, reduceMotion: reduce) { showAll = false } }.buttonStyle(.bordered).controlSize(.small)
+                    VStack(spacing: 0) {
+                        Text("All \(count) photos").font(.subheadline.weight(.semibold)).padding(.bottom, 8)
+                        ForEach(0..<count, id: \.self) { i in
+                            HStack(spacing: 10) {
+                                phPhoto(i, CGSize(width: 40, height: 28)).clipShape(RoundedRectangle(cornerRadius: 6))
+                                Text("Photo \(i + 1)").font(.caption)
+                                Spacer()
+                            }
+                            .padding(.vertical, 4)
+                            if rules { Divider() } // a closing rule under the last row too
+                        }
+                        Toggle("Dividers", isOn: $rules)
+                            .font(.caption).foregroundStyle(.secondary).padding(.top, 8)
+                        Button("Done") { withMotion(.base, reduceMotion: reduce) { showAll = false } }.buttonStyle(.bordered).controlSize(.small).padding(.top, 8)
                     }
                     .padding(14).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 14))
                     .motionTransition(.presence)

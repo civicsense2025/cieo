@@ -9,6 +9,7 @@ public struct DatePickerAtom: MotionAtomView {
     private let times = [["9:00", "11:30", "14:00"], ["10:00", "13:00", "16:30"], ["9:30", "12:00", "15:00"]]
     @State private var day = 7
     @State private var slot: Int?
+    @State private var confirmed = false
     public init() {}
 
     private func enabled(_ d: Int) -> Bool { d >= 3 && ![0, 6].contains((d + 3) % 7) }
@@ -28,37 +29,64 @@ public struct DatePickerAtom: MotionAtomView {
         AtomStage(hint: "Pick a day, then a time") {
             VStack(alignment: .leading, spacing: 10) {
                 HStack { Text("October 2026").font(.caption.weight(.semibold)); Spacer(); Text("Pick a day").font(.caption).foregroundStyle(.secondary) }
-                ZStack(alignment: .topLeading) {
-                    Circle().fill(.primary).frame(width: cellH, height: cellH)
-                        .offset(x: cell(day).x + (cellW - cellH) / 2, y: cell(day).y)
-                        .animation(reduce ? nil : .motion(.base), value: day)
-                    ForEach(0..<7, id: \.self) { c in
-                        Text(String("SMTWTFS".map { $0 }[c])).font(.caption).foregroundStyle(.tertiary).frame(width: cellW, height: cellH).offset(x: Double(c) * cellW)
-                    }
-                    ForEach(1...31, id: \.self) { d in
-                        Button { day = d; slot = nil } label: {
-                            Text("\(d)").font(.caption).frame(width: cellW, height: cellH)
-                                .foregroundStyle(!enabled(d) ? AnyShapeStyle(.tertiary) : d == day ? AnyShapeStyle(.background) : AnyShapeStyle(.primary))
+                ZStack {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ZStack(alignment: .topLeading) {
+                            Circle().fill(.primary).frame(width: cellH, height: cellH)
+                                .offset(x: cell(day).x + (cellW - cellH) / 2, y: cell(day).y)
                                 .animation(reduce ? nil : .motion(.base), value: day)
+                            ForEach(0..<7, id: \.self) { c in
+                                Text(String("SMTWTFS".map { $0 }[c])).font(.caption).foregroundStyle(.tertiary).frame(width: cellW, height: cellH).offset(x: Double(c) * cellW)
+                            }
+                            ForEach(1...31, id: \.self) { d in
+                                Button { withMotion(.base, reduceMotion: reduce) { day = d; slot = nil; confirmed = false } } label: {
+                                    Text("\(d)").font(.caption).frame(width: cellW, height: cellH)
+                                        .foregroundStyle(!enabled(d) ? AnyShapeStyle(.tertiary) : d == day ? AnyShapeStyle(.background) : AnyShapeStyle(.primary))
+                                        .animation(reduce ? nil : .motion(.base), value: day)
+                                }
+                                .buttonStyle(.plain).disabled(!enabled(d)).offset(x: cell(d).x, y: cell(d).y)
+                            }
                         }
-                        .buttonStyle(.plain).disabled(!enabled(d)).offset(x: cell(d).x, y: cell(d).y)
+                        .frame(width: cellW * 7, height: (cellH + 2) * 6, alignment: .topLeading)
+                        HStack(spacing: 6) {
+                            ForEach(0..<3, id: \.self) { i in
+                                let label = times[day % 3][i]
+                                Button { withMotion(.base, reduceMotion: reduce) { slot = i } } label: {
+                                    ZStack { Text(label).font(.caption).id("\(day)-\(i)").transition(reduce ? .identity : slotSwap(i)) }
+                                        .frame(maxWidth: .infinity).frame(height: 32)
+                                        .foregroundStyle(slot == i ? AnyShapeStyle(.background) : AnyShapeStyle(.primary))
+                                        .background(slot == i ? AnyShapeStyle(.primary) : AnyShapeStyle(.quaternary), in: RoundedRectangle(cornerRadius: 8))
+                                }
+                                .buttonStyle(.plain)
+                                .accessibilityLabel("October \(day), \(label)")
+                            }
+                        }
+                        .animation(reduce ? nil : .motion(.base), value: day)
+                        HStack {
+                            Text(slot == nil ? "Pick a time" : "Oct \(day) · \(times[day % 3][slot!])").font(.caption).foregroundStyle(.secondary)
+                            Spacer()
+                            Button("Confirm") { withMotion(.base, reduceMotion: reduce) { confirmed = true } }
+                                .buttonStyle(.borderedProminent).controlSize(.small).disabled(slot == nil)
+                        }
                     }
+                    .opacity(confirmed ? 0 : 1)
+                    VStack(spacing: 6) {
+                        Text("✓ Booked").font(.headline).foregroundStyle(.green)
+                            .id(confirmed ? "done" : "form").motionTransition(.swap())
+                        Text(slot == nil ? "" : "Oct \(day) · \(times[day % 3][slot!])").font(.footnote).foregroundStyle(.secondary)
+                        Button("Book another") { withMotion(.base, reduceMotion: reduce) { confirmed = false; slot = nil } }
+                            .buttonStyle(.bordered).controlSize(.small)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .opacity(confirmed ? 1 : 0)
                 }
-                .frame(width: cellW * 7, height: (cellH + 2) * 6, alignment: .topLeading)
+                .frame(height: 300)
+                .animation(reduce ? nil : .motion(.base), value: confirmed)
                 HStack(spacing: 6) {
-                    ForEach(0..<3, id: \.self) { i in
-                        let label = times[day % 3][i]
-                        Button { withMotion(.base, reduceMotion: reduce) { slot = i } } label: {
-                            ZStack { Text(label).font(.caption).id("\(day)-\(i)").transition(reduce ? .identity : slotSwap(i)) }
-                                .frame(maxWidth: .infinity).frame(height: 32)
-                                .foregroundStyle(slot == i ? AnyShapeStyle(.background) : AnyShapeStyle(.primary))
-                                .background(slot == i ? AnyShapeStyle(.primary) : AnyShapeStyle(.quaternary), in: RoundedRectangle(cornerRadius: 8))
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel("October \(day), \(label)")
-                    }
-                }
-                .animation(reduce ? nil : .motion(.base), value: day)
+                    Text("View:").font(.caption).foregroundStyle(.secondary)
+                    Button("Form") { withMotion(.base, reduceMotion: reduce) { confirmed = false } }.buttonStyle(.bordered).controlSize(.mini)
+                    Button("Success") { if slot != nil { withMotion(.base, reduceMotion: reduce) { confirmed = true } } }.buttonStyle(.bordered).controlSize(.mini)
+                }.font(.caption).foregroundStyle(.secondary)
             }
             .padding(14).frame(width: cellW * 7 + 28)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
