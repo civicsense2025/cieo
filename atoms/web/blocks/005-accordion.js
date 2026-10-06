@@ -1,16 +1,31 @@
-
-
-atom({ id:'accordion', cat:'Content', name:'Accordion', block:'accordion, faq', fam:['M'], tall:true,
-  html:`<div class="card acc" style="width:min(380px,90%);overflow:hidden"></div>`,
-  desc:'Height springs to the measured body. The chevron turns on the same spring and the body fades in with height.',
+/* The measured-height/chevron spring stays intact; semantics and composition improve. */
+atom({
+  id:'accordion',cat:'Content',name:'Accordion',block:'accordion, faq',fam:['M'],tall:true,
+  html:`<style>
+    #accordion .acc{width:min(384px,calc(100% - 32px));overflow:hidden;border:1px solid var(--line-soft);border-radius:24px;background:var(--card)}
+    #accordion .acc-heading{margin:0;padding:24px 24px 16px;font-size:14px;font-weight:600;letter-spacing:-.02em}
+    #accordion .acc-button{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:none;border:0;padding:16px 24px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:start;color:var(--ink)}
+    #accordion .acc-button svg{flex:none;color:var(--muted)}
+    #accordion .acc-button:hover{background:var(--raised)}
+    #accordion .acc-answer{overflow:hidden;height:0}
+    #accordion .acc-answer p{margin:0;padding:0 24px 24px;font-size:12px;line-height:1.65;color:var(--muted)}
+  </style><div class="acc"><h4 class="acc-heading">A few good questions.</h4></div>`,
+  desc:'Each answer opens on the original measured-height spring. The chevron and text follow the same motion.',
   api:'body.h.set(open ? inner.scrollHeight : 0)',
   init(st){
-    const box = $(st,'.acc'), Q = [['Can I use my own domain?','Yes. Add it under Settings, then point a CNAME at your site. Certificates renew on their own.'],['Is there a free plan?','The Starter plan is free for one site with up to 1,000 monthly visitors.'],['How do refunds work?','Cancel within 14 days of a charge and we refund it in full, no form needed.']];
-    const rows = Q.map(([q,a],i) => { const r = document.createElement('div'); r.style.borderTop = i ? '1px solid var(--line-soft)' : '0';
-      r.innerHTML = `<button style="width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:none;border:0;padding:13px 16px;font-weight:500;cursor:pointer;text-align:left"><span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><div style="overflow:hidden;height:0"><p class="small muted" style="margin:0;padding:0 16px 14px"></p></div>`;
-      r.querySelector('span').textContent = q; r.querySelector('p').textContent = a; box.appendChild(r);
-      return { btn:$(r,'button'), chev:$(r,'svg'), body:$(r,'div'), inner:$(r,'p'), h:new Track(0) }; });
-    let open = -1;
-    rows.forEach((r,i) => r.btn.onclick = () => { open = open === i ? -1 : i; rows.forEach((x,j) => { x.h.set(open === j ? 1 : 0); x.btn.setAttribute('aria-expanded', open === j); }); });
-    return t => rows.forEach(r => { const p = clamp(r.h.at(t)); r.body.style.height = px(p*r.inner.offsetHeight); r.chev.style.transform = `rotate(${(p*180).toFixed(1)}deg)`; fade(r.inner, p, (1-p)*-4); });
-  }});
+    const box=$(st,'.acc');
+    const questions=[['Can I use my own domain?','Yes. Add it under Settings and point a CNAME at the site. Certificates renew automatically.'],['Is there a free plan?','The Starter plan includes one site and up to 1,000 monthly visitors.'],['How do refunds work?','Cancel within 14 days of a charge to receive a full refund. These are example product details.']];
+    const rows=questions.map(([q,a],i)=>{
+      const row=document.createElement('div');row.style.borderTop='1px solid var(--line-soft)';
+      row.innerHTML=`<button type="button" class="acc-button" id="acc-trigger-${i}" aria-expanded="false" aria-controls="acc-answer-${i}"><span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="acc-answer" id="acc-answer-${i}" role="region" aria-labelledby="acc-trigger-${i}" inert><p></p></div>`;
+      row.querySelector('span').textContent=q;row.querySelector('p').textContent=a;box.append(row);
+      return {btn:$(row,'button'),chev:$(row,'svg'),body:$(row,'.acc-answer'),inner:$(row,'p'),h:new Track(0)};
+    });
+    let open=-1;
+    rows.forEach((r,i)=>r.btn.onclick=()=>{
+      open=open===i?-1:i;
+      rows.forEach((x,j)=>{const selected=open===j;x.h.set(selected?1:0);x.btn.setAttribute('aria-expanded',String(selected));x.body.inert=!selected;x.body.setAttribute('aria-hidden',String(!selected));});
+    });
+    return t=>rows.forEach(r=>{const p=clamp(r.h.at(t));r.body.style.height=px(p*r.inner.offsetHeight);r.chev.style.transform=`rotate(${(p*180).toFixed(1)}deg)`;fade(r.inner,p,(1-p)*-4);});
+  }
+});
