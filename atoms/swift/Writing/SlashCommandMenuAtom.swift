@@ -3,11 +3,13 @@ import Cieo
 
 public struct SlashCommandMenuAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "slashmenu", category: "Writing", name: "Slash command menu",
-        summary: "Typing “/” opens the menu right at the caret. Typing more filters it in place, the highlight follows with lagging edges, and Enter inserts a block that opens below.")
+        summary: "Typing “/” opens the menu right at the caret. Typing more filters it in place, the highlight follows with lagging edges, and Enter inserts a block that opens below. Rows carry icons you can toggle, and the menu docks left on demand.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @FocusState private var focused: Bool
-    private let kinds = ["Heading", "Image", "Quote", "Divider", "Callout", "Table"]
+    private let kinds = [("Heading", "textformat"), ("Image", "photo"), ("Quote", "quote.opening"), ("Divider", "minus"), ("Callout", "exclamationmark.bubble"), ("Table", "tablecells")]
     private let rowH = 32.0, pad = 6.0
+    @State private var icons = true
+    @State private var dockLeft = false
     private struct Inserted: Identifiable { let id = UUID(); let name: String }
     @State private var text = ""
     @State private var open = false
@@ -22,7 +24,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
         guard let r = text.range(of: #"/\w*$"#, options: .regularExpression) else { return nil }
         return String(text[r].dropFirst()).lowercased()
     }
-    private var visible: [Int] { kinds.indices.filter { kinds[$0].lowercased().hasPrefix(query ?? "") } }
+    private var visible: [Int] { kinds.indices.filter { kinds[$0].0.lowercased().hasPrefix(query ?? "") } }
     private var panelHeight: Double { pad * 2 + Double(max(1, visible.count)) * rowH }
 
     public var body: some View {
@@ -38,6 +40,10 @@ public struct SlashCommandMenuAtom: MotionAtomView {
                         .onKeyPress(.upArrow) { step(-1); return .handled }
                         .onKeyPress(.escape) { setOpen(false); return .handled }
                         .onSubmit { if open, let i = visible[safe: highlight] { insert(i) } }
+                    HStack {
+                        Toggle("Icons", isOn: $icons)
+                        Toggle("Dock left", isOn: $dockLeft)
+                    }.font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
                     Divider()
                     ForEach(blocks) { b in
                         HStack { Text(b.name).fontWeight(.semibold); Text("block").foregroundStyle(.secondary) }.font(.caption)
@@ -48,7 +54,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
                 }
                 .frame(width: 340).animation(reduce ? nil : .motion(.base), value: blocks.count)
                 if open {
-                    menu.offset(x: min(caretX, 130), y: 40).motionTransition(.presence)
+                    menu.offset(x: dockLeft ? 0 : min(caretX, 130), y: 40).motionTransition(.presence)
                 }
             }
             .frame(width: 340, height: 280, alignment: .topLeading)
@@ -63,12 +69,20 @@ public struct SlashCommandMenuAtom: MotionAtomView {
             RoundedRectangle(cornerRadius: 7).fill(.quaternary).frame(height: hiBottom - hiTop).padding(.horizontal, 6).offset(y: hiTop)
             ForEach(kinds.indices, id: \.self) { i in
                 let k = visible.firstIndex(of: i)
-                Text(kinds[i]).font(.subheadline).padding(.horizontal, 16).frame(maxWidth: .infinity, minHeight: rowH, maxHeight: rowH, alignment: .leading)
-                    .contentShape(Rectangle()).offset(y: pad + Double(k ?? i) * rowH).opacity(k == nil ? 0 : 1).allowsHitTesting(k != nil)
-                    .onHover { if $0, let k { highlight = k; moveHighlight(k) } }
-                    .onTapGesture { insert(i) }
-                    .animation(reduce ? nil : .motion(.base), value: k)
-                    .accessibilityAddTraits(.isButton)
+                HStack(spacing: 8) {
+                    if icons {
+                        Image(systemName: kinds[i].1).font(.subheadline)
+                            .frame(width: 24, height: 24).background(.quaternary, in: RoundedRectangle(cornerRadius: 7))
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(kinds[i].0).font(.subheadline)
+                }
+                .padding(.horizontal, 10).frame(maxWidth: .infinity, minHeight: rowH, maxHeight: rowH, alignment: .leading)
+                .contentShape(Rectangle()).offset(y: pad + Double(k ?? i) * rowH).opacity(k == nil ? 0 : 1).allowsHitTesting(k != nil)
+                .onHover { if $0, let k { highlight = k; moveHighlight(k) } }
+                .onTapGesture { insert(i) }
+                .animation(reduce ? nil : .motion(.base), value: k)
+                .accessibilityAddTraits(.isButton)
             }
         }
         .frame(width: 200, height: panelHeight, alignment: .top)
@@ -93,7 +107,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
 
     private func insert(_ i: Int) {
         withMotion(.base, reduceMotion: reduce) {
-            blocks.insert(Inserted(name: kinds[i]), at: 0)
+            blocks.insert(Inserted(name: kinds[i].0), at: 0)
             if blocks.count > 3 { blocks.removeLast() }
         }
         text = text.replacingOccurrences(of: #"/\w*$"#, with: "", options: .regularExpression)
