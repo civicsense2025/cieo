@@ -8,3 +8,7 @@ node_modules/
 design/generated/
 Cieo-studio.html
 test/browser/artifacts/
+# Local catalogue review outputs and optional linked bootstrap.
+review-artifact/
+atoms/web/catalogue/boot.js
+__pycache__/
