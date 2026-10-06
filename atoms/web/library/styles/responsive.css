@@ -1,0 +1,73 @@
+@media (min-width:1600px) { .lib-main { padding-block-start:48px; } .lib-spotlights { gap:24px; } }
+@media (max-width:1399px) { .cieo-catalogue .lib-grid { grid-template-columns:repeat(min(var(--lib-columns),2),minmax(0,1fr)); } .lib-spotlight { gap:8px; padding:16px 12px; } .lib-spotlight .lib-collection-art { inline-size:48px; } .lib-spotlight strong { font-size:12px; } }
+@media (max-width:1199px) {
+  :root[data-cieo-library] { --lib-sidebar:200px; --lib-padding:24px; }
+  .lib-sidebar { padding-inline:8px; }
+  .lib-breadcrumb { display:none; }
+  .lib-search { margin-inline-start:0; inline-size:100%; }
+  .lib-top-actions { margin-inline-start:auto; }
+  .lib-spotlights { grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; margin-block-end:24px; }
+  .lib-spotlight { min-block-size:88px; padding:8px 16px; }
+  .lib-spotlight .lib-collection-art { block-size:64px; inline-size:64px; }
+  .lib-page-heading h1 { font-size:28px; }
+  .lib-page-heading>.lib-button { display:none; }
+  .lib-filterbar { align-items:start; flex-direction:column; gap:8px; }
+  .lib-families { max-inline-size:100%; }
+  .lib-filter-end { inline-size:100%; justify-content:space-between; }
+}
+@media (max-width:879px) {
+  :root[data-cieo-library] { --lib-padding:24px; --lib-sidebar:0px; }
+  .lib-shell { display:block; }
+  .lib-shell>.lib-sidebar { display:none; }
+  .lib-menu-button { display:inline-flex!important; }
+  .lib-topbar { block-size:72px; padding:16px; gap:16px; }
+  .lib-main { padding-block-start:32px; }
+  .lib-search { max-inline-size:none; }
+  .lib-component-dialog { max-inline-size:calc(100vw - 32px); max-block-size:calc(100dvh - 32px); }
+  .lib-detail-layout { grid-template-columns:minmax(0,1fr); }
+  .lib-inspector { border-inline-start:0; border-block-start:1px solid var(--line-soft); }
+  .lib-live-preview { padding:16px; }
+  .lib-navigation-dialog { inline-size:360px; margin:16px auto 16px 16px; block-size:calc(100dvh - 32px); }
+  #mobile-navigation .lib-sidebar { position:static; block-size:auto; background:none; display:flex; padding:16px; }
+  #mobile-navigation .lib-brand,#mobile-navigation .lib-sidebar-bottom { display:none; }
+}
+@media (max-width:599px) {
+  :root[data-cieo-library] { --lib-padding:16px; --lib-gap:16px; --lib-stage:288px; --lib-control:48px; }
+  .lib-topbar { gap:8px; padding-inline:8px; block-size:72px; }
+  .lib-search { min-block-size:40px; padding-inline:12px; }
+  .lib-search input { font-size:13px; }
+  .lib-search kbd { display:none; }
+  .lib-top-actions { gap:0; }
+  .lib-view-button { padding:8px; inline-size:40px; border:0; background:none; }
+  .lib-view-button>span:last-child { display:none; }
+  .lib-page-heading { margin-block-end:24px; }
+  .lib-page-heading h1 { font-size:28px; letter-spacing:-.75px; }
+  .lib-page-heading p { font-size:12px; }
+  .lib-spotlights { gap:8px; }
+  .lib-spotlight { min-block-size:88px; padding:8px; gap:8px; border-radius:16px; }
+  .lib-spotlight .lib-collection-art { inline-size:48px; block-size:56px; }
+  .lib-spotlight small { font-size:10px; }
+  .lib-families { inline-size:100%; border-radius:12px; }
+  .lib-family { min-block-size:40px; padding-inline:12px; }
+  .cieo-catalogue .lib-grid { grid-template-columns:minmax(0,1fr); }
+  .cieo-catalogue .tile.wide { grid-column:auto; }
+  .cieo-catalogue .tile>header { padding:8px; }
+  .cieo-catalogue .tile h3 { font-size:13px; }
+  .cieo-catalogue .lib-card-actions .lib-icon-button { inline-size:40px; block-size:40px; }
+  .lib-dialog { margin:auto 0 0; inline-size:100%; max-inline-size:100%; max-block-size:calc(100dvh - 32px); border-radius:24px 24px 0 0; padding-block-end:env(safe-area-inset-bottom,0px); }
+  .lib-dialog-top { padding:16px; gap:8px; position:sticky; inset-block-start:0; background:var(--tile); z-index:3; }
+  .lib-dialog-top h2 { font-size:18px; }
+  .lib-settings-form,.lib-inspector { padding:24px 16px; }
+  .lib-live-preview { padding:8px; min-block-size:336px; }
+  .lib-live-preview .stage { min-block-size:320px; }
+  .lib-navigation-dialog { block-size:calc(100dvh - 64px); }
+  .lib-announcement { inset-block-end:max(16px,env(safe-area-inset-bottom)); inline-size:max-content; text-align:center; }
+}
+@media (pointer:coarse) {
+  .lib-icon-button,.lib-button,.lib-nav-button,.lib-choice,.lib-swatch { min-block-size:48px; min-inline-size:48px; }
+  .cieo-catalogue .lib-card-actions .lib-icon-button { inline-size:48px; block-size:48px; }
+  .lib-categories .lib-nav-button { min-block-size:44px; }
+  .lib-settings-form select { min-block-size:44px; }
+  .cieo-catalogue .stage .btn,.cieo-catalogue .stage .seg button { min-block-size:44px; }
+  .lib-search input { font-size:16px; }
+}

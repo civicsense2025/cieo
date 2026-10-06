@@ -1,110 +1,48 @@
-name: Catalogue UI source handoff
+name: Catalogue UI
 on:
-  push:
-    branches: [ui/catalogue-soft-studio]
+  pull_request:
+    paths:
+      - 'atoms/web/**'
+      - 'scripts/build-library.mjs'
+      - 'test/catalogue/**'
+      - '.github/workflows/catalogue-ui.yml'
 permissions:
-  contents: write
+  contents: read
+concurrency:
+  group: catalogue-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 jobs:
-  assemble:
-    if: github.repository == 'civicsense2025/cieo' && github.ref == 'refs/heads/ui/catalogue-soft-studio'
+  catalogue:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
         with:
-          node-version: 22
-      - name: Apply the hash-verified, path-restricted UTF-8 source handoff
-        shell: python
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test && node --test test/catalogue/model.test.mjs
+      - name: Build actual catalogue and prepare review artifacts
         run: |
-          import base64, hashlib, json, lzma
-          from pathlib import Path
-          digest = lambda value: hashlib.sha256(value).hexdigest()
-          encoded = ''.join(Path(f'.catalogue-transfer/part-{i:03}').read_text() for i in range(4))
-          compressed = base64.b64decode(encoded, validate=True)
-          assert digest(compressed) == '8434ea23b2bef3cf688cd9c26e1ab34a8e0b93075a63791166ea1c73ba1ded11'
-          raw = lzma.decompress(compressed, memlimit=268435456)
-          assert digest(raw) == '093ae61155b37989d4fd91896b8e0f470abfaea79a4510550e0e5063ac027f73'
-          payload = json.loads(raw)
-          assert len(payload['files']) == 47
-          outputs = {}
-          for name, change in payload['files'].items():
-              path = Path(name)
-              assert not path.is_absolute() and '..' not in path.parts and not path.is_symlink()
-              assert name.startswith(('atoms/web/', 'scripts/', 'test/catalogue-ui/', 'docs/review/')) or name in ('.gitignore', 'README.md', 'test/catalogue-source.test.mjs')
-              before = path.read_bytes() if path.exists() else None
-              assert (digest(before) if before is not None else None) == change['before'], name
-              if 'content' in change:
-                  text = change['content']
-              else:
-                  text = before.decode('utf-8')
-                  for start, end, replacement in reversed(change['edits']):
-                      assert 0 <= start <= end <= len(text)
-                      text = text[:start] + replacement + text[end:]
-              data = text.encode('utf-8')
-              assert digest(data) == change['after'], name
-              outputs[path] = data
-          for path, data in outputs.items():
-              path.parent.mkdir(parents=True, exist_ok=True)
-              path.write_bytes(data)
-          Path('.github/workflows/catalogue-ui.yml').write_text(payload['workflow'])
-          Path('/tmp/catalogue-paths').write_text('\n'.join(payload['files']) + '\n.github/workflows/catalogue-ui.yml\ndocs/library.html\ndocs/catalogue.html\n')
-          print('Verified and applied 47 source files; restored read-only CI workflow.')
-      - name: Build and test the real library
-        run: |
+          mkdir -p catalogue-artifacts
+          git archive HEAD > catalogue-artifacts/source.tar
           node scripts/build-library.mjs
+          cp docs/library.html catalogue-artifacts/Cieo-Library.html
           node scripts/build-catalogue.mjs
-          npm ci
-          npm run check
-      - name: Install browser test tools
+      - name: Install isolated browser test tools
         run: |
-          python3 -m pip install playwright==1.56.0
-          python3 -m playwright install --with-deps chromium
-      - name: Verify catalogue behavior and all original recipes
-        run: |
-          python3 test/catalogue-ui/smoke.py
-          python3 test/catalogue-ui/integrity.py
-      - name: Capture public design references for review only
-        continue-on-error: true
-        shell: python
-        run: |
-          import json
-          from pathlib import Path
-          from playwright.sync_api import sync_playwright
-          out = Path('artifacts/references'); out.mkdir(parents=True, exist_ok=True)
-          report = []
-          with sync_playwright() as p:
-              browser = p.chromium.launch()
-              for name, url in [('recollect','https://recollect.so/'), ('graphical','https://www.graphicalui.com/marketing/preview?mode=light&tab=theme&theme=atlas'), ('figma','https://help.figma.com/hc/en-us/articles/15297425105303-Explore-design-files')]:
-                  page = browser.new_page(viewport={'width':1440,'height':1080})
-                  try:
-                      response = page.goto(url,wait_until='domcontentloaded',timeout=30000)
-                      page.wait_for_timeout(2000)
-                      page.screenshot(path=str(out / (name+'.png')))
-                      report.append({'name':name,'url':url,'status':response.status if response else None,'title':page.title()})
-                  except Exception as error:
-                      report.append({'name':name,'url':url,'error':str(error)})
-                  page.close()
-              browser.close()
-          (out/'capture.json').write_text(json.dumps(report,indent=2))
-      - name: Commit reviewed source only to this task branch
-        run: |
-          git add --pathspec-from-file=/tmp/catalogue-paths
-          git rm -r .catalogue-transfer
-          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Refine real catalogue UI, 27 recipes, responsive inspection and lazy previews'
-          git push origin HEAD:refs/heads/ui/catalogue-soft-studio
-      - name: Archive reviewed source and working preview
-        run: |
-          mkdir -p artifacts
-          git archive --format=zip HEAD -o artifacts/cieo-source.zip
-          cp docs/library.html artifacts/Cieo-Catalogue-Preview.html
-          git rev-parse HEAD > artifacts/source-commit.txt
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+          npm install --no-save --package-lock=false --ignore-scripts playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Exercise the real components
+        run: node test/catalogue/browser.mjs
+      - name: Preserve screenshots, reports, source and standalone catalogue
         if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: catalogue-review
-          path: artifacts/
-          retention-days: 7
+          name: cieo-catalogue-${{ github.event.pull_request.head.sha }}
+          path: catalogue-artifacts/
+          retention-days: 14
           if-no-files-found: error
