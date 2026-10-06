@@ -1,0 +1,75 @@
+name: Catalogue UI
+on:
+  pull_request:
+    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
+permissions:
+  contents: read
+concurrency:
+  group: catalogue-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Check both existing catalogue builds
+        run: |
+          node scripts/build-library.mjs
+          node scripts/build-catalogue.mjs
+          node --test test/catalogue/build.test.mjs
+          git diff --exit-code -- docs/library.html docs/catalogue.html
+      - name: Install browser for visual review
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Test the real collection over HTTP
+        run: python test/catalogue/ui_smoke.py
+      - name: Package source and the actual standalone catalogue
+        if: always()
+        run: |
+          mkdir -p review-artifact
+          git archive --format=tar.gz --output=review-artifact/cieo-source.tar.gz HEAD
+          cp docs/library.html review-artifact/Cieo-Collection.html
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: cieo-catalogue-review
+          path: review-artifact/
+          retention-days: 7
+          if-no-files-found: error
+
+  components:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test && node --test test/catalogue/model.test.mjs
+      - name: Build actual catalogue and prepare review artifacts
+        run: |
+          mkdir -p catalogue-artifacts
+          git archive HEAD > catalogue-artifacts/source.tar
+          node scripts/build-library.mjs
+          cp docs/library.html catalogue-artifacts/Cieo-Library.html
+          node scripts/build-catalogue.mjs
+      - name: Install isolated browser test tools
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Exercise the real components
+        run: node test/catalogue/browser.mjs

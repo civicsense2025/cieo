@@ -22,6 +22,9 @@
     --motion-duration-lazy: 0s;
     --motion-duration-exit: 0s;
     --motion-lag: 0s;
+    --motion-stagger-max: 0s;
+    --motion-drift: 0px;
+    --motion-arrive-opacity: 1;
   }
 }
 
@@ -33,4 +36,7 @@
   --motion-duration-lazy: 0s;
   --motion-duration-exit: 0s;
   --motion-lag: 0s;
+  --motion-stagger-max: 0s;
+  --motion-drift: 0px;
+  --motion-arrive-opacity: 1;
 }

@@ -1,0 +1,52 @@
+/* The original .stage nodes and their recipe-owned transforms remain intact. */
+.cieo-catalogue .lib-grid { display:grid; grid-template-columns:repeat(var(--lib-columns),minmax(0,1fr)); gap:var(--lib-gap); align-items:start; }
+.cieo-catalogue .tile { min-inline-size:0; border-radius:var(--lib-radius); background:var(--tile); padding:8px; box-shadow:var(--shadow-soft); position:relative; scroll-margin-block-start:96px; }
+.cieo-catalogue .tile.wide { grid-column:span 2; }
+.cieo-catalogue .tile>header { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px 8px 8px 16px; }
+.cieo-catalogue .tile h3 { margin:0; font-size:13px; letter-spacing:-.15px; font-weight:600; }
+.cieo-catalogue .lib-card-title { border:0; background:none; color:var(--ink); text-align:start; padding:0; max-inline-size:100%; }
+.cieo-catalogue .lib-card-title:hover { color:var(--accent); }
+.cieo-catalogue .lib-card-meta { color:var(--faint); font-size:10px; margin-block-start:4px; }
+.cieo-catalogue .lib-card-actions { display:flex; gap:0; flex:none; }
+.cieo-catalogue .lib-card-actions .lib-icon-button { inline-size:32px; block-size:32px; border-radius:10px; padding:8px; }
+.cieo-catalogue .lib-save[aria-pressed="true"] { color:var(--accent); background:var(--accent-tint); }
+.cieo-catalogue .lib-save[aria-pressed="true"] svg { fill:var(--accent-tint); }
+.cieo-catalogue .stage { position:relative; block-size:var(--lib-stage); min-inline-size:0; display:grid; grid-template-columns:minmax(0,1fr); place-items:center; justify-items:safe center; user-select:none; -webkit-user-select:none; overflow:auto; border-radius:16px; background:var(--preview,var(--raised)); scrollbar-width:thin; scrollbar-color:var(--line) transparent; }
+.cieo-catalogue .tile.tall .stage,.cieo-catalogue .tile.big .stage { block-size:352px; }
+.cieo-catalogue .tile.wide.tall .stage { block-size:448px; }
+.cieo-catalogue .lib-stage-placeholder { background:var(--preview); border-radius:16px; display:grid; place-items:center; color:var(--muted); font-size:12px; }
+.cieo-catalogue .stage .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-block-size:36px; border:1px solid var(--line); background:var(--card); border-radius:10px; padding:8px 12px; font-size:12px; font-weight:550; color:var(--ink); cursor:pointer; }
+.cieo-catalogue .stage .btn.ink { background:var(--ink); color:var(--card); border-color:var(--ink); }
+.cieo-catalogue .stage .card { background:var(--card); border-radius:16px; box-shadow:0 2px 8px #172b4408,0 16px 32px #172b4408; }
+.cieo-catalogue .stage button { font-family:var(--sans); }
+.cieo-catalogue .stage input,.cieo-catalogue .stage textarea { font-family:var(--sans); caret-color:var(--accent); }
+.cieo-catalogue .stage .seg { position:relative; display:flex; background:color-mix(in srgb,var(--ink) 6%,var(--card)); border-radius:12px; padding:3px; isolation:isolate; }
+.cieo-catalogue .stage .seg .ind { position:absolute; inset:0 auto auto 0; border-radius:9px; background:var(--card); box-shadow:0 1px 4px #0001; pointer-events:none; }
+.cieo-catalogue .stage .seg button { position:relative; border:0; padding:8px 12px; min-block-size:36px; border-radius:9px; background:none; font-size:12px; font-weight:550; color:var(--ink); }
+.cieo-catalogue .stage .seg button[aria-selected="true"] { color:var(--accent); }
+.cieo-catalogue .stage .hint { position:absolute; inset:auto 16px 16px; text-align:center; font-size:10px; line-height:1.4; color:var(--faint); pointer-events:none; }
+.cieo-catalogue .stage .ro { position:absolute; inset:16px 16px auto auto; font-size:11px; font-variant-numeric:tabular-nums; color:var(--muted); }
+.cieo-catalogue .stage .layer { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:8px; white-space:nowrap; }
+.cieo-catalogue .stage .digits { display:inline-flex; font-variant-numeric:tabular-nums; }
+.cieo-catalogue .stage .dslot { position:relative; display:inline-block; block-size:1.25em; overflow:hidden; vertical-align:bottom; }
+.cieo-catalogue .stage .dslot .dl { position:absolute; inset:0 0 auto; text-align:center; }
+.cieo-catalogue .stage .pill { position:absolute; border-radius:999px; }
+.cieo-catalogue .stage .row { display:flex; align-items:center; gap:8px; }
+.cieo-catalogue .stage .col { display:flex; flex-direction:column; gap:8px; }
+.cieo-catalogue .stage .muted { color:var(--muted); }
+.cieo-catalogue .stage .small { font-size:12px; }
+.cieo-catalogue .stage .num { font-variant-numeric:tabular-nums; }
+.cieo-catalogue .preview-error { position:relative; margin:16px; padding:16px; background:var(--card); border:1px dashed var(--danger); border-radius:12px; color:var(--danger); font-size:12px; }
+/* Real catalogue recipes receive the same material treatment, not substitute examples. */
+.cieo-catalogue #tabs .panel { line-height:1.7; font-size:13px; }
+.cieo-catalogue #tabs .tabsx { inline-size:100%; }
+.cieo-catalogue #tabs .tabsx button { flex:1; }
+.cieo-catalogue #accordion .card { box-shadow:var(--shadow-soft); }
+.cieo-catalogue #dropdown .card,.cieo-catalogue #palette .card { border:1px solid var(--line-soft); box-shadow:var(--shadow); }
+.cieo-catalogue #field input,.cieo-catalogue #newsletter input,.cieo-catalogue #search input { border-radius:12px; }
+.cieo-catalogue #progress .btn,.cieo-catalogue #counter .btn,.cieo-catalogue #stepper .btn { min-inline-size:40px; }
+.cieo-catalogue #pricing .card,.cieo-catalogue #checkout .card,.cieo-catalogue #cart .card { border:1px solid var(--line-soft); }
+.cieo-catalogue #canvaszoom .stage,.cieo-catalogue #selectresize .stage,.cieo-catalogue #layers .stage { background:var(--lib-blue); }
+.cieo-catalogue #signature canvas { border-radius:12px; }
+.cieo-catalogue [contenteditable="true"] { outline-offset:4px; user-select:text; -webkit-user-select:text; }
+.cieo-catalogue .stage :is(button,input,select,textarea,a,[tabindex],[contenteditable="true"]):focus-visible { outline:2px solid var(--accent); outline-offset:3px; }

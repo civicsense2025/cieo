@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en" data-theme="white">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Cieo — the motion library</title>
+<!-- CIEO_LIBRARY_STYLES -->
+</head>
+<body class="library-page">
+<a class="lib-skip" href="#lib-title">Skip to the atoms</a>
+<div class="lib-shell">
+  <aside class="lib-sidebar" aria-label="Library navigation">
+    <a class="lib-brand" href="#collection=explore" aria-label="Cieo, explore"><span class="lib-mark" aria-hidden="true"></span><strong>cieo</strong></a>
+    <p class="lib-brand-caption">A little motion. A lot of feeling.</p>
+    <nav class="lib-nav" data-main-navigation aria-label="Browse"></nav>
+    <h2 class="lib-nav-section">Collections</h2>
+    <nav class="lib-category-list" data-category-navigation aria-label="Atom categories"></nav>
+    <div class="lib-sidebar-footer">
+      <span id="lib-total"></span>
+      <a href="catalogue.html">Original technical catalogue ↗</a>
+      <button type="button" class="lib-nav-button" data-open-dialog="lib-shortcuts"><span data-icon="keyboard"></span>Keyboard shortcuts</button>
+    </div>
+  </aside>
+  <main class="lib-main">
+    <header class="lib-topbar">
+      <button type="button" class="lib-icon-button lib-mobile-only lib-menu-button" data-open-dialog="lib-navigation-dialog" aria-label="Open collections"><span data-icon="menu"></span></button>
+      <div class="lib-location"><span data-icon="layers"></span><span id="lib-location-title">Explore</span></div>
+      <label class="lib-search"><span data-icon="search"></span><span class="lib-sr">Search atoms</span><input id="lib-search" type="search" maxlength="160" placeholder="Find an atom…" autocomplete="off"><kbd aria-hidden="true">⌘ K</kbd></label>
+      <button type="button" class="lib-icon-button lib-settings-button" data-open-dialog="lib-settings" aria-label="Library appearance"><span data-icon="tune"></span></button>
+    </header>
+    <div class="lib-content">
+      <section class="lib-heading" aria-labelledby="lib-title">
+        <div><h1 id="lib-title" tabindex="-1">Good things, in motion.</h1><p id="lib-description">A collection of small interactions that make a big difference.</p></div>
+        <span class="lib-heading-count" id="lib-result-count" role="status" aria-live="polite"></span>
+      </section>
+      <nav class="lib-collections" id="lib-collections" aria-label="Featured collections"></nav>
+      <div class="lib-toolbar">
+        <div class="lib-filter-wrap"><div class="lib-filters" id="lib-filters" role="group" aria-label="Filter by motion family"></div></div>
+        <div class="lib-toolbar-actions">
+          <button type="button" id="lib-pause" class="lib-icon-button" aria-label="Pause animated previews" aria-pressed="false" title="Pause previews"><span data-icon="pause"></span></button>
+          <span class="lib-divider" aria-hidden="true"></span>
+          <button type="button" class="lib-icon-button lib-layout-button" data-open-dialog="lib-settings" aria-label="Layout and appearance"><span data-icon="grid"></span></button>
+        </div>
+      </div>
+      <div id="lib-empty" class="lib-empty" hidden><h2 id="lib-empty-title">No atoms found.</h2><p id="lib-empty-description"></p><button type="button" class="lib-button" id="lib-clear">Browse all atoms</button></div>
+      <div id="lib-grid" class="lib-grid" aria-label="Live motion atoms"></div>
+      <noscript><p>The live recipes require JavaScript. Source files are available in <code>atoms/web/blocks/</code>.</p></noscript>
+    </div>
+  </main>
+</div>
+<dialog id="lib-inspector" class="lib-dialog lib-inspector" aria-labelledby="lib-inspector-title">
+  <header class="lib-dialog-header"><span data-icon="layers"></span><h2 id="lib-inspector-title">Inspect atom</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close inspector" autofocus><span data-icon="close"></span></button></header>
+  <div class="lib-inspector-body">
+    <div class="lib-inspector-canvas" id="lib-inspector-preview"></div>
+    <aside class="lib-inspector-meta" aria-label="Component information">
+      <h3>Small details, up close.</h3><p id="lib-inspector-description"></p>
+      <dl><div><dt>Collection</dt><dd id="lib-inspector-category"></dd></div><div><dt>Motion</dt><dd id="lib-inspector-families"></dd></div><div><dt>Runtime</dt><dd>Original Cieo springs</dd></div></dl>
+      <div class="lib-code-tabs" role="group" aria-label="Snippet type"><button type="button" data-code-mode="recipe" aria-pressed="true">Motion recipe</button><button type="button" data-code-mode="markup" aria-pressed="false">HTML</button></div>
+      <pre id="lib-code" tabindex="0" aria-label="Code snippet"></pre>
+      <div class="lib-source-actions">
+        <button type="button" class="lib-button primary" id="lib-copy-code"><span data-icon="copy"></span>Copy snippet</button>
+        <a class="lib-button" id="lib-source-link" target="_blank" rel="noopener">View source ↗</a>
+        <button type="button" class="lib-button" id="lib-inspector-save" aria-pressed="false">Save atom</button>
+        <button type="button" class="lib-button" id="lib-copy-link"><span data-icon="link"></span>Copy link</button>
+      </div>
+      <p class="lib-inspector-note">This is the live recipe, not a screenshot. Snippets need the catalogue styles and runtime; View source opens the complete recipe.</p>
+    </aside>
+  </div>
+</dialog>
+<dialog id="lib-settings" class="lib-dialog lib-settings" aria-labelledby="lib-settings-title">
+  <header class="lib-dialog-header"><h2 id="lib-settings-title">Make a little room.</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close appearance" autofocus><span data-icon="close"></span></button></header>
+  <div class="lib-settings-body">
+    <fieldset><legend>Appearance</legend><div class="lib-setting-seg"><button type="button" data-pref="theme" data-value="system">System</button><button type="button" data-pref="theme" data-value="white">Light</button><button type="button" data-pref="theme" data-value="black">Dark</button></div></fieldset>
+    <fieldset><legend>A touch of color</legend><div class="lib-swatches"><button type="button" data-pref="accent" data-value="violet" style="--swatch:#8062c9" aria-label="Violet accent"></button><button type="button" data-pref="accent" data-value="blue" style="--swatch:#628dd8" aria-label="Blue accent"></button><button type="button" data-pref="accent" data-value="green" style="--swatch:#78a991" aria-label="Green accent"></button><button type="button" data-pref="accent" data-value="coral" style="--swatch:#ce8489" aria-label="Coral accent"></button></div></fieldset>
+    <fieldset><legend>Preview surfaces</legend><div class="lib-setting-seg"><button type="button" data-pref="surfaces" data-value="color">Soft color</button><button type="button" data-pref="surfaces" data-value="neutral">Neutral</button></div></fieldset>
+    <fieldset><legend>Space between things</legend><div class="lib-setting-seg"><button type="button" data-pref="density" data-value="roomy">Roomy</button><button type="button" data-pref="density" data-value="compact">Compact</button></div></fieldset>
+    <fieldset><legend>Corners</legend><div class="lib-setting-seg"><button type="button" data-pref="corners" data-value="soft">Soft</button><button type="button" data-pref="corners" data-value="crisp">Crisp</button></div></fieldset>
+    <fieldset><legend>Details under each atom</legend><div class="lib-setting-seg"><button type="button" data-pref="details" data-value="shown">Show</button><button type="button" data-pref="details" data-value="hidden">Quiet</button></div></fieldset>
+    <label class="lib-setting-row">Columns<select id="lib-columns"><option value="auto">Automatic</option><option value="2">Two</option><option value="3">Three</option><option value="4">Four</option></select></label>
+    <label class="lib-setting-row">Playback speed<select id="lib-speed"><option value="1">1×</option><option value="0.25">¼×</option><option value="0.1">⅒×</option></select></label>
+    <label class="lib-setting-row">Show the 8px grid<input type="checkbox" id="lib-grid-toggle"></label>
+    <button type="button" class="lib-button" id="lib-reset-preferences">Reset appearance</button>
+  </div>
+</dialog>
+<dialog id="lib-navigation-dialog" class="lib-dialog lib-mobile-nav" aria-labelledby="lib-navigation-title">
+  <header class="lib-dialog-header"><h2 id="lib-navigation-title">Collections</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close collections" autofocus><span data-icon="close"></span></button></header>
+  <div class="lib-mobile-nav-content"><nav class="lib-nav" data-main-navigation aria-label="Browse"></nav><nav class="lib-category-list" data-category-navigation aria-label="Atom categories"></nav></div>
+</dialog>
+<dialog id="lib-shortcuts" class="lib-dialog lib-shortcuts" aria-labelledby="lib-shortcuts-title">
+  <header class="lib-dialog-header"><h2 id="lib-shortcuts-title">A few shortcuts.</h2><button type="button" class="lib-icon-button" data-close-dialog aria-label="Close shortcuts" autofocus><span data-icon="close"></span></button></header>
+  <dl><div><dt>Find an atom</dt><dd><kbd>⌘ / Ctrl K</kbd></dd></div><div><dt>Focus search</dt><dd><kbd>/</kbd></dd></div><div><dt>Close a panel</dt><dd><kbd>Esc</kbd></dd></div><div><dt>Show shortcuts</dt><dd><kbd>?</kbd></dd></div></dl>
+</dialog>
+<div id="lib-notice" class="lib-notice" role="status" aria-live="polite" hidden></div>
+<!-- CIEO_LIBRARY_SCRIPTS -->
+</body>
+</html>

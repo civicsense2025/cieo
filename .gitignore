@@ -3,3 +3,12 @@ node_modules/
 .swiftpm/
 *.xcodeproj/xcuserdata/
 .DS_Store
+
+# Reproducible token artifacts are included in npm tarballs and the handoff ZIP.
+design/generated/
+Cieo-studio.html
+test/browser/artifacts/
+# Local catalogue review outputs and optional linked bootstrap.
+review-artifact/
+atoms/web/catalogue/boot.js
+__pycache__/

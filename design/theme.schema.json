@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Cieo theme configuration v1",
+  "description": "Structure only. The runtime also limits dimensions to 10000 and audits semantic color contrast.",
+  "type": "object",
+  "required": [
+    "version",
+    "options"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "brand": {
+          "enum": [
+            "studio",
+            "iris",
+            "lagoon",
+            "ember",
+            "rose",
+            "mono"
+          ]
+        },
+        "scheme": {
+          "enum": [
+            "light",
+            "dark"
+          ]
+        },
+        "density": {
+          "enum": [
+            "compact",
+            "comfortable",
+            "spacious"
+          ]
+        },
+        "radius": {
+          "enum": [
+            "crisp",
+            "soft",
+            "round"
+          ]
+        },
+        "contrast": {
+          "enum": [
+            "standard",
+            "high"
+          ]
+        },
+        "font": {
+          "enum": [
+            "system",
+            "humanist",
+            "mono"
+          ]
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "color-canvas": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-surface": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-raised": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-sunken": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-text": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-muted": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-subtle": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-border": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-border-strong": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-accent": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-on-accent": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-accent-hover": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-accent-soft": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-on-accent-soft": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-focus": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-selection": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-shadow": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-success": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-success-soft": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-warning": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-warning-soft": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-danger": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-danger-soft": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-info": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-info-soft": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "space-0": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-1": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-2": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-3": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-4": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-6": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-8": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-10": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-12": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-16": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "space-24": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "radius-small": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "radius-control": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "radius-surface": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "radius-pill": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "control-height": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "control-small": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "control-large": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "touch-target": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "border-width": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "focus-width": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "focus-offset": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "font-sans": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_ -]{1,80}$"
+              }
+            },
+            "font-mono": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 12,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_ -]{1,80}$"
+              }
+            },
+            "text-caption": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "text-small": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "text-body": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "text-lead": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "text-title": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "text-heading": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "text-display": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "weight-normal": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "weight-medium": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "weight-strong": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "leading-tight": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "leading-body": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "leading-control": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "measure": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "container": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "sidebar": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "shadow-blur": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "shadow-y": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "shadow-alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "disabled-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "layer-base": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "layer-sticky": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "layer-popover": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "layer-toast": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Cieo — The motion collection</title>
+<!-- CATALOGUE_STYLES -->
+</head>
+<body>
+<a class="ui-skip" href="#collection">Skip to the collection</a>
+<aside class="ui-sidebar" aria-label="Catalogue navigation">
+  <a class="ui-brand" href="#all" aria-label="Cieo, all atoms"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M15 3c-7 0-11 4-11 10h11V3Zm3 1v11h11C29 8 25 4 18 4Zm10 14H17v11c7 0 11-4 11-11ZM14 28V17H3c0 7 4 11 11 11Z"/></svg>cieo<span>01</span></a>
+  <nav id="desktop-nav" class="ui-navigation"></nav>
+  <div class="ui-sidebar-footer"><span><i class="ui-status-dot"></i>Made to move</span><button class="ui-button ghost icon" data-open="appearance-dialog" aria-label="Appearance" data-icon="settings"></button></div>
+</aside>
+<main class="ui-main" id="collection" tabindex="-1">
+  <div class="ui-topbar">
+    <button class="ui-button ghost icon ui-mobile-only" data-open="browse-dialog" aria-label="Browse collections" data-icon="sidebar"></button>
+    <div class="ui-breadcrumb">Library <span>/</span> <b id="breadcrumb">Everything</b></div>
+    <label class="ui-search"><span data-icon="search"></span><span class="ui-sr">Search atoms</span><input id="atom-search" type="search" placeholder="Find a little inspiration…" autocomplete="off"><kbd>/</kbd></label>
+    <button class="ui-button ghost icon ui-desktop-only" id="details-toggle" aria-label="Show inline details" aria-pressed="false" data-icon="code"></button>
+    <button class="ui-button ghost icon ui-desktop-only" data-open="appearance-dialog" aria-label="Collection appearance" data-icon="settings"></button>
+  </div>
+  <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span>Saved</button></div></div>
+  <div class="ui-toolbar">
+    <div class="ui-families" role="group" aria-label="Motion family" id="family-filter"></div>
+    <div class="ui-viewtools"><span id="count" class="ui-muted ui-result-count" aria-live="polite"></span><div class="row"><button class="ui-button ghost icon" id="pause-motion" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><label><span class="ui-sr">Preview speed</span><select id="motion-speed"><option value="1">1× speed</option><option value="0.25">¼× speed</option><option value="0.1">⅒× speed</option></select></label></div></div>
+  </div>
+  <div id="groups" aria-label="Live motion atoms"></div>
+  <div id="empty-state" class="ui-empty" hidden><span data-icon="search"></span><h2>Nothing here. Yet.</h2><p>Try another search, or save a few atoms to start a collection.</p><button class="ui-button" id="clear-filters">Show all atoms</button></div>
+  <noscript><p>This catalogue needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
+</main>
+<nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span>Saved</button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
+<dialog class="ui-dialog" id="browse-dialog" aria-labelledby="browse-title"><div class="ui-dialog-heading"><h2 id="browse-title">Collections</h2><button class="ui-button ghost icon" data-close aria-label="Close collections" data-icon="close"></button></div><nav id="mobile-nav" aria-label="All categories"></nav></dialog>
+<dialog class="ui-dialog" id="appearance-dialog" aria-labelledby="appearance-title"><div class="ui-dialog-heading"><h2 id="appearance-title">Make room for your taste.</h2><button class="ui-button ghost icon" data-close aria-label="Close appearance" data-icon="close"></button></div>
+  <div class="ui-settings">
+    <fieldset><legend>Appearance</legend><div class="ui-setting-options" id="appearance-options"><button class="ui-button" data-appearance="system">System</button><button class="ui-button" data-appearance="light">Light</button><button class="ui-button" data-appearance="dark">Dark</button></div></fieldset>
+    <fieldset><legend>Accent · applied to the live atoms</legend><div class="ui-swatches" id="accent-options"><button data-accent="iris" style="--swatch:#8a78dc" aria-label="Iris accent"></button><button data-accent="blue" style="--swatch:#73a5d4" aria-label="Blue accent"></button><button data-accent="green" style="--swatch:#7eae91" aria-label="Green accent"></button><button data-accent="coral" style="--swatch:#de947e" aria-label="Coral accent"></button></div></fieldset>
+    <fieldset><legend>Gallery density</legend><div class="ui-setting-options" id="density-options"><button class="ui-button" data-density="comfortable">Comfortable</button><button class="ui-button" data-density="compact">Compact</button></div></fieldset>
+    <fieldset><legend>Surface corners</legend><div class="ui-setting-options" id="corner-options"><button class="ui-button" data-corners="soft">Soft</button><button class="ui-button" data-corners="crisp">Crisp</button></div></fieldset>
+    <p class="ui-muted" style="font-size:12px;margin:0">Appearance and saved atoms stay in this browser. Nothing is sent to a server.</p>
+  </div>
+</dialog>
+<dialog class="ui-dialog" id="inspect-dialog" aria-labelledby="inspect-title"><div class="ui-dialog-heading"><h2 id="inspect-title">Atom details</h2><button class="ui-button ghost icon" data-close aria-label="Close atom details" data-icon="close"></button></div><div class="ui-inspect-body"><div id="inspect-preview"></div><div class="ui-inspect-meta"><p id="inspect-description"></p><div><h3>Motion</h3><div class="ui-meta-tags" id="inspect-families"></div></div><div><h3>Recipe</h3><pre id="inspect-code"></pre><button class="ui-button" id="copy-recipe"><span data-icon="copy"></span>Copy recipe</button></div><a id="inspect-source" target="_blank" rel="noopener noreferrer">View source</a><button id="inspect-save" class="ui-button" aria-pressed="false">Save atom</button><p class="ui-inspect-note">The original live atom, not a video. The recipe uses the catalogue runtime; adapt it through cieo/dom or cieo/react.</p></div></div></dialog>
+<div id="announcer" class="ui-sr" role="status" aria-live="polite"></div><div id="toast" class="ui-toast" hidden></div>
+<!-- CATALOGUE_SCRIPTS -->
+</body>
+</html>
