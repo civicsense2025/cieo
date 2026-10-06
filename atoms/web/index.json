@@ -2526,5 +2526,325 @@
   "summary": "Twelve role characters on one rig stand in a row, each idling in character: the scheduler checks its ticking watch, support nods while it listens, the designer draws a square in the air that lingers then fades, the developer types on keys that dip, the archivist lifts its box lid and lets it settle. Tap one and the others step back in a ripple from the one you chose while it hops forward and lands with a squash; then its name and job swap in, it switches to its action mood and plays its signature move. Props trail the body on lagging springs, so every hop, lean and landing carries through them. On a phone the row scrolls sideways with snap above the focused stage.",
   "api": "",
   "file": "identity/cast-b.js"
+ },
+ {
+  "id": "binder",
+  "category": "Writing",
+  "name": "Manuscript binder",
+  "summary": "A chapter list with a highlight plate that glides from chapter to chapter on a calm spring, its lower edge trailing 60ms behind. Each chapter keeps a live word count that rolls over like digits, and picking a chapter springs the article pane to its heading.",
+  "file": "blocks/172-binder.js",
+  "api": "pick(i): plate.go(y0,y1); digits[i].set(n); scroll.set(head)"
+ },
+ {
+  "id": "corkboard",
+  "category": "Writing",
+  "name": "Corkboard cards",
+  "summary": "Scene cards follow the pointer one to one while held. On release every card springs home to its slot on the same calm spring with a 40ms stagger, and the synopsis line below swaps to the held card with a quick blur out and back in.",
+  "file": "blocks/173-corkboard.js",
+  "api": "down: card.follow(1:1), syn.to(i)   up: cards.release(slot, S.base, +40ms)"
+ },
+ {
+  "id": "focusline",
+  "category": "Writing",
+  "name": "Focus sentence",
+  "summary": "One sentence at a time carries full ink while the rest sink to a dim grey on the same soft spring. Moving the caret simply retargets that spring, so focus bends mid-flight instead of restarting.",
+  "file": "blocks/174-focusline.js",
+  "api": "caret.set(i): op.set(k==i?1:.35, S.soft)"
+ },
+ {
+  "id": "typewriter",
+  "category": "Writing",
+  "name": "Typewriter lock",
+  "summary": "The caret stays pinned to the middle of the screen while the paper glides beneath it on a soft spring. A lock switch in the tile turns the effect off, so the caret walks the page instead of the page walking to it.",
+  "file": "blocks/175-typewriter.js",
+  "api": "line.set(i): lock?paper.set(mid-i*h):caret.set(i*h)"
+ },
+ {
+  "id": "goalring",
+  "category": "Writing",
+  "name": "Goal ring",
+  "summary": "A ring and its word count climb toward the daily target on a slow lazy spring, digits rolling as they go. At one hundred percent the ring gives a quick snap pulse and swaps to a Done state, and Reset returns it to zero.",
+  "file": "blocks/176-goalring.js",
+  "api": "write(n): p.set(min(1,v)); done?{pulse.snap; swap.to(Done)}"
+ },
+ {
+  "id": "scrivenings",
+  "category": "Writing",
+  "name": "Joined scenes",
+  "summary": "Tick scenes to stitch them into one scroll. Divider titles swap without overlap while the joined height springs to fit.",
+  "file": "blocks/177-scrivenings.js",
+  "api": "sel.toggle(i); div.swap(i); h.set(fit)"
+ },
+ {
+  "id": "barepage",
+  "category": "Writing",
+  "name": "Bare-page fade",
+  "summary": "Enter fades the chrome out fast, then the page widens on a spring. Moving to the top brings the tools back. The toggle picks calm or busy air.",
+  "file": "blocks/178-barepage.js",
+  "api": "enter(): chrome.set(0,snap); w.set(wide,base); top:hover → chrome.set(1)"
+ },
+ {
+  "id": "compilerun",
+  "category": "Writing",
+  "name": "Compile run",
+  "summary": "Run creeps the bar to most of the way on the clock, then springs it shut. Chapter ticks land one after another and the status swaps to open the book.",
+  "file": "blocks/179-compilerun.js",
+  "api": "run(): creep→0.9; done: p.set(1,base); ticks+60ms; swap.to(open)"
+ },
+ {
+  "id": "transcribe",
+  "category": "Writing",
+  "name": "Live transcription caret",
+  "summary": "Words blur in one by one while a soft caret rides the last word. Tapping a word pulses it like a replay. Pause stops the stream.",
+  "file": "blocks/180-transcribe.js",
+  "api": "tick: word.blurIn(base); caret.after(last); tap: pulse.set(1); live.toggle()"
+ },
+ {
+  "id": "pullquote",
+  "category": "Writing",
+  "name": "Pull-quote extractor",
+  "summary": "Drag the quote and it lifts while the paragraphs spring aside. Dropping it grows the block open from zero height. Reset puts it back.",
+  "file": "blocks/181-pullquote.js",
+  "api": "drag(q): lift; sib.y.set(gap); drop: h.set(1,base); reset()"
+ },
+ {
+  "id": "deadline",
+  "category": "Writing",
+  "name": "Deadline ticker",
+  "summary": "The minutes and seconds roll on lazy springs while the plate edges trail 60ms behind. Under ten minutes the tile turns danger. Pause freezes the count in place.",
+  "file": "blocks/182-deadline.js",
+  "api": "tick: rem-=dt; dm/ds.set(mm:ss, REDUCE)   rem<600: dg.set(1); eg.go(i,i)   pp toggles paused"
+ },
+ {
+  "id": "factcheck",
+  "category": "Writing",
+  "name": "Source fact-check chips",
+  "summary": "Each source swaps from unverified to verified in 100ms exit-then-enter while the chip width springs to fit. Verify all runs the same change down the row.",
+  "file": "blocks/183-factcheck.js",
+  "api": "chip: sw.to(v); w.set(fit(v)); tint.set(v)   all: each at t+i·.09"
+ },
+ {
+  "id": "embargo",
+  "category": "Writing",
+  "name": "Embargo countdown",
+  "summary": "Only the digits that change roll each second. At zero the count lifts into a Live pill on a soft spring. Reset puts the count back.",
+  "file": "blocks/184-embargo.js",
+  "api": "tick: dg.set(pad(floor)); delta only rolls   0: sw.to(live); ly -10→0 soft   rs: jump back"
+ },
+ {
+  "id": "lede",
+  "category": "Writing",
+  "name": "Lede optimizer",
+  "summary": "Variants swap exit-then-enter while the grade bar eases on base and the score rolls with the direction of travel. Prev and Next walk the list.",
+  "file": "blocks/185-lede.js",
+  "api": "go(k,t): sw.to(k); w.set(score); dg.set(score, dir)   ends clamp, no wrap"
+ },
+ {
+  "id": "voicenote",
+  "category": "Writing",
+  "name": "Audio-note insert",
+  "summary": "The tile lifts under your pointer and follows it. Dropping it over the draft draws the waveform bar by bar on soft and opens the slot on a height spring. Play and Insert do the same without dragging.",
+  "file": "blocks/186-voicenote.js",
+  "api": "down: lft.set(1)   drop in: x/y.set(slot, soft); bars i·.03 soft; hs.set(64)   pl/ib mirror"
+ },
+ {
+  "id": "wirefeed",
+  "category": "Writing",
+  "name": "Wire-feed ticker",
+  "summary": "New wires slide in at the top and push older wires down, each one following 60ms after the last. The badge count rolls to the new total. Pause stops the feed.",
+  "file": "blocks/187-wirefeed.js",
+  "api": "wire.y.set(0,S.base,t+i*0.06); count.set(n)   pause: timer.stop   REDUCE: jump"
+ },
+ {
+  "id": "stylepaint",
+  "category": "Writing",
+  "name": "Style gallery painter",
+  "summary": "Hovering a style plate slides its highlight over, the style name swaps, and the doc preview retargets size and tint. Leaving keeps the last style.",
+  "file": "blocks/188-stylepaint.js",
+  "api": "hl.go(l,r,S.base); name.to(i)   doc.size.set(s,S.soft)   REDUCE: jump"
+ },
+ {
+  "id": "template",
+  "category": "Writing",
+  "name": "Template inserter",
+  "summary": "Tiles rise in one after another. Picking one grows the doc block open and swaps its content in. Picking again swaps to the new template.",
+  "file": "blocks/189-template.js",
+  "api": "tile.o.set(1,S.base,t+i*0.06)   blk.h.set(H,S.base); body.to(i)   REDUCE: jump"
+ },
+ {
+  "id": "acceptrail",
+  "category": "Writing",
+  "name": "Tracked-changes rail",
+  "summary": "Accepting fades a row out over 100ms, then its height springs shut. The accepted count rolls up. Accept all clears every row in order.",
+  "file": "blocks/190-acceptrail.js",
+  "api": "row.o→0; row.h→0 at t+0.1,S.base   count.set(n)   REDUCE: jump"
+ },
+ {
+  "id": "figbuilder",
+  "category": "Writing",
+  "name": "Figure builder",
+  "summary": "Adding a figure drops its caption in and springs every caption to its ranked slot. The page count rolls up with the list.",
+  "file": "blocks/191-figbuilder.js",
+  "api": "cap.y.set(slot,S.base)   pages.set(n)   add: push + rank   REDUCE: jump"
+ },
+ {
+  "id": "mergestep",
+  "category": "Writing",
+  "name": "Merge preview stepper",
+  "summary": "The record title swaps while the field plate slides behind the rows with its far edge trailing 60ms. A missing field rings in the danger color with a note.",
+  "file": "blocks/192-mergestep.js",
+  "api": "rec.to(i) plate.go(top,bot,S.snap,t+LAG) err.set(bad) · REDUCE: instant"
+ },
+ {
+  "id": "resolvesweep",
+  "category": "Writing",
+  "name": "Resolve sweep",
+  "summary": "Resolving fades a card and its height springs shut. The open count rolls down after, and the avatar stack fans shut with it.",
+  "file": "blocks/193-resolvesweep.js",
+  "api": "o.set(0,S.snap) h.set(0,S.base,t+EXIT) dg.set(n) fan.set(open/3) · REDUCE: instant"
+ },
+ {
+  "id": "compare",
+  "category": "Writing",
+  "name": "Version compare slider",
+  "summary": "The divider follows the pointer one to one. On release it springs to the nearer draft, and the caption swaps to match.",
+  "file": "blocks/194-compare.js",
+  "api": "x = held ? pointer : x.at(t)   up: x.release(hx,vx,near,S.soft)   cap.to(near)"
+ },
+ {
+  "id": "sigchain",
+  "category": "Writing",
+  "name": "Signature chain",
+  "summary": "Advance fills the connector first, then the next seal inks 60ms later. The status swaps forward, ending in Signed.",
+  "file": "blocks/195-sigchain.js",
+  "api": "line.set(k) seal[i].set(k>=i,S.base,t+LAG) status.to(all?2:k?1:0) · REDUCE: instant"
+ },
+ {
+  "id": "budget",
+  "category": "Writing",
+  "name": "Assignment budget board",
+  "summary": "Rows spring into their rank slots while the leader plate follows with its far edge trailing 60ms. Killing swaps a row out, then its space collapses; the counts roll to match.",
+  "file": "blocks/196-budget.js",
+  "api": "y[i].set(slot,S.base) lead.go(t,b,t+LAG) kill:out.to(1);h.set(0,t+EXIT) dg.set(n) · REDUCE: instant"
+ },
+ {
+  "id": "headline",
+  "category": "Writing",
+  "name": "Headline tester",
+  "summary": "Each headline swaps out before the next one swaps in. The winner plate stretches open leading edge first. The click rate rolls over like digits.",
+  "file": "blocks/197-headline.js",
+  "api": "sw.to(i)   plate.go(top,bot)   ctr.set(rate)"
+ },
+ {
+  "id": "killline",
+  "category": "Writing",
+  "name": "Kill line",
+  "summary": "Dragging a story past the cut line arms a red snap. Letting go past the mark fades the row out, then its space closes and the rest spring up. Restore brings it back.",
+  "file": "blocks/198-killline.js",
+  "api": "x.release(v)   arm.set(1)   sw.to(cut), h→0   rest spring up"
+ },
+ {
+  "id": "queryrail",
+  "category": "Writing",
+  "name": "Query rail",
+  "summary": "The rail slides in on a calm spring. New query chips swap in one after another. Resolving one shrinks it away, then the gap closes on the same spring.",
+  "file": "blocks/199-queryrail.js",
+  "api": "rail.set(1)   chip.sw.to(1) @t+i*.04   resolve: w→0, h→0"
+ },
+ {
+  "id": "slug",
+  "category": "Writing",
+  "name": "Slug renamer",
+  "summary": "The field stretches or shrinks to fit as you type. The old slug blurs into the new one. A taken slug rings red and says so.",
+  "file": "blocks/200-slug.js",
+  "api": "w.set(fit(live))   sw.to(new)   taken: ring.set(1), msg"
+ },
+ {
+  "id": "deckstack",
+  "category": "Writing",
+  "name": "Deck stacker",
+  "summary": "Kicker, deck and headline trade places on soft springs with a short trailing edge. The search-result bar fills and inks from green to amber to red as it nears the cut.",
+  "file": "blocks/201-deckstack.js",
+  "api": "y.retarget(S.soft)   trail @t+.06   bar: len→color"
+ },
+ {
+  "id": "flatplan",
+  "category": "Writing",
+  "name": "Flatplan paginator",
+  "summary": "A held page follows the pointer exactly and bends with rubber-band past the ends. On release it springs into the nearest folio slot, the folio number rolls, and the plate marker trails behind by 60ms. Shuffle re-deals the folio.",
+  "file": "blocks/202-flatplan.js",
+  "api": "held.x = pointer; rb past ends   drop: x.release(x, vx, slot)   dg.set(n)   plates.go(l, r)"
+ },
+ {
+  "id": "shipcheck",
+  "category": "Writing",
+  "name": "Ship checklist",
+  "summary": "Each check fills its box, draws the tick, then runs the strike 40ms later. The ring fills and the count rolls with every step, and the ship button swaps into a success stamp on the last one. Reset clears the board.",
+  "file": "blocks/203-shipcheck.js",
+  "api": "box.set(1); tick.set(1); strike.set(1, S.base, t+.04)   ring.set(n/3); dg.set(n)   all: swap.to(1), w.set(measure)"
+ },
+ {
+  "id": "inboxsweep",
+  "category": "Writing",
+  "name": "Inbox sweep",
+  "summary": "A row follows the finger and arms past 80 pixels. On release it flies out on the fast spring while its gap closes on the calm one, and the count left rolls down. Undo brings the last swept row back.",
+  "file": "blocks/204-inboxsweep.js",
+  "api": "x = pointer; armed = |x| > 80   out: x.release(x, v, ±W, S.snap); h.set(0, S.base, t+.15)   undo: h.set(1); x.set(0)"
+ },
+ {
+  "id": "backlink",
+  "category": "Writing",
+  "name": "Backlink popover",
+  "summary": "The popover grows out of the link. Switching tabs swaps the old list out before the new rows rise 30ms apart, and the highlight trails the hovered row by 60ms.",
+  "file": "blocks/205-backlink.js",
+  "api": "pv.o.set(open, open ? S.base : S.snap)   swap.to(tab)   rows: o.set(1, S.base, t+.1+i*.03)   hi.go(top, top+H)"
+ },
+ {
+  "id": "tagpill",
+  "category": "Writing",
+  "name": "Tag pill autocomplete",
+  "summary": "Typing # filters the list inline: matches spring into their slots while misses blur out. The plate trails the top match by 60ms, and Enter morphs the word into a pill that springs open before its text fades in.",
+  "file": "blocks/206-tagpill.js",
+  "api": "rows.filter(#q)   match: y.set(slot); miss: o.set(0)   plate.go(first)   pill: w.set(1); o.set(1, S.base, t+.06)"
+ },
+ {
+  "id": "streak",
+  "category": "Writing",
+  "name": "Streak ring",
+  "summary": "The ring fills to its new share. The week dots ink one after another. The day count rolls over. Flipping weeks and months swaps the caption while the ring and dots replay.",
+  "file": "blocks/207-streak.js",
+  "api": "ring.set(share, soft)   dot[i].set(1, base, t0+i*.04)   count.set(days)   cap.to(mode)"
+ },
+ {
+  "id": "clipper",
+  "category": "Writing",
+  "name": "Clip drop target",
+  "summary": "Dragging over the card warms its tint. Dropping grows the saved preview down from nothing. The cover starts soft and sharpens, then the title trades places with a saved line and its check.",
+  "file": "blocks/208-clipper.js",
+  "api": "tint.set(1, snap) on snap   h.set(H, base) on drop   sharp.set(1, lazy); title.to(saved)   reset: all.set(0)"
+ },
+ {
+  "id": "sketchtext",
+  "category": "Writing",
+  "name": "Sketch to text",
+  "summary": "The ink settles and trades places with typed text. The lines below slide down to make room. Words the reader might doubt blush a warning tint. Retake brings the ink back.",
+  "file": "blocks/209-sketchtext.js",
+  "api": "ink.o.set(0, snap); text.to(1) after .1   below.y.set(H, base)   doubt.tint→1   retake: all back"
+ },
+ {
+  "id": "outline",
+  "category": "Writing",
+  "name": "Outline zoom",
+  "summary": "Zooming swaps the breadcrumb trail. The opened branch grows from almost full size. Its children land one after another while the old siblings wash out. Back walks the same path in reverse.",
+  "file": "blocks/210-outline.js",
+  "api": "crumb.to(depth)   br.sc.set(1, base) from .97   kid[i].o.set(1, base, t0+i*.03)   sib.o.set(0)   back: reverse"
+ },
+ {
+  "id": "recall",
+  "category": "Writing",
+  "name": "Recall flip",
+  "summary": "The card turns over with a small dip at the halfway point. The answer only swaps in once the question has left. Each grade button trails its edge behind it. The next interval rolls its digits forward.",
+  "file": "blocks/211-recall.js",
+  "api": "flip.set(1, soft); dip=sin(pi p)   qa.to(1) after exit   edge.go(grade) trails .06   iv.set(days)"
  }
 ]
