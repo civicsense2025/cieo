@@ -1,7 +1,7 @@
 
 
 atom({ id:'scrivenings', cat:'Writing', name:'Joined scenes', block:'manuscript, scene list', fam:['M','S'], tall:true,
-  html:`<div class="col" style="gap:10px;width:min(340px,92%)"><div class="row sc-chips" style="gap:6px;flex-wrap:wrap"></div><div class="card sc-join" style="overflow:hidden;width:100%"><div class="sc-in col" style="gap:0;padding:12px 14px"></div></div></div><div class="hint">Tick scenes to stitch them together</div>`,
+  html:`<div class="col" style="gap:16px;width:min(340px,92%)"><div class="row sc-chips" style="gap:8px;flex-wrap:wrap"></div><div class="card sc-join" style="overflow:hidden;width:100%"><div class="sc-in col" style="gap:0;padding:24px"></div></div></div><div class="hint">Tick scenes to stitch them together</div>`,
   desc:'Tick scenes to stitch them into one scroll. Divider titles swap without overlap while the joined height springs to fit.',
   api:'sel.toggle(i); div.swap(i); h.set(fit)',
   init(st){
@@ -13,18 +13,18 @@ atom({ id:'scrivenings', cat:'Writing', name:'Joined scenes', block:'manuscript,
       chips.querySelectorAll('button').forEach((b,i) => {
         const on = sel.includes(i);
         b.setAttribute('aria-pressed', on ? 'true' : 'false');
-        b.style.opacity = on ? '1' : '.55';
+        b.style.background=on?'var(--accent-tint)':'var(--card)';b.style.color=on?'var(--accent)':'var(--muted)';
       });
     };
     SC.forEach((s,i) => {
-      const b = document.createElement('button'); b.className = 'chipb small'; b.textContent = s.t;
-      b.style.cssText += 'height:28px;border-radius:14px;padding:0 12px;cursor:pointer';
+      const b = document.createElement('button'); b.type='button';b.className='chipb small'; b.textContent = s.t;
+      b.style.cssText += 'min-height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 16px;cursor:pointer';
       b.onclick = () => { sel = sel.includes(i) ? sel.filter(k => k !== i) : [...sel, i].sort(); render(); };
       chips.appendChild(b);
     });
     const divider = title => {
       const d = document.createElement('div');
-      d.style.cssText = 'position:relative;height:22px;margin:8px 0 2px';
+      d.style.cssText = 'position:relative;height:24px;margin:8px 0 8px';
       const e = document.createElement('span'); e.className = 'layer small muted'; e.textContent = '';
       const f = document.createElement('span'); f.className = 'layer small muted'; f.textContent = title;
       d.appendChild(e); d.appendChild(f);

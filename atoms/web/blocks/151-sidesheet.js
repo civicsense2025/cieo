@@ -22,28 +22,28 @@ const later = (q, tt, fn) => { q.push([tt, fn]); q.sort((a, b) => a[0] - b[0]); 
 atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', fam:['X','D','S'], wide:true, tall:true,
   html:`<style>
 .ss{position:absolute;inset:0;overflow:hidden;isolation:isolate;container-type:inline-size;text-align:left;font-size:13px}
-.ss-ls{position:absolute;left:12px;right:12px;top:10px}
-.ss-hd,.ss-rw{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,1fr) 98px;gap:12px;align-items:center;padding:0 12px}
-.ss-hd{height:26px;font-size:12px;font-weight:500;color:var(--faint)}
-.ss-rw{position:relative;width:100%;height:40px;border:0;border-radius:10px;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.ss-ls{position:absolute;left:16px;right:16px;top:16px}
+.ss-hd,.ss-rw{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,1fr) 98px;gap:16px;align-items:center;padding:0 12px}
+.ss-hd{height:32px;font-size:12px;font-weight:500;color:var(--faint)}
+.ss-rw{position:relative;width:100%;height:48px;border:0;border-radius:12px;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
 .ss-rw>*{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ss-rw b{font-weight:500}
 .ss-st{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500}
 .ss-st i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
 .ss-sc{position:absolute;inset:0;background:#0C1016;opacity:0;pointer-events:none;z-index:4}
 .ss-sh{position:absolute;top:0;right:0;bottom:0;width:min(380px,100%);z-index:5;display:flex;background:var(--card);border-left:1px solid var(--line);box-shadow:var(--shadow);visibility:hidden;touch-action:pan-y}
-.ss-gr{flex:none;width:18px;display:grid;place-items:center;cursor:grab}
-.ss-gr i{width:4px;height:36px;border-radius:2px;background:var(--line)}
+.ss-gr{flex:none;width:24px;display:grid;place-items:center;cursor:grab}
+.ss-gr i{width:4px;height:40px;border-radius:2px;background:var(--line)}
 .ss-mn{flex:1;min-width:0;display:flex;flex-direction:column}
-.ss-tb{flex:none;display:flex;align-items:center;justify-content:space-between;height:44px;padding-right:10px;color:var(--faint);font-size:12px;font-weight:500}
-.ss-x{width:28px;height:28px;border:0;border-radius:8px;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
+.ss-tb{flex:none;display:flex;align-items:center;justify-content:space-between;height:56px;padding-right:16px;color:var(--faint);font-size:12px;font-weight:500}
+.ss-x{width:40px;height:40px;border:0;border-radius:8px;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
 .ss-x:hover{background:var(--raised);color:var(--ink)}
 .ss-lw{position:relative;flex:1;min-height:0}
-.ss-ly{position:absolute;inset:0;padding:0 16px 14px 0;display:flex;flex-direction:column;gap:8px;overflow:hidden}
+.ss-ly{position:absolute;inset:0;padding:0 24px 24px 0;display:flex;flex-direction:column;gap:8px;overflow:auto}
 .ss-ly h4{margin:0;font-size:17px;line-height:22px;letter-spacing:-.015em;font-weight:600}
 .ss-ly p{margin:0}
 .ss-nt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.ss-dl{display:grid;grid-template-columns:70px minmax(0,1fr);gap:4px 10px;margin:4px 0 0}
+.ss-dl{display:grid;grid-template-columns:70px minmax(0,1fr);gap:8px 16px;margin:4px 0 0}
 .ss-dl dt{color:var(--faint)}
 .ss-dl dd{margin:0}
 .ss-ft{display:flex;gap:8px;margin-top:auto}

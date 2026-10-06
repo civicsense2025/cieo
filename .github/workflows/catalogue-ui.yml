@@ -1,0 +1,47 @@
+name: Catalogue UI
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: catalogue-ui-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 22
+      - name: Rebuild both catalogue documents
+        run: node scripts/build-library.mjs && node scripts/build-catalogue.mjs
+      - name: Check the original package and the new catalogue source contract
+        run: npm ci && npm run check
+      - name: Verify generated documents are committed
+        run: git diff --exit-code -- docs/library.html docs/catalogue.html
+      - name: Install browser test tools
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Exercise the real catalogue on an HTTP origin
+        run: python3 test/catalogue-ui/smoke.py
+      - name: Initialize and render every original atom once
+        run: python3 test/catalogue-ui/integrity.py
+      - name: Package the reviewed source and offline preview
+        run: |
+          mkdir -p artifacts
+          git archive --format=zip HEAD -o artifacts/cieo-source.zip
+          cp docs/library.html artifacts/Cieo-Catalogue-Preview.html
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: catalogue-review
+          path: artifacts/
+          retention-days: 7
+          if-no-files-found: error

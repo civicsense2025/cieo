@@ -314,7 +314,7 @@
  {
   "id": "sheet",
   "category": "Admin",
-  "name": "Bottom sheet (mobile only)",
+  "name": "Bottom sheet",
   "summary": "For phone layouts only: on wider screens Studio’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.",
   "file": "blocks/041-sheet.js",
   "api": "y.release(y, vy, y > 0.3H || vy > 500 ? H : 0)"

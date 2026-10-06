@@ -1,0 +1,42 @@
+.l-dialog {padding:0;border:0;border-radius:24px;background:var(--tile);color:var(--ink);box-shadow:var(--panel-shadow);max-height:calc(100dvh - 48px);max-width:calc(100vw - 32px);overflow:auto;overscroll-behavior:contain}
+.l-dialog::backdrop {background:#151b3038;backdrop-filter:blur(4px)}
+.l-dialog-head {display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;border-bottom:1px solid var(--line-soft);position:sticky;top:0;background:var(--lib-glass);backdrop-filter:blur(16px);z-index:5}
+.l-dialog-head h2 {font-size:16px;font-weight:600}
+.l-dialog-body {padding:24px}
+#l-settings {width:360px;margin:88px 24px auto auto}
+#l-settings fieldset {border:0;padding:0;margin:0 0 24px;min-width:0}
+#l-settings legend {font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px}
+.l-choices {display:flex;gap:8px;flex-wrap:wrap}
+.l-choices button {border:1px solid var(--line);background:var(--card);min-height:40px;border-radius:12px;flex:1;padding:8px 12px;font-size:13px}
+.l-choices button[aria-pressed="true"] {background:var(--accent-tint);border-color:var(--accent);color:var(--accent)}
+.l-swatch {width:20px;height:20px;border-radius:50%;display:block;background:var(--swatch);margin:auto}
+.l-note {font-size:12px;color:var(--muted);line-height:1.65}
+#l-browser {width:320px;margin:16px auto 16px 16px;height:calc(100dvh - 32px)}
+#l-browser .l-sidebar {display:block;position:static;max-height:none;height:auto;padding:8px 16px 24px}
+.l-inspector {position:fixed;z-index:40;right:16px;top:88px;bottom:16px;width:320px;background:var(--lib-glass);backdrop-filter:blur(24px);border-radius:24px;box-shadow:var(--panel-shadow);overflow:auto;overscroll-behavior:contain}
+body[data-inspector="true"] .l-main {padding-right:360px}
+body[data-inspector="true"] .l-grid {--l-columns:2}
+.l-inspector .l-dialog-head {padding:16px}
+.l-inspector-content {padding:24px}
+.l-inspector-content h3 {font-size:24px;font-weight:600;letter-spacing:-.6px;margin-bottom:8px}
+.l-inspector-content p {color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:24px}
+.l-inspector-content .l-choices {margin-bottom:24px}
+.l-inspector-content dl {margin:0 0 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px 8px;font-size:12px}
+.l-inspector-content dt {color:var(--faint)}
+.l-inspector-content dd {margin:0;text-align:right;overflow-wrap:anywhere}
+.l-code {padding:16px;border-radius:16px;background:var(--raised);font:11px/1.7 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;margin:8px 0 16px}
+.l-inspector-content .l-button {width:100%;margin-bottom:8px}
+.l-inspector-content .l-source {font:11px/1.6 var(--mono);overflow-wrap:anywhere}
+#l-inspect-sheet {width:400px}
+#l-focus {width:min(1120px,calc(100vw - 48px));height:min(840px,calc(100dvh - 48px));margin:auto}
+.l-focus-host {height:calc(100% - 73px);padding:24px;display:flex;flex-direction:column;min-height:0}
+.l-focus-host .l-stage-host {flex:1;margin:0;width:100%;overflow:auto;border-radius:16px}
+.l-focus-host .stage {height:100%;min-height:480px;position:relative;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;isolation:isolate;overflow:hidden;background:var(--mat,var(--lib-mat))}
+.l-focus-host .stage .hint {bottom:24px}
+body:has(.l-dialog[open]) {overflow:hidden}
+@media(max-width:1279px){body[data-inspector="true"] .l-main{padding-right:24px}.l-inspector{display:none}}
+@media(max-width:599px){.l-dialog,#l-settings,#l-inspect-sheet,#l-focus{margin:auto 8px 8px;width:calc(100vw - 16px);max-width:none;max-height:calc(100dvh - 24px);border-radius:24px;padding-bottom:env(safe-area-inset-bottom,0px)}#l-focus{height:calc(100dvh - 24px)}.l-dialog-head{padding:16px}.l-dialog-body,.l-inspector-content{padding:24px}.l-choices button{min-height:48px}#l-browser{margin:8px auto 8px 8px;height:calc(100dvh - 16px);max-width:calc(100vw - 16px)}.l-focus-host{padding:8px}.l-focus-host .stage{min-height:400px}}
+
+.l-focus-host>.l-tile {flex:1;display:flex;flex-direction:column;border:0;box-shadow:none;overflow:hidden}
+.l-focus-host .l-tile-head,.l-focus-host .l-tile-meta {display:none}
+.l-focus-host .l-tile .stage {height:100%;min-height:480px}

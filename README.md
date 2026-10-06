@@ -45,7 +45,13 @@ Shared rules: content leaves in 100 ms before new content enters; a sliding indi
 
 - `atoms/web/index.json`: every atom (id, category, name, summary, file). The recipe code is in `atoms/web/blocks/` (agent identity in `atoms/web/identity/`). The recipes run on the catalogue's own runtime (`atoms/web/runtime.core.js`); port the pattern into your app with `cieo/dom` or `cieo/react`.
 - `atoms/swift/<Category>/`: one SwiftUI view per atom, same id, built on Cieo. Browse them with `MotionAtoms.all`.
-- `docs/catalogue.html`: the full interactive catalogue (open in a browser). `docs/agent-identity.html`: agent icons and characters.
+- `docs/library.html`: the full interactive catalogue (open in a browser). `docs/catalogue.html`: the compact reference view. `docs/agent-identity.html`: agent icons and characters.
+
+## Catalogue
+
+Open `docs/library.html` for the complete interactive library. The library keeps all 345 recipes, with searchable collections, saved atoms, contextual inspection, expanded previews and appearance controls. The expanded view moves the original recipe, preserving its state.
+
+The editable shell, styles and navigation live under `atoms/web/library/`, `atoms/web/shell.library.before.html`, and `atoms/web/runtime.library.page.js`. Recipe improvements live in `atoms/web/blocks/`; the original spring runtime remains unchanged. Run `node scripts/build-library.mjs` and `node scripts/build-catalogue.mjs` after editing. See `docs/review/catalogue-ui.md` for scope, references and test boundaries.
 
 ## Controls
 

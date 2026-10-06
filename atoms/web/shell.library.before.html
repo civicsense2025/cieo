@@ -1,153 +1,40 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Library</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
-<style>
-:root{
-  --bg:#FFFFFF; --tile:#FFFFFF; --card:#FFFFFF; --raised:#F5F5F5; --surface:#F6F6F4;
-  --ink:#000000; --muted:#525252; --faint:#8A8A8A; --line:rgba(0,0,0,.14); --line-soft:rgba(0,0,0,.08);
-  --accent:#525252; --accent-tint:#F5F5F5; --success:#595D17; --success-tint:#EAECE7; --danger:#B0342F; --danger-tint:#F6E6E4; --warning:#B45309; --warning-tint:#FBEEDF;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(16,20,26,.05),0 12px 32px rgba(16,20,26,.08);
-  --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-  color-scheme:light;
-}
-:root[data-theme="white"]{
-  --bg:#FFFFFF; --tile:#FFFFFF; --card:#FFFFFF; --raised:#F5F5F5; --surface:#F6F6F4;
-  --ink:#000000; --muted:#525252; --faint:#8A8A8A; --line:rgba(0,0,0,.14); --line-soft:rgba(0,0,0,.08);
-  --accent:#525252; --accent-tint:#F5F5F5; --success:#595D17; --success-tint:#EAECE7; --danger:#B0342F; --danger-tint:#F6E6E4; --warning:#B45309; --warning-tint:#FBEEDF;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(16,20,26,.05),0 12px 32px rgba(16,20,26,.08); color-scheme:light;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="white"]){
-  --bg:#000000; --tile:#000000; --card:#0A0A0A; --raised:#141414; --surface:#141416;
-  --ink:#FFFFFF; --muted:#A3A3A3; --faint:#6B6B6B; --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.08);
-  --accent:#A3A3A3; --accent-tint:#141414; --success:#A3A76E; --success-tint:#23261A; --danger:#D0584F; --danger-tint:#2E1A19; --warning:#D6822F; --warning-tint:#2D2114;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.4); color-scheme:dark;}}
-:root[data-theme="black"]{
-  --bg:#000000; --tile:#000000; --card:#0A0A0A; --raised:#141414; --surface:#141416;
-  --ink:#FFFFFF; --muted:#A3A3A3; --faint:#6B6B6B; --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.08);
-  --accent:#A3A3A3; --accent-tint:#141414; --success:#A3A76E; --success-tint:#23261A; --danger:#D0584F; --danger-tint:#2E1A19; --warning:#D6822F; --warning-tint:#2D2114;
-  --shadow:none; --shadow-soft:0 1px 2px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.4); color-scheme:dark;}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);padding-inline:28px;padding-block:64px 160px;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit}
-.wrap{max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:56px}
-.top{display:flex;flex-direction:column;gap:14px;max-width:760px}
-h1{font-size:44px;line-height:1;letter-spacing:-.035em;font-weight:600;margin:0;text-wrap:balance}
-.lede{color:var(--muted);margin:0;max-width:64ch}
-.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding-block:14px;display:flex;flex-wrap:nowrap;gap:10px;align-items:center}
-.toolbar .tools{display:flex;gap:10px;align-items:center;min-width:0;flex:1;overflow-x:auto;scrollbar-width:none}
-.toolbar .tools::-webkit-scrollbar{display:none}
-.toolbar .tools>*{flex:none}
-.toolbar .count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.seg{position:relative;display:flex;flex-wrap:nowrap;background:var(--surface);border-radius:12px;padding:3px}
-.seg .ind{position:absolute;left:0;top:0;background:var(--bg);border-radius:9px;box-shadow:0 1px 4px rgba(0,0,0,.12)}
-.seg button{position:relative;background:none;border:0;border-radius:7px;padding:5px 11px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
-.jumpbtn{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:600;cursor:pointer}
-.jumpbtn svg{width:14px;height:14px;transition:none}
-.jump{position:absolute;left:0;right:0;top:100%;max-height:min(70vh,560px);overflow-y:auto;background:var(--surface);border-radius:18px;box-shadow:var(--shadow-soft);padding:18px 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px 24px;margin-top:8px}
-.jump h4{margin:0 0 6px;font-size:11.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
-.jump a{display:flex;justify-content:space-between;gap:8px;padding:6px 8px;margin:0 -8px;border-radius:7px;color:var(--ink);text-decoration:none;font-size:14px}
-.jump a:hover,.jump a:focus-visible{background:var(--raised)}
-.jump a span{color:var(--faint);font-variant-numeric:tabular-nums}
-.jump a[hidden],.jump div[hidden]{display:none}
-@media (max-width:700px){.toolbar .count{display:none}.jump{grid-template-columns:1fr 1fr;gap:14px 16px;padding:12px 14px}}
-#tweaks{position:fixed;right:20px;bottom:20px;z-index:50;display:flex;flex-direction:column;gap:10px;max-width:min(260px,calc(100vw - 40px));border-radius:20px;padding:16px 18px;background:var(--surface);box-shadow:var(--shadow-soft);will-change:transform}
-#twBody{display:flex;flex-direction:column;gap:12px;overflow:hidden}
-#tweaks label{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:10px}
-#tweaks output{font-size:13px;font-variant-numeric:tabular-nums;color:var(--ink)}
-#tweaks input[type="range"]{accent-color:var(--ink)}
-#twToggle{align-self:flex-end;border:0;background:var(--bg);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-@media (max-width:700px){#tweaks{right:12px;bottom:12px;padding:12px 14px}}
-.group{display:flex;flex-direction:column;gap:20px;scroll-margin-top:72px}
-.group>h2{font-size:13px;font-weight:600;letter-spacing:.02em;margin:0;display:flex;gap:12px;align-items:center;color:var(--muted)}
-.grid{display:grid;gap:32px;grid-template-columns:repeat(var(--cols,3),minmax(0,1fr))}
-@media (max-width:1100px){.grid{grid-template-columns:repeat(min(var(--cols,3),2),minmax(0,1fr))}}
-@media (max-width:700px){.grid{grid-template-columns:minmax(0,1fr)} h1{font-size:34px}}
-[hidden]{display:none!important}
-.tile{background:var(--surface);border-radius:18px;box-shadow:var(--shadow-soft);display:flex;flex-direction:column;min-width:0;content-visibility:auto;contain-intrinsic-size:auto 420px}
-.tile.wide{grid-column:1/-1}
-.tile>header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:20px 20px 0}
-.tile h3{font-size:15px;font-weight:600;margin:0;letter-spacing:-.01em}
-.fam{display:flex;gap:4px}
-.fam span{font-size:11px;font-weight:600;min-width:20px;height:20px;padding:0 5px;border-radius:6px;display:grid;place-items:center;background:var(--raised);color:var(--muted)}
-.tile .block{font-size:12px;color:var(--faint);padding:2px 20px 0}
-.stage{position:relative;height:300px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;user-select:none;-webkit-user-select:none;overflow:hidden;margin-top:6px}
-.tile.tall .stage{height:380px}
-.tile.big .stage{height:380px}
-.tile.wide.tall .stage{height:560px}
-@media (max-width:1100px){.tile.wide.tall .stage{height:600px}}
-@media (max-width:700px){.tile.wide.tall .stage{height:680px}}
-.tile[data-agent].focus{position:fixed;left:2.5vw;top:2.5vh;width:95vw;height:95vh;max-height:95vh;z-index:60;margin:0;border-radius:22px;box-shadow:0 32px 96px rgba(0,0,0,.24)}
-.tile[data-agent].focus .stage{height:auto;flex:1;min-height:0}
-.tilePH{min-width:0}
-#focusScrim{position:fixed;inset:0;z-index:55;background:color-mix(in oklab,var(--ink) 32%,transparent);opacity:0;visibility:hidden}
-.tile>footer{padding:0 20px 20px;display:flex;flex-direction:column;gap:8px;margin-top:auto}
-.tile footer p{margin:0;color:var(--muted);font-size:13.5px}
-.tile pre{margin:0;font:12px/1.55 var(--mono);background:var(--bg);border-radius:10px;padding:10px 12px;overflow-x:auto}
-.hint{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:12px;color:var(--faint);pointer-events:none}
-.ro{position:absolute;top:10px;right:14px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
-button:focus-visible,input:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 12px;font-size:13px;font-weight:500;cursor:pointer}
-.btn.ink{background:var(--ink);color:var(--card);border-color:var(--ink)}
-.card{background:var(--card);border-radius:14px}
-.layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
-.digits{display:inline-flex;font-variant-numeric:tabular-nums}
-.dslot{position:relative;display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom}
-.dslot .dl{position:absolute;left:0;right:0;top:0;text-align:center}
-.pill{position:absolute;border-radius:999px}
-.row{display:flex;align-items:center;gap:10px}
-.col{display:flex;flex-direction:column;gap:10px}
-.muted{color:var(--muted)}
-.small{font-size:13px}
-.num{font-variant-numeric:tabular-nums}
-.infobtn{flex:none;width:24px;height:24px;border-radius:999px;border:0;background:transparent;color:var(--faint);display:grid;place-items:center;font-size:14px;line-height:1;cursor:pointer;padding:0}
-.infobtn:hover{background:var(--raised);color:var(--ink)}
-.infobtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.tileinfo{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 260ms var(--easeSpring,cubic-bezier(.2,.15,.2,1)),opacity 260ms var(--easeSpring,cubic-bezier(.2,.15,.2,1))}
-.tileinfo>*{min-height:0;overflow:hidden}
-.tileinfo.open{grid-template-rows:1fr;opacity:1}
-.detailrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;color:var(--muted)}
-#detailToggle{border:0;background:var(--bg);border-radius:999px;padding:6px 14px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.1);color:var(--ink)}
-.group[data-agent-group]{padding-block:24px}
-.group[data-agent-group] .grid{gap:48px}
-.group[data-agent-group] .tile{border-radius:20px}
-.group[data-agent-group] .tile[data-agent].focus{border-radius:22px}
-</style>
-
-<div class="wrap">
-  <header class="top">
-    <h1>Library</h1>
-    <p class="lede">Every motion pattern the block library and admin primitives need, as live atoms. Each frame is a pure function of time. Springs are closed-form and critically damped, so nothing overshoots. Click, drag, hover and type in any tile.</p>
-  </header>
-
-  <div class="toolbar">
-    <button class="jumpbtn" id="jumpbtn" aria-expanded="false" aria-controls="jump"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h8"/></svg>Jump to</button>
-    <div class="tools">
-    <div class="seg" id="famseg" role="group" aria-label="Filter by motion family"><div class="ind"></div>
-      <button data-f="*">All</button><button data-f="M">M</button><button data-f="S">S</button><button data-f="D">D</button><button data-f="E">E</button><button data-f="X">X</button><button data-f="T">T</button>
-    </div>
-    <div class="seg" id="spdseg" role="group" aria-label="Clock speed"><div class="ind"></div>
-      <button data-s="1">1×</button><button data-s="0.25">¼×</button><button data-s="0.1">⅒×</button>
-    </div>
-    <span class="count" id="count"></span>
-    </div>
-    <div id="jump" class="jump" hidden></div>
-  </div>
-
-  <aside id="tweaks" aria-label="Mosaic tweaks">
-    <div id="twBody">
-      <label>Columns <input id="colRange" type="range" min="2" max="5" step="1" value="3"> <output id="colOut">3</output></label>
-      <div class="seg" id="themeSeg" role="group" aria-label="Theme"><div class="ind"></div><button data-t="system">System</button><button data-t="white">White</button><button data-t="black">Black</button></div>
-      <div class="detailrow"><span>Details</span><button id="detailToggle" aria-expanded="false">Show all</button></div>
-    </div>
-    <button id="twToggle" aria-expanded="true" aria-controls="twBody">Hide</button>
-  </aside>
-
-  <main id="groups" class="col" style="gap:64px"></main>
-  <div id="focusScrim" hidden></div>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cieo — The motion library</title><meta name="color-scheme" content="light dark">
+<!-- LIBRARY_STYLES -->
+</head><body>
+<a class="l-skip" href="#l-main">Skip to the library</a>
+<header class="l-topbar">
+ <button id="l-browse" class="l-icon-button l-menu-toggle" type="button" aria-label="Browse collections" aria-haspopup="dialog" data-icon="sidebar"></button>
+ <a class="l-brand" href="#" aria-label="Cieo home"><span class="l-mark" aria-hidden="true"><i></i><i></i></span><span>cieo</span></a>
+ <label class="l-search"><span data-icon="search"></span><span class="l-sr">Search atoms</span><input id="l-search" type="search" placeholder="Find a little inspiration…" autocomplete="off" maxlength="160"><kbd class="l-key">/</kbd><button id="l-clear-search" type="button" class="l-icon-button" aria-label="Clear search" data-icon="close" hidden></button></label>
+ <div class="l-top-actions"><span class="l-version">Motion, considered.</span><button id="l-pause" type="button" class="l-icon-button" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><button id="l-view" type="button" class="l-button" aria-haspopup="dialog"><span data-icon="sliders"></span><span class="l-action-label">View</span></button></div>
+</header>
+<div class="l-body">
+ <div id="l-sidebar-slot"><nav id="l-nav" class="l-sidebar" aria-label="Atom collections"></nav></div>
+ <main class="l-main" id="l-main" tabindex="-1">
+  <div class="l-main-head"><div><h1 id="l-title">The motion library</h1><p class="l-subtitle" id="l-subtitle">Thoughtful little interactions. Ready to make your own.</p></div><span class="l-tag" id="l-playback-status"><i class="l-dot" aria-hidden="true"></i><span>Live previews</span></span></div>
+  <section id="l-collections" class="l-collections" aria-label="Explore collections"></section>
+  <div class="l-filterbar"><div class="l-families" id="l-families" role="group" aria-label="Filter by motion family"></div><span class="l-result" id="l-result" role="status" aria-live="polite"></span></div>
+  <section id="l-grid" class="l-grid" aria-label="Interactive motion atoms"></section>
+  <section id="l-empty" class="l-empty" hidden><h2>No atoms here yet.</h2><p>Try another search, change a filter, or save a favorite.</p><button id="l-reset" class="l-button" type="button">Show all atoms</button></section>
+ </main>
 </div>
-
+<aside class="l-inspector" id="l-inspector" aria-label="Atom inspector" hidden><header class="l-dialog-head"><h2>Inspect atom</h2><button id="l-inspector-close" class="l-icon-button" type="button" aria-label="Close inspector" data-icon="close"></button></header><div id="l-inspector-slot"><div id="l-inspector-content" class="l-inspector-content"></div></div></aside>
+<dialog class="l-dialog" id="l-browser" aria-labelledby="l-browser-title"><header class="l-dialog-head"><h2 id="l-browser-title">Your library</h2><button type="button" class="l-icon-button" aria-label="Close collections" data-close data-icon="close"></button></header><div id="l-browser-body"></div></dialog>
+<dialog class="l-dialog" id="l-settings" aria-labelledby="l-settings-title">
+ <header class="l-dialog-head"><h2 id="l-settings-title">Make room for your style</h2><button class="l-icon-button" type="button" aria-label="Close view settings" data-close data-icon="close"></button></header>
+ <div class="l-dialog-body">
+  <fieldset><legend>Appearance</legend><div class="l-choices"><button type="button" data-setting="theme" data-value="system">System</button><button type="button" data-setting="theme" data-value="white">Light</button><button type="button" data-setting="theme" data-value="black">Dark</button></div></fieldset>
+  <fieldset><legend>A little color</legend><div class="l-choices"><button type="button" data-setting="accent" data-value="violet" aria-label="Violet accent"><i class="l-swatch" style="--swatch:#8271db"></i></button><button type="button" data-setting="accent" data-value="blue" aria-label="Blue accent"><i class="l-swatch" style="--swatch:#5d8fd9"></i></button><button type="button" data-setting="accent" data-value="green" aria-label="Green accent"><i class="l-swatch" style="--swatch:#63a080"></i></button><button type="button" data-setting="accent" data-value="coral" aria-label="Coral accent"><i class="l-swatch" style="--swatch:#cf876b"></i></button></div></fieldset>
+  <fieldset><legend>Preview size</legend><div class="l-choices"><button type="button" data-setting="density" data-value="gallery">Gallery</button><button type="button" data-setting="density" data-value="comfortable">Roomy</button></div></fieldset>
+  <fieldset><legend>Corners</legend><div class="l-choices"><button type="button" data-setting="corners" data-value="soft">Soft</button><button type="button" data-setting="corners" data-value="crisp">Crisp</button></div></fieldset>
+  <fieldset><legend>Preview speed</legend><div class="l-choices"><button type="button" data-speed="1" aria-pressed="true">1×</button><button type="button" data-speed="0.25" aria-pressed="false">¼×</button><button type="button" data-speed="0.1" aria-pressed="false">⅒×</button></div></fieldset>
+  <p class="l-note">Changes apply to the existing recipe palette and catalogue. View preferences and saved atoms stay on this device. No account needed.</p>
+ </div>
+</dialog>
+<dialog class="l-dialog" id="l-inspect-sheet" aria-labelledby="l-inspect-title"><header class="l-dialog-head"><h2 id="l-inspect-title">Inspect atom</h2><button class="l-icon-button" type="button" aria-label="Close atom details" data-close data-icon="close"></button></header><div id="l-inspect-body"></div></dialog>
+<dialog class="l-dialog" id="l-focus" aria-labelledby="l-focus-title"><header class="l-dialog-head"><h2 id="l-focus-title">Full preview</h2><button class="l-icon-button" type="button" aria-label="Close full preview" data-close data-icon="close"></button></header><div class="l-focus-host" id="l-focus-host"></div></dialog>
+<dialog class="l-dialog" id="l-copy" aria-labelledby="l-copy-title"><header class="l-dialog-head"><h2 id="l-copy-title">Copy manually</h2><button class="l-icon-button" type="button" aria-label="Close copy fallback" data-close data-icon="close"></button></header><div class="l-dialog-body"><p class="l-note">Clipboard access is unavailable. The text below is selected for copying.</p><textarea id="l-copy-text" rows="12" style="width:100%;min-width:240px;margin-top:16px" readonly aria-label="Text to copy"></textarea></div></dialog>
+<div class="l-live-status" id="l-status" role="status" aria-live="polite"></div>
 <script>

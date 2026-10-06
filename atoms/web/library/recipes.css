@@ -1,0 +1,85 @@
+/* Shared recipe primitives: existing classes and spring-owned transforms are preserved. */
+.stage {font:14px/1.5 var(--sans)}
+.stage .btn {border:1px solid var(--line);background:var(--card);border-radius:var(--lib-control-radius);padding:8px 16px;font-size:13px;font-weight:550;cursor:pointer;min-height:40px;box-shadow:0 2px 3px #18233b04}
+.stage .btn.ink {background:var(--accent);color:#fff;border-color:transparent}
+[data-theme="black"] .stage .btn.ink {color:#201b36}
+.stage .btn:hover {box-shadow:var(--shadow)}
+.stage .card {background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
+.stage .seg {position:relative;display:flex;flex-wrap:nowrap;background:var(--raised);border-radius:12px;padding:4px}
+.stage .seg .ind {position:absolute;left:0;top:0;background:var(--card);border-radius:8px;box-shadow:var(--shadow-soft)}
+.stage .seg button {position:relative;background:none;border:0;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:550;cursor:pointer;white-space:nowrap}
+.stage .layer {position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
+.stage .digits {display:inline-flex;font-variant-numeric:tabular-nums}
+.stage .dslot {position:relative;display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom}
+.stage .dslot .dl {position:absolute;left:0;right:0;top:0;text-align:center}
+.stage .pill {position:absolute;border-radius:999px}
+.stage .row {display:flex;align-items:center;gap:8px}
+.stage .col {display:flex;flex-direction:column;gap:8px}
+.stage .muted {color:var(--muted)}
+.stage .small {font-size:13px}
+.stage .num {font-variant-numeric:tabular-nums}
+.stage .hint {position:absolute;bottom:16px;left:16px;right:16px;text-align:center;font-size:11px;line-height:1.4;color:var(--faint);pointer-events:none}
+.stage .ro {position:absolute;top:16px;right:16px;font:11px var(--mono);color:var(--faint)}
+.stage input,.stage textarea,.stage select {accent-color:var(--accent)}
+.stage input::placeholder,.stage textarea::placeholder {color:var(--faint)}
+.stage button:focus-visible,.stage input:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
+.stage .l-recipe-error {padding:24px;color:var(--danger)}
+/* These IDs are the original atoms, not new placeholder specimens. */
+#tabs .panel {border:1px solid var(--line-soft)}
+#tabs .panel .layer {padding:24px!important;font-size:14px;line-height:1.65}
+#accordion .acc {border:1px solid var(--line-soft)}
+#accordion .acc button {min-height:56px;padding:16px!important;gap:16px!important}
+#accordion .acc p {padding:0 16px 16px!important;line-height:1.6}
+#field .fw {border-radius:16px!important;border-width:1px!important;box-shadow:var(--shadow-soft)}
+#dropdown .dd {height:48px;min-width:240px!important;box-shadow:var(--shadow)}
+#dropdown .mn {top:56px!important;min-width:240px!important;padding:8px!important;border:1px solid var(--line-soft)}
+#dropdown .mn button {min-height:40px;padding:8px 12px!important;border-radius:8px!important}
+#palette .stage>.card {border:1px solid var(--line-soft)}
+#palette .stage input {padding:16px 24px!important;min-height:56px}
+#palette .hl {background:var(--accent-tint)!important;left:8px!important;right:8px!important}
+#palette .ps {height:40px!important}
+#switch .l-switch-row {width:min(320px,88%);padding:24px;background:var(--card);box-shadow:var(--shadow);border-radius:24px;display:flex;align-items:center;gap:16px}
+#switch .l-switch-copy {flex:1;font-size:14px;font-weight:600}
+#switch .l-switch-copy small {display:block;color:var(--muted);font-size:12px;font-weight:400;margin-top:4px}
+#sheet .ph {width:min(280px,88%)!important;height:320px!important;border:1px solid var(--line-soft)}
+#sheet .sh {border-radius:24px 24px 0 0!important}
+#toast .stage>.col,#copy .stage>.card {border:1px solid var(--line-soft)}
+#search .stage input,#newsletter .stage input {border-radius:12px!important;min-height:40px}
+#checklist .card {padding:8px!important}
+#checklist .card button {min-height:48px}
+#tooltip .btn {background:var(--card);box-shadow:var(--shadow)}
+#alert .card {border:1px solid var(--line-soft)}
+#stepper .card,#rating .card,#badge .card,#chip .card {border-radius:16px}
+#slider input[type="range"] {height:32px;cursor:ew-resize}
+#counter .card,#progress .card,#line .card,#bars .card,#donut .card {border:1px solid var(--line-soft)}
+#copy .btn,#empty .btn {min-height:48px}
+/* Preserve fixed geometry inside complex original canvases; their own pan/zoom remains active. */
+.l-tile.l-wide .l-stage-host {background:var(--lib-mat)}
+@media(pointer:coarse){.stage .btn{min-height:48px}.stage .seg button{min-height:40px}}
+#palette .pll {max-height:240px;overflow-y:auto!important;scrollbar-width:thin}
+#switch .tg .kn {background:#fff!important}
+#switch .stage {min-height:280px}
+#field .stage .col {padding:24px;background:var(--card);box-shadow:var(--shadow);border-radius:24px;width:min(320px,90%)!important}
+#field .fw {box-shadow:none;background:var(--surface)!important}
+#field .stage input {font-size:16px!important}
+#stepper .stage {height:336px}
+#stepper .stage>.col>.row:last-child {flex-wrap:wrap;gap:16px}
+#stepper .btn:disabled {opacity:.45;cursor:default;box-shadow:none}
+#checklist .stage {height:336px}
+#checklist .stage>.col {padding:24px;background:var(--card);border-radius:24px;box-shadow:var(--shadow);width:min(328px,92%)!important}
+#slider .stage>.row {padding:24px;background:var(--card);border-radius:24px;box-shadow:var(--shadow);width:min(328px,92%)!important}
+#progress .stage {height:368px}
+#progress .stage>.col {padding-top:32px}
+#copy .copy-value {display:block;overflow:hidden;text-overflow:ellipsis}
+:root {--on-accent:#fff}
+:root[data-theme="black"] {--on-accent:#201b36}
+:root {--wash:var(--accent-tint)}
+:where(.stage button:not([style]):not(.btn)) {border:1px solid var(--line);background:var(--card);border-radius:12px;padding:8px 16px;min-height:40px}
+.stage button:disabled {opacity:.45;cursor:default}
+#focusline .stage {display:flex;flex-direction:column;justify-content:center;gap:24px}
+#lede .stage,#outline .stage,#headline .stage {height:368px}
+#colorpicker .stage {height:440px}
+#stylepaint .pk {width:100%}
+#stylepaint .pk .btn {font-size:12px}
+#scrivenings .sc-join {max-height:232px;overflow-y:auto!important;scrollbar-width:thin}
+@media(max-width:599px){.stage input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),.stage textarea,.stage select{font-size:16px!important}}
