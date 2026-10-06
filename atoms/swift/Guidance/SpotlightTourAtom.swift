@@ -28,6 +28,13 @@ public struct SpotlightTourAtom: MotionAtomView {
                 .background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 .clipShape(RoundedRectangle(cornerRadius: 14))
                 Button("Start tour") { withMotion(.base, reduceMotion: reduce) { step = 0; lastStep = 0 } }.buttonStyle(.bordered).controlSize(.small)
+                HStack(spacing: 6) {
+                    Text("Steps:").font(.caption).foregroundStyle(.secondary)
+                    ForEach(0..<steps.count, id: \.self) { n in
+                        Button("\(n + 1)") { go(n) }.buttonStyle(.bordered).controlSize(.mini)
+                    }
+                    Button("Done") { go(steps.count) }.buttonStyle(.bordered).controlSize(.mini)
+                }.font(.caption).foregroundStyle(.secondary)
             }
         }
     }
@@ -46,26 +53,35 @@ public struct SpotlightTourAtom: MotionAtomView {
     }
 
     private var overlay: some View {
-        let s = max(0, step), r = (frames[steps[s].id] ?? .zero).insetBy(dx: -6, dy: -6)
+        let done = step == steps.count
+        let s = min(max(0, step), steps.count - 1), r = (frames[steps[s].id] ?? .zero).insetBy(dx: -6, dy: -6)
         let right = r.maxX + 14 + 200 < 400
-        let tip = CGPoint(x: right ? r.maxX + 14 + 100 : max(8 + 100, r.maxX - 120), y: right ? max(8 + 45, r.midY) : r.maxY + 14 + 45)
+        let tip = done ? CGPoint(x: 200, y: 137) : CGPoint(x: right ? r.maxX + 14 + 100 : max(8 + 100, r.maxX - 120), y: right ? max(8 + 45, r.midY) : r.maxY + 14 + 45)
         return ZStack(alignment: .topLeading) {
-            Color.black.opacity(0.5)
+            Color.black.opacity(done ? 0 : 0.5)
                 .mask(Rectangle().overlay(RoundedRectangle(cornerRadius: 10).frame(width: r.width, height: r.height)
                     .position(x: r.midX, y: r.midY).blendMode(.destinationOut)).compositingGroup())
                 .allowsHitTesting(false)
             VStack(alignment: .leading, spacing: 6) {
                 ZStack(alignment: .topLeading) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(steps[s].title).font(.footnote.weight(.semibold))
-                        Text(steps[s].body).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                    }.id(s).motionTransition(.swap())
+                    if done {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("✓ Tour complete").font(.footnote.weight(.semibold)).foregroundStyle(.green)
+                            Text("You know where everything lives.").font(.caption).foregroundStyle(.secondary)
+                            Button("Replay tour") { go(0) }.buttonStyle(.bordered).controlSize(.mini).padding(.top, 2)
+                        }.id("done").motionTransition(.swap())
+                    } else {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(steps[s].title).font(.footnote.weight(.semibold))
+                            Text(steps[s].body).font(.caption).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
+                        }.id(s).motionTransition(.swap())
+                    }
                 }
                 HStack {
-                    Text("\(s + 1) of \(steps.count)").font(.caption2).foregroundStyle(.secondary)
+                    Text(done ? "\(steps.count) of \(steps.count) ✓" : "\(s + 1) of \(steps.count)").font(.caption2).foregroundStyle(.secondary)
                     Spacer()
-                    if s > 0 { Button("Back") { go(s - 1) }.buttonStyle(.borderless) }
-                    Button(s == steps.count - 1 ? "Done" : "Next") { go(s + 1) }.buttonStyle(.borderless).fontWeight(.semibold)
+                    if step > 0 { Button("Back") { go(step - 1) }.buttonStyle(.borderless) }
+                    Button(done ? "Replay" : s == steps.count - 1 ? "Done" : "Next") { go(done ? 0 : s + 1) }.buttonStyle(.borderless).fontWeight(.semibold)
                 }.font(.caption)
             }
             .padding(10).frame(width: 200, height: 90, alignment: .topLeading)
@@ -78,7 +94,8 @@ public struct SpotlightTourAtom: MotionAtomView {
     }
 
     private func go(_ n: Int) {
-        if n >= steps.count { withMotion(.snap, reduceMotion: reduce) { step = -1 } }
+        if n < 0 { withMotion(.snap, reduceMotion: reduce) { step = -1 } }
+        else if n >= steps.count { withMotion(.base, reduceMotion: reduce) { step = steps.count; lastStep = steps.count - 1 } }
         else { withMotion(.base, reduceMotion: reduce) { step = n; lastStep = n } }
     }
 }

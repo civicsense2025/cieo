@@ -21,7 +21,7 @@ const xGeo = b => [b.offsetLeft, b.offsetLeft + b.offsetWidth];
 /* ================================================================ 1. Notice banner */
 atom({ id:'noticebanner', cat:'Status and records', name:'Notice banner', block:'NoticeBanner', fam:['X','M','S'], wide:true,
   html:`<style>
-.nb{position:absolute;left:12px;right:12px;top:12px;bottom:12px;overflow:hidden;display:flex;flex-direction:column}
+.nnb{position:absolute;left:12px;right:12px;top:12px;bottom:12px;overflow:hidden;display:flex;flex-direction:column}
 .nb-top{flex:none;height:40px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px 0 14px;border-bottom:1px solid var(--line-soft)}
 .nb-slot{flex:none;position:relative;height:0;overflow:hidden}
 .nb-in{position:absolute;left:0;right:0;top:0;padding:10px 12px 0}
@@ -37,7 +37,7 @@ atom({ id:'noticebanner', cat:'Status and records', name:'Notice banner', block:
 .nb-r{display:flex;justify-content:space-between;align-items:center;height:30px;font-size:13px;border-bottom:1px solid var(--line-soft)}
 .nb-r:last-child{border-bottom:0}
 </style>
-<div class="nb card"><div class="nb-top"><b style="font-size:14px">Dashboard</b><button type="button" class="btn nb-next">Next notice</button></div>
+<div class="nnb card"><div class="nb-top"><b style="font-size:14px">Dashboard</b><button type="button" class="btn nb-next">Next notice</button></div>
 <div class="nb-slot"><div class="nb-in"><div class="nb-ban" role="status"><div class="nb-ls"></div><button type="button" class="nb-x" aria-label="Dismiss notice">Dismiss</button></div></div></div>
 <div class="nb-body"><div class="nb-r"><span class="muted">Pages published</span><b class="num">24</b></div><div class="nb-r"><span class="muted">Form submissions this week</span><b class="num">118</b></div><div class="nb-r"><span class="muted">Storage used</span><b class="num">9.2 of 10 GB</b></div></div></div>`,
   desc:'The notice slides down inside a slot whose height springs open, so the dashboard rows are pushed down rather than covered. Next notice cross-morphs the banner fill and border between info, warning and danger while the old copy exits and the new copy enters, never overlapping. Dismiss fades the copy out first, then collapses the slot height after 100ms, and the rows rise to fill it.',
@@ -192,11 +192,11 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
 </style>
 <div class="bk card"><div class="bk-top"><span class="row" style="gap:8px"><b style="font-size:14px">Pages</b><span class="small muted num bk-n6">6</span></span><button type="button" class="btn bk-reset">Reset</button></div>
 <div class="bk-slot"><div class="bk-bar" role="region" aria-label="Bulk actions"><span role="status" aria-live="polite" aria-label="0 selected" class="row small" style="gap:5px"><b class="bk-cn" aria-hidden="true" style="font-size:13px"></b><span aria-hidden="true">selected</span></span><span class="bk-sp" style="flex:1"></span><button type="button" class="btn bk-ar" style="margin-left:auto">Archive</button><button type="button" class="btn bk-dl" style="color:var(--danger);border-color:var(--danger)">Delete</button><button type="button" class="btn bk-cl">Clear</button></div></div>
-<div class="bk-hd"><span class="bk-hc"></span><span>Title</span><span>Status</span><span class="bk-d">Updated</span></div><div class="bk-rows"></div><div class="bk-em" aria-live="polite">No pages left. Reset brings them back.</div></div>`,
+<div class="bk-hd"><span class="bk-hc"></span><span>Title</span><span>Status</span><span class="bk-d">Updated</span></div><div class="bk-rows"></div><div class="row small muted bk-tw" style="gap:6px;padding:8px 12px 10px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" class="bk-dv" checked> Row dividers</label></div><div class="bk-em" aria-live="polite">No pages left. Reset brings them back.</div></div>`,
   desc:'Selecting the first row opens a slot above the table: its height springs open and pushes the rows down, then the bar rises into it 50ms later with the count in rolling digits. The header checkbox morphs between empty, check and a dash for mixed. Delete removes the selected rows top-down, 100ms apart: each row fades, then its height collapses, and the count rolls down; the bar leaves only after the last row has gone. Archive swaps each status chip and Clear releases the rows the same way.',
-  api:'bar.h.set(n > 0); bar.o.set(n > 0, t + .05); count.set(n)   delete: rows[k].o.set(0, t + k·.1); .h.set(0, t + k·.1 + EXIT); bar.leave(after last)',
+  api:'bar.h.set(n > 0); bar.o.set(n > 0, t + .05); count.set(n)   delete: rows[k].o.set(0, t + k·.1); .h.set(0, t + k·.1 + EXIT); bar.leave(after last)   last live row drops its divider',
   init(st){
-    const root = $(st,'.bk'), slot = $(st,'.bk-slot'), bar = $(st,'.bk-bar'), cnt = new Digits($(st,'.bk-cn'), 2), status = $(st,'[role=status]'), rowsEl = $(st,'.bk-rows'), em = $(st,'.bk-em'), n6 = $(st,'.bk-n6');
+    const root = $(st,'.bk'), slot = $(st,'.bk-slot'), bar = $(st,'.bk-bar'), cnt = new Digits($(st,'.bk-cn'), 2), status = $(st,'[role=status]'), rowsEl = $(st,'.bk-rows'), em = $(st,'.bk-em'), n6 = $(st,'.bk-n6'), dvT = $(st,'.bk-dv');
     const bAr = $(st,'.bk-ar'), bDl = $(st,'.bk-dl'), bCl = $(st,'.bk-cl'), bRs = $(st,'.bk-reset');
     const mkCheck = label => {
       const b = xEl('button'); b.type = 'button'; b.className = 'bk-ck'; b.setAttribute('role', 'checkbox'); b.setAttribute('aria-checked', 'false'); b.setAttribute('aria-label', label);
@@ -249,7 +249,9 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
       const h = clamp(bh.at(t)); slot.style.height = px(h*44); slot.style.visibility = h < .004 ? 'hidden' : 'visible'; slot.inert = !barOpen;
       const o = clamp(bo.at(t)); fade(bar, o, (1 - o)*16);
       cnt.render(t); hdr.render(t);
+      const lastLive = live().pop(), showDv = dvT.checked;
       rows.forEach(r => { const hh = clamp(r.h.at(t)); r.w.style.height = px(hh*32); r.w.style.visibility = hh < .01 ? 'hidden' : 'visible'; r.w.inert = r.dead;
+        r.row.style.borderBottom = (!showDv || r === lastLive) ? '1px solid transparent' : '1px solid var(--line-soft)';
         fade(r.row, r.o.at(t), null); r.row.style.background = `color-mix(in oklab, var(--accent-tint) ${(clamp(r.s.at(t))*100).toFixed(1)}%, transparent)`;
         r.box.render(t); const a = clamp(r.a.at(t)); r.chip.style.background = mix(a, 'var(--raised)', r.tint); r.chip.style.color = mix(a, 'var(--muted)', r.col);
         r.L.forEach((l, k) => r.csw.apply(l, k, t)); });

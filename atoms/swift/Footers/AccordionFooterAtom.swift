@@ -9,10 +9,18 @@ public struct AccordionFooterAtom: MotionAtomView {
 }
 
 private struct AccordionFooter: View {
+    @State private var dividers = true
     private let cols: [(String, [String])] = [("Product", ["Overview", "Pricing", "Changelog"]), ("Company", ["About", "Careers", "Press"]), ("Support", ["Docs", "Contact", "Status"])]
     var body: some View {
-        VStack(spacing: 0) { ForEach(cols, id: \.0) { FooterSection(title: $0.0, links: $0.1) } }
+        VStack(spacing: 8) {
+            Toggle("Dividers", isOn: $dividers).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
+            VStack(spacing: 0) {
+                ForEach(cols.indices, id: \.self) { i in
+                    FooterSection(title: cols[i].0, links: cols[i].1, showDivider: dividers && i < cols.count - 1)
+                }
+            }
             .overlay(alignment: .top) { Divider() }
+        }
     }
 }
 
@@ -20,6 +28,7 @@ private struct FooterSection: View {
     @Environment(\.accessibilityReduceMotion) private var reduce
     let title: String
     let links: [String]
+    let showDivider: Bool
     @State private var open = false
     var body: some View {
         VStack(spacing: 0) {
@@ -36,7 +45,9 @@ private struct FooterSection: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: open ? CGFloat(links.count) * 26 + 6 : 0, alignment: .top).clipped()
             .animation(reduce ? nil : .motion(.soft), value: open)
-            Divider()
+            if showDivider {
+                Divider()
+            }
         }
     }
 }

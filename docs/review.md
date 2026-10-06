@@ -35,3 +35,7 @@ Color-pair audits aren't a conformance certification. The source ledger counts c
 ## Release gates
 
 The handoff report records the actual local commands, browser harness, compiler availability, and remaining checks. The pull-request workflow runs the full JavaScript suite and tracked-artifact drift checks, then the existing Swift package on macOS. No release, merge, permission change, or repository visibility change forms part of this work.
+
+## Concurrent upstream work preserved
+
+Before final submission, `main` advanced to `0dca69dc3aa0d2cd10f141ec64d2b4ef3ce6b027` through five commits. The branch incorporates those commits with a merge commit, retaining the new live spring/scheduler API, Swift LiveSpring, updated atom recipes, the library catalogue, and the added engine tests. The package conflict preserves `cieo/live` and expands the upstream CSS side-effect declaration to cover the new design styles. The final upgrade patch targets this newer base; those upstream engine and recipe changes are not counted among this change's 273 refinements.

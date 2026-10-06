@@ -8,11 +8,17 @@ atom({ id:'tour', cat:'Guidance', name:'Spotlight tour', block:'onboarding, admi
     const ui = $(st,'.ui'), hole = $(st,'.hole'), tip = $(st,'.tip'), tc = $(st,'.tc'), stx = $(st,'.st');
     const STEPS = [['.t3','Your pages','Every page lives here. Drag to reorder them.'],['.t1','Preview','See the page as a reader would, on any device.'],['.t2','Publish','Sends every changed page live at once.']];
     const L = STEPS.map(([,h,p]) => { const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += 'flex-direction:column;align-items:flex-start;justify-content:flex-start;white-space:normal;gap:2px'; e.innerHTML = `<b class="small">${h}</b><span class="small muted">${p}</span>`; tc.appendChild(e); return e; });
+    const fin = document.createElement('div'); fin.className = 'layer'; fin.style.cssText += 'flex-direction:column;align-items:flex-start;justify-content:flex-start;white-space:normal;gap:2px'; fin.innerHTML = `<b class="small" style="color:var(--success)">✓ Tour complete</b><span class="small muted">You know where everything lives.</span><button class="btn ink rp" style="padding:4px 10px;margin-top:4px">Replay tour</button>`; tc.appendChild(fin); L.push(fin);
     const H = { x:new Track(0), y:new Track(0), w:new Track(0), h:new Track(0) }, tx = new Track(0), ty = new Track(0), o = new Track(0), sw = new Swap(0); let i = -1;
-    const go = (n, inst) => { if (n >= STEPS.length || n < 0){ o.set(0, S.snap); i = -1; return; } i = n; const r = relRect(ui, $(ui, STEPS[n][0]).getBoundingClientRect()), k = inst ? 'jump' : 'set';
+    const go = (n, inst) => { if (n < 0){ o.set(0, S.snap); i = -1; return; }
+      if (n >= STEPS.length){ i = STEPS.length; sw.to(STEPS.length); o.set(1); const k = inst ? 'jump' : 'set'; tx[k](ui.clientWidth/2 - 110); ty[k](92); stx.textContent = `${STEPS.length} of ${STEPS.length} ✓`; $(st,'.nx').textContent = 'Replay'; $(st,'.bk').style.visibility = 'visible'; return; }
+      i = n; const r = relRect(ui, $(ui, STEPS[n][0]).getBoundingClientRect()), k = inst ? 'jump' : 'set';
       H.x[k](r.x - 6); H.y[k](r.y - 6); H.w[k](r.w + 12); H.h[k](r.h + 12); const right = r.x + r.w + 240 < ui.clientWidth; tx[k](right ? r.x + r.w + 14 : Math.max(8, r.x + r.w - 220)); ty[k](right ? Math.max(8, r.y) : r.y + r.h + 14);
-      inst ? (sw.cur = n, sw.prev = null, sw.t = -9) : sw.to(n); stx.textContent = `${n + 1} of ${STEPS.length}`; $(st,'.nx').textContent = n === STEPS.length - 1 ? 'Done' : 'Next'; o.set(1); };
-    $(st,'.sg').onclick = () => go(0, true); $(st,'.nx').onclick = () => go(i + 1); $(st,'.bk').onclick = () => i > 0 && go(i - 1);
-    return t => { const p = clamp(o.at(t)); Object.assign(hole.style, { left:px(H.x.at(t)), top:px(H.y.at(t)), width:px(H.w.at(t)), height:px(H.h.at(t)), opacity:p.toFixed(3) });
+      inst ? (sw.cur = n, sw.prev = null, sw.t = -9) : sw.to(n); stx.textContent = `${n + 1} of ${STEPS.length}`; $(st,'.nx').textContent = n === STEPS.length - 1 ? 'Done' : 'Next'; $(st,'.bk').style.visibility = n === 0 ? 'hidden' : 'visible'; o.set(1); };
+    $(fin,'.rp').onclick = () => go(0, true);
+    const cust = document.createElement('div'); cust.className = 'row small muted'; cust.style.cssText = 'position:absolute;left:12px;bottom:10px;gap:6px;align-items:center;z-index:3'; cust.innerHTML = `<span>Steps:</span>`; ui.appendChild(cust);
+    [['1',0],['2',1],['3',2],['Done',3]].forEach(([label,n]) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'padding:2px 8px'; b.textContent = label; b.onclick = () => go(n, true); cust.appendChild(b); });
+    $(st,'.sg').onclick = () => go(0, true); $(st,'.nx').onclick = () => { if (i >= STEPS.length) go(0, true); else go(i + 1); }; $(st,'.bk').onclick = () => { if (i > STEPS.length - 1) go(STEPS.length - 1); else if (i > 0) go(i - 1); }; $(st,'.bk').style.visibility = 'hidden';
+    return t => { const p = clamp(o.at(t)); const hp = i >= STEPS.length ? 0 : p; Object.assign(hole.style, { left:px(H.x.at(t)), top:px(H.y.at(t)), width:px(H.w.at(t)), height:px(H.h.at(t)), opacity:hp.toFixed(3) });
       tip.style.left = px(tx.at(t)); tip.style.top = px(ty.at(t)); pop(tip, p, -6); L.forEach((e,k) => sw.apply(e,k,t)); };
   }});

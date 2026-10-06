@@ -3,11 +3,12 @@ import Cieo
 
 public struct BulkBarAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "bulkbar", category: "Status and records", name: "Bulk selection bar",
-        summary: "Selecting the first row opens a slot above the table: its height springs open and pushes the rows down, then the bar rises into it 50ms later with the count in rolling digits. The header checkbox morphs between empty, check and a dash for mixed. Delete removes the selected rows top-down, 100ms apart: each row fades, then its height collapses, and the count rolls down; the bar leaves only after the last row has gone. Archive swaps each status chip and Clear releases the rows the same way.")
+        summary: "Selecting the first row opens a slot above the table: its height springs open and pushes the rows down, then the bar rises into it 50ms later with the count in rolling digits. The header checkbox morphs between empty, check and a dash for mixed. Delete removes the selected rows top-down, 100ms apart: each row fades, then its height collapses, and the count rolls down; the bar leaves only after the last row has gone. Archive swaps each status chip and Clear releases the rows the same way. Dividers run between rows only, never after the last.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private struct Row: Identifiable { let id: Int; let title: String; var archived = false }
     @State private var rows = (1...6).map { Row(id: $0, title: ["Home", "Pricing", "About", "Blog", "Docs", "Contact"][$0 - 1]) }
     @State private var selected: Set<Int> = []
+    @State private var dividers = true
     public init() {}
 
     private var allState: String { selected.isEmpty ? "off" : selected.count == rows.count ? "on" : "mixed" }
@@ -37,7 +38,7 @@ public struct BulkBarAtom: MotionAtomView {
                     }.buttonStyle(.plain).accessibilityLabel("Select all").accessibilityValue(allState)
                     Text("Title").frame(maxWidth: .infinity, alignment: .leading); Text("Status")
                 }.font(.caption.weight(.semibold)).foregroundStyle(.secondary)
-                ForEach(rows) { r in
+                ForEach(Array(rows.enumerated()), id: \.element.id) { idx, r in
                     HStack {
                         Button { toggle(r.id) } label: { Image(systemName: selected.contains(r.id) ? "checkmark.square.fill" : "square") }
                             .buttonStyle(.plain).accessibilityLabel(r.title).accessibilityAddTraits(selected.contains(r.id) ? .isSelected : [])
@@ -46,8 +47,10 @@ public struct BulkBarAtom: MotionAtomView {
                     }
                     .font(.callout).padding(.vertical, 2)
                     .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 1, anchor: .top)))
+                    if dividers && idx < rows.count - 1 { Divider() }
                 }
                 if rows.isEmpty { Text("No pages left. Reset brings them back.").font(.caption).foregroundStyle(.secondary) }
+                Toggle("Row dividers", isOn: $dividers).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
             }
             .frame(maxWidth: 420)
             .animation(reduce ? nil : .motion(.base), value: rows.count)

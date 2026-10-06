@@ -1,15 +1,24 @@
 import SwiftUI
 import Cieo
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 public struct StreamingAnswerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "streaming", category: "AI chat", name: "Streaming answer",
-        summary: "Words arrive on a schedule and each one fades up out of a slight blur, so the text feels written rather than printed. A soft caret rides the last word. Stop freezes the answer where it is.")
+        summary: "Words arrive on a schedule and each one fades up out of a slight blur, so the text feels written rather than printed. A soft caret rides the last word. Stop freezes the answer where it is. On settle, follow-up actions swap in.")
 
     private let words = "Start from your monthly price and offer two months free, about 17% off. Show the yearly total and the monthly equivalent side by side. Default the toggle to yearly only if most readers already pay monthly for over three months. Keep the saving visible on the button itself.".split(separator: " ").map(String.init)
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var shown = 0
     @State private var running = false
+    @State private var followups = true
+    @State private var copied = false
     public init() {}
+
+    private var settled: Bool { !running && shown > 0 }
 
     public var body: some View {
         AtomStage(hint: "Ask, then stop mid-answer") {
@@ -31,8 +40,17 @@ public struct StreamingAnswerAtom: MotionAtomView {
                 .padding(12).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
                 .animation(reduce ? nil : .motion(.snap), value: shown)
                 .accessibilityElement(children: .combine)
+                if settled && followups {
+                    HStack(spacing: 6) {
+                        Button(copied ? "Copied" : "Copy", action: copy).buttonStyle(.bordered).controlSize(.small)
+                        Button("Retry", action: retry).buttonStyle(.bordered).controlSize(.small)
+                    }
+                    .motionTransition(.swap())
+                }
+                Toggle("Follow-up actions", isOn: $followups).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
             }
             .frame(width: 340)
+            .animation(reduce ? nil : .motion(.base), value: settled)
         }
         .task(id: running) {
             guard running else { return }
@@ -46,7 +64,23 @@ public struct StreamingAnswerAtom: MotionAtomView {
     }
 
     private func toggle() {
-        if running { running = false } else { shown = 0; running = true }
+        if running { running = false } else { retry() }
+    }
+
+    private func retry() {
+        shown = 0; copied = false; running = true
+    }
+
+    private func copy() {
+        let text = words.joined(separator: " ")
+        #if canImport(UIKit)
+        UIPasteboard.general.string = text
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+        #endif
+        copied = true
+        Task { try? await Task.sleep(for: .seconds(1.2)); copied = false }
     }
 }
 

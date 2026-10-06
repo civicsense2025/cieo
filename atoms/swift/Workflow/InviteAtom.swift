@@ -3,7 +3,7 @@ import Cieo
 
 public struct InviteAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "invite", category: "Workflow", name: "Invite member",
-        summary: "Invite opens a form row at the top of the list and its height springs open. Send keeps that same row: the form swaps out for the member, the height morphs to fit and the chip reads Pending. Resend turns the chip success and Sent for 1.6 seconds, widening it on the same spring. Revoke fades the row out first, then its space collapses.")
+        summary: "Invite opens a form row at the top of the list and its height springs open. Send keeps that same row: the form swaps out for the member, the height morphs to fit and the chip reads Pending. Resend turns the chip success and Sent for 1.6 seconds, widening it on the same spring. Revoke fades the row out first, then its space collapses. Dividers live between rows, never on the collapsing slot.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var formOpen = false
     @State private var email = ""
@@ -12,12 +12,13 @@ public struct InviteAtom: MotionAtomView {
     @State private var sent = false
     @State private var revoked = false
     @State private var showBad = false
+    @State private var lines = true
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Invite, Send, Resend, Revoke") {
             AgCard {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Members").font(.headline)
@@ -26,7 +27,7 @@ public struct InviteAtom: MotionAtomView {
                         Spacer()
                         Button { toggleForm() } label: { SwapText(formOpen ? "Cancel" : "Invite") }
                             .buttonStyle(AgPress(tone: formOpen ? nil : .info)).disabled(invited && !revoked)
-                    }
+                    }.padding(.bottom, 8)
                     AgReveal(open: formOpen && !invited) {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack {
@@ -37,14 +38,27 @@ public struct InviteAtom: MotionAtomView {
                                 .id(showBad).transition(reduce ? .identity : .motionSwap())
                                 .font(.caption).foregroundStyle(showBad ? .red : .secondary)
                             Button("Send invite") { send() }.buttonStyle(AgPress(tone: .info))
-                        }
+                        }.padding(.bottom, 8)
                     }
-                    AgReveal(open: invited && !revoked) { pendingRow }
-                    member("M", "Maya Okafor", "Owner"); member("T", "Theo Lindqvist", "Editor"); member("P", "Priya Raman", "Viewer")
+                    AgReveal(open: invited && !revoked) { pendingRow.padding(.bottom, 8) }
+                    member("M", "Maya Okafor", "Owner")
+                    divider
+                    member("T", "Theo Lindqvist", "Editor")
+                    divider
+                    member("P", "Priya Raman", "Viewer")
+                    HStack(spacing: 6) {
+                        Text("Lines").font(.caption).foregroundStyle(.secondary)
+                        Button(lines ? "On" : "Off") { withMotion(.base, reduceMotion: reduce) { lines.toggle() } }
+                            .font(.caption).buttonStyle(AgPress()).accessibilityLabel("Dividers \(lines ? "on" : "off")")
+                    }.padding(.top, 8)
                 }
             }
             .frame(maxWidth: 430)
         }
+    }
+
+    @ViewBuilder private var divider: some View {
+        if lines { Divider() } else { EmptyView() }
     }
 
     private var pendingRow: some View {
@@ -62,7 +76,7 @@ public struct InviteAtom: MotionAtomView {
         HStack {
             Text(initial).font(.caption.weight(.semibold)).frame(width: 24, height: 24).background(.quaternary, in: Circle())
             Text(name); Spacer(); Text(r).foregroundStyle(.secondary)
-        }.font(.callout).accessibilityElement(children: .combine)
+        }.font(.callout).padding(.vertical, 8).accessibilityElement(children: .combine)
     }
 
     private func toggleForm() { withMotion(.base, reduceMotion: reduce) { formOpen.toggle(); showBad = false } }

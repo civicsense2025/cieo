@@ -24,20 +24,59 @@ export function hold(el, moving = true) {
 }
 /** One motion per element: claiming finishes any earlier motion on it first. */
 export function animate(els, job) {
+    els = [...new Set(els)];
     els.forEach((el) => owners.get(el)?.());
     const releases = els.map((el) => hold(el));
-    let cancel = noop;
+    let finished = false;
+    let stop = noop;
+    const cancel = () => { stop(); done(); };
     const done = () => {
-        releases.forEach((release) => release());
+        if (finished)
+            return;
+        finished = true;
+        let failure;
+        let failed = false;
+        for (const release of releases) {
+            try {
+                release();
+            }
+            catch (error) {
+                if (!failed) {
+                    failed = true;
+                    failure = error;
+                }
+            }
+        }
         els.forEach((el) => {
             if (owners.get(el) === cancel)
                 owners.delete(el);
         });
-        job.finish?.();
+        try {
+            job.finish?.();
+        }
+        catch (error) {
+            if (!failed) {
+                failed = true;
+                failure = error;
+            }
+        }
+        if (failed)
+            throw failure;
     };
-    job.step(now());
-    cancel = run({ kind: job.kind, step: job.step, finish: done });
+    // Ownership precedes run because reduced-motion completion can happen synchronously.
     els.forEach((el) => owners.set(el, cancel));
+    try {
+        job.step(now());
+        if (!finished)
+            stop = run({ kind: job.kind, step: job.step, finish: done });
+    }
+    catch (error) {
+        try {
+            done();
+        }
+        catch { /* Preserve the initiating failure after releasing the touched styles. */ }
+        throw error;
+    }
     return cancel;
 }
 export function paint(el, o, y = 0, blur = 0, x = 0, scale = 1) {

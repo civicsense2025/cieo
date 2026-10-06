@@ -392,7 +392,10 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
 .qc-ls{position:absolute;left:0;right:0;top:52px;bottom:0;overflow:hidden}
 .qc-r{position:absolute;left:0;right:0;top:0;overflow:hidden}
 .qc-ri{position:absolute;left:0;right:0;top:0;height:40px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--line-soft);font-size:13.5px}
-.qc-ic{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:8px;background:var(--raised);color:var(--muted)}
+.qc-ic{display:grid;place-items:center;width:26px;height:26px;flex:none;border-radius:8px;background:var(--raised);color:var(--muted);line-height:1}
+.qc-c.opt .qc-ic svg,.qc-c.opt .qc-L0 svg,.qc-c.opt .qc-mi .qc-ic svg{transform:translateY(.5px)}
+.qc-c.opt .qc-ic{padding-top:1px}
+.qc-cf{position:absolute;bottom:8px;left:16px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
 .qc-s{position:absolute;right:12px;top:9px;overflow:hidden;border:1px solid var(--ink)}
 .qc-mi{display:flex;align-items:center;gap:10px;width:100%;height:44px;padding:0 10px;border:0;border-radius:9px;background:none;text-align:left;cursor:pointer;color:inherit}
 .qc-mi:hover,.qc-mi:focus-visible{background:var(--raised)}
@@ -408,7 +411,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
 <div class="layer qc-L1" role="menu" aria-label="Create a new item" style="flex-direction:column;align-items:stretch;justify-content:flex-start;gap:0;padding:4px">${Object.keys(QK).map(k => `<button type="button" role="menuitem" class="qc-mi" data-k="${k}"><span class="qc-ic">${ic(QK[k][1],15)}</span><span class="col" style="gap:0;min-width:0"><b style="font-size:13.5px;font-weight:600">${QK[k][0]}</b><span class="muted" style="font-size:12px;line-height:1.3">${QK[k][2]}</span></span></button>`).join('')}</div>
 <form class="layer qc-L2" autocomplete="off" style="justify-content:flex-start;gap:6px;padding:0 5px 0 6px"><span class="qc-kc"><i class="qc-kic" style="display:inline-flex"></i><span class="qc-kl"></span></span><input id="quickcreate-title" class="qc-in" type="text" aria-label="Title"><button type="submit" class="btn ink qc-go" style="padding:3px 11px" disabled>Create</button><button type="button" class="qc-x" aria-label="Cancel">${ic(I.x,14)}</button></form>
 <div class="layer qc-L3" role="status">${ic(I.check,14,3)}<span>Created</span></div>
-</div></div><button type="button" class="btn qc-rs" style="position:absolute;top:10px;right:12px">Reset</button>`,
+</div></div><button type="button" class="btn qc-rs" style="position:absolute;top:10px;right:12px">Reset</button><div class="row small muted qc-cf">Centering<div class="seg qc-cs" role="group" aria-label="Icon centering" style="display:inline-flex"><div class="ind"></div><button type="button">Optical</button><button type="button">Geometric</button></div></div>`,
   desc:'The New button is one surface. Clicking grows it into a menu of kinds, whose rows rise in 35ms apart. Choosing a kind morphs the same surface into a one-line form that stretches across the header and fades the title out. Submitting turns it into a green Created pill, and only then does the new row open at the top of the list while the others slide down.',
   api:'surface.{w,h,r,tone}.set(state)   menuRows[i].set(1, t + i·0.035)   submit: to("done") → +0.16s row.h.set(40), others y.set(+40) → +1.7s to("btn")',
   init(st){
@@ -442,6 +445,10 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
       lay(null, true); cnt.textContent = rows.length + ' items'; q = []; inp.value = ''; go.disabled = true; to('btn', now(), true); sw.cur = 'btn'; sw.prev = null; sw.t = -9;
     };
     reset(); $(st,'.qc-rs').onclick = reset;
+    const cseg = $(st,'.qc-cs'), cind = $(cseg,'.ind'), cbtns = $$(cseg,'button'), ce = edges(0,0);
+    card.classList.add('opt');
+    const pickC = (i, inst) => { const b = cbtns[i]; inst ? ce.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : ce.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); card.classList.toggle('opt', i === 0); };
+    cbtns.forEach((b,i) => b.onclick = () => pickC(i)); requestAnimationFrame(() => pickC(0, true));
     const cancel = focus => { if (state !== 'menu' && state !== 'form') return; to('btn'); if (focus) later(() => L.btn.focus()); };
     L.btn.onclick = () => { if (state === 'btn'){ to('menu'); later(() => state === 'menu' && mis[0].focus()); } else if (state === 'menu') cancel(true); };
     mis.forEach(m => m.onclick = () => {
@@ -468,6 +475,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
     return t => {
       while (q.length && q[0][0] <= t){ const [tt, fn] = q.shift(); fn(tt); }
       const [w, h, r, d, g] = T.map(x => x.at(t));
+      const ca = ce.A.at(t), cb = ce.B.at(t); Object.assign(cind.style, { transform:`translate(${px(ca)},3px)`, width:px(Math.max(0, cb - ca)), height:'calc(100% - 6px)' });
       Object.assign(sf.style, { width:px(w), height:px(h), borderRadius:px(r), background:mix(g,'var(--success-tint)',mix(d,'var(--ink)','var(--card)')), color:mix(g,'var(--success)',mix(d,'var(--card)','var(--ink)')),
         borderColor:mix(g,'var(--success)',mix(d,'var(--ink)','var(--line)')), boxShadow:d < .5 ? 'var(--shadow)' : 'none' });
       for (const k in L) sw.apply(L[k], k, t, 3);

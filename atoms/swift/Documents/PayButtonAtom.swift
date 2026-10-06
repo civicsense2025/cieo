@@ -9,6 +9,7 @@ public struct PayButtonAtom: MotionAtomView {
     @State private var phase = Phase.idle
     @State private var message = 0          // 0 none, 1 paid, 2 declined
     @State private var decline = false
+    @State private var shownTotal = 64.80
     @State private var run: Task<Void, Never>?
     public init() {}
 
@@ -17,7 +18,7 @@ public struct PayButtonAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Pay, then try the declined card") {
             VStack(alignment: .leading, spacing: 10) {
-                HStack { Text("Invoice INV-0042").font(.caption).foregroundStyle(.secondary); Spacer(); Text("$64.80").fontWeight(.semibold).monospacedDigit() }
+                HStack { Text("Invoice INV-0042").font(.caption).foregroundStyle(.secondary); Spacer(); PayTotal(value: shownTotal).fontWeight(.semibold).monospacedDigit() }
                 Button(action: pay) {
                     ZStack { label.id(phase).motionTransition(.swap()) }
                         .fontWeight(.medium).foregroundStyle(phase == .paid || phase == .declined ? AnyShapeStyle(Color.white) : AnyShapeStyle(.background))
@@ -63,9 +64,24 @@ public struct PayButtonAtom: MotionAtomView {
             try? await Task.sleep(for: .milliseconds(1200))
             if Task.isCancelled { return }
             withMotion(.base, reduceMotion: reduce) { phase = fail ? .declined : .paid; message = fail ? 2 : 1 }
-            try? await Task.sleep(for: .milliseconds(fail ? 1800 : 2800))
+            if !fail {
+                shownTotal = 0
+                try? await Task.sleep(for: .milliseconds(250))
+                if Task.isCancelled { return }
+                withMotion(.soft, reduceMotion: reduce) { shownTotal = 64.80 }
+                try? await Task.sleep(for: .milliseconds(2550))
+            } else {
+                try? await Task.sleep(for: .milliseconds(1800))
+            }
             if Task.isCancelled { return }
             withMotion(.base, reduceMotion: reduce) { phase = .idle; if !fail { message = 0 } }
         }
     }
+}
+
+/// A dollar total that springs up to the paid amount instead of jumping.
+private struct PayTotal: View, Animatable {
+    var value: Double
+    var animatableData: Double { get { value } set { value = newValue } }
+    var body: some View { Text(value, format: .currency(code: "USD")) }
 }

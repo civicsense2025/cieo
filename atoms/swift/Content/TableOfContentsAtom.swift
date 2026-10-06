@@ -8,6 +8,8 @@ public struct TableOfContentsAtom: MotionAtomView {
     @State private var active = 0
     @State private var links: [AnyHashable: CGRect] = [:]
     @State private var sections: [AnyHashable: CGRect] = [:]
+    @State private var programmatic = false
+    @State private var navGen = 0
     private let items: [(String, String)] = [
         ("Setup", "Install the CLI, sign in, and pick a starter. The starter sets your fonts, colors and first three pages."),
         ("Pages", "Pages are made of blocks. Drag a block from the panel, then edit its text in place."),
@@ -41,7 +43,15 @@ public struct TableOfContentsAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(items.indices, id: \.self) { i in
                     Button {
+                        active = i
+                        programmatic = true
+                        navGen += 1
+                        let g = navGen
                         withAnimation(reduce ? nil : .motion(.soft)) { proxy.scrollTo(i, anchor: .top) }
+                        Task { @MainActor in
+                            try? await Task.sleep(nanoseconds: 600_000_000)
+                            if g == navGen { programmatic = false }
+                        }
                     } label: {
                         Text(items[i].0).font(.footnote)
                             .foregroundStyle(active == i ? Color.primary : Color.secondary)
@@ -84,6 +94,7 @@ public struct TableOfContentsAtom: MotionAtomView {
         .coordinateSpace(name: "article")
         .onPreferenceChange(FramePreferenceKey.self) { sections = $0 }
         .onChange(of: sections) { _, s in
+            guard !programmatic else { return }
             let i = items.indices.last { (s[$0]?.minY ?? .infinity) <= 14 } ?? 0
             if i != active { active = i }
         }

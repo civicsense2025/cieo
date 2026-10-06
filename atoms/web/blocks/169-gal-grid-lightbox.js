@@ -120,6 +120,15 @@ document.head.insertAdjacentHTML('beforeend', `<style id="txg-shared">
 .txg-lb[data-bp="0"] .txg-lb-cap{padding:10px 60px 18px}
 .txg-lb[data-bp="0"] .txg-lb-cap span{font-size:11px}
 .txg-lb-hold{position:absolute;left:0;right:0;bottom:84px;text-align:center;font-size:12px;color:#ABAEB3;pointer-events:none}
+.txg-lb-film{position:absolute;left:0;right:0;bottom:56px;display:flex;gap:8px;justify-content:center;padding:6px 12px;z-index:2}
+.txg-lb-th{width:58px;height:40px;border-radius:7px;border:2px solid transparent;overflow:hidden;padding:0;background:#171B21;flex:none}
+.txg-lb-th img{width:100%;height:100%;object-fit:cover}
+.txg-lb-th[aria-current="true"]{border-color:#EFF2F6}
+.txg-lb-cap.over{background:linear-gradient(transparent,rgba(12,16,22,.78));padding-top:28px}
+.txg-lb-opts{display:flex;align-items:center;gap:16px;font-size:13px;color:var(--muted);flex:none;flex-wrap:wrap}
+.txg-lb-opts .txg-opt{display:flex;align-items:center;gap:6px}
+.txg-lb-opts button{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:3px 10px;font-size:12.5px;font-weight:500}
+.txg-lb-opts button[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}
 </style>`);
 
 /* ---------- shared: the grid to lightbox viewer (atoms 1 and 3) ---------- */
@@ -134,13 +143,28 @@ function lightbox(st, o){
   const root = $(st, '.txg-lb'), hd = $(root, '.txg-hd'), grid = $(root, '.txg-lb-grid'), ov = $(root, '.txg-lb-ov'), scrim = $(ov, '.txg-lb-scrim'), topEl = $(ov, '.txg-lb-top'), cap = $(ov, '.txg-lb-cap'), nEl = $(ov, '.txg-lb-n');
   const bClose = $(ov, '[data-a=close]'), bPrev = $(ov, '[data-a=prev]'), bNext = $(ov, '[data-a=next]'), chrome = [topEl, bPrev, bNext];
   const items = o.items, L = loader(), TL = timeline(), n = items.length;
+  let thumbsOn = !!o.thumbs, capOver = o.cap === 'over';
+  const film = o.thumbs ? document.createElement('div') : null;
+  if (film){ film.className = 'txg-lb-film'; film.setAttribute('role', 'group'); film.setAttribute('aria-label', 'Thumbnails'); ov.insertBefore(film, topEl); chrome.push(film); }
+  const thbs = film ? items.map((it, i) => { const b = document.createElement('button'); b.className = 'txg-lb-th'; b.tabIndex = -1; b.setAttribute('aria-label', `Show ${CAP[it.n]}, photo ${i + 1} of ${n}`); b.innerHTML = '<img alt="" draggable="false">'; film.appendChild(b); L.add($(b, 'img'), it.n, it.k, { half:true }); b.onclick = () => goTo(i); return b; }) : [];
+  if (o.tweak){
+    const bar = document.createElement('div'); bar.className = 'txg-lb-opts';
+    bar.innerHTML = `<span class="txg-opt"><span>Thumbs</span><button type="button" data-k="th" data-v="on" aria-pressed="true">On</button><button type="button" data-k="th" data-v="off" aria-pressed="false">Off</button></span><span class="txg-opt"><span>Captions</span><button type="button" data-k="cap" data-v="below" aria-pressed="true">Below</button><button type="button" data-k="cap" data-v="over" aria-pressed="false">Overlay</button></span>`;
+    hd.after(bar);
+    $$(bar, 'button').forEach(b => b.onclick = () => {
+      $$(bar, `button[data-k="${b.dataset.k}"]`).forEach(x => x.setAttribute('aria-pressed', x === b));
+      if (b.dataset.k === 'th'){ thumbsOn = b.dataset.v === 'on'; film.style.display = thumbsOn ? '' : 'none'; layout(); }
+      else { capOver = b.dataset.v === 'over'; cap.classList.toggle('over', capOver); layout(); }
+    });
+  }
+  if (capOver) cap.classList.add('over');
   const tiles = items.map((it, i) => { const b = document.createElement('button'); b.className = 'txg-tile'; b.setAttribute('aria-label', `Open ${CAP[it.n]}, photo ${i + 1} of ${n}`); b.innerHTML = '<img alt="" draggable="false">'; grid.appendChild(b); L.add($(b, 'img'), it.n, it.k); b.onclick = () => open(i); return b; });
   const mkSlot = k => { const el = $$(ov, '.txg-lb-slot')[k]; return { el, ph:$(el, '.txg-ph'), img:$(el, 'img'), i:-1, F:null, tr:{ x:new Track(0, FLY), y:new Track(0, FLY), w:new Track(1, FLY), h:new Track(1, FLY), r:new Track(8, FLY) } }; };
   const slots = [mkSlot(0), mkSlot(1)], sw = new Swap(0);
   const To = new Track(0, S.base), Tc = new Track(0, S.base), Dx = new Track(0, S.soft), Dy = new Track(0, S.soft);
   const s = { open:false, closing:false, idx:0, cur:0, dir:1, capT:-9, opener:null, held:false, ax:0, ay:0, gx:0, gy:0 };
   let W = 0, H = 0;
-  const fitRect = k => { const nar = W < 480, padX = nar ? 12 : 76, top = 56, bot = nar ? 96 : 84, aw = W - 2*padX, ah = H - top - bot, a = ASP[k];
+  const fitRect = k => { const nar = W < 480, padX = nar ? 12 : 76, top = 56, bot = (capOver ? 20 : nar ? 96 : 84) + (thumbsOn && film ? 64 : 0), aw = W - 2*padX, ah = H - top - bot, a = ASP[k];
     const w = Math.max(40, Math.min(aw, ah*a)), h = w/a; return { x:(W - w)/2, y:top + (ah - h)/2, w, h, r:6 }; };
   const tileOf = i => { const r = relTo(st, tiles[i]); r.r = parseFloat(getComputedStyle(tiles[i]).borderRadius) || 8; return r; };
   const setTr = (sl, R, instant, at = now(), cfg = FLY) => { for (const a of ['x', 'y', 'w', 'h', 'r']){ if (instant) sl.tr[a].jump(R[a]); else sl.tr[a].set(R[a], cfg, at); } };
@@ -148,7 +172,7 @@ function lightbox(st, o){
     sl.i = i; sl.img.src = phUrl(items[i].n, items[i].k); sl.F = fitRect(items[i].k); sl.ph.style.width = sl.F.w + 'px'; sl.ph.style.height = sl.F.h + 'px';
     if (from && !RM){ setTr(sl, tileOf(i), true); setTr(sl, sl.F, false); } else setTr(sl, sl.F, true);
   };
-  const setCap = (i, instant) => { const m = META[items[i].n]; const apply = () => { $(cap, 'b').textContent = CAP[items[i].n]; $(cap, 'span').textContent = o.meta === 'place' ? `${m.place}, ${m.date}` : metaLine(items[i].n); nEl.textContent = `${i + 1} / ${n}`; }; if (instant){ apply(); s.capT = -9; } else { s.capT = now(); TL.at(now() + EXIT, apply); } };
+  const setCap = (i, instant) => { const m = META[items[i].n]; const apply = () => { $(cap, 'b').textContent = CAP[items[i].n]; $(cap, 'span').textContent = o.meta === 'place' ? `${m.place}, ${m.date}` : metaLine(items[i].n); nEl.textContent = `${i + 1} / ${n}`; thbs.forEach((b, j) => b.setAttribute('aria-current', j === i)); }; if (instant){ apply(); s.capT = -9; } else { s.capT = now(); TL.at(now() + EXIT, apply); } };
   const hideTile = i => tiles.forEach((b, j) => $(b, 'img').style.visibility = j === i ? 'hidden' : 'visible');
   function open(i){
     if (s.open && !s.closing) return; const t = now(); const reopen = s.closing; s.open = true; s.closing = false; s.idx = i; s.opener = tiles[i];
@@ -160,9 +184,10 @@ function lightbox(st, o){
     if (!s.open || s.closing) return; const t = now(); s.closing = true; Tc.set(0, S.snap); ov.inert = true; grid.inert = false; s.opener = tiles[s.idx];
     const sl = slots[s.cur], R = tileOf(s.idx); setTr(sl, R, RM, t + .06); To.set(0, S.soft, t + .04); s.opener.focus({ preventScroll:true });
   }
-  function step(d){
-    if (!s.open || s.closing) return; const t = now(), ni = (s.idx + d + n) % n, nx = 1 - s.cur;
-    s.dir = d; sw.to(nx, t); s.cur = nx; s.idx = ni; place(slots[nx], ni, false); hideTile(ni); setCap(ni);
+  function step(d){ goTo((s.idx + d + n) % n); }
+  function goTo(i){
+    if (!s.open || s.closing || i === s.idx) return; const t = now(), nx = 1 - s.cur;
+    s.dir = i > s.idx ? 1 : -1; sw.to(nx, t); s.cur = nx; s.idx = i; place(slots[nx], i, false); hideTile(i); setCap(i);
   }
   bClose.onclick = close; bPrev.onclick = () => step(-1); bNext.onclick = () => step(1);
   ov.addEventListener('keydown', e => {
@@ -220,6 +245,7 @@ function lightbox(st, o){
       sl.el.style.opacity = p.toFixed(3); sl.el.style.transform = `translateX(${tx.toFixed(2)}px)`; if (p < .01 && j !== s.cur) sl.el.style.visibility = 'hidden'; else sl.el.style.visibility = 'visible';
     });
     const c = clamp(Tc.at(t))*(o.swipe ? 1 - clamp(Math.abs(dy)/70) : 1);
+    if (capOver){ const F = slots[s.cur].F; cap.style.bottom = F ? Math.max(0, H - (F.y + F.h) + 10).toFixed(1) + 'px' : '0px'; } else cap.style.bottom = '0px';
     chrome.forEach(el => { fade(el, c, (1 - c)*-6); el.style.pointerEvents = c > .5 ? 'auto' : 'none'; }); fade(cap, c*swapO(t, s.capT), (1 - c)*8, true);
     if (s.closing){ const sl = slots[s.cur]; let done = To.prune(t) === 0 && oo < .005; for (const a in sl.tr) done = done && sl.tr[a].prune(t) === 0;
       if (done){ s.open = false; s.closing = false; hideTile(-1); slots.forEach(q => q.i = -1); } }
@@ -228,9 +254,9 @@ function lightbox(st, o){
 
 atom({ id:'gal-grid-lightbox', cat:'Galleries', name:'Grid to lightbox, shared element', block:'gallery grid, lightbox, image', fam:['M','X','S'], wide:true, tall:true,
   html:lbHTML('', ['Sierra field notes', '12 photographs, October 2025'], 'Open a photo. Arrow keys step, Escape closes.'),
-  desc:'Press a tile and that same photo grows out of it: position, size, crop and corner radius all spring from the tile to the viewer, while the grid behind it dims. The caption and controls arrive only after the photo is most of the way there. Stepping to the next photo is a Swap, so the old one leaves in the direction of travel before the new one arrives. Closing runs the controls out first, then flies the photo back into whichever tile it ended on. Use when a grid of thumbnails needs a viewer that keeps the user oriented.',
-  api:'photo.rect.set(open ? fit : tileRect); scrim.set(1); chrome.set(1, delay .16); step: exit 100ms, then enter from dir*40px',
-  init(st){ return lightbox(st, { cols:[3, 4, 4], meta:'exif', items:[['ridge','l'], ['lake','l'], ['portrait','p'], ['city','l'], ['studio','s'], ['coast','l'], ['forest','p'], ['dunes','l'], ['canyon','l'], ['harbor','l'], ['meadow','s'], ['field','l']].map(([n, k]) => ({ n, k })) }); } });
+  desc:'Press a tile and that same photo grows out of it: position, size, crop and corner radius all spring from the tile to the viewer, while the grid behind it dims. The caption and controls arrive only after the photo is most of the way there. Stepping to the next photo is a Swap, so the old one leaves in the direction of travel before the new one arrives. Closing runs the controls out first, then flies the photo back into whichever tile it ended on. The viewer strip and the caption placement are per-demo options. Use when a grid of thumbnails needs a viewer that keeps the user oriented.',
+  api:'photo.rect.set(open ? fit : tileRect); scrim.set(1); chrome.set(1, delay .16); step: exit 100ms, then enter from dir*40px; thumbs: on/off · cap: below/overlay',
+  init(st){ return lightbox(st, { thumbs:true, tweak:true, cols:[3, 4, 4], meta:'exif', items:[['ridge','l'], ['lake','l'], ['portrait','p'], ['city','l'], ['studio','s'], ['coast','l'], ['forest','p'], ['dunes','l'], ['canyon','l'], ['harbor','l'], ['meadow','s'], ['field','l']].map(([n, k]) => ({ n, k })) }); } });
 
 atom({ id:'gal-swipe-dismiss', cat:'Galleries', name:'Swipe down to dismiss', block:'gallery grid, lightbox, image', fam:['D','M','X'], wide:true, tall:true,
   html:lbHTML('', ['Field recordings', 'Open a photo, then pull it down'], 'The photo follows your finger. A quick flick closes it.'),

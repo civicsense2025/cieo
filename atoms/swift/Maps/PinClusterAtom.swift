@@ -9,10 +9,12 @@ public struct PinClusterAtom: MotionAtomView {
     private let center = CGPoint(x: 0.5, y: 0.48)
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
+    @State private var compact = false
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Open the cluster, tap the map to close") {
+            VStack(spacing: 6) {
             GeometryReader { g in
                 ZStack {
                     Rectangle().fill(.quaternary.opacity(0.4)).contentShape(Rectangle()).onTapGesture { if open { set(false) } }
@@ -27,7 +29,8 @@ public struct PinClusterAtom: MotionAtomView {
                     }
                     Button { set(true) } label: {
                         Text("\(places.count)").font(.footnote.weight(.bold)).foregroundStyle(.background)
-                            .frame(width: 34, height: 34).background(Circle().fill(Color.accentColor))
+                            .offset(y: -1)
+                            .frame(width: compact ? 28 : 34, height: compact ? 28 : 34).background(Circle().fill(Color.accentColor))
                     }
                     .buttonStyle(.plain).accessibilityLabel("\(places.count) places, open cluster")
                     .position(x: center.x * g.size.width, y: center.y * g.size.height)
@@ -36,8 +39,11 @@ public struct PinClusterAtom: MotionAtomView {
                 }
             }
             .frame(width: 380, height: 220).clipShape(RoundedRectangle(cornerRadius: 14))
+            HStack { Text("Badge size").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Compact badge", isOn: $compact).labelsHidden().controlSize(.mini) }
+            .frame(width: 380)
+            }
         }
     }
 
-    private func set(_ v: Bool) { open = v }
+    private func set(_ v: Bool) { if reduce { open = v } else { withAnimation(v ? .motion(.snap) : .motion(.base).delay(0.25)) { open = v } } }
 }

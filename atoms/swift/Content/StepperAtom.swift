@@ -3,10 +3,12 @@ import Cieo
 
 public struct StepperAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "stepper", category: "Content", name: "Stepper",
-        summary: "The connector fills first, then the next node inks in after the lag. Completed nodes swap their number for a check.")
+        summary: "The connector fills first, then the next node inks in after the lag. Completed nodes swap their number for a check. Finish swaps in a sticky success confirmation.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var step = 0
     @State private var forward = true
+    @State private var finished = false
+    @State private var confirmOn = true
     private let labels = ["Account", "Domain", "Theme", "Publish"]
     public init() {}
 
@@ -30,10 +32,28 @@ public struct StepperAtom: MotionAtomView {
                         Text(l).font(.caption).foregroundStyle(.secondary).frame(maxWidth: .infinity)
                     }
                 }
+                ZStack {
+                    if finished && confirmOn {
+                        HStack(spacing: 6) {
+                            Text("Published — nice work").font(.footnote.weight(.semibold))
+                                .padding(.leading, 10).padding(.trailing, 2).padding(.vertical, 4)
+                                .background(Capsule().fill(Color.accentColor.opacity(0.15)))
+                                .foregroundStyle(Color.accentColor)
+                            Button("Start over") { finished = false; go(0) }.font(.caption).buttonStyle(.bordered)
+                        }
+                        .motionTransition(.swap(drift: 0))
+                    } else {
+                        Text("Finish to publish your site.").font(.footnote).foregroundStyle(.secondary)
+                            .motionTransition(.swap(drift: 0))
+                    }
+                }
+                .frame(height: 30)
                 HStack {
+                    Toggle("Confirmation", isOn: $confirmOn).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
+                        .onChange(of: confirmOn) { _, on in if !on { finished = false } }
                     Spacer()
                     Button("Back") { go(step - 1) }.buttonStyle(.bordered).disabled(step == 0)
-                    Button("Next") { go(step + 1) }.buttonStyle(.borderedProminent).disabled(step == 3)
+                    Button(step == labels.count - 1 ? "Finish" : "Next") { finish() }.buttonStyle(.borderedProminent)
                 }
             }
             .frame(maxWidth: 360)
@@ -41,7 +61,7 @@ public struct StepperAtom: MotionAtomView {
     }
 
     private func node(_ i: Int) -> some View {
-        let inked = i <= step, done = i < step
+        let inked = i <= step, done = i < step || (step == labels.count - 1 && i == step)
         return ZStack {
             Circle().fill(inked ? Color.primary : Color.primary.opacity(0.08))
             Circle().strokeBorder(inked ? Color.primary : Color.primary.opacity(0.2), lineWidth: 2)
@@ -68,5 +88,11 @@ public struct StepperAtom: MotionAtomView {
         guard (0..<labels.count).contains(s) else { return }
         forward = s > step
         step = s
+        if s != labels.count - 1 { finished = false }
+    }
+
+    private func finish() {
+        if step == labels.count - 1 { if confirmOn && !finished { finished = true } }
+        else { go(step + 1) }
     }
 }

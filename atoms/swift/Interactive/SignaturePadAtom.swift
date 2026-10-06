@@ -10,6 +10,7 @@ public struct SignaturePadAtom: MotionAtomView {
     @State private var ink = Track(1, preset: .snap)
     @State private var clearing = false
     @State private var drawing = false
+    @State private var saved = false
     public init() {}
 
     public var body: some View {
@@ -33,6 +34,7 @@ public struct SignaturePadAtom: MotionAtomView {
                     .onChanged { d in
                         let now = d.time.timeIntervalSinceReferenceDate
                         if clearing { strokes = []; clearing = false; ink.jump(1) }
+                        if saved { withMotion(.snap, reduceMotion: reduce) { saved = false } }
                         if !drawing {
                             drawing = true
                             strokes.append([Dot(p: d.location, t: now, w: 3.2)])
@@ -47,17 +49,39 @@ public struct SignaturePadAtom: MotionAtomView {
                     )
                 .accessibilityLabel("Signature pad")
                 HStack {
-                    Text("Sign with mouse or finger").font(.caption).foregroundStyle(.secondary)
+                    ZStack(alignment: .leading) {
+                        if saved {
+                            Text("✓ Signature saved").font(.caption).fontWeight(.semibold).foregroundStyle(.green)
+                                .id("done").motionTransition(.swap())
+                        } else {
+                            Text("Sign with mouse or finger").font(.caption).foregroundStyle(.secondary)
+                                .id("pad").motionTransition(.swap())
+                        }
+                    }
                     Spacer()
                     Button("Clear", action: clear).buttonStyle(.bordered).disabled(strokes.isEmpty)
+                    Button("Save") { withMotion(.base, reduceMotion: reduce) { saved = true } }
+                        .buttonStyle(.borderedProminent).controlSize(.small).disabled(strokes.isEmpty)
                 }
+                HStack(spacing: 6) {
+                    Text("View:").font(.caption).foregroundStyle(.secondary)
+                    Button("Pad") { withMotion(.base, reduceMotion: reduce) { saved = false } }.buttonStyle(.bordered).controlSize(.mini)
+                    Button("Saved") { if !strokes.isEmpty { withMotion(.base, reduceMotion: reduce) { saved = true } } }.buttonStyle(.bordered).controlSize(.mini)
+                    Button("Draw again", action: redraw).buttonStyle(.bordered).controlSize(.mini)
+                }.font(.caption).foregroundStyle(.secondary)
             }
             .frame(maxWidth: 340)
         }
     }
 
+    private func redraw() {
+        withMotion(.snap, reduceMotion: reduce) { saved = false }
+        clear()
+    }
+
     private func clear() {
         guard !strokes.isEmpty else { return }
+        withMotion(.snap, reduceMotion: reduce) { saved = false }
         if reduce { strokes = []; return }
         clearing = true
         DataMotion.retarget(&ink, to: 0, reduce: false)

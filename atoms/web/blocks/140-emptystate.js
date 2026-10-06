@@ -10,5 +10,10 @@ atom({ id:'emptystate', cat:'Guidance', name:'Empty state', block:'entry-list, c
     const eo = new Track(0);
     $(st,'.ca').onclick = () => { const t0 = now(); rows.forEach((x,i) => x.o.set(0, S.snap, t0 + i*.04)); eo.set(1, S.base, t0 + rows.length*.04 + .1); };
     $(st,'.sm').onclick = () => { const t0 = now(); eo.set(0, S.snap); rows.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + i*.04)); };
-    return t => { rows.forEach(x => fade(x.r, x.o.at(t), (1 - clamp(x.o.at(t)))*-6)); const e = clamp(eo.at(t)); fade(es, e, (1 - e)*10); es.style.visibility = e < .01 ? 'hidden' : 'visible'; es.style.pointerEvents = e > .5 ? 'auto' : 'none'; };
+    const cust = document.createElement('div'); cust.className = 'row small muted'; cust.style.cssText += 'gap:6px;align-items:center;margin-top:8px'; cust.innerHTML = `<span>Rows:</span>`; st.appendChild(cust);
+    rows.forEach((x,i) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'padding:2px 8px'; b.textContent = i + 1; b.onclick = () => { const t0 = now(); const vis = clamp(x.o.at(t0)) > .5; x.o.set(vis ? 0 : 1, vis ? S.snap : S.base, t0); const any = rows.some((y,j) => j === i ? !vis : clamp(y.o.at(t0)) > .5); eo.set(any ? 0 : 1, any ? S.snap : S.base, t0 + (vis ? 0 : .12)); }; cust.appendChild(b); });
+    const load = document.createElement('button'); load.className = 'btn'; load.style.cssText += 'padding:2px 8px'; load.textContent = 'Replay end-state'; load.onclick = () => $(st,'.ca').onclick(); cust.appendChild(load);
+    return t => { let last = -1; rows.forEach((x,i) => { if (clamp(x.o.at(t)) > .5) last = i; });
+      rows.forEach((x,i) => { fade(x.r, x.o.at(t), (1 - clamp(x.o.at(t)))*-6); x.r.style.borderBottom = i === last ? '0' : '1px solid var(--line-soft)'; });
+      const e = clamp(eo.at(t)); fade(es, e, (1 - e)*10); es.style.visibility = e < .01 ? 'hidden' : 'visible'; es.style.pointerEvents = e > .5 ? 'auto' : 'none'; };
   }});

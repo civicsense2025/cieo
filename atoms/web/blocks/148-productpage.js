@@ -248,7 +248,10 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
 .cf-in:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .cf-fh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:4px;font-size:13px}
 .cf-er{color:var(--danger);font-size:12px;opacity:0}
-.cf-ro{display:flex;align-items:center;justify-content:space-between;gap:10px;height:44px}
+.cf-ro{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:6px 0}
+.cf-ro+.cf-ro{border-top:1px solid var(--line-soft)}
+.cf-th{flex:none;width:36px;height:44px;border-radius:8px;background:var(--raised);display:grid;place-items:center;color:var(--faint)}
+.cf-p[data-nt] .cf-th{display:none}
 .cf-qb{width:24px;height:24px;padding:0;border-radius:7px;line-height:1}
 @container (max-width:559px){
   .cf-cd{padding:10px 12px;gap:8px}
@@ -279,14 +282,15 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
     const mkP = h => { const d = document.createElement('div'); d.className = 'cf-p'; d.innerHTML = h; pn.appendChild(d); return d; };
 
     /* panel 0: cart */
-    const p0 = mkP('<div class="row" style="justify-content:space-between"><b class="small">Review your cart</b><span class="small muted cf-ct"></span></div>');
+    const p0 = mkP('<div class="row" style="justify-content:space-between"><b class="small">Review your cart</b><span class="small muted cf-ct"></span></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="cf-thb" checked> Thumbs</label>');
     const rows = ITEMS.map(it => {
       const r = document.createElement('div'); r.className = 'cf-ro';
-      r.innerHTML = `<div class="col" style="gap:1px;min-width:0;flex:1"><span class="small" style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><span class="small muted"></span></div><div class="row" style="gap:6px;flex:none"><button type="button" class="btn cf-qb cf-m" aria-label="Decrease quantity">−</button><span class="cf-q small" style="min-width:12px;text-align:center"></span><button type="button" class="btn cf-qb cf-p2" aria-label="Increase quantity">+</button><span class="lt num small" style="min-width:58px;text-align:right"></span></div>`;
+      r.innerHTML = `<span class="cf-th" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span><div class="col" style="gap:1px;min-width:0;flex:1"><span class="small" style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><span class="small muted"></span></div><div class="row" style="gap:6px;flex:none"><button type="button" class="btn cf-qb cf-m" aria-label="Decrease quantity">−</button><span class="cf-q small" style="min-width:12px;text-align:center"></span><button type="button" class="btn cf-qb cf-p2" aria-label="Increase quantity">+</button><span class="lt num small" style="min-width:58px;text-align:right"></span></div>`;
       const sp = $$(r,'.col span'); sp[0].textContent = it.n; sp[1].textContent = `$${it.p} each`;
       p0.appendChild(r); const o = { it, q0:it.q, dg:new Digits($(r,'.cf-q'), 1), lt:$(r,'.lt'), v:new Track(it.p*it.q) }; o.dg.set(String(it.q), true);
       $(r,'.cf-m').onclick = () => upd(o, -1); $(r,'.cf-p2').onclick = () => upd(o, 1); return o; });
     const cct = $(p0,'.cf-ct');
+    $(p0,'.cf-thb').onchange = ev => p0.toggleAttribute('data-nt', !ev.target.checked);
 
     /* panel 1: details */
     const p1 = mkP(['Full name|cf-name|text|Ada Lovelace|Enter your full name|name','Email|cf-email|email|ada@studio.co|Enter a valid email|email'].map(f => { const [l, id, ty, ph] = f.split('|');

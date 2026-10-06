@@ -3,7 +3,7 @@ import Cieo
 
 public struct CallGridAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "callgrid", category: "Video calls", name: "Call grid",
-        summary: "When someone joins or leaves, every tile springs to its new grid slot and the newcomer scales in. A ring follows whoever is speaking, fading between people. Muting draws a slash through your mic and tints it danger.")
+        summary: "When someone joins or leaves, every tile springs to its new grid slot and the newcomer scales in. A ring follows whoever is speaking, fading between people. Muting draws a slash through your mic and tints it danger. Down to one tile you are alone; emptying the grid ends the call with a Rejoin step.")
 
     private let names = ["You", "Maya", "Theo", "Ada", "Jonas", "Priya", "Sam"]
     private let tints: [Color] = [.green, .orange, .blue, .pink, .indigo, .yellow, .teal]
@@ -26,6 +26,24 @@ public struct CallGridAtom: MotionAtomView {
             VStack(spacing: 10) {
                 let size = CGSize(width: 360, height: 210)
                 ZStack(alignment: .topLeading) {
+                    if count == 0 {
+                        VStack(spacing: 8) {
+                            Text("Call ended").font(.callout).foregroundStyle(.secondary)
+                            Button("Rejoin") { withMotion(.base, reduceMotion: reduce) { count = 3 } }
+                                .buttonStyle(.borderedProminent).controlSize(.small)
+                        }
+                        .frame(width: size.width, height: size.height)
+                        .motionTransition(.swap(drift: 0))
+                    }
+                    if count == 1 {
+                        Text("Alone in this call").font(.caption).foregroundStyle(.secondary)
+                            .padding(.horizontal, 10).padding(.vertical, 5)
+                            .background(Capsule().fill(.black.opacity(0.45)))
+                            .frame(width: size.width, height: size.height, alignment: .bottom)
+                            .padding(.bottom, 8)
+                            .foregroundStyle(.white)
+                            .motionTransition(.swap(drift: 0))
+                    }
                     ForEach(0..<count, id: \.self) { i in
                         let f = frame(i, count, size)
                         ZStack(alignment: .bottomLeading) {
@@ -49,7 +67,7 @@ public struct CallGridAtom: MotionAtomView {
                 .animation(reduce ? nil : .motion(.base), value: speaker)
                 HStack(spacing: 8) {
                     Button { withMotion(.base, reduceMotion: reduce) { count = min(names.count, count + 1) } } label: { Label("Join", systemImage: "person.badge.plus") }
-                    Button { withMotion(.snap, reduceMotion: reduce) { count = max(2, count - 1) } } label: { Label("Leave", systemImage: "person.badge.minus") }
+                    Button { withMotion(.snap, reduceMotion: reduce) { count = max(0, count - 1) } } label: { Label("Leave", systemImage: "person.badge.minus") }
                     Button { withMotion(.snap, reduceMotion: reduce) { muted.toggle() } } label: {
                         ZStack {
                             Image(systemName: "mic")

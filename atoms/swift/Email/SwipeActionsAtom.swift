@@ -6,6 +6,7 @@ private struct SwipeRow: View {
     let sender: String
     let preview: String
     let resetToken: Int
+    let showDivider: Bool
     @State private var x = Track(0, preset: .base)
     @State private var h = Track(1, preset: .base)
     @State private var held = false
@@ -40,7 +41,7 @@ private struct SwipeRow: View {
                     .accessibilityAction(named: "Snooze") { fling(-1, g.size.width) }
                 }
                 .frame(height: max(0, rowHeight * h.value(at: t))).clipped()
-                .overlay(alignment: .bottom) { Divider() }
+                .overlay(alignment: .bottom) { if showDivider { Divider() } }
             }
         }
         .frame(height: rowHeight)
@@ -69,18 +70,20 @@ public struct SwipeActionsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "swiperow", category: "Email", name: "Swipe actions",
         summary: "The row follows your finger. The action behind it fills with its color and its icon grows once you pass the 80px threshold. Release past it and the row leaves and its space closes; otherwise it springs home.")
     @State private var token = 0
+    @State private var showDividers = true
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Swipe right to archive, left to snooze") {
             VStack(spacing: 14) {
                 VStack(spacing: 0) {
-                    SwipeRow(sender: "Maya Chen", preview: "Draft is ready for review", resetToken: token)
-                    SwipeRow(sender: "Billing", preview: "Invoice INV-0042 paid", resetToken: token)
-                    SwipeRow(sender: "Theo Park", preview: "Comment on pricing table", resetToken: token)
+                    SwipeRow(sender: "Maya Chen", preview: "Draft is ready for review", resetToken: token, showDivider: showDividers)
+                    SwipeRow(sender: "Billing", preview: "Invoice INV-0042 paid", resetToken: token, showDivider: showDividers)
+                    SwipeRow(sender: "Theo Park", preview: "Comment on pricing table", resetToken: token, showDivider: false)
                 }
                 .frame(maxWidth: 340)
                 Button("Restore") { token += 1 }.buttonStyle(.bordered)
+                Toggle("Dividers", isOn: $showDividers).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
             }
         }
     }

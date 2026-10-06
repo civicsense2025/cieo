@@ -12,13 +12,14 @@ public struct EmptyStateAtom: MotionAtomView {
     public init() {}
 
     public var body: some View {
-        AtomStage(hint: "Archive all, then load samples") {
+        let last = shown.lastIndex(where: { $0 }) ?? -1
+        return AtomStage(hint: "Archive all, then load samples") {
             VStack(spacing: 10) {
                 ZStack {
                     VStack(spacing: 0) {
                         ForEach(items.indices, id: \.self) { i in
                             Text(items[i]).font(.footnote).frame(maxWidth: .infinity, alignment: .leading)
-                                .padding(.horizontal, 14).padding(.vertical, 12).overlay(alignment: .bottom) { Divider() }
+                                .padding(.horizontal, 14).padding(.vertical, 12).overlay(alignment: .bottom) { if i != last { Divider() } }
                                 .opacity(shown[i] ? 1 : 0).offset(y: shown[i] ? 0 : -6)
                         }
                         Spacer(minLength: 0)
@@ -37,6 +38,13 @@ public struct EmptyStateAtom: MotionAtomView {
                     Button("Archive all", action: clear)
                     Button("Load samples", action: restore)
                 }.buttonStyle(.bordered).controlSize(.small)
+                HStack(spacing: 6) {
+                    Text("Rows:").font(.caption).foregroundStyle(.secondary)
+                    ForEach(items.indices, id: \.self) { i in
+                        Button("\(i + 1)") { toggle(i) }.buttonStyle(.bordered).controlSize(.mini)
+                    }
+                    Button("Replay end-state", action: clear).buttonStyle(.bordered).controlSize(.mini)
+                }.font(.caption).foregroundStyle(.secondary)
             }
         }
     }
@@ -49,5 +57,12 @@ public struct EmptyStateAtom: MotionAtomView {
     private func restore() {
         withMotion(.snap, reduceMotion: reduce) { empty = false }
         for i in items.indices { withAnimation(reduce ? nil : .motion(.base).delay(0.12 + Double(i) * 0.04)) { shown[i] = true } }
+    }
+
+    private func toggle(_ i: Int) {
+        let willHide = shown[i]
+        withAnimation(reduce ? nil : .motion(willHide ? .snap : .base)) { shown[i].toggle() }
+        let any = shown.indices.contains { $0 == i ? !willHide : shown[$0] }
+        withAnimation(reduce ? nil : .motion(.base).delay(willHide ? 0 : 0.12)) { empty = !any }
     }
 }

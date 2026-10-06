@@ -8,6 +8,10 @@ public struct SatisfactionFacesAtom: MotionAtomView {
     @State private var mood = Track(0.5)
     @State private var sel: Int?
     @State private var shownLabel = ""
+    @State private var thanked = false
+    @State private var pop = false
+    @State private var fancy = true
+    @State private var pickID = 0
     private let names = ["Very unhappy", "Unhappy", "Neutral", "Happy", "Very happy"]
     public init() {}
 
@@ -20,6 +24,8 @@ public struct SatisfactionFacesAtom: MotionAtomView {
                     Face(mood: mood.value(at: ctx.date.timeIntervalSinceReferenceDate)).frame(width: 64, height: 64)
                 }
                 .accessibilityHidden(true)
+                .scaleEffect(pop ? 1.12 : 1)
+                .motion(.soft, value: pop)
                 HStack(spacing: 6) {
                     ForEach(names.indices, id: \.self) { i in
                         let on = sel == i
@@ -33,25 +39,51 @@ public struct SatisfactionFacesAtom: MotionAtomView {
                                 target(hovering ? i : sel)
                                 shownLabel = hovering ? names[i] : (sel.map { names[$0] } ?? "")
                             }
-                            .onTapGesture {
-                                sel = i
-                                target(i)
-                                shownLabel = names[i]
-                            }
+                            .onTapGesture { pick(i) }
                             .accessibilityElement(children: .ignore)
                             .accessibilityLabel(names[i])
                             .accessibilityAddTraits(on ? [.isButton, .isSelected] : .isButton)
-                            .accessibilityAction { sel = i; target(i); shownLabel = names[i] }
+                            .accessibilityAction { pick(i) }
                     }
                 }
+                SwapText(thanked && sel != nil ? "Thanks — logged as \(names[sel!])." : "")
+                    .font(.footnote.weight(.medium)).foregroundStyle(.green).frame(height: 20)
+                Toggle("Pop + thank-you on pick", isOn: $fancy).font(.caption).foregroundStyle(.secondary)
+                    .onChange(of: fancy) {
+                        if !fancy { thanked = false }
+                        else if let s = sel { thanked = true; shownLabel = names[s] }
+                    }
                 SwapText(shownLabel).font(.footnote).foregroundStyle(.secondary).frame(height: 20)
             }
         }
     }
 
-    private func target(_ i: Int?) {
+    private func target(_ i: Int?, soft: Bool = false) {
         let to = i.map { Double($0) / 4 } ?? 0.5
-        if reduce { mood.jump(to) } else { mood.set(to, at: now()) }
+        if reduce { mood.jump(to) } else { mood.set(to, preset: soft ? .soft : nil, at: now()) }
+    }
+
+    private func pick(_ i: Int) {
+        sel = i
+        target(i, soft: true)
+        shownLabel = names[i]
+        guard fancy else { return }
+        pickID += 1
+        let id = pickID
+        if reduce {
+            pop = false
+            thanked = true
+            return
+        }
+        withMotion(.soft, reduceMotion: reduce) { pop = true }
+        Task {
+            try? await Task.sleep(for: .seconds(0.18))
+            if id != pickID { return }
+            withMotion(.soft, reduceMotion: reduce) { pop = false }
+            try? await Task.sleep(for: .seconds(0.2))
+            if id != pickID { return }
+            thanked = true
+        }
     }
 
     private struct Face: View {

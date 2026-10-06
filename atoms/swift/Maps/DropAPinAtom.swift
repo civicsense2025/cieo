@@ -7,29 +7,39 @@ public struct DropAPinAtom: MotionAtomView {
 
     private struct Drop: Identifiable { let id = UUID(); let at: CGPoint }
     @State private var drops: [Drop] = []
+    @State private var showRing = true
+    @Environment(\.accessibilityReduceMotion) private var reduce
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Tap the map to drop a pin") {
+            VStack(spacing: 6) {
             ZStack {
                 Rectangle().fill(.quaternary.opacity(0.4))
                 Canvas { ctx, size in
                     for x in stride(from: 0, through: size.width, by: 40) { ctx.stroke(Path { $0.move(to: CGPoint(x: x, y: 0)); $0.addLine(to: CGPoint(x: x, y: size.height)) }, with: .color(.secondary.opacity(0.15))) }
                     for y in stride(from: 0, through: size.height, by: 40) { ctx.stroke(Path { $0.move(to: CGPoint(x: 0, y: y)); $0.addLine(to: CGPoint(x: size.width, y: y)) }, with: .color(.secondary.opacity(0.15))) }
                 }.accessibilityHidden(true)
-                ForEach(drops) { d in PinView().position(d.at) }
+                ForEach(drops) { d in PinView(showRing: showRing).position(d.at).motionTransition(.presence) }
             }
             .frame(width: 380, height: 240).clipShape(RoundedRectangle(cornerRadius: 14)).contentShape(Rectangle())
             .onTapGesture(coordinateSpace: .local) { p in
-                drops.append(Drop(at: p)); if drops.count > 6 { drops.removeFirst() }
+                withMotion(.base, reduceMotion: reduce) { drops.append(Drop(at: p)) }
+                if drops.count > 6 {
+                    withMotion(.snap, reduceMotion: reduce) { _ = drops.removeFirst() }
+                }
             }
             .accessibilityLabel("Map").accessibilityHint("Tap to drop a pin")
+            HStack { Text("Ring on drop").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Ring on drop", isOn: $showRing).labelsHidden().controlSize(.mini) }
+            .frame(width: 380)
+            }
         }
     }
 }
 
 private struct PinView: View {
     @Environment(\.accessibilityReduceMotion) private var reduce
+    let showRing: Bool
     @State private var landed = false
     @State private var ring = false
     var body: some View {
@@ -42,7 +52,7 @@ private struct PinView: View {
         }
         .onAppear {
             withMotion(.base, reduceMotion: reduce) { landed = true }
-            if !reduce { withAnimation(.motion(.soft).delay(0.15)) { ring = true } }
+            if !reduce && showRing { withAnimation(.motion(.soft).delay(0.15)) { ring = true } }
         }
         .accessibilityHidden(true)
     }

@@ -7,6 +7,7 @@ public struct CounterAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var value = Track(0, preset: .lazy)
     @State private var delta = Track(0, preset: .lazy)
+    @State private var showDelta = true
     public init() {}
 
     public var body: some View {
@@ -19,13 +20,17 @@ public struct CounterAtom: MotionAtomView {
                         Text(n.formatted(.number.locale(Locale(identifier: "en_US"))))
                             .font(.system(size: 52, weight: .semibold)).monospacedDigit()
                         Text("Members this year").font(.caption).foregroundStyle(.secondary)
-                        Text("+\(Int(delta.value(at: t).rounded()))% vs last year")
-                            .font(.caption.weight(.medium)).monospacedDigit().foregroundStyle(Color.accentColor)
+                        if showDelta {
+                            Text("+\(Int(delta.value(at: t).rounded()))% vs last year")
+                                .font(.caption.weight(.medium)).monospacedDigit().foregroundStyle(Color.accentColor)
+                        }
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityValue("\(n) members")
                 }
                 Button("Replay", action: replay).buttonStyle(.bordered)
+                Toggle("Compare line", isOn: $showDelta)
+                    .font(.caption).foregroundStyle(.secondary)
             }
         }
         .onAppear(perform: replay)
