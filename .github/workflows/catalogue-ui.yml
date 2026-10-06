@@ -3,7 +3,7 @@ on:
   push:
     branches: [design/catalogue-ui-refinement]
   pull_request:
-    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
+    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
 permissions:
   contents: read
 concurrency:
@@ -22,20 +22,25 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm test
-      - run: node scripts/build-library.mjs
+      - run: npm run check
+      - name: Check both existing catalogue builds
+        run: |
+          node scripts/build-library.mjs
+          node scripts/build-catalogue.mjs
+          node --test test/catalogue/build.test.mjs
+          git diff --exit-code -- docs/library.html docs/catalogue.html
       - name: Install browser for visual review
         run: |
           python -m pip install playwright==1.55.0
           python -m playwright install --with-deps chromium
-      - name: Capture public visual references
-        run: python test/catalogue/capture_references.py
-      - name: Package reviewed source without Git credentials or dependencies
+      - name: Test the real collection over HTTP
+        run: python test/catalogue/ui_smoke.py
+      - name: Package source and the actual standalone catalogue
         if: always()
         run: |
           mkdir -p review-artifact
           git archive --format=tar.gz --output=review-artifact/cieo-source.tar.gz HEAD
-          cp docs/library.html review-artifact/library.html
+          cp docs/library.html review-artifact/Cieo-Collection.html
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
