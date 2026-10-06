@@ -1,0 +1,374 @@
+/* cieo/controls.css: styles for cieo/controls. Every colour, radius and size reads a --cieo-* custom property with a
+   neutral system-colour fallback, so the consumer themes (and dark-modes) the controls with its own variables.
+   Timing reads the cieo motion tokens: durations are critically damped spring settle times, nothing overshoots,
+   exits take 100ms before entrances begin, and reduced motion makes everything instant. */
+
+:where(.cieo-ctl) {
+  --_bg: var(--cieo-control-bg, Field);
+  --_fg: var(--cieo-control-fg, FieldText);
+  --_muted: var(--cieo-control-muted, color-mix(in oklab, currentColor 62%, transparent));
+  --_border: var(--cieo-control-border, color-mix(in oklab, currentColor 24%, transparent));
+  --_border-strong: var(--cieo-control-border-strong, color-mix(in oklab, currentColor 48%, transparent));
+  --_raised: var(--cieo-control-raised, color-mix(in oklab, currentColor 8%, transparent));
+  --_accent: var(--cieo-control-accent, CanvasText);
+  --_accent-fg: var(--cieo-control-accent-fg, Canvas);
+  --_danger: var(--cieo-control-danger, light-dark(#b0342f, #f08a84));
+  --_success: var(--cieo-control-success, light-dark(#3f6b21, #9cc97a));
+  --_success-fg: var(--cieo-control-success-fg, Canvas);
+  --_popover: var(--cieo-control-popover-bg, var(--_bg));
+  --_shadow: var(--cieo-control-shadow, 0 1px 2px rgb(0 0 0 / 0.06), 0 12px 32px rgb(0 0 0 / 0.12));
+  --_knob: var(--cieo-control-knob, var(--_bg));
+  --_radius: var(--cieo-radius, 10px);
+  --_h-sm: var(--cieo-control-height-sm, 32px);
+  --_h-md: var(--cieo-control-height-md, 40px);
+  --_field-h: var(--cieo-field-height, 52px);
+  --_ring: var(--cieo-focus-ring, 2px solid var(--_accent));
+  --_ring-offset: var(--cieo-focus-offset, 2px);
+  --_font: var(--cieo-control-font, inherit);
+  --_snap: var(--motion-duration-snap, 200ms);
+  --_base: var(--motion-duration-base, 300ms);
+  --_soft: var(--motion-duration-soft, 440ms);
+  --_exit: var(--motion-duration-exit, 100ms);
+  --_lag: var(--motion-lag, 60ms);
+  --_ease: var(--motion-ease-spring, cubic-bezier(0.2, 0.15, 0.2, 1));
+  --_ease-exit: var(--motion-ease-exit, cubic-bezier(0.4, 0, 1, 1));
+  font-family: var(--_font);
+}
+
+/* Reduced motion: instant, in step with tokens.css and the JS springs (data-motion="full" overrides the OS). */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion="full"]) .cieo-ctl {
+    --_snap: 0s; --_base: 0s; --_soft: 0s; --_exit: 0s; --_lag: 0s;
+  }
+  :root:not([data-motion="full"]) .cieo-ctl .cieo-spin { animation: none; }
+}
+:root[data-motion="reduced"] .cieo-ctl,
+:root[data-reduced-motion="true"] .cieo-ctl {
+  --_snap: 0s; --_base: 0s; --_soft: 0s; --_exit: 0s; --_lag: 0s;
+}
+:root[data-motion="reduced"] .cieo-ctl .cieo-spin,
+:root[data-reduced-motion="true"] .cieo-ctl .cieo-spin { animation: none; }
+
+.cieo-vh {
+  position: absolute !important;
+  width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+.cieo-icon { flex: none; display: block; }
+.cieo-label { font-size: 0.8125rem; font-weight: 500; color: var(--_fg); }
+.cieo-desc { margin: 0; font-size: 0.8125rem; line-height: 1.4; color: var(--_muted); }
+
+/* Blur swap: the leaving layer drifts up and fades in EXIT; the entering one un-blurs after it. */
+.cieo-layer { display: inline-flex; align-items: center; justify-content: center; gap: 0.4em; }
+.cieo-layer:not([data-on]) {
+  position: absolute; inset: 0;
+  opacity: 0; filter: blur(4px); translate: 0 -4px; pointer-events: none;
+  transition: opacity var(--_exit) var(--_ease-exit), filter var(--_exit) var(--_ease-exit), translate var(--_exit) var(--_ease-exit);
+}
+.cieo-layer[data-on] {
+  opacity: 1; filter: none; translate: 0 0;
+  transition: opacity var(--_base) var(--_ease) var(--_exit), filter var(--_base) var(--_ease) var(--_exit);
+}
+.cieo-draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--_snap) var(--_ease-exit); }
+[data-on] > .cieo-icon .cieo-draw,
+[data-on] > svg .cieo-draw { stroke-dashoffset: 0; transition: stroke-dashoffset var(--_soft) var(--_ease) calc(var(--_exit) * 1.8); }
+.cieo-spin { animation: cieo-spin 0.8s linear infinite; }
+@keyframes cieo-spin { to { rotate: 360deg; } }
+
+/* ---------- Button ---------- */
+.cieo-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  box-sizing: border-box; height: var(--_h-md); padding: 0 16px;
+  border: 1px solid transparent; border-radius: var(--_radius);
+  background: transparent; color: var(--_fg);
+  font: inherit; font-family: var(--_font); font-size: 0.9375rem; font-weight: 500; line-height: 1;
+  white-space: nowrap; text-decoration: none; cursor: pointer; user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: scale var(--_snap) var(--_ease), background-color var(--_base) var(--_ease), color var(--_base) var(--_ease), border-color var(--_base) var(--_ease);
+}
+.cieo-btn:active:not(:disabled, [aria-disabled="true"]) { scale: 0.97; }
+.cieo-btn:focus-visible { outline: var(--_ring); outline-offset: var(--_ring-offset); }
+.cieo-btn:disabled, .cieo-btn[aria-disabled="true"]:not([aria-busy]) { opacity: 0.5; cursor: not-allowed; }
+.cieo-btn[aria-busy] { cursor: progress; }
+.cieo-btn--sm { height: var(--_h-sm); padding: 0 12px; font-size: 0.8125rem; }
+.cieo-btn--icon { min-width: var(--_h-md); padding: 0; }
+.cieo-btn--sm.cieo-btn--icon { min-width: var(--_h-sm); }
+/* An icon-only button that confirms with a label (the copy recipe) widens to fit it. */
+.cieo-btn--icon[data-state="done"]:has(.cieo-btn-done .cieo-btn-text) { padding: 0 12px; }
+.cieo-btn--block { display: flex; width: 100%; }
+.cieo-btn--primary { background: var(--_accent); color: var(--_accent-fg); }
+.cieo-btn--primary:hover:not(:disabled, [aria-disabled="true"]) { background: color-mix(in oklab, var(--_accent) 86%, var(--_accent-fg)); }
+.cieo-btn--secondary { background: var(--_bg); border-color: var(--_border); }
+.cieo-btn--secondary:hover:not(:disabled, [aria-disabled="true"]) { border-color: var(--_border-strong); background: color-mix(in oklab, var(--_fg) 4%, var(--_bg)); }
+.cieo-btn--ghost:hover:not(:disabled, [aria-disabled="true"]) { background: var(--_raised); }
+.cieo-btn--text { height: auto; min-height: 1.5em; padding: 2px 4px; border-radius: calc(var(--_radius) / 2); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 0.2em; transition: text-decoration-color var(--_snap) var(--_ease), scale var(--_snap) var(--_ease); }
+.cieo-btn--text:hover { text-decoration-color: currentColor; }
+.cieo-btn[data-state] { overflow: hidden; }
+.cieo-btn.cieo-btn--primary[data-state="done"] { background: var(--_success); color: var(--_success-fg); }
+.cieo-btn.cieo-btn:not(.cieo-btn--primary)[data-state="done"] { color: var(--_success); border-color: color-mix(in oklab, var(--_success) 55%, transparent); }
+/* Touch: a 44px hit area without changing the drawn size (morphing buttons clip, so they grow instead). */
+@media (pointer: coarse) {
+  .cieo-btn:not([data-state])::before { content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); translate: -50% -50%; }
+  .cieo-btn[data-state] { min-height: 44px; }
+}
+
+/* ---------- Select ---------- */
+.cieo-select { display: inline-grid; gap: 6px; min-width: 10rem; color: var(--_fg); }
+.cieo-select-box { position: relative; }
+.cieo-select-native,
+.cieo-select-trigger {
+  appearance: none; -webkit-appearance: none;
+  box-sizing: border-box; display: flex; align-items: center; width: 100%;
+  height: var(--_h-md); margin: 0; padding: 0 36px 0 12px;
+  border: 1px solid var(--_border); border-radius: var(--_radius);
+  background: var(--_bg); color: var(--_fg);
+  font: inherit; font-size: 0.9375rem; line-height: 1.2; text-align: left; cursor: pointer;
+  transition: border-color var(--_base) var(--_ease), scale var(--_snap) var(--_ease);
+}
+.cieo-select--sm .cieo-select-native,
+.cieo-select--sm .cieo-select-trigger { height: var(--_h-sm); font-size: 0.8125rem; padding-left: 10px; }
+.cieo-select-native:hover,
+.cieo-select-trigger:hover { border-color: var(--_border-strong); }
+.cieo-select-native:focus-visible,
+.cieo-select-trigger:focus-visible { outline: var(--_ring); outline-offset: var(--_ring-offset); }
+.cieo-select-native:disabled,
+.cieo-select-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
+.cieo-select-trigger:active:not(:disabled) { scale: 0.99; }
+.cieo-select-box .cieo-chevron { position: absolute; right: 12px; top: 50%; translate: 0 -50%; pointer-events: none; color: var(--_muted); transition: rotate var(--_snap) var(--_ease); }
+.cieo-select[data-open] .cieo-chevron { rotate: 180deg; }
+.cieo-select-value { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Enhanced: the native select stays in the form but leaves sight and the accessibility tree.
+   It keeps its box (invisible), so the trigger laid over it has exactly the server-rendered width: no shift on hydration. */
+.cieo-select[data-enhanced] .cieo-select-native { visibility: hidden; pointer-events: none; }
+.cieo-select-trigger { position: absolute; inset: 0; }
+.cieo-select-pop {
+  position: absolute; z-index: var(--cieo-popover-z, 50);
+  left: 0; top: calc(100% + 4px); min-width: 100%; max-width: min(24rem, calc(100vw - 32px));
+  visibility: hidden; opacity: 0; transform-origin: 20px 0;
+}
+.cieo-select-pop[data-side="top"] { top: auto; bottom: calc(100% + 4px); transform-origin: 20px 100%; }
+.cieo-select-list {
+  position: relative; box-sizing: border-box; max-height: 320px; overflow: auto; overscroll-behavior: contain;
+  padding: 4px; outline: none;
+  background: var(--_popover); color: var(--_fg);
+  border: 1px solid var(--_border); border-radius: calc(var(--_radius) + 2px); box-shadow: var(--_shadow);
+}
+.cieo-select-plate { position: absolute; left: 4px; right: 4px; top: 0; height: 0; opacity: 0; border-radius: calc(var(--_radius) - 2px); background: var(--_raised); pointer-events: none; }
+.cieo-select-option {
+  position: relative; display: flex; align-items: center; gap: 8px;
+  min-height: 36px; padding: 6px 12px 6px 8px; box-sizing: border-box;
+  border-radius: calc(var(--_radius) - 2px);
+  font-size: 0.9375rem; white-space: nowrap; cursor: pointer; user-select: none;
+}
+.cieo-select-option[aria-selected="true"] { font-weight: 500; }
+.cieo-select-option[aria-disabled] { opacity: 0.45; cursor: default; }
+.cieo-select-mark { display: inline-grid; place-items: center; width: 16px; flex: none; color: var(--_fg); }
+@media (forced-colors: active) {
+  .cieo-select-option[data-active] { outline: 2px solid Highlight; outline-offset: -2px; }
+}
+@media (pointer: coarse) {
+  .cieo-select-native, .cieo-select-trigger { min-height: 44px; }
+  .cieo-select-option { min-height: 44px; }
+}
+
+/* ---------- Text field and text area ---------- */
+.cieo-field { display: grid; min-width: 0; color: var(--_fg); --_status: var(--_border); }
+.cieo-field[data-status="valid"] { --_status: var(--_success); }
+.cieo-field[data-status="invalid"] { --_status: var(--_danger); }
+.cieo-field-box {
+  position: relative; display: flex; align-items: stretch;
+  box-sizing: border-box; min-height: var(--_field-h);
+  border: 1.5px solid var(--_status); border-radius: var(--_radius);
+  background: var(--_bg); cursor: text;
+  transition: border-color var(--_base) var(--_ease);
+}
+.cieo-field[data-status="neutral"] .cieo-field-box:hover { border-color: var(--_border-strong); }
+.cieo-field[data-status="neutral"] .cieo-field-box:focus-within { border-color: var(--_fg); }
+.cieo-field-box:has(.cieo-field-control:focus-visible) { outline: var(--_ring); outline-offset: 1px; }
+.cieo-field-main { position: relative; flex: 1; min-width: 0; }
+.cieo-field-control {
+  box-sizing: border-box; display: block; width: 100%; height: 100%; margin: 0;
+  padding: 22px 12px 6px; border: 0; background: none; color: inherit; outline: none;
+  font: inherit; font-size: 1rem; line-height: 1.3; appearance: none;
+}
+.cieo-field-control::placeholder { color: transparent; transition: color var(--_base) var(--_ease); }
+.cieo-field[data-floated] .cieo-field-control::placeholder,
+.cieo-field-control:focus::placeholder { color: var(--_muted); }
+.cieo-field-control:disabled { cursor: not-allowed; opacity: 0.6; }
+.cieo-field--textarea .cieo-field-control { padding-top: 24px; resize: vertical; line-height: 1.5; min-height: var(--_field-h); }
+.cieo-field-label {
+  position: absolute; left: 12px; right: 12px; top: 14px;
+  font-size: 1rem; line-height: 1.25; color: var(--_muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none;
+  transform-origin: 0 0;
+  transition: transform var(--_base) var(--_ease), color var(--_base) var(--_ease);
+}
+.cieo-field-main:focus-within .cieo-field-label,
+.cieo-field-control:not(:placeholder-shown) + .cieo-field-label,
+.cieo-field[data-floated] .cieo-field-label { transform: translateY(-8px) scale(0.8); }
+.cieo-field-control:is(:autofill, :-webkit-autofill) + .cieo-field-label { transform: translateY(-8px) scale(0.8); }
+.cieo-field-main:focus-within .cieo-field-label { color: var(--_fg); }
+.cieo-field[data-status="valid"] .cieo-field-label { color: var(--_success); }
+.cieo-field[data-status="invalid"] .cieo-field-label { color: var(--_danger); }
+.cieo-field-icon { position: relative; flex: none; align-self: center; width: 18px; height: 18px; margin-right: 12px; }
+.cieo-field--textarea .cieo-field-icon { align-self: flex-start; margin-top: 16px; }
+.cieo-field-icon .cieo-layer { position: absolute; inset: 0; }
+.cieo-field-icon .cieo-layer:first-child { color: var(--_success); }
+.cieo-field-icon .cieo-layer:last-child { color: var(--_danger); }
+.cieo-field-icon svg { width: 18px; height: 18px; }
+.cieo-field-affix { display: flex; align-items: center; flex: none; padding-left: 12px; color: var(--_muted); }
+.cieo-field-main + .cieo-field-icon + .cieo-field-affix { padding: 0 12px 0 0; }
+.cieo-field-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-top: 6px; }
+.cieo-field-count { flex: none; font-size: 0.8125rem; color: var(--_muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* The message area opens on a height spring (grid rows 0fr to 1fr), then the text fades down into place. */
+.cieo-field-msg { display: grid; grid-template-rows: 0fr; transition: grid-template-rows var(--_soft) var(--_ease); }
+.cieo-field-msg[data-open] { grid-template-rows: 1fr; }
+.cieo-field-msg > div { min-height: 0; overflow: hidden; }
+.cieo-field-error {
+  margin: 0; padding-top: 6px; font-size: 0.8125rem; line-height: 1.4; color: var(--_danger);
+  opacity: 0; translate: 0 -4px; visibility: hidden;
+  transition: opacity var(--_exit) var(--_ease-exit), translate var(--_exit) var(--_ease-exit), visibility 0s linear var(--_soft);
+}
+.cieo-field-msg[data-open] .cieo-field-error {
+  opacity: 1; translate: 0 0; visibility: visible;
+  transition: opacity var(--_base) var(--_ease) var(--_exit), translate var(--_base) var(--_ease) var(--_exit), visibility 0s;
+}
+
+/* ---------- Search field ---------- */
+.cieo-search { display: grid; gap: 6px; color: var(--_fg); --_h: var(--_h-md); }
+.cieo-search--sm { --_h: var(--_h-sm); }
+.cieo-search-box {
+  position: relative; display: flex; align-items: center;
+  box-sizing: border-box; width: var(--cieo-search-width, 100%); height: var(--_h);
+  border: 1px solid var(--_border); border-radius: var(--cieo-search-radius, 999px);
+  background: var(--_bg); overflow: hidden;
+  transition: width var(--_soft) var(--_ease), border-color var(--_base) var(--_ease);
+}
+.cieo-search-box:hover { border-color: var(--_border-strong); }
+.cieo-search-box:focus-within { border-color: var(--_fg); }
+.cieo-search-box:has(.cieo-search-input:focus-visible) { outline: var(--_ring); outline-offset: 1px; }
+.cieo-search-icon,
+.cieo-search-toggle {
+  flex: none; display: grid; place-items: center; box-sizing: border-box;
+  width: calc(var(--_h) - 2px); height: 100%; padding: 0; margin: 0;
+  border: 0; border-radius: inherit; background: none; color: var(--_muted);
+}
+.cieo-search-toggle { cursor: pointer; }
+.cieo-search-toggle:focus-visible { outline: var(--_ring); outline-offset: -2px; }
+.cieo-search-input {
+  flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0 4px 0 0;
+  border: 0; background: none; color: inherit; outline: none; appearance: none;
+  font: inherit; font-size: 1rem;
+  transition: opacity var(--_base) var(--_ease) 120ms;
+}
+.cieo-search-input::placeholder { color: var(--_muted); }
+.cieo-search[data-enhanced] .cieo-search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.cieo-search-clear {
+  flex: none; display: grid; place-items: center; box-sizing: border-box;
+  width: calc(var(--_h) - 12px); height: calc(var(--_h) - 12px); margin: 0 5px 0 0; padding: 0;
+  border: 0; border-radius: 999px; background: var(--_raised); color: var(--_muted); cursor: pointer;
+  opacity: 0; scale: 0.6; pointer-events: none;
+  transition: opacity var(--_exit) var(--_ease-exit), scale var(--_exit) var(--_ease-exit);
+}
+.cieo-search-clear svg { width: 14px; height: 14px; }
+.cieo-search-clear[data-on] { opacity: 1; scale: 1; pointer-events: auto; transition: opacity var(--_base) var(--_ease), scale var(--_snap) var(--_ease); }
+.cieo-search-clear:focus-visible { outline: var(--_ring); outline-offset: 1px; }
+.cieo-search[data-collapsible] { display: inline-grid; justify-items: end; }
+.cieo-search[data-collapsible] .cieo-search-box { width: var(--cieo-search-width, 16rem); }
+.cieo-search[data-collapsible][data-enhanced]:not([data-open]) .cieo-search-box { width: var(--_h); border-color: transparent; background: transparent; }
+.cieo-search[data-collapsible][data-enhanced]:not([data-open]) .cieo-search-toggle:hover { background: var(--_raised); }
+.cieo-search[data-collapsible][data-enhanced]:not([data-open]) .cieo-search-input { opacity: 0; visibility: hidden; transition: opacity var(--_exit) var(--_ease-exit), visibility 0s linear var(--_exit); }
+@media (pointer: coarse) {
+  .cieo-search { --_h: max(var(--_h-md), 44px); }
+}
+
+/* ---------- Checkbox, radio, switch ---------- */
+.cieo-toggle { position: relative; display: inline-flex; align-items: flex-start; gap: 10px; color: var(--_fg); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.cieo-toggle:has(.cieo-toggle-input:disabled) { opacity: 0.5; cursor: not-allowed; }
+.cieo-toggle-hit { position: relative; flex: none; display: inline-grid; place-items: center; }
+.cieo-toggle-input { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: inherit; }
+.cieo-toggle-input:focus-visible + * { outline: var(--_ring); outline-offset: var(--_ring-offset); }
+.cieo-toggle-text { display: grid; gap: 2px; font-size: 0.9375rem; line-height: 1.35; }
+@media (pointer: coarse) {
+  .cieo-toggle { min-height: 44px; align-items: center; }
+}
+
+.cieo-check-box,
+.cieo-radio-dot {
+  box-sizing: border-box; display: grid; place-items: center; width: 18px; height: 18px; margin-top: 1px;
+  border: 1.5px solid var(--_border-strong); background: var(--_bg);
+  transition: background-color var(--_snap) var(--_ease), border-color var(--_snap) var(--_ease), scale var(--_snap) var(--_ease);
+}
+.cieo-check-box { border-radius: calc(var(--_radius) / 2); color: var(--_accent-fg); }
+.cieo-check-box svg { width: 12px; height: 12px; }
+.cieo-toggle-input:hover:not(:checked, :indeterminate, :disabled) + :is(.cieo-check-box, .cieo-radio-dot) { border-color: var(--_fg); }
+.cieo-toggle-input:active:not(:disabled) + :is(.cieo-check-box, .cieo-radio-dot) { scale: 0.92; }
+.cieo-check-tick,
+.cieo-check-dash { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--_snap) var(--_ease-exit); }
+.cieo-toggle-input:is(:checked, :indeterminate) + .cieo-check-box { background: var(--_accent); border-color: var(--_accent); }
+/* The box fills, then the check draws 40ms later (checklist recipe). */
+.cieo-toggle-input:checked:not(:indeterminate) + .cieo-check-box .cieo-check-tick,
+.cieo-toggle-input:indeterminate + .cieo-check-box .cieo-check-dash { stroke-dashoffset: 0; transition: stroke-dashoffset var(--_base) var(--_ease) calc(var(--_snap) * 0.2); }
+
+.cieo-radio-dot { border-radius: 50%; }
+.cieo-radio-dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--_accent); scale: 0; transition: scale var(--_snap) var(--_ease-exit); }
+.cieo-toggle-input:checked + .cieo-radio-dot { border-color: var(--_accent); }
+.cieo-toggle-input:checked + .cieo-radio-dot::after { scale: 1; transition: scale var(--_snap) var(--_ease); }
+.cieo-radio-group { display: grid; gap: 8px; min-width: 0; margin: 0; padding: 0; border: 0; color: var(--_fg); }
+.cieo-radio-group > legend { padding: 0; margin-bottom: 8px; }
+.cieo-radio-items { display: grid; gap: 8px; }
+.cieo-radio-group[data-orientation="horizontal"] .cieo-radio-items { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+
+/* Switch: the knob's leading edge moves first and the trailing edge follows LAG later; pressed, it widens 6px toward
+   where it will go. The track inks in on the base spring. */
+.cieo-switch-track {
+  position: relative; box-sizing: border-box; display: block; width: 42px; height: 24px; border-radius: 12px;
+  background: color-mix(in oklab, var(--_fg) 18%, transparent);
+  transition: background-color var(--_base) var(--_ease);
+}
+.cieo-switch-knob {
+  position: absolute; top: 3px; bottom: 3px; left: 3px; right: 21px; border-radius: 9px;
+  background: var(--_knob); box-shadow: 0 1px 2px rgb(0 0 0 / 0.2);
+  transition: left var(--_base) var(--_ease), right var(--_base) var(--_ease) var(--_lag);
+}
+.cieo-toggle-input:checked + .cieo-switch-track { background: var(--_accent); }
+.cieo-toggle-input:checked + .cieo-switch-track .cieo-switch-knob { left: 21px; right: 3px; transition: right var(--_base) var(--_ease), left var(--_base) var(--_ease) var(--_lag); }
+.cieo-toggle-input:active:not(:disabled) + .cieo-switch-track .cieo-switch-knob { right: 15px; transition: left var(--_snap) var(--_ease), right var(--_snap) var(--_ease); }
+.cieo-toggle-input:checked:active:not(:disabled) + .cieo-switch-track .cieo-switch-knob { left: 15px; right: 3px; }
+.cieo-switch .cieo-toggle-text { padding-top: 2px; }
+
+/* ---------- Range ---------- */
+.cieo-range { display: grid; gap: 8px; min-width: 10rem; color: var(--_fg); --_thumb: 18px; --_rail: 4px; --_rail-bg: color-mix(in oklab, var(--_fg) 16%, transparent); }
+.cieo-range-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.cieo-range-value { font-size: 0.8125rem; color: var(--_muted); font-variant-numeric: tabular-nums; }
+.cieo-range-input {
+  -webkit-appearance: none; appearance: none; display: block; width: 100%; height: 24px; margin: 0;
+  background: transparent; cursor: pointer; outline: none;
+  --_fill: calc(var(--_thumb) / 2 + (100% - var(--_thumb)) * var(--cieo-range-p, 50) / 100);
+}
+.cieo-range-input:disabled { opacity: 0.5; cursor: not-allowed; }
+.cieo-range-input::-webkit-slider-runnable-track {
+  height: var(--_rail); border-radius: 999px;
+  background: linear-gradient(to right, var(--_accent) var(--_fill), var(--_rail-bg) var(--_fill));
+}
+.cieo-range-input::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; box-sizing: border-box;
+  width: var(--_thumb); height: var(--_thumb); margin-top: calc((var(--_rail) - var(--_thumb)) / 2);
+  border: 2px solid var(--_accent); border-radius: 50%; background: var(--_knob);
+  transition: scale var(--_snap) var(--_ease);
+}
+.cieo-range-input:active::-webkit-slider-thumb { scale: 1.15; }
+.cieo-range-input:focus-visible::-webkit-slider-thumb { outline: var(--_ring); outline-offset: var(--_ring-offset); }
+.cieo-range-input::-moz-range-track { height: var(--_rail); border-radius: 999px; background: var(--_rail-bg); }
+.cieo-range-input::-moz-range-progress { height: var(--_rail); border-radius: 999px; background: var(--_accent); }
+.cieo-range-input::-moz-range-thumb {
+  box-sizing: border-box; width: var(--_thumb); height: var(--_thumb);
+  border: 2px solid var(--_accent); border-radius: 50%; background: var(--_knob);
+  transition: scale var(--_snap) var(--_ease);
+}
+.cieo-range-input:active::-moz-range-thumb { scale: 1.15; }
+.cieo-range-input:focus-visible::-moz-range-thumb { outline: var(--_ring); outline-offset: var(--_ring-offset); }
+@media (pointer: coarse) {
+  .cieo-range-input { height: 44px; }
+}

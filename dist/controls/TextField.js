@@ -1,0 +1,18 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+/* TextField: a native <input> in the field frame. Without JavaScript it is a labelled input that submits normally. */
+import { forwardRef } from 'react';
+import { FieldFrame, useField } from './Field.js';
+export const TextField = forwardRef(function TextField(props, ref) {
+    const { label, description, error, status, validate, onStatusChange, prefix, suffix, className, type = 'text', placeholder, id, ...rest } = props;
+    const own = { label, description, error, status, validate, onStatusChange, prefix, suffix };
+    const field = useField(own, { ...rest, type }, id);
+    const setRef = (el) => {
+        field.ref.current = el;
+        if (typeof ref === 'function')
+            ref(el);
+        else if (ref)
+            ref.current = el;
+    };
+    return (_jsx(FieldFrame, { kind: "input", own: own, field: field, floated: !!placeholder, className: className, children: _jsx("input", { ...rest, ...field.control, ref: setRef, type: type, placeholder: placeholder ?? ' ', className: "cieo-field-control" }) }));
+});

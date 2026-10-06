@@ -1,0 +1,60 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/* Range: a native range input with a drawn track and fill. The server renders the fill at the initial value. After
+   hydration the fill follows a drag exactly and springs (snap) on keyboard steps and track clicks, and the thumb
+   grows while pressed. */
+import { forwardRef, useEffect, useId, useRef, useState } from 'react';
+import { S } from '../core/spring.js';
+import { Digits } from '../react/index.js';
+import { cx } from './classes.js';
+import { Driver } from './motion.js';
+const pct = (v, min, max) => (max > min ? ((v - min) / (max - min)) * 100 : 0);
+export const Range = forwardRef(function Range(props, ref) {
+    const { label, hideLabel, showValue, formatValue = String, className, id, onInput, ...rest } = props;
+    const uid = useId();
+    const inputId = id ?? `${uid}r`;
+    const min = Number(rest.min ?? 0);
+    const max = Number(rest.max ?? 100);
+    const start = Number(rest.value ?? rest.defaultValue ?? (min + max) / 2);
+    /* React writes the fill variable once (server and first render); the spring owns it afterwards. */
+    const initial = useRef({ ['--cieo-range-p']: pct(start, min, max).toFixed(3) });
+    const root = useRef(null);
+    const drv = useRef(null);
+    const dragging = useRef(false);
+    const readout = useRef(null);
+    const driver = () => (drv.current ?? (drv.current = new Driver(pct(start, min, max), (v) => root.current?.style.setProperty('--cieo-range-p', v.toFixed(3)))));
+    const follow = (v) => driver().to(pct(v, min, max), { cfg: S.snap, jump: dragging.current, el: root.current });
+    useEffect(() => {
+        if (rest.value !== undefined)
+            follow(Number(rest.value));
+    }, [rest.value, min, max]);
+    useEffect(() => () => drv.current?.cancel(), []);
+    const setRef = (el) => {
+        if (typeof ref === 'function')
+            ref(el);
+        else if (ref)
+            ref.current = el;
+    };
+    return (_jsxs("div", { ref: root, className: cx('cieo-ctl', 'cieo-range', className), style: initial.current, children: [_jsxs("div", { className: hideLabel ? 'cieo-vh' : 'cieo-range-head', children: [_jsx("label", { htmlFor: inputId, className: "cieo-label", children: label }), showValue ? (_jsx("output", { htmlFor: inputId, className: "cieo-range-value", children: _jsx(RangeReadout, { initial: start, format: formatValue, bind: (api) => (readout.current = api) }) })) : null] }), _jsx("input", { ...rest, ref: setRef, id: inputId, type: "range", className: "cieo-range-input", onPointerDown: (e) => {
+                    dragging.current = false;
+                    rest.onPointerDown?.(e);
+                }, onPointerMove: (e) => {
+                    if (e.buttons)
+                        dragging.current = true;
+                    rest.onPointerMove?.(e);
+                }, onPointerUp: (e) => {
+                    dragging.current = false;
+                    rest.onPointerUp?.(e);
+                }, onInput: (e) => {
+                    const v = Number(e.currentTarget.value);
+                    follow(v);
+                    readout.current?.set(v);
+                    onInput?.(e);
+                } })] }));
+});
+/* The readout keeps its own state so a drag re-renders only the number, never the whole control. */
+function RangeReadout({ initial, format, bind }) {
+    const [v, setV] = useState(initial);
+    bind({ set: setV });
+    return _jsx(Digits, { value: format(v) });
+}

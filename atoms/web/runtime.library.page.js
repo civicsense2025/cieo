@@ -30,8 +30,7 @@ A.forEach(a => {
   $(el,'h3').textContent = a.name; $(el,'.block').textContent = a.block; $(el,'footer p').textContent = a.desc;
   const infoBtn = $(el,'.infobtn'), tileInfo = $(el,'.tileinfo');
   infoBtn.onclick = () => { const open = tileInfo.classList.toggle('open'); infoBtn.setAttribute('aria-expanded', String(open)); };
-  const grid = $(groupEls[a.cat],'.grid'); a.wide ? grid.insertBefore(el, grid.querySelector('.tile:not(.wide)')) : grid.appendChild(el); a.el = el; a.visible = true;
-  try { a.render = a.init($(el,'.stage')); } catch (err) { console.error(a.id, err); a.render = null; }
+  const grid = $(groupEls[a.cat],'.grid'); a.wide ? grid.insertBefore(el, grid.querySelector('.tile:not(.wide)')) : grid.appendChild(el); a.el = el; a.visible = false;
 });
 const detailToggle = document.getElementById('detailToggle');
 if (detailToggle) detailToggle.addEventListener('click', () => {
@@ -40,9 +39,13 @@ if (detailToggle) detailToggle.addEventListener('click', () => {
   detailToggle.setAttribute('aria-expanded', String(next));
   detailToggle.textContent = next ? 'Hide all' : 'Show all';
 });
-// only render tiles on screen
-const io = new IntersectionObserver(es => es.forEach(e => { const a = A.find(x => x.el === e.target); if (a) a.visible = e.isIntersecting; }), { rootMargin:'200px' });
-A.forEach(a => io.observe(a.el));
+// lazy tiles: init on first approach, render only while visible
+const io = new IntersectionObserver(es => es.forEach(e => {
+  const a = A.find(x => x.el === e.target); if (!a) return;
+  if (e.isIntersecting && !a.inited) { a.inited = true; try { a.render = a.init($(a.el,'.stage')); } catch (err) { console.error(a.id, err); a.render = null; } }
+  a.visible = e.isIntersecting;
+}), { rootMargin:'400px' });
+A.forEach(a => { a.inited = false; a.render = null; io.observe(a.el); });
 
 // segmented controls on the bar reuse the edge atom
 function segControl(root, onPick, start = 0){
