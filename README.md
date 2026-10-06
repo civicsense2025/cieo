@@ -1,6 +1,6 @@
-# cieo
+# Cieo
 
-Calm, critically damped spring motion for the web (plain DOM and React) and SwiftUI, plus the Motion Atoms library as recipes on both platforms. Nothing overshoots or bounces, interrupted motion never jumps, and reduced motion makes everything instant.
+Calm, critically damped spring motion for the web (plain DOM and React) and SwiftUI, plus the Motion Atoms library as recipes on both platforms. At-rest steps use non-bouncy curves; explicit release velocity can still carry a value past its target. The optional design foundation adds a visual identity without coupling the motion engine to a framework.
 
 ## Install
 
@@ -29,6 +29,31 @@ SwapText(status)            // old text out, new text in
 RollingDigits(count)        // only changed digits roll
 view.transition(.motionPresence)
 ```
+
+## Design foundation
+
+Open the [design studio](docs/studio/index.html), read the [integration guide](docs/design-system.md), or inspect the [source-mapped improvements](docs/improvements.json). The [review](docs/review.md) records the baseline and the remaining integration boundaries.
+
+```sh
+npm run studio                 # Modular preview, served on loopback
+npm run studio:standalone      # Generate Cieo-studio.html for offline use
+npm run test:design            # Dependency-free design and native-export tests
+npm run test:design:types      # Public TypeScript consumer contract
+```
+
+```js
+import { createTheme, applyTheme, toDTCG, toNative } from 'cieo/design';
+import 'cieo/design.css';
+import 'cieo/primitives.css';
+const theme = createTheme({ brand: 'iris', scheme: 'dark', radius: 'soft' });
+const controller = applyTheme(document.documentElement, theme);
+// Dispose at the host framework's unmount boundary.
+controller.destroy();
+```
+
+The design layer has six brand starting points, 73 semantic tokens, explicit color-pair audits, scoped theming, a CLI, typed JSON, and Swift/Rust/Kotlin/Dart/Python/C constant generators. Native hosts still supply their own components, rendering, accessibility, and text scaling. The existing Motion Atoms catalogue and its recipe runtime remain unchanged.
+
+Pin a reviewed commit or release containing this change. Older tags don't acquire new files when this branch changes. `prepare` and `prepack` generate portable token artifacts using only Node built-ins; the checked-in spring engine still needs no consumer-side TypeScript compilation.
 
 ## Springs
 
@@ -110,4 +135,4 @@ node scripts/build-catalogue.mjs    # rebuild docs/catalogue.html from atoms/web
 node scripts/gen-swift-index.mjs    # relist Swift atoms after adding one
 ```
 
-`dist/` is committed so a git install needs no build step; `npm run check` fails if it is stale.
+`dist/` remains committed. `npm run check` verifies the engine build, the design contract, the improvement ledger, public types, and tracked generated styles. `npm run build:design` regenerates portable assets. No runtime dependency or license change accompanies the design layer.
