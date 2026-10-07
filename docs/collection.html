@@ -25327,7 +25327,7 @@ atom({ id:'omnibox', cat:'Chrome', name:'Omnibox suggestions', block:'chrome, om
   desc:'Suggestion list height springs to the match count. Matches spring in with bolded letters while the plate slides with lagging edges. Opening a result holds a success terminal. Reduced motion jumps instantly.',
   api:'h.set(count*40,S.base); row.set(in?1:0); hl.go(top,bottom)   end: opened, hold',
   init(st){
-    const URLS = ['github.com/principle','git-scm.com/docs','gitlab.com/explore','gitter.im/home','gist.github.com'];
+    const URLS = ['git.example.com/team','git-scm.com/docs','gitlab.com/explore','gitter.im/home','gist.example.com'];
     const wrap = $(st,'.wrap'), plate = $(st,'.plate'), q = $(st,'.q'),
           msg = $(st,'.msg'), bw = $(st,'.bw');
     const put = (tr,v,c) => { if (REDUCE) tr.jump(v); else tr.set(v,c); };
