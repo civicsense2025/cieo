@@ -1,7 +1,7 @@
 name: Catalogue UI
 on:
   pull_request:
-    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'scripts/build-collection.mjs', 'scripts/build-workbench.mjs', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
+    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'scripts/build-collection.mjs', 'scripts/build-workbench.mjs', 'docs/library.html', 'docs/catalogue.html', 'docs/collection.html', 'docs/workbench.html', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
 permissions:
   contents: read
 concurrency:
@@ -11,6 +11,8 @@ jobs:
   review:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      GENERATED_PAGES: library catalogue collection workbench
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -21,14 +23,14 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - name: Check both existing catalogue builds
+      - name: Build generated pages and check for drift
         run: |
-          node scripts/build-library.mjs
-          node scripts/build-catalogue.mjs
-          node scripts/build-collection.mjs
-          node scripts/build-workbench.mjs
+          for page in $GENERATED_PAGES; do node "scripts/build-$page.mjs"; done
           node --test test/catalogue/build.test.mjs
-          git diff --exit-code -- docs/library.html docs/catalogue.html docs/collection.html docs/workbench.html
+          for page in $GENERATED_PAGES; do paths="$paths docs/$page.html"; done
+          git diff --exit-code -- $paths
+          untracked_or_changed="$(git status --porcelain -- docs/)"
+          if [ -n "$untracked_or_changed" ]; then echo "$untracked_or_changed"; exit 1; fi
       - name: Install browser for visual review
         run: |
           python -m pip install playwright==1.55.0
@@ -41,6 +43,7 @@ jobs:
           mkdir -p review-artifact
           git archive --format=tar.gz --output=review-artifact/cieo-source.tar.gz HEAD
           cp docs/collection.html review-artifact/Cieo-Collection.html
+          cp docs/library.html review-artifact/Cieo-Library.html
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
