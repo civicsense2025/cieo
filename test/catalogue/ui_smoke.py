@@ -14,10 +14,13 @@ from playwright.sync_api import sync_playwright, expect
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 OUT = ROOT / 'review-artifact' / 'ui'
 OUT.mkdir(parents=True, exist_ok=True)
-subprocess.run(['node', 'scripts/build-library.mjs'], cwd=ROOT, check=True)
-HTML = (ROOT / 'docs/library.html').read_text()
+subprocess.run(['node', 'scripts/build-collection.mjs'], cwd=ROOT, check=True)
+HTML = (ROOT / 'docs/collection.html').read_text()
 DOCUMENT_ONLY = os.environ.get('CIEO_DOCUMENT_ONLY') == '1'
 checks = []
+RECIPES = json.loads(subprocess.check_output(['node', 'test/catalogue/registry.mjs'], cwd=ROOT, text=True))
+EXPECTED_IDS = [recipe['id'] for recipe in RECIPES]
+EXPECTED_COUNT = len(EXPECTED_IDS)
 
 
 def check(name, condition):
@@ -34,7 +37,7 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
 
 server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), functools.partial(QuietHandler, directory=str(ROOT)))
 threading.Thread(target=server.serve_forever, daemon=True).start()
-url = f'http://127.0.0.1:{server.server_port}/docs/library.html'
+url = f'http://127.0.0.1:{server.server_port}/docs/collection.html'
 
 with sync_playwright() as p:
     launch = {'headless': True}
@@ -51,7 +54,7 @@ with sync_playwright() as p:
             page.set_content(HTML, wait_until='domcontentloaded')
         else:
             page.goto(url, wait_until='domcontentloaded')
-        page.wait_for_function('window.CIEO_REVIEW?.count === 345')
+        page.wait_for_function('!!window.CIEO_REVIEW')
         page.wait_for_timeout(300)
         return page
 
@@ -60,11 +63,11 @@ with sync_playwright() as p:
         page.wait_for_timeout(150)
 
     page = load()
-    check('The original 345 unique atoms remain registered', page.evaluate('new Set(CIEO_REVIEW.ids).size === 345'))
+    check('Every declared atom is registered exactly once', page.evaluate('CIEO_REVIEW.ids') == EXPECTED_IDS and len(set(EXPECTED_IDS)) == EXPECTED_COUNT)
     check('Initial rendering is lazy', page.evaluate('A.filter(a=>a.inited).length < 40'))
     page.evaluate('CIEO_REVIEW.initAll()')
     page.wait_for_timeout(500)
-    check('All 345 atom initializers complete', page.evaluate('CIEO_REVIEW.errors().length === 0 && A.every(a=>a.inited)'))
+    check('All declared atom initializers complete', page.evaluate('CIEO_REVIEW.errors().length === 0 && A.every(a=>a.inited)'))
     failures = page.evaluate('''() => {
         const failures=[];
         for(const a of A) if(a.render) for(const dt of [0,.1,1]) {
@@ -83,13 +86,13 @@ with sync_playwright() as p:
     search(page, 'no-such-cieo-atom')
     check('An empty search presents recovery', page.locator('#empty-state').is_visible())
     page.locator('#clear-filters').click()
-    expect(page.locator('#count')).to_have_text('345 atoms')
+    expect(page.locator('#count')).to_have_text(f'{EXPECTED_COUNT} atoms')
     page.locator('[data-family=D]').click()
     check('Family filtering applies to the full registry', page.evaluate("A.filter(a=>!a.el.hidden).every(a=>a.fam.includes('D'))"))
     page.locator('[data-family="*"]').click()
 
     search(page, 'Switch / Toggle primitive')
-    toggle = page.locator('#switch .cieo-switch')
+    toggle = page.locator('#switch .tg')
     toggle.click()
     expect(toggle).to_have_attribute('aria-checked', 'true')
     toggle.focus(); page.keyboard.press('Space')
@@ -99,10 +102,11 @@ with sync_playwright() as p:
     page.locator('[data-save=switch]').click()
     expect(page.locator('[data-save=switch]')).to_have_attribute('aria-pressed', 'true')
     check('Save acts on the real atom', page.evaluate("CieoCatalogue.favorites.has('switch')"))
+    page.evaluate("window.testSwitch = document.querySelector('#switch .tg')")
     page.locator('[data-inspect=switch]').last.click()
     expect(page.locator('#inspect-dialog')).to_be_visible()
-    check('Inspector moves one live stage without cloning', page.locator('[data-atom=switch]').count() == 1)
-    check('Inspector preserves active atom state', page.locator('#inspect-dialog .cieo-switch').get_attribute('aria-checked') == 'true')
+    check('Inspector moves one live stage without cloning', page.locator('#switch .tg').count() == 0 and page.evaluate("window.testSwitch === document.querySelector('#inspect-dialog .tg')"))
+    check('Inspector preserves active atom state', page.locator('#inspect-dialog .tg').get_attribute('aria-checked') == 'true')
     check('Inspector keeps the original gallery footprint', page.locator('#switch .ui-preview-placeholder').count() == 1)
     check('Inspector links to this atom source', page.locator('#inspect-source').get_attribute('href').endswith('blocks/038-switch.js'))
     for _ in range(10):
@@ -111,7 +115,7 @@ with sync_playwright() as p:
     page.screenshot(path=str(OUT / 'inspector.png'))
     page.keyboard.press('Escape')
     expect(page.locator('#inspect-dialog')).not_to_be_visible()
-    check('Closing restores the live stage and value', page.locator('#switch .cieo-switch').get_attribute('aria-checked') == 'true')
+    check('Closing restores the live stage and value', page.locator('#switch .tg').get_attribute('aria-checked') == 'true')
     check('Closing restores focus to its trigger', page.evaluate("document.activeElement.matches('[data-inspect=switch]')"))
 
     search(page, 'Tabs with panel')
@@ -147,7 +151,7 @@ with sync_playwright() as p:
     for width in [320, 375, 390, 768, 1024, 1440, 1920]:
         page = load(width, 960, has_touch=width < 1024)
         check(f'No document overflow at {width}px', page.evaluate('document.documentElement.scrollWidth <= innerWidth'))
-        check(f'All atoms remain registered at {width}px', page.evaluate('CIEO_REVIEW.count === 345'))
+        check(f'All atoms remain registered at {width}px', page.evaluate('CIEO_REVIEW.ids') == EXPECTED_IDS)
         if width in [390, 768]:
             page.screenshot(path=str(OUT / f'{"phone" if width == 390 else "tablet"}.png'))
         if width < 1024:
@@ -170,8 +174,8 @@ with sync_playwright() as p:
     before = page.evaluate('clock.t'); page.wait_for_timeout(250)
     check('Reduced motion does not advance the idle preview clock', page.evaluate('clock.t') == before)
     check('Reduced motion disables the speed control', page.locator('#motion-speed').is_disabled())
-    search(page, 'Switch / Toggle primitive'); page.locator('#switch .cieo-switch').click()
-    expect(page.locator('#switch .cieo-switch')).to_have_attribute('aria-checked', 'true')
+    search(page, 'Switch / Toggle primitive'); page.locator('#switch .tg').click()
+    expect(page.locator('#switch .tg')).to_have_attribute('aria-checked', 'true')
     check('Reduced motion retains interaction state changes', True)
     page.close()
     page = load(forced_colors='active')

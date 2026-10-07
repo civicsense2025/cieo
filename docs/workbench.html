@@ -23130,7 +23130,7 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
       r.innerHTML = `<i class="fl" style="position:absolute;left:0;top:0;bottom:0;background:var(--raised);width:0"></i><i class="tint" style="position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in oklab,var(--accent-tint) 70%, transparent)"></i><span style="position:relative;flex:1;font-size:14px;line-height:1.5">${n}</span><b class="tt" style="position:relative;font-size:13px;font-variant-numeric:tabular-nums"></b><span class="mk" style="position:relative;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;padding:0;font-size:12px;color:var(--success)"></span>`;
       r.setAttribute('aria-pressed', 'false'); box.appendChild(r);
       r.onclick = () => { if (mine === i) mine = -1; else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
-      return { r, fl:$(r,'.fl'), tint:$(r,'.tint'), mk:$(r,'.mk'), bar:new Track(0), lead:new Track(0), dg:new Digits($(r,'.tt'), 2) }; });
+      return { r, tt:$(r,'.tt'), fl:$(r,'.fl'), tint:$(r,'.tint'), mk:$(r,'.mk'), bar:new Track(0), lead:new Track(0), dg:new Digits($(r,'.tt'), 2) }; });
     rows.forEach(x => { const a = document.createElement('span'); a.className = 'layer'; a.textContent = ''; x.mk.appendChild(a); });
     function sync(inst){ const tot = votes.reduce((a,b) => a+b, 0), mx = Math.max(...votes), li = votes.indexOf(mx), t0 = now();
       rows.forEach((x,i) => { const p = votes[i]/Math.max(1, tot);
