@@ -45,3 +45,33 @@ for (const script of ['build-library.mjs', 'build-catalogue.mjs', 'build-collect
     }
   });
 }
+test('build-workbench.mjs inlines every recipe in order, each tagged with its source file', () => {
+  const html = build('build-workbench.mjs', path.join(temporary, 'workbench.html'));
+  const blocks = JSON.parse(fs.readFileSync(path.join(root, 'atoms/web/blocks.json'), 'utf8'));
+  assert.ok(blocks.length > 0);
+  let end = 0;
+  for (const block of blocks) {
+    const source = fs.readFileSync(path.join(root, 'atoms/web', block), 'utf8').replace(/<\/script/gi, '<\\/script');
+    const marker = `globalThis.__cieoRecipeFile=${JSON.stringify(block)};\n`;
+    const at = html.indexOf(marker, end);
+    assert.ok(at >= end, `missing recipe marker ${block}`);
+    assert.equal(html.slice(at + marker.length, at + marker.length + source.length), source, block);
+    end = at + marker.length + source.length;
+  }
+});
+test('build-workbench.mjs escapes a closing script tag inside inlined recipe code', () => {
+  const sandbox = fs.mkdtempSync(path.join(temporary, 'sandbox '));
+  fs.mkdirSync(path.join(sandbox, 'scripts'));
+  fs.copyFileSync(path.join(root, 'scripts/build-workbench.mjs'), path.join(sandbox, 'scripts/build-workbench.mjs'));
+  fs.cpSync(path.join(root, 'atoms/web'), path.join(sandbox, 'atoms/web'), { recursive: true });
+  const first = JSON.parse(fs.readFileSync(path.join(sandbox, 'atoms/web/blocks.json'), 'utf8'))[0];
+  fs.appendFileSync(path.join(sandbox, 'atoms/web', first), '\nconst __probe = "</script><b>x</b>";\n');
+  const target = path.join(sandbox, 'out.html');
+  const result = spawnSync(process.execPath, [path.join(sandbox, 'scripts/build-workbench.mjs'), target], { cwd: sandbox, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr);
+  const html = fs.readFileSync(target, 'utf8');
+  assert.ok(html.includes('const __probe = "<\\/script><b>x</b>";'));
+  assert.ok(!html.includes('"</script><b>x</b>"'));
+  const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+  assert.ok(script.includes('__probe'));
+});
