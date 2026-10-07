@@ -27,9 +27,9 @@ public struct OfferStackAtom: MotionAtomView {
                             Image(systemName: "gift").font(.callout).foregroundStyle(.white).frame(width: 32, height: 32).background(Color.accentColor, in: RoundedRectangle(cornerRadius: 10))
                             VStack(alignment: .leading, spacing: 0) { Text(offers[i].0).font(.footnote.weight(.semibold)); Text(offers[i].1).font(.caption2).foregroundStyle(.secondary) }
                             Spacer()
-                            Button { withMotion(.base, reduceMotion: reduce) { gone.insert(i) } } label: { Image(systemName: "xmark").font(.caption) }.buttonStyle(.plain).accessibilityLabel("Dismiss \(offers[i].0)")
+                            Button { withMotion(.base, reduceMotion: reduce) { _ = gone.insert(i) } } label: { Image(systemName: "xmark").font(.caption) }.buttonStyle(.plain).accessibilityLabel("Dismiss \(offers[i].0)")
                         }
-                        .padding(12).background(.background, in: RoundedRectangle(cornerRadius: 12)).shadow(radius: 3)
+                        .padding(12).background { RoundedRectangle(cornerRadius: 12).fill(.background) }.shadow(radius: 3)
                         .scaleEffect(1 - CGFloat(depth) * 0.04).offset(y: CGFloat(depth) * 10)
                         .offset(x: depth == 0 ? dragX : 0)
                         .gesture(depth == 0 ? DragGesture().onChanged { dragX = $0.translation.width }

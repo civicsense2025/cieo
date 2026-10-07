@@ -66,7 +66,7 @@ public struct InboxSweepAtom: MotionAtomView {
                         withMotion(.snap, reduceMotion: reduce) { offsets[d.id] = side * 360 }
                         swept.append((d.id, side))
                         DispatchQueue.main.asyncAfter(deadline: .now() + (reduce ? 0 : 0.15)) {
-                            withMotion(.base, reduceMotion: reduce) { collapsed.insert(d.id) }
+                            withMotion(.base, reduceMotion: reduce) { _ = collapsed.insert(d.id) }
                         }
                     } else {
                         withMotion(.base, reduceMotion: reduce) { offsets[d.id] = 0 }

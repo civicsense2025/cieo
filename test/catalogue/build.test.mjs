@@ -13,7 +13,7 @@ function build(script, target) {
   assert.equal(result.status, 0, result.stderr);
   return fs.readFileSync(target, 'utf8');
 }
-test('both established catalogue routes produce the identical real collection', () => {
+test('both established mosaic routes produce identical standalone pages', () => {
   const library = build('build-library.mjs', path.join(temporary, 'library.html'));
   const catalogue = build('build-catalogue.mjs', path.join(temporary, 'catalogue.html'));
   assert.equal(library, catalogue);
@@ -28,13 +28,20 @@ test('the standalone script remains syntactically valid and keeps the original $
   assert.ok(script.includes('class Track'));
   assert.ok(!html.includes('<script src='));
 });
-test('every declared source block is included in order, without a separate specimen registry', () => {
-  const html = build('build-library.mjs', path.join(temporary, 'sources.html'));
-  const blocks = JSON.parse(fs.readFileSync(path.join(root, 'atoms/web/blocks.json'), 'utf8'));
-  let last = -1;
-  for (const block of blocks) {
-    const current = html.indexOf(`window.CIEO_SOURCE_HINT=${JSON.stringify(block)};`);
-    assert.ok(current > last, block);
-    last = current;
-  }
-});
+for (const script of ['build-library.mjs', 'build-catalogue.mjs', 'build-collection.mjs']) {
+  test(`${script} includes every declared source block in order`, () => {
+    const html = build(script, path.join(temporary, script + '.html'));
+    const blocks = JSON.parse(fs.readFileSync(path.join(root, 'atoms/web/blocks.json'), 'utf8'));
+    let end = 0;
+    for (const block of blocks) {
+      let source = fs.readFileSync(path.join(root, 'atoms/web', block), 'utf8');
+      if (script === 'build-collection.mjs') source = source.replace(/<\/script/gi, '<\\/script');
+      const current = html.indexOf(source, end);
+      assert.ok(current >= end, block);
+      if (script === 'build-collection.mjs') {
+        assert.ok(html.slice(end, current).includes(`window.CIEO_SOURCE_HINT=${JSON.stringify(block)};`), block);
+      }
+      end = current + source.length;
+    }
+  });
+}
