@@ -1,7 +1,7 @@
 name: Catalogue UI
 on:
   pull_request:
-    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
+    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'scripts/build-collection.mjs', 'scripts/build-workbench.mjs', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
 permissions:
   contents: read
 concurrency:
@@ -25,8 +25,10 @@ jobs:
         run: |
           node scripts/build-library.mjs
           node scripts/build-catalogue.mjs
+          node scripts/build-collection.mjs
+          node scripts/build-workbench.mjs
           node --test test/catalogue/build.test.mjs
-          git diff --exit-code -- docs/library.html docs/catalogue.html
+          git diff --exit-code -- docs/library.html docs/catalogue.html docs/collection.html docs/workbench.html
       - name: Install browser for visual review
         run: |
           python -m pip install playwright==1.55.0
@@ -38,7 +40,7 @@ jobs:
         run: |
           mkdir -p review-artifact
           git archive --format=tar.gz --output=review-artifact/cieo-source.tar.gz HEAD
-          cp docs/library.html review-artifact/Cieo-Collection.html
+          cp docs/collection.html review-artifact/Cieo-Collection.html
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
