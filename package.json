@@ -14,7 +14,10 @@
     "dist",
     "tokens",
     "atoms/web",
-    "README.md"
+    "README.md",
+    "design",
+    "scripts/export-theme.mjs",
+    "docs/design-system.md"
   ],
   "exports": {
     ".": {
@@ -80,5 +83,8 @@
     "test:design:browser": "python3 test/browser/design_smoke.py",
     "studio": "node scripts/serve-studio.mjs",
     "studio:standalone": "node scripts/build-standalone.mjs"
+  },
+  "bin": {
+    "cieo-theme": "scripts/export-theme.mjs"
   }
 }
