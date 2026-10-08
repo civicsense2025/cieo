@@ -7,10 +7,13 @@ let package = Package(
     products: [
         .library(name: "Cieo", targets: ["Cieo"]),
         .library(name: "CieoAtoms", targets: ["CieoAtoms"]),
+        .library(name: "CieoUI", targets: ["CieoUI"]),
     ],
     targets: [
         .target(name: "Cieo"),
         .target(name: "CieoAtoms", dependencies: ["Cieo"], path: "atoms/swift"),
         .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
+        .target(name: "CieoUI", dependencies: ["Cieo"], resources: [.process("Resources")]),
+        .testTarget(name: "CieoUITests", dependencies: ["CieoUI"]),
     ]
 )

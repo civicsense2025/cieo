@@ -1,6 +1,6 @@
 # Cieo design foundation
 
-Cieo keeps the existing spring engine and adds an optional visual layer. The same semantic decisions travel as CSS, typed JSON, or native constants. Importing the motion engine does not load this layer, and importing the design API does not touch the document or start an animation.
+Cieo keeps the existing spring engine and adds an optional visual layer. The same semantic decisions travel as CSS, typed JSON, or native constants. Importing the motion engine does not load this layer, and importing the design API does not touch the document or start an animation. Apple applications can also import the separate [CieoUI component foundation](apple-components.md); it does not depend on the reference recipe catalogue.
 
 ## Quick start
 
