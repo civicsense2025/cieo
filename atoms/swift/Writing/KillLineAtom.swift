@@ -25,7 +25,7 @@ public struct KillLineAtom: MotionAtomView {
                         if !cut {
                             Text(stories[1]).font(.system(size: 14)).padding(14).frame(maxWidth: .infinity, alignment: .leading)
                                 .background(.background, in: RoundedRectangle(cornerRadius: 10))
-                                .overlay(RoundedRectangle(cornerRadius: 10).stroke(armed ? Color.red : Color.primary.opacity(0.2)))
+                                .overlay(RoundedRectangle(cornerRadius: 10).fill(armed ? Color.red : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
                                 .offset(x: dragX).zIndex(1)
                                 .gesture(DragGesture(minimumDistance: 4).onChanged { g in
                                     dragX = reduce ? g.translation.width : max(0, g.translation.width)

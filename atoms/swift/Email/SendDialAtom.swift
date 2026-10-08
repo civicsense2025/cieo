@@ -36,7 +36,7 @@ public struct SendDialAtom: MotionAtomView {
                                 .buttonStyle(.plain).controlSize(.small)
                                 .font(.caption2.weight(.semibold))
                                 .padding(.horizontal, 10).padding(.vertical, 8)
-                                .overlay(Capsule().stroke(slot == i ? Color.primary : Color.secondary.opacity(0.4), lineWidth: slot == i ? 2 : 1))
+                                .overlay(Capsule().fill(slot == i ? Color.primary : Color.secondary.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
                                 .scaleEffect(slot == i ? 1.05 : 1)
                                 .animation(reduce ? nil : .motion(.soft), value: slot)
                             }

@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Find-in-page bar: drops on snap, digits roll by direction, plate trails.
-public struct FindBarAtom: View {
+public struct FindBarAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "findbar", category: "Chrome", name: "Find Bar", summary: "Find-in-page bar: drops on snap, digits roll by direction, plate trails.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var query = "spring"
@@ -18,7 +19,7 @@ public struct FindBarAtom: View {
                 HStack(spacing: 8) {
                     Button(open ? "Close" : "Find ⌘F") { open.toggle() }.frame(minHeight: 32)
                     if open {
-                        TextField("Find", text: $query).textFieldStyle(.roundedBorder)
+                        TextField("Find", text: $query).textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10))
                             .font(.system(size: 13.5)).frame(minHeight: 32)
                             .transition(reduce ? .opacity : .move(edge: .top).combined(with: .opacity))
                         Text("\(index + 1)/\(total)").font(.system(size: 12.5)).monospacedDigit()
@@ -41,8 +42,8 @@ public struct FindBarAtom: View {
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
         }
         .focusable(true)
-        .onExitCommand { open = false }
-        .onMoveCommand { dir in
+        .escapeKey { open = false }
+        .directionKeys { dir in
             if dir == .down { index = (index + 1) % total }
             else if dir == .up { index = (index + total - 1) % total }
         }

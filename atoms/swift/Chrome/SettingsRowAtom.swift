@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Settings form row: knob edges, helper crossfade, danger/success terminals.
-public struct SettingsRowAtom: View {
+public struct SettingsRowAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "settingsrow", category: "Chrome", name: "Settings Row", summary: "Settings form row: knob edges, helper crossfade, danger/success terminals.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var email = "ada@"
     @State private var enabled = false
@@ -21,7 +22,7 @@ public struct SettingsRowAtom: View {
                 .font(.system(size: 12.5)).foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 8) {
                 Text("Email address").font(.system(size: 13.5, weight: .semibold))
-                TextField("ada@x.com", text: $email).textFieldStyle(.roundedBorder)
+                TextField("ada@x.com", text: $email).textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10))
                     .font(.system(size: 13.5)).frame(minHeight: 36)
                     .overlay(RoundedRectangle(cornerRadius: 8)
                         .stroke(state == 1 ? .red : (state == 2 ? .green : .clear), lineWidth: 1.5))
@@ -45,6 +46,6 @@ public struct SettingsRowAtom: View {
             .animation(reduce ? nil : .spring(response: 0.3), value: enabled)
         }
         .focusable(true)
-        .onExitCommand { email = ""; saved = false }
+        .escapeKey { email = ""; saved = false }
     }
 }

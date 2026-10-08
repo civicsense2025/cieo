@@ -3,7 +3,7 @@ import Cieo
 
 public struct ReviewSummaryAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "reviewsummary", category: "Agent activity", name: "Review summary",
-        summary: "Findings arrive one at a time, 130ms apart: each row fades up and opens its height while the severity counts roll up digit by digit and the Reviewing chip morphs to Completed. Severity chips are full-border chips and double as filters. Switching a filter closes unmatched rows to nothing while the rest slide up, and the Showing count rolls. Opening a finding eases its height open to the saved screenshot, the steps to reproduce, and expected against observed; opening another closes the first.")
+        summary: "Findings arrive one at a time, 130ms apart: each row fades up and opens its height while the severity counts roll up digit by digit and the Reviewing chip morphs to Completed. Severity chips use soft state fills and double as filters. Switching a filter closes unmatched rows to nothing while the rest slide up, and the Showing count rolls. Opening a finding eases its height open to the saved screenshot, the steps to reproduce, and expected against observed; opening another closes the first.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private struct Finding: Identifiable { let id: Int; let sev: Int; let title: String; let detail: String }
     @State private var shown: [Finding] = []

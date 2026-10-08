@@ -20,7 +20,6 @@ public struct SelectionChip: View {
             .padding(.horizontal, Metrics.standard)
             .frame(minHeight: Metrics.touchTarget)
             .background(isSelected ? theme.accent.opacity(0.2) : theme.surface, in: .capsule)
-            .overlay { Capsule().strokeBorder(isSelected ? theme.accent : theme.border) }
         }
         .buttonStyle(.plain)
         .foregroundStyle(theme.foreground)

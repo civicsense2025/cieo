@@ -26,7 +26,7 @@ private struct ToastCard: View {
             }
             .padding(.horizontal, 14).padding(.vertical, 12)
             .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
             .offset(x: px)
             .opacity((gone ? 0 : 1) * min(1, max(0, Double(3 - depth))) * (1 - min(1, abs(px) / 420)))
         }

@@ -23,7 +23,7 @@ public struct AgentNavAtom: MotionAtomView {
                     Button { move(1) } label: { Image(systemName: "chevron.right") }.disabled(index == trail.count - 1).accessibilityLabel("Forward")
                     HStack(spacing: 4) { Image(systemName: "lock").font(.caption2); Text("demo-shop.local"); SwapText(path) }.font(.caption)
                         .padding(6).frame(maxWidth: .infinity, alignment: .leading).background(.quaternary, in: Capsule())
-                    if byAgent { AgentTag() } else { Text("You").font(.caption2.weight(.semibold)).padding(.horizontal, 4).overlay(Capsule().strokeBorder(Color.primary)) }
+                    if byAgent { AgentTag() } else { Text("You").font(.caption2.weight(.semibold)).padding(.horizontal, 4).overlay(Capsule().fill(Color.primary).opacity(0.10).allowsHitTesting(false)) }
                 }.buttonStyle(AgPress()).fixedSize(horizontal: false, vertical: true)
                 GeometryReader { g in
                     Capsule().fill(Color.accentColor).frame(width: loading ? g.size.width : 0, height: 2).opacity(loading ? 1 : 0)

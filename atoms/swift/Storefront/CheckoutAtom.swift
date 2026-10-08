@@ -83,7 +83,7 @@ public struct CheckoutAtom: MotionAtomView {
 
     private func field(_ title: String, _ text: Binding<String>) -> some View {
         TextField(title, text: text).textFieldStyle(.roundedBorder).font(.footnote)
-            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.red, lineWidth: tried && text.wrappedValue.isEmpty ? 1.5 : 0)).motion(.base, value: tried)
+            .overlay(RoundedRectangle(cornerRadius: 6).fill(Color.red).opacity((tried && text.wrappedValue.isEmpty ? 1.5 : 0) > 0 ? 0.10 : 0).allowsHitTesting(false)).motion(.base, value: tried)
     }
 
     private func go(_ s: Int) { dir = s > step ? 1 : -1; withMotion(.base, reduceMotion: reduce) { step = s } }

@@ -99,7 +99,7 @@ public struct ColorPickerAtom: MotionAtomView {
     private func copyButton(color: Color, value: String) -> some View {
         Button { copy(value) } label: {
             HStack(spacing: 8) {
-                RoundedRectangle(cornerRadius: 7).fill(color).overlay(RoundedRectangle(cornerRadius: 7).stroke(.quaternary)).frame(width: 28, height: 28)
+                RoundedRectangle(cornerRadius: 7).fill(color).background(RoundedRectangle(cornerRadius: 7).fill(Color.primary.opacity(0.05))).frame(width: 28, height: 28)
                 HStack(spacing: 4) {
                     if copied { Image(systemName: "checkmark").imageScale(.small).accessibilityHidden(true) }
                     SwapText(copied ? "Copied" : value)
@@ -109,7 +109,7 @@ public struct ColorPickerAtom: MotionAtomView {
             }
             .padding(.horizontal, 8).padding(.vertical, 4)
             .background(copied ? Color.green.opacity(0.14) : Color.clear, in: RoundedRectangle(cornerRadius: 8))
-            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(copied ? Color.green.opacity(0.5) : Color.gray.opacity(0.25)))
+            .overlay(RoundedRectangle(cornerRadius: 8).fill(copied ? Color.green.opacity(0.5) : Color.gray.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
         }
         .buttonStyle(.plain).accessibilityLabel("Copy color value \(value)")
     }
@@ -119,7 +119,7 @@ public struct ColorPickerAtom: MotionAtomView {
             ForEach(presets, id: \.hex) { p in
                 Button {
                     DataMotion.retarget(&hue, to: p.h, reduce: reduce); DataMotion.retarget(&sat, to: p.s, reduce: reduce); DataMotion.retarget(&val, to: p.v, reduce: reduce)
-                } label: { RoundedRectangle(cornerRadius: 6).fill(Color(hue: p.h / 360, saturation: p.s, brightness: p.v)).frame(width: 24, height: 24).overlay(RoundedRectangle(cornerRadius: 6).stroke(.quaternary)) }
+                } label: { RoundedRectangle(cornerRadius: 6).fill(Color(hue: p.h / 360, saturation: p.s, brightness: p.v)).frame(width: 24, height: 24).background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.05))) }
                 .buttonStyle(.plain).accessibilityLabel("Preset \(p.hex)")
             }
             Spacer()

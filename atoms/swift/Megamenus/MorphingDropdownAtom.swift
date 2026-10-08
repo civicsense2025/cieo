@@ -35,7 +35,7 @@ public struct MorphingDropdownAtom: MotionAtomView {
                             .shadow(color: .black.opacity(0.12), radius: 1, y: -1)
                             .offset(x: caret - 5, y: 31).accessibilityHidden(true)
                         RoundedRectangle(cornerRadius: 10, style: .continuous).fill(.background)
-                            .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(.quaternary))
+                            .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.primary.opacity(0.05)))
                             .shadow(color: .black.opacity(0.1), radius: 10, y: 4)
                             .frame(width: max(0, x1 - x0), height: h).offset(x: x0, y: 38)
                             .overlay(alignment: .topLeading) {

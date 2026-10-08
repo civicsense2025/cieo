@@ -31,7 +31,7 @@ public struct CheckoutFieldsAtom: MotionAtomView {
     private func field(_ title: String, text: Binding<String>, bad: Bool, msg: String) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             TextField(title, text: text).textFieldStyle(.roundedBorder).font(.footnote)
-                .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(bad ? Color.red : Color.clear, lineWidth: 1.5))
+                .overlay(RoundedRectangle(cornerRadius: 6).fill(bad ? Color.red : Color.clear).opacity(0.10).allowsHitTesting(false))
                 .motion(.snap, value: bad)
                 .overlay(alignment: .trailing) { if !bad && !text.wrappedValue.isEmpty { Image(systemName: "checkmark").font(.caption).foregroundStyle(.green).padding(.trailing, 8).motionTransition(.swap()) } }
             SwapText(bad ? msg : "").font(.caption2).foregroundStyle(.red).frame(height: 14, alignment: .leading)

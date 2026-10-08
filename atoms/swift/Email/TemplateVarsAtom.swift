@@ -28,7 +28,7 @@ public struct TemplateVarsAtom: MotionAtomView {
                             .font(.caption.weight(.semibold))
                             .padding(.horizontal, 10).padding(.vertical, 5)
                             .background(Capsule().fill(Color.primary.opacity(inserted ? 0.22 : 0.1)))
-                            .overlay(Capsule().stroke(Color.primary, lineWidth: inserted ? 2 : 1))
+                            .overlay(Capsule().fill(Color.primary).opacity(0.10).allowsHitTesting(false))
                             .animation(reduce ? nil : .motion(.base), value: inserted)
                         Button("Insert snippet") { insert() }
                             .buttonStyle(.borderedProminent).controlSize(.small)

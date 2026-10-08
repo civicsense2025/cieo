@@ -61,7 +61,7 @@ public struct PresenceBarAtom: MotionAtomView {
             if p.agent {
                 RoundedRectangle(cornerRadius: 7).fill(Color.primary.opacity(0.1)).frame(width: 28, height: 28)
                     .overlay(Image(systemName: "star.fill").font(.caption))
-                    .overlay(RoundedRectangle(cornerRadius: 7).strokeBorder(Color.accentColor, lineWidth: sel ? 2 : 0))
+                    .overlay(RoundedRectangle(cornerRadius: 7).fill(Color.accentColor).opacity((sel ? 2 : 0) > 0 ? 0.10 : 0).allowsHitTesting(false))
                 AgentTag().scaleEffect(0.8).offset(x: 6, y: 6)
             } else {
                 Circle().fill(Color.accentColor.opacity(0.2)).frame(width: 28, height: 28)

@@ -47,7 +47,7 @@ public struct DropdownAtom: MotionAtomView {
         }
         .padding(6).frame(width: 200)
         .background(.background, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .shadow(color: .black.opacity(0.12), radius: 8, y: 3)
         .scaleEffect(open ? 1 : 0.97, anchor: .topLeading).offset(y: open ? 0 : -4)
         .blur(radius: open ? 0 : 4).opacity(open ? 1 : 0)

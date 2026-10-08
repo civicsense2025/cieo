@@ -57,7 +57,7 @@ public struct CalendarEventAtom: MotionAtomView {
         .padding(.horizontal, 8).padding(.top, 4)
         .frame(width: 224, height: max(20, h), alignment: .topLeading)
         .background(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor.opacity(0.18)))
-        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.accentColor))
+        .overlay(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor).opacity(0.10).allowsHitTesting(false))
         .offset(x: 52, y: a)
         .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged { g in

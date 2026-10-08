@@ -10,11 +10,14 @@ spec.loader.exec_module(exporter)
 
 
 class ExportTests(unittest.TestCase):
-    def test_runtime_subset_keeps_recipes_out(self):
+    def test_runtime_exports_every_native_recipe(self):
         files = exporter.inventory()
         self.assertIn("Sources/CieoUI/Resources/Highlight.metal", files)
         self.assertIn("Sources/Cieo/Spring.swift", files)
-        self.assertFalse(any(name.startswith("atoms/") for name in files))
+        sources = {p.relative_to(exporter.ROOT).as_posix() for p in (exporter.ROOT / "atoms/swift").rglob("*.swift")}
+        self.assertTrue(sources)
+        self.assertEqual({name for name in files if name.startswith("atoms/")}, sources)
+        self.assertIn("Tests/CieoAtomsTests/CatalogTests.swift", files)
 
     def test_additions_require_explicit_review_and_removals_are_rejected(self):
         with self.assertRaises(ValueError):

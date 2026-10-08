@@ -62,7 +62,7 @@ public struct AgentSuggestedEditAtom: MotionAtomView {
             }
         }
         .padding(10).frame(width: 190, alignment: .leading)
-        .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary)).shadow(radius: 4, y: 2)
+        .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).shadow(radius: 4, y: 2)
     }
 
     private func set(_ o: Outcome) { withMotion(.base, reduceMotion: reduce) { outcome = o } }

@@ -24,7 +24,7 @@ public struct StackingCardsAtom: MotionAtomView {
                     .frame(width: s.width - 40, height: s.height * 0.62)
                     .background(RoundedRectangle(cornerRadius: 14).fill(.background))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary))
+                    .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
                     .overlay(Color.black.opacity(0.22 * cover).clipShape(RoundedRectangle(cornerRadius: 14)))
                     .scaleEffect(reduce ? 1 : 1 - 0.05 * cover, anchor: .top)      // recedes from its top edge
                     .offset(y: pin + (s.height - pin) * CGFloat(1 - arrive) * (i == 0 ? 0 : 1) + 14)

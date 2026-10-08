@@ -49,11 +49,11 @@ public struct AvailabilityHeatmapAtom: MotionAtomView {
                         Button("Team") { flip(false) }.font(.system(size: 12))
                             .padding(.horizontal, 12).frame(minHeight: 32)
                             .background(.background, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(!useMine ? Color.primary : Color.secondary.opacity(0.25)))
+                            .overlay(RoundedRectangle(cornerRadius: 8).fill(!useMine ? Color.primary : Color.secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
                         Button("Mine") { flip(true) }.font(.system(size: 12))
                             .padding(.horizontal, 12).frame(minHeight: 32)
                             .background(.background, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(useMine ? Color.primary : Color.secondary.opacity(0.25)))
+                            .overlay(RoundedRectangle(cornerRadius: 8).fill(useMine ? Color.primary : Color.secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
                     }
                     .foregroundStyle(.secondary)
                 }

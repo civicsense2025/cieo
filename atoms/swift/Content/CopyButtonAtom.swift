@@ -44,7 +44,7 @@ public struct CopyButtonAtom: MotionAtomView {
             .frame(width: copied ? 84 : 30, height: 30)
             .foregroundStyle(copied ? Color.green : Color.primary)
             .background(RoundedRectangle(cornerRadius: 8).fill(copied ? Color.green.opacity(0.14) : Color.clear))
-            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(copied ? Color.green : Color.primary.opacity(0.18)))
+            .overlay(RoundedRectangle(cornerRadius: 8).fill(copied ? Color.green : Color.primary.opacity(0.18)).opacity(0.10).allowsHitTesting(false))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .motion(.base, value: copied)
         }

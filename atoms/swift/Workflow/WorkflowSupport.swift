@@ -29,7 +29,7 @@ struct AgChip: View {
         .foregroundStyle(tone.color)
         .padding(.horizontal, 8).padding(.vertical, 3)
         .background(tone.color.opacity(0.14), in: Capsule())
-        .overlay(Capsule().strokeBorder(tone.color.opacity(0.35)))
+        .overlay(Capsule().fill(tone.color.opacity(0.35)).opacity(0.10).allowsHitTesting(false))
         .motion(.base, value: text)
         .motion(.base, value: tone.color)
         .accessibilityElement(children: .combine)
@@ -57,7 +57,7 @@ struct AgCard<Content: View>: View {
     var body: some View {
         content.padding(12)
             .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
     }
 }
 

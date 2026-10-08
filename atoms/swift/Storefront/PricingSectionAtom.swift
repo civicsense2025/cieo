@@ -41,10 +41,10 @@ public struct PricingSectionAtom: MotionAtomView {
             SwapText(cardMode[i] == 0 ? "per month, billed monthly" : "per month, billed yearly").font(.caption2).foregroundStyle(.secondary).frame(height: 14, alignment: .leading)
             Button("Choose") {}.buttonStyle(.plain).font(.caption.weight(.semibold)).frame(maxWidth: .infinity, minHeight: 28)
                 .foregroundStyle(lit ? Color(white: 1, opacity: 0.95) : .primary).background(RoundedRectangle(cornerRadius: 8).fill(lit ? Color.primary : Color.clear))
-                .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
         }
         .padding(12).frame(width: 112).background(.background, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .shadow(color: .black.opacity(lit ? 0.15 : 0.04), radius: lit ? 10 : 2, y: lit ? 4 : 1).offset(y: lit ? -4 : 0)
         .onHover { h in withMotion(.base, reduceMotion: reduce) { hover = h ? i : (hover == i ? nil : hover) } }
         .animation(reduce ? nil : .motion(.base), value: hover)

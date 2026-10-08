@@ -22,7 +22,7 @@ public struct ThemeToggleAtom: MotionAtomView {
                     Capsule().fill(Color.accentColor).frame(width: 60, height: 8)
                 }
                 .foregroundStyle(dark ? Color(white: 0.95) : Color(white: 0.1)).padding(14).frame(width: 220, alignment: .leading)
-                .background(RoundedRectangle(cornerRadius: 12).fill(dark ? Color(white: 0.12) : Color(white: 0.97))).overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))
+                .background(RoundedRectangle(cornerRadius: 12).fill(dark ? Color(white: 0.12) : Color(white: 0.97))).background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                 SwapText(pinned == nil ? "Following the system theme" : "Pinned to \(pinned == .dark ? "dark" : "light")").font(.caption).foregroundStyle(.secondary).frame(height: 16)
             }.animation(reduce ? nil : .motion(.base), value: dark)
         }

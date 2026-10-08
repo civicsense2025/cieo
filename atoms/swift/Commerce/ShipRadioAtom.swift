@@ -42,7 +42,7 @@ public struct ShipRadioAtom: MotionAtomView {
                         }
                         .padding(10).frame(minHeight: 52)
                         .background(.background, in: RoundedRectangle(cornerRadius: 9))
-                        .overlay(RoundedRectangle(cornerRadius: 9).stroke(i == cur ? .primary : .quaternary, lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 9).fill(i == cur ? .primary : .quaternary).opacity(0.10).allowsHitTesting(false))
                         .offset(y: i == cur ? -2 : 0)
                         .animation(reduce ? nil : .motion(.base), value: cur)
                     }

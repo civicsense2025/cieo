@@ -12,6 +12,5 @@ struct Specimen<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(20)
         .background(.background, in: .rect(cornerRadius: 20))
-        .overlay { RoundedRectangle(cornerRadius: 20).strokeBorder(.quaternary) }
     }
 }

@@ -97,7 +97,7 @@ private struct FlyColumn: View {
             .frame(width: 130)
             .padding(4)
             .background(.background, in: RoundedRectangle(cornerRadius: 8))
-            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
             .shadow(color: .black.opacity(0.08), radius: 8, y: 3)
             if let id = openID, let node = nodes.first(where: { $0.id == id }) {
                 FlyColumn(nodes: node.kids, pointer: $pointer)

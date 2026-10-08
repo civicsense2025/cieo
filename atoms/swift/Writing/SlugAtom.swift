@@ -24,7 +24,7 @@ public struct SlugAtom: MotionAtomView {
                     Text("/posts/").foregroundStyle(.secondary)
                     Text(slug).font(.system(size: 14).monospaced()).padding(8).padding(.horizontal, 4)
                         .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(isTaken ? .red : .clear, lineWidth: 2))
+                        .overlay(RoundedRectangle(cornerRadius: 8).fill(isTaken ? .red : .clear).opacity(0.10).allowsHitTesting(false))
                         .shadow(color: isTaken ? .red.opacity(0.45) : .clear, radius: isTaken ? 6 : 0)
                         .id(slug).motionTransition(.swap())
                     Text(isTaken ? "taken — try another" : "").font(.system(size: 12.5)).foregroundStyle(.red)

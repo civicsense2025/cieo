@@ -51,7 +51,7 @@ public struct MenuSearchAtom: MotionAtomView {
         }
         .padding(10)
         .background(.background, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
         .padding(.horizontal, 8)
         .onKeyPress(.downArrow) { sel = min(max(0, rows.count - 1), sel + 1); return .handled }
         .onKeyPress(.upArrow) { sel = max(0, sel - 1); return .handled }

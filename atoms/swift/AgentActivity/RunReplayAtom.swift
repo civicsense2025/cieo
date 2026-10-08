@@ -33,7 +33,7 @@ public struct RunReplayAtom: MotionAtomView {
                         RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.04))
                         VStack(alignment: .leading, spacing: 6) {
                             Text("Start your review").font(.headline)
-                            Text(String("name@company.com".prefix(Int(max(0, min(1, (pos - 0.3) / 0.25)) * 16)))).font(.caption).padding(6).frame(maxWidth: .infinity, alignment: .leading).overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(.quaternary))
+                            Text(String("name@company.com".prefix(Int(max(0, min(1, (pos - 0.3) / 0.25)) * 16)))).font(.caption).padding(6).frame(maxWidth: .infinity, alignment: .leading).background(RoundedRectangle(cornerRadius: 5).fill(Color.primary.opacity(0.05)))
                             Text("Create workspace").font(.caption.weight(.semibold)).foregroundStyle(.white).padding(6).background(Color.accentColor, in: RoundedRectangle(cornerRadius: 6)).scaleEffect(pos > 0.74 && pos < 0.8 ? 0.96 : 1)
                         }.padding(12)
                         if pos >= 1 { AgPinMark(label: "1").position(x: 190, y: 100).transition(.scale) }

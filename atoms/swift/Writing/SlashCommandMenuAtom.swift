@@ -86,7 +86,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
             }
         }
         .frame(width: 200, height: panelHeight, alignment: .top)
-        .background(.background, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        .background(.background, in: RoundedRectangle(cornerRadius: 12)).background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .clipShape(RoundedRectangle(cornerRadius: 12)).shadow(color: .black.opacity(0.12), radius: 8, y: 3)
         .animation(reduce ? nil : .motion(.base), value: panelHeight)
     }

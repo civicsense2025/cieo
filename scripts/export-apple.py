@@ -16,10 +16,13 @@ let package = Package(
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [.library(name: "Cieo", targets: ["Cieo"]),
                .library(name: "CieoUI", targets: ["CieoUI"]),
-               .library(name: "CieoGallery", targets: ["CieoGallery"])],
+               .library(name: "CieoGallery", targets: ["CieoGallery"]),
+               .library(name: "CieoAtoms", targets: ["CieoAtoms"])],
     targets: [.target(name: "Cieo"),
+              .target(name: "CieoAtoms", dependencies: ["Cieo"], path: "atoms/swift"),
               .target(name: "CieoUI", dependencies: ["Cieo"], resources: [.process("Resources")]),
-              .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo"]),
+              .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo", "CieoAtoms"]),
+              .testTarget(name: "CieoAtomsTests", dependencies: ["CieoAtoms"]),
               .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
               .testTarget(name: "CieoUITests", dependencies: ["CieoUI"])])
 '''
@@ -39,7 +42,7 @@ def member(root, name):
 
 def inventory():
     data = {"Package.swift": PACKAGE.encode()}
-    for directory in ["Sources/Cieo", "Sources/CieoUI", "Sources/CieoGallery", "Tests/CieoTests", "Tests/CieoUITests"]:
+    for directory in ["Sources/Cieo", "Sources/CieoUI", "Sources/CieoGallery", "Tests/CieoTests", "Tests/CieoUITests", "Tests/CieoAtomsTests", "atoms/swift"]:
         for path in sorted((ROOT / directory).rglob("*")):
             if path.is_symlink():
                 raise ValueError("Source symlinks are not portable")
@@ -66,13 +69,13 @@ def main():
         raise ValueError("Export to a separate consumer checkout")
     files = inventory()
     # A revision identifies source only when these inputs are committed and unchanged.
-    dirty = subprocess.check_output(["git", "status", "--porcelain", "--", "Sources", "Tests", "Package.swift", "scripts/export-apple.py"], cwd=ROOT, text=True)
+    dirty = subprocess.check_output(["git", "status", "--porcelain", "--", "Sources", "Tests", "Package.swift", "scripts/export-apple.py", "atoms/swift"], cwd=ROOT, text=True)
     if dirty:
         raise ValueError("Commit the runtime source before exporting")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     manifest = {"schema": 1, "owner": "Cieo runtime", "sourceRevision": revision,
                 "sourcePackageSHA256": digest((ROOT / "Package.swift").read_bytes()),
-                "scope": "Motion core and production UI; reference recipe catalogue excluded",
+                "scope": "Motion core, production UI and complete native recipe catalogue",
                 "files": {name: digest(data) for name, data in sorted(files.items())}}
     files[MANIFEST] = (json.dumps(manifest, indent=2) + "\n").encode()
     if args.check:

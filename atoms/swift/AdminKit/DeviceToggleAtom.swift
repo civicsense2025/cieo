@@ -49,7 +49,7 @@ private struct Preview: View, Animatable {
             Spacer(minLength: 0)
         }
         .frame(width: w, height: 190).background(.background).clipShape(RoundedRectangle(cornerRadius: piece([10, 18, 26])))
-        .overlay(RoundedRectangle(cornerRadius: piece([10, 18, 26])).strokeBorder(Color.secondary.opacity(0.5), lineWidth: piece([1, 3, 5])))
+        .overlay(RoundedRectangle(cornerRadius: piece([10, 18, 26])).fill(Color.secondary.opacity(0.5)).opacity(0.10).allowsHitTesting(false))
         .accessibilityHidden(true)
     }
 

@@ -167,7 +167,7 @@ struct MegaShell<Panel: View>: View {
         .animation(reduce ? nil : .motion(.soft), value: heights[i])
         .padding(12)
         .background(.background, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Color.primary.opacity(0.05)))
         .shadow(color: .black.opacity(0.08), radius: 10, y: 4)
         .padding(.horizontal, 8)
     }

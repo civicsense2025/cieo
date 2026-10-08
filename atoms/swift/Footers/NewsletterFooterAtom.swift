@@ -26,7 +26,7 @@ private struct NewsletterForm: View {
                     HStack(spacing: 6) {
                         TextField("you@example.com", text: $email).textFieldStyle(.plain).padding(.horizontal, 10).frame(height: 36)
                             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(ring, lineWidth: 1.5))
+                            .overlay(RoundedRectangle(cornerRadius: 8).fill(ring).opacity(0.10).allowsHitTesting(false))
                             .onSubmit(submit)
                         Button(action: submit) {
                             ZStack {

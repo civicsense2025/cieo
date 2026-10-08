@@ -23,7 +23,6 @@ public struct ActionButtonStyle: ButtonStyle {
             .foregroundStyle(theme.foreground)
             .background(emphasis == .prominent ? theme.accent.opacity(0.14) : theme.surface,
                         in: .rect(cornerRadius: Metrics.corner))
-            .overlay { RoundedRectangle(cornerRadius: Metrics.corner).strokeBorder(theme.border) }
             .opacity(isEnabled ? (configuration.isPressed ? 0.75 : 1) : 0.5)
             .scaleEffect(configuration.isPressed && policy.allowsMotion && !reduceMotion ? 0.98 : 1)
             .animation(policy.allowsMotion && !reduceMotion ? .motion(.snap) : nil, value: configuration.isPressed)

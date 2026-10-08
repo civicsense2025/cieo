@@ -23,7 +23,7 @@ public struct AutosaveStatusAtom: MotionAtomView {
                         .accessibilityElement(children: .combine)
                 }
                 TextEditor(text: $text).scrollContentBackground(.hidden).font(.callout).padding(6).frame(height: 96)
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary)).accessibilityLabel("Draft")
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).accessibilityLabel("Draft")
             }
             .frame(maxWidth: 320)
         }

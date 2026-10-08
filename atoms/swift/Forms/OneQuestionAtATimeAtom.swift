@@ -60,13 +60,13 @@ public struct OneQuestionAtATimeAtom: MotionAtomView {
                         Button { choose(j) } label: {
                             HStack(spacing: 10) {
                                 Text("ABC".map(String.init)[j]).font(.caption2.weight(.semibold)).padding(.horizontal, 5)
-                                    .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.primary.opacity(0.25)))
+                                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.primary.opacity(0.05)))
                                 Text(choices[step][j]).font(.callout)
                                 Spacer(minLength: 0)
                             }
                             .padding(.horizontal, 10).padding(.vertical, 7).frame(maxWidth: 260)
                             .background(RoundedRectangle(cornerRadius: 9).fill(Color.primary.opacity(chosen == j ? 0.12 : 0)))
-                            .overlay(RoundedRectangle(cornerRadius: 9).strokeBorder(chosen == j ? Color.primary : Color.primary.opacity(0.2), lineWidth: 1.5))
+                            .overlay(RoundedRectangle(cornerRadius: 9).fill(chosen == j ? Color.primary : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
                             .motion(.snap, value: chosen)
                             .contentShape(Rectangle())
                         }

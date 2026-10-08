@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Split-view toggle: 1:1 drag, spring release, pill trails edges.
-public struct SplitToggleAtom: View {
+public struct SplitToggleAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "splittoggle", category: "Chrome", name: "Split Toggle", summary: "Split-view toggle: 1:1 drag, spring release, pill trails edges.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var split: CGFloat = 0.5
     @State private var preset = "50 / 50"
@@ -51,10 +52,10 @@ public struct SplitToggleAtom: View {
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
         }
         .focusable(true)
-        .onMoveCommand { dir in
+        .directionKeys { dir in
             if dir == .left { split = max(0.2, split - 0.05) }
             else if dir == .right { split = min(0.85, split + 0.05) }
         }
-        .onExitCommand { split = 0.5; preset = "50 / 50 ✓" }
+        .escapeKey { split = 0.5; preset = "50 / 50 ✓" }
     }
 }

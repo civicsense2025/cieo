@@ -19,7 +19,7 @@ struct BasicsPanelBackground: ViewModifier {
     func body(content: Content) -> some View {
         content
             .background(RoundedRectangle(cornerRadius: radius).fill(.background))
-            .overlay(RoundedRectangle(cornerRadius: radius).strokeBorder(Color.primary.opacity(0.12)))
+            .background(RoundedRectangle(cornerRadius: radius).fill(Color.primary.opacity(0.05)))
             .shadow(color: .black.opacity(0.12), radius: 14, y: 6)
     }
 }

@@ -57,7 +57,7 @@ public struct NavigationDrawerAtom: MotionAtomView {
                 }
                 .frame(width: 260, height: 300)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
-                .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Color.primary.opacity(0.12)))
+                .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
             }
         }
     }

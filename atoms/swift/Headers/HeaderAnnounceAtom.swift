@@ -24,7 +24,7 @@ public struct HeaderAnnounceAtom: MotionAtomView {
                 Button("Show again") { set(true) }.font(.caption).disabled(slot)
                 Spacer(minLength: 0)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+            .clipShape(RoundedRectangle(cornerRadius: 8)).background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
         }
     }
 

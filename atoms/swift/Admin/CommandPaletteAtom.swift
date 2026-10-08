@@ -41,7 +41,7 @@ public struct CommandPaletteAtom: MotionAtomView {
                 SwapText(status).font(.caption).foregroundStyle(.secondary).padding(.horizontal, 16).frame(maxWidth: .infinity, minHeight: 32, alignment: .leading)
             }
             .frame(maxWidth: 380).background(.background, in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary)).clipShape(RoundedRectangle(cornerRadius: 14))
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05))).clipShape(RoundedRectangle(cornerRadius: 14))
         }
         .onChange(of: query) { _, _ in selected = 0; moveHighlight(0) }
         .onAppear { focused = true }

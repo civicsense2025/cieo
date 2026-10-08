@@ -22,7 +22,7 @@ public struct EmailCaptureAtom: MotionAtomView {
                 HStack(spacing: 8) {
                     TextField("you@example.com", text: $email)
                         .textFieldStyle(.roundedBorder).controlSize(.regular)
-                        .overlay(RoundedRectangle(cornerRadius: 9).stroke(invalid ? Color.red : Color.clear, lineWidth: 1.5))
+                        .overlay(RoundedRectangle(cornerRadius: 9).fill(invalid ? Color.red : Color.clear).opacity(0.10).allowsHitTesting(false))
                         .disabled(phase == .done)
                     Button {
                         submit()

@@ -47,7 +47,7 @@ public struct ExpressPayAtom: MotionAtomView {
                         .animation(reduce ? nil : .motion(.base), value: paid)
                     }
                     .padding(14).background(.background, in: RoundedRectangle(cornerRadius: 12))
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary, lineWidth: 1))
+                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                     .transition(.move(edge: .bottom))
                 }
             }

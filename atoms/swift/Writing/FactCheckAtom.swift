@@ -33,7 +33,7 @@ public struct FactCheckAtom: MotionAtomView {
                             .background(chip.verified ? Color.green.opacity(0.12) : Color.secondary.opacity(0.08))
                             .foregroundStyle(chip.verified ? .green : .primary)
                             .clipShape(Capsule())
-                            .overlay(Capsule().stroke(chip.verified ? Color.green : Color.primary.opacity(0.2)))
+                            .overlay(Capsule().fill(chip.verified ? Color.green : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
                         }
                         .buttonStyle(.plain).frame(minHeight: 32)
                         .animation(reduce ? nil : .motion(.base), value: chip.verified)

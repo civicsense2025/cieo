@@ -60,7 +60,7 @@ public struct ApprovalInlineAtom: MotionAtomView {
             }
         }
         .padding(10).frame(width: 220, alignment: .leading)
-        .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary)).shadow(radius: 6, y: 2)
+        .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).shadow(radius: 6, y: 2)
         .position(x: min(max(f.midX, 120), 250), y: f.maxY + 60)
     }
 

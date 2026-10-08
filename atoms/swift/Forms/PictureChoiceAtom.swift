@@ -28,7 +28,7 @@ public struct PictureChoiceAtom: MotionAtomView {
                                 }
                             HStack(spacing: 6) {
                                 Text("ABCD".map(String.init)[i]).font(.caption2.weight(.semibold)).padding(.horizontal, 4)
-                                    .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.primary.opacity(0.25)))
+                                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.primary.opacity(0.05)))
                                 Text(options[i].name).font(.footnote)
                             }
                             .padding(.horizontal, 2).padding(.bottom, 2)

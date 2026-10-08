@@ -45,7 +45,7 @@ public struct HoldConfirmAtom: MotionAtomView {
                         .font(.system(size: 13))
                 }
                 .frame(width: 300)
-                .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(d > 0.02 ? .green : .secondary.opacity(0.25)))
+                .overlay(RoundedRectangle(cornerRadius: 14).fill(d > 0.02 ? .green : .secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
             }
         }
     }

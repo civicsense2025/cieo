@@ -61,7 +61,7 @@ struct AgentCharacter: View {
             Ellipse().stroke(ink, lineWidth: max(1, s * 0.03)).frame(width: s * 0.32, height: s * 0.12)
                 .rotationEffect(.degrees(-20 + spin)).offset(y: -s * 1.16)
             RoundedRectangle(cornerRadius: s * 0.2).fill(wash.opacity(0.3))
-                .overlay(RoundedRectangle(cornerRadius: s * 0.2).strokeBorder(ink, lineWidth: max(1.2, s * 0.035)))
+                .overlay(RoundedRectangle(cornerRadius: s * 0.2).fill(ink).opacity(0.10).allowsHitTesting(false))
                 .frame(width: s, height: s)
                 .overlay(faceView(s).offset(x: look.width * s * 0.07, y: look.height * s * 0.05))
         }

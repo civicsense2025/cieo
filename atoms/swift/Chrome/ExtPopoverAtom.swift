@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Extension popover: grows from icon, snaps shut faster, danger tinted.
-public struct ExtPopoverAtom: View {
+public struct ExtPopoverAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "extpopover", category: "Chrome", name: "Ext Popover", summary: "Extension popover: grows from icon, snaps shut faster, danger tinted.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var chosen: String? = nil
@@ -34,7 +35,7 @@ public struct ExtPopoverAtom: View {
             .animation(reduce ? nil : .spring(response: 0.3), value: open)
         }
         .focusable(true)
-        .onExitCommand { open = false }
+        .escapeKey { open = false }
     }
 
     private func popRow(_ title: String, danger: Bool, delay: Double) -> some View {

@@ -57,7 +57,7 @@ public struct LanguageThemeFooterAtom: MotionAtomView {
     private var languageButton: some View {
         Button { withMotion(.base, reduceMotion: reduce) { open.toggle() } } label: {
             HStack(spacing: 4) { Image(systemName: "globe"); Text(langs[lang]); Image(systemName: "chevron.up").font(.caption2).rotationEffect(.degrees(open ? 180 : 0)) }
-                .font(.caption).padding(.horizontal, 8).padding(.vertical, 5).overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.quaternary))
+                .font(.caption).padding(.horizontal, 8).padding(.vertical, 5).background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.05)))
         }
         .buttonStyle(.plain).accessibilityLabel("Language").accessibilityValue(langs[lang])
         .overlay(alignment: .topLeading) {
@@ -73,7 +73,7 @@ public struct LanguageThemeFooterAtom: MotionAtomView {
                 }
                 .background { MegaPlate(frame: hover.flatMap { frames[AnyHashable($0)] }, radius: 5) }
                 .coordinateSpace(name: "lang").onPreferenceChange(FramePreferenceKey.self) { frames = $0 }
-                .background(.background, in: RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+                .background(.background, in: RoundedRectangle(cornerRadius: 8)).background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
                 .foregroundStyle(.primary)
                 .alignmentGuide(.top) { $0[.bottom] + 6 }
                 .motionTransition(.presence)

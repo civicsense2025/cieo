@@ -38,7 +38,7 @@ public struct AttachStripAtom: MotionAtomView {
                             .font(.caption2.weight(.semibold))
                             .frame(width: 44, height: 44)
                             .background(RoundedRectangle(cornerRadius: 10).fill(Color.accentColor.opacity(selected == i ? 0.3 : 0.12)))
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(selected == i ? Color.primary : Color.secondary.opacity(0.4), lineWidth: selected == i ? 2 : 1))
+                            .overlay(RoundedRectangle(cornerRadius: 10).fill(selected == i ? Color.primary : Color.secondary.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
                             .opacity(appeared ? 1 : 0.45)
                             .offset(y: appeared ? 0 : 10)
                             .animation(reduce ? nil : .motion(.base).delay(Double(i) * 0.03), value: appeared)
@@ -51,7 +51,7 @@ public struct AttachStripAtom: MotionAtomView {
                                 .font(.caption).frame(minWidth: 44, minHeight: 44)
                         }
                         .buttonStyle(.plain)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(style: StrokeStyle(lineWidth: 1, dash: [4])))
+                        .overlay(RoundedRectangle(cornerRadius: 10).fill(Color.primary).opacity(0.10).allowsHitTesting(false))
                         .foregroundStyle(Color.secondary)
                         .opacity(left > 0 ? 1 : 0)
                         .disabled(left == 0)

@@ -58,7 +58,7 @@ public struct FlatplanAtom: MotionAtomView {
         }
         .padding(.horizontal, 12).frame(width: 300, height: 44, alignment: .leading)
         .background(.background, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
         .shadow(color: .black.opacity(held == name ? 0.2 : 0), radius: held == name ? 10 : 0, y: 4)
     }
 

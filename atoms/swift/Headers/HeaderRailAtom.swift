@@ -47,7 +47,7 @@ public struct HeaderRailAtom: MotionAtomView {
                 VStack(spacing: 10) { ForEach(0..<4, id: \.self) { _ in RoundedRectangle(cornerRadius: 8).fill(.quaternary).frame(height: 50) } }
                     .padding(10).frame(maxWidth: .infinity).accessibilityHidden(true)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+            .clipShape(RoundedRectangle(cornerRadius: 8)).background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
         }
     }
 

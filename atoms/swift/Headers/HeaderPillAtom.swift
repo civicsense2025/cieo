@@ -31,7 +31,7 @@ public struct HeaderPillAtom: MotionAtomView {
                     .padding(5)
                     .frame(maxWidth: full ? .infinity : nil)
                     .background(.background, in: Capsule())
-                    .overlay(Capsule().strokeBorder(.quaternary))
+                    .background(Capsule().fill(Color.primary.opacity(0.05)))
                     .shadow(color: .black.opacity(scrolled ? 0.18 : 0.04), radius: scrolled ? 10 : 3, y: 3)
                     .padding(.horizontal, 8).padding(.top, scrolled ? 4 : 10)
                     .motion(.soft, value: scrolled)

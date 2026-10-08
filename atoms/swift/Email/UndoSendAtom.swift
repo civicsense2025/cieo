@@ -50,7 +50,7 @@ public struct UndoSendAtom: MotionAtomView {
                 if !sent { Button("Undo", action: undo).buttonStyle(.bordered).controlSize(.small) }
             }
             .padding(.horizontal, 12).padding(.vertical, 10).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
             .accessibilityElement(children: .contain)
         }
     }

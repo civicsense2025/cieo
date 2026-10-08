@@ -33,7 +33,7 @@ public struct SelectMoveSnapAtom: MotionAtomView {
                     RoundedRectangle(cornerRadius: 10).fill(Color.accentColor).frame(width: max(0, w), height: max(0, h)).offset(x: x, y: y)
                         .gesture(DragGesture(minimumDistance: 0).onChanged { move($0.translation) }.onEnded { _ in release() })
                         .accessibilityLabel("Box").accessibilityValue("\(Int(bw.target)) by \(Int(bh.target))")
-                    RoundedRectangle(cornerRadius: 3).fill(.background).overlay(RoundedRectangle(cornerRadius: 3).stroke(.primary, lineWidth: 2))
+                    RoundedRectangle(cornerRadius: 3).fill(.background).overlay(RoundedRectangle(cornerRadius: 3).fill(.primary).opacity(0.10).allowsHitTesting(false))
                         .frame(width: 12, height: 12).contentShape(Rectangle().inset(by: -8)).offset(x: x + w - 6, y: y + h - 6)
                         .gesture(DragGesture(minimumDistance: 0).onChanged { resize($0.translation) }.onEnded { _ in release() })
                         .accessibilityLabel("Resize handle")
@@ -43,7 +43,7 @@ public struct SelectMoveSnapAtom: MotionAtomView {
                 }
                 .frame(maxWidth: 600, maxHeight: 280, alignment: .topLeading)
                 .background(.background, in: RoundedRectangle(cornerRadius: 14)).clipShape(RoundedRectangle(cornerRadius: 14))
-                .overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary))
+                .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
             }
             .frame(maxWidth: 600).frame(height: 280)
         }

@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Cieo
 
@@ -43,7 +44,7 @@ public struct DeadlineAtom: MotionAtomView {
             .padding(14)
             .background(danger ? Color.red.opacity(0.08) : Color.clear)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(danger ? Color.red : Color.primary.opacity(0.2)))
+            .overlay(RoundedRectangle(cornerRadius: 12).fill(danger ? Color.red : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
             .animation(reduce ? nil : .motion(.base), value: danger)
         }
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { _ in

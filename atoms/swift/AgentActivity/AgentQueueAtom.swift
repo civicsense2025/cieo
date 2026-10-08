@@ -51,7 +51,7 @@ public struct AgentQueueAtom: MotionAtomView {
                         }
                     }
                 }
-                .padding(10).background(.background, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary)).shadow(radius: 4, y: 2)
+                .padding(10).background(.background, in: RoundedRectangle(cornerRadius: 12)).background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05))).shadow(radius: 4, y: 2)
                 .animation(reduce ? nil : .motion(.base), value: reviewing)
             }
             .frame(maxWidth: 360)

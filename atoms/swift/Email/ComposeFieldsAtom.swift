@@ -51,7 +51,7 @@ public struct ComposeFieldsAtom: MotionAtomView {
                 }
                 .padding(14).frame(width: 320)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
-                .overlay(RoundedRectangle(cornerRadius: 14).stroke(edge, lineWidth: 1))
+                .overlay(RoundedRectangle(cornerRadius: 14).fill(edge).opacity(0.10).allowsHitTesting(false))
                 .animation(reduce ? nil : .motion(.base), value: chips.count)
                 Toggle("Send copy to self", isOn: $copySelf)
                     .font(.caption).foregroundStyle(.secondary)
@@ -91,7 +91,7 @@ private struct FlowChips: View {
                 }
                 .padding(.horizontal, 8).padding(.vertical, 5)
                 .background(Capsule().fill(Color.primary.opacity(0.08)))
-                .overlay(Capsule().stroke(chips[i].1 ? Color.secondary.opacity(0.4) : Color.red, lineWidth: 1))
+                .overlay(Capsule().fill(chips[i].1 ? Color.secondary.opacity(0.4) : Color.red).opacity(0.10).allowsHitTesting(false))
             }
         }
     }

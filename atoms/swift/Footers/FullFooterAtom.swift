@@ -57,7 +57,7 @@ private struct Full: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 6) {
                 TextField("you@example.com", text: $email).textFieldStyle(.roundedBorder)
-                    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(phase == 1 ? Color.red : .clear, lineWidth: 1.5)).onSubmit(submit)
+                    .overlay(RoundedRectangle(cornerRadius: 6).fill(phase == 1 ? Color.red : .clear).opacity(0.10).allowsHitTesting(false)).onSubmit(submit)
                 Button(action: submit) {
                     ZStack {
                         if phase == 2 { ProgressView().controlSize(.small) } else if phase == 3 { Image(systemName: "checkmark") } else { Text("Join") }

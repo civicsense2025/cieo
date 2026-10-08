@@ -63,7 +63,7 @@ public struct SignupFieldsAtom: MotionAtomView {
             }
         }
         .padding(.horizontal, 13)
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(bad ? .red : ok ? .green : .secondary.opacity(0.4), lineWidth: 1.5))
+        .overlay(RoundedRectangle(cornerRadius: 10).fill(bad ? .red : ok ? .green : .secondary.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
         .animation(reduce ? nil : .motion(.snap), value: ok)
     }
 

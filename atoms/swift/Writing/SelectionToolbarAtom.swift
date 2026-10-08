@@ -64,7 +64,7 @@ public struct SelectionToolbarAtom: MotionAtomView {
             }
         }
         .padding(4).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary)).shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).shadow(color: .black.opacity(0.12), radius: 6, y: 2)
     }
 
     private func update() {

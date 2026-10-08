@@ -44,7 +44,7 @@ public struct BacklinkFlowAtom: MotionAtomView {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                     .padding(.horizontal, 10).frame(minHeight: 36)
                                     .background(on ? Color.accentColor.opacity(0.12) : Color.clear, in: RoundedRectangle(cornerRadius: 10))
-                                    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(on ? Color.accentColor : Color.clear))
+                                    .overlay(RoundedRectangle(cornerRadius: 10).fill(on ? Color.accentColor : Color.clear).opacity(0.10).allowsHitTesting(false))
                                 }
                                 .buttonStyle(.plain)
                                 .motion(.snap, value: picked)

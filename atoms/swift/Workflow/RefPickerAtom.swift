@@ -36,7 +36,7 @@ public struct RefPickerAtom: MotionAtomView {
                     }
                     .padding(8).frame(minHeight: 44)
                     .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
-                    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(open ? Color.accentColor : Color.secondary.opacity(0.4)))
+                    .overlay(RoundedRectangle(cornerRadius: 10).fill(open ? Color.accentColor : Color.secondary.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
                 }
                 .buttonStyle(.plain).accessibilityLabel("Authors, choose records")
                 if open { list.transition(reduce ? .identity : .motionPresence) }
@@ -62,7 +62,7 @@ public struct RefPickerAtom: MotionAtomView {
         }
         .padding(4)
         .background(.background, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
         .shadow(radius: 6, y: 2)
     }
 

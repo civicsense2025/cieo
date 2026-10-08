@@ -53,7 +53,7 @@ public struct SnackbarAtom: MotionAtomView {
             }
         }
         .background(.background, in: RoundedRectangle(cornerRadius: 10)).clipShape(RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary)).shadow(radius: 6, y: 2)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).shadow(radius: 6, y: 2)
         .onHover { h in
             if h { frozen = max(0, deadline.timeIntervalSinceNow) } else { deadline = Date().addingTimeInterval(frozen) }
             hovering = h

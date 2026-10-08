@@ -13,9 +13,10 @@ let package = Package(
     targets: [
         .target(name: "Cieo"),
         .target(name: "CieoAtoms", dependencies: ["Cieo"], path: "atoms/swift"),
+        .testTarget(name: "CieoAtomsTests", dependencies: ["CieoAtoms"]),
         .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
         .target(name: "CieoUI", dependencies: ["Cieo"], resources: [.process("Resources")]),
         .testTarget(name: "CieoUITests", dependencies: ["CieoUI"]),
-        .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo"]),
+        .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo", "CieoAtoms"]),
     ]
 )

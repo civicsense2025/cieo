@@ -44,7 +44,7 @@ public struct MultiStepFormAtom: MotionAtomView {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(fields[k].0).font(.caption.weight(.medium))
                     TextField(fields[k].1, text: $values[k]).textFieldStyle(.plain).padding(.horizontal, 11).padding(.vertical, 9)
-                        .overlay(RoundedRectangle(cornerRadius: 9).stroke(errors[k] ? Color.red : Color.primary.opacity(0.15), lineWidth: 1.5))
+                        .overlay(RoundedRectangle(cornerRadius: 9).fill(errors[k] ? Color.red : Color.primary.opacity(0.15)).opacity(0.10).allowsHitTesting(false))
                         .accessibilityLabel(fields[k].0)
                         .onChange(of: values[k]) { _, v in if !v.trimmingCharacters(in: .whitespaces).isEmpty { errors[k] = false } }
                     Text("This field is required").font(.caption).foregroundStyle(.red).opacity(errors[k] ? 1 : 0).offset(y: errors[k] ? 0 : -3)

@@ -41,7 +41,7 @@ public struct PollBlockAtom: MotionAtomView {
                             }
                         }
                         .frame(height: 44)
-                        .overlay(Capsule().strokeBorder(voted == i ? Color.primary : Color.secondary.opacity(0.3), lineWidth: 1))
+                        .overlay(Capsule().fill(voted == i ? Color.primary : Color.secondary.opacity(0.3)).opacity(0.10).allowsHitTesting(false))
                     }
                     .buttonStyle(.plain).disabled(voted >= 0)
                 }

@@ -25,7 +25,7 @@ public struct HeaderActionsAtom: MotionAtomView {
                     actions.frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 .padding(10)
-                .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+                .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
                 if menu { accountMenu.motionTransition(.presence) }
                 Spacer(minLength: 0)
             }
@@ -58,6 +58,6 @@ public struct HeaderActionsAtom: MotionAtomView {
             }
         }
         .frame(width: 110, alignment: .leading)
-        .background(.background, in: RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+        .background(.background, in: RoundedRectangle(cornerRadius: 8)).background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
     }
 }

@@ -36,7 +36,7 @@ public struct AddressAutocompleteAtom: MotionAtomView {
                             }
                             .padding(8).frame(minHeight: 38)
                             .background(.background, in: RoundedRectangle(cornerRadius: 9))
-                            .overlay(RoundedRectangle(cornerRadius: 9).stroke(.quaternary, lineWidth: 1))
+                            .background(RoundedRectangle(cornerRadius: 9).fill(Color.primary.opacity(0.05)))
                         }
                         .buttonStyle(.plain)
                         .transition(.scale(scale: 0.96).combined(with: .opacity))
