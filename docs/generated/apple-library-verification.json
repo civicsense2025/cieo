@@ -1,0 +1,54 @@
+{
+  "sourceRevision": "631dd585fcb573c37d27313d306bd2ad791875ec",
+  "boundary": "Integrated runtime source before receipt and verification documentation commits",
+  "web": {
+    "tests": 102,
+    "passed": 100,
+    "skipped": 2,
+    "failed": 0
+  },
+  "catalogueBuildModel": {
+    "passed": 13,
+    "failed": 0
+  },
+  "httpBrowser": {
+    "passed": 67,
+    "failed": 0,
+    "mode": "http"
+  },
+  "javascriptBrowser": {
+    "checks": 24,
+    "failed": 0,
+    "errors": [],
+    "viewports": [
+      360,
+      390,
+      600,
+      768,
+      1024,
+      1440,
+      1920
+    ]
+  },
+  "appleCatalogue": {
+    "passed": 3,
+    "failed": 0
+  },
+  "appleExport": {
+    "passed": 3,
+    "failed": 0
+  },
+  "swift": {
+    "passed": 14,
+    "failed": 0,
+    "platform": "macOS"
+  },
+  "catalogueReceipt": {
+    "swiftRecords": 550,
+    "webRecords": 550,
+    "identities": 551,
+    "observations": 11
+  },
+  "nativeRenderedAcceptance": "pending",
+  "deviceGPUAndEnergy": "pending"
+}

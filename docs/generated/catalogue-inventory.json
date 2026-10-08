@@ -88,7 +88,7 @@
           "symbol": "AddressFieldsAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/AddressFieldsAtom.swift",
-          "sha256": "166e392fe176aba3115a4d24bae7431bd8702dc5d74268a9361f277dc76f942b",
+          "sha256": "78ae3ec704edada2ad442538c025f31240d17f185371e2e47c100d4fdcf30b04",
           "artifactKind": "recipe"
         },
         {
@@ -113,7 +113,7 @@
           "symbol": "AddressFormAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/AddressFormAtom.swift",
-          "sha256": "11d0874e544e5fdd8ede77a792a11c3ef2fd223f07f7b5fd6247e342734a13b6",
+          "sha256": "1041735e76f4f89f12d19fe72bfb00c9323c0a5dfe481b09047c4575e7e27a88",
           "artifactKind": "recipe"
         },
         {
@@ -138,7 +138,7 @@
           "symbol": "AgentAccessAtom",
           "category": "MCP and agents",
           "path": "atoms/swift/MCPAndAgents/AgentAccessAtom.swift",
-          "sha256": "8943cba386dba4fbfb84cc2418e2d8304c8d518b5a16e7063066945a8ce881d7",
+          "sha256": "8f22d329bb3bcc8bd1944abcd1a7577bdd40b56b2e0af36239a4c75d47a58aee",
           "artifactKind": "recipe"
         },
         {
@@ -163,7 +163,7 @@
           "symbol": "AgentActionsAtom",
           "category": "Agent identity",
           "path": "atoms/swift/AgentIdentity/AgentActionsAtom.swift",
-          "sha256": "d1fbec23db883970ab6c718e300ca01b2674f0506ab060053766567de3811eee",
+          "sha256": "a2fff94d2b9960b4d5ab4e71c265565af3f8a62af7e9c6cbb545af7fe8183722",
           "artifactKind": "recipe"
         },
         {
@@ -188,7 +188,7 @@
           "symbol": "AgentBehavioursAtom",
           "category": "Agent identity",
           "path": "atoms/swift/AgentIdentity/AgentBehavioursAtom.swift",
-          "sha256": "7c55ef21abbc836a95f0bf1d91f34b24186a16aa92231ac55d1eea19303d9ad0",
+          "sha256": "70f91eaee7a680568d0007165698eee7de2be088a9e5dc765a0e437e87cffdd2",
           "artifactKind": "recipe"
         },
         {
@@ -338,7 +338,7 @@
           "symbol": "AgentDuetAtom",
           "category": "Agent identity",
           "path": "atoms/swift/AgentIdentity/AgentDuetAtom.swift",
-          "sha256": "31e61d3c946dbe2f53424c695004f92b7eefd419dec0659f5f50132e62565164",
+          "sha256": "661fbdeab5388923c92bd34a00acfb90c05dd2a67e7adb154cca35b59e114c85",
           "artifactKind": "recipe"
         },
         {
@@ -438,7 +438,7 @@
           "symbol": "AgentMarksAtom",
           "category": "Agent identity",
           "path": "atoms/swift/AgentIdentity/AgentMarksAtom.swift",
-          "sha256": "afecbc764761d8dbe5de9d32538d5f47cf2bf40ae03b8d85ee28ddcae3625c7e",
+          "sha256": "1da6628acd40c93ee7ab7eb332b5ba425ffe373f40c834133755868068075017",
           "artifactKind": "recipe"
         },
         {
@@ -488,7 +488,7 @@
           "symbol": "AgentNavAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/AgentNavAtom.swift",
-          "sha256": "d68bf70d1627c365d96b38e30d6d219a8b44797620eb6f27e2366f72c8e28de5",
+          "sha256": "f7a24879691d00b9ccdd4b7888db615495ea1a476ab57fe24a207c1f49ffe054",
           "artifactKind": "recipe"
         },
         {
@@ -513,7 +513,7 @@
           "symbol": "AgentPinAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/AgentPinAtom.swift",
-          "sha256": "0acbae897a811f834314830122f61c2e0b3dea7c2eb499833e37112ce33f2015",
+          "sha256": "ff52e2a47501c73c6786b4af51fecd208ddc4a81a22f3639242da6c6e27b6c4a",
           "artifactKind": "recipe"
         },
         {
@@ -538,7 +538,7 @@
           "symbol": "AgentQueueAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/AgentQueueAtom.swift",
-          "sha256": "b9ade42d28a4237fd311d4488444c1032106335f0d375fba56063161bd29bafc",
+          "sha256": "01d8c016a9c6ba3a91d55583f43ec80cef5eeb99ef785c23ab86c6bcd2aeddff",
           "artifactKind": "recipe"
         },
         {
@@ -563,7 +563,7 @@
           "symbol": "AgentRolesAtom",
           "category": "Agent identity",
           "path": "atoms/swift/AgentIdentity/AgentRolesAtom.swift",
-          "sha256": "1c217390825288d1c1d34d88b1371097003678eb93adf63fc21fb371d0225c7c",
+          "sha256": "aa83012f3f6a2f80d1a6643e30bcb3287a152163c862b32c1eb6f7a9b22f8b5e",
           "artifactKind": "recipe"
         },
         {
@@ -613,7 +613,7 @@
           "symbol": "AgentStatusAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/AgentStatusAtom.swift",
-          "sha256": "e5a1e8a50c98d99abf4ab8139e2a41332cfa534c3ee6fd7bde39b6257f16d050",
+          "sha256": "8a5b33730d41853e1261460e3c01dd25321dd6c71e215d799e3506e38d3a2b64",
           "artifactKind": "recipe"
         },
         {
@@ -638,7 +638,7 @@
           "symbol": "AgentThreadAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/AgentThreadAtom.swift",
-          "sha256": "1eeaa67070c37420971ab226bbb9b4109c30041c433250bc843015171f544822",
+          "sha256": "7366a70c31f7156e711e1065b3b787ec758f405376a24a30f75dc3ddb3d070b1",
           "artifactKind": "recipe"
         },
         {
@@ -738,7 +738,7 @@
           "symbol": "ApiKeyRevealAtom",
           "category": "MCP and agents",
           "path": "atoms/swift/MCPAndAgents/ApiKeyRevealAtom.swift",
-          "sha256": "89b256604c2d89361b3c678719e486ea3bbd2c4b4cf83a3dff3d79ec4a6b1eac",
+          "sha256": "adca7b2218922a1c76a4d6c9818ef1ee5d9ad6a7eea7c504fd620f4e6af1f18b",
           "artifactKind": "recipe"
         },
         {
@@ -763,7 +763,7 @@
           "symbol": "ApprovalAtom",
           "category": "Workflow",
           "path": "atoms/swift/Workflow/ApprovalAtom.swift",
-          "sha256": "e527902e0b0350bb0fc44fe13c583e4297f5ab2a7274b03ff4835b817cbebc2e",
+          "sha256": "e2820985f30f19d098a36a78284f9b7cc2b89ff5329ee8d409537c5e3aa29683",
           "artifactKind": "recipe"
         },
         {
@@ -788,7 +788,7 @@
           "symbol": "ApprovalInlineAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/ApprovalInlineAtom.swift",
-          "sha256": "d2940ff28d8d59047c65b49c79840a23de83dfd919d008b4e4bf32a0838ea8ab",
+          "sha256": "ee3aef3a9d5ca6128bcddcdc95abbdc308756f6a397906b672291910fc79bd86",
           "artifactKind": "recipe"
         },
         {
@@ -813,7 +813,7 @@
           "symbol": "AttachStripAtom",
           "category": "Email",
           "path": "atoms/swift/Email/AttachStripAtom.swift",
-          "sha256": "a073d1c5ab745921e8f9a3cbcfa824aa18fbff5258681842b79719a37b9221f8",
+          "sha256": "dc8c3dc0719835070e9023f70f9574b8e036930ceab906a13774f4476aa04c4b",
           "artifactKind": "recipe"
         },
         {
@@ -838,7 +838,7 @@
           "symbol": "AttendeeFieldsAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/AttendeeFieldsAtom.swift",
-          "sha256": "76d7ca60b6b66b9afed4489fd43c19ffeac383e430654f8622f522282e3de358",
+          "sha256": "ad2d07ec0adf6e57aafe5a1944d7b15fa4df332552333c359b86e690d433f1c5",
           "artifactKind": "recipe"
         },
         {
@@ -863,7 +863,7 @@
           "symbol": "AuditIntakeAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/AuditIntakeAtom.swift",
-          "sha256": "995c36fda40fe08fa5bcc3dcd86353d4240dd890ec471d2193f6485b670520fa",
+          "sha256": "e71bf04cd09eb67d2148f2b93bad9f8eca5d0cd1ec6d7a31493e21635d66c101",
           "artifactKind": "recipe"
         },
         {
@@ -888,7 +888,7 @@
           "symbol": "AuthShellAtom",
           "category": "Workflow",
           "path": "atoms/swift/Workflow/AuthShellAtom.swift",
-          "sha256": "fe787c57dd7af58876740a34e3576ebd0105943234a86d94c687513fef8a68f6",
+          "sha256": "0fadeeeb756f707b89bc5ca2f58507e1bdb57313c3a2eec8b6d7aacc9fefcd6a",
           "artifactKind": "recipe"
         },
         {
@@ -913,7 +913,7 @@
           "symbol": "AddressAutocompleteAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/AddressAutocompleteAtom.swift",
-          "sha256": "f1e989cbf4a00fbb4d4e79d94d1ca18e9148d38d9d3ec5a70e658422da71d00d",
+          "sha256": "315ae41419f1ae3cf32b3b90f280f47cc7284d42a6776c96c79221e29ea88738",
           "artifactKind": "recipe"
         },
         {
@@ -938,7 +938,7 @@
           "symbol": "AutosaveStatusAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/AutosaveStatusAtom.swift",
-          "sha256": "d03e04213d31da566df22d8b8ae3927687fd895a316dc7d7adf73cd331f387cf",
+          "sha256": "7221a79940513a48f2178b9cc7388a7985ef39569de87971353f64c7aaa9baf0",
           "artifactKind": "recipe"
         },
         {
@@ -1013,7 +1013,7 @@
           "symbol": "BacklinkFlowAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/BacklinkFlowAtom.swift",
-          "sha256": "e75361df645abfe3855cddb6180620d7855a24353700259b47c61269316a9ec8",
+          "sha256": "8fcd6fd9fc61b184497f41993c6e5aba1c87fa98f4f65f22387837945f1401be",
           "artifactKind": "recipe"
         },
         {
@@ -1038,7 +1038,7 @@
           "symbol": "BacklinkAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/BacklinkAtom.swift",
-          "sha256": "8ee8f47c1a5ccc5ce857a3306f58733bc2202451d4b299a5710df3a4b950692e",
+          "sha256": "f8f683afdf6d4eea84ad0d145596a7dee6b375d1896274ecc61b30d6d086ea16",
           "artifactKind": "recipe"
         },
         {
@@ -1163,7 +1163,7 @@
           "symbol": "BetweenBlocksInsertAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/BetweenBlocksInsertAtom.swift",
-          "sha256": "5340d7bbba487222787f689eb8ba95d349de5ef7216f6a8719907f6dcdb78484",
+          "sha256": "dce4f6100e27fecdff5752d107cdd9f9caaa42e0d3bd5ee282ef35541d27631d",
           "artifactKind": "recipe"
         },
         {
@@ -1213,7 +1213,7 @@
           "symbol": "BlockLibraryPanelAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/BlockLibraryPanelAtom.swift",
-          "sha256": "432966c6449a20513fab1269f7c5cfcfba6538e085fce1bd1db0b6be74b07685",
+          "sha256": "0b98196e5ba0f00cb3ba235177c6f43e72b0e6a0e2d65be67bb16cf95dc5e39e",
           "artifactKind": "recipe"
         },
         {
@@ -1238,7 +1238,7 @@
           "symbol": "FloatingBlockToolbarAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/FloatingBlockToolbarAtom.swift",
-          "sha256": "2404b703b0c280e8c98e2dcd8e2a64ec52d74127024b72fb374bf412c02492da",
+          "sha256": "2447f63694d0d64f093b52cf2c8082dbeec02468b80f27e81af67526a74c81b3",
           "artifactKind": "recipe"
         },
         {
@@ -1288,7 +1288,7 @@
           "symbol": "BranchFoldAtom",
           "category": "Email",
           "path": "atoms/swift/Email/BranchFoldAtom.swift",
-          "sha256": "b9dd6b55577d928e132014d906d1fb41ed971d9a74bdd49c29c738c94c13b214",
+          "sha256": "e6db378c3fc9c73b64992881d8717cccc79ed2f1c5416654ab13b0403ba11d38",
           "artifactKind": "recipe"
         },
         {
@@ -1388,7 +1388,7 @@
           "symbol": "BudgetAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/BudgetAtom.swift",
-          "sha256": "83ce94cab0cf82c896a63d7304894922189bd748a5c787a67fb2e74b9b0c28a7",
+          "sha256": "af5e4e4f39851ca4c4e9046295b8d2600615a92aea605369e35bdc0a85fafd8f",
           "artifactKind": "recipe"
         },
         {
@@ -1413,7 +1413,7 @@
           "symbol": "BufferSyncAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/BufferSyncAtom.swift",
-          "sha256": "15e93a4a0240a1f23772ddcfb6b5b6287394ccc5c56af4e90288baa5d70ff9ac",
+          "sha256": "d999aa4bc6fc981167a872f7ae180e2bd54af99373167dea4327026ea7671904",
           "artifactKind": "recipe"
         },
         {
@@ -1463,7 +1463,7 @@
           "symbol": "BundleSweepAtom",
           "category": "Email",
           "path": "atoms/swift/Email/BundleSweepAtom.swift",
-          "sha256": "617b200abb892b229cbb98ae47e08586702d8829c2a652ccb9b1f843b19dc689",
+          "sha256": "1286781bcb2e3143b4e3914e7875cafd14604aee6cb52cdf99024ed081a09440",
           "artifactKind": "recipe"
         },
         {
@@ -1488,7 +1488,7 @@
           "symbol": "CalendarEventAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/CalendarEventAtom.swift",
-          "sha256": "dfca218d8e010815bf08ac4c480156720a9edb4d5eb952c19fe9979fac39b732",
+          "sha256": "99dac29756a16f6f1f09c4c3a53bdd573c8da7400e8faa4aeef0f32f3d1d7ec3",
           "artifactKind": "recipe"
         },
         {
@@ -1513,7 +1513,7 @@
           "symbol": "CallGridAtom",
           "category": "Video calls",
           "path": "atoms/swift/VideoCalls/CallGridAtom.swift",
-          "sha256": "8e7704e3968bda56dc64d5a4fc296c9ba593999af158352554deb16adf764c5c",
+          "sha256": "0862bdea4b21e1e97b832a6aac9e3b6bfc58d87ba9a8bb0da63783d1e9774d77",
           "artifactKind": "recipe"
         },
         {
@@ -1538,7 +1538,7 @@
           "symbol": "CanvasPanZoomAtom",
           "category": "Design tools",
           "path": "atoms/swift/DesignTools/CanvasPanZoomAtom.swift",
-          "sha256": "20e320b44c9ed7df5b6be553f449bc07100c95e465406e9fb234cfdd05f370da",
+          "sha256": "e14dae5e25dcaa3b5099e0a51adda77052a296e14fe9f9d74fdd0b61d82b2580",
           "artifactKind": "recipe"
         },
         {
@@ -1588,7 +1588,7 @@
           "symbol": "CaretTipAtom",
           "category": "Overlays",
           "path": "atoms/swift/Overlays/CaretTipAtom.swift",
-          "sha256": "7888d71cca22b983f7ad65f22c2371a10f69d443e59c42a947140e939b17762b",
+          "sha256": "498f2d2450fb316a15b0d4936465aea01954465f6c9298a23b78dd0931133ac8",
           "artifactKind": "recipe"
         },
         {
@@ -1663,7 +1663,7 @@
           "symbol": "CartDrawerAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/CartDrawerAtom.swift",
-          "sha256": "4832e8df849a113269120fc313d194af70aa885e24be409c59b97a54362c1194",
+          "sha256": "901b9af5260e8698269ec50249d05b3547081b56abd808af7757bc1d5e603b59",
           "artifactKind": "recipe"
         },
         {
@@ -1688,7 +1688,7 @@
           "symbol": "CatchUpAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/CatchUpAtom.swift",
-          "sha256": "278e86ee3eb3e937bbf8cf72bf3a46044d26817bb32213bcd87e2866f5d1d410",
+          "sha256": "169cbd46c2b05d88b4ee0ec9fca48105df6466b9912243a54c7bdc8d8be0c610",
           "artifactKind": "recipe"
         },
         {
@@ -1713,7 +1713,7 @@
           "symbol": "CharacterLimitRingAtom",
           "category": "Social",
           "path": "atoms/swift/Social/CharacterLimitRingAtom.swift",
-          "sha256": "9eebe48e97667d6d87053618b602130ac3137412caaa00f67d2e49c7c81ff905",
+          "sha256": "4dfcee71a1bd119d8482747237c8d4fdbcfc8d2856ec9a7111c2d3685eb50a05",
           "artifactKind": "recipe"
         },
         {
@@ -1763,7 +1763,7 @@
           "symbol": "ChatPollAtom",
           "category": "Forms",
           "path": "atoms/swift/AIChat/ChatPollAtom.swift",
-          "sha256": "3677156f24d8d6706da6427aaf20ac83badb8e08f50189ae21f0ef7f7f2fec54",
+          "sha256": "adfda172506d713a04e0b695ac40a93e4f37828c7d338568c37ac8a4d0000d44",
           "artifactKind": "recipe"
         },
         {
@@ -1788,7 +1788,7 @@
           "symbol": "ChatSendAndReplyAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/ChatSendAndReplyAtom.swift",
-          "sha256": "9b43ec6fd50662aad5aabd9f3321e9ab941601f59fbccaaefb1948f6d84a9bf0",
+          "sha256": "a62fb0d9abc5336456c52b6eb30f015c9379262c8480e7655636ee3169b75443",
           "artifactKind": "recipe"
         },
         {
@@ -1813,7 +1813,7 @@
           "symbol": "CheckboxWithMixedStateAtom",
           "category": "Inputs",
           "path": "atoms/swift/Inputs/CheckboxWithMixedStateAtom.swift",
-          "sha256": "3c7c3fb09bc6fc1b287bb925a1b813d5e75ca3558a724c2c024e3030f0460f38",
+          "sha256": "85ce695810da770abdcd3f6c9391122057af66414fdd8c813c27f7f3eabc6f61",
           "artifactKind": "recipe"
         },
         {
@@ -1838,7 +1838,7 @@
           "symbol": "ChecklistAtom",
           "category": "Content",
           "path": "atoms/swift/Content/ChecklistAtom.swift",
-          "sha256": "c37786f9ab89734007b23719ab4fdb3f13f81179777f1ab94736876d5b4da95d",
+          "sha256": "b7f523eaafa4cea7a0b4356a5c1ce1a3ba3191b1706b6d7b41df5e547dd60f28",
           "artifactKind": "recipe"
         },
         {
@@ -1863,7 +1863,7 @@
           "symbol": "ChecklistBeaconAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/ChecklistBeaconAtom.swift",
-          "sha256": "b225555c6fa570ed2234a3b87317e396b7f9b4a523da9430eb8cb34a3a490dd8",
+          "sha256": "f1321606d70897257eb37ae772d423b6a461f7075f1655cc58442c44b5625d33",
           "artifactKind": "recipe"
         },
         {
@@ -1913,7 +1913,7 @@
           "symbol": "CheckoutFieldsAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/CheckoutFieldsAtom.swift",
-          "sha256": "8fc8b3b94e5e6a6abc14b3cafedd5d63587319db0211e090c19daea267feec2c",
+          "sha256": "b2d621235b07a24b66412d6ef26289d054d5983057193a353c678042d0854aa3",
           "artifactKind": "recipe"
         },
         {
@@ -1938,7 +1938,7 @@
           "symbol": "CheckoutAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/CheckoutAtom.swift",
-          "sha256": "73a28691668b832c17146c7f4c133218663a6c93c9b88d933d08b7c7e71cefd9",
+          "sha256": "34264809b865873ceecf278e585975565302cec3197317c4593ee38c13457170",
           "artifactKind": "recipe"
         },
         {
@@ -1988,7 +1988,7 @@
           "symbol": "CitationPopoverAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/CitationPopoverAtom.swift",
-          "sha256": "cf2086d6837d3a927b0f2fe9ce716df90775e1979fe324620fedab25fdd74a64",
+          "sha256": "d747e3fbe403c307d22a456c1ecd2d755dd7be7aea6f6fb483e7c800c36188fe",
           "artifactKind": "recipe"
         },
         {
@@ -2038,7 +2038,7 @@
           "symbol": "ClipperAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/ClipperAtom.swift",
-          "sha256": "2126cefa0582d56b0f51a5ab70c28259758748dd16b923fa8c0545e658c41289",
+          "sha256": "59f3f77f17b2794ab9835bea8dc858c56af63ebd48e138f9121cce64b70fa43e",
           "artifactKind": "recipe"
         },
         {
@@ -2063,7 +2063,7 @@
           "symbol": "PinClusterAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/PinClusterAtom.swift",
-          "sha256": "bf81157847199d9b7fbf7da15f4a7359b723c01245f8907be12600c3ceba6a13",
+          "sha256": "52de00f86fc6df688dc1e9fce8655ba1e2536bebbe3ab796fa11d467b5e28c32",
           "artifactKind": "recipe"
         },
         {
@@ -2080,8 +2080,17 @@
     {
       "id": "cmdpalette",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "cmdpalette",
+          "symbol": "CmdPaletteAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/CmdPaletteAtom.swift",
+          "sha256": "34c5bb3c3f49708e8a431791c112a7e96c9240236f813c6c4b41e8ef29dedaab",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "cmdpalette",
@@ -2104,7 +2113,7 @@
           "symbol": "CoachmarksAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/CoachmarksAtom.swift",
-          "sha256": "5be6c979edc451a703b0f8e654f17ae8ecb639543580498b6b3bc55b9dd6905b",
+          "sha256": "89d7c452ec1c247d4ba07dca380cb66aa0effd75217bcd27658a46cc01c247c2",
           "artifactKind": "recipe"
         },
         {
@@ -2129,7 +2138,7 @@
           "symbol": "ColorPickerAtom",
           "category": "Design tools",
           "path": "atoms/swift/DesignTools/ColorPickerAtom.swift",
-          "sha256": "bee9fc9048879b1b40d20ad43c3c30d7757ce37719822392309960a68a58ed37",
+          "sha256": "3322ae10e38ad088dc8a0c7eeeddf6d6379d5d9fd30f521bc8607c00334e33ad",
           "artifactKind": "recipe"
         },
         {
@@ -2154,7 +2163,7 @@
           "symbol": "ComboboxAtom",
           "category": "Inputs",
           "path": "atoms/swift/Inputs/ComboboxAtom.swift",
-          "sha256": "5ded25da6ce01058e813ade39dcbfcb3a067bd632d752d8b9d8eb65467cfc904",
+          "sha256": "e31ccae8ea8f88e5f98c9ae57ee79e0db6e4d32dde6750fcefb6e1b86185da29",
           "artifactKind": "recipe"
         },
         {
@@ -2229,7 +2238,7 @@
           "symbol": "ComposeFieldsAtom",
           "category": "Email",
           "path": "atoms/swift/Email/ComposeFieldsAtom.swift",
-          "sha256": "9f25a470d497686d27978a89ce280414da391f5ea990cdf17c775256d314a540",
+          "sha256": "305eb868a9bff8267b0ef81e12bbfee0f39418a845bf7e09f33c3ff2aea02905",
           "artifactKind": "recipe"
         },
         {
@@ -2329,7 +2338,7 @@
           "symbol": "ConfidenceMeterAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/ConfidenceMeterAtom.swift",
-          "sha256": "a9e6dc99bef51f56c0bddb64c87de9b2528d9c1a16652e0efb5fce33eb172b20",
+          "sha256": "57d8fb9d1a371254cc4351824307c723dcbd03bb477f50cd70863932d1ee1dff",
           "artifactKind": "recipe"
         },
         {
@@ -2379,7 +2388,7 @@
           "symbol": "ConsentAtom",
           "category": "Status and records",
           "path": "atoms/swift/StatusAndRecords/ConsentAtom.swift",
-          "sha256": "fc5f9ef15354a04d71a9f9138aafd82ef1defa858c123a573744417801a9cecc",
+          "sha256": "abcec18a17c8addcfaadc23214dad6b2d2774d4c1bf797c8f0d5a8387a1cb44c",
           "artifactKind": "recipe"
         },
         {
@@ -2454,7 +2463,7 @@
           "symbol": "OneQuestionAtATimeAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/OneQuestionAtATimeAtom.swift",
-          "sha256": "93224d4c36ebedc7097dfbc9c3c927031e94911ee27f1ce9b44e2efb319276b3",
+          "sha256": "60fd9320c1695c45fbaaa96771a40ede69de09aaf2a3784da0826095f0a3fd62",
           "artifactKind": "recipe"
         },
         {
@@ -2479,7 +2488,7 @@
           "symbol": "CopyButtonAtom",
           "category": "Content",
           "path": "atoms/swift/Content/CopyButtonAtom.swift",
-          "sha256": "1dc28c3313e86c69993789031859c0a937d77aef9655b212c840db792c577f72",
+          "sha256": "c14d70453adeeba6779ac3c25b66043e694c8f898d54924b44a3478aa16ae823",
           "artifactKind": "recipe"
         },
         {
@@ -2579,7 +2588,7 @@
           "symbol": "CrawlProgressAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/CrawlProgressAtom.swift",
-          "sha256": "726f4ac022af6584a0c51ccd9d8e369d02325e75bfa9a726a2d8f13f8137bc69",
+          "sha256": "2206e0e070e45526a1c8589e3342391318b9d657018526220bb2dcce813081af",
           "artifactKind": "recipe"
         },
         {
@@ -2604,7 +2613,7 @@
           "symbol": "HeatmapAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/HeatmapAtom.swift",
-          "sha256": "52d8a6b9f1907718de9eecb7acdb1c35da55d1ad21e408015e57e5ed8ab8e120",
+          "sha256": "516221dd9dcc696c65d122cfda31c45610bdc68ea8a993cf0fd13fb8200dc625",
           "artifactKind": "recipe"
         },
         {
@@ -2679,7 +2688,7 @@
           "symbol": "AnalyticsDashboardAtom",
           "category": "Workspace",
           "path": "atoms/swift/Workspace/AnalyticsDashboardAtom.swift",
-          "sha256": "e895a85c6709314998c810e66b31ef7cc207aff59d282c0c637726bb74864ce8",
+          "sha256": "28069d74c517f2a9e6ce3f59eebcfaa408fec7500ace6cbd979f26e570d0d40e",
           "artifactKind": "recipe"
         },
         {
@@ -2754,7 +2763,7 @@
           "symbol": "DeadlineAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/DeadlineAtom.swift",
-          "sha256": "9b1a1ca9e7154c8d19c7a6c70d02bae05e1454a40e6b910ca9dc9f1f823280fd",
+          "sha256": "6121371c8b8630954d37edee31758a016d7d6f8416b52eef45a8b3d119b2970d",
           "artifactKind": "recipe"
         },
         {
@@ -2854,7 +2863,7 @@
           "symbol": "DeliveryNotesAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/DeliveryNotesAtom.swift",
-          "sha256": "5e6398c84077a26c20698c3d8433458f6294f759632c1aae5c8c3ce8f92e7871",
+          "sha256": "9b1c47f40ce009179ac0353fac9869c626efd831a3c7f52fb7a9b08c0d72eea9",
           "artifactKind": "recipe"
         },
         {
@@ -2879,7 +2888,7 @@
           "symbol": "DeltaArrowsAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/DeltaArrowsAtom.swift",
-          "sha256": "5ddc67dc09cfb3fee06bdc733242735b6e075533855b365880627ccbd82bb085",
+          "sha256": "a5b115ee30c02bae08a895726ec74cecd5aafc055f99b7f7d0c3db175fefde69",
           "artifactKind": "recipe"
         },
         {
@@ -2929,7 +2938,7 @@
           "symbol": "DeviceToggleAtom",
           "category": "Admin kit",
           "path": "atoms/swift/AdminKit/DeviceToggleAtom.swift",
-          "sha256": "ff70c9625b9df1dc8ea70c5d6bd3d97535cfbc105ae4d11e816de6ab0c10d18d",
+          "sha256": "89d2bb41365e6bc8e06fe093899b4a8eb0d685c25efc58d0bb5ba12682717d60",
           "artifactKind": "recipe"
         },
         {
@@ -2979,7 +2988,7 @@
           "symbol": "ConfirmDialogAtom",
           "category": "Overlays",
           "path": "atoms/swift/Overlays/ConfirmDialogAtom.swift",
-          "sha256": "62c84994220da61e22cf23d47537525e35e21f46f257cafe518ab690b635db95",
+          "sha256": "0da7c8b698d694bf98294eb94cced9bf1287aecb12c9433987cef41ef6561622",
           "artifactKind": "recipe"
         },
         {
@@ -3004,7 +3013,7 @@
           "symbol": "DialogFormAtom",
           "category": "Overlays",
           "path": "atoms/swift/Overlays/DialogFormAtom.swift",
-          "sha256": "0d0aa0fc979b667de4195f86b998b7c3f051e73bd71dae3c4cf1ff83bf9d035a",
+          "sha256": "bbadaa7ca3987fa54e6efcccf77a435d655fa4736434bf12ed030120a2b19e77",
           "artifactKind": "recipe"
         },
         {
@@ -3029,7 +3038,7 @@
           "symbol": "DisclosureGroupAtom",
           "category": "Admin kit",
           "path": "atoms/swift/AdminKit/DisclosureGroupAtom.swift",
-          "sha256": "c6b7d1aa2728a1a651bc423a40ecf7b17a7863f6fe4a167b3a00035a90f9bdb5",
+          "sha256": "5fd93618702e054ec6bbbb6743205ce25070b6421627cee8b0f24dc627a4ddd8",
           "artifactKind": "recipe"
         },
         {
@@ -3079,7 +3088,7 @@
           "symbol": "DocSearchAtom",
           "category": "Documents",
           "path": "atoms/swift/Documents/DocSearchAtom.swift",
-          "sha256": "2bf16b742471d018f1ea2e8c9629f5c13c1d4c36d4c08ff03b570b30aaa066df",
+          "sha256": "6fe47e3a49079892cbeed131506d7e08ef27fb76a43be52e886a4be5b8f8969e",
           "artifactKind": "recipe"
         },
         {
@@ -3104,7 +3113,7 @@
           "symbol": "DonationAmountAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/DonationAmountAtom.swift",
-          "sha256": "1ab2d91a01749c059129e41170f9324b92c8f38d7559278642e5edbf3cbcf7a4",
+          "sha256": "23814a86aa289e8ce1a7c06297cbfbd585554b43937d5c62a15727a5e77d1fac",
           "artifactKind": "recipe"
         },
         {
@@ -3171,8 +3180,17 @@
     {
       "id": "downloads",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "downloads",
+          "symbol": "DownloadsAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/DownloadsAtom.swift",
+          "sha256": "759c6c0bd7d5ca6fe3cc2c958ce7b7eb4f6deb2938d35ea0d6dc3c15e8012551",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "downloads",
@@ -3195,7 +3213,7 @@
           "symbol": "NavigationDrawerAtom",
           "category": "Navigation",
           "path": "atoms/swift/Navigation/NavigationDrawerAtom.swift",
-          "sha256": "d09f95c4c2f4c653571f22acd32bb3ba8f0d40de0426ff282cc5251c3b3d50e3",
+          "sha256": "17cdaf90429500e31f0ad1bb0fc52e591e009214202fe3f56ccf66459430ccc3",
           "artifactKind": "recipe"
         },
         {
@@ -3245,7 +3263,7 @@
           "symbol": "DropdownAtom",
           "category": "Admin",
           "path": "atoms/swift/Admin/DropdownAtom.swift",
-          "sha256": "5e125a1b93b0fb029e79ebc48d2e172541d1e8dc27b6e5b7ac6ff9f59c30095e",
+          "sha256": "f062f722affc7b3da01dfd00e10c4ca5c98367c0ddb0d291f2bbae78d55840ed",
           "artifactKind": "recipe"
         },
         {
@@ -3345,7 +3363,7 @@
           "symbol": "EmailCaptureAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/EmailCaptureAtom.swift",
-          "sha256": "22d024429e0932f691cbd65e1b8e67005a8f069abd68816be110efe4a2cf944e",
+          "sha256": "a0ef591adcf78208aef10927cf28a224dc20e7acf2a58800d3651e06b270c043",
           "artifactKind": "recipe"
         },
         {
@@ -3370,7 +3388,7 @@
           "symbol": "EmailPollAtom",
           "category": "Email",
           "path": "atoms/swift/Email/EmailPollAtom.swift",
-          "sha256": "9302df33343b17972e837842bca188bfc84e8b06f60ccde37a656ccc30439566",
+          "sha256": "cc41af25e4b417d573239a4fb1efe8374e6d0f8ac30fb34add411322bd5837f8",
           "artifactKind": "recipe"
         },
         {
@@ -3395,7 +3413,7 @@
           "symbol": "EmbargoAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/EmbargoAtom.swift",
-          "sha256": "6725a1c8e7b35d6dcc70a16b685fa4ee7798c1d58370ef0abdd276ad015214a9",
+          "sha256": "14523493a4f5d0b18a037dff4b62822367d250b79dc9eb23b00d2a60cc10829c",
           "artifactKind": "recipe"
         },
         {
@@ -3420,7 +3438,7 @@
           "symbol": "EmbedCardAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/EmbedCardAtom.swift",
-          "sha256": "e8c524f7519a8f8b23a09df11926c74e450b3667afc81861c72c2c35c85ff5d5",
+          "sha256": "24c893cfb3cf18b619e8f6037228ef42a3c7c9e5eec5791442455a63479a9f58",
           "artifactKind": "recipe"
         },
         {
@@ -3470,7 +3488,7 @@
           "symbol": "EmptyNudgeAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/EmptyNudgeAtom.swift",
-          "sha256": "463b57f44fbcb1adda46890b452786a8450e24c30adf117b0f85d387775b6fc1",
+          "sha256": "b688d01e0971f00b2d37b6c35da74c7029e9a93010884ec475be86f5ce1dbf03",
           "artifactKind": "recipe"
         },
         {
@@ -3545,7 +3563,7 @@
           "symbol": "ExhibitAtom",
           "category": "Documents",
           "path": "atoms/swift/Documents/ExhibitAtom.swift",
-          "sha256": "775a49381992393fd5d33be65bae74554ebf3dd10392177715b4c6c0cf8776ba",
+          "sha256": "4aed67b77eead4ba5646d6af02286bb1095e3ffe36334b4098c875da57863152",
           "artifactKind": "recipe"
         },
         {
@@ -3595,7 +3613,7 @@
           "symbol": "ExpressPayAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/ExpressPayAtom.swift",
-          "sha256": "2408a3e8350f861943447e67b56b0da115b2528cc9eb774e65e985cceb55d228",
+          "sha256": "09963645e22aa39c35ade9336621084eb099f3bcc4cb15a31d5170214ee5dd34",
           "artifactKind": "recipe"
         },
         {
@@ -3612,8 +3630,17 @@
     {
       "id": "extpopover",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "extpopover",
+          "symbol": "ExtPopoverAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/ExtPopoverAtom.swift",
+          "sha256": "e57dfb62d922cca75f7666723b494f5392aace2e9bd2ef327c43597449ca9581",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "extpopover",
@@ -3686,7 +3713,7 @@
           "symbol": "FactCheckAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/FactCheckAtom.swift",
-          "sha256": "87313aebb1b44a05d9a379a83f97f82ebb623f47b028046b2292ba21ebb34ebd",
+          "sha256": "c08855066fabc2a4174599a9e3963cf89a80fd4fbdedbaa19cd1f0d46d4e98fd",
           "artifactKind": "recipe"
         },
         {
@@ -3711,7 +3738,7 @@
           "symbol": "FaqAccordionAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/FaqAccordionAtom.swift",
-          "sha256": "2f53236d2261305fde0be4b6239a6c07ac988af2ac59805e051a9f050619da3b",
+          "sha256": "6c99b60bcc361c7d1483a86b48763d331d9452c71c3d976752598d268753e4ab",
           "artifactKind": "recipe"
         },
         {
@@ -3736,7 +3763,7 @@
           "symbol": "FeatureBeaconAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/FeatureBeaconAtom.swift",
-          "sha256": "59248e339acd46dd9e1c57d67109df0160994f20e99ed4a173fc00ec5e8a57c8",
+          "sha256": "6380441e110f6ddaaed231ec686d452f07d7ddeb3d594f51fde7a928cbfa1951",
           "artifactKind": "recipe"
         },
         {
@@ -3761,7 +3788,7 @@
           "symbol": "TextFieldAtom",
           "category": "Interactive",
           "path": "atoms/swift/Interactive/TextFieldAtom.swift",
-          "sha256": "e65e6a00af9b35f3afba7a5ca8513097e8756edf952d4d10fe9f18068b093eec",
+          "sha256": "de81ab2c022b72c903d0116050484fb4e1d60faaa79dc40ea03ff5cc9e3604b0",
           "artifactKind": "recipe"
         },
         {
@@ -3861,7 +3888,7 @@
           "symbol": "FillFieldAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/FillFieldAtom.swift",
-          "sha256": "c518771b735638de8d3e2e765e3b91b7da2bb308bf2c74314b9fee3a913afd7f",
+          "sha256": "ebe64ae8716590ca75c059340cc62151693e19d757ebc66bf4b3b1538ee7590a",
           "artifactKind": "recipe"
         },
         {
@@ -3903,8 +3930,17 @@
     {
       "id": "findbar",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "findbar",
+          "symbol": "FindBarAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/FindBarAtom.swift",
+          "sha256": "0bee32e876371f5ddfdbcf2ce69c4b937f1116ae7dab77cb148cc30fccb7da16",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "findbar",
@@ -3927,7 +3963,7 @@
           "symbol": "FlatplanAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/FlatplanAtom.swift",
-          "sha256": "cb54db7d5098522797195ecfbfbc89c99152bae3dc2576a0802925de038ead71",
+          "sha256": "c7743a01df3faeb1b96405c715244f599112ca19e70a0ebfbdacee5e02145fff",
           "artifactKind": "recipe"
         },
         {
@@ -4002,7 +4038,7 @@
           "symbol": "FocusRingAtom",
           "category": "Foundations",
           "path": "atoms/swift/Foundations/FocusRingAtom.swift",
-          "sha256": "795429173572ee8854361ccdd3e990f18ef3f4d70e2cbfe85493a785962218d5",
+          "sha256": "89664a7f941f8f77cd63902f9ff76717489a29f04dd98ab0d2f784f924368c96",
           "artifactKind": "recipe"
         },
         {
@@ -4027,7 +4063,7 @@
           "symbol": "FollowButtonAtom",
           "category": "Social",
           "path": "atoms/swift/Social/FollowButtonAtom.swift",
-          "sha256": "fe784a656322aa7adb50a2de83e7fa36f9042c181dbaca92490eb03b0ce90383",
+          "sha256": "e6398c09e258836f817ded16b6e84256597d0832071b3aef48f567b8197367c3",
           "artifactKind": "recipe"
         },
         {
@@ -4052,7 +4088,7 @@
           "symbol": "FollowModeAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/FollowModeAtom.swift",
-          "sha256": "300b19323e2dd178ea3e9f041264282022196721218a45c8450b2bac345a812a",
+          "sha256": "6c78da6813e8ab2a3a49c6ae0782a4d85cc05bc4e2821069e9a0505b2d96ec78",
           "artifactKind": "recipe"
         },
         {
@@ -4177,7 +4213,7 @@
           "symbol": "NewsletterFooterAtom",
           "category": "Footers",
           "path": "atoms/swift/Footers/NewsletterFooterAtom.swift",
-          "sha256": "a4f45d213c589a10477bece73750c89e7cfe5cebe1537c43d44aec6fb1488819",
+          "sha256": "4c3da9028d065e284d5c90c8898eed6fba85e1f57e2165427b7419b9d0b249a7",
           "artifactKind": "recipe"
         },
         {
@@ -4202,7 +4238,7 @@
           "symbol": "LanguageThemeFooterAtom",
           "category": "Footers",
           "path": "atoms/swift/Footers/LanguageThemeFooterAtom.swift",
-          "sha256": "f4486a895cbddf36b5f454621e23a9d7738ccd9fe6975cfdddcebcc902d54819",
+          "sha256": "841ca419083eb0fb48c4b5d93a51edb777b73ed0cf637e6a6f82b4566442b71f",
           "artifactKind": "recipe"
         },
         {
@@ -4227,7 +4263,7 @@
           "symbol": "StickyRevealFooterAtom",
           "category": "Footers",
           "path": "atoms/swift/Footers/StickyRevealFooterAtom.swift",
-          "sha256": "a00a1873e984e1d2205f642979b2f3eca0c1d4379a7e2bf31268021c1f67e054",
+          "sha256": "406727b236753d18dadd73f41d84e0db56f61502948a25385dcff6ffcc5d98a1",
           "artifactKind": "recipe"
         },
         {
@@ -4277,7 +4313,7 @@
           "symbol": "FormFlowAtom",
           "category": "Layout",
           "path": "atoms/swift/Layout/FormFlowAtom.swift",
-          "sha256": "9938a7af8cd92d5ee471127ebc8d3b960e42e250a378a978c38cd96134b1a2fe",
+          "sha256": "3cb6f05058ca3ca25350cd506b00f6e42c3d17a859880712ffda598b78e6d0c3",
           "artifactKind": "recipe"
         },
         {
@@ -4327,7 +4363,7 @@
           "symbol": "FunnelReportAtom",
           "category": "Workspace",
           "path": "atoms/swift/Workspace/FunnelReportAtom.swift",
-          "sha256": "76e39d29822b44a95af3f8ce4920a324e9f6c7bd6f23956d3c6c9cb4752f1e2b",
+          "sha256": "51d31e0911686a22221f66de5c7742f87f0a579f5d197201f379eaef8b45cd48",
           "artifactKind": "recipe"
         },
         {
@@ -4552,7 +4588,7 @@
           "symbol": "ThemeFromPhotoAtom",
           "category": "Photo effects",
           "path": "atoms/swift/PhotoEffects/ThemeFromPhotoAtom.swift",
-          "sha256": "1d2cb999e8231f691571cb94caf9bb2e6c0639bbfeb6b13c10458692e598dc8c",
+          "sha256": "6cb29b6f11c05f4d421269cdf857f5f468a8288dbaa6cb301c725b3369b06cb1",
           "artifactKind": "recipe"
         },
         {
@@ -4702,7 +4738,7 @@
           "symbol": "SitemapSearchFooterAtom",
           "category": "Footers",
           "path": "atoms/swift/Footers/SitemapSearchFooterAtom.swift",
-          "sha256": "d0c646fca7b17bae4912fbd7004d79de545910830fb4354051dc0a80f49e0bdf",
+          "sha256": "517af1accff972eaa5767e774b1454dc10038ef9572ca50c357ccc9adefa5d88",
           "artifactKind": "recipe"
         },
         {
@@ -4752,7 +4788,7 @@
           "symbol": "AppTrustFooterAtom",
           "category": "Footers",
           "path": "atoms/swift/Footers/AppTrustFooterAtom.swift",
-          "sha256": "493044d756a374b1cbdd963083585aabad4965c8228acd9b0ccdbcd8c70533d5",
+          "sha256": "6df6aefe1e2ee3e5f11a11afd8956f1c0b34fb2a6f17cf5a4c7d27299bf6dedc",
           "artifactKind": "recipe"
         },
         {
@@ -4827,7 +4863,7 @@
           "symbol": "FullFooterAtom",
           "category": "Footers",
           "path": "atoms/swift/Footers/FullFooterAtom.swift",
-          "sha256": "e8d7f79cb3359a7e0369a3f2006b066d3ee15b5aff935c84fd751a9c0a736fd7",
+          "sha256": "f5785b76cca398d77336a636f5ad2a9083c2d36e3aa28ea631b03e40d40b9594",
           "artifactKind": "recipe"
         },
         {
@@ -4902,7 +4938,7 @@
           "symbol": "CullDeckAtom",
           "category": "Galleries",
           "path": "atoms/swift/Galleries/CullDeckAtom.swift",
-          "sha256": "3613044b86ff3a140f54fd3dacc848e839b91c81ab6b294d1abb205a6e9e687a",
+          "sha256": "1253824d520a343d47e343aea26013a1499adb7978f8f12cdb372acd64336a0e",
           "artifactKind": "recipe"
         },
         {
@@ -4927,7 +4963,7 @@
           "symbol": "GridToLightboxAtom",
           "category": "Galleries",
           "path": "atoms/swift/Galleries/GridToLightboxAtom.swift",
-          "sha256": "16660be87c65b309c074f5229bc791675e9d0d3e5ebd09bab758a50d40c00718",
+          "sha256": "91f9b0f41a504310a29f185cb7a13d587995b2d645238ca760e2a43bddc929a3",
           "artifactKind": "recipe"
         },
         {
@@ -5127,7 +5163,7 @@
           "symbol": "GeofenceAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/GeofenceAtom.swift",
-          "sha256": "11847d9cf9f59a3c540647bc72059b0d122259e900253840d5542e102019ec3b",
+          "sha256": "ed7f92fe64d6026ceb29c27e8174e2a205e25c143c0ad84b78d9663b4b0563af",
           "artifactKind": "recipe"
         },
         {
@@ -5152,7 +5188,7 @@
           "symbol": "GiftWrapAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/GiftWrapAtom.swift",
-          "sha256": "e81c38fd19c4080a205f3760bb015a4b0a3dac16e6ab4a2d827dc52ca8c632bf",
+          "sha256": "6d9ddb0f4187be5505d36a3584b0c3ccec286a470b485b7156f261ecd530947d",
           "artifactKind": "recipe"
         },
         {
@@ -5202,7 +5238,7 @@
           "symbol": "GroupPollAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/GroupPollAtom.swift",
-          "sha256": "da0dcb6631f9bb96f874334c122440a75e3f9dba36f5d649d73933ec6ea28d22",
+          "sha256": "1e1a4505c1c3d078ed06b553b0cc7135b2780134e07029a34bb36379f4f8ff2a",
           "artifactKind": "recipe"
         },
         {
@@ -5277,7 +5313,7 @@
           "symbol": "HeaderAnnounceAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderAnnounceAtom.swift",
-          "sha256": "58eb58224124be5d431e834e5ee4d9ace5a366a2732a7f8d19654032fe680241",
+          "sha256": "3cf0362f894e1614acdca83d4333bdf6bfb5313f61256fb3b84ab2c6d8659efa",
           "artifactKind": "recipe"
         },
         {
@@ -5377,7 +5413,7 @@
           "symbol": "HeaderPillAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderPillAtom.swift",
-          "sha256": "04480ad978d15e581f421d259398e863bd8b5ec609177322b782c5a4fc9b9fa8",
+          "sha256": "ff97c068193b358a2c5b6524a4d616d7ca072350ae86fd03039f68d0b7fbe80a",
           "artifactKind": "recipe"
         },
         {
@@ -5402,7 +5438,7 @@
           "symbol": "HeaderRailAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderRailAtom.swift",
-          "sha256": "e58b26d35c41a0d1852da81effbba10fd6f950cbd1ba3f25a8bb4fcaf7a635ae",
+          "sha256": "5ffb31a9f18dc3579d63d6aac3cee7af622c26ee4d9808171de4e24d40ac2b2b",
           "artifactKind": "recipe"
         },
         {
@@ -5427,7 +5463,7 @@
           "symbol": "HeaderSearchAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderSearchAtom.swift",
-          "sha256": "463bb1790aaa44d47a48f41ee90ea4e3166d6074dd6ed8185d34f612e04b4bdf",
+          "sha256": "961bc373183715eb4a60b0ad8203976ca077f08e42028589c08dd9815ecc152c",
           "artifactKind": "recipe"
         },
         {
@@ -5477,7 +5513,7 @@
           "symbol": "HeaderSplitAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderSplitAtom.swift",
-          "sha256": "7424c83c2833a51279cd9af9cf98e07f455b31a3d92ccbb22f6518aa67d38f93",
+          "sha256": "9d2f428b7e63bc3b8d061762322bb0897ab209ea743e6b6c4dce25b9055a2920",
           "artifactKind": "recipe"
         },
         {
@@ -5502,7 +5538,7 @@
           "symbol": "HeaderSpreadAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderSpreadAtom.swift",
-          "sha256": "72797f746388a2b5f5a47f4f7d54dce580e44bda04bd5a7d6c9394662c97f17f",
+          "sha256": "f072a07ac08bf3d8c1162d31ec25e893c9a4cde50f398ef19154e50222dd3960",
           "artifactKind": "recipe"
         },
         {
@@ -5552,7 +5588,7 @@
           "symbol": "HeaderActionsAtom",
           "category": "Headers",
           "path": "atoms/swift/Headers/HeaderActionsAtom.swift",
-          "sha256": "2d355b7fa6aeeafc9997ac4efd2872c7eb62e5cfa675106065ae1d6d8f70eda2",
+          "sha256": "1ac1e139729bee75aba5e3eb87ee0356b53be4baeef2c6046e356f415634debe",
           "artifactKind": "recipe"
         },
         {
@@ -5602,7 +5638,7 @@
           "symbol": "HealthDialAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/HealthDialAtom.swift",
-          "sha256": "5160fcf35ec737176b9af4a9a975b52cc9f12debd91d005c80a853d73ec00c3a",
+          "sha256": "a1cc1a4563317a6614457372145c7a1156cfe8ef92920b97a8a7f9ed83bb68c2",
           "artifactKind": "recipe"
         },
         {
@@ -5627,7 +5663,7 @@
           "symbol": "HeartbeatAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/HeartbeatAtom.swift",
-          "sha256": "2e3ead9ef00d07585ebca513a037cc7a8047f4987e6255998c4c82c6b0c022b8",
+          "sha256": "2a79efb2201c6d5fc055171666481a8cfca7e56fd0a0545c1be39388a3e0ad62",
           "artifactKind": "recipe"
         },
         {
@@ -5652,7 +5688,7 @@
           "symbol": "AvailabilityHeatmapAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/AvailabilityHeatmapAtom.swift",
-          "sha256": "2b2720d00ce6f95385749e882ad6f65326e2757fe4d6a6fcfc7f6ec42801d33c",
+          "sha256": "12dbb518f224de01c67db3a93dac6a966c52c9bf43b36ba192d8e308de0bf24f",
           "artifactKind": "recipe"
         },
         {
@@ -5677,7 +5713,7 @@
           "symbol": "HeroEntranceAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/HeroEntranceAtom.swift",
-          "sha256": "2b43caa2f5b3ec5f2b3380d77f2ff552a25a16a77276ed67eced40195feac371",
+          "sha256": "43709ad37135cdf8c6adab75d0be2b28c743d5a036e09aace88fcb2964c85d6e",
           "artifactKind": "recipe"
         },
         {
@@ -5702,7 +5738,7 @@
           "symbol": "HintBubbleAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/HintBubbleAtom.swift",
-          "sha256": "438a1414a195a20102c29bbd1836fac04ccef2eb8320388e87c5aa13d2923468",
+          "sha256": "e14c5464fc88e6c8117ae05e3a3dc0be843df5b0039f5ad516afd0ad6a9fc021",
           "artifactKind": "recipe"
         },
         {
@@ -5727,7 +5763,7 @@
           "symbol": "HoldConfirmAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/HoldConfirmAtom.swift",
-          "sha256": "cb549d99c18717a65e6e5ae1538c3f7a1616fe842743572f6e4cbaac9862ef78",
+          "sha256": "105516220db0c513e4d24808e051a20af92dd76c4b1cbd8b3f3261a21259e54e",
           "artifactKind": "recipe"
         },
         {
@@ -5852,7 +5888,7 @@
           "symbol": "HumanHandoffAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/HumanHandoffAtom.swift",
-          "sha256": "fba32888c4631d4b2b5477abb6cea11d52691790c46c521eb0ecf43536fb4a74",
+          "sha256": "a52cd5d2bde6f6217d019793a9ce6707e77c8d058aa7c39141f274d1982111d8",
           "artifactKind": "recipe"
         },
         {
@@ -5927,7 +5963,7 @@
           "symbol": "InboxSweepAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/InboxSweepAtom.swift",
-          "sha256": "4167adc3538f602c4267b502f867a62f0562d7e046db361a3d5ca2926d6dc4d0",
+          "sha256": "0d2df8e6c0d468121f9ca1ca74e6573a86f583c76e40f60a3c5ddfd0ae5727b8",
           "artifactKind": "recipe"
         },
         {
@@ -5952,7 +5988,7 @@
           "symbol": "InitialBoxAtom",
           "category": "Documents",
           "path": "atoms/swift/Documents/InitialBoxAtom.swift",
-          "sha256": "4a4c831441fbc66c2c3684cc0c85a2df8ec543ff832efece30e9aeb2dd55e9cc",
+          "sha256": "25a407bc33e7b360c355fc9a3e6b072fd86d51b7894b7cbc337d38894ed1ef6d",
           "artifactKind": "recipe"
         },
         {
@@ -5977,7 +6013,7 @@
           "symbol": "InlineEditableFieldAtom",
           "category": "Admin kit",
           "path": "atoms/swift/AdminKit/InlineEditableFieldAtom.swift",
-          "sha256": "3e0d315e8082fd950aa38636ea266d85c40536de3e62a265aa07bae7eafc86ee",
+          "sha256": "71281542aaa3279ed52306a8c2042dccf66c374e571e1485c55ff6b8d9ba4d27",
           "artifactKind": "recipe"
         },
         {
@@ -6002,7 +6038,7 @@
           "symbol": "InlineSuccessAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/InlineSuccessAtom.swift",
-          "sha256": "3ceb0170df0a7c209810797dc5b1568b043a6bc27541c67758a39308eac5379b",
+          "sha256": "cca79d35e2c14ad5c290dd1c691295d3c554dde48c89dc73de33de56ae744ea7",
           "artifactKind": "recipe"
         },
         {
@@ -6027,7 +6063,7 @@
           "symbol": "IntakeQuestionsAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/IntakeQuestionsAtom.swift",
-          "sha256": "0eda020c9bbc2db1b4837695c7cd444d4e19af5e393623273ff4c3f36d02759d",
+          "sha256": "aa495e52c6ba8d598c1da99ec0daee06d75747fedaad755127977599f654c19d",
           "artifactKind": "recipe"
         },
         {
@@ -6052,7 +6088,7 @@
           "symbol": "InviteAtom",
           "category": "Workflow",
           "path": "atoms/swift/Workflow/InviteAtom.swift",
-          "sha256": "d5dcaf9ddcd20ee9f087699bbcd62ef894d87a472bfce85b906dff9c5c5bfcbf",
+          "sha256": "d9db753dcf42009ec275cf5dec01b011ad0d7c55179a447244d38fef47c3715d",
           "artifactKind": "recipe"
         },
         {
@@ -6102,7 +6138,7 @@
           "symbol": "IssueArchiveAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/IssueArchiveAtom.swift",
-          "sha256": "fa70217fa9b82e1ee94bc77435e94632ab732674e766995ac00dcd78550289f2",
+          "sha256": "326bc12e7855b046d2aa27808a0215cca083a2eab8b3d2e1f2baa24e54dfee73",
           "artifactKind": "recipe"
         },
         {
@@ -6127,7 +6163,7 @@
           "symbol": "IssueListAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/IssueListAtom.swift",
-          "sha256": "f89be5ac563e502cf8ae8b976f6704ad2dd8697a73be1cd0a89ae164ed2c09e8",
+          "sha256": "f2e64b63fab69919fd4313ce9f97f5aebb4993edd5e4b3fd104f5b46f60fe293",
           "artifactKind": "recipe"
         },
         {
@@ -6152,7 +6188,7 @@
           "symbol": "ItineraryAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/ItineraryAtom.swift",
-          "sha256": "36e158bf4eba8f36ffd4d75e98091a84af7dfb843ec0dcdc3d224e1b427193bb",
+          "sha256": "dc7d1bad97ac0da3d13058b7f2c089428fa158a6d1e3786e566c19e0fb17fb95",
           "artifactKind": "recipe"
         },
         {
@@ -6177,7 +6213,7 @@
           "symbol": "JurisdictionAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/JurisdictionAtom.swift",
-          "sha256": "4fc17d30d25f44696c77d15434b6a3118aa795fdcb2a315b3026449f285fd72e",
+          "sha256": "9dee2307f2aefc9f33622c8aec88e0ab7e785cfdfea213de2638839691b5c1fa",
           "artifactKind": "recipe"
         },
         {
@@ -6227,7 +6263,7 @@
           "symbol": "KillLineAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/KillLineAtom.swift",
-          "sha256": "a964adf3de451886d85439adde6f5d7941f1ba91c783b3dde151e8bc2b2e8524",
+          "sha256": "7ce6cac08918f21194fe7f5cf4c03f1d2561c1a81f7c57ea4f0557a3f06abb47",
           "artifactKind": "recipe"
         },
         {
@@ -6277,7 +6313,7 @@
           "symbol": "LayerSwitchAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/LayerSwitchAtom.swift",
-          "sha256": "0ad6873ec35792e519200176cbd280083f33a5c2b43c5dbb882497192a03b55c",
+          "sha256": "f02ce72b8603c4a229f8eeee35452f1df82742afd2f5c42595f7548cd253017c",
           "artifactKind": "recipe"
         },
         {
@@ -6352,7 +6388,7 @@
           "symbol": "LikeAtom",
           "category": "Social",
           "path": "atoms/swift/Social/LikeAtom.swift",
-          "sha256": "398c551603682f8ae8ef4edfa58d90e72603719a528dfeb559b2976a559aa16c",
+          "sha256": "06c0d1b8ad13c7ed5979a63de3361393b16b73983ada7db639196950f80721ea",
           "artifactKind": "recipe"
         },
         {
@@ -6402,7 +6438,7 @@
           "symbol": "LinkPreviewAtom",
           "category": "Files and browsing",
           "path": "atoms/swift/FilesAndBrowsing/LinkPreviewAtom.swift",
-          "sha256": "592740594fa00ec4d936a229d920fe1800ab4a38265f78647aa78ea57699f883",
+          "sha256": "9d47a0a4b722761ea8e58333f0bc166d8c0ed56682c22b098d039094a887cc72",
           "artifactKind": "recipe"
         },
         {
@@ -6452,7 +6488,7 @@
           "symbol": "LivePollAtom",
           "category": "Forms",
           "path": "atoms/swift/Dynamic/LivePollAtom.swift",
-          "sha256": "ec61ceda9d1ebbb95ff962bcfe74b31bb63c3b6875a128c8866e760866b7b680",
+          "sha256": "58326d3f5bacbc44f1bbe8d80bfb154a7a52720cfeff6f29e575cec3fedc8d3d",
           "artifactKind": "recipe"
         },
         {
@@ -6477,7 +6513,7 @@
           "symbol": "LiveTickerAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/LiveTickerAtom.swift",
-          "sha256": "c7ac7c3ef79a002dadbb14d9bd535a47892d0a2d14c96e5a9b4a5df3876fbe9c",
+          "sha256": "fcbc527a5b3618833ca12646fa30657b502e2f6709f609f11ed196ce7ddd30a9",
           "artifactKind": "recipe"
         },
         {
@@ -6552,7 +6588,7 @@
           "symbol": "LocationSearchAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/LocationSearchAtom.swift",
-          "sha256": "bbfd1a0cdf4a478e50c82146e3849a03780e99ae95ce8c9b00558d660a842736",
+          "sha256": "223dec31e38501b1d1ca9ff95cd26a42a4ce01247ee4e99e3e0b45a594d62621",
           "artifactKind": "recipe"
         },
         {
@@ -6577,7 +6613,7 @@
           "symbol": "LogoMarqueeAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/LogoMarqueeAtom.swift",
-          "sha256": "8ece50e8962322ecddf2df5baf68d6aa74fc980fed2931cd661922df3a3eb66d",
+          "sha256": "8f32bd12c219c55dd24ecb437d004cbae0645df179f6eac7e27f86713d760007",
           "artifactKind": "recipe"
         },
         {
@@ -6602,7 +6638,7 @@
           "symbol": "LogTailAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/LogTailAtom.swift",
-          "sha256": "07594ca0f8d2a98f3866972617fcfc2821dab0c323d00702ac892512026ee6f1",
+          "sha256": "0277d5f4039de8dbfec28302580f6f080be4280b6c9328cc8555f8365a303518",
           "artifactKind": "recipe"
         },
         {
@@ -6627,7 +6663,7 @@
           "symbol": "LongAnswerAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/LongAnswerAtom.swift",
-          "sha256": "5f0b8307eb1627833fa0ea85903fe94cbe58e0bf6e62d41edd1044bea9798e8a",
+          "sha256": "f02c21657004fa24af34130a059a92773b53b643f1e012507dc23a3d101860a8",
           "artifactKind": "recipe"
         },
         {
@@ -6677,7 +6713,7 @@
           "symbol": "LoyaltyAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/LoyaltyAtom.swift",
-          "sha256": "e2581ffd2c01bd173c1dca8f6c2b767db4690b7a7b05bffcaf65a889f3d3c61a",
+          "sha256": "d1ef882bc1432c25e8afd020dc1a786ec2185c196b7fa9d79813fd29340d4bbe",
           "artifactKind": "recipe"
         },
         {
@@ -6702,7 +6738,7 @@
           "symbol": "MailJumpAtom",
           "category": "Email",
           "path": "atoms/swift/Email/MailJumpAtom.swift",
-          "sha256": "a47e96eff500b8ca65b2c7a81d112e9d754d6d494d8d812944c26a64f290c35b",
+          "sha256": "445882fd6066d3ffe6cec70c18be6b9dbd7acc7e002ade8d116efd77985cef02",
           "artifactKind": "recipe"
         },
         {
@@ -6852,7 +6888,7 @@
           "symbol": "CommandMenuAtom",
           "category": "Mega menus",
           "path": "atoms/swift/Megamenus/CommandMenuAtom.swift",
-          "sha256": "bf98157a8a4f5f11ae1479c23fbec8e1e0591c8c09e6c31c9bc441f2daf5d2b8",
+          "sha256": "640bed2f6e287cbe09f9dcb5a694e085aaadb96f50420fab3bac9a74b1592fbc",
           "artifactKind": "recipe"
         },
         {
@@ -6877,7 +6913,7 @@
           "symbol": "DrillDownMenuAtom",
           "category": "Mega menus",
           "path": "atoms/swift/Megamenus/DrillDownMenuAtom.swift",
-          "sha256": "b6b28267893c573442a7cbfe65130131fd7847dd974f81e0f1df96df710dd25e",
+          "sha256": "c79e7dfbcc57336f7eb9f36fd18d9040b9cfe2d55b8ee4be3844b0c8f2f51235",
           "artifactKind": "recipe"
         },
         {
@@ -6927,7 +6963,7 @@
           "symbol": "NestedFlyoutAtom",
           "category": "Mega menus",
           "path": "atoms/swift/Megamenus/NestedFlyoutAtom.swift",
-          "sha256": "97be0ce06c48802782d737a0b15d94aac02f7b23815a1004002fe8b511e13e24",
+          "sha256": "bf617b1df893e80184e299a19b049f926b66b7fcd1b2904533ed9389ad00e145",
           "artifactKind": "recipe"
         },
         {
@@ -6977,7 +7013,7 @@
           "symbol": "MorphingDropdownAtom",
           "category": "Mega menus",
           "path": "atoms/swift/Megamenus/MorphingDropdownAtom.swift",
-          "sha256": "6f1eb4cb917c45089df72260e8a542b62f1a85b7c5503efcc5af7c6dd8b0762f",
+          "sha256": "6448f17214861c6d2959102afcad1cbbac3d4d261b93438070ddd366ddad10a7",
           "artifactKind": "recipe"
         },
         {
@@ -7002,7 +7038,7 @@
           "symbol": "MenuSearchAtom",
           "category": "Mega menus",
           "path": "atoms/swift/Megamenus/MenuSearchAtom.swift",
-          "sha256": "d9808d3ed65bb72d58135e3e9bd0052c1bdfbc4184ce43b5292c106f1b7f2199",
+          "sha256": "02f66cf739a08cf77fe09f014b15da5f69618e9196a24a0dcf45910a4234b0cf",
           "artifactKind": "recipe"
         },
         {
@@ -7052,7 +7088,7 @@
           "symbol": "MemoryToggleAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/MemoryToggleAtom.swift",
-          "sha256": "85816b38350e11291b0647119afbd5ab09377cd34b07244cc7872975966f0e7d",
+          "sha256": "332281ab66b8fbe6519d2b0d8597fd54ffec41d2ef2b5aa0d40892048033e84b",
           "artifactKind": "recipe"
         },
         {
@@ -7102,7 +7138,7 @@
           "symbol": "MobileMenuAtom",
           "category": "Chrome",
           "path": "atoms/swift/Chrome/MobileMenuAtom.swift",
-          "sha256": "aba0033df5ce145aed1f750dcb58bad762d15971e27e914e5bfc47b90cdb0b54",
+          "sha256": "66fc4d3e0cfdfd760c64b9d2bffc380aca20cc4f8b678d536ddee17cf85410c3",
           "artifactKind": "recipe"
         },
         {
@@ -7127,7 +7163,7 @@
           "symbol": "MultiSelectAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/MultiSelectAtom.swift",
-          "sha256": "3b7940875ebe15271a220f39307594b242795c970d3ba38c8089cb21c94c7e9c",
+          "sha256": "5f793675345b6f54e0d61d62ad4e53fbcf66903d46c930edb5791560645b4842",
           "artifactKind": "recipe"
         },
         {
@@ -7152,7 +7188,7 @@
           "symbol": "MultiStepFormAtom",
           "category": "Interactive",
           "path": "atoms/swift/Interactive/MultiStepFormAtom.swift",
-          "sha256": "a9354ec22df87585f44f67a270f483cc2686cbdd99bd0264f80f193a6123fb91",
+          "sha256": "5183f94d27595208855946835f46f257413e1289abd69f41fdaf0023c176c587",
           "artifactKind": "recipe"
         },
         {
@@ -7277,7 +7313,7 @@
           "symbol": "SubscribeAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/SubscribeAtom.swift",
-          "sha256": "810919e6a38ac7414217d3a051439d4bb1d6f406b9e4b5c34521258ee4daf92f",
+          "sha256": "b20383b92821371c1a964f77ce5c4ae2cba2a12e8eeb817a992cee2374b6becd",
           "artifactKind": "recipe"
         },
         {
@@ -7302,7 +7338,7 @@
           "symbol": "NoticeBannerAtom",
           "category": "Status and records",
           "path": "atoms/swift/StatusAndRecords/NoticeBannerAtom.swift",
-          "sha256": "f39d08f3923f5de9b90434aeec3c365a93c282852e5da6f7bc8f83532a5e078c",
+          "sha256": "3bdb5e6222eae204389f92119f3c894c4018b92cdb3d8225ec7fa4463fca1cd9",
           "artifactKind": "recipe"
         },
         {
@@ -7352,7 +7388,7 @@
           "symbol": "NpsScaleAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/NpsScaleAtom.swift",
-          "sha256": "1462311d89626a56e4690589f18b926a9a3e2fcdea4edf776ec41011dd9197de",
+          "sha256": "f13b099dac92b695a3ac19d2963b9d0aee10b646d275ed1f6769017bdb6f7dc4",
           "artifactKind": "recipe"
         },
         {
@@ -7377,7 +7413,7 @@
           "symbol": "NudgeBannerAtom",
           "category": "Email",
           "path": "atoms/swift/Email/NudgeBannerAtom.swift",
-          "sha256": "efe0d1cfa3988a84bde5ce119e52e9df020e83884ff17b11940c12edac4ed3de",
+          "sha256": "90af3e314d0af96ba0af92b21e2cb1c88550db6c8b1345b4e9de48feda153cf2",
           "artifactKind": "recipe"
         },
         {
@@ -7452,7 +7488,7 @@
           "symbol": "OfferStackAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/OfferStackAtom.swift",
-          "sha256": "abb56a1443126f8030f5e03bfc908197bbd0efcfa88360627d52becba113999b",
+          "sha256": "fc87a8c864270a9253ce2b6372ad190cfd7cb63e6465b004e1c95cf4b66a8be6",
           "artifactKind": "recipe"
         },
         {
@@ -7502,7 +7538,7 @@
           "symbol": "OfflinePackAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/OfflinePackAtom.swift",
-          "sha256": "434bb9dac12297237f6ec2ea8fe7766d61c9fbac7752e517d4d522bef1a4a79d",
+          "sha256": "5d893317245e702c339a8a31581ae3a3edce2e393d65920dad627c04ec3e110b",
           "artifactKind": "recipe"
         },
         {
@@ -7519,15 +7555,24 @@
     {
       "id": "omnibox",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "omnibox",
+          "symbol": "OmniboxAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/OmniboxAtom.swift",
+          "sha256": "e4f1e657b43af35514d2093455eb8bc401ff10d6ab3e0b6a6ec048466dab14a0",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "omnibox",
           "symbol": null,
           "category": "Chrome",
           "path": "atoms/web/blocks/488-omnibox.js",
-          "sha256": "c22da7dbbf02b7c4735f1335ce90e31d640a6ce645993bbb66712b888b7c74c1",
+          "sha256": "f8da9c835ba3830987a624b2baef9bff116fe096974c00670c69d7a5b36d8168",
           "artifactKind": "recipe"
         }
       ]
@@ -7543,7 +7588,7 @@
           "symbol": "OnboardingChecklistAtom",
           "category": "Workspace",
           "path": "atoms/swift/Workspace/OnboardingChecklistAtom.swift",
-          "sha256": "687583754c1d45afbcf760e04f2c42ac9f241495d82bc3673a9cf972583bbd2a",
+          "sha256": "1a304a310051b916cf1758bd7bba5f4dfb6ccb76252e50281683ae180c0cd309",
           "artifactKind": "recipe"
         },
         {
@@ -7568,7 +7613,7 @@
           "symbol": "OneTimeCodeAtom",
           "category": "Inputs",
           "path": "atoms/swift/Inputs/OneTimeCodeAtom.swift",
-          "sha256": "82ea273ad18912a4328e0c133c1ed61a2a56b920882ad9bda7aa7c72bc654cdd",
+          "sha256": "d720afbd85b1006bc2c4ca18277bca1de388112d89a2859e3e113a18c9dcf9f9",
           "artifactKind": "recipe"
         },
         {
@@ -7618,7 +7663,7 @@
           "symbol": "PageEditorAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/PageEditorAtom.swift",
-          "sha256": "8bb66cbac6a882e5bd2a2271459d992f9353e1552af896852f8e6229e266014d",
+          "sha256": "32e1434bf0d40256ffd7885d7bb9afb688b8d5c5b5175a15c895f6d60da55ef3",
           "artifactKind": "recipe"
         },
         {
@@ -7718,7 +7763,7 @@
           "symbol": "CommandPaletteAtom",
           "category": "Admin",
           "path": "atoms/swift/Admin/CommandPaletteAtom.swift",
-          "sha256": "c1d0c8bb3ce3b06097d36e79249e91bed1bd4930990878f995363bd65f935111",
+          "sha256": "906b08eaa82475eb7668474b6749a97a892eaca7eebe64686ee4c47ebaf453f9",
           "artifactKind": "recipe"
         },
         {
@@ -7743,7 +7788,7 @@
           "symbol": "PasswordWithStrengthAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/PasswordWithStrengthAtom.swift",
-          "sha256": "6a5f436ccfb87113322b8ebacb1a738d862af9df0343e29e9941039e4a000c76",
+          "sha256": "423fc4bcfba485a96b4454779fcd62ae125d9bdf5dac54eb64115d9dc3e8e33d",
           "artifactKind": "recipe"
         },
         {
@@ -7768,7 +7813,7 @@
           "symbol": "PauseLiveAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/PauseLiveAtom.swift",
-          "sha256": "d73b0efe5f3102e3f53da2bccaa211fca07c75cc9a33d2683dc580a4f027c4b2",
+          "sha256": "8ddf6e07e3f0e1d778a9a1211ef6faebcbbeaa6e4da7a1c074b1fe49298d6bf8",
           "artifactKind": "recipe"
         },
         {
@@ -7793,7 +7838,7 @@
           "symbol": "PaymentFieldsAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/PaymentFieldsAtom.swift",
-          "sha256": "aa896ad2638b22046796a2f84739ce601d3a0238d715cd66b111eb3399802968",
+          "sha256": "857b39fdffdc6c279b95b717cde4fa4d24c3af78b146f271c1cd0b1c8bd7b871",
           "artifactKind": "recipe"
         },
         {
@@ -7868,7 +7913,7 @@
           "symbol": "PaywallMeterAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/PaywallMeterAtom.swift",
-          "sha256": "1f59af370aa5537470e9b7c64e10116d5c7ca142af9b2c14f4e0c7dc8edc8c21",
+          "sha256": "1293a6dcab15d1b85ae7f65a4df945c4ebf265dcfcfc8faad656bf967574db68",
           "artifactKind": "recipe"
         },
         {
@@ -7893,7 +7938,7 @@
           "symbol": "PhoneNumberAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/PhoneNumberAtom.swift",
-          "sha256": "a98561a3ede34b14d6241c79d898dfa7d291bff7c733782f316e7703094094ba",
+          "sha256": "3a18945b6dd8fe44dc6872f589ecb812d1650781545ba2f17eac7354b97c4e7a",
           "artifactKind": "recipe"
         },
         {
@@ -7918,7 +7963,7 @@
           "symbol": "PickupTimeAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/PickupTimeAtom.swift",
-          "sha256": "9b533506a28ba019fbbb4958f5e95e51f76a75a7bd58a5bf4a834a5230169968",
+          "sha256": "288c685e18345735f165bb4075ba62f59b92b72fbbfb99fa8e7315160337ea33",
           "artifactKind": "recipe"
         },
         {
@@ -7943,7 +7988,7 @@
           "symbol": "PictureChoiceAtom",
           "category": "Forms",
           "path": "atoms/swift/Forms/PictureChoiceAtom.swift",
-          "sha256": "832ad012e188502e3a157e79112b4948e32357b741597fbb81972ff060ff8a34",
+          "sha256": "0fbcfab6c9b534c2288174b569484b1a12889c35af1db0cbb5a2f1e79b5ad4fd",
           "artifactKind": "recipe"
         },
         {
@@ -7968,7 +8013,7 @@
           "symbol": "DropAPinAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/DropAPinAtom.swift",
-          "sha256": "19ed9598c33a60f41dd4bbe48bf2c2917df93a94341fbbac3b286dc5c85df0b3",
+          "sha256": "cbb9cf0d4a1814e80d1d0395fc53a28d5c4e49a802ecc0185a117271ce5d90d7",
           "artifactKind": "recipe"
         },
         {
@@ -7993,7 +8038,7 @@
           "symbol": "PlaceRateAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/PlaceRateAtom.swift",
-          "sha256": "4ce0778d5d71aba0277312f664305b00c79a412d712cef2d44e7ce260e9b285f",
+          "sha256": "d5b83fc9aa069c5b9dc7e068cad2a4dd10e217bb095e6b27082c806e89aa2034",
           "artifactKind": "recipe"
         },
         {
@@ -8018,7 +8063,7 @@
           "symbol": "PlaceSheetAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/PlaceSheetAtom.swift",
-          "sha256": "0509972628b58a3c442a8368869c11d9ad228fbeae65723eb6dea1b18cfe1354",
+          "sha256": "4c9266180874af97deff910ad2cf7bc119e1583ad862ab59ce0aa4545ac082ae",
           "artifactKind": "recipe"
         },
         {
@@ -8043,7 +8088,7 @@
           "symbol": "PlanProgressAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/PlanProgressAtom.swift",
-          "sha256": "d2f82ad65f08fd9a93e42abeb7e9637f29778aca2605706d18af86a56a59ce47",
+          "sha256": "47d4ad2e258befc98c723450d789f432a75987e6eb1711a17b8811ce0ec87fb5",
           "artifactKind": "recipe"
         },
         {
@@ -8093,7 +8138,7 @@
           "symbol": "PollAtom",
           "category": "Interactive",
           "path": "atoms/swift/Interactive/PollAtom.swift",
-          "sha256": "b6be115f18b092f15071941e63fd9d757cefdda4c11ebaed1b70cd9049e10810",
+          "sha256": "db23b34dbf28b9fea1a5a4e75e27e7663f611af08a5c9bc8161e587105819ec2",
           "artifactKind": "recipe"
         },
         {
@@ -8118,7 +8163,7 @@
           "symbol": "PollBlockAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/PollBlockAtom.swift",
-          "sha256": "99ed23845769621f3758d638072b8416dc7c283046a410791533f6588526e802",
+          "sha256": "5f72f4d5691be15edf2b21c1987a0501d112a8c07f5fa7d346bc1d4d163ecf8b",
           "artifactKind": "recipe"
         },
         {
@@ -8143,7 +8188,7 @@
           "symbol": "PopoverAtom",
           "category": "Overlays",
           "path": "atoms/swift/Overlays/PopoverAtom.swift",
-          "sha256": "e690b93f514cd12ce2307f3486128d8d85adb9185bdc8083e74f3ea519a45c83",
+          "sha256": "40127af4a61a9e8ea1037f83b71d3b43b6985a40bb1f4f652a3359c61e30e46b",
           "artifactKind": "recipe"
         },
         {
@@ -8193,7 +8238,7 @@
           "symbol": "PositionTrackerAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/PositionTrackerAtom.swift",
-          "sha256": "a5ac6eb7042aeab6e69f9e2a3c6c5e91cc51e60b924627936a7e1a64de2c02eb",
+          "sha256": "c6858a1ba5aeaa6c348f98494415bbc093cd5241152e177d4c30cbe4fcac71a0",
           "artifactKind": "recipe"
         },
         {
@@ -8218,7 +8263,7 @@
           "symbol": "PredictionAtom",
           "category": "Forms",
           "path": "atoms/swift/Dynamic/PredictionAtom.swift",
-          "sha256": "476e951c701249364670117c50215ada1c017049e968fe8313bbd04df3bd691e",
+          "sha256": "73d8b10d7e9ea5deb2478f0e6ea8e246ec1a7c8c93375ccc56d77b2dbfb31d2c",
           "artifactKind": "recipe"
         },
         {
@@ -8243,7 +8288,7 @@
           "symbol": "PrefCenterAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/PrefCenterAtom.swift",
-          "sha256": "a7eba77dd8919adef7cb60e5dc23ed4ed629d3efe2929967ab2feb4d47b2ddad",
+          "sha256": "c11d2a829e018087c04eea6573cb350f946b9373dd73e79b5cc16b3782065425",
           "artifactKind": "recipe"
         },
         {
@@ -8268,7 +8313,7 @@
           "symbol": "PrefPickAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/PrefPickAtom.swift",
-          "sha256": "e71eb9042a8a87b4c9c8d89a82b9dec037df4e5ab18c239456b180d985bafc22",
+          "sha256": "6b5be45f4966e86184fba45a5e0ca7a7bc7b30476a9b846fc5738b8086df13fb",
           "artifactKind": "recipe"
         },
         {
@@ -8293,7 +8338,7 @@
           "symbol": "PrefQuizAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/PrefQuizAtom.swift",
-          "sha256": "e81d794a7d23b84c07f8938c475fa47bcaea0899a667bb80bb6ef0ddf9010778",
+          "sha256": "04d910a8092d35f00b1782f42d1559b19edd8f8100ac72eb7d4d724819ea22f3",
           "artifactKind": "recipe"
         },
         {
@@ -8343,7 +8388,7 @@
           "symbol": "PresenceBarAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/PresenceBarAtom.swift",
-          "sha256": "b1ded96448c3e1518b3897acc468584c3a0a7cec33beafb63f791b615b2974d8",
+          "sha256": "939eee53b66309e3e67810cd4bad34698983f8da45cf1b1c116e5aa93e3e560f",
           "artifactKind": "recipe"
         },
         {
@@ -8368,7 +8413,7 @@
           "symbol": "PresenceAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/PresenceAtom.swift",
-          "sha256": "16dd9f312b7808741497f2638c80e5609c2c2189d067d2c29f8977db6e2e7001",
+          "sha256": "d6e5bdd7c441f9b7991b2dc232243a6f16c7996d5f08e7b2bac377e26042caf8",
           "artifactKind": "recipe"
         },
         {
@@ -8418,7 +8463,7 @@
           "symbol": "PreviewTextAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/PreviewTextAtom.swift",
-          "sha256": "99c7615093af99921e7bd42da46cb9e5722201cec59bc109871e998e56b4c308",
+          "sha256": "03f74f6938987840bf0aa6c7d6afb16e873c4241abb7fa597a01af95455e4888",
           "artifactKind": "recipe"
         },
         {
@@ -8443,7 +8488,7 @@
           "symbol": "PriceToggleAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/PriceToggleAtom.swift",
-          "sha256": "f41d1bdb5e781623833f4e996659e3fcd6145a9c50303b1134c5ec7539ba6b32",
+          "sha256": "75d867e44ef5bbbd7a610c49b18de1be628b9c80753b722e95b487b1974c6f21",
           "artifactKind": "recipe"
         },
         {
@@ -8493,7 +8538,7 @@
           "symbol": "PricingSectionAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/PricingSectionAtom.swift",
-          "sha256": "e975530b3ffaa00d4ccea59adbf6739fd82230f6d5178710df6263958f6ebb90",
+          "sha256": "1d6e5f02a7345a4ed79e2854d74b7262e6de48cc93c0cf705c20d6f0f0a057f3",
           "artifactKind": "recipe"
         },
         {
@@ -8535,8 +8580,17 @@
     {
       "id": "profileswitch",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "profileswitch",
+          "symbol": "ProfileSwitchAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/ProfileSwitchAtom.swift",
+          "sha256": "28044da4c4346c9e5484396bb98c42b671c1e9896e8296a68a3a6a259784fad9",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "profileswitch",
@@ -8584,7 +8638,7 @@
           "symbol": "PromoCodeAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/PromoCodeAtom.swift",
-          "sha256": "ccfaa397915f6acc419b7a02c5c63ff5288db59d7a21b0d525a6f532beab3472",
+          "sha256": "c4ed9304ac7ffe4da8fe2c497c4e16827a671ae4a899322830f2add1997f6b8c",
           "artifactKind": "recipe"
         },
         {
@@ -8609,7 +8663,7 @@
           "symbol": "PullRefreshArmAtom",
           "category": "Views",
           "path": "atoms/swift/Views/PullRefreshArmAtom.swift",
-          "sha256": "7d62a6d062b4f3a5dcfeed0b850cee133a9029682566f872026fb01c9216d411",
+          "sha256": "d5e204aeb404ad0a46a79fdff583fe4d542347934c7573f4f495ea8949d6c656",
           "artifactKind": "recipe"
         },
         {
@@ -8684,7 +8738,7 @@
           "symbol": "QAUpvoteAtom",
           "category": "Forms",
           "path": "atoms/swift/VideoCalls/QAUpvoteAtom.swift",
-          "sha256": "6e684c4310b31c7992fbedf7398360e699b62dbc2227e04d7487a8b41cf4ed7e",
+          "sha256": "0ac2728265a4b3c6e9fa557dd130e9f9a7439ab38914612ff1f914dd718506a5",
           "artifactKind": "recipe"
         },
         {
@@ -8709,7 +8763,7 @@
           "symbol": "QRCheckoutAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/QRCheckoutAtom.swift",
-          "sha256": "22d87581abfa05ae4b4cd46e7bdcb6d5a739245f52d12f3771c1ce639740d7db",
+          "sha256": "7e32bc2dcd94c5a603f84be3ff583e8122c5a30cfbdf6a1047c37dd134bdee27",
           "artifactKind": "recipe"
         },
         {
@@ -8734,7 +8788,7 @@
           "symbol": "QuantityStepAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/QuantityStepAtom.swift",
-          "sha256": "c4320301ab4089abac32d55279edf1124a63fdf28dbe8a44696bafb4e2fafef7",
+          "sha256": "80e0f64889c64f930b37f9ebf3b5676da51cd9cbdf69cc57c07a9392ca272c38",
           "artifactKind": "recipe"
         },
         {
@@ -8784,7 +8838,7 @@
           "symbol": "QuickCreateAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/QuickCreateAtom.swift",
-          "sha256": "f3fa6d420c8ed655bd505d70e2e29f2c39a44921688002ad99812091407a772a",
+          "sha256": "c489b3ae1bf137f6ee32dab4524ab96217522abad36e8c6d5cded9eed6fcff5d",
           "artifactKind": "recipe"
         },
         {
@@ -8809,7 +8863,7 @@
           "symbol": "QuizRouterAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/QuizRouterAtom.swift",
-          "sha256": "52cfa7d3dce093d4ea60825e8b373f54719be228a437da46090c01b5597d8537",
+          "sha256": "da093c40b12727c21c53230dfa415f1aae77ee4340130b049e27d93b981e14b7",
           "artifactKind": "recipe"
         },
         {
@@ -8909,7 +8963,7 @@
           "symbol": "KeywordRanksAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/KeywordRanksAtom.swift",
-          "sha256": "a2d140e33e8bd71dfbec4e7a0a7f770c57f71dfa0efd06397394c50b41ca360d",
+          "sha256": "ab69850662893094857dc7be40c4a3d5ebce3195e3c68d840bdec4c9ffab8978",
           "artifactKind": "recipe"
         },
         {
@@ -8984,7 +9038,7 @@
           "symbol": "RecallAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/RecallAtom.swift",
-          "sha256": "9e9f2c83e1e7b56811a3efc1c3e3be0c7146a41c93fb9db7412af0fc67243771",
+          "sha256": "0b5729a455fe9d486d272c8d1cdd2cddad124d3a734566b3ab79af363ec621ea",
           "artifactKind": "recipe"
         },
         {
@@ -9034,7 +9088,7 @@
           "symbol": "RedirectRuleAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/RedirectRuleAtom.swift",
-          "sha256": "dd014506f533e31bf05420a6787e395eadfb95ccfe13bec99c30a45df513fa3d",
+          "sha256": "7be481183658a44f154b35eeef85bcb2bfce7a6520b13f9c3f0ee38c69c886cd",
           "artifactKind": "recipe"
         },
         {
@@ -9109,7 +9163,7 @@
           "symbol": "ReferralProgressAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/ReferralProgressAtom.swift",
-          "sha256": "0f077b0b4cd9dfcc6bb74f7d08e50cb78c4a375d1fbf939165d17b2b70617167",
+          "sha256": "845e9f00848997988a342047bc4da617b11ce4a8734beb50ae0e99e88c398303",
           "artifactKind": "recipe"
         },
         {
@@ -9134,7 +9188,7 @@
           "symbol": "RefPickerAtom",
           "category": "Workflow",
           "path": "atoms/swift/Workflow/RefPickerAtom.swift",
-          "sha256": "ef80e3dd112aeae00e40bcaed97ff77da7599a5b255b566238c44e8ef1fbbc0d",
+          "sha256": "060a2716ad9f047953376b9c0c6de1946e4affe786517d9af7015ed2d6a2a6ba",
           "artifactKind": "recipe"
         },
         {
@@ -9159,7 +9213,7 @@
           "symbol": "RegenerationDiffAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/RegenerationDiffAtom.swift",
-          "sha256": "18e6848b58d10db612f4081dc09a2bcd187a5923b696b9c1aae0f51409ff2b5f",
+          "sha256": "47f936808efaec9ff62d242460d666ec52161fe2a286908110eb71f4d9e6eb3b",
           "artifactKind": "recipe"
         },
         {
@@ -9184,7 +9238,7 @@
           "symbol": "DragToReorderAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/DragToReorderAtom.swift",
-          "sha256": "2f18d28a57d8be94763b0ec61b5627e5e3dc63f733793dd9e6bb17d8a865c409",
+          "sha256": "07a3d0a20e6f2938083e492fa096684a6352fe45a3617bd3631819037ea68724",
           "artifactKind": "recipe"
         },
         {
@@ -9259,7 +9313,7 @@
           "symbol": "ResolveSweepAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/ResolveSweepAtom.swift",
-          "sha256": "dd9fad5de6cfc23b295cd560c071a493bbd86a7822f26b6162a96bb98bd3687a",
+          "sha256": "895fde15047784c83365240e2a426f8cd72af6cb92f3b15dce010cde2ffecee3",
           "artifactKind": "recipe"
         },
         {
@@ -9309,7 +9363,7 @@
           "symbol": "ReviewFormAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/ReviewFormAtom.swift",
-          "sha256": "97532809113c4a95e8dea8ee05862b31c247b2dc9e0161608f2615a616c21231",
+          "sha256": "efd7cefb1ae8b7ad6fa3c4f08202e6e119756c5bea84ded7db9999055d59d7bc",
           "artifactKind": "recipe"
         },
         {
@@ -9334,7 +9388,7 @@
           "symbol": "ReviewStarsAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/ReviewStarsAtom.swift",
-          "sha256": "6d6508f2ca9e3f4b80450cd53f0236a63925986cd93f28b122599c21924f3b5d",
+          "sha256": "f446d3cde3a034d6e07770d80a7520afc564ad8122e4b7cfcbd609d8e676cf99",
           "artifactKind": "recipe"
         },
         {
@@ -9359,7 +9413,7 @@
           "symbol": "ReviewSummaryAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/ReviewSummaryAtom.swift",
-          "sha256": "abf4a3d4005d4704825d08ddf6eb73fc31f172db5683eccff40cb5862f146f39",
+          "sha256": "8ae6401476b9f365bbbd8e85ebf6ab616ab7646e5598069dba0fa50c14c9be6f",
           "artifactKind": "recipe"
         },
         {
@@ -9409,7 +9463,7 @@
           "symbol": "RouteCompareAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/RouteCompareAtom.swift",
-          "sha256": "f8b8da531bccfedab000bb84b8fa7c2eeea1feaf4dfcb787b954e616372bd809",
+          "sha256": "2f32cfd0258c2c3be4b53016390474856958b461cc0f1778c73661edc5a6feec",
           "artifactKind": "recipe"
         },
         {
@@ -9459,7 +9513,7 @@
           "symbol": "RsvpAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/RsvpAtom.swift",
-          "sha256": "eee547751fd68315f433785cb0b0f47f8a6214689d70b8c8ea6b0316d21414c5",
+          "sha256": "8d765efa9ca51282e1c1470fb65050da3c035949a5ab0d093f3ad4399cf41ac5",
           "artifactKind": "recipe"
         },
         {
@@ -9484,7 +9538,7 @@
           "symbol": "RunReplayAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/RunReplayAtom.swift",
-          "sha256": "6e066be46ee7d3af5b4bda6f8263be82ffee65f8b0edd550cc0285f35ba989fe",
+          "sha256": "f1bcfa22156ddd50f162594510e162712f7c40edf8607571eedf0271152efd58",
           "artifactKind": "recipe"
         },
         {
@@ -9509,7 +9563,7 @@
           "symbol": "UnsavedChangesBarAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/UnsavedChangesBarAtom.swift",
-          "sha256": "e2db0cc4f2edc8fcb0e20f5737c3aa34c4a31b53a67efafdb0400edfe1254df8",
+          "sha256": "2b82fa6c56794a33fadb82acfcc9b4406b2d5346d40737a3a5ed7d7f49a531b0",
           "artifactKind": "recipe"
         },
         {
@@ -9534,7 +9588,7 @@
           "symbol": "SaveMeterAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/SaveMeterAtom.swift",
-          "sha256": "f359b68007013eb82c3f3bf07781646fbe43fb23ad0f1a6935f26a1030c3bb6d",
+          "sha256": "56e10c97ba86665f9460d19ea7e7931b65eabd7e6cb418c32f02b4b2f0595fd2",
           "artifactKind": "recipe"
         },
         {
@@ -9659,7 +9713,7 @@
           "symbol": "SearchExpandAtom",
           "category": "Chrome",
           "path": "atoms/swift/Chrome/SearchExpandAtom.swift",
-          "sha256": "be329970a22502ecf5498d88c577bbec58a636a6d424b5c4d7e3def127e3345a",
+          "sha256": "607b92cec451ea4cdc8e5c5471cda2ca0a158ae3702e55a33e8d1cf81da67802",
           "artifactKind": "recipe"
         },
         {
@@ -9709,7 +9763,7 @@
           "symbol": "SegSwitchAtom",
           "category": "Views",
           "path": "atoms/swift/Views/SegSwitchAtom.swift",
-          "sha256": "8b29800433d67993b7b6ca0c234bcebe6cb2347227cbf3f19203d04e7a741363",
+          "sha256": "2fbf27a4f066e7f191e3caf755c77808aff144a534901b1358e3a4c0251cd103",
           "artifactKind": "recipe"
         },
         {
@@ -9734,7 +9788,7 @@
           "symbol": "SelectAtom",
           "category": "Inputs",
           "path": "atoms/swift/Inputs/SelectAtom.swift",
-          "sha256": "539eb1fc73131362bef7a56d4a1d9cc1fc8e12ee73065a082909fbb594aa1074",
+          "sha256": "0fc6154628dc856853c986f0e694c17653c4b9b92759cb219e47edc750bf7568",
           "artifactKind": "recipe"
         },
         {
@@ -9759,7 +9813,7 @@
           "symbol": "SelectMoveSnapAtom",
           "category": "Design tools",
           "path": "atoms/swift/DesignTools/SelectMoveSnapAtom.swift",
-          "sha256": "66ac49ab46d4d1d68558c3c19337c819c7596078fcdc69af7e068bb2416004a2",
+          "sha256": "b53bfa08fb1b9448cadd64a8c484926205191f914d61f5cc5ef6da0e33f29098",
           "artifactKind": "recipe"
         },
         {
@@ -9784,7 +9838,7 @@
           "symbol": "SelectionToolbarAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/SelectionToolbarAtom.swift",
-          "sha256": "0dd58d7d417446fe64fb25598afba93b6b745bf0c7c4b6deeeb69742f4fbb429",
+          "sha256": "b8286235890f92e5af10654d4f079d64d92f5186f9b296bfa79bb20d7b89747a",
           "artifactKind": "recipe"
         },
         {
@@ -9809,7 +9863,7 @@
           "symbol": "SendDialAtom",
           "category": "Email",
           "path": "atoms/swift/Email/SendDialAtom.swift",
-          "sha256": "d7f71d2e06c166593c5a59f5cafa27e43fd9414d1ac6b9afba5b8f5857fd6fbe",
+          "sha256": "abcaa172114029dd88aaa4fa5eedff2c71f4b3de51d1fc52e6a014039301d441",
           "artifactKind": "recipe"
         },
         {
@@ -9834,7 +9888,7 @@
           "symbol": "SearchResultPreviewAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/SearchResultPreviewAtom.swift",
-          "sha256": "67e240f37d4fc9d8eb33c1b76c7843910a5f6155421c56015862d47a495c4233",
+          "sha256": "a05513951a5a8c2fdb860da6b32e0ee159eb34df4020d55a3e594ee11d0a1a72",
           "artifactKind": "recipe"
         },
         {
@@ -9876,8 +9930,17 @@
     {
       "id": "settingsearch",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "settingsearch",
+          "symbol": "SettingSearchAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/SettingSearchAtom.swift",
+          "sha256": "17060bb62dec5e30e9b3296f8ce0edf20ca41198bc1da91221aa08d94899dc24",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "settingsearch",
@@ -9892,8 +9955,17 @@
     {
       "id": "settingsrow",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "settingsrow",
+          "symbol": "SettingsRowAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/SettingsRowAtom.swift",
+          "sha256": "2f5990f3a554095044db1fded50ba78045e268db8fdfa6ffa581ae3078874643",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "settingsrow",
@@ -9916,7 +9988,7 @@
           "symbol": "SettingsShellAtom",
           "category": "Workspace",
           "path": "atoms/swift/Workspace/SettingsShellAtom.swift",
-          "sha256": "f9822dd145ea028d74247c2578b41e989f72c18a3f99adb0866ea0735c749d9a",
+          "sha256": "05f1530b4a6e007ef39c07fa19e59034ed7a1fdad50f71c6add6b0dd11e8c4d0",
           "artifactKind": "recipe"
         },
         {
@@ -9941,7 +10013,7 @@
           "symbol": "SetupWizardAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/SetupWizardAtom.swift",
-          "sha256": "bea06aead5fdd9beb3de9d9c065c4ecae23b9031d10eb711aba64d7cef875e4b",
+          "sha256": "9c4362ccef0b9e824d78abdf244e4285365b703e72a5ecbb24480f02a81e736f",
           "artifactKind": "recipe"
         },
         {
@@ -10073,7 +10145,7 @@
           "symbol": "ShelfAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/ShelfAtom.swift",
-          "sha256": "b04007c7c3ca74a83ed9909aadbf572e22f594a2104e9fc7488eaee54553d8b9",
+          "sha256": "ed8e723894f0283d720382d75578e90392a55aa7c259c8709b397234dfe657a1",
           "artifactKind": "recipe"
         },
         {
@@ -10098,7 +10170,7 @@
           "symbol": "ShipCheckAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/ShipCheckAtom.swift",
-          "sha256": "3c969353e5f277f6db5e0766bfe5e392dbdb4c8cecca374100257d552386ffbe",
+          "sha256": "cc595af00c34ac1e49e3c4147e337cc5dff40964df964861078291cf94ad5590",
           "artifactKind": "recipe"
         },
         {
@@ -10123,7 +10195,7 @@
           "symbol": "ShipRadioAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/ShipRadioAtom.swift",
-          "sha256": "22499f884a533e99d5b81556ee4183e6302ab4239728d96b3cb4a093882be59a",
+          "sha256": "c78484f00976c0722bd5025d2cf09736d412c9b70fcfd0023d0494f7c15e2bf7",
           "artifactKind": "recipe"
         },
         {
@@ -10148,7 +10220,7 @@
           "symbol": "ShortcutsOverlayAtom",
           "category": "Editor",
           "path": "atoms/swift/Editor/ShortcutsOverlayAtom.swift",
-          "sha256": "c529f3fcd170becc5184da018d39d84d70a6f570f50ae6e31852535a6177ebb8",
+          "sha256": "cdc441045788d776eb9f387997560de7fef5e3ba3d2507d05e0d1e5feab9456b",
           "artifactKind": "recipe"
         },
         {
@@ -10173,7 +10245,7 @@
           "symbol": "ShortcutSheetAtom",
           "category": "Guidance",
           "path": "atoms/swift/Guidance/ShortcutSheetAtom.swift",
-          "sha256": "f2bace7c01d6a5d119d8696d50136ce1e7e37a7e27049de7b25925d7678c159d",
+          "sha256": "91ee971a099e16d499cc290c70de642bca72f5ab2508e63aebd16f29ac447e04",
           "artifactKind": "recipe"
         },
         {
@@ -10273,7 +10345,7 @@
           "symbol": "SigGuideAtom",
           "category": "Documents",
           "path": "atoms/swift/Documents/SigGuideAtom.swift",
-          "sha256": "3bcc2ca3b747613610d174a86aaffd9afb69ecedaf9f4f3839b9c5efb823645a",
+          "sha256": "972901d5cf64bbd17cf6569efad409fbfcc1811d20b2902f455f83ef33ab1c33",
           "artifactKind": "recipe"
         },
         {
@@ -10323,7 +10395,7 @@
           "symbol": "SignupFieldsAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/SignupFieldsAtom.swift",
-          "sha256": "904aa87ebef2382fd89024d50e2d64b59c63ed0f715cc68ac6ca35936b1922f4",
+          "sha256": "ba8b4d59c1cf0d904874a62a768c6db27907a2b7acc152120c0598cd98ad70fb",
           "artifactKind": "recipe"
         },
         {
@@ -10423,7 +10495,7 @@
           "symbol": "SitemapTreeAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/SitemapTreeAtom.swift",
-          "sha256": "1968f390b3cf1bc9a2296293823baaef5f530f247a0e6e0cf7f2e90c40c64065",
+          "sha256": "cffcca76aceed7ca39b970ca538c518ac22226c58d28828337475a22c685c6d9",
           "artifactKind": "recipe"
         },
         {
@@ -10498,7 +10570,7 @@
           "symbol": "SlashCommandMenuAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/SlashCommandMenuAtom.swift",
-          "sha256": "ff1e2b4ce612309b53c2d62148c2b91dec7970b7f43197ada1ef2863f7d5f0de",
+          "sha256": "10a51a6493917411a2767a577e92f8c153f3b3565f16a0463e6dbddaa70797d3",
           "artifactKind": "recipe"
         },
         {
@@ -10548,7 +10620,7 @@
           "symbol": "SliderHistogramAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/SliderHistogramAtom.swift",
-          "sha256": "c2f3719b3ed614c63b1606a97cb0aebcc352887d40806a3101fe79faaa7e21bf",
+          "sha256": "18cb777817193e400c60ad20443cce0fe020c9ca610c9ebe97917ae95ea0f409",
           "artifactKind": "recipe"
         },
         {
@@ -10573,7 +10645,7 @@
           "symbol": "SlotFillingFormAtom",
           "category": "Forms",
           "path": "atoms/swift/AIChat/SlotFillingFormAtom.swift",
-          "sha256": "22e5393cb44a17aac2c505633abba4fd0840eab4a84af6397d59e90feb18a0bb",
+          "sha256": "c0f3440394c459d5ae5d0e35c7ad7252746ec9b24c1a87f861795a4d864194d0",
           "artifactKind": "recipe"
         },
         {
@@ -10598,7 +10670,7 @@
           "symbol": "SlotGridAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/SlotGridAtom.swift",
-          "sha256": "d8b1c3e1149215a3500d01c7728b5b20c6c94997449cfdf8f2f02afdd90856b7",
+          "sha256": "0a0ec78213eea7c0d962605a6537ec7b9413a020c5ac1f9b25fae48c086955dd",
           "artifactKind": "recipe"
         },
         {
@@ -10623,7 +10695,7 @@
           "symbol": "SlugAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/SlugAtom.swift",
-          "sha256": "51a75858fbf2526e57efde294af03914b7d9664b884740fed5d590c0905df36f",
+          "sha256": "b1c142f795b50c485ae1828cc2d405233b4d71bb972d6f5dff5d56066896fb2d",
           "artifactKind": "recipe"
         },
         {
@@ -10648,7 +10720,7 @@
           "symbol": "SnackbarAtom",
           "category": "Status and records",
           "path": "atoms/swift/StatusAndRecords/SnackbarAtom.swift",
-          "sha256": "ff8bf40c0b1e96206c7a80d65a0dc4175522a8e73cf256bfbdd795a60ab62f36",
+          "sha256": "0db9e6983cf5691ed186139abe73eb60ea8bcf419112d5643bba0dac48485baa",
           "artifactKind": "recipe"
         },
         {
@@ -10673,7 +10745,7 @@
           "symbol": "SnippetEditorAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/SnippetEditorAtom.swift",
-          "sha256": "4e1c0665f8e17acd9bd237a86957bd4e348a21e6c9ccbb7a54787d325a8b1fb3",
+          "sha256": "47ed16ce9efee029bf33a92c44ec21e48539e4038256d7f50ec82a7699e9e0c8",
           "artifactKind": "recipe"
         },
         {
@@ -10698,7 +10770,7 @@
           "symbol": "SnoozeSheetAtom",
           "category": "Email",
           "path": "atoms/swift/Email/SnoozeSheetAtom.swift",
-          "sha256": "f3cf44b1305f07c74dc7aac8648333223d4e293b0168bde2a5d8745bd41f13d5",
+          "sha256": "a8c33d341f6495c3cb5255cba618c58c5a60592ef2e7450e9acafdbe72512557",
           "artifactKind": "recipe"
         },
         {
@@ -10773,7 +10845,7 @@
           "symbol": "SplitDividerAtom",
           "category": "Views",
           "path": "atoms/swift/Views/SplitDividerAtom.swift",
-          "sha256": "583af4d58918a85cebb38516288b47c5e1876ccdbface3c1bc2593c8b0b4453b",
+          "sha256": "96de648391696f81b1a6471255b0b9dff7fd50773485c59b3478de8b755d0c92",
           "artifactKind": "recipe"
         },
         {
@@ -10823,7 +10895,7 @@
           "symbol": "SplitTabsAtom",
           "category": "Email",
           "path": "atoms/swift/Email/SplitTabsAtom.swift",
-          "sha256": "0f625b9301fd2eebf08b197bcbeb1aa614c2498ae1f1652be643405100dfb1e0",
+          "sha256": "a3435f838f4067d0ef939eb26e5a251d2738014793e3c1bf0ca852d998d89458",
           "artifactKind": "recipe"
         },
         {
@@ -10840,8 +10912,17 @@
     {
       "id": "splittoggle",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "splittoggle",
+          "symbol": "SplitToggleAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/SplitToggleAtom.swift",
+          "sha256": "5aa3896742dd23d4ac9c95d2f6aa9eefbc7fb1954d8abb2500d366ea93b7916e",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "splittoggle",
@@ -10964,7 +11045,7 @@
           "symbol": "StatCountAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/StatCountAtom.swift",
-          "sha256": "0f3c6b199f3aba240ffc9150b23c87990e7b8c9aa9c7e0f3f1a310eb32d3bfd3",
+          "sha256": "e252dbce5b0926e477edcf818d1cc4870c776e2c8e64cce319120438d630f233",
           "artifactKind": "recipe"
         },
         {
@@ -11064,7 +11145,7 @@
           "symbol": "StepperHeaderAtom",
           "category": "Forms",
           "path": "atoms/swift/Views/StepperHeaderAtom.swift",
-          "sha256": "e3ee08e470a0772e1482c780bfe24ce435c0be2f88367d0527f43e5e036ca11b",
+          "sha256": "c7033646d3e1dffe444df80e1813c9e3b2bbcc24173b2aff85f8599623847857",
           "artifactKind": "recipe"
         },
         {
@@ -11114,7 +11195,7 @@
           "symbol": "MultiStepShellAtom",
           "category": "Forms",
           "path": "atoms/swift/Views/MultiStepShellAtom.swift",
-          "sha256": "e8cddf0f4141b23e1db0ed39945068378eadeef31a66ea6a4ad0792878555933",
+          "sha256": "ca31951d36391dd83982dcf2cd7773f5a483acdb035ae0f44b2535670aff6bfe",
           "artifactKind": "recipe"
         },
         {
@@ -11164,7 +11245,7 @@
           "symbol": "StickyCTAAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/StickyCTAAtom.swift",
-          "sha256": "163b22ba32c202351c88ce672e146e6068dacf0ce9d4d256db2155c374db4c7e",
+          "sha256": "b6ab6c58fc65221243d631125be979a56a00b1324f9322a17dd9ab5fffd0dbc4",
           "artifactKind": "recipe"
         },
         {
@@ -11214,7 +11295,7 @@
           "symbol": "StockCountAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/StockCountAtom.swift",
-          "sha256": "bbea06585f3857a8f3ee8fff099375d4f48c2c585ab724fb3ef06dcac17f4082",
+          "sha256": "35a19fb17a43f1191872538ad05a919090028b9ea4a4426d17ff40463e792dbd",
           "artifactKind": "recipe"
         },
         {
@@ -11289,7 +11370,7 @@
           "symbol": "StreamingAnswerAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/StreamingAnswerAtom.swift",
-          "sha256": "de343b8f3576873e61a70a313d48fa9e6d9041252c3986db3fe5d79c06c62892",
+          "sha256": "d2a4a5f2440e560609c54c54ccb4a5e44a6aa4369b216639d239b0cd6f59ecee",
           "artifactKind": "recipe"
         },
         {
@@ -11364,7 +11445,7 @@
           "symbol": "SuggestionChipsAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/SuggestionChipsAtom.swift",
-          "sha256": "28da98850d3ee0cc1112bde0c03b7d82380e0828527c48eef1c7af15bc245f03",
+          "sha256": "9c2723d6425154fc9a4180e5b32f17102ac974a799f4c3274637619158d12a10",
           "artifactKind": "recipe"
         },
         {
@@ -11389,7 +11470,7 @@
           "symbol": "AgentSuggestedEditAtom",
           "category": "Agent activity",
           "path": "atoms/swift/AgentActivity/AgentSuggestedEditAtom.swift",
-          "sha256": "af63be68686d5c35a1e87b6925d7d04f6cf0c448fe89e9039669163d3d96dd5a",
+          "sha256": "e71fd42b8da99ba9b6b50856f58f5b343aa4125174d9f117011d3470ad5d159a",
           "artifactKind": "recipe"
         },
         {
@@ -11464,7 +11545,7 @@
           "symbol": "SurveyBlockAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/SurveyBlockAtom.swift",
-          "sha256": "94bde7df2fa907f04cac0679837359a3d5c078cefa0fcf9d303609c7dbcc7050",
+          "sha256": "0a68409347059a603b807d2e6fd061189b66ee0b4a7e46b9794d7bd8c00120ea",
           "artifactKind": "recipe"
         },
         {
@@ -11489,7 +11570,7 @@
           "symbol": "SwatchAtom",
           "category": "Storefront",
           "path": "atoms/swift/Storefront/SwatchAtom.swift",
-          "sha256": "ce810d5c25dd0f4999c7beb71da4c95c6ca4169e8b8a25f03e3d829c532417dc",
+          "sha256": "e0c80a915ba1a57ca55e4b5cef0f3ed137c8b7e06c0f88a91d76ceaf34d4a7fd",
           "artifactKind": "recipe"
         },
         {
@@ -11556,8 +11637,17 @@
     {
       "id": "tabcards",
       "artifactKind": "recipe",
-      "platformStatus": "web-only",
+      "platformStatus": "paired",
       "sources": [
+        {
+          "platform": "swift",
+          "id": "tabcards",
+          "symbol": "TabCardsAtom",
+          "category": "Chrome",
+          "path": "atoms/swift/Chrome/TabCardsAtom.swift",
+          "sha256": "a80c0e2954c9d2936318f83fc823976815b236daef7a0d7cc30785e370a33ef2",
+          "artifactKind": "recipe"
+        },
         {
           "platform": "web",
           "id": "tabcards",
@@ -11605,7 +11695,7 @@
           "symbol": "TabRestoreAtom",
           "category": "Views",
           "path": "atoms/swift/Views/TabRestoreAtom.swift",
-          "sha256": "88624675a136783543a15f4e7f2fced37725a25e66d20abaccd626c5d32dac1b",
+          "sha256": "b97b7c1cce95e11032100f4fed3207a863254cb4f3db77e90f6493e5a81204ea",
           "artifactKind": "recipe"
         },
         {
@@ -11705,7 +11795,7 @@
           "symbol": "TagPillAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/TagPillAtom.swift",
-          "sha256": "eaaca9abfdcc6a04f0d5e41fb7e9e4ea3fe8124d725af1f9f1ddfbccd673953c",
+          "sha256": "f4df33a189b044012d7a79d09618d1dd752427a1aa19dfe3ab2031e0ed10f7e3",
           "artifactKind": "recipe"
         },
         {
@@ -11755,7 +11845,7 @@
           "symbol": "TaxEstimatorAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/TaxEstimatorAtom.swift",
-          "sha256": "d604a0c0ddd6fc4df2195bdd982a58866ee1e92f23247d928cbf8812ae2dd9d0",
+          "sha256": "e4cbd5664fbfc1f0e5152dacbf17454eac7b4bac88af6a3c3841510ff8e5aaa2",
           "artifactKind": "recipe"
         },
         {
@@ -11805,7 +11895,7 @@
           "symbol": "TemplateVarsAtom",
           "category": "Email",
           "path": "atoms/swift/Email/TemplateVarsAtom.swift",
-          "sha256": "18b32272e170d01595ecea8fa42a963a77a0b9036f8e56589f91d90acc4a7ad8",
+          "sha256": "70ebc3f5750bddadd90d22c43cc764e07e1662ca128ef502e7fcd343a46a140f",
           "artifactKind": "recipe"
         },
         {
@@ -11830,7 +11920,7 @@
           "symbol": "TestimonialDeckAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/TestimonialDeckAtom.swift",
-          "sha256": "d69baf934db24682f46f5dd8a9137ef7c00c0d634a5cb9ad8d63ff1d0659ccf5",
+          "sha256": "3dee6b2f15c96b7884477f20244eeb85d0a48855c0b913b56f5593a4543b4dc2",
           "artifactKind": "recipe"
         },
         {
@@ -11880,7 +11970,7 @@
           "symbol": "ThemeToggleAtom",
           "category": "Admin kit",
           "path": "atoms/swift/AdminKit/ThemeToggleAtom.swift",
-          "sha256": "b2c76374857555781b5a078465c380c74a2713b8c99ee4b1cf8804cd43c524e3",
+          "sha256": "3a89664d7885efc26a2c5fbeec508da7623e67e70cb74ad96ed55018acea1b2d",
           "artifactKind": "recipe"
         },
         {
@@ -11930,7 +12020,7 @@
           "symbol": "ThumbsReasonAtom",
           "category": "Forms",
           "path": "atoms/swift/AIChat/ThumbsReasonAtom.swift",
-          "sha256": "8bfa8d668cf94b1fcbe29bf682d150f3ff7c111b56c5d9b3f59245e8ac4c2ae0",
+          "sha256": "949bc2cf705648b797a447bb1f2209947eb55bbddc163db939108366211c61e9",
           "artifactKind": "recipe"
         },
         {
@@ -11955,7 +12045,7 @@
           "symbol": "TierPickerAtom",
           "category": "Newsletter",
           "path": "atoms/swift/Newsletter/TierPickerAtom.swift",
-          "sha256": "eb77bc621f9954c983d1edb21f9d801404a9fdfd66c7a1b00fcba7111c9ed32c",
+          "sha256": "b479c1481dd57268293b5e617f63c9d3d67751af00b055a867ddfc2dae853344",
           "artifactKind": "recipe"
         },
         {
@@ -12005,7 +12095,7 @@
           "symbol": "RunningTimerAtom",
           "category": "Admin kit",
           "path": "atoms/swift/AdminKit/RunningTimerAtom.swift",
-          "sha256": "3b3512588cb2954dff9b86baa43d2fd859a669d86b063a56de81c993e9d6c1fa",
+          "sha256": "e7926c22e61c06954d98d757644f0e0ba551c67bb8a00444b72eec7384d2e514",
           "artifactKind": "recipe"
         },
         {
@@ -12055,7 +12145,7 @@
           "symbol": "ToastStackAtom",
           "category": "Admin",
           "path": "atoms/swift/Admin/ToastStackAtom.swift",
-          "sha256": "c142f5d9d5b8e8c6b760aa2de2e715784956d1dc90476215aa28e288942f2743",
+          "sha256": "b436ae791be0fe1258f0830760cea8c72eadfb61985aa30f11a09c8f9996d2ac",
           "artifactKind": "recipe"
         },
         {
@@ -12080,7 +12170,7 @@
           "symbol": "ToastStackPileAtom",
           "category": "Overlays",
           "path": "atoms/swift/Overlays/ToastStackPileAtom.swift",
-          "sha256": "276aab5e59768517f7d63cf210edcfe72d1e0433fa0b81d73e1dec10dcb29e10",
+          "sha256": "8eb3ccce0d571f35187628435e43e2e463a8d7d8ff616c676868d7c9e19c14f4",
           "artifactKind": "recipe"
         },
         {
@@ -12230,7 +12320,7 @@
           "symbol": "ToolCallDisclosureAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/ToolCallDisclosureAtom.swift",
-          "sha256": "9401f393abbb3bbd3778f14475f435ed185875df76f096c7643c5b97c1b49b75",
+          "sha256": "3c5dd9c3e9576bf788918a2a622f52aa1e9458b7e85b2784fa3037d0c5847d16",
           "artifactKind": "recipe"
         },
         {
@@ -12330,7 +12420,7 @@
           "symbol": "TrackingTimelineAtom",
           "category": "Commerce",
           "path": "atoms/swift/Commerce/TrackingTimelineAtom.swift",
-          "sha256": "88bf548f170a3076211fe317cbadb9f02bcf9f37f1adb3a6bc641d335e2f725f",
+          "sha256": "5b54af43e98727c1473e1810d1fc2d4b48122fe2f95bf065af16ad493fa29903",
           "artifactKind": "recipe"
         },
         {
@@ -12405,7 +12495,7 @@
           "symbol": "TripPollAtom",
           "category": "Maps",
           "path": "atoms/swift/Maps/TripPollAtom.swift",
-          "sha256": "63119d78b4959620782254d56d70080f10a06b6f99e4fed8eaa4def08acce597",
+          "sha256": "666dd615f62606dd7db54fdbeb81d220368c411134d6dfae22c3c5ad441da33f",
           "artifactKind": "recipe"
         },
         {
@@ -12414,7 +12504,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/317-trippoll.js",
-          "sha256": "36c7e36ac29ec3a7d33c172ee994b8e58c652f4a6aab31bdd265e0593f412fe5",
+          "sha256": "fd0b3bac82f1f1e0ba90b16a6bd8ee90f69a84d09e2ad97c856d80a12da0b24f",
           "artifactKind": "recipe"
         }
       ]
@@ -12705,7 +12795,7 @@
           "symbol": "SyncedThumbnailRailAtom",
           "category": "Carousels",
           "path": "atoms/swift/Carousels/SyncedThumbnailRailAtom.swift",
-          "sha256": "ad8e74e79f534b9727b76c0a9a0d9f0e77bb2ea62dad53e0a71f25b02adc5f96",
+          "sha256": "2d3a8fb422d1301166479b428ce830979b09953a159611efd7d314f10e17a82c",
           "artifactKind": "recipe"
         },
         {
@@ -12805,7 +12895,7 @@
           "symbol": "ThumbnailToHeroAtom",
           "category": "Image transitions",
           "path": "atoms/swift/ImageTransitions/ThumbnailToHeroAtom.swift",
-          "sha256": "7fe3d1761b0b285b5b0cf15b6fab631890c35741d3c7c0e5477746ab8dca3072",
+          "sha256": "c199d70893c20186af62dbd94459fc07333fb9666f618de40f815e53a06af8bc",
           "artifactKind": "recipe"
         },
         {
@@ -13230,7 +13320,7 @@
           "symbol": "StackingCardsAtom",
           "category": "Scroll stories",
           "path": "atoms/swift/ScrollStories/StackingCardsAtom.swift",
-          "sha256": "60236eea6f84f93205063c2494fc355a08a366c7d75e5491f8b48ba317eadbf5",
+          "sha256": "5ed5ea386059d45a7834955560b2f9c895a0420d84cb6c8b9d6ef2e03f1644c7",
           "artifactKind": "recipe"
         },
         {
@@ -13305,7 +13395,7 @@
           "symbol": "TimezoneFlipAtom",
           "category": "Scheduling",
           "path": "atoms/swift/Scheduling/TimezoneFlipAtom.swift",
-          "sha256": "59f434f1c5527fb1de47a290c0f71eea6fc8eb7254116de19d499d8da3761b4f",
+          "sha256": "0d0f632aac2ff59feffdda7f05190d9ec1a4ae2a31b5c2f3e4866feeae36bdea",
           "artifactKind": "recipe"
         },
         {
@@ -13330,7 +13420,7 @@
           "symbol": "UndoRedoAtom",
           "category": "Design tools",
           "path": "atoms/swift/DesignTools/UndoRedoAtom.swift",
-          "sha256": "66d60064eef0f9b179b4332356f9a43260383f18143ceaf556a4cdba9526db8c",
+          "sha256": "30e9fd050fa43813a8066b4400bb66445ebc3af5698cd33a2372376e5360dd34",
           "artifactKind": "recipe"
         },
         {
@@ -13355,7 +13445,7 @@
           "symbol": "UndoSendAtom",
           "category": "Email",
           "path": "atoms/swift/Email/UndoSendAtom.swift",
-          "sha256": "2140f010cc9a04f3dac5262ff1448580d41ded8b081757038dc8b8d6ef3f23b6",
+          "sha256": "155242ba993de9074a2a2af7d2010d99abc53d6fec4a438ed389a7260fe6b735",
           "artifactKind": "recipe"
         },
         {
@@ -13405,7 +13495,7 @@
           "symbol": "UpdateFlashAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/UpdateFlashAtom.swift",
-          "sha256": "13a8f906c5bb0d11c4064e40b8f1f0ac198dd84cc34d4a23b1104accbdf2fa50",
+          "sha256": "d531eeb55bb38303e53c6a4535678888442b3895eb16cfcc76fecd4c10441cee",
           "artifactKind": "recipe"
         },
         {
@@ -13430,7 +13520,7 @@
           "symbol": "ValidationShakeAtom",
           "category": "Foundations",
           "path": "atoms/swift/Foundations/ValidationShakeAtom.swift",
-          "sha256": "ed36e34894eb394333de162688987dde2d96596af39ee0655f172206c5c45e0a",
+          "sha256": "9488cbd426278b21c0a976021ad0ac02f4db8499954e98ca302fb94a5f639c50",
           "artifactKind": "recipe"
         },
         {
@@ -13455,7 +13545,7 @@
           "symbol": "ViewCrossfadeAtom",
           "category": "Views",
           "path": "atoms/swift/Views/ViewCrossfadeAtom.swift",
-          "sha256": "793e10e6ee697aacac986c7c57fc7f8349b48ac3790c3cc65c62b12085328870",
+          "sha256": "83f27f08c9a5f921d1840385d7b5549d36a9c0939b71deea089daada782fc93f",
           "artifactKind": "recipe"
         },
         {
@@ -13530,7 +13620,7 @@
           "symbol": "CoreVitalsAtom",
           "category": "SEO",
           "path": "atoms/swift/SEO/CoreVitalsAtom.swift",
-          "sha256": "59f89699147a3bd65cde717983961b519eed0e6848eeb756b4533bf7f0bea92f",
+          "sha256": "5f0cbaefd8e1f87a2557c7a38e134727f25094d93cc627502616ff18895080e6",
           "artifactKind": "recipe"
         },
         {
@@ -13555,7 +13645,7 @@
           "symbol": "VoiceNoteAtom",
           "category": "Writing",
           "path": "atoms/swift/Writing/VoiceNoteAtom.swift",
-          "sha256": "0c30ecd0a70c95311b6d7837ab2b9ccdbd3265a3251b37e1025eab9bb6ff4662",
+          "sha256": "2c2adf55418d268a10987b6129bedffc513dcb48c2ef6cbe2dd0753d7643a260",
           "artifactKind": "recipe"
         },
         {
@@ -13580,7 +13670,7 @@
           "symbol": "VoiceWaveformAtom",
           "category": "AI chat",
           "path": "atoms/swift/AIChat/VoiceWaveformAtom.swift",
-          "sha256": "bfdbb2f6c38326d5fe5f8ac8b50ea9458d88f23b17ad05c71923a0e834e3bc14",
+          "sha256": "2329f282761850e31e633f7c4da93a979807024066e6537f6020a8fd08de150a",
           "artifactKind": "recipe"
         },
         {
@@ -13655,7 +13745,7 @@
           "symbol": "WordRotatorAtom",
           "category": "Landing",
           "path": "atoms/swift/Landing/WordRotatorAtom.swift",
-          "sha256": "037f4181f2b8999d204c581cfd25bcd51583d518d785af47f57d6b2724b50bc3",
+          "sha256": "a126c42493f372620d499f8d7420415f5ac80d6c40625eaa88ff56fce3e9aa6d",
           "artifactKind": "recipe"
         },
         {

@@ -1,6 +1,6 @@
 # Catalogue migration receipt
 
-The reproducible [receipt](generated/catalogue-inventory.json) preserves 1,090 current source records (540 Swift, 550 web). Eleven `indexed-source-not-loaded` observations expose indexed declarations outside the web loader list. Focused tooling passes; the full gate remains blocked by inherited failures described below.
+The reproducible [receipt](generated/catalogue-inventory.json) preserves 1,100 current source records (550 Swift, 550 web). Eleven `indexed-source-not-loaded` observations expose indexed declarations outside the web loader list. The receipt is refreshed for the integrated native library. The earlier tooling-only gate failures below are historical; current verification is tracked in the [integration report](reports/apple-library-integration-20261008.md).
 
 - [Generate and check](#generate-and-check)
 - [Interpret the receipt](#interpret-the-receipt)
@@ -28,7 +28,7 @@ This file is a migration receipt, not the forthcoming manifest registry. It does
 
 The frozen identity fixture is `test/fixtures/catalogue-baseline.json`. Generation never updates it. Intentional identity removal, renaming or public symbol changes require an explicitly reviewed baseline amendment with compatibility rationale and tests; do not regenerate it merely to silence a diagnostic. Path or byte changes alone do not require identity amendment.
 
-## Verification and limits
+## Historical tooling verification and limits
 
 Verification runs on this tooling slice are recorded below. The prepared baseline already verifies 34 design exports before failing the ledger at `CIEO-144`; aggregate brand validation and catalogue source-block ordering also fail before this slice. No product sources, public APIs, loader membership or token values changed. Native rendering, starter parity and production manifest support remain separate work.
 
