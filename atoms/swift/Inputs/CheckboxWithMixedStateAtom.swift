@@ -39,7 +39,7 @@ public struct CheckboxWithMixedStateAtom: MotionAtomView {
                 HStack(spacing: 10) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 5).fill(on ? Color.primary : Color.clear)
-                        RoundedRectangle(cornerRadius: 5).strokeBorder(on ? Color.primary : Color.primary.opacity(0.25), lineWidth: 1.5)
+                        RoundedRectangle(cornerRadius: 5).fill(on ? Color.primary : Color.primary.opacity(0.25)).opacity(0.10)
                         Mark(mixed: mixed ? 1 : 0)
                             .stroke(.background, style: StrokeStyle(lineWidth: 2.6, lineCap: .round, lineJoin: .round))
                             .frame(width: 14, height: 14)

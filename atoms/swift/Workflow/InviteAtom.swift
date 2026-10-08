@@ -31,7 +31,7 @@ public struct InviteAtom: MotionAtomView {
                     AgReveal(open: formOpen && !invited) {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack {
-                                TextField("name@company.com", text: $email).textFieldStyle(.roundedBorder)
+                                TextField("name@company.com", text: $email).softFieldSurface()
                                 Picker("Role", selection: $role) { ForEach(["Editor", "Viewer", "Admin"], id: \.self) { Text($0) } }.labelsHidden()
                             }
                             Text(showBad ? "Enter a full email address." : "They get an email link that expires in 7 days.")

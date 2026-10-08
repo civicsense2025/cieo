@@ -17,7 +17,7 @@ public struct ValidationShakeAtom: MotionAtomView {
                 TimelineView(.animation(paused: reduce)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     TextField("Email", text: $email)
-                        .textFieldStyle(.roundedBorder).frame(minHeight: 40)
+                        .softFieldSurface().frame(minHeight: 40)
                         .overlay(RoundedRectangle(cornerRadius: 8).fill(invalid ? .red : .clear).opacity(0.10).allowsHitTesting(false))
                         .offset(x: shakeOffset(at: t))
                 }

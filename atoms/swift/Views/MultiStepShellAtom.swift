@@ -35,13 +35,13 @@ public struct MultiStepShellAtom: MotionAtomView {
                         panel(0) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Name").font(.caption).foregroundStyle(.secondary)
-                                TextField("Jordan Ellis", text: $name).textFieldStyle(.roundedBorder).font(.footnote)
+                                TextField("Jordan Ellis", text: $name).softFieldSurface().font(.footnote)
                             }
                         }
                         panel(1) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Email").font(.caption).foregroundStyle(.secondary)
-                                TextField("you@example.org", text: $email).textFieldStyle(.roundedBorder).font(.footnote)
+                                TextField("you@example.org", text: $email).softFieldSurface().font(.footnote)
                             }
                         }
                         panel(2) {

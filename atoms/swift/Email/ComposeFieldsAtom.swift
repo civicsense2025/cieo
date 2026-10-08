@@ -30,7 +30,7 @@ public struct ComposeFieldsAtom: MotionAtomView {
                     Text("New message").font(.callout.weight(.semibold))
                     HStack(spacing: 6) {
                         TextField("To…", text: $input)
-                            .textFieldStyle(.roundedBorder).font(.caption)
+                            .softFieldSurface().font(.caption)
                             .focused($focused)
                             .onSubmit { add() }
                         Button("Add") { add() }.buttonStyle(.bordered).controlSize(.small)

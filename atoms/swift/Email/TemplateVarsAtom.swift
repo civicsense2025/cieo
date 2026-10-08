@@ -49,10 +49,10 @@ public struct TemplateVarsAtom: MotionAtomView {
                         Text(".").font(.caption)
                     }
                     HStack(spacing: 6) {
-                        TextField("first", text: $first).textFieldStyle(.roundedBorder).font(.caption)
-                        TextField("plan", text: $plan).textFieldStyle(.roundedBorder).font(.caption)
+                        TextField("first", text: $first).softFieldSurface().font(.caption)
+                        TextField("plan", text: $plan).softFieldSurface().font(.caption)
                     }
-                    TextField("End date, e.g. Friday", text: $date).textFieldStyle(.roundedBorder).font(.caption)
+                    TextField("End date, e.g. Friday", text: $date).softFieldSurface().font(.caption)
                     SwapText(inserted && date.isEmpty ? "Add the end date above" : "").font(.caption)
                         .foregroundStyle(Color.red)
                         .frame(height: 18, alignment: .leading)

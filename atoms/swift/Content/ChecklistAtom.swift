@@ -54,7 +54,7 @@ public struct ChecklistAtom: MotionAtomView {
                     ZStack {
                         RoundedRectangle(cornerRadius: 5).fill(on ? Color.primary : Color.clear)
                             .animation(anim(0), value: on)
-                        RoundedRectangle(cornerRadius: 5).strokeBorder(on ? Color.primary : Color.primary.opacity(0.25), lineWidth: 1.5)
+                        RoundedRectangle(cornerRadius: 5).fill(on ? Color.primary : Color.primary.opacity(0.25)).opacity(0.10)
                             .animation(anim(0), value: on)
                         Tick().trim(from: 0, to: on ? 1 : 0)
                             .stroke(.background, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))

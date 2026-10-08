@@ -21,7 +21,7 @@ public struct EmailCaptureAtom: MotionAtomView {
                 Text("One email a month. Unsubscribe anytime.").font(.caption).foregroundStyle(.secondary)
                 HStack(spacing: 8) {
                     TextField("you@example.com", text: $email)
-                        .textFieldStyle(.roundedBorder).controlSize(.regular)
+                        .softFieldSurface().controlSize(.regular)
                         .overlay(RoundedRectangle(cornerRadius: 9).fill(invalid ? Color.red : Color.clear).opacity(0.10).allowsHitTesting(false))
                         .disabled(phase == .done)
                     Button {

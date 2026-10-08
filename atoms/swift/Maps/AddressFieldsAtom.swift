@@ -25,7 +25,7 @@ public struct AddressFieldsAtom: MotionAtomView {
                         .opacity(valid ? 1 : 0.3)
                         .animation(reduce ? nil : .motion(.base).delay(valid ? 0.06 : 0), value: valid)
                     VStack(alignment: .leading, spacing: 6) {
-                        labeled("Street") { TextField("Street", text: $street).textFieldStyle(.roundedBorder).font(.subheadline) }
+                        labeled("Street") { TextField("Street", text: $street).softFieldSurface().font(.subheadline) }
                         if suggest {
                             Button(street.count > 12 ? "1 Ferry Plaza, SF" : "1 Ferry Building, SF") {
                                 street = street.count > 12 ? "1 Ferry Plaza" : "1 Ferry Building"
@@ -36,8 +36,8 @@ public struct AddressFieldsAtom: MotionAtomView {
                             .motionTransition(.swap())
                         }
                         HStack(spacing: 8) {
-                            labeled("City") { TextField("City", text: $city).textFieldStyle(.roundedBorder).font(.subheadline) }
-                            labeled("ZIP") { TextField("ZIP", text: $zip).textFieldStyle(.roundedBorder).font(.subheadline).monospacedDigit().frame(width: 110) }
+                            labeled("City") { TextField("City", text: $city).softFieldSurface().font(.subheadline) }
+                            labeled("ZIP") { TextField("ZIP", text: $zip).softFieldSurface().font(.subheadline).monospacedDigit().frame(width: 110) }
                         }
                         if let error {
                             Text(error).font(.caption).foregroundStyle(.red).lineSpacing(4).motionTransition(.swap())

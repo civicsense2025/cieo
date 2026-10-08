@@ -39,7 +39,7 @@ public struct OneTimeCodeAtom: MotionAtomView {
                             }
                             .font(.system(size: 22, weight: .semibold)).monospacedDigit()
                             .frame(width: 40, height: 48)
-                            .background(RoundedRectangle(cornerRadius: 10).strokeBorder(tint, lineWidth: 1.5))
+                            .background(RoundedRectangle(cornerRadius: 10).fill(tint).opacity(0.10))
                         }
                     }
                     .animation(reduce ? nil : .motion(.base), value: code)

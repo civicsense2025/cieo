@@ -23,7 +23,7 @@ public struct JurisdictionAtom: MotionAtomView {
                             Image(systemName: "chevron.down").font(.caption).rotationEffect(.degrees(open ? 180 : 0))
                         }
                         .padding(.horizontal, 10).frame(minHeight: 36)
-                        .background(RoundedRectangle(cornerRadius: 8).stroke(.secondary.opacity(0.4), lineWidth: 1))
+                        .background(RoundedRectangle(cornerRadius: 8).fill(.secondary.opacity(0.4)).opacity(0.10))
                     }
                     .buttonStyle(.plain).focused($focused)
                     .onKeyPress(.downArrow) { withMotion(.base, reduceMotion: reduce) { pick = min(4, pick + 1) }; return .handled }

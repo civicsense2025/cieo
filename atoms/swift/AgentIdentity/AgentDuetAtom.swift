@@ -32,7 +32,7 @@ public struct AgentDuetAtom: MotionAtomView {
                     VStack(alignment: .trailing, spacing: 2) {
                         Text("Checkout").font(.caption2).foregroundStyle(.secondary)
                         SwapText(totalFixed ? "Total $48.00" : "Total $84.00").font(.callout.weight(.semibold)).padding(3)
-                            .overlay(step >= 1 && !resolved ? RoundedRectangle(cornerRadius: 4).strokeBorder(Color.accentColor, lineWidth: 2) : nil)
+                            .overlay(step >= 1 && !resolved ? RoundedRectangle(cornerRadius: 4).fill(Color.accentColor).opacity(0.10).allowsHitTesting(false) : nil)
                     }.frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing).padding(12)
                     if pin { AgPinMark(label: "1", resolved: resolved).offset(x: 215, y: -110).transition(.scale) }
                     if let nx = noteX { Image(systemName: "note.text").offset(x: nx, y: -80).transition(.opacity) }

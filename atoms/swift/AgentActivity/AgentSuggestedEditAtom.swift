@@ -24,7 +24,7 @@ public struct AgentSuggestedEditAtom: MotionAtomView {
                         .padding(.horizontal, 10).padding(.vertical, 6)
                         .background(outcome == .accepted ? Color.green : Color.accentColor, in: RoundedRectangle(cornerRadius: 6))
                         .animation(reduce ? nil : .motion(.base), value: outcome)
-                        .overlay(shown && outcome == .proposed ? RoundedRectangle(cornerRadius: 8).strokeBorder(Color.accentColor, lineWidth: 2).padding(-4) : nil)
+                        .overlay(shown && outcome == .proposed ? RoundedRectangle(cornerRadius: 8).fill(Color.accentColor).opacity(0.10).allowsHitTesting(false).padding(-4) : nil)
                 }
                 .frame(width: 150, alignment: .leading).padding(12)
                 .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))

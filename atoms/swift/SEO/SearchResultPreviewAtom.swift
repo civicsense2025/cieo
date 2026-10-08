@@ -37,7 +37,7 @@ public struct SearchResultPreviewAtom: MotionAtomView {
         let r = Double(text.wrappedValue.count) / Double(limit)
         return VStack(alignment: .leading, spacing: 4) {
             Text(name).font(.caption.weight(.medium))
-            TextField(name, text: text, axis: .vertical).lineLimit(1...3).textFieldStyle(.roundedBorder)
+            TextField(name, text: text, axis: .vertical).lineLimit(1...3).softFieldSurface()
             GeometryReader { g in
                 ZStack(alignment: .leading) {
                     Capsule().fill(.quaternary)

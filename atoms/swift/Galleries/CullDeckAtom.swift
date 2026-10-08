@@ -21,7 +21,7 @@ public struct CullDeckAtom: MotionAtomView {
                 HStack(spacing: 6) {
                     ForEach(0..<count, id: \.self) { s in
                         ZStack {
-                            RoundedRectangle(cornerRadius: 4).strokeBorder(.quaternary, lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 4).fill(.quaternary).opacity(0.10)
                             if s < kept.count { phPhoto(kept[s], CGSize(width: 30, height: 24)).clipShape(RoundedRectangle(cornerRadius: 4)).transition(.opacity) }
                         }.frame(width: 30, height: 24)
                     }

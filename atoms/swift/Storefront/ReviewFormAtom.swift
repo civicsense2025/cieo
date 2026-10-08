@@ -17,7 +17,7 @@ public struct ReviewFormAtom: MotionAtomView {
                 Text("Write a review").font(.callout.weight(.semibold))
                 HStack(spacing: 6) { ForEach(0..<3, id: \.self) { i in
                     Button { withMotion(.base, reduceMotion: reduce) { if photos.contains(i) { photos.remove(i) } else { photos.insert(i) } } } label: {
-                        ZStack { if photos.contains(i) { RoundedRectangle(cornerRadius: 12).fill(.quaternary).overlay(Text("◍").font(.title3)) } else { RoundedRectangle(cornerRadius: 12).strokeBorder(style: StrokeStyle(dash: [5])).overlay(Image(systemName: "plus").foregroundStyle(.secondary)) } }
+                        ZStack { if photos.contains(i) { RoundedRectangle(cornerRadius: 12).fill(.quaternary).overlay(Text("◍").font(.title3)) } else { RoundedRectangle(cornerRadius: 12).fill(Color.secondary).opacity(0.10).allowsHitTesting(false).overlay(Image(systemName: "plus").foregroundStyle(.secondary)) } }
                         .frame(height: 64).frame(maxWidth: .infinity)
                     }.buttonStyle(.plain).accessibilityLabel("Photo \(i + 1)")
                 } }

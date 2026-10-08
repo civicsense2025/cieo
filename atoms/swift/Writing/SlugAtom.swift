@@ -18,7 +18,7 @@ public struct SlugAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Try “Water rates” — that slug is taken") {
             VStack(alignment: .leading, spacing: 8) {
-                TextField("Post title", text: $title).textFieldStyle(.roundedBorder).frame(maxWidth: 340)
+                TextField("Post title", text: $title).softFieldSurface().frame(maxWidth: 340)
                     .accessibilityLabel("Post title")
                 HStack(spacing: 8) {
                     Text("/posts/").foregroundStyle(.secondary)

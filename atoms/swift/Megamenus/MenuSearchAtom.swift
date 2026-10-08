@@ -34,7 +34,7 @@ public struct MenuSearchAtom: MotionAtomView {
     private var panel: some View {
         VStack(alignment: .leading, spacing: 4) {
             TextField("Search the docs", text: $query)
-                .textFieldStyle(.roundedBorder).focused($focused)
+                .softFieldSurface().focused($focused)
                 .onChange(of: query) { _, _ in sel = 0 }
                 .onSubmit { toggle() }
             VStack(alignment: .leading, spacing: 0) {

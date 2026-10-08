@@ -36,7 +36,7 @@ public struct PasswordWithStrengthAtom: MotionAtomView {
                     .buttonStyle(.plain).accessibilityLabel(revealed ? "Hide password" : "Show password")
                 }
                 .padding(.leading, 11).padding(.trailing, 4).frame(height: 42)
-                .background(RoundedRectangle(cornerRadius: 10).strokeBorder(focused ? Color.primary : Color.primary.opacity(0.2), lineWidth: 1.5))
+                .background(RoundedRectangle(cornerRadius: 10).fill(focused ? Color.primary : Color.primary.opacity(0.2)).opacity(0.10))
                 HStack(spacing: 4) {
                     ForEach(0..<4, id: \.self) { i in
                         Capsule().fill(Color.primary.opacity(0.08)).frame(height: 5)

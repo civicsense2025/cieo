@@ -3,7 +3,7 @@ import Cieo
 
 public struct PaymentFieldsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "payfields", category: "Commerce", name: "Payment fields",
-        summary: "Spaces land every four digits while the brand swaps live. Valid fields earn a success check; invalid ones ring danger with a fix, as you type.")
+        summary: "Spaces land every four digits while the brand swaps live. Valid fields earn a success check; invalid ones show a danger fill with a fix, as you type.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var card = ""
     @State private var expiry = ""
@@ -41,7 +41,7 @@ public struct PaymentFieldsAtom: MotionAtomView {
                     TextField("Card number", text: $card).monospacedDigit()
                     .frame(height: 38).padding(.horizontal, 10)
                     .background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
-                    .border(!card.isEmpty && !cardOK ? .red : .clear, width: 1)
+                    .background(Color.red.opacity(!card.isEmpty && !cardOK ? 0.10 : 0))
                     .onChange(of: card) { format() }
                 fieldMsg(
                     card.isEmpty ? nil :

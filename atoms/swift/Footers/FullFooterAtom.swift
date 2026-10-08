@@ -56,7 +56,7 @@ private struct Full: View {
     private var newsletter: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 6) {
-                TextField("you@example.com", text: $email).textFieldStyle(.roundedBorder)
+                TextField("you@example.com", text: $email).softFieldSurface()
                     .overlay(RoundedRectangle(cornerRadius: 6).fill(phase == 1 ? Color.red : .clear).opacity(0.10).allowsHitTesting(false)).onSubmit(submit)
                 Button(action: submit) {
                     ZStack {

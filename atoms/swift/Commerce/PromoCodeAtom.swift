@@ -34,7 +34,7 @@ public struct PromoCodeAtom: MotionAtomView {
                         TextField("TRY SHIP10", text: $code)
                             .frame(height: 38).padding(.horizontal, 10)
                             .background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
-                            .border(error != nil ? .red : .clear, width: 1)
+                            .background(Color.red.opacity(error != nil ? 0.10 : 0))
                             .onChange(of: code) { error = nil }
                         Button {
                             apply()

@@ -39,7 +39,7 @@ public struct PopoverAtom: MotionAtomView {
             HStack(spacing: 6) {
                 Text("example.com/p/spring-launch").font(.caption).lineLimit(1)
                     .padding(.horizontal, 9).frame(maxWidth: .infinity, minHeight: 32, alignment: .leading)
-                    .background(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.primary.opacity(0.15)))
+                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.15)).opacity(0.10))
                 copyButton
             }
         }
@@ -62,7 +62,7 @@ public struct PopoverAtom: MotionAtomView {
             }
             .font(.caption.weight(.medium)).foregroundStyle(copied ? Color.green : Color.primary)
             .frame(width: 76, height: 32)
-            .background(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.primary.opacity(0.15)))
+            .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.15)).opacity(0.10))
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .motion(.base, value: copied)
         }

@@ -43,8 +43,8 @@ public struct AuthShellAtom: MotionAtomView {
         case .signIn:
             VStack(alignment: .leading, spacing: 8) {
                 Text("Sign in").font(.headline)
-                TextField("you@example.com", text: $email).textFieldStyle(.roundedBorder).accessibilityLabel("Email")
-                SecureField("Demo only, 8+ characters", text: $password).textFieldStyle(.roundedBorder)
+                TextField("you@example.com", text: $email).softFieldSurface().accessibilityLabel("Email")
+                SecureField("Demo only, 8+ characters", text: $password).softFieldSurface()
                 Button { submit() } label: { HStack { if working { AgSpinner(size: 12) }; SwapText(working ? "Checking…" : "Enter") } }
                     .buttonStyle(AgPress(tone: .info)).disabled(working)
                 Button("Forgot password?") { go(.forgot, forward: true) }.buttonStyle(.plain).font(.caption).foregroundStyle(Color.accentColor)

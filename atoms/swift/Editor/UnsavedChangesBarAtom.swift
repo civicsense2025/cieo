@@ -24,7 +24,7 @@ public struct UnsavedChangesBarAtom: MotionAtomView {
         AtomStage(hint: "Edit any field") {
             ZStack(alignment: .bottom) {
                 VStack(spacing: 0) {
-                    row("Site name", edited: cur.name != saved.name) { TextField("Name", text: $cur.name).textFieldStyle(.roundedBorder).frame(width: 150) }
+                    row("Site name", edited: cur.name != saved.name) { TextField("Name", text: $cur.name).softFieldSurface().frame(width: 150) }
                     Divider()
                     row("Language", edited: cur.lang != saved.lang) { langPicker }
                     Divider()

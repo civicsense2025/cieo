@@ -28,7 +28,7 @@ public struct ChatSendAndReplyAtom: MotionAtomView {
                 Divider()
                 HStack(spacing: 6) {
                     TextField("Message", text: $draft).textFieldStyle(.plain).padding(.horizontal, 12).padding(.vertical, 8)
-                        .background(Capsule().strokeBorder(.quaternary)).onSubmit(send)
+                        .background(Capsule().fill(.quaternary).opacity(0.10)).onSubmit(send)
                     Button("Send", action: send).buttonStyle(.borderedProminent).controlSize(.small).disabled(busy || draft.isEmpty)
                 }.padding(8)
             }

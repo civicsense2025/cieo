@@ -42,7 +42,7 @@ public struct ShortcutsOverlayAtom: MotionAtomView {
         var index = 0
         return VStack(alignment: .leading, spacing: 6) {
             HStack { Text("Shortcuts").font(.subheadline.weight(.semibold)); Spacer(); Button { toggle(false) } label: { Image(systemName: "xmark") }.buttonStyle(.plain).accessibilityLabel("Close") }
-            TextField("Filter", text: $query).textFieldStyle(.roundedBorder).font(.footnote).focused($focused)
+            TextField("Filter", text: $query).softFieldSurface().font(.footnote).focused($focused)
             VStack(alignment: .leading, spacing: 0) {
                 ForEach(shown, id: \.0) { g in
                     Text(g.0).font(.caption.weight(.semibold)).foregroundStyle(.secondary).padding(.top, 6).transition(.opacity)

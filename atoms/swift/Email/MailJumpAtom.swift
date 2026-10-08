@@ -31,7 +31,7 @@ public struct MailJumpAtom: MotionAtomView {
                 }.buttonStyle(.bordered).controlSize(.small)
                 VStack(alignment: .leading, spacing: 8) {
                     TextField("Search mail…", text: $query)
-                        .textFieldStyle(.roundedBorder).font(.caption)
+                        .softFieldSurface().font(.caption)
                         .focused($focused)
                     HStack(alignment: .top, spacing: 10) {
                         VStack(spacing: 2) {

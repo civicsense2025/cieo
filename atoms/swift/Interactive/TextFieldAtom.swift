@@ -27,9 +27,9 @@ public struct TextFieldAtom: MotionAtomView {
                 VStack(alignment: .leading, spacing: 0) {
                     ZStack(alignment: .topLeading) {
                         RoundedRectangle(cornerRadius: 10).fill(.background)
-                        RoundedRectangle(cornerRadius: 10).stroke(Color.primary.opacity(0.15 + 0.85 * q), lineWidth: 1.5)
-                        RoundedRectangle(cornerRadius: 10).stroke(Color.green.opacity(g), lineWidth: 1.5)
-                        RoundedRectangle(cornerRadius: 10).stroke(Color.red.opacity(k), lineWidth: 1.5)
+                        RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.15 + 0.85 * q)).opacity(0.10)
+                        RoundedRectangle(cornerRadius: 10).fill(Color.green.opacity(g)).opacity(0.10)
+                        RoundedRectangle(cornerRadius: 10).fill(Color.red.opacity(k)).opacity(0.10)
                         Text("Email address")
                             .foregroundStyle(k > 0.5 ? Color.red : g > 0.5 ? Color.green : Color.secondary)
                             .scaleEffect(1 - 0.2 * p, anchor: .topLeading).offset(x: 13, y: 16 - 9 * p).allowsHitTesting(false)

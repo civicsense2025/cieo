@@ -27,7 +27,7 @@ public struct FocusRingAtom: MotionAtomView {
                     VStack(spacing: 16) {
                         TextField("Title", text: .constant("Spring essay"))
                             .focused($focused, equals: .title)
-                            .textFieldStyle(.roundedBorder).frame(minHeight: 40)
+                            .softFieldSurface().frame(minHeight: 40)
                         HStack(spacing: 8) {
                             Button("Save draft") {}.focused($focused, equals: .save)
                                 .buttonStyle(.bordered).frame(maxWidth: .infinity, minHeight: 40)

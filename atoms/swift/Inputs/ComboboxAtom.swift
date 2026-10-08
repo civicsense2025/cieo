@@ -34,7 +34,7 @@ public struct ComboboxAtom: MotionAtomView {
                     .onKeyPress(.escape) { focused = false; return .handled }
             }
             .padding(.horizontal, 10).frame(width: width, height: 38)
-            .background(RoundedRectangle(cornerRadius: 9).strokeBorder(Color.primary.opacity(0.2), lineWidth: 1.5))
+            .background(RoundedRectangle(cornerRadius: 9).fill(Color.primary.opacity(0.2)).opacity(0.10))
             .overlay(alignment: .topLeading) {
                 if focused { list.offset(y: 44).transition(reduce ? .identity : .basicsPop()) }
             }

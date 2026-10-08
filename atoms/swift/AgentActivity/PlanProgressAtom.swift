@@ -54,7 +54,7 @@ public struct PlanProgressAtom: MotionAtomView {
                         .transition(reduce ? .identity : .opacity.combined(with: .move(edge: .top)))
                     }
                     if adding {
-                        HStack { TextField("New step", text: $newTitle).textFieldStyle(.roundedBorder); Button("Add") { add() }.buttonStyle(AgPress(tone: .info)); Button("Cancel") { adding = false }.buttonStyle(AgPress()) }.transition(.opacity)
+                        HStack { TextField("New step", text: $newTitle).softFieldSurface(); Button("Add") { add() }.buttonStyle(AgPress(tone: .info)); Button("Cancel") { adding = false }.buttonStyle(AgPress()) }.transition(.opacity)
                     } else { Button { withMotion(.base, reduceMotion: reduce) { adding = true } } label: { Label("Add step", systemImage: "plus") }.buttonStyle(AgPress()) }
                 }
             }

@@ -3,7 +3,7 @@ import Cieo
 
 public struct FillFieldAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fillfield", category: "Forms", name: "Fillable field",
-        summary: "The label floats on first input. A short value rings danger with its message; a valid one inks a check and holds looks-good.")
+        summary: "The label floats on first input. A short value gains a danger fill with its message; a valid one inks a check and holds looks-good.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var value = ""
     @State private var touched = false
@@ -21,7 +21,7 @@ public struct FillFieldAtom: MotionAtomView {
                         TextField("", text: $value, onEditingChanged: { _ in touched = true })
                             .frame(minHeight: 36)
                             .padding(.horizontal, 10).padding(.trailing, 24)
-                            .background(RoundedRectangle(cornerRadius: 8).stroke(bad || empty ? .red : .secondary.opacity(0.4), lineWidth: 1))
+                            .background(RoundedRectangle(cornerRadius: 8).fill(bad || empty ? .red : .secondary.opacity(0.4)).opacity(0.10))
                             .onChange(of: value) { touched = true }
                         Text("e.g. Delivery schedule")
                             .font(.system(size: value.isEmpty ? 14 : 11))

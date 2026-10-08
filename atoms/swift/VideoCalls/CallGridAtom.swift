@@ -51,7 +51,7 @@ public struct CallGridAtom: MotionAtomView {
                             Text(String(names[i].prefix(1))).font(.callout.weight(.semibold)).frame(width: 44, height: 44)
                                 .background(Circle().fill(.white.opacity(0.2))).frame(maxWidth: .infinity, maxHeight: .infinity)
                             Text(names[i]).font(.caption.weight(.medium)).padding(.leading, 8).padding(.bottom, 6)
-                            RoundedRectangle(cornerRadius: 10).strokeBorder(Color.green, lineWidth: 2.5).opacity(speaker == i ? 1 : 0)
+                            RoundedRectangle(cornerRadius: 10).fill(Color.green).opacity(0.10).opacity(speaker == i ? 1 : 0)
                         }
                         .foregroundStyle(.white).frame(width: f.width, height: f.height)
                         .clipShape(RoundedRectangle(cornerRadius: 10))

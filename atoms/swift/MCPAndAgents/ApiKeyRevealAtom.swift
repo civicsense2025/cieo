@@ -26,7 +26,7 @@ public struct ApiKeyRevealAtom: MotionAtomView {
                         Button { withMotion(.base, reduceMotion: reduce) { form.toggle() } } label: { SwapText(form ? "Cancel" : "Create key") }.buttonStyle(AgPress(tone: form ? nil : .info))
                     }
                     AgReveal(open: form) {
-                        HStack { TextField("Key name", text: $name).textFieldStyle(.roundedBorder); Button("Create") { create() }.buttonStyle(AgPress(tone: .info)) }
+                        HStack { TextField("Key name", text: $name).softFieldSurface(); Button("Create") { create() }.buttonStyle(AgPress(tone: .info)) }
                     }
                     AgReveal(open: reveal) {
                         VStack(alignment: .leading, spacing: 6) {

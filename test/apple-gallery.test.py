@@ -25,16 +25,18 @@ class GalleryTests(unittest.TestCase):
                 self.assertNotIn(".toggleStyle(.checkbox)", path.read_text(), str(path))
         source = adapter.read_text()
         self.assertIn("#if os(macOS)", source)
-        self.assertIn(".toggleStyle(.checkbox)", source)
-        self.assertIn(".toggleStyle(.switch)", source)
+        self.assertIn("toggleStyle(.checkbox)", source)
+        self.assertIn("toggleStyle(.switch)", source)
 
     def test_preview_and_production_atoms_have_no_exterior_outline(self):
         for name in ["Sources/CieoGallery/Specimen.swift", "Sources/CieoUI/Atoms/ActionButtonStyle.swift",
                      "Sources/CieoUI/Atoms/SelectionChip.swift", "atoms/swift/Support/AtomStage.swift"]:
             self.assertNotIn("strokeBorder", (ROOT / name).read_text(), name)
-        decorative = re.compile(r"\.overlay\((?:RoundedRectangle|Capsule)\([^\n]*?\.stroke(?:Border)?\(\.quaternary")
+        decorative = re.compile(r"\.(?:overlay|background)\((?:RoundedRectangle|Capsule)\([^\n]*?\.stroke(?:Border)?\(\.quaternary")
         for path in (ROOT / "atoms/swift").rglob("*.swift"):
             self.assertIsNone(decorative.search(path.read_text()), str(path))
+            self.assertNotIn(".border(", path.read_text(), str(path))
+            self.assertNotIn(".textFieldStyle(.roundedBorder)", path.read_text(), str(path))
 
 
 if __name__ == "__main__":

@@ -31,7 +31,7 @@ public struct ThumbsReasonAtom: MotionAtomView {
                 if sel != nil && askReason && !sent {
                     HStack(spacing: 6) {
                         TextField("What stood out?", text: $reason)
-                            .textFieldStyle(.roundedBorder).font(.system(size: 13))
+                            .softFieldSurface().font(.system(size: 13))
                         Button("Send") {
                             withMotion(.base, reduceMotion: reduce) { sent = true }
                         }.buttonStyle(.borderedProminent).controlSize(.small)

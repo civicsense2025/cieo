@@ -16,7 +16,7 @@ public struct DocSearchAtom: MotionAtomView {
         AtomStage(hint: "Search “spring”, jump with ›, try “xyz”") {
             VStack(spacing: 10) {
                 HStack(spacing: 8) {
-                    TextField("Search document", text: $query).textFieldStyle(.roundedBorder).frame(minHeight: 32)
+                    TextField("Search document", text: $query).softFieldSurface().frame(minHeight: 32)
                     Button("‹") { step(-1) }.frame(minHeight: 32)
                     Button("›") { step(1) }.frame(minHeight: 32)
                     Text(String(format: "%02d", hits)).font(.callout).monospacedDigit()

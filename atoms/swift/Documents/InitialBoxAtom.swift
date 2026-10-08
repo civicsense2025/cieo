@@ -16,7 +16,7 @@ public struct InitialBoxAtom: MotionAtomView {
                 VStack(spacing: 10) {
                     Text("Initial here").font(.headline)
                     ZStack {
-                        RoundedRectangle(cornerRadius: 10).strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6])).foregroundStyle(.secondary)
+                        RoundedRectangle(cornerRadius: 10).fill(Color.secondary).opacity(0.10).foregroundStyle(.secondary)
                         ZStack {
                             if stamped { Text(initials.uppercased()).font(.system(size: 26).italic()).foregroundStyle(Color.accentColor).id(initials).motionTransition(.swap()).rotationEffect(.degrees(-4)).scaleEffect(scale) }
                             else { Text("MK").font(.caption).foregroundStyle(.secondary) }
@@ -24,7 +24,7 @@ public struct InitialBoxAtom: MotionAtomView {
                     }
                     .frame(width: 120, height: 76)
                     HStack(spacing: 8) {
-                        TextField("Initials", text: $initials).multilineTextAlignment(.center).textFieldStyle(.roundedBorder).frame(width: 76, height: 32)
+                        TextField("Initials", text: $initials).multilineTextAlignment(.center).softFieldSurface().frame(width: 76, height: 32)
                         Button(stamped ? "Clear" : "Adopt & stamp") {
                             if stamped { withMotion(.base, reduceMotion: reduce) { stamped = false } }
                             else {

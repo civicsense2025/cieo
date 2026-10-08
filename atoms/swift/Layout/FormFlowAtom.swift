@@ -52,7 +52,7 @@ public struct FormFlowAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Email").font(.footnote)
                 TextField("you@site.com", text: $email)
-                    .textFieldStyle(.roundedBorder).controlSize(.small)
+                    .softFieldSurface().controlSize(.small)
                     .focused($emailFocused)
                     .onChange(of: email) { _, v in
                         if liveError && !v.trimmingCharacters(in: .whitespaces).isEmpty && showError {
@@ -75,7 +75,7 @@ public struct FormFlowAtom: MotionAtomView {
     private func field(_ label: String, text: Binding<String>) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.footnote)
-            TextField(label, text: text).textFieldStyle(.roundedBorder).controlSize(.small)
+            TextField(label, text: text).softFieldSurface().controlSize(.small)
         }
     }
 

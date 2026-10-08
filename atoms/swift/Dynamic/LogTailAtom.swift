@@ -41,7 +41,7 @@ public struct LogTailAtom: MotionAtomView {
                         .padding(.horizontal, 10)
                     }
                     .frame(height: 132)
-                    .background(RoundedRectangle(cornerRadius: 10).stroke(.quaternary))
+                    .background(RoundedRectangle(cornerRadius: 10).fill(.quaternary).opacity(0.10))
                     .onChange(of: rows.count) { _, _ in
                         guard stick, !paused, let last = rows.last else { return }
                         withAnimation(reduce ? nil : .motion(.base)) {

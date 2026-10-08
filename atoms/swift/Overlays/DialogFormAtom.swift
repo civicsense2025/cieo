@@ -47,7 +47,7 @@ public struct DialogFormAtom: MotionAtomView {
             Text(label).font(.footnote)
             HStack(spacing: 8) {
                 TextField(label, text: text).focused($field, equals: tag)
-                    .textFieldStyle(.roundedBorder).font(.callout).frame(height: 36)
+                    .softFieldSurface().font(.callout).frame(height: 36)
                 Image(systemName: "checkmark.circle.fill").foregroundStyle(.green).opacity(valid(tag) ? 1 : 0)
             }
         }

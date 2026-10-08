@@ -36,7 +36,7 @@ public struct AuditIntakeAtom: MotionAtomView {
                         panel("What site should we audit?") {
                             HStack(spacing: 8) {
                                 TextField("example.site", text: $url)
-                                    .textFieldStyle(.roundedBorder).font(.subheadline)
+                                    .softFieldSurface().font(.subheadline)
                                     .monospacedDigit()
                                 if urlOK {
                                     Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
@@ -78,7 +78,7 @@ public struct AuditIntakeAtom: MotionAtomView {
                         } else {
                             panel("Where should we send it?") {
                                 TextField("you@example.com", text: .constant("you@example.com"))
-                                    .textFieldStyle(.roundedBorder).font(.subheadline)
+                                    .softFieldSurface().font(.subheadline)
                                 rowNav(showBack: true, next: "Queue audit ✓") {
                                     withMotion(.base, reduceMotion: reduce) { queued = true }
                                 }

@@ -87,7 +87,7 @@ public struct SlotFillingFormAtom: MotionAtomView {
                     ForEach(defs[i].options, id: \.self) { opt in
                         Text(opt).font(.caption).foregroundStyle(.secondary)
                             .padding(.horizontal, 10).frame(height: 28)
-                            .background(RoundedRectangle(cornerRadius: 9).strokeBorder(.quaternary))
+                            .background(RoundedRectangle(cornerRadius: 9).fill(.quaternary).opacity(0.10))
                     }
                 }
                 .motionTransition(.presence)

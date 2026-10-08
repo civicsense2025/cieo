@@ -22,7 +22,7 @@ public struct LocationSearchAtom: MotionAtomView {
                 Text("Find a place").font(.callout.weight(.semibold)).lineSpacing(4)
                 HStack(spacing: 8) {
                     TextField("Try “ferry” or “zzz”", text: $query)
-                        .textFieldStyle(.roundedBorder).font(.subheadline)
+                        .softFieldSurface().font(.subheadline)
                         .accessibilityLabel("Search places")
                     Button("Search") {}.buttonStyle(.borderedProminent).controlSize(.small)
                 }.padding(.top, 8)

@@ -51,7 +51,7 @@ public struct NpsScaleAtom: MotionAtomView {
                                     .foregroundStyle(sel == i ? Color.white : Color.primary)
                                     .animation(.motion(.base), value: sel)
                                     .frame(maxWidth: .infinity).frame(height: 40)
-                                    .background(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.primary.opacity(sel == i ? 0 : 0.2)))
+                                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(sel == i ? 0 : 0.2)).opacity(0.10))
                                     .motion(.base, value: sel)
                                     .contentShape(Rectangle()).reportFrame(i, in: "scale")
                             }

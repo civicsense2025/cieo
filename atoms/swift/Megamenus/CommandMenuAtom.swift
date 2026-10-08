@@ -45,7 +45,7 @@ public struct CommandMenuAtom: MotionAtomView {
     private var palette: some View {
         VStack(alignment: .leading, spacing: 4) {
             TextField(scope.map { "Search \($0)" } ?? "Search all commands", text: $query)
-                .textFieldStyle(.roundedBorder).focused($focused)
+                .softFieldSurface().focused($focused)
                 .onChange(of: query) { _, _ in sel = 0 }
                 .onSubmit { run() }
             VStack(spacing: 0) {
