@@ -211,17 +211,34 @@ test('receipt hashes exact raw bytes including CRLF and trailing bytes', t => {
     }
     assert.equal(new Set(hashes).size, 3);
 });
+// Capture only calls expected to diagnose failure; successful calls keep real stderr.
+function assertDiagnostic(options, expectedCodes) {
+    const write = process.stderr.write;
+    let output = '';
+    let status;
+    try {
+        process.stderr.write = chunk => { output += String(chunk); return true; };
+        status = runInventory(options);
+    } finally {
+        process.stderr.write = write;
+    }
+    assert.equal(status, 1, output);
+    const result = JSON.parse(output);
+    assert.deepEqual(Object.keys(result), ['diagnostics']);
+    assert.deepEqual(result.diagnostics.map(diagnostic => diagnostic.code), expectedCodes);
+    assert.ok(result.diagnostics.every(diagnostic => typeof diagnostic.path === 'string' && typeof diagnostic.message === 'string'));
+}
 test('generation and check preserve missing, edited and invalid-source output', t => {
     const root = receiptFixture(t);
-    assert.equal(runInventory({ root, check: true }), 1);
+    assertDiagnostic({ root, check: true }, ['stale-inventory']);
     assert.ok(!fs.existsSync(outputPath(root)));
     assert.equal(runInventory({ root, check: false }), 0);
     assert.equal(runInventory({ root, check: true }), 0);
     fs.writeFileSync(outputPath(root), 'edited');
-    assert.equal(runInventory({ root, check: true }), 1);
+    assertDiagnostic({ root, check: true }, ['stale-inventory']);
     assert.equal(fs.readFileSync(outputPath(root), 'utf8'), 'edited');
     fs.writeFileSync(path.join(root, 'atoms/web/blocks/sample.js'), 'atom({id: computed});');
-    assert.equal(runInventory({ root, check: false }), 1);
+    assertDiagnostic({ root, check: false }, ['index-mismatch', 'missing-baseline-id', 'unsupported-source-header']);
     assert.equal(fs.readFileSync(outputPath(root), 'utf8'), 'edited');
 });
 test('linked output parent directories and files are refused without mutation', t => {
@@ -233,7 +250,7 @@ test('linked output parent directories and files are refused without mutation', 
         const destination = component.endsWith('.json') ? path.join(outside, 'file') : outside;
         if (component.endsWith('.json')) fs.writeFileSync(destination, 'untouched');
         fs.symlinkSync(destination, target);
-        for (const check of [true, false]) assert.equal(runInventory({ root, check }), 1);
+        for (const check of [true, false]) assertDiagnostic({ root, check }, ['symlink-output']);
         assert.deepEqual(fs.readdirSync(outside), component.endsWith('.json') ? ['file'] : []);
         if (component.endsWith('.json')) assert.equal(fs.readFileSync(destination, 'utf8'), 'untouched');
     }
@@ -269,7 +286,7 @@ test('interrupted temporary writes preserve old receipt and clean owned files', 
         }
         return write(target, ...args);
     });
-    assert.equal(runInventory({ root, check: false }), 1);
+    assertDiagnostic({ root, check: false }, ['EIO']);
     assert.deepEqual(fs.readFileSync(outputPath(root)), original);
     assert.deepEqual(fs.readdirSync(path.dirname(outputPath(root))), ['catalogue-inventory.json']);
 });
