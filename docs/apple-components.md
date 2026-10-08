@@ -2,6 +2,8 @@
 
 Cieo owns the reusable Swift source. `CieoUI` depends only on the existing Cieo motion engine; reference recipes remain in the separate `CieoAtoms` product. The initial scope is a small production foundation, not a new navigation or authentication implementation.
 
+The [catalogue migration receipt](catalogue-inventory.md) records current recipe identities and source hashes; it does not establish production component readiness.
+
 ## Implementation contract
 
 1. Foundations own semantic palette, spacing and the rendering policy.

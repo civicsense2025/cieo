@@ -176,3 +176,84 @@ test('frozen baseline records retain their declared platform identities', () => 
     assert.deepEqual(reconcile(baseline.records, baseline.records).diagnostics, []);
     assert.ok(baseline.records.every(record => record.artifactKind === 'recipe' && /^[a-f0-9]{64}$/.test(record.sha256)));
 });
+
+import { createHash } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import { buildReceipt, runInventory } from '../scripts/check-catalogue-inventory.mjs';
+const outputPath = root => path.join(root, 'docs/generated/catalogue-inventory.json');
+function receiptFixture(t, options) {
+    const root = fixture(t, options);
+    fs.mkdirSync(path.join(root, 'test/fixtures'), { recursive: true });
+    fs.writeFileSync(path.join(root, 'test/fixtures/catalogue-baseline.json'), JSON.stringify({ formatVersion: 1, sourceRevision: 'a'.repeat(40), records: collectSources(root).records }));
+    return root;
+}
+test('receipt repeats exactly, retains observations and excludes checkout paths', t => {
+    const root = receiptFixture(t, { blocks: [] });
+    const first = buildReceipt(root), second = buildReceipt(root);
+    assert.deepEqual(first.diagnostics, []);
+    assert.equal(first.bytes, second.bytes);
+    const receipt = JSON.parse(first.bytes);
+    assert.equal(receipt.entries[0].artifactKind, 'recipe');
+    assert.equal(receipt.observations[0].code, 'indexed-source-not-loaded');
+    assert.equal(receipt.entries[0].sources.length, 2);
+    assert.ok(!first.bytes.includes(root));
+});
+test('receipt hashes exact raw bytes including CRLF and trailing bytes', t => {
+    const root = receiptFixture(t);
+    const target = path.join(root, 'atoms/swift/Writing/Different.swift');
+    const hashes = [];
+    for (const bytes of [Buffer.from(swift), Buffer.from(swift.replaceAll('\n', '\r\n')), Buffer.from(swift + '\n')]) {
+        fs.writeFileSync(target, bytes);
+        const record = JSON.parse(buildReceipt(root).bytes).entries[0].sources.find(s => s.platform === 'swift');
+        assert.equal(record.sha256, createHash('sha256').update(bytes).digest('hex'));
+        hashes.push(record.sha256);
+    }
+    assert.equal(new Set(hashes).size, 3);
+});
+test('generation and check preserve missing, edited and invalid-source output', t => {
+    const root = receiptFixture(t);
+    assert.equal(runInventory({ root, check: true }), 1);
+    assert.ok(!fs.existsSync(outputPath(root)));
+    assert.equal(runInventory({ root, check: false }), 0);
+    assert.equal(runInventory({ root, check: true }), 0);
+    fs.writeFileSync(outputPath(root), 'edited');
+    assert.equal(runInventory({ root, check: true }), 1);
+    assert.equal(fs.readFileSync(outputPath(root), 'utf8'), 'edited');
+    fs.writeFileSync(path.join(root, 'atoms/web/blocks/sample.js'), 'atom({id: computed});');
+    assert.equal(runInventory({ root, check: false }), 1);
+    assert.equal(fs.readFileSync(outputPath(root), 'utf8'), 'edited');
+});
+test('linked output parent directories and files are refused without mutation', t => {
+    for (const component of ['docs', 'generated', 'catalogue-inventory.json']) {
+        const root = receiptFixture(t), outside = fs.mkdtempSync(path.join(os.tmpdir(), 'receipt-outside-'));
+        t.after(() => fs.rmSync(outside, { recursive: true, force: true }));
+        const target = component === 'docs' ? path.join(root, 'docs') : component === 'generated' ? path.join(root, 'docs/generated') : outputPath(root);
+        fs.mkdirSync(path.dirname(target), { recursive: true });
+        const destination = component.endsWith('.json') ? path.join(outside, 'file') : outside;
+        if (component.endsWith('.json')) fs.writeFileSync(destination, 'untouched');
+        fs.symlinkSync(destination, target);
+        for (const check of [true, false]) assert.equal(runInventory({ root, check }), 1);
+        assert.deepEqual(fs.readdirSync(outside), component.endsWith('.json') ? ['file'] : []);
+        if (component.endsWith('.json')) assert.equal(fs.readFileSync(destination, 'utf8'), 'untouched');
+    }
+});
+test('CLI rejects unsupported arguments and imports safely without argv', () => {
+    const cli = fileURLToPath(new URL('../scripts/check-catalogue-inventory.mjs', import.meta.url));
+    for (const args of [['--root', '/tmp'], ['--check', '--check'], ['--unknown']]) {
+        const result = spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8' });
+        assert.equal(result.status, 2);
+        assert.equal(JSON.parse(result.stderr).diagnostics[0].code, 'unsupported-arguments');
+    }
+    const result = spawnSync(process.execPath, ['--input-type=module', '-e', `process.argv = []; await import(${JSON.stringify(pathToFileURL(cli).href)});`], { encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(result.stdout, '');
+});
+test('child-process seam exercises fixture generation and check exit status', t => {
+    const root = receiptFixture(t);
+    const module = new URL('../scripts/check-catalogue-inventory.mjs', import.meta.url).href;
+    const invoke = check => spawnSync(process.execPath, ['--input-type=module', '-e', `import {runInventory} from ${JSON.stringify(module)}; process.exitCode=runInventory({root:${JSON.stringify(root)},check:${check}});`], { encoding: 'utf8' });
+    assert.equal(invoke(true).status, 1);
+    assert.equal(invoke(false).status, 0);
+    assert.equal(invoke(true).status, 0);
+});
