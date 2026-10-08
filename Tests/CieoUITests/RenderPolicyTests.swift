@@ -15,6 +15,7 @@ final class RenderPolicyTests: XCTestCase {
             RenderPolicy(effectsEnabled: true, increasedContrast: true),
             RenderPolicy(effectsEnabled: true, lowPower: true),
             RenderPolicy(effectsEnabled: true, active: false),
+            RenderPolicy(effectsEnabled: true, motionDisabled: true),
         ]
         for policy in constrained {
             XCTAssertFalse(policy.allowsShader)
@@ -22,6 +23,7 @@ final class RenderPolicyTests: XCTestCase {
         XCTAssertFalse(constrained[0].allowsMotion)
         XCTAssertFalse(constrained[3].allowsMotion)
         XCTAssertFalse(constrained[4].allowsMotion)
+        XCTAssertFalse(constrained[5].allowsMotion)
         XCTAssertTrue(constrained[1].allowsMotion)
     }
 

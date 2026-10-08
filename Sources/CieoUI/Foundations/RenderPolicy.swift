@@ -5,11 +5,11 @@ public struct RenderPolicy: Equatable, Sendable {
     public let allowsMotion: Bool
     public let allowsShader: Bool
 
-    public init(effectsEnabled: Bool = false, reduceMotion: Bool = false,
+    public init(effectsEnabled: Bool = false, reduceMotion: Bool = false, motionDisabled: Bool = false,
                 reduceTransparency: Bool = false, increasedContrast: Bool = false,
                 lowPower: Bool = false, active: Bool = true)
     {
-        allowsMotion = active && !reduceMotion && !lowPower
+        allowsMotion = active && !reduceMotion && !motionDisabled && !lowPower
         allowsShader = effectsEnabled && allowsMotion && !reduceTransparency && !increasedContrast
     }
 
