@@ -23,6 +23,8 @@ class GalleryTests(unittest.TestCase):
         for path in (ROOT / "atoms/swift").rglob("*.swift"):
             if path != adapter:
                 self.assertNotIn(".toggleStyle(.checkbox)", path.read_text(), str(path))
+                self.assertNotIn(".onExitCommand", path.read_text(), str(path))
+                self.assertNotIn(".onMoveCommand", path.read_text(), str(path))
         source = adapter.read_text()
         self.assertIn("#if os(macOS)", source)
         self.assertIn("toggleStyle(.checkbox)", source)

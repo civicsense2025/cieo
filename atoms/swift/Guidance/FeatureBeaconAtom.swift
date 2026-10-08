@@ -63,6 +63,6 @@ public struct FeatureBeaconAtom: MotionAtomView {
                 }.font(.caption).foregroundStyle(.secondary)
             }
         }
-        .onExitCommand { if open { withMotion(.snap, reduceMotion: reduce) { open = false } } }
+        .escapeKey { if open { withMotion(.snap, reduceMotion: reduce) { open = false } } }
     }
 }
