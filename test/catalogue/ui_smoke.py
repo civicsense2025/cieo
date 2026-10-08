@@ -139,9 +139,9 @@ with sync_playwright() as p:
 
     search(page, '')
     page.locator('.ui-topbar [data-open=appearance-dialog]').click()
-    page.locator('[data-appearance=dark]').click()
+    page.get_by_role('button', name='Dark', exact=True).click()
     expect(page.locator('html')).to_have_attribute('data-appearance', 'dark')
-    page.locator('[data-accent=coral]').click()
+    page.get_by_role('button', name='Coral accent', exact=True).click()
     check('Accent is applied to the existing preview scope', page.locator('#switch').evaluate("e=>getComputedStyle(e).getPropertyValue('--accent').trim() === '#edb5a4'"))
     page.keyboard.press('Escape')
     page.screenshot(path=str(OUT / 'dark.png'))
