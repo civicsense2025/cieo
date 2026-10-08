@@ -54,7 +54,7 @@ public struct FeatureBeaconAtom: MotionAtomView {
                     }
                 }
                 .padding(.horizontal, 14).padding(.vertical, 14)
-                .frame(width: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 .animation(reduce ? nil : .motion(.base), value: open)
                 HStack(spacing: 6) {
                     Text("Pulse:").font(.caption).foregroundStyle(.secondary)

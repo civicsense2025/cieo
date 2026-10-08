@@ -39,7 +39,7 @@ public struct CheckoutAtom: MotionAtomView {
                     insertion: .modifier(active: Slide(x: 30 * dir, blur: 4, o: 0), identity: Slide(x: 0, blur: 0, o: 1)).animation(.motion(.base).delay(Motion.exit)),
                     removal: .modifier(active: Slide(x: -30 * dir, blur: 4, o: 0), identity: Slide(x: 0, blur: 0, o: 1)).animation(.motionExit))) }
                     .frame(width: 340, height: 160, alignment: .topLeading).clipped()
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 

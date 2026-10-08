@@ -85,7 +85,7 @@ public struct IssueListAtom: MotionAtomView {
                 }
                 .buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 }

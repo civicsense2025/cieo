@@ -34,7 +34,7 @@ public struct SelectionToolbarAtom: MotionAtomView {
         AtomStage(hint: "Drag across some words") {
             ZStack(alignment: .topLeading) {
                 WritingWords(words: words, space: "p", font: .callout, highlighted: selection)
-                    .frame(width: 320).coordinateSpace(name: "p")
+                    .frame(maxWidth: 320).coordinateSpace(name: "p")
                     .onPreferenceChange(FramePreferenceKey.self) { frames = $0 }
                     .contentShape(Rectangle())
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("p"))

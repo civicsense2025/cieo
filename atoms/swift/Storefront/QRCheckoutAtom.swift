@@ -34,7 +34,7 @@ public struct QRCheckoutAtom: MotionAtomView {
                     }.buttonStyle(.borderedProminent).controlSize(.small)
                     Toggle("Beam", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
                 }
-            }.frame(width: 300).onAppear { withMotion(.base, reduceMotion: reduce) { shown = true } }
+            }.frame(maxWidth: 300).onAppear { withMotion(.base, reduceMotion: reduce) { shown = true } }
         }
     }
 }

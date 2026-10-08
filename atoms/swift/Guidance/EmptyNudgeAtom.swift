@@ -45,7 +45,7 @@ public struct EmptyNudgeAtom: MotionAtomView {
                     }
                 }
                 .padding(.horizontal, 14).padding(.vertical, 16)
-                .frame(width: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 HStack(spacing: 6) {
                     Text("Tips:").font(.caption).foregroundStyle(.secondary)
                     ForEach(tips.indices, id: \.self) { i in

@@ -43,7 +43,7 @@ public struct MemoryToggleAtom: MotionAtomView {
                     .frame(height: 18, alignment: .leading)
                 Toggle("Show source", isOn: $showSource).font(.caption).foregroundStyle(.secondary)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.base), value: on)
         }
     }

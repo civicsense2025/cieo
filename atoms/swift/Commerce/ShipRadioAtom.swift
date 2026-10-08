@@ -59,7 +59,7 @@ public struct ShipRadioAtom: MotionAtomView {
                 }
                 Toggle("Free over $75", isOn: $free75).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
-            .padding(14).frame(width: 300)
+            .padding(14).frame(maxWidth: 300)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
         }
     }

@@ -56,7 +56,7 @@ public struct PreviewTextAtom: MotionAtomView {
                     Text("cut at \(limit)").font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .padding(16).frame(width: 340)
+            .padding(16).frame(maxWidth: 340)
             .background(.background, in: RoundedRectangle(cornerRadius: 14))
             .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
         }

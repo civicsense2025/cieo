@@ -49,7 +49,7 @@ public struct SuggestionChipsAtom: MotionAtomView {
                 }
                 Toggle("Stagger chips in", isOn: $stagger).font(.caption).foregroundStyle(.secondary)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.base), value: picked)
             .onAppear { shown = true }
         }

@@ -37,7 +37,7 @@ public struct RegenerationDiffAtom: MotionAtomView {
                     Toggle("Highlight changes", isOn: $highlight).font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.base), value: regen)
         }
     }

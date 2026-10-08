@@ -30,7 +30,7 @@ public struct CharacterLimitRingAtom: MotionAtomView {
                     Button("Post") {}.buttonStyle(.borderedProminent).controlSize(.small).disabled(over || text.isEmpty)
                 }
             }
-            .padding(12).frame(width: 320)
+            .padding(12).frame(maxWidth: 320)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
         }
     }

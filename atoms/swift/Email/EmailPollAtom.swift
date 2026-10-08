@@ -65,7 +65,7 @@ public struct EmailPollAtom: MotionAtomView {
                     HStack { Text("Votes can move when allowed").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Allow change vote", isOn: $allowChange).labelsHidden().controlSize(.mini) }
                         .padding(.top, 8)
                 }
-                .padding(14).frame(width: 300)
+                .padding(14).frame(maxWidth: 300)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
             }
         }

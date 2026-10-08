@@ -63,7 +63,7 @@ public struct RsvpAtom: MotionAtomView {
                             .font(.system(size: 12)).foregroundStyle(.secondary)
                     }
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
         .onAppear { if !ready { ready = true; left.jump(0); right.jump(0) } }

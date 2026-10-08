@@ -60,7 +60,7 @@ public struct ToolCallDisclosureAtom: MotionAtomView {
                 Toggle("Verbose steps", isOn: $verbose).font(.caption).foregroundStyle(.secondary)
                     .padding(.top, 10)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.soft), value: verbose)
         }
     }

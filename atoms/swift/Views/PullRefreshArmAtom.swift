@@ -67,7 +67,7 @@ public struct PullRefreshArmAtom: MotionAtomView {
                         withMotion(.base, reduceMotion: reduce) { pull = 0; phase = .idle }
                     }
                 })
-                Toggle("Stiff pull", isOn: $stiff).font(.caption).foregroundStyle(.secondary).frame(width: 320)
+                Toggle("Stiff pull", isOn: $stiff).font(.caption).foregroundStyle(.secondary).frame(maxWidth: 320)
             }
         }
     }

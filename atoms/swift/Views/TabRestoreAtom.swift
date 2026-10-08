@@ -58,7 +58,7 @@ public struct TabRestoreAtom: MotionAtomView {
                     Text("\(tabs[cur]) · \(depths[cur]) deep · scroll restores").font(.caption).foregroundStyle(.secondary)
                         .frame(maxWidth: .infinity, alignment: .leading).padding(10)
                 }
-                .frame(width: 340)
+                .frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12)).clipShape(RoundedRectangle(cornerRadius: 12))
                 HStack(spacing: 8) {
                     Button("Simulate alert") { ping() }.buttonStyle(.bordered).controlSize(.small)

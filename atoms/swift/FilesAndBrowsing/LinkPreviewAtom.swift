@@ -29,7 +29,7 @@ public struct LinkPreviewAtom: MotionAtomView {
                         }
                     }.font(.callout)
                 }
-                .frame(width: 320, alignment: .leading)
+                .frame(maxWidth: 320, alignment: .leading)
                 if let i = current, let f = frames[i] {
                     card(i)
                         .position(x: min(max(f.midX, 125 + 8), 320 - 125 - 8), y: f.maxY + 8 + 68)
@@ -41,6 +41,7 @@ public struct LinkPreviewAtom: MotionAtomView {
             .frame(width: 320, height: 240, alignment: .topLeading)
             .motion(.base, value: current)
         }
+        .onDisappear { pending?.cancel() }
     }
 
     private func card(_ i: Int) -> some View {

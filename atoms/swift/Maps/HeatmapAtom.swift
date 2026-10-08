@@ -38,7 +38,7 @@ public struct HeatmapAtom: MotionAtomView {
                 }
                 .frame(width: 380, height: 240).clipShape(RoundedRectangle(cornerRadius: 14))
                 HStack { Text("Dense cells pulse once, then rest").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Heat", isOn: $on).labelsHidden().controlSize(.mini) }
-                    .frame(width: 380)
+                    .frame(maxWidth: 380)
             }
         }
     }

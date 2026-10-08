@@ -38,9 +38,9 @@ public struct ViewCrossfadeAtom: MotionAtomView {
                         Button("About") { go(2) }.buttonStyle(.bordered).controlSize(.small)
                     }.padding(10)
                 }
-                .frame(width: 340)
+                .frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12)).clipShape(RoundedRectangle(cornerRadius: 12))
-                Toggle("Soft blur", isOn: $softBlur).font(.caption).foregroundStyle(.secondary).frame(width: 340)
+                Toggle("Soft blur", isOn: $softBlur).font(.caption).foregroundStyle(.secondary).frame(maxWidth: 340)
             }
         }
     }

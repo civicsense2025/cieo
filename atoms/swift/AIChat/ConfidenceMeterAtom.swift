@@ -56,7 +56,7 @@ public struct ConfidenceMeterAtom: MotionAtomView {
                 }
                 Toggle("Slow ink", isOn: $slow).font(.caption).foregroundStyle(.secondary)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
         }
     }
 

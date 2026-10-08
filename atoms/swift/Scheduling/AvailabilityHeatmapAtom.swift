@@ -57,7 +57,7 @@ public struct AvailabilityHeatmapAtom: MotionAtomView {
                     }
                     .foregroundStyle(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
         .onAppear { if !ready { ready = true; paint(instant: true) } }

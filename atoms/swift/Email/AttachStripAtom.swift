@@ -57,7 +57,7 @@ public struct AttachStripAtom: MotionAtomView {
                         .disabled(left == 0)
                     }
                 }
-                .padding(14).frame(width: 300)
+                .padding(14).frame(maxWidth: 300)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Compress images", isOn: $compress)
                     .font(.caption).foregroundStyle(.secondary)

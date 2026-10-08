@@ -31,7 +31,7 @@ public struct SitemapTreeAtom: MotionAtomView {
                 Toggle("Flag orphans", isOn: $flagOrphans).font(.caption).foregroundStyle(.secondary)
                     .nativeToggleStyle()
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 

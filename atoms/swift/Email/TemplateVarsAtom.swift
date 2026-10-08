@@ -57,7 +57,7 @@ public struct TemplateVarsAtom: MotionAtomView {
                         .foregroundStyle(Color.red)
                         .frame(height: 18, alignment: .leading)
                 }
-                .padding(14).frame(width: 320)
+                .padding(14).frame(maxWidth: 320)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Keep placeholders", isOn: $keepPlaceholders)
                     .font(.caption).foregroundStyle(.secondary)

@@ -25,7 +25,7 @@ public struct CheckoutFieldsAtom: MotionAtomView {
                     }.buttonStyle(.borderedProminent).controlSize(.small).disabled(paid).tint(paid ? .green : .accentColor)
                     Toggle("Validate live", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
                 }
-            }.frame(width: 300)
+            }.frame(maxWidth: 300)
         }
     }
     private func field(_ title: String, text: Binding<String>, bad: Bool, msg: String) -> some View {

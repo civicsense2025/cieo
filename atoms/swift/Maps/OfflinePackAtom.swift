@@ -48,7 +48,7 @@ public struct OfflinePackAtom: MotionAtomView {
                         .accessibilityLabel("Wi-Fi only")
                 }
             }
-            .padding(14).frame(width: 340)
+            .padding(14).frame(maxWidth: 340)
             .background(RoundedRectangle(cornerRadius: 14).fill(.background).shadow(radius: 4, y: 1))
         }
     }

@@ -61,10 +61,10 @@ public struct MultiStepShellAtom: MotionAtomView {
                     }.padding(.top, 10)
                 }
                 .padding(14)
-                .frame(width: 340)
+                .frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).fill(step == 2 ? Color.green : .clear).opacity(0.10).allowsHitTesting(false))
-                Toggle("Prefill answers", isOn: $prefill).font(.caption).foregroundStyle(.secondary).frame(width: 340)
+                Toggle("Prefill answers", isOn: $prefill).font(.caption).foregroundStyle(.secondary).frame(maxWidth: 340)
                     .onChange(of: prefill) { _, on in if on { name = "Jordan Ellis"; email = "you@example.org" } }
             }
         }

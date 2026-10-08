@@ -57,7 +57,7 @@ public struct AddressFieldsAtom: MotionAtomView {
                 HStack { Text("Verified plate glides behind").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Suggest", isOn: $suggest).labelsHidden().controlSize(.mini) }
                     .padding(.top, 8)
             }
-            .padding(14).frame(width: 380)
+            .padding(14).frame(maxWidth: 380)
             .background(RoundedRectangle(cornerRadius: 14).fill(.background).shadow(radius: 4, y: 1))
         }
     }

@@ -33,7 +33,7 @@ public struct ChatPollAtom: MotionAtomView {
                     }.buttonStyle(.bordered).controlSize(.small)
                 }
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
         }
     }
 

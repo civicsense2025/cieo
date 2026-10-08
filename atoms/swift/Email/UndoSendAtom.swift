@@ -21,7 +21,7 @@ public struct UndoSendAtom: MotionAtomView {
                     Text("Looks great. Ship it Thursday.").font(.caption)
                     Button("Send", action: send).buttonStyle(.borderedProminent).frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                .padding(14).frame(width: 300).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
+                .padding(14).frame(maxWidth: 300).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
                 .opacity(draft ? 1 : 0).offset(y: draft ? 0 : 20).scaleEffect(draft ? 1 : 0.92, anchor: .bottom).allowsHitTesting(draft)
                 .animation(reduce ? nil : .motion(draft ? .base : .snap), value: draft)
                 VStack { Spacer(); toastView.opacity(toast ? 1 : 0).offset(y: toast ? 0 : 12).allowsHitTesting(toast)

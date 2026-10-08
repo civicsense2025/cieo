@@ -27,7 +27,7 @@ public struct StockCountAtom: MotionAtomView {
                     Button(stock <= 0 ? "Sold out" : "Buy one") { withMotion(.lazy, reduceMotion: reduce) { stock = max(0, stock - 1) } }.buttonStyle(.borderedProminent).controlSize(.small)
                     Toggle("Auto-restock", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
                 }
-            }.frame(width: 300)
+            }.frame(maxWidth: 300)
         }
     }
 }

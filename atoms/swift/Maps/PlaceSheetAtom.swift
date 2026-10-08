@@ -56,9 +56,9 @@ public struct PlaceSheetAtom: MotionAtomView {
                     })
                     .accessibilityLabel("Place card").accessibilityHint("Drag to resize the sheet")
                 }
-                .frame(width: 380).clipShape(RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 380).clipShape(RoundedRectangle(cornerRadius: 14))
                 HStack { Text("Drag the sheet · map stays live").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Photos", isOn: $photos).labelsHidden().controlSize(.mini) }
-                    .frame(width: 380)
+                    .frame(maxWidth: 380)
             }
         }
     }

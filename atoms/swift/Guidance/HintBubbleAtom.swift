@@ -41,7 +41,7 @@ public struct HintBubbleAtom: MotionAtomView {
                     }
                 }
                 .padding(.horizontal, 14).padding(.vertical, 14)
-                .frame(width: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 HStack(spacing: 6) {
                     Text("Field:").font(.caption).foregroundStyle(.secondary)
                     Button("Name") { field = 0 }.buttonStyle(.bordered).controlSize(.mini)

@@ -84,7 +84,7 @@ public struct RedirectRuleAtom: MotionAtomView {
                     Text("· reorder with ↑ ↓").font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 

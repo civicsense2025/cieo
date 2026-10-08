@@ -49,7 +49,7 @@ public struct ComposeFieldsAtom: MotionAtomView {
                         withMotion(.base, reduceMotion: reduce) { focused = false }
                     }.buttonStyle(.borderedProminent).controlSize(.small)
                 }
-                .padding(14).frame(width: 320)
+                .padding(14).frame(maxWidth: 320)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 .overlay(RoundedRectangle(cornerRadius: 14).fill(edge).opacity(0.10).allowsHitTesting(false))
                 .animation(reduce ? nil : .motion(.base), value: chips.count)

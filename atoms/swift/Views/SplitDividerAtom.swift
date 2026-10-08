@@ -65,7 +65,7 @@ public struct SplitDividerAtom: MotionAtomView {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                 Toggle("Collapse to overlay under 100pt", isOn: $collapse)
-                    .font(.caption).foregroundStyle(.secondary).frame(width: 380)
+                    .font(.caption).foregroundStyle(.secondary).frame(maxWidth: 380)
                     .onChange(of: collapse) { _, on in
                         withMotion(.base, reduceMotion: reduce) { overlay = on && pos < 100 }
                     }

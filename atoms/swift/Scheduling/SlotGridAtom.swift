@@ -46,7 +46,7 @@ public struct SlotGridAtom: MotionAtomView {
                         }
                     }
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
         .onAppear { if !ready { ready = true; slide(0, instant: true) } }

@@ -37,7 +37,7 @@ public struct PrefQuizAtom: MotionAtomView {
                     removal: .modifier(active: QuizSlide(x: -24 * dir), identity: QuizSlide(x: 0)).animation(.motionExit)))
                 .id(step)
                 Toggle("Restart when done", isOn: .constant(false)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
     private func qcard(_ q: String, _ answers: [String]) -> some View {

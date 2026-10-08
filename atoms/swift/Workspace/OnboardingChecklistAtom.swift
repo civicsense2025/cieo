@@ -40,7 +40,7 @@ public struct OnboardingChecklistAtom: MotionAtomView {
                     }.motionTransition(.swap())
                 }
             }
-            .padding(16).frame(width: 300).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14)).animation(reduce ? nil : .motion(.base), value: stage).animation(reduce ? nil : .motion(.base), value: open)
+            .padding(16).frame(maxWidth: 300).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14)).animation(reduce ? nil : .motion(.base), value: stage).animation(reduce ? nil : .motion(.base), value: open)
         }
     }
 

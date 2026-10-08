@@ -34,7 +34,7 @@ public struct PickupTimeAtom: MotionAtomView {
                 } }.id(day).motionTransition(.swap())
                 SwapText(slot.map { "\(days[day]) at \($0) — ready in 15 min." } ?? "Pick a day to see slots.").font(.caption).foregroundStyle(.secondary)
                 Toggle("Include weekend", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 }

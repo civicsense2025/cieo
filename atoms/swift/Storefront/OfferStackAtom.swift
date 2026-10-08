@@ -40,7 +40,7 @@ public struct OfferStackAtom: MotionAtomView {
                     }
                 }.frame(height: 130)
                 Toggle("Depth effect", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 }

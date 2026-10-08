@@ -53,7 +53,7 @@ public struct SlotFillingFormAtom: MotionAtomView {
                 }
                 .padding(.top, 8)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.soft), value: done)
         }
     }

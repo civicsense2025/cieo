@@ -34,7 +34,7 @@ public struct ReviewFormAtom: MotionAtomView {
                         .buttonStyle(.borderedProminent).controlSize(.small).disabled(posted).tint(posted ? .green : .accentColor)
                     Toggle("Photos", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
                 }
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 }

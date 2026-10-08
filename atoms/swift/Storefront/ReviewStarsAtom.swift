@@ -29,7 +29,7 @@ public struct ReviewStarsAtom: MotionAtomView {
                         .buttonStyle(.borderedProminent).controlSize(.small).disabled(score == 0 || done).tint(done ? .green : .accentColor)
                     Toggle("Half stars", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
                 }
-            }.frame(width: 300)
+            }.frame(maxWidth: 300)
         }
     }
 }

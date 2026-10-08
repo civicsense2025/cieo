@@ -27,7 +27,7 @@ public struct BacklinkAtom: MotionAtomView {
                     .accessibilityValue(open ? "expanded" : "collapsed")
                 if open { panel.motionTransition(.presence) }
             }
-            .frame(width: 300, alignment: .leading)
+            .frame(maxWidth: 300, alignment: .leading)
         }
     }
 

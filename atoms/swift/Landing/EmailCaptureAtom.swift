@@ -33,7 +33,7 @@ public struct EmailCaptureAtom: MotionAtomView {
                             else { Text("Join").id(0).motionTransition(.swap()) }
                         }.frame(minWidth: 64, minHeight: 36)
                     }.buttonStyle(.borderedProminent).tint(phase == .done ? .green : .accentColor).disabled(phase != .idle)
-                }.frame(width: 320)
+                }.frame(maxWidth: 320)
                 ZStack {
                     if invalid { Text("Enter an address like name@example.com").foregroundStyle(.red).id(1).motionTransition(.swap()) }
                     else if phase == .done { Text("Check your inbox to confirm.").foregroundStyle(.green).id(2).motionTransition(.swap()) }
@@ -43,7 +43,7 @@ public struct EmailCaptureAtom: MotionAtomView {
                     var t = Transaction(); t.disablesAnimations = true
                     withTransaction(t) { email = ""; invalid = false; phase = .idle }
                 }.font(.caption).buttonStyle(.borderless)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 

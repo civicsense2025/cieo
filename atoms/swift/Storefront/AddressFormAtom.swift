@@ -44,7 +44,7 @@ public struct AddressFormAtom: MotionAtomView {
                     }
                 }.frame(height: 76, alignment: .top)
                 Toggle("Look up city", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 }

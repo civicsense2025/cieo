@@ -52,7 +52,7 @@ public struct SurveyBlockAtom: MotionAtomView {
                 Button("Reset") { withMotion(.snap, reduceMotion: reduce) { step = 0 } }
                     .font(.caption).buttonStyle(.borderless)
             }
-            .padding(16).frame(width: 340)
+            .padding(16).frame(maxWidth: 340)
             .background(finished ? Color.green.opacity(0.15) : Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 14))
             .animation(reduce ? nil : .motion(.base), value: finished)
             .shadow(color: .black.opacity(0.08), radius: 8, y: 2)

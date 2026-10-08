@@ -49,9 +49,10 @@ public struct CrawlProgressAtom: MotionAtomView {
                     .nativeToggleStyle()
                 Button("Start crawl", action: run).buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear(perform: run)
+        .onDisappear { task?.cancel() }
     }
 
     private func run() {

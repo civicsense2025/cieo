@@ -37,7 +37,7 @@ public struct KeywordRanksAtom: MotionAtomView {
                         }
                     }.frame(height: 180, alignment: .top)
                 }
-                .frame(width: 340)
+                .frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 Button("Refresh", action: refresh).buttonStyle(.bordered).controlSize(.small)
             }

@@ -45,7 +45,7 @@ public struct PrefPickAtom: MotionAtomView {
                     .padding(.top, 8)
                 }
                 .padding(.horizontal, 14).padding(.vertical, 14)
-                .frame(width: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 HStack(spacing: 6) {
                     Text("Preset:").font(.caption).foregroundStyle(.secondary)
                     Button("None") { withMotion(.base, reduceMotion: reduce) { on = [Bool](repeating: false, count: topics.count) } }

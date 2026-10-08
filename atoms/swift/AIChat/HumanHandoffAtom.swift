@@ -66,7 +66,7 @@ public struct HumanHandoffAtom: MotionAtomView {
                     Toggle("Transcript", isOn: $showTranscript).font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.base), value: asked)
             .animation(reduce ? nil : .motion(.base), value: joined)
         }

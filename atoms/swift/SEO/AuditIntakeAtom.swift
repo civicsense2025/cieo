@@ -96,7 +96,7 @@ public struct AuditIntakeAtom: MotionAtomView {
                         .nativeToggleStyle()
                 }
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 

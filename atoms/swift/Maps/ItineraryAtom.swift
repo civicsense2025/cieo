@@ -48,7 +48,7 @@ public struct ItineraryAtom: MotionAtomView {
                 HStack { Text("One value drives ink, clock and miles").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Walking", isOn: $walking).labelsHidden().controlSize(.mini) }
                     .padding(.top, 8)
             }
-            .padding(14).frame(width: 380)
+            .padding(14).frame(maxWidth: 380)
             .background(RoundedRectangle(cornerRadius: 14).fill(.background).shadow(radius: 4, y: 1))
         }
     }

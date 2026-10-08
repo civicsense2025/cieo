@@ -50,7 +50,7 @@ public struct PositionTrackerAtom: MotionAtomView {
                     .nativeToggleStyle()
                 Button("Refresh", action: refresh).buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear { draw = reduce ? 1 : 0; withMotion(.lazy, reduceMotion: reduce) { draw = 1 } }
     }

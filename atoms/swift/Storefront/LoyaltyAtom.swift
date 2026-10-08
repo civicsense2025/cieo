@@ -32,7 +32,7 @@ public struct LoyaltyAtom: MotionAtomView {
                     }
                 }
                 Toggle("Reset after claim", isOn: .constant(false)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 300)
+            }.frame(maxWidth: 300)
         }
     }
 }

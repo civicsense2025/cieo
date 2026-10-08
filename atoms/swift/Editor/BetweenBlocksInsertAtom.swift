@@ -25,7 +25,7 @@ public struct BetweenBlocksInsertAtom: MotionAtomView {
                     gap(i + 1)
                 }
             }
-            .padding(12).frame(width: 360, alignment: .top)
+            .padding(12).frame(maxWidth: 360, alignment: .top)
         }
     }
 

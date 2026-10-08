@@ -51,7 +51,7 @@ public struct TagPillAtom: MotionAtomView {
                 Toggle("Filter on #", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
-                }.frame(width: 320)
+                }.frame(maxWidth: 320)
                 if query != nil {
                     menu.offset(y: 120).motionTransition(.presence)
                 }

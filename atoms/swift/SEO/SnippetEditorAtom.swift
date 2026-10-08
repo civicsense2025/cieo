@@ -45,7 +45,7 @@ public struct SnippetEditorAtom: MotionAtomView {
                 Toggle("Rich result extras", isOn: $rich).font(.caption).foregroundStyle(.secondary)
                     .nativeToggleStyle()
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 }

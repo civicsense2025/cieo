@@ -12,12 +12,12 @@ public struct AtomStage<Content: View>: View {
 
     public var body: some View {
         VStack(spacing: 12) {
-            content.frame(maxWidth: .infinity, maxHeight: .infinity)
+            content.frame(maxWidth: .infinity)
             if let hint {
                 Text(hint).font(.caption).foregroundStyle(.secondary)
             }
         }
-        .padding(20)
+        .padding(12)
         .frame(minHeight: 280)
     }
 }

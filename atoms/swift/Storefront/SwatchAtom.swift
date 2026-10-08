@@ -24,7 +24,7 @@ public struct SwatchAtom: MotionAtomView {
                     }.buttonStyle(.plain).disabled(colors[i].3).accessibilityLabel(colors[i].0)
                 } }.animation(reduce ? nil : .motion(.base), value: pick)
                 Toggle("Show sold-out variant", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 300)
+            }.frame(maxWidth: 300)
         }
     }
 }

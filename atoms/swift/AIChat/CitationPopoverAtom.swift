@@ -28,7 +28,7 @@ public struct CitationPopoverAtom: MotionAtomView {
                     }
                     Toggle("Stagger sources", isOn: $stagger).font(.caption).foregroundStyle(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
                 if open {
                     Color.clear.contentShape(Rectangle())
                         .onTapGesture { close() }
@@ -49,7 +49,7 @@ public struct CitationPopoverAtom: MotionAtomView {
                     }
                     .padding(.horizontal, 12)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                    .frame(width: 300)
+                    .frame(maxWidth: 300)
                     .motionTransition(.presence)
                 }
             }

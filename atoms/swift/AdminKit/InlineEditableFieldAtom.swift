@@ -37,7 +37,7 @@ public struct InlineEditableFieldAtom: MotionAtomView {
                 }
                 ZStack(alignment: .leading) { if editing && invalid { Text(draft.count > 24 ? "Use 24 characters or fewer" : "A name is required").font(.caption).foregroundStyle(.red).motionTransition(.swap()) } }.frame(height: 16)
             }
-            .frame(width: 340).animation(reduce ? nil : .motion(.base), value: mode).animation(reduce ? nil : .motion(.base), value: invalid)
+            .frame(maxWidth: 340).animation(reduce ? nil : .motion(.base), value: mode).animation(reduce ? nil : .motion(.base), value: invalid)
         }
     }
 

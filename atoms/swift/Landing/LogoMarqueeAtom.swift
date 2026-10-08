@@ -29,11 +29,11 @@ public struct LogoMarqueeAtom: MotionAtomView {
                     .background(copy == 0 ? GeometryReader { g in Color.clear.onAppear { half = g.size.width } } : nil)
                 } }
                 .offset(x: half > 0 ? -(x.truncatingRemainder(dividingBy: half)) : 0)
-                .frame(width: 340).clipped()
+                .frame(maxWidth: 340).clipped()
                 .mask(LinearGradient(stops: [.init(color: .clear, location: 0), .init(color: .black, location: 0.12), .init(color: .black, location: 0.88), .init(color: .clear, location: 1)], startPoint: .leading, endPoint: .trailing))
                 .onHover { hovering = $0 }
                 Toggle("Pause strip", isOn: $paused).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
             .onReceive(timer) { _ in if (!stopped) { x += 1 } }
         }
     }

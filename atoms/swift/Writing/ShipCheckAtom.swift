@@ -44,7 +44,7 @@ public struct ShipCheckAtom: MotionAtomView {
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
         }
     }
 

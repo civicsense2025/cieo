@@ -27,11 +27,11 @@ public struct FlatplanAtom: MotionAtomView {
                     HStack(spacing: 2) { Text("p."); RollingDigits(folio); Text("/ 5") }
                         .font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
                 ZStack(alignment: .topLeading) {
                     RoundedRectangle(cornerRadius: 7).fill(.quaternary)
                         .frame(height: max(0, hiBottom - hiTop)).offset(y: hiTop)
-                        .frame(width: 300)
+                        .frame(maxWidth: 300)
                     ForEach(order, id: \.self) { name in
                         page(name)
                             .offset(y: held == name ? dragY : Double(slot(name)) * rowH)

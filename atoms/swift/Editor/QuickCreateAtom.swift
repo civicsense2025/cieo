@@ -31,7 +31,7 @@ public struct QuickCreateAtom: MotionAtomView {
                 }.frame(width: 340, height: 130, alignment: .topLeading).zIndex(1)
                 VStack(spacing: 0) { ForEach(rows) { r in
                     EditorHeightReveal(progress: r.shown ? 1 : 0) { Text(r.title).font(.footnote).frame(maxWidth: .infinity, minHeight: 40, alignment: .leading).padding(.horizontal, 12).overlay(alignment: .bottom) { Divider() } }.clipped()
-                } }.frame(width: 340).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
+                } }.frame(maxWidth: 340).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 10))
                 HStack(spacing: 6) {
                     Text("Centering").font(.caption).foregroundStyle(.secondary)
                     Picker("Centering", selection: $optical) { Text("Optical").tag(true); Text("Geometric").tag(false) }

@@ -31,7 +31,7 @@ public struct HeroEntranceAtom: MotionAtomView {
                     item(0.52, rise: 8) { HStack { Button("Start free") {}.buttonStyle(.borderedProminent); Button("See a demo") {}.buttonStyle(.bordered) }.controlSize(.small) }
                     AtomPhoto(seed: 5, goldenHour: 0.4).frame(height: 70).clipShape(RoundedRectangle(cornerRadius: 12))
                         .opacity(shown ? 1 : 0).scaleEffect(shown ? 1 : 0.98).offset(y: shown ? 0 : 28).animation(enter(0.62, soft: true), value: shown)
-                }.frame(width: 320, alignment: .leading)
+                }.frame(maxWidth: 320, alignment: .leading)
                 Button("Replay") { replay() }.font(.caption).buttonStyle(.borderless)
             }
         }

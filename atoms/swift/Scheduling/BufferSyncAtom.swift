@@ -72,7 +72,7 @@ public struct BufferSyncAtom: MotionAtomView {
                     Toggle("Auto-sync on release", isOn: $auto)
                         .font(.system(size: 12)).foregroundStyle(.secondary).tint(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
     }

@@ -22,7 +22,7 @@ public struct SearchResultPreviewAtom: MotionAtomView {
                 .frame(maxWidth: .infinity, alignment: .leading).padding(10)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 

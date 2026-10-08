@@ -52,7 +52,7 @@ public struct VoiceWaveformAtom: MotionAtomView {
                     Toggle("Transcript", isOn: $showTranscript).font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.soft), value: holding)
         }
     }

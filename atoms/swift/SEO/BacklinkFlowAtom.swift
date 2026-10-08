@@ -75,7 +75,7 @@ public struct BacklinkFlowAtom: MotionAtomView {
                 Toggle("Show lost link", isOn: $showLost).font(.caption).foregroundStyle(.secondary)
                     .nativeToggleStyle()
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear {
             if reduce { draw = 3; return }

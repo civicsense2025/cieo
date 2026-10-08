@@ -27,7 +27,7 @@ public struct SearchExpandAtom: MotionAtomView {
                 bar
                 if open && !q.isEmpty { results.motionTransition(.presence).offset(y: 58) }
             }
-            .frame(width: 340).frame(maxHeight: .infinity, alignment: .top).padding(.top, 8)
+            .frame(maxWidth: 340).frame(maxHeight: .infinity, alignment: .top).padding(.top, 8)
             .animation(reduce ? nil : .motion(.base), value: q.isEmpty)
         }
         .onChange(of: query) { old, _ in

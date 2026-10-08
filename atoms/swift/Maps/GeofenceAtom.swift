@@ -34,7 +34,7 @@ public struct GeofenceAtom: MotionAtomView {
                 .onTapGesture { withMotion(inside ? .base : .soft, reduceMotion: reduce) { inside.toggle() } }
                 .accessibilityLabel("Geofence").accessibilityValue(inside ? "Inside" : "Outside")
                 HStack { Text("Exit reverses the breach").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Wide ring", isOn: $wide).labelsHidden().controlSize(.mini) }
-                    .frame(width: 380)
+                    .frame(maxWidth: 380)
             }
         }
     }

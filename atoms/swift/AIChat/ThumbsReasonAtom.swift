@@ -40,7 +40,7 @@ public struct ThumbsReasonAtom: MotionAtomView {
                 }
                 Toggle("Ask for a reason", isOn: $askReason).font(.caption).foregroundStyle(.secondary)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
             .animation(reduce ? nil : .motion(.base), value: sel)
             .animation(reduce ? nil : .motion(.soft), value: sent)
         }

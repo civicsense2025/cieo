@@ -70,7 +70,7 @@ public struct MailJumpAtom: MotionAtomView {
                         .frame(maxWidth: .infinity, minHeight: 100, alignment: .topLeading)
                     }
                 }
-                .padding(14).frame(width: 340)
+                .padding(14).frame(maxWidth: 340)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Search sent too", isOn: $sentToo)
                     .font(.caption).foregroundStyle(.secondary)

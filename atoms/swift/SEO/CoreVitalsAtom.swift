@@ -65,7 +65,7 @@ public struct CoreVitalsAtom: MotionAtomView {
                     .nativeToggleStyle()
                 Button("Re-measure", action: measure).buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear(perform: measure)
     }
