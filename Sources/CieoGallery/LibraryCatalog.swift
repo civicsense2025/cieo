@@ -1,92 +1,119 @@
 import CieoAtoms
 import SwiftUI
 
-/// Metadata-only rows keep every recipe discoverable without starting its animation or task.
+/// Browse metadata only. A live recipe is created after opening its preview.
 struct LibraryCatalog: View {
+    private enum Scope: String, CaseIterable { case all = "All", saved = "Saved", recent = "Recent" }
+    private static let recipes = MotionAtoms.all.sorted { $0.info.name.localizedStandardCompare($1.info.name) == .orderedAscending }
+    @AppStorage("catalog.saved") private var savedIDs = ""
+    @AppStorage("catalog.recent") private var recentIDs = ""
+    @Environment(\.dynamicTypeSize) private var typeSize
     @State private var query = ""
-    @State private var category = "All categories"
-    private let recipes = MotionAtoms.all.sorted { $0.info.name.localizedStandardCompare($1.info.name) == .orderedAscending }
+    @State private var category: String?
+    @State private var scope = Scope.all
+    @State private var categoriesPresented = false
 
-    private var categories: [String] {
-        Set(recipes.map(\.info.category)).sorted()
+    private var saved: Set<String> {
+        Set(savedIDs.split(separator: "|").map(String.init))
+    }
+
+    private var recent: [String] {
+        recentIDs.split(separator: "|").map(String.init)
     }
 
     private var results: [MotionAtom] {
-        recipes.filter { recipe in
-            (category == "All categories" || recipe.info.category == category) &&
-                (query.isEmpty || [recipe.info.name, recipe.info.category, recipe.info.id, recipe.info.summary]
-                    .contains { $0.localizedCaseInsensitiveContains(query) })
+        let available = scope == .recent ? recent.compactMap { id in Self.recipes.first { $0.id == id } } : Self.recipes
+        return available.filter {
+            (category == nil || $0.info.category == category) &&
+                (scope != .saved || saved.contains($0.id)) && $0.info.matches(query)
         }
     }
 
     var body: some View {
         List {
             Section {
-                Text("\(recipes.count) motion recipes").font(.title.bold())
-                Picker("Category", selection: $category) {
-                    Text("All categories").tag("All categories")
-                    ForEach(categories, id: \.self) { Text($0).tag($0) }
+                NavigationLink {
+                    FoundationCatalog()
+                } label: {
+                    Label("Foundations & controls", systemImage: "square.stack.3d.up")
+                        .padding(.vertical, 8)
                 }
-                NavigationLink("Foundations & controls") { FoundationCatalog() }
+                Picker("Library scope", selection: $scope) {
+                    ForEach(Scope.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+                }
+                .modifier(LibraryPickerStyle(accessible: typeSize.isAccessibilitySize))
+                .listRowSeparator(.hidden)
+                Button { categoriesPresented = true } label: {
+                    HStack {
+                        Label(category ?? "All categories", systemImage: "line.3.horizontal.decrease")
+                        Spacer()
+                        Text("\(results.count)").monospacedDigit().foregroundStyle(.secondary)
+                        Image(systemName: "chevron.down").font(.caption)
+                    }.padding(.vertical, 8)
+                }
+                .foregroundStyle(.primary)
+                .accessibilityIdentifier("library.categories")
+            } header: {
+                Text("\(Self.recipes.count) motion recipes")
             }
-            Section("\(results.count) results") {
+            Section {
                 ForEach(results) { recipe in
                     NavigationLink(value: recipe.id) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(recipe.info.name).font(.headline)
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Text(recipe.info.name).font(.headline)
+                                if saved.contains(recipe.id) {
+                                    Image(systemName: "bookmark.fill").font(.caption).accessibilityLabel("Saved")
+                                }
+                            }
                             Text(recipe.info.category).font(.caption).foregroundStyle(.secondary)
-                        }.padding(.vertical, 6)
+                            Text(recipe.info.summary).font(.subheadline).foregroundStyle(.secondary).lineLimit(2)
+                        }.padding(.vertical, 8)
                     }
                     .accessibilityIdentifier("library.\(recipe.id)")
                     .listRowSeparator(.hidden)
+                    .swipeActions {
+                        Button(saved.contains(recipe.id) ? "Unsave" : "Save", systemImage: "bookmark") { toggleSaved(recipe.id) }
+                            .tint(.secondary)
+                    }
                 }
                 if results.isEmpty {
-                    ContentUnavailableView.search(text: query)
+                    ContentUnavailableView {
+                        Label(scope == .saved && query.isEmpty ? "No saved recipes" : "No matching recipes", systemImage: "magnifyingglass")
+                    } description: {
+                        Text(scope == .saved && query.isEmpty ? "Save a recipe from its preview to find it here." : "Try a different search or clear your filters.")
+                    } actions: {
+                        Button("Show all recipes") { query = ""; category = nil; scope = .all }
+                    }
                 }
             }
         }
         .listStyle(.plain)
+        .scrollDismissesKeyboard(.interactively)
         .searchable(text: $query, prompt: "Search all recipes")
-        .navigationTitle("Motion library")
+        .navigationTitle("Library")
+        .sheet(isPresented: $categoriesPresented) {
+            CategoryBrowser(recipes: Self.recipes, selection: $category)
+        }
         .navigationDestination(for: String.self) { id in
-            if let recipe = recipes.first(where: { $0.id == id }) {
-                RecipePreview(recipe: recipe)
+            if let recipe = Self.recipes.first(where: { $0.id == id }) {
+                RecipePreview(recipe: recipe, isSaved: saved.contains(id)) { toggleSaved(id) }
+                    .onAppear { recentIDs = ([id] + recent.filter { $0 != id }).prefix(20).joined(separator: "|") }
             }
         }
     }
+
+    private func toggleSaved(_ id: String) {
+        var next = saved
+        if next.contains(id) { next.remove(id) } else { next.insert(id) }
+        // Persist only identities from this catalogue; recipe content and running state stay transient.
+        savedIDs = Self.recipes.map(\.id).filter { next.contains($0) }.joined(separator: "|")
+    }
 }
 
-private struct RecipePreview: View {
-    let recipe: MotionAtom
-    @Environment(\.scenePhase) private var phase
-    @State private var wide = false
-    @State private var replay = 0
-
-    var body: some View {
-        GeometryReader { geometry in
-            ScrollView([.horizontal, .vertical]) {
-                VStack(alignment: .leading, spacing: 24) {
-                    if phase == .active {
-                        // Instantiate only the selected recipe; navigation releases its view hierarchy.
-                        recipe.make().id(replay)
-                            .frame(minHeight: 360)
-                            .accessibilityIdentifier("recipe.\(recipe.id)")
-                    } else {
-                        Text("Preview paused while the app is inactive.")
-                    }
-                    DisclosureGroup("Recipe notes") {
-                        Text(recipe.info.summary).font(.subheadline).foregroundStyle(.secondary)
-                    }
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 24)
-                .frame(width: wide ? max(760, geometry.size.width) : max(320, geometry.size.width))
-            }
-        }
-        .navigationTitle(recipe.info.name)
-        .toolbar {
-            Button("Replay", systemImage: "arrow.clockwise") { replay += 1 }
-            Button(wide ? "Compact preview" : "Wide preview", systemImage: "arrow.left.and.right") { wide.toggle() }
-        }
+private struct LibraryPickerStyle: ViewModifier {
+    let accessible: Bool
+    func body(content: Content) -> some View {
+        if accessible { content.pickerStyle(.menu) } else { content.pickerStyle(.segmented) }
     }
 }

@@ -29,5 +29,6 @@ struct MoleculeExamples: View {
                 }
             }
         }
+        .onChange(of: title) { saved = false }
     }
 }

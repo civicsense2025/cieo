@@ -5,7 +5,7 @@ struct PatternExamples: View {
     private enum State: String, CaseIterable { case empty = "Empty", loading = "Loading", error = "Error", offline = "Offline", ready = "Ready" }
     @State private var state = State.empty
     @State private var progress = 0.4
-    @State private var loading = false
+    @State private var saved = false
 
     var body: some View {
         VStack(spacing: 24) {
@@ -19,19 +19,19 @@ struct PatternExamples: View {
                     ForEach(State.allCases, id: \.self) { Text($0.rawValue).tag($0) }
                 }.pickerStyle(.menu)
                 StatePanel(panelTitle, detail: panelDetail, symbol: panelSymbol) {
-                    ActionButton("Load example", isBusy: loading) { loading = true; state = .loading }
-                    Button("Clear") { loading = false; state = .empty }
+                    ActionButton("Load example", isBusy: state == .loading) { state = .loading }
+                    Button("Clear") { state = .empty }
                 }
-                .task(id: loading) {
-                    guard loading else { return }
+                .task(id: state) {
+                    guard state == .loading else { return }
                     do { try await Task.sleep(for: .seconds(1.2)) } catch { return }
                     state = .ready
-                    loading = false
                 }
             }
             Specimen(title: "Reusable section & row") {
                 ContentSection("Reading list", detail: "A composition slot for your own content.") {
-                    ActionRow("Sample article", detail: "Five minutes", actionTitle: "Save") { state = .ready }
+                    ActionRow("Sample article", detail: "Five minutes", actionTitle: saved ? "Unsave" : "Save") { saved.toggle() }
+                    if saved { Notice("Saved locally", detail: "Tap Unsave to restore the original state.", symbol: "bookmark.fill") }
                 }
             }
         }

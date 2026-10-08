@@ -22,7 +22,7 @@ struct AtomExamples: View {
                     }
             }
             Specimen(title: "Animated progress") {
-                HStack(spacing: 24) {
+                VStack(alignment: .leading, spacing: 16) {
                     ProgressRing(value: progress).accessibilityIdentifier("progress.ring")
                     Button("Advance progress") { progress = progress >= 1 ? 0 : progress + 0.25 }
                         .buttonStyle(ActionButtonStyle(.quiet))

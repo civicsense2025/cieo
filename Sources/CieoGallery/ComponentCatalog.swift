@@ -13,23 +13,29 @@ struct FoundationCatalog: View {
     init() {}
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                Picker("Category", selection: $category) {
-                    ForEach(Category.allCases, id: \.self) { Text($0.rawValue).tag($0) }
-                }
-                .modifier(CategoryPickerStyle(accessible: typeSize.isAccessibilitySize))
-                switch category {
-                case .motion: MotionExamples()
-                case .atoms: AtomExamples()
-                case .molecules: MoleculeExamples()
-                case .patterns: PatternExamples()
-                }
+        VStack(spacing: 0) {
+            Picker("Category", selection: $category) {
+                ForEach(Category.allCases, id: \.self) { Text($0.rawValue).tag($0) }
             }
-            .padding(20)
-            .frame(maxWidth: 680)
-            .frame(maxWidth: .infinity)
+            .modifier(CategoryPickerStyle(accessible: typeSize.isAccessibilitySize))
+            .padding(.horizontal, 16).padding(.vertical, 12)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    switch category {
+                    case .motion: MotionExamples()
+                    case .atoms: AtomExamples()
+                    case .molecules: MoleculeExamples()
+                    case .patterns: PatternExamples()
+                    }
+                }
+                .padding(16)
+                .frame(maxWidth: 680)
+                .frame(maxWidth: .infinity)
+            }
+            // Each section starts at the top; controls never disappear into the previous scroll offset.
+            .id(category)
         }
+        .background(.background)
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Components")
         .toolbar {
