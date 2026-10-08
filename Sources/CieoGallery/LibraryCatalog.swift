@@ -66,16 +66,19 @@ private struct RecipePreview: View {
         GeometryReader { geometry in
             ScrollView([.horizontal, .vertical]) {
                 VStack(alignment: .leading, spacing: 24) {
-                    Text(recipe.info.summary).font(.subheadline).foregroundStyle(.secondary)
                     if phase == .active {
-                        // Instantiate only the selected recipe. Navigation removes its timers and tasks.
+                        // Instantiate only the selected recipe; navigation releases its view hierarchy.
                         recipe.make().id(replay)
                             .frame(minHeight: 360)
                             .accessibilityIdentifier("recipe.\(recipe.id)")
                     } else {
                         Text("Preview paused while the app is inactive.")
                     }
+                    DisclosureGroup("Recipe notes") {
+                        Text(recipe.info.summary).font(.subheadline).foregroundStyle(.secondary)
+                    }
                 }
+                .padding(.horizontal, 16)
                 .padding(.vertical, 24)
                 .frame(width: wide ? max(760, geometry.size.width) : max(320, geometry.size.width))
             }
