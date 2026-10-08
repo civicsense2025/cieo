@@ -66,13 +66,13 @@ public struct BufferSyncAtom: MotionAtomView {
                         Button("Sync") { sync() }.font(.system(size: 13))
                             .padding(.horizontal, 14).frame(minHeight: 32)
                             .background(.background, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.secondary.opacity(0.3)))
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
                     }
                     .frame(minHeight: 36)
                     Toggle("Auto-sync on release", isOn: $auto)
                         .font(.system(size: 12)).foregroundStyle(.secondary).tint(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
     }

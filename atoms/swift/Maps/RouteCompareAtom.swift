@@ -52,7 +52,7 @@ public struct RouteCompareAtom: MotionAtomView {
                 }
                 HStack { Text("Winner keeps the plate").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Traffic", isOn: $traffic).labelsHidden().controlSize(.mini) }
             }
-            .padding(14).frame(width: 380)
+            .padding(14).frame(maxWidth: 380)
             .background(RoundedRectangle(cornerRadius: 14).fill(.background).shadow(radius: 4, y: 1))
         }
     }

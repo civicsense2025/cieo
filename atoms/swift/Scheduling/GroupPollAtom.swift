@@ -49,7 +49,7 @@ public struct GroupPollAtom: MotionAtomView {
                     Text(voted ? "\(Int(total)) votes · \(names[top]) leads" : "Tap an option to vote")
                         .font(.system(size: 12)).foregroundStyle(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
     }

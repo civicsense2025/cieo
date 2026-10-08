@@ -22,9 +22,9 @@ public struct LocationSearchAtom: MotionAtomView {
                 Text("Find a place").font(.callout.weight(.semibold)).lineSpacing(4)
                 HStack(spacing: 8) {
                     TextField("Try “ferry” or “zzz”", text: $query)
-                        .textFieldStyle(.roundedBorder).font(.subheadline)
+                        .softFieldSurface().font(.subheadline)
                         .accessibilityLabel("Search places")
-                    Button("Search") {}.buttonStyle(.borderedProminent).controlSize(.small)
+                    PreviewAction("Search").buttonStyle(.borderedProminent).controlSize(.small)
                 }.padding(.top, 8)
                 if query.trimmingCharacters(in: .whitespaces).lowercased() == "zzz" || (hits.isEmpty && !query.isEmpty) {
                     HStack {
@@ -55,7 +55,7 @@ public struct LocationSearchAtom: MotionAtomView {
                 HStack { Text("Pins drop in reading order").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Recent first", isOn: $recent).labelsHidden().controlSize(.mini) }
                     .padding(.top, 8)
             }
-            .padding(14).frame(width: 380)
+            .padding(14).frame(maxWidth: 380)
             .background(RoundedRectangle(cornerRadius: 14).fill(.background).shadow(radius: 4, y: 1))
         }
     }

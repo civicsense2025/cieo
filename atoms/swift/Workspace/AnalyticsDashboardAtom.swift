@@ -42,7 +42,7 @@ public struct AnalyticsDashboardAtom: MotionAtomView {
                             .offset(y: CGFloat(rank) * 26).animation(reduce ? nil : .motion(.base).delay(0.16 + Double(rank) * 0.02), value: rank)
                     }
                 }.frame(height: 104, alignment: .topLeading)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
         .onAppear { update(0, first: true) }
     }

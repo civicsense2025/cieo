@@ -55,7 +55,7 @@ public struct QuizRouterAtom: MotionAtomView {
                     }.frame(minHeight: 172, alignment: .top)
                 }
                 .padding(.horizontal, 14).padding(.vertical, 14)
-                .frame(width: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 HStack(spacing: 6) {
                     Text("Jump:").font(.caption).foregroundStyle(.secondary)
                     Button("1") { withMotion(.base, reduceMotion: reduce) { step = 0 } }.buttonStyle(.bordered).controlSize(.mini)

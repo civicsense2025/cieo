@@ -14,7 +14,7 @@ public struct RecallAtom: MotionAtomView {
         AtomStage(hint: "Tap the card, then grade it") {
             VStack(spacing: 16) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12).stroke(.quaternary)
+                    RoundedRectangle(cornerRadius: 12).fill(.quaternary).opacity(0.10)
                         .background(.quaternary.opacity(0.15), in: RoundedRectangle(cornerRadius: 12))
                     Text(shown ? "The market bell at dawn" : "What opens the spring essay?")
                         .font(.system(size: 15, weight: .semibold)).multilineTextAlignment(.center).padding()

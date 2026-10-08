@@ -28,7 +28,7 @@ public struct TemplateVarsAtom: MotionAtomView {
                             .font(.caption.weight(.semibold))
                             .padding(.horizontal, 10).padding(.vertical, 5)
                             .background(Capsule().fill(Color.primary.opacity(inserted ? 0.22 : 0.1)))
-                            .overlay(Capsule().stroke(Color.primary, lineWidth: inserted ? 2 : 1))
+                            .overlay(Capsule().fill(Color.primary).opacity(0.10).allowsHitTesting(false))
                             .animation(reduce ? nil : .motion(.base), value: inserted)
                         Button("Insert snippet") { insert() }
                             .buttonStyle(.borderedProminent).controlSize(.small)
@@ -49,15 +49,15 @@ public struct TemplateVarsAtom: MotionAtomView {
                         Text(".").font(.caption)
                     }
                     HStack(spacing: 6) {
-                        TextField("first", text: $first).textFieldStyle(.roundedBorder).font(.caption)
-                        TextField("plan", text: $plan).textFieldStyle(.roundedBorder).font(.caption)
+                        TextField("first", text: $first).softFieldSurface().font(.caption)
+                        TextField("plan", text: $plan).softFieldSurface().font(.caption)
                     }
-                    TextField("End date, e.g. Friday", text: $date).textFieldStyle(.roundedBorder).font(.caption)
+                    TextField("End date, e.g. Friday", text: $date).softFieldSurface().font(.caption)
                     SwapText(inserted && date.isEmpty ? "Add the end date above" : "").font(.caption)
                         .foregroundStyle(Color.red)
                         .frame(height: 18, alignment: .leading)
                 }
-                .padding(14).frame(width: 320)
+                .padding(14).frame(maxWidth: 320)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Keep placeholders", isOn: $keepPlaceholders)
                     .font(.caption).foregroundStyle(.secondary)

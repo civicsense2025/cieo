@@ -32,7 +32,7 @@ public struct MultiSelectAtom: MotionAtomView {
             }
             .padding(.leading, 8).padding(.trailing, 32).padding(.vertical, 6)
             .frame(width: 280, alignment: .leading).frame(minHeight: 42)
-            .background(RoundedRectangle(cornerRadius: 10).strokeBorder(Color.primary.opacity(0.2), lineWidth: 1.5))
+            .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.2)).opacity(0.10))
             .overlay(alignment: .topTrailing) { Image(systemName: "chevron.down").font(.footnote.weight(.semibold)).foregroundStyle(.secondary).padding(.top, 14).padding(.trailing, 10) }
             .contentShape(Rectangle())
         }
@@ -48,7 +48,7 @@ public struct MultiSelectAtom: MotionAtomView {
                     HStack(spacing: 10) {
                         ZStack {
                             RoundedRectangle(cornerRadius: 4).fill(on ? Color.primary : Color.clear)
-                            RoundedRectangle(cornerRadius: 4).strokeBorder(on ? Color.primary : Color.primary.opacity(0.25), lineWidth: 1.5)
+                            RoundedRectangle(cornerRadius: 4).fill(on ? Color.primary : Color.primary.opacity(0.25)).opacity(0.10)
                             Image(systemName: "checkmark").font(.system(size: 9, weight: .heavy)).foregroundStyle(.background).opacity(on ? 1 : 0)
                         }
                         .frame(width: 16, height: 16).motion(.base, value: on)

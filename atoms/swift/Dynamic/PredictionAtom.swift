@@ -33,7 +33,7 @@ public struct PredictionAtom: MotionAtomView {
                                 .animation(reduce ? nil : .motion(.base).delay(0.09), value: locked),
                             alignment: .leading
                         )
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(locked == i ? .primary : .quaternary))
+                        .overlay(RoundedRectangle(cornerRadius: 10).fill(locked == i ? .primary : .quaternary).opacity(0.10).allowsHitTesting(false))
                         .scaleEffect(locked == i ? 0.98 : 1)
                     }
                     .buttonStyle(.plain).disabled(locked >= 0)
@@ -64,7 +64,7 @@ public struct PredictionAtom: MotionAtomView {
                     }
                     Spacer()
                     Toggle("show odds", isOn: $showOdds).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 380)

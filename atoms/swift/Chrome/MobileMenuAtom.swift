@@ -47,7 +47,7 @@ public struct MobileMenuAtom: MotionAtomView {
             }
             .frame(width: 270, height: 290)
             .background(.background, in: RoundedRectangle(cornerRadius: 14))
-            .overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
             .clipShape(RoundedRectangle(cornerRadius: 14))
         }
     }

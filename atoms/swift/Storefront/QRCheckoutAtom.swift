@@ -14,7 +14,7 @@ public struct QRCheckoutAtom: MotionAtomView {
             VStack(spacing: 8) {
                 Text("Scan to pay").font(.callout.weight(.semibold))
                 ZStack {
-                    RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary).frame(width: 148, height: 148)
+                    RoundedRectangle(cornerRadius: 12).fill(.quaternary).opacity(0.10).frame(width: 148, height: 148)
                         .overlay(Image(systemName: "qrcode").font(.system(size: 90)).foregroundStyle(.primary))
                         .scaleEffect(shown ? 1 : 0.96).motion(.base, value: shown)
                     TimelineView(.animation(minimumInterval: 1.0 / 30)) { tl in
@@ -34,7 +34,7 @@ public struct QRCheckoutAtom: MotionAtomView {
                     }.buttonStyle(.borderedProminent).controlSize(.small)
                     Toggle("Beam", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
                 }
-            }.frame(width: 300).onAppear { withMotion(.base, reduceMotion: reduce) { shown = true } }
+            }.frame(maxWidth: 300).onAppear { withMotion(.base, reduceMotion: reduce) { shown = true } }
         }
     }
 }

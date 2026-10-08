@@ -44,7 +44,7 @@ public struct ShipCheckAtom: MotionAtomView {
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
         }
     }
 
@@ -55,7 +55,7 @@ public struct ShipCheckAtom: MotionAtomView {
                     RoundedRectangle(cornerRadius: 5)
                         .fill(done[i] ? Color.primary : .clear)
                         .animation(reduce ? nil : .motion(.base), value: done[i])
-                    RoundedRectangle(cornerRadius: 5).strokeBorder(done[i] ? Color.primary : Color.primary.opacity(0.25), lineWidth: 1.5)
+                    RoundedRectangle(cornerRadius: 5).fill(done[i] ? Color.primary : Color.primary.opacity(0.25)).opacity(0.10)
                     CheckTick(t: done[i] ? 1 : 0)
                         .stroke(.background, lineWidth: 2.5).frame(width: 10, height: 10)
                         .animation(reduce ? nil : .motion(.base), value: done[i])

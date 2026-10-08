@@ -35,7 +35,7 @@ public struct InboxSweepAtom: MotionAtomView {
                 Toggle("Arm past 80px", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 
@@ -54,7 +54,7 @@ public struct InboxSweepAtom: MotionAtomView {
                 Text(d.sub).font(.system(size: 12.5)).foregroundStyle(.secondary)
             }
             .padding(.horizontal, 14).padding(.vertical, 10)
-            .frame(width: 320, alignment: .leading)
+            .frame(maxWidth: 320, alignment: .leading)
             .background(.background, in: RoundedRectangle(cornerRadius: 0))
             .offset(x: off)
             .gesture(DragGesture()

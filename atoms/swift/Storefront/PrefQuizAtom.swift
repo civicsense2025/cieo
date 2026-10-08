@@ -29,7 +29,7 @@ public struct PrefQuizAtom: MotionAtomView {
                             }
                             Text("2 picks · prices from $32.").font(.caption2).foregroundStyle(.secondary)
                             Button("Retake") { dir = -1; withMotion(.base, reduceMotion: reduce) { step = 0 } }.buttonStyle(.bordered).controlSize(.small)
-                        }.padding(14).background(.background, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+                        }.padding(14).background(.background, in: RoundedRectangle(cornerRadius: 12)).background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                     }
                 }.frame(height: 170).clipped()
                 .transition(reduce ? .identity : .asymmetric(
@@ -37,7 +37,7 @@ public struct PrefQuizAtom: MotionAtomView {
                     removal: .modifier(active: QuizSlide(x: -24 * dir), identity: QuizSlide(x: 0)).animation(.motionExit)))
                 .id(step)
                 Toggle("Restart when done", isOn: .constant(false)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
     private func qcard(_ q: String, _ answers: [String]) -> some View {
@@ -46,7 +46,7 @@ public struct PrefQuizAtom: MotionAtomView {
             ForEach(answers, id: \.self) { a in
                 Button(a) { dir = 1; withMotion(.base, reduceMotion: reduce) { step += 1 } }.buttonStyle(.bordered).controlSize(.small)
             }
-        }.padding(14).background(.background, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        }.padding(14).background(.background, in: RoundedRectangle(cornerRadius: 12)).background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
     }
 }
 

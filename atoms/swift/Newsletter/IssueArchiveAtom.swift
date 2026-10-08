@@ -47,7 +47,7 @@ public struct IssueArchiveAtom: MotionAtomView {
                     .animation(reduce ? nil : .motion(.base).delay(Double(abs(i - max(open, 0))) * 0.04), value: open)
                 }
             }
-            .padding(16).frame(width: 340)
+            .padding(16).frame(maxWidth: 340)
             .background(.background, in: RoundedRectangle(cornerRadius: 14))
             .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
         }

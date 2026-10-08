@@ -18,7 +18,7 @@ struct AgentTag: View {
     var body: some View {
         HStack(spacing: 2) { Image(systemName: "star.fill").font(.system(size: 7)); Text("Agent").font(.system(size: 9, weight: .semibold)) }
             .padding(.horizontal, 4).padding(.vertical, 1)
-            .overlay(RoundedRectangle(cornerRadius: 3).strokeBorder(Color.primary, lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 3).fill(Color.primary).opacity(0.10).allowsHitTesting(false))
     }
 }
 
@@ -70,7 +70,7 @@ struct AgMockPage: View {
             Text(title).font(.headline).reportFrame("heading", in: "pg")
             Text("Create a workspace and invite your team.").font(.caption).foregroundStyle(.secondary)
             Text("name@company.com").font(.caption).foregroundStyle(.secondary).padding(7).frame(maxWidth: .infinity, alignment: .leading)
-                .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(.quaternary)).reportFrame("field", in: "pg")
+                .background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.05))).reportFrame("field", in: "pg")
             Text("Create workspace").font(.caption.weight(.semibold)).foregroundStyle(.white).padding(.horizontal, 10).padding(.vertical, 6)
                 .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 6)).reportFrame("button", in: "pg")
             Text("Read more").font(.caption).underline().reportFrame("link", in: "pg")

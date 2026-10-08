@@ -26,7 +26,7 @@ public struct BlockLibraryPanelAtom: MotionAtomView {
             ZStack(alignment: .topLeading) {
                 HStack(alignment: .top, spacing: 0) {
                     VStack(alignment: .leading, spacing: 8) {
-                        TextField("Search blocks", text: $query).textFieldStyle(.roundedBorder).font(.footnote)
+                        TextField("Search blocks", text: $query).softFieldSurface().font(.footnote)
                         ZStack(alignment: .topLeading) { ForEach(tiles.indices, id: \.self) { i in tile(i) } }.frame(height: 130, alignment: .topLeading)
                         Spacer()
                     }.padding(10).frame(width: 216)

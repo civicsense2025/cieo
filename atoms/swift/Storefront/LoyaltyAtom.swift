@@ -14,7 +14,7 @@ public struct LoyaltyAtom: MotionAtomView {
                 HStack { Text("Coffee club").font(.callout.weight(.semibold)); RollingDigits(count).font(.footnote).foregroundStyle(.secondary) }
                 if count >= 6 {
                     HStack { Text("Free drink unlocked").font(.footnote.weight(.semibold)); Spacer()
-                        Button("Claim") {}.buttonStyle(.bordered).controlSize(.small) }
+                        PreviewAction("Claim").buttonStyle(.bordered).controlSize(.small) }
                     .padding(14).background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12))
                     .motionTransition(.swap())
                 } else {
@@ -32,7 +32,7 @@ public struct LoyaltyAtom: MotionAtomView {
                     }
                 }
                 Toggle("Reset after claim", isOn: .constant(false)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 300)
+            }.frame(maxWidth: 300)
         }
     }
 }

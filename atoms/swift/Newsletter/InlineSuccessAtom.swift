@@ -45,8 +45,9 @@ public struct InlineSuccessAtom: MotionAtomView {
                     }
                 }.frame(height: 18)
                 Button("Reset") { reset() }.font(.caption).buttonStyle(.borderless)
-            }.frame(width: 340).padding(16)
+            }.frame(maxWidth: 340).padding(16)
         }
+        .onDisappear { run?.cancel() }
     }
 
     @ViewBuilder private var label: some View {

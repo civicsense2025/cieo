@@ -27,7 +27,7 @@ public struct ClipperAtom: MotionAtomView {
                 .padding(16)
                 .frame(maxWidth: 320)
                 .background(over ? Color.accentColor.opacity(0.15) : Color.clear)
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(over ? Color.accentColor : Color.primary.opacity(0.2), style: StrokeStyle(lineWidth: 2, dash: [8])))
+                .overlay(RoundedRectangle(cornerRadius: 12).fill(over ? Color.accentColor : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
                 .animation(reduce ? nil : .motion(.snap), value: over)
                 .animation(reduce ? nil : .motion(.base), value: saved)
                 Toggle("Tint on hover", isOn: $tweak)
@@ -35,7 +35,7 @@ public struct ClipperAtom: MotionAtomView {
                     .frame(maxWidth: 200)
                 Text("“Write what you notice.”")
                     .font(.system(size: 12.5)).padding(.horizontal, 14).padding(.vertical, 8)
-                    .overlay(Capsule().stroke(.quaternary))
+                    .background(Capsule().fill(Color.primary.opacity(0.05)))
                     .gesture(DragGesture(minimumDistance: 4)
                         .onChanged { _ in if !over { withMotion(.snap, reduceMotion: reduce) { over = true } } }
                         .onEnded { v in

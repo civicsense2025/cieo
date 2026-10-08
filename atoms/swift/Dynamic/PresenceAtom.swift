@@ -51,7 +51,7 @@ public struct PresenceAtom: MotionAtomView {
                     .buttonStyle(.bordered).controlSize(.regular).disabled(order.count <= 1)
                     Spacer()
                     Toggle("owner ring", isOn: $ownerRing).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 400)

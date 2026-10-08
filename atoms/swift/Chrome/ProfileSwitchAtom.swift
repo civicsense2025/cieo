@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Profile switcher: ring inks, identity crossfades, width springs.
-public struct ProfileSwitchAtom: View {
+public struct ProfileSwitchAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "profileswitch", category: "Chrome", name: "Profile Switch", summary: "Profile switcher: ring inks, identity crossfades, width springs.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var current = 0
     @State private var open = false
@@ -64,8 +65,8 @@ public struct ProfileSwitchAtom: View {
             .animation(reduce ? nil : .spring(response: 0.3), value: open)
         }
         .focusable(true)
-        .onExitCommand { open = false }
-        .onMoveCommand { dir in
+        .escapeKey { open = false }
+        .directionKeys { dir in
             if dir == .down { current = (current + 1) % people.count; open = true }
             else if dir == .up { current = (current + people.count - 1) % people.count; open = true }
         }

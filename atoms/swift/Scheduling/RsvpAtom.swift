@@ -53,17 +53,17 @@ public struct RsvpAtom: MotionAtomView {
                         Text("Plus-one").font(.system(size: 12)).foregroundStyle(.secondary)
                         Button("-") { plus = max(0, plus - 1) }.font(.system(size: 13))
                             .frame(width: 32, height: 32).background(.background, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.secondary.opacity(0.3)))
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
                         Text("\(plus)").font(.system(size: 13)).monospacedDigit().frame(minWidth: 12)
                         Button("+") { plus = min(4, plus + 1) }.font(.system(size: 13))
                             .frame(width: 32, height: 32).background(.background, in: RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.secondary.opacity(0.3)))
+                            .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
                         Spacer()
                         Text(pick == 2 ? "We saved you a maybe seat" : pick == 0 ? "See you there" : pick == 1 ? "You will be missed" : "")
                             .font(.system(size: 12)).foregroundStyle(.secondary)
                     }
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
         .onAppear { if !ready { ready = true; left.jump(0); right.jump(0) } }

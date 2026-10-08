@@ -41,14 +41,14 @@ public struct PollBlockAtom: MotionAtomView {
                             }
                         }
                         .frame(height: 44)
-                        .overlay(Capsule().strokeBorder(voted == i ? Color.primary : Color.secondary.opacity(0.3), lineWidth: 1))
+                        .overlay(Capsule().fill(voted == i ? Color.primary : Color.secondary.opacity(0.3)).opacity(0.10).allowsHitTesting(false))
                     }
                     .buttonStyle(.plain).disabled(voted >= 0)
                 }
                 Button("Reset") { withMotion(.snap, reduceMotion: reduce) { voted = -1 } }
                     .font(.caption).buttonStyle(.borderless)
             }
-            .padding(16).frame(width: 340)
+            .padding(16).frame(maxWidth: 340)
             .background(.background, in: RoundedRectangle(cornerRadius: 14))
             .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
         }

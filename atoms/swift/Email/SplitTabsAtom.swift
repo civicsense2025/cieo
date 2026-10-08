@@ -75,7 +75,7 @@ public struct SplitTabsAtom: MotionAtomView {
                     .clipped()
                     .animation(reduce ? nil : .motion(.base), value: cur)
                 }
-                .padding(14).frame(width: 320)
+                .padding(14).frame(maxWidth: 320)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Show counts", isOn: $showCounts)
                     .font(.caption).foregroundStyle(.secondary)

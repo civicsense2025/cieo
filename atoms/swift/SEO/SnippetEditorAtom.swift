@@ -28,8 +28,8 @@ public struct SnippetEditorAtom: MotionAtomView {
                 }
                 .pickerStyle(.segmented).frame(width: 200)
                 .motion(.base, value: tab)
-                TextField("Title", text: $title).textFieldStyle(.roundedBorder).font(.subheadline)
-                TextField("Description", text: $detail, axis: .vertical).lineLimit(2).textFieldStyle(.roundedBorder).font(.footnote)
+                TextField("Title", text: $title).softFieldSurface().font(.subheadline)
+                TextField("Description", text: $detail, axis: .vertical).lineLimit(2).softFieldSurface().font(.footnote)
                 VStack(alignment: .leading, spacing: 2) {
                     Text("fieldnotes.example › spring-launch").font(.caption2).foregroundStyle(.secondary)
                     SwapText(cut(title, tab == 0 ? 60 : 45)).font(.subheadline.weight(.medium)).foregroundStyle(Color.accentColor)
@@ -43,9 +43,9 @@ public struct SnippetEditorAtom: MotionAtomView {
                 .padding(14).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 .motion(.base, value: tab)
                 Toggle("Rich result extras", isOn: $rich).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 }

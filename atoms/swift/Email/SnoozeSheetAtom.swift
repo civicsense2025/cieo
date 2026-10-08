@@ -44,7 +44,7 @@ public struct SnoozeSheetAtom: MotionAtomView {
                         .motionTransition(.presence)
                     }
                 }
-                .padding(14).frame(width: 300)
+                .padding(14).frame(maxWidth: 300)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Remind with sound", isOn: $remindSound)
                     .font(.caption).foregroundStyle(.secondary)

@@ -38,7 +38,7 @@ public struct ExhibitAtom: MotionAtomView {
                             if phase == .failed { Button("Retry", action: start).frame(minHeight: 32) }
                         }
                         .padding(4).motionTransition(.swap())
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(phase == .failed ? .red : .clear, lineWidth: 2))
+                        .overlay(RoundedRectangle(cornerRadius: 8).fill(phase == .failed ? .red : .clear).opacity(0.10).allowsHitTesting(false))
                     }
                     ZStack(alignment: .leading) {
                         if phase == .done { Text("Exhibit B attached ✓").foregroundStyle(.green).motionTransition(.swap()) }

@@ -21,7 +21,7 @@ private struct Sitemap: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack {
-                TextField("Search the sitemap", text: $query).textFieldStyle(.roundedBorder).focused($focused).frame(maxWidth: 220)
+                TextField("Search the sitemap", text: $query).softFieldSurface().focused($focused).frame(maxWidth: 220)
                 Spacer()
                 HStack(spacing: 4) { RollingDigits(count); Text("links").foregroundStyle(.secondary) }.font(.caption)
                     .accessibilityElement(children: .ignore).accessibilityLabel("\(count) links")

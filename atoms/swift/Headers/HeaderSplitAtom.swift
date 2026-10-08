@@ -19,7 +19,7 @@ public struct HeaderSplitAtom: MotionAtomView {
                 }
                 .motion(.base, value: toEdges)
                 .padding(10)
-                .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+                .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
                 Picker("Alignment", selection: $toEdges) { Text("Toward logo").tag(false); Text("Toward edges").tag(true) }
                     .pickerStyle(.segmented).frame(maxWidth: 260)
                 HdrBlocks()

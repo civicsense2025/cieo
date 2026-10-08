@@ -49,11 +49,11 @@ public struct TierPickerAtom: MotionAtomView {
                     }
                     .motionTransition(.swap())
                     .animation(reduce ? nil : .motion(.base), value: yearly)
-                    Button("Choose Plus") {}.buttonStyle(.borderedProminent).controlSize(.regular)
+                    PreviewAction("Choose Plus").buttonStyle(.borderedProminent).controlSize(.regular)
                         .frame(maxWidth: .infinity)
                 }
                 .padding(16)
-                .frame(width: 340)
+                .frame(maxWidth: 340)
                 .background(.background, in: RoundedRectangle(cornerRadius: 14))
                 .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
             }

@@ -61,7 +61,7 @@ public struct AgentActionsAtom: MotionAtomView {
             .scaleEffect(i.kind == .press ? 1 - p * 0.14 : i.kind == .pulse ? 1 + p * 0.14 : 1)
             .frame(width: size, height: size)
             .background(brand ? Color.green.opacity(0.18) : .clear, in: RoundedRectangle(cornerRadius: size * 0.22))
-            .overlay(RoundedRectangle(cornerRadius: size * 0.22).strokeBorder(Color.primary, lineWidth: brand ? 1.7 : 1.2))
+            .overlay(RoundedRectangle(cornerRadius: size * 0.22).fill(Color.primary).opacity(0.10).allowsHitTesting(false))
             .onHover { if $0 { play(i.id) } }
             .onTapGesture { play(i.id) }
             .accessibilityLabel(i.name).accessibilityAddTraits(.isButton)

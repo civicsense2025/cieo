@@ -55,7 +55,7 @@ public struct PhoneNumberAtom: MotionAtomView {
                         .motion(.base, value: complete)
                 }
                 .frame(height: 42)
-                .background(RoundedRectangle(cornerRadius: 10).strokeBorder(focused ? Color.primary : Color.primary.opacity(0.2), lineWidth: 1.5))
+                .background(RoundedRectangle(cornerRadius: 10).fill(focused ? Color.primary : Color.primary.opacity(0.2)).opacity(0.10))
             }
             .frame(maxWidth: 300)
         }

@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Cieo
 
@@ -38,7 +39,7 @@ public struct LiveTickerAtom: MotionAtomView {
                         .buttonStyle(.bordered).controlSize(.regular)
                     Spacer()
                     Toggle("auto-tick", isOn: $auto).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 420)

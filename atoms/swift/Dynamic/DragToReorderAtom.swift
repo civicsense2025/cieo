@@ -30,7 +30,7 @@ public struct DragToReorderAtom: MotionAtomView {
                         }
                         .padding(.horizontal, 12).frame(height: 44)
                         .background(.background, in: RoundedRectangle(cornerRadius: 10))
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary))
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
                         .shadow(color: .black.opacity(0.08 + 0.12 * l), radius: 4 + 20 * l / 2, y: 2 + 10 * l / 2)
                         .scaleEffect(1 + 0.03 * l)
                         .offset(y: held == i ? hy : ys[i].value(at: t))

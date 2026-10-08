@@ -37,7 +37,7 @@ public struct AgentRolesAtom: MotionAtomView {
         return VStack(spacing: 1) {
             RoundedRectangle(cornerRadius: size * 0.22).fill(brand ? Color(white: 1).opacity(0.9) : Color.clear)
                 .overlay(brand ? RoundedRectangle(cornerRadius: size * 0.22).fill(Color.green.opacity(0.2)) : nil)
-                .overlay(RoundedRectangle(cornerRadius: size * 0.22).strokeBorder(Color.primary, lineWidth: brand ? 1.7 : max(1, size / 16)))
+                .overlay(RoundedRectangle(cornerRadius: size * 0.22).fill(Color.primary).opacity(0.10).allowsHitTesting(false))
                 .overlay(Image(systemName: sym).font(.system(size: size * 0.44)).rotationEffect(.degrees(p * 18)).offset(x: p * 2))
                 .frame(width: size, height: size)
             if size > 16 { Ellipse().stroke(Color.primary, lineWidth: 1).frame(width: size * 0.7, height: size * 0.18).rotationEffect(.degrees(-18 + p * 40)) }

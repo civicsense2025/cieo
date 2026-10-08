@@ -52,7 +52,7 @@ public struct EmbedCardAtom: MotionAtomView {
                             withMotion(.snap, reduceMotion: reduce) { open = false; joined = false; email = "" }
                         }.font(.caption).buttonStyle(.borderless)
                     }
-                    .padding(16).frame(width: 340)
+                    .padding(16).frame(maxWidth: 340)
                     .background(.background, in: RoundedRectangle(cornerRadius: 14))
                     .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
                     .transition(reduce ? .identity : .scale(scale: 0.97).combined(with: .opacity))

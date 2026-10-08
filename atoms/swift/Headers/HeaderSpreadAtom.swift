@@ -31,7 +31,7 @@ public struct HeaderSpreadAtom: MotionAtomView {
                     account
                 }
                 .padding(.horizontal, 12).padding(.vertical, 8)
-                .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+                .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
                 Picker("Link alignment", selection: $center) { Text("Left").tag(false); Text("Center").tag(true) }
                     .pickerStyle(.segmented).frame(maxWidth: 180)
                 HdrBlocks()

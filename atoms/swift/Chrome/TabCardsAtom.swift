@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Tab hover cards: rest-then-rise, glide tab-to-tab, preview crossfades.
-public struct TabCardsAtom: View {
+public struct TabCardsAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "tabcards", category: "Chrome", name: "Tab Cards", summary: "Tab hover cards: rest-then-rise, glide tab-to-tab, preview crossfades.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var current = 0
     @State private var shown = false
@@ -22,11 +23,11 @@ public struct TabCardsAtom: View {
                     }
                 }
                 .focusable(true)
-                .onMoveCommand { dir in
+                .directionKeys { dir in
                     if dir == .right { current = (current + 1) % tabs.count; shown = true }
                     else if dir == .left { current = (current + tabs.count - 1) % tabs.count; shown = true }
                 }
-                .onExitCommand { pinned = false; shown = false }
+                .escapeKey { pinned = false; shown = false }
                 ZStack {
                     if shown {
                         VStack(alignment: .leading, spacing: 4) {

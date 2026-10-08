@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Cieo
 
@@ -81,7 +82,7 @@ public struct VoiceNoteAtom: MotionAtomView {
         }
         .padding(.horizontal, 12).frame(width: 190, height: 56, alignment: .leading)
         .background(.thickMaterial).clipShape(RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .accessibilityElement(children: .combine).accessibilityLabel("Voice note, 12 seconds")
     }
 

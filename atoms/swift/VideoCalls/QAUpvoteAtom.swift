@@ -60,7 +60,7 @@ public struct QAUpvoteAtom: MotionAtomView {
                             }
                         }
                         .padding(8)
-                        .background(RoundedRectangle(cornerRadius: 10).stroke(.quaternary))
+                        .background(RoundedRectangle(cornerRadius: 10).fill(.quaternary).opacity(0.10))
                         .id(item.id)
                     }
                 }

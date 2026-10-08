@@ -12,6 +12,8 @@ npm install github:civicsense2025/cieo#v0.1.0
 
 SwiftUI: in Xcode, File → Add Package Dependencies → `https://github.com/civicsense2025/cieo`, then add `Cieo` (and `CieoAtoms` for the reference atoms).
 
+For reusable production controls, add the separate `CieoUI` product. Its [Apple foundation](docs/apple-components.md) organizes foundations, atoms, molecules and organisms independently of the recipe catalogue. Native Button/TextField semantics remain intact; host-owned state and actions stay outside the design layer. Install `.renderingPreferences()` at the host root, and opt into the bounded Metal decoration only where useful.
+
 ## Use
 
 ```ts

@@ -77,7 +77,7 @@ public struct IntakeQuestionsAtom: MotionAtomView {
                         Spacer()
                     }
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
                 .offset(x: shake.value(at: t))
             }
         }

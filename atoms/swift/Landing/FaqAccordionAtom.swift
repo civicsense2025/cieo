@@ -46,7 +46,7 @@ public struct FaqAccordionAtom: MotionAtomView {
                 }
                 Button("Collapse all") { withMotion(.base, reduceMotion: reduce) { open = nil } }
                     .font(.caption).buttonStyle(.borderless).padding(.top, 12)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 }

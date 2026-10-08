@@ -42,7 +42,7 @@ public struct ShelfAtom: MotionAtomView {
                     }.buttonStyle(.plain).accessibilityLabel("Go to item \(i + 1)")
                 } }.frame(maxWidth: .infinity)
                 Toggle("Peek next card", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 }

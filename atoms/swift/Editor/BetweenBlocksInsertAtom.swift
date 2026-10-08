@@ -25,7 +25,7 @@ public struct BetweenBlocksInsertAtom: MotionAtomView {
                     gap(i + 1)
                 }
             }
-            .padding(12).frame(width: 360, alignment: .top)
+            .padding(12).frame(maxWidth: 360, alignment: .top)
         }
     }
 
@@ -37,7 +37,7 @@ public struct BetweenBlocksInsertAtom: MotionAtomView {
                 if isOpen {
                     HStack(spacing: 6) {
                         ForEach(kinds, id: \.0) { k in
-                            Button { insert(k.0, at: g) } label: { Label(k.0, systemImage: k.1).font(.caption.weight(.medium)).padding(.horizontal, 10).padding(.vertical, 6).background(.background, in: Capsule()).overlay(Capsule().strokeBorder(Color.accentColor)) }.buttonStyle(.plain)
+                            Button { insert(k.0, at: g) } label: { Label(k.0, systemImage: k.1).font(.caption.weight(.medium)).padding(.horizontal, 10).padding(.vertical, 6).background(.background, in: Capsule()).overlay(Capsule().fill(Color.accentColor).opacity(0.10).allowsHitTesting(false)) }.buttonStyle(.plain)
                         }
                     }.motionTransition(.swap())
                 } else {

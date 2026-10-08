@@ -34,7 +34,7 @@ public struct RedirectRuleAtom: MotionAtomView {
                 }
                 ForEach($rules) { $rule in
                     VStack(alignment: .leading, spacing: 6) {
-                        TextField("From path", text: $rule.from).textFieldStyle(.roundedBorder)
+                        TextField("From path", text: $rule.from).softFieldSurface()
                             .font(.footnote).monospacedDigit()
                             .overlay(RoundedRectangle(cornerRadius: 8)
                                 .strokeBorder(valid(rule) ? Color.clear : Color.red, lineWidth: valid(rule) ? 0 : 1.5))
@@ -45,7 +45,7 @@ public struct RedirectRuleAtom: MotionAtomView {
                         }
                         HStack(spacing: 6) {
                             Text("→").foregroundStyle(.secondary)
-                            TextField("To path", text: $rule.to).textFieldStyle(.roundedBorder).font(.footnote)
+                            TextField("To path", text: $rule.to).softFieldSurface().font(.footnote)
                         }
                         HStack(spacing: 4) {
                             Button("↑") { move(rule.id, by: -1) }.buttonStyle(.bordered).controlSize(.mini)
@@ -80,11 +80,11 @@ public struct RedirectRuleAtom: MotionAtomView {
                 .padding(.horizontal, 14).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 HStack(spacing: 6) {
                     Toggle("Regex paths", isOn: $regex).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                     Text("· reorder with ↑ ↓").font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 

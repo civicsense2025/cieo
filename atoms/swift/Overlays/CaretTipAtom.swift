@@ -14,7 +14,7 @@ public struct CaretTipAtom: MotionAtomView {
             VStack(spacing: 10) {
                 Toggle("Glide caret", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                 TextField("Type to move the tip", text: $text).focused($editing)
-                    .textFieldStyle(.roundedBorder).font(.callout).frame(width: 270)
+                    .softFieldSurface().font(.callout).frame(width: 270)
                 tip.transition(reduce ? .identity : .opacity.combined(with: .offset(y: 4)).animation(.motion(.base)))
             }
             .frame(maxHeight: .infinity, alignment: .top).padding(.top, 40)

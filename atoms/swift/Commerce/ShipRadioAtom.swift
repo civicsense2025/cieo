@@ -42,7 +42,7 @@ public struct ShipRadioAtom: MotionAtomView {
                         }
                         .padding(10).frame(minHeight: 52)
                         .background(.background, in: RoundedRectangle(cornerRadius: 9))
-                        .overlay(RoundedRectangle(cornerRadius: 9).stroke(i == cur ? .primary : .quaternary, lineWidth: 1))
+                        .overlay(RoundedRectangle(cornerRadius: 9).fill(i == cur ? .primary : .quaternary).opacity(0.10).allowsHitTesting(false))
                         .offset(y: i == cur ? -2 : 0)
                         .animation(reduce ? nil : .motion(.base), value: cur)
                     }
@@ -57,9 +57,9 @@ public struct ShipRadioAtom: MotionAtomView {
                             .font(.system(size: 12.5)).foregroundStyle(.secondary).monospacedDigit()
                     }
                 }
-                Toggle("Free over $75", isOn: $free75).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Free over $75", isOn: $free75).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
-            .padding(14).frame(width: 300)
+            .padding(14).frame(maxWidth: 300)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
         }
     }

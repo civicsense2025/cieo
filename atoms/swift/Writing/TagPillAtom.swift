@@ -46,12 +46,12 @@ public struct TagPillAtom: MotionAtomView {
                     }
                     .padding(14)
                     .background(.background, in: RoundedRectangle(cornerRadius: 10))
-                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary))
+                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
                     .animation(reduce ? nil : .motion(.base), value: pills.count)
                 Toggle("Filter on #", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
-                }.frame(width: 320)
+                }.frame(maxWidth: 320)
                 if query != nil {
                     menu.offset(y: 120).motionTransition(.presence)
                 }
@@ -83,7 +83,7 @@ public struct TagPillAtom: MotionAtomView {
         }
         .frame(width: 200, height: panelHeight, alignment: .top)
         .background(.background, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .clipShape(RoundedRectangle(cornerRadius: 12)).shadow(color: .black.opacity(0.12), radius: 8, y: 3)
         .animation(reduce ? nil : .motion(.base), value: panelHeight)
     }

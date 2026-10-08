@@ -27,7 +27,7 @@ public struct SearchExpandAtom: MotionAtomView {
                 bar
                 if open && !q.isEmpty { results.motionTransition(.presence).offset(y: 58) }
             }
-            .frame(width: 340).frame(maxHeight: .infinity, alignment: .top).padding(.top, 8)
+            .frame(maxWidth: 340).frame(maxHeight: .infinity, alignment: .top).padding(.top, 8)
             .animation(reduce ? nil : .motion(.base), value: q.isEmpty)
         }
         .onChange(of: query) { old, _ in
@@ -56,7 +56,7 @@ public struct SearchExpandAtom: MotionAtomView {
         }
         .padding(.leading, 16).padding(.trailing, 8).frame(height: 52)
         .background(.background, in: RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
         .animation(reduce ? nil : .motion(.base), value: open)
         .animation(reduce ? nil : .motion(.base).delay(0.12), value: showInput)
     }
@@ -80,7 +80,7 @@ public struct SearchExpandAtom: MotionAtomView {
         }
         .frame(height: panelHeight, alignment: .top)
         .background(.background, in: RoundedRectangle(cornerRadius: 14))
-        .overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary)).clipShape(RoundedRectangle(cornerRadius: 14))
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05))).clipShape(RoundedRectangle(cornerRadius: 14))
         .shadow(color: .black.opacity(0.1), radius: 8, y: 3)
         .animation(reduce ? nil : .motion(.base), value: panelHeight)
         .accessibilityElement(children: .contain)

@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Downloads shelf: pushes up, rows stagger 40ms, ring fills, success terminal.
-public struct DownloadsAtom: View {
+public struct DownloadsAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "downloads", category: "Chrome", name: "Downloads", summary: "Downloads shelf: pushes up, rows stagger 40ms, ring fills, success terminal.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var running = false
     @State private var progress: Double = 0
@@ -63,6 +64,6 @@ public struct DownloadsAtom: View {
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
         }
         .focusable(true)
-        .onExitCommand { running = false; progress = 0; done = false }
+        .escapeKey { running = false; progress = 0; done = false }
     }
 }

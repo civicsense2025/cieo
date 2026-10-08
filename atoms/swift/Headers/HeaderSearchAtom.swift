@@ -29,14 +29,14 @@ public struct HeaderSearchAtom: MotionAtomView {
                     .background(.quaternary, in: Capsule())
                 }
                 .padding(10).frame(maxWidth: .infinity)
-                .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+                .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
                 .animation(reduce ? nil : .motion(.soft), value: open)
                 if open {
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(rows, id: \.self) { Text($0).font(.callout).padding(.horizontal, 10).padding(.vertical, 6).frame(maxWidth: .infinity, alignment: .leading).transition(reduce ? .identity : .megaBlur) }
                         if rows.isEmpty { Text("No matches").font(.caption).foregroundStyle(.secondary).padding(10) }
                     }
-                    .frame(width: 230).background(.background, in: RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+                    .frame(width: 230).background(.background, in: RoundedRectangle(cornerRadius: 8)).background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
                     .animation(reduce ? nil : .motion(.soft), value: rows)
                     .motionTransition(.presence)
                 }

@@ -30,7 +30,7 @@ public struct DonationAmountAtom: MotionAtomView {
                         .onChange(of: custom) { _, v in custom = String(v.filter(\.isNumber).prefix(4)) }
                 }
                 .font(.subheadline).padding(.horizontal, 10).padding(.vertical, 8)
-                .overlay(RoundedRectangle(cornerRadius: 9).stroke(.quaternary, lineWidth: 1.5))
+                .background(RoundedRectangle(cornerRadius: 9).fill(Color.primary.opacity(0.05)))
                 .opacity(chip == 4 ? 1 : 0).offset(y: chip == 4 ? 0 : -4)
                 .frame(height: chip == 4 ? 40 : 0, alignment: .top).clipped()
                 .accessibilityHidden(chip != 4)

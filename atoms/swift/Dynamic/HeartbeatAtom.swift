@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Cieo
 
@@ -43,7 +44,7 @@ public struct HeartbeatAtom: MotionAtomView {
                         .buttonStyle(.bordered).controlSize(.regular)
                         Spacer()
                         Toggle("loop", isOn: $loop).font(.caption).foregroundStyle(.secondary)
-                            .toggleStyle(.checkbox)
+                            .nativeToggleStyle()
                     }
                 }
                 .frame(maxWidth: 380)

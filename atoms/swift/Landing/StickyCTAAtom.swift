@@ -21,7 +21,7 @@ public struct StickyCTAAtom: MotionAtomView {
                             VStack(spacing: 8) {
                                 Text("Ship the page").font(.title.weight(.semibold))
                                 Text("Scroll past this hero to call in the bar.").font(.caption).foregroundStyle(.secondary)
-                                Button("Start free") {}.buttonStyle(.borderedProminent).controlSize(.small)
+                                PreviewAction("Start free").buttonStyle(.borderedProminent).controlSize(.small)
                             }.frame(maxWidth: .infinity).padding(.vertical, 36)
                             .background(GeometryReader { g in Color.clear.preference(key: HeroBottomKey.self, value: g.frame(in: .named("preview")).maxY) })
                             VStack(alignment: .leading, spacing: 8) {
@@ -38,7 +38,7 @@ public struct StickyCTAAtom: MotionAtomView {
                         HStack {
                             Text("Start \(plans[plan]) free").font(.subheadline.weight(.semibold)).id(plan).motionTransition(.swap())
                             Spacer()
-                            Button("Start free") {}.buttonStyle(.bordered).controlSize(.small).tint(.white)
+                            PreviewAction("Start free").buttonStyle(.bordered).controlSize(.small).tint(.white)
                         }.padding(.leading, 12).padding(6)
                         .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 10))
                         .foregroundStyle(.white).padding(.horizontal, 8).padding(.top, 8)

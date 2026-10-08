@@ -24,7 +24,7 @@ public struct StatCountAtom: MotionAtomView {
                     else { Text("counting…").font(.caption).foregroundStyle(.secondary).id(0).motionTransition(.swap()) }
                 }
                 Button("Replay") { replay() }.font(.caption).buttonStyle(.borderless)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
             .onAppear { fire() }
         }
     }

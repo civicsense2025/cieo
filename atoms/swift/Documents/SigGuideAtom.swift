@@ -49,10 +49,10 @@ public struct SigGuideAtom: MotionAtomView {
     private func field(label: String, text: String, value: Binding<String>, index: Int) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(label).font(.system(size: 11)).foregroundStyle(.secondary)
-            TextField(text, text: value).textFieldStyle(.roundedBorder).frame(minHeight: 32)
+            TextField(text, text: value).softFieldSurface().frame(minHeight: 32)
         }
         .padding(.vertical, 8).opacity(signed || index <= step ? 1 : 0.45)
-        .overlay(RoundedRectangle(cornerRadius: 8).stroke(danger && index == step ? .red : .clear, lineWidth: 2))
+        .overlay(RoundedRectangle(cornerRadius: 8).fill(danger && index == step ? .red : .clear).opacity(0.10).allowsHitTesting(false))
     }
 
     private func next() {

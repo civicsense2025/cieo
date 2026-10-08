@@ -40,7 +40,7 @@ public struct SelectAtom: MotionAtomView {
                     .rotationEffect(.degrees(open ? 180 : 0))
             }
             .padding(.horizontal, 12).frame(width: 220, height: 38)
-            .background(RoundedRectangle(cornerRadius: 9).strokeBorder(Color.primary.opacity(0.2), lineWidth: 1.5))
+            .background(RoundedRectangle(cornerRadius: 9).fill(Color.primary.opacity(0.2)).opacity(0.10))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

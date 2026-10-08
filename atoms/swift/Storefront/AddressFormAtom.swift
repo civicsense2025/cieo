@@ -28,23 +28,23 @@ public struct AddressFormAtom: MotionAtomView {
                     if country == 0 {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 8) {
-                                TextField("ZIP code", text: $zip).textFieldStyle(.roundedBorder).font(.footnote)
-                                TextField("State", text: .constant("")).textFieldStyle(.roundedBorder).font(.footnote)
+                                TextField("ZIP code", text: $zip).softFieldSurface().font(.footnote)
+                                TextField("State", text: .constant("")).softFieldSurface().font(.footnote)
                             }
                             SwapText(city).font(.caption).foregroundStyle(.secondary)
                         }.motionTransition(.swap()).id(country)
                     } else {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 8) {
-                                TextField("Postcode", text: .constant("")).textFieldStyle(.roundedBorder).font(.footnote)
-                                TextField("County", text: .constant("")).textFieldStyle(.roundedBorder).font(.footnote)
+                                TextField("Postcode", text: .constant("")).softFieldSurface().font(.footnote)
+                                TextField("County", text: .constant("")).softFieldSurface().font(.footnote)
                             }
                             Text("Try SW1A 1AA.").font(.caption).foregroundStyle(.secondary)
                         }.motionTransition(.swap()).id(country)
                     }
                 }.frame(height: 76, alignment: .top)
                 Toggle("Look up city", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 }

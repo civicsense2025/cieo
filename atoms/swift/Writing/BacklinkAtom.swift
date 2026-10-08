@@ -27,7 +27,7 @@ public struct BacklinkAtom: MotionAtomView {
                     .accessibilityValue(open ? "expanded" : "collapsed")
                 if open { panel.motionTransition(.presence) }
             }
-            .frame(width: 300, alignment: .leading)
+            .frame(maxWidth: 300, alignment: .leading)
         }
     }
 
@@ -63,7 +63,7 @@ public struct BacklinkAtom: MotionAtomView {
         }
         .padding(14)
         .background(.background, in: RoundedRectangle(cornerRadius: 12))
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .shadow(color: .black.opacity(0.12), radius: 8, y: 3)
         .onChange(of: tab) { _, _ in moveHighlight(0) }
     }

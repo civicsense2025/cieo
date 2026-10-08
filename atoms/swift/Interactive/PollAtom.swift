@@ -41,7 +41,7 @@ public struct PollAtom: MotionAtomView {
                 GeometryReader { g in Rectangle().fill(.quaternary).frame(width: g.size.width * max(0, min(1, v / 100))) }
             }
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.primary.opacity(0.12 + 0.88 * c), lineWidth: 1))
+            .overlay(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.12 + 0.88 * c)).opacity(0.10).allowsHitTesting(false))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

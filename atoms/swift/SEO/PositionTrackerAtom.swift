@@ -47,10 +47,10 @@ public struct PositionTrackerAtom: MotionAtomView {
                 }
                 .padding(14).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 Toggle("Sparkline", isOn: $showLine).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
                 Button("Refresh", action: refresh).buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear { draw = reduce ? 1 : 0; withMotion(.lazy, reduceMotion: reduce) { draw = 1 } }
     }

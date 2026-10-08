@@ -3,7 +3,7 @@ import Cieo
 
 public struct PictureChoiceAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "picturechoice", category: "Forms", name: "Picture choice",
-        summary: "Choosing a card presses it in slightly, inks its border and pops a check badge in the corner. Letter keys pick an option, as in conversational forms.")
+        summary: "Choosing a card presses it in slightly, tints its surface and pops a check badge in the corner. Letter keys pick an option, as in conversational forms.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var sel: Int?
     @State private var pressed: Int?
@@ -28,13 +28,13 @@ public struct PictureChoiceAtom: MotionAtomView {
                                 }
                             HStack(spacing: 6) {
                                 Text("ABCD".map(String.init)[i]).font(.caption2.weight(.semibold)).padding(.horizontal, 4)
-                                    .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Color.primary.opacity(0.25)))
+                                    .background(RoundedRectangle(cornerRadius: 4).fill(Color.primary.opacity(0.05)))
                                 Text(options[i].name).font(.footnote)
                             }
                             .padding(.horizontal, 2).padding(.bottom, 2)
                         }
                         .padding(6).frame(width: 130)
-                        .background(RoundedRectangle(cornerRadius: 12).strokeBorder(on ? Color.primary : Color.primary.opacity(0.2), lineWidth: 2))
+                        .background(RoundedRectangle(cornerRadius: 12).fill(on ? Color.primary : Color.primary.opacity(0.2)).opacity(0.10))
                         .overlay(alignment: .topTrailing) {
                             Image(systemName: "checkmark").font(.system(size: 11, weight: .heavy)).foregroundStyle(.background)
                                 .frame(width: 22, height: 22).background(Circle().fill(.primary))

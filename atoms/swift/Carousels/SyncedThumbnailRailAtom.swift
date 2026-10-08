@@ -20,7 +20,7 @@ public struct SyncedThumbnailRailAtom: MotionAtomView {
                             .offset(x: CGFloat(Double(n) - pos) * item, y: -size.height * 0.14)
                     }
                     ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 8).strokeBorder(Color.accentColor, lineWidth: 2)
+                        RoundedRectangle(cornerRadius: 8).fill(Color.accentColor).opacity(0.10)
                             .frame(width: CGFloat(hi - lo) * pitch - 4, height: 40).offset(x: CGFloat(lo) * pitch - 2)
                         ForEach(0..<count, id: \.self) { n in
                             phPhoto(n, CGSize(width: 46, height: 36)).clipShape(RoundedRectangle(cornerRadius: 6)).offset(x: CGFloat(n) * pitch)

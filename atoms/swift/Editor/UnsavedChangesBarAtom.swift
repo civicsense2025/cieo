@@ -24,13 +24,13 @@ public struct UnsavedChangesBarAtom: MotionAtomView {
         AtomStage(hint: "Edit any field") {
             ZStack(alignment: .bottom) {
                 VStack(spacing: 0) {
-                    row("Site name", edited: cur.name != saved.name) { TextField("Name", text: $cur.name).textFieldStyle(.roundedBorder).frame(width: 150) }
+                    row("Site name", edited: cur.name != saved.name) { TextField("Name", text: $cur.name).softFieldSurface().frame(width: 150) }
                     Divider()
                     row("Language", edited: cur.lang != saved.lang) { langPicker }
                     Divider()
                     row("Show in navigation", edited: cur.show != saved.show) { Toggle("Show in navigation", isOn: $cur.show).labelsHidden() }
                 }
-                .padding(.horizontal, 14).frame(width: 400).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
+                .padding(.horizontal, 14).frame(maxWidth: 400).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 12))
                 .frame(maxHeight: .infinity, alignment: .top).padding(.top, 8)
                 if showBar { bar.transition(reduce ? .identity : .move(edge: .bottom).combined(with: .opacity)).padding(8) }
             }

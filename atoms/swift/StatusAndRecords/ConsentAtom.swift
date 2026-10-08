@@ -59,7 +59,7 @@ public struct ConsentAtom: MotionAtomView {
         .padding(tab ? 8 : 12)
         .frame(maxWidth: tab ? 150 : 340, alignment: .leading)
         .background(.background, in: RoundedRectangle(cornerRadius: tab ? 16 : 12))
-        .overlay(RoundedRectangle(cornerRadius: tab ? 16 : 12).strokeBorder(.quaternary))
+        .background(RoundedRectangle(cornerRadius: tab ? 16 : 12).fill(Color.primary.opacity(0.05)))
         .shadow(radius: 6, y: 2)
         .padding(8)
         .contentShape(Rectangle())

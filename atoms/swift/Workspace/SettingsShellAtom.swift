@@ -55,7 +55,7 @@ public struct SettingsShellAtom: MotionAtomView {
                 Button("Delete site…") { withMotion(.soft, reduceMotion: reduce) { confirming = true } }.controlSize(.small).buttonStyle(.bordered).tint(.red)
                 if confirming {
                     Text("Type Harbor & Pine to confirm.").font(.caption).foregroundStyle(.secondary)
-                    TextField("Site name", text: $typed).textFieldStyle(.roundedBorder).font(.footnote)
+                    TextField("Site name", text: $typed).softFieldSurface().font(.footnote)
                     Button("Delete") { withMotion(.base, reduceMotion: reduce) { scheduled = true } }.controlSize(.small).buttonStyle(.borderedProminent).tint(.red).disabled(typed != "Harbor & Pine")
                 }
             }

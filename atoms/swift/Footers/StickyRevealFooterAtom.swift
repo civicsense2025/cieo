@@ -15,7 +15,7 @@ public struct StickyRevealFooterAtom: MotionAtomView {
                 ZStack(alignment: .bottom) {
                     VStack(spacing: 8) {
                         Text("Let’s build something calm").font(.title3.weight(.semibold))
-                        Button("Get in touch") {}.buttonStyle(.borderedProminent)
+                        PreviewAction("Get in touch").buttonStyle(.borderedProminent)
                     }
                     .foregroundStyle(.background)
                     .frame(maxWidth: .infinity).frame(height: footerHeight)

@@ -34,7 +34,7 @@ public struct SelectionToolbarAtom: MotionAtomView {
         AtomStage(hint: "Drag across some words") {
             ZStack(alignment: .topLeading) {
                 WritingWords(words: words, space: "p", font: .callout, highlighted: selection)
-                    .frame(width: 320).coordinateSpace(name: "p")
+                    .frame(maxWidth: 320).coordinateSpace(name: "p")
                     .onPreferenceChange(FramePreferenceKey.self) { frames = $0 }
                     .contentShape(Rectangle())
                     .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .named("p"))
@@ -64,7 +64,7 @@ public struct SelectionToolbarAtom: MotionAtomView {
             }
         }
         .padding(4).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.quaternary)).shadow(color: .black.opacity(0.12), radius: 6, y: 2)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).shadow(color: .black.opacity(0.12), radius: 6, y: 2)
     }
 
     private func update() {

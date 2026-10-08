@@ -42,7 +42,7 @@ public struct LayerSwitchAtom: MotionAtomView {
                 }
                 .frame(width: 380, height: 240).clipShape(RoundedRectangle(cornerRadius: 14))
                 HStack { Text("Old tiles cross-fade, new blooms in").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Labels", isOn: $labels).labelsHidden().controlSize(.mini) }
-                    .frame(width: 380)
+                    .frame(maxWidth: 380)
             }
         }
     }

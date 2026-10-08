@@ -3,7 +3,7 @@ import Cieo
 
 public struct PaymentFieldsAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "payfields", category: "Commerce", name: "Payment fields",
-        summary: "Spaces land every four digits while the brand swaps live. Valid fields earn a success check; invalid ones ring danger with a fix, as you type.")
+        summary: "Spaces land every four digits while the brand swaps live. Valid fields earn a success check; invalid ones show a danger fill with a fix, as you type.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var card = ""
     @State private var expiry = ""
@@ -41,7 +41,7 @@ public struct PaymentFieldsAtom: MotionAtomView {
                     TextField("Card number", text: $card).monospacedDigit()
                     .frame(height: 38).padding(.horizontal, 10)
                     .background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
-                    .border(!card.isEmpty && !cardOK ? .red : .clear, width: 1)
+                    .background(Color.red.opacity(!card.isEmpty && !cardOK ? 0.10 : 0))
                     .onChange(of: card) { format() }
                 fieldMsg(
                     card.isEmpty ? nil :
@@ -62,9 +62,9 @@ public struct PaymentFieldsAtom: MotionAtomView {
                 }
                 .frame(height: 38).frame(maxWidth: .infinity)
                 .background(paid ? .green : .primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.white)
-                Toggle("Save card", isOn: $save).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Save card", isOn: $save).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
-            .padding(14).frame(width: 300)
+            .padding(14).frame(maxWidth: 300)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
         }
     }

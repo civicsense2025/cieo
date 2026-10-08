@@ -35,11 +35,11 @@ private struct AppFooter: View {
             HStack(spacing: 8) {
                 ForEach(badges.indices, id: \.self) { i in
                     Label(badges[i].1, systemImage: badges[i].0).font(.caption).padding(.horizontal, 8).padding(.vertical, 5)
-                        .overlay(Capsule().strokeBorder(badge == i ? Color.primary : Color.secondary.opacity(0.3), lineWidth: 1))
+                        .overlay(Capsule().fill(badge == i ? Color.primary : Color.secondary.opacity(0.3)).opacity(0.10).allowsHitTesting(false))
                         .overlay(alignment: .top) {
                             if badge == i {
                                 Text(badges[i].2).font(.caption2).padding(8).frame(width: 150).background(.background, in: RoundedRectangle(cornerRadius: 8))
-                                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary)).alignmentGuide(.top) { $0[.bottom] + 6 }.motionTransition(.presence)
+                                    .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05))).alignmentGuide(.top) { $0[.bottom] + 6 }.motionTransition(.presence)
                             }
                         }
                         .onHover { h in withMotion(.base, reduceMotion: reduce) { badge = h ? i : (badge == i ? nil : badge) } }

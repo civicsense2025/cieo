@@ -18,17 +18,17 @@ public struct ExpressPayAtom: MotionAtomView {
                     Text("Checkout").font(.system(size: 15, weight: .semibold)).frame(maxWidth: .infinity, alignment: .leading)
                     Text("$82.00").font(.system(size: 15, weight: .semibold)).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
                     if ready {
-                        Button("Pay") {}.frame(height: 38).frame(maxWidth: .infinity)
+                        PreviewAction("Pay").frame(height: 38).frame(maxWidth: .infinity)
                             .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
-                        Button("G Pay") {}.frame(height: 38).frame(maxWidth: .infinity)
+                        PreviewAction("G Pay").frame(height: 38).frame(maxWidth: .infinity)
                             .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                             .animation(reduce ? nil : .motion(.base).delay(0.06), value: ready)
                     }
                     Button("More options") { withMotion(.base, reduceMotion: reduce) { sheet = true } }
                         .frame(height: 38).frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    Toggle("Apply SHIP10 in sheet", isOn: $coupon).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                    Toggle("Apply SHIP10 in sheet", isOn: $coupon).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
                     Spacer()
                 }
                 .padding(14).frame(width: 280, height: 330)
@@ -47,7 +47,7 @@ public struct ExpressPayAtom: MotionAtomView {
                         .animation(reduce ? nil : .motion(.base), value: paid)
                     }
                     .padding(14).background(.background, in: RoundedRectangle(cornerRadius: 12))
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary, lineWidth: 1))
+                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                     .transition(.move(edge: .bottom))
                 }
             }

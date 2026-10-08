@@ -41,7 +41,7 @@ public struct FollowModeAtom: MotionAtomView {
                 }
                 .frame(height: viewH).clipped()
                 .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))
-                .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(following ? Color.accentColor : Color.secondary.opacity(0.3), lineWidth: following ? 2 : 1))
+                .overlay(RoundedRectangle(cornerRadius: 10).fill(following ? Color.accentColor : Color.secondary.opacity(0.3)).opacity(0.10).allowsHitTesting(false))
                 .gesture(DragGesture().onChanged { v in
                     if following { setFollow(false) }
                     let s = dragStart ?? viewY; dragStart = s

@@ -21,7 +21,7 @@ public struct UndoSendAtom: MotionAtomView {
                     Text("Looks great. Ship it Thursday.").font(.caption)
                     Button("Send", action: send).buttonStyle(.borderedProminent).frame(maxWidth: .infinity, alignment: .trailing)
                 }
-                .padding(14).frame(width: 300).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
+                .padding(14).frame(maxWidth: 300).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
                 .opacity(draft ? 1 : 0).offset(y: draft ? 0 : 20).scaleEffect(draft ? 1 : 0.92, anchor: .bottom).allowsHitTesting(draft)
                 .animation(reduce ? nil : .motion(draft ? .base : .snap), value: draft)
                 VStack { Spacer(); toastView.opacity(toast ? 1 : 0).offset(y: toast ? 0 : 12).allowsHitTesting(toast)
@@ -50,7 +50,7 @@ public struct UndoSendAtom: MotionAtomView {
                 if !sent { Button("Undo", action: undo).buttonStyle(.bordered).controlSize(.small) }
             }
             .padding(.horizontal, 12).padding(.vertical, 10).background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-            .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
             .accessibilityElement(children: .contain)
         }
     }

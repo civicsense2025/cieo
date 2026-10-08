@@ -39,7 +39,7 @@ public struct CheckoutAtom: MotionAtomView {
                     insertion: .modifier(active: Slide(x: 30 * dir, blur: 4, o: 0), identity: Slide(x: 0, blur: 0, o: 1)).animation(.motion(.base).delay(Motion.exit)),
                     removal: .modifier(active: Slide(x: -30 * dir, blur: 4, o: 0), identity: Slide(x: 0, blur: 0, o: 1)).animation(.motionExit))) }
                     .frame(width: 340, height: 160, alignment: .topLeading).clipped()
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 
@@ -82,8 +82,8 @@ public struct CheckoutAtom: MotionAtomView {
     }
 
     private func field(_ title: String, _ text: Binding<String>) -> some View {
-        TextField(title, text: text).textFieldStyle(.roundedBorder).font(.footnote)
-            .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(Color.red, lineWidth: tried && text.wrappedValue.isEmpty ? 1.5 : 0)).motion(.base, value: tried)
+        TextField(title, text: text).softFieldSurface().font(.footnote)
+            .overlay(RoundedRectangle(cornerRadius: 6).fill(Color.red).opacity((tried && text.wrappedValue.isEmpty ? 1.5 : 0) > 0 ? 0.10 : 0).allowsHitTesting(false)).motion(.base, value: tried)
     }
 
     private func go(_ s: Int) { dir = s > step ? 1 : -1; withMotion(.base, reduceMotion: reduce) { step = s } }

@@ -39,7 +39,7 @@ public struct AgentPinAtom: MotionAtomView {
                             Button("Resolve") { resolve() }.buttonStyle(AgPress(tone: .success)).font(.caption)
                         }
                         .padding(8).frame(width: 190, alignment: .leading)
-                        .background(.background, in: RoundedRectangle(cornerRadius: 8)).overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary)).shadow(radius: 4, y: 2)
+                        .background(.background, in: RoundedRectangle(cornerRadius: 8)).background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05))).shadow(radius: 4, y: 2)
                         .scaleEffect(card ? 1 : 0.2, anchor: .topLeading).position(x: min(f.maxX + 70, 250), y: f.maxY + 52)
                         .transition(reduce ? .identity : .scale(scale: 0.15, anchor: .topLeading).combined(with: .opacity))
                     }

@@ -31,7 +31,7 @@ public struct DropAPinAtom: MotionAtomView {
             }
             .accessibilityLabel("Map").accessibilityHint("Tap to drop a pin")
             HStack { Text("Ring on drop").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Ring on drop", isOn: $showRing).labelsHidden().controlSize(.mini) }
-            .frame(width: 380)
+            .frame(maxWidth: 380)
             }
         }
     }

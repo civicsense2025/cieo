@@ -3,7 +3,7 @@ import Cieo
 
 public struct ThumbnailToHeroAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-flip", category: "Image transitions", name: "Thumbnail to hero",
-        summary: "The thumbnail you choose lifts out of the strip and grows into the hero along a curved path: it rises first, then widens as it lands, while its slot stays outlined until it arrives and the old hero dims beneath. Use it for galleries with a visible strip or grid, so people see where the big photo came from.")
+        summary: "The thumbnail you choose lifts out of the strip and grows into the hero along a curved path: it rises first, then widens as it lands, while its slot stays softly highlighted until it arrives and the old hero dims beneath. Use it for galleries with a visible strip or grid, so people see where the big photo came from.")
     @State private var from = 0
     @State private var to = 0
     @State private var epoch = 0
@@ -21,8 +21,8 @@ public struct ThumbnailToHeroAtom: MotionAtomView {
                         phPhoto(from, hero.size).clipShape(RoundedRectangle(cornerRadius: 10)).opacity(1 - 0.6 * p)
                         ForEach(0..<3, id: \.self) { i in
                             ZStack {
-                                RoundedRectangle(cornerRadius: 8).strokeBorder(Color.accentColor, lineWidth: 2)
-                                    .opacity(i == to && p < 1 ? 1 : 0)       // the slot stays outlined until the photo lands
+                                RoundedRectangle(cornerRadius: 8).fill(Color.accentColor).opacity(0.10)
+                                    .opacity(i == to && p < 1 ? 1 : 0)       // the slot stays softly highlighted until the photo lands
                                 phPhoto(i, thumbs[i].size).clipShape(RoundedRectangle(cornerRadius: 8))
                                     .opacity(i == to && p < 1 ? 0.25 : 1)
                             }

@@ -3,7 +3,7 @@ import Cieo
 
 public struct AgentAccessAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentaccess", category: "MCP and agents", name: "Agent permission matrix",
-        summary: "Each cell is a checkbox. Toggling springs the fill and check, and the cell takes a full outline (ink for added, red with a faint check for removed) so the change is visible before saving. The pending panel grows up from the bottom edge and each change enters as its own row. The header chip morphs to Can publish or delete as soon as one of those grants is on. Save swaps to a spinner, then Saved, collapses the rows and settles every outline; Discard springs everything back.")
+        summary: "Each cell is a checkbox. Toggling springs the fill and check, and the cell takes a soft state fill (ink for added, red with a faint check for removed) so the change is visible before saving. The pending panel grows up from the bottom edge and each change enters as its own row. The header chip morphs to Can publish or delete as soon as one of those grants is on. Save swaps to a spinner, then Saved, collapses the rows and settles every fill; Discard springs everything back.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var grants: [[Bool]] = [[true, true, false], [true, false, false], [false, false, false]]
     @State private var saved: [[Bool]] = [[true, true, false], [true, false, false], [false, false, false]]
@@ -64,7 +64,7 @@ public struct AgentAccessAtom: MotionAtomView {
                 .foregroundStyle(on ? Color.white : removed ? Color.red.opacity(0.4) : .clear)
                 .frame(width: 28, height: 28)
                 .background(on ? Color.accentColor : Color.clear, in: RoundedRectangle(cornerRadius: 6))
-                .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(added ? Color.primary : removed ? Color.red : Color.secondary.opacity(0.4), lineWidth: added || removed ? 2 : 1))
+                .overlay(RoundedRectangle(cornerRadius: 6).fill(added ? Color.primary : removed ? Color.red : Color.secondary.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(cols[c]) on \(rows[r])").accessibilityValue(on ? "granted" : "not granted")

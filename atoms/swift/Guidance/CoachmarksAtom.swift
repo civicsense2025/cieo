@@ -59,7 +59,7 @@ public struct CoachmarksAtom: MotionAtomView {
                     .background(.background, in: RoundedRectangle(cornerRadius: 10)).shadow(color: .black.opacity(0.18), radius: 8, y: 2)
                 }
                 .padding(.horizontal, 14).padding(.vertical, 14)
-                .frame(width: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
+                .frame(maxWidth: 320).background(.quaternary.opacity(0.4), in: RoundedRectangle(cornerRadius: 14))
                 HStack(spacing: 6) {
                     Text("Steps:").font(.caption).foregroundStyle(.secondary)
                     ForEach(steps.indices, id: \.self) { n in Button("\(n + 1)") { go(n) }.buttonStyle(.bordered).controlSize(.mini) }

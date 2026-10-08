@@ -21,7 +21,7 @@ public struct LongAnswerAtom: MotionAtomView {
                     .textFieldStyle(.plain).font(.callout).focused($focused)
                     .padding(.horizontal, 11).padding(.vertical, 9)
                     .frame(height: height, alignment: .top)
-                    .background(RoundedRectangle(cornerRadius: 10).strokeBorder(focused ? Color.primary : Color.primary.opacity(0.2), lineWidth: 1.5))
+                    .background(RoundedRectangle(cornerRadius: 10).fill(focused ? Color.primary : Color.primary.opacity(0.2)).opacity(0.10))
                     .background {
                         Text(text + "\u{200B}").font(.callout).padding(.horizontal, 11).padding(.vertical, 9)
                             .frame(maxWidth: .infinity, alignment: .leading)

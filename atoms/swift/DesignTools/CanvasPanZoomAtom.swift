@@ -41,7 +41,7 @@ public struct CanvasPanZoomAtom: MotionAtomView {
                 }
                 .frame(width: g.size.width, height: g.size.height).clipped()
                 .background(.background, in: RoundedRectangle(cornerRadius: 14))
-                .clipShape(RoundedRectangle(cornerRadius: 14)).overlay(RoundedRectangle(cornerRadius: 14).stroke(.quaternary))
+                .clipShape(RoundedRectangle(cornerRadius: 14)).background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
                 .gesture(DragGesture(minimumDistance: 2)
                     .onChanged { d in
                         let n = now()

@@ -49,7 +49,7 @@ public struct StreamingAnswerAtom: MotionAtomView {
                 }
                 Toggle("Follow-up actions", isOn: $followups).font(.caption).foregroundStyle(.secondary).toggleStyle(.switch).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
             .animation(reduce ? nil : .motion(.base), value: settled)
         }
         .task(id: running) {

@@ -3,7 +3,7 @@ import Cieo
 
 public struct ApprovalAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "approval", category: "Workflow", name: "Approval card",
-        summary: "Deciding does two things in order. The status strip springs taller and its tint and outline morph from warning to success or danger while the label swaps. Then the Approve and Deny row fades out and its space collapses 100ms later, so the card ends as a stamp, not a form. Reset reverses it.")
+        summary: "Deciding does two things in order. The status strip springs taller and its tint morphs from warning to success or danger while the label swaps. Then the Approve and Deny row fades out and its space collapses 100ms later, so the card ends as a stamp, not a form. Reset reverses it.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private enum Decision { case pending, approved, denied }
     @State private var decision = Decision.pending
@@ -41,7 +41,7 @@ public struct ApprovalAtom: MotionAtomView {
                     .padding(10)
                     .frame(minHeight: decision == .pending ? 38 : 56, alignment: .center)
                     .background(tone.color.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(tone.color.opacity(0.4)))
+                    .overlay(RoundedRectangle(cornerRadius: 10).fill(tone.color.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
                     .animation(reduce ? nil : .motion(.base), value: decision)
                     AgReveal(open: !rowGone) {
                         HStack {

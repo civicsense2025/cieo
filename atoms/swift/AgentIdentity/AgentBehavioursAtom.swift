@@ -3,7 +3,7 @@ import Cieo
 
 public struct AgentBehavioursAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentbehaviours", category: "Agent identity", name: "Agent behaviours",
-        summary: "One agent performs eighteen behaviours inside a small web page, each a short loop that ends where it began. It hops to get around and every landing squashes and recovers without bouncing. What it carries trails its body and tilts against the motion. It leans into whatever it pushes, and its face changes mood brows first, then lids, then mouth. The page answers on the same clock: a button squashes, an outline snaps leading edge first, a pin goes in, text is struck through. Asking permission waits for your real Allow or Deny.")
+        summary: "One agent performs eighteen behaviours inside a small web page, each a short loop that ends where it began. It hops to get around and every landing squashes and recovers without bouncing. What it carries trails its body and tilts against the motion. It leans into whatever it pushes, and its face changes mood brows first, then lids, then mouth. The page answers on the same clock: a button squashes, a soft highlight appears, a pin goes in, text is struck through. Asking permission waits for your real Allow or Deny.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var x: CGFloat = 20
     @State private var lift: CGFloat = 0
@@ -13,7 +13,7 @@ public struct AgentBehavioursAtom: MotionAtomView {
     @State private var look = CGSize.zero
     @State private var prop: String?
     @State private var buttonPressed = false
-    @State private var outline = false
+    @State private var highlight = false
     @State private var pinned = false
     @State private var struck = false
     @State private var asking = false
@@ -33,7 +33,7 @@ public struct AgentBehavioursAtom: MotionAtomView {
                         Spacer(minLength: 100)
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Total $48.00").font(.callout).strikethrough(struck).padding(2)
-                                .overlay(outline ? RoundedRectangle(cornerRadius: 4).strokeBorder(Color.accentColor, lineWidth: 2) : nil)
+                                .overlay(highlight ? RoundedRectangle(cornerRadius: 4).fill(Color.accentColor).opacity(0.10).allowsHitTesting(false) : nil)
                             Text("Pay now").font(.caption.weight(.semibold)).foregroundStyle(.white).padding(.horizontal, 8).padding(.vertical, 5)
                                 .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 6)).scaleEffect(buttonPressed ? 0.94 : 1)
                         }
@@ -63,7 +63,7 @@ public struct AgentBehavioursAtom: MotionAtomView {
     }
 
     private func settle() async {
-        withMotion(.base, reduceMotion: reduce) { lean = 0; look = .zero; prop = nil; buttonPressed = false; outline = false; struck = false; face = AgFace(); pinned = false; asking = false }
+        withMotion(.base, reduceMotion: reduce) { lean = 0; look = .zero; prop = nil; buttonPressed = false; highlight = false; struck = false; face = AgFace(); pinned = false; asking = false }
         try? await Task.sleep(nanoseconds: 100_000_000)
     }
     private func hop(to nx: CGFloat) async {
@@ -87,8 +87,8 @@ public struct AgentBehavioursAtom: MotionAtomView {
             case "Push": caption = "Leans into what it pushes"; await hop(to: 180); withMotion(.base, reduceMotion: reduce) { lean = 12 }; try? await Task.sleep(nanoseconds: 250_000_000)
                 withMotion(.snap, reduceMotion: reduce) { buttonPressed = true }; try? await Task.sleep(nanoseconds: 200_000_000); withMotion(.snap, reduceMotion: reduce) { buttonPressed = false }
             case "Carry": caption = "What it carries trails and tilts against the motion"; withMotion(.base, reduceMotion: reduce) { prop = "shippingbox" }; await hop(to: 150); await hop(to: 20)
-            case "Look": caption = "Mood moves brows, then lids, then mouth"; agStage(.thinking, face: $face, reduce: reduce); withMotion(.soft, reduceMotion: reduce) { look = CGSize(width: 1, height: -0.3) }; try? await Task.sleep(nanoseconds: 700_000_000); withMotion(.base, reduceMotion: reduce) { outline = true }
-            case "Pin": caption = "The outline snaps, then a pin goes in"; await hop(to: 150); withMotion(.base, reduceMotion: reduce) { outline = true }; try? await Task.sleep(nanoseconds: 350_000_000); withMotion(.snap, reduceMotion: reduce) { pinned = true }
+            case "Look": caption = "Mood moves brows, then lids, then mouth"; agStage(.thinking, face: $face, reduce: reduce); withMotion(.soft, reduceMotion: reduce) { look = CGSize(width: 1, height: -0.3) }; try? await Task.sleep(nanoseconds: 700_000_000); withMotion(.base, reduceMotion: reduce) { highlight = true }
+            case "Pin": caption = "The soft highlight appears, then a pin goes in"; await hop(to: 150); withMotion(.base, reduceMotion: reduce) { highlight = true }; try? await Task.sleep(nanoseconds: 350_000_000); withMotion(.snap, reduceMotion: reduce) { pinned = true }
             case "Strike": caption = "Text is struck through"; await hop(to: 150); withMotion(.base, reduceMotion: reduce) { struck = true }
             case "Ask": caption = "Waiting for your Allow or Deny"; agStage(.worried, face: $face, reduce: reduce); withMotion(.base, reduceMotion: reduce) { asking = true }
             default: caption = "Cheers"; agStage(.happy, face: $face, reduce: reduce); await hop(to: 60); await hop(to: 100)

@@ -31,9 +31,9 @@ public struct RunningTimerAtom: MotionAtomView {
                 }.animation(reduce ? nil : .motion(.base), value: running)
                 VStack(spacing: 0) { ForEach(log) { e in
                     EditorHeightReveal(progress: e.shown ? 1 : 0) { HStack { Text(e.task).font(.footnote); Spacer(); Text(String(format: "%d:%02d", e.secs / 60, e.secs % 60)).font(.caption).monospacedDigit().foregroundStyle(.secondary) }.frame(height: 32).overlay(alignment: .bottom) { Divider() } }.clipped()
-                } }.frame(width: 340, alignment: .top)
+                } }.frame(maxWidth: 340, alignment: .top)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .task(id: running) {
             guard running else { return }

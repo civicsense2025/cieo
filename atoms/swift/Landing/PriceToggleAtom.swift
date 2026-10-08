@@ -32,15 +32,15 @@ public struct PriceToggleAtom: MotionAtomView {
                             .background(.green.opacity(0.14), in: Capsule())
                             .id(1).motionTransition(.swap())
                     }
-                    Button("Choose \(tiers[tier].name)") {}.buttonStyle(.borderedProminent).controlSize(.small)
-                }.padding(20).frame(width: 300)
+                    PreviewAction("Choose \(tiers[tier].name)").buttonStyle(.borderedProminent).controlSize(.small)
+                }.padding(20).frame(maxWidth: 300)
                 .background(yearly ? Color.accentColor.opacity(0.08) : Color.clear, in: RoundedRectangle(cornerRadius: 10))
                 .offset(y: yearly ? -4 : 0)
                 .animation(reduce ? nil : .motion(.soft), value: yearly)
                 Picker("Plan tier", selection: $tier) { ForEach(tiers.indices, id: \.self) { Text(tiers[$0].name).tag($0) } }
                     .pickerStyle(.segmented).labelsHidden().frame(width: 240)
                     .font(.caption).opacity(0.8)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
             .animation(reduce ? nil : .motion(.base), value: yearly)
             .animation(reduce ? nil : .motion(.base), value: tier)
         }

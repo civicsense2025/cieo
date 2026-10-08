@@ -52,7 +52,7 @@ public struct ResolveSweepAtom: MotionAtomView {
                             }
                             .padding(14)
                             .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
-                            .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))
+                            .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                             .opacity(fading[i] ? 0 : 1)
                             .animation(reduce ? nil : .motion(.snap), value: fading[i])
                             .frame(height: fading[i] ? 0 : nil, alignment: .top).clipped()

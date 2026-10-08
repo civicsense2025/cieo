@@ -62,7 +62,7 @@ public struct DrillDownMenuAtom: MotionAtomView {
             }
         }
         .background(.background, in: RoundedRectangle(cornerRadius: 10))
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary))
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05)))
         .frame(maxWidth: 320)
     }
 

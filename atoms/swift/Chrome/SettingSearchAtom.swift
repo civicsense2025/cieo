@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Settings search: filters in place, heights spring, arrows highlight.
-public struct SettingSearchAtom: View {
+public struct SettingSearchAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "settingsearch", category: "Chrome", name: "Setting Search", summary: "Settings search: filters in place, heights spring, arrows highlight.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var query = ""
     @State private var highlight = 0
@@ -22,7 +23,7 @@ public struct SettingSearchAtom: View {
             Text("Filters in place · misses blur out · ↑↓ highlights")
                 .font(.system(size: 12.5)).foregroundStyle(.secondary).monospacedDigit()
             VStack(spacing: 8) {
-                TextField("Search settings…", text: $query).textFieldStyle(.roundedBorder)
+                TextField("Search settings…", text: $query).textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10))
                     .font(.system(size: 13.5)).frame(minHeight: 36)
                 ForEach(data.map(\.0), id: \.self) { sec in
                     let rows = matches.filter { $0.sec == sec }
@@ -55,8 +56,8 @@ public struct SettingSearchAtom: View {
             .animation(reduce ? nil : .spring(response: 0.3), value: matches.count)
         }
         .focusable(true)
-        .onExitCommand { query = ""; jumped = nil }
-        .onMoveCommand { dir in
+        .escapeKey { query = ""; jumped = nil }
+        .directionKeys { dir in
             guard !matches.isEmpty else { return }
             if dir == .down { highlight = (highlight + 1) % matches.count }
             else if dir == .up { highlight = (highlight + matches.count - 1) % matches.count }

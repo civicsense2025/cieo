@@ -29,7 +29,7 @@ public struct FollowButtonAtom: MotionAtomView {
                         .foregroundStyle(following ? tint : Color(white: 1, opacity: 0.95))
                         .frame(width: width, height: 34)
                         .background(Capsule().fill(following ? Color.clear : Color.primary))
-                        .overlay(Capsule().strokeBorder(tint, lineWidth: 1.5))
+                        .overlay(Capsule().fill(tint).opacity(0.10).allowsHitTesting(false))
                         .clipShape(Capsule())
                         .motion(.base, value: label)
                 }

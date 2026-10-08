@@ -46,12 +46,13 @@ public struct CrawlProgressAtom: MotionAtomView {
                 .frame(maxWidth: .infinity, alignment: .leading).frame(minHeight: 88)
                 .padding(12).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 Toggle("Verbose log", isOn: $verbose).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
                 Button("Start crawl", action: run).buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear(perform: run)
+        .onDisappear { task?.cancel() }
     }
 
     private func run() {

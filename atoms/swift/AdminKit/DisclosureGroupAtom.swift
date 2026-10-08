@@ -22,7 +22,7 @@ public struct DisclosureGroupAtom: MotionAtomView {
                 }
                 group("Typography") { Text("Heading and body fonts.").font(.footnote).foregroundStyle(.secondary).padding(.vertical, 8) }
                 Button("Reset") { withMotion(.base, reduceMotion: reduce) { open = defaults } }.buttonStyle(.bordered).controlSize(.small).padding(.top, 10)
-            }.frame(width: 300, alignment: .topLeading).animation(nil, value: open)
+            }.frame(maxWidth: 300, alignment: .topLeading).animation(nil, value: open)
         }
     }
 

@@ -33,7 +33,7 @@ public struct UndoRedoAtom: MotionAtomView {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
                 }
                 .frame(height: 150).background(.background, in: RoundedRectangle(cornerRadius: 12)).clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                 .accessibilityLabel("Canvas, step \(index) of \(history.count - 1)")
                 HStack(spacing: 6) {
                     Button("Nudge right") { act { $0.x = min($0.x + 60, 240) } }

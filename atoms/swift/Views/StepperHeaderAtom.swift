@@ -57,9 +57,9 @@ public struct StepperHeaderAtom: MotionAtomView {
                     Text("Step \(cur + 1) of \(names.count) · \(names[cur])").font(.caption).foregroundStyle(.secondary)
                 }
                 .padding(14)
-                .frame(width: 360)
+                .frame(maxWidth: 360)
                 .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12)).clipShape(RoundedRectangle(cornerRadius: 12))
-                Toggle("6 steps (overflow)", isOn: $wide).font(.caption).foregroundStyle(.secondary).frame(width: 360)
+                Toggle("6 steps (overflow)", isOn: $wide).font(.caption).foregroundStyle(.secondary).frame(maxWidth: 360)
                     .onChange(of: wide) { _, _ in
                         withMotion(.base, reduceMotion: reduce) { cur = min(cur, names.count - 1) }
                     }

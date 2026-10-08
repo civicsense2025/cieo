@@ -49,7 +49,7 @@ public struct BudgetAtom: MotionAtomView {
                         .padding(.horizontal, 12)
                         .frame(height: rowH)
                         .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12))
-                        .overlay(RoundedRectangle(cornerRadius: 12).strokeBorder(.quaternary))
+                        .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                         .offset(y: slotOf(i))
                         .animation(reduce ? nil : .motion(.base), value: slotOf(i))
                         .opacity(dead[i] ? 0 : 1)

@@ -28,7 +28,7 @@ public struct CitationPopoverAtom: MotionAtomView {
                     }
                     Toggle("Stagger sources", isOn: $stagger).font(.caption).foregroundStyle(.secondary)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
                 if open {
                     Color.clear.contentShape(Rectangle())
                         .onTapGesture { close() }
@@ -49,7 +49,7 @@ public struct CitationPopoverAtom: MotionAtomView {
                     }
                     .padding(.horizontal, 12)
                     .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12))
-                    .frame(width: 300)
+                    .frame(maxWidth: 300)
                     .motionTransition(.presence)
                 }
             }
@@ -60,7 +60,7 @@ public struct CitationPopoverAtom: MotionAtomView {
         Button("\(i + 1)") { toggle(i) }
             .font(.caption.weight(.semibold))
             .frame(width: 24, height: 24)
-            .background(RoundedRectangle(cornerRadius: 8).strokeBorder(.quaternary))
+            .background(RoundedRectangle(cornerRadius: 8).fill(.quaternary).opacity(0.10))
             .scaleEffect(popped == i ? 1.3 : 1)
             .motion(.snap, value: popped == i)
             .accessibilityLabel("Source \(i + 1)")

@@ -51,7 +51,7 @@ public struct DeliveryNotesAtom: MotionAtomView {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .transition(.scale(scale: 0.9).combined(with: .opacity))
                 }
-                Toggle("“Leave at door” shortcut", isOn: $door).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("“Leave at door” shortcut", isOn: $door).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
                     .onChange(of: door) { if door && note.isEmpty { note = "Leave at door. " } }
             }
             .padding(14).frame(width: 280)

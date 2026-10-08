@@ -54,7 +54,7 @@ public struct SubscribeAtom: MotionAtomView {
         .padding(4)
         .frame(width: done ? 210 : 320, height: 48)
         .background(Capsule().fill(done ? Color.green.opacity(0.15) : Color.secondary.opacity(0.12)))
-        .overlay(Capsule().strokeBorder(Color.red.opacity(invalid ? 1 : 0), lineWidth: 1.5))
+        .overlay(Capsule().fill(Color.red.opacity(invalid ? 1 : 0)).opacity(0.10).allowsHitTesting(false))
     }
 
     @ViewBuilder private var label: some View {

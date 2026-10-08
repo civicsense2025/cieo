@@ -34,7 +34,7 @@ public struct AttendeeFieldsAtom: MotionAtomView {
                         .background(sent ? .green : .primary, in: RoundedRectangle(cornerRadius: 10))
                         .foregroundStyle(.white)
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
     }
@@ -52,7 +52,7 @@ public struct AttendeeFieldsAtom: MotionAtomView {
                     Image(systemName: "checkmark").font(.system(size: 13, weight: .semibold)).foregroundStyle(.green)
                         .frame(width: 16 * ok).opacity(ok).padding(.trailing, 8).offset(y: -1)
                 }
-                .onChange(of: text.wrappedValue) { _ in validate(live: true) }
+                .onChange(of: text.wrappedValue) { _, _ in validate(live: true) }
             Text(show ? msg : " ").font(.system(size: 12)).foregroundStyle(.red).frame(height: 18)
         }
     }

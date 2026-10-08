@@ -24,7 +24,7 @@ public struct AgentMarksAtom: MotionAtomView {
                                 Text(names[i]).font(.caption2)
                             }
                             .padding(6).background(pick == i ? Color.accentColor.opacity(0.14) : .clear, in: RoundedRectangle(cornerRadius: 10))
-                            .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(pick == i ? Color.accentColor : Color.secondary.opacity(0.3)))
+                            .overlay(RoundedRectangle(cornerRadius: 10).fill(pick == i ? Color.accentColor : Color.secondary.opacity(0.3)).opacity(0.10).allowsHitTesting(false))
                         }.buttonStyle(.plain).accessibilityLabel(names[i]).accessibilityAddTraits(pick == i ? .isSelected : [])
                     }
                 }

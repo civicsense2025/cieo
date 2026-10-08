@@ -46,7 +46,7 @@ public struct BranchFoldAtom: MotionAtomView {
                     .opacity(open ? 1 : 0)
                     .animation(reduce ? nil : .motion(.base), value: open)
                 }
-                .padding(14).frame(width: 300)
+                .padding(14).frame(maxWidth: 300)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 Toggle("Fold signatures too", isOn: $foldSigs)
                     .font(.caption).foregroundStyle(.secondary)

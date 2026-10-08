@@ -20,7 +20,7 @@ public struct FloatingBlockToolbarAtom: MotionAtomView {
             ZStack(alignment: .topLeading) {
                 ForEach(kinds.indices, id: \.self) { i in
                     RoundedRectangle(cornerRadius: 8).fill(.quaternary.opacity(0.6)).frame(width: 300, height: 48)
-                        .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.accentColor, lineWidth: selected == i ? 2 : 0))
+                        .overlay(RoundedRectangle(cornerRadius: 8).fill(Color.accentColor).opacity((selected == i ? 2 : 0) > 0 ? 0.10 : 0).allowsHitTesting(false))
                         .overlay(Text(kinds[i].name).font(.footnote))
                         .offset(x: 20, y: blockY[i]).onTapGesture { select(i) }
                         .accessibilityLabel("\(kinds[i].name) block").accessibilityAddTraits(.isButton)

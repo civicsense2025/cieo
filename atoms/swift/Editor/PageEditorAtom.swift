@@ -62,7 +62,7 @@ public struct PageEditorAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 8) {
                 Text(blocks[s].name).font(.footnote.weight(.semibold))
                 Text("Heading").font(.caption).foregroundStyle(.secondary)
-                TextField("Heading", text: $blocks[s].heading).textFieldStyle(.roundedBorder).font(.footnote)
+                TextField("Heading", text: $blocks[s].heading).softFieldSurface().font(.footnote)
                 Text("Background").font(.caption).foregroundStyle(.secondary)
                 HStack(spacing: 6) { ForEach(swatches.indices, id: \.self) { k in
                     Button { blocks[s].bg = k } label: { Circle().fill(swatches[k].1).overlay(Circle().strokeBorder(blocks[s].bg == k ? Color.accentColor : Color.secondary.opacity(0.4), lineWidth: 2)).frame(width: 22, height: 22) }

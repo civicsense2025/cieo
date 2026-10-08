@@ -62,10 +62,10 @@ public struct CoreVitalsAtom: MotionAtomView {
                     .foregroundStyle(verdict == "All green ✓" ? Color.green : Color.secondary)
                     .frame(height: 24)
                 Toggle("Threshold bands", isOn: $showBands).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
                 Button("Re-measure", action: measure).buttonStyle(.bordered).controlSize(.small)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
         .onAppear(perform: measure)
     }

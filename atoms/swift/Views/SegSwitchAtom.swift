@@ -53,7 +53,7 @@ public struct SegSwitchAtom: MotionAtomView {
                 .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12))
                 .animation(reduce ? nil : .motion(.base), value: cur)
             }
-            .frame(width: 340)
+            .frame(maxWidth: 340)
         }
     }
 }

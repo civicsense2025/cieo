@@ -21,7 +21,7 @@ private struct Full: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("LET’S TALK").font(.caption2.weight(.semibold)).footRise(0, gap: 0.055)
             Text("Build calmer software").font(.title3.weight(.bold)).footRise(1, gap: 0.055)
-            HStack { Button("Book a call") {}.buttonStyle(.borderedProminent); FootLink(title: "See pricing") }.footRise(2, gap: 0.055)
+            HStack { PreviewAction("Book a call").buttonStyle(.borderedProminent); FootLink(title: "See pricing") }.footRise(2, gap: 0.055)
             newsletter.footRise(3, gap: 0.055)
             HStack(alignment: .top, spacing: 14) {
                 ForEach(cols.indices, id: \.self) { i in
@@ -56,8 +56,8 @@ private struct Full: View {
     private var newsletter: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack(spacing: 6) {
-                TextField("you@example.com", text: $email).textFieldStyle(.roundedBorder)
-                    .overlay(RoundedRectangle(cornerRadius: 6).strokeBorder(phase == 1 ? Color.red : .clear, lineWidth: 1.5)).onSubmit(submit)
+                TextField("you@example.com", text: $email).softFieldSurface()
+                    .overlay(RoundedRectangle(cornerRadius: 6).fill(phase == 1 ? Color.red : .clear).opacity(0.10).allowsHitTesting(false)).onSubmit(submit)
                 Button(action: submit) {
                     ZStack {
                         if phase == 2 { ProgressView().controlSize(.small) } else if phase == 3 { Image(systemName: "checkmark") } else { Text("Join") }

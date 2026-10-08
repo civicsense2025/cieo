@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Omnibox: list height springs to count, matches spring in, plate trails edges.
-public struct OmniboxAtom: View {
+public struct OmniboxAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "omnibox", category: "Chrome", name: "Omnibox", summary: "Omnibox: list height springs to count, matches spring in, plate trails edges.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var query = "git"
     @State private var highlight = 0
@@ -19,7 +20,7 @@ public struct OmniboxAtom: View {
             Text("Height springs to count · ↑↓ + Enter · Esc clears")
                 .font(.system(size: 12.5)).foregroundStyle(.secondary)
             VStack(spacing: 8) {
-                TextField("Address", text: $query).textFieldStyle(.roundedBorder)
+                TextField("Address", text: $query).textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10))
                     .font(.system(size: 13.5)).frame(minHeight: 36)
                 VStack(spacing: 0) {
                     ForEach(Array(matches.enumerated()), id: \.offset) { i, u in
@@ -50,8 +51,8 @@ public struct OmniboxAtom: View {
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
         }
         .focusable(true)
-        .onExitCommand { query = ""; opened = nil }
-        .onMoveCommand { dir in
+        .escapeKey { query = ""; opened = nil }
+        .directionKeys { dir in
             guard !matches.isEmpty else { return }
             if dir == .down { highlight = (highlight + 1) % matches.count }
             else if dir == .up { highlight = (highlight + matches.count - 1) % matches.count }

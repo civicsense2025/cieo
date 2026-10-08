@@ -52,7 +52,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
                             .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 0.92, anchor: .top)))
                     }
                 }
-                .frame(width: 340).animation(reduce ? nil : .motion(.base), value: blocks.count)
+                .frame(maxWidth: 340).animation(reduce ? nil : .motion(.base), value: blocks.count)
                 if open {
                     menu.offset(x: dockLeft ? 0 : min(caretX, 130), y: 40).motionTransition(.presence)
                 }
@@ -86,7 +86,7 @@ public struct SlashCommandMenuAtom: MotionAtomView {
             }
         }
         .frame(width: 200, height: panelHeight, alignment: .top)
-        .background(.background, in: RoundedRectangle(cornerRadius: 12)).overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary))
+        .background(.background, in: RoundedRectangle(cornerRadius: 12)).background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
         .clipShape(RoundedRectangle(cornerRadius: 12)).shadow(color: .black.opacity(0.12), radius: 8, y: 3)
         .animation(reduce ? nil : .motion(.base), value: panelHeight)
     }

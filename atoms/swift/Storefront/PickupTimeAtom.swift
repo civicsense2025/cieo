@@ -28,13 +28,13 @@ public struct PickupTimeAtom: MotionAtomView {
                     Button(s) { withMotion(.base, reduceMotion: reduce) { slot = s } }
                     .buttonStyle(.plain).font(.footnote).frame(height: 32).padding(.horizontal, 12)
                     .background(.background, in: RoundedRectangle(cornerRadius: 8))
-                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(slot == s ? Color.primary : Color.secondary.opacity(0.3), lineWidth: slot == s ? 1.5 : 1))
+                    .overlay(RoundedRectangle(cornerRadius: 8).fill(slot == s ? Color.primary : Color.secondary.opacity(0.3)).opacity(0.10).allowsHitTesting(false))
                     .offset(y: slot == s ? -2 : 0)
-                    .background { if slot == s { RoundedRectangle(cornerRadius: 10).strokeBorder(Color.primary, lineWidth: 1.5).padding(-3).matchedGeometryEffect(id: "plate", in: plate) } }
+                    .background { if slot == s { RoundedRectangle(cornerRadius: 10).fill(Color.primary).opacity(0.10).padding(-3).matchedGeometryEffect(id: "plate", in: plate) } }
                 } }.id(day).motionTransition(.swap())
                 SwapText(slot.map { "\(days[day]) at \($0) — ready in 15 min." } ?? "Pick a day to see slots.").font(.caption).foregroundStyle(.secondary)
                 Toggle("Include weekend", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
-            }.frame(width: 320)
+            }.frame(maxWidth: 320)
         }
     }
 }

@@ -42,7 +42,7 @@ public struct CatchUpAtom: MotionAtomView {
                         .buttonStyle(.borderedProminent).controlSize(.regular).disabled(live)
                     Spacer()
                     Toggle("stagger wave", isOn: $wave).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 420)

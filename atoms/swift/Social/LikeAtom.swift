@@ -26,7 +26,7 @@ public struct LikeAtom: MotionAtomView {
                     RollingDigits(count).font(.body.weight(.semibold))
                 }
                 .padding(.vertical, 8).padding(.leading, 12).padding(.trailing, 14)
-                .background(Capsule().strokeBorder(.quaternary))
+                .background(Capsule().fill(.quaternary).opacity(0.10))
             }
             .buttonStyle(.plain)
             .accessibilityLabel("Like").accessibilityValue("\(count)")

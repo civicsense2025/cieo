@@ -40,7 +40,7 @@ public struct AgentThreadAtom: MotionAtomView {
                                     .motionTransition(.swap())
                             }
                             HStack {
-                                TextField("Reply", text: $reply).textFieldStyle(.roundedBorder).onSubmit { send() }
+                                TextField("Reply", text: $reply).softFieldSurface().onSubmit { send() }
                                 Button("Send") { send() }.buttonStyle(AgPress(tone: .info)).disabled(reply.isEmpty || typing)
                             }
                         }

@@ -51,7 +51,7 @@ public struct ApprovalInlineAtom: MotionAtomView {
             else {
                 Text(risky ? "Delete workspace Northwind" : "Submit the signup form").font(.caption.weight(.semibold))
                 Text(risky ? "This sends: workspace_id=ws_91, permanent=true" : "This sends: email, plan=Team").font(.caption2).foregroundStyle(.secondary)
-                if risky { TextField("Type Northwind to confirm", text: $typed).textFieldStyle(.roundedBorder).font(.caption) }
+                if risky { TextField("Type Northwind to confirm", text: $typed).softFieldSurface().font(.caption) }
                 HStack {
                     Button("Allow once") { decide("Allowed once", always: false) }.buttonStyle(AgPress(tone: .info)).disabled(risky && !matches)
                     if !risky { Button("Always allow") { decide("Always allowed", always: true) }.buttonStyle(AgPress()) }
@@ -60,7 +60,7 @@ public struct ApprovalInlineAtom: MotionAtomView {
             }
         }
         .padding(10).frame(width: 220, alignment: .leading)
-        .background(.background, in: RoundedRectangle(cornerRadius: 10)).overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(.quaternary)).shadow(radius: 6, y: 2)
+        .background(.background, in: RoundedRectangle(cornerRadius: 10)).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.05))).shadow(radius: 6, y: 2)
         .position(x: min(max(f.midX, 120), 250), y: f.maxY + 60)
     }
 

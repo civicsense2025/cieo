@@ -67,7 +67,7 @@ public struct GridToLightboxAtom: MotionAtomView {
                                         ForEach(0..<count, id: \.self) { i in
                                             AtomPhoto(seed: i)
                                                 .frame(width: 44, height: 30).clipShape(RoundedRectangle(cornerRadius: 5))
-                                                .overlay(RoundedRectangle(cornerRadius: 5).stroke(.white, lineWidth: i == s ? 2 : 0))
+                                                .overlay(RoundedRectangle(cornerRadius: 5).fill(.white).opacity((i == s ? 2 : 0) > 0 ? 0.10 : 0).allowsHitTesting(false))
                                                 .opacity(i == s ? 1 : 0.7)
                                                 .onTapGesture { stepTo(i) }
                                                 .accessibilityLabel("Show photo \(i + 1)").accessibilityAddTraits(.isButton)

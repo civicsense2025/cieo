@@ -21,8 +21,8 @@ public struct EmailCaptureAtom: MotionAtomView {
                 Text("One email a month. Unsubscribe anytime.").font(.caption).foregroundStyle(.secondary)
                 HStack(spacing: 8) {
                     TextField("you@example.com", text: $email)
-                        .textFieldStyle(.roundedBorder).controlSize(.regular)
-                        .overlay(RoundedRectangle(cornerRadius: 9).stroke(invalid ? Color.red : Color.clear, lineWidth: 1.5))
+                        .softFieldSurface().controlSize(.regular)
+                        .overlay(RoundedRectangle(cornerRadius: 9).fill(invalid ? Color.red : Color.clear).opacity(0.10).allowsHitTesting(false))
                         .disabled(phase == .done)
                     Button {
                         submit()
@@ -33,7 +33,7 @@ public struct EmailCaptureAtom: MotionAtomView {
                             else { Text("Join").id(0).motionTransition(.swap()) }
                         }.frame(minWidth: 64, minHeight: 36)
                     }.buttonStyle(.borderedProminent).tint(phase == .done ? .green : .accentColor).disabled(phase != .idle)
-                }.frame(width: 320)
+                }.frame(maxWidth: 320)
                 ZStack {
                     if invalid { Text("Enter an address like name@example.com").foregroundStyle(.red).id(1).motionTransition(.swap()) }
                     else if phase == .done { Text("Check your inbox to confirm.").foregroundStyle(.green).id(2).motionTransition(.swap()) }
@@ -43,7 +43,7 @@ public struct EmailCaptureAtom: MotionAtomView {
                     var t = Transaction(); t.disablesAnimations = true
                     withTransaction(t) { email = ""; invalid = false; phase = .idle }
                 }.font(.caption).buttonStyle(.borderless)
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 

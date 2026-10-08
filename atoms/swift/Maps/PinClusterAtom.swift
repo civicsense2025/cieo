@@ -40,7 +40,7 @@ public struct PinClusterAtom: MotionAtomView {
             }
             .frame(width: 380, height: 220).clipShape(RoundedRectangle(cornerRadius: 14))
             HStack { Text("Badge size").font(.caption).foregroundStyle(.secondary); Spacer(); Toggle("Compact badge", isOn: $compact).labelsHidden().controlSize(.mini) }
-            .frame(width: 380)
+            .frame(maxWidth: 380)
             }
         }
     }

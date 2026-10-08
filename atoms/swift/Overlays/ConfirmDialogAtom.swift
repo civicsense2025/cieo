@@ -24,7 +24,7 @@ public struct ConfirmDialogAtom: MotionAtomView {
                             }
                         }
                     }
-                    .padding(8).frame(width: 300)
+                    .padding(8).frame(maxWidth: 300)
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.06)))
                     Button("Reset", action: reset).buttonStyle(.bordered)
                 }

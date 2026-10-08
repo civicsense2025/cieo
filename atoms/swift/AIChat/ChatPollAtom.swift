@@ -33,7 +33,7 @@ public struct ChatPollAtom: MotionAtomView {
                     }.buttonStyle(.bordered).controlSize(.small)
                 }
             }
-            .frame(width: 300)
+            .frame(maxWidth: 300)
         }
     }
 
@@ -59,7 +59,7 @@ public struct ChatPollAtom: MotionAtomView {
             .padding(.horizontal, 12).padding(.vertical, 10)
         }
         .frame(width: 276)
-        .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(voted == i ? Color.primary : Color.secondary.opacity(0.25)))
+        .overlay(RoundedRectangle(cornerRadius: 10).fill(voted == i ? Color.primary : Color.secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
     }
 
     private func vote(_ i: Int) {

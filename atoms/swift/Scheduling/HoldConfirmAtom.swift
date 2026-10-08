@@ -44,8 +44,8 @@ public struct HoldConfirmAtom: MotionAtomView {
                     Text(done.target > 0 ? "Booked · Tue 9:00" : "Hold to confirm")
                         .font(.system(size: 13))
                 }
-                .frame(width: 300)
-                .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(d > 0.02 ? .green : .secondary.opacity(0.25)))
+                .frame(maxWidth: 300)
+                .overlay(RoundedRectangle(cornerRadius: 14).fill(d > 0.02 ? .green : .secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
             }
         }
     }

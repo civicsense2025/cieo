@@ -38,7 +38,7 @@ public struct SlotGridAtom: MotionAtomView {
                             Text(slots[day][i]).font(.system(size: 13)).monospacedDigit()
                                 .frame(maxWidth: .infinity, minHeight: 36)
                                 .background(.background, in: RoundedRectangle(cornerRadius: 8))
-                                .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(pick == i ? Color.primary : Color.secondary.opacity(0.25)))
+                                .overlay(RoundedRectangle(cornerRadius: 8).fill(pick == i ? Color.primary : Color.secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
                                 .transition(.opacity.combined(with: .move(edge: .bottom)))
                                 .animation(.spring.delay(Double(i) * 0.04), value: day)
                                 .onTapGesture { pick = i }
@@ -46,7 +46,7 @@ public struct SlotGridAtom: MotionAtomView {
                         }
                     }
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
         .onAppear { if !ready { ready = true; slide(0, instant: true) } }

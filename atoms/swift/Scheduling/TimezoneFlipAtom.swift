@@ -52,10 +52,10 @@ public struct TimezoneFlipAtom: MotionAtomView {
                     }
                     Toggle("Working hours only", isOn: $hoursOnly)
                         .font(.system(size: 12)).foregroundStyle(.secondary).tint(.secondary)
-                        .onChange(of: hoursOnly) { v in
+                        .onChange(of: hoursOnly) { _, v in
                             if reduce { late.jump(v ? 1 : 0) } else { late.set(v ? 1 : 0, at: now()) } }
                 }
-                .frame(width: 300)
+                .frame(maxWidth: 300)
             }
         }
         .onAppear { if !ready { ready = true; slide(0, instant: true); late.jump(1) } }

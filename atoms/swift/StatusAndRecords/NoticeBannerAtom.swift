@@ -3,7 +3,7 @@ import Cieo
 
 public struct NoticeBannerAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "noticebanner", category: "Status and records", name: "Notice banner",
-        summary: "The notice slides down inside a slot whose height springs open, so the dashboard rows are pushed down rather than covered. Next notice cross-morphs the banner fill and border between info, warning and danger while the old copy exits and the new copy enters, never overlapping. Dismiss fades the copy out first, then collapses the slot height after 100ms, and the rows rise to fill it.")
+        summary: "The notice slides down inside a slot whose height springs open, so the dashboard rows are pushed down rather than covered. Next notice cross-morphs the banner fill between info, warning and danger while the old copy exits and the new copy enters, never overlapping. Dismiss fades the copy out first, then collapses the slot height after 100ms, and the rows rise to fill it.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var index = 0
     @State private var shown = true
@@ -37,7 +37,7 @@ public struct NoticeBannerAtom: MotionAtomView {
                     .foregroundStyle(n.0.color)
                     .padding(10)
                     .background(n.0.color.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
-                    .overlay(RoundedRectangle(cornerRadius: 10).strokeBorder(n.0.color.opacity(0.4)))
+                    .overlay(RoundedRectangle(cornerRadius: 10).fill(n.0.color.opacity(0.4)).opacity(0.10).allowsHitTesting(false))
                     .animation(reduce ? nil : .motion(.base), value: index)
                 }
                 ForEach([("Pages published", "24"), ("Form submissions this week", "118"), ("Storage used", "9.2 of 10 GB")], id: \.0) { r in

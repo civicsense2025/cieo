@@ -49,7 +49,7 @@ public struct PullRefreshArmAtom: MotionAtomView {
                 .frame(width: 320, height: 280, alignment: .top)
                 .background(.background, in: RoundedRectangle(cornerRadius: 12))
                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(.quaternary, lineWidth: 1))
+                .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                 .gesture(DragGesture(minimumDistance: 6).onChanged { g in
                     guard phase != .loading, g.translation.height > 0 else { return }
                     let dy = g.translation.height
@@ -67,7 +67,7 @@ public struct PullRefreshArmAtom: MotionAtomView {
                         withMotion(.base, reduceMotion: reduce) { pull = 0; phase = .idle }
                     }
                 })
-                Toggle("Stiff pull", isOn: $stiff).font(.caption).foregroundStyle(.secondary).frame(width: 320)
+                Toggle("Stiff pull", isOn: $stiff).font(.caption).foregroundStyle(.secondary).frame(maxWidth: 320)
             }
         }
     }

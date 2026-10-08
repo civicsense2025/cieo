@@ -54,7 +54,7 @@ public struct BundleSweepAtom: MotionAtomView {
                         .font(.caption.weight(.semibold)).foregroundStyle(Color.green)
                         .frame(height: 20, alignment: .leading)
                 }
-                .padding(14).frame(width: 300)
+                .padding(14).frame(maxWidth: 300)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.06)))
                 HStack(spacing: 10) {
                     Button(archived ? "Undo" : "Archive bundle") {

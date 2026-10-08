@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 import Cieo
 
@@ -36,7 +37,7 @@ public struct EmbargoAtom: MotionAtomView {
                 .frame(width: 280, height: 58)
                 .background(live ? Color.green.opacity(0.1) : Color.clear)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(live ? Color.green : Color.primary.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 12).fill(live ? Color.green : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
                 .animation(reduce ? nil : .motion(.base), value: live)
                 Button("Reset") {
                     withMotion(.base, reduceMotion: reduce) { remaining = total; lift = 0 }

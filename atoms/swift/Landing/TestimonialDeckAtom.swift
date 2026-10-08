@@ -26,7 +26,7 @@ public struct TestimonialDeckAtom: MotionAtomView {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("“\(quotes[i].1)”").font(.footnote).lineLimit(3)
                                 Text("— \(quotes[i].0)").font(.caption).foregroundStyle(.secondary)
-                            }.padding(14).frame(width: 300, alignment: .leading)
+                            }.padding(14).frame(maxWidth: 300, alignment: .leading)
                             .background(.background, in: RoundedRectangle(cornerRadius: 10))
                             .scaleEffect(1 - CGFloat(min(2, pos)) * 0.06)
                             .offset(x: pos == 0 ? dragX : 0, y: CGFloat(min(2, pos)) * 10)
@@ -57,7 +57,7 @@ public struct TestimonialDeckAtom: MotionAtomView {
                     }
                     Button(finished ? "Restart" : "Next") { next() }.font(.caption).buttonStyle(.borderless)
                 }
-            }.frame(width: 340)
+            }.frame(maxWidth: 340)
         }
     }
 

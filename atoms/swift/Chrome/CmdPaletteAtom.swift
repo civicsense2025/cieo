@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// Command palette: drops on soft spring, rows spring to slots, highlight edges trail.
-public struct CmdPaletteAtom: View {
+public struct CmdPaletteAtom: MotionAtomView {
+    public static let info = MotionAtomInfo(id: "cmdpalette", category: "Chrome", name: "Cmd Palette", summary: "Command palette: drops on soft spring, rows spring to slots, highlight edges trail.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var query = ""
@@ -25,7 +26,7 @@ public struct CmdPaletteAtom: View {
                     .frame(minHeight: 32).frame(maxWidth: .infinity)
                 if open {
                     TextField("Type a command…", text: $query)
-                        .textFieldStyle(.roundedBorder).focused($focused)
+                        .textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10)).focused($focused)
                         .font(.system(size: 13.5)).frame(minHeight: 36)
                         .onAppear { focused = true }
                     VStack(spacing: 0) {
@@ -53,8 +54,8 @@ public struct CmdPaletteAtom: View {
         }
         .lineSpacing(4)
         .focusable(true)
-        .onExitCommand { open = false }
-        .onMoveCommand { dir in
+        .escapeKey { open = false }
+        .directionKeys { dir in
             guard !matches.isEmpty else { return }
             switch dir {
             case .up: highlight = (highlight + matches.count - 1) % matches.count
