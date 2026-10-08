@@ -1,0 +1,182 @@
+[
+  {
+    "title": "DesignSystems.com homepage",
+    "url": "https://www.designsystems.com/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "The homepage organizes entry into foundations, design/development, operations, conference talks, and a featured external directory. It explains audience benefits through short article summaries and offers six featured Figma kits; contribution and subscription prompts are separate actions.",
+    "cieoImplication": "Make Cieo discoverable by the task a reader wants to complete. Offer clear routes from principles to atomic components to optional packs, and keep explanation close to usable examples rather than opening with a giant inventory.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "5 tips from an Airbnb designer on maintaining a design system",
+    "url": "https://www.designsystems.com/5-tips-from-an-airbnb-designer-on-maintaining-a-design-system/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "Airbnb emphasizes a common component vocabulary, recurring duplicate audits, and documentation linked to production code. Team-specific components can graduate after testing when others can use them; maintaining a small robust core still permits experimentation.",
+    "cieoImplication": "Keep input and general-control names stable. Evaluate Writing additions for genuine reuse, and show real platform renders linked to their public API instead of a disconnected specimen.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Build trust by taking a cross-functional approach",
+    "url": "https://www.designsystems.com/build-trust-by-taking-a-cross-functional-approach/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "The Atlassian account links adoption to designers and engineers working together and meaningful consumer ownership. Its engineer rotations and shared documentation days are organization-specific mechanisms, rather than evidence that every library needs a committee.",
+    "cieoImplication": "Name one accountable component owner and invite focused feedback from real consumers. Preserve design and implementation responsibility without importing staffing programs or enterprise meeting rituals.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Building a design system one brick at a time",
+    "url": "https://www.designsystems.com/building-a-design-system-one-brick-at-a-time/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "PlanGrid describes starting with fonts, color, and icons that solved observable problems, then expanding into components. Its multi-part components permit replacing bounded pieces; deviations help reveal useful future variants rather than requiring every special case in the default API.",
+    "cieoImplication": "Ship a dependable atomic foundation, then optional packs. Show a concrete task before and after adoption; use named composition seams only where they preserve meaningful ownership and accessibility.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Design systems are everybody’s business",
+    "url": "https://www.designsystems.com/design-systems-are-everybodys-business/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "Workday describes progressively serving design, engineering, broader colleagues, and external consumers. Documentation supports onboarding and shared understanding. The article also warns against forcing product components into marketing contexts merely to make surfaces identical.",
+    "cieoImplication": "Explain both who Cieo serves and the task each layer supports. Carry recognizable typography, hierarchy, and behavior across surfaces while letting optional Writing components serve a distinct authoring purpose.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "How Pinterest’s design systems team measures adoption",
+    "url": "https://www.designsystems.com/how-pinterests-design-systems-team-measures-adoption/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "Pinterest distinguishes design adoption from production code adoption and relative coverage from raw insertion counts. Its selected recent handoff files reduce scratchpad noise; design/code differences can reveal implementation limits. It explicitly declines to prescribe an ideal adoption percentage.",
+    "cieoImplication": "Use optional local usage summaries with a stated denominator, platform, and time window. Count actual consumer use separately from demos and combine counts with task feedback; do not copy background organization-wide analytics.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "How to govern a design system that is continuously evolving",
+    "url": "https://www.designsystems.com/how-to-govern-a-design-system/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "The governance account invites anyone to propose a change, tests it against existing uses, and aligns naming, states, options, tokens, and viewport behavior before implementation. Updated design, code links, documentation, and communication complete the change.",
+    "cieoImplication": "Use a short change proposal with purpose, current-use evidence, affected consumers, and platform states. Preserve existing APIs and document migration when behavior or appearance must change; keep deliberation asynchronous unless a real dispute remains.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Keeping design system contributions in check",
+    "url": "https://www.designsystems.com/keeping-design-system-contributions-in-check/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "The contribution article distinguishes a feature-ready contribution from a fully reusable system contribution. A matrix makes missing work visible across consolidation, design delivery, and reuse readiness; documentation, usage examples, accessibility, and environment alignment belong to reuse readiness.",
+    "cieoImplication": "Maintain one compact matrix with owner, purpose, API, examples, state coverage, and separate platform proofs. Mark incomplete evidence plainly and keep experimental or niche components outside the stable core.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Open to all",
+    "url": "https://www.designsystems.com/open-design-systems/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "The directory lists 47 external Figma community kits and creator profiles. Reading its entries establishes what the site features, not the quality, current behavior, license, or completeness of those outside systems. Counts and availability can drift.",
+    "cieoImplication": "Use this as a labeled comparison shortlist. Cieo needs its own criteria and recognizable identity; selecting or copying a kit requires a separate scoped inspection and license check, not inference from directory inclusion.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Productizing your design system",
+    "url": "https://www.designsystems.com/productizing-your-design-system/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "Workday treats its design system as a product serving specific consumers, using stakeholder research to prioritize requests. Intake asks why existing components fail and whether a proposed solution serves other teams. Its button-color example exposes dependencies beyond code and design.",
+    "cieoImplication": "Prioritize real developer and designer needs. Check rendered layouts, examples, documentation, and downstream consumers before an aesthetic change; preserve working APIs and provide upgrade guidance when changes are necessary.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "London",
+    "url": "https://www.designsystems.com/schema-london-2022/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "The London event page describes eight recordings covering token interchange, brand/product relationships, research, rebranding, complex updates, public systems, and a panel. These are program descriptions, not reviewed talk transcripts; caption requests produced empty responses.",
+    "cieoImplication": "Use the program as pointers for future deeper research. Its themes reinforce explicit change impact and shared brand principles, but do not attribute detailed implementation methods to unreviewed recordings.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "New York",
+    "url": "https://www.designsystems.com/schema-new-york-2022/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "The New York page describes nine recordings covering community roadmaps, trust, native mobile systems, data, advocacy, component properties, subcomponents, and a panel. Eight city talks and the shared panel are inventoried; no recording transcript was retrievable.",
+    "cieoImplication": "Prioritize a later native-library and subcomponent review if transcripts become accessible. For now, use only the published descriptions and independently supported article findings for Cieo implementation recommendations.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "東京 Tokyo",
+    "url": "https://www.designsystems.com/schema-tokyo-2022/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "The Tokyo event page provides Japanese and English descriptions for seven recordings about openness, broad product workflows, flexible guidance, design tokens, audiences, and innovation. Five linked videos advertise Japanese captions, but every caption endpoint returned an empty response.",
+    "cieoImplication": "Keep room for flexible extensions and explanations for non-developers. Treat the bilingual program as reviewed text while preserving language and audiovisual gaps; do not claim the complete talks were read or watched.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Collaborations in code",
+    "url": "https://www.designsystems.com/sections/design-and-development/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "This index groups implementation and collaboration articles, including platform parity, semantics, automation, no-UI containers, and multi-brand systems. Its summaries route readers to distinct detailed sources rather than providing evidence of those implementations themselves.",
+    "cieoImplication": "Organize implementation guidance around interoperable concepts and platform-specific proof. Link each concept to examples and public APIs, while leaving backend adapters and framework implementation claims to their actual owners and validation.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Best in class basics",
+    "url": "https://www.designsystems.com/sections/getting-started/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "The foundations index links iconography, typography, spacing, motion, small-team experience, content strategy, and color. Its short descriptions emphasize practical decisions a newcomer needs to make, rather than presenting a system as only a component catalog.",
+    "cieoImplication": "Give Cieo a concise starting path: purpose and voice, semantic tokens, core behavior, then optional composition. Explain why each foundation exists and provide an immediately usable example before exhaustive variants.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Process & People",
+    "url": "https://www.designsystems.com/sections/operations/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "The operations index exposes contribution, governance, adoption, maturity, shared ownership, maintenance, and agency perspectives. It provides a broad view of human and release processes around the code, with detailed claims delegated to each linked article.",
+    "cieoImplication": "Keep the process proportional to Cieo’s team: one owner, one matrix, concise contribution criteria, and clear change notes. Operational visibility should help users adopt the library without creating a separate enterprise bureaucracy.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Talks and conversations",
+    "url": "https://www.designsystems.com/sections/schema/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "The Schema index links the three 2022 city program pages and Taking cues from code. Its topics introduce conference material, but the page does not supply full talk transcripts or establish that embedded recordings have been reviewed.",
+    "cieoImplication": "Separate article-based decisions from talk leads. Keep recording URLs and transcript status visible in research notes so a later reviewer can continue from the precise unresolved boundary instead of repeating the crawl.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Starting a newsletter is the best thing you can do for your design system",
+    "url": "https://www.designsystems.com/starting-a-newsletter-is-the-best-thing-you-can-do-for-your-design-system/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "Gusto uses short updates to make otherwise invisible system work understandable, showing visual changes, shared vocabulary, benefits, and forthcoming work. The author stresses audience-aware tone and honest discussion of breakage; publication timing reflects that particular team.",
+    "cieoImplication": "Write a local changelog with problem, useful outcome, before/after evidence, and impact on adopters. No newsletter subscription or outbound communication is needed to make Cieo’s benefits concrete and discoverable.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "The case for an open design system",
+    "url": "https://www.designsystems.com/the-case-for-an-open-design-system/",
+    "fullTextRead": true,
+    "contentKind": "article",
+    "keyLesson": "Workday connects openness with broader expertise, visible imperfections, documentation, and accountability. The article treats visual changes as potentially breaking alongside API changes, using change logs and versioning to make upgrade impact understandable. Openness does not automatically solve maintenance.",
+    "cieoImplication": "Publish clear status and contribution criteria when authorized, retain one owner, and label visual compatibility changes. Avoid equating public source, broad component counts, or attractive examples with verified cross-platform release readiness.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  },
+  {
+    "title": "Responsive Typographic Scale",
+    "url": "https://www.designsystems.com/typography/",
+    "fullTextRead": true,
+    "contentKind": "index",
+    "keyLesson": "The typography index is a responsive scale demonstrator with named heading, lead, paragraph, and label specimens. Its extracted text includes pixel-unit labels but not resolved values or behavior, so text review cannot establish actual rendering or accessibility.",
+    "cieoImplication": "Document typography roles and intended usage, then verify real font metrics, wrapping, large text, and platform rendering. Do not copy numerical scale values from an extraction that never recorded them.",
+    "readBoundary": "Public page text; audiovisual and interactive content separately inventoried."
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "title": "A collaborative approach to defining components and their features",
+    "url": "https://www.designsystems.com/a-collaborative-approach-to-defining-components-and-their-features/",
+    "fullTextRead": true,
+    "keyLesson": "Purpose provides a durable boundary when visually similar components solve different problems. Design rationale explains uses, limits and alternatives.",
+    "cieoImplication": "Require explicit purpose, useWhen, avoidWhen, behavior and limitations in Cieo documentation. Separate look-alike components when ownership or interaction differs. Derive discovery projections from one manifest owner rather than copying metadata across environments.",
+    "sha256": "a66844aa9ed9360313d625151f021ad5c1d3b7abc1a8e703cbff8b2bf62767c3",
+    "cachedTextFile": "a-collaborative-approach-to-defining-components-and-their-features.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "A system built on parity: How to treat all of your users equally",
+    "url": "https://www.designsystems.com/a-system-built-on-parity-how-to-treat-all-of-your-users-equally/",
+    "fullTextRead": true,
+    "keyLesson": "Lyft aligns names, feasibility, contributions and migration across platforms while permitting native sheet behavior to differ. Readiness requires completed platform work.",
+    "cieoImplication": "Use common IDs with platform-specific adaptations. Record implementation and verification separately for each platform, state and capability. Swift declarations and token exports cannot establish native parity; preserve visible gaps until fresh platform receipts exist.",
+    "sha256": "2d9ec5e3e1490b97f444734307eb680dddf1d1f1198b68dc9fd428f60236ea1f",
+    "cachedTextFile": "a-system-built-on-parity-how-to-treat-all-of-your-users-equally.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "Building ChimeKit with Atomic Design and a collaborative process",
+    "url": "https://www.designsystems.com/building-chimekit-with-atomic-design-and-a-collaborative-process/",
+    "fullTextRead": true,
+    "keyLesson": "ChimeKit audits existing patterns, standardizes foundations and composes components into templates. Cross-functional review checks states, use cases, consistency and flexibility before publication.",
+    "cieoImplication": "Inventory every existing recipe ID before promotion. Keep honest recipe maturity until a reusable contract exists. Review composition and states as part of publication, and separate sample templates and text from reusable native assemblies.",
+    "sha256": "7b0ec933cb3f1ccf4b5f7b7ebe2c32253889a95867eaa433baada4659ca27d73",
+    "cachedTextFile": "building-chimekit-with-atomic-design-and-a-collaborative-process.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "How Spotify’s design system goes beyond platforms",
+    "url": "https://www.designsystems.com/how-spotifys-design-system-goes-beyond-platforms/",
+    "fullTextRead": true,
+    "keyLesson": "Spotify shares foundations while researching each platform’s anatomy, input and interaction differences. Component outlines align terminology and properties; coordination and release dependencies remain costs.",
+    "cieoImplication": "Define shared contracts before adapters without demanding identical view trees. Document native differences and supported states per platform. Bound active conversion work, assign component ownership, and avoid announcing all-platform coverage based on a single catalog pass.",
+    "sha256": "8a48aa4c8085034b69bbd902e0afadfa1d2dd800101b872b14bd44c1f7a5d6dd",
+    "cachedTextFile": "how-spotifys-design-system-goes-beyond-platforms.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "How Thumbtack structures their design system",
+    "url": "https://www.designsystems.com/how-thumbtack-structures-their-design-system/",
+    "fullTextRead": true,
+    "keyLesson": "Thumbtack separates tokens, atomic styling and components, with behavior beneath visual treatment. Lower-level escape hatches enable unusual cases while documentation and feedback remain necessary.",
+    "cieoImplication": "Keep styles replaceable without sacrificing native behavior. Existing design sources own token values; component manifests reference them. Expose coherent parts when an assembly is restrictive, and avoid extra repositories or competing metadata owners for each layer.",
+    "sha256": "c3cfd81c289eca4ef886a091ac50a9f51d25b2b3797d5b034f7096abc8724900",
+    "cachedTextFile": "how-thumbtack-structures-their-design-system.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "React containers, some assembly required",
+    "url": "https://www.designsystems.com/react-containers-some-assembly-required/",
+    "fullTextRead": true,
+    "keyLesson": "Zendesk separates keyboard, focus, RTL and accessibility behavior from visuals. Consumers still must attach properties and references correctly, and documentation is an explicit integration need.",
+    "cieoImplication": "Apply behavior/style separation without transplanting React hooks into Swift. Preserve native controls where they own interaction. Specify slot, state and focus responsibilities; actual integrations need checks before accessibility claims, even when the underlying primitive is reusable.",
+    "sha256": "6e636796409484d0ee5f56b9d5adf3586de76fcb0a4a97c2d580ba32cea3da4e",
+    "cachedTextFile": "react-containers-some-assembly-required.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "Stack mirroring: Designing for code and coding for design",
+    "url": "https://www.designsystems.com/stack-mirroring-designing-for-code-and-coding-for-design/",
+    "fullTextRead": true,
+    "keyLesson": "Stack mirroring aligns namespaces, nesting, properties and dependency layers between design and code. The author combines shared fundamentals with platform-specific component libraries to reduce conceptual mismatch.",
+    "cieoImplication": "Generate Cieo discovery, documentation and design projections from component manifests. Align meaningful public parts and slots, while allowing native implementation internals to differ. Do not add wrappers solely to reproduce a taxonomy diagram or a design-file layer tree.",
+    "sha256": "fbf2506037b664f58b8f05a8107d9c94582f10be480bc4cc0f2d1fff2fe89813",
+    "cachedTextFile": "stack-mirroring-designing-for-code-and-coding-for-design.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "The Forge: Harry’s approach to the multi-brand component library",
+    "url": "https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/",
+    "fullTextRead": true,
+    "keyLesson": "The Forge offers flexible base components and opinionated assemblies. Brands consume complete components or rearrange subcomponents, supporting structural customization beyond fonts and colors.",
+    "cieoImplication": "Provide documented slots and composition alongside semantic style overrides. Writing organisms assemble core inputs and actions without making core depend on Writing. Keep manuscript samples in Examples/Writing, and preserve domain boundaries instead of endlessly widening a generic component API.",
+    "sha256": "97970ce4f63f39b28ebd71f07ae1d8dac959951894764adb5aee346a89dee839",
+    "cachedTextFile": "the-forge-harrys-approach-to-multi-brand-design-systems.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "The future of design systems is automated",
+    "url": "https://www.designsystems.com/the-future-of-design-systems-is-automated/",
+    "fullTextRead": true,
+    "keyLesson": "The article surveys repetitive-work automation, integrations and generated documentation. Outputs depend on inputs; generated code can need correction, and predictions are possibilities rather than verified outcomes.",
+    "cieoImplication": "Automate validation, indexes, documentation and portable mirrors deterministically. Generated metadata cannot confer executable capabilities or native verification. Evaluate actual interactions separately and label productivity or user-outcome benefits as hypotheses until measured in Cieo consumers.",
+    "sha256": "b4532392dabb172b89c79d0ad3df728a8e7cbec8bcd0694a68c4d35f6a2dd0f8",
+    "cachedTextFile": "the-future-of-design-systems-is-automated.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "The future of design systems is complicated",
+    "url": "https://www.designsystems.com/the-future-of-design-systems-is-complicated/",
+    "fullTextRead": true,
+    "keyLesson": "Expanding contexts increase complexity. The article balances structure with experimentation, describing local systems and nested subcomponents that extend coverage without predicting every future assembly.",
+    "cieoImplication": "Keep optional domain packs inside Cieo with shared lower-level contracts. Use taxonomy for navigation without forcing artificial native hierarchies. Preserve constrained composition escape hatches and promote domain patterns only after their reusable state, events and ownership contracts become clear.",
+    "sha256": "72de2da0bea2761779ab91e550ba60d670137fec21609d0ceca412b2b2ca8058",
+    "cachedTextFile": "the-future-of-design-systems-is-complicated.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "The future of design systems is semantic",
+    "url": "https://www.designsystems.com/the-future-of-design-systems-is-semantic/",
+    "fullTextRead": true,
+    "keyLesson": "Tokens separate repeatable decisions from implementation, and variables/references express context. The article connects semantics with collaboration while distinguishing present mechanisms from possible future tooling.",
+    "cieoImplication": "Reference canonical semantic tokens instead of copying palettes into components. Describe contexts and override precedence explicitly. Keep schema, component, package and document versions distinct, and verify current official APIs before recommending exact tooling mechanisms based on historical examples.",
+    "sha256": "c5c04ada9ae4ceafeac17a1d4051d99a17ec05af5fb91f616eb5209afbf080c4",
+    "cachedTextFile": "the-future-of-design-systems-is-semantic.txt",
+    "reviewDate": "2026-10-08"
+  },
+  {
+    "title": "White-labeling: Putting the design system in users' hands",
+    "url": "https://www.designsystems.com/white-labeling-putting-the-design-system-in-users-hands/",
+    "fullTextRead": true,
+    "keyLesson": "The case combines defaults, constrained properties and schema-shaped configuration. Its raw-CSS escape hatch explicitly acknowledges injection risk, exposing a boundary created by unlimited customization.",
+    "cieoImplication": "Use typed style overrides and composition slots with strict validation. Portable manifests must not embed executable CSS or arbitrary code. Preserve native semantics and documented constraints; wide customization is a mechanism, not evidence that every resulting interface remains usable or accessible.",
+    "sha256": "d99725dc46f82cded644c622567ebc16daf93eafdafcdde1942da83dd2dd9ab0",
+    "cachedTextFile": "white-labeling-putting-the-design-system-in-users-hands.txt",
+    "reviewDate": "2026-10-08"
+  }
+]

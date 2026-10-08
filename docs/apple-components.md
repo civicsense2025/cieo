@@ -2,6 +2,8 @@
 
 Cieo owns the reusable Swift source. `CieoUI` depends only on the existing Cieo motion engine; the complete 550-recipe native catalogue remains in the separate `CieoAtoms` product. `CieoGallery` exposes both that catalogue and the reusable controls without changing authentication.
 
+The [catalogue migration receipt](catalogue-inventory.md) records current recipe identities and source hashes; it does not establish production component readiness.
+
 ## Implementation contract
 
 1. Foundations own semantic palette, spacing and the rendering policy.

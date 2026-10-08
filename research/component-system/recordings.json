@@ -1,0 +1,797 @@
+{
+  "reviewDate": "2026-10-08",
+  "scope": "All audiovisual embeds discovered in the reachable-page inventory; Schema caption endpoint checks performed for all 23 unique YouTube videos.",
+  "counts": {
+    "schemaEmbedPlacements": 24,
+    "schemaUniqueVideos": 23,
+    "allYouTubePlacements": 25,
+    "otherStandaloneVideoExamples": 7,
+    "vimeoRecordings": 1,
+    "uniqueAudiovisualResources": 31,
+    "readableSchemaTranscripts": 0,
+    "videosWatchedByOperationsResearcher": 0
+  },
+  "schemaTranscriptFinding": "Public watch pages loaded and advertised caption tracks (18 English, five Japanese). Every chosen caption URL returned HTTP 200 with zero bytes; captions are advertised, but transcript content was not retrievable in this execution context. This does not prove transcripts do not exist.",
+  "recordings": [
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/1DRe0WBRhWOFMNq3VWCCeF/740010c1fb376cf59b91a9f5eaa5bd40/Figma_-_Motion_Usage.mp4",
+      "kind": "Embedded video example",
+      "title": "Figma_-_Motion_Usage.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/2KNDByPUMsiVsSAietQip6/dacdafee521930b2a18b8636176fb66b/Figma_-_Dynamic_Duration.mp4",
+      "kind": "Embedded video example",
+      "title": "Figma_-_Dynamic_Duration.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/5Wxx21tROznAdZOiGVdmx7/aceb69b71815221b69a6fa462c420ea3/Figma_-_Easing.mp4",
+      "kind": "Embedded video example",
+      "title": "Figma_-_Easing.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/3QtmUeNy68DIwBMJFV5uJA/d72a052478f3065c679229cd5a410658/Figma_-_Open-Close.mp4",
+      "kind": "Embedded video example",
+      "title": "Figma_-_Open-Close.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/3eqyG0dWG9GMQiBzrwssPz/efa03df727219ff97b4eb3b938f74892/Figma_-_Choreography.mp4",
+      "kind": "Embedded video example",
+      "title": "Figma_-_Choreography.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=cvFRJZmMGtc",
+      "embedUrl": "https://www.youtube.com/embed/cvFRJZmMGtc",
+      "videoId": "cvFRJZmMGtc",
+      "kind": "YouTube recording",
+      "title": "Schema 2022 London Opening Keynote - Conference Kickoff - Jacob Miller (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "root-export-invoked-no-transcript-available; operations-agent-browser-unavailable",
+      "rootOfficialExportResult": {
+        "videoId": "cvFRJZmMGtc",
+        "url": "https://www.youtube.com/watch?v=cvFRJZmMGtc",
+        "verifiedPageTitle": "Schema 2022 London Opening Keynote - Conference Kickoff - Jacob Miller",
+        "result": "No transcript is available for this YouTube video",
+        "exportAttempts": 2,
+        "retryContext": "Retried after page title verified; same error."
+      }
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ssOdzxZdg58",
+      "embedUrl": "https://www.youtube.com/embed/ssOdzxZdg58",
+      "videoId": "ssOdzxZdg58",
+      "kind": "YouTube recording",
+      "title": "An introduction to the design tokens file format - James Nash, Louis Chenais (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=sqC-QAnVElM",
+      "embedUrl": "https://www.youtube.com/embed/sqC-QAnVElM",
+      "videoId": "sqC-QAnVElM",
+      "kind": "YouTube recording",
+      "title": "Multidimensional design systems - Patrycja Rozmus (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=QaocNHzy6lk",
+      "embedUrl": "https://www.youtube.com/embed/QaocNHzy6lk",
+      "videoId": "QaocNHzy6lk",
+      "kind": "YouTube recording",
+      "title": "Research-driven design systems - Brice Fontaine, Jack Roles (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=4dMAE3d4HT4",
+      "embedUrl": "https://www.youtube.com/embed/4dMAE3d4HT4",
+      "videoId": "4dMAE3d4HT4",
+      "kind": "YouTube recording",
+      "title": "Rebranding, or the subtle art of juggling new and legacy design systems - Qonto team (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=co6t3x7OsWk",
+      "embedUrl": "https://www.youtube.com/embed/co6t3x7OsWk",
+      "videoId": "co6t3x7OsWk",
+      "kind": "YouTube recording",
+      "title": "Navigating complex system updates - Gonzalo Vasquez, Leonie Proske (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=1wyCtbZEViE",
+      "embedUrl": "https://www.youtube.com/embed/1wyCtbZEViE",
+      "videoId": "1wyCtbZEViE",
+      "kind": "YouTube recording",
+      "title": "Building an open source design system for the many - Ahcène Amrouz, Antoine Puig (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=fCwb6t5LvbM",
+      "embedUrl": "https://www.youtube.com/embed/fCwb6t5LvbM",
+      "videoId": "fCwb6t5LvbM",
+      "kind": "YouTube recording",
+      "title": "Speaker Panel Q&A (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-london-2022/",
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=Yo7rL0pvHTk",
+      "embedUrl": "https://www.youtube.com/embed/Yo7rL0pvHTk",
+      "videoId": "Yo7rL0pvHTk",
+      "kind": "YouTube recording",
+      "title": "Schema 2022 NYC Opening Keynote - Conference Kickoff - Jacob Miller",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/",
+        "https://www.designsystems.com/taking-cues-from-code/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=4MpGxmlOf7w",
+      "embedUrl": "https://www.youtube.com/embed/4MpGxmlOf7w",
+      "videoId": "4MpGxmlOf7w",
+      "kind": "YouTube recording",
+      "title": "Designing a community-driven design systems roadmap - Jules Forrest",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=ihdvLizFzJY",
+      "embedUrl": "https://www.youtube.com/embed/ihdvLizFzJY",
+      "videoId": "ihdvLizFzJY",
+      "kind": "YouTube recording",
+      "title": "Establishing early evangelists: from sentiment gathering to strategic roadmapping - Taylor Cashdan",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=jgueTz72ZMQ",
+      "embedUrl": "https://www.youtube.com/embed/jgueTz72ZMQ",
+      "videoId": "jgueTz72ZMQ",
+      "kind": "YouTube recording",
+      "title": "Creating DoorDash’s native mobile design system - Camden Asay, Matthew Burg, Will Hou, Ayanna Kosoko",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=IPJMrd3bfIM",
+      "embedUrl": "https://www.youtube.com/embed/IPJMrd3bfIM",
+      "videoId": "IPJMrd3bfIM",
+      "kind": "YouTube recording",
+      "title": "Evolving systems with data and heart - Uber Team",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=On3w6zPQPHU",
+      "embedUrl": "https://www.youtube.com/embed/On3w6zPQPHU",
+      "videoId": "On3w6zPQPHU",
+      "kind": "YouTube recording",
+      "title": "Expanding your Design System's sphere of influence and other lessons - Lauren LoPrete",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=xKM04kqvfPI",
+      "embedUrl": "https://www.youtube.com/embed/xKM04kqvfPI",
+      "videoId": "xKM04kqvfPI",
+      "kind": "YouTube recording",
+      "title": "Inside Figma: Behind the scenes of component properties - Su Yang, Naomi Jung",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=NiDoqI_ZhvY",
+      "embedUrl": "https://www.youtube.com/embed/NiDoqI_ZhvY",
+      "videoId": "NiDoqI_ZhvY",
+      "kind": "YouTube recording",
+      "title": "Architecting Subcomponents - Nathan Curtis",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-new-york-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "root-export-invoked-no-transcript-available; operations-agent-browser-unavailable",
+      "rootOfficialExportResult": {
+        "videoId": "NiDoqI_ZhvY",
+        "url": "https://www.youtube.com/watch?v=NiDoqI_ZhvY",
+        "verifiedPageTitle": "Architecting Subcomponents - Nathan Curtis",
+        "result": "No transcript is available for this YouTube video",
+        "exportAttempts": 1
+      }
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=EKIj_-QkbZQ",
+      "embedUrl": "https://www.youtube.com/embed/EKIj_-QkbZQ",
+      "videoId": "EKIj_-QkbZQ",
+      "kind": "YouTube recording",
+      "title": "Schema 2022 Tokyo Opening Keynote - Sho Kuwamoto",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=yj6T-fO49yo",
+      "embedUrl": "https://www.youtube.com/embed/yj6T-fO49yo",
+      "videoId": "yj6T-fO49yo",
+      "kind": "YouTube recording",
+      "title": "[ENG SUB] Openness and the use of Figma in solving social issues - Fujitsu team (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "ja"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=lNHax1LT0Ns",
+      "embedUrl": "https://www.youtube.com/embed/lNHax1LT0Ns",
+      "videoId": "lNHax1LT0Ns",
+      "kind": "YouTube recording",
+      "title": "[ENG SUB] Workflows for building design systems in Figma at Yahoo - Mr. Takanori Hirohashi",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "ja"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=nHSSUU7igmk",
+      "embedUrl": "https://www.youtube.com/embed/nHSSUU7igmk",
+      "videoId": "nHSSUU7igmk",
+      "kind": "YouTube recording",
+      "title": "[ENG SUB] Design Systems not for “design” - Masanori Ueda (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "ja"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=m8ZSu9eCsQc",
+      "embedUrl": "https://www.youtube.com/embed/m8ZSu9eCsQc",
+      "videoId": "m8ZSu9eCsQc",
+      "kind": "YouTube recording",
+      "title": "Rolling out design tokens to a branded house with 18+ products - Deborah Lindberg, Lewis Healey",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "en"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=AogBqcTeGXc",
+      "embedUrl": "https://www.youtube.com/embed/AogBqcTeGXc",
+      "videoId": "AogBqcTeGXc",
+      "kind": "YouTube recording",
+      "title": "[ENG SUB] Don't make design systems just for developers - Tatsuya Sawanobori (Schema 2022)",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "ja"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=KYMpp9LL6W4",
+      "embedUrl": "https://www.youtube.com/embed/KYMpp9LL6W4",
+      "videoId": "KYMpp9LL6W4",
+      "kind": "YouTube recording",
+      "title": "[ENG SUB] Design system and systematization of thinking by teamLab - Sukeharu Ito",
+      "sourcePages": [
+        "https://www.designsystems.com/schema-tokyo-2022/"
+      ],
+      "programTextRead": true,
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "http": 200,
+        "captionTracksMarker": true,
+        "transcriptMarker": true,
+        "captionLanguages": [
+          "ja"
+        ],
+        "captionHttpStatus": 200,
+        "captionBytes": 0,
+        "transcriptStatus": "blocked-empty-caption-response"
+      },
+      "requiredNextAction": "Retrieve the official public transcript via YouTube UI or a working public caption endpoint, then read and record language; do not treat description as transcript.",
+      "officialExportStatus": "blocked-environment-has-no-browser; export-not-invoked"
+    },
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/66SnOVAZ0K53tW3qQYnbHH/0a328efa20dcdabe75a00c7a81a14f17/harrys_homepage.mov",
+      "kind": "Embedded video example",
+      "title": "harrys_homepage.mov",
+      "sourcePages": [
+        "https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/3B6ty0gKIslTmcf01ErTYc/77179f5ae6a7a57a2c25454878423e4b/flamingo_homepage.mov",
+      "kind": "Embedded video example",
+      "title": "flamingo_homepage.mov",
+      "sourcePages": [
+        "https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    },
+    {
+      "url": "https://player.vimeo.com/video/806584865?h=389c95c477",
+      "kind": "Vimeo recording",
+      "title": "806584865",
+      "sourcePages": [
+        "https://www.designsystems.com/the-future-of-design-systems-is-accessible/"
+      ],
+      "videoWatched": false,
+      "transcriptRead": false,
+      "transcriptCheck": {
+        "transcriptStatus": "not-investigated",
+        "reason": "Outside the Schema transcript checks; separately preserve as unreviewed media."
+      },
+      "requiredNextAction": "Inspect public media and any accessible caption/text alternative; record exact observation and gaps."
+    }
+  ],
+  "officialTranscriptExportCheck": {
+    "reviewDate": "2026-10-08",
+    "method": "Official CUA YouTube transcript export availability check",
+    "representativeRecording": "https://www.youtube.com/watch?v=NiDoqI_ZhvY",
+    "recordingTitle": "Architecting Subcomponents - Nathan Curtis",
+    "createTabAttempt": "cua.createBrowserTab(\"iab\", \"https://www.youtube.com/watch?v=NiDoqI_ZhvY\", { visible: false })",
+    "createTabResult": "Browser is not available: iab",
+    "browserInventoryCall": "cua.listBrowsers()",
+    "browserInventoryResult": [],
+    "exportInvoked": false,
+    "transcriptObtained": false,
+    "ownedTabsCreated": 0,
+    "cleanup": "No tab created; no root or user tab touched.",
+    "stopReason": "No browser is available to this research agent, so no documented tab/content API can be invoked. A second representative export would repeat the same unavailable-browser boundary. No further attempts made.",
+    "requiredNextAction": "Run documented content.exportYouTubeTranscript() from a CUA environment with an available official browser; read actual nonempty output before updating transcriptRead."
+  },
+  "rootOfficialTranscriptExportCheck": {
+    "reviewDate": "2026-10-08",
+    "reportedBy": "root research coordinator",
+    "browserAvailable": true,
+    "method": "Official Tab.content.exportYouTubeTranscript() after known YouTube watch page loaded and title verified",
+    "recordings": [
+      {
+        "videoId": "NiDoqI_ZhvY",
+        "url": "https://www.youtube.com/watch?v=NiDoqI_ZhvY",
+        "verifiedPageTitle": "Architecting Subcomponents - Nathan Curtis",
+        "result": "No transcript is available for this YouTube video",
+        "exportAttempts": 1
+      },
+      {
+        "videoId": "cvFRJZmMGtc",
+        "url": "https://www.youtube.com/watch?v=cvFRJZmMGtc",
+        "verifiedPageTitle": "Schema 2022 London Opening Keynote - Conference Kickoff - Jacob Miller",
+        "result": "No transcript is available for this YouTube video",
+        "exportAttempts": 2,
+        "retryContext": "Retried after page title verified; same error."
+      }
+    ],
+    "transcriptsObtained": 0,
+    "transcriptsRead": 0,
+    "videoPlaybackObserved": false,
+    "cleanup": "Root reports its owned YouTube tab closed.",
+    "stopReason": "Two representative recordings returned the same no-transcript export error. No additional retries or recording checks planned.",
+    "interpretation": "An export failure in this environment; not proof that public caption tracks do not exist. Operations-agent browser unavailability is a distinct earlier environment limitation."
+  }
+}

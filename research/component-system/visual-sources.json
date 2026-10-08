@@ -1,0 +1,119 @@
+[
+  {
+    "title": "5 steps for including motion design in your system",
+    "url": "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/",
+    "fullTextRead": true,
+    "keyLesson": "Audit existing motion and document purpose, start and end states, easing, effects, and choreography. Example duration formulas illustrate options rather than universal rules.",
+    "cieoImplication": "Keep Cieo spring presets; document interruption, reversal, reduced-motion settlement, and state meaning per component. Historical Material, Lightning, and Inspector Spacetime examples need current verification before implementation.",
+    "textFile": "5-steps-for-including-motion-design-in-your-system.txt",
+    "rawSha256": "7365c2e2443863d0c87a2be25844299bc39bf4fd01c8b3f522b1e5d552115946"
+  },
+  {
+    "title": "About Wonder Blocks, Khan Academy’s design system and the story behind it",
+    "url": "https://www.designsystems.com/about-wonder-blocks-khan-academys-design-system-and-the-story-behind-it/",
+    "fullTextRead": true,
+    "keyLesson": "Khan Academy tied visual consolidation to user needs, clear functional colors, density, collaborative principles, and sustainable maintenance. Selecting a visual direction did not complete implementation.",
+    "cieoImplication": "Retain Cieo identity while reducing arbitrary variations. Evaluate type and spacing with real content; separate a demonstrated recipe from a maintained component, and never transfer Khan Academy efficiency percentages to Cieo.",
+    "textFile": "about-wonder-blocks-khan-academys-design-system-and-the-story-behind-it.txt",
+    "rawSha256": "c70adfec7f1ca49dac37348e0a28c66413378e6dccbb05f91be32cc0c71d044b"
+  },
+  {
+    "title": "Color",
+    "url": "https://www.designsystems.com/color-guides/",
+    "fullTextRead": true,
+    "keyLesson": "A controlled palette needs usage guidance, semantic names, and explicitly accessible foreground/background pairs; a list of swatches is insufficient.",
+    "cieoImplication": "Keep graphite, white, and iris as current identity anchors. Propose semantic surface, text, accent, boundary, and status roles; evaluate actual composed colors across states, dark mode, and alternate accents before approval.",
+    "textFile": "color-guides.txt",
+    "rawSha256": "c2de66814b16799039464db904064e8ce1bd220d82f4008e4faa9e0397bd9817"
+  },
+  {
+    "title": "Guide to content strategy",
+    "url": "https://www.designsystems.com/guide-to-content-strategy-in-design-systems/",
+    "fullTextRead": true,
+    "keyLesson": "Content decisions belong beside components: casing, vocabulary, empty states, confirmations, microcopy, and localization require explicit guidance.",
+    "cieoImplication": "Use sentence case and task-first explanations; distinguish remove, delete, discard, copy, and export. Preserve input on errors. Reject shrinking translated text as a default; prefer flexible geometry, wrapping, and context-specific layout.",
+    "textFile": "guide-to-content-strategy-in-design-systems.txt",
+    "rawSha256": "8678bc5bdc84db33f9ce5084ab517a8b6e2f9928e8d7d93b2a7d959e26f35fdb"
+  },
+  {
+    "title": "How a small team built figma.com’s design system",
+    "url": "https://www.designsystems.com/how-a-small-team-built-figma-dot-coms-design-system/",
+    "fullTextRead": true,
+    "keyLesson": "An inventory exposed repeated patterns and outliers; extracting smaller flexible foundations helped a small team reuse existing work and justify exceptions.",
+    "cieoImplication": "Audit Cieo recipes before promotion. Consolidate genuine shared anatomy, retain justified layout freedom, and avoid adopting branded color nicknames or Figma marketing structures. Catalogue composition must not silently redefine reusable component ownership.",
+    "textFile": "how-a-small-team-built-figma-dot-coms-design-system.txt",
+    "rawSha256": "2c068d282d0dac2df797b3f74a09ae900ecf0f972153c22ab3496ff40d143c95"
+  },
+  {
+    "title": "A complete guide to iconography",
+    "url": "https://www.designsystems.com/iconography-guide/",
+    "fullTextRead": true,
+    "keyLesson": "Consistent optical weight, size-aware detail, naming, and implementation coordination make icon libraries usable; the article includes prescriptive stylistic opinions.",
+    "cieoImplication": "Use one-color product glyphs, preserve native system-symbol behavior, and label unfamiliar actions. Treat the claim that icons are language-independent skeptically. The inspected size example supports simplification at small sizes rather than blind scaling.",
+    "textFile": "iconography-guide.txt",
+    "rawSha256": "328ad3a884db40fce2a3726a1bd3d2474eac78c2c17d571d513f2085c8bf208c"
+  },
+  {
+    "title": "Six myths holding you back from embracing design systems",
+    "url": "https://www.designsystems.com/six-myths-holding-you-back-from-embracing-design-systems/",
+    "fullTextRead": true,
+    "keyLesson": "Systems suit teams of different sizes; fashionable techniques and famous systems are not universal prescriptions. Systems should support real organizational goals and creative work.",
+    "cieoImplication": "Ground Cieo direction in existing identity and consumer needs. Avoid copying Material, Figma, or an elaborate enterprise process. Require a specific user or maintenance benefit before adding themes, variants, effects, or public configuration.",
+    "textFile": "six-myths-holding-you-back-from-embracing-design-systems.txt",
+    "rawSha256": "c44cc0ca239a49abb5fc856ecbf9dc9596936dd24fa155a7c4e70e4642810643"
+  },
+  {
+    "title": "Space, grids, and layouts",
+    "url": "https://www.designsystems.com/space-grids-and-layouts/",
+    "fullTextRead": true,
+    "keyLesson": "Spatial systems reduce arbitrary decisions; element-first and content-first sizing serve different situations. A grid does not remove responsive or device-specific interaction decisions.",
+    "cieoImplication": "Keep the current eight-unit rhythm with deliberate optical exceptions. Let rows, labels, and errors grow with content, large text, and localization. The inspected content-first table reinforces preserving padding while allowing multiline content.",
+    "textFile": "space-grids-and-layouts.txt",
+    "rawSha256": "704750d015fb3ca3ccd292d41ddb5985102e2cb516c1d3285ba0750fa3061152"
+  },
+  {
+    "title": "Taking cues from code",
+    "url": "https://www.designsystems.com/taking-cues-from-code/",
+    "fullTextRead": true,
+    "keyLesson": "Composition, nested subcomponents, and separation of structure from presentation can manage complex systems while retaining creative freedom. Process must respond to consumer needs.",
+    "cieoImplication": "Prefer a few meaningful slots over combinatorial variants. Keep generic controls independent, compose optional Writing behavior separately, and let hosts supply real editor actions. Do not add a headless architecture solely because the article describes one.",
+    "textFile": "taking-cues-from-code.txt",
+    "rawSha256": "d4c837fed214c2971f1d46db08339894f6abe5eb37c0aace5e3dedf29f36fa6d"
+  },
+  {
+    "title": "The future of design systems is accessible",
+    "url": "https://www.designsystems.com/the-future-of-design-systems-is-accessible/",
+    "fullTextRead": true,
+    "keyLesson": "Accessible defaults, semantic implementation, human testing, documentation, and participation by people with disabilities work together; automated overlays are inadequate substitutes.",
+    "cieoImplication": "Make keyboard, focus, labels, recovery, reduced motion, and state contrast explicit contracts. Separate component evidence from complete-journey conformance. Treat article-era statistics, AI predictions, and plugin examples as historical rather than current verified product facts.",
+    "textFile": "the-future-of-design-systems-is-accessible.txt",
+    "rawSha256": "7b228b7e2dd0980cb05c4adff25d59dc2df3156668eefc37e5047e40ae75075f"
+  },
+  {
+    "title": "The spectrum of maturity for design systems",
+    "url": "https://www.designsystems.com/the-spectrum-of-maturity-for-design-systems/",
+    "fullTextRead": true,
+    "keyLesson": "The distance between system creators and consumers helps explain documentation and maintenance needs; polished public platforms are not the required starting point for every team.",
+    "cieoImplication": "Cieo consumers need purpose, usage boundaries, host responsibilities, state examples, and evidence status. Keep documentation proportional to actual separation and adoption; do not make recipe count or enterprise-style governance a proxy for maturity.",
+    "textFile": "the-spectrum-of-maturity-for-design-systems.txt",
+    "rawSha256": "d7041f3035ecabfa82d00a2b2fa097210243fecd507594cd98196fef60010b6d"
+  },
+  {
+    "title": "Typography",
+    "url": "https://www.designsystems.com/typography-guides/",
+    "fullTextRead": true,
+    "keyLesson": "Typography combines font choice, weights, sizes, line heights, responsive behavior, and performance; presets can codify these related decisions.",
+    "cieoImplication": "Keep native system type and a dependable web fallback. Test Inter loading instead of assuming a CSS declaration proves it. Propose complete type roles and readable explanatory body text; calibrate metrics per font, script, and large-text setting.",
+    "textFile": "typography-guides.txt",
+    "rawSha256": "2e6f805f66c45a6a659c664f240d490a36520e24daed245a495318ea151e4559"
+  },
+  {
+    "title": "Why we build design systems: an agency's perspective",
+    "url": "https://www.designsystems.com/why-we-build-design-systems-an-agencys-perspective/",
+    "fullTextRead": true,
+    "keyLesson": "An agency handoff should provide reusable ingredients and guidance for extending functionality and aesthetics, with collaboration and continued feedback suited to each client.",
+    "cieoImplication": "Explain the task a Cieo component helps accomplish, where it fits, and how a consumer extends it safely. Cieo owns reusable source; Tessera consumes the catalogue. Avoid promising productivity gains without consumer evidence.",
+    "textFile": "why-we-build-design-systems-an-agencys-perspective.txt",
+    "rawSha256": "d99cd526beeec8f914d3daad157ac89b9f3367f1db30351c7b118c714327cf84"
+  }
+]
