@@ -13,8 +13,10 @@ function literalOffsets(text) {
     const offsets = new Uint8Array(text.length);
     function regexEnd(start) {
         const before = text.slice(0, start).trimEnd();
-        if (before && !/[=(:,[!?:;{}]$/.test(before) && !/\breturn$/.test(before))
-            return start;
+        const expressionStart = !before || /[=(:,[!?:;{}&|]$/.test(before) ||
+            /=>$/.test(before) || /\b(?:return|throw|yield|await|void|typeof|delete|case)$/.test(before);
+        // Header-shaped text inside a slash pair is ambiguous even after an
+        // unfamiliar expression prefix. Reject it rather than invent an ID.
         let inClass = false;
         for (let i = start + 1; i < text.length && text[i] !== '\n'; i++) {
             if (text[i] === '\\') {
@@ -26,7 +28,7 @@ function literalOffsets(text) {
             if (text[i] === ']')
                 inClass = false;
             if (text[i] === '/' && !inClass)
-                return i + 1;
+                return expressionStart || /\batom\s*\(/.test(text.slice(start + 1, i)) ? i + 1 : start;
         }
         return start;
     }

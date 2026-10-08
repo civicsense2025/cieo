@@ -97,3 +97,25 @@ test('Swift extraction retains declaration order and ignores support code', () =
     assert.deepEqual(readSwiftSource(swift + '\n' + second, 'combined.swift').records.map(r => r.id), ['sample', 'second']);
     assert.deepEqual(readSwiftSource('public struct Helper {}', 'helper.swift'), { records: [], diagnostics: [] });
 });
+test('arrow-returned regex declarations are rejected rather than inventoried', () => {
+    const result = readWebSource("const pattern = () => /atom({id:'fake',cat:'Writing'})/;", 'fixture.js');
+    assert.deepEqual(result.ids, []);
+    assert.ok(result.diagnostics.some(d => d.code === 'unsupported-source-header'));
+});
+test('regex decoys are rejected in adjacent expression contexts', () => {
+    const literal = "/atom({id:'fake',cat:'Writing'})/";
+    for (const source of [
+        `const pattern = flag && ${literal};`,
+        `const pattern = flag || ${literal};`,
+        `const pattern = flag ?? ${literal};`,
+        `const pattern = flag ? ${literal} : /safe/;`,
+        `function pattern() { throw ${literal}; }`,
+        `function* pattern() { yield ${literal}; }`,
+        `if (flag) ${literal}.test(value);`,
+        `const pattern = () => /* context */ ${literal};`,
+    ]) {
+        const result = readWebSource(source, 'fixture.js');
+        assert.deepEqual(result.ids, []);
+        assert.ok(result.diagnostics.some(d => d.code === 'unsupported-source-header'), source);
+    }
+});
