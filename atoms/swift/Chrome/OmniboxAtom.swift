@@ -6,7 +6,7 @@ public struct OmniboxAtom: View {
     @State private var query = "git"
     @State private var highlight = 0
     @State private var opened: String? = nil
-    private let urls = ["github.com/principle", "git-scm.com/docs", "gitlab.com/explore", "gitter.im/home", "gist.github.com"]
+    private let urls = ["example.com/code", "git-scm.com/docs", "gitlab.com/explore", "gitter.im/home", "snippets.example.com"]
 
     public init() {}
     private var matches: [String] {
