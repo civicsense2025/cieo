@@ -25,6 +25,6 @@ public struct HighlightSurface: View {
     }
 
     private var surface: some View {
-        RoundedRectangle(cornerRadius: Metrics.corner).fill(theme.accent.opacity(0.12))
+        RoundedRectangle(cornerRadius: Metrics.corner).fill(theme.accent.opacity(0.72))
     }
 }

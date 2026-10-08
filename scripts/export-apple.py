@@ -15,9 +15,11 @@ let package = Package(
     name: "Cieo",
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [.library(name: "Cieo", targets: ["Cieo"]),
-               .library(name: "CieoUI", targets: ["CieoUI"])],
+               .library(name: "CieoUI", targets: ["CieoUI"]),
+               .library(name: "CieoGallery", targets: ["CieoGallery"])],
     targets: [.target(name: "Cieo"),
               .target(name: "CieoUI", dependencies: ["Cieo"], resources: [.process("Resources")]),
+              .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo"]),
               .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
               .testTarget(name: "CieoUITests", dependencies: ["CieoUI"])])
 '''
@@ -37,7 +39,7 @@ def member(root, name):
 
 def inventory():
     data = {"Package.swift": PACKAGE.encode()}
-    for directory in ["Sources/Cieo", "Sources/CieoUI", "Tests/CieoTests", "Tests/CieoUITests"]:
+    for directory in ["Sources/Cieo", "Sources/CieoUI", "Sources/CieoGallery", "Tests/CieoTests", "Tests/CieoUITests"]:
         for path in sorted((ROOT / directory).rglob("*")):
             if path.is_symlink():
                 raise ValueError("Source symlinks are not portable")
@@ -46,10 +48,18 @@ def inventory():
     return data
 
 
+def validate_file_set(previous, current, allow_new_files):
+    if not previous.issubset(current):
+        raise ValueError("Removing mirror members requires a separate migration")
+    if previous != current and not allow_new_files:
+        raise ValueError("File set changed; review additions with --allow-new-files")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("destination", type=Path)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument("--allow-new-files", action="store_true")
     args = parser.parse_args()
     destination = args.destination.resolve()
     if destination == ROOT or ROOT.is_relative_to(destination) or destination.is_relative_to(ROOT):
@@ -79,8 +89,10 @@ def main():
         previous = json.loads((destination / MANIFEST).read_text())
         if previous.get("owner") != "Cieo runtime":
             raise ValueError("Destination is not an owned runtime mirror")
-        if set(previous["files"]) != set(manifest["files"]):
-            raise ValueError("File set changed; review the mirror update explicitly")
+        validate_file_set(set(previous["files"]), set(manifest["files"]), args.allow_new_files)
+        for name in set(manifest["files"]) - set(previous["files"]):
+            if member(destination, name).exists():
+                raise ValueError(f"Preserve unowned destination file: {name}")
         for name, checksum in previous["files"].items():
             if digest(member(destination, name).read_bytes()) != checksum:
                 raise ValueError(f"Preserve edited mirror file: {name}")

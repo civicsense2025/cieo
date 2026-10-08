@@ -8,6 +8,7 @@ let package = Package(
         .library(name: "Cieo", targets: ["Cieo"]),
         .library(name: "CieoAtoms", targets: ["CieoAtoms"]),
         .library(name: "CieoUI", targets: ["CieoUI"]),
+        .library(name: "CieoGallery", targets: ["CieoGallery"]),
     ],
     targets: [
         .target(name: "Cieo"),
@@ -15,5 +16,6 @@ let package = Package(
         .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
         .target(name: "CieoUI", dependencies: ["Cieo"], resources: [.process("Resources")]),
         .testTarget(name: "CieoUITests", dependencies: ["CieoUI"]),
+        .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo"]),
     ]
 )

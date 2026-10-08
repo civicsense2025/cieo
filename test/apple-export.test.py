@@ -16,6 +16,13 @@ class ExportTests(unittest.TestCase):
         self.assertIn("Sources/Cieo/Spring.swift", files)
         self.assertFalse(any(name.startswith("atoms/") for name in files))
 
+    def test_additions_require_explicit_review_and_removals_are_rejected(self):
+        with self.assertRaises(ValueError):
+            exporter.validate_file_set({"old"}, {"old", "new"}, False)
+        exporter.validate_file_set({"old"}, {"old", "new"}, True)
+        with self.assertRaises(ValueError):
+            exporter.validate_file_set({"old", "removed"}, {"old"}, True)
+
     def test_member_cannot_escape_the_mirror(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory).resolve()
