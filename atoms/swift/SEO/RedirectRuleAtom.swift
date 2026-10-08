@@ -80,7 +80,7 @@ public struct RedirectRuleAtom: MotionAtomView {
                 .padding(.horizontal, 14).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 HStack(spacing: 6) {
                     Toggle("Regex paths", isOn: $regex).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                     Text("· reorder with ↑ ↓").font(.caption).foregroundStyle(.secondary)
                 }
             }

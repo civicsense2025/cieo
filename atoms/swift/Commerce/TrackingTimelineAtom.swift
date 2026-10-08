@@ -56,7 +56,7 @@ public struct TrackingTimelineAtom: MotionAtomView {
                     }
                     .frame(height: 38).padding(.horizontal, 14)
                     .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
-                    Toggle("Notify me", isOn: $notify).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                    Toggle("Notify me", isOn: $notify).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
                 }
             }
             .padding(14).frame(width: 280)

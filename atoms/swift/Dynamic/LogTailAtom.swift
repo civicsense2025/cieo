@@ -56,7 +56,7 @@ public struct LogTailAtom: MotionAtomView {
                         .buttonStyle(.bordered).controlSize(.regular)
                     Spacer()
                     Toggle("stick to latest", isOn: $stick).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 420)

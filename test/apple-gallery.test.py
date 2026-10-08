@@ -1,4 +1,4 @@
-"""Catalogue completeness and decorative chrome checks without starting 545 views."""
+"""Catalogue completeness and decorative chrome checks without starting every view."""
 from pathlib import Path
 import re
 import unittest
@@ -17,6 +17,16 @@ class GalleryTests(unittest.TestCase):
         self.assertEqual(len(declared), 550)
         self.assertEqual(sorted(declared), sorted(indexed))
         self.assertEqual(len(indexed), len(set(indexed)))
+
+    def test_checkbox_style_stays_in_platform_adapter(self):
+        adapter = ROOT / "atoms/swift/Support/NativeToggleStyle.swift"
+        for path in (ROOT / "atoms/swift").rglob("*.swift"):
+            if path != adapter:
+                self.assertNotIn(".toggleStyle(.checkbox)", path.read_text(), str(path))
+        source = adapter.read_text()
+        self.assertIn("#if os(macOS)", source)
+        self.assertIn(".toggleStyle(.checkbox)", source)
+        self.assertIn(".toggleStyle(.switch)", source)
 
     def test_preview_and_production_atoms_have_no_exterior_outline(self):
         for name in ["Sources/CieoGallery/Specimen.swift", "Sources/CieoUI/Atoms/ActionButtonStyle.swift",

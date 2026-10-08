@@ -33,7 +33,7 @@ public struct DeltaArrowsAtom: MotionAtomView {
                 .buttonStyle(.plain)
                 Text(i == steps.count - 1 ? "Settled · no drift" : "Step \(i + 1) of \(steps.count) · tap the chip")
                     .font(.caption).foregroundStyle(.secondary).monospacedDigit()
-                Toggle("loop", isOn: $loop).font(.caption).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("loop", isOn: $loop).font(.caption).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .frame(maxWidth: 400)
         }

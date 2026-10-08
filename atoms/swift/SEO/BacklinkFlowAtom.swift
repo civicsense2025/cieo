@@ -73,7 +73,7 @@ public struct BacklinkFlowAtom: MotionAtomView {
                 }
                 .motion(.lazy, value: draw)
                 Toggle("Show lost link", isOn: $showLost).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
             }
             .frame(width: 340)
         }

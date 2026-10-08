@@ -50,7 +50,7 @@ public struct TaxEstimatorAtom: MotionAtomView {
                         .padding(.top, 12).overlay(Divider(), alignment: .top)
                     }
                 }
-                Toggle("Include county rate", isOn: $county).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Include county rate", isOn: $county).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .padding(14).frame(width: 280)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

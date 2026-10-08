@@ -46,7 +46,7 @@ public struct AddressAutocompleteAtom: MotionAtomView {
                 .animation(reduce ? nil : .motion(.base), value: usOnly)
                 SwapText(picked != nil ? "Picked — edit to search again" : "")
                     .font(.system(size: 13)).lineSpacing(6.5).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
-                Toggle("US only", isOn: $usOnly).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("US only", isOn: $usOnly).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .padding(14).frame(width: 300)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

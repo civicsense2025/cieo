@@ -43,7 +43,7 @@ public struct SnippetEditorAtom: MotionAtomView {
                 .padding(14).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 .motion(.base, value: tab)
                 Toggle("Rich result extras", isOn: $rich).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
             }
             .frame(width: 340)
         }

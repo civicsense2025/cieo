@@ -39,7 +39,7 @@ public struct GiftWrapAtom: MotionAtomView {
                         .padding(8).background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }
-                Toggle("Foil bow", isOn: $foil).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Foil bow", isOn: $foil).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .padding(14).frame(width: 280)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

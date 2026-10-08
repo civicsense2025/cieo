@@ -28,7 +28,7 @@ public struct ExpressPayAtom: MotionAtomView {
                     }
                     Button("More options") { withMotion(.base, reduceMotion: reduce) { sheet = true } }
                         .frame(height: 38).frame(maxWidth: .infinity).buttonStyle(.bordered)
-                    Toggle("Apply SHIP10 in sheet", isOn: $coupon).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                    Toggle("Apply SHIP10 in sheet", isOn: $coupon).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
                     Spacer()
                 }
                 .padding(14).frame(width: 280, height: 330)

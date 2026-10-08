@@ -64,7 +64,7 @@ public struct PredictionAtom: MotionAtomView {
                     }
                     Spacer()
                     Toggle("show odds", isOn: $showOdds).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 380)

@@ -62,7 +62,7 @@ public struct PauseLiveAtom: MotionAtomView {
                     .buttonStyle(.bordered).controlSize(.regular)
                     Spacer()
                     Toggle("keep buffer", isOn: $keepBuffer).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 420)

@@ -54,7 +54,7 @@ public struct CartDrawerAtom: MotionAtomView {
                             Button("Checkout") { withMotion(.base, reduceMotion: reduce) { open = false } }
                                 .frame(height: 38).frame(maxWidth: .infinity)
                                 .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
-                            Toggle("Free over $50", isOn: $freeOver50).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                            Toggle("Free over $50", isOn: $freeOver50).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
                         }
                         .padding(14).frame(width: 232).background(.background, in: RoundedRectangle(cornerRadius: 12))
                         .transition(.move(edge: .trailing))

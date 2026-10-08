@@ -93,7 +93,7 @@ public struct AuditIntakeAtom: MotionAtomView {
                     Text("Step \(min(step + 1, 3)) of 3").font(.caption).foregroundStyle(.secondary).monospacedDigit()
                     Text("·").foregroundStyle(.secondary)
                     Toggle("Email my report", isOn: $emailReport).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(width: 340)

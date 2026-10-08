@@ -52,7 +52,7 @@ public struct UpdateFlashAtom: MotionAtomView {
                     .buttonStyle(.bordered).controlSize(.regular)
                     Spacer()
                     Toggle("tint wash", isOn: $wash).font(.caption).foregroundStyle(.secondary)
-                        .toggleStyle(.checkbox)
+                        .nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 400)

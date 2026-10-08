@@ -77,7 +77,7 @@ public struct IssueListAtom: MotionAtomView {
                         .motionTransition(.swap()).animation(reduce ? nil : .motion(.base), value: openCount)
                 }
                 Toggle("Dividers", isOn: $dividers).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
                 Button("Reset") {
                     withMotion(.base, reduceMotion: reduce) {
                         for i in items.indices { items[i].done = false; items[i].open = false }

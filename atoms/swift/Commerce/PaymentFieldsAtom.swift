@@ -62,7 +62,7 @@ public struct PaymentFieldsAtom: MotionAtomView {
                 }
                 .frame(height: 38).frame(maxWidth: .infinity)
                 .background(paid ? .green : .primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.white)
-                Toggle("Save card", isOn: $save).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Save card", isOn: $save).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .padding(14).frame(width: 300)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

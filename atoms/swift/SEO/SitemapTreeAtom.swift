@@ -29,7 +29,7 @@ public struct SitemapTreeAtom: MotionAtomView {
                 .padding(8).background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 12))
                 .motion(.base, value: journalOpen)
                 Toggle("Flag orphans", isOn: $flagOrphans).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
             }
             .frame(width: 340)
         }

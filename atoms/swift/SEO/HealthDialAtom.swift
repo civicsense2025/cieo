@@ -38,7 +38,7 @@ public struct HealthDialAtom: MotionAtomView {
                 SwapText(verdict).font(.subheadline.weight(.semibold)).foregroundStyle(tint).frame(height: 22)
                 Text("Outer ring: performance · inner: technical").font(.caption).foregroundStyle(.secondary)
                 Toggle("Show rings separately", isOn: $separate).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
                 Button("Run audit", action: run).font(.caption).buttonStyle(.borderless)
             }
         }

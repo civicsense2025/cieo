@@ -49,7 +49,7 @@ public struct QuantityStepAtom: MotionAtomView {
                             Text(money(sub.value(at: t))).font(.system(size: 15, weight: .semibold)).monospacedDigit() }
                     }
                 }
-                Toggle("Compact rows", isOn: $compact).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Compact rows", isOn: $compact).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .padding(14).frame(width: 280)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

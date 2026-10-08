@@ -34,7 +34,7 @@ public struct SliderHistogramAtom: MotionAtomView {
                     .accessibilityLabel("Team size")
                 Text("Set · \(Int(value)) of 500").font(.caption).foregroundStyle(.secondary).monospacedDigit()
                 Toggle("snap to 25", isOn: $snapping).font(.caption).foregroundStyle(.secondary)
-                    .toggleStyle(.checkbox)
+                    .nativeToggleStyle()
             }
             .frame(maxWidth: 420)
         }

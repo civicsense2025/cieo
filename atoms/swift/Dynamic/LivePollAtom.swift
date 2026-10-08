@@ -55,7 +55,7 @@ public struct LivePollAtom: MotionAtomView {
                         .buttonStyle(.bordered).controlSize(.regular)
                     Spacer()
                     Toggle("let me change my vote", isOn: $changeable)
-                        .font(.caption).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                        .font(.caption).foregroundStyle(.secondary).nativeToggleStyle()
                 }
             }
             .frame(maxWidth: 360)

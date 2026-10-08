@@ -59,7 +59,7 @@ public struct PromoCodeAtom: MotionAtomView {
                         .background(.quaternary, in: Capsule())
                         .transition(.scale(scale: 0.85).combined(with: .opacity))
                 }
-                Toggle("Auto-apply best code", isOn: $auto).font(.system(size: 12.5)).foregroundStyle(.secondary).toggleStyle(.checkbox)
+                Toggle("Auto-apply best code", isOn: $auto).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
                     .onChange(of: auto) { if auto { code = "SHIP10" } }
             }
             .padding(14).frame(width: 280)
