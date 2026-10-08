@@ -119,3 +119,60 @@ test('regex decoys are rejected in adjacent expression contexts', () => {
         assert.ok(result.diagnostics.some(d => d.code === 'unsupported-source-header'), source);
     }
 });
+
+import { reconcile } from '../scripts/catalogue/reconcile.mjs';
+const source = (platform, id, file, symbol = null) => ({
+    platform, id, symbol, category: 'Writing', path: file,
+    sha256: 'a'.repeat(64), artifactKind: 'recipe'
+});
+test('joins equivalent IDs without erasing either source', () => {
+    const result = reconcile([source('swift', 'outline', 'a.swift', 'OutlineAtom'), source('web', 'outline', 'a.js')]);
+    assert.deepEqual(result.diagnostics, []);
+    assert.equal(result.entries[0].platformStatus, 'paired');
+    assert.equal(result.entries[0].sources.length, 2);
+});
+test('duplicate platform identity diagnoses every colliding path canonically', () => {
+    const records = ['c.swift', 'a.swift', 'b.swift'].map(file => source('swift', 'same', file));
+    const result = reconcile(records);
+    assert.equal(result.diagnostics.length, 2);
+    assert.ok(result.diagnostics.every(d => d.code === 'duplicate-platform-id' && d.message.includes('a.swift')));
+    assert.equal(JSON.stringify(result), JSON.stringify(reconcile([...records].reverse())));
+});
+test('baseline preserves IDs and public Swift symbols but allows path and hash changes', () => {
+    const original = source('swift', 'before', 'a.swift', 'BeforeAtom');
+    assert.ok(reconcile([source('swift', 'after', 'a.swift', 'BeforeAtom')], [original]).diagnostics.some(d => d.code === 'missing-baseline-id'));
+    assert.ok(reconcile([source('swift', 'before', 'a.swift', 'AfterAtom')], [original]).diagnostics.some(d => d.code === 'changed-baseline-symbol'));
+    assert.deepEqual(reconcile([{ ...original, path: 'moved.swift', sha256: 'b'.repeat(64) }], [original]).diagnostics, []);
+    assert.ok(reconcile([source('web', 'before', 'a.js')], [original]).diagnostics.some(d => d.code === 'missing-baseline-id'));
+});
+test('single-platform coverage and empty collections remain explicit', () => {
+    assert.equal(reconcile([source('web', 'one', 'one.js')]).entries[0].platformStatus, 'web-only');
+    assert.equal(reconcile([source('swift', 'one', 'one.swift')]).entries[0].platformStatus, 'swift-only');
+    assert.deepEqual(reconcile([]), { entries: [], diagnostics: [] });
+});
+test('reconciliation preserves caller inputs and produces identical reversed receipts', () => {
+    const records = [source('web', 'z', 'z.js'), source('swift', 'a', 'a.swift', 'AAtom'), source('web', 'a', 'a.js')];
+    const baseline = [source('swift', 'missing', 'missing.swift', 'MissingAtom')];
+    const before = JSON.stringify({ records, baseline });
+    records.forEach(Object.freeze); baseline.forEach(Object.freeze);
+    Object.freeze(records); Object.freeze(baseline);
+    assert.equal(JSON.stringify(reconcile(records, baseline)), JSON.stringify(reconcile([...records].reverse(), [...baseline].reverse())));
+    assert.equal(JSON.stringify({ records, baseline }), before);
+});
+test('equal diagnostic keys and equal paths have deterministic evidence order', () => {
+    const records = [source('swift', 'same', 'a.swift', 'ZAtom'), source('swift', 'same', 'a.swift', 'AAtom'), source('swift', 'same', 'a.swift', 'BAtom')];
+    const baseline = [source('swift', 'missing', 'missing.swift'), source('swift', 'missing', 'missing.swift')];
+    const result = reconcile(records, baseline);
+    assert.equal(result.diagnostics.filter(d => d.code === 'duplicate-platform-id').length, 2);
+    assert.equal(JSON.stringify(result), JSON.stringify(reconcile([...records].reverse(), [...baseline].reverse())));
+});
+test('frozen baseline records retain their declared platform identities', () => {
+    const baseline = JSON.parse(fs.readFileSync(new URL('./fixtures/catalogue-baseline.json', import.meta.url), 'utf8'));
+    assert.equal(baseline.formatVersion, 1);
+    assert.match(baseline.sourceRevision, /^[a-f0-9]{40}$/);
+    assert.equal(baseline.records.length, 1090);
+    assert.equal(baseline.records.filter(record => record.platform === 'swift').length, 540);
+    assert.equal(baseline.records.filter(record => record.platform === 'web').length, 550);
+    assert.deepEqual(reconcile(baseline.records, baseline.records).diagnostics, []);
+    assert.ok(baseline.records.every(record => record.artifactKind === 'recipe' && /^[a-f0-9]{64}$/.test(record.sha256)));
+});
