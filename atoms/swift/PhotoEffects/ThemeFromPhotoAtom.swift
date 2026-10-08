@@ -45,7 +45,7 @@ public struct ThemeFromPhotoAtom: MotionAtomView {
                 HStack {
                     let c = chosen.flatMap { $0 < swatches.count ? swatches[$0].color : nil } ?? SIMD3(0.2, 0.4, 0.9)
                     let lum = 0.2126 * c.x + 0.7152 * c.y + 0.0722 * c.z
-                    Button("Get started") {}.buttonStyle(.plain).padding(.horizontal, 16).padding(.vertical, 8)
+                    PreviewAction("Get started").buttonStyle(.plain).padding(.horizontal, 16).padding(.vertical, 8)
                         .background(Color(red: c.x, green: c.y, blue: c.z), in: Capsule())
                         .foregroundStyle(lum > 0.5 ? Color.black : Color.white)      // text flips to whichever passes contrast
                         .motion(.base, value: chosen)

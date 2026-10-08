@@ -39,7 +39,7 @@ public struct PricingSectionAtom: MotionAtomView {
             Text(p.name).font(.footnote.weight(.semibold))
             HStack(alignment: .firstTextBaseline, spacing: 1) { Text("$").font(.footnote); RollingDigits(cardMode[i] == 0 ? p.monthly : p.yearly).font(.title.weight(.semibold)) }
             SwapText(cardMode[i] == 0 ? "per month, billed monthly" : "per month, billed yearly").font(.caption2).foregroundStyle(.secondary).frame(height: 14, alignment: .leading)
-            Button("Choose") {}.buttonStyle(.plain).font(.caption.weight(.semibold)).frame(maxWidth: .infinity, minHeight: 28)
+            PreviewAction("Choose").buttonStyle(.plain).font(.caption.weight(.semibold)).frame(maxWidth: .infinity, minHeight: 28)
                 .foregroundStyle(lit ? Color(white: 1, opacity: 0.95) : .primary).background(RoundedRectangle(cornerRadius: 8).fill(lit ? Color.primary : Color.clear))
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.05)))
         }

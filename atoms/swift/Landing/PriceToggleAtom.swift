@@ -32,7 +32,7 @@ public struct PriceToggleAtom: MotionAtomView {
                             .background(.green.opacity(0.14), in: Capsule())
                             .id(1).motionTransition(.swap())
                     }
-                    Button("Choose \(tiers[tier].name)") {}.buttonStyle(.borderedProminent).controlSize(.small)
+                    PreviewAction("Choose \(tiers[tier].name)").buttonStyle(.borderedProminent).controlSize(.small)
                 }.padding(20).frame(maxWidth: 300)
                 .background(yearly ? Color.accentColor.opacity(0.08) : Color.clear, in: RoundedRectangle(cornerRadius: 10))
                 .offset(y: yearly ? -4 : 0)

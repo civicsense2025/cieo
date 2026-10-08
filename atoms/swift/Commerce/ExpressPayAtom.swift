@@ -18,10 +18,10 @@ public struct ExpressPayAtom: MotionAtomView {
                     Text("Checkout").font(.system(size: 15, weight: .semibold)).frame(maxWidth: .infinity, alignment: .leading)
                     Text("$82.00").font(.system(size: 15, weight: .semibold)).monospacedDigit().frame(maxWidth: .infinity, alignment: .leading)
                     if ready {
-                        Button("Pay") {}.frame(height: 38).frame(maxWidth: .infinity)
+                        PreviewAction("Pay").frame(height: 38).frame(maxWidth: .infinity)
                             .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
-                        Button("G Pay") {}.frame(height: 38).frame(maxWidth: .infinity)
+                        PreviewAction("G Pay").frame(height: 38).frame(maxWidth: .infinity)
                             .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                             .animation(reduce ? nil : .motion(.base).delay(0.06), value: ready)

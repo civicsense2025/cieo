@@ -21,7 +21,7 @@ private struct Full: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("LET’S TALK").font(.caption2.weight(.semibold)).footRise(0, gap: 0.055)
             Text("Build calmer software").font(.title3.weight(.bold)).footRise(1, gap: 0.055)
-            HStack { Button("Book a call") {}.buttonStyle(.borderedProminent); FootLink(title: "See pricing") }.footRise(2, gap: 0.055)
+            HStack { PreviewAction("Book a call").buttonStyle(.borderedProminent); FootLink(title: "See pricing") }.footRise(2, gap: 0.055)
             newsletter.footRise(3, gap: 0.055)
             HStack(alignment: .top, spacing: 14) {
                 ForEach(cols.indices, id: \.self) { i in

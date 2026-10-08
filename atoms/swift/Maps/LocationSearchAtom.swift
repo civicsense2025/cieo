@@ -24,7 +24,7 @@ public struct LocationSearchAtom: MotionAtomView {
                     TextField("Try “ferry” or “zzz”", text: $query)
                         .softFieldSurface().font(.subheadline)
                         .accessibilityLabel("Search places")
-                    Button("Search") {}.buttonStyle(.borderedProminent).controlSize(.small)
+                    PreviewAction("Search").buttonStyle(.borderedProminent).controlSize(.small)
                 }.padding(.top, 8)
                 if query.trimmingCharacters(in: .whitespaces).lowercased() == "zzz" || (hits.isEmpty && !query.isEmpty) {
                     HStack {

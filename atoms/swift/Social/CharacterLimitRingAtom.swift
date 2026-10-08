@@ -27,7 +27,7 @@ public struct CharacterLimitRingAtom: MotionAtomView {
                     .frame(width: 22, height: 22).scaleEffect(near ? 1.2 : 1)
                     .motion(.base, value: text.count).motion(.base, value: near)
                     .accessibilityElement().accessibilityLabel("Characters left").accessibilityValue("\(left)")
-                    Button("Post") {}.buttonStyle(.borderedProminent).controlSize(.small).disabled(over || text.isEmpty)
+                    PreviewAction("Post").buttonStyle(.borderedProminent).controlSize(.small).disabled(over || text.isEmpty)
                 }
             }
             .padding(12).frame(maxWidth: 320)

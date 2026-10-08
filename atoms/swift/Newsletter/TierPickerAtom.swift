@@ -49,7 +49,7 @@ public struct TierPickerAtom: MotionAtomView {
                     }
                     .motionTransition(.swap())
                     .animation(reduce ? nil : .motion(.base), value: yearly)
-                    Button("Choose Plus") {}.buttonStyle(.borderedProminent).controlSize(.regular)
+                    PreviewAction("Choose Plus").buttonStyle(.borderedProminent).controlSize(.regular)
                         .frame(maxWidth: .infinity)
                 }
                 .padding(16)

@@ -36,7 +36,7 @@ public struct OnboardingChecklistAtom: MotionAtomView {
                     VStack(spacing: 8) {
                         Image(systemName: "checkmark.circle.fill").font(.system(size: 40)).foregroundStyle(.green).scaleEffect(finished ? 1 : 0.5).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.1), value: finished)
                         Text("You’re all set").font(.headline).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.25), value: finished)
-                        Button("Continue") {}.buttonStyle(.borderedProminent).controlSize(.small).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.35), value: finished)
+                        PreviewAction("Continue").buttonStyle(.borderedProminent).controlSize(.small).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.35), value: finished)
                     }.motionTransition(.swap())
                 }
             }

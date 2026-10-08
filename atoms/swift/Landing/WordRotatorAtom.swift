@@ -19,7 +19,7 @@ public struct WordRotatorAtom: MotionAtomView {
                     Text(words[index]).font(.title.weight(.semibold)).id(index).motionTransition(.swap())
                 }
                 Text("Drag blocks, edit text and publish in one click.").font(.footnote).foregroundStyle(.secondary)
-                HStack { Button("Start free") {}.buttonStyle(.borderedProminent); Button("See a demo") {}.buttonStyle(.bordered) }.controlSize(.small)
+                HStack { PreviewAction("Start free").buttonStyle(.borderedProminent); PreviewAction("See a demo").buttonStyle(.bordered) }.controlSize(.small)
                 Toggle("Loop keywords", isOn: $loop).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 320).multilineTextAlignment(.center)
             .task { await cycle() }
