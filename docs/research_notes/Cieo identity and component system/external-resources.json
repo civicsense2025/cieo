@@ -1,0 +1,981 @@
+{
+  "reviewDate": "2026-10-08",
+  "scope": "Directory features and reachable-page outbound HTTP resources, separated from article-text review. No outside organizations were recursively crawled.",
+  "directoryKits": [
+    {
+      "title": "Airtable Base SDK",
+      "organization": "Airtable",
+      "url": "https://www.figma.com/community/file/862805330899066752",
+      "profileUrl": "https://www.figma.com/@airtable",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Amplify UI Kit",
+      "organization": "Amazon Web Services",
+      "url": "https://www.figma.com/community/file/1047600760128127424",
+      "profileUrl": "https://www.figma.com/@awsamplify",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Arco Design System",
+      "organization": "Arco Design",
+      "url": "https://www.figma.com/community/file/1053233047330321743",
+      "profileUrl": "https://www.figma.com/@ArcoDsystem",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "ADS Foundations",
+      "organization": "Atlassian",
+      "url": "https://www.figma.com/community/file/1527530559648073327",
+      "profileUrl": "https://www.figma.com/@atlassian",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Cloudscape Design System",
+      "organization": "Cloudscape",
+      "url": "https://www.figma.com/community/file/1130789169293366599",
+      "profileUrl": "https://www.figma.com/@cloudscape",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Forma 36",
+      "organization": "Contentful",
+      "url": "https://www.figma.com/community/file/1099314541500153018",
+      "profileUrl": "https://www.figma.com/@contentful",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Apron",
+      "organization": "Cookpad",
+      "url": "https://www.figma.com/community/file/847372282968994272",
+      "profileUrl": "https://www.figma.com/@cookpad",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Vitamin - Web UI kit",
+      "organization": "Decathlon",
+      "url": "https://www.figma.com/community/file/1116652932009947171",
+      "profileUrl": "https://www.figma.com/@decathlon",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Data Visualisation",
+      "organization": "DBS Bank",
+      "url": "https://www.figma.com/community/file/1273895245584027076",
+      "profileUrl": "https://www.figma.com/@dbsdesign",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Design System UI Kit",
+      "organization": "Finastra",
+      "url": "https://www.figma.com/community/file/982657631921263317",
+      "profileUrl": "https://www.figma.com/@finastra",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Flamingo Design System",
+      "organization": "Flamingo Design System",
+      "url": "https://www.figma.com/community/file/859195262232492832",
+      "profileUrl": "https://www.figma.com/@JuanGGZ",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Flowbite Design System",
+      "organization": "Flowbite",
+      "url": "https://www.figma.com/community/file/1179442320711977498",
+      "profileUrl": "https://www.figma.com/@themesberg",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Primer",
+      "organization": "Github",
+      "url": "https://www.figma.com/community/file/854767373644076713",
+      "profileUrl": "https://www.figma.com/@primer",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Pajamas",
+      "organization": "GitLab",
+      "url": "https://www.figma.com/community/file/781156790581391771",
+      "profileUrl": "https://www.figma.com/@GitLab",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Components UI Kit",
+      "organization": "Goldman Sachs",
+      "url": "https://www.figma.com/community/file/1000116734511828536",
+      "profileUrl": "https://www.figma.com/@gs",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Carbon",
+      "organization": "IBM",
+      "url": "https://www.figma.com/community/file/1157761560874207208",
+      "profileUrl": "https://www.figma.com/@ibmorg",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Henaket - Design System v 1.0",
+      "organization": "ISAA Design Team",
+      "url": "https://www.figma.com/community/file/1257654638425705295",
+      "profileUrl": "https://www.figma.com/@isaagov",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Orbit Desktop Web Components",
+      "organization": "Kiwi.com",
+      "url": "https://www.figma.com/community/file/832549862383280158",
+      "profileUrl": "https://www.figma.com/@orbitbykiwi",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Bold Design System",
+      "organization": "Laboratório Bridge",
+      "url": "https://www.figma.com/community/file/918488838987058594",
+      "profileUrl": "https://www.figma.com/@bridgelab",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Lexicon Design System",
+      "organization": "Liferay",
+      "url": "https://www.figma.com/community/file/961581638760900307",
+      "profileUrl": "https://www.figma.com/@liferay",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Coderhouse",
+      "organization": "Luana Marques",
+      "url": "https://www.figma.com/community/file/895664261764229458",
+      "profileUrl": "https://www.figma.com/@lu",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Material 3 Design Kit",
+      "organization": "Material Design",
+      "url": "https://www.figma.com/community/file/1035203688168086460",
+      "profileUrl": "https://www.figma.com/@materialdesign",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Microsoft Teams UI Kit",
+      "organization": "Microsoft",
+      "url": "https://www.figma.com/community/file/916836509871353159",
+      "profileUrl": "https://www.figma.com/@microsoft",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Windows UI",
+      "organization": "Microsoft",
+      "url": "https://www.figma.com/community/file/1159947337437047524",
+      "profileUrl": "https://www.figma.com/@microsoft",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Monday UI Kit",
+      "organization": "monday.com",
+      "url": "https://www.figma.com/community/file/940242815162888749",
+      "profileUrl": "https://www.figma.com/@mondaydotcom",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Moon Design System",
+      "organization": "Moon",
+      "url": "https://www.figma.com/community/file/1002945721703152933",
+      "profileUrl": "https://www.figma.com/@moon_design",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Ant for Figma",
+      "organization": "Mr. Biscuit",
+      "url": "https://www.figma.com/community/file/831698976089873405",
+      "profileUrl": "https://www.figma.com/@MrBiscuit",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Kyper Design System",
+      "organization": "MX",
+      "url": "https://www.figma.com/community/file/832648547778609189",
+      "profileUrl": "https://www.figma.com/@MX",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Mail RU",
+      "organization": "Paradigm",
+      "url": "https://www.figma.com/community/file/912997371761492068",
+      "profileUrl": "https://www.figma.com/@paradigm",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Pipedrive Convention UI",
+      "organization": "Pipedrive, Inc.",
+      "url": "https://www.figma.com/community/file/1110537691858131226",
+      "profileUrl": "https://www.figma.com/@pipedrive",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Pluralsight Web Components",
+      "organization": "Pluralsight",
+      "url": "https://www.figma.com/community/file/915654353202115828",
+      "profileUrl": "https://www.figma.com/@pluralsight",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "QBlocks",
+      "organization": "Quora",
+      "url": "https://www.figma.com/community/file/1022238667743756269",
+      "profileUrl": "https://www.figma.com/@quora",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Radius UI Kit",
+      "organization": "Rangle.io",
+      "url": "https://www.figma.com/community/file/1261640200482106003",
+      "profileUrl": "https://www.figma.com/@rangleio",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Flywheel UI Kit",
+      "organization": "Revenue",
+      "url": "https://www.figma.com/community/file/955931782232995254",
+      "profileUrl": "https://www.figma.com/@revenue",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Salesforce Lightning",
+      "organization": "Salesforce",
+      "url": "https://www.figma.com/community/file/854593583696357016",
+      "profileUrl": "https://www.figma.com/@salesforce",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Segment Evergreen",
+      "organization": "Segment",
+      "url": "https://www.figma.com/community/file/974362403539471944",
+      "profileUrl": "https://www.figma.com/@segment",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Semi Design System",
+      "organization": "Semi Design",
+      "url": "https://www.figma.com/community/file/1034817675495341827",
+      "profileUrl": "https://www.figma.com/@semi",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Composants",
+      "organization": "Service d'Information du Gouvernement",
+      "url": "https://www.figma.com/community/file/1042832984468443942",
+      "profileUrl": "https://www.figma.com/@gouvfr",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Spotify Backstage",
+      "organization": "Spotify",
+      "url": "https://www.figma.com/community/file/850673348101741100",
+      "profileUrl": "https://www.figma.com/@backstage",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Allium Design System",
+      "organization": "TELUS Digital",
+      "url": "https://www.figma.com/community/file/1088490829648085954",
+      "profileUrl": "https://www.figma.com/@telusdigital",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "TDesign for Web",
+      "organization": "Tencent",
+      "url": "https://www.figma.com/community/file/1053279236128724321",
+      "profileUrl": "https://www.figma.com/@Tencent",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Twilio Paste",
+      "organization": "Twilio",
+      "url": "https://www.figma.com/community/file/1012844215105752327",
+      "profileUrl": "https://www.figma.com/@twilio",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Base Gallery",
+      "organization": "Uber",
+      "url": "https://www.figma.com/community/file/805195278314519508",
+      "profileUrl": "https://www.figma.com/@uber",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Vaadin Design System",
+      "organization": "Vaadin",
+      "url": "https://www.figma.com/community/file/843042473942860131",
+      "profileUrl": "https://www.figma.com/@vaadin",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "Voog Design System",
+      "organization": "Voog",
+      "url": "https://www.figma.com/community/file/892341847258436769",
+      "profileUrl": "https://www.figma.com/@voog",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "WFP UI Kit Components",
+      "organization": "World Food Programme",
+      "url": "https://www.figma.com/community/file/992767067205722688",
+      "profileUrl": "https://www.figma.com/@unwfp",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    },
+    {
+      "title": "yoko:space Design System v1 (LTR)",
+      "organization": "Yoko",
+      "url": "https://www.figma.com/community/file/1400747734632264113",
+      "profileUrl": "https://www.figma.com/@yokostudio",
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "reviewStatus": "directory-entry-read; external-kit-not-audited"
+    }
+  ],
+  "directoryKitCount": 47,
+  "interactiveEmbeds": [
+    {
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/tabs/?fontsize=14",
+      "title": "how-to-container",
+      "sourcePage": "https://www.designsystems.com/react-containers-some-assembly-required/",
+      "reviewStatus": "inventoried-not-interaction-reviewed",
+      "requiredNextAction": "Open the public embedded resource in a bounded review; document accessible states, license/access limitations, and actual behavior."
+    },
+    {
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/tabs-1/?fontsize=14",
+      "title": "how-to-container",
+      "sourcePage": "https://www.designsystems.com/react-containers-some-assembly-required/",
+      "reviewStatus": "inventoried-not-interaction-reviewed",
+      "requiredNextAction": "Open the public embedded resource in a bounded review; document accessible states, license/access limitations, and actual behavior."
+    },
+    {
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/uibot/?fontsize=14",
+      "title": "how-to-container",
+      "sourcePage": "https://www.designsystems.com/react-containers-some-assembly-required/",
+      "reviewStatus": "inventoried-not-interaction-reviewed",
+      "requiredNextAction": "Open the public embedded resource in a bounded review; document accessible states, license/access limitations, and actual behavior."
+    },
+    {
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/tooltip/?fontsize=14",
+      "title": "how-to-container",
+      "sourcePage": "https://www.designsystems.com/react-containers-some-assembly-required/",
+      "reviewStatus": "inventoried-not-interaction-reviewed",
+      "requiredNextAction": "Open the public embedded resource in a bounded review; document accessible states, license/access limitations, and actual behavior."
+    },
+    {
+      "url": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FOeCcFwAMhpOiV6KaVsr5Ma7N%2FFigma-Post%3Fnode-id%3D0%253A1",
+      "title": "Embedded Figma design",
+      "sourcePage": "https://www.designsystems.com/white-labeling-putting-the-design-system-in-users-hands/",
+      "reviewStatus": "inventoried-not-interaction-reviewed",
+      "requiredNextAction": "Open the public embedded resource in a bounded review; document accessible states, license/access limitations, and actual behavior."
+    }
+  ],
+  "outboundResources": [
+    {
+      "sourcePage": "https://www.designsystems.com/",
+      "urls": [
+        "https://www.figma.com/community/file/1035203688168086460",
+        "https://www.figma.com/community/file/1527530559648073327",
+        "https://www.figma.com/community/file/850673348101741100",
+        "https://www.figma.com/community/file/854593583696357016",
+        "https://www.figma.com/community/file/854767373644076713",
+        "https://www.figma.com/community/file/862805330899066752",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/",
+      "urls": [
+        "https://archive-1_0_5.lightningdesignsystem.com/design/motion/",
+        "https://google.github.io/inspectorspacetime/",
+        "https://material.io/design/motion/",
+        "https://material.io/design/motion/speed.html#controlling-speed",
+        "https://material.io/design/motion/understanding-motion.html#principles",
+        "https://www.figma.com/privacy/",
+        "https://www.ibm.com/design/language/elements/motion/",
+        "https://www.lightningdesignsystem.com/guidelines/animation/styleguidelines/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/5-tips-from-an-airbnb-designer-on-maintaining-a-design-system/",
+      "urls": [
+        "https://airbnb.design/the-way-we-build/",
+        "https://www.airbnb.com/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/a-collaborative-approach-to-defining-components-and-their-features/",
+      "urls": [
+        "https://twitter.com/disco_lu/status/1598703964081430529/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/a-system-built-on-parity-how-to-treat-all-of-your-users-equally/",
+      "urls": [
+        "https://medium.com/tap-to-dismiss/",
+        "https://www.figma.com/privacy/",
+        "https://www.lyft.com/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/about-wonder-blocks-khan-academys-design-system-and-the-story-behind-it/",
+      "urls": [
+        "https://en.wikipedia.org/wiki/Constructivism_(philosophy_of_education/",
+        "https://khan.github.io/ui-components-prototype/",
+        "https://khanacademy.org/",
+        "https://www.figma.com/privacy/",
+        "https://www.khanacademy.org/careers/",
+        "https://www.khanacademy.org/donate/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/build-trust-by-taking-a-cross-functional-approach/",
+      "urls": [
+        "https://app.asana.com/",
+        "https://atlassian.com/",
+        "https://atlassian.design/",
+        "https://medium.com/the-year-of-the-looking-glass/dont-be-a-gatekeeper-5c48db173662/",
+        "https://www.atlassian.com/",
+        "https://www.dropbox.com",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/building-a-design-system-one-brick-at-a-time/",
+      "urls": [
+        "https://medium.com/plangrid-design/building-a-design-system-one-brick-at-a-time-a6233b173742/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/building-chimekit-with-atomic-design-and-a-collaborative-process/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/color-guides/",
+      "urls": [
+        "https://design.lyft.com/re-approaching-color-9e604ba22c88/",
+        "https://medium.com/eightshapes-llc/color-in-design-systems-a1c80f65fa3/",
+        "https://polaris.shopify.com/design/colors#section-accessibility",
+        "https://www.figma.com/file/09mhzcQWURcGDUTBcgRsesGc/Style-Guide-Starter/duplicate",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/design-systems-are-everybodys-business/",
+      "urls": [
+        "https://design.workday.com/",
+        "https://design.workday.com/playbook/",
+        "https://getbootstrap.com/",
+        "https://github.com/workday/canvas-kit/",
+        "https://material-ui.com/",
+        "https://uxdesign.cc/coherent-not-consistent-b44244dadec4/",
+        "https://www.figma.com/privacy/",
+        "https://www.workday.com/",
+        "https://www.workday.com/en-us/applications/workday-cloud-platform.html/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/guide-to-content-strategy-in-design-systems/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/how-a-small-team-built-figma-dot-coms-design-system/",
+      "urls": [
+        "https://www.figma.com/",
+        "https://www.figma.com/community/file/799433873230303935/",
+        "https://www.figma.com/features/",
+        "https://www.figma.com/file/09mhzcQWURcGDUTBcgRsesGc/Style-Guide-Starter/duplicate",
+        "https://www.figma.com/file/Yz71zYkfYIWlfSS1d0ExzWxg/Figma-Website-Style-Guide?node-id=0%3A5003",
+        "https://www.figma.com/organization/",
+        "https://www.figma.com/privacy/",
+        "https://www.figma.com/ui-design-tool/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/how-pinterests-design-systems-team-measures-adoption/",
+      "urls": [
+        "https://gestalt.pinterest.systems/",
+        "https://gestalt.pinterest.systems/web/pageheader#Props",
+        "https://github.com/pinterest/gestalt/",
+        "https://help.figma.com/hc/en-us/articles/360039238353-View-and-explore-library-analytics/",
+        "https://segment.com/blog/driving-adoption-of-a-design-system/",
+        "https://www.figma.com/developers/api",
+        "https://www.figma.com/privacy/",
+        "https://www.npmjs.com/package/figma-calculations?activeTab=readme"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/how-spotifys-design-system-goes-beyond-platforms/",
+      "urls": [
+        "https://carbondesignsystem.com/",
+        "https://dbanks.design/blog/multi-platform/",
+        "https://figma-staging.netlify.app/blog/the-five-stages-of-an-effective-brainstorm/",
+        "https://pr-newsroom-wp.appspot.com/2019-05-09/sten-garmark-spotifys-vp-of-product-unpacks-our-ubiquity-strategy/",
+        "https://spotify.design/article/can-i-get-an-encore-spotifys-design-system-three-years-on/",
+        "https://spotify.design/article/reimagining-design-systems-at-spotify/",
+        "https://twitter.com/shaunbent/status/1671901968032251905?s=20",
+        "https://twitter.com/spotifydesign/",
+        "https://www.andreassamuelsson.com/",
+        "https://www.dsw.community/schedule/",
+        "https://www.figma.com/blog/creating-coherence-how-spotifys-design-system-goes-beyond-platforms/",
+        "https://www.figma.com/privacy/",
+        "https://www.instagram.com/spotify.design/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/how-thumbtack-structures-their-design-system/",
+      "urls": [
+        "https://blog.codinghorror.com/falling-into-the-pit-of-success/",
+        "https://en.wikipedia.org/wiki/Separation_of_concerns/",
+        "https://github.com/lerna/lerna/",
+        "https://monorepo.tools/",
+        "https://spectrum.adobe.com/page/design-tokens/",
+        "https://thumbprint.design/",
+        "https://thumbprint.design/atomic/",
+        "https://thumbprint.design/components/modal-curtain/react/",
+        "https://thumbprint.design/components/modal/react/",
+        "https://thumbprint.design/components/overview/",
+        "https://thumbprint.design/tokens/scss/",
+        "https://www.figma.com/privacy/",
+        "https://www.thumbtack.com/",
+        "https://yarnpkg.com/features/workspaces/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/how-to-govern-a-design-system/",
+      "urls": [
+        "https://govern.design/",
+        "https://lazaroibanez.com/agile-development-what-are-the-definitions-of-ready-and-done-9ac582243bfa/",
+        "https://www.figma.com/community/file/975025453979368158/Figma-Playground/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/iconography-guide/",
+      "urls": [
+        "https://brand.uber.com/guide#iconography-system-icons",
+        "https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/system-icons/",
+        "https://help.figma.com/article/63-vector-networks/",
+        "https://johanronsse.be/2018/09/23/the-figma-api-for-the-rest-of-us/",
+        "https://material.io/tools/icons/?style=baseline",
+        "https://thenounproject.com/",
+        "https://www.bonniekatewolf.com/icon-system.html/",
+        "https://www.figma.com/blog/with-figmas-new-svg-exports-less-more/",
+        "https://www.figma.com/file/v8WczgltywYcWbZyAqChfX/Design-Systems-Icon-Guide/duplicate",
+        "https://www.figma.com/privacy/",
+        "https://www.zachroszczewski.com/airbnb/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/keeping-design-system-contributions-in-check/",
+      "urls": [
+        "https://docs.google.com/spreadsheets/d/1AsBcaOPwY8uwYACNj5uwolZHMaDHEJRKjBVuO2TkGLc/copy?usp=sharing",
+        "https://medium.com/eightshapes-llc/crafting-ui-component-api-together-81946d140371/",
+        "https://medium.com/eightshapes-llc/team-models-for-scaling-a-design-system-2cf9d03be6a0/",
+        "https://www.figma.com/community/file/975025453979368158/",
+        "https://www.figma.com/privacy/",
+        "https://www.govern.design/checklist/",
+        "https://www.lazaroibanez.com/blog/2020/06/28/agile-development-what-are-the-definitions-of-ready-and-done/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/open-design-systems/",
+      "urls": [
+        "https://www.figma.com/community/file/1000116734511828536",
+        "https://www.figma.com/community/file/1002945721703152933",
+        "https://www.figma.com/community/file/1012844215105752327",
+        "https://www.figma.com/community/file/1022238667743756269",
+        "https://www.figma.com/community/file/1034817675495341827",
+        "https://www.figma.com/community/file/1035203688168086460",
+        "https://www.figma.com/community/file/1042832984468443942",
+        "https://www.figma.com/community/file/1047600760128127424",
+        "https://www.figma.com/community/file/1053233047330321743",
+        "https://www.figma.com/community/file/1053279236128724321",
+        "https://www.figma.com/community/file/1088490829648085954",
+        "https://www.figma.com/community/file/1099314541500153018",
+        "https://www.figma.com/community/file/1110537691858131226",
+        "https://www.figma.com/community/file/1116652932009947171",
+        "https://www.figma.com/community/file/1130789169293366599",
+        "https://www.figma.com/community/file/1157761560874207208",
+        "https://www.figma.com/community/file/1159947337437047524",
+        "https://www.figma.com/community/file/1179442320711977498",
+        "https://www.figma.com/community/file/1257654638425705295",
+        "https://www.figma.com/community/file/1261640200482106003",
+        "https://www.figma.com/community/file/1273895245584027076",
+        "https://www.figma.com/community/file/1400747734632264113",
+        "https://www.figma.com/community/file/1527530559648073327",
+        "https://www.figma.com/community/file/781156790581391771",
+        "https://www.figma.com/community/file/805195278314519508",
+        "https://www.figma.com/community/file/831698976089873405",
+        "https://www.figma.com/community/file/832549862383280158",
+        "https://www.figma.com/community/file/832648547778609189",
+        "https://www.figma.com/community/file/843042473942860131",
+        "https://www.figma.com/community/file/847372282968994272",
+        "https://www.figma.com/community/file/850673348101741100",
+        "https://www.figma.com/community/file/854593583696357016",
+        "https://www.figma.com/community/file/854767373644076713",
+        "https://www.figma.com/community/file/859195262232492832",
+        "https://www.figma.com/community/file/862805330899066752",
+        "https://www.figma.com/community/file/892341847258436769",
+        "https://www.figma.com/community/file/895664261764229458",
+        "https://www.figma.com/community/file/912997371761492068",
+        "https://www.figma.com/community/file/915654353202115828",
+        "https://www.figma.com/community/file/916836509871353159",
+        "https://www.figma.com/community/file/918488838987058594",
+        "https://www.figma.com/community/file/940242815162888749",
+        "https://www.figma.com/community/file/955931782232995254",
+        "https://www.figma.com/community/file/961581638760900307",
+        "https://www.figma.com/community/file/974362403539471944",
+        "https://www.figma.com/community/file/982657631921263317",
+        "https://www.figma.com/community/file/992767067205722688",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/productizing-your-design-system/",
+      "urls": [
+        "https://design.workday.com/",
+        "https://github.com/Workday/canvas-kit/",
+        "https://www.figma.com/file/zVfAubTewDCmnQymk896oL/Stakeholder-Mapping-Exercise-Copy/duplicate/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/react-containers-some-assembly-required/",
+      "urls": [
+        "https://garden.zendesk.com/",
+        "https://garden.zendesk.com/react-containers/",
+        "https://github.com/downshift-js/downshift/",
+        "https://github.com/zendeskgarden/react-containers/",
+        "https://github.com/zendeskgarden/react-containers/blob/master/packages/utilities/src/utils/composeEventHandlers.js/",
+        "https://medium.com/zendesk-engineering/",
+        "https://medium.com/zendesk-engineering/creating-the-ultimate-flexibility-via-container-components-in-react-e4b8eca5338c/",
+        "https://reactjs.org/docs/hooks-intro.html/",
+        "https://reactjs.org/docs/render-props.html/",
+        "https://www.figma.com/privacy/",
+        "https://www.npmjs.com/search?q=%40zendeskgarden%2Fcontainer",
+        "https://www.styled-components.com/",
+        "https://www.uibot.app/",
+        "https://www.w3.org/TR/wai-aria-practices-1.1/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/schema-london-2022/",
+      "urls": [
+        "https://www.figma.com/privacy/",
+        "https://www.youtube.com/playlist?list=PLXDU_eVOJTx4vCcmQ5aqU78pyGCOK_tqY"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/schema-new-york-2022/",
+      "urls": [
+        "https://www.figma.com/privacy/",
+        "https://www.youtube.com/playlist?list=PLXDU_eVOJTx4vCcmQ5aqU78pyGCOK_tqY"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/schema-tokyo-2022/",
+      "urls": [
+        "https://www.figma.com/blog/schema-london-2022/",
+        "https://www.figma.com/blog/schema-new-york-2022/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/sections/design-and-development/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/sections/getting-started/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/sections/operations/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/sections/schema/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/six-myths-holding-you-back-from-embracing-design-systems/",
+      "urls": [
+        "https://m3.material.io/",
+        "https://twitter.com/_AnaBoyer/status/1748410093815886208/",
+        "https://www.figma.com/blog/building-a-design-system-that-breathes-with-headspace/",
+        "https://www.figma.com/blog/newsletter/",
+        "https://www.figma.com/blog/six-myths-holding-you-back-from-embracing-design-systems/",
+        "https://www.figma.com/community/category/design-systems/partners/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/space-grids-and-layouts/",
+      "urls": [
+        "https://builttoadapt.io/8-point-grid-borders-and-layouts-e91eb97f5091/",
+        "https://codepen.io/elliotdahl/pen/wgQxNG/",
+        "https://lattice.com",
+        "https://www.figma.com/blog/line-height-changes/",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/stack-mirroring-designing-for-code-and-coding-for-design/",
+      "urls": [
+        "https://lexi-lambda.github.io/blog/2016/08/24/understanding-the-npm-dependency-model/",
+        "https://www.figma.com/privacy/",
+        "https://www.happymoney.com/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/starting-a-newsletter-is-the-best-thing-you-can-do-for-your-design-system/",
+      "urls": [
+        "https://medium.com/tap-to-dismiss/art-of-diplomacy-2ad1e2cac795/",
+        "https://www.figma.com/privacy/",
+        "https://www.robinrendle.com/notes/the-success-of-many-days/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/taking-cues-from-code/",
+      "urls": [
+        "https://figma-staging.netlify.app/best-practices/branching-in-figma/",
+        "https://help.figma.com/hc/en-us/articles/4406787442711-Figma-beta-features#component-properties",
+        "https://medium.com/eightshapes-llc/subcomponents-753ce9f6600a/",
+        "https://non.io/",
+        "https://schema.figma.com/",
+        "https://schemavirtual.splashthat.com/",
+        "https://twitter.com/EstherCheran/",
+        "https://twitter.com/nathanacurtis/",
+        "https://www.figma.com/privacy/",
+        "https://www.youtube.com/watch?v=BhocoPQTUDE"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-case-for-an-open-design-system/",
+      "urls": [
+        "https://design.workday.com/",
+        "https://github.com/Workday/canvas-kit/",
+        "https://www.figma.com/privacy/",
+        "https://www.researchgate.net/publication/23718837_The_Cognitive_Benefits_of_Interacting_With_Nature/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/",
+      "urls": [
+        "https://harrys.com",
+        "https://www.figma.com/privacy/",
+        "https://www.harrys.com",
+        "https://www.harrys.com/",
+        "https://www.shopflamingo.com/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-future-of-design-systems-is-accessible/",
+      "urls": [
+        "https://docs-assets.developer.apple.com/ml-research/papers/screen-recognition-chi-2021.pdf/",
+        "https://forms.monday.com/forms/6a425f98a65cbc97338a0c80572fe1bb?r=use1",
+        "https://github.com/eBay/figma-include-accessibility-annotations/",
+        "https://material.io/blog/research-state-of-design-systems-2020/",
+        "https://support.apple.com/en-us/HT211899/",
+        "https://twitter.com/figma/",
+        "https://webaim.org/projects/million/",
+        "https://www.a11yproject.com/posts/should-i-use-an-accessibility-overlay/",
+        "https://www.figma.com/blog/the-future-of-design-systems-is-automated/",
+        "https://www.figma.com/community/plugin/1208180794570801545/Include%E2%80%94Accessibility-Annotations/",
+        "https://www.figma.com/privacy/",
+        "https://www.forrester.com/resources/customer-experience-design/digital-accessibility-basics/",
+        "https://www.nytimes.com/2022/07/13/technology/ai-web-accessibility.html/",
+        "https://www.w3.org/WAI/standards-guidelines/wcag/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-future-of-design-systems-is-automated/",
+      "urls": [
+        "https://airbnb.design/sketching-interfaces/",
+        "https://diagram.com/",
+        "https://genius.design/",
+        "https://github.com/features/copilot/",
+        "https://nymag.com/intelligencer/article/will-dall-e-ai-artist-take-my-job.html/",
+        "https://techcrunch.com/2022/08/10/stark-wants-to-change-the-way-companies-make-websites-and-software-accessible/",
+        "https://twitter.com/NirBenita/status/923282908890230784/",
+        "https://twitter.com/andpoul/",
+        "https://twitter.com/figma/",
+        "https://uxdesign.cc/designers-are-spending-too-much-time-designing-ui-variations-manually-ad665d8d5e40/",
+        "https://www.figma.com/blog/behind-the-feature-find-and-replace/",
+        "https://www.figma.com/blog/digital-design-is-now-a-real-job/",
+        "https://www.figma.com/blog/how-magician-uses-figmas-text-review-api/",
+        "https://www.figma.com/community/",
+        "https://www.figma.com/community/category/design-systems/widgets/",
+        "https://www.figma.com/community/plugin/1151890004010191690/",
+        "https://www.figma.com/community/plugin/733902567457592893/Autoflow/",
+        "https://www.figma.com/community/plugin/789009980664807964/",
+        "https://www.figma.com/community/plugin/838925615018625519/Pitchdeck-Presentation-Studio/",
+        "https://www.figma.com/community/plugin/851183094275736358/Figma-to-HTML/",
+        "https://www.figma.com/community/plugins/",
+        "https://www.figma.com/community/widget/1045386129853518633/",
+        "https://www.figma.com/community/widget/1189412171675106282/Component-Prop-Table/",
+        "https://www.figma.com/privacy/",
+        "https://www.getstark.co/",
+        "https://www.shopify.com/blog/ai-product-descriptions/",
+        "https://www.shopify.com/blog/ai-product-descriptions?wvideo=tpvd93aj7t",
+        "https://www.theverge.com/2023/1/16/23557098/generative-ai-art-copyright-legal-lawsuit-stable-diffusion-midjourney-deviantart/",
+        "https://www.w3.org/community/design-tokens/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-future-of-design-systems-is-complicated/",
+      "urls": [
+        "https://help.figma.com/hc/en-us/articles/360063144053-Guide-to-branching/",
+        "https://m3.material.io/",
+        "https://material.io/blog/announcing-material-you/",
+        "https://medium.com/eightshapes-llc/subcomponents-753ce9f6600a/",
+        "https://spotify.design/article/can-i-get-an-encore-spotifys-design-system-three-years-on/",
+        "https://twitter.com/figma/",
+        "https://ux.shopify.com/design-systems-are-flawed-eecb60610efa/",
+        "https://www.figma.com/best-practices/component-architecture/nested-components/",
+        "https://www.figma.com/privacy/",
+        "https://www.linkedin.com/in/lmacfadyen/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-future-of-design-systems-is-semantic/",
+      "urls": [
+        "https://design.google/library/exploring-color-google-maps/",
+        "https://eightshapes.com/",
+        "https://help.figma.com/hc/en-us/articles/14506587589399-Use-variables-in-prototypes/",
+        "https://help.figma.com/hc/en-us/articles/15339657135383-Guide-to-variables-in-Figma/",
+        "https://medium.com/salesforce-ux/",
+        "https://twitter.com/figma/",
+        "https://twitter.com/figma/status/1671563500546842625/",
+        "https://www.andreassamuelsson.com/",
+        "https://www.dittowords.com/",
+        "https://www.figma.com/blog/config-2023-recap/#with-variables-design-systems-speak-the-same",
+        "https://www.figma.com/blog/the-shared-language-of-props/",
+        "https://www.figma.com/blog/welcome-to-the-wip/",
+        "https://www.figma.com/developers/api#variables",
+        "https://www.figma.com/plugin-docs/working-with-variables/",
+        "https://www.figma.com/privacy/",
+        "https://www.uxpin.com/studio/blog/what-are-design-tokens/#:~:text=name%20a%20few.-,Where%20did%20Design%20Tokens%20Come%20From%3F,across%20multiple%20platforms%20and%20software.",
+        "https://www.youtube.com/watch?list=PLXDU_eVOJTx61IdqXh3jrvopJN8HGkS5F&v=M0NU5QFLCl4",
+        "https://www.youtube.com/watch?v=1ONxxlJnvdM",
+        "https://youtu.be/yI9QVwkk2Go?t=564"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/the-spectrum-of-maturity-for-design-systems/",
+      "urls": [
+        "https://airbnb.design/the-way-we-build/",
+        "https://developer.apple.com/design/human-interface-guidelines/",
+        "https://interface.free.fr/Archives/Apple_HIGuidelines.pdf/",
+        "https://lightningdesignsystem.com/",
+        "https://material.io/design/",
+        "https://polaris.shopify.com/",
+        "https://www.figma.com/file/Gj9iMcTbFbHrFq1ZWbDBuyc9/UI2-%E2%80%94%C2%A0Public-Copy?node-id=0%3A11724",
+        "https://www.figma.com/privacy/",
+        "https://www.microsoft.com/design/fluent/#/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/typography-guides/",
+      "urls": [
+        "https://alistapart.com/article/more-meaningful-typography/",
+        "https://blog.prototypr.io/10-practical-steps-to-create-a-predictable-accessible-and-harmonious-typography-system-a-case-6c85d901bedd/",
+        "https://danmall.com/posts/typography-in-design-systems/",
+        "https://jxnblk.com/blog/mathematical-web-typography/",
+        "https://medium.com/codyhouse/create-your-design-system-part-1-typography-7c630d9092bd/",
+        "https://polaris.shopify.com/design/typography#navigation",
+        "https://www.figma.com/file/09mhzcQWURcGDUTBcgRsesGc/Style-Guide-Starter/duplicate",
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/typography/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/white-labeling-putting-the-design-system-in-users-hands/",
+      "urls": [
+        "https://airbnb.design/building-a-visual-language/",
+        "https://dawnlabs.io/design-systems",
+        "https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties/",
+        "https://en.wikipedia.org/wiki/Cross-site_scripting/",
+        "https://github.com/cure53/DOMPurify/",
+        "https://github.com/system-ui/designql/",
+        "https://www.figma.com/privacy/",
+        "https://www.npmjs.com/package/styled-system/",
+        "https://www.styled-components.com/"
+      ]
+    },
+    {
+      "sourcePage": "https://www.designsystems.com/why-we-build-design-systems-an-agencys-perspective/",
+      "urls": [
+        "https://www.figma.com/privacy/"
+      ]
+    }
+  ],
+  "limits": "Directory reading does not validate external kit quality, license, currency, source parity, or accessibility. Subscription/contact/profile actions were not performed."
+}

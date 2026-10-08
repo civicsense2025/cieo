@@ -1,0 +1,264 @@
+{
+  "reviewDate": "2026-10-08",
+  "scope": "Single additional bounded round: seven standalone public motion/Forge examples, five inventoried interactive embeds, one typography demo. No external directory kits.",
+  "method": "Attempted own background CUA IAB tab; browser creation failed before navigation; browser discovery returned empty list. Read cached primary source text for captions/context. No remote media download, install, custom execution, login or permission grant.",
+  "counts": {
+    "resources": 13,
+    "browserAttempts": 1,
+    "mediaObserved": 0,
+    "fullPlaybackObserved": 0,
+    "interactiveExercised": 0,
+    "sourceTextOnly": 13
+  },
+  "cleanup": "No own tab was created. Previous research tab was closed in prior round. Parent reportTab was untouched.",
+  "resources": [
+    {
+      "id": "motion-1",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/1DRe0WBRhWOFMNq3VWCCeF/740010c1fb376cf59b91a9f5eaa5bd40/Figma_-_Motion_Usage.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "title": "Figma_-_Motion_Usage.mp4",
+      "kind": "standalone-video-example",
+      "status": "blocked-browser-unavailable",
+      "browserAttempted": true,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source prose distinguishes navigation direction, attention to new content, and playful character.",
+      "cieoImplication": "Use motion to explain orientation or feedback; treat decorative motion as optional. No pixels were observed in this round.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "motion-2",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/2KNDByPUMsiVsSAietQip6/dacdafee521930b2a18b8636176fb66b/Figma_-_Dynamic_Duration.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "title": "Figma_-_Dynamic_Duration.mp4",
+      "kind": "standalone-video-example",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source prose discusses object size and travel as inputs to duration.",
+      "cieoImplication": "Document distance and size context rather than adopting one global timing formula. Playback speed and trajectory remain unobserved.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "motion-3",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/5Wxx21tROznAdZOiGVdmx7/aceb69b71815221b69a6fa462c420ea3/Figma_-_Easing.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "title": "Figma_-_Easing.mp4",
+      "kind": "standalone-video-example",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source prose distinguishes productive and expressive easing and contextual brand character.",
+      "cieoImplication": "Retain Cieo critically damped presets where useful; do not infer a new easing curve from an unobserved clip.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "motion-4",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/3QtmUeNy68DIwBMJFV5uJA/d72a052478f3065c679229cd5a410658/Figma_-_Open-Close.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "title": "Figma_-_Open-Close.mp4",
+      "kind": "standalone-video-example",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source prose discusses expressive entrances and productive exits.",
+      "cieoImplication": "Describe entry, dismissal, reversal, and immediate reduced-motion state; clip interruption behavior remains unobserved.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "motion-5",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/3eqyG0dWG9GMQiBzrwssPz/efa03df727219ff97b4eb3b938f74892/Figma_-_Choreography.mp4",
+      "sourcePages": [
+        "https://www.designsystems.com/5-steps-for-including-motion-design-in-your-system/"
+      ],
+      "title": "Figma_-_Choreography.mp4",
+      "kind": "standalone-video-example",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source prose discusses groups moving to focus attention and preserve spatial context.",
+      "cieoImplication": "Move only the relevant container or items, and bound unnecessary cascades. No sequence timing was observed.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "motion-6",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/66SnOVAZ0K53tW3qQYnbHH/0a328efa20dcdabe75a00c7a81a14f17/harrys_homepage.mov",
+      "sourcePages": [
+        "https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/"
+      ],
+      "title": "harrys_homepage.mov",
+      "kind": "standalone-video-example",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Forge source compares distinct brand homepages and explains sharing layered base components while preserving layout freedom.",
+      "cieoImplication": "Preserve reusable behavior without making every Cieo consumer share the catalogue look. Homepage composition and motion remain unobserved.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "motion-7",
+      "url": "https://videos.ctfassets.net/7jw9uvgmirvi/3B6ty0gKIslTmcf01ErTYc/77179f5ae6a7a57a2c25454878423e4b/flamingo_homepage.mov",
+      "sourcePages": [
+        "https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/"
+      ],
+      "title": "flamingo_homepage.mov",
+      "kind": "standalone-video-example",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Forge source describes brand individuality and compares popup-cart and sidebar-cart composition in text and code examples.",
+      "cieoImplication": "Generic primitives can support different domain compositions. The prose supports flexibility; the clip does not establish any observed visual or interaction result.",
+      "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
+    },
+    {
+      "id": "interactive-1",
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/tabs/?fontsize=14",
+      "sourcePages": [
+        "https://www.designsystems.com/react-containers-some-assembly-required/"
+      ],
+      "title": "how-to-container",
+      "kind": "interactive-embed",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source text presents keyboard, selection, focus and RTL behavior separated from tab visuals.",
+      "cieoImplication": "Specify behavior ownership independently of appearance; do not claim the archived demo currently works.",
+      "blocker": "No CUA browsers available. No site failure, sign-in requirement, permission prompt, runtime state or license was individually verified."
+    },
+    {
+      "id": "interactive-2",
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/tabs-1/?fontsize=14",
+      "sourcePages": [
+        "https://www.designsystems.com/react-containers-some-assembly-required/"
+      ],
+      "title": "how-to-container",
+      "kind": "interactive-embed",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source text says styling changes can improve tab treatment while retaining shared behavior.",
+      "cieoImplication": "Preserve semantic behavior when changing appearance; rendered parity remains unobserved.",
+      "blocker": "No CUA browsers available. No site failure, sign-in requirement, permission prompt, runtime state or license was individually verified."
+    },
+    {
+      "id": "interactive-3",
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/uibot/?fontsize=14",
+      "sourcePages": [
+        "https://www.designsystems.com/react-containers-some-assembly-required/"
+      ],
+      "title": "how-to-container",
+      "kind": "interactive-embed",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source text describes randomized tab visuals with vertical/RTL behavior controlled by hook options.",
+      "cieoImplication": "Composition can allow variation while preserving a tested contract; do not equate random visuals with Cieo identity.",
+      "blocker": "No CUA browsers available. No site failure, sign-in requirement, permission prompt, runtime state or license was individually verified."
+    },
+    {
+      "id": "interactive-4",
+      "url": "https://codesandbox.io/embed/github/zendesk-garden/how-to-container/tree/tooltip/?fontsize=14",
+      "sourcePages": [
+        "https://www.designsystems.com/react-containers-some-assembly-required/"
+      ],
+      "title": "how-to-container",
+      "kind": "interactive-embed",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source text describes a tooltip shown on focus/click with hover behavior suppressed by event cancellation.",
+      "cieoImplication": "Document trigger ownership and escape hatches; tooltip keyboard and dismissal were not exercised.",
+      "blocker": "No CUA browsers available. No site failure, sign-in requirement, permission prompt, runtime state or license was individually verified."
+    },
+    {
+      "id": "interactive-5",
+      "url": "https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FOeCcFwAMhpOiV6KaVsr5Ma7N%2FFigma-Post%3Fnode-id%3D0%253A1",
+      "sourcePages": [
+        "https://www.designsystems.com/white-labeling-putting-the-design-system-in-users-hands/"
+      ],
+      "title": "Embedded Figma design",
+      "kind": "interactive-embed",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Source text illustrates theme customization and discusses unsafe global CSS injection as an escape hatch.",
+      "cieoImplication": "Prefer bounded semantic theme roles; do not copy arbitrary CSS injection. Historical on-premise deployment does not establish safety.",
+      "blocker": "No CUA browsers available. No site failure, sign-in requirement, permission prompt, runtime state or license was individually verified."
+    },
+    {
+      "id": "typography-demo",
+      "url": "https://www.designsystems.com/typography/",
+      "sourcePages": [
+        "https://www.designsystems.com/typography/"
+      ],
+      "title": "Responsive Typographic Scale",
+      "kind": "same-origin-interactive-demo",
+      "status": "not-attempted-common-browser-blocker",
+      "browserAttempted": false,
+      "mediaObserved": false,
+      "fullPlaybackObserved": false,
+      "interactiveExercised": false,
+      "posterOrFrameObserved": false,
+      "sourceTextRead": true,
+      "sourceTextLesson": "Extracted page text names H1XL, H1, H2, H3, Lead, P1, P2, P3 and Label examples, with repeated sample text and px labels. Actual numeric values and resizing behavior are absent from the cached text.",
+      "cieoImplication": "Name and document useful type roles, but do not adopt demo values or claim responsive behavior without rendering and exercising it.",
+      "blocker": "No CUA browsers available; no type input, viewport change, font loading or rendered typography was observed."
+    }
+  ],
+  "remainingLimits": "Existing selected figure inspection from the prior round remains valid. This file adds no new rendered media evidence; all proposed utility/identity lessons here derive only from primary page text."
+}
