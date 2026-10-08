@@ -77,8 +77,10 @@ export function runInventory({ root = rootPath, check = false } = {}) {
         fs.mkdirSync(path.dirname(output), { recursive: true });
         outputFile(root);
         temporary = path.join(path.dirname(output), `.catalogue-inventory-${randomUUID()}.tmp`);
-        fs.writeFileSync(temporary, bytes, { flag: 'wx' });
+        const descriptor = fs.openSync(temporary, 'wx');
         ownsTemporary = true;
+        try { fs.writeFileSync(descriptor, bytes); }
+        finally { fs.closeSync(descriptor); }
         outputFile(root);
         fs.renameSync(temporary, output);
         temporary = undefined;

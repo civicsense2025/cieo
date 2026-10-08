@@ -257,3 +257,19 @@ test('child-process seam exercises fixture generation and check exit status', t 
     assert.equal(invoke(false).status, 0);
     assert.equal(invoke(true).status, 0);
 });
+test('interrupted temporary writes preserve old receipt and clean owned files', t => {
+    const root = receiptFixture(t);
+    assert.equal(runInventory({ root, check: false }), 0);
+    const original = fs.readFileSync(outputPath(root));
+    const write = fs.writeFileSync;
+    t.mock.method(fs, 'writeFileSync', (target, ...args) => {
+        if (typeof target === 'number' || String(target).endsWith('.tmp')) {
+            write(target, 'partial');
+            throw Object.assign(new Error('Interrupted write'), { code: 'EIO' });
+        }
+        return write(target, ...args);
+    });
+    assert.equal(runInventory({ root, check: false }), 1);
+    assert.deepEqual(fs.readFileSync(outputPath(root)), original);
+    assert.deepEqual(fs.readdirSync(path.dirname(outputPath(root))), ['catalogue-inventory.json']);
+});

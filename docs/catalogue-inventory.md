@@ -36,9 +36,9 @@ Verification runs on this tooling slice are recorded below. The prepared baselin
 
 | Check | Observed result |
 | --- | --- |
-| Inventory fixture tests | 34/34 pass, including real child processes, import without argv, exact byte hashes, stale preservation and linked output rejection |
+| Inventory fixture tests | 35/35 pass, including real child processes, import without argv, exact byte hashes, stale preservation and linked output rejection |
 | Generate and `check:catalogue` | Pass; 551 entries retain 1,090 source records and 11 sorted observations; all current source hashes independently match raw bytes |
-| `npm run test` | 98 tests: 96 pass, 2 skipped |
+| `npm run test` | 99 tests: 97 pass, 2 skipped |
 | Design exports / design types | 34 exports verify; type check passes; design ledger fails at inherited `Missing source contract: CIEO-144` |
 | Aggregate / catalogue / Apple export | Aggregate fails with the same 57 brand hits, no added or removed hits; catalogue remains 8/9 with `every declared source block is included in order` failing at `blocks/000-shared.js`; Apple export 2/2 passes |
 
