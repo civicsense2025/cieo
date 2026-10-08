@@ -18,7 +18,7 @@ class ExportTests(unittest.TestCase):
 
     def test_member_cannot_escape_the_mirror(self):
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory).resolve()
             with self.assertRaises(ValueError):
                 exporter.member(root, "../unowned")
             (root / "link").symlink_to(root.parent)

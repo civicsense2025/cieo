@@ -28,6 +28,7 @@ def digest(data):
 
 
 def member(root, name):
+    root = root.resolve()
     path = root / name
     if not path.resolve().is_relative_to(root) or path.is_symlink():
         raise ValueError("Mirror members must stay inside the destination")
@@ -87,7 +88,8 @@ def main():
     for name, data in files.items():
         path = member(destination, name)
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_bytes(data)
+        if not path.exists() or path.read_bytes() != data:
+            path.write_bytes(data)
     print(f"Exported {len(manifest['files'])} runtime files at {revision}")
 
 

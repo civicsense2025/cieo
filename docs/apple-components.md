@@ -10,7 +10,7 @@ Cieo owns the reusable Swift source. `CieoUI` depends only on the existing Cieo 
 4. Organisms compose state panels and content sections, leaving data and actions with the host.
 5. A portable runtime snapshot mirrors the exact core/UI sources into the Apple starter, with revision and content hashes checked before builds.
 
-Keep iOS 17/macOS 14 support, system text scaling, native keyboard/focus behavior and stable identities. Reduce Motion disables movement. Background, Low Power Mode, increased contrast and reduced transparency constrain optional graphics. No display links, perpetual animation, full-screen blur, forced rasterization or auth changes belong in this layer.
+Keep iOS 17/macOS 14 support, system text scaling, native keyboard/focus behavior and stable identities. Building CieoUI requires Xcode 16 or later for the back-deployed `@Entry` macro; verification uses Xcode 27. Reduce Motion disables movement. Background, Low Power Mode, increased contrast and reduced transparency constrain optional graphics. No display links, perpetual animation, full-screen blur, forced rasterization or auth changes belong in this layer.
 
 ## Rendering and acceptance
 
