@@ -12,7 +12,7 @@ The reproducible [receipt](generated/catalogue-inventory.json) preserves 1,090 c
 1. Run `node scripts/check-catalogue-inventory.mjs` to regenerate the fixed receipt destination.
 2. Run `npm run check:catalogue` to compare exact bytes without changing files.
 
-The CLI derives the repository root from its own location, so either command can run independently of the current working directory. It accepts only no arguments or `--check`: success exits 0, diagnostics or stale output exit 1, unsupported arguments exit 2. Failures emit one JSON object containing a diagnostic array. Source errors stop writes; output symlinks are rejected. Generation uses an exclusive same-directory temporary file and rename, cleaning up only its own temporary file. Existing brand, design ledger and aggregate checks remain unchanged.
+Run the commands above from the repository root. The CLI derives its data root from its own location; invoking Node with an absolute path to `scripts/check-catalogue-inventory.mjs` also works from another working directory. It accepts only no arguments or `--check`: success exits 0, diagnostics or stale output exit 1, unsupported arguments exit 2. Failures emit one JSON object containing a diagnostic array. Source errors stop writes; output symlinks are rejected. Generation uses an exclusive same-directory temporary file and rename, cleaning up only its own temporary file. Existing brand, design ledger and aggregate checks remain unchanged.
 
 ## Interpret the receipt
 
@@ -40,6 +40,6 @@ Verification runs on this tooling slice are recorded below. The prepared baselin
 | Generate and `check:catalogue` | Pass; 551 entries retain 1,090 source records and 11 sorted observations; all current source hashes independently match raw bytes |
 | `npm run test` | 99 tests: 97 pass, 2 skipped |
 | Design exports / design types | 34 exports verify; type check passes; design ledger fails at inherited `Missing source contract: CIEO-144` |
-| Aggregate / catalogue / Apple export | Aggregate fails with the same 57 brand hits, no added or removed hits; catalogue remains 8/9 with `every declared source block is included in order` failing at `blocks/000-shared.js`; Apple export 2/2 passes |
+| Aggregate / catalogue / Apple export | The slice preflight and publication each had 57 brand hits. Whole-branch review against `9d2574f` attributed 50 to branch-added documentation; relocation and portable references remove those 50, leaving seven older hits; catalogue remains 8/9 with `every declared source block is included in order` failing at `blocks/000-shared.js`; Apple export 2/2 passes |
 
 `git diff --check` passes. No browser or native app was launched: this slice changes tooling and documentation only. Full-gate status is **focused-pass/full-gate-blocked**; resolve the inherited checks in separately authorized work before merging or starting source migration. Local command logs and baseline comparison are in the ignored task evidence directory; the local `task-3-report.md` records exact commands and evidence paths.

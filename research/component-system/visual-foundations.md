@@ -26,11 +26,11 @@ The inspected worktree is `/Users/tanho/GitHub_non_cloud/.cieo-worktrees/compone
 
 | Owner inspected | Implemented source facts | Implication for a proposal |
 | --- | --- | --- |
-| [Web palette](../../../atoms/web/catalogue/tokens.css) | Light graphite `#202125`, white `#ffffff`, iris `#6654c8`, iris tint `#eeebfa`; separate dark values and alternate accents; 8px unit | Keep this recognizable starting identity; give values semantic role contracts before extending them. |
-| [Web shell](../../../atoms/web/catalogue/shell.css) and [recipe presentation](../../../atoms/web/catalogue/atoms.css) | Inter-first stack; 14px shell body; labels and metadata include 10–13px; 24px gallery gaps; 24px stage radius; fixed preview stage heights | These are catalogue choices. They do not establish a universal component scale or safe minimum text size. |
-| [Native theme](../../../Sources/CieoUI/Foundations/Theme.swift) | Host accent and system foreground/secondary; 8/16/24 metrics, 12 corner, 44 touch target | Native uses semantic host colors; iris parity does not currently exist automatically. Keep host theming explicit. |
-| [Native field](../../../Sources/CieoUI/Molecules/LabeledField.swift) and [button style](../../../Sources/CieoUI/Atoms/ActionButtonStyle.swift) | Native TextField and ButtonStyle; field error uses `.red`; button uses alpha-composited tint and opacity states | Semantic migration and actual composed contrast need review; a Theme struct alone does not prove comprehensive state styling. |
-| [Earlier catalogue review](../../catalogue-ui-review.md) | Historical web refinement claims and explicit legacy/native limits | The review names 345 catalogue atoms at its own reviewed commit. Do not substitute that historical number for today's inventory or imply native acceptance. |
+| [Web palette](../../atoms/web/catalogue/tokens.css) | Light graphite `#202125`, white `#ffffff`, iris `#6654c8`, iris tint `#eeebfa`; separate dark values and alternate accents; 8px unit | Keep this recognizable starting identity; give values semantic role contracts before extending them. |
+| [Web shell](../../atoms/web/catalogue/shell.css) and [recipe presentation](../../atoms/web/catalogue/atoms.css) | Inter-first stack; 14px shell body; labels and metadata include 10–13px; 24px gallery gaps; 24px stage radius; fixed preview stage heights | These are catalogue choices. They do not establish a universal component scale or safe minimum text size. |
+| [Native theme](../../Sources/CieoUI/Foundations/Theme.swift) | Host accent and system foreground/secondary; 8/16/24 metrics, 12 corner, 44 touch target | Native uses semantic host colors; iris parity does not currently exist automatically. Keep host theming explicit. |
+| [Native field](../../Sources/CieoUI/Molecules/LabeledField.swift) and [button style](../../Sources/CieoUI/Atoms/ActionButtonStyle.swift) | Native TextField and ButtonStyle; field error uses `.red`; button uses alpha-composited tint and opacity states | Semantic migration and actual composed contrast need review; a Theme struct alone does not prove comprehensive state styling. |
+| [Earlier catalogue review](../../docs/catalogue-ui-review.md) | Historical web refinement claims and explicit legacy/native limits | The review names 345 catalogue atoms at its own reviewed commit. Do not substitute that historical number for today's inventory or imply native acceptance. |
 
 These links are relative to this notes directory and resolve inside the assigned Cieo worktree.
 
@@ -83,7 +83,7 @@ Keep Cieo's interruptible spring vocabulary as a functional signature: movement 
 
 #### Preserve the existing signature with explicit purpose
 
-[Spring.swift](../../../Sources/Cieo/Spring.swift) defines critically damped `snap`, `base`, `soft`, and `lazy` presets, with interruptible Track retargeting. This is a restrained response, not a bouncy brand. [MotionTokens](../../../Sources/Cieo/Tokens.swift) contains settle-time descriptors; they are not fixed delays to place before a user action completes.
+[Spring.swift](../../Sources/Cieo/Spring.swift) defines critically damped `snap`, `base`, `soft`, and `lazy` presets, with interruptible Track retargeting. This is a restrained response, not a bouncy brand. [MotionTokens](../../Sources/Cieo/Tokens.swift) contains settle-time descriptors; they are not fixed delays to place before a user action completes.
 
 | Intent | Proposed component behavior | Constraint |
 | --- | --- | --- |
@@ -94,7 +94,7 @@ Keep Cieo's interruptible spring vocabulary as a functional signature: movement 
 
 For each motion-bearing component, document trigger, target state, animated properties, preset, cancellation/reversal, focus ownership, reduced-motion result, and resting behavior. Test rapid reversal halfway through motion; an MP4 of a happy path cannot establish interruption correctness.
 
-The inspected [RenderPolicy](../../../Sources/CieoUI/Foundations/RenderPolicy.swift) and [RenderingPreferences](../../../Sources/CieoUI/Foundations/RenderingPreferences.swift) already gate motion using activity, reduced motion, explicit disable, and low power; shaders also depend on opt-in effects, transparency, and contrast. Preserve this boundary. Do not claim every legacy recipe follows it. Reduced motion should settle directly into the same meaningful state, while focus, labels, and status remain intact.
+The inspected [RenderPolicy](../../Sources/CieoUI/Foundations/RenderPolicy.swift) and [RenderingPreferences](../../Sources/CieoUI/Foundations/RenderingPreferences.swift) already gate motion using activity, reduced motion, explicit disable, and low power; shaders also depend on opt-in effects, transparency, and contrast. Preserve this boundary. Do not claim every legacy recipe follows it. Reduced motion should settle directly into the same meaningful state, while focus, labels, and status remain intact.
 
 
 #### Additional source-text context from the bounded media round

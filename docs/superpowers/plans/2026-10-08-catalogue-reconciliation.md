@@ -1,6 +1,6 @@
 # Catalogue Reconciliation Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **Execution status:** All three inventory tasks completed and reviewed. The checkboxes record that bounded execution; the full gate remains blocked and later component work is not authorized by this plan.
 
 **Goal:** Account for every existing Swift and web recipe ID before introducing component manifests or moving source files.
 
@@ -81,7 +81,7 @@ No change to `atoms/`, `Sources/`, `design/`, `Package.swift`, generated catalog
 
 The signatures above define the implementation contract. Use the concrete extraction patterns and failure rules below.
 
-- [ ] **Step 1: Add source-header regression tests.** Use these tests and add the filesystem fixtures described in Step 3.
+- [x] **Step 1: Add source-header regression tests.** Use these tests and add the filesystem fixtures described in Step 3.
 
 ```js
 import test from 'node:test';
@@ -111,7 +111,7 @@ test('web extraction reads declaration headers without executing code', () => {
 
 Run `node --test test/catalogue-inventory.test.mjs`; expect module-not-found failure before the implementation exists.
 
-- [ ] **Step 2: Implement narrow, fail-closed header extraction.** Use these patterns for the source format actually observed in the repository:
+- [x] **Step 2: Implement narrow, fail-closed header extraction.** Use these patterns for the source format actually observed in the repository:
 
 ```js
 const swiftDeclarations = /\bpublic\s+struct\s+(\w+)\s*:\s*MotionAtomView\b/g;
@@ -124,7 +124,7 @@ For Swift, split the text at declaration offsets. Each declaration segment must 
 
 These regexes are not language parsers. They may conservatively reject strings/comments containing declaration-like text; record that limitation and test ambiguous input as rejected. Do not strip arbitrary content, evaluate web blocks, infer IDs from filenames, or ignore an unexpected source form. If the real corpus fails, add a minimal fixture for that specific form and extend extraction deliberately; do not relax the total-accounting invariant. The acceptance condition is zero parse gaps on the actual committed corpus, not a count copied from the report.
 
-- [ ] **Step 3: Implement contained source collection.** Discover all `.swift` files under `atoms/swift`, excluding `*.generated.swift`, using sorted directory traversal. Reject symlink entries. Read `atoms/web/blocks.json` and `atoms/web/index.json` as JSON, require arrays, and require strings for block entries and `id`, `category`, `file` for index entries. Reject duplicate block paths and index IDs. Read every listed block; compare its header IDs with index rows assigned to that block. Report missing/extra/index-mismatch records; do not select one source as silently authoritative. A block containing more than one recipe is allowed only when the index supplies every ID. Hash block bytes and carry indexed category after correspondence is established.
+- [x] **Step 3: Implement contained source collection.** Discover all `.swift` files under `atoms/swift`, excluding `*.generated.swift`, using sorted directory traversal. Reject symlink entries. Read `atoms/web/blocks.json` and `atoms/web/index.json` as JSON, require arrays, and require strings for block entries and `id`, `category`, `file` for index entries. Reject duplicate block paths and index IDs. Read every listed block; compare its header IDs with index rows assigned to that block. Report missing/extra/index-mismatch records; do not select one source as silently authoritative. A block containing more than one recipe is allowed only when the index supplies every ID. Hash block bytes and carry indexed category after correspondence is established.
 
 Use this containment implementation, with errors normalized at `collectSources` into code/path/message diagnostics:
 
@@ -150,8 +150,8 @@ export function containedFile(root, relativePath) {
 
 Add temporary-directory tests for `../outside`, an absolute path, a symlink to an outside file, missing source, index/source disagreement, unindexed recipe, duplicate block path, shared block, and unsupported headers. Use `fs.mkdtempSync` and `t.after` cleanup for owned fixtures only. The collector must not run source or fetch remote URLs.
 
-- [ ] **Step 4: Run focused tests and collect the real corpus.** Invoke `collectSources(process.cwd())` from a temporary Node ES-module entry. Expected: all declaration/index identities accounted for, or explicit diagnostics requiring fixture-driven extractor correction. Record observed counts; the research's 540 Swift/45 Writing counts are a cross-check, not a fixed pass assertion. Re-read source headers for every discrepancy.
-- [ ] **Step 5: Commit only the new collector and its tests.** Message: “Read recipe identities from their existing sources. Report unsupported headers and index disagreements before migration can drop an ID.”
+- [x] **Step 4: Run focused tests and collect the real corpus.** Invoke `collectSources(process.cwd())` from a temporary Node ES-module entry. Expected: all declaration/index identities accounted for, or explicit diagnostics requiring fixture-driven extractor correction. Record observed counts; the research's 540 Swift/45 Writing counts are a cross-check, not a fixed pass assertion. Re-read source headers for every discrepancy.
+- [x] **Step 5: Commit only the new collector and its tests.** Message: “Read recipe identities from their existing sources. Report unsupported headers and index disagreements before migration can drop an ID.”
 
 ## Task 2: Reconcile platforms and preserve the baseline
 
@@ -159,7 +159,7 @@ Add temporary-directory tests for `../outside`, an absolute path, a symlink to a
 
 **Interfaces:** Consumes source records from Task 1. Produces `reconcile(records, baseline = []) -> { entries, diagnostics }`, where each entry has `id`, `artifactKind: 'recipe'`, `sources` (sorted source records), and `platformStatus: 'paired'|'swift-only'|'web-only'`. Baseline compares platform, ID and Swift symbol. Paths and hashes remain evidence, not identity.
 
-- [ ] **Step 1: Add collision and compatibility tests.**
+- [x] **Step 1: Add collision and compatibility tests.**
 
 ```js
 import { reconcile } from '../scripts/catalogue/reconcile.mjs';
@@ -191,7 +191,7 @@ test('single-platform coverage is retained rather than claimed as parity', () =>
 
 Run the focused test file; expect missing-module failure.
 
-- [ ] **Step 2: Implement reconciliation.** The following algorithm owns grouping and baseline preservation; normalize/sort diagnostics by code/path/message before returning.
+- [x] **Step 2: Implement reconciliation.** The following algorithm owns grouping and baseline preservation; normalize/sort diagnostics by code/path/message before returning.
 
 ```js
 export function reconcile(records, baseline = []) {
@@ -224,9 +224,9 @@ export function reconcile(records, baseline = []) {
 
 Use `[...sources].sort(...)` instead of `toSorted` if the pinned Node runtime requires it. Add a test asserting caller input remains unchanged. Compare byte-identical receipts after reversing input order. Test equal diagnostic keys as well; deterministic ordering must not depend on sort instability.
 
-- [ ] **Step 3: Freeze the actual pre-migration baseline.** Require clean tracked recipe inputs using Git before collecting; record their source revision and exact source hashes. Store `{ formatVersion: 1, sourceRevision, records }` in the fixture. Sort platform/id/path using explicit codepoint comparison. This is the one deliberate baseline creation; do not offer a routine CLI “accept all changes” switch. Baseline updates require an explained compatibility migration and review. Do not erase duplicates or bypass parse diagnostics to create it.
-- [ ] **Step 4: Re-run focused tests and independently compare baseline IDs with the existing Swift generated index and web index.** Symbol count must match `MotionAtom(Type.self)` entries in `atoms/swift/AtomIndex.generated.swift`; mismatch is a diagnostic for investigation. No generated index rewrite in this task. The Writing category remains source metadata; it grants neither optional-target membership nor production status.
-- [ ] **Step 5: Commit reconciler, baseline and tests.** Message: “Freeze pre-migration recipe identities and reconcile platform coverage. Keep missing IDs and symbol changes visible without treating a demo as a production component.”
+- [x] **Step 3: Freeze the actual pre-migration baseline.** Require clean tracked recipe inputs using Git before collecting; record their source revision and exact source hashes. Store `{ formatVersion: 1, sourceRevision, records }` in the fixture. Sort platform/id/path using explicit codepoint comparison. This is the one deliberate baseline creation; do not offer a routine CLI “accept all changes” switch. Baseline updates require an explained compatibility migration and review. Do not erase duplicates or bypass parse diagnostics to create it.
+- [x] **Step 4: Re-run focused tests and independently compare baseline IDs with the existing Swift generated index and web index.** Symbol count must match `MotionAtom(Type.self)` entries in `atoms/swift/AtomIndex.generated.swift`; mismatch is a diagnostic for investigation. No generated index rewrite in this task. The Writing category remains source metadata; it grants neither optional-target membership nor production status.
+- [x] **Step 5: Commit reconciler, baseline and tests.** Message: “Freeze pre-migration recipe identities and reconcile platform coverage. Keep missing IDs and symbol changes visible without treating a demo as a production component.”
 
 ## Task 3: Publish and check the receipt
 
@@ -234,7 +234,7 @@ Use `[...sources].sort(...)` instead of `toSorted` if the pinned Node runtime re
 
 **Interfaces:** CLI `node scripts/check-catalogue-inventory.mjs [--check]`. Root is derived from `import.meta.url`, independent of working directory. Exit 0 on exact valid receipt, 1 on diagnostics or stale output, 2 on unsupported arguments. No implicit baseline mutation.
 
-- [ ] **Step 1: Add CLI tests with a temporary fixture repository.** Export `buildReceipt(root)` from the CLI module and guard the entry point with `pathToFileURL(process.argv[1]).href === import.meta.url`. `buildReceipt` consumes collectors/reconciler and returns `{ bytes, diagnostics }`; it never writes. Add these concrete assertions after constructing a minimal fixture using the source text from Task 1:
+- [x] **Step 1: Add CLI tests with a temporary fixture repository.** Export `buildReceipt(root)` from the CLI module and guard the entry point with `pathToFileURL(process.argv[1]).href === import.meta.url`. `buildReceipt` consumes collectors/reconciler and returns `{ bytes, diagnostics }`; it never writes. Add these concrete assertions after constructing a minimal fixture using the source text from Task 1:
 
 ```js
 const first = buildReceipt(fixtureRoot);
@@ -247,11 +247,11 @@ assert.ok(!first.bytes.includes(fixtureRoot));
 
 Spawn the CLI with an exported `runInventory({ root, check })` test seam rather than exposing an arbitrary root flag to normal users. Require these assertions: missing output + check returns 1 without creating a file; valid generation then check returns 0; edited output + check returns 1 and retains edits; source parse error leaves old output bytes unchanged. The CLI must never invoke Swift, evaluate a block or start a server.
 
-- [ ] **Step 2: Implement receipt/check/write orchestration.** Receipt shape is `{ formatVersion: 1, baselineRevision, entries }`, serialized as `JSON.stringify(value, null, 2) + '\n'`; omit timestamps/current checkout paths so repeated source input produces identical bytes. Use the frozen baseline revision, not the current commit, to avoid a self-invalidating receipt. Source hashes identify current bytes. On source diagnostics print one JSON object containing the diagnostic array and exit 1 before any write.
+- [x] **Step 2: Implement receipt/check/write orchestration.** Receipt shape is `{ formatVersion: 1, baselineRevision, entries }`, serialized as `JSON.stringify(value, null, 2) + '\n'`; omit timestamps/current checkout paths so repeated source input produces identical bytes. Use the frozen baseline revision, not the current commit, to avoid a self-invalidating receipt. Source hashes identify current bytes. On source diagnostics print one JSON object containing the diagnostic array and exit 1 before any write.
 
 For writes, create the parent directory only after validation, write a same-directory temporary file with `flag: 'wx'`, and `renameSync` into place; clean up only that owned temporary file in `finally`. Check mode compares exact bytes and reports `stale-inventory` without mutation. The public script accepts only no arguments or `--check`; reject any other argument with exit 2. Treat unexpected filesystem errors as failures rather than an empty catalogue. Do not overwrite source or baseline from this CLI.
 
-- [ ] **Step 3: Add the explicit package command and usage documentation.**
+- [x] **Step 3: Add the explicit package command and usage documentation.**
 
 ```json
 "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check"
@@ -259,7 +259,7 @@ For writes, create the parent directory only after validation, write a same-dire
 
 Keep existing `check`, brand validation and ledger checks intact. Document generation and check commands, baseline amendment rules, recipe-only classification, parser limitations, platform-mismatch interpretation, and why this file is not the forthcoming manifest registry. Add a link to this receipt guide from `docs/apple-components.md`; reread its surrounding status language before editing. This additional touched file is documentation only.
 
-- [ ] **Step 4: Run the required gates and compare inherited failures.** Before edits in Task 1, capture baseline exits for the same commands below. After implementation, run them again with logs in a task-local ignored temporary evidence directory. Do not call a failing aggregate green because focused tests pass.
+- [x] **Step 4: Run the required gates and compare inherited failures.** Before edits in Task 1, capture baseline exits for the same commands below. After implementation, run them again with logs in a task-local ignored temporary evidence directory. Do not call a failing aggregate green because focused tests pass.
 
 ```sh
 node --test test/catalogue-inventory.test.mjs
@@ -278,7 +278,7 @@ Capture known brand/ledger failure identities before claiming they are inherited
 
 Search direct consumers with `rg 'index.json|blocks.json|MotionAtomInfo|MotionAtoms.all|AtomIndex.generated' scripts atoms test Sources docs`; reread relevant call sites and confirm no consumer was switched to the receipt. No native app builds are needed for these tooling-only changes. If native verification becomes necessary because scope changed, enumerate matching processes and use normal quit before building/testing.
 
-- [ ] **Step 5: Review the full diff and commit the receipt owner.** Confirm only the listed tooling, fixture, documentation and package command changed. Ensure all generated bytes match check mode, hashes correspond to current source, no private absolute paths appear, no temporary files are staged, and no process was left running. Message: “Publish a reproducible catalogue migration receipt. Add a non-mutating check so stale inventories and source gaps block the next migration.”
+- [x] **Step 5: Review the full diff and commit the receipt owner.** Confirm only the listed tooling, fixture, documentation and package command changed. Ensure all generated bytes match check mode, hashes correspond to current source, no private absolute paths appear, no temporary files are staged, and no process was left running. Message: “Publish a reproducible catalogue migration receipt. Add a non-mutating check so stale inventories and source gaps block the next migration.”
 
 ## Acceptance and execution handoff
 
@@ -286,4 +286,4 @@ The slice is complete only when every real source ID is represented or explicitl
 
 Self-review mapping: specification inventory/compatibility requirements map to Tasks 1–3. The remaining contract, native, export and Tessera requirements map to slices 2–5 above and require their own concrete plans; none is silently omitted from the approved integration scope. The research media gaps remain in the coverage ledger.
 
-**Review this plan and choose execution:** subagent-driven gives each task an independent implementer/reviewer; native execution keeps implementation in this session with one independent whole-branch review. Subagent-driven is recommended because extraction, compatibility and generated receipts can agree with each other while still losing a real catalogue entry; independent review is useful at those boundaries. No runtime implementation begins until this written plan is reviewed and an execution method is selected, as required by the [writing-plans skill](/Users/tanho/.codex/plugins/cache/superpowers-dev/superpowers/6.4.1/skills/writing-plans/SKILL.md).
+**Execution completed:** The approved subagent-driven method completed all three inventory tasks through `7cb3d06`. Focused tooling passes; older brand, design ledger and catalogue-order failures still block merge and source migration. Whole-branch documentation remediation follows the final review; runtime contracts and later slices retain their separate acceptance gates.
