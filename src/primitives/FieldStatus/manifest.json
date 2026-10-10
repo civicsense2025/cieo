@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.field-status",
+  "componentVersion": "1.0.0",
+  "name": "FieldStatus",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/FieldStatus/FieldStatus.tsx", "symbol": "FieldStatus" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "message", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 512 } },
+    { "id": "tone", "type": { "kind": "enum", "values": ["description", "error"] }, "required": false, "nullable": false, "default": "description", "constraints": {} }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "status", "overrides": ["color"], "tokenRoles": ["text", "color"] }],
+  "constraints": { "layout": ["single-help-line"], "content": ["alert-only-when-error"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["message", "tone"], "states": [], "events": [], "parts": ["status"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "One help or error line under a control." },
+  "extensions": {}
+}

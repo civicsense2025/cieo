@@ -1,0 +1,5 @@
+/* design/styles/primitives/field-status.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-field-status { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-field-status[data-tone='error'] { color: var(--cieo-color-danger); }
+}
