@@ -1,0 +1,5 @@
+/* design/styles/primitives/citation.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-citation { font-style: italic; color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-citation-link { color: inherit; }
+}

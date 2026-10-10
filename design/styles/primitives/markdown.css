@@ -1,0 +1,7 @@
+/* design/styles/primitives/markdown.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-markdown {
+    max-width: var(--cieo-measure); color: var(--cieo-color-text);
+    font-family: var(--cieo-font-sans); line-height: var(--cieo-leading-body);
+  }
+}
