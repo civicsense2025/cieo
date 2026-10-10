@@ -1,0 +1,4 @@
+/* design/styles/primitives/radio-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-radio-list { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; }
+}
