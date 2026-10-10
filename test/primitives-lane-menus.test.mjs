@@ -13,12 +13,12 @@ const COMPONENTS = [
   { name: 'DropdownMenuRadioGroup', id: 'core.dropdown-menu-radio-group', level: 'atom', css: null, props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'DropdownMenuRadioGroupContext.Provider'] },
   { name: 'DropdownMenuRadioItem', id: 'core.dropdown-menu-radio-item', level: 'atom', css: 'dropdown-menu-radio-item.css', props: ['label', 'value'], markers: ['role="menuitemradio"', 'DropdownMenuRadioGroupContext', 'group?.value === value'] },
   { name: 'DropdownMenuDivider', id: 'core.dropdown-menu-divider', level: 'atom', css: 'dropdown-menu-divider.css', props: [], markers: ['role="separator"', 'cieo-dropdown-menu-divider'] },
-  { name: 'DropdownMenuSubMenu', id: 'core.dropdown-menu-submenu', level: 'molecule', css: 'dropdown-menu-submenu.css', props: ['label'], markers: ['role="menu"', 'focus-within', 'cieo-dropdown-menu-submenu-panel'] },
+  { name: 'DropdownMenuSubMenu', id: 'core.dropdown-menu-submenu', level: 'molecule', css: 'dropdown-menu-submenu.css', props: ['label', 'motion', 'entering', 'exiting'], markers: ['role="menu"', 'focus-within', 'cieo-dropdown-menu-submenu-panel'] },
   { name: 'MoreMenu', id: 'core.more-menu', level: 'molecule', css: null, props: ['label'], markers: ['IconButton', 'DropdownMenu', "label = 'More actions'"] },
   { name: 'SegmentedControl', id: 'core.segmented-control', level: 'molecule', css: 'segmented-control.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'SegmentedControlContext.Provider', 'cieo-segmented-control'] },
   { name: 'SegmentedControlItem', id: 'core.segmented-control-item', level: 'atom', css: 'segmented-control-item.css', props: ['value'], markers: ['aria-pressed={picked}', 'SegmentedControlContext'] },
   { name: 'Tab', id: 'core.tab', level: 'atom', css: 'tab.css', props: ['value'], markers: ['role="tab"', 'TabContext', 'tabs === null'] },
-  { name: 'TabList', id: 'core.tab-list', level: 'molecule', css: 'tab-list.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="tablist"', 'export const TabContext', 'cieo-tab-list'] },
+  { name: 'TabList', id: 'core.tab-list', level: 'molecule', css: 'tab-list.css', props: ['label', 'value', 'defaultValue', 'onValueChange', 'motion'], markers: ['role="tablist"', 'export const TabContext', 'cieo-tab-list'] },
   { name: 'TabMenu', id: 'core.tab-menu', level: 'molecule', css: 'tab-menu.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="tablist"', 'data-variant="menu"', 'TabContext.Provider'] },
 ];
 
