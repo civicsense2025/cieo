@@ -20,6 +20,10 @@ Wrapper with a trigger button and a nested `div role="menu"` panel. CSS `:hover`
 
 Opacity-only reveal, no JavaScript motion. The reduced-motion guard drops even the fade. Panel hides when pointer and focus leave; host owns closing the root menu.
 
+## Motion
+
+Reveals on snap token via entering; motion={false} renders instantly. Reduced motion always resolves end states.
+
 ## Keyboard / accessibility
 
 - Trigger keeps native button focus; tabbing into the panel keeps it open via `:focus-within`.

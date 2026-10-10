@@ -20,6 +20,10 @@ Tab row that owns the selected value while the host owns the panels.
 
 No motion. Controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue` with internal state). Selecting a tab reports its `value`; host swaps panels and owns persistence.
 
+## Motion
+
+No animated indicator yet; the indicator spring lands in wave 2. This task only adds the opt-out: `motion={false}` renders the end state instantly.
+
 ## Keyboard / accessibility
 
 - Row carries the tab name (`aria-label`, required). Do not repeat it on tabs.

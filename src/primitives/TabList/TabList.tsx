@@ -19,10 +19,12 @@ export interface TabListProps {
   defaultValue?: string;
   /** Called with the newly selected value. Host owns panels and persistence. */
   onValueChange?: (value: string) => void;
+  /** False renders the end state instantly. Defaults to true. */
+  motion?: boolean;
   children: ReactNode;
 }
 
-export function TabList({ label, value, defaultValue, onValueChange, children }: TabListProps) {
+export function TabList({ label, value, defaultValue, onValueChange, motion, children }: TabListProps) {
   const [internal, setInternal] = useState(defaultValue);
   const current = value ?? internal;
   function handleSelect(next: string) {
@@ -30,7 +32,7 @@ export function TabList({ label, value, defaultValue, onValueChange, children }:
     onValueChange?.(next);
   }
   return (
-    <div role="tablist" aria-label={label} className="cieo cieo-tab-list">
+    <div role="tablist" aria-label={label} className="cieo cieo-tab-list" data-motion={motion === false ? 'off' : undefined}>
       <TabContext.Provider value={{ value: current, onSelect: handleSelect }}>
         {children}
       </TabContext.Provider>
