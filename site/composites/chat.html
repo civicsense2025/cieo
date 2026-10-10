@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat workspace · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<style>
+.cieo-chat-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans)}
+.cieo-chat-panes{display:grid;gap:var(--cieo-space-4)}
+.cieo-chat-list{overflow-y:auto;max-block-size:70vh;scroll-behavior:smooth}
+.cieo-chat-composer-row{display:flex;gap:var(--cieo-space-2)}
+.cieo-chat-fade{transition:opacity var(--motion-duration-base) var(--motion-ease-spring)}
+@media (prefers-reduced-motion: reduce){
+.cieo-chat-list{scroll-behavior:auto}
+.cieo-chat-fade{transition:none}
+}
+</style>
+</head>
+<body class="cieo">
+<div class="cieo-chat-page" data-parts="ChatLayout">
+<header>
+<p><a href="./index.html">Composites</a></p>
+<h1 data-parts="Heading">Chat workspace</h1>
+<p data-parts="Text">A seeded transcript with local replies.</p>
+</header>
+<div class="cieo-chat-panes">
+<div data-pane="transcript">
+<div class="cieo-chat-list" data-parts="ChatMessageList" data-list role="log" aria-label="Conversation">
+<div class="cieo-chat-message cieo-chat-fade" data-parts="ChatSystemMessage">Demo replies locally — no messages leave this page.</div>
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<div data-parts="ChatMessageMetadata"><span>You</span> <time>09:41</time></div>
+<div data-parts="ChatMessageBubble"><p data-parts="Text">How do I theme the buttons?</p></div>
+</article>
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<div data-parts="ChatMessageMetadata"><span>Cieo</span> <time>09:41</time></div>
+<div data-parts="ChatMessageBubble">
+<p data-parts="Text">Use the theme tokens, then render the control:</p>
+<pre data-parts="CodeBlock"><code data-parts="Code">import { Button } from 'cieo/Button';</code></pre>
+<p data-parts="Text">Related tokens: <span data-parts="Token">theme</span> <span data-parts="Token">tokens</span></p>
+</div>
+</article>
+</div>
+<form class="cieo-chat-composer-row" data-parts="ChatComposer" data-composer aria-label="Send a message">
+<div data-parts="ChatComposerInput">
+<label for="chat-input">Message</label>
+<textarea id="chat-input" data-input placeholder="Ask something…" rows="2"></textarea>
+</div>
+<button type="submit" data-send>Send</button>
+</form>
+</div>
+<div data-pane="rail">
+<section data-parts="Card" aria-labelledby="run-details">
+<h2 id="run-details" data-parts="Heading">Run details</h2>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>Model</dt><dd>cieo-demo</dd></div>
+<div data-parts="MetadataListItem"><dt>Replies</dt><dd>local</dd></div>
+<div data-parts="MetadataListItem"><dt>History</dt><dd>kept on page</dd></div>
+</dl>
+</section>
+</div>
+</div>
+</div>
+<section data-built-from>
+<h2 data-parts="Heading">Built from</h2>
+<ul>
+<li><a href="../components/ChatLayout.html">ChatLayout</a></li>
+<li><a href="../components/ChatMessage.html">ChatMessage</a></li>
+<li><a href="../components/ChatMessageBubble.html">ChatMessageBubble</a></li>
+<li><a href="../components/ChatMessageList.html">ChatMessageList</a></li>
+<li><a href="../components/ChatMessageMetadata.html">ChatMessageMetadata</a></li>
+<li><a href="../components/ChatSystemMessage.html">ChatSystemMessage</a></li>
+<li><a href="../components/ChatComposer.html">ChatComposer</a></li>
+<li><a href="../components/ChatComposerInput.html">ChatComposerInput</a></li>
+<li><a href="../components/Token.html">Token</a></li>
+<li><a href="../components/Code.html">Code</a></li>
+<li><a href="../components/CodeBlock.html">CodeBlock</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/MetadataListItem.html">MetadataListItem</a></li>
+</ul>
+</section>
+<script src="./chat.js" defer></script>
+</body>
+</html>
