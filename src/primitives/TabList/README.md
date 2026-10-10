@@ -22,7 +22,7 @@ No motion. Controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue
 
 ## Motion
 
-No animated indicator yet; the indicator spring lands in wave 2. This task only adds the opt-out: `motion={false}` renders the end state instantly.
+The selected-tab indicator slides on the base spring with a lagging edge (`useEdges`): each Tab registers its button through context, and the row re-measures the selected tab (`offsetLeft`/`offsetWidth`) on selection change and window resize. `motion={false}` repositions the indicator instantly. Reduced motion jumps to the end state.
 
 ## Keyboard / accessibility
 

@@ -1,7 +1,7 @@
 // src/primitives/Tab/Tab.tsx
 'use client';
 /* Tab. One tab inside TabList (or TabMenu). Selected when the shared value equals its own value; standalone it renders a plain button. */
-import { useContext, type ReactNode } from 'react';
+import { useContext, useLayoutEffect, useRef, type ReactNode } from 'react';
 import { TabContext } from '../TabList/TabList.js';
 
 export interface TabProps {
@@ -12,6 +12,16 @@ export interface TabProps {
 
 export function Tab({ value, children }: TabProps) {
   const tabs = useContext(TabContext);
+  const ref = useRef<HTMLButtonElement>(null);
+  const selected = tabs?.value === value;
+  const registerTab = tabs?.registerTab;
+  useLayoutEffect(() => {
+    if (!selected || !registerTab) return;
+    const el = ref.current;
+    if (!el) return;
+    registerTab(value, el);
+    return () => registerTab(value, null);
+  }, [selected, registerTab, value]);
   if (tabs === null) {
     return (
       <button type="button" className="cieo cieo-tab">
@@ -19,9 +29,8 @@ export function Tab({ value, children }: TabProps) {
       </button>
     );
   }
-  const selected = tabs.value === value;
   return (
-    <button type="button" role="tab" aria-selected={selected} data-selected={selected} onClick={() => tabs.onSelect?.(value)} className="cieo cieo-tab">
+    <button ref={ref} type="button" role="tab" aria-selected={selected} data-selected={selected} onClick={() => tabs.onSelect?.(value)} className="cieo cieo-tab">
       {children}
     </button>
   );
