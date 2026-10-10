@@ -130,6 +130,8 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 @media(pointer:coarse){.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-chip{min-height:48px}}
 /* Prevent recipe image or SVG intrinsic widths from enlarging the gallery track. */
 .stage > :not(style){max-inline-size:100%}
+/* Caret rule for every recipe select: the arrow sits 12px inside the right edge and the text keeps clear of it. */
+.tile select{-webkit-appearance:none;appearance:none;padding-right:34px!important;background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:12px 12px!important}
 
 .ui-dialog{border:0;padding:0;color:var(--ink);background:var(--card);border-radius:24px;box-shadow:var(--float-shadow);max-width:calc(100vw - 32px);max-height:calc(100dvh - 48px);overflow:auto;overscroll-behavior:contain}
 .ui-dialog::backdrop{background:#1b172738;backdrop-filter:blur(4px)}
@@ -138,10 +140,10 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 #browse-dialog{width:480px}#mobile-nav{padding:8px 16px 24px}#mobile-nav .ui-folders{grid-template-columns:repeat(4,1fr)}
 #appearance-dialog{width:384px}.ui-settings{padding:24px;display:grid;gap:24px}.ui-settings label,.ui-settings legend{font-size:12px;color:var(--muted);margin:0 0 8px}.ui-settings fieldset{border:0;margin:0;padding:0}.ui-setting-options{display:flex;gap:8px}.ui-setting-options>*{flex:1}.ui-settings input[type=range]{width:100%;accent-color:var(--accent)}
 .ui-swatches{display:flex;gap:16px}.ui-swatches button{width:48px;height:48px;border-radius:16px;border:4px solid var(--card);box-shadow:0 0 0 1px var(--line);background:var(--swatch);font-size:0}.ui-swatches button[aria-pressed=true]{box-shadow:0 0 0 2px var(--accent)}
-#inspect-dialog{width:1040px}.ui-inspect-body{display:grid;grid-template-columns:minmax(0,1fr) 280px;min-height:480px}
-#inspect-preview{background:var(--page);display:flex;align-items:center;min-width:0;padding:24px;overflow:auto}
-#inspect-preview .tile{width:100%;margin:0}#inspect-preview .stage{height:448px!important}#inspect-preview .ui-family-mark{display:none}
-.ui-inspect-meta{padding:24px;display:flex;flex-direction:column;gap:24px;min-width:0}.ui-inspect-meta p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}.ui-inspect-meta h3{font-size:12px;font-weight:600;margin:0 0 8px}
+#inspect-dialog{width:100vw;max-width:100vw;height:100vh;height:100dvh;max-height:100dvh;border-radius:0;box-shadow:none;margin:0;overflow:hidden}#inspect-dialog[open]{display:flex;flex-direction:column}#inspect-dialog .ui-dialog-heading{flex:none}.ui-inspect-body{display:grid;grid-template-columns:minmax(0,1fr) 280px;flex:1;min-height:0}
+#inspect-preview{background:var(--page);display:flex;align-items:stretch;min-width:0;min-height:0;padding:24px;overflow:auto}
+#inspect-preview .tile{width:100%;margin:0}#inspect-preview .stage{height:100%!important;min-height:0}#inspect-preview .tile{height:100%;display:flex;flex-direction:column}#inspect-preview .stage-shell{flex:1;min-height:0;display:flex;flex-direction:column}#inspect-preview .ui-family-mark{display:none}
+.ui-inspect-meta{padding:24px;display:flex;flex-direction:column;gap:24px;min-width:0;overflow:auto}.ui-inspect-meta p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}.ui-inspect-meta h3{font-size:12px;font-weight:600;margin:0 0 8px}
 .ui-inspect-meta pre{font:11px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--page);padding:16px;border-radius:12px;margin:0 0 8px}
 .ui-inspect-meta a{font-size:12px;text-underline-offset:3px;overflow-wrap:anywhere}.ui-inspect-meta .ui-meta-tags{display:flex;flex-wrap:wrap;gap:8px}.ui-meta-tags span{padding:4px 8px;border-radius:8px;background:var(--raised);font-size:11px}
 .ui-inspect-note{margin-top:auto!important;font-size:11px!important}
@@ -420,13 +422,14 @@ window.CIEO_SOURCE_HINT="blocks/005-accordion.js";
 atom({
   id:'accordion',cat:'Content',name:'Accordion',block:'accordion, faq',fam:['M'],tall:true,
   html:`<style>
-    #accordion .acc{width:min(384px,calc(100% - 32px));overflow:hidden;border:1px solid var(--line-soft);border-radius:24px;background:var(--card)}
-    #accordion .acc-heading{margin:0;padding:24px 24px 16px;font-size:14px;font-weight:600;letter-spacing:-.02em}
-    #accordion .acc-button{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:none;border:0;padding:16px 24px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:start;color:var(--ink)}
-    #accordion .acc-button svg{flex:none;color:var(--muted)}
-    #accordion .acc-button:hover{background:var(--raised)}
-    #accordion .acc-answer{overflow:hidden;height:0}
-    #accordion .acc-answer p{margin:0;padding:0 24px 24px;font-size:12px;line-height:1.65;color:var(--muted)}
+    .acc{width:min(384px,calc(100% - 32px));display:flex;flex-direction:column;gap:8px;padding:8px;border-radius:24px;background:var(--card)}
+    .acc-heading{margin:0;padding:16px 16px 8px;font-size:14px;font-weight:600;letter-spacing:-.02em}
+    .acc-row{border-radius:16px;background:var(--raised);overflow:hidden}
+    .acc-button{width:100%;min-height:56px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:none;border:0;padding:16px 16px 16px 24px;font:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:start;color:var(--ink);border-radius:16px}
+    .acc-button svg{flex:none;color:var(--muted);margin-right:4px}
+    .acc-button:hover{background:var(--hover,rgba(0,0,0,.04))}
+    .acc-answer{overflow:hidden;height:0}
+    .acc-answer p{margin:0;padding:0 24px 20px;font-size:12px;line-height:1.65;color:var(--muted)}
   </style><div class="acc"><h4 class="acc-heading">A few good questions.</h4></div>`,
   desc:'Each answer opens on the original measured-height spring. The chevron and text follow the same motion.',
   api:'body.h.set(open ? inner.scrollHeight : 0)',
@@ -434,7 +437,7 @@ atom({
     const box=$(st,'.acc');
     const questions=[['Can I use my own domain?','Yes. Add it under Settings and point a CNAME at the site. Certificates renew automatically.'],['Is there a free plan?','The Starter plan includes one site and up to 1,000 monthly visitors.'],['How do refunds work?','Cancel within 14 days of a charge to receive a full refund. These are example product details.']];
     const rows=questions.map(([q,a],i)=>{
-      const row=document.createElement('div');row.style.borderTop='1px solid var(--line-soft)';
+      const row=document.createElement('div');row.className='acc-row';
       row.innerHTML=`<button type="button" class="acc-button" id="acc-trigger-${i}" aria-expanded="false" aria-controls="acc-answer-${i}"><span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div class="acc-answer" id="acc-answer-${i}" role="region" aria-labelledby="acc-trigger-${i}" inert><p></p></div>`;
       row.querySelector('span').textContent=q;row.querySelector('p').textContent=a;box.append(row);
       return {btn:$(row,'button'),chev:$(row,'svg'),body:$(row,'.acc-answer'),inner:$(row,'p'),h:new Track(0)};
@@ -26060,10 +26063,10 @@ atom({ id:'shipradio', cat:'Commerce', name:'Shipping method', block:'checkout, 
     const ops = $(st,'.ops'), O = [['Standard',4.9,'3–5 days'],['Express',12,'1–2 days'],['Overnight',24,'Tomorrow']];
     const eta = new Swap(0), it = O.map(([n,p,e],i) => { const b = document.createElement('button'); b.setAttribute('role','radio');
       b.style.cssText = 'display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;padding:10px 12px;font-size:14px;text-align:left;min-height:52px';
-      b.innerHTML = `<span class="ring" style="position:relative;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;padding:0"><i style="width:10px;height:10px;border-radius:50%;background:var(--ink);transform:scale(0) translateY(.5px)"></i></span><span class="col" style="gap:2px"><b style="font-size:13px;font-weight:600;line-height:1.5">${n}${i === 0 ? ' <em class="pill" style="font-style:normal;font-size:12px;font-weight:600;background:var(--raised);border-radius:10px;padding:1px 8px">Free $75+</em>' : ''}</b><span class="small muted" style="font-size:12.5px">${e}</span></span><span class="pr num" style="margin-left:auto;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums"></span>`;
+      b.innerHTML = `<span class="ring" style="position:relative;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;padding:0"><i style="width:10px;height:10px;border-radius:50%;background:var(--ink);transform:scale(0) translateY(.5px)"></i></span><span class="col" style="gap:2px"><b style="font-size:13px;font-weight:600;line-height:1.5">${n}${i === 0 ? ' <em class="pill" style="font-style:normal;font-size:12px;font-weight:600;background:var(--raised);border-radius:10px;padding:1px 8px;margin-left:6px">Free $75+</em>' : ''}</b><span class="small muted" style="font-size:12.5px">${e}</span></span><span class="pr num" style="margin-left:auto;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums"></span>`;
       ops.appendChild(b); const d = { b, p:new Track(i === 0 ? 1 : 0), lift:new Track(0), price:p }; return d; });
     const delta = new Track(0), dl = $(st,'.dl');
-    const EL = O.map(o => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.textContent = 'Arrives ' + o[2]; $(st,'.eta').appendChild(e); return e; });
+    const EL = O.map(o => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.style.justifyContent = 'flex-start'; e.textContent = 'Arrives ' + o[2]; $(st,'.eta').appendChild(e); return e; });
     let cur = 0; delta.jump(0);
     const pick = i => { cur = i; it.forEach((x,j) => { x.p.set(j === i ? 1 : 0); x.lift.set(j === i ? 1 : 0); x.b.setAttribute('aria-checked', j === i); }); eta.to(i); delta.set(O[i][1] - O[0][1]); };
     it.forEach((x,i) => { x.b.onclick = () => pick(i); x.pr = $(x.b,'.pr'); });
@@ -26081,7 +26084,7 @@ atom({ id:'shipradio', cat:'Commerce', name:'Shipping method', block:'checkout, 
 
 window.CIEO_SOURCE_HINT="blocks/511-giftwrap.js";
 atom({ id:'giftwrap', cat:'Commerce', name:'Gift wrap', block:'cart, toggle, gift', fam:['M','S'],
-  html:`<div class="card col" style="width:min(300px,92%);padding:14px;gap:8px"><div class="row" style="gap:10px;align-items:center"><svg class="bow" width="44" height="33" viewBox="0 0 44 33" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" style="flex:none"><path class="b1" d="M22 12 C12 2 4 6 8 12 C11 16 18 14 22 12"/><path class="b2" d="M22 12 C32 2 40 6 36 12 C33 16 26 14 22 12"/><rect x="13" y="12" width="18" height="16" rx="3" stroke="var(--ink)"/></svg><span class="col" style="gap:2px"><b style="font-size:15px;font-weight:600">Gift wrap</b><span class="small muted" style="font-size:12.5px">Kraft paper, cotton bow</span></span><span class="fee num" style="margin-left:auto;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;min-width:52px;text-align:right"></span><button class="sw" role="switch" aria-checked="false" aria-label="Gift wrap" style="width:48px;height:36px;border-radius:18px;border:1px solid var(--line);background:var(--raised);cursor:pointer;position:relative;padding:0;display:grid;align-items:center"><i style="position:absolute;left:4px;width:26px;height:26px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);transform:translateY(.5px)"></i></button></div><div class="nt" style="overflow:hidden;max-height:0"><textarea class="ta" rows="2" maxlength="140" placeholder="Gift note…" aria-label="Gift note" style="width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;line-height:1.5;resize:none"></textarea></div><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="fl"> Foil bow</label></div><div class="hint">Flip the wrap switch</div>`,
+  html:`<div class="card col" style="width:min(300px,92%);padding:14px;gap:8px"><div class="row" style="gap:10px;align-items:center"><svg class="bow" width="44" height="33" viewBox="0 0 44 33" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" style="flex:none"><path class="b1" d="M22 12 C12 2 4 6 8 12 C11 16 18 14 22 12"/><path class="b2" d="M22 12 C32 2 40 6 36 12 C33 16 26 14 22 12"/><rect x="13" y="12" width="18" height="16" rx="3" stroke="var(--ink)"/></svg><span class="col" style="gap:2px"><b style="font-size:15px;font-weight:600">Gift wrap</b><span class="small muted" style="font-size:12.5px">Kraft paper, cotton bow</span></span><span class="fee num" style="margin-left:auto;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;min-width:52px;text-align:right"></span><button class="sw" role="switch" aria-checked="false" aria-label="Gift wrap" style="width:48px;height:36px;border-radius:18px;border:0;background:var(--raised);cursor:pointer;position:relative;padding:0;display:grid;align-items:center"><i style="position:absolute;left:4px;width:26px;height:26px;border-radius:50%;background:var(--card);box-shadow:var(--shadow);transform:translateY(.5px)"></i></button></div><div class="nt" style="overflow:hidden;max-height:0"><textarea class="ta" rows="2" maxlength="140" placeholder="Gift note…" aria-label="Gift note" style="width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:13px;line-height:1.5;resize:none"></textarea></div><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="fl"> Foil bow</label></div><div class="hint">Flip the wrap switch</div>`,
   desc:'The knob edges across like a switch while the note height-springs open and the bow draws itself softly. The fee rolls in place without moving the switch.',
   api:'on.set(1); knob.release → edge   note.set(H); bow.set(1,soft); fee.set(4.95)',
   init(st){
@@ -26126,7 +26129,7 @@ atom({ id:'taxest', cat:'Commerce', name:'Tax estimator', block:'checkout, tax, 
 
 window.CIEO_SOURCE_HINT="blocks/513-expresspay.js";
 atom({ id:'expresspay', cat:'Commerce', name:'Express pay sheet', block:'checkout, sheet, wallets', fam:['M','S'], tall:true,
-  html:`<div class="card ph" style="position:relative;width:min(300px,92%);height:360px;overflow:hidden;padding:14px"><div class="col" style="gap:8px"><b style="font-size:15px;font-weight:600">Checkout</b><span class="num" style="font-size:15px;font-weight:600;font-variant-numeric:tabular-nums">$82.00</span><div class="xp col" style="gap:8px"></div><button class="mo" style="height:38px;border-radius:9px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:14px">More options</button></div><div class="sh" style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);border-radius:12px 12px 0 0;box-shadow:var(--shadow);padding:14px"><b style="font-size:13px;font-weight:600;line-height:1.5">Order · 2 items</b><div class="ln col small" style="gap:4px;margin:8px 0;font-size:13px;line-height:1.5"></div><button class="cf" style="position:relative;height:38px;width:100%;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;overflow:hidden"><span class="tx">Confirm $82.00</span></button></div></div><div class="row small muted" style="gap:6px;font-size:12.5px;justify-content:center"><label class="row" style="gap:6px"><input type="checkbox" class="cp" checked> Apply SHIP10 in sheet</label></div><div class="hint">Wait for wallets, open options</div>`,
+  html:`<div class="card ph" style="position:relative;width:min(300px,92%);height:360px;overflow:hidden;padding:14px"><div class="col" style="gap:8px"><b style="font-size:15px;font-weight:600">Checkout</b><span class="num" style="font-size:15px;font-weight:600;font-variant-numeric:tabular-nums">$82.00</span><div class="xp col" style="gap:8px"></div><button class="mo" style="height:38px;border-radius:9px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:14px">More options</button></div><div class="sh" style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);border-radius:12px 12px 0 0;box-shadow:var(--shadow);padding:14px"><b style="font-size:13px;font-weight:600;line-height:1.5">Order · 2 items</b><div class="ln col small" style="gap:4px;margin:8px 0;font-size:13px;line-height:1.5"></div><label class="row small muted" style="gap:6px;font-size:12.5px;margin-bottom:10px"><input type="checkbox" class="cp" checked> Apply SHIP10 in sheet</label><button class="cf" style="position:relative;height:38px;width:100%;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;overflow:hidden"><span class="tx">Confirm $82.00</span></button></div></div><div class="hint">Wait for wallets, open options</div>`,
   desc:'Wallet buttons fade up staggered once ready. The sheet rises on the base spring carrying line-items, options and coupon inside. Confirm fills toward success and holds its receipt terminal.',
   api:'ready: btn[i]=prog(t,t0+i*.06)   sheet.set(1); ok.set(1) → receipt hold',
   init(st){
@@ -26184,7 +26187,7 @@ atom({ id:'payfields', cat:'Commerce', name:'Payment fields', block:'checkout, c
   init(st){
     const cn = $(st,'.cn'), ex = $(st,'.ex'), cv = $(st,'.cv'), m1 = $(st,'.m1'), m2 = $(st,'.m2'), py = $(st,'.py');
     const brand = new Swap(0), ok = new Track(0);
-    ['Card','Visa','Mastercard','Amex'].forEach((s,i) => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.textContent = s; $(st,'.br').appendChild(e); });
+    ['Card','Visa','Mastercard','Amex'].forEach((s,i) => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.style.justifyContent = 'flex-end'; e.textContent = s; $(st,'.br').appendChild(e); });
     const luhn = s => { let d = 0, alt = false; for (let i = s.length-1; i >= 0; i--){ let n = +s[i]; if (alt){ n *= 2; if (n > 9) n -= 9; } d += n; alt = !alt; } return s.length >= 15 && d % 10 === 0; };
     const chk = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12.5 10 17.5 19 7"/></svg>`;
     function vCard(live){ const raw = cn.value.replace(/\D/g,'').slice(0,16);
@@ -26211,7 +26214,7 @@ atom({ id:'payfields', cat:'Commerce', name:'Payment fields', block:'checkout, c
 window.CIEO_SOURCE_HINT="blocks/516-autocomplete.js";
 atom({ id:'autocomplete', cat:'Commerce', name:'Address autocomplete', block:'checkout, combobox, address', fam:['M','S'],
   html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Delivery address</b><input class="q" placeholder="Start typing…" aria-label="Address search" role="combobox" aria-expanded="true" style="height:38px;border-radius:9px;border:1px solid var(--line);padding:0 10px;font-size:14px"><div class="ls col" role="listbox" style="gap:4px;overflow:hidden"></div><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="us" checked> US only</label></div><div class="hint">Type “ma”, pick a row</div>`,
-  desc:'Rows filter in place: matches spring into their slots while misses blur out. Picking swaps in the full address and collapses the list height to a receipt terminal.',
+  desc:'Suggestions stay hidden until two characters are typed. Rows filter in place: matches spring into their slots while misses blur out. Picking swaps in the full address and collapses the list height to a receipt terminal.',
   api:'vis[i].set(match?1:0) springs slots   pick: full.to(1); listH.set(0)',
   init(st){
     const q = $(st,'.q'), ls = $(st,'.ls');
@@ -26226,7 +26229,7 @@ atom({ id:'autocomplete', cat:'Commerce', name:'Address autocomplete', block:'ch
     ls.after(F);
     function filt(){ const s = q.value.trim().toLowerCase(), us = $(st,'.us').checked; let n = 0;
       R.forEach(r => { const m = (!s || r.a.toLowerCase().includes(s)) && (!us || !/Toronto/.test(r.a)); r.v.set(m ? 1 : 0); if (m) n++; });
-      listH.set(n === 0 ? 0 : 1); full.to(0); }
+      listH.set(s.length < 2 || n === 0 ? 0 : 1); full.to(0); }
     R.forEach(r => r.b.onclick = () => { q.value = r.a + ' ' + r.z; R.forEach(x => x.v.set(x === r ? 1 : 0)); listH.set(0); full.to(1); });
     q.oninput = filt; $(st,'.us').onchange = filt; filt();
     return t => { const p = clamp(listH.at(t)); ls.style.maxHeight = (p*220).toFixed(0) + 'px'; ls.style.opacity = p.toFixed(3);
