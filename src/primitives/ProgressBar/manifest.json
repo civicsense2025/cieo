@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.progress-bar",
+  "componentVersion": "1.0.0",
+  "name": "ProgressBar",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/ProgressBar/ProgressBar.tsx", "symbol": "ProgressBar" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "value", "type": { "kind": "number" }, "required": true, "nullable": false, "constraints": { "min": 0 } },
+    { "id": "max", "type": { "kind": "number" }, "required": false, "nullable": false, "default": 100, "constraints": { "min": 1 } },
+    { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "progress", "overrides": [], "tokenRoles": ["surface-control"] }],
+  "constraints": { "layout": ["full-width-bar"], "content": ["label-names-task"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["value", "max", "label"], "states": [], "events": [], "parts": ["progress"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Task progress with native semantics." },
+  "extensions": { "sharedStyle": "Paint comes from the design-system .cieo-progress in design/styles/controls.css (via design/primitives.css); no CSS ships with this primitive." }
+}

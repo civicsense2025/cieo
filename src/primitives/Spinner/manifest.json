@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.spinner",
+  "componentVersion": "1.0.0",
+  "name": "Spinner",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Spinner/Spinner.tsx", "symbol": "Spinner" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Loading", "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "size", "type": { "kind": "enum", "values": ["sm", "md"] }, "required": false, "nullable": false, "default": "md", "constraints": {} }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "ring", "overrides": [], "tokenRoles": ["border"] }],
+  "constraints": { "layout": ["inline-only"], "content": ["label-required"], "motion": ["spin-with-reduced-motion-rest"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "size"], "states": [], "events": [], "parts": ["ring"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Loading indicator with an accessible label." },
+  "extensions": {}
+}
