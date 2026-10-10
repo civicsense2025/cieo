@@ -172,8 +172,8 @@ console.log('motion tokens: clean');
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { motionAttrs } from '../src/primitives/motion.js';
-import { Track, run, setMotionState } from '../src/core/spring.js';
+import { motionAttrs } from '../dist/primitives/motion.js';
+import { Track, run, setMotionState } from '../dist/core/spring.js';
 
 test('motionAttrs defaults to on with no keys', () => {
   assert.deepEqual(motionAttrs(), { 'data-motion': 'on' });
@@ -209,7 +209,7 @@ test('retargeted Track stays continuous (Review Focus 4)', () => {
 ```
 
 - [ ] **Step 6: Wire the gate into `package.json` check script** — append `&& node scripts/check-motion-tokens.mjs` after the pages check so the token gate runs in CI. Exact edit: in the `"check"` script string, replace `node scripts/build-component-pages.mjs --check && git diff` with `node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && git diff`.
-- [ ] **Step 7: Run `node scripts/wire-primitives.mjs` (expect only motion.css import added), then `npm run build`, then `node --test test/motion-foundation.test.mjs` — expect PASS, then commit pathspec-limited (motion.ts, motion.css, gate script, react/index.tsx, package.json, test file, dist/primitives/motion.*).**
+- [ ] **Step 7: Run `node scripts/wire-primitives.mjs` (expect only motion.css import added), then `npm run build`, then `node --test test/motion-foundation.test.mjs` — expect PASS, then commit pathspec-limited (motion.ts, motion.css, gate script, react/index.tsx, package.json, test file, dist/primitives/motion.*, dist/react/index.*).**
 
 ## Wave 1 shared pattern (repeated verbatim in Tasks 1–10)
 
@@ -346,7 +346,7 @@ Test file: `test/motion-stage-b.test.mjs` (audit + 2 contract tests).
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Track, setMotionState } from '../src/core/spring.js';
+import { Track, setMotionState } from '../dist/core/spring.js';
 
 test('indicator tracks selection through context registration', () => {
   const src = readFileSync('src/primitives/TabList/TabList.tsx', 'utf8');
@@ -416,7 +416,7 @@ test('motion=false renders a plain numeral', () => {
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Track } from '../src/core/spring.js';
+import { Track } from '../dist/core/spring.js';
 
 test('dialog stays mounted through exit (Review Focus 3)', () => {
   const src = readFileSync('src/primitives/Dialog/Dialog.tsx', 'utf8');
@@ -501,7 +501,7 @@ export function Dialog({ label, open, onClose, children, motion, entering = 'ris
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Track } from '../src/core/spring.js';
+import { Track } from '../dist/core/spring.js';
 
 test('sheet stays mounted through exit', () => {
   const src = readFileSync('src/primitives/BottomSheet/BottomSheet.tsx', 'utf8');
@@ -587,7 +587,7 @@ export function BottomSheet({ label, open, onClose, children, motion, entering =
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { Track } from '../src/core/spring.js';
+import { Track } from '../dist/core/spring.js';
 
 test('viewer stays mounted through exit', () => {
   const src = readFileSync('src/primitives/Lightbox/Lightbox.tsx', 'utf8');
