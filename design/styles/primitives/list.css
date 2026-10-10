@@ -1,0 +1,5 @@
+@layer cieo.components {
+  :where(.cieo).cieo-p-list { list-style: none; margin: 0; padding: 0; }
+  :where(.cieo) .cieo-p-list-item { padding-block: var(--cieo-space-3); border-block-end: 1px solid var(--cieo-color-border); }
+  :where(.cieo) .cieo-p-list-item:last-child { border-block-end: 0; }
+}
