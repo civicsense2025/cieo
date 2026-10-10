@@ -1,0 +1,5 @@
+/* design/styles/primitives/chat-message-bubble.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-message-bubble { justify-self: start; max-inline-size: 32rem; padding: var(--cieo-space-2) var(--cieo-space-3); background: var(--cieo-color-sunken); color: var(--cieo-color-text); border-radius: var(--cieo-radius-control); }
+  :where(.cieo).cieo-chat-message-bubble[data-variant='outgoing'] { justify-self: end; background: var(--cieo-color-accent); }
+}

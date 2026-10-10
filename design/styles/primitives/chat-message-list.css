@@ -1,0 +1,4 @@
+/* design/styles/primitives/chat-message-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-message-list { display: grid; align-content: start; gap: var(--cieo-space-2); overflow-y: auto; padding: var(--cieo-space-3); background: var(--cieo-color-surface); }
+}

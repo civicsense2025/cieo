@@ -1,0 +1,10 @@
+/* design/styles/primitives/chat-layout.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); gap: var(--cieo-space-4); }
+  :where(.cieo).cieo-chat-layout > [data-pane='transcript'] { display: grid; align-content: start; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo).cieo-chat-layout > [data-pane='rail'] { min-inline-size: 0; }
+  @media (max-width: 48rem) {
+    :where(.cieo).cieo-chat-layout { grid-template-columns: minmax(0, 1fr); }
+    :where(.cieo).cieo-chat-layout > [data-pane='rail'] { display: none; }
+  }
+}

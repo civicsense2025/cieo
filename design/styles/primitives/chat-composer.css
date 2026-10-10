@@ -1,0 +1,4 @@
+/* design/styles/primitives/chat-composer.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-composer { display: flex; align-items: end; gap: var(--cieo-space-2); padding: var(--cieo-space-3); background: var(--cieo-color-surface); border-block-start: 1px solid var(--cieo-color-border); }
+}
