@@ -1,3 +1,5 @@
+/* Dashboard demo: section switching with the current marker, settings persisted under the
+   cieo-dashboard-settings key (private-mode safe), and a save confirmation banner. */
 (function () {
   'use strict';
   var KEY = 'cieo-dashboard-settings';
@@ -28,11 +30,18 @@
   function paint(value) {
     if (readout) readout.textContent = value + ' units';
   }
-  if (threshold) {
-    threshold.addEventListener('input', function () {
-      paint(threshold.value);
-    });
+  function markDirty() {
+    // The confirmation describes the last save; any edit makes it stale until the next one.
+    if (saved) saved.hidden = true;
   }
+  // 'input' covers text, checkbox, and range in modern browsers.
+  [store, notify, threshold].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener('input', function () {
+      if (el === threshold) paint(el.value);
+      markDirty();
+    });
+  });
 
   try {
     var settings = JSON.parse(window.localStorage.getItem(KEY) || 'null');

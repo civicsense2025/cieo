@@ -1,3 +1,5 @@
+/* Booking demo behavior: weekday slot tables (none Sundays), live summary, confirm gating,
+   and reference codes as BK-<YYYYMMDD>-<HHMM>-initials. Hosts nothing; all state is local. */
 (function () {
   'use strict';
   var WEEKDAY_SLOTS = ['09:00', '10:30', '13:00', '15:30'];
@@ -48,7 +50,10 @@
   }
 
   function emailValid() {
-    return emailEl.value.indexOf('@') !== -1;
+    // Both sides of @ must hold text; "@" alone or "a@" never passes.
+    var v = emailEl.value.trim();
+    var at = v.indexOf('@');
+    return at > 0 && at < v.length - 1;
   }
 
   function checkConfirm() {
@@ -127,7 +132,13 @@
     hideError();
     refEl.textContent = referenceFor(state.day, state.slot, nameEl.value);
     form.hidden = true;
-    if (successEl) successEl.hidden = false;
+    if (successEl) {
+      successEl.hidden = false;
+      // Focus leaves the now-hidden Confirm button; move it to the success heading so
+      // screen-reader and keyboard users land on the announcement.
+      var heading = successEl.querySelector('[data-success-heading]');
+      if (heading && heading.focus) heading.focus();
+    }
   }
 
   dayButtons.forEach(function (button) {

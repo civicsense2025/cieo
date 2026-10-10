@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Store dashboard · Cieo</title>
+<title>Admin dashboard · Cieo</title>
 <link rel="stylesheet" href="../../tokens/tokens.css">
 <link rel="stylesheet" href="../../design/themes.css">
 <style>
@@ -104,6 +104,11 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 </style>
 </head>
 <body>
+<header>
+<p><a href="./index.html">Composites</a></p>
+<h1>Admin dashboard</h1>
+<p>Track orders and adjust store settings; built only from shipped parts.</p>
+</header>
 <div class="dash" data-parts="AppShell SideNav SideNavItem Card Badge Table TableHeader TableBody TableRow TableCell Field Slider Banner Heading Text">
 <nav class="dash-nav" aria-label="Store sections">
 <ul>
@@ -167,8 +172,17 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <button class="dash-save" type="button" data-save>Save settings</button>
 <div class="dash-saved" role="status" data-saved hidden>Settings saved.</div>
 </section>
+<section aria-label="Behavior">
+<h2>Behavior</h2>
+<ul>
+<li>Section buttons switch Overview, Orders, and Settings panels with the current marker moving.</li>
+<li>Settings persist under the cieo-dashboard-settings key and survive reload, including private mode.</li>
+<li>Save confirms visibly; editing again hides the confirmation until the next save.</li>
+</ul>
+</section>
 <section class="dash-built" data-built-from aria-label="Built from">
 <h2>Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
 <ul>
 <li><a href="../components/AppShell.html">AppShell</a></li>
 <li><a href="../components/SideNav.html">SideNav</a></li>

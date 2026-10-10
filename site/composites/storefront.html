@@ -14,6 +14,9 @@ img{max-width:100%;height:auto}
 </head>
 <body>
 <main>
+<p><a href="./index.html">Composites</a></p>
+<h1 data-parts="Heading">Storefront</h1>
+<p data-parts="Text">A product page with a live bag and checkout.</p>
 <h1 data-parts="Heading">Drift Wool Runner</h1>
 
 <section aria-label="Product" data-parts="Card">
@@ -61,8 +64,8 @@ img{max-width:100%;height:auto}
 </fieldset>
 <p data-parts="Text" data-order-total>$0.00</p>
 <button type="button" data-place>Place order</button>
-<p hidden data-order-ok data-parts="Banner">Order confirmed. Reference <span data-ref></span></p>
-<p hidden data-order-error data-parts="Banner">Check the highlighted fields.</p>
+<p hidden data-order-ok data-parts="Banner"><span data-ref-prefix>Order confirmed. Reference </span><span data-ref></span></p>
+<p hidden id="order-error" role="alert" data-order-error data-parts="Banner">Check the highlighted fields.</p>
 </section>
 
 <section data-parts="Collapsible">
@@ -77,8 +80,19 @@ img{max-width:100%;height:auto}
 <p>Returns are free within 60 days provided the runner is clean and in its original packaging.</p>
 </section>
 
+<section aria-label="Behavior">
+<h2 data-parts="Heading">Behavior</h2>
+<ul>
+<li>Thumbnails swap the main image and alt text.</li>
+<li>Quantity clamps 1–9; the line total is $148 times quantity; the bag accumulates per variant.</li>
+<li>Order total is bag plus delivery ($12 express); it recomputes from state on every change.</li>
+<li>Email and address validate on order; failures use the alert banner with invalid fields marked and focused.</li>
+<li>An empty bag cannot order.</li>
+</ul>
+</section>
 <section data-built-from>
 <h2>Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
 <ul>
 <li><a href="../components/Thumbnail.html">Thumbnail</a></li>
 <li><a href="../components/RadioList.html">RadioList</a></li>
@@ -90,7 +104,7 @@ img{max-width:100%;height:auto}
 <li><a href="../components/Collapsible.html">Collapsible</a></li>
 <li><a href="../components/Badge.html">Badge</a></li>
 <li><a href="../components/Banner.html">Banner</a></li>
-<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a> (rendered by JS after Add to bag)</li>
 <li><a href="../components/Heading.html">Heading</a></li>
 <li><a href="../components/Text.html">Text</a></li>
 <li><a href="../components/Divider.html">Divider</a></li>

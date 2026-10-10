@@ -1,3 +1,5 @@
+/* Chat workspace demo: appends messages locally (no backend), guards double-submit with a
+   400ms reply window, Enter sends while Shift+Enter adds a newline, and the list auto-scrolls. */
 (function () {
   var form = document.querySelector('[data-composer]');
   var list = document.querySelector('[data-list]');
@@ -65,7 +67,8 @@
   });
 
   input.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    // isComposing guards IME (CJK) users from sending mid-composition on Enter.
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
       e.preventDefault();
       submit();
     }
