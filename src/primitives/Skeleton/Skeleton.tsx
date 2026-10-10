@@ -6,11 +6,13 @@ export interface SkeletonProps {
   lines?: number;
   /** Screen-reader label. Defaults to Loading. */
   label?: string;
+  /** False renders the static bar instantly. Defaults to true. */
+  motion?: boolean;
 }
 
-export function Skeleton({ lines = 3, label = 'Loading' }: SkeletonProps) {
+export function Skeleton({ lines = 3, label = 'Loading', motion }: SkeletonProps) {
   return (
-    <span className="cieo cieo-p-skeleton">
+    <span className="cieo cieo-p-skeleton" data-motion={motion === false ? 'off' : undefined}>
       <span aria-hidden="true" className="cieo-p-skeleton-lines">
         {Array(lines)
           .fill(null)

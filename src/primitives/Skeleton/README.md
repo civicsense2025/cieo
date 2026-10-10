@@ -39,6 +39,10 @@ Line count and label only. Bar fill, radius, and pulse come from Cieo tokens; mo
 - Placeholder only; it never fetches, resolves, or times out.
 - Twelve lines max; longer waits need progress copy, not more bars.
 
+## Motion
+
+Rests to a static bar under reduced motion; `motion={false}` renders the static bar always.
+
 ## Related
 
 EmptyState (molecule), Spinner (atom), Text (atom).
