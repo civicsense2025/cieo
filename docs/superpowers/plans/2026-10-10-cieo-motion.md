@@ -18,6 +18,7 @@
 - Static components get no motion props. Props exist only where something animates.
 - Host owns open state, persistence, filtering, positioning-flip, and drag. Components own structure, semantics, and springs.
 - `dist/` remains committed. `npm run check` stays green throughout.
+- Agents never run `npm run build` / `npm test` (both rebuild `dist/`) and never touch `dist/`; type proof is `npx tsc -p tsconfig.json --noEmit`. Only the integrator builds.
 - Lanes touch only their own component dirs + their own test file + their components' doc pages. Shared files (barrel, package.json, primitives.css, exports test, generators, `src/react/index.tsx` except Task 0, engine files except Task 0) are integrator-owned.
 
 ## Review Focus
@@ -207,7 +208,8 @@ test('retargeted Track stays continuous (Review Focus 4)', () => {
 });
 ```
 
-- [ ] **Step 6: Run `node scripts/wire-primitives.mjs` (expect only motion.css import added), then `npm run build`, then `node --test test/motion-foundation.test.mjs` — expect PASS, then commit pathspec-limited.**
+- [ ] **Step 6: Wire the gate into `package.json` check script** — append `&& node scripts/check-motion-tokens.mjs` after the pages check so the token gate runs in CI. Exact edit: in the `"check"` script string, replace `node scripts/build-component-pages.mjs --check && git diff` with `node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && git diff`.
+- [ ] **Step 7: Run `node scripts/wire-primitives.mjs` (expect only motion.css import added), then `npm run build`, then `node --test test/motion-foundation.test.mjs` — expect PASS, then commit pathspec-limited (motion.ts, motion.css, gate script, react/index.tsx, package.json, test file, dist/primitives/motion.*).**
 
 ## Wave 1 shared pattern (repeated verbatim in Tasks 1–10)
 
@@ -278,7 +280,7 @@ Each wave-1 task also updates its components' `site/components/<Name>.html` prop
 ### Task 1: content family (24 dirs)
 
 Dirs: Avatar, AvatarGroup, AvatarGroupOverflow, AvatarStatusDot, Badge, Text, AvatarGroup? No — AvatarGroup lives in its own dir. Full list: Avatar, AvatarGroup, AvatarGroupOverflow, AvatarStatusDot, Badge, Text, Icon, Kbd, Code, CodeBlock, Heading, Blockquote, Citation, Markdown, Thumbnail, Token, StatusDot, EmptyState, Banner, Timer, Timestamp, Skeleton, AvatarGroup? Count check: wave-3 content lane had 19 (Avatar, AvatarGroupOverflow, AvatarStatusDot, Icon, Kbd, Code, CodeBlock, Heading, Blockquote, Citation, Markdown, Thumbnail, Token, StatusDot, EmptyState, Banner, Timer, Timestamp, Skeleton) + leftovers AvatarGroup, Badge, Text = 22. (Spinner/ProgressBar belong to stage-b — see Task 10.) So 22 dirs.
-Prop work: Skeleton only (motion-only pattern). Fix nothing else unless audit test fails (audit first; fix what the test names).
+Prop work: Skeleton only (motion-only pattern) plus one exact fix — `design/styles/primitives/skeleton.css` line 7 `animation: cieo-p-skeleton-pulse 1.5s ease-in-out infinite` becomes `animation: cieo-p-skeleton-pulse calc(var(--motion-duration-lazy, 740ms) * 2) ease-in-out infinite` (preserves ~period, gains global retiming; zeroes under reduced motion via tokens). Fix nothing else unless audit test fails.
 Test file: `test/motion-content.test.mjs` (audit test with the 22 dirs + Skeleton contract test).
 
 ### Task 2: form family (18 dirs)
@@ -294,7 +296,7 @@ Test file: `test/motion-layout.test.mjs`.
 ### Task 4: menus family (19 dirs)
 
 Dirs: ToggleButton, ToggleButtonGroup, DropdownMenu, DropdownMenuItem, DropdownMenuGroup, DropdownMenuCheckboxItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuDivider, DropdownMenuSubMenu, MoreMenu, SegmentedControl, SegmentedControlItem, Tab, TabList, TabMenu, ButtonGroup, IconButton, Toolbar.
-Prop work: DropdownMenuSubMenu (full trio, defaults fade/fade — its CSS hover-reveal gains data attrs; keep existing reveal CSS, add data-entering hook only if missing), TabList (motion-only), TabMenu (motion-only).
+Prop work: DropdownMenuSubMenu (full trio, defaults fade/fade — its CSS hover-reveal gains data attrs; keep existing reveal CSS, add data-entering hook only if missing), TabList (motion-only). TabMenu is audit-only (no animation exists to configure — a motion prop there would be decorative).
 Test file: `test/motion-menus.test.mjs` (audit + 3 contract tests).
 
 ### Task 5: command family (17 dirs)
@@ -400,7 +402,7 @@ test('motion=false renders a plain numeral', () => {
 
 - [ ] **Step 2: Run to verify it fails** — expect FAIL.
 - [ ] **Step 3: Implement** — add `motion?: boolean` prop; current-page button gets `key="current-page"` (stable identity across pages so React reuses the element) rendering `motion === false ? p : <Digits value={page} kind="feedback" />`; other buttons unchanged. Manifest + README Motion section + page update.
-- [ ] **Step 4: Run test — expect PASS**, plus `npm run build`.
+- [ ] **Step 4: Run test — expect PASS**, plus `npx tsc -p tsconfig.json --noEmit` for type proof (never `npm run build` / `npm test` — both rebuild `dist/`, which is integrator-owned; parallel agents must not race on it).
 - [ ] **Step 5: Commit** pathspec-limited.
 
 ### Task 13: Dialog enter/exit springs (pattern owner for 14–15)
@@ -485,7 +487,7 @@ export function Dialog({ label, open, onClose, children, motion, entering = 'ris
 
 `void exiting` documents the CSS/data-attribute side; exiting still ships in data attributes for hosts. Manifest + README Motion section + page update.
 
-- [ ] **Step 4: Run test — expect PASS**, plus `npm run build`.
+- [ ] **Step 4: Run test — expect PASS**, plus `npx tsc -p tsconfig.json --noEmit` for type proof (never `npm run build` / `npm test` — both rebuild `dist/`, which is integrator-owned; parallel agents must not race on it).
 - [ ] **Step 5: Commit** pathspec-limited to Dialog/, test file, Dialog page.
 
 ### Task 14: BottomSheet enter/exit springs
@@ -571,7 +573,7 @@ export function BottomSheet({ label, open, onClose, children, motion, entering =
 
 `void exiting` documents the CSS/data-attribute side; exiting still ships in data attributes for hosts. Manifest + README Motion section + page update.
 
-- [ ] **Step 4: Run test — expect PASS**, plus `npm run build`.
+- [ ] **Step 4: Run test — expect PASS**, plus `npx tsc -p tsconfig.json --noEmit` for type proof (never `npm run build` / `npm test` — both rebuild `dist/`, which is integrator-owned; parallel agents must not race on it).
 - [ ] **Step 5: Commit** pathspec-limited to BottomSheet/, test file, BottomSheet page.
 
 ### Task 15: Lightbox enter/exit springs
@@ -666,7 +668,7 @@ export function Lightbox({ src, alt, open, onClose, label = 'Image viewer', moti
 
 Note: Lightbox ORIGINS.rise equals fade (images fade, they don't rise) — deliberate, documented here. Manifest + README + page update.
 
-- [ ] **Step 4: Run test — expect PASS**, plus `npm run build`.
+- [ ] **Step 4: Run test — expect PASS**, plus `npx tsc -p tsconfig.json --noEmit` for type proof (never `npm run build` / `npm test` — both rebuild `dist/`, which is integrator-owned; parallel agents must not race on it).
 - [ ] **Step 5: Commit** pathspec-limited to Lightbox/, test file, Lightbox page.
 
 ### Task 16: Carousel scroll spring
@@ -693,7 +695,7 @@ test('motion=false falls back to native paging', () => {
 
 - [ ] **Step 2: Run to verify it fails** — expect FAIL.
 - [ ] **Step 3: Implement** — add `motion?: boolean` prop; replace `track.scrollBy({ left: direction * track.clientWidth })` with `motion === false ? track.scrollBy({ left: direction * track.clientWidth }) : scrollTo(track, track.scrollLeft + direction * track.clientWidth);` importing `scrollTo` from `'../../dom/scroll.js'`. Manifest + README + page update.
-- [ ] **Step 4: Run test — expect PASS**, plus `npm run build`.
+- [ ] **Step 4: Run test — expect PASS**, plus `npx tsc -p tsconfig.json --noEmit` for type proof (never `npm run build` / `npm test` — both rebuild `dist/`, which is integrator-owned; parallel agents must not race on it).
 - [ ] **Step 5: Commit** pathspec-limited.
 
 ### Task 17: Motion docs regen
