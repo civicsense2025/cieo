@@ -105,7 +105,7 @@ test('Selector re-exports the Select control without new CSS', () => {
 test('Tokenizer chips carry labeled remove buttons and Enter adds', () => {
   const src = readFileSync('src/primitives/Tokenizer/Tokenizer.tsx', 'utf8');
   assert.match(src, /aria-label=\{`Remove \$\{v\}`\}/);
-  assert.match(src, /onRemove\?\(index: number\)/);
+  assert.match(src, /onRemove\?: \(index: number\)/);
   assert.match(src, /Enter/);
 });
 
