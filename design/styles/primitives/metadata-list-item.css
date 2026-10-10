@@ -1,0 +1,6 @@
+/* design/styles/primitives/metadata-list-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-metadata-list-item { display: contents; }
+  :where(.cieo).cieo-metadata-list-item > dt { color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-metadata-list-item > dd { margin: 0; color: var(--cieo-color-text); }
+}

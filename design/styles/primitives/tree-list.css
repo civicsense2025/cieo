@@ -1,0 +1,11 @@
+/* design/styles/primitives/tree-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-tree-list { list-style: none; margin: 0; }
+  :where(.cieo).cieo-tree-list[data-depth='0'] { padding-inline-start: 0; }
+  :where(.cieo).cieo-tree-list[data-depth='1'] { padding-inline-start: 1.5rem; }
+  :where(.cieo).cieo-tree-list[data-depth='2'] { padding-inline-start: 3rem; }
+  :where(.cieo).cieo-tree-list[data-depth='3'] { padding-inline-start: 4.5rem; }
+  :where(.cieo).cieo-tree-list[data-depth='4'] { padding-inline-start: 6rem; }
+  :where(.cieo).cieo-tree-list[data-depth='5'] { padding-inline-start: 7.5rem; }
+  :where(.cieo).cieo-tree-list[data-depth='6'] { padding-inline-start: 9rem; }
+}

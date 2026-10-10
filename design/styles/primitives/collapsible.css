@@ -1,0 +1,6 @@
+/* design/styles/primitives/collapsible.css */
+@layer cieo.components {
+  :where(.cieo).cieo-collapsible { border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); }
+  :where(.cieo).cieo-collapsible > button { width: 100%; text-align: start; padding: var(--cieo-space-3) var(--cieo-space-4); font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); background: none; border: 0; cursor: pointer; }
+  :where(.cieo).cieo-collapsible > [role='region'] { padding: var(--cieo-space-3) var(--cieo-space-4); border-block-start: 1px solid var(--cieo-color-border); }
+}

@@ -1,0 +1,4 @@
+/* design/styles/primitives/collapsible-group.css */
+@layer cieo.components {
+  :where(.cieo).cieo-collapsible-group { display: flex; flex-direction: column; gap: var(--cieo-space-3); }
+}

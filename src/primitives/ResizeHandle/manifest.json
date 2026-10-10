@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.resize-handle",
+  "componentVersion": "1.0.0",
+  "name": "ResizeHandle",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/ResizeHandle/ResizeHandle.tsx", "symbol": "ResizeHandle" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "orientation", "type": { "kind": "enum", "values": ["vertical", "horizontal"] }, "required": false, "nullable": false, "default": "vertical", "constraints": {} },
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "handle", "overrides": ["border"], "tokenRoles": ["border-control"] }],
+  "constraints": { "layout": ["between-resizable-regions"], "content": ["host-owns-drag"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["orientation", "label"], "states": [], "events": [], "parts": ["handle"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Drag separator between resizable regions; host owns the drag." },
+  "extensions": {}
+}

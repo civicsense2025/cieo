@@ -1,0 +1,4 @@
+/* design/styles/primitives/table-selection-toolbar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-table-selection-toolbar { display: flex; align-items: center; gap: var(--cieo-space-4); padding: var(--cieo-space-3) var(--cieo-space-4); background: var(--cieo-color-surface); border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); }
+}
