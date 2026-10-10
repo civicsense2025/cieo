@@ -1,0 +1,6 @@
+// src/primitives/Layout/Layout.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function Layout({ children }) {
+    return (_jsx("div", { className: "cieo cieo-layout", children: children }));
+}

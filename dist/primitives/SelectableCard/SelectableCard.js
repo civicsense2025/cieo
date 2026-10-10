@@ -1,0 +1,12 @@
+// src/primitives/SelectableCard/SelectableCard.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function SelectableCard({ label, selected = false, onSelect, children }) {
+    const onKeyDown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect?.();
+        }
+    };
+    return (_jsx("div", { role: "checkbox", "aria-checked": selected, "aria-label": label, tabIndex: 0, "data-selected": selected, onClick: () => onSelect?.(), onKeyDown: onKeyDown, className: "cieo cieo-selectable-card", children: children }));
+}

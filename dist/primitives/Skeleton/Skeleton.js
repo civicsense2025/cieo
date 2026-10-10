@@ -1,0 +1,8 @@
+// src/primitives/Skeleton/Skeleton.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function Skeleton({ lines = 3, label = 'Loading' }) {
+    return (_jsxs("span", { className: "cieo cieo-p-skeleton", children: [_jsx("span", { "aria-hidden": "true", className: "cieo-p-skeleton-lines", children: Array(lines)
+                    .fill(null)
+                    .map((_, i) => (_jsx("span", { className: "cieo-p-skeleton-line" }, i))) }), _jsx("span", { className: "cieo-p-skeleton-label", children: label })] }));
+}

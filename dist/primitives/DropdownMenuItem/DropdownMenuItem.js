@@ -1,0 +1,6 @@
+// src/primitives/DropdownMenuItem/DropdownMenuItem.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function DropdownMenuItem({ label, disabled = false, onSelect, children }) {
+    return (_jsx("button", { type: "button", role: "menuitem", "aria-label": label, disabled: disabled, onClick: () => onSelect?.(), className: "cieo cieo-dropdown-menu-item", children: children ?? label }));
+}

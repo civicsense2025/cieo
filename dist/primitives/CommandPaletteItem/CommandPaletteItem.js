@@ -1,0 +1,6 @@
+// src/primitives/CommandPaletteItem/CommandPaletteItem.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function CommandPaletteItem({ value, selected = false, onSelect, children }) {
+    return (_jsx("div", { role: "option", "aria-selected": selected, "data-value": value, onClick: () => onSelect?.(value), className: "cieo cieo-p-command-palette-item", children: children }));
+}

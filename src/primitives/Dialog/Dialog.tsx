@@ -2,7 +2,7 @@
 'use client';
 /* Dialog. Controlled modal panel over a scrim. Renders null when closed; host owns open state. */
 import type { KeyboardEvent, ReactNode } from 'react';
-import { Overlay } from '../../Overlay/Overlay.js';
+import { Overlay } from '../Overlay/Overlay.js';
 
 export interface DialogProps {
   /** Accessible name for the dialog (e.g. "Rename file"). Required. */

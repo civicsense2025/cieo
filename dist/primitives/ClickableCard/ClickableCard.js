@@ -1,0 +1,6 @@
+// src/primitives/ClickableCard/ClickableCard.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function ClickableCard({ children }) {
+    return (_jsx("article", { className: "cieo cieo-clickable-card", children: children }));
+}

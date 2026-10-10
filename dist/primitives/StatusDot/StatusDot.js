@@ -1,0 +1,9 @@
+// src/primitives/StatusDot/StatusDot.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function StatusDot({ status = 'default', label }) {
+    if (label) {
+        return _jsx("span", { role: "img", "aria-label": label, "data-status": status, className: "cieo cieo-p-status-dot" });
+    }
+    return _jsx("span", { "aria-hidden": "true", "data-status": status, className: "cieo cieo-p-status-dot" });
+}

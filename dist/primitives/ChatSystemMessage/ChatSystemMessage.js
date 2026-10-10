@@ -1,0 +1,6 @@
+// src/primitives/ChatSystemMessage/ChatSystemMessage.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function ChatSystemMessage({ children }) {
+    return (_jsx("p", { className: "cieo cieo-chat-system-message", children: children }));
+}

@@ -1,0 +1,6 @@
+// src/primitives/TopNavHeading/TopNavHeading.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function TopNavHeading({ href = '/', children }) {
+    return (_jsx("a", { href: href, className: "cieo cieo-top-nav-heading", children: children }));
+}

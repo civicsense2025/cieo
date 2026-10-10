@@ -1,0 +1,6 @@
+// src/primitives/DialogHeader/DialogHeader.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function DialogHeader({ title, onClose, closeLabel = 'Close' }) {
+    return (_jsxs("div", { className: "cieo cieo-dialog-header", children: [_jsx("h2", { children: title }), onClose ? (_jsx("button", { type: "button", onClick: onClose, "aria-label": closeLabel, children: closeLabel })) : null] }));
+}

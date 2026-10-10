@@ -2,7 +2,7 @@
 'use client';
 /* BottomSheet. Bottom-anchored dialog over a scrim. Renders null when closed; host owns open state. */
 import type { KeyboardEvent, ReactNode } from 'react';
-import { Overlay } from '../../Overlay/Overlay.js';
+import { Overlay } from '../Overlay/Overlay.js';
 
 export interface BottomSheetProps {
   /** Accessible name for the sheet (e.g. "Share options"). Required. */

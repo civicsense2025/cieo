@@ -1,0 +1,6 @@
+// src/primitives/LayoutFooter/LayoutFooter.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function LayoutFooter({ label, children }) {
+    return (_jsx("footer", { "aria-label": label, className: "cieo cieo-layout-footer", children: children }));
+}

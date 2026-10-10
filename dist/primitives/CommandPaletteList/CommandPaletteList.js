@@ -1,0 +1,6 @@
+// src/primitives/CommandPaletteList/CommandPaletteList.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function CommandPaletteList({ label, children }) {
+    return (_jsx("div", { role: "listbox", "aria-label": label, className: "cieo cieo-p-command-palette-list", children: children }));
+}

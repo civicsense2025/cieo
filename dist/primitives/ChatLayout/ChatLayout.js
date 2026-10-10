@@ -1,0 +1,6 @@
+// src/primitives/ChatLayout/ChatLayout.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function ChatLayout({ children, rail }) {
+    return (_jsxs("div", { className: "cieo cieo-chat-layout", children: [_jsx("div", { "data-pane": "transcript", children: children }), rail ? _jsx("div", { "data-pane": "rail", children: rail }) : null] }));
+}

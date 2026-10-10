@@ -1,0 +1,6 @@
+// src/primitives/SideNavSection/SideNavSection.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function SideNavSection({ label, children }) {
+    return (_jsx("div", { role: "group", "aria-label": label, className: "cieo cieo-side-nav-section", children: children }));
+}

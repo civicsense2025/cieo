@@ -1,0 +1,6 @@
+// src/primitives/CommandPaletteFooter/CommandPaletteFooter.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function CommandPaletteFooter({ children }) {
+    return _jsx("div", { className: "cieo cieo-p-command-palette-footer", children: children });
+}
