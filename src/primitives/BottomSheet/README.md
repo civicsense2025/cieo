@@ -18,11 +18,11 @@ Bottom-anchored dialog sheet for short choices on narrow screens (share options,
 
 ## Behavior
 
-Renders null when `open` is false or omitted; the host owns open state. Escape calls `onClose`.
+Stays mounted through the exit spring and unmounts when done; the host owns open state. Escape calls `onClose`.
 
 ## Motion
 
-Animates on rise via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states. Still renders null when closed; the `exiting` choice applies once wave 2 wires presence behind these props.
+Springs in on open and plays the exit spring before unmounting on close. Reversal retargets continuously mid-flight. `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) jumps to end states.
 
 ## Keyboard / accessibility
 
