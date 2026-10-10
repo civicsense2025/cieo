@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.scrollable-area",
+  "componentVersion": "1.0.0",
+  "name": "ScrollableArea",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/ScrollableArea/ScrollableArea.tsx", "symbol": "ScrollableArea" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "orientation", "type": { "kind": "enum", "values": ["vertical", "horizontal", "both"] }, "required": false, "nullable": false, "default": "vertical", "constraints": {} },
+    { "id": "maxHeight", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "scroller", "overrides": [], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["bounded-overflow"], "content": ["host-owns-scroll-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["orientation", "maxHeight"], "states": [], "events": [], "parts": ["scroller"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Overflow container with a scroll direction." },
+  "extensions": {}
+}

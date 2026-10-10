@@ -1,0 +1,6 @@
+/* design/styles/primitives/hstack.css */
+@layer cieo.components {
+  :where(.cieo).cieo-h-stack { display: flex; flex-direction: row; align-items: center; gap: var(--cieo-space-4); min-inline-size: 0; }
+  :where(.cieo).cieo-h-stack[data-gap='sm'] { gap: var(--cieo-space-2); }
+  :where(.cieo).cieo-h-stack[data-gap='lg'] { gap: var(--cieo-space-6); }
+}

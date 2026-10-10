@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.v-stack",
+  "componentVersion": "1.0.0",
+  "name": "VStack",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": ["Stack"],
+  "source": { "target": "web", "path": "src/primitives/VStack/VStack.tsx", "symbol": "VStack" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "gap", "type": { "kind": "enum", "values": ["sm", "md", "lg"] }, "required": false, "nullable": false, "default": "md", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "stack", "overrides": ["gap"], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["single-gap-column"], "content": ["stack-children"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["gap"], "states": [], "events": [], "parts": ["stack"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Vertical stack under the HStack/VStack naming." },
+  "extensions": { "wraps": "src/primitives/Stack/Stack.tsx" }
+}

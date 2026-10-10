@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.h-stack",
+  "componentVersion": "1.0.0",
+  "name": "HStack",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/HStack/HStack.tsx", "symbol": "HStack" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "gap", "type": { "kind": "enum", "values": ["sm", "md", "lg"] }, "required": false, "nullable": false, "default": "md", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "row", "overrides": ["gap"], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["single-gap-row"], "content": ["row-children"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["gap"], "states": [], "events": [], "parts": ["row"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Horizontal row with one gap between children." },
+  "extensions": {}
+}
