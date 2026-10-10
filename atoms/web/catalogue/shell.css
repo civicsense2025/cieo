@@ -3,7 +3,7 @@ body{margin:0;background:var(--page);color:var(--ink);font:14px/1.5 var(--sans);
 button,input,select{font:inherit;color:inherit} button{cursor:pointer} button:disabled{cursor:not-allowed}
 button,a,input,summary,select,textarea{ -webkit-tap-highlight-color:transparent }
 :focus-visible{outline:2px solid var(--accent);outline-offset:4px}
-a{color:inherit} button svg, .ui-icon{width:20px;height:20px;flex:none;pointer-events:none}
+a{color:inherit} [data-icon] svg, .ui-icon{width:20px;height:20px;flex:none;pointer-events:none}
 .ui-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 16px;border:0;border-radius:12px;background:var(--card);box-shadow:0 1px 3px #0000000a;font-weight:500;white-space:nowrap}
 .ui-button:hover{background:var(--raised)} .ui-button.primary{background:var(--ink);color:var(--card)}
 .ui-button.icon{width:40px;padding:8px}.ui-button.ghost{background:transparent;box-shadow:none}.ui-button[aria-pressed=true]{background:var(--accent-tint);color:var(--accent)}
