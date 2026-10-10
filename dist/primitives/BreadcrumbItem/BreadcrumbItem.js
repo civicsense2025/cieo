@@ -1,0 +1,5 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function BreadcrumbItem({ current = false, children }) {
+    return (_jsx("li", { "aria-current": current ? 'page' : undefined, className: "cieo-p-crumb", children: children }));
+}

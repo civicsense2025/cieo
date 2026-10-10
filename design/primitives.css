@@ -10,3 +10,10 @@
 @import './styles/primitives/toolbar.css';
 @import './styles/primitives/p-text.css';
 @import './styles/primitives/p-field.css';
+@import './styles/primitives/stack.css';
+@import './styles/primitives/divider.css';
+@import './styles/primitives/breadcrumbs.css';
+@import './styles/primitives/tooltip.css';
+@import './styles/primitives/overlay.css';
+@import './styles/primitives/list.css';
+@import './styles/primitives/spinner.css';
