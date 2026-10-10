@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.grid-span",
+  "componentVersion": "1.0.0",
+  "name": "GridSpan",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/GridSpan/GridSpan.tsx", "symbol": "GridSpan" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "span", "type": { "kind": "integer" }, "required": true, "nullable": false, "constraints": { "min": 1, "max": 12 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "cell", "overrides": [], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["grid-child-only"], "content": ["span-within-grid"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["span"], "states": [], "events": [], "parts": ["cell"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Grid item that spans N columns." },
+  "extensions": {}
+}

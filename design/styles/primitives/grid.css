@@ -1,0 +1,6 @@
+/* design/styles/primitives/grid.css */
+@layer cieo.components {
+  :where(.cieo).cieo-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--cieo-space-4); min-inline-size: 0; }
+  :where(.cieo).cieo-grid[data-gap='sm'] { gap: var(--cieo-space-2); }
+  :where(.cieo).cieo-grid[data-gap='lg'] { gap: var(--cieo-space-6); }
+}

@@ -1,0 +1,4 @@
+/* design/styles/primitives/layout.css */
+@layer cieo.components {
+  :where(.cieo).cieo-layout { display: grid; grid-template-rows: auto 1fr auto; min-block-size: 100dvh; min-inline-size: 0; }
+}

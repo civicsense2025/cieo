@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.layout-panel",
+  "componentVersion": "1.0.0",
+  "name": "LayoutPanel",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/LayoutPanel/LayoutPanel.tsx", "symbol": "LayoutPanel" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "side", "type": { "kind": "enum", "values": ["left", "right"] }, "required": false, "nullable": false, "default": "right", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "panel", "overrides": ["border"], "tokenRoles": ["border-control"] }],
+  "constraints": { "layout": ["side-rail"], "content": ["panel-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "side"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Named side panel on the left or right edge." },
+  "extensions": {}
+}
