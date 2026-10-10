@@ -1,0 +1,4 @@
+@layer cieo.components {
+  :where(.cieo).cieo-p-text { margin: 0; line-height: var(--cieo-leading-control); }
+  :where(.cieo).cieo-p-text[data-size='small'] { font-size: var(--cieo-text-small); }
+}

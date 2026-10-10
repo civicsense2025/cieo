@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.text",
+  "componentVersion": "1.0.0",
+  "name": "Text",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Text/Text.tsx", "symbol": "Text" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "as", "type": { "kind": "enum", "values": ["p", "span", "div"] }, "required": false, "nullable": false, "default": "p", "constraints": {} },
+    { "id": "size", "type": { "kind": "enum", "values": ["default", "small"] }, "required": false, "nullable": false, "default": "default", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "text", "overrides": ["font-size"], "tokenRoles": ["text-body"] }],
+  "constraints": { "layout": ["inline-flow"], "content": ["body-copy-only"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["as", "size"], "states": [], "events": [], "parts": ["text"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Body copy with size control." },
+  "extensions": {}
+}
