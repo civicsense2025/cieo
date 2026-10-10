@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.table-row",
+  "componentVersion": "1.0.0",
+  "name": "TableRow",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/TableRow/TableRow.tsx", "symbol": "TableRow" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "selected", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 32, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "row", "overrides": ["background"], "tokenRoles": ["selection"] }],
+  "constraints": { "layout": ["inside-thead-tbody-tfoot"], "content": ["row-has-cells"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["selected"], "states": [], "events": [], "parts": ["row"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Table row with optional selected highlight." },
+  "extensions": {}
+}

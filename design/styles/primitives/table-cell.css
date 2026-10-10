@@ -1,0 +1,4 @@
+/* design/styles/primitives/table-cell.css */
+@layer cieo.components {
+  :where(.cieo).cieo-table-cell { padding: var(--cieo-space-3) var(--cieo-space-4); text-align: start; }
+}
