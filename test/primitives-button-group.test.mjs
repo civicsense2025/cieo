@@ -22,4 +22,5 @@ test('ButtonGroup CSS uses tokens and collapses adjoining borders', () => {
   const css = readFileSync('design/styles/primitives/button-group.css', 'utf8');
   assert.match(css, /--cieo-color-border-strong/);
   assert.match(css, /margin-inline-start:\s*-1px|border-start-start-radius/);
+  assert.match(css, /:not\(:first-child\):not\(:last-child\)/);
 });

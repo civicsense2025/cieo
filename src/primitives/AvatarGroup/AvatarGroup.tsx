@@ -24,8 +24,8 @@ export function AvatarGroup({ people, max = 4, size = 'md', style }: AvatarGroup
   const rest = people.length - shown.length;
   return (
     <span aria-hidden="true" data-size={size} className="cieo cieo-avatar-group" style={style}>
-      {shown.map((p) => (
-        <span key={p.name} className="cieo-avatar" title={p.name}>
+      {shown.map((p, i) => (
+        <span key={`${p.name}-${i}`} className="cieo-avatar">
           {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-avatar-initials">{p.initials}</span>}
         </span>
       ))}
