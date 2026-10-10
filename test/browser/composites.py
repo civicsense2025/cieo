@@ -29,10 +29,31 @@ try:
         pg.fill('[data-name]', 'Amara Okafor'); pg.fill('[data-email]', 'a@example.com')
         pg.click('[data-confirm]')
         checks['booking-ref'] = (pg.text_content('[data-reference]') or '').strip() == 'BK-20261021-1030-AO'
+        pg.goto('http://127.0.0.1:4799/site/composites/settings.html')
+        pg.fill('[data-setting="name"]', 'Ada Lovelace'); pg.fill('[data-setting="email"]', 'ada@example.com')
+        pg.click('[data-save]')
+        checks['settings-save'] = pg.locator('[data-saved]').is_visible()
+        pg.reload()
+        checks['settings-persist'] = pg.input_value('[data-setting="name"]') == 'Ada Lovelace'
+        pg.goto('http://127.0.0.1:4799/site/composites/inbox.html')
+        pg.click('[data-thread="invoice-1042"]')
+        checks['inbox-thread'] = pg.locator('#panel-invoice-1042').is_visible()
+        before = pg.locator('#panel-invoice-1042 [data-messages] > *').count()
+        pg.fill('[data-reply]', 'Thanks — paid today'); pg.click('[data-send]')
+        checks['inbox-reply'] = pg.locator('#panel-invoice-1042 [data-messages] > *').count() == before + 1
+        pg.goto('http://127.0.0.1:4799/site/composites/onboarding.html')
+        pg.click('[data-next="profile"]')
+        pg.fill('[data-name]', 'Ada Lovelace'); pg.fill('[data-email]', 'ada@example.com')
+        pg.check('input[name="avatar"] >> nth=0')
+        pg.click('[data-next="preferences"]')
+        pg.click('[data-theme] >> nth=0')
+        pg.select_option('[data-digest]', index=1)
+        pg.click('[data-next="done"]')
+        checks['onboarding-done'] = pg.locator('[data-step-panel="done"]').is_visible()
         checks['no-errors'] = (errors == [])
         b.close()
     print(json.dumps(checks, indent=1))
-    ok = all(checks.values()) and len(checks) == 7
+    ok = all(checks.values()) and len(checks) == 11
     print('COMPOSITES', 'PASS' if ok else 'FAIL'); sys.exit(0 if ok else 1)
 finally:
     srv.terminate()
