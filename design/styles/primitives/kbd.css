@@ -1,0 +1,10 @@
+/* design/styles/primitives/kbd.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-kbd {
+    display: inline-block; padding: var(--cieo-space-0) var(--cieo-space-1);
+    font-family: var(--cieo-font-mono); font-size: var(--cieo-text-small); line-height: var(--cieo-leading-tight);
+    color: var(--cieo-color-text); background: var(--cieo-color-sunken);
+    border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small);
+    white-space: nowrap;
+  }
+}

@@ -1,0 +1,11 @@
+/* design/styles/primitives/avatar-group-overflow.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-avatar-group-overflow {
+    display: inline-flex; align-items: center; justify-content: center;
+    inline-size: 2rem; block-size: 2rem; border-radius: 999px; flex: none;
+    background: var(--cieo-color-surface); color: var(--cieo-color-text);
+    border: 2px solid var(--cieo-color-border-strong);
+    font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium);
+  }
+  :where(.cieo).cieo-p-avatar-group-overflow[data-size='sm'] { inline-size: 1.5rem; block-size: 1.5rem; }
+}

@@ -1,0 +1,13 @@
+/* design/styles/primitives/avatar-status-dot.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-avatar-status-dot-wrap { position: relative; display: inline-flex; flex: none; }
+  :where(.cieo) .cieo-p-avatar-status-dot {
+    position: absolute; inset-block-end: 0; inset-inline-end: 0;
+    inline-size: 0.75rem; block-size: 0.75rem; border-radius: 999px;
+    background: var(--cieo-color-muted); border: 2px solid var(--cieo-color-surface);
+  }
+  :where(.cieo) .cieo-p-avatar-status-dot[data-status='success'] { background: var(--cieo-color-success); }
+  :where(.cieo) .cieo-p-avatar-status-dot[data-status='warning'] { background: var(--cieo-color-warning); }
+  :where(.cieo) .cieo-p-avatar-status-dot[data-status='danger'] { background: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-p-avatar-status-dot[data-status='info'] { background: var(--cieo-color-info); }
+}

@@ -1,0 +1,10 @@
+/* design/styles/primitives/icon.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-icon {
+    display: inline-flex; align-items: center; justify-content: center; flex: none;
+    inline-size: 1.25rem; block-size: 1.25rem;
+    font-size: var(--cieo-text-body); line-height: var(--cieo-leading-tight); color: inherit;
+  }
+  :where(.cieo).cieo-p-icon[data-size='sm'] { inline-size: 1rem; block-size: 1rem; font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-p-icon svg { inline-size: 100%; block-size: 100%; }
+}
