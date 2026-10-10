@@ -104,13 +104,32 @@
   };
   const input=document.getElementById('atom-search');
   input.addEventListener('input',()=>{search=input.value;c.filter()});
-  document.getElementById('family-filter').addEventListener('click',e=>{
-    const b=e.target.closest('[data-family]');if(!b)return;c.family=b.dataset.family;
-    document.querySelectorAll('[data-family]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));c.filter();
+  // Family tabs: one tablist, one shared tabpanel (#groups). Selection follows focus.
+  const tabs=[...document.querySelectorAll('#family-filter [role=tab]')], panel=document.getElementById('groups');
+  const markTab=tab=>{
+    tabs.forEach(t=>{const on=t===tab;t.setAttribute('aria-selected',String(on));t.tabIndex=on?0:-1});
+    panel.setAttribute('aria-labelledby',tab.id);
+  };
+  const selectTab=(tab,{focus=false}={})=>{
+    markTab(tab);c.family=tab.dataset.family;c.filter();
+    if(focus)tab.focus();
+  };
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>selectTab(tab));
+    tab.addEventListener('keydown',e=>{
+      const cur=tabs.indexOf(tab), rtl=getComputedStyle(tab).direction==='rtl';
+      const moves={ArrowRight:rtl?cur-1:cur+1,ArrowLeft:rtl?cur+1:cur-1,Home:0,End:tabs.length-1};
+      if(!(e.key in moves))return;
+      e.preventDefault();
+      selectTab(tabs[(moves[e.key]+tabs.length)%tabs.length],{focus:true});
+    });
   });
+  // Route changes and "Show all atoms" reset c.family to '*' in gallery routeChanged; keep the tab state in step.
+  addEventListener('hashchange',()=>markTab(tabs[0]));
+  document.getElementById('clear-filters').addEventListener('click',()=>markTab(tabs[0]));
   const routeChanged=()=>{
     search=c.route().query;input.value=search;c.family='*';
-    document.querySelectorAll('[data-family]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.family==='*')));
+    markTab(tabs[0]);
     c.filter();window.scrollTo({top:0});
     const id=c.route().atom;if(id&&c.byId.has(id))c.inspect(id);
   };
