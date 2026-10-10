@@ -16,20 +16,25 @@ export interface AvatarGroupProps {
   /** Max faces before collapsing into +N. Defaults to 4. */
   max?: number;
   size?: 'sm' | 'md';
+  /** Optional text after the faces, e.g. "3k love" for review counts. Read by assistive tech; the faces stay decorative. */
+  label?: string;
   style?: CSSProperties;
 }
 
-export function AvatarGroup({ people, max = 4, size = 'md', style }: AvatarGroupProps) {
+export function AvatarGroup({ people, max = 4, size = 'md', label, style }: AvatarGroupProps) {
   const shown = people.slice(0, max);
   const rest = people.length - shown.length;
   return (
-    <span aria-hidden="true" data-size={size} className="cieo cieo-avatar-group" style={style}>
-      {shown.map((p, i) => (
-        <span key={`${p.name}-${i}`} className="cieo-avatar">
-          {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-avatar-initials">{p.initials}</span>}
-        </span>
-      ))}
-      {rest > 0 ? <span className="cieo-avatar cieo-avatar-overflow">+{rest}</span> : null}
+    <span data-size={size} className="cieo cieo-avatar-group" style={style}>
+      <span aria-hidden="true" className="cieo-avatar-stack">
+        {shown.map((p, i) => (
+          <span key={`${p.name}-${i}`} className="cieo-avatar">
+            {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-avatar-initials">{p.initials}</span>}
+          </span>
+        ))}
+        {rest > 0 ? <span className="cieo-avatar cieo-avatar-overflow">+{rest}</span> : null}
+      </span>
+      {label ? <span className="cieo-avatar-group-label">{label}</span> : null}
     </span>
   );
 }

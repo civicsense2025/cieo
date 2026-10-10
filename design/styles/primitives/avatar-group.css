@@ -1,7 +1,8 @@
 /* design/styles/primitives/avatar-group.css */
 @layer cieo.components {
   :where(.cieo).cieo-avatar-group { display: inline-flex; align-items: center; }
-  :where(.cieo).cieo-avatar-group > * + * { margin-inline-start: -0.5rem; }
+  :where(.cieo).cieo-avatar-group .cieo-avatar-stack { display: inline-flex; align-items: center; }
+  :where(.cieo).cieo-avatar-group .cieo-avatar-stack > * + * { margin-inline-start: -0.5rem; }
   :where(.cieo) .cieo-avatar {
     inline-size: 2rem; block-size: 2rem; border-radius: 999px; overflow: hidden; flex: none;
     display: inline-flex; align-items: center; justify-content: center;
@@ -9,6 +10,7 @@
     border: 2px solid var(--cieo-color-surface);
   }
   :where(.cieo).cieo-avatar-group[data-size='sm'] .cieo-avatar { inline-size: 1.5rem; block-size: 1.5rem; }
+  :where(.cieo).cieo-avatar-group .cieo-avatar-group-label { margin-inline-start: 0.5rem; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); white-space: nowrap; }
   :where(.cieo) .cieo-avatar img { inline-size: 100%; block-size: 100%; object-fit: cover; }
   :where(.cieo) .cieo-avatar-initials { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); }
   :where(.cieo) .cieo-avatar-overflow { background: var(--cieo-color-surface); border: 2px solid var(--cieo-color-border-strong); }

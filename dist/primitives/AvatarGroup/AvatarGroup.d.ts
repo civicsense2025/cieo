@@ -12,6 +12,8 @@ export interface AvatarGroupProps {
     /** Max faces before collapsing into +N. Defaults to 4. */
     max?: number;
     size?: 'sm' | 'md';
+    /** Optional text after the faces, e.g. "3k love" for review counts. Read by assistive tech; the faces stay decorative. */
+    label?: string;
     style?: CSSProperties;
 }
-export declare function AvatarGroup({ people, max, size, style }: AvatarGroupProps): import("react/jsx-runtime").JSX.Element;
+export declare function AvatarGroup({ people, max, size, label, style }: AvatarGroupProps): import("react/jsx-runtime").JSX.Element;
