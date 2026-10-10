@@ -6,7 +6,7 @@
 .tile[data-tone=blue] .stage-shell{background:var(--blue)}.tile[data-tone=lilac] .stage-shell{background:var(--lilac)}.tile[data-tone=peach] .stage-shell{background:var(--peach)}.tile[data-tone=mint] .stage-shell{background:var(--mint)}.tile[data-tone=butter] .stage-shell{background:var(--butter)}
 .stage{position:relative;height:360px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;overflow:hidden;min-width:0;isolation:isolate}
 .tile.tall .stage{height:384px}.tile.big .stage{height:400px}.tile.wide .stage{height:400px}.tile.wide.tall .stage{height:560px}
-.tile>header{display:flex;align-items:center;gap:8px;padding:16px 0 8px}.tile h3{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:-.1px;margin:0;flex:1}.tile>header p{margin:4px 0 0;font-size:11px;color:var(--faint)}
+.tile>header{display:flex;align-items:center;gap:8px;padding:16px 0 8px}.tile h3{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:-.1px;margin:0;flex:1}.tile>header p{margin:4px 0 0;font-size:11px;color:var(--muted)}
 .tile .ui-tile-name{border:0;background:transparent;padding:0;color:var(--ink);text-align:left;font:inherit;font-weight:600;display:block}.tile .ui-tile-name:hover{color:var(--accent)}
 .tile .ui-tile-tools{margin-left:auto;display:flex;gap:0}.tile .ui-tile-tools button{width:32px;height:32px;border:0;background:transparent;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
 .tile .ui-tile-tools button:hover{background:var(--raised)}.tile .ui-tile-tools button[aria-pressed=true]{color:var(--accent);background:var(--accent-tint)}.tile .ui-tile-tools svg{width:16px;height:16px}
@@ -21,17 +21,18 @@
 .layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap}
 .digits{display:inline-flex;font-variant-numeric:tabular-nums}.dslot{position:relative;display:inline-block;height:1.25em;overflow:hidden;vertical-align:bottom}.dslot .dl{position:absolute;left:0;right:0;top:0;text-align:center}
 .pill{position:absolute;border-radius:999px}.row{display:flex;align-items:center;gap:8px}.col{display:flex;flex-direction:column;gap:8px}.muted{color:var(--muted)}.small{font-size:13px}.num{font-variant-numeric:tabular-nums}
-.hint{position:absolute;bottom:16px;left:16px;right:16px;text-align:center;font-size:11px;color:var(--faint);pointer-events:none}.ro{position:absolute;top:16px;right:16px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.hint{position:absolute;bottom:16px;left:16px;right:16px;text-align:center;font-size:11px;color:var(--muted);pointer-events:none}.ro{position:absolute;top:16px;right:16px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
 .stage input,.stage textarea{font:inherit;color:inherit;accent-color:var(--accent)}.stage button:focus-visible,.stage input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.stage input::placeholder,.stage textarea::placeholder{color:var(--faint)}.stage :is(button,input,textarea){max-width:100%}
+.stage input::placeholder,.stage textarea::placeholder{color:var(--muted)}.stage :is(button,input,textarea){max-width:100%}
+#palq:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .ui-atom-error{padding:24px;text-align:center;font-size:13px;color:var(--danger)}
 .ui-setting-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px;width:min(336px,calc(100% - 48px));background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
 .ui-setting-row strong{font-size:13px;font-weight:600}.ui-setting-row small{display:block;font-size:11px;color:var(--muted);margin-top:8px}.ui-setting-row .tg{flex:none}
 .ui-command-icon{width:24px;height:24px;border-radius:8px;background:var(--raised);display:grid;place-items:center;color:var(--muted);font-size:12px;flex:none}
-.ui-stage-footer{font-size:10px;color:var(--faint);letter-spacing:.03em}
+.ui-stage-footer{font-size:10px;color:var(--muted);letter-spacing:.03em}
 :root[data-corners=crisp] .stage :is(.card,.btn){border-radius:8px}
 @media(max-width:767px){#groups{gap:24px}.tile.wide{grid-column:auto}.tile .stage{height:320px}.tile.tall .stage,.tile.big .stage{height:400px}.tile.wide.tall .stage{height:560px}.tile .ui-tile-tools button{width:40px;height:40px}.tile>header{padding-top:8px}.stage .btn{min-height:40px}.ui-setting-row{padding:16px;gap:16px}}
-@media(pointer:coarse){.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-chip{min-height:48px}}
+@media(pointer:coarse){.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-families [role=tab]{min-height:48px}}
 /* Prevent recipe image or SVG intrinsic widths from enlarging the gallery track. */
 .stage > :not(style){max-inline-size:100%}
 /* Caret rule for every recipe select: the arrow sits 12px inside the right edge and the text keeps clear of it. */
