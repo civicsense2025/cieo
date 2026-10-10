@@ -302,7 +302,7 @@ ${SRCSS}
   </section>
   <section class="L ld" aria-label="Setup complete" style="text-align:center">
     <div class="col" style="align-items:center;gap:0">
-      <svg class="ok" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle class="dc" cx="22" cy="22" r="20" fill="var(--success-tint)" fill-opacity="0"/><circle class="rg2" cx="22" cy="22" r="20" fill="none" stroke="var(--success)" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 22 22)"/><path class="ck" d="M13.5 22.5 19.5 28.5 30.5 16" fill="none" stroke="var(--success)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
+      <svg class="ok" width="24" height="24" viewBox="0 0 44 44" aria-hidden="true"><circle class="dc" cx="22" cy="22" r="20" fill="var(--success-tint)" fill-opacity="0"/><circle class="rg2" cx="22" cy="22" r="20" fill="none" stroke="var(--success)" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 22 22)"/><path class="ck" d="M13.5 22.5 19.5 28.5 30.5 16" fill="none" stroke="var(--success)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
       <h4 class="dt" style="margin-top:12px">Your site is ready</h4>
       <p class="small muted dm" style="margin:6px 0 14px;max-width:34ch">Domain connected, theme chosen, first post drafted and a teammate invited. Everything stays editable in Settings.</p>
       <button type="button" class="btn ink cont">Continue</button>

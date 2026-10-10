@@ -385,7 +385,7 @@ atom({ id:'themetoggle', cat:CAT, name:'Theme toggle', block:'ThemeToggle', fam:
 /* ================================================================ 7. Device toggle */
 atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', fam:['E','M'], wide:true, tall:true,
   html:`<style>
-.dv{position:absolute;inset:0;overflow:hidden}
+.ss-dv{position:absolute;inset:0;overflow:hidden}
 .dv-sg{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;background:var(--raised);border-radius:10px;padding:3px;z-index:2}
 .dv-sg .ind{position:absolute;left:0;top:0;background:var(--card);border-radius:7px;box-shadow:var(--shadow)}
 .dv-sg button{position:relative;width:38px;height:28px;border:0;border-radius:7px;background:none;display:grid;place-items:center;cursor:pointer}
@@ -410,7 +410,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
 @container (max-width:560px){.dv-hr{grid-template-columns:minmax(0,1fr)}.dv-im{height:50px}.dv-gr{grid-template-columns:minmax(0,1fr)}.dv-pg{padding:10px 12px;gap:10px}}
 @container (max-width:520px){.dv-lk,.dv-cta{display:none}.dv-bg{display:block}}
 @container (max-width:300px){.dv-dt{display:none}}
-</style><div class="dv"><div class="dv-sg" role="group" aria-label="Preview width"><div class="ind"></div>
+</style><div class="ss-dv"><div class="dv-sg" role="group" aria-label="Preview width"><div class="ind"></div>
 <button type="button" aria-label="Desktop" title="Desktop">${ic(J.monitor, 17)}</button><button type="button" aria-label="Tablet · 820" title="Tablet · 820">${ic(J.tablet, 17)}</button><button type="button" aria-label="Phone · 390" title="Phone · 390">${ic(J.phone, 17)}</button></div>
 <div class="dv-fr" role="img" aria-label="Preview of the site at the chosen width"><div class="dv-cr"><span class="dv-dt"><i></i><i></i><i></i></span><span class="dv-ur"><span>northlight.studio</span><span class="dv-wd num">0 px</span></span></div>
 <div class="dv-pg"><div class="dv-nv"><b>Northlight</b><span class="dv-lk"><span>Work</span><span>Studio</span><span>Journal</span></span><span class="dv-cta">Book a call</span><span class="dv-bg">${ic(I.menu, 16)}</span></div>
@@ -419,7 +419,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
   desc:'The three icon buttons share one indicator whose edges lag: leading edge first, trailing 60ms later. The preview frame is a single element whose width, corner radius, bezel and chrome height spring together from one device value, so going Desktop to Phone passes through tablet like a real resize. The page inside is container-queried: columns collapse, the nav folds to a menu and cards stack as the width crosses each breakpoint.',
   api:'u.set(device)   width = piece([avail, min(820, .72·avail), min(390, .4·avail)], u)   radius = piece([10, 18, 30], u)   ind.go(l, r)',
   init(st){
-    const root = $(st,'.dv'), grp = $(st,'.dv-sg'), ind = $(grp,'.ind'), btns = $$(grp,'button'), fr = $(st,'.dv-fr'), cr = $(st,'.dv-cr'), wd = $(st,'.dv-wd');
+    const root = $(st,'.ss-dv'), grp = $(st,'.dv-sg'), ind = $(grp,'.ind'), btns = $$(grp,'button'), fr = $(st,'.dv-fr'), cr = $(st,'.dv-cr'), wd = $(st,'.dv-wd');
     const e = edges(0, 0), u = new Track(0); let cur = 0, last = '';
     const NAME = ['Desktop', 'Tablet', 'Phone'];
     const geo = b => [b.offsetLeft, b.offsetLeft + b.offsetWidth];

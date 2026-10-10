@@ -82,12 +82,17 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-chip:hover{background:var(--raised)}.ui-chip[aria-pressed=true]{background:var(--ink);color:var(--card)}.ui-chip i{font:11px var(--mono);font-style:normal;opacity:.65}
 .ui-viewtools{display:flex;align-items:center;gap:8px}.ui-viewtools select{border:0;background:transparent;font-size:12px;padding:8px;min-height:40px}
 .ui-empty{padding:80px 24px;text-align:center}.ui-empty h2{font-size:24px;letter-spacing:-.5px}.ui-empty p{color:var(--muted)}
+.ui-tile-caption{margin:0;padding:12px 0 0;font-size:12px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere;max-width:100%}
+#groups .tile>header{min-width:0}
+#groups .tile .ui-tile-name{min-width:0;overflow-wrap:anywhere}
+#groups .tile .ui-tile-tools{flex:none}
+#groups .ui-family-mark{flex:none}
 .ui-bottom{display:none}.ui-mobile-only{display:none!important}
 .ui-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;background:var(--ink);color:var(--card);padding:16px 24px;border-radius:16px;box-shadow:var(--float-shadow);max-width:calc(100vw - 32px);font-size:13px;pointer-events:none}
 @media(min-width:1840px){.ui-main{padding-inline:48px}}
 @media(max-width:1279px){:root{--sidebar:216px;--columns:2}.ui-main{padding-inline:24px}.ui-breadcrumb{display:none}.ui-search{margin-left:0;width:100%;max-width:400px}.ui-topbar>button:last-child{margin-left:auto}}
 @media(max-width:1023px){.ui-sidebar{display:none}.ui-main{margin:0}.ui-mobile-only{display:inline-flex!important}.ui-topbar{min-height:72px}.ui-search{max-width:none}.ui-breadcrumb{display:none}.ui-heading{padding-top:24px}}
-@media(max-width:767px){:root{--columns:1}.ui-main{padding:0 16px 112px}.ui-topbar{gap:8px;min-height:72px}.ui-topbar>.ui-desktop-only{display:none}.ui-heading{padding-top:16px;align-items:center}.ui-heading h1{font-size:32px;letter-spacing:-1px}.ui-heading p{font-size:12px}.ui-heading-tools{display:none!important}.ui-search{padding-inline:12px}.ui-search kbd{display:none}.ui-toolbar{flex-wrap:wrap;gap:8px;margin-bottom:16px}.ui-families{width:100%;margin-inline:-4px}.ui-viewtools{width:100%;justify-content:space-between}.ui-chip{min-height:40px;padding-inline:16px}.ui-bottom{display:flex;position:fixed;z-index:30;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:264px;justify-content:space-around;padding:8px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--float-shadow)}.ui-bottom button{width:72px;height:48px;display:flex;align-items:center;justify-content:center;gap:2px;flex-direction:column;background:none;border:0;color:var(--muted);border-radius:16px;font-size:10px}.ui-bottom button:hover{background:var(--raised)}.ui-bottom button svg{height:20px}.ui-toast{bottom:96px}.ui-button{min-height:48px}.ui-button.icon{width:48px}}
+@media(max-width:767px){:root{--columns:1}.ui-main{padding:0 16px 112px}.ui-topbar{gap:8px;min-height:72px}.ui-topbar>.ui-desktop-only{display:none}.ui-heading{padding-top:16px;align-items:center}.ui-heading h1{font-size:32px;letter-spacing:-1px}.ui-heading p{font-size:12px}.ui-heading-tools{display:none!important}.ui-search{padding-inline:12px}.ui-search kbd{display:none}.ui-toolbar{flex-wrap:wrap;gap:8px;margin-bottom:16px}.ui-families{width:100%;margin-inline:-4px}.ui-viewtools{width:100%;justify-content:space-between}.ui-chip{min-height:40px;padding-inline:16px}.ui-tile-caption{padding-top:8px}#groups .tile>header{gap:6px}.ui-bottom{display:flex;position:fixed;z-index:30;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:264px;justify-content:space-around;padding:8px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--float-shadow)}.ui-bottom button{width:72px;height:48px;display:flex;align-items:center;justify-content:center;gap:2px;flex-direction:column;background:none;border:0;color:var(--muted);border-radius:16px;font-size:10px}.ui-bottom button:hover{background:var(--raised)}.ui-bottom button svg{height:20px}.ui-toast{bottom:96px}.ui-button{min-height:48px}.ui-button.icon{width:48px}}
 
 /* Existing recipes keep their class names and measured geometry. These rules refine
    shared surfaces; atom-specific geometry is changed in its source, not forced here. */
@@ -1722,8 +1727,8 @@ atom({ id:'combobox', cat:'Inputs', name:'Combobox', block:'form, Combobox primi
   api:'row.y.set(k·34)   row.o.set(match)   list.h.set(min(n, 5)·34 + 12)',
   init(st){
     const inp = $(st,'input'), lb = $(st,'.lb'), hl = $(st,'.hl'), C = ['Argentina','Australia','Austria','Belgium','Brazil','Canada','Chile','Denmark','Estonia','Finland'], R = 40, P = 8;
-    const mk = () => { const d = document.createElement('div'); d.setAttribute('role','option'); d.style.cssText = 'position:absolute;left:8px;right:8px;top:0;height:40px;display:flex;align-items:center;padding:0 16px;font-size:12px;cursor:pointer;border-radius:7px'; lb.appendChild(d); return d; };
-    const rows = C.map(n => ({ el:mk(), n, y:new Track(0), o:new Track(0) })); const add = { el:mk(), n:'', y:new Track(P), o:new Track(0), add:true }; add.el.style.color = 'var(--muted)';
+    const mk = id => { const d = document.createElement('div'); d.setAttribute('role','option'); if (id) d.id = id; d.style.cssText = 'position:absolute;left:8px;right:8px;top:0;height:40px;display:flex;align-items:center;padding:0 16px;font-size:12px;cursor:pointer;border-radius:7px'; lb.appendChild(d); return d; };
+    const rows = C.map((n,i) => ({ el:mk('country-option-' + i), n, y:new Track(0), o:new Track(0) })); const add = { el:mk('country-option-add'), n:'', y:new Track(P), o:new Track(0), add:true }; add.el.style.color = 'var(--muted)';
     const o = new Track(0), H = new Track(0), e = edges(P, P + R); let vis = [], hi = 0, open = false;
     const esc2 = s => s.replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' })[c]);
     const render = () => { const q = inp.value.trim().toLowerCase(); vis = rows.filter(r => r.n.toLowerCase().includes(q)).slice(0,5);
@@ -1731,11 +1736,12 @@ atom({ id:'combobox', cat:'Inputs', name:'Combobox', block:'form, Combobox primi
         r.el.innerHTML = q && i >= 0 ? esc2(r.n.slice(0,i)) + '<b>' + esc2(r.n.slice(i, i + q.length)) + '</b>' + esc2(r.n.slice(i + q.length)) : esc2(r.n);
         if (k >= 0){ r.o.target === 0 ? r.y.jump(P + k*R) : r.y.set(P + k*R); } r.o.set(k >= 0 ? 1 : 0, k >= 0 ? S.base : S.snap); });
       if (!vis.length && q){ add.el.innerHTML = `Add “${esc2(inp.value.trim())}”`; vis = [add]; add.o.set(1); } else add.o.set(0, S.snap);
-      H.set(P*2 + Math.max(1, vis.length)*R); hi = 0; e.go(P, P + R); };
+      H.set(P*2 + Math.max(1, vis.length)*R); hi = 0; e.go(P, P + R); syncHi(); };
+    const syncHi = () => { [...rows, add].forEach(r => r.el.setAttribute('aria-selected', String(vis[hi] === r))); inp.setAttribute('aria-activedescendant', (vis[hi] && vis[hi].el.id) || ''); };
     const setOpen = v => { open = v; openSet(o, v); inp.setAttribute('aria-expanded', v); if (v){ render(); H.jump(P*2 + Math.max(1, vis.length)*R); e.jump(P, P + R); } };
     const choose = r => { inp.value = r.add ? inp.value.trim() : r.n; setOpen(false); };
     inp.onfocus = () => setOpen(true); inp.oninput = () => open ? render() : setOpen(true); inp.onblur = () => setOpen(false);
-    inp.onkeydown = ev => { if (!vis.length) return; if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){ ev.preventDefault(); hi = (hi + (ev.key === 'ArrowDown' ? 1 : vis.length - 1)) % vis.length; e.go(P + hi*R, P + (hi+1)*R); }
+    inp.onkeydown = ev => { if (!vis.length) return; if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){ ev.preventDefault(); hi = (hi + (ev.key === 'ArrowDown' ? 1 : vis.length - 1)) % vis.length; e.go(P + hi*R, P + (hi+1)*R); syncHi(); }
       if (ev.key === 'Enter'){ ev.preventDefault(); choose(vis[hi]); } if (ev.key === 'Escape') setOpen(false); };
     [...rows, add].forEach(r => { r.el.onpointerdown = ev => ev.preventDefault(); r.el.onclick = () => choose(r); r.el.onpointerenter = () => { const k = vis.indexOf(r); if (k >= 0 && k !== hi){ hi = k; e.go(P + k*R, P + (k+1)*R); } }; });
     return t => { pop(lb, o.at(t)); lb.style.height = px(H.at(t)); plate(hl, e.A.at(t), e.B.at(t)); hl.style.opacity = vis.length ? 1 : 0;
@@ -2404,7 +2410,7 @@ atom({ id:'conversational', cat:'Forms', name:'One question at a time', block:'f
       const num = `<span class="small muted">${i + 1} →</span>`;
       if (q.t === 'text') d.innerHTML = `${num}<b style="font-size:22px;letter-spacing:-.02em">${q.q}</b><input id="cv-name" placeholder="${q.ph}" autocomplete="off" style="border:0;border-bottom:2px solid var(--line);background:none;color:var(--ink);font:20px var(--sans);padding:6px 0;outline:none"><div class="row"><button class="btn ink ok">OK ${ic(I.check,13,3)}</button><span class="small muted">press <b>Enter ↵</b></span><span class="er small" style="color:var(--danger);opacity:0">Please fill this in</span></div>`;
       else if (q.t === 'choice') d.innerHTML = `${num}<b style="font-size:22px;letter-spacing:-.02em">${q.q}</b><div class="col" style="gap:6px;max-width:260px">${q.o.map((o,j) => `<button class="opt" style="display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);padding:7px 10px;cursor:pointer;text-align:left;font-size:15px"><kbd style="font:600 11px var(--sans);border:1px solid var(--line);border-radius:4px;padding:0 5px">${'ABC'[j]}</kbd>${o}</button>`).join('')}</div>`;
-      else d.innerHTML = `<div class="row" style="gap:12px"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path class="ck" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><b class="thx" style="font-size:22px;letter-spacing:-.02em"></b></div><span class="small muted">We’ll email your migration checklist shortly.</span><button class="btn again" style="align-self:flex-start">Start again</button>`;
+      else d.innerHTML = `<div class="row" style="gap:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path class="ck" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><b class="thx" style="font-size:22px;letter-spacing:-.02em"></b></div><span class="small muted">We’ll email your migration checklist shortly.</span><button class="btn again" style="align-self:flex-start">Start again</button>`;
       cv.appendChild(d); return d; });
     const sw = new Swap(0), prog2 = new Track(0); let cur = 0, pulse = null, adv = 0, tEnd = 0;
     const go = i => { cur = i; sw.to(i); prog2.set(i/(Q.length - 1)); if (Q[i].t === 'text') setTimeout(() => $(panes[i],'input').focus({ preventScroll:true }), 120); if (Q[i].t === 'end'){ tEnd = now(); $(panes[i],'.thx').textContent = `Thanks, ${name.split(' ')[0]}.`; } };
@@ -2585,7 +2591,7 @@ window.CIEO_SOURCE_HINT="blocks/108-presence.js";
 
 
 atom({ id:'presence', cat:'Writing', name:'Live collaborators', block:'richtext editor (multiplayer)', fam:['M','X','T'], tall:true,
-  html:`<div class="card" style="position:relative;width:min(380px,92%);padding:16px"><div class="row" style="justify-content:space-between;margin-bottom:8px"><b class="small">Launch plan</b><div class="av row" style="gap:0"></div></div><p class="tx small" style="margin:0;line-height:1.8"></p></div>`,
+  html:`<div class="card" style="position:relative;width:min(380px,92%);padding:16px"><div class="row" style="justify-content:space-between;margin-bottom:8px"><b class="small">Launch plan</b><div class="av row" style="gap:0;padding:4px 0 4px 6px;margin:-4px 0 -4px -6px"></div></div><p class="tx small" style="margin:0;line-height:1.8"></p></div>`,
   desc:'Remote cursors glide word to word with name flags, and each person’s avatar joins the stack with a ring in their color. Positions are scheduled on the clock, so the scene replays identically.',
   api:'cursor.{x,y}.set(word[i] rect) every 1.3s   avatar.o.set(1)',
   init(st){
@@ -4137,7 +4143,7 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
     for (const k of ['none','bad']){ const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += ';white-space:normal;justify-content:flex-start;padding:0 10px;border-radius:9px;' + (k === 'bad' ? 'background:var(--danger-tint);color:var(--danger)' : ''); if (k === 'bad') e.innerHTML = ic(I.alert, 18) + '<span class="small" style="flex:1" role="alert">Your bank declined this card. You were not charged.</span>'; pm.appendChild(e); ml[k] = e; }
 
     /* panel 3: receipt */
-    const p3 = mkP(`<div class="row" style="gap:14px;align-items:center;margin-top:6px"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="cf-c1" cx="12" cy="12" r="10" pathLength="1" stroke-dasharray="1"/><path class="cf-c2" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><div class="col" style="gap:0"><b>Payment received</b><span class="small muted cf-mail"></span></div></div><div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;margin-top:4px"><span class="muted small">Total paid</span><b class="num cf-rt" style="font-size:24px;letter-spacing:-.02em"></b></div>`);
+    const p3 = mkP(`<div class="row" style="gap:14px;align-items:center;margin-top:6px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="cf-c1" cx="12" cy="12" r="10" pathLength="1" stroke-dasharray="1"/><path class="cf-c2" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><div class="col" style="gap:0"><b>Payment received</b><span class="small muted cf-mail"></span></div></div><div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;margin-top:4px"><span class="muted small">Total paid</span><b class="num cf-rt" style="font-size:24px;letter-spacing:-.02em"></b></div>`);
     const c1 = $(p3,'.cf-c1'), c2 = $(p3,'.cf-c2'), rt = $(p3,'.cf-rt'), mail = $(p3,'.cf-mail');
     const panels = [p0, p1, p2, p3];
 
@@ -4574,7 +4580,7 @@ ${SRCSS}
   </section>
   <section class="L ld" aria-label="Setup complete" style="text-align:center">
     <div class="col" style="align-items:center;gap:0">
-      <svg class="ok" width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle class="dc" cx="22" cy="22" r="20" fill="var(--success-tint)" fill-opacity="0"/><circle class="rg2" cx="22" cy="22" r="20" fill="none" stroke="var(--success)" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 22 22)"/><path class="ck" d="M13.5 22.5 19.5 28.5 30.5 16" fill="none" stroke="var(--success)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
+      <svg class="ok" width="24" height="24" viewBox="0 0 44 44" aria-hidden="true"><circle class="dc" cx="22" cy="22" r="20" fill="var(--success-tint)" fill-opacity="0"/><circle class="rg2" cx="22" cy="22" r="20" fill="none" stroke="var(--success)" stroke-width="2" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-90 22 22)"/><path class="ck" d="M13.5 22.5 19.5 28.5 30.5 16" fill="none" stroke="var(--success)" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>
       <h4 class="dt" style="margin-top:12px">Your site is ready</h4>
       <p class="small muted dm" style="margin:6px 0 14px;max-width:34ch">Domain connected, theme chosen, first post drafted and a teammate invited. Everything stays editable in Settings.</p>
       <button type="button" class="btn ink cont">Continue</button>
@@ -5276,7 +5282,7 @@ atom({ id:'themetoggle', cat:CAT, name:'Theme toggle', block:'ThemeToggle', fam:
 /* ================================================================ 7. Device toggle */
 atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', fam:['E','M'], wide:true, tall:true,
   html:`<style>
-.dv{position:absolute;inset:0;overflow:hidden}
+.ss-dv{position:absolute;inset:0;overflow:hidden}
 .dv-sg{position:absolute;top:10px;left:50%;transform:translateX(-50%);display:flex;background:var(--raised);border-radius:10px;padding:3px;z-index:2}
 .dv-sg .ind{position:absolute;left:0;top:0;background:var(--card);border-radius:7px;box-shadow:var(--shadow)}
 .dv-sg button{position:relative;width:38px;height:28px;border:0;border-radius:7px;background:none;display:grid;place-items:center;cursor:pointer}
@@ -5301,7 +5307,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
 @container (max-width:560px){.dv-hr{grid-template-columns:minmax(0,1fr)}.dv-im{height:50px}.dv-gr{grid-template-columns:minmax(0,1fr)}.dv-pg{padding:10px 12px;gap:10px}}
 @container (max-width:520px){.dv-lk,.dv-cta{display:none}.dv-bg{display:block}}
 @container (max-width:300px){.dv-dt{display:none}}
-</style><div class="dv"><div class="dv-sg" role="group" aria-label="Preview width"><div class="ind"></div>
+</style><div class="ss-dv"><div class="dv-sg" role="group" aria-label="Preview width"><div class="ind"></div>
 <button type="button" aria-label="Desktop" title="Desktop">${ic(J.monitor, 17)}</button><button type="button" aria-label="Tablet · 820" title="Tablet · 820">${ic(J.tablet, 17)}</button><button type="button" aria-label="Phone · 390" title="Phone · 390">${ic(J.phone, 17)}</button></div>
 <div class="dv-fr" role="img" aria-label="Preview of the site at the chosen width"><div class="dv-cr"><span class="dv-dt"><i></i><i></i><i></i></span><span class="dv-ur"><span>northlight.studio</span><span class="dv-wd num">0 px</span></span></div>
 <div class="dv-pg"><div class="dv-nv"><b>Northlight</b><span class="dv-lk"><span>Work</span><span>Studio</span><span>Journal</span></span><span class="dv-cta">Book a call</span><span class="dv-bg">${ic(I.menu, 16)}</span></div>
@@ -5310,7 +5316,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
   desc:'The three icon buttons share one indicator whose edges lag: leading edge first, trailing 60ms later. The preview frame is a single element whose width, corner radius, bezel and chrome height spring together from one device value, so going Desktop to Phone passes through tablet like a real resize. The page inside is container-queried: columns collapse, the nav folds to a menu and cards stack as the width crosses each breakpoint.',
   api:'u.set(device)   width = piece([avail, min(820, .72·avail), min(390, .4·avail)], u)   radius = piece([10, 18, 30], u)   ind.go(l, r)',
   init(st){
-    const root = $(st,'.dv'), grp = $(st,'.dv-sg'), ind = $(grp,'.ind'), btns = $$(grp,'button'), fr = $(st,'.dv-fr'), cr = $(st,'.dv-cr'), wd = $(st,'.dv-wd');
+    const root = $(st,'.ss-dv'), grp = $(st,'.dv-sg'), ind = $(grp,'.ind'), btns = $$(grp,'button'), fr = $(st,'.dv-fr'), cr = $(st,'.dv-cr'), wd = $(st,'.dv-wd');
     const e = edges(0, 0), u = new Track(0); let cur = 0, last = '';
     const NAME = ['Desktop', 'Tablet', 'Phone'];
     const geo = b => [b.offsetLeft, b.offsetLeft + b.offsetWidth];
@@ -20361,18 +20367,18 @@ atom({ id:'outline', cat:'Writing', name:'Outline zoom', block:'outline, documen
 
 window.CIEO_SOURCE_HINT="blocks/211-recall.js";
 atom({ id:'recall', cat:'Writing', name:'Recall flip', block:'flashcards, spaced repetition', fam:['M','S'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="align-items:center;gap:12px;padding:12px;margin:0 auto;max-width:360px"><div class="card rc" style="margin:0 auto;width:min(300px,88%);min-height:120px;display:grid;place-items:center;padding:20px;cursor:pointer;position:relative"><b class="qa" style="position:relative;min-height:24px;text-align:center"></b></div><div class="row" style="gap:8px;align-items:center"><button class="btn g0">Again</button><button class="btn g1">Hard</button><button class="btn g2">Easy</button><span class="small muted">in</span><b class="iv"></b></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Trail grade edge</span></label><div class="hint">Tap the card, then grade it</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="align-items:center;gap:12px;padding:12px;margin:0 auto;max-width:360px"><button type="button" class="card rc" aria-label="Show answer" style="margin:0 auto;width:min(300px,88%);min-height:120px;display:grid;place-items:center;padding:20px;cursor:pointer;position:relative;border:0;font:inherit;color:inherit"><b class="qa" style="position:relative;min-height:24px;text-align:center"></b></button><div class="row" style="gap:8px;align-items:center"><button class="btn g0">Again</button><button class="btn g1">Hard</button><button class="btn g2">Easy</button><span class="small muted">in</span><b class="iv"></b></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Trail grade edge</span></label><div class="hint">Tap the card, then grade it</div>`,
   desc:'The card turns over with a small dip at the halfway point. The answer only swaps in once the question has left. Each grade button trails its edge behind it. The next interval rolls its digits forward.',
   api:'flip.set(1, soft); dip=sin(pi p)   qa.to(1) after exit   edge.go(grade) trails .06   iv.set(days)',
   init(st){
-    const card = $(st,'.rc'), qa = $(st,'.qa');
+    const card = $(st,'button.rc'), qa = $(st,'.qa');
     const L = ['What opens the spring essay?','The market bell at dawn'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.textAlign = 'center'; e.textContent = s; qa.appendChild(e); return e; });
     const flip = new Track(0), sw = new Swap(0), dg = new Digits($(st,'.iv'), 2), e = edges(0, 120);
     const days = ['1d','3d','7d']; let shown = false; dg.set('1d', true); e.jump(0, 120);
     card.onclick = () => { if (shown) return; shown = true; flip.set(1, S.soft); sw.to(1, now()); };
     const grade = (i, inst) => { if (inst){ e.jump(0, [1,3,7][i]*40); } else { e.go(0, [1,3,7][i]*40); dg.set(days[i]); }
       shown = false; flip.set(0, S.soft); sw.to(0); };
-    [$$(st,'.g0')[0], $$(st,'.g1')[0], $$(st,'.g2')[0]].forEach((b,i) => b.onclick = () => grade(i));
+    [$$(st,'button.g0')[0], $$(st,'button.g1')[0], $$(st,'button.g2')[0]].forEach((b,i) => b.onclick = () => grade(i));
     grade(0, true);
     return t => { const p = clamp(flip.at(t)), dip = Math.sin(Math.PI*p);
       card.style.transform = `perspective(700px) rotateY(${(p*180).toFixed(1)}deg) translateY(${(-dip*10).toFixed(2)}px) scale(${(.97+.03*dip).toFixed(4)})`;
@@ -20582,13 +20588,13 @@ atom({ id:'annotthread', cat:'Documents', name:'Annotation thread', block:'comme
 
 window.CIEO_SOURCE_HINT="blocks/220-fill-field.js";
 atom({ id:'fillfield', cat:'Forms', name:'Fillable field', block:'form, text input, validation', fam:['M','S'],
-  html:`<div class="col" style="width:min(320px,90%);gap:8px"><div class="card col" style="padding:14px 16px;gap:12px"><b style="font-size:15px">Exhibit title</b><div class="wrap" style="position:relative"><label class="fl" style="position:absolute;left:12px;font-size:14px;color:var(--muted);pointer-events:none">e.g. Delivery schedule</label><input class="in" type="text" autocomplete="off" style="width:100%;min-height:36px;border-radius:8px;border:1px solid var(--line);padding:0 32px 0 10px;font-size:14px"><svg class="ck" width="18" height="18" viewBox="0 0 20 20" style="position:absolute;right:8px;top:9px"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="msg small" style="position:relative;height:22px;font-size:12.5px;line-height:1.5"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="rq" checked> required field</label></div><div class="hint">Type 3+ letters, erase to feel danger</div>`,
+  html:`<div class="col" style="width:min(320px,90%);gap:8px"><div class="card col" style="padding:14px 16px;gap:12px"><b style="font-size:15px">Exhibit title</b><div class="wrap" style="position:relative"><label class="fl" style="position:absolute;left:12px;font-size:14px;color:var(--muted);pointer-events:none">e.g. Delivery schedule</label><input class="in" type="text" autocomplete="off" style="width:100%;min-height:36px;border-radius:8px;border:1px solid var(--line);padding:0 32px 0 10px;font-size:14px"><svg class="ck" width="18" height="18" viewBox="0 0 20 20" style="position:absolute;right:8px;top:9px"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="msg small" style="position:relative;min-height:22px;font-size:12.5px;line-height:1.5;display:grid"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="rq" checked> required field</label></div><div class="hint">Type 3+ letters, erase to feel danger</div>`,
   desc:'The label floats up the moment typing starts. An empty required field rings danger with its message; a valid one inks a success check and holds a looks-good terminal.',
   api:'float.set(typing?1:0, base)   invalid: ring danger + msg.to(1)   valid: ck.set(1), msg.to(2)',
   init(st){
     const inp = $(st,'.in'), fl = $(st,'.fl'), ck = $(st,'.ck path'), msg = $(st,'.msg'), rq = $(st,'.rq');
     const flT = new Track(0), ring = new Track(0), ckT = new Track(0), sw = new Swap(0);
-    const M = ['', 'Enter at least 3 characters', 'Looks good ✓'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; msg.appendChild(el); return el; });
+    const M = ['', 'Enter at least 3 characters', 'Looks good ✓'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.style.position = 'relative'; el.style.gridArea = '1/1'; el.style.minWidth = '0'; el.style.overflowWrap = 'anywhere'; el.textContent = s; msg.appendChild(el); return el; });
     const LEN = 24; let touched = false;
     const check = () => { const v = inp.value, bad = touched && rq.checked && v.length > 0 && v.length < 3, empty = touched && rq.checked && !v.length;
       flT.set(v.length ? 1 : 0, S.base); ring.set(bad || empty ? 1 : 0, S.base); ckT.set(v.length >= 3 ? 1 : 0, S.base);
@@ -22236,7 +22242,7 @@ atom({ id:'buffersync', cat:'Scheduling', name:'Buffer editor', block:'buffer, s
 
 window.CIEO_SOURCE_HINT="blocks/294-attendees.js";
 atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendees, invite form', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Invite attendees</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="f0" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Name</label><div class="iw" style="position:relative"><input class="in" type="text" autocomplete="name" placeholder="Ada Lovelace" style="width:100%;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;height:18px;font-size:12px"></div></div><div class="f1" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Email</label><div class="iw" style="position:relative"><input class="in" type="email" autocomplete="email" placeholder="ada@example.com" style="width:100%;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;height:18px;font-size:12px"></div></div><button class="go" style="min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);cursor:pointer;font-size:14px;font-weight:600">Send invite</button><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><input type="checkbox" class="ci" checked style="width:16px;height:16px"><span style="font-size:12px">Include calendar invite</span></div></div></div><div class="hint">Invalid rings red · valid earns a check</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Invite attendees</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="f0" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Name</label><div class="iw" style="position:relative"><input class="in" type="text" autocomplete="name" placeholder="Ada Lovelace" style="width:100%;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><div class="f1" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Email</label><div class="iw" style="position:relative"><input class="in" type="email" autocomplete="email" placeholder="ada@example.com" style="width:100%;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><button class="go" style="min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);cursor:pointer;font-size:14px;font-weight:600">Send invite</button><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><input type="checkbox" class="ci" checked style="width:16px;height:16px"><span style="font-size:12px">Include calendar invite</span></div></div></div><div class="hint">Invalid rings red · valid earns a check</div>`,
   desc:'Each field validates as you type. A bad value rings the field red and swaps in its message; a good one earns a success check. Sending with errors surfaces every message, and a clean invite holds its success state.',
   api:'err.set(1) danger ring + msg swap   ok.set(1) success check   send: all valid → terminal',
   init(st){
@@ -22245,9 +22251,9 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
       { box:'.f1', test:v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), msg:'Enter a valid email' }];
     const F = defs.map(d => {
       const box = $(st,d.box), inp = $$(box,'.in')[0], mg = $$(box,'.mg')[0], iw = $$(box,'.iw')[0];
-      const e0 = document.createElement('span'); e0.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center';
+      const e0 = document.createElement('span'); e0.style.cssText = 'grid-area:1/1;display:flex;align-items:center;min-width:0;min-height:18px';
       const e1 = document.createElement('span'); e1.className = 'layer'; e1.textContent = d.msg;
-      e1.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;color:var(--danger,#c9403b)';
+      e1.style.cssText = 'grid-area:1/1;position:relative;display:flex;align-items:center;min-width:0;min-height:18px;overflow-wrap:anywhere;color:var(--danger,#c9403b)';
       mg.appendChild(e0); mg.appendChild(e1);
       const ck = document.createElement('span'); ck.textContent = '✓';
       ck.style.cssText = 'position:absolute;right:10px;top:50%;margin-top:-9px;width:0;overflow:hidden;font-size:14px;color:var(--success);transform:translateY(-1px)';
@@ -22285,7 +22291,7 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
 
 window.CIEO_SOURCE_HINT="blocks/295-intakeq.js";
 atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, booking flow', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Book a visit</b><div class="card qcard" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="prow" style="display:flex;align-items:center;gap:8px"><div class="ptrack" style="position:relative;flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i class="pfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);border-radius:3px"></i></div><span class="pcap" style="font-size:12px;color:var(--ink);opacity:.6;font-variant-numeric:tabular-nums;white-space:nowrap">1 of 3</span></div><div class="qa" style="position:relative;min-height:132px;overflow:hidden"></div><div class="row small muted" style="gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><button class="bk" style="min-height:32px;border-radius:8px;border:0;background:none;padding:0 4px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">← Back</button><button class="sv" style="margin-left:auto;min-height:32px;border-radius:8px;border:1px solid var(--line);background:none;padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Save draft</button></div></div></div><div class="hint">Answer to advance · empty continues shake</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Book a visit</b><div class="card qcard" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="prow" style="display:flex;align-items:center;gap:8px"><div class="ptrack" style="position:relative;flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i class="pfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);border-radius:3px"></i></div><span class="pcap" style="font-size:12px;color:var(--ink);opacity:.6;font-variant-numeric:tabular-nums;white-space:nowrap">1 of 3</span></div><div class="qa" style="position:relative;display:grid;min-height:132px"></div><div class="row small muted" style="gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><button class="bk" style="min-height:32px;border-radius:8px;border:0;background:none;padding:0 4px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">← Back</button><button class="sv" style="margin-left:auto;min-height:32px;border-radius:8px;border:1px solid var(--line);background:none;padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Save draft</button></div></div></div><div class="hint">Answer to advance · empty continues shake</div>`,
   desc:'Each answer slides the next question up from below while the progress bar fills. Continuing empty snaps the card side to side and swaps in what is missing. The sent summary holds as the terminal.',
   api:'qa.to(step+1) rises   pr.set(step/3) fills   empty: sh.release shake + need.to(1)',
   init(st){
@@ -22299,7 +22305,7 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
     const layers = [];
     const build = k => {
       const L = document.createElement('div'); L.className = 'layer';
-      L.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;gap:8px';
+      L.style.cssText = 'position:relative;grid-area:1/1;display:flex;flex-direction:column;gap:8px;min-width:0';
       if (k < 3){
         const t = document.createElement('b'); t.textContent = Q[k].q;
         t.style.cssText = 'font-size:14px;font-weight:600'; L.appendChild(t);
@@ -22316,11 +22322,11 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
           else { sh.release(10, 0, 0, { w:46, z:.22 }); need.to(1); } };
         L.appendChild(c);
         const wrap = document.createElement('span');
-        wrap.style.cssText = 'position:relative;display:block;height:18px';
+        wrap.style.cssText = 'position:relative;display:grid;min-height:18px';
         const n = document.createElement('span'); n.className = 'layer'; n.textContent = 'Pick one to continue';
-        n.style.cssText = 'position:absolute;inset:0;font-size:12px;color:var(--danger,#c9403b)';
+        n.style.cssText = 'grid-area:1/1;position:relative;font-size:12px;line-height:1.5;overflow-wrap:anywhere;min-width:0;color:var(--danger,#c9403b)';
         const n0 = document.createElement('span'); n0.className = 'layer';
-        n0.style.cssText = 'position:absolute;inset:0;font-size:12px';
+        n0.style.cssText = 'grid-area:1/1;position:relative;font-size:12px;line-height:1.5;min-width:0';
         wrap.appendChild(n0); wrap.appendChild(n); L.appendChild(wrap); L._n = [n0, n];
       } else {
         L.style.alignItems = 'center'; L.style.justifyContent = 'center'; L.style.textAlign = 'center';
@@ -22352,15 +22358,16 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
 
 window.CIEO_SOURCE_HINT="blocks/296-rsvp3.js";
 atom({ id:'rsvp3', cat:'Scheduling', name:'RSVP', block:'rsvp, yes no maybe', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Can you make it?</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><p style="font-size:13px;margin:0">Summer picnic · Sat 12:00 PM · 20 invited</p><div class="seg" style="position:relative;display:flex;gap:4px;background:var(--raised);border-radius:10px;padding:4px" role="radiogroup"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><span style="font-size:12px">Plus-one</span><button class="m" style="min-height:32px;min-width:32px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;padding:0">−</button><b class="g" style="font-size:13px;font-variant-numeric:tabular-nums">0</b><button class="p" style="min-height:32px;min-width:32px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;padding:0">+</button><span class="note" style="font-size:12px;margin-left:auto"></span></div></div></div><div class="hint">Maybe holds amber — the honest answer</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Can you make it?</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><p style="font-size:13px;margin:0">Summer picnic · Sat 12:00 PM · 20 invited</p><div class="seg" style="position:relative;display:flex;gap:4px;background:var(--raised);border-radius:10px;padding:4px" role="radiogroup"></div><div class="row small muted" style="gap:6px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:10px"><span style="font-size:12px">Plus-one</span><button class="m" style="min-height:32px;min-width:32px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;padding:0">−</button><b class="g" style="font-size:13px;font-variant-numeric:tabular-nums">0</b><button class="p" style="min-height:32px;min-width:32px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-size:13px;padding:0">+</button><span class="note" style="font-size:12px;margin-left:auto;min-width:0;overflow-wrap:anywhere;text-align:right"></span></div></div></div><div class="hint">Maybe holds amber — the honest answer</div>`,
   desc:'One plate slides between yes, no and maybe. Counts roll on digits with every vote, yes inks success and maybe holds a warning tint instead of ever resolving green.',
   api:'plate.go(l, r) single plate   counts Digits roll   maybe: warn.set(1) amber hold',
   init(st){
     const O = ['Yes','No','Maybe'], base = [12,3,5], seg = $(st,'.seg'), pl = edges(0, 0);
     const tabs = O.map((o,i) => {
       const b = document.createElement('button'); b.setAttribute('role','radio');
-      b.style.cssText = 'position:relative;z-index:1;flex:1;min-height:40px;border:0;background:none;border-radius:8px;cursor:pointer;font-size:13px;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 0';
-      const l = document.createElement('span'); l.textContent = o; b.appendChild(l);
+      b.style.cssText = 'position:relative;z-index:1;flex:1;min-width:0;min-height:40px;border:0;background:none;border-radius:8px;cursor:pointer;font-size:13px;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 0;overflow:hidden';
+      const l = document.createElement('span'); l.textContent = o;
+      l.style.cssText = 'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%'; b.appendChild(l);
       const c = document.createElement('span'); c.style.cssText = 'font-size:12px;font-variant-numeric:tabular-nums;opacity:.7';
       b.appendChild(c); seg.appendChild(b);
       const dg = new Digits(c, 2); dg.set(String(base[i]), true);
@@ -22698,7 +22705,7 @@ atom({ id:'liveticker', cat:'Dynamic', name:'Live value ticker', block:'metric, 
 window.CIEO_SOURCE_HINT="blocks/328-presence.js";
 
 atom({ id:'presencelive', cat:'Dynamic', name:'Presence avatars', block:'avatars, presence', fam:['S','M'],
-  html:`<div class="card col" style="width:min(400px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">Who is here</b><div class="stage" style="position:relative;height:34px"></div><div class="cap small muted num" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums">3 online · settled</div><div class="row" style="gap:8px;align-items:center"><button class="btn jn" style="min-height:32px">Join</button><button class="btn lv" style="min-height:32px">Leave</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="or" checked> owner ring</label></div></div><div class="hint">Joiners fan out · leavers shrink away</div>`,
+  html:`<div class="card col" style="width:min(400px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">Who is here</b><div class="stage" style="position:relative;height:40px"></div><div class="cap small muted num" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums">3 online · settled</div><div class="row" style="gap:8px;align-items:center"><button class="btn jn" style="min-height:32px">Join</button><button class="btn lv" style="min-height:32px">Leave</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="or" checked> owner ring</label></div></div><div class="hint">Joiners fan out · leavers shrink away</div>`,
   desc:'A joiner pops in at 60% scale and fans the stack out with stagger. A leaver shrinks in place, then the gap springs closed. The owner keeps a ring.',
   api:'slot[i].x.set(i·24, S.base, t + i·.05)   join: sc.jump(.6).set(1)',
   init(st){
@@ -22706,18 +22713,18 @@ atom({ id:'presencelive', cat:'Dynamic', name:'Presence avatars', block:'avatars
     const C = ['#6b5cff','#0ea5e9','#10b981','#f59e0b','#ef4444','#ec4899'], N = ['A','B','C','D','E','F'];
     let order = [], gone = [], nextId = 0, lastEv = -9;
     const mk = id => { const e = document.createElement('span');
-      e.style.cssText = `position:absolute;left:0;top:3px;width:28px;height:28px;border-radius:50%;background:${C[id % 6]};color:#fff;font:600 12px/1 var(--sans);display:grid;place-items:center;padding:0;border:2px solid var(--card)`;
+      e.style.cssText = `position:absolute;left:0;top:6px;width:28px;height:28px;border-radius:50%;background:${C[id % 6]};color:#fff;font:600 12px/1 var(--sans);display:grid;place-items:center;padding:0;border:2px solid var(--card)`;
       e.textContent = N[id % 6]; stage.appendChild(e);
       return { id, e, x:new Track(0), sc:new Track(1), o:new Track(1) }; };
     for (let i = 0; i < 3; i++){ const a = mk(nextId++); a.x.jump(i*24); order.push(a); }
     const layout = (t, keep) => order.forEach((a,i) => { if (a !== keep) a.x.set(i*24, S.base, t + i*.05); a.e.style.zIndex = 10 - i; });
     layout(-9); order.forEach((a,i) => a.e.style.zIndex = 10 - i);
-    $(st,'.jn').onclick = () => { if (order.length >= 6) return; const t = now(), a = mk(nextId++);
+    $(st,'button.jn').onclick = () => { if (order.length >= 6) return; const t = now(), a = mk(nextId++);
       a.x.jump(order.length*24 + 20); a.sc.jump(REDUCE ? 1 : .6); a.o.jump(0);
       order.push(a); lastEv = t;
       if (REDUCE){ a.o.jump(1); a.sc.jump(1); a.x.jump((order.length - 1)*24); layout(t); }
       else { a.o.set(1, S.snap, t); a.sc.set(1, S.base, t); a.x.set((order.length - 1)*24, S.base, t + .04); layout(t, a); } };
-    $(st,'.lv').onclick = () => { if (order.length <= 1) return; const t = now();
+    $(st,'button.lv').onclick = () => { if (order.length <= 1) return; const t = now();
       const a = order.find(x => x.id !== 0) || order[order.length - 1];
       order = order.filter(x => x !== a); lastEv = t;
       if (REDUCE){ a.e.remove(); layout(t); }
@@ -22828,7 +22835,7 @@ atom({ id:'deltaarrows', cat:'Dynamic', name:'Delta arrows', block:'metric, chip
 window.CIEO_SOURCE_HINT="blocks/332-logtail.js";
 
 atom({ id:'logtail', cat:'Dynamic', name:'Streaming log tail', block:'log, feed', fam:['S','M'], tall:true,
-  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Deploy log</b><span class="pl small num" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums">Live tail</span></div><div class="box col" style="gap:0;height:132px;overflow-y:auto;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--card)"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Stuck to the latest · scroll up to read back</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="sk" checked> stick to latest</label></div></div><div class="hint">New rows open, then fade up</div>`,
+  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Deploy log</b><span class="pl small num" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums">Live tail</span></div><div class="box col" style="gap:0;height:132px;overflow-y:auto;overflow-x:hidden;border:1px solid var(--line);border-radius:10px;padding:6px 10px;background:var(--card)"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Stuck to the latest · scroll up to read back</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="sk" checked> stick to latest</label></div></div><div class="hint">New rows open, then fade up</div>`,
   desc:'A new row opens its height first, then fades up into place while older rows spring down. The tail auto-sticks unless you scrolled up to read back.',
   api:'row.h.set(1, S.base) → o.set(1)   olds.y.release(-8, v, 0)   stick: scrollTop = scrollHeight',
   init(st){
@@ -22838,11 +22845,13 @@ atom({ id:'logtail', cat:'Dynamic', name:'Streaming log tail', block:'log, feed'
     let rows = [], n = 0, paused = false, next = .6, userUp = false;
     box.onscroll = () => { userUp = box.scrollHeight - box.scrollTop - box.clientHeight > 30; };
     const add = t => { const r = document.createElement('div');
-      r.style.cssText = 'overflow:hidden;font-size:13px;line-height:1.5;font-variant-numeric:tabular-nums;white-space:nowrap';
-      r.innerHTML = `<span class="c" style="display:block"><span style="color:var(--accent)">✓</span> <span class="m"></span> <span class="ts small muted" style="font-size:12px"></span></span>`;
+      r.style.cssText = 'display:block;overflow:hidden;max-width:100%;min-height:22px;font-size:13px;line-height:1.5;font-variant-numeric:tabular-nums;white-space:nowrap;text-overflow:ellipsis';
+      r.innerHTML = `<span class="c" style="display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;min-height:22px;line-height:1.5"><span style="color:var(--accent)">✓</span> <span class="m"></span> <span class="ts small muted" style="font-size:12px"></span></span>`;
       box.appendChild(r);
       const ts = new Date(Date.now()).toLocaleTimeString('en-US',{hour12:false});
-      $(r,'.m').textContent = EV[n % EV.length]; $(r,'.ts').textContent = '#' + (++n) + ' · ' + ts;
+      const label = EV[n % EV.length];
+      $(r,'.m').textContent = label; $(r,'.ts').textContent = '#' + (++n) + ' · ' + ts;
+      r.title = label + ' #' + n + ' · ' + ts;
       const h = new Track(REDUCE ? 1 : 0), o = new Track(REDUCE ? 1 : 0), y = new Track(0);
       rows.forEach(x => { if (!REDUCE){ x.y.jump(x.y.at(t) - 8); x.y.set(0, S.base, t); } });
       rows.push({ r, h, o, y, c:$(r,'.c') });
@@ -22851,7 +22860,8 @@ atom({ id:'logtail', cat:'Dynamic', name:'Streaming log tail', block:'log, feed'
     ps.onclick = () => { paused = !paused; sw.to(paused ? 1 : 0); };
     return t => { if (!paused && t >= next){ add(t); next = t + .9; }
       rows.forEach(x => { const h = x.h.at(t);
-        x.r.style.height = (h*24).toFixed(2) + 'px';
+        const hh = h <= 0.01 ? 0 : Math.max(22, h*26);
+        x.r.style.height = hh.toFixed(2) + 'px';
         fade(x.c, x.o.at(t), (1 - x.o.at(t))*6 + x.y.at(t)); });
       if (sk.checked && !userUp && !paused) box.scrollTop = box.scrollHeight;
       pl.textContent = paused ? 'Paused' : (userUp ? 'Reading back' : 'Live tail');
@@ -22988,8 +22998,11 @@ atom({ id:'sliderhist', cat:'Dynamic', name:'Slider with histogram', block:'slid
     const H = [22,38,30,52,44,64,58,74,66,80,72,60], MAX = 500;
     let v = 264;
     const d = new Digits(vv, 3); d.set(String(v), true);
-    const B = H.map(h => { const b = document.createElement('div');
-      b.style.cssText = `flex:1;height:${h}px;border-radius:4px;background:var(--ink)`;
+    const B = H.map(h => { const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', `Set team size to ${Math.round(h/80*MAX)}`);
+      b.style.cssText = `flex:1;height:${h}px;border:0;padding:0;border-radius:4px;background:var(--ink);cursor:pointer;min-width:0;appearance:none;-webkit-appearance:none;font:inherit;color:inherit`;
+      b.addEventListener('click', () => { measure(); setV(h/80*MAX, now()); x.jump(v/MAX*W); });
       bars.appendChild(b); return { b, o:new Track(h/80*MAX <= v ? 1 : .25) }; });
     const x = new Track(0); let W = 0, dragOn = false;
     const measure = () => { W = trk.clientWidth - 24; x.jump(v/MAX*W); };
@@ -24272,14 +24285,14 @@ atom({ id:'pickuptime', cat:'Storefront', name:'Pickup time picker', block:'pick
 
 window.CIEO_SOURCE_HINT="blocks/415-checkoutfields.js";
 atom({ id:'checkoutfields', cat:'Forms', name:'Checkout fields', block:'checkout form, inputs, validation', fam:['S','M'],
-  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Payment details</h4><div class="fd" style="position:relative"><input class="in nm" id="co-nm" type="text" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-nm" class="lb lb0" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Full name</label><span class="ok ok0" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em0" style="position:relative;height:18px;font-size:12px;line-height:1.5"></div></div><div class="fd" style="position:relative"><input class="in em2" id="co-em" type="email" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-em" class="lb lb1" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Email</label><span class="ok ok1" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em1" style="position:relative;height:18px;font-size:12px;line-height:1.5"></div></div><button class="btn go" style="height:36px;border-radius:9px">Pay $24.00</button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lv" checked> Validate live</label></div><div class="hint">Leave a field empty, then fix it</div>`,
+  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Payment details</h4><div class="fd" style="position:relative"><input class="in nm" id="co-nm" type="text" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-nm" class="lb lb0" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Full name</label><span class="ok ok0" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em0" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><div class="fd" style="position:relative"><input class="in em2" id="co-em" type="email" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-em" class="lb lb1" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Email</label><span class="ok ok1" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em1" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><button class="btn go" style="height:36px;border-radius:9px">Pay $24.00</button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lv" checked> Validate live</label></div><div class="hint">Leave a field empty, then fix it</div>`,
   desc:'Labels snap up on focus or fill. An invalid submit rings danger and swaps in a message; fixing a field swaps it out and stamps a success check that holds.',
   api:'label.set(float, snap)   err.set(1); msg.to(err)   ok.set(valid)',
   init(st){
     const F = [0, 1].map(i => ({ inp:$(st, '.in.nm,.in.em2'.split(',')[i] || '.in'), lb:$(st, '.lb' + i), em:$(st, '.em' + i), ok:$(st, '.ok' + i), fl:new Track(0), er:new Track(0), gd:new Track(0) }));
     F[0].inp = $(st, '.nm'); F[1].inp = $(st, '.em2');
     const msgs = ['Enter your full name', 'Enter a valid email'];
-    const layers = F.map((f, i) => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.style.color = 'var(--danger)'; e.textContent = msgs[i]; f.em.appendChild(e); return e; });
+    const layers = F.map((f, i) => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.style.position = 'relative'; e.style.gridArea = '1/1'; e.style.minWidth = '0'; e.style.overflowWrap = 'anywhere'; e.style.color = 'var(--danger)'; e.textContent = msgs[i]; f.em.appendChild(e); return e; });
     const sw = [new Swap(-1), new Swap(-1)], lv = $(st, '.lv'), go = $(st, '.go');
     const valid = (i, v) => i ? /^\S+@\S+\.\S+$/.test(v.trim()) : v.trim().length > 1;
     const paint = (f, i) => { const on = document.activeElement === f.inp || f.inp.value; f.fl.set(on ? 1 : 0, S.snap); };
@@ -24389,12 +24402,12 @@ atom({ id:'prefquiz', cat:'Forms', name:'Preference quiz', block:'quiz, onboardi
 
 window.CIEO_SOURCE_HINT="blocks/427-wordrotator.js";
 atom({ id:'wordrotator', cat:'Landing', name:'Hero word rotator', block:'Landing hero', fam:['S','M','T'],
-  html:`<div class="col" style="gap:0;align-items:center;max-width:420px;margin:0 auto;padding:44px 16px;text-align:center"><h3 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-.035em;line-height:1.2">Pages that <span class="pill" style="display:inline-block;background:var(--raised);border-radius:10px;padding:0 10px;overflow:hidden;vertical-align:bottom;cursor:pointer"><span class="slot" style="position:relative;display:inline-block;height:1.2em"></span></span></h3><p class="small muted" style="margin:12px 0 0;font-size:15px;line-height:1.5">Drag blocks, edit text and publish in one click.</p><div class="row" style="gap:8px;margin-top:16px"><button class="btn ink go" style="min-height:36px;border-radius:10px">Start free</button><button class="btn ghost" style="min-height:36px;border-radius:10px">See a demo</button></div><label class="row small muted" style="gap:6px;margin-top:16px;cursor:pointer;font-size:12.5px;line-height:1.5"><input type="checkbox" class="lp" checked> loop keywords</label></div><div class="hint">Keyword swaps every 2.8s · pill width springs to fit</div>`,
+  html:`<div class="col" style="gap:0;align-items:center;max-width:420px;margin:0 auto;padding:44px 16px;text-align:center"><h3 style="margin:0;font-size:30px;font-weight:600;letter-spacing:-.035em;line-height:1.2">Pages that <button type="button" class="pill" aria-label="Show next keyword" style="display:inline-block;background:var(--raised);border:0;border-radius:10px;padding:0 10px;overflow:hidden;vertical-align:bottom;cursor:pointer;font:inherit;color:inherit"><span class="slot" style="position:relative;display:inline-block;height:1.2em"></span></button></h3><p class="small muted" style="margin:12px 0 0;font-size:15px;line-height:1.5">Drag blocks, edit text and publish in one click.</p><div class="row" style="gap:8px;margin-top:16px"><button class="btn ink go" style="min-height:36px;border-radius:10px">Start free</button><button class="btn ghost" style="min-height:36px;border-radius:10px">See a demo</button></div><label class="row small muted" style="gap:6px;margin-top:16px;cursor:pointer;font-size:12.5px;line-height:1.5"><input type="checkbox" class="lp" checked> loop keywords</label></div><div class="hint">Keyword swaps every 2.8s · pill width springs to fit</div>`,
   desc:'The keyword slot cycles every 2.8s: the old word blurs up and out, the next rises in, and the pill width springs to fit. With loop off the last word holds as the terminal state.',
   api:'swap.to(next)   w.set(measure(next))   end: hold',
   init(st){
     const W = ['convert','delight','rank','sell'];
-    const slot = $(st,'.slot'), pill = $(st,'.pill'), lp = $(st,'.lp');
+    const slot = $(st,'.slot'), pill = $(st,'button.pill'), lp = $(st,'.lp');
     const L = W.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.cssText = 'position:absolute;left:0;top:0;white-space:nowrap'; e.textContent = s; slot.appendChild(e); return e; });
     const sw = new Swap(0), w = new Track(0);
     let i = 0, last = -9, live = false;
@@ -26661,11 +26674,13 @@ atom({ id:'mailjump', cat:'Email', name:'Command-K jump', block:'email, palette,
   api:'rows y.set(slot*52, base)   hl.go(top, top+52) lag .06   pvw.to(i)   end: jumped',
   init(st){
     const pal = $(st,'.pal'), q = $(st,'.q'), lst = $(st,'.lst'), hl = $(st,'.hl'), pvw = $(st,'.pvw');
-    $(st,'.Go').onclick = () => { q.focus(); q.select(); };
+    $(st,'button.Go').onclick = () => { q.focus(); q.select(); };
     const mail = [['Board pre-read','AC','Q3 numbers inside'],['Pricing draft','MQ','New tiers attached'],['Scope v2','JK','Ship it Thursday']];
     const ys = mail.map(() => new Track(0)), os = mail.map(() => new Track(1));
-    const rows = mail.map((m, i) => { const d = document.createElement('div');
-      d.style.cssText = 'position:absolute;left:0;right:0;height:52px;display:flex;gap:8px;align-items:center;cursor:pointer';
+    const rows = mail.map((m, i) => { const d = document.createElement('button');
+      d.type = 'button';
+      d.setAttribute('aria-label', `Open ${m[0]}`);
+      d.style.cssText = 'position:absolute;left:0;right:0;height:52px;display:flex;gap:8px;align-items:center;cursor:pointer;border:0;background:none;padding:0;font:inherit;color:inherit;text-align:left';
       d.innerHTML = `<span style="width:32px;height:32px;flex:none;border-radius:50%;background:var(--raised);display:grid;place-items:center;font-size:11.5px;font-weight:600;padding:0;transform:translateY(.5px)">${m[1]}</span><span style="font-size:13px;font-weight:600;line-height:1.5">${m[0]}</span>`;
       d.onclick = () => hi(i, true); lst.appendChild(d); return d; });
     const pv = mail.map(m => { const e = document.createElement('span'); e.className = 'layer'; e.style.cssText = 'align-items:flex-start;justify-content:flex-start;flex-direction:column;gap:2px';
@@ -26919,7 +26934,7 @@ window.CIEO_SOURCE_HINT="catalogue/navigation.js";
   const all=link('Everything','all',A.length,'grid')+link('Saved','saved','0','bookmark');
   const folders=Object.keys(c.collections).map((name,i)=>`<a class="ui-folder" href="#collection-${slug(name)}"><span class="ui-folder-art" style="--accent:${['#8576cd','#79a7c0','#c68c63','#86a285'][i]}"><i></i><i></i><i></i></span>${name}</a>`).join('');
   const categoryLinks=[...c.categoryCounts].sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>link(name,'cat-'+slug(name),n)).join('');
-  const nav=`${all}<div class="ui-navtitle">Collections <span>4</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size}</span></div>${categoryLinks}`;
+  const nav=`${all}<div class="ui-navtitle">Collections <span>4</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4</span></a>`;
   document.getElementById('desktop-nav').innerHTML=nav;document.getElementById('mobile-nav').innerHTML=nav;
   document.getElementById('total-count').textContent=`${A.length} atoms`;
   document.getElementById('family-filter').innerHTML=`<button class="ui-chip" data-family="*" aria-pressed="true">All motion</button>`+Object.entries(c.familyNames).map(([id,name])=>`<button class="ui-chip" data-family="${id}" aria-pressed="false"><i>${id}</i>${name}</button>`).join('');
@@ -26931,7 +26946,7 @@ window.CIEO_SOURCE_HINT="catalogue/navigation.js";
     return {category,collection,saved:hash==='saved',query:params.get('q')||'',atom:hash.startsWith('atom-')?hash.slice(5):null,hash};
   };
   c.markNavigation=()=>{
-    const route=c.route();document.querySelectorAll('.ui-navlink,.ui-folder').forEach(a=>{
+    const route=c.route();document.querySelectorAll('.ui-navlink:not([data-flows]),.ui-folder').forEach(a=>{
       const selected=a.hash===location.hash||a.hash==='#all'&&(!location.hash||route.atom);
       if(selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
       if(a.hash==='#saved'&&a.lastElementChild)a.lastElementChild.textContent=c.favorites?.size||0;
@@ -26961,11 +26976,38 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
     document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>b.setAttribute('aria-pressed',String(c.favorites.has(id))));
     c.markNavigation();c.updateInspectorSave?.();if(c.route().saved)c.filter();
   };
+  // Captions: recipe demos keep a trailing `<div class="hint">…</div>` inside
+  // their stage HTML. Lift a trailing plain-text hint out of the preview and
+  // render its text between the stage and the tile header. Sources keep their
+  // markup; the rule mirrors scripts/build-library.mjs (div only, no child
+  // elements, trailing at every level up to the stage).
+  const takeTrailingHint=(stage)=>{
+    const hints=stage.querySelectorAll('.hint');
+    if(!hints.length)return '';
+    const hint=hints[hints.length-1];
+    if(hint.tagName!=='DIV'||hint.children.length)return '';
+    let cur=hint;
+    while(cur&&cur!==stage){
+      let sib=cur.nextSibling;
+      while(sib){
+        if(sib.nodeType===1)return '';
+        if(sib.nodeType===3&&sib.textContent.trim()!=='')return '';
+        sib=sib.nextSibling;
+      }
+      cur=cur.parentElement;
+    }
+    if(cur!==stage)return '';
+    const text=hint.textContent.trim();
+    hint.remove();
+    return text;
+  };
   for(const [index,a] of sorted.entries()){
     const el=document.createElement('article');el.id=a.id;el.className='tile'+(a.wide?' wide':'')+(a.tall?' tall':'')+(a.big?' big':'');
     el.dataset.tone=['lilac','blue','mint','peach','butter'][index%5];
     const shell=document.createElement('div');shell.className='stage-shell';
-    const stage=document.createElement('div');stage.className='stage';stage.innerHTML=a.html;c.isolateStyles(stage,a.id);
+    const stage=document.createElement('div');stage.className='stage';stage.innerHTML=a.html;
+    const captionText=takeTrailingHint(stage);
+    c.isolateStyles(stage,a.id);
     const marks=document.createElement('div');marks.className='ui-family-mark';marks.innerHTML=a.fam.map(f=>`<span title="${c.familyNames[f]}">${f}</span>`).join('');
     shell.append(stage);
     const header=document.createElement('header');
@@ -26977,7 +27019,9 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
     header.append(title,marks,tools);
     const detail=document.createElement('div');detail.className='ui-detail';detail.hidden=true;
     const desc=document.createElement('p');desc.textContent=a.desc;const code=document.createElement('pre');code.textContent=a.api;detail.append(desc,code);
-    el.append(shell,header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
+    el.append(shell);
+    if(captionText){const cap=document.createElement('p');cap.className='ui-tile-caption';cap.textContent=captionText;el.append(cap);}
+    el.append(header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
   }
   c.initAtom=a=>{
     if(a.inited)return;a.inited=true;

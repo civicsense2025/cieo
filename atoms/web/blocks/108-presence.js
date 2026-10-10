@@ -1,7 +1,7 @@
 
 
 atom({ id:'presence', cat:'Writing', name:'Live collaborators', block:'richtext editor (multiplayer)', fam:['M','X','T'], tall:true,
-  html:`<div class="card" style="position:relative;width:min(380px,92%);padding:16px"><div class="row" style="justify-content:space-between;margin-bottom:8px"><b class="small">Launch plan</b><div class="av row" style="gap:0"></div></div><p class="tx small" style="margin:0;line-height:1.8"></p></div>`,
+  html:`<div class="card" style="position:relative;width:min(380px,92%);padding:16px"><div class="row" style="justify-content:space-between;margin-bottom:8px"><b class="small">Launch plan</b><div class="av row" style="gap:0;padding:4px 0 4px 6px;margin:-4px 0 -4px -6px"></div></div><p class="tx small" style="margin:0;line-height:1.8"></p></div>`,
   desc:'Remote cursors glide word to word with name flags, and each person’s avatar joins the stack with a ring in their color. Positions are scheduled on the clock, so the scene replays identically.',
   api:'cursor.{x,y}.set(word[i] rect) every 1.3s   avatar.o.set(1)',
   init(st){

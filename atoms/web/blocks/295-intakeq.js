@@ -1,5 +1,5 @@
 atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, booking flow', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Book a visit</b><div class="card qcard" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="prow" style="display:flex;align-items:center;gap:8px"><div class="ptrack" style="position:relative;flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i class="pfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);border-radius:3px"></i></div><span class="pcap" style="font-size:12px;color:var(--ink);opacity:.6;font-variant-numeric:tabular-nums;white-space:nowrap">1 of 3</span></div><div class="qa" style="position:relative;min-height:132px;overflow:hidden"></div><div class="row small muted" style="gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><button class="bk" style="min-height:32px;border-radius:8px;border:0;background:none;padding:0 4px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">← Back</button><button class="sv" style="margin-left:auto;min-height:32px;border-radius:8px;border:1px solid var(--line);background:none;padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Save draft</button></div></div></div><div class="hint">Answer to advance · empty continues shake</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Book a visit</b><div class="card qcard" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="prow" style="display:flex;align-items:center;gap:8px"><div class="ptrack" style="position:relative;flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i class="pfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);border-radius:3px"></i></div><span class="pcap" style="font-size:12px;color:var(--ink);opacity:.6;font-variant-numeric:tabular-nums;white-space:nowrap">1 of 3</span></div><div class="qa" style="position:relative;display:grid;min-height:132px"></div><div class="row small muted" style="gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><button class="bk" style="min-height:32px;border-radius:8px;border:0;background:none;padding:0 4px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">← Back</button><button class="sv" style="margin-left:auto;min-height:32px;border-radius:8px;border:1px solid var(--line);background:none;padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Save draft</button></div></div></div><div class="hint">Answer to advance · empty continues shake</div>`,
   desc:'Each answer slides the next question up from below while the progress bar fills. Continuing empty snaps the card side to side and swaps in what is missing. The sent summary holds as the terminal.',
   api:'qa.to(step+1) rises   pr.set(step/3) fills   empty: sh.release shake + need.to(1)',
   init(st){
@@ -13,7 +13,7 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
     const layers = [];
     const build = k => {
       const L = document.createElement('div'); L.className = 'layer';
-      L.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;gap:8px';
+      L.style.cssText = 'position:relative;grid-area:1/1;display:flex;flex-direction:column;gap:8px;min-width:0';
       if (k < 3){
         const t = document.createElement('b'); t.textContent = Q[k].q;
         t.style.cssText = 'font-size:14px;font-weight:600'; L.appendChild(t);
@@ -30,11 +30,11 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
           else { sh.release(10, 0, 0, { w:46, z:.22 }); need.to(1); } };
         L.appendChild(c);
         const wrap = document.createElement('span');
-        wrap.style.cssText = 'position:relative;display:block;height:18px';
+        wrap.style.cssText = 'position:relative;display:grid;min-height:18px';
         const n = document.createElement('span'); n.className = 'layer'; n.textContent = 'Pick one to continue';
-        n.style.cssText = 'position:absolute;inset:0;font-size:12px;color:var(--danger,#c9403b)';
+        n.style.cssText = 'grid-area:1/1;position:relative;font-size:12px;line-height:1.5;overflow-wrap:anywhere;min-width:0;color:var(--danger,#c9403b)';
         const n0 = document.createElement('span'); n0.className = 'layer';
-        n0.style.cssText = 'position:absolute;inset:0;font-size:12px';
+        n0.style.cssText = 'grid-area:1/1;position:relative;font-size:12px;line-height:1.5;min-width:0';
         wrap.appendChild(n0); wrap.appendChild(n); L.appendChild(wrap); L._n = [n0, n];
       } else {
         L.style.alignItems = 'center'; L.style.justifyContent = 'center'; L.style.textAlign = 'center';

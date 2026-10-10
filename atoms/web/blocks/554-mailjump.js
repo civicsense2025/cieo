@@ -5,11 +5,13 @@ atom({ id:'mailjump', cat:'Email', name:'Command-K jump', block:'email, palette,
   api:'rows y.set(slot*52, base)   hl.go(top, top+52) lag .06   pvw.to(i)   end: jumped',
   init(st){
     const pal = $(st,'.pal'), q = $(st,'.q'), lst = $(st,'.lst'), hl = $(st,'.hl'), pvw = $(st,'.pvw');
-    $(st,'.Go').onclick = () => { q.focus(); q.select(); };
+    $(st,'button.Go').onclick = () => { q.focus(); q.select(); };
     const mail = [['Board pre-read','AC','Q3 numbers inside'],['Pricing draft','MQ','New tiers attached'],['Scope v2','JK','Ship it Thursday']];
     const ys = mail.map(() => new Track(0)), os = mail.map(() => new Track(1));
-    const rows = mail.map((m, i) => { const d = document.createElement('div');
-      d.style.cssText = 'position:absolute;left:0;right:0;height:52px;display:flex;gap:8px;align-items:center;cursor:pointer';
+    const rows = mail.map((m, i) => { const d = document.createElement('button');
+      d.type = 'button';
+      d.setAttribute('aria-label', `Open ${m[0]}`);
+      d.style.cssText = 'position:absolute;left:0;right:0;height:52px;display:flex;gap:8px;align-items:center;cursor:pointer;border:0;background:none;padding:0;font:inherit;color:inherit;text-align:left';
       d.innerHTML = `<span style="width:32px;height:32px;flex:none;border-radius:50%;background:var(--raised);display:grid;place-items:center;font-size:11.5px;font-weight:600;padding:0;transform:translateY(.5px)">${m[1]}</span><span style="font-size:13px;font-weight:600;line-height:1.5">${m[0]}</span>`;
       d.onclick = () => hi(i, true); lst.appendChild(d); return d; });
     const pv = mail.map(m => { const e = document.createElement('span'); e.className = 'layer'; e.style.cssText = 'align-items:flex-start;justify-content:flex-start;flex-direction:column;gap:2px';

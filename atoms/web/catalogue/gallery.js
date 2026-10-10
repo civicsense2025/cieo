@@ -14,11 +14,38 @@
     document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>b.setAttribute('aria-pressed',String(c.favorites.has(id))));
     c.markNavigation();c.updateInspectorSave?.();if(c.route().saved)c.filter();
   };
+  // Captions: recipe demos keep a trailing `<div class="hint">…</div>` inside
+  // their stage HTML. Lift a trailing plain-text hint out of the preview and
+  // render its text between the stage and the tile header. Sources keep their
+  // markup; the rule mirrors scripts/build-library.mjs (div only, no child
+  // elements, trailing at every level up to the stage).
+  const takeTrailingHint=(stage)=>{
+    const hints=stage.querySelectorAll('.hint');
+    if(!hints.length)return '';
+    const hint=hints[hints.length-1];
+    if(hint.tagName!=='DIV'||hint.children.length)return '';
+    let cur=hint;
+    while(cur&&cur!==stage){
+      let sib=cur.nextSibling;
+      while(sib){
+        if(sib.nodeType===1)return '';
+        if(sib.nodeType===3&&sib.textContent.trim()!=='')return '';
+        sib=sib.nextSibling;
+      }
+      cur=cur.parentElement;
+    }
+    if(cur!==stage)return '';
+    const text=hint.textContent.trim();
+    hint.remove();
+    return text;
+  };
   for(const [index,a] of sorted.entries()){
     const el=document.createElement('article');el.id=a.id;el.className='tile'+(a.wide?' wide':'')+(a.tall?' tall':'')+(a.big?' big':'');
     el.dataset.tone=['lilac','blue','mint','peach','butter'][index%5];
     const shell=document.createElement('div');shell.className='stage-shell';
-    const stage=document.createElement('div');stage.className='stage';stage.innerHTML=a.html;c.isolateStyles(stage,a.id);
+    const stage=document.createElement('div');stage.className='stage';stage.innerHTML=a.html;
+    const captionText=takeTrailingHint(stage);
+    c.isolateStyles(stage,a.id);
     const marks=document.createElement('div');marks.className='ui-family-mark';marks.innerHTML=a.fam.map(f=>`<span title="${c.familyNames[f]}">${f}</span>`).join('');
     shell.append(stage);
     const header=document.createElement('header');
@@ -30,7 +57,9 @@
     header.append(title,marks,tools);
     const detail=document.createElement('div');detail.className='ui-detail';detail.hidden=true;
     const desc=document.createElement('p');desc.textContent=a.desc;const code=document.createElement('pre');code.textContent=a.api;detail.append(desc,code);
-    el.append(shell,header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
+    el.append(shell);
+    if(captionText){const cap=document.createElement('p');cap.className='ui-tile-caption';cap.textContent=captionText;el.append(cap);}
+    el.append(header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
   }
   c.initAtom=a=>{
     if(a.inited)return;a.inited=true;
