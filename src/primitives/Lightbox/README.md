@@ -18,11 +18,11 @@ Image viewer dialog for inspecting one picture at full size (a receipt photo, a 
 
 ## Behavior
 
-Renders null when `open` is false or omitted; the host owns open state. Escape calls `onClose`.
+Stays mounted through the exit spring before unmounting when `open` closes; the host owns open state. Escape calls `onClose`.
 
 ## Motion
 
-Animates on fade via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states. Still renders null when closed; the `exiting` choice applies once wave 2 wires presence behind these props.
+Fades in on open (`entering`, default `fade`); plays the exit spring before unmounting on close (`exiting`, default `fade`). `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states. Images fade, they don't rise.
 
 ## Keyboard / accessibility
 
