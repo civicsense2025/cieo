@@ -1,0 +1,5 @@
+/* design/styles/primitives/card.css */
+@layer cieo.components {
+  :where(.cieo).cieo-card { display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); background: var(--cieo-color-surface); color: var(--cieo-color-text); border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); }
+  :where(.cieo).cieo-card > h2 { margin: 0; }
+}
