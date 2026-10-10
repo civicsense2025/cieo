@@ -26,7 +26,7 @@
   "events": [],
   "variants": [],
   "styleParts": [{ "id": "row", "overrides": ["border"], "tokenRoles": ["border-muted"] }],
-  "constraints": { "layout": ["tab-row"], "content": ["tabs-have-label"], "motion": ["no-motion"] },
+  "constraints": { "layout": ["tab-row"], "content": ["tabs-have-label"], "motion": ["honor-render-policy"] },
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "value", "defaultValue", "onValueChange", "motion"], "states": [], "events": [], "parts": ["row"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
