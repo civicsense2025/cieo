@@ -1,0 +1,6 @@
+/* design/styles/primitives/top-nav-mega-menu-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav-mega-menu-item { display: block; padding: var(--cieo-space-1) var(--cieo-space-2); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-top-nav-mega-menu-item-title { display: block; font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-top-nav-mega-menu-item-description { display: block; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

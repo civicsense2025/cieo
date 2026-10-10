@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.top-nav-heading",
+  "componentVersion": "1.0.0",
+  "name": "TopNavHeading",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/TopNavHeading/TopNavHeading.tsx", "symbol": "TopNavHeading" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "href", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "/", "constraints": { "minLength": 1, "maxLength": 1024 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "brand", "overrides": ["color"], "tokenRoles": ["text-brand"] }],
+  "constraints": { "layout": ["leading-in-bar"], "content": ["brand-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["href"], "states": [], "events": [], "parts": ["brand"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Brand slot in the top nav; links home by default." },
+  "extensions": {}
+}

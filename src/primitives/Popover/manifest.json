@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.popover",
+  "componentVersion": "1.0.0",
+  "name": "Popover",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Popover/Popover.tsx", "symbol": "Popover" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "open", "type": { "kind": "boolean" }, "required": false, "nullable": false, "constraints": {} },
+    { "id": "defaultOpen", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} },
+    { "id": "onOpenChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (open: boolean) => void; no function kind exists in the manifest precedent." }
+  ],
+  "slots": [
+    { "id": "trigger", "allowed": ["component"], "min": 1, "max": 1, "order": "document" },
+    { "id": "default", "allowed": ["component"], "min": 1, "max": 1, "order": "document" }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "panel", "overrides": ["background"], "tokenRoles": ["surface-control"] }],
+  "constraints": { "layout": ["absolute-panel-below-trigger", "no-flip"], "content": ["panel-is-content"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["open", "defaultOpen", "onOpenChange"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Controlled disclosure shell with a simple absolute panel below the trigger." },
+  "extensions": {}
+}

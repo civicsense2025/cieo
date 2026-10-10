@@ -1,0 +1,6 @@
+/* design/styles/primitives/top-nav-mega-menu-featured-card.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav-mega-menu-featured-card { display: flex; flex-direction: column; gap: var(--cieo-space-2); padding: var(--cieo-space-3); background-color: var(--cieo-color-surface); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-top-nav-mega-menu-featured-card-title { font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-top-nav-mega-menu-featured-card-description { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.top-nav-mega-menu",
+  "componentVersion": "1.0.0",
+  "name": "TopNavMegaMenu",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/TopNavMegaMenu/TopNavMegaMenu.tsx", "symbol": "TopNavMegaMenu" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "open", "type": { "kind": "boolean" }, "required": false, "nullable": false, "constraints": {} },
+    { "id": "defaultOpen", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} },
+    { "id": "onOpenChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (open: boolean) => void; no function kind exists in the manifest precedent, see src/controls/Range.tsx." }
+  ],
+  "slots": [
+    { "id": "trigger", "allowed": ["content"], "min": 1, "max": 1, "order": "document" },
+    { "id": "default", "allowed": ["component"], "min": 0, "max": 16, "order": "document" }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "panel", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
+  "constraints": { "layout": ["panel-below-trigger", "no-flip"], "content": ["trigger-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["open", "defaultOpen", "onOpenChange"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Controlled disclosure panel below a trigger; no flip." },
+  "extensions": {}
+}

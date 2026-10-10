@@ -1,0 +1,5 @@
+/* design/styles/primitives/top-nav-mega-menu.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav-mega-menu { position: relative; }
+  :where(.cieo).cieo-top-nav-mega-menu-panel { position: absolute; top: 100%; inset-inline-start: 0; display: flex; flex-direction: column; gap: var(--cieo-space-2); padding: var(--cieo-space-3); background-color: var(--cieo-color-surface); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); }
+}
