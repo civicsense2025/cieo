@@ -20,6 +20,10 @@ Trigger slot plus `content` card body; CSS reveals the card on hover and focus-w
 
 Opacity-only reveal with a reduced-motion guard. No JavaScript state; the trigger keeps its accessible name.
 
+## Motion
+
+Animates on fade via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states.
+
 ## Keyboard / accessibility
 
 - Trigger is described by the card (`aria-describedby`); keyboard users get it on focus.
