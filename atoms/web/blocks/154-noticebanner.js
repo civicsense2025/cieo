@@ -301,19 +301,19 @@ atom({ id:'snackbar', cat:'Status and records', name:'Snackbar with action', blo
 /* ================================================================ 5. Avatar picker */
 atom({ id:'avatarpicker', tall:true, cat:'Status and records', name:'Avatar picker', block:'AvatarPicker', fam:['S','X','E'],
   html:`<style>
-.av{width:min(360px,92%);padding:16px;display:flex;flex-direction:column;gap:12px}
+.avp{width:min(360px,92%);padding:16px;display:flex;flex-direction:column;gap:12px}
 .av-ph{position:relative;flex:none;width:88px;height:88px}
 .av-ph svg.rg{position:absolute;inset:0;width:100%;height:100%}
 .av-im{position:absolute;left:8px;top:8px;width:72px;height:72px;border-radius:50%;overflow:hidden;background:var(--raised)}
 .av-im>div{position:absolute;inset:0}
 .av-im svg{display:block;width:100%;height:100%}
-.av .btn{white-space:nowrap}
+.avp .btn{white-space:nowrap}
 .av-pr{position:relative;display:flex;gap:8px;padding:3px}
 .av-p{flex:none;width:36px;height:36px;border-radius:50%;border:0;padding:0;overflow:hidden;cursor:pointer;position:relative;z-index:1;background:var(--raised)}
 .av-p svg{display:block;width:100%;height:100%}
 .av-rg{position:absolute;top:0;height:42px;border-radius:21px;border:2px solid var(--accent);left:0;pointer-events:none}
 </style>
-<div class="av card"><div class="row" style="gap:16px"><div class="av-ph" role="img" aria-label="Current avatar: initials MO"><svg class="rg" viewBox="0 0 88 88" aria-hidden="true"><circle cx="44" cy="44" r="40" fill="none" stroke="var(--line)" stroke-width="3"/><circle class="arc" cx="44" cy="44" r="40" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" transform="rotate(-90 44 44)"/></svg><div class="av-im"></div></div>
+<div class="avp card"><div class="row" style="gap:16px"><div class="av-ph" role="img" aria-label="Current avatar: initials MO"><svg class="rg" viewBox="0 0 88 88" aria-hidden="true"><circle cx="44" cy="44" r="40" fill="none" stroke="var(--line)" stroke-width="3"/><circle class="arc" cx="44" cy="44" r="40" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" transform="rotate(-90 44 44)"/></svg><div class="av-im"></div></div>
 <div class="col" style="gap:8px;min-width:0"><div><b style="display:block;line-height:1.3">Maya Okafor</b><span class="small muted">Editor</span></div><div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn av-up">Upload photo</button><button type="button" class="btn av-cl" disabled>Clear</button></div></div></div>
 <div><div class="small muted" style="margin-bottom:6px">Or choose a preset</div><div class="av-pr" role="group" aria-label="Preset avatars"><i class="av-rg"></i></div></div>
 <div class="small muted av-st" role="status" style="position:relative;height:18px"></div></div>`,
