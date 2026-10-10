@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storefront · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<style>
+body{font-family:system-ui,sans-serif;background:var(--cieo-color-surface,#fff);color:var(--cieo-color-ink,#1a1a1a);max-width:40rem;margin:0 auto;padding:var(--cieo-space-4,1rem)}
+img{max-width:100%;height:auto}
+[aria-invalid="true"]{outline:2px solid var(--cieo-color-danger,#b3261e)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<main>
+<h1 data-parts="Heading">Drift Wool Runner</h1>
+
+<section aria-label="Product" data-parts="Card">
+<p data-parts="Badge" data-tone="success">In stock</p>
+<img id="main-image" data-main-image src="fog.jpg" alt="Drift Wool Runner in Fog">
+<div role="group" aria-label="Views" data-parts="Thumbnail">
+<button type="button" data-thumb="Fog"><img src="fog.jpg" alt="Fog" data-src="fog.jpg" data-alt="Drift Wool Runner in Fog"></button>
+<button type="button" data-thumb="Oak"><img src="oak.jpg" alt="Oak" data-src="oak.jpg" data-alt="Drift Wool Runner in Oak"></button>
+<button type="button" data-thumb="Ink"><img src="ink.jpg" alt="Ink" data-src="ink.jpg" data-alt="Drift Wool Runner in Ink"></button>
+</div>
+<p data-parts="Text" data-price>$148.00</p>
+<p data-parts="Text">4.8 (312 reviews)</p>
+<fieldset data-parts="RadioList">
+<legend>Color</legend>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Fog" checked> Fog</label>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Oak"> Oak</label>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Ink"> Ink</label>
+</fieldset>
+<div data-parts="Stepper">
+<button type="button" data-qty-minus data-parts="Step">−</button>
+<output data-qty>1</output>
+<button type="button" data-qty-plus data-parts="Step">+</button>
+</div>
+<p data-parts="Text" data-line-total>$148.00</p>
+<button type="button" data-add>Add to bag</button>
+</section>
+
+<hr data-parts="Divider">
+
+<section aria-label="Bag" data-cart data-parts="Card">
+<h2 data-parts="Heading">Your bag</h2>
+<p data-parts="Text">Your bag is empty.</p>
+</section>
+
+<section aria-label="Checkout" data-parts="Card">
+<h2 data-parts="Heading">Checkout</h2>
+<label data-parts="Field">Email <input type="email" data-email autocomplete="email"></label>
+<label data-parts="Field">Street <input type="text" data-street autocomplete="street-address"></label>
+<label data-parts="Field">City <input type="text" data-city autocomplete="address-level2"></label>
+<label data-parts="Field">Postcode <input type="text" data-postcode autocomplete="postal-code"></label>
+<fieldset data-delivery data-parts="RadioList">
+<legend>Delivery</legend>
+<label data-parts="RadioListItem"><input type="radio" name="delivery" value="standard" checked> Standard $0</label>
+<label data-parts="RadioListItem"><input type="radio" name="delivery" value="express"> Express $12</label>
+</fieldset>
+<p data-parts="Text" data-order-total>$0.00</p>
+<button type="button" data-place>Place order</button>
+<p hidden data-order-ok data-parts="Banner">Order confirmed. Reference <span data-ref></span></p>
+<p hidden data-order-error data-parts="Banner">Check the highlighted fields.</p>
+</section>
+
+<section data-parts="Collapsible">
+<h2>Specifications</h2>
+<p>Hand-loomed from undyed highland wool with a cotton backing for grip on hard floors.</p>
+<p>Measures 80 by 300 centimetres and weighs 4.2 kilograms; pile height is 12 millimetres.</p>
+</section>
+
+<section data-parts="Collapsible">
+<h2>Shipping &amp; returns</h2>
+<p>Standard delivery is free and arrives in 5 to 7 days; express delivery costs $12 and arrives in 2 days.</p>
+<p>Returns are free within 60 days provided the runner is clean and in its original packaging.</p>
+</section>
+
+<section data-built-from>
+<h2>Built from</h2>
+<ul>
+<li><a href="../components/Thumbnail.html">Thumbnail</a></li>
+<li><a href="../components/RadioList.html">RadioList</a></li>
+<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
+<li><a href="../components/Stepper.html">Stepper</a></li>
+<li><a href="../components/Step.html">Step</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Collapsible.html">Collapsible</a></li>
+<li><a href="../components/Badge.html">Badge</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/Divider.html">Divider</a></li>
+</ul>
+</section>
+</main>
+<script src="./storefront.js" defer></script>
+</body>
+</html>
