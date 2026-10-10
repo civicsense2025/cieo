@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Store dashboard · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/themes.css">
+<style>
+:root { color-scheme: light; }
+body {
+  margin: 0;
+  font-family: var(--cieo-font-sans);
+  background: var(--cieo-color-canvas);
+  color: var(--cieo-color-text);
+}
+.dash { display: flex; }
+.dash-nav {
+  width: max-content;
+  padding: var(--cieo-space-4);
+  background: var(--cieo-color-surface);
+  border-inline-end: var(--cieo-border-width) solid var(--cieo-color-border);
+}
+.dash-nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--cieo-space-2); }
+.dash-nav button {
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  border: var(--cieo-border-width) solid transparent;
+  border-radius: var(--cieo-radius-control);
+  background: transparent;
+  color: var(--cieo-color-text);
+  cursor: pointer;
+}
+.dash-nav button[aria-current="page"] {
+  background: var(--cieo-color-accent-soft);
+  color: var(--cieo-color-accent);
+  border-color: var(--cieo-color-accent);
+}
+.dash-main { flex: 1; padding: var(--cieo-space-4); max-width: var(--cieo-container); }
+.dash-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--cieo-space-3); margin-block-end: var(--cieo-space-4); }
+.dash-card {
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-surface);
+  padding: var(--cieo-space-3);
+}
+.dash-card p { margin: 0 0 var(--cieo-space-1); color: var(--cieo-color-muted); }
+.dash-badge {
+  display: inline-block;
+  margin-inline-start: var(--cieo-space-2);
+  padding: 0 var(--cieo-space-2);
+  border-radius: var(--cieo-radius-pill);
+  border: var(--cieo-border-width) solid transparent;
+  vertical-align: middle;
+}
+.dash-badge[data-tone="success"] { background: var(--cieo-color-success-soft); color: var(--cieo-color-success); }
+.dash-badge[data-tone="warning"] { background: var(--cieo-color-warning-soft); color: var(--cieo-color-warning); }
+.dash-badge[data-tone="danger"] { background: var(--cieo-color-danger-soft); color: var(--cieo-color-danger); }
+.dash-badge[data-tone="info"] { background: var(--cieo-color-info-soft); color: var(--cieo-color-info); }
+table { width: 100%; border-collapse: collapse; background: var(--cieo-color-surface); }
+caption { text-align: start; font-weight: bold; margin-block-end: var(--cieo-space-2); }
+th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+.dash-field { display: grid; gap: var(--cieo-space-1); margin-block-end: var(--cieo-space-3); }
+.dash-field input[type="text"] {
+  font: inherit;
+  color: var(--cieo-color-text);
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-control);
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  min-height: var(--cieo-control-height);
+}
+.dash-check { display: flex; align-items: center; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
+.dash-check input { accent-color: var(--cieo-color-accent); }
+.dash-range { display: flex; align-items: center; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
+.dash-range input { accent-color: var(--cieo-color-accent); }
+.dash-save {
+  font: inherit;
+  padding: var(--cieo-space-2) var(--cieo-space-4);
+  min-height: var(--cieo-control-height);
+  border: var(--cieo-border-width) solid var(--cieo-color-accent);
+  border-radius: var(--cieo-radius-control);
+  background: var(--cieo-color-accent);
+  color: var(--cieo-color-on-accent);
+  cursor: pointer;
+}
+.dash-saved {
+  margin-block-start: var(--cieo-space-3);
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-success-soft);
+  color: var(--cieo-color-success);
+  border: var(--cieo-border-width) solid var(--cieo-color-success);
+  border-radius: var(--cieo-radius-surface);
+}
+.dash-built { margin-block-start: var(--cieo-space-4); }
+.dash-built ul { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
+.dash-built a { color: var(--cieo-color-accent); }
+:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s; animation-duration: 0s; }
+}
+</style>
+</head>
+<body>
+<div class="dash" data-parts="AppShell SideNav SideNavItem Card Badge Table TableHeader TableBody TableRow TableCell Field Slider Banner Heading Text">
+<nav class="dash-nav" aria-label="Store sections">
+<ul>
+<li><button type="button" data-nav="overview" aria-current="page">Overview</button></li>
+<li><button type="button" data-nav="orders">Orders</button></li>
+<li><button type="button" data-nav="settings">Settings</button></li>
+</ul>
+</nav>
+<main class="dash-main">
+<section data-panel="overview" aria-label="Overview">
+<div class="dash-cards">
+<div class="dash-card"><p>Revenue</p><strong>$48,210</strong><span class="dash-badge" data-tone="success">+12%</span></div>
+<div class="dash-card"><p>Orders</p><strong>1,284</strong><span class="dash-badge" data-tone="success">+4%</span></div>
+<div class="dash-card"><p>Refunds</p><strong>23</strong><span class="dash-badge" data-tone="warning">+8%</span></div>
+<div class="dash-card"><p>Active carts</p><strong>312</strong><span class="dash-badge" data-tone="info">live</span></div>
+</div>
+<h2>Recent orders</h2>
+<table>
+<caption>Recent orders</caption>
+<thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>#1041</td><td>Amara Okafor</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
+<tr><td>#1040</td><td>Liam Chen</td><td>$296.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
+<tr><td>#1039</td><td>Sofia Reyes</td><td>$74.00</td><td><span class="dash-badge" data-tone="danger">Refunded</span></td></tr>
+<tr><td>#1038</td><td>Noah Kim</td><td>$212.00</td><td><span class="dash-badge" data-tone="warning">Pending</span></td></tr>
+<tr><td>#1037</td><td>Ava Patel</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
+</tbody>
+</table>
+</section>
+<section data-panel="orders" aria-label="Orders" hidden>
+<h2>Orders</h2>
+<table>
+<caption>Orders</caption>
+<thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
+<tbody>
+<tr><td>#1041</td><td>Amara Okafor</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
+<tr><td>#1040</td><td>Liam Chen</td><td>$296.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
+<tr><td>#1039</td><td>Sofia Reyes</td><td>$74.00</td><td><span class="dash-badge" data-tone="danger">Refunded</span></td></tr>
+<tr><td>#1038</td><td>Noah Kim</td><td>$212.00</td><td><span class="dash-badge" data-tone="warning">Pending</span></td></tr>
+<tr><td>#1037</td><td>Ava Patel</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
+</tbody>
+</table>
+</section>
+<section data-panel="settings" aria-label="Settings" hidden>
+<h2>Settings</h2>
+<div class="dash-field">
+<label for="dash-store">Store name</label>
+<input id="dash-store" type="text" data-setting="store" value="Drift Goods">
+</div>
+<div class="dash-check">
+<input id="dash-notify" type="checkbox" role="switch" data-setting="notify" checked>
+<label for="dash-notify">Email notifications</label>
+</div>
+<div class="dash-field">
+<label for="dash-threshold">Low-stock threshold</label>
+<div class="dash-range">
+<input id="dash-threshold" type="range" min="0" max="50" value="12" data-setting="threshold">
+<output data-readout for="dash-threshold">12 units</output>
+</div>
+</div>
+<button class="dash-save" type="button" data-save>Save settings</button>
+<div class="dash-saved" role="status" data-saved hidden>Settings saved.</div>
+</section>
+<section class="dash-built" data-built-from aria-label="Built from">
+<h2>Built from</h2>
+<ul>
+<li><a href="../components/AppShell.html">AppShell</a></li>
+<li><a href="../components/SideNav.html">SideNav</a></li>
+<li><a href="../components/SideNavItem.html">SideNavItem</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Badge.html">Badge</a></li>
+<li><a href="../components/Table.html">Table</a></li>
+<li><a href="../components/TableHeader.html">TableHeader</a></li>
+<li><a href="../components/TableBody.html">TableBody</a></li>
+<li><a href="../components/TableRow.html">TableRow</a></li>
+<li><a href="../components/TableCell.html">TableCell</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/Slider.html">Slider</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+</ul>
+</section>
+</main>
+</div>
+<script src="./dashboard.js" defer></script>
+</body>
+</html>
