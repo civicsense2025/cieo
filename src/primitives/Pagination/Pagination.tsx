@@ -26,11 +26,17 @@ export function Pagination({ page, pageCount, onPageChange, label = 'Pagination'
       <button type="button" disabled={page <= 1} aria-label="Previous page" onClick={() => onPageChange?.(page - 1)}>
         Previous
       </button>
-      {pages.map((p) => (
-        <button key={p} type="button" aria-current={p === page ? 'page' : undefined} onClick={() => onPageChange?.(p)}>
-          {p === page ? (motion === false ? p : <Digits value={page} kind="feedback" />) : p}
-        </button>
-      ))}
+      {pages.map((p) =>
+        p === page ? (
+          <button key="current-page" type="button" aria-current="page" onClick={() => onPageChange?.(p)}>
+            {motion === false ? p : <Digits value={page} kind="feedback" />}
+          </button>
+        ) : (
+          <button key={p} type="button" onClick={() => onPageChange?.(p)}>
+            {p}
+          </button>
+        ),
+      )}
       <button type="button" disabled={page >= pageCount} aria-label="Next page" onClick={() => onPageChange?.(page + 1)}>
         Next
       </button>
