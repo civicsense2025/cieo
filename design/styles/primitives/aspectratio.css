@@ -1,0 +1,5 @@
+/* design/styles/primitives/aspectratio.css */
+@layer cieo.components {
+  :where(.cieo).cieo-aspect-ratio { position: relative; inline-size: 100%; overflow: hidden; }
+  :where(.cieo).cieo-aspect-ratio > * { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+}
