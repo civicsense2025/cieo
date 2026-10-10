@@ -1,7 +1,11 @@
-<!-- site/component.html : per-primitive docs template in Cieo style (Documentation-Design shape, no Astryx copy) -->
+<!-- site/component.html : reference shape for per-primitive docs pages (Documentation-Design shape, no Astryx copy).
+     Generated pages under site/components/ are owned by scripts/build-component-pages.mjs, which preserves
+     each page's authored content and renders this shell around it — including the import banner below.
+     The banner's import line is derived from the tsx exports; never hand-write it per page. -->
 <article class="cieo cieo-doc" data-component="${id}">
   <header><h1>${name}</h1><p>${summary}</p><span data-level>${level}</span></header>
   <div class="cieo-doc-body">
+    <div class="cieo-import-banner" data-import-banner><p><strong>Use the import, not the markup.</strong> Copy this line into your code — never paste the preview HTML below.</p><pre><code data-import>${import}</code></pre><button type="button" data-copy-import>Copy import</button></div>
     <div data-preview><!-- live preview mounts here and follows the theme bar --></div>
     <div role="tablist" aria-label="Example views"><button role="tab" aria-selected="true">Description</button><button role="tab" aria-selected="false">Code</button></div>
     <pre><code data-code>${code}</code></pre><button data-copy>Copy</button>

@@ -42,3 +42,12 @@ test('docs template renders props from manifest and empty state', () => {
   assert.match(html, /data-preview/);
   assert.match(html, /On this page/);
 });
+
+test('component pages teach the import, not the markup', () => {
+  for (const name of names) {
+    const html = readFileSync(`site/components/${name}.html`, 'utf8');
+    assert.match(html, /data-import-banner/, `${name} missing import banner (run node scripts/build-component-pages.mjs)`);
+    assert.ok(html.includes(`from 'cieo/${name}'`), `${name} banner has the wrong import line`);
+    assert.ok(!html.includes('</div></div></div><div data-dont>'), `${name} has unbalanced markup`);
+  }
+});

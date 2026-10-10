@@ -6,62 +6,19 @@
 //   - docs/generated/primitive-exports.json ({ names: [...] } consumed by tests)
 // Deterministic: sorted, no timestamps. Run: node scripts/wire-primitives.mjs [--check]
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { scanPrimitives } from './lib/primitives.mjs';
 
 const root = new URL('..', import.meta.url).pathname.replace(/\/$/, '');
 const primDir = `${root}/src/primitives`;
 const check = process.argv.includes('--check');
 
-function parseExports(src) {
-  const values = [];
-  const types = [];
-  for (const m of src.matchAll(/export\s+(?:async\s+)?function\s+(\w+)/g)) values.push(m[1]);
-  for (const m of src.matchAll(/export\s+(?:const|class)\s+(\w+)/g)) values.push(m[1]);
-  for (const m of src.matchAll(/export\s+(interface)\s+(\w+)/g)) types.push(m[2]);
-  for (const m of src.matchAll(/export\s+type\s+(\w+)\s*=/g)) types.push(m[1]);
-  for (const m of src.matchAll(/export\s*\{([^}]+)\}/g)) {
-    for (const part of m[1].split(',')) {
-      const p = part.trim();
-      if (!p) continue;
-      const isType = p.startsWith('type ');
-      const bare = isType ? p.slice(5).trim() : p;
-      const asMatch = bare.match(/^(\S+)\s+as\s+(\S+)$/);
-      const name = asMatch ? asMatch[2] : bare;
-      if (isType) types.push(name);
-      else values.push(name);
-    }
-  }
-  for (const m of src.matchAll(/export\s+type\s*\{([^}]+)\}/g)) {
-    for (const part of m[1].split(',')) {
-      const p = part.trim();
-      if (!p) continue;
-      const asMatch = p.match(/^(\S+)\s+as\s+(\S+)$/);
-      types.push(asMatch ? asMatch[2] : p);
-    }
-  }
-  return { values: [...new Set(values)], types: [...new Set(types)] };
+let entries;
+try {
+  entries = scanPrimitives(root);
+} catch (err) {
+  console.error(err.message);
+  process.exit(1);
 }
-
-const dirs = readdirSync(primDir, { withFileTypes: true })
-  .filter((d) => d.isDirectory())
-  .map((d) => d.name)
-  .sort();
-
-const entries = [];
-for (const dir of dirs) {
-  const file = `${primDir}/${dir}/${dir}.tsx`;
-  if (!existsSync(file)) {
-    console.error(`missing component source: src/primitives/${dir}/${dir}.tsx`);
-    process.exitCode = 1;
-    continue;
-  }
-  const { values, types } = parseExports(readFileSync(file, 'utf8'));
-  if (values.length === 0) {
-    console.error(`no exported values in ${file}`);
-    process.exitCode = 1;
-  }
-  entries.push({ dir, values, types });
-}
-if (process.exitCode) process.exit(process.exitCode);
 
 const barrel = entries
   .map(({ dir, values, types }) => `export { ${[...values, ...types.map((t) => `type ${t}`)].join(', ')} } from './${dir}/${dir}.js';`)
