@@ -344,7 +344,7 @@ ${fauxCss('fz4-')}${DK('fz4-')}${colCss('fz4-')}
 .fz4-tp .digits{display:inline-flex}
 .fz4-tp span.u{font-size:.5em;color:var(--muted);margin-left:2px}
 .fz4-cd{position:relative;height:40px;flex:1;min-width:0;font-size:14px}
-.fz4-cd>span{position:absolute;left:0;top:0;white-space:nowrap;line-height:1.35}
+.fz4-cd>span{position:absolute;left:0;right:0;top:0;line-height:1.35}
 .fz4-cd small{display:block;font-size:12.5px;color:var(--muted)}
 .fz4-vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .fz4-cs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px;padding-inline:clamp(16px,4cqw,36px)}
