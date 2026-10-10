@@ -1,0 +1,6 @@
+/* design/styles/primitives/step.css */
+@layer cieo.components {
+  :where(.cieo).cieo-step { display: flex; align-items: center; gap: var(--cieo-space-2); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-step[data-state='done'] { color: var(--cieo-color-text); }
+  :where(.cieo).cieo-step[data-state='current'] { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+}

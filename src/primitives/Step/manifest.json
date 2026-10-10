@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.step",
+  "componentVersion": "1.0.0",
+  "name": "Step",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Step/Step.tsx", "symbol": "Step" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "state", "type": { "kind": "enum", "values": ["done", "current", "todo"] }, "required": false, "nullable": false, "default": "todo", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "item", "overrides": ["color"], "tokenRoles": ["text-progress"] }],
+  "constraints": { "layout": ["item-in-stepper"], "content": ["item-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["state"], "states": [], "events": [], "parts": ["item"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Custom step item for hand-built steppers." },
+  "extensions": {}
+}
