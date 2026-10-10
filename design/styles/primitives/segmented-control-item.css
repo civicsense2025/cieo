@@ -1,0 +1,5 @@
+/* design/styles/primitives/segmented-control-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-segmented-control-item { display: inline-flex; align-items: center; min-block-size: var(--cieo-control-small); padding-inline: var(--cieo-space-3); border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: var(--cieo-color-text); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-segmented-control-item[data-picked='true'] { background: var(--cieo-color-surface); font-weight: var(--cieo-weight-medium); }
+}
