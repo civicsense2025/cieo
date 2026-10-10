@@ -2,6 +2,7 @@
 'use client';
 /* Carousel. Scroll-snap region with previous/next buttons. Buttons scroll by one visible page. */
 import { useRef, type ReactNode } from 'react';
+import { scrollTo } from '../../dom/scroll.js';
 
 export interface CarouselProps {
   /** Accessible name for the carousel region (e.g. "Featured guides"). Required. */
@@ -15,7 +16,7 @@ export function Carousel({ label, motion, children }: CarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const scrollBy = (direction: 1 | -1) => {
     const track = trackRef.current;
-    if (track) track.scrollBy({ left: direction * track.clientWidth });
+    if (track) motion === false ? track.scrollBy({ left: direction * track.clientWidth }) : scrollTo(track, track.scrollLeft + direction * track.clientWidth);
   };
   return (
     <div className="cieo cieo-carousel" data-motion={motion === false ? 'off' : undefined}>

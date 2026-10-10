@@ -20,7 +20,9 @@ Region with `aria-label` and a scroll-snap track, flanked by Previous/Next nativ
 
 No motion. Buttons scroll the track by its own `clientWidth`; the track never loops or autoplays.
 
-Motion: `motion={false}` sets `data-motion="off"` (opt-out contract now); the scroll spring lands in wave 2.
+## Motion
+
+Paging rides the scroll spring. `motion={false}` uses native instant paging; reduced motion jumps.
 
 ## Keyboard / accessibility
 
