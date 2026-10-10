@@ -1,6 +1,6 @@
 @layer cieo.components {
   :where(.cieo).cieo-p-spinner { display: inline-flex; }
-  :where(.cieo) .cieo-p-spinner-ring { inline-size: 1rem; block-size: 1rem; border-radius: 999px; border: 2px solid var(--cieo-color-border); border-top-color: var(--cieo-color-accent); animation: cieo-spin 0.8s linear infinite; }
+  :where(.cieo) .cieo-p-spinner-ring { inline-size: 1rem; block-size: 1rem; border-radius: 999px; border: 2px solid var(--cieo-color-border); border-top-color: var(--cieo-color-accent); animation: cieo-spin var(--motion-duration-lazy, 740ms) linear infinite; }
   :where(.cieo).cieo-p-spinner[data-size='sm'] .cieo-p-spinner-ring { inline-size: 0.75rem; block-size: 0.75rem; }
   @keyframes cieo-spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) {

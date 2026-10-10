@@ -18,7 +18,11 @@ Root `span.cieo.cieo-p-spinner` with `role="status"` and `aria-label`; inner rin
 
 ## Behavior
 
-CSS rotation only (`cieo-spin`, 0.8s linear infinite). Size defaults to `md`; `sm` shrinks the ring. The ring rests (no animation, dimmed) under `prefers-reduced-motion`.
+CSS rotation only (`cieo-spin`, `var(--motion-duration-lazy, 740ms)` linear infinite). Size defaults to `md`; `sm` shrinks the ring. The ring rests (no animation, dimmed) under `prefers-reduced-motion`.
+
+## Motion
+
+Rotation period is token-driven (`--motion-duration-lazy`, ~740ms). Pass `motion={false}` to set `data-motion="off"`, which kills the animation via the shared motion contract (`design/styles/primitives/motion.css`). Reduced-motion rest still applies.
 
 ## Keyboard / accessibility
 

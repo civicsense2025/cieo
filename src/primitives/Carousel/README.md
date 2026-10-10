@@ -20,6 +20,8 @@ Region with `aria-label` and a scroll-snap track, flanked by Previous/Next nativ
 
 No motion. Buttons scroll the track by its own `clientWidth`; the track never loops or autoplays.
 
+Motion: `motion={false}` sets `data-motion="off"` (opt-out contract now); the scroll spring lands in wave 2.
+
 ## Keyboard / accessibility
 
 - Region carries the carousel name (`label`, required); items keep native focus and order.

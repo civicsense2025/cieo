@@ -15,7 +15,8 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Loading", "constraints": { "minLength": 1, "maxLength": 256 } },
-    { "id": "size", "type": { "kind": "enum", "values": ["sm", "md"] }, "required": false, "nullable": false, "default": "md", "constraints": {} }
+    { "id": "size", "type": { "kind": "enum", "values": ["sm", "md"] }, "required": false, "nullable": false, "default": "md", "constraints": {} },
+    { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} }
   ],
   "slots": [],
   "state": [],
@@ -24,7 +25,7 @@
   "variants": [],
   "styleParts": [{ "id": "ring", "overrides": [], "tokenRoles": ["border"] }],
   "constraints": { "layout": ["inline-only"], "content": ["label-required"], "motion": ["spin-with-reduced-motion-rest"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "size"], "states": [], "events": [], "parts": ["ring"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "size", "motion"], "states": [], "events": [], "parts": ["ring"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Loading indicator with an accessible label." },
