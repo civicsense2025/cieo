@@ -5,7 +5,7 @@ atom({ id:'payfields', cat:'Commerce', name:'Payment fields', block:'checkout, c
   init(st){
     const cn = $(st,'.cn'), ex = $(st,'.ex'), cv = $(st,'.cv'), m1 = $(st,'.m1'), m2 = $(st,'.m2'), py = $(st,'.py');
     const brand = new Swap(0), ok = new Track(0);
-    ['Card','Visa','Mastercard','Amex'].forEach((s,i) => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.textContent = s; $(st,'.br').appendChild(e); });
+    ['Card','Visa','Mastercard','Amex'].forEach((s,i) => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.style.justifyContent = 'flex-end'; e.textContent = s; $(st,'.br').appendChild(e); });
     const luhn = s => { let d = 0, alt = false; for (let i = s.length-1; i >= 0; i--){ let n = +s[i]; if (alt){ n *= 2; if (n > 9) n -= 9; } d += n; alt = !alt; } return s.length >= 15 && d % 10 === 0; };
     const chk = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"><path d="M5 12.5 10 17.5 19 7"/></svg>`;
     function vCard(live){ const raw = cn.value.replace(/\D/g,'').slice(0,16);
