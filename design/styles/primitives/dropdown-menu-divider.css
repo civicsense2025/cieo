@@ -1,0 +1,4 @@
+/* design/styles/primitives/dropdown-menu-divider.css */
+@layer cieo.components {
+  :where(.cieo).cieo-dropdown-menu-divider { block-size: var(--cieo-border-width); margin-block: var(--cieo-space-1); background: var(--cieo-color-border); }
+}

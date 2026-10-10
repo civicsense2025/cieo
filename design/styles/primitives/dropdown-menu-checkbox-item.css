@@ -1,0 +1,6 @@
+/* design/styles/primitives/dropdown-menu-checkbox-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-dropdown-menu-checkbox-item { display: flex; align-items: center; inline-size: 100%; gap: var(--cieo-space-2); padding: var(--cieo-space-1) var(--cieo-space-2); border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: var(--cieo-color-text); font-size: var(--cieo-text-small); text-align: start; }
+  :where(.cieo).cieo-dropdown-menu-checkbox-item:hover { background: var(--cieo-color-sunken); }
+  :where(.cieo).cieo-dropdown-menu-checkbox-item[data-checked='true'] { font-weight: var(--cieo-weight-medium); }
+}

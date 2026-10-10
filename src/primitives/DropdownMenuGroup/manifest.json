@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.dropdown-menu-group",
+  "componentVersion": "1.0.0",
+  "name": "DropdownMenuGroup",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/DropdownMenuGroup/DropdownMenuGroup.tsx", "symbol": "DropdownMenuGroup" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 16, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "label", "overrides": ["color"], "tokenRoles": ["text-muted"] }],
+  "constraints": { "layout": ["stacked-section"], "content": ["label-when-grouped"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label"], "states": [], "events": [], "parts": ["label"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Labeled section inside a dropdown menu." },
+  "extensions": {}
+}
