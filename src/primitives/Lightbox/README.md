@@ -18,7 +18,11 @@ Image viewer dialog for inspecting one picture at full size (a receipt photo, a 
 
 ## Behavior
 
-No motion. Renders null when `open` is false or omitted; the host owns open state. Escape calls `onClose`.
+Renders null when `open` is false or omitted; the host owns open state. Escape calls `onClose`.
+
+## Motion
+
+Animates on fade via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states. Still renders null when closed; the `exiting` choice applies once wave 2 wires presence behind these props.
 
 ## Keyboard / accessibility
 

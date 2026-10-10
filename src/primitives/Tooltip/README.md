@@ -20,6 +20,10 @@ Outer `cieo-p-tooltip` span; trigger span wraps children; bubble span with `role
 
 CSS reveal only: bubble appears on hover and `focus-within` via opacity. No JavaScript open state.
 
+## Motion
+
+Animates on fade via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states.
+
 ## Keyboard / accessibility
 
 - The trigger keeps its own accessible name; the bubble never replaces it.

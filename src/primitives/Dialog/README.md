@@ -18,7 +18,11 @@ Controlled modal panel over a scrim for short tasks (rename a file, confirm a ch
 
 ## Behavior
 
-No motion. Renders null when `open` is false or omitted; the host owns open state. Escape calls `onClose`; the host decides what closing means.
+Renders null when `open` is false or omitted; the host owns open state. Escape calls `onClose`; the host decides what closing means.
+
+## Motion
+
+Animates on rise via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states. Still renders null when closed; the `exiting` choice applies once wave 2 wires presence behind these props.
 
 ## Keyboard / accessibility
 
