@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
-export interface TooltipProps {
+import { type MotionProps } from '../motion.js';
+export interface TooltipProps extends MotionProps {
     text: string;
     children: ReactNode;
 }
-export declare function Tooltip({ text, children }: TooltipProps): import("react/jsx-runtime").JSX.Element;
+export declare function Tooltip({ text, children, motion, entering, exiting }: TooltipProps): import("react/jsx-runtime").JSX.Element;

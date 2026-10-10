@@ -23,7 +23,7 @@ const COMPONENTS = [
   { dir: 'Outline', name: 'Outline', id: 'core.outline', markers: ['<nav', 'aria-label={label}', "label = 'On this page'", "'#' +"] },
   { dir: 'Stepper', name: 'Stepper', id: 'core.stepper', markers: ['<ol', 'aria-label={label}', "? 'step' : undefined", 'cieo-stepper'] },
   { dir: 'Step', name: 'Step', id: 'core.step', markers: ['data-state={state}', "state = 'todo'", '<li'] },
-  { dir: 'Pagination', name: 'Pagination', id: 'core.pagination', markers: ['<nav', 'aria-label={label}', "label = 'Pagination'", 'aria-current', 'pageCount'] },
+  { dir: 'Pagination', name: 'Pagination', id: 'core.pagination', headings: 11, markers: ['<nav', 'aria-label={label}', "label = 'Pagination'", 'aria-current', 'pageCount'] },
 ];
 
 for (const c of COMPONENTS) {
@@ -41,10 +41,10 @@ for (const c of COMPONENTS) {
     assert.equal(m.schemaVersion, '1.0.0');
   });
 
-  test(`${c.name} README has 10 doc headings`, () => {
+  test(`${c.name} README has ${c.headings ?? 10} doc headings`, () => {
     const readme = readFileSync(`src/primitives/${c.dir}/README.md`, 'utf8');
     const headings = readme.match(/^## /gm) || [];
-    assert.equal(headings.length, 10);
+    assert.equal(headings.length, c.headings ?? 10);
   });
 
   test(`${c.name} doc page exists with h1 and prop rows`, () => {

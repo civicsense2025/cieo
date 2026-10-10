@@ -4,12 +4,12 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 const COMPONENTS = [
-  { name: 'Dialog', id: 'core.dialog', markers: ['role="dialog"', 'aria-modal', 'Overlay', 'if (!open) return null', 'aria-label={label}', 'onKeyDown'] },
+  { name: 'Dialog', id: 'core.dialog', markers: ['role="dialog"', 'aria-modal', 'Overlay', 'if (!mounted) return null', 'aria-label={label}', 'onKeyDown'] },
   { name: 'DialogHeader', id: 'core.dialog-header', markers: ['{title}', "closeLabel = 'Close'", 'onClick={onClose}'] },
   { name: 'AlertDialog', id: 'core.alert-dialog', markers: ['role="alertdialog"', '../Dialog/Dialog.js', 'if (!open) return null'] },
-  { name: 'BottomSheet', id: 'core.bottom-sheet', markers: ['role="dialog"', 'data-side="bottom"', 'Overlay', 'if (!open) return null'] },
+  { name: 'BottomSheet', id: 'core.bottom-sheet', markers: ['role="dialog"', 'data-side="bottom"', 'Overlay', 'if (!mounted) return null'] },
   { name: 'BottomSheetSwitcher', id: 'core.bottom-sheet-switcher', markers: ['role="listbox"', 'aria-label={label}'] },
-  { name: 'Lightbox', id: 'core.lightbox', markers: ['<img', 'src={src}', 'alt={alt}', "label = 'Image viewer'", 'if (!open) return null'] },
+  { name: 'Lightbox', id: 'core.lightbox', markers: ['<img', 'src={src}', 'alt={alt}', "label = 'Image viewer'", 'if (!mounted) return null'] },
   { name: 'ChatMessage', id: 'core.chat-message', markers: ['<article', '{author', '{time', '{children}'] },
   { name: 'ChatMessageBubble', id: 'core.chat-message-bubble', markers: ['data-variant', "variant = 'incoming'"] },
   { name: 'ChatMessageList', id: 'core.chat-message-list', markers: ['role="log"', "label = 'Messages'"] },

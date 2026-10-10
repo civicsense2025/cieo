@@ -7,5 +7,7 @@ export interface PaginationProps {
     onPageChange?: (page: number) => void;
     /** Accessible name. Defaults to Pagination. */
     label?: string;
+    /** False renders the current numeral instantly. Defaults to true (numeral rolls on change). */
+    motion?: boolean;
 }
-export declare function Pagination({ page, pageCount, onPageChange, label }: PaginationProps): import("react/jsx-runtime").JSX.Element;
+export declare function Pagination({ page, pageCount, onPageChange, label, motion }: PaginationProps): import("react/jsx-runtime").JSX.Element;

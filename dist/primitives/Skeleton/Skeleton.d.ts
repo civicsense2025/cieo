@@ -3,5 +3,7 @@ export interface SkeletonProps {
     lines?: number;
     /** Screen-reader label. Defaults to Loading. */
     label?: string;
+    /** False renders the static bar instantly. Defaults to true. */
+    motion?: boolean;
 }
-export declare function Skeleton({ lines, label }: SkeletonProps): import("react/jsx-runtime").JSX.Element;
+export declare function Skeleton({ lines, label, motion }: SkeletonProps): import("react/jsx-runtime").JSX.Element;
