@@ -16,3 +16,11 @@ test('primitives barrel re-exports both proofs', () => {
   assert.match(src, /ButtonGroup/);
   assert.match(src, /AvatarGroup/);
 });
+
+test('docs template renders props from manifest and empty state', () => {
+  const html = readFileSync('site/component.html', 'utf8');
+  assert.match(html, /data-props/);
+  assert.match(html, /Not documented yet/);
+  assert.match(html, /data-preview/);
+  assert.match(html, /On this page/);
+});

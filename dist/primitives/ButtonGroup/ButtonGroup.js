@@ -1,0 +1,6 @@
+// src/primitives/ButtonGroup/ButtonGroup.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function ButtonGroup({ label, orientation = 'horizontal', children }) {
+    return (_jsx("div", { role: "group", "aria-label": label, "data-orientation": orientation, className: "cieo cieo-button-group", children: children }));
+}
