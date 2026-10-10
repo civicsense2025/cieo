@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.breadcrumb-item",
+  "componentVersion": "1.0.0",
+  "name": "BreadcrumbItem",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/BreadcrumbItem/BreadcrumbItem.tsx", "symbol": "BreadcrumbItem" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "current", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "group", "overrides": ["border"], "tokenRoles": ["border-control"] }],
+  "constraints": { "layout": ["connected-children"], "content": ["group-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["current"], "states": [], "events": [], "parts": ["group"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "One crumb: link or current page." },
+  "extensions": {}
+}

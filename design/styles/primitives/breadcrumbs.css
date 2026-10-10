@@ -1,0 +1,6 @@
+@layer cieo.components {
+  :where(.cieo).cieo-p-breadcrumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-2); list-style: none; margin: 0; padding: 0; }
+  :where(.cieo) .cieo-p-crumb { display: inline-flex; align-items: center; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-p-crumb + .cieo-p-crumb::before { content: '/'; color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-p-crumb[aria-current='page'] { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+}
