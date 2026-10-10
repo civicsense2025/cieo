@@ -1,0 +1,5 @@
+/* design/styles/primitives/command-palette-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-command-palette-item { padding: var(--cieo-space-1) var(--cieo-space-2); border-radius: var(--cieo-radius-control); cursor: pointer; }
+  :where(.cieo).cieo-p-command-palette-item[aria-selected='true'] { background: var(--cieo-color-surface); border: 1px solid var(--cieo-color-border-strong); }
+}

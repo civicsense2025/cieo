@@ -1,0 +1,4 @@
+/* design/styles/primitives/command-palette-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-command-palette-list { max-block-size: 18rem; overflow-y: auto; padding: var(--cieo-space-1); }
+}

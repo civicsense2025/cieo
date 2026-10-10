@@ -1,0 +1,4 @@
+/* design/styles/primitives/command-palette-group.css */
+@layer cieo.components {
+  :where(.cieo) .cieo-p-command-palette-group-label { margin: 0; padding: var(--cieo-space-1) var(--cieo-space-2); font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+}
