@@ -1,0 +1,11 @@
+/* design/styles/primitives/button-group.css */
+@layer cieo.components {
+  :where(.cieo).cieo-button-group { display: inline-flex; }
+  :where(.cieo).cieo-button-group[data-orientation='vertical'] { flex-direction: column; }
+  :where(.cieo).cieo-button-group > * { border-color: var(--cieo-color-border-strong); }
+  :where(.cieo).cieo-button-group > * + * { margin-inline-start: -1px; }
+  :where(.cieo).cieo-button-group[data-orientation='vertical'] > * + * { margin-inline-start: 0; margin-block-start: -1px; }
+  :where(.cieo).cieo-button-group > :first-child { border-start-end-radius: 0; border-end-end-radius: 0; }
+  :where(.cieo).cieo-button-group > :last-child { border-start-start-radius: 0; border-end-start-radius: 0; }
+  :where(.cieo).cieo-button-group > :only-child { border-radius: var(--cieo-radius-control); }
+}
