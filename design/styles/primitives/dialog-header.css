@@ -1,0 +1,5 @@
+/* design/styles/primitives/dialog-header.css */
+@layer cieo.components {
+  :where(.cieo).cieo-dialog-header { display: flex; align-items: baseline; justify-content: space-between; gap: var(--cieo-space-3); margin-block-end: var(--cieo-space-3); }
+  :where(.cieo).cieo-dialog-header > h2 { margin: 0; color: var(--cieo-color-text); }
+}

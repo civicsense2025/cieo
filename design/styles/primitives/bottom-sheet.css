@@ -1,0 +1,4 @@
+/* design/styles/primitives/bottom-sheet.css */
+@layer cieo.components {
+  :where(.cieo).cieo-bottom-sheet { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--cieo-popover-z, 50); max-block-size: 80vh; overflow: auto; background: var(--cieo-color-surface); color: var(--cieo-color-text); border-block-start: 1px solid var(--cieo-color-border-strong); border-start-start-radius: var(--cieo-radius-control); border-start-end-radius: var(--cieo-radius-control); padding: var(--cieo-space-4); }
+}

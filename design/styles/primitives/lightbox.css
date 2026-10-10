@@ -1,0 +1,5 @@
+/* design/styles/primitives/lightbox.css */
+@layer cieo.components {
+  :where(.cieo).cieo-lightbox { position: fixed; inset-block-start: 50%; inset-inline-start: 50%; transform: translate(-50%, -50%); z-index: var(--cieo-popover-z, 50); display: grid; gap: var(--cieo-space-3); max-inline-size: calc(100vw - var(--cieo-space-6)); max-block-size: calc(100vh - var(--cieo-space-6)); padding: var(--cieo-space-4); background: var(--cieo-color-surface); border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); }
+  :where(.cieo).cieo-lightbox > img { max-inline-size: 100%; max-block-size: 70vh; }
+}

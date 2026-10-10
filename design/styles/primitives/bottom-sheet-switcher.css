@@ -1,0 +1,5 @@
+/* design/styles/primitives/bottom-sheet-switcher.css */
+@layer cieo.components {
+  :where(.cieo).cieo-bottom-sheet-switcher { display: grid; gap: var(--cieo-space-1); padding: var(--cieo-space-2); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-bottom-sheet-switcher > * + * { border-block-start: 1px solid var(--cieo-color-border); }
+}
