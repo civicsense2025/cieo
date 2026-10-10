@@ -1,5 +1,5 @@
 atom({ id:'payfields', cat:'Commerce', name:'Payment fields', block:'checkout, card-form, validation', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><div class="row" style="justify-content:space-between;align-items:baseline"><b style="font-size:15px;font-weight:600">Payment</b><span class="br small" style="position:relative;display:block;min-height:19px;font-size:12.5px"></span></div><input class="cn" inputmode="numeric" placeholder="Card number" aria-label="Card number" style="height:38px;border-radius:9px;border:1px solid var(--line);padding:0 10px;font-size:14px;font-variant-numeric:tabular-nums"><p class="m1 small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p><div class="row" style="gap:8px"><input class="ex" placeholder="MM/YY" aria-label="Expiry" style="flex:1;height:38px;border-radius:9px;border:1px solid var(--line);padding:0 10px;font-size:14px;min-width:0"><input class="cv" inputmode="numeric" maxlength="4" placeholder="CVC" aria-label="CVC" style="width:88px;height:38px;border-radius:9px;border:1px solid var(--line);padding:0 10px;font-size:14px"></div><p class="m2 small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p><button class="py" style="height:38px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer">Pay $82.00</button><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="sv"> Save card</label></div><div class="hint">Type 4242… then a short number</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><div class="row" style="justify-content:space-between;align-items:baseline"><b style="font-size:15px;font-weight:600">Payment</b><span class="br small" style="position:relative;display:block;min-height:19px;font-size:12.5px"></span></div><input class="cn" inputmode="numeric" placeholder="Card number" aria-label="Card number" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px;font-variant-numeric:tabular-nums"><p class="m1 small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p><div class="row" style="gap:8px"><input class="ex" placeholder="MM/YY" aria-label="Expiry" style="flex:1;height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px;min-width:0"><input class="cv" inputmode="numeric" maxlength="4" placeholder="CVC" aria-label="CVC" style="width:88px;height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"></div><p class="m2 small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p><button class="py" style="height:38px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer">Pay $82.00</button><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="sv"> Save card</label></div><div class="hint">Type 4242… then a short number</div>`,
   desc:'Spaces land every four digits while the brand swaps live. Valid fields earn a success check inline; invalid ones ring danger with a fix, as you type — never submit-only. Pay holds its terminal.',
   api:'brand.to(visa|mc|amex|unknown)   ok[i].set(1)/bad[i].ring() live on input',
   init(st){
@@ -11,15 +11,15 @@ atom({ id:'payfields', cat:'Commerce', name:'Payment fields', block:'checkout, c
     function vCard(live){ const raw = cn.value.replace(/\D/g,'').slice(0,16);
       cn.value = raw.replace(/(\d{4})(?=\d)/g,'$1 ');
       brand.to(raw[0] === '4' ? 1 : raw[0] === '5' ? 2 : raw[0] === '3' ? 3 : 0);
-      const good = luhn(raw); cn.style.borderColor = !raw ? 'var(--line)' : good ? 'var(--success)' : 'var(--danger)';
+      const good = luhn(raw); cn.style.borderColor = !raw ? 'var(--muted)' : good ? 'var(--success)' : 'var(--danger)';
       m1.innerHTML = !raw ? '' : good ? chk + ' Looks good.' : 'Card looks short — check the 16 digits.';
       m1.style.color = good ? 'var(--success)' : 'var(--danger)'; return good; }
     function vRest(){ let e = ex.value.replace(/\D/g,'').slice(0,4);
       if (e.length >= 3) e = e.slice(0,2) + '/' + e.slice(2); ex.value = e;
       const m = +e.slice(0,2), goodE = /^\d{2}\/\d{2}$/.test(e) && m >= 1 && m <= 12;
       const goodC = /^\d{3,4}$/.test(cv.value);
-      ex.style.borderColor = !ex.value ? 'var(--line)' : goodE ? 'var(--success)' : 'var(--danger)';
-      cv.style.borderColor = !cv.value ? 'var(--line)' : goodC ? 'var(--success)' : 'var(--danger)';
+      ex.style.borderColor = !ex.value ? 'var(--muted)' : goodE ? 'var(--success)' : 'var(--danger)';
+      cv.style.borderColor = !cv.value ? 'var(--muted)' : goodC ? 'var(--success)' : 'var(--danger)';
       m2.textContent = !ex.value && !cv.value ? '' : !goodE ? 'Use MM/YY — e.g. 08/28.' : !goodC ? 'CVC is the 3 digits on the back.' : '';
       m2.style.color = 'var(--danger)'; return goodE && goodC; }
     cn.oninput = () => vCard(true); ex.oninput = vRest; cv.oninput = vRest;

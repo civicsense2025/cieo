@@ -8,7 +8,7 @@ atom({ id:'livepoll', cat:'Forms', name:'Live poll', block:'poll, vote', fam:['M
     const O = [['Booking calendar',38],['Course player',27],['Job board',21]];
     const head = $(st,'b');
     const rows = O.map(([n]) => { const b = document.createElement('button');
-      b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;min-height:40px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;font-size:14px;line-height:1.5';
+      b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;min-height:40px;border:0;background:var(--card);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left;font-size:14px;line-height:1.5';
       b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--raised)"></i><span style="position:relative;display:flex;gap:8px;align-items:center"><svg class="ck" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:0;opacity:0"><path d="M5 12.5 10 17.5 19 7"/></svg><span></span></span><span class="pc num small" style="position:relative;font-size:12px;font-variant-numeric:tabular-nums"></span>`;
       $$(b,'span')[1].textContent = n; pl.insertBefore(b, $(pl,'.ct')); return { b, fill:$(b,'i'), ck:$(b,'.ck'), pc:$(b,'.pc'), v:new Track(0), o:new Track(0), c:new Track(0) }; });
     let voted = -1, total = 0;

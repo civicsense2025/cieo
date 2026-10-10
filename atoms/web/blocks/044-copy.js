@@ -5,7 +5,7 @@ atom({
     <div class="card" style="position:relative;padding:24px 16px 72px;border-radius:24px;min-width:0">
       <span class="muted" style="font:12px var(--sans)">A small beginning.</span>
       <code style="display:block;overflow:auto;margin-top:16px;font:12px/1.6 var(--mono);white-space:nowrap">import { Track, S } from 'cieo';</code>
-      <button type="button" class="cp" aria-label="Copy import" style="position:absolute;right:16px;bottom:16px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);cursor:pointer;overflow:hidden;font:500 13px var(--sans);color:var(--ink)"></button>
+      <button type="button" class="cp" aria-label="Copy import" style="position:absolute;right:16px;bottom:16px;height:40px;border-radius:12px;border:1.5px solid var(--muted);background:var(--card);cursor:pointer;overflow:hidden;font:500 13px var(--sans);color:var(--ink)"></button>
     </div><span class="copy-message small muted" role="status" aria-live="polite"></span>
   </div>`,
   desc:'The button widens and swaps only after a successful copy. When clipboard permission is unavailable, the source is selected for manual copying instead of falsely reporting success.',
@@ -32,7 +32,7 @@ atom({
     return t=>{
       if(back&&t>=back){back=0;sw.to(0);width.set(40);ok.set(0);cp.setAttribute('aria-label','Copy import');}
       const g=clamp(ok.at(t));cp.style.width=px(width.at(t));cp.style.color=mix(g,'var(--success)','var(--ink)');
-      cp.style.borderColor=mix(g,'var(--success)','var(--line)');cp.style.background=mix(g,'var(--success-tint)','var(--card)');
+      cp.style.borderColor=mix(g,'var(--success)','var(--muted)');cp.style.background=mix(g,'var(--success-tint)','var(--card)');
       icons.forEach((e,i)=>sw.apply(e,i,t,3));
     };
   },

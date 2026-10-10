@@ -6,7 +6,7 @@ atom({ id:'breadcrumbs', cat:'Content', name:'Breadcrumbs', block:'breadcrumbs',
   api:'crumb.w.set(collapsed ? 0 : measured, S.base, t + i·0.03)',
   init(st){
     const bc = $(st,'.bc'), N = ['Home','Docs','Guides','Blocks','Tabs'];
-    const sep = '<span style="color:var(--faint);padding:0 6px">/</span>';
+    const sep = '<span style="color:var(--muted);padding:0 6px">/</span>';
     const parts = N.map((n,i) => { const w = document.createElement('span'); w.style.cssText = 'display:inline-flex;overflow:hidden'; w.innerHTML = (i ? sep : '') + `<a href="#" style="color:${i === N.length-1 ? 'var(--ink)' : 'var(--muted)'};text-decoration:none;font-weight:${i === N.length-1 ? 600 : 400}">${n}</a>`; bc.appendChild(w); $(w,'a').onclick = e => e.preventDefault(); return { w, full:0, tr:new Track(1) }; });
     const el = document.createElement('span'); el.style.cssText = 'display:inline-flex;overflow:hidden'; el.innerHTML = sep + '<button aria-label="Show full path" style="border:0;background:var(--raised);border-radius:6px;padding:0 6px;cursor:pointer;color:var(--muted)">…</button>'; bc.insertBefore(el, parts[1].w);
     const eo = new Track(0); let ew = 0, col = false;

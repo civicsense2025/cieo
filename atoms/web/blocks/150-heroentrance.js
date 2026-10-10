@@ -13,7 +13,7 @@ atom({ id:'heroentrance', cat:'Landing', name:'Hero entrance', block:'hero, cta-
 .ldh-p{margin:0;color:var(--muted);max-width:44ch;font-size:15px;line-height:1.5}
 .ldh-b{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .ldh-b .btn{padding:9px 16px;font-size:14px;border-radius:10px}
-.ldh-i{align-self:end;height:262px;border-radius:14px 14px 0 0;border:1px solid var(--line);border-bottom:0;overflow:hidden;transform-origin:50% 100%;min-width:0}
+.ldh-i{align-self:end;height:262px;border-radius:14px 14px 0 0;border:0;background:var(--raised);overflow:hidden;transform-origin:50% 100%;min-width:0}
 .ldh-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line-soft)}
 .ldh-logo{width:14px;height:14px;border-radius:4px;background:var(--ink)}
 .ldh-nm{font-size:12.5px;font-weight:600}
@@ -93,8 +93,8 @@ atom({ id:'scrollfeatures', cat:'Landing', name:'Scroll-linked features', block:
 .lds-h{margin:0;font-size:19px;line-height:1.2;letter-spacing:-.02em;font-weight:600}
 .lds-p{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted)}
 .lds-v{position:relative;min-width:0}
-.lds-s{position:sticky;height:220px;border-radius:16px;background:var(--bg);border:1px solid var(--line);overflow:hidden}
-.lds-sh{position:absolute;left:0;top:0;border:1px solid var(--line);overflow:hidden}
+.lds-s{position:sticky;height:220px;border-radius:16px;background:var(--card);border:0;overflow:hidden}
+.lds-sh{position:absolute;left:0;top:0;border:0;overflow:hidden}
 .lds-ly{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
 .lds-ly i{display:block}
 .lds-dt{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center}
@@ -178,7 +178,7 @@ atom({ id:'testimonialwall', cat:'Landing', name:'Testimonial wall', block:'test
 .ldt-nm{display:block;font-size:13.5px;line-height:18px;font-weight:600}
 .ldt-rlw{overflow:hidden;height:0}
 .ldt-rl{display:block;font-size:12.5px;line-height:16px;color:var(--muted)}
-.ldt-ch{position:absolute;top:14px;right:14px;color:var(--faint);display:flex}
+.ldt-ch{position:absolute;top:14px;right:14px;color:var(--muted);display:flex}
 </style>
 <div class="ldt"><div class="ldt-fr"><div class="seg ldt-sg" role="group" aria-label="Filter testimonials"><div class="ind"></div><button>All</button><button>Writers</button><button>Studios</button><button>Shops</button></div></div>
 <div class="ldt-sc"><div class="ldt-cg"></div></div></div>`,

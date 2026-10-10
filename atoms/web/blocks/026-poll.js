@@ -7,7 +7,7 @@ atom({ id:'poll', cat:'Interactive', name:'Poll', block:'poll', fam:['M','S'], t
   api:'opt[i].fill.set(pct[i], S.base, t + i*0.05)',
   init(st){
     const pl = $(st,'.pl'), O = [['Booking calendar',38],['Course player',27],['Job board',21],['Map directory',14]];
-    const rows = O.map(([n]) => { const b = document.createElement('button'); b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left';
+    const rows = O.map(([n]) => { const b = document.createElement('button'); b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;border:0;background:var(--card);border-radius:10px;padding:10px 12px;cursor:pointer;text-align:left';
       b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;background:var(--raised)"></i><span style="position:relative;display:flex;gap:8px;align-items:center"><svg class="ck" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg><span></span></span><span class="num small" style="position:relative"></span>`;
       $$(b,'span')[1].textContent = n; pl.appendChild(b); return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[2], v:new Track(0), o:new Track(0), c:new Track(0) }; });
     let voted = -1;

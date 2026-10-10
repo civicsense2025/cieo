@@ -7,7 +7,7 @@ atom({ id:'nps', cat:'Forms', name:'NPS scale', block:'form (NPS, linear scale)'
   init(st){
     const ns = $(st,'.ns'), pl = $(st,'.pl'), cap = $(st,'.cap'), B = ['','Detractor','Passive','Promoter'];
     const L = B.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; cap.appendChild(e); return e; });
-    const btns = [...Array(11)].map((_,i) => { const b = document.createElement('button'); b.setAttribute('role','radio'); b.textContent = i; b.style.cssText = 'position:relative;flex:1;height:40px;border:1px solid var(--line);border-radius:8px;background:var(--card);cursor:pointer;font:600 14px var(--sans);font-variant-numeric:tabular-nums'; ns.appendChild(b); return b; });
+    const btns = [...Array(11)].map((_,i) => { const b = document.createElement('button'); b.setAttribute('role','radio'); b.textContent = i; b.style.cssText = 'position:relative;flex:1;height:40px;border:0;border-radius:8px;background:var(--card);cursor:pointer;font:600 14px var(--sans);font-variant-numeric:tabular-nums'; ns.appendChild(b); return b; });
     const e = edges(0,0), o = new Track(0), cw = new Track(0), cs = new Track(0), sw = new Swap(0), csw = new Swap(0); let sel = -1; const q = []; pl.style.willChange = 'left,width';
     const cfk = $(st,'.cfk'), cf = $(st,'.cf');
     const C = ['', 'Thanks — tell us what hurt.', 'Thanks — noted.', 'Thanks — spread the word.'].map(s => { const e2 = document.createElement('span'); e2.className = 'layer'; e2.textContent = s; cf.appendChild(e2); return e2; });

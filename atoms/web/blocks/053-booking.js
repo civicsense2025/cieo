@@ -6,7 +6,7 @@ atom({ id:'booking', cat:'Interactive', name:'Date and time picker', block:'book
   api:'disc.{x,y}.set(cell)   slot[i].swap.to(day, t + i·0.04)',
   init(st){
     const card = $(st,'.card'), cal = $(st,'.cal'), selEl = $(st,'.sel'), sl = $(st,'.sl'), head = $(card, '.row');
-    'SMTWTFS'.split('').forEach(c => { const h = document.createElement('span'); h.textContent = c; h.style.cssText = 'color:var(--faint);padding:2px 0'; cal.appendChild(h); });
+    'SMTWTFS'.split('').forEach(c => { const h = document.createElement('span'); h.textContent = c; h.style.cssText = 'color:var(--muted);padding:2px 0'; cal.appendChild(h); });
     for (let i = 0; i < 4; i++) cal.appendChild(document.createElement('span'));
     const days = []; for (let d = 1; d <= 31; d++){ const b = document.createElement('button'); b.textContent = d; const past = d < 3, wk = [0,6].includes((d + 3) % 7);
       b.disabled = past || wk; b.style.cssText = `position:relative;border:0;background:none;height:30px;border-radius:50%;cursor:${b.disabled ? 'default' : 'pointer'};color:${b.disabled ? 'var(--faint)' : 'var(--ink)'};font-size:12.5px`; cal.appendChild(b); days.push(b); }

@@ -205,7 +205,7 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
 .oag-act{display:flex;height:40px}
 .oag-act .btn{position:relative;flex:1 1 0;min-width:0;height:40px;padding:0;overflow:hidden;font-size:14px}
 .oag-act .btn>span{position:absolute;inset:0}
-.oag-fine{font-size:12px;line-height:17px;color:var(--faint)}
+.oag-fine{font-size:12px;line-height:17px;color:var(--muted)}
 @container (min-width:620px){
   .oag-card{grid-template-columns:240px minmax(0,1fr);gap:28px;padding:24px}
   .oag-id{padding-top:4px}
@@ -301,18 +301,18 @@ atom({ id:'toolapproval', cat:'MCP and agents', name:'Tool call approval', block
 .tap-rk{font-size:11.5px;line-height:18px;font-weight:600;padding:0 8px;border-radius:9px}
 .tap-tool{display:block;margin:10px 0 2px;font:500 17px/24px var(--mono);letter-spacing:-.01em;word-break:break-all}
 .tap-sum{margin:0;font-size:13.5px;line-height:20px;color:var(--muted)}
-.tap-ag{margin-top:12px;border:1px solid var(--line-soft);border-radius:10px;overflow:hidden}
+.tap-ag{margin-top:12px;border:0;background:var(--raised);border-radius:10px;overflow:hidden}
 .tap-tg{display:flex;align-items:center;gap:8px;width:100%;border:0;background:none;padding:8px 10px;font-size:12.5px;line-height:18px;font-weight:600;cursor:pointer;text-align:left}
 .tap-tg .tap-l{position:relative;flex:1;height:18px;min-width:0}
 .tap-pw{overflow:hidden;border-top:1px solid var(--line-soft)}
 .tap-pre{margin:0;border:0;border-radius:0;background:none;overflow:visible;padding:8px 10px;font:12px/18px var(--mono);white-space:pre-wrap;word-break:break-word;color:var(--muted)}
-.tap-pre .tap-k{color:var(--faint)}.tap-pre .tap-s{color:var(--ink)}.tap-pre .tap-n{color:var(--accent)}
+.tap-pre .tap-k{color:var(--muted)}.tap-pre .tap-s{color:var(--ink)}.tap-pre .tap-n{color:var(--accent)}
 .tap-zn{position:relative;overflow:hidden}
 .tap-ly{position:absolute;left:0;right:0;top:0;padding:14px 0 16px}
 .tap-bt{display:flex;flex-wrap:wrap;gap:8px}
 .tap-bt .btn{flex:1 1 auto;height:36px;padding:0 14px;font-size:13.5px}
 .tap-bt .btn:disabled{opacity:.45;cursor:default}
-.tap-hint{margin:10px 0 0;font-size:12px;line-height:17px;color:var(--faint)}
+.tap-hint{margin:10px 0 0;font-size:12px;line-height:17px;color:var(--muted)}
 .tap-run{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:var(--raised);font-size:13px;line-height:20px}
 .tap-run code{font:12.5px var(--mono)}
 .tap-res{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border-radius:10px;font-size:13px;line-height:19px}
@@ -410,13 +410,13 @@ atom({ id:'toolcalllog', cat:'MCP and agents', name:'Tool call log', block:'Agen
 .tcl-ic{position:relative;width:22px;height:22px;border-radius:50%;display:block}
 .tcl-ic>span{position:absolute;inset:0;display:grid;place-items:center}
 .tcl-nm{font:500 13px/20px var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tcl-nm em{font:400 12px var(--sans);font-style:normal;color:var(--faint);margin-left:8px}
+.tcl-nm em{font:400 12px var(--sans);font-style:normal;color:var(--muted);margin-left:8px}
 .tcl-ar{font:12px/18px var(--mono);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .tcl-du{font-size:12.5px;line-height:18px;color:var(--muted);min-width:34px;text-align:right}
 .tcl-dt{height:0;overflow:hidden}
 .tcl-di{margin:0 14px 12px 46px;display:grid;gap:8px}
 .tcl-bl{border-radius:8px;background:var(--bg);padding:8px 10px}
-.tcl-bl small{display:block;font-size:11.5px;line-height:16px;font-weight:600;color:var(--faint);margin-bottom:2px}
+.tcl-bl small{display:block;font-size:11.5px;line-height:16px;font-weight:600;color:var(--muted);margin-bottom:2px}
 .tcl-bl pre{margin:0;background:none;border:0;border-radius:0;padding:0;overflow:visible;font:12px/18px var(--mono);white-space:pre-wrap;word-break:break-word}
 .tcl-bl.tcl-er{background:var(--danger-tint);color:var(--danger)}.tcl-bl.tcl-er small{color:var(--danger)}
 .tcl-empty{padding:30px 14px;text-align:center;font-size:13px;color:var(--muted)}
@@ -582,14 +582,14 @@ atom({ id:'apikeyreveal', cat:'MCP and agents', name:'API key reveal and rotate'
 .akr-fm{padding:14px;display:grid;gap:12px;border-bottom:1px solid var(--line-soft);background:var(--tile)}
 .akr-fm label,.akr-fm legend{display:block;font-size:12.5px;line-height:18px;font-weight:600;margin-bottom:4px;padding:0}
 .akr-fm fieldset{border:0;margin:0;padding:0;min-width:0}
-.akr-fm input{width:100%;height:36px;border:1px solid var(--line);background:var(--card);border-radius:9px;padding:0 10px;font:inherit;font-size:14px;color:var(--ink)}
+.akr-fm input{width:100%;height:36px;border:1.5px solid var(--muted);background:var(--card);border-radius:9px;padding:0 10px;font:inherit;font-size:14px;color:var(--ink)}
 .akr-fm .seg{display:inline-flex}
 .akr-fb{display:flex;gap:8px;justify-content:flex-end}
 .akr-rv{padding:14px;border-bottom:1px solid var(--line-soft);background:var(--warning-tint)}
 .akr-rv h5{margin:0;font-size:14px;line-height:20px;font-weight:600;display:flex;align-items:center;gap:8px;color:var(--warning)}
 .akr-rv p{margin:2px 0 10px;font-size:12.5px;line-height:18px;color:var(--ink)}
 .akr-kb{display:flex;gap:8px;align-items:stretch}
-.akr-kc{flex:1;min-width:0;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:12.5px/20px var(--mono);word-break:break-all;-webkit-user-select:all;user-select:all}
+.akr-kc{flex:1;min-width:0;background:var(--raised);border:0;border-radius:9px;padding:8px 10px;font:12.5px/20px var(--mono);word-break:break-all;-webkit-user-select:all;user-select:all}
 .akr-cp{position:relative;width:84px;padding:0;overflow:hidden;flex:none}
 .akr-rn{margin-top:8px;font-size:12.5px;line-height:18px;color:var(--muted)}
 .akr-rb{display:flex;justify-content:flex-end;margin-top:12px}
@@ -601,7 +601,7 @@ atom({ id:'apikeyreveal', cat:'MCP and agents', name:'API key reveal and rotate'
 .akr-tg{font-size:11.5px;line-height:16px;font-weight:600;padding:0 7px;border-radius:8px;background:var(--raised);color:var(--muted)}
 .akr-nw{font-size:11.5px;line-height:16px;font-weight:600;padding:0 7px;border-radius:8px;background:var(--accent-tint);color:var(--accent);overflow:hidden;white-space:nowrap}
 .akr-px{position:relative;display:block;height:20px;margin-top:2px;font:12.5px/20px var(--mono);color:var(--muted)}
-.akr-mt{position:relative;display:block;height:18px;font-size:12.5px;line-height:18px;color:var(--faint)}
+.akr-mt{position:relative;display:block;height:18px;font-size:12.5px;line-height:18px;color:var(--muted)}
 .akr-ab{display:flex;gap:6px;flex:none}
 .akr-ab .btn{height:30px;padding:0 11px;font-size:13px}
 .akr-cf{height:0;overflow:hidden}
@@ -707,7 +707,7 @@ atom({ id:'serverstatus', cat:'MCP and agents', name:'Server connection health',
 .srs-sp li{display:flex;align-items:center;gap:10px;font-size:13.5px;line-height:20px}
 .srs-si{position:relative;flex:none;width:20px;height:20px;border-radius:50%}
 .srs-si>span{position:absolute;inset:0;display:grid;place-items:center}
-.srs-st{margin-left:auto;font-size:12px;color:var(--faint)}
+.srs-st{margin-left:auto;font-size:12px;color:var(--muted)}
 .srs-er{height:0;overflow:hidden}
 .srs-ei{margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--danger-tint);color:var(--danger);font-size:12.5px;line-height:18px}
 .srs-ei b{display:block;font-weight:600}
@@ -715,7 +715,7 @@ atom({ id:'serverstatus', cat:'MCP and agents', name:'Server connection health',
 .srs-ei .srs-cd{display:flex;gap:4px;align-items:center;margin-top:4px}
 .srs-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--line-soft)}
 .srs-stats>div{padding:12px 16px;border-bottom:1px solid var(--line-soft)}
-.srs-stats dt{font-size:12px;line-height:16px;color:var(--faint)}
+.srs-stats dt{font-size:12px;line-height:16px;color:var(--muted)}
 .srs-stats dd{position:relative;margin:2px 0 0;height:22px;font-size:15px;line-height:22px;font-weight:600}
 .srs-stats dd>span{position:absolute;left:0;top:0;display:flex;gap:4px;align-items:center;white-space:nowrap}
 .srs-tl{gap:0!important}
@@ -731,9 +731,9 @@ atom({ id:'serverstatus', cat:'MCP and agents', name:'Server connection health',
 }
 </style>
 <div class="srs-root"><section class="srs-card" aria-labelledby="srs-t"><div class="srs-head"><span class="srs-ic">${ic('<ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>', 19, 1.75)}</span><div style="flex:1;min-width:0"><h4 id="srs-t">Postgres</h4><small>analytics-ro · stdio · postgres-mcp 0.9.2</small></div><span class="srs-chip"></span></div>
-<div class="srs-bd"><div class="srs-lat"><div class="srs-cap">Round-trip latency</div><div class="srs-big"><span class="srs-n"><span class="srs-d"></span><small>ms</small></span><span class="srs-dash" style="color:var(--faint)">—</span></div><div class="srs-spk" aria-hidden="true"></div></div>
+<div class="srs-bd"><div class="srs-lat"><div class="srs-cap">Round-trip latency</div><div class="srs-big"><span class="srs-n"><span class="srs-d"></span><small>ms</small></span><span class="srs-dash" style="color:var(--muted)">—</span></div><div class="srs-spk" aria-hidden="true"></div></div>
 <div class="srs-sp"><ol class="srs-steps" aria-label="Connection steps"></ol><div class="srs-er"><div class="srs-ei"><b class="srs-em"></b><code class="srs-ec"></code><div class="srs-cd"><span class="srs-cl">Retrying in</span><span class="srs-c1"></span><span>s</span><span>·</span><span>attempt</span><span class="srs-c2"></span></div></div></div></div></div>
-<dl class="srs-stats"><div><dt>Uptime, 30 days</dt><dd><span>99.98%</span></dd></div><div><dt>Tools available</dt><dd><span class="srs-tl"></span></dd></div><div><dt>Protocol</dt><dd><span>2025-06-18</span></dd></div><div><dt>Last ping</dt><dd><span class="srs-lp"><span class="srs-lpd"></span><span>s ago</span></span><span class="srs-lx" style="color:var(--faint)">Never</span></dd></div></dl>
+<dl class="srs-stats"><div><dt>Uptime, 30 days</dt><dd><span>99.98%</span></dd></div><div><dt>Tools available</dt><dd><span class="srs-tl"></span></dd></div><div><dt>Protocol</dt><dd><span>2025-06-18</span></dd></div><div><dt>Last ping</dt><dd><span class="srs-lp"><span class="srs-lpd"></span><span>s ago</span></span><span class="srs-lx" style="color:var(--muted)">Never</span></dd></div></dl>
 <div class="srs-ft"><button type="button" class="btn srs-a" style="width:112px"><span style="position:absolute;inset:0"></span></button><button type="button" class="btn srs-b" style="width:140px"><span style="position:absolute;inset:0"></span></button></div></section><div class="srs-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Connecting walks four steps in order: each swaps its ring for a spinner, then a check, 450 to 600ms apart, and the chip morphs to Connected when the last lands. The latency number rolls digit by digit with each ping while the sparkline shifts one bar left and every bar springs to its neighbor’s height. Simulate outage drops the bars flat and morphs everything to the error state; a countdown rolls down, the first auto retry fails at Initialize, and the second succeeds. Retry now skips the wait.',
   api:'steps[i]: wait → run → done | fail   latency.set(ms)   bars[i].set(vals[i+1])   outage: bars.set(0, t + i·0.02), err.open(1)   countdown = ceil(retryAt − t)',
@@ -744,7 +744,7 @@ atom({ id:'serverstatus', cat:'MCP and agents', name:'Server connection health',
     const nSw = new Swap(1), nEls = [$(st,'.srs-n'), $(st,'.srs-dash')], lpSw = new Swap(1), lpEls = [$(st,'.srs-lp'), $(st,'.srs-lx')];
     const aT = mText(A.firstChild, 'left:0;right:0;top:0;text-align:center;line-height:32px;font-size:13px;font-weight:500'), bT = mText(B.firstChild, 'left:0;right:0;top:0;text-align:center;line-height:32px;font-size:13px;font-weight:500');
     const STEP = ['Resolve host', 'Open TLS connection', 'Initialize session', 'List tools'], DUR = [.45, .5, .6, .5], LAT = [38, 41, 36, 44, 39, 52, 40, 37, 43, 35, 46, 39];
-    const rows = STEP.map((n, i) => { const li = mEl('li'); li.innerHTML = `<span class="srs-si"><span class="srs-la" style="color:var(--faint)">${ic('<circle cx="12" cy="12" r="7"/>', 16, 2)}</span><span class="srs-lb" style="color:var(--muted)">${SPIN(16)}</span><span class="srs-lc" style="color:var(--success)">${ic(I.check, 14, 3)}</span><span class="srs-ld" style="color:var(--danger)">${ic(I.x, 13, 3)}</span></span><span class="srs-nm"></span><span class="srs-st"></span>`;
+    const rows = STEP.map((n, i) => { const li = mEl('li'); li.innerHTML = `<span class="srs-si"><span class="srs-la" style="color:var(--muted)">${ic('<circle cx="12" cy="12" r="7"/>', 16, 2)}</span><span class="srs-lb" style="color:var(--muted)">${SPIN(16)}</span><span class="srs-lc" style="color:var(--success)">${ic(I.check, 14, 3)}</span><span class="srs-ld" style="color:var(--danger)">${ic(I.x, 13, 3)}</span></span><span class="srs-nm"></span><span class="srs-st"></span>`;
       $(li,'.srs-nm').textContent = n; steps.appendChild(li); return { li, L:$$(li,'.srs-si>span'), ring:$(li,'.srs-si'), st:$(li,'.srs-st'), sw:new Swap(0), W:[0,1,2,3].map(k => new Track(k === 0 ? 1 : 0)), k:0 }; });
     const bars = [...Array(24)].map(() => { const i = mEl('i'); spk.appendChild(i); return { e:i, v:new Track(.05) }; });
     const q = [], erS = mSlot(er, erI, 0), W = [new Track(0), new Track(1), new Track(0)];
@@ -813,7 +813,7 @@ atom({ id:'agentaccess', cat:'MCP and agents', name:'Agent permission matrix', b
 .aam-c{display:grid;place-items:center;min-width:0}
 .aam-b{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);padding:0;cursor:pointer;display:grid;place-items:center}
 .aam-b svg{display:block}
-.aam-lk{width:30px;height:30px;display:grid;place-items:center;color:var(--faint);font-size:14px}
+.aam-lk{width:30px;height:30px;display:grid;place-items:center;color:var(--muted);font-size:14px}
 .aam-df{flex:none;border-top:1px solid var(--line-soft)}
 .aam-dp{padding:12px 14px;background:var(--tile)}
 .aam-dh{display:flex;align-items:center;gap:8px;font-size:13px;line-height:20px;font-weight:600}

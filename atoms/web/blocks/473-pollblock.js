@@ -8,7 +8,7 @@ atom({ id:'pollblock', cat:'Newsletter', name:'Reader poll', block:'newsletter, 
     const pl = $(st,'.pl'), pc = $(st,'.pc');
     const O = [['Rivers & routes',46],['Winter kitchens',31],['Maps we kept',23]];
     const rows = O.map(([n]) => { const b = document.createElement('button');
-      b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px;min-height:44px;cursor:pointer;text-align:left;font-size:13.5px;line-height:1.5;color:var(--ink)';
+      b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--card);border-radius:10px;padding:0 13px;min-height:44px;cursor:pointer;text-align:left;font-size:13.5px;line-height:1.5;color:var(--ink)';
       b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;background:var(--raised)"></i><span style="position:relative;display:flex;gap:8px;align-items:center"><span class="ck" style="display:grid;place-items:center;padding:0;width:16px;transform:translateY(.5px)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span><span></span></span><span class="num small" style="position:relative;font-variant-numeric:tabular-nums;font-size:12.5px"></span>`;
       $$(b,'span')[2].textContent = n; pl.appendChild(b);
       return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[3], v:new Track(0, S.lazy), o:new Track(0), c:new Track(0) }; });

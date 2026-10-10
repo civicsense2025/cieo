@@ -1,7 +1,7 @@
 
 
 atom({ id:'select', cat:'Inputs', name:'Select', block:'form, Select primitive', fam:['X','E','S'], tall:true,
-  html:`<div style="position:absolute;top:56px;left:50%;transform:translateX(-50%);width:min(264px,calc(100% - 48px))"><button class="btn tr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-label="Status" style="width:100%;display:flex;align-items:center;gap:8px;height:48px"><span class="lw" style="position:relative;flex:1;height:20px"></span>${ic(I.chev,14)}</button><div class="lb card" role="listbox" style="position:absolute;top:56px;left:0;right:0;padding:8px;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:8px;right:8px;top:0;border-radius:7px;background:var(--raised)"></i></div></div>`,
+  html:`<div style="position:absolute;top:56px;left:50%;transform:translateX(-50%);width:min(264px,calc(100% - 48px))"><button class="btn tr" role="combobox" aria-haspopup="listbox" aria-expanded="false" aria-label="Status" style="width:100%;display:flex;align-items:center;gap:8px;height:48px;border:1.5px solid var(--muted)"><span class="lw" style="position:relative;flex:1;height:20px"></span>${ic(I.chev,14)}</button><div class="lb card" role="listbox" style="position:absolute;top:56px;left:0;right:0;padding:8px;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:8px;right:8px;top:0;border-radius:7px;background:var(--raised)"></i></div></div>`,
   desc:'The list grows from the trigger. A highlight plate follows hover and arrow keys with lagging edges. Choosing moves the check, closes the list and swaps the trigger label.',
   api:'list.o.set(open)   hl.go(top, bottom)   label.to(i)   check[i].set(1)',
   init(st){

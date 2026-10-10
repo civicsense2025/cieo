@@ -67,7 +67,7 @@ atom({ id:'dashboard', cat:'Workspace', name:'Analytics dashboard', block:'analy
 .dsh .ph b{font-size:13px;font-weight:600;color:var(--ink)}
 .dsh .plot{position:absolute;left:42px;right:16px;top:38px;bottom:26px}
 .dsh .plot svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.dsh .lg{position:absolute;inset:0;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.dsh .lg{position:absolute;inset:0;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
 .dsh .lg .y{position:absolute;right:calc(100% + 8px);transform:translateY(-50%);line-height:1}
 .dsh .lg .x{position:absolute;top:calc(100% + 8px);line-height:1;white-space:nowrap}
 .dsh .rows{position:absolute;left:0;right:0;top:36px;height:145px;overflow:hidden}
@@ -174,11 +174,11 @@ atom({ id:'notifcenter', cat:'Workspace', name:'Notification center', block:'not
 .ntf{position:absolute;inset:0}
 .ntf .bar{position:absolute;left:0;right:0;top:0;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:1px solid var(--line)}
 .ntf .bar b{font-size:15px;font-weight:600;letter-spacing:-.01em}
-.ntf .bell{position:relative;width:36px;height:36px;border:1px solid var(--line);background:var(--card);border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
+.ntf .bell{position:relative;width:36px;height:36px;border:1.5px solid var(--muted);background:var(--card);border-radius:10px;display:grid;place-items:center;cursor:pointer;padding:0}
 .ntf .bd{position:absolute;left:19px;top:-8px;height:20px;min-width:20px;padding:0 6px;border-radius:10px;background:var(--danger);color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1}
 .ntf .sk{position:absolute;left:14px;top:72px;display:flex;flex-direction:column;gap:12px;width:min(260px,50%)}
 .ntf .sk i{display:block;height:10px;border-radius:5px;background:var(--raised)}
-.ntf .pn{position:absolute;right:12px;top:52px;width:min(360px,calc(100% - 24px));max-height:calc(100% - 62px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line-soft);transform-origin:calc(100% - 30px) -10px}
+.ntf .pn{position:absolute;right:12px;top:52px;width:min(360px,calc(100% - 24px));max-height:calc(100% - 62px);display:flex;flex-direction:column;overflow:hidden;transform-origin:calc(100% - 30px) -10px}
 .ntf .ph{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line-soft)}
 .ntf .ph b{font-size:14px;font-weight:600}
 .ntf .ls{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
@@ -187,7 +187,7 @@ atom({ id:'notifcenter', cat:'Workspace', name:'Notification center', block:'not
 .ntf .ic{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center}
 .ntf .tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .ntf .t{font-size:13px;line-height:1.35;font-weight:500}
-.ntf .tm{font-size:12px;color:var(--faint)}
+.ntf .tm{font-size:12px;color:var(--muted)}
 .ntf .dtw{flex:none;width:8px;height:8px}
 .ntf .dt{display:block;width:8px;height:8px;border-radius:50%;background:var(--accent)}
 ${SRCSS}
@@ -268,7 +268,7 @@ const TASKS = [
 
 atom({ id:'onboarding', cat:'Workspace', name:'Onboarding checklist', block:'onboarding, checklist, progress ring', fam:['M','S','T'], wide:true, tall:true,
   html:`<style>
-.onb{position:absolute;left:50%;top:0;width:min(420px,calc(100% - 24px));overflow:hidden;border:1px solid var(--line-soft)}
+.onb{position:absolute;left:50%;top:0;width:min(420px,calc(100% - 24px));overflow:hidden}
 .onb .L{position:absolute;left:0;right:0;top:0;padding:16px 18px}
 .onb h4{margin:0;font-size:20px;line-height:1.2;letter-spacing:-.02em;font-weight:600}
 .onb p{margin:0}

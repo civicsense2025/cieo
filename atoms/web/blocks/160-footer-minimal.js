@@ -96,10 +96,10 @@ const pageTop = p => `<div class="${p}pgw"><header class="${p}ph"><span class="$
 const base = p => `
 .${p}r{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:8px 12px 12px;min-width:0;text-align:left}
 .${p}bar{flex:none;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 10px;min-height:30px}
-.${p}cap{font-size:12px;color:var(--faint)}
+.${p}cap{font-size:12px;color:var(--muted)}
 .${p}bs{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-width:0}
 .${p}bar .btn{padding:4px 10px;font-size:12.5px}
-.${p}w{position:relative;flex:1;min-height:0;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);overflow:hidden;container-type:inline-size}
+.${p}w{position:relative;flex:1;min-height:0;border:0;border-radius:12px;background:var(--card);color:var(--ink);overflow:hidden;container-type:inline-size}
 .${p}sc{position:absolute;inset:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
 .${p}pgw{min-height:660px;display:flex;flex-direction:column}
 .${p}ph{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;border-bottom:1px solid var(--line-soft)}
@@ -109,14 +109,14 @@ const base = p => `
 .${p}pgi p{margin:0 0 14px;font-size:15px;line-height:1.6;color:var(--muted)}
 .${p}pgi .${p}kk{margin:0 0 10px;color:var(--accent);font-weight:600;font-size:13px}
 .${p}h1{margin:0 0 10px;font-size:30px;line-height:1.1;letter-spacing:-.03em;font-weight:600;text-wrap:balance;outline:none}
-.${p}pgi .${p}by{font-size:13px;color:var(--faint);margin-bottom:18px}
+.${p}pgi .${p}by{font-size:13px;color:var(--muted);margin-bottom:18px}
 .${p}q{margin:18px 0;padding:0;font-size:20px;line-height:1.35;letter-spacing:-.015em;font-weight:500;color:var(--ink)}
-.${p}q cite{display:block;margin-top:8px;font-size:13px;font-weight:400;font-style:normal;color:var(--faint)}
+.${p}q cite{display:block;margin-top:8px;font-size:13px;font-weight:400;font-style:normal;color:var(--muted)}
 .${p}l{position:relative;display:inline-flex;align-items:center;gap:4px;color:var(--muted);text-decoration:none;font-size:13px;line-height:20px;border-radius:4px}
 .${p}t{position:relative;display:inline-block}
 .${p}u{position:absolute;left:0;right:0;bottom:0;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;pointer-events:none}
 .${p}ar{display:inline-flex}
-.${p}btt{flex:none;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px 0 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);font-size:13px;font-weight:500;cursor:pointer}
+.${p}btt{flex:none;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px 0 14px;border:0;border-radius:999px;background:var(--raised);color:var(--muted);font-size:13px;font-weight:500;cursor:pointer}
 .${p}btt:not(:has(.${p}t)){width:32px;padding:0}
 .${p}ls,.${p}g ul{list-style:none;margin:0;padding:0}
 @container (max-width:520px){.${p}h1{font-size:24px}.${p}ph,.${p}pgi{padding-left:18px;padding-right:18px}}
@@ -142,9 +142,9 @@ const COLCSS = p => `
 .${p}br{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}
 .${p}brn{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:16px;letter-spacing:-.01em;color:var(--ink)}
 .${p}tag{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:30ch}
-.${p}ad{margin:2px 0 0;font-style:normal;font-size:12.5px;line-height:1.55;color:var(--faint)}
+.${p}ad{margin:2px 0 0;font-style:normal;font-size:12.5px;line-height:1.55;color:var(--muted)}
 .${p}bm{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px}
-.${p}bm p{margin:0;font-size:12.5px;color:var(--faint);margin-right:auto}
+.${p}bm p{margin:0;font-size:12.5px;color:var(--muted);margin-right:auto}
 .${p}bm .${p}ls{display:flex;flex-wrap:wrap;gap:4px 18px}
 `;
 
@@ -158,7 +158,7 @@ atom({ id:'footer-minimal', cat:CAT, name:'Minimal footer', block:'site-footer (
 .${P1}in>nav{grid-area:ls}
 .${P1}ls{display:flex;gap:4px 22px}
 .${P1}btt{grid-area:bt}
-@container (max-width:520px){.${P1}in{grid-template-columns:1fr auto;grid-template-areas:"ls ls" "cp bt";padding:16px 18px}.${P1}cp{font-size:12.5px;color:var(--faint)}}`,
+@container (max-width:520px){.${P1}in{grid-template-columns:1fr auto;grid-template-areas:"ls ls" "cp bt";padding:16px 18px}.${P1}cp{font-size:12.5px;color:var(--muted)}}`,
     ft:`<div class="${P1}ft" role="contentinfo"><div class="${P1}in"><p class="${P1}cp">© 2026 Northlight Studio, Inc.</p><nav aria-label="Footer"><ul class="${P1}ls">${lis(P1, ['Privacy', 'Terms', 'Contact'])}</ul></nav>${btt(P1)}</div></div>` }),
   desc:'Hovering or tabbing to a link draws its underline left to right on a snap spring while the text darkens; leaving wipes the line out toward the right. Back to top nudges its arrow up, then the page scrolls home on a soft spring and focus lands on the page heading. Wheel, touch or any key cancels the scroll mid-flight.',
   api:'link.p.set(hover ? 1 : 0, S.snap)   underline.scaleX = p, origin = hover ? left : right   scroll.jump(y).set(0, S.soft)',
@@ -177,7 +177,7 @@ atom({ id:'footer-centered', cat:CAT, name:'Centered footer with social icons', 
 .${P2}pl{position:absolute;top:0;bottom:0;left:0;border-radius:10px;background:var(--raised);pointer-events:none}
 .${P2}so a{position:relative;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;color:var(--muted);text-decoration:none}
 .${P2}bm{width:100%;border-top:1px solid var(--line);padding-top:16px;margin-top:2px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px}
-.${P2}bm p{margin:0;font-size:12.5px;color:var(--faint)}`,
+.${P2}bm p{margin:0;font-size:12.5px;color:var(--muted)}`,
     ft:`<div class="${P2}ft" role="contentinfo"><div class="${P2}in"><a href="#" class="${P2}brand" aria-label="Northlight home">${logo()}Northlight</a><p class="${P2}tag">Publishing tools for small newsrooms and the people who read them.</p>
 <nav aria-label="Footer"><ul class="${P2}ls">${lis(P2, ['Product', 'Pricing', 'Docs', 'Changelog', 'About', 'Contact'])}</ul></nav>
 <ul class="${P2}so" aria-label="Northlight on social media"><i class="${P2}pl"></i>${[['Source control', K.gh], ['LinkedIn', K.li], ['YouTube', K.yt], ['RSS feed', K.rss]].map(([n, d]) => `<li><a href="#" aria-label="${n}">${ic(d, 18, 1.8)}</a></li>`).join('')}</ul>
@@ -358,13 +358,13 @@ atom({ id:'footer-region-theme', cat:CAT, name:'Footer with language picker and 
 .${P6}bm{margin-top:28px;padding:16px 0 18px;border-top:1px solid var(--line);gap:12px 18px}
 .${P6}bm .${P6}ls{margin-right:auto}
 .${P6}ct{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-left:auto}
-.${P6}lg6{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+.${P6}lg6{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 10px;border:0;border-radius:9px;background:var(--raised);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
 .${P6}lg6 svg{flex:none;color:var(--muted)}
 .${P6}tg{position:relative;display:flex;padding:3px;border-radius:10px;background:var(--raised)}
 .${P6}tg button{position:relative;width:32px;height:28px;display:grid;place-items:center;border:0;background:none;border-radius:7px;color:var(--muted);cursor:pointer}
 .${P6}tp{position:absolute;top:3px;bottom:3px;left:0;background:var(--card);border-radius:7px;box-shadow:var(--shadow);pointer-events:none}
-.${P6}pp{position:absolute;left:0;top:0;width:min(264px,calc(100% - 16px));background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);visibility:hidden;opacity:0}
-.${P6}hd{padding:10px 14px 4px;font-size:12px;color:var(--faint)}
+.${P6}btt{border:1.5px solid var(--muted)}.${P6}pp{position:absolute;left:0;top:0;width:min(264px,calc(100% - 16px));background:var(--card);border:0;border-radius:12px;box-shadow:var(--shadow);visibility:hidden;opacity:0}
+.${P6}hd{padding:10px 14px 4px;font-size:12px;color:var(--muted)}
 .${P6}lb{position:relative;padding:4px 6px 6px;outline:none!important}
 .${P6}hl{position:absolute;left:6px;right:6px;top:0;height:0;border-radius:7px;background:var(--raised);pointer-events:none}
 .${P6}op{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px;height:34px;padding:0 10px;border-radius:7px;font-size:13.5px;cursor:pointer}
@@ -473,9 +473,9 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
 .${P7}rd{flex:none;width:8px;height:8px;border-radius:50%;background:var(--success)}
 .${P7}rn{flex:1;color:var(--ink)}
 .${P7}rs{position:relative;flex:none;width:76px;height:18px;line-height:18px;font-size:12.5px;color:var(--muted)}
-.${P7}up{margin:10px 0 0;font-size:12.5px;color:var(--faint)}
+.${P7}up{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
 .${P7}bm{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:24px;padding:16px 0 18px;border-top:1px solid var(--line)}
-.${P7}bm p{margin:0 auto 0 0;font-size:12.5px;color:var(--faint)}
+.${P7}bm p{margin:0 auto 0 0;font-size:12.5px;color:var(--muted)}
 .${P7}bm .${P7}ls{display:flex;flex-wrap:wrap;gap:4px 18px}
 @container (max-width:520px){.${P7}in{padding:22px 18px 0}.${P7}bm p{width:100%}}`,
     ft:`<div class="${P7}ft" role="contentinfo"><div class="${P7}in"><div class="${P7}top"><div class="${P7}brand"><span class="${P7}brn">${logo()}Northlight</span><p class="${P7}tag">Publishing tools for small newsrooms and the people who read them.</p></div>

@@ -6,7 +6,7 @@ atom({ id:'reviewform', cat:'Forms', name:'Review form', block:'review form, pho
     const ph = $(st,'.ph'), md = $(st,'.md'), ml = $(st,'.ml'), snd = $(st,'.snd'), iph = $(st,'.iph');
     const T = 3, tiles = [];
     for (let i = 0; i < T; i++){ const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Add photo ' + (i + 1));
-      b.style.cssText = 'flex:1;aspect-ratio:1;max-width:88px;border-radius:12px;border:1px dashed var(--line);background:var(--raised);padding:0;display:grid;place-items:center;cursor:pointer;color:var(--faint);overflow:hidden;height:0;min-height:0;opacity:0';
+      b.style.cssText = 'flex:1;aspect-ratio:1;max-width:88px;border-radius:12px;border:1px dashed var(--line);background:var(--raised);padding:0;display:grid;place-items:center;cursor:pointer;color:var(--muted);overflow:hidden;height:0;min-height:0;opacity:0';
       b.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>';
       ph.appendChild(b); const h = new Track(0), sh = new Track(0); tiles.push({ b, h, sh, on:false });
       b.onclick = () => { const o = !b._on; b._on = o; b.setAttribute('aria-pressed', o); tiles[i].h.set(o ? 1 : 0, S.base);

@@ -2,7 +2,7 @@
 
 atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, nav-menu, search-trigger, cta-button, reading-progress', fam:['M','E','S','X','D'], wide:true, tall:true,
   html:`<style>
-.sh{position:absolute;inset:10px 12px;isolation:isolate;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;text-align:left}
+.sh{position:absolute;inset:10px 12px;isolation:isolate;border:0;border-radius:14px;background:var(--card);overflow:hidden;text-align:left}
 .sh-pg{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain}
 .sh-hd{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:0 20px;background:var(--card);border-bottom:1px solid var(--line-soft)}
 .sh-sd{position:absolute;left:0;right:0;top:0;bottom:-1px;pointer-events:none;box-shadow:var(--shadow);opacity:0;z-index:-1}
@@ -18,7 +18,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
 .sh-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:none}
 .sh-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center}
 .sh-sx input{position:absolute;left:34px;right:12px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;user-select:text;-webkit-user-select:text}
-.sh-cta{height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--card);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
+.sh-cta{height:36px;padding:0 14px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
 .sh-mb{display:none;position:relative;width:36px;height:36px;border:0;background:none;cursor:pointer;flex:none}
 .sh-mb i{position:absolute;top:0;left:9px;width:18px;height:2px;border-radius:1px;background:var(--ink)}
 .sh-rp{position:absolute;left:0;bottom:-1px;height:2px;background:var(--accent)}

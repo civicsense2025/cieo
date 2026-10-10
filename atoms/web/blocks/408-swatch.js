@@ -8,7 +8,7 @@ atom({ id:'swatch', cat:'Storefront', name:'Variant swatch morph', block:'swatch
     const ring = document.createElement('i'); ring.setAttribute('aria-hidden','true');
     ring.style.cssText = 'position:absolute;top:0;left:0;border:2px solid var(--ink);border-radius:50%;pointer-events:none'; wr.appendChild(ring);
     const btns = C.map((v, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-label', v.n + (v.out ? ', sold out' : '')); b.disabled = v.out;
-      b.style.cssText = 'position:relative;width:28px;height:28px;border-radius:50%;border:1px solid var(--line);padding:0;background:' + v.c + ';cursor:pointer;display:grid;place-items:center';
+      b.style.cssText = 'position:relative;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--muted);padding:0;background:' + v.c + ';cursor:pointer;display:grid;place-items:center';
       b.innerHTML = `<svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true"><circle class="rg" cx="14" cy="14" r="12" stroke="var(--ink)" stroke-width="2" pathLength="1" stroke-dasharray="1" opacity="0"/><line class="sl" x1="6" y1="22" x2="22" y2="6" stroke="var(--danger)" stroke-width="2" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/></svg>`;
       wr.appendChild(b); return b; });
     const rg = btns.map(b => $(b, '.rg')), sl = btns.map(b => $(b, '.sl'));

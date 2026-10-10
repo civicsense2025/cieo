@@ -8,10 +8,10 @@ atom({ id:'senddial', cat:'Email', name:'Send-later dial', block:'email, schedul
     const slots = ['Today 5 PM', 'Tonight 8 PM', 'Tomorrow 8 AM', 'Tue 8 AM'];
     const lab = ['Pick a time on the dial', ...slots.map(s => 'Send ' + s), 'Scheduled'].map((s, k) => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.style.fontSize = '13px'; e.textContent = s; if (k === 5){ e.style.color = 'var(--success)'; e.style.fontWeight = '600'; } dl.appendChild(e); return e; });
     const dots = slots.map((s, i) => { const d = document.createElement('span'); const a = -Math.PI/2 + i*Math.PI/2;
-      d.style.cssText = `position:absolute;left:50%;top:50%;width:44px;height:32px;margin:-16px 0 0 -22px;border-radius:16px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-size:11px;font-weight:600;padding:0;transform:translate(${Math.cos(a)*52}px,${Math.sin(a)*52}px)`;
+      d.style.cssText = `position:absolute;left:50%;top:50%;width:44px;height:32px;margin:-16px 0 0 -22px;border-radius:16px;background:var(--raised);display:grid;place-items:center;font-size:11px;font-weight:600;padding:0;transform:translate(${Math.cos(a)*52}px,${Math.sin(a)*52}px)`;
       d.textContent = ['5PM','8PM','8AM','TUE'][i]; dial.appendChild(d); return { d, a }; });
     const ring = document.createElement('span');
-    ring.style.cssText = 'position:absolute;left:50%;top:50%;width:96px;height:96px;margin:-48px 0 0 -48px;border-radius:50%;border:1px solid var(--line);background:var(--tile)';
+    ring.style.cssText = 'position:absolute;left:50%;top:50%;width:96px;height:96px;margin:-48px 0 0 -48px;border-radius:50%;background:var(--tile)';
     dial.insertBefore(ring, dial.firstChild);
     const dt = new Track(0), sw = new Swap(0), sc = new Track(1);
     let open = false, idx = 0, timer = 0;
@@ -26,6 +26,6 @@ atom({ id:'senddial', cat:'Email', name:'Send-later dial', block:'email, schedul
       dial.style.opacity = p.toFixed(3); dial.style.visibility = p < .02 ? 'hidden' : 'visible';
       dial.style.transform = `scale(${(0.92 + .08*p).toFixed(4)})`;
       dots.forEach((o, i) => { const on = open && i === idx;
-        o.d.style.borderColor = on ? 'var(--ink)' : 'var(--line)'; o.d.style.background = on ? 'var(--ink)' : 'var(--card)'; o.d.style.color = on ? 'var(--card)' : 'var(--ink)'; });
+        o.d.style.background = on ? 'var(--ink)' : 'var(--raised)'; o.d.style.color = on ? 'var(--card)' : 'var(--ink)'; });
       lab.forEach((e, k) => sw.apply(e, k, t)); };
   }});

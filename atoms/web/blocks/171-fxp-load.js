@@ -466,10 +466,10 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
   html:`${CSS}<style>
 .fxp-ed{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(220px,.75fr) 1.5fr;gap:20px;align-items:stretch}
 .fxp-et{display:flex;flex-direction:column;justify-content:flex-end;gap:10px;padding:4px 0 6px;min-width:0}
-.fxp-ek{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
+.fxp-ek{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .fxp-eh{margin:0;font-size:30px;line-height:1.08;letter-spacing:-.03em;font-weight:600;text-wrap:balance}
 .fxp-es{margin:0;color:var(--muted);font-size:14.5px;line-height:1.5;text-wrap:pretty}
-.fxp-eb{font-size:12.5px;color:var(--faint)}
+.fxp-eb{font-size:12.5px;color:var(--muted)}
 @container (max-width:700px){.fxp-ed{grid-template-columns:1fr;grid-template-rows:1fr auto;gap:12px}.fxp-et{order:2;padding:0;gap:6px}.fxp-eh{font-size:22px}.fxp-es{font-size:13.5px}}
 @container (max-width:420px){.fxp-es{display:none}}
 </style><div class="fxp-w"><div class="fxp-ed"><div class="fxp-et"><span class="fxp-ek">Field notes · Issue 14</span><h4 class="fxp-eh">Where the coast road ends</h4><p class="fxp-es">Forty miles of switchbacks, one diner, and the light that makes the drive worth it.</p><span class="fxp-eb">Words by Ines Alvarez · Photographs by Theo Marsh</span></div>
@@ -732,7 +732,7 @@ atom({ id:'fxp-frost', cat:'Photo effects', name:'Frost behind captions', block:
 @container (max-width:560px){.fxp-fc{left:14px;bottom:14px;max-width:calc(100% - 28px)}.fxp-fh{font-size:22px}.fxp-fb{font-size:13px}}
 .fxp-cr{display:inline-flex;align-items:center;gap:6px}
 </style><div class="fxp-w"><div class="fxp-fr"><canvas class="fxp-cv" aria-hidden="true"></canvas><div class="fxp-fc"><span class="fxp-fk1">Harbor, low tide</span><span class="fxp-fh">The boats come in at six</span><span class="fxp-fb">Crews unload before the light goes. Photographs by Theo Marsh.</span></div></div>
-<div class="fxp-bar"><div class="seg" role="group" aria-label="Caption colour"><div class="ind"></div><button>Light text</button><button>Dark text</button></div><label class="fxp-rg">Frost <input id="fxp-frost-r" type="range" min="4" max="28" value="16"></label><label class="fxp-rg">Headline <input id="fxp-frost-cap" type="text" value="The boats come in at six" maxlength="60" style="width:180px;font:13px var(--sans);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:4px 8px"></label><button type="button" class="btn fxp-rp">Replay</button><span class="fxp-gap"></span><span class="fxp-tx fxp-cr" aria-live="polite"></span></div></div>`,
+<div class="fxp-bar"><div class="seg" role="group" aria-label="Caption colour"><div class="ind"></div><button>Light text</button><button>Dark text</button></div><label class="fxp-rg">Frost <input id="fxp-frost-r" type="range" min="4" max="28" value="16"></label><label class="fxp-rg">Headline <input id="fxp-frost-cap" type="text" value="The boats come in at six" maxlength="60" style="width:180px;font:13px var(--sans);color:var(--ink);background:var(--card);border:1.5px solid var(--muted);border-radius:8px;padding:4px 8px"></label><button type="button" class="btn fxp-rp">Replay</button><span class="fxp-gap"></span><span class="fxp-tx fxp-cr" aria-live="polite"></span></div></div>`,
   desc:'The whole photo starts frosted, then clears in a wave that runs from the far corners toward the caption, leaving frost hugging only the actual lines of text (measured from the live DOM, so it follows wrapping and edits). The frost is blurred, grain-dithered, and toned just enough to reach 6:1 contrast under its worst patch, and the readout shows the ratio with and without it. Use when: captions or headlines sit on busy photos and must pass contrast without a heavy box or gradient.',
   api:'field = max(blur(lineRects), .4·falloff(box))   frost = smoothstep(th, th+.25, field), th = −.3 + .72·p   tone k solves contrast ≥ 6:1',
   init(st){
@@ -806,8 +806,8 @@ atom({ id:'fxp-palette', cat:'Photo effects', name:'Theme from photo', block:'si
 .fxp-sw button[aria-checked="true"]{border-color:var(--line);background:var(--card)}
 .fxp-sw i{width:28px;height:28px;border-radius:7px;box-shadow:inset 0 0 0 1px rgba(127,127,127,.25)}
 .fxp-sw code{font:12px var(--mono);color:var(--muted)}
-.fxp-sw span{font-variant-numeric:tabular-nums;color:var(--faint);font-size:12px}
-.fxp-pvw{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px;display:flex;flex-direction:column;gap:8px}
+.fxp-sw span{font-variant-numeric:tabular-nums;color:var(--muted);font-size:12px}
+.fxp-pvw{border:0;border-radius:12px;background:var(--card);padding:14px;display:flex;flex-direction:column;gap:8px}
 .fxp-pvw b{font-size:16px;letter-spacing:-.01em}
 .fxp-pvw p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
 .fxp-cta{align-self:flex-start;border:0;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}

@@ -25,12 +25,12 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
 .wfsu-r1 .wfsu-ri{border-bottom:1px solid var(--line-soft)}
 .wfsu-ri b{display:block;font-size:14px;font-weight:600;letter-spacing:-.01em}
 .wfsu-ri small{display:block;font-size:12.5px;line-height:1.4;color:var(--muted)}
-.wfsu-bt{position:relative;flex:none;width:104px;height:32px;padding:0;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;overflow:hidden;background:var(--card);color:var(--danger);border:1px solid var(--danger)}
+.wfsu-bt{position:relative;flex:none;width:104px;height:32px;padding:0;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;overflow:hidden;background:var(--raised);color:var(--danger);border:0}
 .wfsu-st{position:relative;height:36px;margin-top:10px;font-size:12.5px}
 .wfsu-scr{position:absolute;inset:0;background:#0C1016;opacity:0;pointer-events:none;z-index:20}
 .wfsu-ov{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:30}
 .wfsu-dl{width:min(336px,94%);padding:16px;text-align:left;visibility:hidden}
-.wfsu-ey{margin:0;font-size:12px;font-weight:500;color:var(--faint)}
+.wfsu-ey{margin:0;font-size:12px;font-weight:500;color:var(--muted)}
 .wfsu-tt{margin:2px 0 4px;font-size:16px;font-weight:600;letter-spacing:-.02em}
 .wfsu-cp{margin:0 0 12px;font-size:12.5px;line-height:1.45;color:var(--muted)}
 .wfsu-ob{position:relative;display:flex;gap:7px}
@@ -68,7 +68,7 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
     boxes.forEach(x => x.b.setAttribute('aria-hidden', 'true')); ob.insertBefore(ring, boxes[0].b);
     const dL = { idle:wfLayer(del, 'Delete site'), busy:wfLayer(del, 'Deleting…') };
     const vL = { idle:wfLayer(vb, 'Verify owner access'), busy:wfLayer(vb, 'Verifying…'), ok:wfLayer(vb, ic(I.check,16,2.5) + 'Verified') };
-    const mL = { hint:wfLayer(mbox, 'Demo code: ' + CODE, 'color:var(--faint);font-size:12.5px'), bad:wfLayer(mbox, 'That code didn’t match. Try again.', 'color:var(--danger);font-size:12.5px'), ok:wfLayer(mbox, 'Verified. Resuming your request…', 'color:var(--success);font-size:12.5px') };
+    const mL = { hint:wfLayer(mbox, 'Demo code: ' + CODE, 'color:var(--muted);font-size:12.5px'), bad:wfLayer(mbox, 'That code didn’t match. Try again.', 'color:var(--danger);font-size:12.5px'), ok:wfLayer(mbox, 'Verified. Resuming your request…', 'color:var(--success);font-size:12.5px') };
     const sL = { done:wfLayer(stat, ic(I.check,16,2.5) + '<span>Site deleted. Restore it from Trash for 30 days.</span>', 'justify-content:flex-start;align-items:flex-start;white-space:normal;color:var(--success);font-weight:500;gap:6px;padding:0 2px') };
     const dsw = new Swap('idle'), vsw = new Swap('idle'), msw = new Swap('hint'), ssw = new Swap('none');
     const e = edges(0,40), o = new Track(0), ok = new Track(0), bad = new Track(0), en = new Track(0), fo = new Track(0), rowH = new Track(1), rowO = new Track(1);
@@ -206,7 +206,7 @@ atom({ id:'approval', cat:'Workflow', name:'Approval card', block:'ApprovalDetai
 .wfap-sl b{display:block;font-size:13px;line-height:1.3}
 .wfap-sl small{display:block;font-size:12.5px;line-height:1.3;opacity:.85}
 .wfap-dl{display:grid;grid-template-columns:92px minmax(0,1fr);gap:5px 10px;margin:12px 0 0;font-size:13px}
-.wfap-dl dt{color:var(--faint)}
+.wfap-dl dt{color:var(--muted)}
 .wfap-dl dd{margin:0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .wfap-ac{overflow:hidden}
 .wfap-ai{display:flex;gap:8px;padding-top:12px}
@@ -253,13 +253,13 @@ atom({ id:'fielddiff', cat:'Workflow', name:'Field diff rows', block:'WorkflowFi
 .wffd-hd b{display:block;font-size:13.5px;letter-spacing:-.01em}
 .wffd-hd small{display:block;font-size:12.5px;color:var(--muted)}
 .wffd-bs{display:flex;gap:4px}
-.wffd-b{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;padding:4px 7px;font-size:12px;white-space:nowrap;font-weight:500;cursor:pointer}
+.wffd-b{border:0;background:var(--raised);color:var(--ink);border-radius:9px;padding:4px 7px;font-size:12px;white-space:nowrap;font-weight:500;cursor:pointer}
 .wffd-r{padding:8px 14px 9px;border-top:1px solid var(--line-soft)}
 .wffd-l{display:flex;align-items:center;justify-content:space-between;height:18px;margin-bottom:5px}
 .wffd-l code{font:12px var(--mono);color:var(--muted)}
 .wffd-bg{position:relative;width:72px;height:16px;font-size:12px;font-weight:500}
-.wffd-v{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--faint)}
-.wffd-p{position:relative;border:1px solid var(--line);border-radius:8px;background:transparent;padding:4px 9px;font-size:13px;cursor:pointer;color:var(--ink);overflow:hidden;text-align:left}
+.wffd-v{display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--muted)}
+.wffd-p{position:relative;border:0;border-radius:8px;background:var(--raised);padding:4px 9px;font-size:13px;cursor:pointer;color:var(--ink);overflow:hidden;text-align:left}
 .wffd-p i{position:absolute;left:8px;right:8px;top:50%;height:1.5px;margin-top:-.75px;background:currentColor;transform-origin:0 50%;transform:scaleX(0);pointer-events:none}
 .wffd-ft{padding:6px 14px 8px;border-top:1px solid var(--line-soft);font-size:12px;color:var(--muted)}
 </style>
@@ -292,7 +292,7 @@ atom({ id:'fielddiff', cat:'Workflow', name:'Field diff rows', block:'WorkflowFi
       rows.forEach(x => { for (const c in BADGE) x.sw.apply(x.L[c], c, t, 3);
         [[x.o, x.so, x.po, 1], [x.n, x.sn, x.pn, .6]].forEach(([el, S_, P_, base]) => { const s = clamp(S_.at(t)), p = clamp(P_.at(t));
           el.style.opacity = (lerp(base, 1, p)*(1 - .45*s)).toFixed(3); el.style.color = mix(s,'var(--faint)','var(--ink)');
-          el.style.background = mix(p,'var(--success-tint)','transparent'); el.style.borderColor = mix(s,'transparent', mix(p,'var(--success)','var(--line)'));
+          el.style.background = mix(p,'var(--success-tint)','transparent'); el.style.boxShadow = `inset 0 ${(-2*p).toFixed(2)}px 0 var(--ink)`;
           $(el,'i').style.transform = `scaleX(${s.toFixed(3)})`; }); });
       [[bA, pa], [bR, pr]].forEach(([b, tr]) => { const p = clamp(tr.at(t)); b.style.background = mix(p,'var(--ink)','var(--card)'); b.style.color = mix(p,'var(--card)','var(--ink)'); b.style.borderColor = mix(p,'var(--ink)','var(--line)'); });
     };
@@ -305,13 +305,13 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
 .wfiv-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;height:52px}
 .wfiv-hd b{display:block;font-size:14px;letter-spacing:-.01em}
 .wfiv-hd small{display:block;font-size:12.5px;color:var(--muted)}
-.wfiv-bt{position:relative;flex:none;width:78px;height:32px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--card);overflow:hidden;padding:0}
+.wfiv-bt{position:relative;flex:none;width:78px;height:32px;border-radius:9px;font-size:13px;font-weight:500;cursor:pointer;border:0;background:var(--ink);color:var(--card);overflow:hidden;padding:0}
 .wfiv-sl{position:relative;overflow:hidden;height:0}
 .wfiv-ly{position:absolute;left:0;right:0;top:0}
 .wfiv-fm{margin:0;padding:10px 14px 6px;display:flex;flex-direction:column;gap:6px}
 .wfiv-fr{display:flex;flex-wrap:wrap;gap:8px}
-.wfiv-in{flex:1 1 150px;min-width:0;height:34px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:14px var(--sans);padding:0 11px;user-select:text;-webkit-user-select:text}
-.wfiv-se{flex:none;height:34px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:13px var(--sans);padding:0 6px}
+.wfiv-in{flex:1 1 150px;min-width:0;height:34px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:14px var(--sans);padding:0 11px;user-select:text;-webkit-user-select:text}
+.wfiv-se{flex:none;height:34px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:13px var(--sans);padding:0 6px}
 .wfiv-hp{position:relative;height:18px;font-size:12.5px}
 .wfiv-mb{display:flex;align-items:center;gap:10px;padding:8px 14px}
 .wfiv-av{flex:none;width:28px;height:28px;border-radius:50%;background:var(--raised);display:grid;place-items:center;font-size:12px;font-weight:600}
@@ -320,7 +320,7 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
 .wfiv-l2{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
 .wfiv-cp{position:relative;flex:none;height:20px;border-radius:999px;font-size:12px;font-weight:500;overflow:hidden}
 .wfiv-ab{display:flex;gap:2px;flex:none}
-.wfiv-ab .btn{border-color:transparent;background:none;padding:4px 8px;font-size:12.5px}
+.wfiv-ab .btn{border-color:transparent;background:var(--raised);padding:4px 8px;font-size:12.5px}
 .wfiv-rw{display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;font-size:13px}
 .wfiv-rw:not(:last-child){border-bottom:1px solid var(--line-soft)}
 .wfiv-rw.nolines{border-bottom-color:transparent}
@@ -334,7 +334,7 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
   <div class="wfiv-rw"><span class="wfiv-av">M</span><b>Maya Okafor</b><span class="muted">Owner</span></div>
   <div class="wfiv-rw"><span class="wfiv-av">T</span><b>Theo Lindqvist</b><span class="muted">Editor</span></div>
   <div class="wfiv-rw"><span class="wfiv-av">P</span><b>Priya Raman</b><span class="muted">Viewer</span></div>
-  <div class="wfiv-cf"><span>Lines</span><button class="btn wfiv-tg" type="button" aria-pressed="true" style="padding:3px 10px;font-size:12px">On</button></div>
+  <div class="wfiv-cf"><span>Lines</span><button class="btn wfiv-tg" type="button" aria-pressed="true" style="padding:3px 10px;font-size:12px;background:var(--raised)">On</button></div>
   <span class="wfiv-sr" role="status" aria-live="polite" style="${wfSr}"></span>
 </div>`,
   desc:'Invite opens a form row at the top of the list and its height springs open. Send keeps that same row: the form swaps out for the member, the height morphs to fit and the chip reads Pending. Resend turns the chip success and Sent for 1.6 seconds, widening it on the same spring. Revoke fades the row out first, then its space collapses 100ms later. Dividers live between rows, never on the collapsing slot, so no hairline drags.',
@@ -372,7 +372,7 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
       const f = clamp(fm.at(t)); sl.style.background = mix(f,'var(--raised)','transparent');
       for (const k in LY) ssw.apply(LY[k], k, t, 4);
       for (const k in bL) bsw.apply(bL[k], k, t, 3); for (const k in hL) hsw.apply(hL[k], k, t, 3);
-      email.style.borderColor = mix(clamp(bad.at(t)),'var(--danger)','var(--line)');
+      email.style.borderColor = mix(clamp(bad.at(t)),'var(--danger)','var(--muted)');
       const d = clamp(dis.at(t)); bt.style.opacity = (1 - .55*d).toFixed(3); bt.style.cursor = d > .5 ? 'default' : 'pointer';
       const g = clamp(cg.at(t)); cp.style.width = px(cw.at(t)); cp.style.background = mix(g,'var(--success-tint)','var(--warning-tint)'); cp.style.color = mix(g,'var(--success)','var(--warning)');
       for (const k in cL) csw.apply(cL[k], k, t, 3);
@@ -386,8 +386,8 @@ atom({ id:'refpicker', cat:'Workflow', name:'Reference row picker', block:'Refer
 .wfrp-lb{display:block;font-size:13px;font-weight:500;margin-bottom:6px}
 .wfrp-fw{position:relative;height:44px}
 .wfrp-f{position:absolute;inset:0;z-index:31;border:1.5px solid var(--line);border-radius:10px;background:var(--card)}
-.wfrp-tg{position:absolute;inset:0;width:100%;border:0;background:none;border-radius:9px;text-align:left;padding:0 34px 0 12px;cursor:pointer;color:var(--faint);font:14px var(--sans)}
-.wfrp-ph{position:absolute;left:12px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;color:var(--faint);font-size:14px}
+.wfrp-tg{position:absolute;inset:0;width:100%;border:0;background:none;border-radius:9px;text-align:left;padding:0 34px 0 12px;cursor:pointer;color:var(--muted);font:14px var(--sans)}
+.wfrp-ph{position:absolute;left:12px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;color:var(--muted);font-size:14px}
 .wfrp-cv{position:absolute;right:11px;top:13px;color:var(--muted);pointer-events:none}
 .wfrp-pop{position:absolute;left:0;right:0;top:calc(100% + 6px);padding:8px 4px 4px;visibility:hidden}
 .wfrp-s{display:block;width:calc(100% - 8px);margin:0 4px 6px;height:34px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:13.5px var(--sans);padding:0 10px;user-select:text;-webkit-user-select:text}
@@ -413,7 +413,7 @@ atom({ id:'refpicker', cat:'Workflow', name:'Reference row picker', block:'Refer
     let isOpen = false, chips = [], lastW = 0;
     const recs = REC.map(([n,p],i) => { const b = wfEl('button', 'position:absolute;left:4px;right:4px;top:0;height:36px;border:0;border-radius:8px;background:none;text-align:left;padding:3px 10px;cursor:pointer;display:flex;flex-direction:column;justify-content:center;min-width:0;color:var(--ink)');
       b.type = 'button'; b.setAttribute('role', 'option'); b.setAttribute('aria-selected', 'false'); b.tabIndex = -1;
-      b.innerHTML = '<span style="font-size:13px;font-weight:500;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><span style="font-size:11.5px;line-height:14px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>';
+      b.innerHTML = '<span style="font-size:13px;font-weight:500;line-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span><span style="font-size:11.5px;line-height:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>';
       b.firstChild.textContent = n; b.lastChild.textContent = p; inn.appendChild(b);
       const r = { n, p, b, y:new Track(4 + i*PITCH), o:new Track(1), vis:true, sel:false };
       b.onclick = () => pick(r); b.onpointerenter = b.onfocus = () => { const y = r.y.target; ple.go(y, y + 36); plo.set(1); };
@@ -447,7 +447,7 @@ atom({ id:'refpicker', cat:'Workflow', name:'Reference row picker', block:'Refer
       const start = { x:rr.left - fr.left - 1.5, y:rr.top - fr.top - 1.5, w:rr.width, h:rr.height };
       rec.sel = true; plo.set(0); relist(t0);
       const c = wfEl('span', '', ''); c.className = 'wfrp-c';
-      c.innerHTML = '<span class="rf" style="position:absolute;left:10px;top:3px;right:6px;display:flex;flex-direction:column"><span style="font-size:13px;font-weight:500;line-height:16px;color:var(--ink)"></span><span style="font-size:11.5px;line-height:14px;color:var(--faint)"></span></span><span class="ci" style="position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:4px;padding:0 5px 0 10px;font-size:13px;font-weight:500;color:var(--ink)"><span></span><button class="wfrp-x" type="button" tabindex="-1"></button></span>';
+      c.innerHTML = '<span class="rf" style="position:absolute;left:10px;top:3px;right:6px;display:flex;flex-direction:column"><span style="font-size:13px;font-weight:500;line-height:16px;color:var(--ink)"></span><span style="font-size:11.5px;line-height:14px;color:var(--muted)"></span></span><span class="ci" style="position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:4px;padding:0 5px 0 10px;font-size:13px;font-weight:500;color:var(--ink)"><span></span><button class="wfrp-x" type="button" tabindex="-1"></button></span>';
       $(c,'.rf').firstChild.textContent = rec.n; $(c,'.rf').lastChild.textContent = rec.p; $(c,'.ci').firstChild.textContent = rec.n; const xb = $(c,'.wfrp-x'); xb.innerHTML = ic(I.x,12,2.5); xb.setAttribute('aria-label', 'Remove ' + rec.n);
       fld.appendChild(c);
       const ch = { rec, c, rf:$(c,'.rf'), ci:$(c,'.ci'), xb, W:$(c,'.ci').offsetWidth, gone:false, x:new Track(start.x), y:new Track(start.y), w:new Track(start.w), h:new Track(start.h), r:new Track(8), cp:new Track(0), o:new Track(1) };

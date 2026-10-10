@@ -7,9 +7,9 @@ atom({ id:'voicenote', cat:'Writing', name:'Audio-note insert', block:'richtext 
 .vn-doc b{color:var(--ink)}
 .vs{position:absolute;left:14px;right:14px;top:118px;height:0;overflow:visible}
 .vs i{position:absolute;left:0;right:0;top:0;display:block;height:0;border:1.5px dashed var(--line);border-radius:12px;opacity:0}
-.vt{position:absolute;left:0;top:0;width:190px;height:56px;border-radius:12px;background:var(--raised);border:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.vt{position:absolute;left:0;top:0;width:190px;height:56px;border-radius:12px;background:var(--raised);border:0;display:flex;align-items:center;gap:8px;padding:0 12px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
 .vb{flex:none;width:3px;border-radius:2px;background:var(--ink)}
-.vn-tray{position:absolute;left:14px;right:14px;bottom:56px;height:72px;border-radius:12px;border:1px solid var(--line-soft)}
+.vn-tray{position:absolute;left:14px;right:14px;bottom:56px;height:72px;border-radius:12px;border:0;background:var(--bg)}
 .vn-ctl{position:absolute;left:14px;right:14px;bottom:12px;display:flex;gap:8px}
 </style>
 <div class="card vn"><div class="vn-doc"><b>Spring launch</b><br>Doors at 6 pm, talk at 7. Press play on the note, or drop it into the draft.</div><div class="vs"><i></i></div><div class="vn-tray"></div><div class="vt"><span class="vw" style="display:flex;align-items:center;gap:2.5px;height:26px"></span><span class="small muted">0:12</span></div><div class="vn-ctl"><button class="btn pl" type="button" style="position:relative;height:32px;min-width:70px"></button><button class="btn insb" type="button" style="position:relative;height:32px;min-width:78px"></button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Preview waveform</span></label><div class="hint">Drag the note, or use Insert</div>`,

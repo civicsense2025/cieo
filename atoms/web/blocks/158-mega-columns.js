@@ -61,7 +61,7 @@ const MGCSS = `<style>
 .mg-w button,.mg-w a{-webkit-tap-highlight-color:transparent}
 .mg-w .hint{z-index:1}
 .mg-pg{position:absolute;inset:0;padding:100px 28px 0;pointer-events:none}
-.mg-ey{font-size:12px;font-weight:500;color:var(--faint)}
+.mg-ey{font-size:12px;font-weight:500;color:var(--muted)}
 .mg-hd{position:relative;height:40px;margin:4px 0 6px;font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:40px}
 .mg-hd span{position:absolute;left:0;top:0;white-space:nowrap}
 .mg-ln{margin:0;max-width:46ch;color:var(--muted)}
@@ -101,7 +101,7 @@ const MGCSS = `<style>
 .mg-ah svg{flex:none;color:var(--muted)}
 .mg-ab{height:0;overflow:hidden}
 .mg-ai{padding:0 8px 12px}
-.mg-gh{margin:8px 0 2px;padding:0 8px;font-size:12px;font-weight:500;color:var(--faint)}
+.mg-gh{margin:8px 0 2px;padding:0 8px;font-size:12px;font-weight:500;color:var(--muted)}
 .mg-mr{display:flex;gap:11px;align-items:flex-start;padding:8px;border-radius:10px}
 .mg-mr:active{background:var(--raised)}
 .mg-mr b{display:block;font-size:14px;font-weight:500}
@@ -269,7 +269,7 @@ atom({ id:'mega-columns', cat:'Mega menus', name:'Link groups with descriptions'
 .mg1-pw{position:relative}
 .mg1-pa{position:absolute;left:0;right:0;top:0}
 .mg1-gr{position:relative;display:grid;gap:4px 18px;padding:16px 14px 10px}
-.mg1-h{margin:0 0 4px;padding:0 10px;font-size:12px;font-weight:500;color:var(--faint)}
+.mg1-h{margin:0 0 4px;padding:0 10px;font-size:12px;font-weight:500;color:var(--muted)}
 .mg1-lk{position:relative;z-index:1;display:flex;gap:11px;align-items:flex-start;padding:9px 10px;border-radius:10px}
 .mg1-lk b{display:block;font-size:14px;font-weight:500;letter-spacing:-.005em}
 .mg1-lk small{display:block;margin-top:1px;font-size:12.5px;line-height:1.35;color:var(--muted)}
@@ -408,7 +408,7 @@ atom({ id:'mega-tabs', cat:'Mega menus', name:'Vertical tabs, hover to swap', bl
 .mg3-tb{position:relative;z-index:1;display:flex;align-items:center;gap:10px;width:100%;height:44px;margin:0 0 2px;padding:0 10px;border:0;border-radius:10px;background:none;font:500 14px var(--sans);color:var(--muted);text-align:left;cursor:pointer}
 .mg3-tb[aria-selected="true"]{color:var(--ink)}
 .mg3-tb span:nth-child(2){flex:1}
-.mg3-tb>svg:last-child{color:var(--faint);opacity:0}
+.mg3-tb>svg:last-child{color:var(--muted);opacity:0}
 .mg3-tb[aria-selected="true"]>svg:last-child{opacity:1}
 .mg3-dw{position:relative}
 .mg3-dt{position:absolute;inset:0;padding:20px 22px;overflow:hidden}
@@ -658,17 +658,17 @@ atom({ id:'mega-search', cat:'Mega menus', name:'Search inside the menu', block:
 .mg5-in{display:flex;align-items:center;gap:10px;height:56px;padding:0 14px 0 18px;border-bottom:1px solid var(--line-soft)}
 .mg5-si{flex:none;color:var(--muted);display:flex}
 .mg5-q{flex:1;min-width:0;height:40px;border:0;background:none;color:var(--ink);font:16px var(--sans);outline:none;user-select:text;-webkit-user-select:text}
-.mg5-q::placeholder{color:var(--faint)}
+.mg5-q::placeholder{color:var(--muted)}
 .mg5-q:focus-visible{outline:none}
 .mg5-in:focus-within{box-shadow:inset 0 -2px 0 var(--ink)}
 .mg5-cl{flex:none;width:28px;height:28px;border:0;border-radius:50%;background:var(--raised);color:var(--muted);display:grid;place-items:center;cursor:pointer;visibility:hidden}
-.mg5-k,.mg5-fo kbd{font:500 11.5px var(--mono);padding:2px 6px;border-radius:6px;border:1px solid var(--line);color:var(--muted);background:var(--card)}
+.mg5-k,.mg5-fo kbd{font:500 11.5px var(--mono);padding:2px 7px;border-radius:6px;color:var(--muted);background:var(--card)}
 .mg5-cn{display:none;flex:none;border:0;background:none;padding:8px 2px;font:500 15px var(--sans);color:var(--ink);cursor:pointer}
 .mg5-sg{position:relative;display:flex;gap:2px;margin:10px 14px 0;padding:3px;border-radius:10px;background:var(--raised);width:max-content;max-width:calc(100% - 28px)}
 .mg5-sp{position:absolute;left:0;top:3px;bottom:3px;border-radius:7px;background:var(--card);box-shadow:var(--shadow)}
 .mg5-sg button{position:relative;border:0;background:none;padding:5px 12px;border-radius:7px;font:500 13px var(--sans);color:var(--muted);cursor:pointer}
 .mg5-sg button[aria-pressed="true"]{color:var(--ink)}
-.mg5-st{padding:12px 20px 6px;font-size:12px;font-weight:500;color:var(--faint)}
+.mg5-st{padding:12px 20px 6px;font-size:12px;font-weight:500;color:var(--muted)}
 .mg5-lw{position:relative;padding:0 8px}
 .mg5-lb{position:relative}
 .mg5-pl{position:absolute;left:0;right:0;top:0;height:48px;border-radius:10px;background:var(--raised);pointer-events:none}
@@ -677,13 +677,13 @@ atom({ id:'mega-search', cat:'Mega menus', name:'Search inside the menu', block:
 .mg5-tx b{display:block;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mg5-tx small{display:block;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mg5-tx mark{background:var(--accent-tint);color:var(--accent);border-radius:3px;padding:0 1px;font-weight:600}
-.mg5-kd{flex:none;font-size:12px;color:var(--faint)}
+.mg5-kd{flex:none;font-size:12px;color:var(--muted)}
 .mg5-em{position:absolute;left:0;right:0;top:0;height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;visibility:hidden;pointer-events:none;padding:0 16px}
 .mg5-em b{font-size:14px;font-weight:500}
 .mg5-em span{font-size:13px;color:var(--muted)}
 .mg5-fo{display:flex;gap:18px;padding:10px 20px;margin-top:6px;background:var(--raised);font-size:12.5px;color:var(--muted)}
 .mg5-fo span{display:inline-flex;gap:4px;align-items:center}
-.mg5-sb{flex:0 1 220px;margin-left:8px;height:36px;border:1px solid var(--line);color:var(--muted)}
+.mg5-sb{flex:0 1 220px;margin-left:8px;height:36px;border:0;padding:1px 7px;background:var(--raised);color:var(--muted)}
 .mg5-sb span{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis}
 .mg5-sb kbd{font:500 11.5px var(--mono);padding:1px 6px;border-radius:6px;background:var(--raised);color:var(--muted)}
 .mg5-sbtn{display:none}
@@ -864,7 +864,7 @@ atom({ id:'mega-flyout', cat:'Mega menus', name:'Nested flyout, three levels', b
 .mg7-rw{position:relative}
 .mg7-it{position:relative;z-index:1;display:flex;align-items:center;gap:10px;width:100%;height:40px;padding:0 10px;border:0;border-radius:8px;background:none;font:500 14px var(--sans);color:var(--ink);text-align:left;cursor:pointer}
 .mg7-it .mg7-ci{flex:none;display:flex;color:var(--muted)}
-.mg7-it .mg7-ch{margin-left:auto;flex:none;display:flex;color:var(--faint)}
+.mg7-it .mg7-ch{margin-left:auto;flex:none;display:flex;color:var(--muted)}
 .mg7-tv{position:absolute;inset:0;width:100%;height:100%;z-index:45;pointer-events:none;opacity:0}
 .mg7-tv polygon{fill:var(--accent);fill-opacity:.16;stroke:var(--accent);stroke-width:1;stroke-dasharray:4 4}
 .mg-w[data-n] .mg7-mn,.mg-w[data-n] .mg7-tv{display:none}
@@ -1107,9 +1107,9 @@ atom({ id:'mega-command', cat:'Mega menus', name:'Command menu', block:'Mega men
 .mg9-si{flex:none;display:flex;color:var(--muted)}
 .mg9-q{flex:1;min-width:0;height:40px;border:0;background:none;color:var(--ink);font:16px var(--sans);outline:none;user-select:text;-webkit-user-select:text}
 .mg9-q:focus-visible{outline:none}
-.mg9-q::placeholder{color:var(--faint)}
+.mg9-q::placeholder{color:var(--muted)}
 .mg9-in:focus-within{box-shadow:inset 0 -2px 0 var(--ink)}
-.mg9-pn kbd,.mg9-ms kbd,.mg9-cb2 kbd{font:500 11.5px var(--mono);padding:2px 6px;border-radius:6px;border:1px solid var(--line);color:var(--muted);background:var(--card)}
+.mg9-pn kbd,.mg9-ms kbd,.mg9-cb2 kbd{font:500 11.5px var(--mono);padding:2px 7px;border-radius:6px;color:var(--muted);background:var(--card)}
 .mg9-sg{position:relative;display:flex;gap:2px;margin:10px 14px 0;padding:3px;border-radius:10px;background:var(--raised);width:max-content;max-width:calc(100% - 28px)}
 .mg9-sp{position:absolute;left:0;top:3px;bottom:3px;border-radius:7px;background:var(--card);box-shadow:var(--shadow)}
 .mg9-sg button{position:relative;border:0;background:none;padding:5px 12px;border-radius:7px;font:500 13px var(--sans);color:var(--muted);cursor:pointer}
@@ -1117,7 +1117,7 @@ atom({ id:'mega-command', cat:'Mega menus', name:'Command menu', block:'Mega men
 .mg9-lw{position:relative;max-height:316px;overflow-y:auto;overscroll-behavior:contain;margin-top:8px;padding:0 8px;scrollbar-width:thin}
 .mg9-lb{position:relative}
 .mg9-pl{position:absolute;left:0;right:0;top:0;height:40px;border-radius:10px;background:var(--raised);pointer-events:none}
-.mg9-g{position:absolute;left:0;right:0;top:0;height:30px;padding:10px 10px 0;font-size:12px;font-weight:500;color:var(--faint)}
+.mg9-g{position:absolute;left:0;right:0;top:0;height:30px;padding:10px 10px 0;font-size:12px;font-weight:500;color:var(--muted)}
 .mg9-r{position:absolute;left:0;right:0;top:0;height:40px;display:flex;align-items:center;gap:12px;padding:0 10px;border-radius:10px;cursor:pointer}
 .mg9-r .mg-ic{width:30px;height:30px;border-radius:8px}
 .mg9-lb2{flex:1;min-width:0;font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1126,10 +1126,10 @@ atom({ id:'mega-command', cat:'Mega menus', name:'Command menu', block:'Mega men
 .mg9-em span{color:var(--ink);margin:0 4px 0 0}
 .mg9-fo{display:flex;gap:18px;padding:10px 20px;margin-top:8px;background:var(--raised);font-size:12.5px;color:var(--muted)}
 .mg9-fo span{display:inline-flex;gap:4px;align-items:center}
-.mg9-cb2{flex:0 1 190px;margin-left:8px;height:36px;border:1px solid var(--line);color:var(--muted)}
+.mg9-cb2{flex:0 1 190px;margin-left:8px;height:36px;border:0;padding:1px 7px;background:var(--raised);color:var(--muted)}
 .mg9-cb2 span{flex:1;text-align:left}
 .mg9-mbtn{display:none}
-.mg-w[data-n] .mg9-mbtn.mg-mb{display:inline-flex!important;align-items:center;gap:8px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:none;font:500 14px var(--sans);color:var(--ink);cursor:pointer}
+.mg-w[data-n] .mg9-mbtn.mg-mb{display:inline-flex!important;align-items:center;gap:8px;height:40px;padding:0 15px;border:0;border-radius:10px;background:var(--raised);font:500 14px var(--sans);color:var(--ink);cursor:pointer}
 .mg-w[data-n] .mg9-pn{display:none}
 .mg9-ms{position:absolute;z-index:50;left:0;right:0;bottom:0;display:none;background:var(--card);border-radius:18px 18px 0 0;box-shadow:var(--shadow);visibility:hidden}
 .mg-w[data-n] .mg9-ms{display:block}
@@ -1195,14 +1195,14 @@ atom({ id:'mega-drill', cat:'Mega menus', name:'Drill-down menu with back', bloc
 .mg10-lv{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;padding:8px 8px 14px;background:var(--card);will-change:transform}
 .mg10-rw{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:52px;padding:8px 12px;border:0;border-radius:10px;background:none;font:500 16px var(--sans);color:var(--ink);text-align:left;cursor:pointer}
 .mg10-rw:active{background:var(--raised)}
-.mg10-rw svg{flex:none;color:var(--faint)}
+.mg10-rw svg{flex:none;color:var(--muted)}
 .mg10-rt b{display:block;font-size:15px;font-weight:500}
 .mg10-rt small{display:block;margin-top:1px;font-size:12.5px;line-height:1.35;color:var(--muted)}
 .mg10-r0 .mg10-rw{font-size:17px;font-weight:600;letter-spacing:-.015em}
 .mg10-all{color:var(--muted)}
 .mg10-cb{display:flex;gap:8px;padding:14px 4px 0}
 .mg10-cb a{flex:1;justify-content:center;margin:0}
-.mg10-bl{margin:6px 12px 4px;font-size:12.5px;color:var(--faint)}
+.mg10-bl{margin:6px 12px 4px;font-size:12.5px;color:var(--muted)}
 .mg-w[data-n] .mg10-tt{left:64px;right:64px}
 .mg-w[data-n] .mg10-bk span{width:34px}
 </style><div class="mg-w">${mgPageHTML}<div class="mg-sc"></div>

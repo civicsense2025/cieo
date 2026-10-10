@@ -39,9 +39,9 @@ const CSS = `
 .§-an{display:flex;flex-direction:column;min-width:0;line-height:1.2}
 .§-an b{font-size:13px;font-weight:600;white-space:nowrap}
 .§-ln{display:flex;align-items:center;gap:6px;min-width:0}
-.§-id{font:11px/1 var(--mono);color:var(--faint)}
-.§-tag{display:inline-flex;align-items:center;height:16px;padding:0 5px;border-radius:5px;border:1px solid var(--line);font-size:10.5px;font-weight:600;color:var(--muted)}
-.§-chip{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 7px;border-radius:6px;border:1px solid var(--line);font-size:11.5px;font-weight:600;white-space:nowrap;flex:none}
+.§-id{font:11px/1 var(--mono);color:var(--muted)}
+.§-tag{display:inline-flex;align-items:center;height:16px;padding:0 5px;border-radius:5px;border:0;background:var(--raised);font-size:10.5px;font-weight:600;color:var(--muted)}
+.§-chip{display:inline-flex;align-items:center;gap:4px;height:20px;padding:0 7px;border-radius:6px;border:0;background:var(--raised);font-size:11.5px;font-weight:600;white-space:nowrap;flex:none}
 .§-chip[data-sev=block]{color:var(--danger);background:var(--danger-tint);border-color:var(--danger)}
 .§-chip[data-sev=warn]{color:var(--warning);background:var(--warning-tint);border-color:var(--warning)}
 .§-chip[data-sev=info]{color:var(--muted);background:var(--raised);border-color:var(--muted)}
@@ -69,19 +69,19 @@ const CSS = `
 .§-sec{font-size:13px;font-weight:500}
 .§-art{height:150px;border-radius:12px;background:var(--raised);overflow:hidden}
 .§-prc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:4px 18px 20px}
-.§-pc{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--card)}
+.§-pc{border:0;border-radius:12px;padding:14px;background:var(--card)}
 .§-pn{font-size:12px;color:var(--muted);font-weight:500}
 .§-pr{display:flex;align-items:baseline;gap:5px;margin:4px 0 8px;white-space:nowrap}
 .§-pv{font-size:24px;font-weight:600;letter-spacing:-.03em}
 .§-pu{font-size:11.5px;color:var(--muted)}
 .§-pl{margin:0;padding:0;list-style:none;font-size:12px;color:var(--muted);display:grid;gap:5px}
-.§-nws{margin:0 18px 18px;padding:14px 16px;border-radius:12px;background:var(--tile);border:1px solid var(--line-soft);display:flex;gap:12px 16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.§-nws{margin:0 18px 18px;padding:14px 16px;border-radius:12px;background:var(--tile);border:0;display:flex;gap:12px 16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .§-nws b{font-size:13.5px;font-weight:600}
 .§-ns{font-size:12px;color:var(--muted);margin-top:2px}
 .§-fm{display:flex;gap:8px;flex:1 1 220px;max-width:340px;min-width:0}
-.§-em{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:8px;background:var(--card);padding:0 10px;font:13px var(--sans);color:var(--ink)}
+.§-em{flex:1;min-width:0;height:34px;border:1.5px solid var(--muted);border-radius:8px;background:var(--card);padding:0 10px;font:13px var(--sans);color:var(--ink)}
 .§-sx{height:34px;border:0;border-radius:8px;background:var(--ink);color:var(--card);padding:0 12px;font:600 12.5px var(--sans)}
-.§-sf{display:flex;gap:14px;padding:12px 18px 16px;font-size:11.5px;color:var(--faint);border-top:1px solid var(--line-soft)}
+.§-sf{display:flex;gap:14px;padding:12px 18px 16px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line-soft)}
 @container (max-width:560px){.§-hero{grid-template-columns:1fr;padding-top:18px;gap:16px}.§-art{height:104px}.§-prc{grid-template-columns:1fr}.§-h1{font-size:23px}.§-nl{display:none}}
 /* pins and cards: agents are rounded squares, people are circles */
 .§-pw{position:absolute;left:0;top:0;width:0;height:0}
@@ -291,7 +291,7 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
 .agt-m:last-child{padding-bottom:12px}
 .agt-mh{display:flex;align-items:center;gap:7px;font-size:12.5px}
 .agt-mh b{font-weight:600}
-.agt-tm{margin-left:auto;font-size:11.5px;color:var(--faint);white-space:nowrap}
+.agt-tm{margin-left:auto;font-size:11.5px;color:var(--muted);white-space:nowrap}
 .agt-bd{position:relative;margin:6px 0 0 29px;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
 .agt-bd p{margin:0}
 .agt-bd .agt-chip{margin-top:8px}
@@ -423,14 +423,14 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
 .evc-w{flex:none;overflow:hidden}
 .evc-it{display:flex;align-items:center;gap:10px;width:100%;padding:6px;border:0;border-radius:10px;background:none;text-align:left;cursor:pointer;color:var(--ink)}
 .evc-it:hover{background:var(--raised)}
-.evc-th{position:relative;flex:none;width:92px;height:58px;border:1px solid var(--line);border-radius:8px;background:var(--card);overflow:hidden}
+.evc-th{position:relative;flex:none;width:92px;height:58px;border:0;border-radius:8px;background:var(--raised);overflow:hidden}
 .evc-ph{position:absolute;left:0;top:0;transform-origin:0 0;background:var(--card);overflow:hidden}
 .evc-cp{min-width:0;display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
 .evc-cp .evc-sel{font-size:11px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .evc-tf{position:absolute;left:0;top:0;border:1.5px solid var(--ink);outline:1.5px solid var(--card);pointer-events:none!important;visibility:hidden;z-index:2}
 .evc-tf i{position:absolute;width:7px;height:7px;background:var(--card);border:1.5px solid var(--ink);box-sizing:border-box}
 .evc-tg{position:absolute;left:-1.5px;font:11px/1 var(--mono);background:var(--ink);color:var(--card);padding:4px 6px;border-radius:5px;white-space:nowrap}
-.evc-fly{position:absolute;left:0;top:0;z-index:20;visibility:hidden;border:1px solid var(--line);border-radius:8px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;pointer-events:none}
+.evc-fly{position:absolute;left:0;top:0;z-index:20;visibility:hidden;border:0;border-radius:8px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;pointer-events:none}
 .evc-vw{position:absolute;inset:0;z-index:40;visibility:hidden}
 .evc-sc{position:absolute;inset:-12px;background:color-mix(in oklab,var(--ink) 42%,transparent)}
 .evc-vp{position:absolute;left:0;top:0;overflow:hidden}
@@ -439,7 +439,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
 .evc-vh b{flex:1;font-size:13px;font-weight:600}
 .evc-vh button{border:0;background:none;color:var(--ink);padding:5px;border-radius:7px;cursor:pointer;display:grid;place-items:center}
 .evc-vh button:hover{background:var(--raised)}
-.evc-vh button[disabled]{color:var(--faint);cursor:default;background:none}
+.evc-vh button[disabled]{color:var(--muted);cursor:default;background:none}
 .evc-vb{position:relative;flex:1;min-height:0}
 .evc-vl{position:absolute;inset:0;display:flex;flex-direction:column}
 .evc-pic{position:relative;flex:1;min-height:0;background:var(--raised);margin:12px 12px 0;border-radius:10px;overflow:hidden}
@@ -681,7 +681,7 @@ const FINDINGS = [
   { sev:'info', title:'Hero copy has two grammar slips', sel:'p.hero-sub', route:'/pricing', pin:13, sp:'sub', steps:['Open /pricing', 'Read the line under the headline'], exp:'“…teams collaborate on notes more easily.”', obs:'“…teams to collaborate on notes more easier.”' },
   { sev:'info', title:'Footer links have no hover state', sel:'footer a', route:'/pricing', pin:14, sp:'ft', steps:['Open /pricing and scroll to the footer', 'Hover Privacy, Terms and Status'], exp:'Links change on hover', obs:'No visible change' } ];
 const SPEC = {
-  cta:'<button type="button" class="rvs-cta" tabindex="-1">Start free trial</button>', tog:'<div style="display:inline-flex;border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px;font-size:12px"><span style="padding:4px 10px;border-radius:6px;background:var(--ink);color:var(--card)">Monthly</span><span style="padding:4px 10px">Yearly</span></div>',
+  cta:'<button type="button" class="rvs-cta" tabindex="-1">Start free trial</button>', tog:'<div style="display:inline-flex;border:1.5px solid var(--muted);border-radius:9px;padding:3px;gap:3px;font-size:12px"><span style="padding:4px 10px;border-radius:6px;background:var(--ink);color:var(--card)">Monthly</span><span style="padding:4px 10px">Yearly</span></div>',
   em:'<input class="rvs-em" placeholder="Work email" tabindex="-1" style="width:140px">', art:'<div class="rvs-art" style="height:64px;width:120px"><svg viewBox="0 0 220 120" width="100%" height="100%" aria-hidden="true"><rect x="22" y="58" width="26" height="46" rx="5" fill="var(--faint)"/><rect x="60" y="38" width="26" height="66" rx="5" fill="var(--muted)"/><rect x="98" y="24" width="26" height="80" rx="5" fill="var(--accent)"/><rect x="136" y="46" width="26" height="58" rx="5" fill="var(--muted)"/><rect x="174" y="30" width="26" height="74" rx="5" fill="var(--ink)"/></svg></div>',
   err:'<div style="width:150px"><input class="rvs-em" placeholder="Email" tabindex="-1" style="width:100%;border-color:var(--danger)"><div style="font-size:11.5px;color:var(--danger);margin-top:4px">Enter your work email</div></div>', plan:'<div class="rvs-pc" style="width:128px;padding:10px"><div class="rvs-pn">Team</div><div class="rvs-pr"><span class="rvs-pv" style="font-size:20px">$12</span></div><div class="rvs-pu">per seat per month</div></div>',
   sub:'<p class="rvs-sub" style="margin:0;width:150px;font-size:11.5px">Fieldnote helps teams to collaborate on notes more easier.</p>', ft:'<div class="rvs-sf" style="padding:0;border:0;font-size:12px"><span>Privacy</span><span>Terms</span><span>Status</span></div>' };
@@ -691,11 +691,11 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
 .rvs-pn{position:absolute;inset:12px;display:flex;flex-direction:column;overflow:hidden}
 .rvs-hd{flex:none;display:flex;align-items:center;gap:10px;padding:12px 14px 4px}
 .rvs-sm{flex:none;padding:0 14px;font-size:12.5px;color:var(--muted)}
-.rvs-run{position:relative;flex:none;height:24px;border-radius:7px;border:1px solid var(--muted);overflow:hidden;font-size:12px;font-weight:600;white-space:nowrap}
+.rvs-run{position:relative;flex:none;height:24px;border-radius:7px;border:0;background:var(--raised);overflow:hidden;font-size:12px;font-weight:600;white-space:nowrap}
 .rvs-run>span{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:6px;padding:0 9px}
 .rvs-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
 .rvs-fl{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px 10px}
-.rvs-f{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:8px;border:1px solid var(--line);background:none;font:500 12.5px var(--sans);cursor:pointer;white-space:nowrap}
+.rvs-f{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:8px;border:0;background:var(--raised);font:500 12.5px var(--sans);cursor:pointer;white-space:nowrap}
 .rvs-f .digits{font-weight:600}
 .rvs-sh{margin-left:auto;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:4px;white-space:nowrap}
 .rvs-ls{position:relative;flex:1;min-height:0;overflow-y:auto;border-top:1px solid var(--line-soft)}
@@ -710,7 +710,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
 .rvs-cv{display:grid;place-items:center;color:var(--muted)}
 .rvs-in{display:grid;grid-template-columns:168px minmax(0,1fr);gap:8px 16px;padding:2px 14px 16px 14px}
 .rvs-ev{display:flex;flex-direction:column;gap:6px}
-.rvs-tn{display:grid;place-items:center;height:96px;border:1px solid var(--line);border-radius:10px;background:var(--card);overflow:hidden}
+.rvs-tn{display:grid;place-items:center;height:96px;border:0;border-radius:10px;background:var(--raised);overflow:hidden}
 .rvs-cp{font-size:11.5px;color:var(--muted);line-height:1.4}
 .rvs-tx b{display:block;font-size:12px;font-weight:600;margin-bottom:4px}
 .rvs-tx ol{margin:0 0 10px;padding-left:18px;font-size:12.5px;line-height:1.5;color:var(--muted)}
@@ -798,7 +798,7 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
 .agq-sn .btn,.agq-sl .btn{padding:4px 11px;font-size:12.5px}
 .agq-ib{border:0;background:none;color:var(--muted);padding:5px;border-radius:7px;cursor:pointer;display:grid;place-items:center}
 .agq-ib:hover:not([disabled]){background:var(--raised);color:var(--ink)}
-.agq-ib[disabled]{color:var(--faint);opacity:.55;cursor:default}
+.agq-ib[disabled]{color:var(--muted);opacity:.55;cursor:default}
 .agq-sl{padding:10px 10px 14px 14px}
 .agq-r1{display:flex;align-items:center;gap:8px}
 .agq-r1 .agq-cn{flex:1;font-size:12.5px;color:var(--muted);display:flex;justify-content:center;gap:4px;align-items:center}
@@ -910,7 +910,7 @@ const CHIP_W = { c:'var(--warning)', t:'var(--warning-tint)' }, CHIP_S = { c:'va
 
 atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:'Agent hand-off on a pin (proposed; uses the review tool run status + pin discussion)', fam:['M','S','T','X'], wide:true, tall:true,
   html:`<style>${css('hno')}
-.hno-run{position:relative;flex:none;height:24px;border-radius:7px;border:1px solid;overflow:hidden;font-size:12px;font-weight:600;white-space:nowrap}
+.hno-run{position:relative;flex:none;height:24px;border-radius:7px;border:0;overflow:hidden;font-size:12px;font-weight:600;white-space:nowrap}
 .hno-run>span{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:6px;padding:0 9px}
 .hno-dot{width:7px;height:7px;border-radius:50%;background:currentColor}
 .hno-cc{padding:12px}
@@ -939,7 +939,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
 .hno-ri{position:relative;height:22px;margin-top:12px;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
 .hno-ri>span.l{position:absolute;left:16px;top:0;height:22px;display:flex;align-items:center;white-space:nowrap}
 .hno-ri .hno-dot{flex:none;background:var(--muted)}
-.hno-sc{position:relative;flex:none;height:22px;border-radius:6px;border:1px solid;overflow:hidden;font-size:11.5px;font-weight:600;white-space:nowrap}
+.hno-sc{position:relative;flex:none;height:22px;border-radius:6px;border:0;overflow:hidden;font-size:11.5px;font-weight:600;white-space:nowrap}
 .hno-sc>span{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:4px;padding:0 7px}
 .hno-hd .hno-sc{margin-left:auto}
 .hno-root[data-n="1"] .hno-bar .hno-an{display:none}

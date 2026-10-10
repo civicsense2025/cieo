@@ -24,7 +24,7 @@ atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', f
 .ss{position:absolute;inset:0;overflow:hidden;isolation:isolate;container-type:inline-size;text-align:left;font-size:13px}
 .ss-ls{position:absolute;left:12px;right:12px;top:10px}
 .ss-hd,.ss-rw{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.3fr) minmax(0,1fr) 98px;gap:12px;align-items:center;padding:0 12px}
-.ss-hd{height:26px;font-size:12px;font-weight:500;color:var(--faint)}
+.ss-hd{height:26px;font-size:12px;font-weight:500;color:var(--muted)}
 .ss-rw{position:relative;width:100%;height:40px;border:0;border-radius:10px;background:none;color:var(--ink);font:inherit;text-align:left;cursor:pointer}
 .ss-rw>*{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ss-rw b{font-weight:500}
@@ -35,7 +35,7 @@ atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', f
 .ss-gr{flex:none;width:18px;display:grid;place-items:center;cursor:grab}
 .ss-gr i{width:4px;height:36px;border-radius:2px;background:var(--line)}
 .ss-mn{flex:1;min-width:0;display:flex;flex-direction:column}
-.ss-tb{flex:none;display:flex;align-items:center;justify-content:space-between;height:44px;padding-right:10px;color:var(--faint);font-size:12px;font-weight:500}
+.ss-tb{flex:none;display:flex;align-items:center;justify-content:space-between;height:44px;padding-right:10px;color:var(--muted);font-size:12px;font-weight:500}
 .ss-x{width:28px;height:28px;border:0;border-radius:8px;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted)}
 .ss-x:hover{background:var(--raised);color:var(--ink)}
 .ss-lw{position:relative;flex:1;min-height:0}
@@ -44,7 +44,7 @@ atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', f
 .ss-ly p{margin:0}
 .ss-nt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .ss-dl{display:grid;grid-template-columns:70px minmax(0,1fr);gap:4px 10px;margin:4px 0 0}
-.ss-dl dt{color:var(--faint)}
+.ss-dl dt{color:var(--muted)}
 .ss-dl dd{margin:0}
 .ss-ft{display:flex;gap:8px;margin-top:auto}
 @container (max-width:560px){.ss-hd,.ss-rw{grid-template-columns:minmax(0,1fr) 98px}.ss-c2,.ss-c3{display:none}}
@@ -107,7 +107,7 @@ atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', f
       sheet.style.transform = `translateX(${px(v*w)})`;
       scrim.style.opacity = (clamp(1 - v)*.32).toFixed(3);
       layers.forEach((l, k) => sw.apply(l, k, t, 4));
-      rows.forEach((r, i) => { r.style.background = mix(tr[i].sel.at(t), 'var(--accent-tint)', mix(tr[i].hov.at(t), 'var(--raised)', 'transparent')); });
+      rows.forEach((r, i) => { r.style.background = mix(tr[i].sel.at(t), 'var(--accent-tint)', mix(tr[i].hov.at(t), 'var(--raised)', 'transparent')); r.style.boxShadow = `inset ${(2*clamp(tr[i].sel.at(t))).toFixed(2)}px 0 0 var(--accent)`; });
     };
   }});
 
@@ -122,7 +122,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 .sg.sm button{padding:3px 10px;font-size:12px}
 .sg-i{position:absolute;z-index:0;left:var(--ind-left,0);right:var(--ind-right,100%);top:var(--ind-top,0);height:var(--ind-height,0);border-radius:999px;background:var(--card);box-shadow:var(--shadow);opacity:0;pointer-events:none}
 .sg[data-ind="ready"] .sg-i{opacity:1}
-.sg-ro{font:11.5px/1.4 var(--mono);color:var(--faint);min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sg-ro{font:11.5px/1.4 var(--mono);color:var(--muted);min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style><div class="sg-w">
 <div class="sg-l"><span class="small muted" id="sg-a">File source</span><div class="sg" role="group" aria-labelledby="sg-a"><div class="sg-i"></div><button type="button">Upload</button><button type="button">Link</button><button type="button">Media library</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
@@ -222,7 +222,7 @@ atom({ id:'scrollfade', cat:CAT, name:'Scroll-fade row', block:'ScrollFadeRow', 
 .sf-row{display:flex;overflow-x:auto;scrollbar-width:none;min-width:0;padding:4px 3px;--fade-start:0px;--fade-end:0px;-webkit-mask-image:linear-gradient(to right,transparent,#000 var(--fade-start),#000 calc(100% - var(--fade-end)),transparent);mask-image:linear-gradient(to right,transparent,#000 var(--fade-start),#000 calc(100% - var(--fade-end)),transparent)}
 .sf-row::-webkit-scrollbar{display:none}
 .sf-c1{flex:none;padding-right:6px}
-.sf-c{display:block;width:max-content;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;background:var(--card);color:var(--ink)}
+.sf-c{display:block;width:max-content;border:0;border-radius:999px;padding:6px 13px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap;background:var(--raised);color:var(--ink)}
 .sf-c:focus-visible{outline-offset:1px}
 .sf-ar{width:30px;height:30px;padding:0;display:grid;place-items:center}
 .sf-ar:disabled{opacity:.4;cursor:default}
@@ -277,7 +277,7 @@ atom({ id:'inlineedit', cat:CAT, name:'Inline editable field', block:'InlineEdit
 .ie-ib:hover{background:var(--raised);color:var(--ink)}
 .ie-hp{position:relative;height:18px;margin-top:4px;font-size:12px}
 .ie-hp>span{position:absolute;left:0;top:0;white-space:nowrap}
-.ie-hp>.ie-ct{left:auto;right:2px;font-size:12px;color:var(--faint);font-variant-numeric:tabular-nums}
+.ie-hp>.ie-ct{left:auto;right:2px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 </style><div class="ie-w"></div><div class="hint">Click a value. Enter saves, Escape cancels. Try empty, or “admin”.</div>`,
   desc:'The value and the input are the same box: same padding and type, so nothing shifts. Click and the border and fill morph in while the text swaps to the input and the trailing check and cancel buttons arrive. Enter saves behind a short spinner, then the new value swaps in with a Saved check. Escape swaps the typed text out and the original back in. Invalid input turns the border danger and swaps in the message.',
   api:'box.edit.set(1)   text.to("edit")   trail.to("act")   Enter: trail.to("spin") → text.to("disp"); trail.to("ok")   Esc: text.to("disp")',
@@ -334,7 +334,7 @@ atom({ id:'themetoggle', cat:CAT, name:'Theme toggle', block:'ThemeToggle', fam:
 .tt-b:hover{background:var(--raised);color:var(--ink)}
 .tt-s{position:relative;flex:1;height:20px;font-size:12px;color:var(--muted)}
 .tt-s>span{position:absolute;left:0;top:0;white-space:nowrap;line-height:20px}
-.tt-pv{border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--p-bg);color:var(--p-ink);border:1px solid var(--p-line)}
+.tt-pv{border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--p-bg);color:var(--p-ink)}
 .tt-hd{display:flex;align-items:center;justify-content:space-between;font-size:13px}
 .tt-hd b{font-weight:600}
 .tt-ch{font-size:11.5px;font-weight:600;border-radius:999px;padding:2px 8px;background:var(--p-tint);color:var(--p-accent)}
@@ -393,7 +393,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
 .dv-cr{flex:none;display:flex;align-items:center;gap:6px;padding:0 10px;background:var(--raised);overflow:hidden}
 .dv-dt{display:flex;gap:4px;flex:none}
 .dv-dt i{width:7px;height:7px;border-radius:50%;background:var(--line)}
-.dv-ur{flex:1;min-width:0;height:16px;border-radius:8px;background:var(--card);display:flex;justify-content:space-between;gap:8px;align-items:center;padding:0 8px;font-size:10px;color:var(--faint);white-space:nowrap;overflow:hidden}
+.dv-ur{flex:1;min-width:0;height:16px;border-radius:8px;background:var(--card);display:flex;justify-content:space-between;gap:8px;align-items:center;padding:0 8px;font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden}
 .dv-pg{flex:1;min-height:0;overflow:hidden;padding:12px 16px;display:flex;flex-direction:column;gap:12px;font-size:12px;text-align:left}
 .dv-nv{display:flex;align-items:center;gap:14px}
 .dv-lk{display:flex;gap:12px;margin-left:auto;color:var(--muted)}
@@ -447,12 +447,12 @@ atom({ id:'timer', cat:CAT, name:'Running timer', block:'ActiveTimer', fam:['T',
   html:`<style>
 .tm-w{width:min(400px,92%);display:flex;flex-direction:column;gap:10px;text-align:left}
 .tm-c{padding:14px;display:flex;flex-direction:column;gap:10px}
-.tm-t{position:relative;height:20px;font-size:12px;font-weight:500;color:var(--faint)}
+.tm-t{position:relative;height:20px;font-size:12px;font-weight:500;color:var(--muted)}
 .tm-t>*{position:absolute;right:0;top:0}
 .tm-t>span:first-child{left:0;right:auto}
 .tm-tk{position:relative;height:36px}
 .tm-tk>*{position:absolute;left:0;right:0;top:0;height:36px}
-.tm-sel{width:100%;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:14px var(--sans);padding:0 10px}
+.tm-sel{width:100%;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:14px var(--sans);padding:0 10px}
 .tm-tt{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:500;padding:0 10px}
 .tm-tt i{width:8px;height:8px;border-radius:50%;background:var(--danger);flex:none}
 .tm-bm{display:flex;align-items:center;justify-content:space-between;height:44px}
@@ -461,7 +461,7 @@ atom({ id:'timer', cat:CAT, name:'Running timer', block:'ActiveTimer', fam:['T',
 .tm-bt{position:relative;height:40px;border:0;border-radius:20px;overflow:hidden;cursor:pointer;font-weight:500;font-size:14px;flex:none}
 .tm-bl{position:absolute;left:0;top:0;height:100%;display:flex;align-items:center;gap:7px;padding:0 16px;white-space:nowrap}
 .tm-sk{width:max-content;padding:4px 10px;font-size:12px}
-.tm-lh{font-size:12px;font-weight:500;color:var(--faint)}
+.tm-lh{font-size:12px;font-weight:500;color:var(--muted)}
 .tm-lg{position:relative;height:104px;overflow:hidden;border-radius:12px;background:var(--card);box-shadow:var(--shadow)}
 .tm-rw{position:absolute;left:0;right:0;top:0;height:32px;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;font-size:13px}
 .tm-rw span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:8px}
@@ -509,19 +509,19 @@ atom({ id:'disclosure', cat:CAT, name:'Disclosure group', block:'EditorDisclosur
   html:`<style>
 .dg-p{width:min(330px,94%);height:306px;display:flex;flex-direction:column;background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;text-align:left}
 .dg-tt{flex:none;display:flex;align-items:center;justify-content:space-between;height:38px;padding:0 14px;font-size:13px;font-weight:600;border-bottom:1px solid var(--line-soft)}
-.dg-tt span{font-size:12px;font-weight:400;color:var(--faint)}
+.dg-tt span{font-size:12px;font-weight:400;color:var(--muted)}
 .dg-sc{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
 .dg-sc>.dg-g{border-bottom:1px solid var(--line-soft)}
 .dg-h{display:flex;align-items:center;gap:6px;width:100%;height:30px;padding:0 12px;border:0;background:none;color:var(--ink);font-size:12.5px;font-weight:500;text-align:left;cursor:pointer}
-.dg-h svg{flex:none;color:var(--faint)}
-.dg-n{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--faint)}
+.dg-h svg{flex:none;color:var(--muted)}
+.dg-n{margin-left:auto;font-size:11.5px;font-weight:400;color:var(--muted)}
 .dg .dg-g .dg-g .dg-h{height:28px;color:var(--muted);padding-left:6px}
 .dg-b{overflow:hidden}
 .dg-i{padding:2px 12px 8px 30px}
 .dg-i>.dg-g{margin-left:-18px;margin-right:-12px}
 .dg-rw{display:flex;align-items:center;justify-content:space-between;gap:10px;height:28px;font-size:12px;color:var(--muted)}
-.dg-rw input,.dg-rw select{width:104px;height:22px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:12px var(--sans);padding:0 6px}
-.dg-ft{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;height:34px;padding:0 10px 0 14px;border-top:1px solid var(--line-soft);font:11px var(--mono);color:var(--faint)}
+.dg-rw input,.dg-rw select{width:104px;height:22px;border:1.5px solid var(--muted);border-radius:6px;background:var(--bg);color:var(--ink);font:12px var(--sans);padding:0 6px}
+.dg-ft{flex:none;display:flex;align-items:center;justify-content:space-between;gap:8px;height:34px;padding:0 10px 0 14px;border-top:1px solid var(--line-soft);font:11px var(--mono);color:var(--muted)}
 .dg-fm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style><div class="dg-p dg"><div class="dg-tt">Heading<span>Inspector</span></div><div class="dg-sc"></div><div class="dg-ft"><span class="dg-fm"></span><button type="button" class="btn dg-rs" style="padding:2px 8px;font-size:12px">Reset</button></div></div>`,
   desc:'Each group is its own spring, never tied to a sibling: the body height follows the measured content, the chevron turns a quarter on the same spring and the content fades in with the height. Spacing holds two nested groups that open and close independently, and the parent’s height follows whatever they are doing. Like the editor’s preference store, only your toggles are remembered; Reset returns every group to its default.',
@@ -567,7 +567,7 @@ atom({ id:'delayspinner', cat:CAT, name:'Delayed spinner', block:'Spinner', fam:
 .ds-c{padding:12px 14px}
 .ds-h{display:flex;align-items:center;justify-content:space-between;height:26px}
 .ds-h b{font-size:14px;font-weight:600}
-.ds-up{position:relative;height:18px;width:150px;margin-left:10px;font-size:12px;color:var(--faint)}
+.ds-up{position:relative;height:18px;width:150px;margin-left:10px;font-size:12px;color:var(--muted)}
 .ds-up>span{position:absolute;left:0;top:0;white-space:nowrap}
 .ds-sp{flex:none;width:18px;height:18px;color:var(--muted);display:grid;place-items:center}
 .ds-ls{position:relative;height:102px;margin-top:6px}
@@ -577,7 +577,7 @@ atom({ id:'delayspinner', cat:CAT, name:'Delayed spinner', block:'Spinner', fam:
 .ds-tl{position:relative;height:6px;border-radius:3px;background:var(--raised);margin-top:6px}
 .ds-tl>i{position:absolute;top:0;height:100%;border-radius:3px}
 .ds-mk{position:absolute;top:-4px;width:1px;height:14px;background:var(--faint);left:15%}
-.ds-lb{position:relative;height:16px;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.ds-lb{position:relative;height:16px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
 .ds-lb>span{position:absolute;top:0}
 .ds-ph{position:relative;height:36px;font-size:13px;color:var(--muted)}
 .ds-ph>span{position:absolute;left:0;top:0;right:0}

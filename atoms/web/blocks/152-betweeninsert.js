@@ -37,8 +37,8 @@ const BK = {
 const EBCSS = `<style>
 .eb{position:absolute;left:0;right:0;top:0;overflow:hidden}
 .eb-f{position:relative;overflow:hidden}
-.eb-i{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:0 12px;border:1px solid var(--line-soft);border-radius:10px;background:var(--card);overflow:hidden;font-size:13px;line-height:1.35}
-.eb-ph{display:grid;place-items:center;border-radius:6px;background:var(--raised);color:var(--faint)}
+.eb-i{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:0 12px;border-radius:10px;background:var(--card);overflow:hidden;font-size:13px;line-height:1.35}
+.eb-ph{display:grid;place-items:center;border-radius:6px;background:var(--raised);color:var(--muted)}
 </style>`;
 
 /* Stack of absolutely placed blocks. Each block has y/h/o springs; a layout pass writes y targets
@@ -98,7 +98,7 @@ const reveal = (cv, it, pad = 14) => {
 /* ---------------------------------------------------------------- 1 */
 atom({ id:'betweeninsert', cat:'Editor', name:'Between-blocks insert', block:'BetweenInsert, Block Library (compact)', fam:['M','S','X'], wide:true, tall:true,
   html:`${EBCSS}<style>
-.bi-cv{position:relative;width:min(520px,94%);height:270px;margin-top:40px;overflow-x:hidden;overflow-y:auto;padding:4px 12px;border:1px solid var(--line-soft);border-radius:14px;background:var(--bg)}
+.bi-cv{position:relative;width:min(520px,94%);height:270px;margin-top:40px;overflow-x:hidden;overflow-y:auto;padding:4px 12px;border-radius:14px;background:var(--bg);box-shadow:var(--shadow)}
 .bi-gap{position:relative}
 .bi-ln{position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;border-radius:1px;background:var(--accent);pointer-events:none;opacity:0}
 .bi-mp{position:absolute;left:50%;top:50%;overflow:hidden;opacity:0}
@@ -168,7 +168,7 @@ atom({ id:'betweeninsert', cat:'Editor', name:'Between-blocks insert', block:'Be
         if (!r.gap){ r.inner.style.opacity = clamp(r.o.at(t)).toFixed(3); continue; }
         const o = clamp(r.op.at(t)), v = Math.max(clamp(r.hv.at(t)), o);
         Object.assign(r.mp.style, { width:px(lerp(22, PW, o)), height:px(lerp(22, 38, o)), borderRadius:px(lerp(11, 14, o)), opacity:v.toFixed(3),
-          transform:`translate(-50%,-50%) scale(${lerp(.8, 1, v).toFixed(4)})`, background:mix(o,'var(--card)','var(--accent)'), border:`1px solid ${mix(o,'var(--line)','var(--accent)')}`,
+          transform:`translate(-50%,-50%) scale(${lerp(.8, 1, v).toFixed(4)})`, background:mix(o,'var(--card)','var(--accent)'), border:`1.5px solid ${mix(o,'var(--muted)','var(--accent)')}`,
           boxShadow:o > .02 ? `0 1px 2px rgba(16,20,26,${(.07*o).toFixed(3)}),0 6px 18px rgba(16,20,26,${(.06*o).toFixed(3)})` : 'none' });
         r.ln.style.opacity = (v*(1 - o)).toFixed(3); r.ln.style.transform = `scaleX(${lerp(.6, 1, v).toFixed(4)})`;
         r.sw.apply(r.pl,'pl',t,2); r.sw.apply(r.pk,'pk',t,3);
@@ -186,10 +186,10 @@ const tbBtn = ([a, l]) => `<button type="button" class="bt-b" data-a="${a}" aria
 const tbWidth = k => 28*TBTY[k].length + 125;
 atom({ id:'blocktoolbar', cat:'Editor', name:'Floating block toolbar', block:'CanvasBlockToolbar', fam:['E','S','X'], wide:true, tall:true,
   html:`${EBCSS}<style>
-.bt-cv{position:relative;width:min(560px,94%);height:276px;margin-top:40px;overflow-x:hidden;overflow-y:auto;border:1px solid var(--line-soft);border-radius:14px;background:var(--bg)}
+.bt-cv{position:relative;width:min(560px,94%);height:276px;margin-top:40px;overflow-x:hidden;overflow-y:auto;border-radius:14px;background:var(--bg);box-shadow:var(--shadow)}
 .bt-in{position:relative;margin:0 16px}
 .bt-in>.eb{cursor:pointer}.bt-in>.eb:focus-visible{outline:none}.bt-in>.eb:focus-visible .btb-i{outline:2px solid var(--accent);outline-offset:-2px}
-.bt-tb{position:absolute;left:0;top:0;height:32px;border:1px solid var(--line);border-radius:9px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;visibility:hidden}
+.bt-tb{position:absolute;left:0;top:0;height:32px;border-radius:9px;background:var(--card);box-shadow:var(--shadow);overflow:hidden;visibility:hidden}
 .bt-g{position:absolute;top:2px;display:flex;gap:2px}
 .bt-b{width:26px;height:26px;display:grid;place-items:center;border:0;border-radius:6px;background:none;color:var(--muted);cursor:pointer;padding:0;font:600 10.5px var(--sans)}
 .bt-b:hover:not(:disabled){background:var(--raised);color:var(--ink)}
@@ -285,13 +285,13 @@ atom({ id:'blocklibrary', cat:'Editor', name:'Block library panel', block:'Block
   html:`${EBCSS}<style>
 .bl-w{position:relative;width:min(720px,96%);height:276px;margin-top:40px;display:grid;grid-template-columns:clamp(150px,40%,240px) minmax(0,1fr);gap:12px}
 .bl-p{display:flex;flex-direction:column;gap:8px;padding:10px;min-height:0}
-.bl-sl{display:flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--muted)}
+.bl-sl{display:flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:1.5px solid var(--muted);border-radius:9px;background:var(--bg);color:var(--muted)}
 .bl-sl:focus-within{outline:2px solid var(--accent);outline-offset:2px}
 .bl-q{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:13px;color:var(--ink);outline:none!important;user-select:text;-webkit-user-select:text}
 .bl-ta{position:relative;flex:1;min-height:0}
-.bl-t{position:absolute;left:0;top:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid var(--line-soft);border-radius:10px;background:var(--bg);font-size:11.5px;font-weight:500;cursor:grab;touch-action:none;padding:0}
+.bl-t{position:absolute;left:0;top:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:10px;background:var(--card);font-size:11.5px;font-weight:500;cursor:grab;touch-action:none;padding:0}
 .bl-t:hover{border-color:var(--line)}
-.bl-cv{position:relative;overflow-x:hidden;overflow-y:auto;border:1px solid var(--line-soft);border-radius:14px;background:var(--bg)}
+.bl-cv{position:relative;overflow-x:hidden;overflow-y:auto;border-radius:14px;background:var(--bg);box-shadow:var(--shadow)}
 .bl-in{position:relative;margin:0 10px}
 .bl-ln{position:absolute;left:0;right:0;top:0;height:3px;margin-top:-1.5px;border-radius:2px;background:var(--accent);pointer-events:none;opacity:0}
 .bl-gh{position:absolute;left:0;top:0;z-index:40;pointer-events:none;visibility:hidden;background:var(--card);border-color:var(--line);cursor:grabbing}
@@ -396,7 +396,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
 .qc-c.opt .qc-ic svg,.qc-c.opt .qc-L0 svg,.qc-c.opt .qc-mi .qc-ic svg{transform:translateY(.5px)}
 .qc-c.opt .qc-ic{padding-top:1px}
 .qc-cf{position:absolute;bottom:8px;left:16px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
-.qc-s{position:absolute;right:12px;top:9px;overflow:hidden;border:1px solid var(--ink)}
+.qc-s{position:absolute;right:12px;top:9px;overflow:hidden;box-shadow:var(--shadow)}
 .qc-mi{display:flex;align-items:center;gap:10px;width:100%;height:44px;padding:0 10px;border:0;border-radius:9px;background:none;text-align:left;cursor:pointer;color:inherit}
 .qc-mi:hover,.qc-mi:focus-visible{background:var(--raised)}
 .qc-mi:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
@@ -501,10 +501,10 @@ atom({ id:'shortcuts', cat:'Editor', name:'Shortcuts overlay', block:'ShortcutsO
   html:`<style>
 .sc-ed{position:absolute;inset:12px;overflow:hidden}
 .sc-ed:focus-visible{outline-offset:-2px}
-.sc-k{font:500 11.5px var(--mono);padding:1px 6px;border-radius:5px;background:var(--raised);color:var(--muted);border:1px solid var(--line-soft);white-space:nowrap}
+.sc-k{font:500 11.5px var(--mono);padding:1px 6px;border-radius:5px;background:var(--raised);color:var(--muted);white-space:nowrap}
 .sc-sc{position:absolute;inset:0;z-index:29;background:color-mix(in oklab,var(--ink) 30%,transparent);visibility:hidden;opacity:0}
 .sc-sh{position:absolute;inset:0;margin:auto;width:min(360px,92%);height:min(306px,calc(100% - 24px));display:flex;flex-direction:column;overflow:hidden;visibility:hidden}
-.sc-f{display:flex;align-items:center;gap:6px;height:36px;margin:8px 14px 0;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--muted);flex:none}
+.sc-f{display:flex;align-items:center;gap:6px;height:36px;margin:8px 14px 0;padding:0 10px;border:1.5px solid var(--muted);border-radius:9px;background:var(--bg);color:var(--muted);flex:none}
 .sc-f:focus-within{outline:2px solid var(--accent);outline-offset:1px}
 .sc-q{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:13px;color:var(--ink);outline:none!important;user-select:text;-webkit-user-select:text}
 .sc-bd{position:relative;flex:1;min-height:0;overflow-y:auto;padding:0 14px}

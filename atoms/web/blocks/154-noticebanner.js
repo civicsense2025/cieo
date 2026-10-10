@@ -25,7 +25,7 @@ atom({ id:'noticebanner', cat:'Status and records', name:'Notice banner', block:
 .nb-top{flex:none;height:40px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px 0 14px;border-bottom:1px solid var(--line-soft)}
 .nb-slot{flex:none;position:relative;height:0;overflow:hidden}
 .nb-in{position:absolute;left:0;right:0;top:0;padding:10px 12px 0}
-.nb-ban{display:flex;align-items:flex-start;gap:12px;border:1px solid;border-radius:10px;padding:10px 12px}
+.nb-ban{display:flex;align-items:flex-start;gap:12px;border-radius:10px;padding:11px 13px}
 .nb-ls{flex:1;min-width:0;display:grid}
 .nb-n{grid-area:1/1;display:flex;gap:10px;align-items:flex-start;min-width:0}
 .nb-n>span{flex:none;display:flex;margin-top:1px}
@@ -85,7 +85,7 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
 .cn-hero{padding:22px 20px;max-width:560px}
 .cn-hero h4{margin:0 0 8px;font-size:24px;line-height:1.15;letter-spacing:-.025em;text-wrap:balance}
 .cn-hero p{margin:0 0 10px;font-size:13.5px;color:var(--muted);line-height:1.55}
-.cn-bx{position:absolute;bottom:12px;left:0;overflow:hidden;z-index:5;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line)}
+.cn-bx{position:absolute;bottom:12px;left:0;overflow:hidden;z-index:5;background:var(--card);box-shadow:var(--shadow)}
 .cn-ct{position:absolute;left:0;top:0;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px;display:flex;flex-direction:column;scrollbar-width:thin}
 .cn-k{font-size:11.5px;line-height:14px;font-weight:600;color:var(--accent);margin-bottom:2px}
 .cn-tt{display:grid}
@@ -175,7 +175,7 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
 .bk{position:absolute;left:12px;right:12px;top:10px;overflow:hidden}
 .bk-top{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 14px}
 .bk-slot{position:relative;height:0;overflow:hidden}
-.bk-bar{position:absolute;left:8px;right:8px;top:2px;height:40px;display:flex;align-items:center;gap:8px;padding:0 10px 0 12px;background:var(--accent-tint);border:1px solid var(--accent);border-radius:8px}
+.bk-bar{position:absolute;left:8px;right:8px;top:2px;height:40px;display:flex;align-items:center;gap:8px;padding:0 10px 0 12px;background:var(--accent-tint);border-radius:8px}
 .bk-bar .btn{padding:4px 10px;font-size:12.5px}
 .bk-hd,.bk-r{display:grid;grid-template-columns:34px minmax(0,1fr) 96px 64px;align-items:center;height:32px;padding:0 8px 0 4px;column-gap:8px}
 .bk-nd .bk-hd,.bk-nd .bk-r{grid-template-columns:34px minmax(0,1fr) 96px}.bk-nd .bk-d{display:none}
@@ -358,12 +358,12 @@ atom({ id:'daterange', cat:'Status and records', name:'Date range selector', blo
   html:`<style>
 .dr{width:min(322px,92%);display:flex;flex-direction:column;gap:8px}
 .dr-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));position:relative;z-index:1}
-.dr-wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:22px;align-items:center;text-align:center;font-size:11.5px;color:var(--faint)}
+.dr-wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:22px;align-items:center;text-align:center;font-size:11.5px;color:var(--muted)}
 .dr-rows{position:relative}
 .dr-pl{position:absolute;inset:0;z-index:0;pointer-events:none}
 .dr-pl i{position:absolute;left:0;height:26px;background:var(--accent-tint)}
 .dr-d{position:relative;height:32px;border:0;background:none;padding:0;cursor:pointer;font-size:13px;font-variant-numeric:tabular-nums}
-.dr-d:disabled{cursor:default;color:var(--faint)}
+.dr-d:disabled{cursor:default;color:var(--muted)}
 .dr-c{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--accent)}
 .dr-n{position:relative}
 .dr-t{position:absolute;left:50%;bottom:3px;width:4px;height:4px;margin-left:-2px;border-radius:50%}
@@ -428,7 +428,7 @@ atom({ id:'scrubber', cat:'Status and records', name:'Timeline scrubber', block:
   html:`<style>
 .sc{position:absolute;left:12px;right:12px;top:12px;bottom:10px;display:flex;flex-direction:column;gap:10px}
 .sc-pn{flex:none;height:134px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px}
-.sc-as{font:12px var(--mono);color:var(--faint);height:16px}
+.sc-as{font:12px var(--mono);color:var(--muted);height:16px}
 .sc-sw{position:relative;height:88px;margin-top:4px}
 .sc-nr .sc-chip{display:none}
 .sc-sw>div{position:absolute;inset:0}
@@ -444,7 +444,7 @@ atom({ id:'scrubber', cat:'Status and records', name:'Timeline scrubber', block:
 .sc-dot{position:absolute;top:30px;width:10px;height:10px;margin-left:-5px;border-radius:50%;border:2px solid}
 .sc-th{position:absolute;top:25px;left:0;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--tile),var(--shadow)}
 .sc-ml{position:absolute;top:8px;font-size:11px;transform:translateX(-50%);white-space:nowrap}
-.sc-mo{position:absolute;top:48px;font-size:11px;color:var(--faint);padding-left:4px;white-space:nowrap}
+.sc-mo{position:absolute;top:48px;font-size:11px;color:var(--muted);padding-left:4px;white-space:nowrap}
 .sc-mk{position:absolute;top:40px;width:1px;height:6px;background:var(--line)}
 </style>
 <div class="sc"><div class="sc-pn card"><div style="min-width:0"><div class="sc-as"></div><div class="sc-sw"></div></div><div class="sc-st"><div><span>Co-sponsors</span><b class="sc-c1"></b></div><div><span>Days since filing</span><b class="sc-c2"></b></div></div></div>

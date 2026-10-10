@@ -5,7 +5,7 @@ atom({ id:'shipradio', cat:'Commerce', name:'Shipping method', block:'checkout, 
   init(st){
     const ops = $(st,'.ops'), O = [['Standard',4.9,'3–5 days'],['Express',12,'1–2 days'],['Overnight',24,'Tomorrow']];
     const eta = new Swap(0), it = O.map(([n,p,e],i) => { const b = document.createElement('button'); b.setAttribute('role','radio');
-      b.style.cssText = 'display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;padding:10px 12px;font-size:14px;text-align:left;min-height:52px';
+      b.style.cssText = 'display:flex;align-items:center;gap:10px;border-radius:9px;background:var(--raised);cursor:pointer;padding:10px 12px;font-size:14px;text-align:left;min-height:52px';
       b.innerHTML = `<span class="ring" style="position:relative;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;padding:0"><i style="width:10px;height:10px;border-radius:50%;background:var(--ink);transform:scale(0) translateY(.5px)"></i></span><span class="col" style="gap:2px"><b style="font-size:13px;font-weight:600;line-height:1.5">${n}${i === 0 ? ' <em class="pill" style="font-style:normal;font-size:12px;font-weight:600;background:var(--raised);border-radius:10px;padding:1px 8px;margin-left:6px">Free $75+</em>' : ''}</b><span class="small muted" style="font-size:12.5px">${e}</span></span><span class="pr num" style="margin-left:auto;font-size:15px;font-weight:600;font-variant-numeric:tabular-nums"></span>`;
       ops.appendChild(b); const d = { b, p:new Track(i === 0 ? 1 : 0), lift:new Track(0), price:p }; return d; });
     const delta = new Track(0), dl = $(st,'.dl');

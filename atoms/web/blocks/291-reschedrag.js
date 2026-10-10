@@ -8,7 +8,7 @@ atom({ id:'reschedrag', cat:'Scheduling', name:'Reschedule drag', block:'resched
     box.style.height = px(H);
     const ys = [], rows = times.map((tm,i) => {
       const r = document.createElement('div');
-      r.style.cssText = 'position:absolute;left:0;right:0;height:' + RH + 'px;border:1px solid var(--line);border-radius:10px;background:var(--card);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:13px';
+      r.style.cssText = 'position:absolute;left:0;right:0;height:' + RH + 'px;box-sizing:border-box;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);display:flex;align-items:center;gap:10px;padding:0 12px;font-size:13px';
       const a = document.createElement('span'); a.textContent = tm;
       a.style.cssText = 'font-size:12px;color:var(--ink);opacity:.55;width:64px;font-variant-numeric:tabular-nums';
       const b = document.createElement('span'); b.textContent = names[i];
@@ -17,10 +17,10 @@ atom({ id:'reschedrag', cat:'Scheduling', name:'Reschedule drag', block:'resched
     const chip = document.createElement('div');
     chip.style.cssText = 'position:absolute;left:0;right:0;height:' + RH + 'px;border-radius:10px;background:var(--accent);color:#fff;font-size:13px;cursor:grab;touch-action:none;overflow:hidden';
     const L = times.map(tm => { const s = document.createElement('span'); s.className = 'layer';
-      s.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;padding:0 12px;font-variant-numeric:tabular-nums';
-      s.textContent = 'Design review · ' + tm; chip.appendChild(s); return s; });
-    const custom = document.createElement('span'); custom.className = 'layer'; custom.textContent = 'Design review · custom';
-    custom.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;padding:0 12px'; chip.appendChild(custom);
+      s.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;gap:6px;padding:0 12px;font-variant-numeric:tabular-nums';
+      s.innerHTML = ic(I.check, 13, 2.5) + '<span>Design review · ' + tm + '</span>'; chip.appendChild(s); return s; });
+    const custom = document.createElement('span'); custom.className = 'layer'; custom.innerHTML = ic(I.check, 13, 2.5) + '<span>Design review · custom</span>';
+    custom.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;gap:6px;padding:0 12px'; chip.appendChild(custom);
     box.appendChild(chip);
     const sw = new Swap(1), cy = new Track(1*(RH+GAP));
     let home = 1, held = false, hy = 0, gapIdx = 1, snap = true;
