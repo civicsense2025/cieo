@@ -22,7 +22,7 @@ Renders null when `open` is false or omitted; the host owns open state. Escape c
 
 ## Motion
 
-Animates on rise via the `entering` behavior; `motion={false}` renders the end state instantly. Reduced motion (OS setting or `data-motion="reduced"`) always resolves end states. Still renders null when closed; the `exiting` choice applies once wave 2 wires presence behind these props.
+Springs in on open (`entering="rise"` default); the exit spring plays before unmounting on close. Reversal mid-flight is continuous (one shared spring retargets). `motion={false}` mounts/unmounts instantly. Reduced motion jumps to end states.
 
 ## Keyboard / accessibility
 
