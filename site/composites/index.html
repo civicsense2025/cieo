@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Composites · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/themes.css">
+<style>
+:root { color-scheme: light; }
+body {
+  margin: 0;
+  font-family: var(--cieo-font-sans);
+  background: var(--cieo-color-canvas);
+  color: var(--cieo-color-text);
+}
+.index { max-width: var(--cieo-container); margin-inline: auto; padding: var(--cieo-space-4); }
+.index-cards { display: grid; gap: var(--cieo-space-3); }
+.index-card {
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-surface);
+  padding: var(--cieo-space-3);
+}
+.index-card a { color: var(--cieo-color-accent); }
+:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+</style>
+</head>
+<body>
+<main class="index">
+<h1>Composites</h1>
+<p>Whole screens built only from the parts above — each doubles as proof the parts fit together.</p>
+<div class="index-cards">
+<section class="index-card" aria-labelledby="card-dashboard">
+<h2 id="card-dashboard">Admin dashboard</h2>
+<p>Track orders and adjust store settings from one admin screen. <a href="./dashboard.html">Open admin dashboard with settings</a></p>
+</section>
+<section class="index-card" aria-labelledby="card-storefront">
+<h2 id="card-storefront">Storefront</h2>
+<p>Inspect the product, set quantity, and complete checkout in one flow. <a href="./storefront.html">Open storefront product page with checkout</a></p>
+</section>
+<section class="index-card" aria-labelledby="card-chat">
+<h2 id="card-chat">AI chat</h2>
+<p>Hold a threaded conversation in a workspace that answers locally. <a href="./chat.html">Open AI chat workspace</a></p>
+</section>
+<section class="index-card" aria-labelledby="card-booking">
+<h2 id="card-booking">Booking</h2>
+<p>Choose a day and time, share details, and receive a reference. <a href="./booking.html">Open scheduling and booking flow</a></p>
+</section>
+</div>
+</main>
+</body>
+</html>
