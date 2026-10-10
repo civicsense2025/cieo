@@ -1,0 +1,8 @@
+/* design/styles/primitives/calendar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: var(--cieo-space-1); min-inline-size: 0; }
+  :where(.cieo) .cieo-p-calendar-weekday { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); text-align: center; }
+  :where(.cieo) .cieo-p-calendar-blank { min-block-size: var(--cieo-control-small); }
+  :where(.cieo) .cieo-p-calendar-day { border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); min-block-size: var(--cieo-control-small); }
+  :where(.cieo) .cieo-p-calendar-day[aria-pressed='true'] { border-color: var(--cieo-color-accent); background: var(--cieo-color-accent-soft); color: var(--cieo-color-text); }
+}
