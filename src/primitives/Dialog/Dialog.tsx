@@ -2,9 +2,10 @@
 'use client';
 /* Dialog. Controlled modal panel over a scrim. Renders null when closed; host owns open state. */
 import type { KeyboardEvent, ReactNode } from 'react';
+import { motionAttrs, type MotionProps } from '../motion.js';
 import { Overlay } from '../Overlay/Overlay.js';
 
-export interface DialogProps {
+export interface DialogProps extends MotionProps {
   /** Accessible name for the dialog (e.g. "Rename file"). Required. */
   label: string;
   /** Whether the dialog is open. Renders null when false or omitted. */
@@ -14,7 +15,7 @@ export interface DialogProps {
   children: ReactNode;
 }
 
-export function Dialog({ label, open, onClose, children }: DialogProps) {
+export function Dialog({ label, open, onClose, children, motion, entering = 'rise', exiting = 'rise' }: DialogProps) {
   if (!open) return null;
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Escape') onClose?.();
@@ -22,7 +23,7 @@ export function Dialog({ label, open, onClose, children }: DialogProps) {
   return (
     <>
       <Overlay />
-      <div role="dialog" aria-modal="true" aria-label={label} onKeyDown={onKeyDown} className="cieo cieo-dialog">
+      <div role="dialog" aria-modal="true" aria-label={label} onKeyDown={onKeyDown} className="cieo cieo-dialog" {...motionAttrs({ motion, entering, exiting })}>
         {children}
       </div>
     </>

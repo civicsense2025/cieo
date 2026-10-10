@@ -2,9 +2,10 @@
 'use client';
 /* BottomSheet. Bottom-anchored dialog over a scrim. Renders null when closed; host owns open state. */
 import type { KeyboardEvent, ReactNode } from 'react';
+import { motionAttrs, type MotionProps } from '../motion.js';
 import { Overlay } from '../Overlay/Overlay.js';
 
-export interface BottomSheetProps {
+export interface BottomSheetProps extends MotionProps {
   /** Accessible name for the sheet (e.g. "Share options"). Required. */
   label: string;
   /** Whether the sheet is open. Renders null when false or omitted. */
@@ -14,7 +15,7 @@ export interface BottomSheetProps {
   children: ReactNode;
 }
 
-export function BottomSheet({ label, open, onClose, children }: BottomSheetProps) {
+export function BottomSheet({ label, open, onClose, children, motion, entering = 'rise', exiting = 'rise' }: BottomSheetProps) {
   if (!open) return null;
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Escape') onClose?.();
@@ -22,7 +23,7 @@ export function BottomSheet({ label, open, onClose, children }: BottomSheetProps
   return (
     <>
       <Overlay />
-      <div role="dialog" aria-modal="true" aria-label={label} data-side="bottom" onKeyDown={onKeyDown} className="cieo cieo-bottom-sheet">
+      <div role="dialog" aria-modal="true" aria-label={label} data-side="bottom" onKeyDown={onKeyDown} className="cieo cieo-bottom-sheet" {...motionAttrs({ motion, entering, exiting })}>
         {children}
       </div>
     </>
