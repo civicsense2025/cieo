@@ -14,6 +14,17 @@ body {
   background: var(--cieo-color-canvas);
   color: var(--cieo-color-text);
 }
+.dash-skip {
+  position: absolute;
+  inset-inline-start: var(--cieo-space-3);
+  top: -120px;
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  border-radius: var(--cieo-radius-control);
+  background: var(--cieo-color-accent);
+  color: var(--cieo-color-on-accent);
+  z-index: 1;
+}
+.dash-skip:focus { top: var(--cieo-space-2); }
 .dash { display: flex; }
 .dash-nav {
   width: max-content;
@@ -39,6 +50,7 @@ body {
   border-color: var(--cieo-color-accent);
 }
 .dash-main { flex: 1; padding: var(--cieo-space-4); max-width: var(--cieo-container); }
+.dash-main a { color: var(--cieo-color-accent); }
 .dash-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--cieo-space-3); margin-block-end: var(--cieo-space-4); }
 .dash-card {
   background: var(--cieo-color-surface);
@@ -62,8 +74,29 @@ body {
 table { width: 100%; border-collapse: collapse; background: var(--cieo-color-surface); }
 caption { text-align: start; font-weight: bold; margin-block-end: var(--cieo-space-2); }
 th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+.dash-sort {
+  font: inherit;
+  font-weight: 700;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  cursor: pointer;
+}
+.dash-sort:disabled { opacity: .55; cursor: default; }
+.dash-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cieo-space-2) var(--cieo-space-3);
+  align-items: end;
+  margin-block-end: var(--cieo-space-2);
+}
+.dash-toolbar .dash-field { margin-block-end: 0; min-width: min(100%, 220px); }
 .dash-field { display: grid; gap: var(--cieo-space-1); margin-block-end: var(--cieo-space-3); }
-.dash-field input[type="text"] {
+.dash-field input[type="text"],
+.dash-field input[type="search"],
+.dash-field input[type="email"],
+.dash-field select {
   font: inherit;
   color: var(--cieo-color-text);
   background: var(--cieo-color-surface);
@@ -72,10 +105,22 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
   padding: var(--cieo-space-2) var(--cieo-space-3);
   min-height: var(--cieo-control-height);
 }
+.dash-field input[aria-invalid="true"] { border-color: var(--cieo-color-danger); }
+.dash-field input:disabled, .dash-field select:disabled { opacity: .55; }
+.dash-error { margin: 0; color: var(--cieo-color-danger); }
+.dash-form-error {
+  margin-block-end: var(--cieo-space-3);
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-danger-soft);
+  color: var(--cieo-color-danger);
+  border: var(--cieo-border-width) solid var(--cieo-color-danger);
+  border-radius: var(--cieo-radius-surface);
+}
 .dash-check { display: flex; align-items: center; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
 .dash-check input { accent-color: var(--cieo-color-accent); }
 .dash-range { display: flex; align-items: center; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
 .dash-range input { accent-color: var(--cieo-color-accent); }
+.dash-actions { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); align-items: center; }
 .dash-save {
   font: inherit;
   padding: var(--cieo-space-2) var(--cieo-space-4);
@@ -86,6 +131,17 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
   color: var(--cieo-color-on-accent);
   cursor: pointer;
 }
+.dash-btn {
+  font: inherit;
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  min-height: var(--cieo-control-height);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-control);
+  background: var(--cieo-color-surface);
+  color: var(--cieo-color-text);
+  cursor: pointer;
+}
+.dash-btn:disabled { opacity: .55; cursor: default; }
 .dash-saved {
   margin-block-start: var(--cieo-space-3);
   padding: var(--cieo-space-3);
@@ -94,9 +150,39 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
   border: var(--cieo-border-width) solid var(--cieo-color-success);
   border-radius: var(--cieo-radius-surface);
 }
+.dash-status {
+  margin-block-start: var(--cieo-space-3);
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-info-soft);
+  color: var(--cieo-color-info);
+  border: var(--cieo-border-width) solid var(--cieo-color-info);
+  border-radius: var(--cieo-radius-surface);
+}
+.dash-count { color: var(--cieo-color-muted); }
+.dash-empty {
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-surface);
+  padding: var(--cieo-space-4);
+  margin-block-end: var(--cieo-space-3);
+}
+.dash-empty h3 { margin: 0 0 var(--cieo-space-1); }
+.dash-empty p { margin: 0 0 var(--cieo-space-2); color: var(--cieo-color-muted); }
+.dash-loading p { margin: 0 0 var(--cieo-space-2); color: var(--cieo-color-muted); }
+.dash-skel { display: grid; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
+.dash-skel span {
+  display: block;
+  height: var(--cieo-space-3);
+  background: var(--cieo-color-accent-soft);
+  border-radius: var(--cieo-radius-control);
+}
+.dash-skel span:nth-child(2) { width: 82%; }
+.dash-skel span:nth-child(3) { width: 64%; }
 .dash-built { margin-block-start: var(--cieo-space-4); }
 .dash-built ul { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
 .dash-built a { color: var(--cieo-color-accent); }
+.dash-related { margin-block-start: var(--cieo-space-4); }
+.dash-related ul { display: grid; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
 :focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0s; animation-duration: 0s; }
@@ -104,12 +190,13 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 </style>
 </head>
 <body>
+<a class="dash-skip" href="#dash-main">Skip to main content</a>
 <header>
 <p><a href="./index.html">Composites</a></p>
 <h1>Admin dashboard</h1>
 <p>Track orders and adjust store settings; built only from shipped parts.</p>
 </header>
-<div class="dash" data-parts="AppShell SideNav SideNavItem Card Badge Table TableHeader TableBody TableRow TableCell Field Slider Banner Heading Text">
+<div class="dash" data-parts="AppShell SideNav SideNavItem Card Badge Table TableHeader TableBody TableRow TableCell Field FieldStatus Slider Banner EmptyState Skeleton Heading Text">
 <nav class="dash-nav" aria-label="Store sections">
 <ul>
 <li><button type="button" data-nav="overview" aria-current="page">Overview</button></li>
@@ -117,7 +204,7 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <li><button type="button" data-nav="settings">Settings</button></li>
 </ul>
 </nav>
-<main class="dash-main">
+<main class="dash-main" id="dash-main">
 <section data-panel="overview" aria-label="Overview">
 <div class="dash-cards">
 <div class="dash-card"><p>Revenue</p><strong>$48,210</strong><span class="dash-badge" data-tone="success">+12%</span></div>
@@ -137,13 +224,52 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <tr><td>#1037</td><td>Ava Patel</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
 </tbody>
 </table>
+<p><button class="dash-btn" type="button" data-goto="orders">See all orders</button></p>
+<p>New here? Preview the buyer flow in the <a href="./storefront.html">storefront</a>.</p>
 </section>
 <section data-panel="orders" aria-label="Orders" hidden>
-<h2>Orders</h2>
-<table>
+<h2 tabindex="-1">Orders</h2>
+<div class="dash-toolbar">
+<div class="dash-field">
+<label for="dash-search">Search orders</label>
+<input id="dash-search" type="search" data-orders-search placeholder="Order number or customer" autocomplete="off">
+</div>
+<div class="dash-field">
+<label for="dash-status">Status</label>
+<select id="dash-status" data-orders-status>
+<option value="all">All statuses</option>
+<option value="Paid">Paid</option>
+<option value="Pending">Pending</option>
+<option value="Refunded">Refunded</option>
+</select>
+</div>
+<button class="dash-btn" type="button" data-orders-refresh>Refresh orders</button>
+<button class="dash-btn" type="button" data-empty-demo>Preview empty state</button>
+</div>
+<p class="dash-count" role="status" data-orders-count>Showing 5 of 5 orders.</p>
+<div class="dash-loading" role="status" data-orders-loading hidden>
+<p>Refreshing orders…</p>
+<div class="dash-skel" aria-hidden="true"><span></span><span></span><span></span></div>
+</div>
+<div class="dash-empty" data-empty-results hidden>
+<h3>No matching orders</h3>
+<p>Nothing fits that search or status. Loosen the filters to see more.</p>
+<p><button class="dash-btn" type="button" data-clear-filters>Clear search and filters</button></p>
+</div>
+<div class="dash-empty" data-empty-orders hidden>
+<h3>No orders yet</h3>
+<p>New orders will land here. Preview the buyer flow in the <a href="./storefront.html">storefront</a>.</p>
+<p><button class="dash-btn" type="button" data-restore-orders>Restore demo orders</button></p>
+</div>
+<table data-orders-table>
 <caption>Orders</caption>
-<thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
-<tbody>
+<thead><tr>
+<th scope="col" aria-sort="descending"><button type="button" class="dash-sort" data-sort="order">Order <span aria-hidden="true" data-arrow>↓</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" class="dash-sort" data-sort="customer">Customer <span aria-hidden="true" data-arrow></span></button></th>
+<th scope="col" aria-sort="none"><button type="button" class="dash-sort" data-sort="total">Total <span aria-hidden="true" data-arrow></span></button></th>
+<th scope="col" aria-sort="none"><button type="button" class="dash-sort" data-sort="status">Status <span aria-hidden="true" data-arrow></span></button></th>
+</tr></thead>
+<tbody data-orders-body>
 <tr><td>#1041</td><td>Amara Okafor</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
 <tr><td>#1040</td><td>Liam Chen</td><td>$296.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
 <tr><td>#1039</td><td>Sofia Reyes</td><td>$74.00</td><td><span class="dash-badge" data-tone="danger">Refunded</span></td></tr>
@@ -151,12 +277,21 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <tr><td>#1037</td><td>Ava Patel</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
 </tbody>
 </table>
+<p>Visits tied to an order are scheduled in the <a href="./booking.html">booking flow</a>.</p>
 </section>
 <section data-panel="settings" aria-label="Settings" hidden>
 <h2>Settings</h2>
+<form data-settings-form novalidate>
+<div class="dash-form-error" role="alert" data-settings-error hidden>Fix the highlighted fields, then save again.</div>
 <div class="dash-field">
 <label for="dash-store">Store name</label>
-<input id="dash-store" type="text" data-setting="store" value="Drift Goods">
+<input id="dash-store" type="text" data-setting="store" value="Drift Goods" maxlength="40" aria-describedby="dash-store-error">
+<p class="dash-error" id="dash-store-error" data-error="store" hidden>Give the store a name of at least 2 characters.</p>
+</div>
+<div class="dash-field">
+<label for="dash-contact">Support reply-to (optional)</label>
+<input id="dash-contact" type="email" data-setting="contact" value="" placeholder="help@example.com" autocomplete="email" aria-describedby="dash-contact-error">
+<p class="dash-error" id="dash-contact-error" data-error="contact" hidden>That reply-to needs an @ sign, or leave it blank.</p>
 </div>
 <div class="dash-check">
 <input id="dash-notify" type="checkbox" role="switch" data-setting="notify" checked>
@@ -165,19 +300,38 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <div class="dash-field">
 <label for="dash-threshold">Low-stock threshold</label>
 <div class="dash-range">
-<input id="dash-threshold" type="range" min="0" max="50" value="12" data-setting="threshold">
+<input id="dash-threshold" type="range" min="0" max="50" value="12" data-setting="threshold" aria-describedby="dash-threshold-error">
 <output data-readout for="dash-threshold">12 units</output>
 </div>
+<p class="dash-error" id="dash-threshold-error" data-error="threshold" hidden>Pick a threshold between 0 and 50.</p>
 </div>
-<button class="dash-save" type="button" data-save>Save settings</button>
+<div class="dash-actions">
+<button class="dash-save" type="submit" data-save>Save settings</button>
+<button class="dash-btn" type="button" data-discard>Discard changes</button>
+</div>
+</form>
 <div class="dash-saved" role="status" data-saved hidden>Settings saved.</div>
+<p class="dash-status" role="status" data-settings-status hidden></p>
+<p>Not sure about a threshold? Talk it through in the <a href="./chat.html">chat demo</a>.</p>
 </section>
 <section aria-label="Behavior">
 <h2>Behavior</h2>
 <ul>
-<li>Section buttons switch Overview, Orders, and Settings panels with the current marker moving.</li>
-<li>Settings persist under the cieo-dashboard-settings key and survive reload, including private mode.</li>
+<li>Section buttons switch Overview, Orders, and Settings panels with the current marker moving. Arrow keys, Home, and End move between sections.</li>
+<li>Orders can be searched, filtered by status, and sorted from any column header; the count line reports what is shown.</li>
+<li>Refresh shows a loading state before re-rendering. Clearing the filters restores the list, and the demo can preview and restore the empty state.</li>
+<li>Settings validate before saving: the store needs a name and a filled reply-to needs an @ sign. Errors flag inline and focus moves to the first one.</li>
+<li>Settings persist under the cieo-dashboard-settings key and survive reload, including private mode. Discard returns the form to the last saved values.</li>
 <li>Save confirms visibly; editing again hides the confirmation until the next save.</li>
+<li>Escape clears the order search. Enter inside a settings field saves.</li>
+</ul>
+</section>
+<section class="dash-related" aria-label="Related flows">
+<h2>Related flows</h2>
+<ul>
+<li><a href="./storefront.html">Storefront</a> — the buyer side that creates the orders listed here.</li>
+<li><a href="./chat.html">Chat</a> — talk through store settings with the local demo assistant.</li>
+<li><a href="./booking.html">Booking</a> — schedule the visits tied to these orders.</li>
 </ul>
 </section>
 <section class="dash-built" data-built-from aria-label="Built from">
@@ -195,8 +349,11 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <li><a href="../components/TableRow.html">TableRow</a></li>
 <li><a href="../components/TableCell.html">TableCell</a></li>
 <li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
 <li><a href="../components/Slider.html">Slider</a></li>
 <li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/EmptyState.html">EmptyState</a></li>
+<li><a href="../components/Skeleton.html">Skeleton</a></li>
 <li><a href="../components/Heading.html">Heading</a></li>
 <li><a href="../components/Text.html">Text</a></li>
 </ul>

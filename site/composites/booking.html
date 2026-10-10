@@ -14,6 +14,8 @@
 .booking-day{aspect-ratio:1;cursor:pointer}
 .booking-day[disabled]{cursor:not-allowed}
 .booking-slot{display:block;padding:var(--cieo-space-2)}
+.booking-actions{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2)}
+[aria-invalid="true"]{outline:2px solid var(--cieo-color-danger,#b3261e)}
 @media (prefers-reduced-motion:reduce){.booking-layout *{animation:none;transition:none}}
 </style>
 </head>
@@ -21,9 +23,9 @@
 <header class="booking-layout">
 <p><a href="./index.html">Composites</a></p>
 <h1 class="cieo-p-heading">Book a visit</h1>
-<p class="cieo-p-text">Pick a day, choose a time, leave your details. Whole screen built only from shipped parts.</p>
+<p class="cieo-p-text">Pick a day, choose a time, leave your details — then look up, move, or cancel the visit. Whole screen built only from shipped parts.</p>
 </header>
-<main class="booking-layout" data-parts="Stepper Step Calendar RadioList RadioListItem Field Card MetadataList EmptyState Banner Heading Text">
+<main class="booking-layout" data-parts="Stepper Step Calendar RadioList RadioListItem Field FieldStatus Card MetadataList EmptyState Banner Heading Text List ListItem Badge">
 <div class="booking-grid" data-booking-form>
 <div>
 <section aria-label="Booking steps">
@@ -32,10 +34,13 @@
 <li class="cieo-step" data-step="day" aria-current="step"><span>Day</span></li>
 <li class="cieo-step" data-step="time"><span>Time</span></li>
 <li class="cieo-step" data-step="details"><span>Details</span></li>
+<li class="cieo-step" data-step="confirm"><span>Confirm</span></li>
+<li class="cieo-step" data-step="manage"><span>Manage</span></li>
 </ol>
 </section>
 <section aria-labelledby="calendar-heading">
-<h2 class="cieo-p-heading" id="calendar-heading">October 2026</h2>
+<h2 class="cieo-p-heading" id="calendar-heading" tabindex="-1" data-calendar-heading>October 2026</h2>
+<p class="cieo cieo-p-field-status" role="alert" data-day-error id="booking-day-error" hidden>Choose a day first — the house is closed Sundays.</p>
 <div class="cieo-p-calendar" data-calendar role="group" aria-label="October 2026">
 <span class="cieo-p-calendar-weekday">Su</span><span class="cieo-p-calendar-weekday">Mo</span><span class="cieo-p-calendar-weekday">Tu</span><span class="cieo-p-calendar-weekday">We</span><span class="cieo-p-calendar-weekday">Th</span><span class="cieo-p-calendar-weekday">Fr</span><span class="cieo-p-calendar-weekday">Sa</span>
 <div class="booking-days">
@@ -76,6 +81,7 @@
 </section>
 <section aria-labelledby="times-heading">
 <h2 class="cieo-p-heading" id="times-heading">Times</h2>
+<p class="cieo cieo-p-field-status" role="alert" data-slot-error id="booking-slot-error" hidden>Pick a time to continue — Saturdays run mornings only.</p>
 <fieldset class="cieo-p-radio-list" data-slots>
 <legend>Times</legend>
 <div class="cieo cieo-p-empty-state" data-slots-empty>
@@ -89,10 +95,12 @@
 <div class="cieo-p-field">
 <label for="booking-name">Name</label>
 <input id="booking-name" name="name" type="text" autocomplete="name" data-name>
+<p class="cieo cieo-p-field-status" role="alert" data-name-error id="booking-name-error" hidden>Add your name so the visit is held for you.</p>
 </div>
 <div class="cieo-p-field">
 <label for="booking-email">Email</label>
 <input id="booking-email" name="email" type="email" autocomplete="email" data-email>
+<p class="cieo cieo-p-field-status" role="alert" data-email-error id="booking-email-error" hidden>Add an email like you@example.com so the confirmation reaches you.</p>
 </div>
 </section>
 <button type="button" data-confirm disabled>Confirm booking</button>
@@ -116,7 +124,49 @@
 <div class="cieo cieo-p-banner">
 <p class="cieo-p-banner-title">Booked.</p>
 </div>
-<p class="cieo-p-text">Your reference is <span data-reference>—</span>.</p>
+<p class="cieo-p-text">Your reference is <span data-reference>—</span>. <span class="cieo cieo-badge" data-status="success" data-booking-status>Upcoming visit</span></p>
+<p class="cieo-p-text" data-success-note hidden></p>
+<p class="booking-actions"><button type="button" data-reschedule>Change day or time</button> <button type="button" data-cancel>Cancel this visit</button></p>
+<div class="cieo cieo-p-banner" data-cancel-confirm hidden>
+<p class="cieo-p-banner-title">Cancel this visit?</p>
+<p class="cieo-p-text">The slot opens for someone else. Press Escape or Keep it to hold the visit.</p>
+<p class="booking-actions"><button type="button" data-cancel-yes>Yes, cancel it</button> <button type="button" data-cancel-no>Keep it</button></p>
+</div>
+</section>
+<section class="cieo-card" data-cancelled hidden>
+<h2 tabindex="-1" data-cancelled-heading>Booking cancelled</h2>
+<div class="cieo cieo-p-banner">
+<p class="cieo-p-banner-title">Booking cancelled.</p>
+</div>
+<p class="cieo-p-text">Reference <span data-cancelled-ref>—</span> no longer holds a slot. <span class="cieo cieo-badge" data-status="danger">Cancelled visit</span></p>
+<p class="booking-actions"><button type="button" data-book-again>Book a new visit</button></p>
+</section>
+<section class="cieo-card" aria-labelledby="visits-heading">
+<h2 class="cieo-p-heading" id="visits-heading">Your visits</h2>
+<p class="cieo-p-text">Demo visits live on this page only. Anything you book joins the list; visits before 10 October 2026 read as past.</p>
+<ul class="cieo cieo-p-list" data-visits aria-label="Your visits">
+<li class="cieo-p-list-item" data-visit data-visit-day="2026-10-21" data-visit-ref="BK-20261021-1030-AO"><span class="cieo cieo-badge" data-status="success">Upcoming visit</span> 21 October 2026 at 10:30 — ref BK-20261021-1030-AO</li>
+<li class="cieo-p-list-item" data-visit data-visit-day="2026-09-18" data-visit-ref="BK-20260918-1300-AO"><span class="cieo cieo-badge" data-status="default">Past visit</span> 18 September 2026 at 13:00 — ref BK-20260918-1300-AO</li>
+</ul>
+</section>
+<section class="cieo-card" aria-labelledby="lookup-heading">
+<h2 class="cieo-p-heading" id="lookup-heading">Find a booking</h2>
+<p class="cieo-p-text">Type a reference exactly as shown, for example BK-20261021-1030-AO. Reading happens on this page — nothing is sent anywhere.</p>
+<div class="cieo-p-field">
+<label for="booking-lookup">Booking reference</label>
+<input id="booking-lookup" name="reference" type="text" autocomplete="off" spellcheck="false" placeholder="BK-20261021-1030-AO" data-lookup>
+<p class="cieo cieo-p-field-status" role="alert" data-lookup-error id="booking-lookup-error" hidden>We cannot read that reference — check the letters and try again.</p>
+</div>
+<p class="booking-actions"><button type="button" data-lookup-go>Look up</button></p>
+<div data-lookup-panel hidden>
+<h3 tabindex="-1" data-lookup-heading>Booking found</h3>
+<dl class="cieo-metadata-list" data-lookup-result>
+<div><dt>Day</dt><dd data-lookup-day>—</dd></div>
+<div><dt>Time</dt><dd data-lookup-time>—</dd></div>
+<div><dt>Holder</dt><dd data-lookup-holder>—</dd></div>
+<div><dt>Status</dt><dd data-lookup-status>—</dd></div>
+</dl>
+</div>
 </section>
 <section aria-label="Behavior">
 <h2 class="cieo-p-heading">Behavior</h2>
@@ -124,6 +174,18 @@
 <li>Sundays have no slots — pick another day; Saturdays offer two morning times.</li>
 <li>Summary and confirm unlock as day, slot, name, and a valid email land.</li>
 <li>Confirm hides the form, announces success, and moves focus to it; the reference encodes day, time, and initials.</li>
+<li>Day, time, name, and email each raise their own fix-it note the moment they need attention.</li>
+<li>A confirmed visit can move to a new day or time, or cancel after a second confirming press; Escape keeps the visit.</li>
+<li>References read locally: any BK-YYYYMMDD-HHMM code resolves to its day and time, and visits before 10 October 2026 read as past.</li>
+<li>Keyboard path: Tab moves across days, arrow keys move across times, Enter runs the lookup, Escape steps back from cancelling.</li>
+</ul>
+</section>
+<section aria-label="Related screens">
+<h2 class="cieo-p-heading">Related screens</h2>
+<ul>
+<li><a href="./dashboard.html">Admin dashboard</a> — check the day's orders beside the visitor book.</li>
+<li><a href="./storefront.html">Storefront</a> — regulars often collect an order when they visit.</li>
+<li><a href="./chat.html">Chat workspace</a> — ask the desk anything before you book.</li>
 </ul>
 </section>
 <section data-built-from>
@@ -136,12 +198,16 @@
 <li><a href="../components/RadioList.html">RadioList</a></li>
 <li><a href="../components/RadioListItem.html">RadioListItem</a></li>
 <li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
 <li><a href="../components/Card.html">Card</a></li>
 <li><a href="../components/MetadataList.html">MetadataList</a></li>
 <li><a href="../components/EmptyState.html">EmptyState</a></li>
 <li><a href="../components/Banner.html">Banner</a></li>
 <li><a href="../components/Heading.html">Heading</a></li>
 <li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/List.html">List</a></li>
+<li><a href="../components/ListItem.html">ListItem</a></li>
+<li><a href="../components/Badge.html">Badge</a></li>
 </ul>
 </section>
 </main>
