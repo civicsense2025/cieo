@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<style>
+.booking-layout{display:grid;gap:var(--cieo-space-4);max-width:60rem;margin-inline:auto;padding:var(--cieo-space-4)}
+.booking-grid{display:grid;gap:var(--cieo-space-4)}
+@media (min-width:48rem){.booking-grid{grid-template-columns:2fr 1fr}}
+.booking-days{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--cieo-space-1)}
+.booking-day{aspect-ratio:1;cursor:pointer}
+.booking-day[disabled]{cursor:not-allowed}
+.booking-slot{display:block;padding:var(--cieo-space-2)}
+@media (prefers-reduced-motion:reduce){.booking-layout *{animation:none;transition:none}}
+</style>
+</head>
+<body class="cieo">
+<header class="booking-layout">
+<p><a href="./index.html">Composites</a></p>
+<h1 class="cieo-p-heading">Book a visit</h1>
+<p class="cieo-p-text">Pick a day, choose a time, leave your details. Whole screen built only from shipped parts.</p>
+</header>
+<main class="booking-layout" data-parts="Stepper Step Calendar RadioList RadioListItem Field Card MetadataList EmptyState Banner Heading Text">
+<div class="booking-grid" data-booking-form>
+<div>
+<section aria-label="Booking steps">
+<h2 class="cieo-p-heading">Steps</h2>
+<ol class="cieo-stepper" data-stepper>
+<li class="cieo-step" data-step="day" aria-current="step"><span>Day</span></li>
+<li class="cieo-step" data-step="time"><span>Time</span></li>
+<li class="cieo-step" data-step="details"><span>Details</span></li>
+</ol>
+</section>
+<section aria-labelledby="calendar-heading">
+<h2 class="cieo-p-heading" id="calendar-heading">October 2026</h2>
+<div class="cieo-p-calendar" data-calendar role="group" aria-label="October 2026">
+<span class="cieo-p-calendar-weekday">Su</span><span class="cieo-p-calendar-weekday">Mo</span><span class="cieo-p-calendar-weekday">Tu</span><span class="cieo-p-calendar-weekday">We</span><span class="cieo-p-calendar-weekday">Th</span><span class="cieo-p-calendar-weekday">Fr</span><span class="cieo-p-calendar-weekday">Sa</span>
+<div class="booking-days">
+<span class="cieo-p-calendar-blank" aria-hidden="true"></span><span class="cieo-p-calendar-blank" aria-hidden="true"></span><span class="cieo-p-calendar-blank" aria-hidden="true"></span><span class="cieo-p-calendar-blank" aria-hidden="true"></span>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-01" aria-pressed="false" aria-label="2026-10-01">1</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-02" aria-pressed="false" aria-label="2026-10-02">2</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-03" aria-pressed="false" aria-label="2026-10-03">3</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-04" disabled title="No slots Sundays" aria-label="2026-10-04, no slots">4</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-05" aria-pressed="false" aria-label="2026-10-05">5</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-06" aria-pressed="false" aria-label="2026-10-06">6</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-07" aria-pressed="false" aria-label="2026-10-07">7</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-08" aria-pressed="false" aria-label="2026-10-08">8</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-09" aria-pressed="false" aria-label="2026-10-09">9</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-10" aria-pressed="false" aria-label="2026-10-10">10</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-11" disabled title="No slots Sundays" aria-label="2026-10-11, no slots">11</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-12" aria-pressed="false" aria-label="2026-10-12">12</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-13" aria-pressed="false" aria-label="2026-10-13">13</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-14" aria-pressed="false" aria-label="2026-10-14">14</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-15" aria-pressed="false" aria-label="2026-10-15">15</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-16" aria-pressed="false" aria-label="2026-10-16">16</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-17" aria-pressed="false" aria-label="2026-10-17">17</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-18" disabled title="No slots Sundays" aria-label="2026-10-18, no slots">18</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-19" aria-pressed="false" aria-label="2026-10-19">19</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-20" aria-pressed="false" aria-label="2026-10-20">20</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-21" aria-pressed="false" aria-label="2026-10-21">21</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-22" aria-pressed="false" aria-label="2026-10-22">22</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-23" aria-pressed="false" aria-label="2026-10-23">23</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-24" aria-pressed="false" aria-label="2026-10-24">24</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-25" disabled title="No slots Sundays" aria-label="2026-10-25, no slots">25</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-26" aria-pressed="false" aria-label="2026-10-26">26</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-27" aria-pressed="false" aria-label="2026-10-27">27</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-28" aria-pressed="false" aria-label="2026-10-28">28</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-29" aria-pressed="false" aria-label="2026-10-29">29</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-30" aria-pressed="false" aria-label="2026-10-30">30</button>
+<button type="button" class="cieo-p-calendar-day booking-day" data-day="2026-10-31" aria-pressed="false" aria-label="2026-10-31">31</button>
+</div>
+</div>
+</section>
+<section aria-labelledby="times-heading">
+<h2 class="cieo-p-heading" id="times-heading">Times</h2>
+<fieldset class="cieo-p-radio-list" data-slots>
+<legend>Times</legend>
+<div class="cieo cieo-p-empty-state" data-slots-empty>
+<p class="cieo-p-empty-state-title">No slots on Sundays — pick another day.</p>
+<p class="cieo-p-empty-state-description">Choose a Monday to Saturday in October 2026 to see times.</p>
+</div>
+</fieldset>
+</section>
+<section aria-labelledby="details-heading">
+<h2 class="cieo-p-heading" id="details-heading">Details</h2>
+<div class="cieo-p-field">
+<label for="booking-name">Name</label>
+<input id="booking-name" name="name" type="text" autocomplete="name" data-name>
+</div>
+<div class="cieo-p-field">
+<label for="booking-email">Email</label>
+<input id="booking-email" name="email" type="email" autocomplete="email" data-email>
+</div>
+</section>
+<button type="button" data-confirm disabled>Confirm booking</button>
+<div class="cieo cieo-p-banner" data-book-error hidden>
+<p class="cieo-p-banner-title">Add a valid email.</p>
+</div>
+</div>
+<aside aria-label="Summary">
+<section class="cieo-card">
+<h2 class="cieo-p-heading">Your booking</h2>
+<dl class="cieo-metadata-list" data-summary>
+<div><dt>Day</dt><dd data-summary-day>—</dd></div>
+<div><dt>Time</dt><dd data-summary-time>—</dd></div>
+<div><dt>Name</dt><dd data-summary-name>—</dd></div>
+</dl>
+</section>
+</aside>
+</div>
+<section class="cieo-card" data-success hidden>
+<div class="cieo cieo-p-banner">
+<p class="cieo-p-banner-title">Booked.</p>
+</div>
+<p class="cieo-p-text">Your reference is <span data-reference>—</span>.</p>
+</section>
+<section data-built-from>
+<h2 class="cieo-p-heading">Built from</h2>
+<ul>
+<li><a href="../components/Stepper.html">Stepper</a></li>
+<li><a href="../components/Step.html">Step</a></li>
+<li><a href="../components/Calendar.html">Calendar</a></li>
+<li><a href="../components/RadioList.html">RadioList</a></li>
+<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/EmptyState.html">EmptyState</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+</ul>
+</section>
+</main>
+<script src="./booking.js" defer></script>
+</body>
+</html>
