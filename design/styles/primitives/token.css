@@ -1,0 +1,10 @@
+/* design/styles/primitives/token.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-token {
+    display: inline-block; padding: var(--cieo-space-0) var(--cieo-space-2);
+    font-size: var(--cieo-text-small); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-medium);
+    color: var(--cieo-color-text); background: var(--cieo-color-sunken);
+    border-radius: var(--cieo-radius-pill); white-space: nowrap;
+  }
+  :where(.cieo).cieo-p-token[data-tone='accent'] { color: var(--cieo-color-on-accent-soft); background: var(--cieo-color-accent-soft); }
+}

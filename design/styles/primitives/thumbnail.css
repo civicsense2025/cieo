@@ -1,0 +1,11 @@
+/* design/styles/primitives/thumbnail.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-thumbnail {
+    display: block; aspect-ratio: 1 / 1; object-fit: cover; flex: none;
+    inline-size: 4rem; block-size: 4rem;
+    border-radius: var(--cieo-radius-small); border: 1px solid var(--cieo-color-border);
+    background: var(--cieo-color-sunken);
+  }
+  :where(.cieo).cieo-p-thumbnail[data-size='sm'] { inline-size: 2.5rem; block-size: 2.5rem; }
+  :where(.cieo).cieo-p-thumbnail[data-size='lg'] { inline-size: 6rem; block-size: 6rem; }
+}

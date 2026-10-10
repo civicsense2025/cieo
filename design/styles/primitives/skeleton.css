@@ -1,0 +1,17 @@
+/* design/styles/primitives/skeleton.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-skeleton { display: block; }
+  :where(.cieo) .cieo-p-skeleton-lines { display: flex; flex-direction: column; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-p-skeleton-line {
+    display: block; block-size: 0.75rem; border-radius: var(--cieo-radius-small);
+    background: var(--cieo-color-sunken); animation: cieo-p-skeleton-pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes cieo-p-skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  :where(.cieo) .cieo-p-skeleton-label {
+    position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden;
+    clip-path: inset(50%); white-space: nowrap;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-p-skeleton-line { animation: none; }
+  }
+}
