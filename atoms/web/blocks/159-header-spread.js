@@ -32,10 +32,10 @@ const PAGE = (top = 0, lead = '') => `<main class="hx-ar" style="padding-top:cal
 <h2>Built for the person who also answers support</h2><p>There is no ledger jargon in the interface. Each screen tells you what needs a decision and what has already been handled.</p><p>Invite your accountant for free and they see exactly what you see, with their own notes.</p></main>`;
 const SEG = (key, label, opts, aria) => `<div class="hx-cg" data-k="${key}"><span class="hx-cl">${label}</span><div class="seg" role="group" aria-label="${aria}"><div class="ind"></div>${opts.map(o => `<button type="button">${o}</button>`).join('')}</div></div>`;
 const ctl = (c = {}) => `<div class="hx-ct">${SEG('auth','Account',['Signed out','Signed in'],'Account state')}${SEG('cta','Call to action',['Primary','Ghost','Link'],'Call to action style')}${c.align ? SEG('align', c.label || 'Links', c.align, 'Link alignment') : ''}${c.extra || ''}</div>`;
-const shell = (pg, c, fr = '') => `<div class="hx"><div class="hx-fr"><div class="hx-pg" tabindex="0" aria-label="Scrollable sample page">${pg}</div>${fr}</div>${ctl(c)}</div>`;
+const shell = (pg, c, fr = '') => `<div class="hx-shell"><div class="hx-fr"><div class="hx-pg" tabindex="0" aria-label="Scrollable sample page">${pg}</div>${fr}</div>${ctl(c)}</div>`;
 
 document.head.insertAdjacentHTML('beforeend', `<style id="hx-shared">
-.hx{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:10px 12px;text-align:left;container-type:inline-size;font-size:14px}
+.hx-shell{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;padding:10px 12px;text-align:left;container-type:inline-size;font-size:14px}
 .hx-fr{position:relative;flex:1;min-height:0;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;isolation:isolate}
 .hx-pg{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin}
 .hx-ct{flex:none;display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
