@@ -28,7 +28,8 @@ const STRICT = args.includes('--strict');
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`usage: node scripts/check-recipes.mjs [--strict]
   (a) trailing plain-text hint divs  (b) font-size >= 50px allowlist
-  (c) clickable-div WARN triage list. --strict applies the literal
+  (c) clickable-div WARN triage list  (d) cross-file class collisions.
+  --strict applies the literal
   /<div class="hint">[^<]*<\\/div>\\s*$/ regex to every hint field.`);
   process.exit(0);
 }
@@ -113,11 +114,11 @@ function htmlFields(src) {
     const q = src[i];
     if (q === '`') {
       const t = scanTemplate(src, i + 1);
-      fields.push({ kind: 'template', text: t.text, at: fieldAt });
+      fields.push({ kind: 'template', text: t.text, at: fieldAt, start: i, end: t.end });
       re.lastIndex = t.end;
     } else if (q === '"' || q === "'") {
       const t = scanQuoted(src, i + 1, q);
-      fields.push({ kind: 'quoted', text: t.text, at: fieldAt });
+      fields.push({ kind: 'quoted', text: t.text, at: fieldAt, start: i, end: t.end });
       re.lastIndex = t.end;
     } else {
       fields.push({ kind: 'dynamic', text: src.slice(i, i + 60).split('\n')[0], at: fieldAt });
@@ -201,9 +202,11 @@ for (const rel of blocks) {
 
 // (b) large-type rule ----------------------------------------------------
 let allowlist = [];
+let styleAllow = new Set();
 try {
   const raw = JSON.parse(fs.readFileSync(path.join(root, 'scripts/recipe-allowlist.json'), 'utf8'));
   allowlist = Array.isArray(raw) ? raw : (raw.files ?? raw.allowlist ?? []);
+  if (!Array.isArray(raw) && Array.isArray(raw.style)) styleAllow = new Set(raw.style);
 } catch {
   allowlist = [];
 }
@@ -298,15 +301,159 @@ for (const rel of blocks) {
   }
 }
 
+// (d) cross-file class collisions -----------------------------------------
+// Recipe <style> blocks share one document on unscoped surfaces, and
+// head-injected styles (<style> outside any html: field, e.g. via
+// insertAdjacentHTML) escape even the collection surface's per-tile scoping.
+// Two shapes FAIL:
+//  (d1) same bare selector with disjoint declaration sets across 2+ files
+//       (same-file repeats are responsive overrides, not collisions;
+//       identical bodies everywhere are shared convention, not collisions).
+//  (d2) class used in block X, styled nowhere in X nor shared CSS, while a
+//       HEAD-INJECTED style in another file defines it with layout props.
+//       (Head injection bypasses per-tile scoping on every surface.)
+// Anything else suspicious (usage vs foreign field-style defs) is WARN
+// triage: unscoped surfaces concat everything, but most of it is either
+// intentional sharing or scoped-safe on the primary surface.
+const LAYOUT_PROPS = /\b(position|display|float|width|height|padding|margin|inset|top|left|right|bottom|overflow|flex|grid|transform|z-index|place-|align-|justify-|gap|order|container-type)\s*:/;
+function splitSelectors(group) {
+  // Split a selector group on top-level commas (parens/brackets respected).
+  const out = [];
+  let depth = 0, start = 0;
+  for (let i = 0; i < group.length; i += 1) {
+    const c = group[i];
+    if (c === '(' || c === '[') depth += 1;
+    else if (c === ')' || c === ']') depth -= 1;
+    else if (c === ',' && depth === 0) { out.push(group.slice(start, i)); start = i + 1; }
+  }
+  out.push(group.slice(start));
+  return out.map((s) => s.trim()).filter(Boolean);
+}
+function bareRuleEntries(css) {
+  // [selector, body] for bare .cls rules, incl. comma groups + nested matches.
+  const out = [];
+  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const r of clean.matchAll(/(^|[;}{])\s*([^{}@]+?)\s*\{([^{}]*)\}/g)) {
+    if (!r[2] || r[2].trim().startsWith('@')) continue;
+    const body = r[3].split(';').map((p) => p.trim()).filter(Boolean).sort().join(';');
+    if (!body) continue;
+    for (const part of splitSelectors(r[2])) {
+      if (/^\.[A-Za-z][\w-]*$/.test(part)) out.push([part, body]);
+    }
+  }
+  return out;
+}
+function styleMatches(src) {
+  // All <style> matches with absolute offsets.
+  const out = [];
+  for (const m of src.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+    out.push({ start: m.index, css: m[1] });
+  }
+  return out;
+}
+const SHARED_CSS = ['atoms/web/catalogue/atoms.css', 'atoms/web/catalogue/shell.css'];
+const sharedClasses = new Set();
+for (const rel of SHARED_CSS) {
+  try {
+    const css = fs.readFileSync(path.join(root, rel), 'utf8');
+    for (const m of css.matchAll(/\.([A-Za-z][\w-]*)/g)) sharedClasses.add(m[1]);
+  } catch { /* missing shared sheet: skip silently */ }
+}
+const definedBy = new Map(); // selector -> Map(file -> Set(bodies)), all defs
+const headDefs = new Map(); // selector -> Map(file -> Set(bodies)), head-injected only
+const usedBy = new Map(); // class -> Set(files using it in html fields)
+for (const rel of blocks) {
+  const file = path.join(blocksDir, path.basename(rel));
+  const src = fs.readFileSync(file, 'utf8');
+  const base = path.basename(rel);
+  const fields = htmlFields(src);
+  const inField = (idx) => fields.some((f) => f.start !== undefined && idx >= f.start && idx < (f.end ?? Infinity));
+  for (const sm of styleMatches(src)) {
+    const head = !inField(sm.start);
+    for (const [sel, body] of bareRuleEntries(sm.css)) {
+      if (!definedBy.has(sel)) definedBy.set(sel, new Map());
+      const per = definedBy.get(sel);
+      if (!per.has(base)) per.set(base, new Set());
+      per.get(base).add(body);
+      if (head) {
+        if (!headDefs.has(sel)) headDefs.set(sel, new Map());
+        const hp = headDefs.get(sel);
+        if (!hp.has(base)) hp.set(base, new Set());
+        hp.get(base).add(body);
+      }
+    }
+  }
+  for (const field of htmlFields(src)) {
+    if (field.kind === 'dynamic') continue;
+    const masked = maskInterpolations(field.text);
+    for (const m of masked.matchAll(/class="([^"]*)"/g)) {
+      for (const cls of m[1].split(/\s+/)) {
+        if (/^[A-Za-z][\w-]*$/.test(cls)) {
+          if (!usedBy.has(cls)) usedBy.set(cls, new Set());
+          usedBy.get(cls).add(base);
+        }
+      }
+    }
+  }
+}
+for (const rel of ['atoms/web/catalogue/atoms.css', 'atoms/web/catalogue/shell.css']) {
+  try {
+    const css = fs.readFileSync(path.join(root, rel), 'utf8');
+    const key = `shared:${path.basename(rel)}`;
+    for (const [sel, body] of bareRuleEntries(css)) {
+      if (!definedBy.has(sel)) definedBy.set(sel, new Map());
+      if (!definedBy.get(sel).has(key)) definedBy.get(sel).set(key, new Set());
+      definedBy.get(sel).get(key).add(body);
+    }
+  } catch { /* missing shared sheet: skip silently */ }
+}
+for (const [sel, per] of [...definedBy].sort()) {
+  // Accepted convention (see recipe-allowlist.json `style`): the 41-file
+  // template pins .small with !important, so it wins deterministically
+  // everywhere despite the shell's plainer value. Exempt, don't normalize.
+  if (styleAllow.has(sel)) continue;
+  const files = [...per.keys()];
+  if (files.length < 2) continue;
+  const common = files.map((f) => per.get(f)).reduce((a, b) => new Set([...a].filter((x) => b.has(x))));
+  if (common.size === 0) {
+    fail('STYLE', `${sel} has disjoint declarations across ${files.join(', ')} (rename to a namespaced class)`);
+  }
+}
+const warnedStyle = new Set();
+for (const [cls, users] of [...usedBy].sort()) {
+  const sel = `.${cls}`;
+  if (sharedClasses.has(cls)) continue;
+  const definers = definedBy.has(sel) ? [...definedBy.get(sel).keys()].filter((f) => !f.startsWith('shared:')) : [];
+  const orphans = [...users].filter((f) => !definers.includes(f));
+  if (!orphans.length || !definers.length) continue;
+  // FAIL only when a head-injected definition (unscoped on every surface)
+  // carries layout: that is the proven cross-tile breaker shape.
+  const headOwners = (headDefs.has(sel) ? [...headDefs.get(sel).keys()] : [])
+    .filter((f) => !orphans.includes(f) && [...headDefs.get(sel).get(f)].some((b) => LAYOUT_PROPS.test(b)));
+  if (headOwners.length) {
+    fail('STYLE', `.${cls} used in ${orphans.join(', ')} but head-styled only in ${headOwners.join(', ')} (rename one side)`);
+    continue;
+  }
+  // Anything else foreign-styled is WARN triage: unscoped surfaces concat
+  // everything, so verify visually before renaming (may be intentional sharing).
+  const layoutOwners = definers.filter((f) =>
+    [...definedBy.get(sel).get(f)].some((b) => LAYOUT_PROPS.test(b)));
+  if (layoutOwners.length && !warnedStyle.has(cls)) {
+    warnedStyle.add(cls);
+    warn('STYLE', `.${cls} used in ${orphans.join(', ')} but styled only in ${layoutOwners.join(', ')} (verify visually; may be intentional sharing)`);
+  }
+}
+
 // --- verdict ---
 for (const w of warns) console.log(`WARN ${w}`);
 for (const f of fails) console.log(`FAIL ${f}`);
 const hintFails = fails.filter((f) => f.startsWith('HINT')).length;
 const typeFails = fails.filter((f) => f.startsWith('TYPE')).length;
+const styleFails = fails.filter((f) => f.startsWith('STYLE')).length;
 const clicks = warns.filter((w) => w.startsWith('CLICK')).length;
 const hintWarns = warns.filter((w) => w.startsWith('HINT')).length;
 if (fails.length) {
-  console.log(`check-recipes: FAIL hints=${hintFails} type=${typeFails} (warnings: hints=${hintWarns} clicks=${clicks})${STRICT ? ' [strict]' : ''}`);
+  console.log(`check-recipes: FAIL hints=${hintFails} type=${typeFails} style=${styleFails} (warnings: hints=${hintWarns} clicks=${clicks})${STRICT ? ' [strict]' : ''}`);
   process.exit(1);
 }
 console.log(`check-recipes: PASS blocks=${blocks.length} (warnings: hints=${hintWarns} clicks=${clicks})${STRICT ? ' [strict]' : ''}`);
