@@ -22,7 +22,7 @@ No motion. Buttons scroll the track by its own `clientWidth`; the track never lo
 
 ## Motion
 
-Paging rides the scroll spring. `motion={false}` uses native instant paging; reduced motion jumps.
+Paging rides the scroll spring. `motion={false}` sets `data-motion` off and uses native instant paging; reduced motion jumps.
 
 ## Keyboard / accessibility
 
