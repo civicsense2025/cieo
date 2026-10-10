@@ -1,0 +1,5 @@
+/* design/styles/primitives/nav-heading-menu.css */
+@layer cieo.components {
+  :where(.cieo).cieo-nav-heading-menu { display: flex; flex-direction: column; gap: var(--cieo-space-2); }
+  :where(.cieo).cieo-nav-heading-menu > h2 { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-muted); }
+}

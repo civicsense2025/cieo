@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.mobile-nav-toggle",
+  "componentVersion": "1.0.0",
+  "name": "MobileNavToggle",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/MobileNavToggle/MobileNavToggle.tsx", "symbol": "MobileNavToggle" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "expanded", "type": { "kind": "boolean" }, "required": true, "nullable": false, "constraints": {} },
+    { "id": "onToggle", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is () => void; no function kind exists in the manifest precedent, see src/controls/Range.tsx." },
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Open navigation", "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "button", "overrides": ["color"], "tokenRoles": ["text-control"] }],
+  "constraints": { "layout": ["header-toggle"], "content": ["button-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["expanded", "onToggle", "label"], "states": [], "events": [], "parts": ["button"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Button that opens the drawer; host owns expanded state." },
+  "extensions": {}
+}

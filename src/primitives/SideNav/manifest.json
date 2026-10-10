@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.side-nav",
+  "componentVersion": "1.0.0",
+  "name": "SideNav",
+  "layer": "organism",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/SideNav/SideNav.tsx", "symbol": "SideNav" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Sections", "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "collapsed", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 32, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "rail", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
+  "constraints": { "layout": ["vertical-rail", "collapsed-is-icon-rail"], "content": ["nav-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "collapsed"], "states": [], "events": [], "parts": ["rail"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Section rail nav; collapsed narrows to an icon rail." },
+  "extensions": {}
+}

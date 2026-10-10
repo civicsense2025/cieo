@@ -1,0 +1,4 @@
+/* design/styles/primitives/side-nav-section.css */
+@layer cieo.components {
+  :where(.cieo).cieo-side-nav-section { display: flex; flex-direction: column; gap: var(--cieo-space-1); }
+}

@@ -1,0 +1,5 @@
+/* design/styles/primitives/mobile-nav.css */
+@layer cieo.components {
+  :where(.cieo).cieo-mobile-nav { position: fixed; inset-block: 0; inset-inline-end: 0; display: flex; flex-direction: column; gap: var(--cieo-space-3); padding: var(--cieo-space-4); background-color: var(--cieo-color-surface); border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo).cieo-mobile-nav > nav { display: flex; flex-direction: column; gap: var(--cieo-space-2); }
+}

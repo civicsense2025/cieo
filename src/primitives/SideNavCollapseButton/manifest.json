@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.side-nav-collapse-button",
+  "componentVersion": "1.0.0",
+  "name": "SideNavCollapseButton",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/SideNavCollapseButton/SideNavCollapseButton.tsx", "symbol": "SideNavCollapseButton" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "expanded", "type": { "kind": "boolean" }, "required": true, "nullable": false, "constraints": {} },
+    { "id": "onToggle", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is () => void; no function kind exists in the manifest precedent, see src/controls/Range.tsx." },
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Collapse navigation", "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "button", "overrides": ["color"], "tokenRoles": ["text-control"] }],
+  "constraints": { "layout": ["rail-footer"], "content": ["button-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["expanded", "onToggle", "label"], "states": [], "events": [], "parts": ["button"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Button that toggles the rail; host owns expanded state." },
+  "extensions": {}
+}

@@ -1,0 +1,5 @@
+/* design/styles/primitives/side-nav-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-side-nav-item { display: block; padding: var(--cieo-space-1) var(--cieo-space-2); border-radius: var(--cieo-radius-control); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-side-nav-item[aria-current='page'] { font-weight: var(--cieo-weight-medium); border-inline-start: var(--cieo-border-width) solid var(--cieo-color-accent); }
+}
