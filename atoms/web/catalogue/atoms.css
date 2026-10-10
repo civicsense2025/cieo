@@ -34,3 +34,5 @@
 @media(pointer:coarse){.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-chip{min-height:48px}}
 /* Prevent recipe image or SVG intrinsic widths from enlarging the gallery track. */
 .stage > :not(style){max-inline-size:100%}
+/* Caret rule for every recipe select: the arrow sits 12px inside the right edge and the text keeps clear of it. */
+.tile select{-webkit-appearance:none;appearance:none;padding-right:34px!important;background-color:var(--card);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b72' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:12px 12px!important}
