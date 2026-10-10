@@ -1,0 +1,4 @@
+@layer cieo.components {
+  :where(.cieo).cieo-icon-button { display: inline-flex; align-items: center; justify-content: center; aspect-ratio: 1; min-block-size: var(--cieo-control-height); padding: var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); cursor: pointer; }
+  :where(.cieo).cieo-icon-button[data-size='sm'] { min-block-size: var(--cieo-control-small); }
+}
