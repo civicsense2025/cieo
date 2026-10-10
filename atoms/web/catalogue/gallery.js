@@ -62,12 +62,25 @@
     el.append(header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
   }
   c.initAtom=a=>{
+    // A disposed tile was torn down while hidden (listeners detached, stage
+    // restored to pristine HTML by its own dispose). Revive it with a fresh
+    // init so showing it again behaves exactly like the first show. The tile
+    // held open in the inspector is never torn down, so it is never revived.
+    if(a.disposed&&c.active!==a){a.disposed=false;a.inited=false;a.render=null}
     if(a.inited)return;a.inited=true;
     try{a.render=a.init(a.stage);a.el.dataset.ready='true'}catch(error){a.el.dataset.error='true';console.error('Atom initialization:',a.id,error);}
   };
   c.observer=new IntersectionObserver(entries=>{
     for(const entry of entries){const a=c.byElement.get(entry.target);if(!a)continue;
       a.visible=entry.isIntersecting;if(a.visible&&!a.el.hidden)c.initAtom(a);
+      // Hiding parks the tile: the render loop already skips it, and a recipe
+      // exposing render.dispose additionally detaches its listeners and drops
+      // its motion state. Re-showing re-inits from pristine HTML. The
+      // inspected tile keeps rendering, so it is never parked.
+      else if(a.inited&&!a.disposed&&c.active!==a&&a.render&&typeof a.render.dispose==='function'){
+        try{a.render.dispose()}catch(error){console.error('Atom dispose:',a.id,error)}
+        a.disposed=true;
+      }
     }c.invalidate?.();
   },{rootMargin:'240px'});
   A.forEach(a=>c.observer.observe(a.el));

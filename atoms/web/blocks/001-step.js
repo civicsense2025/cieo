@@ -7,6 +7,9 @@ atom({ id:'step', cat:'Foundations', name:'Spring presets', block:'every block',
   api:'x = to + resp(t − t0, from − to, v0, S.base)',
   init(st){
     const dots = $$(st,'b'), tr = [S.snap,S.base,S.soft,S.lazy].map(c => new Track(0,c));
-    st.onclick = () => tr.forEach(x => x.set(x.target ? 0 : 1));
+    st.setAttribute('role', 'button'); st.tabIndex = 0; st.setAttribute('aria-label', 'Send all four springs');
+    const go = () => tr.forEach(x => x.set(x.target ? 0 : 1));
+    st.onclick = go;
+    st.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
     return t => { const w = dots[0].parentNode.clientWidth - 14; tr.forEach((x,i) => dots[i].style.transform = `translateX(${px(x.at(t)*w)})`); };
   }});

@@ -1,7 +1,7 @@
 
 
 atom({ id:'stories', cat:'Social', name:'Story progress', block:'carousel (stories), gallery', fam:['T','S'], tall:true,
-  html:`<div class="sx card" style="position:relative;width:200px;height:300px;overflow:hidden;background:var(--ink);color:var(--card);cursor:pointer;user-select:none"><div class="bars row" style="position:absolute;left:8px;right:8px;top:8px;gap:4px;z-index:2"></div><div class="pn" style="position:absolute;inset:0"></div></div><div class="hint">Tap left or right · hold to pause</div><div class="row small muted" style="gap:8px;justify-content:center"><button class="btn rp" style="padding:2px 10px">Replay</button><span>End card on finish</span></div>`,
+  html:`<div class="sx card" style="position:relative;width:200px;height:300px;overflow:hidden;background:var(--ink);color:var(--card);cursor:pointer;user-select:none"><div class="bars row" style="position:absolute;left:8px;right:8px;top:8px;gap:4px;z-index:2"></div><div class="pn" style="position:absolute;inset:0"></div></div><div class="row small muted" style="gap:8px;justify-content:center"><button class="btn rp" style="padding:2px 10px">Replay</button><span>End card on finish</span></div><div class="hint">Tap left or right · hold to pause</div>`,
   desc:'The current segment fills from the clock over 3 seconds; earlier ones stay full and later ones empty. Tapping a side skips with a blur swap, and holding pauses the clock for this story only. The last story settles into an end card, and replay swaps back to the start.',
   api:'fill[i] = i < cur ? 1 : i > cur ? 0 : (t − t0)/3   hold: t0 += pause',
   init(st){

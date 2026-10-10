@@ -1,7 +1,7 @@
 
 
 atom({ id:'swiperow', cat:'Email', name:'Swipe actions', block:'entry-list, inbox', fam:['D','M'], tall:true,
-  html:`<div class="col sr" style="width:min(340px,90%);gap:0"></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Restore</button><div class="hint">Swipe right to archive, left to snooze</div><label class="row small muted" style="gap:6px;justify-content:center;cursor:pointer"><input type="checkbox" class="dv" checked> Dividers</label>`,
+  html:`<div class="col sr" style="width:min(340px,90%);gap:0"></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Restore</button><label class="row small muted" style="gap:6px;justify-content:center;cursor:pointer"><input type="checkbox" class="dv" checked> Dividers</label><div class="hint">Swipe right to archive, left to snooze</div>`,
   desc:'The row follows your finger. The action behind it fills with its color and its icon grows once you pass the 80px threshold. Release past it and the row leaves and its space closes; otherwise it springs home.',
   api:'x = pointer   armed = |x| > 80   out: x.release(x, v, ±W); h.set(0, t + 0.15)',
   init(st){

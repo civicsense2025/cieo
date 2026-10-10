@@ -510,7 +510,10 @@ atom({ id:'step', cat:'Foundations', name:'Spring presets', block:'every block',
   api:'x = to + resp(t − t0, from − to, v0, S.base)',
   init(st){
     const dots = $$(st,'b'), tr = [S.snap,S.base,S.soft,S.lazy].map(c => new Track(0,c));
-    st.onclick = () => tr.forEach(x => x.set(x.target ? 0 : 1));
+    st.setAttribute('role', 'button'); st.tabIndex = 0; st.setAttribute('aria-label', 'Send all four springs');
+    const go = () => tr.forEach(x => x.set(x.target ? 0 : 1));
+    st.onclick = go;
+    st.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
     return t => { const w = dots[0].parentNode.clientWidth - 14; tr.forEach((x,i) => dots[i].style.transform = `translateX(${px(x.at(t)*w)})`); };
   }});
 
@@ -537,7 +540,10 @@ atom({ id:'stagger', cat:'Foundations', name:'Stagger', block:'progress, chart, 
   init(st){
     const bars = $$(st,'.row div'), sets = [[.3,.55,.8,.45,.95,.6,.7],[.85,.4,.25,.7,.35,.9,.5]]; let k = 0;
     const tr = sets[0].map(v => new Track(v));
-    st.onclick = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + i*.04)); };
+    st.setAttribute('role', 'button'); st.tabIndex = 0; st.setAttribute('aria-label', 'Reshuffle bars');
+    const go = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + i*.04)); };
+    st.onclick = go;
+    st.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
     return t => tr.forEach((x,i) => bars[i].style.height = px(x.at(t)*140));
   }});
 
@@ -2386,7 +2392,7 @@ globalThis.__cieoRecipeFile="blocks/084-avatars.js";
 
 
 atom({ id:'avatars', cat:'Content', name:'Avatar group', block:'profile-header, testimonial, Avatar', fam:['M','X'],
-  html:`<div class="col" style="gap:4px"><div class="ag" style="position:relative;height:40px;width:220px"></div><div class="hint">Hover the group, then a face</div><div class="row small muted" style="gap:6px;flex-wrap:wrap">Thumbnails <button class="btn th-on" aria-pressed="false" style="padding:2px 9px;font-size:12px">With</button><button class="btn th-off" aria-pressed="true" style="padding:2px 9px;font-size:12px">Without</button><span style="opacity:.4">·</span> Density <button class="btn dn-cf" aria-pressed="true" style="padding:2px 9px;font-size:12px">Comfortable</button><button class="btn dn-dn" aria-pressed="false" style="padding:2px 9px;font-size:12px">Dense</button></div></div>`,
+  html:`<div class="col" style="gap:4px"><div class="ag" style="position:relative;height:40px;width:220px"></div><div class="row small muted" style="gap:6px;flex-wrap:wrap">Thumbnails <button class="btn th-on" aria-pressed="false" style="padding:2px 9px;font-size:12px">With</button><button class="btn th-off" aria-pressed="true" style="padding:2px 9px;font-size:12px">Without</button><span style="opacity:.4">·</span> Density <button class="btn dn-cf" aria-pressed="true" style="padding:2px 9px;font-size:12px">Comfortable</button><button class="btn dn-dn" aria-pressed="false" style="padding:2px 9px;font-size:12px">Dense</button></div></div><div class="hint">Hover the group, then a face</div>`,
   desc:'Hovering the stack fans the avatars apart with a 30ms stagger. Hovering one face shows its name above it with the popover rule. Thumbnails swap initials for photo thumbs; dense tightens the pitch.',
   api:'avatar[i].x.set(open ? i·pitch.open : i·pitch.shut, S.base, t + i·0.03)   thumbs.o.set(1)   size.set(dense ? 32 : 40)',
   init(st){
@@ -3062,7 +3068,7 @@ globalThis.__cieoRecipeFile="blocks/115-swiperow.js";
 
 
 atom({ id:'swiperow', cat:'Email', name:'Swipe actions', block:'entry-list, inbox', fam:['D','M'], tall:true,
-  html:`<div class="col sr" style="width:min(340px,90%);gap:0"></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Restore</button><div class="hint">Swipe right to archive, left to snooze</div><label class="row small muted" style="gap:6px;justify-content:center;cursor:pointer"><input type="checkbox" class="dv" checked> Dividers</label>`,
+  html:`<div class="col sr" style="width:min(340px,90%);gap:0"></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Restore</button><label class="row small muted" style="gap:6px;justify-content:center;cursor:pointer"><input type="checkbox" class="dv" checked> Dividers</label><div class="hint">Swipe right to archive, left to snooze</div>`,
   desc:'The row follows your finger. The action behind it fills with its color and its icon grows once you pass the 80px threshold. Release past it and the row leaves and its space closes; otherwise it springs home.',
   api:'x = pointer   armed = |x| > 80   out: x.release(x, v, ±W); h.set(0, t + 0.15)',
   init(st){
@@ -3235,7 +3241,7 @@ globalThis.__cieoRecipeFile="blocks/125-stories.js";
 
 
 atom({ id:'stories', cat:'Social', name:'Story progress', block:'carousel (stories), gallery', fam:['T','S'], tall:true,
-  html:`<div class="sx card" style="position:relative;width:200px;height:300px;overflow:hidden;background:var(--ink);color:var(--card);cursor:pointer;user-select:none"><div class="bars row" style="position:absolute;left:8px;right:8px;top:8px;gap:4px;z-index:2"></div><div class="pn" style="position:absolute;inset:0"></div></div><div class="hint">Tap left or right · hold to pause</div><div class="row small muted" style="gap:8px;justify-content:center"><button class="btn rp" style="padding:2px 10px">Replay</button><span>End card on finish</span></div>`,
+  html:`<div class="sx card" style="position:relative;width:200px;height:300px;overflow:hidden;background:var(--ink);color:var(--card);cursor:pointer;user-select:none"><div class="bars row" style="position:absolute;left:8px;right:8px;top:8px;gap:4px;z-index:2"></div><div class="pn" style="position:absolute;inset:0"></div></div><div class="row small muted" style="gap:8px;justify-content:center"><button class="btn rp" style="padding:2px 10px">Replay</button><span>End card on finish</span></div><div class="hint">Tap left or right · hold to pause</div>`,
   desc:'The current segment fills from the clock over 3 seconds; earlier ones stay full and later ones empty. Tapping a side skips with a blur swap, and holding pauses the clock for this story only. The last story settles into an end card, and replay swaps back to the start.',
   api:'fill[i] = i < cur ? 1 : i > cur ? 0 : (t − t0)/3   hold: t0 += pause',
   init(st){
@@ -3320,12 +3326,13 @@ atom({ id:'tabstrip', cat:'Files and browsing', name:'Browser tabs', block:'tabs
     const tsx = $(st,'.tsx'), ind = $(st,'.ind'), nt = $(st,'.nt'), pg = $(st,'.pg'), N = ['Inbox','Docs · Spring launch','Figma · Hero','Analytics','Search: yearly pricing','Calendar'];
     let tabs = [], act = null, k = 0; const W = 150;
     const add = (inst) => { const name = N[k++ % N.length], b = document.createElement('div'); b.style.cssText = 'position:relative;flex:none;height:36px;overflow:hidden;cursor:pointer';
+      b.setAttribute('role', 'tab'); b.tabIndex = 0; b.setAttribute('aria-label', name); b.setAttribute('aria-selected', 'false');
       b.innerHTML = `<span class="lb" style="position:absolute;left:12px;right:28px;top:9px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</span><button aria-label="Close ${name}" style="position:absolute;right:6px;top:8px;width:20px;height:20px;border:0;border-radius:5px;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center">${ic(I.x,11,2.5)}</button>`;
       tsx.insertBefore(b, nt); const pane = document.createElement('div'); pane.className = 'layer'; pane.style.cssText += 'justify-content:flex-start;align-items:flex-start;padding:14px 16px;white-space:normal'; pane.innerHTML = `<b>${name}</b>`; pg.appendChild(pane);
       const tb = { b, lb:$(b,'.lb'), pane, w:new Track(inst ? 1 : 0), o:new Track(inst ? 1 : 0), gone:false, sw:null };
-      if (!inst){ tb.w.set(1); tb.o.set(1, S.base, now() + .06); } b.onclick = () => select(tb); $(b,'button').onclick = ev => { ev.stopPropagation(); close(tb); }; tabs.push(tb); select(tb, inst); };
+      if (!inst){ tb.w.set(1); tb.o.set(1, S.base, now() + .06); } b.onclick = () => select(tb); b.onkeydown = ev => { if (ev.target !== b) return; if (ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); select(tb); } }; $(b,'button').onclick = ev => { ev.stopPropagation(); close(tb); }; tabs.push(tb); select(tb, inst); };
     const psw = new Swap(null);
-    const select = tb => { act = tb; psw.to(tb); };
+    const select = tb => { act = tb; psw.to(tb); tabs.forEach(x => x.b.setAttribute('aria-selected', String(x === tb))); };
     const close = tb => { if (tabs.filter(x => !x.gone).length < 2) return; tb.gone = true; tb.o.set(0, S.snap); tb.w.set(0, S.base, now() + EXIT); if (act === tb){ const live = tabs.filter(x => !x.gone); select(live[Math.max(0, live.length - 1)]); } };
     nt.onclick = () => add(); add(true); add(true); add(true); select(tabs[0], true); psw.cur = tabs[0]; psw.prev = null; psw.t = -9;
     // indicator = live rect of the active tab + a decaying offset from the previous tab (edges lag)
@@ -3651,7 +3658,7 @@ const vwEllipsis = 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
 
 /* ================================================================ 1. List to detail */
 atom({ id:'listdetail', cat:'Views', name:'List to detail', block:'postlist, entry-list, collection', fam:['M','S','E'], wide:true, tall:true,
-  html:`<div class="ldg" style="position:absolute;left:16px;right:16px;top:14px;bottom:30px;display:grid;gap:12px;align-content:center;grid-template-columns:repeat(var(--c,4),minmax(0,1fr));grid-auto-rows:var(--rh,230px)"></div><div class="hint">Open a post. Escape or Back returns it to its slot.</div><div class="ldf card" role="dialog" aria-modal="true" style="position:absolute;display:none;overflow:hidden;z-index:6;background:var(--card)"><div class="fa" style="position:absolute;left:0;right:0;top:0"></div><div class="ff" style="position:absolute;left:0;right:0;height:56px;padding:10px 12px;overflow:hidden;pointer-events:none"></div><div class="fd" style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px 0;overflow:hidden"><div class="i1"><b style="display:block;font-size:20px;letter-spacing:-.02em;line-height:1.25"></b><span class="small muted" style="display:block;margin-top:2px"></span></div><p class="i2" style="margin:10px 0 0;font-size:13.5px;line-height:1.5;max-width:64ch"></p><p class="i3" style="margin:8px 0 0;font-size:13.5px;line-height:1.5;max-width:64ch"></p></div><button type="button" class="btn fb" style="position:absolute;top:10px;left:10px;display:flex;gap:6px;align-items:center;box-shadow:var(--shadow)">${ic(vwBack,14)}Back</button></div>`,
+  html:`<div class="ldg" style="position:absolute;left:16px;right:16px;top:14px;bottom:30px;display:grid;gap:12px;align-content:center;grid-template-columns:repeat(var(--c,4),minmax(0,1fr));grid-auto-rows:var(--rh,230px)"></div><div class="ldf card" role="dialog" aria-modal="true" style="position:absolute;display:none;overflow:hidden;z-index:6;background:var(--card)"><div class="fa" style="position:absolute;left:0;right:0;top:0"></div><div class="ff" style="position:absolute;left:0;right:0;height:56px;padding:10px 12px;overflow:hidden;pointer-events:none"></div><div class="fd" style="position:absolute;left:0;right:0;bottom:0;padding:14px 20px 0;overflow:hidden"><div class="i1"><b style="display:block;font-size:20px;letter-spacing:-.02em;line-height:1.25"></b><span class="small muted" style="display:block;margin-top:2px"></span></div><p class="i2" style="margin:10px 0 0;font-size:13.5px;line-height:1.5;max-width:64ch"></p><p class="i3" style="margin:8px 0 0;font-size:13.5px;line-height:1.5;max-width:64ch"></p></div><button type="button" class="btn fb" style="position:absolute;top:10px;left:10px;display:flex;gap:6px;align-items:center;box-shadow:var(--shadow)">${ic(vwBack,14)}Back</button></div><div class="hint">Open a post. Escape or Back returns it to its slot.</div>`,
   desc:'The card you pick is the detail view. Siblings fade and blur out first, then the same card’s x, y, width, height and radius spring from its measured slot to fill the frame while its image grows. Back appears as it lands, then the heading and two paragraphs enter 50ms apart. Closing runs it backwards: text out, card down into the exact slot, siblings return.',
   api:'sib.set(0)   box.{x,y,w,h,r}.set(frame, t+.08)   body[i].set(1, t+.5+i*.05)   close: body.set(0); box.set(slot, t+EXIT); sib.set(1)',
   init(st){
@@ -21528,6 +21535,7 @@ atom({ id:'rsvp', cat:'Forms', name:'Call RSVP', block:'rsvp (going, maybe, even
   desc:'The plate slides behind your pick with its trailing edge 60ms late, and the headcount rolls its digits. Your answer swaps in a terminal you can change.',
   api:'plate.go(x, w) trails .06   head.set(n)   pick: fin.to(i+1)',
   init(st){
+    const pristine = st.innerHTML;
     const O = ['Going',"Maybe","Can't"];
     const opts = $(st,'.opts'), pl = $(st,'.pl'), hc = $(st,'.hc'), brk = $(st,'.brk'), sc = $(st,'.sc');
     const edge = edges(0, 80); edge.jump(-99, 80);
@@ -21551,13 +21559,19 @@ atom({ id:'rsvp', cat:'Forms', name:'Call RSVP', block:'rsvp (going, maybe, even
       const b = btns[i]; edge.go(b.offsetLeft, b.offsetWidth, t0); vis.set(1, S.base, t0);
       fsw.to(i + 1, t0);
       btns.forEach((x,j) => { x.setAttribute('aria-pressed', j === i); x.style.fontWeight = j === i ? '600' : ''; }); };
-    $(st,'.ch').onclick = () => { mine = -1; counts[1] += 0; fsw.to(0); paint();
+    const chBtn = $(st,'.ch');
+    chBtn.onclick = () => { mine = -1; counts[1] += 0; fsw.to(0); paint();
       btns.forEach(x => { x.setAttribute('aria-pressed', 'false'); x.style.fontWeight = ''; }); };
     sc.onchange = () => cok.set(sc.checked ? 1 : 0, S.base);
-    return t => { Object.assign(pl.style, { left:px(Math.max(0, edge.A.at(t))), width:px(Math.max(0, edge.B.at(t))), opacity:clamp(vis.at(t)).toFixed(3) });
+    const render = t => { Object.assign(pl.style, { left:px(Math.max(0, edge.A.at(t))), width:px(Math.max(0, edge.B.at(t))), opacity:clamp(vis.at(t)).toFixed(3) });
       F.forEach((e,k) => fsw.apply(e,k,t)); hd.render(t);
       const c = clamp(cok.at(t)), row = $(st,'.cnt');
       row.style.opacity = c.toFixed(3); row.style.visibility = c < .02 ? 'hidden' : 'visible'; };
+    render.ctl = { buttons:btns, edge, shown:vis, fin:fsw, head:hd, counts, get mine(){ return mine; } };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true;
+      btns.forEach(b => { b.onclick = null; }); chBtn.onclick = null; sc.onchange = null;
+      st.innerHTML = pristine; };
+    return render;
   }});
 
 
@@ -22702,9 +22716,11 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
   desc:'Each field validates as you type. A bad value rings the field red and swaps in its message; a good one earns a success check. Sending with errors surfaces every message, and a clean invite holds its success state.',
   api:'err.set(1) danger ring + msg swap   ok.set(1) success check   send: all valid → terminal',
   init(st){
+    const pristine = st.innerHTML;
     const defs = [
       { box:'.f0', test:v => v.trim().length >= 2, msg:'Enter a name (2+ letters)' },
       { box:'.f1', test:v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), msg:'Enter a valid email' }];
+    const offs = [];
     const F = defs.map(d => {
       const box = $(st,d.box), inp = $$(box,'.in')[0], mg = $$(box,'.mg')[0], iw = $$(box,'.iw')[0];
       const e0 = document.createElement('span'); e0.style.cssText = 'grid-area:1/1;display:flex;align-items:center;min-width:0;min-height:18px';
@@ -22721,8 +22737,10 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
         f.ok.set(good && inp.value ? 1 : 0);
         if (!good && (f.touched || !quiet)) f.sw.to(1); else f.sw.to(0);
         return good; };
-      inp.addEventListener('input', () => check(true));
-      inp.addEventListener('blur', () => { f.touched = true; check(false); });
+      const onInput = () => check(true), onBlur = () => { f.touched = true; check(false); };
+      inp.addEventListener('input', onInput);
+      inp.addEventListener('blur', onBlur);
+      offs.push(() => { inp.removeEventListener('input', onInput); inp.removeEventListener('blur', onBlur); });
       return f; });
     const go = $(st,'.go');
     const done = new Track(0);
@@ -22736,13 +22754,17 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
       if (F.every(f => { const g = f.test(f.inp.value);
         f.err.set(g ? 0 : 1); f.ok.set(g ? 1 : 0); f.sw.to(g ? 0 : 1); return g; })){
         gsw.to(1); done.set(1, S.base); go.style.cursor = 'default'; } };
-    return t => F.forEach((f,i) => { const e = clamp(f.err.at(t)), o = clamp(f.ok.at(t));
+    const render = t => F.forEach((f,i) => { const e = clamp(f.err.at(t)), o = clamp(f.ok.at(t));
       f.inp.style.borderColor = e > .02 ? mix(e,'var(--danger,#c9403b)','var(--line)') : mix(o,'var(--success)','var(--line)');
       f.inp.style.boxShadow = e > .02 ? '0 0 0 3px color-mix(in oklab, var(--danger,#c9403b) ' + (e*18).toFixed(1) + '%, transparent)' : 'none';
       f.sw.apply(f.e1, 1, t); fade(f.e0, 1, 0, false);
       f.ck.style.width = px(16*o);
       if (i === 0){ li.forEach((l,k) => gsw.apply(l,k,t));
         go.style.background = mix(clamp(done.at(t)),'var(--success)','var(--ink)'); } });
+    render.ctl = { fields:F, done, choice:gsw };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true;
+      offs.forEach(off => off()); go.onclick = null; st.innerHTML = pristine; };
+    return render;
   }});
 
 
@@ -22752,6 +22774,7 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
   desc:'Each answer slides the next question up from below while the progress bar fills. Continuing empty snaps the card side to side and swaps in what is missing. The sent summary holds as the terminal.',
   api:'qa.to(step+1) rises   pr.set(step/3) fills   empty: sh.release shake + need.to(1)',
   init(st){
+    const pristine = st.innerHTML;
     const Q = [
       { q:'What brings you in?', opts:['Tour','Consult','Follow-up'] },
       { q:'Party size?', opts:['1–2','3–5','6+'] },
@@ -22800,17 +22823,22 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
       sw.to(step); pr.set(step/3, S.base);
       pcap.textContent = step >= 3 ? 'Done' : (step + 1) + ' of 3';
       if (step >= 3) sv.set(1, S.base); };
-    $(st,'.bk').onclick = () => { if (step <= 0) return; step--; ans[step] = null;
+    const bk = $(st,'.bk'), svBtn = $(st,'.sv');
+    bk.onclick = () => { if (step <= 0) return; step--; ans[step] = null;
       const fresh = build(step); layers[step].replaceWith(fresh); layers[step] = fresh;
       sw.to(step); pr.set(step/3); need.to(0);
       pcap.textContent = (step + 1) + ' of 3'; sv.set(0); };
-    $(st,'.sv').onclick = e => { const b = e.target;
+    svBtn.onclick = e => { const b = e.target;
       b.textContent = b.textContent === 'Save draft' ? 'Draft saved ✓' : 'Save draft'; };
-    return t => { layers.forEach((L,k) => sw.apply(L,k,t,10));
+    const render = t => { layers.forEach((L,k) => sw.apply(L,k,t,10));
       layers.forEach(L => { if (L._n) L._n.forEach((n,j) => need.apply(n, j ? 1 : 0, t, 3)); });
       pfill.style.width = (clamp(pr.at(t))*100).toFixed(1) + '%';
       qcard.style.transform = 'translateX(' + sh.at(t).toFixed(2) + 'px)';
       qcard.style.borderColor = mix(clamp(sv.at(t)),'var(--success)','var(--line)'); };
+    render.ctl = { get step(){ return step; }, ans, qa:sw, progress:pr, shake:sh, need, saved:sv };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true;
+      bk.onclick = null; svBtn.onclick = null; st.innerHTML = pristine; };
+    return render;
   }});
 
 
@@ -22820,7 +22848,9 @@ atom({ id:'rsvp3', cat:'Scheduling', name:'RSVP', block:'rsvp, yes no maybe', fa
   desc:'One plate slides between yes, no and maybe. Counts roll on digits with every vote, yes inks success and maybe holds a warning tint instead of ever resolving green.',
   api:'plate.go(l, r) single plate   counts Digits roll   maybe: warn.set(1) amber hold',
   init(st){
+    const pristine = st.innerHTML;
     const O = ['Yes','No','Maybe'], base = [12,3,5], seg = $(st,'.seg'), pl = edges(0, 0);
+    let dead = false;
     const tabs = O.map((o,i) => {
       const b = document.createElement('button'); b.setAttribute('role','radio');
       b.style.cssText = 'position:relative;z-index:1;flex:1;min-width:0;min-height:40px;border:0;background:none;border-radius:8px;cursor:pointer;font-size:13px;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 0;overflow:hidden';
@@ -22841,17 +22871,23 @@ atom({ id:'rsvp3', cat:'Scheduling', name:'RSVP', block:'rsvp, yes no maybe', fa
       counts();
       $(st,'.note').textContent = i === 2 ? 'We saved you a maybe seat' : i === 0 ? 'See you there' : 'You will be missed'; };
     tabs.forEach((x,i) => x.b.onclick = () => vote(i));
-    $(st,'.m').onclick = () => { plus = Math.max(0, plus - 1); $(st,'.g').textContent = plus; counts(); };
-    $(st,'.p').onclick = () => { plus = Math.min(4, plus + 1); $(st,'.g').textContent = plus; counts(); };
+    const minus = $(st,'.m'), plusBtn = $(st,'.p');
+    minus.onclick = () => { plus = Math.max(0, plus - 1); $(st,'.g').textContent = plus; counts(); };
+    plusBtn.onclick = () => { plus = Math.min(4, plus + 1); $(st,'.g').textContent = plus; counts(); };
     counts();
-    document.fonts.ready.then(() => pl.jump(0, 0)); pl.jump(0, 0);
-    return t => { const wpx = Math.max(0, pl.B.at(t) - pl.A.at(t));
+    document.fonts.ready.then(() => { if (!dead) pl.jump(0, 0); }); pl.jump(0, 0);
+    const render = t => { const wpx = Math.max(0, pl.B.at(t) - pl.A.at(t));
       plate.style.left = px(pl.A.at(t)); plate.style.width = px(wpx);
       plate.style.opacity = pick < 0 ? '0' : '1';
       plate.style.background = pick === 2 ? mix(clamp(tabs[2].tn.at(t)),'#fef3c7','var(--card)') : 'var(--card)';
       tabs.forEach((x,i) => { x.dg.render(t); const v = clamp(x.tn.at(t));
         x.b.style.fontWeight = v > .5 ? '600' : '400';
         x.b.style.color = i === 2 ? mix(v,'#92400e','var(--ink)') : i === 0 ? mix(v,'var(--success)','var(--ink)') : 'var(--ink)'; }); };
+    render.ctl = { tabs, plate:pl, get pick(){ return pick; }, get plus(){ return plus; } };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true; dead = true;
+      tabs.forEach(x => { x.b.onclick = null; }); minus.onclick = null; plusBtn.onclick = null;
+      st.innerHTML = pristine; };
+    return render;
   }});
 
 
@@ -26800,7 +26836,7 @@ atom({ id:'delivnotes', cat:'Commerce', name:'Delivery instructions', block:'che
 
 globalThis.__cieoRecipeFile="blocks/527-toaststack.js";
 atom({ id:'toaststack', cat:'Overlays', name:'Toast stack pile', block:'Toast stack, polite announce', fam:['X','M'], tall:true,
-  html:`<button class="btn ink add" style="min-height:36px">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:20px;width:min(300px,86%);transform:translateX(-50%);height:120px"></div><div class="hint">Hover the pile to expand + pause timers</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px"><input type="checkbox" class="ex" checked> expand on hover</label>`,
+  html:`<button class="btn ink add" style="min-height:36px">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:20px;width:min(300px,86%);transform:translateX(-50%);height:120px"></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px"><input type="checkbox" class="ex" checked> expand on hover</label><div class="hint">Hover the pile to expand + pause timers</div>`,
   desc:'Newest slides in on base while older ones sink with soft depth. Hovering expands the pile and pauses timers; toasts announce politely, errors assertively.',
   api:'add: i.set(j, S.soft); hover: spread.set(1); timers pause while hover',
   init(st){
@@ -26827,7 +26863,7 @@ atom({ id:'toaststack', cat:'Overlays', name:'Toast stack pile', block:'Toast st
 
 globalThis.__cieoRecipeFile="blocks/528-sheetdetents.js";
 atom({ id:'sheetlevels', cat:'Overlays', name:'Sheet detents', block:'Action sheet peek half full', fam:['X','D'], tall:true,
-  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Pages</b><span class="small muted" style="font-size:12.5px;line-height:1.5">Home \u00b7 About \u00b7 Journal</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px;min-height:36px">Share options</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh card" role="dialog" aria-modal="false" aria-label="Share options" style="position:absolute;left:0;right:0;bottom:0;height:230px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;padding:0;cursor:grab" aria-hidden="true"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col" style="padding:0 18px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Share</b><span class="small" style="font-size:13.5px;line-height:1.5">Copy link \u00b7 Email \u00b7 Messages</span></div></div></div><div class="hint">Drag or flick: peek \u2192 half \u2192 full</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="in" checked> background inert</label>`,
+  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Pages</b><span class="small muted" style="font-size:12.5px;line-height:1.5">Home \u00b7 About \u00b7 Journal</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px;min-height:36px">Share options</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh card" role="dialog" aria-modal="false" aria-label="Share options" style="position:absolute;left:0;right:0;bottom:0;height:230px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;padding:0;cursor:grab" aria-hidden="true"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col" style="padding:0 18px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Share</b><span class="small" style="font-size:13.5px;line-height:1.5">Copy link \u00b7 Email \u00b7 Messages</span></div></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="in" checked> background inert</label><div class="hint">Drag or flick: peek \u2192 half \u2192 full</div>`,
   desc:'Sheet rests at peek, half or full detents on base. A fast flick skips the middle detent. The grabber stays visible and the page behind stays inert.',
   api:'y.set(detent); flick: skip middle when |vy|>700; inert: aria-hidden while open',
   init(st){
@@ -26845,7 +26881,7 @@ atom({ id:'sheetlevels', cat:'Overlays', name:'Sheet detents', block:'Action she
 
 globalThis.__cieoRecipeFile="blocks/529-hoverintent.js";
 atom({ id:'hoverintent', cat:'Overlays', name:'Hover intent card', block:'Hover card intent + safe triangle', fam:['X'], tall:false,
-  html:`<p style="margin:26px 0 0;max-width:300px;text-align:center;line-height:1.6;font-size:13.5px">Written by <a href="#" class="hv" aria-haspopup="true" style="position:relative;color:var(--ink);font-weight:600">Maya Chen<span class="hc card" role="dialog" style="position:absolute;left:50%;top:calc(100% + 10px);width:230px;margin-left:-115px;padding:14px;text-align:left;font-weight:400;transform-origin:50% 0;visibility:hidden"><b style="display:block;font-size:15px;font-weight:600;line-height:1.5">Maya Chen</b><span class="small muted" style="display:block;font-size:12.5px;line-height:1.5">@mayachen</span><span class="small" style="display:block;margin-top:8px;font-size:13px;line-height:1.5">Editor at Field Notes. Slow approaches open.</span></span></a> on Sep 28.</p><div class="hint">Slow rest opens \u00b7 fast pass never opens</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="pin" checked> focus pins open</label>`,
+  html:`<p style="margin:26px 0 0;max-width:300px;text-align:center;line-height:1.6;font-size:13.5px">Written by <a href="#" class="hv" aria-haspopup="true" style="position:relative;color:var(--ink);font-weight:600">Maya Chen<span class="hc card" role="dialog" style="position:absolute;left:50%;top:calc(100% + 10px);width:230px;margin-left:-115px;padding:14px;text-align:left;font-weight:400;transform-origin:50% 0;visibility:hidden"><b style="display:block;font-size:15px;font-weight:600;line-height:1.5">Maya Chen</b><span class="small muted" style="display:block;font-size:12.5px;line-height:1.5">@mayachen</span><span class="small" style="display:block;margin-top:8px;font-size:13px;line-height:1.5">Editor at Field Notes. Slow approaches open.</span></span></a> on Sep 28.</p><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="pin" checked> focus pins open</label><div class="hint">Slow rest opens \u00b7 fast pass never opens</div>`,
   desc:'A slow approach that rests opens after a beat; a fast pass never opens. A safe triangle between link and card keeps it open, and keyboard focus pins it.',
   api:'rest 0.35s opens (slow only); triangle keeps open; focus pins',
   init(st){
@@ -26865,7 +26901,7 @@ atom({ id:'hoverintent', cat:'Overlays', name:'Hover intent card', block:'Hover 
 
 globalThis.__cieoRecipeFile="blocks/530-submenu.js";
 atom({ id:'submenu', cat:'Overlays', name:'Context submenu', block:'Submenu slide, arrow turns', fam:['X','E'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center"><button class="btn ink mn" aria-haspopup="menu" style="min-height:36px">Open menu</button><div class="wrap" style="position:relative;width:230px;height:170px"><div class="m1 card" role="menu" style="position:absolute;left:0;top:0;width:150px;padding:6px"></div><div class="m2 card" role="menu" aria-label="Share submenu" style="position:absolute;left:150px;top:24px;width:150px;padding:6px;visibility:hidden"></div></div></div><div class="hint">Esc steps back one level</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="st" checked> keep parent open</label>`,
+  html:`<div class="col" style="gap:8px;align-items:center"><button class="btn ink mn" aria-haspopup="menu" style="min-height:36px">Open menu</button><div class="wrap" style="position:relative;width:230px;height:170px"><div class="m1 card" role="menu" style="position:absolute;left:0;top:0;width:150px;padding:6px"></div><div class="m2 card" role="menu" aria-label="Share submenu" style="position:absolute;left:150px;top:24px;width:150px;padding:6px;visibility:hidden"></div></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="st" checked> keep parent open</label><div class="hint">Esc steps back one level</div>`,
   desc:'The child slides 12px from the parent edge on base while edges trail 60ms. The parent stays put, the arrow turns, and Esc steps back one level.',
   api:'child.x: edges(A,B) trail .06; arrow rotate with open',
   init(st){
@@ -26892,7 +26928,7 @@ atom({ id:'submenu', cat:'Overlays', name:'Context submenu', block:'Submenu slid
 
 globalThis.__cieoRecipeFile="blocks/531-triggermodal.js";
 atom({ id:'triggermodal', cat:'Overlays', name:'Modal from trigger', block:'Scale from trigger rect + scrim', fam:['X'], tall:true,
-  html:`<div class="ph" style="position:relative;width:min(280px,86%);height:220px;display:grid;place-items:center"><button class="btn ink tg" style="min-height:36px">Read story</button><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none;border-radius:12px"></div><div class="dl card" role="dialog" aria-modal="true" aria-labelledby="tm-t" style="position:absolute;left:50%;top:50%;width:min(240px,84%);padding:18px;visibility:hidden;border-radius:15px"><b id="tm-t" style="display:block;font-size:15px;font-weight:600;line-height:1.5">Morning routes</b><p class="small muted" style="margin:6px 0 14px;font-size:13px;line-height:1.55">A 4-minute read about rivers and slow starts.</p><div class="row" style="justify-content:flex-end"><button class="btn cs" style="min-height:36px">Close</button></div></div></div><div class="hint">Grows from the button, returns into it</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="sf" checked> scrim fade</label>`,
+  html:`<div class="ph" style="position:relative;width:min(280px,86%);height:220px;display:grid;place-items:center"><button class="btn ink tg" style="min-height:36px">Read story</button><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none;border-radius:12px"></div><div class="dl card" role="dialog" aria-modal="true" aria-labelledby="tm-t" style="position:absolute;left:50%;top:50%;width:min(240px,84%);padding:18px;visibility:hidden;border-radius:15px"><b id="tm-t" style="display:block;font-size:15px;font-weight:600;line-height:1.5">Morning routes</b><p class="small muted" style="margin:6px 0 14px;font-size:13px;line-height:1.55">A 4-minute read about rivers and slow starts.</p><div class="row" style="justify-content:flex-end"><button class="btn cs" style="min-height:36px">Close</button></div></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="sf" checked> scrim fade</label><div class="hint">Grows from the button, returns into it</div>`,
   desc:'The modal grows from the trigger rect on base while the scrim fades. Closing snaps back into the trigger faster, and focus returns to it.',
   api:'open: scale from trigger rect (base); close: snap into rect',
   init(st){
@@ -26909,7 +26945,7 @@ atom({ id:'triggermodal', cat:'Overlays', name:'Modal from trigger', block:'Scal
 
 globalThis.__cieoRecipeFile="blocks/532-velosheet.js";
 atom({ id:'velosheet', cat:'Overlays', name:'Velocity drawer', block:'Drag 1:1, velocity snap, stagger', fam:['X','D'], tall:true,
-  html:`<div class="ph card" style="position:relative;width:min(260px,82%);height:290px;overflow:hidden"><header class="row" style="height:50px;padding:0 10px;gap:8px;border-bottom:1px solid var(--line-soft)"><button class="hb" aria-label="Open navigation" style="width:36px;height:36px;border:0;background:none;cursor:pointer;display:grid;place-items:center;padding:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform:translateY(1px)"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><b style="font-size:15px;font-weight:600">Common Room</b></header><p class="small muted" style="padding:14px;margin:0;font-size:12.5px;line-height:1.55">Drags 1:1 \u00b7 release speed decides.</p><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><nav class="dw" aria-label="Site" style="position:absolute;left:0;top:0;bottom:0;width:200px;background:var(--card);box-shadow:var(--shadow);padding:16px 10px;touch-action:none"><b style="display:block;padding:0 10px 10px;font-size:15px;font-weight:600">Common Room</b></nav></div><div class="hint">Fling to snap \u00b7 links stagger after settle</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="st2" checked> stagger links</label>`,
+  html:`<div class="ph card" style="position:relative;width:min(260px,82%);height:290px;overflow:hidden"><header class="row" style="height:50px;padding:0 10px;gap:8px;border-bottom:1px solid var(--line-soft)"><button class="hb" aria-label="Open navigation" style="width:36px;height:36px;border:0;background:none;cursor:pointer;display:grid;place-items:center;padding:0"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="transform:translateY(1px)"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><b style="font-size:15px;font-weight:600">Common Room</b></header><p class="small muted" style="padding:14px;margin:0;font-size:12.5px;line-height:1.55">Drags 1:1 \u00b7 release speed decides.</p><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><nav class="dw" aria-label="Site" style="position:absolute;left:0;top:0;bottom:0;width:200px;background:var(--card);box-shadow:var(--shadow);padding:16px 10px;touch-action:none"><b style="display:block;padding:0 10px 10px;font-size:15px;font-weight:600">Common Room</b></nav></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="st2" checked> stagger links</label><div class="hint">Fling to snap \u00b7 links stagger after settle</div>`,
   desc:'The drawer tracks the drag 1:1 and release velocity picks open or closed. The scrim fades with position and links stagger only after it settles.',
   api:'x.release(x, vx, open?); links stagger after |v|<1',
   init(st){
@@ -26931,7 +26967,7 @@ atom({ id:'velosheet', cat:'Overlays', name:'Velocity drawer', block:'Drag 1:1, 
 
 globalThis.__cieoRecipeFile="blocks/533-carettip.js";
 atom({ id:'carettip', cat:'Overlays', name:'Caret tooltip', block:'Follows caret, Swap per word', fam:['X','S'], tall:false,
-  html:`<div class="col" style="gap:10px;align-items:center;width:100%"><div class="ed card" contenteditable="true" spellcheck="false" aria-label="Type to move the tip" style="width:min(280px,90%);padding:12px 14px;font-size:13.5px;line-height:1.55;min-height:44px">type here to glide the tip</div><div class="tp card" aria-hidden="true" style="position:absolute;padding:6px 10px;font-size:12.5px;border-radius:10px;visibility:hidden;white-space:nowrap"><span class="tx layer" style="position:relative"></span></div></div><div class="hint">Tip glides word to word \u00b7 never steals focus</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="gl" checked> glide caret</label>`,
+  html:`<div class="col" style="gap:10px;align-items:center;width:100%"><div class="ed card" contenteditable="true" spellcheck="false" aria-label="Type to move the tip" style="width:min(280px,90%);padding:12px 14px;font-size:13.5px;line-height:1.55;min-height:44px">type here to glide the tip</div><div class="tp card" aria-hidden="true" style="position:absolute;padding:6px 10px;font-size:12.5px;border-radius:10px;visibility:hidden;white-space:nowrap"><span class="tx layer" style="position:relative"></span></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="gl" checked> glide caret</label><div class="hint">Tip glides word to word \u00b7 never steals focus</div>`,
   desc:'The tip anchors to the caret with a snap, then glides word to word on base as you type. Text swaps per word and focus never leaves the field.',
   api:'caret.x snap; glide base; tx.to(word)',
   init(st){
@@ -26950,7 +26986,7 @@ atom({ id:'carettip', cat:'Overlays', name:'Caret tooltip', block:'Follows caret
 
 globalThis.__cieoRecipeFile="blocks/534-holdscrim.js";
 atom({ id:'holdscrim', cat:'Overlays', name:'Hold scrim dismiss', block:'Press-hold 500ms dismiss', fam:['X'], tall:true,
-  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:230px;overflow:hidden;display:grid;place-items:center"><button class="btn ink op" style="min-height:36px">Open preview</button><div class="sr" role="button" tabindex="0" aria-label="Press and hold to dismiss" style="position:absolute;inset:0;background:var(--ink);opacity:0;touch-action:none;display:grid;place-items:center"><span class="ring" style="width:44px;height:44px;border-radius:50%;border:3px solid #fff;display:grid;place-items:center;padding:0;color:#fff;font-size:12px">500</span></div><b class="tt" style="position:absolute;bottom:14px;font-size:15px;font-weight:600">Hold the shade to dismiss</b></div><div class="hint">Press dims deeper \u00b7 hold 500ms dismisses</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="kb" checked> Space holds too</label>`,
+  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:230px;overflow:hidden;display:grid;place-items:center"><button class="btn ink op" style="min-height:36px">Open preview</button><div class="sr" role="button" tabindex="0" aria-label="Press and hold to dismiss" style="position:absolute;inset:0;background:var(--ink);opacity:0;touch-action:none;display:grid;place-items:center"><span class="ring" style="width:44px;height:44px;border-radius:50%;border:3px solid #fff;display:grid;place-items:center;padding:0;color:#fff;font-size:12px">500</span></div><b class="tt" style="position:absolute;bottom:14px;font-size:15px;font-weight:600">Hold the shade to dismiss</b></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="kb" checked> Space holds too</label><div class="hint">Press dims deeper \u00b7 hold 500ms dismisses</div>`,
   desc:'Pressing dims the scrim deeper as a snap preview. Holding 500ms dismisses; releasing early springs back. Space held works the same.',
   api:'press: dim snap preview; hold 0.5s dismiss; early release springs back',
   init(st){
@@ -26973,7 +27009,7 @@ atom({ id:'holdscrim', cat:'Overlays', name:'Hold scrim dismiss', block:'Press-h
 
 globalThis.__cieoRecipeFile="blocks/535-dialogform.js";
 atom({ id:'dialogform', cat:'Overlays', name:'Dialog form steps', block:'Pinned header footer Swap body', fam:['X','S'], tall:true,
-  html:`<button class="btn ink op" style="min-height:36px">Invite member</button><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="dialog" aria-modal="true" aria-labelledby="df-t" style="position:absolute;left:50%;top:50%;width:min(270px,86%);padding:18px 20px;visibility:hidden;border-radius:15px"><b id="df-t" style="display:block;font-size:15px;font-weight:600;line-height:1.5">Invite to Common Room</b><div class="bd" style="position:relative;min-height:74px;margin:10px 0 12px"></div><div class="row" style="justify-content:flex-end;gap:8px;border-top:1px solid var(--line-soft);padding-top:12px"><button class="btn cs" style="min-height:36px">Cancel</button><button class="btn ink nx" style="min-height:36px">Continue</button></div><p class="er small" style="color:var(--danger);font-size:12.5px;line-height:1.5;min-height:18px;margin:8px 0 0"></p></div><div class="hint">Step 1 of 2 \u00b7 invalid shakes danger</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="fx" checked> focus first invalid</label>`,
+  html:`<button class="btn ink op" style="min-height:36px">Invite member</button><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="dialog" aria-modal="true" aria-labelledby="df-t" style="position:absolute;left:50%;top:50%;width:min(270px,86%);padding:18px 20px;visibility:hidden;border-radius:15px"><b id="df-t" style="display:block;font-size:15px;font-weight:600;line-height:1.5">Invite to Common Room</b><div class="bd" style="position:relative;min-height:74px;margin:10px 0 12px"></div><div class="row" style="justify-content:flex-end;gap:8px;border-top:1px solid var(--line-soft);padding-top:12px"><button class="btn cs" style="min-height:36px">Cancel</button><button class="btn ink nx" style="min-height:36px">Continue</button></div><p class="er small" style="color:var(--danger);font-size:12.5px;line-height:1.5;min-height:18px;margin:8px 0 0"></p></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="fx" checked> focus first invalid</label><div class="hint">Step 1 of 2 \u00b7 invalid shakes danger</div>`,
   desc:'Header and footer stay pinned while only the body swaps on base. Invalid fields turn danger with a message, valid ones show a success check.',
   api:'body.to(step, base only); invalid: danger + message + focus',
   init(st){
@@ -26999,7 +27035,7 @@ atom({ id:'dialogform', cat:'Overlays', name:'Dialog form steps', block:'Pinned 
 
 globalThis.__cieoRecipeFile="blocks/536-holdconfirm.js";
 atom({ id:'confirmhold', cat:'Overlays', name:'Hold to confirm', block:'Danger slides in, hold + countdown', fam:['X','T'], tall:true,
-  html:`<div class="card col" style="width:min(270px,86%);padding:8px"><div class="rw" style="overflow:hidden"><div class="row fr" style="justify-content:space-between;padding:8px 10px"><span class="small" style="font-weight:500;font-size:13.5px;line-height:1.5">About page</span><button class="btn del" style="color:var(--danger);min-height:36px;padding:4px 10px">Delete</button></div></div></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="alertdialog" aria-label="Confirm delete" style="position:absolute;left:50%;top:50%;width:min(250px,84%);padding:18px 20px;visibility:hidden;border-radius:15px"><b style="display:block;font-size:15px;font-weight:600;line-height:1.5">Delete \u201cAbout\u201d?</b><p class="small muted" style="margin:6px 0 12px;font-size:13px;line-height:1.55">Hold the button 3s to confirm.</p><button class="btn hd" style="width:100%;min-height:40px;background:var(--danger);border-color:var(--danger);color:#fff;position:relative;overflow:hidden"><span class="fl" style="position:absolute;inset:0;background:#ffffff2e;width:0"></span><span class="lb" style="position:relative">Hold to delete \u00b7 <b class="cd"></b></span></button><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn cs" style="min-height:36px">Cancel</button></div></div><div class="hint">Danger slides after dialog \u00b7 row collapses</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="ct" checked> 3s countdown</label>`,
+  html:`<div class="card col" style="width:min(270px,86%);padding:8px"><div class="rw" style="overflow:hidden"><div class="row fr" style="justify-content:space-between;padding:8px 10px"><span class="small" style="font-weight:500;font-size:13.5px;line-height:1.5">About page</span><button class="btn del" style="color:var(--danger);min-height:36px;padding:4px 10px">Delete</button></div></div></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="alertdialog" aria-label="Confirm delete" style="position:absolute;left:50%;top:50%;width:min(250px,84%);padding:18px 20px;visibility:hidden;border-radius:15px"><b style="display:block;font-size:15px;font-weight:600;line-height:1.5">Delete \u201cAbout\u201d?</b><p class="small muted" style="margin:6px 0 12px;font-size:13px;line-height:1.55">Hold the button 3s to confirm.</p><button class="btn hd" style="width:100%;min-height:40px;background:var(--danger);border-color:var(--danger);color:#fff;position:relative;overflow:hidden"><span class="fl" style="position:absolute;inset:0;background:#ffffff2e;width:0"></span><span class="lb" style="position:relative">Hold to delete \u00b7 <b class="cd"></b></span></button><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn cs" style="min-height:36px">Cancel</button></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="ct" checked> 3s countdown</label><div class="hint">Danger slides after dialog \u00b7 row collapses</div>`,
   desc:'The danger confirm slides in on base after the dialog. Hold-to-confirm runs a digits countdown, then the row collapses only after exit.',
   api:'dlg base; hold 3s Digits; row.h base after exit',
   init(st){

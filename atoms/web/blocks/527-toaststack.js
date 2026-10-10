@@ -1,5 +1,5 @@
 atom({ id:'toaststack', cat:'Overlays', name:'Toast stack pile', block:'Toast stack, polite announce', fam:['X','M'], tall:true,
-  html:`<button class="btn ink add" style="min-height:36px">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:20px;width:min(300px,86%);transform:translateX(-50%);height:120px"></div><div class="hint">Hover the pile to expand + pause timers</div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px"><input type="checkbox" class="ex" checked> expand on hover</label>`,
+  html:`<button class="btn ink add" style="min-height:36px">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:20px;width:min(300px,86%);transform:translateX(-50%);height:120px"></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px"><input type="checkbox" class="ex" checked> expand on hover</label><div class="hint">Hover the pile to expand + pause timers</div>`,
   desc:'Newest slides in on base while older ones sink with soft depth. Hovering expands the pile and pauses timers; toasts announce politely, errors assertively.',
   api:'add: i.set(j, S.soft); hover: spread.set(1); timers pause while hover',
   init(st){

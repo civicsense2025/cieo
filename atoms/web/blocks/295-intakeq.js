@@ -3,6 +3,7 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
   desc:'Each answer slides the next question up from below while the progress bar fills. Continuing empty snaps the card side to side and swaps in what is missing. The sent summary holds as the terminal.',
   api:'qa.to(step+1) rises   pr.set(step/3) fills   empty: sh.release shake + need.to(1)',
   init(st){
+    const pristine = st.innerHTML;
     const Q = [
       { q:'What brings you in?', opts:['Tour','Consult','Follow-up'] },
       { q:'Party size?', opts:['1–2','3–5','6+'] },
@@ -51,15 +52,20 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
       sw.to(step); pr.set(step/3, S.base);
       pcap.textContent = step >= 3 ? 'Done' : (step + 1) + ' of 3';
       if (step >= 3) sv.set(1, S.base); };
-    $(st,'.bk').onclick = () => { if (step <= 0) return; step--; ans[step] = null;
+    const bk = $(st,'.bk'), svBtn = $(st,'.sv');
+    bk.onclick = () => { if (step <= 0) return; step--; ans[step] = null;
       const fresh = build(step); layers[step].replaceWith(fresh); layers[step] = fresh;
       sw.to(step); pr.set(step/3); need.to(0);
       pcap.textContent = (step + 1) + ' of 3'; sv.set(0); };
-    $(st,'.sv').onclick = e => { const b = e.target;
+    svBtn.onclick = e => { const b = e.target;
       b.textContent = b.textContent === 'Save draft' ? 'Draft saved ✓' : 'Save draft'; };
-    return t => { layers.forEach((L,k) => sw.apply(L,k,t,10));
+    const render = t => { layers.forEach((L,k) => sw.apply(L,k,t,10));
       layers.forEach(L => { if (L._n) L._n.forEach((n,j) => need.apply(n, j ? 1 : 0, t, 3)); });
       pfill.style.width = (clamp(pr.at(t))*100).toFixed(1) + '%';
       qcard.style.transform = 'translateX(' + sh.at(t).toFixed(2) + 'px)';
       qcard.style.borderColor = mix(clamp(sv.at(t)),'var(--success)','var(--line)'); };
+    render.ctl = { get step(){ return step; }, ans, qa:sw, progress:pr, shake:sh, need, saved:sv };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true;
+      bk.onclick = null; svBtn.onclick = null; st.innerHTML = pristine; };
+    return render;
   }});

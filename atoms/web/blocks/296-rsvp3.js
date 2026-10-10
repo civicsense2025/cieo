@@ -3,7 +3,9 @@ atom({ id:'rsvp3', cat:'Scheduling', name:'RSVP', block:'rsvp, yes no maybe', fa
   desc:'One plate slides between yes, no and maybe. Counts roll on digits with every vote, yes inks success and maybe holds a warning tint instead of ever resolving green.',
   api:'plate.go(l, r) single plate   counts Digits roll   maybe: warn.set(1) amber hold',
   init(st){
+    const pristine = st.innerHTML;
     const O = ['Yes','No','Maybe'], base = [12,3,5], seg = $(st,'.seg'), pl = edges(0, 0);
+    let dead = false;
     const tabs = O.map((o,i) => {
       const b = document.createElement('button'); b.setAttribute('role','radio');
       b.style.cssText = 'position:relative;z-index:1;flex:1;min-width:0;min-height:40px;border:0;background:none;border-radius:8px;cursor:pointer;font-size:13px;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:4px 0;overflow:hidden';
@@ -24,15 +26,21 @@ atom({ id:'rsvp3', cat:'Scheduling', name:'RSVP', block:'rsvp, yes no maybe', fa
       counts();
       $(st,'.note').textContent = i === 2 ? 'We saved you a maybe seat' : i === 0 ? 'See you there' : 'You will be missed'; };
     tabs.forEach((x,i) => x.b.onclick = () => vote(i));
-    $(st,'.m').onclick = () => { plus = Math.max(0, plus - 1); $(st,'.g').textContent = plus; counts(); };
-    $(st,'.p').onclick = () => { plus = Math.min(4, plus + 1); $(st,'.g').textContent = plus; counts(); };
+    const minus = $(st,'.m'), plusBtn = $(st,'.p');
+    minus.onclick = () => { plus = Math.max(0, plus - 1); $(st,'.g').textContent = plus; counts(); };
+    plusBtn.onclick = () => { plus = Math.min(4, plus + 1); $(st,'.g').textContent = plus; counts(); };
     counts();
-    document.fonts.ready.then(() => pl.jump(0, 0)); pl.jump(0, 0);
-    return t => { const wpx = Math.max(0, pl.B.at(t) - pl.A.at(t));
+    document.fonts.ready.then(() => { if (!dead) pl.jump(0, 0); }); pl.jump(0, 0);
+    const render = t => { const wpx = Math.max(0, pl.B.at(t) - pl.A.at(t));
       plate.style.left = px(pl.A.at(t)); plate.style.width = px(wpx);
       plate.style.opacity = pick < 0 ? '0' : '1';
       plate.style.background = pick === 2 ? mix(clamp(tabs[2].tn.at(t)),'#fef3c7','var(--card)') : 'var(--card)';
       tabs.forEach((x,i) => { x.dg.render(t); const v = clamp(x.tn.at(t));
         x.b.style.fontWeight = v > .5 ? '600' : '400';
         x.b.style.color = i === 2 ? mix(v,'#92400e','var(--ink)') : i === 0 ? mix(v,'var(--success)','var(--ink)') : 'var(--ink)'; }); };
+    render.ctl = { tabs, plate:pl, get pick(){ return pick; }, get plus(){ return plus; } };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true; dead = true;
+      tabs.forEach(x => { x.b.onclick = null; }); minus.onclick = null; plusBtn.onclick = null;
+      st.innerHTML = pristine; };
+    return render;
   }});

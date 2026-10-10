@@ -3,9 +3,11 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
   desc:'Each field validates as you type. A bad value rings the field red and swaps in its message; a good one earns a success check. Sending with errors surfaces every message, and a clean invite holds its success state.',
   api:'err.set(1) danger ring + msg swap   ok.set(1) success check   send: all valid → terminal',
   init(st){
+    const pristine = st.innerHTML;
     const defs = [
       { box:'.f0', test:v => v.trim().length >= 2, msg:'Enter a name (2+ letters)' },
       { box:'.f1', test:v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()), msg:'Enter a valid email' }];
+    const offs = [];
     const F = defs.map(d => {
       const box = $(st,d.box), inp = $$(box,'.in')[0], mg = $$(box,'.mg')[0], iw = $$(box,'.iw')[0];
       const e0 = document.createElement('span'); e0.style.cssText = 'grid-area:1/1;display:flex;align-items:center;min-width:0;min-height:18px';
@@ -22,8 +24,10 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
         f.ok.set(good && inp.value ? 1 : 0);
         if (!good && (f.touched || !quiet)) f.sw.to(1); else f.sw.to(0);
         return good; };
-      inp.addEventListener('input', () => check(true));
-      inp.addEventListener('blur', () => { f.touched = true; check(false); });
+      const onInput = () => check(true), onBlur = () => { f.touched = true; check(false); };
+      inp.addEventListener('input', onInput);
+      inp.addEventListener('blur', onBlur);
+      offs.push(() => { inp.removeEventListener('input', onInput); inp.removeEventListener('blur', onBlur); });
       return f; });
     const go = $(st,'.go');
     const done = new Track(0);
@@ -37,11 +41,15 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
       if (F.every(f => { const g = f.test(f.inp.value);
         f.err.set(g ? 0 : 1); f.ok.set(g ? 1 : 0); f.sw.to(g ? 0 : 1); return g; })){
         gsw.to(1); done.set(1, S.base); go.style.cursor = 'default'; } };
-    return t => F.forEach((f,i) => { const e = clamp(f.err.at(t)), o = clamp(f.ok.at(t));
+    const render = t => F.forEach((f,i) => { const e = clamp(f.err.at(t)), o = clamp(f.ok.at(t));
       f.inp.style.borderColor = e > .02 ? mix(e,'var(--danger,#c9403b)','var(--line)') : mix(o,'var(--success)','var(--line)');
       f.inp.style.boxShadow = e > .02 ? '0 0 0 3px color-mix(in oklab, var(--danger,#c9403b) ' + (e*18).toFixed(1) + '%, transparent)' : 'none';
       f.sw.apply(f.e1, 1, t); fade(f.e0, 1, 0, false);
       f.ck.style.width = px(16*o);
       if (i === 0){ li.forEach((l,k) => gsw.apply(l,k,t));
         go.style.background = mix(clamp(done.at(t)),'var(--success)','var(--ink)'); } });
+    render.ctl = { fields:F, done, choice:gsw };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true;
+      offs.forEach(off => off()); go.onclick = null; st.innerHTML = pristine; };
+    return render;
   }});

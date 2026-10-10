@@ -3,6 +3,7 @@ atom({ id:'rsvp', cat:'Forms', name:'Call RSVP', block:'rsvp (going, maybe, even
   desc:'The plate slides behind your pick with its trailing edge 60ms late, and the headcount rolls its digits. Your answer swaps in a terminal you can change.',
   api:'plate.go(x, w) trails .06   head.set(n)   pick: fin.to(i+1)',
   init(st){
+    const pristine = st.innerHTML;
     const O = ['Going',"Maybe","Can't"];
     const opts = $(st,'.opts'), pl = $(st,'.pl'), hc = $(st,'.hc'), brk = $(st,'.brk'), sc = $(st,'.sc');
     const edge = edges(0, 80); edge.jump(-99, 80);
@@ -26,11 +27,17 @@ atom({ id:'rsvp', cat:'Forms', name:'Call RSVP', block:'rsvp (going, maybe, even
       const b = btns[i]; edge.go(b.offsetLeft, b.offsetWidth, t0); vis.set(1, S.base, t0);
       fsw.to(i + 1, t0);
       btns.forEach((x,j) => { x.setAttribute('aria-pressed', j === i); x.style.fontWeight = j === i ? '600' : ''; }); };
-    $(st,'.ch').onclick = () => { mine = -1; counts[1] += 0; fsw.to(0); paint();
+    const chBtn = $(st,'.ch');
+    chBtn.onclick = () => { mine = -1; counts[1] += 0; fsw.to(0); paint();
       btns.forEach(x => { x.setAttribute('aria-pressed', 'false'); x.style.fontWeight = ''; }); };
     sc.onchange = () => cok.set(sc.checked ? 1 : 0, S.base);
-    return t => { Object.assign(pl.style, { left:px(Math.max(0, edge.A.at(t))), width:px(Math.max(0, edge.B.at(t))), opacity:clamp(vis.at(t)).toFixed(3) });
+    const render = t => { Object.assign(pl.style, { left:px(Math.max(0, edge.A.at(t))), width:px(Math.max(0, edge.B.at(t))), opacity:clamp(vis.at(t)).toFixed(3) });
       F.forEach((e,k) => fsw.apply(e,k,t)); hd.render(t);
       const c = clamp(cok.at(t)), row = $(st,'.cnt');
       row.style.opacity = c.toFixed(3); row.style.visibility = c < .02 ? 'hidden' : 'visible'; };
+    render.ctl = { buttons:btns, edge, shown:vis, fin:fsw, head:hd, counts, get mine(){ return mine; } };
+    render.dispose = () => { if (render.disposed) return; render.disposed = true;
+      btns.forEach(b => { b.onclick = null; }); chBtn.onclick = null; sc.onchange = null;
+      st.innerHTML = pristine; };
+    return render;
   }});
