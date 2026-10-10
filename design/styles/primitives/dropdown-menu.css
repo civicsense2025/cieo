@@ -1,0 +1,6 @@
+/* design/styles/primitives/dropdown-menu.css */
+@layer cieo.components {
+  :where(.cieo).cieo-dropdown-menu { position: relative; display: inline-block; }
+  :where(.cieo) .cieo-dropdown-menu-trigger { display: inline-block; }
+  :where(.cieo) .cieo-dropdown-menu-panel { position: absolute; inset-block-start: 100%; inset-inline-start: 0; z-index: var(--cieo-popover-z); min-inline-size: 12rem; margin-block-start: var(--cieo-space-1); padding: var(--cieo-space-1); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+}

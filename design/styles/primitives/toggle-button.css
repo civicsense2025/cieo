@@ -1,0 +1,6 @@
+/* design/styles/primitives/toggle-button.css */
+@layer cieo.components {
+  :where(.cieo).cieo-toggle-button { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-control-height); padding-inline: var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-toggle-button[data-pressed='true'] { background: var(--cieo-color-sunken); border-color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-toggle-button:disabled { color: var(--cieo-color-muted); }
+}

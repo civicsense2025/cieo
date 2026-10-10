@@ -1,0 +1,9 @@
+/* design/styles/primitives/toggle-button-group.css */
+@layer cieo.components {
+  :where(.cieo).cieo-toggle-button-group { display: inline-flex; }
+  :where(.cieo).cieo-toggle-button-group > * + * { margin-inline-start: -1px; }
+  :where(.cieo).cieo-toggle-button-group > :first-child { border-start-end-radius: 0; border-end-end-radius: 0; }
+  :where(.cieo).cieo-toggle-button-group > :last-child { border-start-start-radius: 0; border-end-start-radius: 0; }
+  :where(.cieo).cieo-toggle-button-group > :not(:first-child):not(:last-child) { border-radius: 0; }
+  :where(.cieo).cieo-toggle-button-group > :only-child { border-radius: var(--cieo-radius-control); }
+}
