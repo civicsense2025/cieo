@@ -18,7 +18,11 @@ Windowed page nav (±2 around the current page).
 
 ## Behavior
 
-No motion. Window is ±2 clamped to 1..pageCount. Edge buttons disable at the ends. Host owns `page`.
+Window is ±2 clamped to 1..pageCount. Edge buttons disable at the ends. Host owns `page`. Current-numeral motion is opt-out (see Motion).
+
+## Motion
+
+The current numeral rolls on change; motion={false} renders a plain numeral.
 
 ## Keyboard / accessibility
 

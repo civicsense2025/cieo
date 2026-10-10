@@ -1,6 +1,7 @@
 // src/primitives/Pagination/Pagination.tsx
 'use client';
 /* Pagination. Windowed page nav (±2 around the current page); host owns page state. */
+import { Digits } from '../../react/index.js';
 
 export interface PaginationProps {
   /** Current page (1-based). Required. */
@@ -11,9 +12,11 @@ export interface PaginationProps {
   onPageChange?: (page: number) => void;
   /** Accessible name. Defaults to Pagination. */
   label?: string;
+  /** False renders the current numeral instantly. Defaults to true (numeral rolls on change). */
+  motion?: boolean;
 }
 
-export function Pagination({ page, pageCount, onPageChange, label = 'Pagination' }: PaginationProps) {
+export function Pagination({ page, pageCount, onPageChange, label = 'Pagination', motion }: PaginationProps) {
   const start = Math.max(1, page - 2);
   const end = Math.min(pageCount, page + 2);
   const pages: number[] = [];
@@ -25,7 +28,7 @@ export function Pagination({ page, pageCount, onPageChange, label = 'Pagination'
       </button>
       {pages.map((p) => (
         <button key={p} type="button" aria-current={p === page ? 'page' : undefined} onClick={() => onPageChange?.(p)}>
-          {p}
+          {p === page ? (motion === false ? p : <Digits value={page} kind="feedback" />) : p}
         </button>
       ))}
       <button type="button" disabled={page >= pageCount} aria-label="Next page" onClick={() => onPageChange?.(page + 1)}>

@@ -17,7 +17,8 @@
     { "id": "page", "type": { "kind": "integer" }, "required": true, "nullable": false, "constraints": { "min": 1 } },
     { "id": "pageCount", "type": { "kind": "integer" }, "required": true, "nullable": false, "constraints": { "min": 1 } },
     { "id": "onPageChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (page: number) => void; no function kind exists in the manifest precedent, see src/controls/Range.tsx." },
-    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Pagination", "constraints": { "minLength": 1, "maxLength": 256 } }
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Pagination", "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} }
   ],
   "slots": [],
   "state": [],
@@ -26,7 +27,7 @@
   "variants": [],
   "styleParts": [{ "id": "bar", "overrides": ["gap"], "tokenRoles": ["space-control"] }],
   "constraints": { "layout": ["windowed-pages"], "content": ["nav-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["page", "pageCount", "onPageChange", "label"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["page", "pageCount", "onPageChange", "label", "motion"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Windowed page nav (±2 around the current page)." },
