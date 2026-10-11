@@ -4,6 +4,7 @@
     "AppShell",
     "AspectRatio",
     "AuthEmailField",
+    "AuthPasswordInput",
     "Avatar",
     "AvatarGroup",
     "AvatarGroupOverflow",
@@ -156,5 +157,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 155
+  "count": 156
 }

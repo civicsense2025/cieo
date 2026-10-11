@@ -1,0 +1,26 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/* AuthPasswordInput (static). Password input with a strength meter and a show/hide toggle that keeps focus on the input. */
+import { useRef, useState } from 'react';
+function scorePassword(pw) {
+    let score = 0;
+    if (pw.length >= 8)
+        score += 1;
+    if (pw.length >= 12)
+        score += 1;
+    if (/[a-z]/.test(pw) && /[A-Z]/.test(pw))
+        score += 1;
+    if (/\d/.test(pw) && /[^a-zA-Z0-9]/.test(pw))
+        score += 1;
+    return Math.min(score, 4);
+}
+const STRENGTH_LABELS = ['Too weak', 'Weak', 'Okay', 'Strong', 'Very strong'];
+export function AuthPasswordInput({ id, label = 'Password', value, defaultValue, error, disabled, showStrength = true, autoComplete = 'current-password', style, onChange, onBlur }) {
+    const [shown, setShown] = useState(false);
+    const [inner, setInner] = useState(defaultValue ?? '');
+    const inputRef = useRef(null);
+    const current = value ?? inner;
+    const score = scorePassword(current);
+    const describedBy = error ? `${id}-error` : undefined;
+    return (_jsxs("span", { className: "cieo cieo-auth-password-input", "data-invalid": error ? 'true' : undefined, style: style, children: [_jsx("label", { className: "cieo-auth-label", htmlFor: id, children: label }), _jsxs("span", { className: "cieo-auth-password-wrap", children: [_jsx("input", { ref: inputRef, id: id, className: "cieo-auth-input", type: shown ? 'text' : 'password', autoComplete: autoComplete, value: value, defaultValue: defaultValue, disabled: disabled, "aria-invalid": error ? 'true' : undefined, "aria-describedby": describedBy, onChange: e => { setInner(e.target.value); onChange?.(e.target.value); }, onBlur: onBlur }), _jsx("button", { type: "button", className: "cieo-auth-toggle", "aria-label": shown ? 'Hide password' : 'Show password', "aria-pressed": shown, disabled: disabled, onClick: () => { setShown(s => !s); inputRef.current?.focus(); }, children: shown ? 'Hide' : 'Show' })] }), showStrength && current ? (_jsx("span", { className: "cieo-auth-meter", role: "meter", "aria-label": "Password strength", "aria-valuemin": 0, "aria-valuemax": 4, "aria-valuenow": score, "aria-valuetext": STRENGTH_LABELS[score], children: [0, 1, 2, 3].map(i => (_jsx("i", { "data-filled": i < score ? 'true' : undefined }, i))) })) : null, error ? _jsx("span", { id: `${id}-error`, className: "cieo-auth-error", role: "alert", children: error }) : null] }));
+}
