@@ -2,7 +2,7 @@
 atom({
   id:'dropdown',cat:'Admin',name:'Dropdown',block:'Select / menu primitive',fam:['X','S'],tall:true,
   html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:min(248px,88%)">
-    <button type="button" class="btn dd" aria-haspopup="menu" aria-expanded="false" style="position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:40px;justify-content:space-between;border-radius:16px;border:0;background:var(--raised)">
+    <button type="button" class="btn dd" aria-label="Sort collection" aria-haspopup="menu" aria-expanded="false" style="position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:40px;justify-content:space-between;border-radius:16px;border:0;background:var(--raised)">
       <span class="lbw" style="position:relative;height:24px;flex:1;text-align:left"></span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
     </button><div class="mn card" role="menu" aria-label="Sort collection" aria-hidden="true" inert style="position:absolute;top:48px;left:0;width:100%;padding:8px;border-radius:16px;transform-origin:24px 0;visibility:hidden"></div>
   </div>`,

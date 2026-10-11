@@ -1,7 +1,7 @@
 
 
 atom({ id:'surface', cat:'Admin', name:'Morph surface', block:'buttons → loader → island → toast', fam:['M','S'], wide:true, tall:true,
-  html:`<button class="sf" style="position:relative;border:0;cursor:pointer;font-weight:500;overflow:hidden;padding:0"></button><div class="ro st">button</div><div class="hint">Click the button</div>`,
+  html:`<button class="sf" aria-label="Start sequence" style="position:relative;border:0;cursor:pointer;font-weight:500;overflow:hidden;padding:0"></button><div class="ro st">button</div><div class="hint">Click the button</div>`,
   desc:'Button, loader, check, dynamic island and toast are one element. Width, height, radius and ink ride springs, and the check fills with the success color. Content swaps by the blur rule. The run is a list of timed events.',
   api:'plan([[0,"loader"],[1.1,"check"],[1.9,"island"],[3.6,"toast"],[5.6,"button"]])',
   init(st){

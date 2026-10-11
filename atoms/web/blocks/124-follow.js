@@ -1,7 +1,7 @@
 
 
 atom({ id:'follow', cat:'Social', name:'Follow button', block:'profile-header, social-links', fam:['M','S'],
-  html:`<div class="row" style="gap:12px"><i style="width:44px;height:44px;border-radius:50%;background:var(--accent)"></i><span class="col" style="gap:0"><b class="small">Field Notes</b><span class="small muted">@fieldnotes</span></span><button class="fb" aria-pressed="false" style="position:relative;height:34px;border-radius:17px;border:1.5px solid var(--ink);cursor:pointer;font:600 13px var(--sans);overflow:hidden;margin-left:8px"></button></div><div class="hint">Follow, then hover the button</div>`,
+  html:`<div class="row" style="gap:12px"><i style="width:44px;height:44px;border-radius:50%;background:var(--accent)"></i><span class="col" style="gap:0"><b class="small">Field Notes</b><span class="small muted">@fieldnotes</span></span><button class="fb" aria-label="Follow or unfollow" aria-pressed="false" style="position:relative;height:34px;border-radius:17px;border:1.5px solid var(--ink);cursor:pointer;font:600 13px var(--sans);overflow:hidden;margin-left:8px"></button></div><div class="hint">Follow, then hover the button</div>`,
   desc:'Follow turns into an outlined Following with its width springing to fit. Hovering Following previews Unfollow in the danger color, so the destructive action is never a surprise.',
   api:'w.set(measure(label)); fill.set(!following); hover && following → label.to("unfollow")',
   init(st){

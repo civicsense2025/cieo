@@ -1,7 +1,7 @@
 
 
 atom({ id:'payment', cat:'Documents', name:'Pay button', block:'payment-methods, checkout', fam:['M','S'],
-  html:`<div class="card col" style="width:min(300px,88%);padding:16px;gap:10px"><div class="row" style="justify-content:space-between"><span class="muted small">Invoice INV-0042</span><b class="num tot"></b></div><button class="pay" style="position:relative;height:44px;border:0;border-radius:11px;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="pm small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" id="pay-decline" class="dc"> Simulate a declined card</label></div>`,
+  html:`<div class="card col" style="width:min(300px,88%);padding:16px;gap:10px"><div class="row" style="justify-content:space-between"><span class="muted small">Invoice INV-0042</span><b class="num tot"></b></div><button class="pay" aria-label="Pay invoice" style="position:relative;height:44px;border:0;border-radius:11px;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="pm small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" id="pay-decline" class="dc"> Simulate a declined card</label></div>`,
   desc:'Processing keeps the button in place with a spinner. Success fills it with the success color; a decline fills it with danger and opens a fix-it message. Both settle back to a retryable state. On success the invoice total counts up on a soft spring while the receipt swaps in.',
   api:'plan(processing → paid | declined)   fill = mix(success | danger, ink)   total.set(64.80, S.soft, t0 + .25)',
   init(st){

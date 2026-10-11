@@ -102,7 +102,7 @@ atom({ id:'productpage', cat:'Storefront', name:'Product page', block:'product, 
       <div class="pp-sk" role="status"></div>
       <div><div class="pp-lb"><span>Color</span><span class="pp-cn muted"></span></div><div class="pp-sw" role="group" aria-label="Color"></div></div>
       <div><div class="pp-lb"><span>Size</span></div><div class="pp-cp" role="group" aria-label="Size"></div></div>
-      <button type="button" class="pp-ad"></button>
+      <button type="button" class="pp-ad" aria-label="Add to cart"></button>
     </div>
   </div></div>
   <div class="pp-sc"></div>
@@ -268,7 +268,7 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
   <div class="cf-mn"><div class="cf-pn"></div>
     <aside class="cf-tt" aria-label="Order summary"><div class="r"><span class="muted">Subtotal</span><span class="num"></span></div><div class="r"><span class="muted">Shipping</span><span class="num"></span></div><div class="r"><span class="muted">Tax (8%)</span><span class="num"></span></div><div class="r tot"><span>Total</span><span class="num"></span></div></aside>
   </div>
-  <div class="cf-ac"><button type="button" class="btn cf-bk">Back</button><button type="submit" class="cf-nx"></button></div>
+  <div class="cf-ac"><button type="button" class="btn cf-bk">Back</button><button type="submit" class="cf-nx" aria-label="Next step"></button></div>
 </form></div>`,
   desc:'One bar fills as you move Cart, Details, Payment, Receipt, and panels slide sideways in the direction of travel with the blur swap. Changing a quantity rolls its digit first, then every money value springs to the new total together; shipping goes free at $100. Empty required fields ring in danger. Pay shows a spinner, then fills success and slides to the receipt, where the check draws and the total counts up. With Simulate decline the button and bar flash danger, a message swaps in, and you stay on Payment.',
   api:'panel.to(i, dir)   bar.set((i + 1)/4)   totals.set(sum)   pay: busy → ok | bad   receipt: check.draw(t0 + .3); total.set(sum, t0 + .25)',

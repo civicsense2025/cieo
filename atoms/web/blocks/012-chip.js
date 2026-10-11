@@ -1,7 +1,7 @@
 
 
 atom({ id:'chip', cat:'Content', name:'Blur swap label', block:'buttons, cta-button', fam:['S','M'],
-  html:`<div class="col" style="gap:16px;align-items:center"><button class="chipb" style="position:relative;height:48px;border-radius:24px;background:var(--accent);color:var(--card);border:0;cursor:pointer;font-weight:500"></button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp"> loop</label></div><div class="hint">Click to advance</div>`,
+  html:`<div class="col" style="gap:16px;align-items:center"><button class="chipb" aria-label="Upload status" style="position:relative;height:48px;border-radius:24px;background:var(--accent);color:var(--card);border:0;cursor:pointer;font-weight:500"></button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp"> loop</label></div><div class="hint">Click to advance</div>`,
   desc:'Outgoing text blurs up and out in 100ms. Incoming text starts after it, while the pill width springs to fit. The last state holds as a success terminal instead of wrapping; tapping it starts over.',
   api:'w.set(measure(next)); swap.to(next)   end: success.set(1), hold',
   init(st){
