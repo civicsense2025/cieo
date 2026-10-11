@@ -2,6 +2,7 @@ export { AlertDialog } from './AlertDialog/AlertDialog.js';
 export { AppShell } from './AppShell/AppShell.js';
 export { AspectRatio } from './AspectRatio/AspectRatio.js';
 export { AuthEmailField } from './AuthEmailField/AuthEmailField.js';
+export { AuthOtpInput } from './AuthOtpInput/AuthOtpInput.js';
 export { AuthPasswordInput } from './AuthPasswordInput/AuthPasswordInput.js';
 export { Avatar } from './Avatar/Avatar.js';
 export { AvatarGroup } from './AvatarGroup/AvatarGroup.js';

@@ -1,0 +1,17 @@
+/* design/styles/primitives/auth-otp-input.css */
+@layer cieo.components {
+  :where(.cieo).cieo-auth-otp-input { display: inline-flex; flex-direction: column; gap: 6px; }
+  :where(.cieo) .cieo-auth-label { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-otp-boxes { display: inline-flex; gap: 8px; }
+  :where(.cieo) .cieo-auth-otp-box {
+    width: 2.75rem; height: 2.75rem; border-radius: 9px; text-align: center;
+    border: 1.5px solid var(--cieo-color-text-muted, #66676f);
+    background: var(--cieo-color-surface); color: var(--cieo-color-text);
+    font-size: var(--cieo-text-body); font-variant-numeric: tabular-nums;
+  }
+  :where(.cieo) .cieo-auth-otp-box:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  :where(.cieo) .cieo-auth-error { font-size: var(--cieo-text-small); color: var(--cieo-color-danger); }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-auth-otp-input * { animation: none; transition: none; }
+  }
+}

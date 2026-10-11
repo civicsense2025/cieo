@@ -8,6 +8,7 @@
 @import './styles/primitives/appshell.css';
 @import './styles/primitives/aspectratio.css';
 @import './styles/primitives/auth-email-field.css';
+@import './styles/primitives/auth-otp-input.css';
 @import './styles/primitives/auth-password-input.css';
 @import './styles/primitives/avatar-group-overflow.css';
 @import './styles/primitives/avatar-group.css';

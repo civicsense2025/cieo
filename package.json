@@ -66,6 +66,10 @@
       "types": "./dist/primitives/AuthEmailField/AuthEmailField.d.ts",
       "default": "./dist/primitives/AuthEmailField/AuthEmailField.js"
     },
+    "./AuthOtpInput": {
+      "types": "./dist/primitives/AuthOtpInput/AuthOtpInput.d.ts",
+      "default": "./dist/primitives/AuthOtpInput/AuthOtpInput.js"
+    },
     "./AuthPasswordInput": {
       "types": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.d.ts",
       "default": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.js"
