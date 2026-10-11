@@ -30,3 +30,34 @@ test('allowed references cannot conceal branding or personal paths on the same l
     assert.match(result.stdout, /found brand words/);
   }
 });
+
+test('documentation infrastructure paths allow only their matched occurrences', () => {
+  const infrastructure = [
+    '[PR template](../.github/pull_request_template.md)',
+    '".github/**/*",',
+    "path.start_with?('.github/')",
+  ];
+  for (const reference of infrastructure) {
+    const allowed = scan(reference);
+    assert.equal(allowed.status, 0, allowed.stdout + allowed.stderr);
+    for (const forbidden of ['meridian', 'claude', 'github', '/Users/tanho/private']) {
+      const rejected = scan(`${reference} ${forbidden}`);
+      assert.equal(rejected.status, 1, `${reference} ${forbidden}`);
+      assert.match(rejected.stdout, /found brand words/);
+    }
+  }
+});
+
+test('nearby infrastructure names remain forbidden', () => {
+  for (const content of [
+    '.github/pull_request_template.mdextra',
+    '".github/*"',
+    '".github/**"',
+    "path.start_with?('.github/unreviewed/')",
+    '.github/unreviewed.md',
+  ]) {
+    const result = scan(content);
+    assert.equal(result.status, 1, content);
+    assert.match(result.stdout, /found brand words/);
+  }
+});
