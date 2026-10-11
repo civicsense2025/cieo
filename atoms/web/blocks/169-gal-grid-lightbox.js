@@ -281,6 +281,7 @@ document.head.insertAdjacentHTML('beforeend', `<style id="txg-zm">
 .txg-zm-film button{flex:1 1 0;max-width:76px;min-width:0;height:48px;border-radius:9px;border:2px solid transparent;overflow:hidden;padding:0;background:var(--raised);position:relative}
 .txg-zm-film button img{position:absolute;inset:0}
 .txg-zm-film button[aria-current=true]{border-color:var(--ink)}
+.txg-zm-film button[aria-pressed=true]{border-color:var(--accent)}
 </style>`);
 atom({ id:'gal-zoom-pan', cat:'Galleries', name:'Lightbox with pinch, wheel and double-tap zoom', block:'lightbox, image zoom', fam:['D','M','S'], wide:true, tall:true,
   html:`<div class="txg txg-zm"><div class="txg-zm-vp txg-dk" tabindex="0" role="group" aria-roledescription="image viewer" aria-label="Photo viewer. Plus and minus zoom, zero fits, arrow keys pan.">
@@ -294,10 +295,12 @@ atom({ id:'gal-zoom-pan', cat:'Galleries', name:'Lightbox with pinch, wheel and 
     const root = $(st, '.txg-zm'), vp = $(root, '.txg-zm-vp'), ph = $(vp, '.txg-zm-ph'), img = $(ph, 'img'), pct = $(vp, '.txg-zm-pct'), map = $(vp, '.txg-zm-map'), mapI = $(map, 'i'), film = $(root, '.txg-zm-film'), hint = $(vp, '.txg-zm-hint');
     const items = [['ridge','l'], ['canyon','l'], ['portrait','p'], ['harbor','l'], ['studio','s'], ['city','l']], MAXZ = 5, L = loader(), TL = timeline(), W0 = S.soft.w;
     const Ts = new Track(1, S.soft), Tx = new Track(0, S.soft), Ty = new Track(0, S.soft);
-    let cur = 0, pend = -1, VW = 0, VH = 0, FW = 1, FH = 1, swT = -9, lastP = -1, curs = '';
-    const thumbs = items.map(([n, k], i) => { const b = document.createElement('button'); b.setAttribute('aria-label', `Show ${CAP[n]}`); b.innerHTML = '<img alt="" draggable="false">'; film.appendChild(b); L.add($(b, 'img'), n, k, { half:true }); b.onclick = () => go(i); return b; });
+    let cur = 0, pend = -1, VW = 0, VH = 0, FW = 1, FH = 1, swT = -9, lastP = -1, curs = '', mapOn = false;
+    const thumbs = items.map(([n, k], i) => { const b = document.createElement('button'); b.setAttribute('aria-label', `Show ${CAP[n]}`); b.innerHTML = '<img alt="" draggable="false">'; film.appendChild(b); L.add($(b, 'img'), n, k, { half:true }); b.onclick = () => (i === (pend < 0 ? cur : pend) ? toggleMap() : go(i)); return b; });
     items.forEach(([n, k]) => L.job(() => zbig(n, k)));
-    const sel = () => thumbs.forEach((b, j) => b.setAttribute('aria-current', j === (pend < 0 ? cur : pend)));
+    // the open photo's thumbnail toggles the corner locator (the overlay) and shows it pressed
+    const sel = () => thumbs.forEach((b, j) => { const on = j === (pend < 0 ? cur : pend); b.setAttribute('aria-current', on); b.setAttribute('aria-pressed', String(on && mapOn)); });
+    const toggleMap = () => { mapOn = !mapOn; sel(); };
     const fit = () => { VW = vp.clientWidth; VH = vp.clientHeight; const a = ASP[items[cur][1]], mw = VW - 24, mh = VH - 24; FW = Math.max(40, Math.min(mw, mh*a)); FH = FW/a;
       ph.style.width = FW + 'px'; ph.style.height = FH + 'px'; ph.style.marginLeft = -FW/2 + 'px'; ph.style.marginTop = -FH/2 + 'px'; map.style.height = (92/a) + 'px'; hint.textContent = VW < 480 ? 'Pinch or double-tap to zoom.' : 'Pinch, or hold Ctrl and scroll, to zoom. Double-tap to zoom in.'; };
     const B = s => ({ x:Math.max(0, (FW*s - VW)/2), y:Math.max(0, (FH*s - VH)/2) });
@@ -340,14 +343,14 @@ atom({ id:'gal-zoom-pan', cat:'Galleries', name:'Lightbox with pinch, wheel and 
       if (e.key === '+' || e.key === '='){ zoomBy(1.6); e.preventDefault(); } else if (e.key === '-' || e.key === '_'){ zoomBy(1/1.6); e.preventDefault(); } else if (e.key === '0'){ reset(); e.preventDefault(); }
       else if (e.key.startsWith('Arrow')){ e.preventDefault(); if (!z){ if (e.key === 'ArrowRight') go((cur + 1) % items.length); if (e.key === 'ArrowLeft') go((cur + items.length - 1) % items.length); } else { const d = 90; if (e.key === 'ArrowLeft') pan(Tx, d, b.x); if (e.key === 'ArrowRight') pan(Tx, -d, b.x); if (e.key === 'ArrowUp') pan(Ty, d, b.y); if (e.key === 'ArrowDown') pan(Ty, -d, b.y); } }
     });
-    function go(i){ const t = now(); if (i === (pend < 0 ? cur : pend)) return; pend = i; swT = t; sel(); TL.at(t + EXIT, () => { show(i); pend = -1; Ts.jump(1); Tx.jump(0); Ty.jump(0); sel(); }); }
+    function go(i){ const t = now(); if (i === (pend < 0 ? cur : pend)) return; mapOn = false; pend = i; swT = t; sel(); TL.at(t + EXIT, () => { show(i); pend = -1; Ts.jump(1); Tx.jump(0); Ty.jump(0); sel(); }); }
     new ResizeObserver(() => { fit(); const b = B(Ts.target); Tx.jump(clamp(Tx.target, -b.x, b.x)); Ty.jump(clamp(Ty.target, -b.y, b.y)); }).observe(vp); show(0); sel();
     return t => {
       L.pump(); TL.run(t); const v = view(t);
       ph.style.transform = `translate(${v.x.toFixed(2)}px,${v.y.toFixed(2)}px) scale(${v.s.toFixed(4)})`; ph.style.opacity = swapO(t, swT).toFixed(3);
       const p = Math.round(v.s*100); if (p !== lastP){ lastP = p; pct.textContent = p + '%'; }
-      const o = clamp((v.s - 1.02)/.25); hint.style.opacity = (1 - o).toFixed(3); map.style.opacity = o.toFixed(3); map.style.visibility = o < .01 ? 'hidden' : 'visible';
-      if (o > 0){ const vw = Math.min(1, VW/(FW*v.s)), vh = Math.min(1, VH/(FH*v.s)), cx = .5 - v.x/(FW*v.s), cy = .5 - v.y/(FH*v.s);
+      const o = clamp((v.s - 1.02)/.25), om = mapOn ? 1 : o; hint.style.opacity = (1 - o).toFixed(3); map.style.opacity = om.toFixed(3); map.style.visibility = om < .01 ? 'hidden' : 'visible';
+      if (om > 0){ const vw = Math.min(1, VW/(FW*v.s)), vh = Math.min(1, VH/(FH*v.s)), cx = .5 - v.x/(FW*v.s), cy = .5 - v.y/(FH*v.s);
         mapI.style.left = ((cx - vw/2)*100).toFixed(2) + '%'; mapI.style.top = ((cy - vh/2)*100).toFixed(2) + '%'; mapI.style.width = (vw*100).toFixed(2) + '%'; mapI.style.height = (vh*100).toFixed(2) + '%'; }
       const c = held ? 'grabbing' : v.s > 1.02 ? 'grab' : 'zoom-in'; if (c !== curs){ curs = c; vp.style.cursor = c; }
     };

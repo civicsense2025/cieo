@@ -104,6 +104,8 @@ document.head.insertAdjacentHTML('beforeend', `<style id="hx-shared">
 .hx-fg div{background:var(--raised);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .hx-fg span{font-size:12.5px;color:var(--muted)}.hx-fg b{font-size:22px;letter-spacing:-.03em;font-weight:600;font-variant-numeric:tabular-nums}
 .hx-ro{position:absolute;right:10px;bottom:8px;z-index:6;font-size:12px;color:var(--muted);pointer-events:none;height:20px;width:230px}
+.hx-nt{position:absolute;left:14px;bottom:12px;z-index:9;padding:6px 10px;border-radius:8px;background:var(--ink);color:var(--card);font-size:12.5px;line-height:1.4;white-space:nowrap;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s}
+.hx-nt[data-on]{opacity:1;transform:none}
 .hx-ro span{position:absolute;right:0;top:0;white-space:nowrap}
 </style>`);
 
@@ -142,8 +144,13 @@ function kit(st, o = {}){
     const pr = new Track(0, S.snap), hh = new Track(0, S.snap);
     b.addEventListener('pointerdown', () => pr.set(1)); ['pointerup','pointerleave','pointercancel'].forEach(e => b.addEventListener(e, () => pr.set(0)));
     b.addEventListener('pointerenter', () => hh.set(1)); b.addEventListener('pointerleave', () => hh.set(0));
+    b.addEventListener('click', () => K.note(label + ': demo, no page to open'));
     ctas.push({ b, block, pr, hh, ar:$(b,'i') }); return b;
   };
+  // short confirmation shown over the frame's bottom-left corner for 1.5 s; every header control calls it
+  let noteT = 0;
+  K.note = msg => { let n = fr.querySelector('.hx-nt'); if (!n){ n = document.createElement('div'); n.className = 'hx-nt'; n.setAttribute('role', 'status'); fr.appendChild(n); }
+    n.textContent = msg; n.setAttribute('data-on', ''); clearTimeout(noteT); noteT = setTimeout(() => n.removeAttribute('data-on'), 1500); };
   K.setVariant = i => { K.variant = i; VT[i].forEach((v,j) => vt[j].set(v)); segs.cta && segs.cta.pick(i); };
 
   // account zone: signed-out layer and signed-in layer share one container that morphs between their widths
@@ -359,6 +366,7 @@ atom({ id:'header-stacked', cat:'Headers', name:'Header: utility bar and main ro
   init(st){
     const K = kit(st, { bp:640, align0:0 }), hd = $(st,'.hd4-hd'), ut = $(st,'.hd4-ut'), ui = $(st,'.hd4-ui'), sd = $(st,'.hx-sd'), mn = $(st,'.hd4-mn'), nv = $(st,'.hd4-nv'), g = $(st,'.hd4-g'), ul = $(st,'.hd4-ul'), bd = $(mn,'.hx-bd');
     K.acts($(st,'.hx-ac'));
+    $$(st,'.hd4-ui button').forEach(b => b.addEventListener('click', () => K.note((b.getAttribute('aria-label') || b.textContent.trim()) + ': demo, no page to open')));
     const links = NAV.map(n => { const a = document.createElement('a'); a.href = '#'; a.className = 'hx-l'; a.textContent = n; g.appendChild(a); return K.link(a); });
     const u = edges(0,0); let cur = 0; const gg = a => [a.offsetLeft + 11, a.offsetLeft + a.offsetWidth - 11];
     const setCur = (i, inst) => { cur = i; links.forEach((l,j) => { l.setCur(j === i); j === i ? l.a.setAttribute('aria-current','page') : l.a.removeAttribute('aria-current'); }); const [l,r] = gg(links[i].a); inst ? u.jump(l, r) : u.go(l, r); };
@@ -368,6 +376,7 @@ atom({ id:'header-stacked', cat:'Headers', name:'Header: utility bar and main ro
     $(st,'.hx-pg').addEventListener('scroll', () => { const y = $(st,'.hx-pg').scrollTop, c = collapsed ? y > 10 : y > 40; if (c === collapsed) return; collapsed = c; const t0 = now();
       if (c){ uo.set(0, S.snap, t0); uh.set(0, S.base, t0 + .06); } else { uh.set(1, S.base, t0); uo.set(1, S.base, t0 + .1); } });
     K.panel({ id:'hd4-menu', mode:'drop', burger:$(st,'.hx-bg'), top:() => K.below(hd), links:MLINKS, extra:`<div class="hd4-xt"><a href="#">Help center</a><a href="#">Contact sales</a><a href="#">English</a></div>` });
+    $$(st,'.hd4-xt a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); K.note(a.textContent + ': demo, no page to open'); }));
     return t => { ut.style.height = px(clamp(uh.at(t))*34); ui.style.opacity = clamp(uo.at(t)).toFixed(3); sd.style.opacity = clamp(K.sc.at(t)).toFixed(3); bd.style.opacity = '0';
       const a = u.A.at(t), b = u.B.at(t); ul.style.transform = `translateX(${px(a)})`; ul.style.width = px(b - a); sl(); K.draw(t); };
   }});

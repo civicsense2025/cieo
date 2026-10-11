@@ -85,13 +85,13 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
     const m = new Track(0), cb = new Track(0);
 
     const H = (r, k) => r.l[k].offsetHeight;
-    const collapse = r => { r.state = 0; r.act.inert = true; r.ah.set(0); r.m.setAttribute('aria-pressed', 'false'); };
+    const collapse = r => { r.state = 0; r.ah.set(0); r.m.setAttribute('aria-pressed', 'false'); };
     const deselect = () => { if (sel){ collapse(sel); sel = null; } };
     const selectRow = r => {
       if (busy) return;
       if (sel === r){ deselect(); return; }
       if (sel) collapse(sel);
-      sel = r; r.state = 1; r.act.inert = false; r.ah.set(H(r, 0)); r.sw.to(0); r.m.setAttribute('aria-pressed', 'true');
+      sel = r; r.state = 1; r.ah.set(H(r, 0)); r.sw.to(0); r.m.setAttribute('aria-pressed', 'true');
     };
     const makeRow = d => {
       const w = WHO[d.who], el = mk('div', 'position:relative;overflow:hidden;padding:0 6px;height:0');
@@ -101,7 +101,6 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
         <div class="rw-l2" style="position:absolute;left:0;right:0;top:0;padding:0 8px 10px 42px"><button type="button" class="btn" disabled style="width:100%">Restoring…</button></div></div></div>`;
       const r = { id:++uid, d, p:d.p, born:d.born, el, in:$(el, '.rw-in'), m:$(el, '.rw-m'), tm:$(el, '.rw-tm'), act:$(el, '.rw-a'), l:[$(el, '.rw-l0'), $(el, '.rw-l1'), $(el, '.rw-l2')], go:$(el, '.rw-go'), no:$(el, '.rw-no'), yes:$(el, '.rw-yes'),
         e:new Track(0), ah:new Track(0), b:new Track(0), sw:new Swap(0), state:0, ts:'' };
-      r.act.inert = true;
       r.m.onclick = () => selectRow(r);
       r.el.addEventListener('pointerenter', () => { if (!busy) hover = r; });
       r.el.addEventListener('pointerleave', () => { if (hover === r) hover = null; });
@@ -121,7 +120,7 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
     const keyOf = want => want ? want.id + '@' + curRev : 'cur';
     const applyBody = (want, key) => {
       applied = key; const d = bodyHTML(want);
-      if (want){ flashUntil = 0; const w = WHO[want.d.who]; appliedLbl = d.add + d.del === 0 ? 'Same as the current draft' :
+      if (want){ const w = WHO[want.d.who]; appliedLbl = d.add + d.del === 0 ? 'Same as the current draft' :
         `Previewing ${hx(want.d.label.toLowerCase())} · ${ago(now() - want.born)} · <span style="color:var(--success)">+${d.add}</span> <span style="color:var(--danger)">−${d.del}</span> words`; }
       else appliedLbl = 'Current draft';
       bodyPair.put(d.html);
@@ -187,7 +186,7 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
         r.el.style.height = px(e * (MAIN + ah + 4)); fade(r.el, e, (1 - e) * -8, false);
         r.in.style.background = mix(clamp(r.b.at(t)) * .7, 'var(--raised)', 'transparent');
         if (r === sel && Math.abs(ah - r.ah.target) > .5){ const bot = r.el.offsetTop + e * (MAIN + ah + 4); if (bot > scroller.scrollTop + scroller.clientHeight) scroller.scrollTop = bot - scroller.clientHeight; }   // keep the opening row in view
-        r.act.style.height = px(ah); for (let k = 0; k < 3; k++) r.sw.apply(r.l[k], k, t, 3);
+        r.act.style.height = px(ah); r.act.style.visibility = r.state === 0 && ah < .5 ? 'hidden' : 'visible'; for (let k = 0; k < 3; k++) r.sw.apply(r.l[k], k, t, 3);
         const s = ago(t - r.born); if (s !== r.ts){ r.ts = s; r.tm.textContent = s; }
       }
     };

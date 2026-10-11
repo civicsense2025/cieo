@@ -13,7 +13,7 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
     const plate = document.createElement('div');
     plate.style.cssText = 'position:absolute;top:4px;bottom:4px;border-radius:8px;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.15)';
     rail.prepend(plate);
-    let dur = 30, day = 0;
+    let dur = 60, day = 0;
     const cells = [];
     for (let i = 0; i < 6; i++){
       const b = document.createElement('button');
@@ -35,10 +35,10 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
     const d0 = $(st,'.d0'), d1 = $(st,'.d1');
     const goDur = d => { dur = d; paint(); const t0 = now();
       cells.forEach((c,k) => c.sw.to(day, t0 + k*.03));
-      d0.style.boxShadow = d === 30 ? 'inset 0 -2px 0 var(--ink)' : 'none';
-      d1.style.boxShadow = d === 60 ? 'inset 0 -2px 0 var(--ink)' : 'none'; };
+      d0.style.boxShadow = d === 30 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d0.setAttribute('aria-pressed', d === 30); d0.style.fontWeight = d === 30 ? '600' : '400';
+      d1.style.boxShadow = d === 60 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d1.setAttribute('aria-pressed', d === 60); d1.style.fontWeight = d === 60 ? '600' : '400'; };
     d0.onclick = () => goDur(30); d1.onclick = () => goDur(60);
-    paint(); goDur(30);
+    paint(); goDur(dur);
     const first = () => pl.jump(tabs[0].offsetLeft, tabs[0].offsetLeft + tabs[0].offsetWidth);
     document.fonts.ready.then(first); first(); tabs[0].style.fontWeight = '600';
     return t => { plate.style.left = px(pl.A.at(t)); plate.style.width = px(Math.max(0, pl.B.at(t) - pl.A.at(t)));

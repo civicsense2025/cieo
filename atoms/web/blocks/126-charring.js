@@ -7,6 +7,7 @@ atom({ id:'charring', cat:'Social', name:'Character limit ring', block:'form (lo
   init(st){
     const ta = $(st,'textarea'), rg = $(st,'.rg'), lft = $(st,'.lft'), pb = $(st,'.pb'), MAX = 140, v = new Track(0), k1 = new Track(0), k2 = new Track(0), big = new Track(0);
     const upd = inst => { const n = ta.value.length, left = MAX - n, k = inst ? 'jump' : 'set'; v[k](Math.min(1, n/MAX)); k1[k](left < 20 ? 1 : 0); k2[k](left < 0 ? 1 : 0); big[k](left < 20 ? 1 : 0); lft.textContent = left < 20 ? left : ''; pb.disabled = left < 0 || !n; ta.setAttribute('aria-invalid', left < 0); };
-    ta.oninput = () => upd(); upd(true);
+    ta.oninput = () => { pb.textContent = 'Post'; upd(); }; upd(true);
+    pb.onclick = () => { if (pb.disabled) return; ta.value = ''; pb.textContent = 'Posted'; upd(); ta.focus(); };
     return t => { const a = clamp(k1.at(t)), b = clamp(k2.at(t)); rg.style.strokeDashoffset = (1 - clamp(v.at(t))).toFixed(4); rg.style.stroke = `color-mix(in oklab, var(--danger) ${(b*100).toFixed(1)}%, ${mix(a,'var(--warning)','var(--accent)')})`; rg.parentNode.style.transform = `scale(${(1 + .2*clamp(big.at(t))).toFixed(4)})`; lft.style.color = b > .5 ? 'var(--danger)' : 'var(--muted)'; };
   }});

@@ -480,8 +480,9 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), rg = $(st, '#fxp-screen-p'), s = surface(fr, cv), ph = lazyPhoto('coast');
     let mode = 0, sig = '', theme = -1, ink = [0, 0, 0], paper = [1, 1, 1]; const P = new Tw(0);
-    const seg = mkSeg($(st, '.seg'), i => mode = i);
     const play = () => { P.jump(0).to(1, 2.2); }; $(st, '.fxp-rp').onclick = play;
+    // picking a screen (even the one already on) replays the resolve, so every click shows the change
+    const seg = mkSeg($(st, '.seg'), i => { mode = i; play(); });
     rg.oninput = () => P.jump(rg.value/100); onView(st, () => P.jump(0).to(1, 2.2, now() + .4));
     return t => {
       seg.render(t); const img = ph.need(s.cw, s.ch); if (!img) return;

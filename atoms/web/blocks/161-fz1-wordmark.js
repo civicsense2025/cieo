@@ -800,6 +800,7 @@ ${fauxCss('fz8-')}${DK('fz8-')}${colCss('fz8-')}
 .fz8-bt{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 0 18px;font-size:12.5px;color:var(--muted)}
 .fz8-bt a{color:inherit;text-decoration:none}
 .fz8-rp{position:absolute;top:10px;right:12px;z-index:8}
+.fz8-pg{scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
 @container (min-width:520px){.fz8-cs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @container (min-width:760px){.fz8-bd{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
 @container (min-width:900px){.fz8-mn{grid-template-columns:minmax(0,4.5fr) minmax(0,7.5fr)}}
@@ -813,7 +814,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
   </section>
   <div class="fz8-mn">
     <div class="fz8-nl"><h4 class="fz8-nt" data-i="nlt">The Cairn letter</h4><p class="fz8-nx" data-i="nlx">One email a month. What we learned from 4,000 funnels, with no product pitches.</p>
-      <form class="fz8-nf" novalidate><div class="fz8-fw"><div class="fz8-fd"><input class="fz8-in" id="fz8-em" type="email" autocomplete="email" aria-label="Email address" placeholder="you@company.com"><button type="submit" class="fz8-sb"></button></div>
+      <form class="fz8-nf" novalidate><div class="fz8-fw"><div class="fz8-fd"><input class="fz8-in" id="fz8-em" type="email" autocomplete="email" aria-label="Email address" placeholder="you@company.com"><button type="submit" class="fz8-sb" aria-label="Subscribe"></button></div>
         <div class="fz8-ok" role="status" aria-live="polite">${ic(I.check, 16, 2.5)}<span data-i="okt">You are on the list.</span><button type="button" class="fz8-un" data-i="again">Use another address</button></div></div>
         <div class="fz8-mg" role="alert"><span></span></div></form></div>
     <nav class="fz8-cs" aria-label="Footer">${[['Product', ['Funnels', 'Session replays', 'Experiments', 'Warehouse sync', 'Pricing']], ['Resources', ['Documentation', 'Guides', 'Changelog', 'Research', 'Community']], ['Company', ['About', 'Careers', 'Press', 'Customers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Data processing', 'Subprocessors', 'Security']]].map(([h, ls], i) => `<div class="fz8-c"><h4 class="fz8-h" data-i="h${i}">${h}</h4><ul class="fz8-u">${ls.map(l => `<li><a class="fz8-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>`).join('')}</nav>

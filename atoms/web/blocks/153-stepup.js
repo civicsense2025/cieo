@@ -45,7 +45,7 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
 <button class="btn wfsu-rs" style="position:absolute;top:10px;right:12px">Reset</button>
 <div class="wfsu-pg"><div class="wfsu-hd">Danger zone</div>
 <div class="card wfsu-cd">
- <div class="wfsu-r1"><div class="wfsu-ri"><div><b>Delete this site</b><small>Removes harbor-studio.example.site, its pages and media.</small></div><button class="wfsu-bt" type="button"></button></div></div>
+ <div class="wfsu-r1"><div class="wfsu-ri"><div><b>Delete this site</b><small>Removes harbor-studio.example.site, its pages and media.</small></div><button class="wfsu-bt" type="button" aria-label="Delete site"></button></div></div>
  <div class="wfsu-ri"><div><b>Export content</b><small>Download every page as JSON.</small></div><span class="small muted">Available</span></div>
 </div>
 <div class="wfsu-st" role="status" aria-live="polite"></div></div>
@@ -55,7 +55,7 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
  <p class="wfsu-cp">Deleting a site needs a fresh check. Enter the 6-digit code from your authenticator app.</p>
  <div class="wfsu-ob"><i class="wfsu-rg"></i><input class="wfsu-in" id="wfsu-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Six digit authenticator code"></div>
  <div class="wfsu-m" role="status" aria-live="polite"></div>
- <button class="wfsu-vb" type="button" aria-disabled="true"></button>
+ <button class="wfsu-vb" type="button" aria-disabled="true" aria-label="Verify owner access"></button>
  <div class="wfsu-lk"><button class="wfsu-pk" type="button">Use a passkey instead</button><button class="wfsu-cn" type="button">Cancel</button></div>
 </div></div>`,
   desc:'Delete site is blocked until you prove it is you. A scrim fades in while the dialog rises 8px from 97% scale, with focus in the code row and the ring sliding box to box. A wrong code turns the boxes danger, says why, then clears itself. A right code turns the boxes and button success, the dialog leaves, and only then does the blocked action resume: the button reads Deleting…, the row fades out and its space collapses, and a status line swaps in.',
@@ -328,7 +328,7 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
 .wfiv-cf{display:flex;align-items:center;gap:6px;padding:6px 14px 10px;font-size:12px;color:var(--muted)}
 </style>
 <div class="card wfiv-cd">
- <div class="wfiv-hd"><div><b>Members</b><small>3 active</small></div><button class="wfiv-bt" type="button" aria-expanded="false"></button></div>
+ <div class="wfiv-hd"><div><b>Members</b><small>3 active</small></div><button class="wfiv-bt" type="button" aria-label="Show or hide details" aria-expanded="false"></button></div>
  <div class="wfiv-sl"><form class="wfiv-ly wfiv-fm" novalidate><div class="wfiv-fr"><input class="wfiv-in" id="wfiv-em" type="email" placeholder="name@work.com" aria-label="Email address" autocomplete="off"><select class="wfiv-se" aria-label="Role"><option>Editor</option><option>Viewer</option><option>Admin</option></select><button class="btn ink" type="submit">Send invite</button></div><div class="wfiv-hp"></div></form>
   <div class="wfiv-ly wfiv-mb"><span class="wfiv-av"></span><div class="wfiv-tx"><div class="wfiv-em"></div><div class="wfiv-l2"><span class="wfiv-cp"></span><span class="wfiv-ro"></span></div></div><div class="wfiv-ab"><button class="btn wfiv-rsd" type="button">Resend</button><button class="btn wfiv-rvk" type="button" style="color:var(--danger)">Revoke</button></div></div></div>
   <div class="wfiv-rw"><span class="wfiv-av">M</span><b>Maya Okafor</b><span class="muted">Owner</span></div>

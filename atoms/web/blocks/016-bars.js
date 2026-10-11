@@ -10,9 +10,11 @@ atom({ id:'bars', cat:'Data', name:'Bar chart', block:'chart', fam:['M','T','E']
     let g = ''; for (const v of [0,50,100]) g += `<line x1="${X0}" x2="320" y1="${Y0 - v/100*H}" y2="${Y0 - v/100*H}" stroke="var(--line)"/><text x="${X0-6}" y="${Y0 - v/100*H + 4}" text-anchor="end" font-size="11" fill="var(--faint)">${v}</text>`;
     svg.innerHTML = g + DS[0].map((_,i) => `<rect x="${X0 + gap/2 + i*(bw+gap)}" width="${bw}" rx="4" fill="var(--ink)"/>`).join('');
     const rects = $$(svg,'rect'), tr = DS[0].map(v => new Track(0)), e = edges(0,0); let k = 0;
-    const sel = (i, inst) => { k = i; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth);
-      const t0 = now(); tr.forEach((x,j) => x.set(DS[i][j], S.base, t0 + j*.03)); };
-    btns.forEach((b,i) => b.onclick = () => sel(i)); requestAnimationFrame(() => sel(0, true)); document.fonts.ready.then(() => e.jump(btns[k].offsetLeft, btns[k].offsetLeft + btns[k].offsetWidth));
+    // opens on 2026 so that 2025 has something to switch from; re-clicking the active year replays its bars from zero
+    const sel = (i, inst) => { const again = !inst && i === k; k = i; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth);
+      btns.forEach((x,j) => x.setAttribute('aria-pressed', String(j === i)));
+      const t0 = now(); tr.forEach((x,j) => { if (again) x.jump(0); x.set(DS[i][j], S.base, t0 + j*.03); }); };
+    btns.forEach((b,i) => b.onclick = () => sel(i)); requestAnimationFrame(() => sel(1, true)); document.fonts.ready.then(() => e.jump(btns[k].offsetLeft, btns[k].offsetLeft + btns[k].offsetWidth));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       rects.forEach((r,i) => { const h = Math.max(0, tr[i].at(t))/100*H; r.setAttribute('y', (Y0 - h).toFixed(2)); r.setAttribute('height', h.toFixed(2)); }); };
   }});
