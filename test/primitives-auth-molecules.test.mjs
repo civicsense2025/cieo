@@ -34,3 +34,10 @@ test('Auth molecule manifests carry the molecule layer', () => {
     assert.equal(m.layer, 'molecule');
   }
 });
+
+test('AuthMfaChallenge normalizes recovery codes and forwards pending and error', () => {
+  const src = readFileSync('src/primitives/AuthMfaChallenge/AuthMfaChallenge.tsx', 'utf8');
+  assert.match(src, /replace\(\/\[/);
+  assert.match(src, /disabled=\{pending\}/);
+  assert.match(src, /error=\{error\}/);
+});

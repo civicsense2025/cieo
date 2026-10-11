@@ -56,7 +56,9 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
             aria-invalid={error ? 'true' : undefined}
             aria-describedby={describedBy}
             onChange={e => {
-              const v = e.target.value.replace(/\D/g, '').slice(-1);
+              const raw = e.target.value.replace(/\D/g, '');
+              if (raw.length > 1) { onPasteText(raw, i); return; }
+              const v = raw.slice(-1);
               if (!v && e.target.value) return;
               const next = [...digits];
               next[i] = v;

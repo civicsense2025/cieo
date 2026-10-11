@@ -29,15 +29,15 @@ export function AuthMfaChallenge({ id, pending, error, style, onSubmit, onRecove
             disabled={pending}
             onChange={e => setRecovery(e.target.value)}
           />
-          <button type="button" className="cieo-auth-submit" disabled={pending || !recovery} onClick={() => onRecovery(recovery)}>
+          <button type="button" className="cieo-auth-submit" disabled={pending || !recovery} onClick={() => onRecovery(recovery.toLowerCase().replace(/[\s-]/g, ''))}>
             {pending ? 'Checking…' : 'Use recovery code'}
           </button>
         </span>
       ) : (
-        <AuthOtpInput id={`${id}-otp`} onComplete={onSubmit} />
+        <AuthOtpInput id={`${id}-otp`} disabled={pending} error={error} onComplete={onSubmit} />
       )}
       {error ? <span className="cieo-auth-error" role="alert">{error}</span> : null}
-      <button type="button" className="cieo-auth-toggle" onClick={() => setUseRecovery(v => !v)}>
+      <button type="button" className="cieo-auth-toggle" disabled={pending} onClick={() => setUseRecovery(v => !v)}>
         {useRecovery ? 'Use the authenticator instead' : 'Use a recovery code instead'}
       </button>
     </div>

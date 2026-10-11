@@ -18,6 +18,11 @@ test('AuthOtpInput manifest documents length default 6', () => {
   assert.ok(length && length.default === 6);
 });
 
+test('AuthOtpInput distributes multi-character entry across boxes', () => {
+  const src = readFileSync('src/primitives/AuthOtpInput/AuthOtpInput.tsx', 'utf8');
+  assert.match(src, /onPasteText\(raw,\s*i\)/);
+});
+
 test('AuthOtpInput CSS keeps 44px boxes with a visible focus outline', () => {
   const css = readFileSync('design/styles/primitives/auth-otp-input.css', 'utf8');
   assert.match(css, /1\.5px solid/);

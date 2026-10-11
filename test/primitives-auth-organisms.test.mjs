@@ -23,3 +23,8 @@ test('Auth organism manifests carry the organism layer', () => {
     assert.equal(m.layer, 'organism');
   }
 });
+
+test('AuthCredentialForm leaves native validation off so inline errors stand alone', () => {
+  const src = readFileSync('src/primitives/AuthCredentialForm/AuthCredentialForm.tsx', 'utf8');
+  assert.doesNotMatch(src, /noValidate=\{false\}/);
+});

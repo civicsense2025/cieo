@@ -25,7 +25,12 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
         focusBox(start + clean.length);
     };
     return (_jsxs("span", { className: "cieo cieo-auth-otp-input", "data-invalid": error ? 'true' : undefined, style: style, role: "group", "aria-labelledby": `${id}-label`, children: [_jsx("span", { className: "cieo-auth-label", id: `${id}-label`, children: label }), _jsx("span", { className: "cieo-auth-otp-boxes", children: digits.map((d, i) => (_jsx("input", { ref: el => { boxes.current[i] = el; }, className: "cieo-auth-otp-box", inputMode: "numeric", autoComplete: i === 0 ? 'one-time-code' : 'off', maxLength: 1, value: d, disabled: disabled, "aria-label": `Digit ${i + 1} of ${length}`, "aria-invalid": error ? 'true' : undefined, "aria-describedby": describedBy, onChange: e => {
-                        const v = e.target.value.replace(/\D/g, '').slice(-1);
+                        const raw = e.target.value.replace(/\D/g, '');
+                        if (raw.length > 1) {
+                            onPasteText(raw, i);
+                            return;
+                        }
+                        const v = raw.slice(-1);
                         if (!v && e.target.value)
                             return;
                         const next = [...digits];

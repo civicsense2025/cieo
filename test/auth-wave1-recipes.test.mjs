@@ -11,6 +11,11 @@ for (const id of ['auth-magic-link', 'auth-mfa-challenge', 'auth-reset']) {
   });
 }
 
+test('Wave 1 magic link disables send while the countdown runs', () => {
+  const src = readFileSync('atoms/web/blocks/558-auth-wave1.js', 'utf8');
+  assert.match(src, /snd\.disabled/);
+});
+
 test('Wave 1 recipes guard resend, normalize recovery codes, and swap reset steps', () => {
   const src = readFileSync('atoms/web/blocks/558-auth-wave1.js', 'utf8');
   assert.match(src, /resendToken|guard/);

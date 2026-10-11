@@ -20,7 +20,7 @@ export function AuthCredentialForm({ id, mode = 'signin', pending, error, style,
   const [password, setPassword] = useState('');
   const submit = (e: FormEvent) => { e.preventDefault(); if (!pending) onSubmit({ email, password }); };
   return (
-    <form className="cieo cieo-auth-credential-form" style={style} onSubmit={submit} noValidate={false}>
+    <form className="cieo cieo-auth-credential-form" style={style} onSubmit={submit} noValidate>
       <AuthEmailField id={`${id}-email`} value={email} onChange={setEmail} />
       <AuthPasswordInput
         id={`${id}-password`}

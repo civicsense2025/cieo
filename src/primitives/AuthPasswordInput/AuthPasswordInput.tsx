@@ -57,7 +57,7 @@ export function AuthPasswordInput({ id, label = 'Password', value, defaultValue,
         />
         <button
           type="button"
-          className="cieo-auth-toggle"
+          className="cieo-auth-visibility"
           aria-label={shown ? 'Hide password' : 'Show password'}
           aria-pressed={shown}
           disabled={disabled}
@@ -67,7 +67,7 @@ export function AuthPasswordInput({ id, label = 'Password', value, defaultValue,
         </button>
       </span>
       {showStrength && current ? (
-        <span className="cieo-auth-meter" role="meter" aria-label="Password strength" aria-valuemin={0} aria-valuemax={4} aria-valuenow={score} aria-valuetext={STRENGTH_LABELS[score]}>
+        <span className="cieo-auth-meter" role="meter" aria-label="Password strength" aria-valuemin={0} aria-valuemax={4} aria-valuenow={score} aria-valuetext={STRENGTH_LABELS[score]} data-score={score}>
           {[0, 1, 2, 3].map(i => (
             <i key={i} data-filled={i < score ? 'true' : undefined} />
           ))}
