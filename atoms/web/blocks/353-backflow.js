@@ -17,7 +17,7 @@ atom({ id:'backflow', cat:'SEO', name:'Backlink flow', block:'seo backlinks, flo
       e.innerHTML = '<b style="font-size:14px">' + s.n + '</b><span class="small muted" style="font-size:12.5px;line-height:1.5">' + s.d + '</span><span style="font-size:13px;line-height:1.55">' + s.c + '</span>';
       dt.appendChild(e); return e; });
     const btns = S3.map((s,i) => { const b = document.createElement('button');
-      b.style.cssText = 'display:flex;align-items:center;gap:8px;border:1px solid var(--line-soft);background:var(--card);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:13px;font-weight:500;text-align:left;min-height:36px;width:100%';
+      b.style.cssText = 'display:flex;align-items:center;gap:8px;background:var(--raised);border-radius:10px;padding:8px 10px;cursor:pointer;font-size:13px;font-weight:500;text-align:left;min-height:36px;width:100%';
       b.innerHTML = '<i style="flex:none;width:10px;height:10px;border-radius:50%;background:' + (i === 2 ? 'var(--warning)' : 'var(--success)') + '"></i><span>' + s.n + '</span>';
       const w = document.createElement('div'); w.style.padding = '4px 0'; w.appendChild(b); src.appendChild(w);
       const hov = () => { const t0 = now(); paths.forEach((p,j) => wd[j].set(j === i ? 4.5 : 2, S.snap, t0)); sw.to(i); };

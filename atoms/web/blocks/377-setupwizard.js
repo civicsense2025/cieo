@@ -8,7 +8,7 @@ atom({ id:'setupwizard', cat:'Guidance', name:'Setup wizard', block:'onboarding 
     const pn = $(st,'.pn'), bar = $(st,'.segbar'), thumb = $(st,'.thumb'), nx = $(st,'.nx'), bk = $(st,'.bk'), sk = $(st,'.sk'), tw = $(st,'.tw');
     const sw = new Swap(0), ind = edges(0, 40); let step = 0, team = false, dir = 1;
     const panel = inner => { const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += 'flex-direction:column;align-items:stretch;justify-content:flex-start;white-space:normal;gap:6px;text-align:left'; e.innerHTML = inner; pn.appendChild(e); return e; };
-    const pickBtn = (label, sub, fn) => { const b = document.createElement('button'); b.style.cssText = 'border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 12px;min-height:36px;cursor:pointer;font-size:14px;line-height:1.5;text-align:left'; b.innerHTML = `${label}<br><span class="small muted">${sub}</span>`; b.onclick = fn; return b; };
+    const pickBtn = (label, sub, fn) => { const b = document.createElement('button'); b.style.cssText = 'border:0;background:var(--raised);border-radius:9px;padding:7px 13px;min-height:36px;cursor:pointer;font-size:14px;line-height:1.5;text-align:left'; b.innerHTML = `${label}<br><span class="small muted">${sub}</span>`; b.onclick = fn; return b; };
     const L = [];
     L.push(panel(`<b style="font-size:14px;line-height:1.5">Welcome in</b><span class="small muted" style="line-height:1.5">Four small choices and your space runs itself.</span>`));
     const type = panel(`<b style="font-size:14px;line-height:1.5">Who is this for?</b>`); L.push(type);

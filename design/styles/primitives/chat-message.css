@@ -1,0 +1,5 @@
+/* design/styles/primitives/chat-message.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-message { display: grid; gap: var(--cieo-space-1); padding-block: var(--cieo-space-2); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-chat-message > time { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

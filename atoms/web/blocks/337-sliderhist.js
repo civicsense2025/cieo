@@ -8,8 +8,11 @@ atom({ id:'sliderhist', cat:'Dynamic', name:'Slider with histogram', block:'slid
     const H = [22,38,30,52,44,64,58,74,66,80,72,60], MAX = 500;
     let v = 264;
     const d = new Digits(vv, 3); d.set(String(v), true);
-    const B = H.map(h => { const b = document.createElement('div');
-      b.style.cssText = `flex:1;height:${h}px;border-radius:4px;background:var(--ink)`;
+    const B = H.map(h => { const b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', `Set team size to ${Math.round(h/80*MAX)}`);
+      b.style.cssText = `flex:1;height:${h}px;border:0;padding:0;border-radius:4px;background:var(--ink);cursor:pointer;min-width:0;appearance:none;-webkit-appearance:none;font:inherit;color:inherit`;
+      b.addEventListener('click', () => { measure(); setV(h/80*MAX, now()); x.jump(v/MAX*W); });
       bars.appendChild(b); return { b, o:new Track(h/80*MAX <= v ? 1 : .25) }; });
     const x = new Track(0); let W = 0, dragOn = false;
     const measure = () => { W = trk.clientWidth - 24; x.jump(v/MAX*W); };

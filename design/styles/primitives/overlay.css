@@ -1,0 +1,3 @@
+@layer cieo.components {
+  :where(.cieo).cieo-p-overlay { position: fixed; inset: 0; background: rgb(0 0 0 / 0.4); }
+}

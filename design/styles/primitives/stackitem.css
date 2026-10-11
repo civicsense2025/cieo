@@ -1,0 +1,5 @@
+/* design/styles/primitives/stackitem.css */
+@layer cieo.components {
+  :where(.cieo).cieo-stack-item { min-inline-size: 0; }
+  :where(.cieo).cieo-stack-item[data-grow='true'] { flex: 1 1 auto; min-inline-size: 0; }
+}

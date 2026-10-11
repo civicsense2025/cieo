@@ -1,0 +1,5 @@
+/* design/styles/primitives/top-nav-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav-item { color: var(--cieo-color-text); padding: var(--cieo-space-1) var(--cieo-space-2); }
+  :where(.cieo).cieo-top-nav-item[aria-current='page'] { font-weight: var(--cieo-weight-medium); border-block-end: var(--cieo-border-width) solid var(--cieo-color-accent); }
+}

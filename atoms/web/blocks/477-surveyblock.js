@@ -15,7 +15,7 @@ atom({ id:'surveyblock', cat:'Newsletter', name:'Reader survey', block:'newslett
       d.innerHTML = `<span style="font-size:13.5px;font-weight:600;line-height:1.5"></span><div class="col" style="gap:8px"></div>`;
       d.querySelector('span').textContent = q; const list = d.querySelector('.col');
       opts.forEach(o => { const b = document.createElement('button'); b.textContent = o;
-        b.style.cssText = 'min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:13.5px;cursor:pointer;color:var(--ink)';
+        b.style.cssText = 'min-height:44px;border-radius:10px;border:0;background:var(--raised);font-size:13.5px;cursor:pointer;color:var(--ink)';
         b.onclick = () => next(); list.appendChild(b); });
       pn.appendChild(d); return d; });
     const thL = document.createElement('div'); thL.className = 'layer'; thL.style.justifyContent = 'center';

@@ -25,7 +25,7 @@ atom({ id:'noticebanner', cat:'Status and records', name:'Notice banner', block:
 .nb-top{flex:none;height:40px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 8px 0 14px;border-bottom:1px solid var(--line-soft)}
 .nb-slot{flex:none;position:relative;height:0;overflow:hidden}
 .nb-in{position:absolute;left:0;right:0;top:0;padding:10px 12px 0}
-.nb-ban{display:flex;align-items:flex-start;gap:12px;border:1px solid;border-radius:10px;padding:10px 12px}
+.nb-ban{display:flex;align-items:flex-start;gap:12px;border-radius:10px;padding:11px 13px}
 .nb-ls{flex:1;min-width:0;display:grid}
 .nb-n{grid-area:1/1;display:flex;gap:10px;align-items:flex-start;min-width:0}
 .nb-n>span{flex:none;display:flex;margin-top:1px}
@@ -85,7 +85,7 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
 .cn-hero{padding:22px 20px;max-width:560px}
 .cn-hero h4{margin:0 0 8px;font-size:24px;line-height:1.15;letter-spacing:-.025em;text-wrap:balance}
 .cn-hero p{margin:0 0 10px;font-size:13.5px;color:var(--muted);line-height:1.55}
-.cn-bx{position:absolute;bottom:12px;left:0;overflow:hidden;z-index:5;background:var(--card);box-shadow:var(--shadow);border:1px solid var(--line)}
+.cn-bx{position:absolute;bottom:12px;left:0;overflow:hidden;z-index:5;background:var(--card);box-shadow:var(--shadow)}
 .cn-ct{position:absolute;left:0;top:0;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px;display:flex;flex-direction:column;scrollbar-width:thin}
 .cn-k{font-size:11.5px;line-height:14px;font-weight:600;color:var(--accent);margin-bottom:2px}
 .cn-tt{display:grid}
@@ -95,6 +95,9 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
 .cn-in p{margin:0;font-size:13px;line-height:1.5;color:var(--muted);max-width:62ch}
 .cn-lks{display:flex;gap:14px;margin-top:6px}
 .cn-lk{border:0;background:none;padding:0;font-size:12.5px;font-weight:500;color:var(--ink);cursor:pointer;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.cn-lk[aria-expanded="true"]{text-decoration-thickness:2px}
+.cn-pd{margin-top:8px;padding:9px 11px;border-radius:9px;background:var(--raised);font-size:12.5px;line-height:1.5;color:var(--ink);max-width:62ch}
+.cn-pd[hidden]{display:none}
 .cn-cats{overflow:hidden;flex:none;height:0}
 .cn-cin{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px;padding-top:8px}
 .cn-op{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line-soft);border-radius:10px;padding:7px 10px;cursor:pointer}
@@ -113,15 +116,19 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
 <button type="button" class="btn cn-re" style="position:absolute;top:7px;right:12px;z-index:6">Replay</button><div class="ro cn-ro" style="top:auto;bottom:18px;right:16px" aria-live="polite">No choice yet</div>
 <div class="cn-bx"><div class="cn-ct" role="dialog" aria-label="Privacy choices" aria-describedby="consent-copy"><span class="cn-k">Privacy choices</span>
 <div class="cn-tt"><h2>Your visit, your choice.</h2><h2>Choose what this site may use.</h2></div>
-<div class="cn-in"><div><p id="consent-copy">Necessary storage keeps this site working. Analytics, personalization and marketing stay off unless you choose them.</p><div class="cn-lks"><button type="button" class="cn-lk">Cookie policy</button><button type="button" class="cn-lk">Privacy policy</button></div></div></div>
+<div class="cn-in"><div><p id="consent-copy">Necessary storage keeps this site working. Analytics, personalization and marketing stay off unless you choose them.</p><div class="cn-lks"><button type="button" class="cn-lk" aria-expanded="false" aria-controls="consent-pd">Cookie policy</button><button type="button" class="cn-lk" aria-expanded="false" aria-controls="consent-pd">Privacy policy</button></div><div class="cn-pd" id="consent-pd" role="region" aria-live="polite" hidden></div></div></div>
 <div class="cn-cats"><div class="cn-cin"></div></div>
 <div class="cn-act"><button type="button" class="btn cn-no">Necessary only</button><button type="button" class="btn cn-mid" aria-expanded="false"><span>Choose preferences</span><span>Save preferences</span></button><button type="button" class="btn cn-all">Accept all</button></div></div>
 <button type="button" class="cn-tab" aria-label="Reopen privacy choices">${ic('<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.500 7-10V6z"/><path d="m9 12 2.200 2.200L15.500 10"/>', 15)}<span>Privacy choices</span></button></div>`,
-  desc:'The banner rises from the bottom edge. Customize does not open a dialog: the intro fades and its height collapses while the four categories grow in place and the title swaps, and the middle button swaps to Save preferences. Every optional switch starts off, the three buttons carry equal weight, and focus lands on Necessary only. After a choice the copy exits first, then the same surface morphs its size, radius and position into a small tab in the corner; the tab label enters last. Clicking the tab reverses it.',
+  desc:'The banner rises from the bottom edge. Customize does not open a dialog: the intro fades and its height collapses while the four categories grow in place and the title swaps, and the middle button swaps to Save preferences. Every optional switch starts off, the three buttons carry equal weight, and focus lands on Necessary only. After a choice the copy exits first, then the same surface morphs its size, radius and position into a small tab in the corner; the tab label enters last. Clicking the tab reverses it. Cookie policy and Privacy policy open a short note in place; the same link again closes it.',
   api:'rise: y.set(0)   customize: intro.h.set(0), cats.h.set(measure), title.swap()   choose: copy.set(0); box.{w,h,x,r}.set(tab, t + EXIT); label.set(1, t + EXIT + .1)',
   init(st){
     const bx = $(st,'.cn-bx'), ct = $(st,'.cn-ct'), tab = $(st,'.cn-tab'), tts = $$(st,'.cn-tt h2'), intro = $(st,'.cn-in'), introI = intro.firstElementChild, cats = $(st,'.cn-cats'), cin = $(st,'.cn-cin');
     const btnNo = $(st,'.cn-no'), btnMid = $(st,'.cn-mid'), btnAll = $(st,'.cn-all'), midL = $$(btnMid,'span'), ro = $(st,'.cn-ro'), re = $(st,'.cn-re');
+    const pd = $(st,'#consent-pd'), pdBtns = $$(st,'.cn-lk'), PD = ['Your choices are stored on this device. Necessary cookies keep checkout and saved choices working. Every other category stays off until you switch it on.', 'Analytics counts page views without identifying you. Personalization and marketing stay off unless you turn them on. Change any of this from the privacy choices tab.'];
+    let pdOpen = -1;
+    const setPd = i => { pdOpen = i; pdBtns.forEach((b, j) => b.setAttribute('aria-expanded', j === i)); pd.hidden = i < 0; if (i >= 0) pd.textContent = PD[i]; };
+    pdBtns.forEach((b, i) => b.onclick = () => setPd(pdOpen === i ? -1 : i));
     const OPT = [['Necessary','Required for security, checkout and saved privacy choices.'],['Analytics','Helps the site owner understand useful pages and drop-off.'],['Personalization','Remembers optional display and content preferences.'],['Marketing','Measures campaigns and relevant promotions.']];
     const sws = OPT.map(([n, d], i) => { const l = xEl('label'); l.className = 'cn-op';
       l.innerHTML = `<span><strong></strong><small></small></span><button type="button" role="switch" class="cn-sw" aria-checked="${i === 0}"><i></i></button>`;
@@ -141,7 +148,7 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
     const reopen = () => { if (state !== 'tab') return; const t = now(); state = 'open'; saved.forEach((v, i) => draft[i] = v); syncSwitches(true);
       TO.set(0, S.snap, t); M.set(0, S.base, t + EXIT); CO.set(1, S.base, t + EXIT + .1);
       xPush(q, t + EXIT + .22, () => { if (state === 'open') btnNo.focus({ preventScroll:true }); }); };
-    const replay = () => { const t = now(); state = 'open'; expanded = false; q.length = 0; draft.splice(0, 4, true, false, false, false); saved.splice(0, 4, true, false, false, false); syncSwitches(true);
+    const replay = () => { const t = now(); state = 'open'; expanded = false; setPd(-1); q.length = 0; draft.splice(0, 4, true, false, false, false); saved.splice(0, 4, true, false, false, false); syncSwitches(true);
       E.jump(0); M.jump(0); CO.jump(1); TO.jump(0); R.jump(0); R.set(1, S.soft, t + .12); tsw.cur = 0; tsw.prev = null; tsw.t = -9; msw.cur = 0; msw.prev = null; msw.t = -9;
       btnMid.setAttribute('aria-expanded', 'false'); ro.textContent = 'No choice yet'; xPush(q, t + .45, () => { if (state === 'open') btnNo.focus({ preventScroll:true }); }); };
     btnNo.onclick = () => choose([true, false, false, false]);
@@ -175,7 +182,7 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
 .bk{position:absolute;left:12px;right:12px;top:10px;overflow:hidden}
 .bk-top{height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 14px}
 .bk-slot{position:relative;height:0;overflow:hidden}
-.bk-bar{position:absolute;left:8px;right:8px;top:2px;height:40px;display:flex;align-items:center;gap:8px;padding:0 10px 0 12px;background:var(--accent-tint);border:1px solid var(--accent);border-radius:8px}
+.bk-bar{position:absolute;left:8px;right:8px;top:2px;height:40px;display:flex;align-items:center;gap:8px;padding:0 10px 0 12px;background:var(--accent-tint);border-radius:8px}
 .bk-bar .btn{padding:4px 10px;font-size:12.5px}
 .bk-hd,.bk-r{display:grid;grid-template-columns:34px minmax(0,1fr) 96px 64px;align-items:center;height:32px;padding:0 8px 0 4px;column-gap:8px}
 .bk-nd .bk-hd,.bk-nd .bk-r{grid-template-columns:34px minmax(0,1fr) 96px}.bk-nd .bk-d{display:none}
@@ -301,19 +308,19 @@ atom({ id:'snackbar', cat:'Status and records', name:'Snackbar with action', blo
 /* ================================================================ 5. Avatar picker */
 atom({ id:'avatarpicker', tall:true, cat:'Status and records', name:'Avatar picker', block:'AvatarPicker', fam:['S','X','E'],
   html:`<style>
-.av{width:min(360px,92%);padding:16px;display:flex;flex-direction:column;gap:12px}
+.avp{width:min(360px,92%);padding:16px;display:flex;flex-direction:column;gap:12px}
 .av-ph{position:relative;flex:none;width:88px;height:88px}
 .av-ph svg.rg{position:absolute;inset:0;width:100%;height:100%}
 .av-im{position:absolute;left:8px;top:8px;width:72px;height:72px;border-radius:50%;overflow:hidden;background:var(--raised)}
 .av-im>div{position:absolute;inset:0}
 .av-im svg{display:block;width:100%;height:100%}
-.av .btn{white-space:nowrap}
+.avp .btn{white-space:nowrap}
 .av-pr{position:relative;display:flex;gap:8px;padding:3px}
 .av-p{flex:none;width:36px;height:36px;border-radius:50%;border:0;padding:0;overflow:hidden;cursor:pointer;position:relative;z-index:1;background:var(--raised)}
 .av-p svg{display:block;width:100%;height:100%}
 .av-rg{position:absolute;top:0;height:42px;border-radius:21px;border:2px solid var(--accent);left:0;pointer-events:none}
 </style>
-<div class="av card"><div class="row" style="gap:16px"><div class="av-ph" role="img" aria-label="Current avatar: initials MO"><svg class="rg" viewBox="0 0 88 88" aria-hidden="true"><circle cx="44" cy="44" r="40" fill="none" stroke="var(--line)" stroke-width="3"/><circle class="arc" cx="44" cy="44" r="40" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" transform="rotate(-90 44 44)"/></svg><div class="av-im"></div></div>
+<div class="avp card"><div class="row" style="gap:16px"><div class="av-ph" role="img" aria-label="Current avatar: initials MO"><svg class="rg" viewBox="0 0 88 88" aria-hidden="true"><circle cx="44" cy="44" r="40" fill="none" stroke="var(--line)" stroke-width="3"/><circle class="arc" cx="44" cy="44" r="40" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" transform="rotate(-90 44 44)"/></svg><div class="av-im"></div></div>
 <div class="col" style="gap:8px;min-width:0"><div><b style="display:block;line-height:1.3">Maya Okafor</b><span class="small muted">Editor</span></div><div class="row" style="gap:8px;flex-wrap:wrap"><button type="button" class="btn av-up">Upload photo</button><button type="button" class="btn av-cl" disabled>Clear</button></div></div></div>
 <div><div class="small muted" style="margin-bottom:6px">Or choose a preset</div><div class="av-pr" role="group" aria-label="Preset avatars"><i class="av-rg"></i></div></div>
 <div class="small muted av-st" role="status" style="position:relative;height:18px"></div></div>`,
@@ -358,12 +365,12 @@ atom({ id:'daterange', cat:'Status and records', name:'Date range selector', blo
   html:`<style>
 .dr{width:min(322px,92%);display:flex;flex-direction:column;gap:8px}
 .dr-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));position:relative;z-index:1}
-.dr-wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:22px;align-items:center;text-align:center;font-size:11.5px;color:var(--faint)}
+.dr-wk{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));height:22px;align-items:center;text-align:center;font-size:11.5px;color:var(--muted)}
 .dr-rows{position:relative}
 .dr-pl{position:absolute;inset:0;z-index:0;pointer-events:none}
 .dr-pl i{position:absolute;left:0;height:26px;background:var(--accent-tint)}
 .dr-d{position:relative;height:32px;border:0;background:none;padding:0;cursor:pointer;font-size:13px;font-variant-numeric:tabular-nums}
-.dr-d:disabled{cursor:default;color:var(--faint)}
+.dr-d:disabled{cursor:default;color:var(--muted)}
 .dr-c{position:absolute;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:var(--accent)}
 .dr-n{position:relative}
 .dr-t{position:absolute;left:50%;bottom:3px;width:4px;height:4px;margin-left:-2px;border-radius:50%}
@@ -428,7 +435,7 @@ atom({ id:'scrubber', cat:'Status and records', name:'Timeline scrubber', block:
   html:`<style>
 .sc{position:absolute;left:12px;right:12px;top:12px;bottom:10px;display:flex;flex-direction:column;gap:10px}
 .sc-pn{flex:none;height:134px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px}
-.sc-as{font:12px var(--mono);color:var(--faint);height:16px}
+.sc-as{font:12px var(--mono);color:var(--muted);height:16px}
 .sc-sw{position:relative;height:88px;margin-top:4px}
 .sc-nr .sc-chip{display:none}
 .sc-sw>div{position:absolute;inset:0}
@@ -444,7 +451,7 @@ atom({ id:'scrubber', cat:'Status and records', name:'Timeline scrubber', block:
 .sc-dot{position:absolute;top:30px;width:10px;height:10px;margin-left:-5px;border-radius:50%;border:2px solid}
 .sc-th{position:absolute;top:25px;left:0;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--tile),var(--shadow)}
 .sc-ml{position:absolute;top:8px;font-size:11px;transform:translateX(-50%);white-space:nowrap}
-.sc-mo{position:absolute;top:48px;font-size:11px;color:var(--faint);padding-left:4px;white-space:nowrap}
+.sc-mo{position:absolute;top:48px;font-size:11px;color:var(--muted);padding-left:4px;white-space:nowrap}
 .sc-mk{position:absolute;top:40px;width:1px;height:6px;background:var(--line)}
 </style>
 <div class="sc"><div class="sc-pn card"><div style="min-width:0"><div class="sc-as"></div><div class="sc-sw"></div></div><div class="sc-st"><div><span>Co-sponsors</span><b class="sc-c1"></b></div><div><span>Days since filing</span><b class="sc-c2"></b></div></div></div>

@@ -1,0 +1,4 @@
+/* design/styles/primitives/timestamp.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-timestamp { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); white-space: nowrap; }
+}

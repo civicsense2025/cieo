@@ -1,0 +1,5 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function ListItem({ children }) {
+    return (_jsx("li", { className: "cieo-p-list-item", children: children }));
+}

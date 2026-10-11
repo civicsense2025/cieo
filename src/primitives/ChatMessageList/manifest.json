@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.chat-message-list",
+  "componentVersion": "1.0.0",
+  "name": "ChatMessageList",
+  "layer": "organism",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/ChatMessageList/ChatMessageList.tsx", "symbol": "ChatMessageList" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Messages", "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 0, "max": 256, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "transcript", "overrides": ["surface"], "tokenRoles": ["surface"] }],
+  "constraints": { "layout": ["scroll-container"], "content": ["list-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label"], "states": [], "events": [], "parts": ["transcript"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Scrollable transcript region that announces new messages politely." },
+  "extensions": {}
+}

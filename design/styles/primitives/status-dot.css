@@ -1,0 +1,11 @@
+/* design/styles/primitives/status-dot.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-status-dot {
+    display: inline-block; flex: none; inline-size: 0.5rem; block-size: 0.5rem; border-radius: 999px;
+    background: var(--cieo-color-muted);
+  }
+  :where(.cieo).cieo-p-status-dot[data-status='success'] { background: var(--cieo-color-success); }
+  :where(.cieo).cieo-p-status-dot[data-status='warning'] { background: var(--cieo-color-warning); }
+  :where(.cieo).cieo-p-status-dot[data-status='danger'] { background: var(--cieo-color-danger); }
+  :where(.cieo).cieo-p-status-dot[data-status='info'] { background: var(--cieo-color-info); }
+}

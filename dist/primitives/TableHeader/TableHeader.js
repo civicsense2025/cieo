@@ -1,0 +1,5 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function TableHeader({ children }) {
+    return (_jsx("thead", { className: "cieo cieo-table-header", children: children }));
+}

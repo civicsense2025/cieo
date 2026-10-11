@@ -11,7 +11,7 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
     const rows = opts.map((o, i) => {
       const d = document.createElement('button');
       d.style.cssText = 'position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:52px;border:0;background:none;cursor:pointer;padding:6px 0;text-align:left;color:var(--ink)' + (i ? ';border-top:1px solid var(--line-soft)' : '');
-      d.innerHTML = `<span class="bar" style="position:absolute;left:0;top:8px;bottom:8px;border-radius:8px;background:var(--accent-tint);width:0"></span><span class="ck" style="position:relative;width:22px;height:22px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;font-size:12px;font-weight:700;padding:0;transform:translateY(.5px)"></span><span style="position:relative;flex:1;font-size:13.5px;font-weight:500;line-height:1.5">${o[0]}</span><b class="pc num" style="position:relative;font-size:12.5px"></b>`;
+      d.innerHTML = `<span class="bar" style="position:absolute;left:0;top:8px;bottom:8px;border-radius:8px;background:var(--accent-tint);width:0"></span><span class="ck" style="position:relative;width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid var(--muted);background:var(--card);display:grid;place-items:center;font-size:12px;font-weight:700;padding:0;transform:translateY(.5px)"></span><span style="position:relative;flex:1;font-size:13.5px;font-weight:500;line-height:1.5">${o[0]}</span><b class="pc num" style="position:relative;font-size:12.5px"></b>`;
       box.appendChild(d);
       return { d, bar: d.querySelector('.bar'), ck: d.querySelector('.ck'), pc: d.querySelector('.pc'), w: new Track(0), f: new Track(0) };
     });
@@ -22,7 +22,7 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
         r.ck.textContent = i === mine ? '✓' : '';
         r.ck.style.background = i === mine ? 'var(--ink)' : 'var(--card)';
         r.ck.style.color = i === mine ? 'var(--card)' : 'var(--ink)';
-        r.ck.style.borderColor = i === mine ? 'var(--ink)' : 'var(--line)';
+        r.ck.style.borderColor = i === mine ? 'var(--ink)' : 'var(--muted)';
         r.pc.textContent = Math.round(p*100) + '%'; }); };
     rows.forEach((r, i) => r.d.onclick = () => { const t = now();
       if (mine === i) return;

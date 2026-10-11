@@ -16,7 +16,7 @@ atom({ id:'tabrestore', cat:'Views', name:'Tab state restore', block:'tabs, stat
     let cur = 0;
     dgs.forEach((d, i) => d.set(String(counts[i]), true));
     const place = i => { const b = btns[i]; return [b.offsetLeft + 12, b.offsetLeft + b.offsetWidth - 12]; };
-    const go = i => { if (i === cur) return; saved[cur] = panes[cur].scrollTop;
+    const go = i => { if (i === cur){ sw.cur = -1; sw.to(i); return; } saved[cur] = panes[cur].scrollTop;
       cur = i; const [a, b] = place(i); e.go(a, b); sw.to(i);
       panes[i].scrollTop = saved[i]; counts[i] = 0; dgs[i].set('0');
       dp.textContent = ['Read', 'Saved', 'Me'][i] + ' · ' + depth[i] + ' deep'; paint(); };

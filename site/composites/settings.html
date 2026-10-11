@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account settings · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/themes.css">
+<style>
+:root { color-scheme: light; }
+body {
+  margin: 0;
+  font-family: var(--cieo-font-sans);
+  background: var(--cieo-color-canvas);
+  color: var(--cieo-color-text);
+}
+.set-skip {
+  position: absolute;
+  inset-inline-start: var(--cieo-space-3);
+  top: -120px;
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  border-radius: var(--cieo-radius-control);
+  background: var(--cieo-color-accent);
+  color: var(--cieo-color-on-accent);
+  z-index: 1;
+}
+.set-skip:focus { top: var(--cieo-space-2); }
+.set-main { padding: var(--cieo-space-4); max-width: var(--cieo-container); }
+.set-main a { color: var(--cieo-color-accent); }
+.set-card {
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-surface);
+  padding: var(--cieo-space-3);
+  margin-block-end: var(--cieo-space-3);
+}
+.set-field { display: grid; gap: var(--cieo-space-1); margin-block-end: var(--cieo-space-3); }
+.set-field input[type="text"],
+.set-field input[type="search"],
+.set-field input[type="email"],
+.set-field select {
+  font: inherit;
+  color: var(--cieo-color-text);
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-control);
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  min-height: var(--cieo-control-height);
+  transition: border-color var(--motion-duration-snap) var(--motion-ease-spring);
+}
+.set-field input[aria-invalid="true"] { border-color: var(--cieo-color-danger); }
+.set-error { margin: 0; color: var(--cieo-color-danger); }
+.set-form-error {
+  margin-block-end: var(--cieo-space-3);
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-danger-soft);
+  color: var(--cieo-color-danger);
+  border: var(--cieo-border-width) solid var(--cieo-color-danger);
+  border-radius: var(--cieo-radius-surface);
+}
+.set-avatar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--cieo-space-3);
+  margin-block-end: var(--cieo-space-3);
+}
+.set-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: var(--cieo-control-large);
+  height: var(--cieo-control-large);
+  border-radius: var(--cieo-radius-pill);
+  background: var(--cieo-color-accent-soft);
+  color: var(--cieo-color-accent);
+  font-weight: 700;
+}
+.set-avatar-row strong { display: block; }
+.set-avatar-row p { margin: 0; color: var(--cieo-color-muted); }
+.set-radio-group { display: grid; gap: var(--cieo-space-2); margin: 0; padding: 0; border: 0; }
+.set-radio-group legend { font-weight: 700; margin-block-end: var(--cieo-space-1); }
+.set-radio-group label,
+.set-check label {
+  display: flex;
+  align-items: baseline;
+  gap: var(--cieo-space-2);
+  cursor: pointer;
+}
+.set-radio-group input,
+.set-check input { accent-color: var(--cieo-color-accent); }
+.set-check { display: grid; gap: var(--cieo-space-2); margin: 0 0 var(--cieo-space-3); padding: 0; border: 0; }
+.set-check legend { font-weight: 700; margin-block-end: var(--cieo-space-1); }
+.set-check small { display: block; color: var(--cieo-color-muted); }
+.set-savebar {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cieo-space-2);
+  align-items: center;
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-surface);
+}
+.set-save {
+  font: inherit;
+  padding: var(--cieo-space-2) var(--cieo-space-4);
+  min-height: var(--cieo-control-height);
+  border: var(--cieo-border-width) solid var(--cieo-color-accent);
+  border-radius: var(--cieo-radius-control);
+  background: var(--cieo-color-accent);
+  color: var(--cieo-color-on-accent);
+  cursor: pointer;
+}
+.set-btn {
+  font: inherit;
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  min-height: var(--cieo-control-height);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-control);
+  background: var(--cieo-color-surface);
+  color: var(--cieo-color-text);
+  cursor: pointer;
+}
+.set-saved {
+  margin-block-start: var(--cieo-space-3);
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-success-soft);
+  color: var(--cieo-color-success);
+  border: var(--cieo-border-width) solid var(--cieo-color-success);
+  border-radius: var(--cieo-radius-surface);
+}
+.set-status {
+  margin-block-start: var(--cieo-space-3);
+  padding: var(--cieo-space-3);
+  background: var(--cieo-color-info-soft);
+  color: var(--cieo-color-info);
+  border: var(--cieo-border-width) solid var(--cieo-color-info);
+  border-radius: var(--cieo-radius-surface);
+}
+.set-count { color: var(--cieo-color-muted); }
+.set-empty {
+  background: var(--cieo-color-surface);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
+  border-radius: var(--cieo-radius-surface);
+  padding: var(--cieo-space-4);
+  margin-block-end: var(--cieo-space-3);
+}
+.set-empty h2 { margin: 0 0 var(--cieo-space-1); }
+.set-empty p { margin: 0 0 var(--cieo-space-2); color: var(--cieo-color-muted); }
+.set-built { margin-block-start: var(--cieo-space-4); }
+.set-built ul { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
+.set-related ul { display: grid; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
+:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0s; animation-duration: 0s; }
+}
+</style>
+</head>
+<body>
+<a class="set-skip" href="#set-main">Skip to main content</a>
+<header>
+<p><a href="./index.html">Composites</a></p>
+<h1>Account settings</h1>
+<p>Shape who you are here and how the shop behaves; built only from shipped parts.</p>
+</header>
+<div class="set" data-parts="AppShell Section Heading Text Card Avatar Field FieldStatus RadioList RadioListItem CheckboxList CheckboxListItem Banner EmptyState Selector SelectorOption FormLayout Stack">
+<main class="set-main" id="set-main">
+<div class="set-field">
+<label for="set-search">Search settings</label>
+<input id="set-search" type="search" data-settings-search placeholder="Try theme or email" autocomplete="off">
+</div>
+<p class="set-count" role="status" data-search-count>Showing 2 of 2 sections.</p>
+<form data-settings-form novalidate>
+<div class="set-form-error" role="alert" data-settings-error hidden>Fix the highlighted fields, then save again.</div>
+<section data-section="profile" data-search-text="profile account display name email avatar picture identity" aria-labelledby="set-profile-h">
+<h2 id="set-profile-h" tabindex="-1">Profile</h2>
+<div class="set-card">
+<div class="set-avatar-row">
+<span class="set-avatar" data-avatar aria-hidden="true">AL</span>
+<div><strong data-avatar-name>Ada Lovelace</strong><p data-avatar-email>ada@example.com</p></div>
+<button class="set-btn" type="button" data-avatar-change>Change avatar</button>
+</div>
+<div class="set-field">
+<label for="set-name">Display name</label>
+<input id="set-name" type="text" data-setting="name" value="Ada Lovelace" maxlength="40" autocomplete="name" aria-describedby="set-name-error">
+<p class="set-error" id="set-name-error" data-error="name" hidden>Give a display name of at least 2 characters.</p>
+</div>
+<div class="set-field">
+<label for="set-email">Email address</label>
+<input id="set-email" type="email" data-setting="email" value="ada@example.com" autocomplete="email" aria-describedby="set-email-error">
+<p class="set-error" id="set-email-error" data-error="email" hidden>Enter an email like ada@example.com.</p>
+</div>
+</div>
+<p>Store-level identity lives in the <a href="./dashboard.html">dashboard</a>.</p>
+</section>
+<section data-section="preferences" data-search-text="preferences theme appearance light dark system notifications digest updates motion animation reduced density comfortable compact layout" aria-labelledby="set-prefs-h">
+<h2 id="set-prefs-h" tabindex="-1">Preferences</h2>
+<fieldset class="set-card set-radio-group">
+<legend>Theme</legend>
+<label><input type="radio" name="theme" value="light" data-setting="theme" data-theme="light"> Light</label>
+<label><input type="radio" name="theme" value="dark" data-setting="theme" data-theme="dark"> Dark</label>
+<label><input type="radio" name="theme" value="system" data-setting="theme" data-theme="system" checked> System</label>
+</fieldset>
+<fieldset class="set-card set-check">
+<legend>Notifications</legend>
+<div>
+<input id="set-product" type="checkbox" role="switch" data-setting="notifyProduct" checked>
+<label for="set-product">Product updates <small>Short notes when something new ships.</small></label>
+</div>
+<div>
+<input id="set-weekly" type="checkbox" role="switch" data-setting="notifyWeekly" checked>
+<label for="set-weekly">Weekly digest <small>One roundup on Sundays.</small></label>
+</div>
+</fieldset>
+<div class="set-card">
+<div class="set-field">
+<label for="set-motion">Motion</label>
+<select id="set-motion" data-setting="motion">
+<option value="full" selected>Full motion</option>
+<option value="reduced">Reduced motion</option>
+</select>
+</div>
+<div class="set-field">
+<label for="set-density">Density</label>
+<select id="set-density" data-setting="density">
+<option value="comfortable" selected>Comfortable</option>
+<option value="compact">Compact</option>
+</select>
+</div>
+</div>
+<p>See the results while shopping in the <a href="./storefront.html">storefront</a>, or talk them through in <a href="./chat.html">chat</a>. Visits tied to your account are scheduled in the <a href="./booking.html">booking flow</a>.</p>
+</section>
+<div class="set-savebar">
+<button class="set-save" type="submit" data-save>Save settings</button>
+<button class="set-btn" type="button" data-discard>Discard changes</button>
+</div>
+</form>
+<div class="set-saved" role="status" data-saved hidden>Settings saved.</div>
+<p class="set-status" role="status" data-settings-status hidden></p>
+<div class="set-empty" data-no-results hidden>
+<h2>No matching settings</h2>
+<p>Nothing matches that search. Try theme or clear the search to see everything.</p>
+<p><button class="set-btn" type="button" data-clear-search>Clear search</button></p>
+</div>
+<section aria-label="Behavior">
+<h2>Behavior</h2>
+<ul>
+<li>Search narrows the visible sections as you type and reports the count; an empty result offers a way back.</li>
+<li>Display name needs at least 2 characters and email needs an at sign with a domain; problems flag inline and focus moves to the first one.</li>
+<li>Theme picks one of light, dark, or system with arrow-key support. Notification switches toggle independently.</li>
+<li>Save confirms visibly and survives reload, including private mode; editing again hides the confirmation until the next save.</li>
+<li>Discard returns the form to the last saved values and says so.</li>
+<li>Escape clears the search. Enter inside a profile field saves. Enter in the search jumps to the first matching section.</li>
+<li>Reduced motion is honored: smooth jumps become instant and transitions collapse.</li>
+</ul>
+</section>
+<section class="set-related" aria-label="Related flows">
+<h2>Related flows</h2>
+<ul>
+<li><a href="./dashboard.html">Dashboard</a> — store identity and order-side settings.</li>
+<li><a href="./storefront.html">Storefront</a> — the buyer side that reflects these preferences.</li>
+<li><a href="./chat.html">Chat</a> — talk through which preferences fit you.</li>
+<li><a href="./booking.html">Booking</a> — schedule the visits tied to your account.</li>
+</ul>
+</section>
+<section class="set-built" data-built-from aria-label="Built from">
+<h2>Built from</h2>
+<p>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
+<ul>
+<li><a href="../components/AppShell.html">AppShell</a></li>
+<li><a href="../components/Section.html">Section</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Avatar.html">Avatar</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
+<li><a href="../components/RadioList.html">RadioList</a></li>
+<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
+<li><a href="../components/CheckboxList.html">CheckboxList</a></li>
+<li><a href="../components/CheckboxListItem.html">CheckboxListItem</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/EmptyState.html">EmptyState</a></li>
+<li><a href="../components/Selector.html">Selector</a></li>
+<li><a href="../components/SelectorOption.html">SelectorOption</a></li>
+<li><a href="../components/FormLayout.html">FormLayout</a></li>
+<li><a href="../components/Stack.html">Stack</a></li>
+</ul>
+</section>
+</main>
+</div>
+<script src="./settings.js" defer></script>
+</body>
+</html>

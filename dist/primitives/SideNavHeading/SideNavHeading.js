@@ -1,0 +1,6 @@
+// src/primitives/SideNavHeading/SideNavHeading.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function SideNavHeading({ children }) {
+    return _jsx("h2", { className: "cieo cieo-side-nav-heading", children: children });
+}

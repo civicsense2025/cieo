@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.center",
+  "componentVersion": "1.0.0",
+  "name": "Center",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Center/Center.tsx", "symbol": "Center" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "maxWidth", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "60rem", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "column", "overrides": ["max-width"], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["centered-column"], "content": ["single-flow"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["maxWidth"], "states": [], "events": [], "parts": ["column"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Centered content column with a max width." },
+  "extensions": {}
+}

@@ -1,7 +1,7 @@
 
 
 atom({ id:'autosave', cat:'Writing', name:'Autosave status', block:'richtext editor, form', fam:['S'],
-  html:`<div class="col" style="width:min(320px,88%);gap:8px"><div class="row" style="justify-content:space-between"><b class="small">Draft · Spring launch</b><span class="as small" role="status" style="position:relative;width:130px;height:20px"></span></div><textarea id="as-ta" rows="4" style="resize:none;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.5 var(--sans);padding:10px;outline:none">We launch the spring collection on Thursday.</textarea></div><div class="hint">Type, then pause</div>`,
+  html:`<div class="col" style="width:min(320px,88%);gap:8px"><div class="row" style="justify-content:space-between"><b class="small">Draft · Spring launch</b><span class="as small" role="status" style="position:relative;width:130px;height:20px"></span></div><textarea id="as-ta" aria-label="Draft text" rows="4" style="resize:none;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.5 var(--sans);padding:10px;outline:none">We launch the spring collection on Thursday.</textarea></div><div class="hint">Type, then pause</div>`,
   desc:'The status moves through Editing, Saving with a spinner, and Saved with a success check, then relaxes to a quiet “Saved just now”. Each change is a blur swap timed from your last keystroke.',
   api:'on input: to("editing"); idle 0.8s → "saving"; +0.6s → "saved"; +2s → "idle"',
   init(st){

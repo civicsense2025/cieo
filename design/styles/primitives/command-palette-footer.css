@@ -1,0 +1,4 @@
+/* design/styles/primitives/command-palette-footer.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-command-palette-footer { padding: var(--cieo-space-1) var(--cieo-space-2); border-block-start: 1px solid var(--cieo-color-border); font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+}

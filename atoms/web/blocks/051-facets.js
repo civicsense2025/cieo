@@ -15,7 +15,9 @@ atom({ id:'facets', cat:'Dynamic', name:'Filtered collection', block:'collection
         if (on){ const x = (n % cols)*(cw + 10), y = Math.floor(n/cols)*88; inst || c.o.target === 0 ? (c.x.jump(x), c.y.jump(y)) : (c.x.set(x, S.base, t0 + n*.03), c.y.set(y, S.base, t0 + n*.03)); n++; }
         c.o.set(on ? 1 : 0, on ? S.base : S.snap, on ? t0 + EXIT : t0); c.c.style.pointerEvents = on ? 'auto' : 'none'; });
       const h = Math.ceil(n/cols)*88 - 10; inst ? H.jump(h) : H.set(h); };
-    const sel = (i, inst) => { f = btns[i].textContent; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); lay(inst); };
+    const sel = (i, inst) => { const same = !inst && f === btns[i].textContent; f = btns[i].textContent; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); lay(inst);
+      // re-picking the active filter replays the entrance so the press is visible
+      if (same) { const t0 = now(); cards.forEach((c, k) => { if (c.o.target === 1){ c.o.jump(0); c.o.set(1, S.base, t0 + k*.03); } }); } };
     btns.forEach((b,i) => b.onclick = () => sel(i)); const init = () => sel(btns.findIndex(b => b.textContent === f), true); document.fonts.ready.then(init); requestAnimationFrame(init); addEventListener('resize', () => lay(true));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       cg.style.height = px(H.at(t)); cards.forEach(c => { c.c.style.left = px(c.x.at(t)); c.c.style.top = px(c.y.at(t)); fade(c.c, c.o.at(t), null); c.c.style.visibility = c.o.at(t) < .01 ? 'hidden' : 'visible'; }); };

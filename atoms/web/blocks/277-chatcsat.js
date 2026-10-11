@@ -17,7 +17,7 @@ atom({ id:'chatcsat', cat:'Forms', name:'CSAT in chat', block:'chat, CSAT', fam:
     const thanks = i => `Thanks — logged as ${N[i]}.`;
     tk.onchange = () => { if (!tk.checked) tsw.to(0); else if (sel >= 0){ Y[1].textContent = thanks(sel); tsw.to(1); } };
     const btns = N.map((n,i) => { const b = document.createElement('button'); b.setAttribute('role','radio'); b.setAttribute('aria-label', n);
-      b.innerHTML = FACE(i); b.style.cssText = 'width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;padding:0;cursor:pointer';
+      b.innerHTML = FACE(i); b.style.cssText = 'width:36px;height:36px;border-radius:10px;border:1.5px solid var(--muted);background:var(--card);display:grid;place-items:center;padding:0;cursor:pointer';
       b.onpointerenter = () => { mood.set(i/4, REDUCE ? S.snap : S.soft); sw.to(i + 1); };
       b.onpointerleave = () => { mood.set(sel < 0 ? .5 : sel/4, REDUCE ? S.snap : S.soft); sw.to(sel + 1); };
       b.onclick = () => { sel = i; const t = now();

@@ -1,0 +1,5 @@
+/* design/styles/primitives/table-header-cell.css */
+@layer cieo.components {
+  :where(.cieo).cieo-table-header-cell { padding: var(--cieo-space-3) var(--cieo-space-4); text-align: start; font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-table-header-cell > button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+}

@@ -1,0 +1,5 @@
+/* design/styles/primitives/side-nav-heading.css */
+@layer cieo.components {
+  :where(.cieo).cieo-side-nav-heading { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-muted); padding-inline: var(--cieo-space-2); }
+  :where(.cieo).cieo-side-nav[data-collapsed='true'] .cieo-side-nav-heading { display: none; }
+}

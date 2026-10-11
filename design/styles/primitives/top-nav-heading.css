@@ -1,0 +1,4 @@
+/* design/styles/primitives/top-nav-heading.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav-heading { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); margin-inline-end: var(--cieo-space-3); }
+}

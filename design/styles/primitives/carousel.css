@@ -1,0 +1,6 @@
+/* design/styles/primitives/carousel.css */
+@layer cieo.components {
+  :where(.cieo).cieo-carousel { display: grid; gap: var(--cieo-space-2); }
+  :where(.cieo).cieo-carousel-track { display: grid; grid-auto-flow: column; grid-auto-columns: min(18rem, 80%); gap: var(--cieo-space-3); overflow-x: auto; scroll-snap-type: x mandatory; padding-block: var(--cieo-space-2); }
+  :where(.cieo).cieo-carousel-track > * { scroll-snap-align: start; }
+}

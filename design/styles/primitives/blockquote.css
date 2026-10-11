@@ -1,0 +1,9 @@
+/* design/styles/primitives/blockquote.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-blockquote {
+    margin: 0; padding-inline-start: var(--cieo-space-4);
+    border-inline-start: 3px solid var(--cieo-color-border-strong);
+    color: var(--cieo-color-text); line-height: var(--cieo-leading-body);
+  }
+  :where(.cieo).cieo-p-blockquote footer { margin-block-start: var(--cieo-space-2); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

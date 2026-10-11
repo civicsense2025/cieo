@@ -1,0 +1,6 @@
+// src/primitives/SideNavItem/SideNavItem.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function SideNavItem({ href, current = false, children }) {
+    return (_jsx("a", { href: href, "aria-current": current ? 'page' : undefined, className: "cieo cieo-side-nav-item", children: children }));
+}

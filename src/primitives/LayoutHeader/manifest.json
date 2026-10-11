@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.layout-header",
+  "componentVersion": "1.0.0",
+  "name": "LayoutHeader",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/LayoutHeader/LayoutHeader.tsx", "symbol": "LayoutHeader" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [],
+  "constraints": { "layout": ["frame-top"], "content": ["banner-landmark"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label"], "states": [], "events": [], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "App frame header landmark, unstyled by design." },
+  "extensions": { "unstyled": "No CSS ships with this primitive; it is a landmark only and the host owns all paint." }
+}

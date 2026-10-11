@@ -1,0 +1,6 @@
+// src/primitives/GridSpan/GridSpan.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function GridSpan({ span, children }) {
+    return (_jsx("div", { "data-span": span, className: "cieo cieo-grid-span", children: children }));
+}

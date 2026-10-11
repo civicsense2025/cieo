@@ -1,0 +1,5 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function Toolbar({ label, title, children }) {
+    return (_jsxs("div", { role: "toolbar", "aria-label": label, className: "cieo cieo-toolbar", children: [title ? _jsx("span", { className: "cieo-toolbar-title", children: title }) : null, _jsx("span", { className: "cieo-toolbar-actions", children: children })] }));
+}

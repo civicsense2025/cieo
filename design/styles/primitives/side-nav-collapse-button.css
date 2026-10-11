@@ -1,0 +1,4 @@
+/* design/styles/primitives/side-nav-collapse-button.css */
+@layer cieo.components {
+  :where(.cieo).cieo-side-nav-collapse-button { min-height: var(--cieo-control-small); padding-inline: var(--cieo-space-2); color: var(--cieo-color-text); }
+}

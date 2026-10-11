@@ -192,7 +192,7 @@ export function useSwapEffect(ref: RefObject<Element | null>, value: string, opt
 }
 
 /** Sliding indicator: when `key` changes, the indicator springs from its old span with a leading and a lagging edge. */
-export function useEdges(indicator: RefObject<Element | null>, key: unknown): void {
+export function useEdges(indicator: RefObject<Element | null>, key: unknown, opts?: { disabled?: boolean }): void {
   const last = useRef<{ left: number; right: number } | null>(null);
   useIso(() => {
     const el = indicator.current;
@@ -200,7 +200,7 @@ export function useEdges(indicator: RefObject<Element | null>, key: unknown): vo
     const r = el.getBoundingClientRect();
     const prev = last.current;
     last.current = { left: r.left, right: r.right };
-    if (prev) return edges(el, prev, undefined);
+    if (prev && !opts?.disabled) return edges(el, prev, undefined);
   }, [key]);
 }
 
@@ -223,13 +223,16 @@ export function useFlip(container: RefObject<Element | null>, key: unknown, opts
 }
 
 /** Mount/unmount with a shared enter/exit spring. Returns whether to render and a ref for the element. */
-export function usePresence<T extends HTMLElement>(open: boolean, opts: PresenceOptions = {}): { mounted: boolean; ref: RefObject<T | null> } {
+export function usePresence<T extends HTMLElement>(open: boolean, opts: PresenceOptions & { disabled?: boolean } = {}): { mounted: boolean; ref: RefObject<T | null> } {
   const [mounted, setMounted] = useState(open);
   const ref = useRef<T>(null);
   const cancel = useRef<Cancel | null>(null);
-  if (open && !mounted) setMounted(true);
+  if (opts.disabled) {
+    if (mounted !== open) setMounted(open);
+  } else if (open && !mounted) setMounted(true);
   /* No cleanup per change: enter and exit retarget the element's one presence spring, so reversing is continuous. */
   useIso(() => {
+    if (opts.disabled) return;
     const el = ref.current;
     if (!el) return;
     cancel.current = open ? enter(el, opts) : exit(el, { ...opts, done: () => setMounted(false) });

@@ -9,18 +9,18 @@ atom({ id:'savebar', cat:'Editor', name:'Unsaved changes bar', block:'Settings f
 .sb-l{display:flex;align-items:baseline;gap:8px;font-size:13px;font-weight:500}
 .sb-l small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
 .sb-mk{display:inline-block;font-size:12px;font-weight:500;color:var(--accent);opacity:0}
-.sb-iw{border:1.5px solid var(--line);border-radius:9px;background:var(--card)}
+.sb-iw{border:1.5px solid var(--muted);border-radius:9px;background:var(--card)}
 .sb-iw input{display:block;width:100%;height:34px;border:0;background:none;color:var(--ink);font:14px var(--sans);padding:0 11px;user-select:text;-webkit-user-select:text}
 .sb-seg{flex-wrap:nowrap}
 .sb-seg button{padding:5px 10px}
-.sb-sw{position:relative;flex:none;width:48px;height:28px;border-radius:14px;border:0;padding:0;cursor:pointer;background:var(--raised)}
-.sb-kn{position:absolute;top:3px;left:0;height:22px;border-radius:11px;background:var(--card);box-shadow:var(--shadow)}
+.sb-sw{position:relative;flex:none;width:48px;height:28px;border-radius:14px;border:0;padding:0;cursor:pointer;background:var(--raised);box-shadow:inset 0 0 0 1.5px var(--muted)}
+.sb-kn{position:absolute;top:3px;left:0;height:22px;border-radius:11px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--muted), var(--shadow)}
 .sb-bar{position:absolute;left:0;right:0;bottom:12px;margin:0 auto;width:min(440px,calc(100% - 24px));height:52px;border-radius:14px;background:var(--ink);color:var(--card);box-shadow:var(--shadow);visibility:hidden;opacity:0}
 .sb-ly{position:absolute;inset:0;display:flex;align-items:center;gap:6px;padding:0 10px 0 16px;font-size:13px;font-weight:500}
 .sb-msg{position:relative;flex:1;min-width:0;height:20px;overflow:hidden}
 .sb-msg .layer{justify-content:flex-start}
-.sb-dc{flex:none;height:32px;padding:0;border:0;border-radius:8px;background:none;color:inherit;font-weight:500;cursor:pointer;overflow:hidden;white-space:nowrap}
-.sb-sv{position:relative;flex:none;height:32px;border:0;padding:0;background:var(--card);color:var(--ink);font-weight:600;cursor:pointer;overflow:hidden}
+.sb-dc{flex:none;height:32px;padding:0;border:0;border-radius:8px;background:var(--raised);color:var(--ink);font-weight:500;cursor:pointer;overflow:hidden;white-space:nowrap}
+.sb-sv{position:relative;flex:none;height:32px;border:0;padding:0;background:var(--raised);color:var(--ink);font-weight:600;cursor:pointer;overflow:hidden}
 .sb-ok{width:24px;height:24px;border-radius:50%;background:var(--success-tint);color:var(--success);display:grid;place-items:center;flex:none}
 </style><div class="sb">
 <div class="card sb-cd"><b style="font-size:15px;letter-spacing:-.01em;padding-bottom:2px">Site settings</b>
@@ -74,9 +74,9 @@ atom({ id:'savebar', cat:'Editor', name:'Unsaved changes bar', block:'Settings f
     return t => {
       while (q.length && t >= q[0][0]) q.shift()[1]();
       mks.forEach((m,i) => { const o = clamp(mk[i].at(t)); fade(m, o, (1-o)*-3); });
-      fade(nameI, nameO.at(t), null); iw.style.borderColor = mix(clamp(fo.at(t)), 'var(--ink)', 'var(--line)');
+      fade(nameI, nameO.at(t), null); iw.style.borderColor = mix(clamp(fo.at(t)), 'var(--ink)', 'var(--muted)');
       const l = le.A.at(t), r = le.B.at(t); sind.style.transform = `translate(${px(l)},3px)`; sind.style.width = px(r - l); sind.style.height = 'calc(100% - 6px)';
-      const pr = sp.at(t), a = se.A.at(t) - (cur.show ? 5*pr : 0), b = se.B.at(t) + (cur.show ? 0 : 5*pr); kn.style.transform = `translateX(${px(a)})`; kn.style.width = px(b - a); sw.style.background = mix(clamp(sf.at(t)), 'var(--ink)', 'var(--raised)');
+      const pr = sp.at(t), a = se.A.at(t) - (cur.show ? 5*pr : 0), b = se.B.at(t) + (cur.show ? 0 : 5*pr); kn.style.transform = `translateX(${px(a)})`; kn.style.width = px(b - a); const f = clamp(sf.at(t)); sw.style.background = mix(f, 'var(--ink)', 'var(--raised)'); sw.style.boxShadow = `inset 0 0 0 1.5px ${mix(f, 'var(--ink)', 'var(--muted)')}`;
       pop(bar, bo.at(t), 20);
       ls.apply(dly, 'd', t, 4); ls.apply(sly, 's', t, 4); msgSw.apply(msgs[0], 'ok', t, 3); msgSw.apply(msgs[1], 'bad', t, 3);
       ['save','spin','check'].forEach((k,i) => btnSw.apply(svl[i], k, t, 3));

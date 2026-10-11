@@ -11,7 +11,7 @@ atom({ id:'qaupvote', cat:'Forms', name:'Live Q&A upvote', block:'q&a (upvote, q
       $(st,'.fin').appendChild(e); return e; });
     const fsw = new Swap(0), ok = new Track(0);
     const rows = Q.map((q,i) => { const r = document.createElement('div'); r.className = 'row';
-      r.style.cssText = 'gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--card)';
+      r.style.cssText = 'gap:10px;align-items:center;border-radius:10px;padding:9px 11px;background:var(--card)';
       const vb = document.createElement('b'); vb.style.cssText = 'font-size:13px;font-variant-numeric:tabular-nums;min-width:20px;text-align:right';
       const dg = new Digits(vb, 2); dg.set(String(V0[i]).padStart(2,' '), true);
       const tx = document.createElement('span'); tx.style.cssText = 'font-size:13.5px;line-height:1.5;flex:1'; tx.textContent = q;
@@ -25,13 +25,15 @@ atom({ id:'qaupvote', cat:'Forms', name:'Live Q&A upvote', block:'q&a (upvote, q
       r.append(vb, tx, slot, rv); qr.appendChild(r);
       const sw = new Swap(0), dim = new Track(0), y = new Track(0);
       up.onclick = () => vote(it, 1); rv.onclick = () => resolve(it);
-      const it = { r, tx, rv, dg, sw, dim, y, votes:V0[i], home:i, done:false }; return it; });
+      const it = { r, tx, rv, dg, sw, dim, y, up, votes:V0[i], home:i, done:false }; return it; });
     const rank = () => [...rows].sort((a,b) => b.votes - a.votes || a.home - b.home);
     const H = () => (rows[0] ? rows[0].r.offsetHeight + 8 : 58);
     const layout = () => { const t0 = now(), rk = rank(), h = H();
       rows.forEach(it => { const k = rk.indexOf(it);
         it.y.set(so.checked ? (k - it.home)*h : 0, S.base, t0); }); };
-    const vote = (it, d) => { if (it.done) return; it.votes += d; it.dg.set(String(it.votes).padStart(2,' ')); layout(); };
+    const vote = (it, d) => { if (it.done) return; it.votes += d; it.dg.set(String(it.votes).padStart(2,' ')); layout();
+      // voted state: ink fill plus a check glyph and label, so it reads without colour
+      it.up.style.background = 'var(--ink)'; it.up.style.color = 'var(--card)'; it.up.textContent = '✓ Voted'; };
     const resolve = it => { if (it.done) return; const t0 = now(); it.done = true;
       it.sw.to(1, t0); it.dim.set(1, S.base, t0);
       if (rows.every(r => r.done)){ fsw.to(1, t0); ok.set(1, S.snap, t0); } };

@@ -55,7 +55,7 @@ atom({ id:'productpage', cat:'Storefront', name:'Product page', block:'product, 
 .pp-sk{position:relative;height:18px;font-size:13px;font-weight:500}
 .pp-lb{display:flex;gap:6px;font-size:13px;font-weight:500;margin-bottom:6px}
 .pp-sw{display:flex;gap:12px;padding:3px 4px}
-.pp-sb{position:relative;width:24px;height:24px;border-radius:50%;border:1px solid var(--line);padding:0;cursor:pointer}
+.pp-sb{position:relative;width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);padding:0;cursor:pointer}
 .pp-rg{position:absolute;inset:-5px;border:2px solid var(--ink);border-radius:50%;pointer-events:none;opacity:0}
 .pp-cp{display:flex;flex-wrap:wrap;gap:6px}
 .pp-ch{min-width:38px;height:30px;padding:0 8px;border-radius:8px;border:1.5px solid var(--line);background:var(--card);font-size:13px;font-weight:500;cursor:pointer}
@@ -73,7 +73,7 @@ atom({ id:'productpage', cat:'Storefront', name:'Product page', block:'product, 
 .pp-lh{flex:none;width:44px;height:58px;border-radius:8px;overflow:hidden;background:var(--raised)}
 .pp-lc{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .pp-qb{width:24px;height:24px;padding:0;border-radius:7px;line-height:1}
-.pp-gh{position:absolute;left:0;top:0;width:48px;height:58px;border-radius:9px;overflow:hidden;border:1px solid var(--line);z-index:25;pointer-events:none}
+.pp-gh{position:absolute;left:0;top:0;width:48px;height:58px;border-radius:9px;overflow:hidden;z-index:25;pointer-events:none}
 @container (max-width:559px){
   .pp{padding:0 12px 10px}
   .pp-in{gap:10px}
@@ -102,7 +102,7 @@ atom({ id:'productpage', cat:'Storefront', name:'Product page', block:'product, 
       <div class="pp-sk" role="status"></div>
       <div><div class="pp-lb"><span>Color</span><span class="pp-cn muted"></span></div><div class="pp-sw" role="group" aria-label="Color"></div></div>
       <div><div class="pp-lb"><span>Size</span></div><div class="pp-cp" role="group" aria-label="Size"></div></div>
-      <button type="button" class="pp-ad"></button>
+      <button type="button" class="pp-ad" aria-label="Add to cart"></button>
     </div>
   </div></div>
   <div class="pp-sc"></div>
@@ -250,7 +250,7 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
 .cf-er{color:var(--danger);font-size:12px;opacity:0}
 .cf-ro{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:44px;padding:6px 0}
 .cf-ro+.cf-ro{border-top:1px solid var(--line-soft)}
-.cf-th{flex:none;width:36px;height:44px;border-radius:8px;background:var(--raised);display:grid;place-items:center;color:var(--faint)}
+.cf-th{flex:none;width:36px;height:44px;border-radius:8px;background:var(--raised);display:grid;place-items:center;color:var(--muted)}
 .cf-p[data-nt] .cf-th{display:none}
 .cf-qb{width:24px;height:24px;padding:0;border-radius:7px;line-height:1}
 @container (max-width:559px){
@@ -268,7 +268,7 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
   <div class="cf-mn"><div class="cf-pn"></div>
     <aside class="cf-tt" aria-label="Order summary"><div class="r"><span class="muted">Subtotal</span><span class="num"></span></div><div class="r"><span class="muted">Shipping</span><span class="num"></span></div><div class="r"><span class="muted">Tax (8%)</span><span class="num"></span></div><div class="r tot"><span>Total</span><span class="num"></span></div></aside>
   </div>
-  <div class="cf-ac"><button type="button" class="btn cf-bk">Back</button><button type="submit" class="cf-nx"></button></div>
+  <div class="cf-ac"><button type="button" class="btn cf-bk">Back</button><button type="submit" class="cf-nx" aria-label="Next step"></button></div>
 </form></div>`,
   desc:'One bar fills as you move Cart, Details, Payment, Receipt, and panels slide sideways in the direction of travel with the blur swap. Changing a quantity rolls its digit first, then every money value springs to the new total together; shipping goes free at $100. Empty required fields ring in danger. Pay shows a spinner, then fills success and slides to the receipt, where the check draws and the total counts up. With Simulate decline the button and bar flash danger, a message swaps in, and you stay on Payment.',
   api:'panel.to(i, dir)   bar.set((i + 1)/4)   totals.set(sum)   pay: busy → ok | bad   receipt: check.draw(t0 + .3); total.set(sum, t0 + .25)',
@@ -300,12 +300,12 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
     const clear = f => { f.e.set(0); f.inp.removeAttribute('aria-invalid'); f.er.setAttribute('aria-hidden', 'true'); };
 
     /* panel 2: payment */
-    const p2 = mkP(`<div class="cf-ro card" style="height:48px;padding:0 12px;box-shadow:none;border:1px solid var(--line)"><div class="row" style="gap:10px">${ic('<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/>', 20, 1.75)}<div class="col" style="gap:0"><span class="small" style="font-weight:500">Visa ending 4242</span><span class="small muted">Test card, expires 09/30</span></div></div></div><label class="row small" style="gap:8px;cursor:pointer"><input type="checkbox" id="cf-decline" class="cf-dc"> Simulate decline</label><div class="cf-pm" style="position:relative;height:44px"></div>`);
+    const p2 = mkP(`<div class="cf-ro card" style="height:48px;padding:0 12px;box-shadow:none"><div class="row" style="gap:10px">${ic('<rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19"/>', 20, 1.75)}<div class="col" style="gap:0"><span class="small" style="font-weight:500">Visa ending 4242</span><span class="small muted">Test card, expires 09/30</span></div></div></div><label class="row small" style="gap:8px;cursor:pointer"><input type="checkbox" id="cf-decline" class="cf-dc"> Simulate decline</label><div class="cf-pm" style="position:relative;height:44px"></div>`);
     const dc = $(p2,'.cf-dc'), pm = $(p2,'.cf-pm'), ml = {};
     for (const k of ['none','bad']){ const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += ';white-space:normal;justify-content:flex-start;padding:0 10px;border-radius:9px;' + (k === 'bad' ? 'background:var(--danger-tint);color:var(--danger)' : ''); if (k === 'bad') e.innerHTML = ic(I.alert, 18) + '<span class="small" style="flex:1" role="alert">Your bank declined this card. You were not charged.</span>'; pm.appendChild(e); ml[k] = e; }
 
     /* panel 3: receipt */
-    const p3 = mkP(`<div class="row" style="gap:14px;align-items:center;margin-top:6px"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="cf-c1" cx="12" cy="12" r="10" pathLength="1" stroke-dasharray="1"/><path class="cf-c2" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><div class="col" style="gap:0"><b>Payment received</b><span class="small muted cf-mail"></span></div></div><div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;margin-top:4px"><span class="muted small">Total paid</span><b class="num cf-rt" style="font-size:24px;letter-spacing:-.02em"></b></div>`);
+    const p3 = mkP(`<div class="row" style="gap:14px;align-items:center;margin-top:6px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="cf-c1" cx="12" cy="12" r="10" pathLength="1" stroke-dasharray="1"/><path class="cf-c2" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><div class="col" style="gap:0"><b>Payment received</b><span class="small muted cf-mail"></span></div></div><div class="row" style="justify-content:space-between;border-top:1px solid var(--line);padding-top:10px;margin-top:4px"><span class="muted small">Total paid</span><b class="num cf-rt" style="font-size:24px;letter-spacing:-.02em"></b></div>`);
     const c1 = $(p3,'.cf-c1'), c2 = $(p3,'.cf-c2'), rt = $(p3,'.cf-rt'), mail = $(p3,'.cf-mail');
     const panels = [p0, p1, p2, p3];
 
@@ -371,7 +371,7 @@ atom({ id:'pricingsection', cat:'Storefront', name:'Pricing section', block:'pri
 .ps-sv{overflow:hidden;width:0;flex:none}
 .ps-pill{display:inline-block;margin-left:10px;white-space:nowrap;background:var(--accent-tint);color:var(--accent);font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px}
 .ps-gr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;width:100%;max-width:860px;align-items:stretch;padding-top:6px}
-.ps-cd{position:relative;display:flex;flex-direction:column;gap:8px;padding:16px 16px 14px;border:1px solid var(--line);text-align:left;min-width:0}
+.ps-cd{position:relative;display:flex;flex-direction:column;gap:8px;padding:17px 17px 15px;text-align:left;min-width:0}
 .ps-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px}
 .ps-nm{margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em}
 .ps-tag{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--accent-tint);color:var(--accent);white-space:nowrap}
@@ -381,7 +381,7 @@ atom({ id:'pricingsection', cat:'Storefront', name:'Pricing section', block:'pri
 .ps-ft{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted);flex:1}
 .ps-ft li{display:flex;gap:7px;align-items:center}
 .ps-ft svg{color:var(--accent);flex:none}
-.ps-cta{height:36px;border-radius:9px;border:1px solid var(--line);font-weight:500;font-size:13px;cursor:pointer;padding:0 12px;white-space:nowrap}
+.ps-cta{height:36px;border-radius:9px;border:0;background:var(--raised);font-weight:500;font-size:13px;cursor:pointer;padding:0 13px;white-space:nowrap}
 @container (max-width:559px){
   .ps{gap:8px;padding:8px 12px}
   .ps-gr{grid-template-columns:1fr;gap:8px}
@@ -389,7 +389,7 @@ atom({ id:'pricingsection', cat:'Storefront', name:'Pricing section', block:'pri
   .ps-hd{grid-area:hd;justify-content:flex-start;gap:8px}
   .ps-pr{grid-area:pr;justify-self:end;font-size:26px}
   .ps-nt{grid-area:nt}
-  .ps-cta{grid-area:cta;height:28px;font-size:12px;padding:0 10px}
+  .ps-cta{grid-area:cta;height:28px;font-size:12px;padding:0 11px}
   .ps-ft{display:none}
 }
 </style>

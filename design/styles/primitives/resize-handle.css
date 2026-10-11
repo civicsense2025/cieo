@@ -1,0 +1,5 @@
+/* design/styles/primitives/resize-handle.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-resize[data-orientation='vertical'] { width: 1px; align-self: stretch; cursor: col-resize; background: var(--cieo-color-border-strong); }
+  :where(.cieo).cieo-p-resize[data-orientation='horizontal'] { height: 1px; cursor: row-resize; background: var(--cieo-color-border-strong); }
+}

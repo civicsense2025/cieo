@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.section",
+  "componentVersion": "1.0.0",
+  "name": "Section",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Section/Section.tsx", "symbol": "Section" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "title", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "section", "overrides": ["gap"], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["stacked-children"], "content": ["label-names-region"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "label"], "states": [], "events": [], "parts": ["section"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Page subdivision with an optional title heading." },
+  "extensions": {}
+}

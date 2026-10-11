@@ -1,0 +1,6 @@
+/* design/styles/primitives/appshell.css */
+@layer cieo.components {
+  :where(.cieo).cieo-app-shell { display: grid; grid-template-columns: auto 1fr; gap: var(--cieo-space-4); min-block-size: 100dvh; min-inline-size: 0; }
+  :where(.cieo) .cieo-app-shell-nav { min-inline-size: 0; }
+  :where(.cieo) .cieo-app-shell-main { min-inline-size: 0; }
+}

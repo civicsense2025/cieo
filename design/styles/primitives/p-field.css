@@ -1,0 +1,6 @@
+@layer cieo.components {
+  :where(.cieo).cieo-p-field { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo).cieo-p-field > label { font-weight: var(--cieo-weight-medium); font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-p-help { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-p-help[data-tone='danger'] { color: var(--cieo-color-danger); }
+}

@@ -5,7 +5,7 @@ atom({ id:'contextmenu', cat:'Overlays', name:'Context menu', block:'Context men
   desc:'Right-click, or long-press on touch, opens the menu at the pointer. It grows from that exact corner and flips when it would overflow. Items fade in 25ms apart; the destructive item is danger-colored. Delete asks first in a danger confirm mirroring the dialog, then the row collapses and the hint swaps to trash with Undo, which springs the row back.',
   api:'menu.at(pointer); origin = flipped ? "right" : "left"; item[i].o = prog(t, tOpen + i·0.025)   delete: confirm.o.set(1); on confirm: row.o→0, row.h→0 (t+EXIT); undo: row.h→1, row.o→1 (t+EXIT)',
   init(st){
-    const cm = $(st,'.cm'), hint = $(st,'.st'), frw = $(st,'.frw'), fr = $(st,'.fr'), cf = $(st,'.cf'), un = $(st,'.un'), df = $(st,'.df'), IT = ['Open','Rename','Duplicate','Move to…','—','Delete'];
+    const cm = $(st,'.cm'), hint = $(st,'.st') || st.appendChild(Object.assign(document.createElement('div'), { className:'hint st' })), frw = $(st,'.frw'), fr = $(st,'.fr'), cf = $(st,'.cf'), un = $(st,'.un'), df = $(st,'.df'), IT = ['Open','Rename','Duplicate','Move to…','—','Delete'];
     let confirmOn = true, deleted = false;
     cf.onclick = () => { confirmOn = !confirmOn; cf.setAttribute('aria-pressed', String(confirmOn)); cf.textContent = confirmOn ? 'On' : 'Off'; };
     const items = IT.map(n => { if (n === '—'){ const h = document.createElement('hr'); h.style.cssText = 'border:0;border-top:1px solid var(--line-soft);margin:4px 0'; cm.appendChild(h); return { el:h }; }

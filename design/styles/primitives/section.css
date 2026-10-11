@@ -1,0 +1,5 @@
+/* design/styles/primitives/section.css */
+@layer cieo.components {
+  :where(.cieo).cieo-section { display: grid; gap: var(--cieo-space-4); min-inline-size: 0; }
+  :where(.cieo) .cieo-section-title { margin: 0; }
+}

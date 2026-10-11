@@ -2,7 +2,7 @@
 atom({
   id:'field',cat:'Interactive',name:'Text field',block:'form, newsletter',fam:['M','S'],
   html:`<div class="col" style="width:min(336px,88%);gap:0">
-    <label class="fw" style="position:relative;display:block;height:64px;border:1px solid var(--line);border-radius:16px;background:var(--card);cursor:text">
+    <label class="fw" style="position:relative;display:block;height:64px;border:1.5px solid var(--muted);border-radius:16px;background:var(--card);cursor:text">
       <span class="lb" style="position:absolute;left:16px;top:20px;transform-origin:0 0;color:var(--muted)">Email address</span>
       <input type="email" inputmode="email" autocomplete="email" aria-label="Email address" style="position:absolute;left:16px;right:48px;bottom:8px;border:0;background:none;color:var(--ink);font:16px var(--sans);padding:0;min-width:0">
       <span class="ic" aria-hidden="true" style="position:absolute;right:16px;top:24px;width:16px;height:16px">
@@ -30,7 +30,7 @@ atom({
     return t=>{
       const p=clamp(f.at(t)),g=clamp(ok.at(t)),k=clamp(bad.at(t)),q=clamp(fo.at(t));
       lb.style.transform=`translateY(${px(-12*p)}) scale(${(1-.2*p).toFixed(4)})`;
-      const base=mix(q,'var(--accent)','var(--line)');
+      const base=mix(q,'var(--accent)','var(--muted)');
       fw.style.borderColor=`color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, ${base}))`;
       lb.style.color=k>.5?'var(--danger)':g>.5?'var(--success)':'var(--muted)';
       icons.forEach((el,i)=>sw.apply(el,i,t,0));er.style.height=px(k*msg.offsetHeight);fade(msg,k,(1-k)*-4);

@@ -1,0 +1,5 @@
+/* design/styles/primitives/clickable-card.css */
+@layer cieo.components {
+  :where(.cieo).cieo-clickable-card { position: relative; display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); background: var(--cieo-color-surface); color: var(--cieo-color-text); border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); }
+  :where(.cieo).cieo-clickable-card a::after { content: ""; position: absolute; inset: 0; }
+}

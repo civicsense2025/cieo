@@ -18,7 +18,7 @@ atom({ id:'tabcards', cat:'Chrome', name:'Tab hover cards', block:'chrome, tabs,
     const btns = TABS.map((tb,i) => {
       const b = document.createElement('button');
       b.textContent = tb.t; b.setAttribute('role','tab');
-      b.style.cssText = 'flex:1;min-height:32px;border-radius:8px;border:1px solid color-mix(in oklab, var(--ink) 16%, transparent);background:transparent;font-size:13px;line-height:1.5;cursor:pointer';
+      b.style.cssText = 'flex:1;min-height:32px;border-radius:8px;border:0;background:var(--raised);font-size:13px;line-height:1.5;cursor:pointer';
       strip.appendChild(b);
       b.addEventListener('mouseenter', () => hover(i));
       b.addEventListener('focus', () => hover(i));

@@ -9,7 +9,7 @@ atom({ id:'quizrouter', cat:'Forms', name:'Goal router', block:'onboarding quiz,
     const GOALS = [['Ship faster','Cut review time in half.'],['Look sharper','A portfolio that reads in seconds.'],['Stay organized','One inbox for every draft.']];
     const PACES = ['A calm weekly digest','A brisk daily briefing'];
     const dg = new Digits($(st,'.dn'), 1), sw = new Swap(0), press = new Track(0); let step = 0, goal = 0;
-    const optBtn = (label, sub) => { const b = document.createElement('button'); b.style.cssText = 'display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:9px;padding:6px 12px;min-height:36px;cursor:pointer;font-size:14px;line-height:1.5'; b.innerHTML = `<span style="flex:1">${label}<br><span class="small muted">${sub}</span></span>`; return b; };
+    const optBtn = (label, sub) => { const b = document.createElement('button'); b.style.cssText = 'display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:var(--raised);border-radius:9px;padding:6px 12px;min-height:36px;cursor:pointer;font-size:14px;line-height:1.5'; b.innerHTML = `<span style="flex:1">${label}<br><span class="small muted">${sub}</span></span>`; return b; };
     const L = [];
     const goalLayer = document.createElement('div'); goalLayer.className = 'layer'; goalLayer.style.cssText += 'flex-direction:column;gap:6px;align-items:stretch;white-space:normal';
     goalLayer.innerHTML = `<span style="font-size:13px;line-height:1.5">What brings you here?</span>`;

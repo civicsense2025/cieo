@@ -1,0 +1,37 @@
+// src/primitives/TabList/TabList.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/* TabList. Tab row owning the selected value (controlled or not). Exports TabContext for Tab and TabMenu. */
+import { createContext, useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useEdges } from '../../react/index.js';
+export const TabContext = createContext(null);
+export function TabList({ label, value, defaultValue, onValueChange, motion, children }) {
+    const [internal, setInternal] = useState(defaultValue);
+    const current = value ?? internal;
+    const tabsRef = useRef(new Map());
+    const indicatorRef = useRef(null);
+    const [style, setStyle] = useState({ left: 0, width: 0 });
+    function handleSelect(next) {
+        if (value === undefined)
+            setInternal(next);
+        onValueChange?.(next);
+    }
+    const registerTab = useCallback((key, el) => {
+        if (el)
+            tabsRef.current.set(key, el);
+        else
+            tabsRef.current.delete(key);
+    }, []);
+    useLayoutEffect(() => {
+        function measure() {
+            const el = current !== undefined ? tabsRef.current.get(current) : undefined;
+            if (el)
+                setStyle({ left: el.offsetLeft, width: el.offsetWidth });
+        }
+        measure();
+        window.addEventListener('resize', measure);
+        return () => window.removeEventListener('resize', measure);
+    }, [current]);
+    useEdges(indicatorRef, current, { disabled: motion === false });
+    return (_jsxs("div", { role: "tablist", "aria-label": label, className: "cieo cieo-tab-list", "data-motion": motion === false ? 'off' : undefined, children: [_jsx(TabContext.Provider, { value: { value: current, onSelect: handleSelect, registerTab }, children: children }), _jsx("span", { ref: indicatorRef, className: "cieo-tab-indicator", style: { left: style.left, width: style.width }, "aria-hidden": "true" })] }));
+}

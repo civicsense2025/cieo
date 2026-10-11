@@ -57,7 +57,9 @@ atom({ id:'budget', cat:'Writing', name:'Assignment budget board', block:'assign
       else { h[i].set(RH, S.base, t0); out[i].to(0, t0 + EXIT); layout(t0, false); cDg.dir = 1; hDg.dir = 1; setTimeout(counts, EXIT*1000); }
     };
     rows.forEach((c,i) => c.btn.onclick = () => dead[i] ? restore(i) : kill(i));
-    $(st,'.rs').onclick = () => alive().length < A.length && A.forEach((_,i) => restore(i));
+    const rs = $(st,'.rs'); let flashT = 0;
+    rs.onclick = () => { const had = alive().length < A.length; if (had) A.forEach((_,i) => restore(i));
+      rs.textContent = had ? 'Restored' : 'All rows funded'; clearTimeout(flashT); flashT = setTimeout(() => { rs.textContent = 'Restore all'; }, 1400); };
     return t => {
       rows.forEach((c,i) => {
         c.r.style.top = px(y[i].at(t)); c.r.style.height = px(Math.max(0, h[i].at(t)));

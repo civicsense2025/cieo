@@ -5,13 +5,13 @@ atom({ id:'pageeditor', cat:'Editor', name:'Page editor', block:'section, headin
   html:`<style>
 .pe{position:absolute;inset:0;overflow:hidden;isolation:isolate;background:var(--bg);font-size:13px;text-align:left}
 .pe-out{position:absolute;left:0;top:0;bottom:0;width:140px;padding:10px 8px;background:var(--tile);border-right:1px solid var(--line);z-index:3}
-.pe-ttl{font-size:12px;font-weight:500;color:var(--faint);padding:0 8px 8px}
+.pe-ttl{font-size:12px;font-weight:500;color:var(--muted);padding:0 8px 8px}
 .pe-lst{position:relative;display:flex;flex-direction:column;gap:2px}
 .pe-pl{position:absolute;border-radius:8px;background:var(--raised);pointer-events:none;opacity:0}
 .pe-it{position:relative;display:flex;align-items:center;gap:8px;width:100%;padding:7px 8px;border:0;border-radius:8px;background:none;color:var(--ink);font-weight:500;text-align:left;cursor:pointer}
 .pe-cv{position:absolute;left:140px;top:0;bottom:0;right:0;overflow:auto;overscroll-behavior:contain;z-index:1}
 .pe-pg{position:relative;padding:12px;display:flex;flex-direction:column;gap:8px}
-.pe-bk{position:relative;border-radius:10px;border:1px solid var(--line-soft);cursor:pointer;background:var(--pe-bg);color:var(--pe-fg)}
+.pe-bk{position:relative;border-radius:10px;border:1.5px solid var(--muted);cursor:pointer;background:var(--pe-bg);color:var(--pe-fg)}
 .pe-bk h4{margin:0;overflow-wrap:anywhere}
 .pe-bk p{margin:0;overflow-wrap:anywhere}
 .pe-rg{position:absolute;left:0;top:0;border:2px solid var(--accent);border-radius:13px;pointer-events:none;opacity:0;z-index:2}
@@ -22,12 +22,12 @@ atom({ id:'pageeditor', cat:'Editor', name:'Page editor', block:'section, headin
 .pe-ly{position:absolute;inset:0;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
 .pe-lh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .pe-lh b{font-size:14px;letter-spacing:-.01em}
-.pe-lh span{font-size:12px;color:var(--faint)}
+.pe-lh span{font-size:12px;color:var(--muted)}
 .pe-f{display:flex;flex-direction:column;gap:5px;min-width:0}
 .pe-f label,.pe-f .pe-fl{font-size:12px;font-weight:500;color:var(--muted)}
-.pe-f input,.pe-f textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:13px/1.45 var(--sans);padding:7px 9px;resize:none;user-select:text;-webkit-user-select:text}
+.pe-f input,.pe-f textarea{width:100%;border:1.5px solid var(--muted);border-radius:8px;background:var(--bg);color:var(--ink);font:13px/1.45 var(--sans);padding:7px 9px;resize:none;user-select:text;-webkit-user-select:text}
 .pe-sw{position:relative;display:flex;gap:8px;padding:3px;align-self:flex-start}
-.pe-sw button{position:relative;width:24px;height:24px;border-radius:7px;border:1px solid var(--line);cursor:pointer;padding:0}
+.pe-sw button{position:relative;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--muted);cursor:pointer;padding:0}
 .pe-sq{position:absolute;left:0;top:0;height:30px;border-radius:10px;border:2px solid var(--ink);pointer-events:none}
 .pe[data-n] .pe-out{right:0;bottom:auto;width:auto;height:46px;padding:6px 8px;border-right:0;border-bottom:1px solid var(--line)}
 .pe[data-n] .pe-ttl{display:none}

@@ -1,0 +1,6 @@
+// src/primitives/SideNav/SideNav.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function SideNav({ label = 'Sections', collapsed = false, children }) {
+    return (_jsx("nav", { "aria-label": label, "data-collapsed": collapsed, className: "cieo cieo-side-nav", children: children }));
+}

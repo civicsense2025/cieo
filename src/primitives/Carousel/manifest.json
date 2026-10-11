@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.carousel",
+  "componentVersion": "1.0.0",
+  "name": "Carousel",
+  "layer": "organism",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Carousel/Carousel.tsx", "symbol": "Carousel" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 32, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "track", "overrides": ["surface"], "tokenRoles": ["surface"] }],
+  "constraints": { "layout": ["scroll-snap-row"], "content": ["carousel-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "motion"], "states": [], "events": [], "parts": ["track"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Scroll-snap row of cards with previous and next buttons." },
+  "extensions": {}
+}

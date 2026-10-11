@@ -1,0 +1,12 @@
+/* design/styles/primitives/avatar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-avatar-one {
+    display: inline-flex; align-items: center; justify-content: center;
+    inline-size: 2rem; block-size: 2rem; border-radius: 999px; overflow: hidden; flex: none;
+    background: var(--cieo-color-sunken); color: var(--cieo-color-text);
+    border: 2px solid var(--cieo-color-surface);
+    font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium);
+  }
+  :where(.cieo).cieo-p-avatar-one[data-size='sm'] { inline-size: 1.5rem; block-size: 1.5rem; }
+  :where(.cieo).cieo-p-avatar-one img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+}

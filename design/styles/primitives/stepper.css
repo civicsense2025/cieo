@@ -1,0 +1,7 @@
+/* design/styles/primitives/stepper.css */
+@layer cieo.components {
+  :where(.cieo).cieo-stepper ol { display: flex; gap: var(--cieo-space-3); }
+  :where(.cieo).cieo-stepper li { color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-stepper li[data-state='done'] { color: var(--cieo-color-text); }
+  :where(.cieo).cieo-stepper li[data-state='current'] { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+}

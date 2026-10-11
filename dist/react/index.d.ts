@@ -38,14 +38,18 @@ export declare function useSwapEffect(ref: RefObject<Element | null>, value: str
     blur?: number;
 }): void;
 /** Sliding indicator: when `key` changes, the indicator springs from its old span with a leading and a lagging edge. */
-export declare function useEdges(indicator: RefObject<Element | null>, key: unknown): void;
+export declare function useEdges(indicator: RefObject<Element | null>, key: unknown, opts?: {
+    disabled?: boolean;
+}): void;
 /** FLIP reflow: children of `container` slide from where they were to where they are after a render that changed `key`. */
 export declare function useFlip(container: RefObject<Element | null>, key: unknown, opts?: {
     stagger?: number;
     clip?: Element;
 }): void;
 /** Mount/unmount with a shared enter/exit spring. Returns whether to render and a ref for the element. */
-export declare function usePresence<T extends HTMLElement>(open: boolean, opts?: PresenceOptions): {
+export declare function usePresence<T extends HTMLElement>(open: boolean, opts?: PresenceOptions & {
+    disabled?: boolean;
+}): {
     mounted: boolean;
     ref: RefObject<T | null>;
 };

@@ -1,7 +1,7 @@
 
 
 atom({ id:'taginput', cat:'Inputs', name:'Tag input', block:'form, term-list', fam:['M','X'],
-  html:`<label class="tg card" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;width:min(336px,calc(100% - 48px));min-height:64px;padding:16px;cursor:text"><input id="tag-in" placeholder="Add a tag" aria-label="Add a tag" style="flex:1;min-width:80px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:8px;min-height:32px"></label><div class="hint">Enter or comma adds · Backspace removes</div>`,
+  html:`<label class="tg card" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;width:min(336px,calc(100% - 48px));min-height:64px;padding:16px;border:1.5px solid var(--muted);cursor:text"><input id="tag-in" placeholder="Add a tag" aria-label="Add a tag" style="flex:1;min-width:80px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:8px;min-height:32px"></label><div class="hint">Enter or comma adds · Backspace removes</div>`,
   desc:'A new chip opens its own width before its text fades in. Removing reverses it: text out first, then the gap closes, so neighbors slide over instead of jumping.',
   api:'chip.w.set(measured); chip.o.set(1, S.base, t + 0.06)   remove: o→0, then w→0',
   init(st){

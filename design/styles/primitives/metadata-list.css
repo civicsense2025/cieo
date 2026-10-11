@@ -1,0 +1,4 @@
+/* design/styles/primitives/metadata-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-metadata-list { display: grid; grid-template-columns: auto 1fr; gap: var(--cieo-space-2) var(--cieo-space-4); margin: 0; }
+}

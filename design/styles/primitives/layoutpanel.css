@@ -1,0 +1,6 @@
+/* design/styles/primitives/layoutpanel.css */
+@layer cieo.components {
+  :where(.cieo).cieo-layout-panel { min-inline-size: 0; }
+  :where(.cieo).cieo-layout-panel[data-side='right'] { border-inline-start: 1px solid var(--cieo-color-border); }
+  :where(.cieo).cieo-layout-panel[data-side='left'] { border-inline-end: 1px solid var(--cieo-color-border); }
+}

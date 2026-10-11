@@ -1,0 +1,6 @@
+// src/primitives/AppShell/AppShell.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function AppShell({ nav, children }) {
+    return (_jsxs("div", { className: "cieo cieo-app-shell", children: [nav ? _jsx("div", { className: "cieo-app-shell-nav", children: nav }) : null, _jsx("div", { className: "cieo-app-shell-main", children: children })] }));
+}

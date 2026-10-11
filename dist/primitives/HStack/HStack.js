@@ -1,0 +1,6 @@
+// src/primitives/HStack/HStack.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function HStack({ gap = 'md', children }) {
+    return (_jsx("div", { "data-gap": gap, className: "cieo cieo-h-stack", children: children }));
+}

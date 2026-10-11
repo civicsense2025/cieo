@@ -6,7 +6,7 @@ atom({ id:'grouppoll', cat:'Scheduling', name:'Group-poll tally', block:'group p
     const box = $(st,'.card'), O = [['Tue 9:00 AM',4],['Wed 2:00 PM',6],['Thu 11:00 AM',5]];
     const rows = O.map(([n,v0]) => {
       const b = document.createElement('button');
-      b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 12px;min-height:44px;cursor:pointer;text-align:left;font-size:13px';
+      b.style.cssText = 'position:relative;overflow:hidden;display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--raised);border-radius:10px;padding:0 12px;min-height:44px;cursor:pointer;text-align:left;font-size:13px';
       const fill = document.createElement('i');
       fill.style.cssText = 'position:absolute;left:0;top:0;bottom:0;width:0;background:var(--raised)';
       const nm = document.createElement('span'); nm.textContent = n; nm.style.cssText = 'position:relative';
@@ -22,7 +22,7 @@ atom({ id:'grouppoll', cat:'Scheduling', name:'Group-poll tally', block:'group p
     const foot = document.createElement('div');
     foot.className = 'row small muted';
     foot.style.cssText = 'gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:2px';
-    foot.innerHTML = '<span class="vc" style="font-size:12px"></span><button class="rs" style="margin-left:auto;min-height:32px;border-radius:8px;border:1px solid var(--line);background:none;padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Reset</button>';
+    foot.innerHTML = '<span class="vc" style="font-size:12px"></span><button class="rs" style="margin-left:auto;min-height:32px;border-radius:8px;background:var(--raised);padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Reset</button>';
     box.appendChild(foot);
     const vc = $$(foot,'.vc')[0];
     let voted = false;

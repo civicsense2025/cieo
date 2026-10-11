@@ -1,0 +1,5 @@
+/* design/styles/primitives/tab.css */
+@layer cieo.components {
+  :where(.cieo).cieo-tab { display: inline-flex; align-items: center; min-block-size: var(--cieo-control-height); padding-inline: var(--cieo-space-2); border: 0; border-block-end: var(--cieo-border-width) solid transparent; background: transparent; color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-tab[data-selected='true'] { border-block-end-color: var(--cieo-color-accent); color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+}

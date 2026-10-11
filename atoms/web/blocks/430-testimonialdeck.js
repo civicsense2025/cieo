@@ -9,7 +9,7 @@ atom({ id:'testimonialdeck', cat:'Landing', name:'Testimonial deck', block:'Land
       ['Priya','Finally a site that loads fast and respects my time.']];
     const deck = $(st,'.deck'), cap = $(st,'.cap'), dots = $(st,'.dots'), nx = $(st,'.nx');
     const cards = Q.map(([who,txt],i) => { const d = document.createElement('div');
-      d.style.cssText = 'position:absolute;left:0;right:0;top:0;background:var(--card);border:1px solid var(--line-soft);border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)';
+      d.style.cssText = 'position:absolute;left:0;right:0;top:0;background:var(--card);border:0;border-radius:10px;padding:14px 16px;box-shadow:var(--shadow)';
       d.innerHTML = `<div style="font-size:14px;line-height:1.5"></div><div class="small muted" style="margin-top:8px;font-size:12.5px">— ${who}</div>`;
       d.firstChild.textContent = '“' + txt + '”'; deck.appendChild(d); return d; });
     const done = document.createElement('div');

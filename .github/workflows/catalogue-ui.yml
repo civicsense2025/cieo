@@ -1,7 +1,7 @@
 name: Catalogue UI
 on:
   pull_request:
-    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'scripts/build-collection.mjs', 'scripts/build-workbench.mjs', 'docs/library.html', 'docs/catalogue.html', 'docs/collection.html', 'docs/workbench.html', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
+    paths: ['atoms/web/**', 'scripts/build-library.mjs', 'scripts/build-catalogue.mjs', 'scripts/build-collection.mjs', 'scripts/build-workbench.mjs', 'docs/library.html', 'docs/catalogue.html', 'docs/collection.html', 'docs/workbench.html', 'design/styles/primitives/dialog.css', 'test/browser/smoke.*', 'test/catalogue/**', '.github/workflows/catalogue-ui.yml']
 permissions:
   contents: read
 concurrency:
@@ -35,8 +35,10 @@ jobs:
         run: |
           python -m pip install playwright==1.55.0
           python -m playwright install --with-deps chromium
-      - name: Test the real collection over HTTP
-        run: python test/catalogue/ui_smoke.py
+      - name: Test dialog motion and the real collection over HTTP
+        run: |
+          python test/browser/smoke.py
+          python test/catalogue/ui_smoke.py
       - name: Package source and the actual standalone catalogue
         if: always()
         run: |

@@ -1,0 +1,5 @@
+/* design/styles/primitives/table.css */
+@layer cieo.components {
+  :where(.cieo).cieo-table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  :where(.cieo).cieo-table :is(th, td) { border-color: var(--cieo-color-border); border-style: solid; border-width: 0 0 1px; }
+}

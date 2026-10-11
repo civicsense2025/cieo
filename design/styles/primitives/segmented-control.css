@@ -1,0 +1,4 @@
+/* design/styles/primitives/segmented-control.css */
+@layer cieo.components {
+  :where(.cieo).cieo-segmented-control { display: inline-flex; gap: var(--cieo-space-1); padding: var(--cieo-space-1); border-radius: var(--cieo-radius-control); background: var(--cieo-color-sunken); }
+}

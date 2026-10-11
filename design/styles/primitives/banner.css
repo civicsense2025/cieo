@@ -1,0 +1,12 @@
+/* design/styles/primitives/banner.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-banner {
+    display: block; padding: var(--cieo-space-3) var(--cieo-space-4);
+    color: var(--cieo-color-text); background: var(--cieo-color-info-soft);
+    border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control);
+  }
+  :where(.cieo).cieo-p-banner[data-tone='success'] { background: var(--cieo-color-success-soft); }
+  :where(.cieo).cieo-p-banner[data-tone='warning'] { background: var(--cieo-color-warning-soft); }
+  :where(.cieo).cieo-p-banner[data-tone='danger'] { background: var(--cieo-color-danger-soft); }
+  :where(.cieo) .cieo-p-banner-title { margin: 0 0 var(--cieo-space-1); font-weight: var(--cieo-weight-strong); }
+}

@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.chat-composer",
+  "componentVersion": "1.0.0",
+  "name": "ChatComposer",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/ChatComposer/ChatComposer.tsx", "symbol": "ChatComposer" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Send a message", "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "onSubmit", "type": { "kind": "function" }, "required": false, "nullable": false, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 4, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "composer", "overrides": ["surface"], "tokenRoles": ["surface", "border-control"] }],
+  "constraints": { "layout": ["input-row"], "content": ["composer-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "onSubmit"], "states": [], "events": [], "parts": ["composer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Controlled form shell for composing and sending a message." },
+  "extensions": {}
+}

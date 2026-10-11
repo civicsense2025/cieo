@@ -1,0 +1,6 @@
+// src/primitives/TopNavMenu/TopNavMenu.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function TopNavMenu({ label, children }) {
+    return (_jsx("div", { role: "group", "aria-label": label, className: "cieo cieo-top-nav-menu", children: children }));
+}

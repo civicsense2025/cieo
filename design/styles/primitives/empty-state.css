@@ -1,0 +1,10 @@
+/* design/styles/primitives/empty-state.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-empty-state {
+    display: flex; flex-direction: column; align-items: center; gap: var(--cieo-space-2);
+    padding: var(--cieo-space-6) var(--cieo-space-4); text-align: center;
+  }
+  :where(.cieo) .cieo-p-empty-state-title { margin: 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-p-empty-state-description { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-p-empty-state-action { margin-block-start: var(--cieo-space-2); }
+}

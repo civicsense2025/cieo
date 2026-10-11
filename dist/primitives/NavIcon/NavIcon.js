@@ -1,0 +1,6 @@
+// src/primitives/NavIcon/NavIcon.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function NavIcon({ size = 'md', children }) {
+    return (_jsx("span", { "aria-hidden": "true", "data-size": size, className: "cieo cieo-nav-icon", children: children }));
+}

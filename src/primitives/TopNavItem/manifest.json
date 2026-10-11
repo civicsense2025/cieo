@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.top-nav-item",
+  "componentVersion": "1.0.0",
+  "name": "TopNavItem",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/TopNavItem/TopNavItem.tsx", "symbol": "TopNavItem" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "href", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 1024 } },
+    { "id": "current", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "link", "overrides": ["color"], "tokenRoles": ["text-link"] }],
+  "constraints": { "layout": ["inline-in-bar"], "content": ["link-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["href", "current"], "states": [], "events": [], "parts": ["link"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Single link in the top nav; marks the current page." },
+  "extensions": {}
+}

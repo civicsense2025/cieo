@@ -1,0 +1,8 @@
+@layer cieo.components {
+  :where(.cieo).cieo-p-tooltip { position: relative; display: inline-flex; }
+  :where(.cieo) .cieo-p-tooltip-bubble { position: absolute; inset-block-end: 100%; inset-inline-start: 50%; transform: translateX(-50%); margin-block-end: var(--cieo-space-2); max-inline-size: 16rem; padding: var(--cieo-space-1) var(--cieo-space-2); border-radius: var(--cieo-radius-control); background: var(--cieo-color-text); color: var(--cieo-color-surface); font-size: var(--cieo-text-small); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity var(--motion-duration-snap, 200ms); z-index: var(--cieo-popover-z, 50); }
+  :where(.cieo).cieo-p-tooltip:hover .cieo-p-tooltip-bubble, :where(.cieo).cieo-p-tooltip:focus-within .cieo-p-tooltip-bubble { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-p-tooltip-bubble { transition: none; }
+  }
+}

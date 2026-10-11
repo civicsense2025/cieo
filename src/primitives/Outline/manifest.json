@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.outline",
+  "componentVersion": "1.0.0",
+  "name": "Outline",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Outline/Outline.tsx", "symbol": "Outline" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "On this page", "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "items", "type": { "kind": "array", "items": { "kind": "record", "fields": [
+      { "id": "id", "type": { "kind": "string" }, "required": true, "nullable": false },
+      { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false }
+    ] } }, "required": true, "nullable": false, "constraints": { "minItems": 1, "maxItems": 32 } }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "list", "overrides": ["color"], "tokenRoles": ["text-muted"] }],
+  "constraints": { "layout": ["toc-list"], "content": ["items-have-targets"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "items"], "states": [], "events": [], "parts": ["list"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Table-of-contents nav built from an items array." },
+  "extensions": {}
+}

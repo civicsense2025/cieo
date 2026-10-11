@@ -1,0 +1,13 @@
+@layer cieo.components {
+  :where(.cieo)[data-motion='off'], :where(.cieo)[data-motion='off'] * { animation: none !important; transition: none !important; }
+  :where(.cieo)[data-entering='fade'] { animation: cieo-enter-fade var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  :where(.cieo)[data-entering='rise'] { animation: cieo-enter-rise var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  :where(.cieo)[data-entering='scale'] { animation: cieo-enter-scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  :where(.cieo)[data-entering='none'] { animation: none; }
+  @keyframes cieo-enter-fade { from { opacity: 0; } }
+  @keyframes cieo-enter-rise { from { opacity: 0; transform: translateY(var(--motion-drift, 4px)); } }
+  @keyframes cieo-enter-scale { from { opacity: 0; transform: scale(0.96); } }
+  @media (prefers-reduced-motion: reduce) {
+    :root:not([data-motion='full']) :where(.cieo)[data-entering] { animation: none; }
+  }
+}

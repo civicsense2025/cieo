@@ -1,0 +1,6 @@
+/* design/styles/primitives/tab-menu.css */
+@layer cieo.components {
+  :where(.cieo).cieo-tab-menu { display: flex; flex-direction: column; gap: var(--cieo-space-1); padding: var(--cieo-space-1); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); }
+  :where(.cieo).cieo-tab-menu .cieo-tab { border-block-end: 0; border-radius: var(--cieo-radius-control); }
+  :where(.cieo).cieo-tab-menu .cieo-tab[data-selected='true'] { background: var(--cieo-color-sunken); }
+}

@@ -1,0 +1,4 @@
+/* design/styles/primitives/mobile-nav-toggle.css */
+@layer cieo.components {
+  :where(.cieo).cieo-mobile-nav-toggle { min-height: var(--cieo-control-small); padding-inline: var(--cieo-space-2); color: var(--cieo-color-text); }
+}

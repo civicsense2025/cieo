@@ -1,0 +1,7 @@
+/* design/styles/primitives/scrollablearea.css */
+@layer cieo.components {
+  :where(.cieo).cieo-scrollable-area { overflow: auto; min-inline-size: 0; }
+  :where(.cieo).cieo-scrollable-area[data-orientation='vertical'] { overflow-x: hidden; overflow-y: auto; }
+  :where(.cieo).cieo-scrollable-area[data-orientation='horizontal'] { overflow-x: auto; overflow-y: hidden; }
+  :where(.cieo).cieo-scrollable-area[data-orientation='both'] { overflow: auto; }
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.more-menu",
+  "componentVersion": "1.0.0",
+  "name": "MoreMenu",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/MoreMenu/MoreMenu.tsx", "symbol": "MoreMenu" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "More actions", "constraints": { "minLength": 1, "maxLength": 256 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 16, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [],
+  "constraints": { "layout": ["trigger-plus-panel"], "content": ["menu-has-label"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label"], "states": [], "events": [], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "IconButton-triggered dropdown menu. Style-free: DropdownMenu owns the visuals." },
+  "extensions": {}
+}

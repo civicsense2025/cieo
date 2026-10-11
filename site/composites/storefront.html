@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Storefront · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<style>
+body{font-family:system-ui,sans-serif;background:var(--cieo-color-surface,#fff);color:var(--cieo-color-ink,#1a1a1a);max-width:40rem;margin:0 auto;padding:var(--cieo-space-4,1rem)}
+img{max-width:100%;height:auto}
+[aria-invalid="true"]{outline:2px solid var(--cieo-color-danger,#b3261e)}
+[data-parts="FieldStatus"]{color:var(--cieo-color-danger,#b3261e)}
+:focus-visible{outline:2px solid var(--cieo-color-focus,#1a73e8);outline-offset:2px}
+.skip{position:absolute;left:-9999px;top:0}
+.skip:focus{position:static;left:auto}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#bag">Skip to bag</a>
+<main>
+<p><a href="./index.html">Composites</a></p>
+<nav aria-label="More demos">
+<p data-parts="Text">Also try the <a href="./dashboard.html">admin dashboard</a>, the <a href="./chat.html">chat workspace</a>, or the <a href="./booking.html">booking flow</a>.</p>
+</nav>
+<h1 data-parts="Heading">Storefront</h1>
+<p data-parts="Text">A product page with a live bag and checkout.</p>
+<h1 data-parts="Heading">Drift Wool Runner</h1>
+
+<section aria-label="Product" data-parts="Card">
+<p data-parts="Badge" data-tone="success">In stock</p>
+<img id="main-image" data-main-image src="fog.jpg" alt="Drift Wool Runner in Fog">
+<div role="group" aria-label="Views" data-parts="Thumbnail">
+<button type="button" data-thumb="Fog" aria-pressed="true" aria-label="View Fog"><img src="fog.jpg" alt="Fog" data-src="fog.jpg" data-alt="Drift Wool Runner in Fog"></button>
+<button type="button" data-thumb="Oak" aria-pressed="false" aria-label="View Oak"><img src="oak.jpg" alt="Oak" data-src="oak.jpg" data-alt="Drift Wool Runner in Oak"></button>
+<button type="button" data-thumb="Ink" aria-pressed="false" aria-label="View Ink"><img src="ink.jpg" alt="Ink" data-src="ink.jpg" data-alt="Drift Wool Runner in Ink"></button>
+</div>
+<p data-parts="Text" data-price>$148.00</p>
+<p data-parts="Text">4.8 (312 reviews)</p>
+<fieldset data-parts="RadioList">
+<legend>Color</legend>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Fog" checked> Fog</label>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Oak"> Oak</label>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Ink"> Ink</label>
+</fieldset>
+<div data-parts="Stepper">
+<button type="button" data-qty-minus data-parts="Step" aria-label="Decrease quantity">−</button>
+<output data-qty aria-live="polite" aria-label="Quantity">1</output>
+<button type="button" data-qty-plus data-parts="Step" aria-label="Increase quantity">+</button>
+</div>
+<p data-parts="Text" data-line-total>$148.00</p>
+<button type="button" data-add>Add to bag</button>
+</section>
+
+<hr data-parts="Divider">
+
+<section aria-label="Bag" id="bag" data-cart data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-bag-heading>Your bag</h2>
+<div data-cart-empty data-parts="EmptyState">
+<p data-parts="Text">Your bag is empty.</p>
+<p data-parts="Text">Pick a color and a quantity above, then add the runner to start an order.</p>
+</div>
+<ul hidden data-cart-lines data-parts="List"></ul>
+<p hidden data-cart-total-wrap data-parts="Text">Bag total: <span data-cart-total>$0.00</span></p>
+<p role="status" data-bag-status data-parts="Text"></p>
+</section>
+
+<section aria-label="Checkout" data-checkout data-parts="Card">
+<h2 data-parts="Heading">Checkout</h2>
+<div data-parts="Field">
+<label for="sf-email">Email</label>
+<input id="sf-email" type="email" data-email autocomplete="email">
+<p hidden id="sf-email-error" data-error-for="email" data-parts="FieldStatus"></p>
+</div>
+<div data-parts="Field">
+<label for="sf-street">Street</label>
+<input id="sf-street" type="text" data-street autocomplete="street-address">
+<p hidden id="sf-street-error" data-error-for="street" data-parts="FieldStatus"></p>
+</div>
+<div data-parts="Field">
+<label for="sf-city">City</label>
+<input id="sf-city" type="text" data-city autocomplete="address-level2">
+<p hidden id="sf-city-error" data-error-for="city" data-parts="FieldStatus"></p>
+</div>
+<div data-parts="Field">
+<label for="sf-postcode">Postcode</label>
+<input id="sf-postcode" type="text" data-postcode autocomplete="postal-code">
+<p hidden id="sf-postcode-error" data-error-for="postcode" data-parts="FieldStatus"></p>
+</div>
+<fieldset data-delivery data-parts="RadioList">
+<legend>Delivery</legend>
+<label data-parts="RadioListItem"><input type="radio" name="delivery" value="standard" checked> Standard $0</label>
+<label data-parts="RadioListItem"><input type="radio" name="delivery" value="express"> Express $12</label>
+</fieldset>
+<h3 data-parts="Heading">Order summary</h3>
+<dl data-order-lines data-parts="MetadataList">
+<div><dt>No items yet</dt><dd>—</dd></div>
+</dl>
+<p data-parts="Text">Total: <span data-order-total aria-live="polite">$0.00</span></p>
+<button type="button" data-place>Place order</button>
+<p hidden id="order-error" role="alert" data-order-error data-parts="Banner">Check the highlighted fields.</p>
+<p hidden data-order-ok data-parts="Banner" tabindex="-1"><span data-ref-prefix>Order confirmed. Reference </span><span data-ref></span></p>
+<div hidden data-confirm-detail>
+<p data-parts="Text">A receipt is on its way to your inbox. The runner leaves the workshop within two days.</p>
+<button type="button" data-again>Start a new order</button>
+</div>
+</section>
+
+<section data-parts="Collapsible">
+<h2>Specifications</h2>
+<p>Hand-loomed from undyed highland wool with a cotton backing for grip on hard floors.</p>
+<p>Measures 80 by 300 centimetres and weighs 4.2 kilograms; pile height is 12 millimetres.</p>
+</section>
+
+<section data-parts="Collapsible">
+<h2>Shipping &amp; returns</h2>
+<p>Standard delivery is free and arrives in 5 to 7 days; express delivery costs $12 and arrives in 2 days.</p>
+<p>Returns are free within 60 days provided the runner is clean and in its original packaging.</p>
+</section>
+
+<section aria-label="Behavior">
+<h2 data-parts="Heading">Behavior</h2>
+<ul>
+<li>Thumbnails swap the main image and alt text; the active view is pressed.</li>
+<li>Quantity clamps 1–9; the line total is $148 times quantity; the bag accumulates per color.</li>
+<li>Each bag line carries its own stepper and remove control; stepping down at 1 removes the line.</li>
+<li>Order total is bag plus delivery ($12 express); the summary recomputes from state on every add, edit, removal, and delivery change.</li>
+<li>Email and address validate on order with per-field messages; failures use the alert banner with invalid fields marked and focused, and each fix clears its own message.</li>
+<li>An empty bag cannot order; removing the last line restores the empty state.</li>
+<li>Every action is a native button or input, so Tab reaches it all; success and error states take focus, and bag changes are announced.</li>
+</ul>
+</section>
+<section data-built-from>
+<h2>Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
+<ul>
+<li><a href="../components/Thumbnail.html">Thumbnail</a></li>
+<li><a href="../components/RadioList.html">RadioList</a></li>
+<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
+<li><a href="../components/Stepper.html">Stepper</a></li>
+<li><a href="../components/Step.html">Step</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Collapsible.html">Collapsible</a></li>
+<li><a href="../components/Badge.html">Badge</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a> (rendered by JS after Add to bag)</li>
+<li><a href="../components/EmptyState.html">EmptyState</a></li>
+<li><a href="../components/List.html">List</a> (rendered by JS after Add to bag)</li>
+<li><a href="../components/ListItem.html">ListItem</a> (rendered by JS after Add to bag)</li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/Divider.html">Divider</a></li>
+</ul>
+</section>
+</main>
+<script src="./storefront.js" defer></script>
+</body>
+</html>

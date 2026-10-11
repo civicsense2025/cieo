@@ -1,0 +1,15 @@
+// src/primitives/TopNavMegaMenu/TopNavMegaMenu.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { useState } from 'react';
+export function TopNavMegaMenu({ trigger, open, defaultOpen = false, onOpenChange, children }) {
+    const [inner, setInner] = useState(defaultOpen);
+    const isOpen = open ?? inner;
+    function toggle() {
+        const next = !isOpen;
+        if (open === undefined)
+            setInner(next);
+        onOpenChange?.(next);
+    }
+    return (_jsxs("div", { "data-open": isOpen, className: "cieo cieo-top-nav-mega-menu", children: [_jsx("button", { type: "button", "aria-expanded": isOpen, onClick: toggle, children: trigger }), isOpen ? _jsx("div", { className: "cieo-top-nav-mega-menu-panel", children: children }) : null] }));
+}

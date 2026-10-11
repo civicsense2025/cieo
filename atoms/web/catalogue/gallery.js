@@ -11,14 +11,41 @@
   c.toggleSave=(id)=>{
     c.favorites.has(id)?c.favorites.delete(id):c.favorites.add(id);
     if(!c.save('cieo-catalogue-saved',[...c.favorites]))c.announce('Saved for this session. Browser storage is unavailable.');
-    document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>b.setAttribute('aria-pressed',String(c.favorites.has(id))));
+    const saved=c.favorites.has(id);document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>{b.setAttribute('aria-pressed',String(saved));b.setAttribute('aria-label',`${saved?'Saved':'Save'} ${c.byId.get(id).name}`)});
     c.markNavigation();c.updateInspectorSave?.();if(c.route().saved)c.filter();
+  };
+  // Captions: recipe demos keep a trailing `<div class="hint">…</div>` inside
+  // their stage HTML. Lift a trailing plain-text hint out of the preview and
+  // render its text between the stage and the tile header. Sources keep their
+  // markup; the rule mirrors scripts/build-library.mjs (div only, no child
+  // elements, trailing at every level up to the stage).
+  const takeTrailingHint=(stage)=>{
+    const hints=stage.querySelectorAll('.hint');
+    if(!hints.length)return '';
+    const hint=hints[hints.length-1];
+    if(hint.tagName!=='DIV'||hint.children.length)return '';
+    let cur=hint;
+    while(cur&&cur!==stage){
+      let sib=cur.nextSibling;
+      while(sib){
+        if(sib.nodeType===1)return '';
+        if(sib.nodeType===3&&sib.textContent.trim()!=='')return '';
+        sib=sib.nextSibling;
+      }
+      cur=cur.parentElement;
+    }
+    if(cur!==stage)return '';
+    const text=hint.textContent.trim();
+    hint.remove();
+    return text;
   };
   for(const [index,a] of sorted.entries()){
     const el=document.createElement('article');el.id=a.id;el.className='tile'+(a.wide?' wide':'')+(a.tall?' tall':'')+(a.big?' big':'');
     el.dataset.tone=['lilac','blue','mint','peach','butter'][index%5];
     const shell=document.createElement('div');shell.className='stage-shell';
-    const stage=document.createElement('div');stage.className='stage';stage.innerHTML=a.html;c.isolateStyles(stage,a.id);
+    const stage=document.createElement('div');stage.className='stage';stage.innerHTML=a.html;
+    const captionText=takeTrailingHint(stage);
+    c.isolateStyles(stage,a.id);
     const marks=document.createElement('div');marks.className='ui-family-mark';marks.innerHTML=a.fam.map(f=>`<span title="${c.familyNames[f]}">${f}</span>`).join('');
     shell.append(stage);
     const header=document.createElement('header');
@@ -26,19 +53,42 @@
     const h=document.createElement('h3'),button=document.createElement('button');button.className='ui-tile-name';button.textContent=a.name;button.dataset.inspect=a.id;h.append(button);
     const category=document.createElement('p');category.textContent=a.cat;title.append(h,category);
     const tools=document.createElement('div');tools.className='ui-tile-tools';
-    tools.innerHTML=`<button data-save="${a.id}" aria-label="Save ${a.id}" aria-pressed="${c.favorites.has(a.id)}">${c.icon('bookmark')}</button><button data-inspect="${a.id}" aria-label="Inspect ${a.id}">${c.icon('expand')}</button>`;
+    tools.innerHTML=`<button data-save="${a.id}" aria-label="${c.favorites.has(a.id)?'Saved':'Save'} ${a.name}" aria-pressed="${c.favorites.has(a.id)}">${c.icon('bookmark')}</button><button data-inspect="${a.id}" aria-label="Show details for ${a.name}">${c.icon('expand')}</button>`;
     header.append(title,marks,tools);
     const detail=document.createElement('div');detail.className='ui-detail';detail.hidden=true;
     const desc=document.createElement('p');desc.textContent=a.desc;const code=document.createElement('pre');code.textContent=a.api;detail.append(desc,code);
-    el.append(shell,header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
+    el.append(shell);
+    if(captionText){const cap=document.createElement('p');cap.className='ui-tile-caption';cap.textContent=captionText;el.append(cap);}
+    el.append(header,detail);grid.append(el);a.el=el;a.stage=stage;a.visible=false;a.inited=false;a.render=null;c.byElement.set(el,a);
   }
   c.initAtom=a=>{
+    // A disposed tile was torn down while hidden (listeners detached, stage
+    // restored to pristine HTML by its own dispose). Revive it with a fresh
+    // init so showing it again behaves exactly like the first show. The tile
+    // held open in the inspector is never torn down, so it is never revived.
+    if(a.disposed&&c.active!==a){a.disposed=false;a.inited=false;a.render=null}
     if(a.inited)return;a.inited=true;
     try{a.render=a.init(a.stage);a.el.dataset.ready='true'}catch(error){a.el.dataset.error='true';console.error('Atom initialization:',a.id,error);}
   };
+  // Focus and pointer input can arrive before IntersectionObserver delivers its
+  // first entry. Install the recipe's handlers before that first interaction.
+  const preparePreview=event=>{
+    const a=c.byElement.get(event.target.closest('.tile'));
+    if(a&&!a.el.hidden&&a.stage.contains(event.target)){c.initAtom(a);c.invalidate?.();}
+  };
+  grid.addEventListener('focus',preparePreview,true);
+  grid.addEventListener('pointerdown',preparePreview,true);
   c.observer=new IntersectionObserver(entries=>{
     for(const entry of entries){const a=c.byElement.get(entry.target);if(!a)continue;
       a.visible=entry.isIntersecting;if(a.visible&&!a.el.hidden)c.initAtom(a);
+      // Hiding parks the tile: the render loop already skips it, and a recipe
+      // exposing render.dispose additionally detaches its listeners and drops
+      // its motion state. Re-showing re-inits from pristine HTML. The
+      // inspected tile keeps rendering, so it is never parked.
+      else if(a.inited&&!a.disposed&&c.active!==a&&a.render&&typeof a.render.dispose==='function'){
+        try{a.render.dispose()}catch(error){console.error('Atom dispose:',a.id,error)}
+        a.disposed=true;
+      }
     }c.invalidate?.();
   },{rootMargin:'240px'});
   A.forEach(a=>c.observer.observe(a.el));
@@ -58,17 +108,40 @@
     document.getElementById('breadcrumb').textContent=route.category||route.collection||(route.saved?'Saved':'Everything');
     document.getElementById('collection-subtitle').textContent=query?`Results for “${search}”`:route.saved?'Your own little collection of good interactions.':'Small interactions. A little more feeling.';
     document.getElementById('count').textContent=`${count} ${count===1?'atom':'atoms'}`;
+    // A family tab and a category or collection both narrow the list; name both so the result is not silent.
+    const summary=document.getElementById('filter-summary'),scope=route.category||route.collection;
+    summary.hidden=!(c.family!=='*'&&scope);
+    if(!summary.hidden)summary.textContent=`${c.familyNames[c.family]} in ${scope}: ${count} ${count===1?'atom':'atoms'}`;
     document.getElementById('empty-state').hidden=count>0;c.markNavigation();c.invalidate?.();
   };
   const input=document.getElementById('atom-search');
   input.addEventListener('input',()=>{search=input.value;c.filter()});
-  document.getElementById('family-filter').addEventListener('click',e=>{
-    const b=e.target.closest('[data-family]');if(!b)return;c.family=b.dataset.family;
-    document.querySelectorAll('[data-family]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));c.filter();
+  // Family tabs: one tablist, one shared tabpanel (#groups). Selection follows focus.
+  const tabs=[...document.querySelectorAll('#family-filter [role=tab]')], panel=document.getElementById('groups');
+  const markTab=tab=>{
+    tabs.forEach(t=>{const on=t===tab;t.setAttribute('aria-selected',String(on));t.tabIndex=on?0:-1});
+    panel.setAttribute('aria-labelledby',tab.id);
+  };
+  const selectTab=(tab,{focus=false}={})=>{
+    markTab(tab);c.family=tab.dataset.family;c.filter();
+    if(focus)tab.focus();
+  };
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>selectTab(tab));
+    tab.addEventListener('keydown',e=>{
+      const cur=tabs.indexOf(tab), rtl=getComputedStyle(tab).direction==='rtl';
+      const moves={ArrowRight:rtl?cur-1:cur+1,ArrowLeft:rtl?cur+1:cur-1,Home:0,End:tabs.length-1};
+      if(!(e.key in moves))return;
+      e.preventDefault();
+      selectTab(tabs[(moves[e.key]+tabs.length)%tabs.length],{focus:true});
+    });
   });
+  // Route changes and "Show all atoms" reset c.family to '*' in gallery routeChanged; keep the tab state in step.
+  addEventListener('hashchange',()=>markTab(tabs[0]));
+  document.getElementById('clear-filters').addEventListener('click',()=>markTab(tabs[0]));
   const routeChanged=()=>{
     search=c.route().query;input.value=search;c.family='*';
-    document.querySelectorAll('[data-family]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.family==='*')));
+    markTab(tabs[0]);
     c.filter();window.scrollTo({top:0});
     const id=c.route().atom;if(id&&c.byId.has(id))c.inspect(id);
   };

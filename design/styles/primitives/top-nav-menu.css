@@ -1,0 +1,4 @@
+/* design/styles/primitives/top-nav-menu.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav-menu { display: flex; align-items: center; gap: var(--cieo-space-2); }
+}

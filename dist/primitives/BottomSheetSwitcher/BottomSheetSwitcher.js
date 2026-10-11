@@ -1,0 +1,6 @@
+// src/primitives/BottomSheetSwitcher/BottomSheetSwitcher.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function BottomSheetSwitcher({ label, children }) {
+    return (_jsx("div", { role: "listbox", "aria-label": label, className: "cieo cieo-bottom-sheet-switcher", children: children }));
+}

@@ -1,0 +1,4 @@
+/* design/styles/primitives/chat-system-message.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-system-message { margin: 0; text-align: center; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

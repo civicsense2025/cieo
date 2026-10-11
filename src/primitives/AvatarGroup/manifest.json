@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.avatar-group",
+  "componentVersion": "1.0.0",
+  "name": "AvatarGroup",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [{ "id": "face-stack", "note": "Row-face-stack nickname resolves here" }],
+  "source": { "target": "web", "path": "src/primitives/AvatarGroup/AvatarGroup.tsx", "symbol": "AvatarGroup" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "people", "type": { "kind": "array", "items": { "kind": "record", "fields": [
+      { "id": "name", "type": { "kind": "string" }, "required": true, "nullable": false },
+      { "id": "initials", "type": { "kind": "string" }, "required": true, "nullable": false },
+      { "id": "src", "type": { "kind": "string" }, "required": false, "nullable": false }
+    ] } }, "required": true, "nullable": false, "constraints": { "minItems": 1, "maxItems": 64 } },
+    { "id": "max", "type": { "kind": "integer" }, "required": false, "nullable": false, "default": 4, "constraints": { "min": 1, "max": 12 } },
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Optional text after the faces, e.g. 3k love for review counts." },
+    { "id": "size", "type": { "kind": "enum", "values": ["sm", "md"] }, "required": false, "nullable": false, "default": "md", "constraints": {} },
+    { "id": "style", "type": { "kind": "record", "fields": [] }, "required": false, "nullable": false, "constraints": {}, "note": "React CSSProperties passthrough to the root span; Cieo tokens only, no motion." }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "avatar", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
+  "constraints": { "layout": ["max-4-plus-overflow"], "content": ["initials-when-no-photo", "stack-is-decorative"], "motion": ["no-animation-in-rows", "honor-render-policy"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["people", "max", "size"], "states": [], "events": [], "parts": ["avatar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Static decorative face stack for rows; the row owns names." },
+  "extensions": {}
+}

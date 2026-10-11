@@ -9,8 +9,8 @@ atom({ id:'prediction', cat:'Forms', name:'Prediction question', block:'poll, vo
     [['Tap a side to lock your call'],['Locked · Ship it 68% · settled']].forEach(([s]) => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; cp.appendChild(e); });
     const E = edges(50, 50), press = new Track(0), fill = new Track(0), on = new Track(0);
     const B = ['Ship it','Slip'].map((n,i) => { const b = document.createElement('button');
-      b.style.cssText = 'position:relative;overflow:hidden;min-height:40px;border:1px solid var(--line);background:var(--card);border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;line-height:1.5';
-      b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent)"></i><span style="position:relative">${n}</span>`;
+      b.style.cssText = 'position:relative;overflow:hidden;min-height:40px;border:0;background:var(--raised);border-radius:10px;cursor:pointer;font-size:14px;font-weight:500;line-height:1.5';
+      b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:2px;width:0;background:var(--accent)"></i><span style="position:relative">${n}</span>`;
       opts.appendChild(b); return { b, f:$(b,'i') }; });
     let locked = -1;
     B.forEach((x,i) => x.b.onclick = () => { if (locked >= 0) return; locked = i; const t = now(), ship = i === 0 ? 68 : 32;
@@ -23,7 +23,7 @@ atom({ id:'prediction', cat:'Forms', name:'Prediction question', block:'poll, vo
     return t => { B.forEach((x,i) => { const p = press.at(t), f = clamp(fill.at(t)) * (locked === i ? 1 : 0);
         x.f.style.width = (f*100).toFixed(1) + '%'; x.f.style.opacity = (.25 + .2*f).toFixed(3);
         x.b.style.transform = locked === i ? `scale(${(1 - .04*p).toFixed(3)})` : 'none';
-        x.b.style.borderColor = mix(locked === i ? clamp(on.at(t)) : 0,'var(--ink)','var(--line)'); });
+        x.b.style.boxShadow = `inset 0 ${(-2*(locked === i ? clamp(on.at(t)) : 0)).toFixed(2)}px 0 var(--ink)`; });
       const a = E.A.at(t); fA.style.width = clamp(a/100)*100 + '%';
       ot.textContent = locked < 0 ? '68 / 32' : `${Math.round(a)} / ${100 - Math.round(a)}`;
       [...cp.children].forEach((e,j) => csw.apply(e,j,t)); };

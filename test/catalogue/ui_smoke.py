@@ -76,8 +76,8 @@ with sync_playwright() as p:
         return failures;
     }''')
     check('All registered render functions tolerate three sampled frames', not failures)
-    check('Pricing recipe CSS no longer positions the picker preset row', page.locator('#colorpicker .ps').evaluate("e=>getComputedStyle(e).position === 'static'"))
-    check('The picker presets remain in a horizontal row', page.locator('#colorpicker .ps').evaluate("e=>getComputedStyle(e).flexDirection === 'row'"))
+    check('Pricing recipe CSS no longer positions the picker preset row', page.locator('#colorpicker .cps').evaluate("e=>getComputedStyle(e).position === 'static'"))
+    check('The picker presets remain in a horizontal row', page.locator('#colorpicker .cps').evaluate("e=>getComputedStyle(e).flexDirection === 'row'"))
     page.screenshot(path=str(OUT / 'desktop.png'))
 
     search(page, 'rubber-band slider')
@@ -157,7 +157,7 @@ with sync_playwright() as p:
         if width < 1024:
             page.locator('.ui-topbar [data-open=browse-dialog]').click()
             expect(page.locator('#browse-dialog')).to_be_visible()
-            page.locator('#mobile-nav a[href="#cat-writing"]').click()
+            page.get_by_role('dialog', name='Collections', exact=True).locator('a[href="#cat-writing"]').click()
             expect(page.locator('#collection-title')).to_have_text('Writing')
             check(f'Category navigation and legacy hashes work at {width}px', page.evaluate("A.filter(a=>!a.el.hidden).every(a=>a.cat==='Writing')"))
             expect(page.locator('#browse-dialog')).not_to_be_visible()
@@ -179,7 +179,7 @@ with sync_playwright() as p:
     check('Reduced motion retains interaction state changes', True)
     page.close()
     page = load(forced_colors='active')
-    check('Forced colors retain visible chrome boundaries', page.locator('.ui-chip[aria-pressed=true]').evaluate("e=>getComputedStyle(e).borderTopStyle !== 'none'"))
+    check('Forced colors retain visible chrome boundaries', page.get_by_role('tab', name='All motion', exact=True).evaluate("e=>getComputedStyle(e).outlineStyle !== 'none'"))
     page.close(); browser.close()
 server.shutdown()
 report = {'passed': len(checks), 'failed': 0, 'mode': 'document-only' if DOCUMENT_ONLY else 'http', 'checks': checks}

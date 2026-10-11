@@ -1,0 +1,4 @@
+/* design/styles/primitives/command-palette.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-command-palette { inline-size: min(36rem, 100%); border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); z-index: var(--cieo-popover-z, 50); overflow: hidden; }
+}

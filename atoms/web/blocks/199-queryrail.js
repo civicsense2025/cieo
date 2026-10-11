@@ -8,7 +8,7 @@ atom({ id:'queryrail', cat:'Writing', name:'Query rail', block:'search rail', fa
     const rx = new Track(0); let n = 0; const items = [];
     const add = () => { if (n >= Q.length) return; const k = n++;
       const d = document.createElement('button'); d.className = 'chipb small card';
-      d.style.cssText += 'position:relative;overflow:hidden;text-align:left;cursor:pointer;padding:8px 10px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:9px;width:100%';
+      d.style.cssText += 'position:relative;overflow:hidden;text-align:left;cursor:pointer;padding:8px 10px;background:var(--raised);color:var(--ink);border-radius:9px;width:100%';
       d.innerHTML = `<span class="c layer">${Q[k]}</span><span class="r layer" style="color:var(--success)">Resolved ✓</span>`;
       chips.appendChild(d);
       const it = { d, c:d.querySelector('.c'), r:d.querySelector('.r'), sw:new Swap(0), w:new Track(0), h:new Track(0), gone:false };

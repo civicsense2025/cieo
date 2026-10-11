@@ -1,0 +1,6 @@
+/* design/styles/primitives/typeahead.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-typeahead { display: flex; flex-direction: column; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-p-typeahead-input { border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); padding: var(--cieo-space-1) var(--cieo-space-2); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-p-typeahead-list { border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); padding: var(--cieo-space-1); z-index: var(--cieo-popover-z, 50); }
+}

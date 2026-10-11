@@ -7,6 +7,9 @@ atom({ id:'stagger', cat:'Foundations', name:'Stagger', block:'progress, chart, 
   init(st){
     const bars = $$(st,'.row div'), sets = [[.3,.55,.8,.45,.95,.6,.7],[.85,.4,.25,.7,.35,.9,.5]]; let k = 0;
     const tr = sets[0].map(v => new Track(v));
-    st.onclick = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + i*.04)); };
+    st.setAttribute('role', 'button'); st.tabIndex = 0; st.setAttribute('aria-label', 'Reshuffle bars');
+    const go = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + i*.04)); };
+    st.onclick = go;
+    st.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
     return t => tr.forEach((x,i) => bars[i].style.height = px(x.at(t)*140));
   }});

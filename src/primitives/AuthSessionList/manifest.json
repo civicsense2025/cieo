@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.auth-session-list",
+  "componentVersion": "1.0.0",
+  "name": "AuthSessionList",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/AuthSessionList/AuthSessionList.tsx", "symbol": "AuthSessionList" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "id", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": {} },
+    { "id": "sessions", "type": { "kind": "array", "items": { "kind": "record" } }, "required": true, "nullable": false, "constraints": {} }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [{ "id": "onRevoke", "payload": "string" }],
+  "variants": [],
+  "styleParts": [],
+  "constraints": { "layout": [], "content": ["current-text-marked"], "motion": ["no-animation-in-rows"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "sessions"], "states": [], "events": ["onRevoke"], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Device session list with per-device revoke and a text-marked current session." },
+  "extensions": {}
+}

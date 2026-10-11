@@ -6,7 +6,7 @@ atom({ id:'otp', cat:'Inputs', name:'One-time code', block:'form, account, Input
   api:'box[i].to(digit)   ring.go(x[i])   status → success | danger',
   init(st){
     const ob = $(st,'.ob'), inp = $(st,'input'), ring = $(st,'.ring'), om = $(st,'.om');
-    const boxes = [...Array(6)].map(() => { const b = document.createElement('span'); b.style.cssText = 'position:relative;width:40px;height:48px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);font:600 22px var(--sans);display:block'; ob.insertBefore(b, inp); return { b, sw:new Swap(''), L:{} }; });
+    const boxes = [...Array(6)].map(() => { const b = document.createElement('span'); b.style.cssText = 'position:relative;width:40px;height:48px;border-radius:10px;border:1.5px solid var(--muted);background:var(--card);font:600 22px var(--sans);display:block'; ob.insertBefore(b, inp); return { b, sw:new Swap(''), L:{} }; });
     const M = { '':'', ok:'Verified. Signing you in…', bad:'That code didn’t match. Try again.' }, ml = {};
     for (const k in M){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = M[k]; e.style.color = k === 'ok' ? 'var(--success)' : 'var(--danger)'; om.appendChild(e); ml[k] = e; }
     const e = edges(0,40), ok = new Track(0), bad = new Track(0), fo = new Track(0), msw = new Swap(''); let clearAt = 0;
@@ -19,6 +19,6 @@ atom({ id:'otp', cat:'Inputs', name:'One-time code', block:'form, account, Input
     return t => { if (clearAt && t >= clearAt){ clearAt = 0; inp.value = ''; show(); }
       const g = clamp(ok.at(t)), k = clamp(bad.at(t)), a = e.A.at(t), b = e.B.at(t);
       ring.style.left = px(a); ring.style.width = px(b - a); ring.style.opacity = (clamp(fo.at(t))*(1 - Math.max(g,k))).toFixed(3);
-      const bc = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, ${mix(g,'var(--success)','var(--line)')})`;
+      const bc = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, ${mix(g,'var(--success)','var(--muted)')})`;
       boxes.forEach(x => { x.b.style.borderColor = bc; for (const c in x.L) x.sw.apply(x.L[c], c, t, 10); }); for (const c in ml) msw.apply(ml[c], c, t); };
   }});

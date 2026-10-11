@@ -1,0 +1,4 @@
+/* design/styles/primitives/chat-message-metadata.css */
+@layer cieo.components {
+  :where(.cieo).cieo-chat-message-metadata { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

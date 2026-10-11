@@ -1,7 +1,7 @@
 
 
 atom({ id:'offline', cat:'Guidance', name:'Offline banner', block:'announcement, alert', fam:['X','S','T'], tall:true,
-  html:`<div class="card" style="position:relative;width:min(340px,90%);height:220px;overflow:hidden"><div class="bn small" role="status" style="position:absolute;left:0;right:0;top:0;height:38px;display:flex;align-items:center;padding:0 14px;gap:8px"><span class="tx" style="position:relative;flex:1;height:20px"></span></div><div class="small muted bdy" style="padding:16px;line-height:1.6">Your draft keeps saving to this device while you are offline, and syncs when the connection returns.</div></div><button class="btn tg" style="position:absolute;top:10px;right:12px">Go offline</button>`,
+  html:`<div class="card" style="position:relative;width:min(340px,90%);height:220px;overflow:hidden"><div class="bn small" role="status" style="position:absolute;left:0;right:0;top:0;height:38px;display:flex;align-items:center;padding:0 14px;gap:8px"><span class="tx" style="position:relative;flex:1;height:20px"></span></div><div class="small muted bdy" style="padding:16px;line-height:1.6">Your draft keeps saving to this device while you are offline, and syncs when the connection returns.</div></div><button class="btn tg" style="position:absolute;top:10px;right:12px;border:0;background:var(--raised)">Go offline</button>`,
   desc:'Losing the connection drops a warning banner that pushes content down. Reconnecting swaps the text to a spinner, then to a success message, and the banner leaves after a moment.',
   api:'offline: y.set(0), tone warning   reconnect: to("syncing") → +1.2s "online", success → +1.6s y.set(−H)',
   init(st){

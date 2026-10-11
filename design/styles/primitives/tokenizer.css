@@ -1,0 +1,7 @@
+/* design/styles/primitives/tokenizer.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-tokenizer { display: flex; flex-direction: column; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-p-tokenizer-chips { display: flex; flex-wrap: wrap; gap: var(--cieo-space-1); border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); padding: var(--cieo-space-1); }
+  :where(.cieo) .cieo-p-tokenizer-chip { display: inline-flex; align-items: center; gap: var(--cieo-space-1); border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); padding: var(--cieo-space-1) var(--cieo-space-2); background: var(--cieo-color-surface); }
+  :where(.cieo) .cieo-p-tokenizer-input { border: 0; background: transparent; color: var(--cieo-color-text); min-inline-size: 8rem; flex: 1; }
+}

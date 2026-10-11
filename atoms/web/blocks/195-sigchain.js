@@ -20,16 +20,19 @@ atom({ id:'sigchain', cat:'Writing', name:'Signature chain', block:'signature ch
     });
     const sts = ['Waiting for signatures','Collecting seals…','Signed — ready to file'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; stx.appendChild(e); return e; });
     let k = 0;
+    // "Require all seals" on: signed only with every seal. Off: signed once two seals are inked.
+    const req = $(st,'.twk'), stateOf = n => n >= (req.checked ? N.length - 1 : 1) ? 2 : n > 0 ? 1 : 0;
     const go = n => {
       n = Math.max(0, Math.min(N.length - 1, n)); const t0 = now(), fwd = n > k; k = n;
-      if (REDUCE){ line.jump(n); seals.forEach((s,i) => { s.ink.jump(i <= n ? 1 : 0); s.sw.cur = i < n || n === N.length-1 && i === n ? 1 : 0; s.sw.prev = null; s.sw.t = -9; }); done.cur = n === N.length-1 ? 2 : n > 0 ? 1 : 0; done.prev = null; done.t = -9; }
+      if (REDUCE){ line.jump(n); seals.forEach((s,i) => { s.ink.jump(i <= n ? 1 : 0); s.sw.cur = i < n || n === N.length-1 && i === n ? 1 : 0; s.sw.prev = null; s.sw.t = -9; }); done.cur = stateOf(n); done.prev = null; done.t = -9; }
       else {
         line.set(n); seals.forEach((s,i) => { s.ink.set(i <= n ? 1 : 0, S.base, t0 + (fwd ? LAG : 0)); s.sw.to(i < n || (n === N.length-1 && i === n) ? 1 : 0, t0 + (fwd ? LAG : 0)); });
-        done.to(n === N.length-1 ? 2 : n > 0 ? 1 : 0);
+        done.to(stateOf(n));
       }
       $(st,'.ad').disabled = n === N.length - 1;
     };
     $(st,'.ad').onclick = () => go(k + 1); $(st,'.rs').onclick = () => go(0);
+    req.onchange = () => done.to(stateOf(k));
     go(0);
     return t => {
       fill.style.height = (clamp(line.at(t)/(N.length-1))*100).toFixed(2) + '%';

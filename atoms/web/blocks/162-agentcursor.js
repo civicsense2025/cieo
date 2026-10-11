@@ -102,9 +102,9 @@ const pgCss = p => `
 .${p}cta{display:flex;flex-wrap:wrap;gap:8px}
 .${p}b1,.${p}b2{display:inline-block;padding:8px 14px;border-radius:9px;font-weight:600;font-size:13px}
 .${p}b1{background:var(--ink);color:var(--card)}
-.${p}b2{border:1px solid var(--line);font-weight:500}
+.${p}b2{background:var(--raised);font-weight:500}
 .${p}g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:8px 16px 14px}
-.${p}cd{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--tile)}
+.${p}cd{border-radius:12px;padding:12px 14px;background:var(--tile)}
 .${p}cd b{display:block;font-size:13.5px}
 .${p}cd span{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 .${p}cd em{display:block;font-style:normal;font-size:22px;font-weight:600;letter-spacing:-.02em;margin:4px 0 2px}
@@ -116,7 +116,7 @@ const pgCss = p => `
 .${p}fq span{color:var(--muted)}
 .${p}ps{display:flex;justify-content:space-between;gap:12px;padding:11px 16px;border-top:1px solid var(--line-soft)}
 .${p}ps b{font-size:14px;font-weight:600}
-.${p}ps span{color:var(--faint);white-space:nowrap}
+.${p}ps span{color:var(--muted);white-space:nowrap}
 .${p}ft{margin-top:auto;display:flex;gap:14px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line-soft);color:var(--muted);font-size:12.5px}
 @container (max-width:560px){.${p}g3{grid-template-columns:1fr;gap:8px}.${p}h1{font-size:25px}.${p}hr{padding:20px 14px 8px}.${p}op{display:none}.${p}sub{margin-bottom:12px}.${p}sh{padding-top:18px}}
 `;
@@ -134,7 +134,7 @@ const PAGE = {
   home:p => pgNav(p, '') + `<div class="${p}ct">` + pgHead(p, 'Review links for every change', 'Demo shop, built for review', 'Every change gets a link your team can open, comment on, and approve.', `<div class="${p}cta"><span class="${p}b1" data-t="start" data-n="Get started button">Get started</span><span class="${p}b2" data-t="seepricing" data-n="See pricing button">See pricing</span></div>`) + pgCards(p, FEAT) + `</div>` + pgFoot(p),
   pricing:p => pgNav(p, 'pricing') + `<div class="${p}ct">` + pgHead(p, '', 'Simple pricing', 'Nine dollars a month, cancel any time.') + pgCards(p, PLANS) + FAQ.slice(0, 2).map(([a, b]) => `<div class="${p}fq"><b>${a}</b><span>${b}</span></div>`).join('') + `</div>` + pgFoot(p),
   blog:p => pgNav(p, 'blog') + `<div class="${p}ct">` + pgHead(p, '', 'Notes', 'We ship small changes every week.') + pgPosts(p) + `</div>` + pgFoot(p),
-  signup:p => pgNav(p, '') + `<div class="${p}ct">` + pgHead(p, '', 'Start your review', 'Create a workspace and invite your team.', `<div style="display:grid;gap:8px;max-width:300px"><div style="border:1px solid var(--line);border-radius:9px;padding:9px 11px;color:var(--faint)">Work email</div><div class="${p}b1" style="text-align:center" data-t="create" data-n="Create workspace button">Create workspace</div></div>`) + `</div>` + pgFoot(p) };
+  signup:p => pgNav(p, '') + `<div class="${p}ct">` + pgHead(p, '', 'Start your review', 'Create a workspace and invite your team.', `<div style="display:grid;gap:8px;max-width:300px"><div style="border:1.5px solid var(--muted);border-radius:9px;padding:9px 11px;color:var(--muted)">Work email</div><div class="${p}b1" style="text-align:center" data-t="create" data-n="Create workspace button">Create workspace</div></div>`) + `</div>` + pgFoot(p) };
 const ROUTE = { home:'/', pricing:'/pricing', blog:'/blog', signup:'/signup' };
 const TITLE = { home:'Home', pricing:'Pricing', blog:'Blog', signup:'Sign up' };
 // one tall page: overview, how it works, pricing, questions, notes
@@ -154,7 +154,7 @@ atom({ id:'agentcursor', cat:'Agent activity', name:'Agent cursor', block:'Revie
   html:`<style>${pgCss('agc-')}
 .agc-root{position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px;container-type:inline-size}
 .agc-bar{flex:none;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-.agc-hn{flex:1;min-width:0;text-align:right;font-size:12.5px;color:var(--faint)}
+.agc-hn{flex:1;min-width:0;text-align:right;font-size:12.5px;color:var(--muted)}
 @container (max-width:640px){.agc-hn{display:none}}
 .agc-win{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .agc-chrome{flex:none;display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border-bottom:1px solid var(--line-soft);font-size:12.5px;color:var(--muted)}
@@ -247,7 +247,7 @@ atom({ id:'agentnav', cat:'Agent activity', name:'Agent navigation', block:'Revi
 .agn-root{position:absolute;inset:0;padding:12px;container-type:inline-size}
 .agn-win{height:100%;display:flex;flex-direction:column;overflow:hidden}
 .agn-chrome{flex:none;display:flex;align-items:center;gap:6px;height:46px;padding:0 10px;border-bottom:1px solid var(--line-soft)}
-.agn-nb{flex:none;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink)}
+.agn-nb{flex:none;width:30px;height:30px;border-radius:8px;border:1.5px solid var(--muted);background:var(--card);display:grid;place-items:center;padding:0;cursor:pointer;color:var(--ink)}
 .agn-url{flex:1;min-width:0;display:flex;align-items:center;gap:6px;height:30px;background:var(--raised);border-radius:8px;padding:0 10px;font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden}
 .agn-host{flex:none}
 .agn-path{position:relative;flex:1;height:18px;color:var(--ink);font-weight:500}
@@ -255,13 +255,13 @@ atom({ id:'agentnav', cat:'Agent activity', name:'Agent navigation', block:'Revi
 .agn-who>span{grid-area:1/1;justify-self:end;display:flex;align-items:center;gap:5px;height:26px;font-size:12px;font-weight:600;color:var(--card);white-space:nowrap}
 .agn-wa{border-radius:7px;padding:0 9px 0 7px;background:var(--accent)}
 .agn-wy{border-radius:13px;padding:0 11px;background:var(--ink)}
-.agn-trail{flex:none;display:flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 14px;border-bottom:1px solid var(--line-soft);font-size:12px;color:var(--faint)}
+.agn-trail{flex:none;display:flex;align-items:center;gap:8px;height:40px;padding:0 10px 0 14px;border-bottom:1px solid var(--line-soft);font-size:12px;color:var(--muted)}
 .agn-tv{position:relative;flex:1;min-width:0;height:28px;overflow:hidden}
 .agn-ti{position:absolute;left:0;top:0;display:flex;align-items:center;height:28px;white-space:nowrap}
 .agn-cp{display:flex;align-items:center;flex:none;height:28px;overflow:hidden}
 .agn-ci{display:flex;align-items:center;gap:4px;flex:none;padding-left:4px}
 .agn-ch{height:24px;border-radius:12px;padding:0 10px;font-size:12.5px;font-weight:500;cursor:pointer;border:1px dashed transparent;white-space:nowrap}
-.agn-cv{color:var(--faint);display:grid;place-items:center}
+.agn-cv{color:var(--muted);display:grid;place-items:center}
 .agn-view{position:relative;flex:1;min-height:0;overflow:hidden}
 .agn-ld{position:absolute;left:0;top:0;right:0;height:2px;background:var(--accent);transform-origin:0 50%;z-index:5;opacity:0}
 .agn-log{flex:none;display:flex;align-items:center;gap:10px;height:42px;padding:0 10px 0 14px;border-top:1px solid var(--line-soft);font:12px var(--mono);color:var(--muted)}
@@ -443,7 +443,7 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
 .agi-h1{font-size:26px;line-height:1.1;font-weight:600;letter-spacing:-.03em;width:fit-content}
 .agi-sb{color:var(--muted);margin-top:-4px}
 .agi-fl{display:flex;flex-direction:column;gap:4px;font-size:12.5px;font-weight:500}
-.agi-box{height:38px;border:1px solid var(--line);border-radius:9px;padding:0 11px;display:flex;align-items:center;color:var(--faint);font-size:13.5px;font-weight:400}
+.agi-box{height:38px;border:1.5px solid var(--muted);border-radius:9px;padding:0 11px;display:flex;align-items:center;color:var(--muted);font-size:13.5px;font-weight:400}
 .agi-rw{display:flex;align-items:center;gap:16px;margin-top:2px}
 .agi-bt{height:38px;padding:0 16px;border-radius:9px;background:var(--faint);color:var(--card);font-weight:600;display:flex;align-items:center}
 .agi-lk{font-size:13px;line-height:18px;text-decoration:underline;text-underline-offset:2px;color:var(--ink)}
@@ -462,7 +462,7 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
 .agi-dv{flex:none;display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12.5px;color:var(--muted);border-bottom:1px solid var(--line-soft)}
 .agi-bd{flex:1;min-height:0;overflow:auto;display:grid;align-content:start;padding:0}
 .agi-ly{grid-area:1/1;padding:10px 14px}
-.agi-rl{font-size:11.5px;font-weight:600;color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
+.agi-rl{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
 .agi-nm{font-size:15px;font-weight:600;line-height:1.3;margin-top:1px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .agi-tg{font-size:11.5px;font-weight:600;border-radius:5px;padding:1px 6px;background:var(--warning-tint);color:var(--warning)}
 .agi-sl{font:12px/1.5 var(--mono);color:var(--muted);margin:4px 0 8px;overflow-wrap:anywhere}
@@ -589,7 +589,7 @@ atom({ id:'presencebar', cat:'Agent activity', name:'Presence bar', block:'Revie
 .agp-hd{flex:none;display:flex;align-items:center;gap:12px;padding:6px 14px;min-height:62px}
 .agp-ti{flex:none;min-width:0}
 .agp-ti b{display:block;font-size:14px;line-height:1.3}
-.agp-ti span{font-size:12px;color:var(--faint)}
+.agp-ti span{font-size:12px;color:var(--muted)}
 .agp-pr{flex:1;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:2px}
 .agp-wr{flex:none;overflow:hidden}
 .agp-cl{display:flex;align-items:center;gap:9px;padding:6px 12px 6px 7px;border-radius:12px;border:1.5px solid transparent;background:none;cursor:pointer;text-align:left;color:var(--ink);white-space:nowrap;flex:none}
@@ -598,7 +598,7 @@ atom({ id:'presencebar', cat:'Agent activity', name:'Presence bar', block:'Revie
 .agp-av.a{border-radius:10px;background:var(--accent-tint);color:var(--accent);border:1.5px solid var(--accent)}
 .agp-tx{display:flex;flex-direction:column;gap:3px;min-width:0}
 .agp-nm{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;line-height:16px}
-.agp-tg{font-size:11px;font-weight:600;line-height:14px;padding:0 5px;color:var(--muted);border:1px solid var(--line)}
+.agp-tg{font-size:11px;font-weight:600;line-height:14px;padding:0 5px;color:var(--muted);background:var(--raised)}
 .agp-tg.h{border-radius:7px}
 .agp-tg.a{border-radius:3px}
 .agp-ac{display:flex;align-items:center;height:20px;padding:0 8px;font-size:12px;font-weight:500;overflow:hidden}
@@ -770,7 +770,7 @@ atom({ id:'sitecoverage', cat:'Agent activity', name:'Site coverage', block:'Rev
 .agv-qt{flex:1;min-width:0}
 .agv-qt b{display:block;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
 .agv-qt span{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
-.agv-qg{flex:none;color:var(--faint);display:grid;place-items:center}
+.agv-qg{flex:none;color:var(--muted);display:grid;place-items:center}
 .agv-qe{position:absolute;left:14px;right:14px;top:14px;font-size:13px;color:var(--muted);margin:0}
 @container (max-width:639px){
   .agv-in{flex-direction:column;gap:8px}

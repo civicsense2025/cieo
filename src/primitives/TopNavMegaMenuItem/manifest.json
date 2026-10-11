@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.top-nav-mega-menu-item",
+  "componentVersion": "1.0.0",
+  "name": "TopNavMegaMenuItem",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/TopNavMegaMenuItem/TopNavMegaMenuItem.tsx", "symbol": "TopNavMegaMenuItem" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "href", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 1024 } },
+    { "id": "title", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "description", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 512 } }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "row", "overrides": ["color"], "tokenRoles": ["text-link"] }],
+  "constraints": { "layout": ["row-in-panel"], "content": ["row-has-title"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["href", "title", "description"], "states": [], "events": [], "parts": ["row"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Link row with a title and an optional description." },
+  "extensions": {}
+}

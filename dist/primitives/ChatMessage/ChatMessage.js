@@ -1,0 +1,6 @@
+// src/primitives/ChatMessage/ChatMessage.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function ChatMessage({ author, time, children }) {
+    return (_jsxs("article", { className: "cieo cieo-chat-message", children: [author ? _jsx("span", { "data-author": true, children: author }) : null, time ? _jsx("time", { children: time }) : null, children] }));
+}

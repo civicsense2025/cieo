@@ -1,0 +1,5 @@
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function Breadcrumbs({ label = 'Breadcrumb', children }) {
+    return (_jsx("nav", { "aria-label": label, className: "cieo cieo-p-breadcrumbs", children: _jsx("ol", { children: children }) }));
+}

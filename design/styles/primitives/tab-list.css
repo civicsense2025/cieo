@@ -1,0 +1,4 @@
+/* design/styles/primitives/tab-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-tab-list { display: flex; gap: var(--cieo-space-2); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+}

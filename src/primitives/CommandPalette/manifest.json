@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.command-palette",
+  "componentVersion": "1.0.0",
+  "name": "CommandPalette",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/CommandPalette/CommandPalette.tsx", "symbol": "CommandPalette" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "query", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {} },
+    { "id": "onQueryChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (query: string) => void; no function kind exists in the manifest precedent." }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "panel", "overrides": ["background"], "tokenRoles": ["surface-control"] }],
+  "constraints": { "layout": ["dialog-panel"], "content": ["host-filters-from-query"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "query", "onQueryChange"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Controlled command-menu shell; the host filters items from the query." },
+  "extensions": {}
+}

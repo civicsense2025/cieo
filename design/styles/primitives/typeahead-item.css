@@ -1,0 +1,4 @@
+/* design/styles/primitives/typeahead-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-typeahead-item { padding: var(--cieo-space-1) var(--cieo-space-2); border-radius: var(--cieo-radius-control); cursor: pointer; }
+}

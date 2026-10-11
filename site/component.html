@@ -1,0 +1,18 @@
+<!-- site/component.html : reference shape for per-primitive docs pages (Documentation-Design shape, no Astryx copy).
+     Generated pages under site/components/ are owned by scripts/build-component-pages.mjs, which preserves
+     each page's authored content and renders this shell around it — including the import banner below.
+     The banner's import line is derived from the tsx exports; never hand-write it per page. -->
+<article class="cieo cieo-doc" data-component="${id}">
+  <header><h1>${name}</h1><p>${summary}</p><span data-level>${level}</span></header>
+  <div class="cieo-doc-body">
+    <div class="cieo-import-banner" data-import-banner><p><strong>Use the import, not the markup.</strong> Copy this line into your code — never paste the preview HTML below.</p><pre><code data-import>${import}</code></pre><button type="button" data-copy-import>Copy import</button></div>
+    <div data-preview><!-- live preview mounts here and follows the theme bar --></div>
+    <div role="tablist" aria-label="Example views"><button role="tab" aria-selected="true">Description</button><button role="tab" aria-selected="false">Code</button></div>
+    <pre><code data-code>${code}</code></pre><button data-copy>Copy</button>
+    <table data-props><thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody data-props-rows></tbody></table>
+    <section data-dos><h2>Do</h2><div data-do></div><h2>Don't</h2><div data-dont></div></section>
+    <p data-empty>Not documented yet</p>
+  </div>
+  <aside aria-label="On this page"><a href="#usage">Usage</a><a href="#best">Best practices</a><a href="#examples">Examples</a></aside>
+  <footer><code data-install>npm install github:civicsense2025/cieo#v0.3.0</code><a data-workbench href="/workbench.html">Open in Workbench</a><nav><a data-prev>Previous</a><a data-next>Next</a></nav></footer>
+</article>

@@ -1,0 +1,13 @@
+/* design/styles/primitives/heading.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-heading {
+    margin: 0; font-family: var(--cieo-font-sans); font-weight: var(--cieo-weight-strong);
+    line-height: var(--cieo-leading-tight); color: var(--cieo-color-text);
+  }
+  :where(.cieo).cieo-p-heading[data-level='1'] { font-size: 2em; }
+  :where(.cieo).cieo-p-heading[data-level='2'] { font-size: 1.5em; }
+  :where(.cieo).cieo-p-heading[data-level='3'] { font-size: 1.25em; }
+  :where(.cieo).cieo-p-heading[data-level='4'] { font-size: 1.125em; }
+  :where(.cieo).cieo-p-heading[data-level='5'] { font-size: 1em; }
+  :where(.cieo).cieo-p-heading[data-level='6'] { font-size: 0.875em; }
+}

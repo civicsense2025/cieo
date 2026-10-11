@@ -10,7 +10,7 @@ atom({ id:'corkboard', cat:'Writing', name:'Corkboard cards', block:'writing, bo
       d.style.cssText = 'position:absolute;inset:0'; syn.appendChild(d); return d; });
     const cards = C.map(([t],i) => {
       const c = document.createElement('div'); c.className = 'small'; c.textContent = t; c.style.touchAction = 'none';
-      c.style.cssText += ';position:absolute;top:8px;width:88px;height:96px;border-radius:10px;background:var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none';
+      c.style.cssText += ';position:absolute;top:8px;width:88px;height:96px;border-radius:10px;background:var(--card);display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none';
       bd.appendChild(c);
       const cx = new Track(i*W), cy = new Track(0); let dx = 0, dy = 0;
       drag(c, { down: p => { const t = now(); dx = p.x - cx.at(t) - 4; dy = p.y - cy.at(t) - 8; c.style.zIndex = 5; go(i); },

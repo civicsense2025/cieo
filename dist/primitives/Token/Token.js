@@ -1,0 +1,6 @@
+// src/primitives/Token/Token.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function Token({ tone = 'default', children }) {
+    return (_jsx("span", { "data-tone": tone, className: "cieo cieo-p-token", children: children }));
+}

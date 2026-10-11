@@ -50,6 +50,686 @@
     },
     "./design.css": "./design/themes.css",
     "./primitives.css": "./design/primitives.css",
+    "./AlertDialog": {
+      "types": "./dist/primitives/AlertDialog/AlertDialog.d.ts",
+      "default": "./dist/primitives/AlertDialog/AlertDialog.js"
+    },
+    "./AppShell": {
+      "types": "./dist/primitives/AppShell/AppShell.d.ts",
+      "default": "./dist/primitives/AppShell/AppShell.js"
+    },
+    "./AspectRatio": {
+      "types": "./dist/primitives/AspectRatio/AspectRatio.d.ts",
+      "default": "./dist/primitives/AspectRatio/AspectRatio.js"
+    },
+    "./AuthAccountCard": {
+      "types": "./dist/primitives/AuthAccountCard/AuthAccountCard.d.ts",
+      "default": "./dist/primitives/AuthAccountCard/AuthAccountCard.js"
+    },
+    "./AuthCredentialForm": {
+      "types": "./dist/primitives/AuthCredentialForm/AuthCredentialForm.d.ts",
+      "default": "./dist/primitives/AuthCredentialForm/AuthCredentialForm.js"
+    },
+    "./AuthEmailField": {
+      "types": "./dist/primitives/AuthEmailField/AuthEmailField.d.ts",
+      "default": "./dist/primitives/AuthEmailField/AuthEmailField.js"
+    },
+    "./AuthInviteAccept": {
+      "types": "./dist/primitives/AuthInviteAccept/AuthInviteAccept.d.ts",
+      "default": "./dist/primitives/AuthInviteAccept/AuthInviteAccept.js"
+    },
+    "./AuthMfaChallenge": {
+      "types": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.d.ts",
+      "default": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.js"
+    },
+    "./AuthMfaFlow": {
+      "types": "./dist/primitives/AuthMfaFlow/AuthMfaFlow.d.ts",
+      "default": "./dist/primitives/AuthMfaFlow/AuthMfaFlow.js"
+    },
+    "./AuthOtpInput": {
+      "types": "./dist/primitives/AuthOtpInput/AuthOtpInput.d.ts",
+      "default": "./dist/primitives/AuthOtpInput/AuthOtpInput.js"
+    },
+    "./AuthPasskeyButton": {
+      "types": "./dist/primitives/AuthPasskeyButton/AuthPasskeyButton.d.ts",
+      "default": "./dist/primitives/AuthPasskeyButton/AuthPasskeyButton.js"
+    },
+    "./AuthPasswordInput": {
+      "types": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.d.ts",
+      "default": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.js"
+    },
+    "./AuthResetFlow": {
+      "types": "./dist/primitives/AuthResetFlow/AuthResetFlow.d.ts",
+      "default": "./dist/primitives/AuthResetFlow/AuthResetFlow.js"
+    },
+    "./AuthResetForm": {
+      "types": "./dist/primitives/AuthResetForm/AuthResetForm.d.ts",
+      "default": "./dist/primitives/AuthResetForm/AuthResetForm.js"
+    },
+    "./AuthSessionList": {
+      "types": "./dist/primitives/AuthSessionList/AuthSessionList.d.ts",
+      "default": "./dist/primitives/AuthSessionList/AuthSessionList.js"
+    },
+    "./AuthSignInCard": {
+      "types": "./dist/primitives/AuthSignInCard/AuthSignInCard.d.ts",
+      "default": "./dist/primitives/AuthSignInCard/AuthSignInCard.js"
+    },
+    "./AuthSignUpCard": {
+      "types": "./dist/primitives/AuthSignUpCard/AuthSignUpCard.d.ts",
+      "default": "./dist/primitives/AuthSignUpCard/AuthSignUpCard.js"
+    },
+    "./AuthSsoButtons": {
+      "types": "./dist/primitives/AuthSsoButtons/AuthSsoButtons.d.ts",
+      "default": "./dist/primitives/AuthSsoButtons/AuthSsoButtons.js"
+    },
+    "./Avatar": {
+      "types": "./dist/primitives/Avatar/Avatar.d.ts",
+      "default": "./dist/primitives/Avatar/Avatar.js"
+    },
+    "./AvatarGroup": {
+      "types": "./dist/primitives/AvatarGroup/AvatarGroup.d.ts",
+      "default": "./dist/primitives/AvatarGroup/AvatarGroup.js"
+    },
+    "./AvatarGroupOverflow": {
+      "types": "./dist/primitives/AvatarGroupOverflow/AvatarGroupOverflow.d.ts",
+      "default": "./dist/primitives/AvatarGroupOverflow/AvatarGroupOverflow.js"
+    },
+    "./AvatarStatusDot": {
+      "types": "./dist/primitives/AvatarStatusDot/AvatarStatusDot.d.ts",
+      "default": "./dist/primitives/AvatarStatusDot/AvatarStatusDot.js"
+    },
+    "./Badge": {
+      "types": "./dist/primitives/Badge/Badge.d.ts",
+      "default": "./dist/primitives/Badge/Badge.js"
+    },
+    "./Banner": {
+      "types": "./dist/primitives/Banner/Banner.d.ts",
+      "default": "./dist/primitives/Banner/Banner.js"
+    },
+    "./Blockquote": {
+      "types": "./dist/primitives/Blockquote/Blockquote.d.ts",
+      "default": "./dist/primitives/Blockquote/Blockquote.js"
+    },
+    "./BottomSheet": {
+      "types": "./dist/primitives/BottomSheet/BottomSheet.d.ts",
+      "default": "./dist/primitives/BottomSheet/BottomSheet.js"
+    },
+    "./BottomSheetSwitcher": {
+      "types": "./dist/primitives/BottomSheetSwitcher/BottomSheetSwitcher.d.ts",
+      "default": "./dist/primitives/BottomSheetSwitcher/BottomSheetSwitcher.js"
+    },
+    "./BreadcrumbItem": {
+      "types": "./dist/primitives/BreadcrumbItem/BreadcrumbItem.d.ts",
+      "default": "./dist/primitives/BreadcrumbItem/BreadcrumbItem.js"
+    },
+    "./Breadcrumbs": {
+      "types": "./dist/primitives/Breadcrumbs/Breadcrumbs.d.ts",
+      "default": "./dist/primitives/Breadcrumbs/Breadcrumbs.js"
+    },
+    "./ButtonGroup": {
+      "types": "./dist/primitives/ButtonGroup/ButtonGroup.d.ts",
+      "default": "./dist/primitives/ButtonGroup/ButtonGroup.js"
+    },
+    "./Calendar": {
+      "types": "./dist/primitives/Calendar/Calendar.d.ts",
+      "default": "./dist/primitives/Calendar/Calendar.js"
+    },
+    "./Card": {
+      "types": "./dist/primitives/Card/Card.d.ts",
+      "default": "./dist/primitives/Card/Card.js"
+    },
+    "./Carousel": {
+      "types": "./dist/primitives/Carousel/Carousel.d.ts",
+      "default": "./dist/primitives/Carousel/Carousel.js"
+    },
+    "./Center": {
+      "types": "./dist/primitives/Center/Center.d.ts",
+      "default": "./dist/primitives/Center/Center.js"
+    },
+    "./ChatComposer": {
+      "types": "./dist/primitives/ChatComposer/ChatComposer.d.ts",
+      "default": "./dist/primitives/ChatComposer/ChatComposer.js"
+    },
+    "./ChatComposerInput": {
+      "types": "./dist/primitives/ChatComposerInput/ChatComposerInput.d.ts",
+      "default": "./dist/primitives/ChatComposerInput/ChatComposerInput.js"
+    },
+    "./ChatLayout": {
+      "types": "./dist/primitives/ChatLayout/ChatLayout.d.ts",
+      "default": "./dist/primitives/ChatLayout/ChatLayout.js"
+    },
+    "./ChatMessage": {
+      "types": "./dist/primitives/ChatMessage/ChatMessage.d.ts",
+      "default": "./dist/primitives/ChatMessage/ChatMessage.js"
+    },
+    "./ChatMessageBubble": {
+      "types": "./dist/primitives/ChatMessageBubble/ChatMessageBubble.d.ts",
+      "default": "./dist/primitives/ChatMessageBubble/ChatMessageBubble.js"
+    },
+    "./ChatMessageList": {
+      "types": "./dist/primitives/ChatMessageList/ChatMessageList.d.ts",
+      "default": "./dist/primitives/ChatMessageList/ChatMessageList.js"
+    },
+    "./ChatMessageMetadata": {
+      "types": "./dist/primitives/ChatMessageMetadata/ChatMessageMetadata.d.ts",
+      "default": "./dist/primitives/ChatMessageMetadata/ChatMessageMetadata.js"
+    },
+    "./ChatSystemMessage": {
+      "types": "./dist/primitives/ChatSystemMessage/ChatSystemMessage.d.ts",
+      "default": "./dist/primitives/ChatSystemMessage/ChatSystemMessage.js"
+    },
+    "./CheckboxInput": {
+      "types": "./dist/primitives/CheckboxInput/CheckboxInput.d.ts",
+      "default": "./dist/primitives/CheckboxInput/CheckboxInput.js"
+    },
+    "./CheckboxList": {
+      "types": "./dist/primitives/CheckboxList/CheckboxList.d.ts",
+      "default": "./dist/primitives/CheckboxList/CheckboxList.js"
+    },
+    "./CheckboxListItem": {
+      "types": "./dist/primitives/CheckboxListItem/CheckboxListItem.d.ts",
+      "default": "./dist/primitives/CheckboxListItem/CheckboxListItem.js"
+    },
+    "./Citation": {
+      "types": "./dist/primitives/Citation/Citation.d.ts",
+      "default": "./dist/primitives/Citation/Citation.js"
+    },
+    "./ClickableCard": {
+      "types": "./dist/primitives/ClickableCard/ClickableCard.d.ts",
+      "default": "./dist/primitives/ClickableCard/ClickableCard.js"
+    },
+    "./Code": {
+      "types": "./dist/primitives/Code/Code.d.ts",
+      "default": "./dist/primitives/Code/Code.js"
+    },
+    "./CodeBlock": {
+      "types": "./dist/primitives/CodeBlock/CodeBlock.d.ts",
+      "default": "./dist/primitives/CodeBlock/CodeBlock.js"
+    },
+    "./Collapsible": {
+      "types": "./dist/primitives/Collapsible/Collapsible.d.ts",
+      "default": "./dist/primitives/Collapsible/Collapsible.js"
+    },
+    "./CollapsibleGroup": {
+      "types": "./dist/primitives/CollapsibleGroup/CollapsibleGroup.d.ts",
+      "default": "./dist/primitives/CollapsibleGroup/CollapsibleGroup.js"
+    },
+    "./CommandPalette": {
+      "types": "./dist/primitives/CommandPalette/CommandPalette.d.ts",
+      "default": "./dist/primitives/CommandPalette/CommandPalette.js"
+    },
+    "./CommandPaletteEmpty": {
+      "types": "./dist/primitives/CommandPaletteEmpty/CommandPaletteEmpty.d.ts",
+      "default": "./dist/primitives/CommandPaletteEmpty/CommandPaletteEmpty.js"
+    },
+    "./CommandPaletteFooter": {
+      "types": "./dist/primitives/CommandPaletteFooter/CommandPaletteFooter.d.ts",
+      "default": "./dist/primitives/CommandPaletteFooter/CommandPaletteFooter.js"
+    },
+    "./CommandPaletteGroup": {
+      "types": "./dist/primitives/CommandPaletteGroup/CommandPaletteGroup.d.ts",
+      "default": "./dist/primitives/CommandPaletteGroup/CommandPaletteGroup.js"
+    },
+    "./CommandPaletteInput": {
+      "types": "./dist/primitives/CommandPaletteInput/CommandPaletteInput.d.ts",
+      "default": "./dist/primitives/CommandPaletteInput/CommandPaletteInput.js"
+    },
+    "./CommandPaletteItem": {
+      "types": "./dist/primitives/CommandPaletteItem/CommandPaletteItem.d.ts",
+      "default": "./dist/primitives/CommandPaletteItem/CommandPaletteItem.js"
+    },
+    "./CommandPaletteList": {
+      "types": "./dist/primitives/CommandPaletteList/CommandPaletteList.d.ts",
+      "default": "./dist/primitives/CommandPaletteList/CommandPaletteList.js"
+    },
+    "./ComplexSelector": {
+      "types": "./dist/primitives/ComplexSelector/ComplexSelector.d.ts",
+      "default": "./dist/primitives/ComplexSelector/ComplexSelector.js"
+    },
+    "./DateInput": {
+      "types": "./dist/primitives/DateInput/DateInput.d.ts",
+      "default": "./dist/primitives/DateInput/DateInput.js"
+    },
+    "./DateRangeInput": {
+      "types": "./dist/primitives/DateRangeInput/DateRangeInput.d.ts",
+      "default": "./dist/primitives/DateRangeInput/DateRangeInput.js"
+    },
+    "./DateTimeInput": {
+      "types": "./dist/primitives/DateTimeInput/DateTimeInput.d.ts",
+      "default": "./dist/primitives/DateTimeInput/DateTimeInput.js"
+    },
+    "./Dialog": {
+      "types": "./dist/primitives/Dialog/Dialog.d.ts",
+      "default": "./dist/primitives/Dialog/Dialog.js"
+    },
+    "./DialogHeader": {
+      "types": "./dist/primitives/DialogHeader/DialogHeader.d.ts",
+      "default": "./dist/primitives/DialogHeader/DialogHeader.js"
+    },
+    "./Divider": {
+      "types": "./dist/primitives/Divider/Divider.d.ts",
+      "default": "./dist/primitives/Divider/Divider.js"
+    },
+    "./DropdownMenu": {
+      "types": "./dist/primitives/DropdownMenu/DropdownMenu.d.ts",
+      "default": "./dist/primitives/DropdownMenu/DropdownMenu.js"
+    },
+    "./DropdownMenuCheckboxItem": {
+      "types": "./dist/primitives/DropdownMenuCheckboxItem/DropdownMenuCheckboxItem.d.ts",
+      "default": "./dist/primitives/DropdownMenuCheckboxItem/DropdownMenuCheckboxItem.js"
+    },
+    "./DropdownMenuDivider": {
+      "types": "./dist/primitives/DropdownMenuDivider/DropdownMenuDivider.d.ts",
+      "default": "./dist/primitives/DropdownMenuDivider/DropdownMenuDivider.js"
+    },
+    "./DropdownMenuGroup": {
+      "types": "./dist/primitives/DropdownMenuGroup/DropdownMenuGroup.d.ts",
+      "default": "./dist/primitives/DropdownMenuGroup/DropdownMenuGroup.js"
+    },
+    "./DropdownMenuItem": {
+      "types": "./dist/primitives/DropdownMenuItem/DropdownMenuItem.d.ts",
+      "default": "./dist/primitives/DropdownMenuItem/DropdownMenuItem.js"
+    },
+    "./DropdownMenuRadioGroup": {
+      "types": "./dist/primitives/DropdownMenuRadioGroup/DropdownMenuRadioGroup.d.ts",
+      "default": "./dist/primitives/DropdownMenuRadioGroup/DropdownMenuRadioGroup.js"
+    },
+    "./DropdownMenuRadioItem": {
+      "types": "./dist/primitives/DropdownMenuRadioItem/DropdownMenuRadioItem.d.ts",
+      "default": "./dist/primitives/DropdownMenuRadioItem/DropdownMenuRadioItem.js"
+    },
+    "./DropdownMenuSubMenu": {
+      "types": "./dist/primitives/DropdownMenuSubMenu/DropdownMenuSubMenu.d.ts",
+      "default": "./dist/primitives/DropdownMenuSubMenu/DropdownMenuSubMenu.js"
+    },
+    "./EmptyState": {
+      "types": "./dist/primitives/EmptyState/EmptyState.d.ts",
+      "default": "./dist/primitives/EmptyState/EmptyState.js"
+    },
+    "./Field": {
+      "types": "./dist/primitives/Field/Field.d.ts",
+      "default": "./dist/primitives/Field/Field.js"
+    },
+    "./FieldStatus": {
+      "types": "./dist/primitives/FieldStatus/FieldStatus.d.ts",
+      "default": "./dist/primitives/FieldStatus/FieldStatus.js"
+    },
+    "./FileInput": {
+      "types": "./dist/primitives/FileInput/FileInput.d.ts",
+      "default": "./dist/primitives/FileInput/FileInput.js"
+    },
+    "./FormLayout": {
+      "types": "./dist/primitives/FormLayout/FormLayout.d.ts",
+      "default": "./dist/primitives/FormLayout/FormLayout.js"
+    },
+    "./Grid": {
+      "types": "./dist/primitives/Grid/Grid.d.ts",
+      "default": "./dist/primitives/Grid/Grid.js"
+    },
+    "./GridSpan": {
+      "types": "./dist/primitives/GridSpan/GridSpan.d.ts",
+      "default": "./dist/primitives/GridSpan/GridSpan.js"
+    },
+    "./HStack": {
+      "types": "./dist/primitives/HStack/HStack.d.ts",
+      "default": "./dist/primitives/HStack/HStack.js"
+    },
+    "./Heading": {
+      "types": "./dist/primitives/Heading/Heading.d.ts",
+      "default": "./dist/primitives/Heading/Heading.js"
+    },
+    "./HoverCard": {
+      "types": "./dist/primitives/HoverCard/HoverCard.d.ts",
+      "default": "./dist/primitives/HoverCard/HoverCard.js"
+    },
+    "./Icon": {
+      "types": "./dist/primitives/Icon/Icon.d.ts",
+      "default": "./dist/primitives/Icon/Icon.js"
+    },
+    "./IconButton": {
+      "types": "./dist/primitives/IconButton/IconButton.d.ts",
+      "default": "./dist/primitives/IconButton/IconButton.js"
+    },
+    "./InputGroup": {
+      "types": "./dist/primitives/InputGroup/InputGroup.d.ts",
+      "default": "./dist/primitives/InputGroup/InputGroup.js"
+    },
+    "./InputGroupText": {
+      "types": "./dist/primitives/InputGroupText/InputGroupText.d.ts",
+      "default": "./dist/primitives/InputGroupText/InputGroupText.js"
+    },
+    "./Kbd": {
+      "types": "./dist/primitives/Kbd/Kbd.d.ts",
+      "default": "./dist/primitives/Kbd/Kbd.js"
+    },
+    "./Layout": {
+      "types": "./dist/primitives/Layout/Layout.d.ts",
+      "default": "./dist/primitives/Layout/Layout.js"
+    },
+    "./LayoutContent": {
+      "types": "./dist/primitives/LayoutContent/LayoutContent.d.ts",
+      "default": "./dist/primitives/LayoutContent/LayoutContent.js"
+    },
+    "./LayoutFooter": {
+      "types": "./dist/primitives/LayoutFooter/LayoutFooter.d.ts",
+      "default": "./dist/primitives/LayoutFooter/LayoutFooter.js"
+    },
+    "./LayoutHeader": {
+      "types": "./dist/primitives/LayoutHeader/LayoutHeader.d.ts",
+      "default": "./dist/primitives/LayoutHeader/LayoutHeader.js"
+    },
+    "./LayoutPanel": {
+      "types": "./dist/primitives/LayoutPanel/LayoutPanel.d.ts",
+      "default": "./dist/primitives/LayoutPanel/LayoutPanel.js"
+    },
+    "./Lightbox": {
+      "types": "./dist/primitives/Lightbox/Lightbox.d.ts",
+      "default": "./dist/primitives/Lightbox/Lightbox.js"
+    },
+    "./List": {
+      "types": "./dist/primitives/List/List.d.ts",
+      "default": "./dist/primitives/List/List.js"
+    },
+    "./ListItem": {
+      "types": "./dist/primitives/ListItem/ListItem.d.ts",
+      "default": "./dist/primitives/ListItem/ListItem.js"
+    },
+    "./Markdown": {
+      "types": "./dist/primitives/Markdown/Markdown.d.ts",
+      "default": "./dist/primitives/Markdown/Markdown.js"
+    },
+    "./MetadataList": {
+      "types": "./dist/primitives/MetadataList/MetadataList.d.ts",
+      "default": "./dist/primitives/MetadataList/MetadataList.js"
+    },
+    "./MetadataListItem": {
+      "types": "./dist/primitives/MetadataListItem/MetadataListItem.d.ts",
+      "default": "./dist/primitives/MetadataListItem/MetadataListItem.js"
+    },
+    "./MobileNav": {
+      "types": "./dist/primitives/MobileNav/MobileNav.d.ts",
+      "default": "./dist/primitives/MobileNav/MobileNav.js"
+    },
+    "./MobileNavToggle": {
+      "types": "./dist/primitives/MobileNavToggle/MobileNavToggle.d.ts",
+      "default": "./dist/primitives/MobileNavToggle/MobileNavToggle.js"
+    },
+    "./MoreMenu": {
+      "types": "./dist/primitives/MoreMenu/MoreMenu.d.ts",
+      "default": "./dist/primitives/MoreMenu/MoreMenu.js"
+    },
+    "./MultiSelector": {
+      "types": "./dist/primitives/MultiSelector/MultiSelector.d.ts",
+      "default": "./dist/primitives/MultiSelector/MultiSelector.js"
+    },
+    "./NavHeadingMenu": {
+      "types": "./dist/primitives/NavHeadingMenu/NavHeadingMenu.d.ts",
+      "default": "./dist/primitives/NavHeadingMenu/NavHeadingMenu.js"
+    },
+    "./NavIcon": {
+      "types": "./dist/primitives/NavIcon/NavIcon.d.ts",
+      "default": "./dist/primitives/NavIcon/NavIcon.js"
+    },
+    "./NumberInput": {
+      "types": "./dist/primitives/NumberInput/NumberInput.d.ts",
+      "default": "./dist/primitives/NumberInput/NumberInput.js"
+    },
+    "./Outline": {
+      "types": "./dist/primitives/Outline/Outline.d.ts",
+      "default": "./dist/primitives/Outline/Outline.js"
+    },
+    "./OverflowList": {
+      "types": "./dist/primitives/OverflowList/OverflowList.d.ts",
+      "default": "./dist/primitives/OverflowList/OverflowList.js"
+    },
+    "./Overlay": {
+      "types": "./dist/primitives/Overlay/Overlay.d.ts",
+      "default": "./dist/primitives/Overlay/Overlay.js"
+    },
+    "./Pagination": {
+      "types": "./dist/primitives/Pagination/Pagination.d.ts",
+      "default": "./dist/primitives/Pagination/Pagination.js"
+    },
+    "./Popover": {
+      "types": "./dist/primitives/Popover/Popover.d.ts",
+      "default": "./dist/primitives/Popover/Popover.js"
+    },
+    "./PowerSearch": {
+      "types": "./dist/primitives/PowerSearch/PowerSearch.d.ts",
+      "default": "./dist/primitives/PowerSearch/PowerSearch.js"
+    },
+    "./ProgressBar": {
+      "types": "./dist/primitives/ProgressBar/ProgressBar.d.ts",
+      "default": "./dist/primitives/ProgressBar/ProgressBar.js"
+    },
+    "./RadioList": {
+      "types": "./dist/primitives/RadioList/RadioList.d.ts",
+      "default": "./dist/primitives/RadioList/RadioList.js"
+    },
+    "./RadioListItem": {
+      "types": "./dist/primitives/RadioListItem/RadioListItem.d.ts",
+      "default": "./dist/primitives/RadioListItem/RadioListItem.js"
+    },
+    "./ResizeHandle": {
+      "types": "./dist/primitives/ResizeHandle/ResizeHandle.d.ts",
+      "default": "./dist/primitives/ResizeHandle/ResizeHandle.js"
+    },
+    "./ScrollableArea": {
+      "types": "./dist/primitives/ScrollableArea/ScrollableArea.d.ts",
+      "default": "./dist/primitives/ScrollableArea/ScrollableArea.js"
+    },
+    "./Section": {
+      "types": "./dist/primitives/Section/Section.d.ts",
+      "default": "./dist/primitives/Section/Section.js"
+    },
+    "./SegmentedControl": {
+      "types": "./dist/primitives/SegmentedControl/SegmentedControl.d.ts",
+      "default": "./dist/primitives/SegmentedControl/SegmentedControl.js"
+    },
+    "./SegmentedControlItem": {
+      "types": "./dist/primitives/SegmentedControlItem/SegmentedControlItem.d.ts",
+      "default": "./dist/primitives/SegmentedControlItem/SegmentedControlItem.js"
+    },
+    "./SelectableCard": {
+      "types": "./dist/primitives/SelectableCard/SelectableCard.d.ts",
+      "default": "./dist/primitives/SelectableCard/SelectableCard.js"
+    },
+    "./Selector": {
+      "types": "./dist/primitives/Selector/Selector.d.ts",
+      "default": "./dist/primitives/Selector/Selector.js"
+    },
+    "./SelectorOption": {
+      "types": "./dist/primitives/SelectorOption/SelectorOption.d.ts",
+      "default": "./dist/primitives/SelectorOption/SelectorOption.js"
+    },
+    "./SideNav": {
+      "types": "./dist/primitives/SideNav/SideNav.d.ts",
+      "default": "./dist/primitives/SideNav/SideNav.js"
+    },
+    "./SideNavCollapseButton": {
+      "types": "./dist/primitives/SideNavCollapseButton/SideNavCollapseButton.d.ts",
+      "default": "./dist/primitives/SideNavCollapseButton/SideNavCollapseButton.js"
+    },
+    "./SideNavHeading": {
+      "types": "./dist/primitives/SideNavHeading/SideNavHeading.d.ts",
+      "default": "./dist/primitives/SideNavHeading/SideNavHeading.js"
+    },
+    "./SideNavItem": {
+      "types": "./dist/primitives/SideNavItem/SideNavItem.d.ts",
+      "default": "./dist/primitives/SideNavItem/SideNavItem.js"
+    },
+    "./SideNavSection": {
+      "types": "./dist/primitives/SideNavSection/SideNavSection.d.ts",
+      "default": "./dist/primitives/SideNavSection/SideNavSection.js"
+    },
+    "./Skeleton": {
+      "types": "./dist/primitives/Skeleton/Skeleton.d.ts",
+      "default": "./dist/primitives/Skeleton/Skeleton.js"
+    },
+    "./Slider": {
+      "types": "./dist/primitives/Slider/Slider.d.ts",
+      "default": "./dist/primitives/Slider/Slider.js"
+    },
+    "./Spinner": {
+      "types": "./dist/primitives/Spinner/Spinner.d.ts",
+      "default": "./dist/primitives/Spinner/Spinner.js"
+    },
+    "./Stack": {
+      "types": "./dist/primitives/Stack/Stack.d.ts",
+      "default": "./dist/primitives/Stack/Stack.js"
+    },
+    "./StackItem": {
+      "types": "./dist/primitives/StackItem/StackItem.d.ts",
+      "default": "./dist/primitives/StackItem/StackItem.js"
+    },
+    "./StatusDot": {
+      "types": "./dist/primitives/StatusDot/StatusDot.d.ts",
+      "default": "./dist/primitives/StatusDot/StatusDot.js"
+    },
+    "./Step": {
+      "types": "./dist/primitives/Step/Step.d.ts",
+      "default": "./dist/primitives/Step/Step.js"
+    },
+    "./Stepper": {
+      "types": "./dist/primitives/Stepper/Stepper.d.ts",
+      "default": "./dist/primitives/Stepper/Stepper.js"
+    },
+    "./Tab": {
+      "types": "./dist/primitives/Tab/Tab.d.ts",
+      "default": "./dist/primitives/Tab/Tab.js"
+    },
+    "./TabList": {
+      "types": "./dist/primitives/TabList/TabList.d.ts",
+      "default": "./dist/primitives/TabList/TabList.js"
+    },
+    "./TabMenu": {
+      "types": "./dist/primitives/TabMenu/TabMenu.d.ts",
+      "default": "./dist/primitives/TabMenu/TabMenu.js"
+    },
+    "./Table": {
+      "types": "./dist/primitives/Table/Table.d.ts",
+      "default": "./dist/primitives/Table/Table.js"
+    },
+    "./TableBody": {
+      "types": "./dist/primitives/TableBody/TableBody.d.ts",
+      "default": "./dist/primitives/TableBody/TableBody.js"
+    },
+    "./TableCell": {
+      "types": "./dist/primitives/TableCell/TableCell.d.ts",
+      "default": "./dist/primitives/TableCell/TableCell.js"
+    },
+    "./TableFooter": {
+      "types": "./dist/primitives/TableFooter/TableFooter.d.ts",
+      "default": "./dist/primitives/TableFooter/TableFooter.js"
+    },
+    "./TableHeader": {
+      "types": "./dist/primitives/TableHeader/TableHeader.d.ts",
+      "default": "./dist/primitives/TableHeader/TableHeader.js"
+    },
+    "./TableHeaderCell": {
+      "types": "./dist/primitives/TableHeaderCell/TableHeaderCell.d.ts",
+      "default": "./dist/primitives/TableHeaderCell/TableHeaderCell.js"
+    },
+    "./TableRow": {
+      "types": "./dist/primitives/TableRow/TableRow.d.ts",
+      "default": "./dist/primitives/TableRow/TableRow.js"
+    },
+    "./TableSelectionToolbar": {
+      "types": "./dist/primitives/TableSelectionToolbar/TableSelectionToolbar.d.ts",
+      "default": "./dist/primitives/TableSelectionToolbar/TableSelectionToolbar.js"
+    },
+    "./Text": {
+      "types": "./dist/primitives/Text/Text.d.ts",
+      "default": "./dist/primitives/Text/Text.js"
+    },
+    "./Thumbnail": {
+      "types": "./dist/primitives/Thumbnail/Thumbnail.d.ts",
+      "default": "./dist/primitives/Thumbnail/Thumbnail.js"
+    },
+    "./TimeInput": {
+      "types": "./dist/primitives/TimeInput/TimeInput.d.ts",
+      "default": "./dist/primitives/TimeInput/TimeInput.js"
+    },
+    "./Timer": {
+      "types": "./dist/primitives/Timer/Timer.d.ts",
+      "default": "./dist/primitives/Timer/Timer.js"
+    },
+    "./Timestamp": {
+      "types": "./dist/primitives/Timestamp/Timestamp.d.ts",
+      "default": "./dist/primitives/Timestamp/Timestamp.js"
+    },
+    "./ToggleButton": {
+      "types": "./dist/primitives/ToggleButton/ToggleButton.d.ts",
+      "default": "./dist/primitives/ToggleButton/ToggleButton.js"
+    },
+    "./ToggleButtonGroup": {
+      "types": "./dist/primitives/ToggleButtonGroup/ToggleButtonGroup.d.ts",
+      "default": "./dist/primitives/ToggleButtonGroup/ToggleButtonGroup.js"
+    },
+    "./Token": {
+      "types": "./dist/primitives/Token/Token.d.ts",
+      "default": "./dist/primitives/Token/Token.js"
+    },
+    "./Tokenizer": {
+      "types": "./dist/primitives/Tokenizer/Tokenizer.d.ts",
+      "default": "./dist/primitives/Tokenizer/Tokenizer.js"
+    },
+    "./Toolbar": {
+      "types": "./dist/primitives/Toolbar/Toolbar.d.ts",
+      "default": "./dist/primitives/Toolbar/Toolbar.js"
+    },
+    "./Tooltip": {
+      "types": "./dist/primitives/Tooltip/Tooltip.d.ts",
+      "default": "./dist/primitives/Tooltip/Tooltip.js"
+    },
+    "./TopNav": {
+      "types": "./dist/primitives/TopNav/TopNav.d.ts",
+      "default": "./dist/primitives/TopNav/TopNav.js"
+    },
+    "./TopNavHeading": {
+      "types": "./dist/primitives/TopNavHeading/TopNavHeading.d.ts",
+      "default": "./dist/primitives/TopNavHeading/TopNavHeading.js"
+    },
+    "./TopNavItem": {
+      "types": "./dist/primitives/TopNavItem/TopNavItem.d.ts",
+      "default": "./dist/primitives/TopNavItem/TopNavItem.js"
+    },
+    "./TopNavMegaMenu": {
+      "types": "./dist/primitives/TopNavMegaMenu/TopNavMegaMenu.d.ts",
+      "default": "./dist/primitives/TopNavMegaMenu/TopNavMegaMenu.js"
+    },
+    "./TopNavMegaMenuFeaturedCard": {
+      "types": "./dist/primitives/TopNavMegaMenuFeaturedCard/TopNavMegaMenuFeaturedCard.d.ts",
+      "default": "./dist/primitives/TopNavMegaMenuFeaturedCard/TopNavMegaMenuFeaturedCard.js"
+    },
+    "./TopNavMegaMenuItem": {
+      "types": "./dist/primitives/TopNavMegaMenuItem/TopNavMegaMenuItem.d.ts",
+      "default": "./dist/primitives/TopNavMegaMenuItem/TopNavMegaMenuItem.js"
+    },
+    "./TopNavMenu": {
+      "types": "./dist/primitives/TopNavMenu/TopNavMenu.d.ts",
+      "default": "./dist/primitives/TopNavMenu/TopNavMenu.js"
+    },
+    "./TreeList": {
+      "types": "./dist/primitives/TreeList/TreeList.d.ts",
+      "default": "./dist/primitives/TreeList/TreeList.js"
+    },
+    "./Typeahead": {
+      "types": "./dist/primitives/Typeahead/Typeahead.d.ts",
+      "default": "./dist/primitives/Typeahead/Typeahead.js"
+    },
+    "./TypeaheadItem": {
+      "types": "./dist/primitives/TypeaheadItem/TypeaheadItem.d.ts",
+      "default": "./dist/primitives/TypeaheadItem/TypeaheadItem.js"
+    },
+    "./VStack": {
+      "types": "./dist/primitives/VStack/VStack.d.ts",
+      "default": "./dist/primitives/VStack/VStack.js"
+    },
+    "./primitives": {
+      "types": "./dist/primitives/index.d.ts",
+      "default": "./dist/primitives/index.js"
+    },
     "./design.tokens.json": "./design/generated/default.tokens.json",
     "./design.portable.json": "./design/generated/default.portable.json",
     "./theme.schema.json": "./design/theme.schema.json",
@@ -73,11 +753,13 @@
     "build": "rm -rf dist && tsc -p tsconfig.json && cp src/controls/controls.css dist/controls/controls.css",
     "test": "npm run build && node --test test/*.test.mjs",
     "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check",
-    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && git diff --exit-code -- dist design/themes.css design/theme.schema.json",
+    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && git diff --exit-code -- dist design/themes.css design/theme.schema.json",
     "test:browser": "python3 test/browser/smoke.py",
+    "test:composites": "python3 test/browser/composites.py",
     "prepare": "node scripts/build-design.mjs",
     "prepack": "node scripts/build-design.mjs",
     "build:design": "node scripts/build-design.mjs",
+    "build:pages": "node scripts/wire-primitives.mjs && node scripts/build-component-pages.mjs && node scripts/build-component-index.mjs",
     "check:design": "node scripts/build-design.mjs --check && node scripts/check-design-ledger.mjs",
     "test:design": "node --test test/design-*.test.mjs",
     "test:design:types": "tsc -p test/types/tsconfig.json",

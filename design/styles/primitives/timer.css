@@ -1,0 +1,7 @@
+/* design/styles/primitives/timer.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-timer {
+    font-family: var(--cieo-font-mono); font-size: var(--cieo-text-body);
+    font-variant-numeric: tabular-nums; color: var(--cieo-color-text); white-space: nowrap;
+  }
+}

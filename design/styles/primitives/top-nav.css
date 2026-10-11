@@ -1,0 +1,5 @@
+/* design/styles/primitives/top-nav.css */
+@layer cieo.components {
+  :where(.cieo).cieo-top-nav { position: sticky; top: 0; background-color: var(--cieo-color-surface); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo).cieo-top-nav > nav { display: flex; align-items: center; gap: var(--cieo-space-3); padding-inline: var(--cieo-space-4); min-height: var(--cieo-control-height); }
+}

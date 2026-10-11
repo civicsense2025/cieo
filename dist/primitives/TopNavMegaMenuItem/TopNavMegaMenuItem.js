@@ -1,0 +1,6 @@
+// src/primitives/TopNavMegaMenuItem/TopNavMegaMenuItem.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function TopNavMegaMenuItem({ href, title, description }) {
+    return (_jsxs("a", { href: href, className: "cieo cieo-top-nav-mega-menu-item", children: [_jsx("span", { className: "cieo-top-nav-mega-menu-item-title", children: title }), description ? _jsx("span", { className: "cieo-top-nav-mega-menu-item-description", children: description }) : null] }));
+}

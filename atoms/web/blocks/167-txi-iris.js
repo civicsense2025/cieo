@@ -28,12 +28,12 @@ if (!document.getElementById('txi-css')){ const s = document.createElement('styl
 .txi-sh{position:absolute;inset:0;background:${DARK};opacity:0;pointer-events:none}
 .txi-bar{display:flex;align-items:center;gap:10px;flex:none}
 .txi-nav{display:flex;gap:6px;flex:none}
-.txi-b{width:36px;height:36px;display:grid;place-items:center;padding:0;border:1px solid var(--line);background:var(--card);border-radius:10px;cursor:pointer;color:var(--ink)}
+.txi-b{width:36px;height:36px;display:grid;place-items:center;padding:0;border:1.5px solid var(--muted);background:var(--card);border-radius:10px;cursor:pointer;color:var(--ink)}
 .txi-b:hover{background:var(--raised)}
 .txi-cap{position:relative;flex:1;min-width:0;height:36px}
 .txi-cap>span{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .txi-cap b{font-size:13.5px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.txi-cap i{font-style:normal;font-size:12px;line-height:1.3;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.txi-cap i{font-style:normal;font-size:12px;line-height:1.3;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
 .txi-live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .txi-scr{display:flex;align-items:center;gap:8px;flex:none;font-size:12px;color:var(--muted)}
 .txi-scr input{width:clamp(96px,24cqi,210px);margin:0;accent-color:var(--ink);cursor:ew-resize}
@@ -41,7 +41,7 @@ if (!document.getElementById('txi-css')){ const s = document.createElement('styl
 @container (max-width:470px){.txi-bar{flex-wrap:wrap;row-gap:8px}.txi-cap{order:-1;flex:1 0 100%;height:34px}.txi-scr{flex:1;min-width:0}.txi-scr input{flex:1;width:auto;min-width:0}}
 .txi-plate{position:absolute;inset:0;background:var(--card)}
 .txi-gcap{position:absolute;left:0;right:0;height:32px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--ink);white-space:nowrap;padding:0 12px}
-.txi-gcap b{font-weight:600;overflow:hidden;text-overflow:ellipsis}.txi-gcap i{font-style:normal;color:var(--faint);font-variant-numeric:tabular-nums}
+.txi-gcap b{font-weight:600;overflow:hidden;text-overflow:ellipsis}.txi-gcap i{font-style:normal;color:var(--muted);font-variant-numeric:tabular-nums}
 .txi-dr{position:absolute;left:0;right:0;overflow:hidden}
 .txi-ho{position:absolute;left:0;top:0;width:100%}
 .txi-hero{position:absolute;left:0;right:0;top:0;border-radius:12px;background:${DARK};touch-action:pan-y;cursor:grab}
@@ -53,9 +53,9 @@ if (!document.getElementById('txi-css')){ const s = document.createElement('styl
 .txi-pn{position:absolute;top:0;overflow:hidden;border-radius:12px;background:${DARK}}
 .txi-hit{position:absolute;inset:0;touch-action:pan-y;cursor:grab}
 .txi-dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;padding:3px 5px;border-radius:999px;background:var(--card);box-shadow:var(--shadow)}
-.txi-dot{position:relative;width:22px;height:22px;border:0;padding:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px}
+.txi-dot{position:relative;width:24px;height:24px;border:0;padding:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px}
 .txi-dot i{width:6px;height:6px;border-radius:50%;background:var(--faint)}
-.txi-dind{position:absolute;left:0;top:11px;width:16px;height:6px;margin-top:-3px;border-radius:3px;background:var(--ink);pointer-events:none}
+.txi-dind{position:absolute;left:0;top:15px;width:16px;height:6px;margin-top:-3px;border-radius:3px;background:var(--ink);pointer-events:none}
 `; document.head.appendChild(s); }
 
 const shell = (id, label, inner = '', bare = false) => `<div class="txi-k"><div class="txi-f${bare ? ' txi-bare' : ''}" tabindex="0" role="group" aria-roledescription="slideshow" aria-label="${label}. Arrow keys or swipe to change photo.">${inner}</div><div class="txi-bar"><div class="txi-nav"><button type="button" class="txi-b" data-a="prev" aria-label="Previous photo">${ic(CL, 16)}</button><button type="button" class="txi-b" data-a="next" aria-label="Next photo">${ic(CR, 16)}</button></div><div class="txi-cap" aria-hidden="true"><span><b></b><i></i></span><span><b></b><i></i></span></div><span class="txi-live" aria-live="polite"></span><label class="txi-scr" for="${id}-scrub"><span>Scrub</span><input type="range" id="${id}-scrub" min="0" max="1000" step="1" value="1000" aria-label="Scrub through the last transition"><output class="num" for="${id}-scrub">100%</output></label></div></div>`;
@@ -452,7 +452,7 @@ void main(){ vec2 q = Q(); vec3 c = tx(q).rgb; float a;
 
 /* ================================================================ 10. Shared element: thumbnail to hero */
 atom({ id:'txi-flip', cat:'Image transitions', name:'Thumbnail to hero', block:'gallery with thumbnail strip, product images', fam:['M','D'], wide:true, tall:true,
-  html:shell('txi-flip', 'Thumbnail to hero gallery', `<div class="txi-hero"></div>${'<button type="button" class="txi-th"><img alt=""></button>'.repeat(6)}<div class="txi-ls"></div>`, true),
+  html:shell('txi-flip', 'Thumbnail to hero gallery', `<div class="txi-hero"></div>${'<button type="button" class="txi-th" aria-label="Show photo"><img alt=""></button>'.repeat(6)}<div class="txi-ls"></div>`, true),
   desc:'The thumbnail you choose lifts out of the strip and grows into the hero along a curved path: it rises first, then widens as it lands, while its slot stays outlined until it arrives and the old hero dims beneath. Use it for galleries with a visible strip or grid, so people see where the big photo came from.',
   api:'rect = { cx: lerp(th, hero, p), cy: lerp(th, hero, 1 − (1 − p)^1.8), size: lerp(th, hero, p^1.25) }',
   init(st){
@@ -500,7 +500,7 @@ void main(){ vec2 q = Q(); vec3 c = tx(q).rgb;
 
 /* ================================================================ 12. Fly-to strip (zoom out with speed, own invention) */
 atom({ id:'txi-flyto', cat:'Image transitions', name:'Fly-to strip', block:'chapters, numbered steps, long galleries', fam:['M','D'], wide:true, tall:true,
-  html:shell('txi-flyto', 'Fly-to strip', `<div class="txi-trk" aria-hidden="true">${'<div class="txi-pn"><img alt=""><i class="txi-sh"></i></div>'.repeat(8)}</div><div class="txi-hit"></div><div class="txi-dots" role="group" aria-label="Jump to photo"><i class="txi-dind"></i>${'<button type="button" class="txi-dot"><i></i></button>'.repeat(8)}</div>`),
+  html:shell('txi-flyto', 'Fly-to strip', `<div class="txi-trk" aria-hidden="true">${'<div class="txi-pn"><img alt=""><i class="txi-sh"></i></div>'.repeat(8)}</div><div class="txi-hit"></div><div class="txi-dots" role="group" aria-label="Jump to photo"><i class="txi-dind"></i>${'<button type="button" class="txi-dot" aria-label="Jump to photo"><i></i></button>'.repeat(8)}</div>`),
   desc:'The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.',
   api:'pos.set(i); zoom = 1 − min(.44, .1·|d pos/dt|^.85); view = translate(center − pos·(W + gap)·zoom) scale(zoom)',
   init(st){

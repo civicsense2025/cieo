@@ -2,7 +2,7 @@
 
 atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, nav-menu, search-trigger, cta-button, reading-progress', fam:['M','E','S','X','D'], wide:true, tall:true,
   html:`<style>
-.sh{position:absolute;inset:10px 12px;isolation:isolate;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;text-align:left}
+.sh{position:absolute;inset:10px 12px;isolation:isolate;border:0;border-radius:14px;background:var(--card);overflow:hidden;text-align:left}
 .sh-pg{position:absolute;inset:0;overflow:auto;overscroll-behavior:contain}
 .sh-hd{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:0 20px;background:var(--card);border-bottom:1px solid var(--line-soft)}
 .sh-sd{position:absolute;left:0;right:0;top:0;bottom:-1px;pointer-events:none;box-shadow:var(--shadow);opacity:0;z-index:-1}
@@ -15,10 +15,10 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
 .sh-hl{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--raised);opacity:0}
 .sh-ul{position:absolute;left:0;bottom:3px;height:2px;border-radius:1px;background:var(--ink)}
 .sh-rt{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
-.sh-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:none}
+.sh-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);box-shadow:inset 0 0 0 1.5px var(--muted);overflow:hidden;flex:none}
 .sh-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center}
 .sh-sx input{position:absolute;left:34px;right:12px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;user-select:text;-webkit-user-select:text}
-.sh-cta{height:36px;padding:0 14px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--card);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
+.sh-cta{height:36px;padding:0 14px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
 .sh-mb{display:none;position:relative;width:36px;height:36px;border:0;background:none;cursor:pointer;flex:none}
 .sh-mb i{position:absolute;top:0;left:9px;width:18px;height:2px;border-radius:1px;background:var(--ink)}
 .sh-rp{position:absolute;left:0;bottom:-1px;height:2px;background:var(--accent)}
@@ -67,6 +67,10 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
     const underline = inst => { const [l,r] = g(links[cur]); inst ? u.jump(l + 12, r - 12) : u.go(l + 12, r - 12); };
     pg.onscroll = () => c.set(pg.scrollTop > 16 ? 1 : 0);
     cta.onpointerdown = () => cp.set(1); cta.onpointerup = cta.onpointerleave = () => cp.set(0);
+    // a press swaps the label to a confirmation for 1.8s, then restores it
+    let ctaT = 0;
+    const startFree = () => { cta.textContent = 'Trial started'; cta.style.background = 'var(--success)'; clearTimeout(ctaT); ctaT = setTimeout(() => { cta.textContent = 'Start free'; cta.style.background = ''; }, 1800); };
+    cta.onclick = startFree;
     const setSearch = on => { searchOn = on; sb.setAttribute('aria-expanded', on); const t0 = now(), W = hd.clientWidth, n = pg.clientWidth < 640;
       sxw.set(on ? (n ? Math.max(120, W - 76) : 220) : 36); sio.set(on ? 1 : 0, on ? S.base : S.snap, on ? t0 + .12 : t0);
       logoC.p.set(on && n ? 0 : 1); navC.p.set(on && !n && W < 980 ? 0 : 1); if (on) setTimeout(() => inp.focus(), 0); };
@@ -77,7 +81,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
       if (inst){ mo.jump(on ? 1 : 0); mitems.forEach(x => x.o.jump(on ? 1 : 0)); return; }
       mo.set(on ? 1 : 0); mitems.forEach((x,i) => on ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (on) setTimeout(() => mlinks[0].a.focus(), 0); };
     mb.onclick = () => setMenu(!menuOn);
-    mitems.forEach(x => x.a.onclick = e => { e.preventDefault(); if (menuOn) setMenu(false); });
+    mitems.forEach(x => x.a.onclick = e => { e.preventDefault(); if (x.a === mcta) startFree(); if (menuOn) setMenu(false); });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOn){ setMenu(false); mb.focus(); } });
     const measure = () => { navC.measure(); logoC.measure(); };
     const relayout = () => { measure(); underline(true); };

@@ -5,7 +5,7 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
   init(st){
     const box = $(st,'.opts'), N = ['Ferry Building','Lands End','Dolores Park'];
     const votes = [5, 3, 2]; let mine = -1, show = true;
-    const rows = N.map((n,i) => { const r = document.createElement('button'); r.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--card);padding:10px 12px;cursor:pointer;overflow:hidden';
+    const rows = N.map((n,i) => { const r = document.createElement('button'); r.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-radius:10px;background:var(--card);padding:11px 13px;cursor:pointer;overflow:hidden';
       r.innerHTML = `<i class="fl" style="position:absolute;left:0;top:0;bottom:0;background:var(--raised);width:0"></i><i class="tint" style="position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in oklab,var(--accent-tint) 70%, transparent)"></i><span style="position:relative;flex:1;font-size:14px;line-height:1.5">${n}</span><b class="tt" style="position:relative;font-size:13px;font-variant-numeric:tabular-nums"></b><span class="mk" style="position:relative;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;padding:0;font-size:12px;color:var(--success)"></span>`;
       r.setAttribute('aria-pressed', 'false'); box.appendChild(r);
       r.onclick = () => { if (mine === i) mine = -1; else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };

@@ -1,0 +1,9 @@
+/* design/styles/primitives/code.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-code {
+    font-family: var(--cieo-font-mono); font-size: var(--cieo-text-small);
+    color: var(--cieo-color-text); background: var(--cieo-color-accent-soft);
+    padding: var(--cieo-space-0) var(--cieo-space-1); border-radius: var(--cieo-radius-small);
+    white-space: nowrap;
+  }
+}

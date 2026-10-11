@@ -1,0 +1,120 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.auth-credential-form",
+  "componentVersion": "1.0.0",
+  "name": "AuthCredentialForm",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AuthCredentialForm/AuthCredentialForm.tsx",
+    "symbol": "AuthCredentialForm"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "id",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "mode",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "signin",
+          "signup"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "signin",
+      "constraints": {}
+    },
+    {
+      "id": "pending",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "error",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [
+    {
+      "id": "onSubmit",
+      "payload": "string"
+    }
+  ],
+  "variants": [
+    "error",
+    "pending"
+  ],
+  "styleParts": [],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-animation-in-rows"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "id",
+        "mode",
+        "pending",
+        "error"
+      ],
+      "states": [],
+      "events": [
+        "onSubmit"
+      ],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Email plus password plus submit for sign in and sign up."
+  },
+  "extensions": {}
+}

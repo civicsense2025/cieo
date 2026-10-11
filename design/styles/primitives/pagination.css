@@ -1,0 +1,6 @@
+/* design/styles/primitives/pagination.css */
+@layer cieo.components {
+  :where(.cieo).cieo-pagination { display: flex; align-items: center; gap: var(--cieo-space-1); }
+  :where(.cieo).cieo-pagination button { min-height: var(--cieo-control-small); padding-inline: var(--cieo-space-2); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-pagination button[aria-current='page'] { font-weight: var(--cieo-weight-medium); border-block-end: var(--cieo-border-width) solid var(--cieo-color-accent); }
+}

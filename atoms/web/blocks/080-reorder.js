@@ -7,7 +7,7 @@ atom({ id:'reorder', cat:'Dynamic', name:'Drag to reorder', block:'collection, n
   init(st){
     const box = $(st,'.ro2'), N = ['Home','About','Journal','Shop','Contact'], R = 50;
     const rows = N.map((n,i) => { const r = document.createElement('div'); r.className = 'card row'; r.style.cssText += 'position:absolute;left:0;right:0;top:0;height:44px;padding:0 12px;gap:10px;touch-action:none;cursor:grab';
-      r.innerHTML = `<span style="color:var(--faint)">${ic(I.grip,16)}</span><span class="small" style="font-weight:500;flex:1">${n}</span><span class="small muted num"></span>`; box.appendChild(r); return { r, n, num:$$(r,'span')[2], y:new Track(i*R), lift:new Track(0, S.snap) }; });
+      r.innerHTML = `<span style="color:var(--muted)">${ic(I.grip,16)}</span><span class="small" style="font-weight:500;flex:1">${n}</span><span class="small muted num"></span>`; box.appendChild(r); return { r, n, num:$$(r,'span')[2], y:new Track(i*R), lift:new Track(0, S.snap) }; });
     let order = rows.slice(), held = null, hy = 0, sy = 0;
     const lay = () => order.forEach((r,i) => { if (r !== held) r.y.set(i*R); r.num.textContent = i + 1; });
     rows.forEach(r => drag(r.r, { down:p => { held = r; sy = r.y.at() - p.cy; hy = r.y.at(); r.lift.set(1); r.r.style.zIndex = 5; },

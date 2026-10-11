@@ -7,13 +7,16 @@ atom({ id:'reviewstars', cat:'Forms', name:'Review stars input', block:'stars, r
     const C = ['Tap a star', 'Poor', 'Fair', 'Good', 'Great', 'Loved it'];
     const L = C.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; cap.appendChild(e); return e; });
     const stars = []; for (let i = 0; i < 5; i++){ const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-label', (i + 1) + ' stars');
-      b.style.cssText = 'width:36px;height:36px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:var(--faint)';
+      b.style.cssText = 'width:36px;height:36px;padding:0;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:var(--muted)';
       b.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"><path d="M12 3.5 14.8 9l5.9.6-4.4 4 1.2 5.9L12 16.4 6.5 19.5l1.2-5.9-4.4-4L9.2 9z"/></svg>';
       row.appendChild(b); stars.push(b); }
     const fill = new Track(0), sw = new Swap(0), done = new Track(0), bsw = new Swap(0);
+    // the caption layers are absolute: anchor them to the button so they cannot cover the stars
+    sub.style.position = 'relative'; sub.style.overflow = 'hidden'; sub.textContent = '';
     const BL = ['Submit review', 'Thanks — review posted']; const BLy = BL.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; sub.appendChild(e); return e; });
     let score = 0, held = false;
-    const val = e => { const r = row.getBoundingClientRect(); const p = clamp((e.clientX - r.left) / r.width) * 5; return hf.checked ? Math.round(p * 2) / 2 : Math.round(p); };
+    // map the pointer onto the five stars themselves, not the row (the row is wider than the stars)
+    const val = e => { const a = stars[0].getBoundingClientRect(), z = stars[4].getBoundingClientRect(); const p = clamp((e.clientX - a.left) / (z.right - a.left)) * 5; return hf.checked ? Math.round(p * 2) / 2 : Math.round(p); };
     const paint = v => stars.forEach((b, i) => { const f = clamp(v - i, 0, 1); b.style.color = mix(f, 'var(--warning)', 'var(--faint)'); b.firstChild.setAttribute('fill', f > .75 ? 'currentColor' : 'none'); b.style.transform = `scale(${(1 + .12 * (f > 0 && f < 1 ? 1 : 0)).toFixed(3)})`; });
     stars.forEach((b, i) => { b.onclick = () => { score = i + 1; fill.set(score, S.base); sw.to(score); stars.forEach((x, j) => x.setAttribute('aria-checked', j < score)); }; });
     row.addEventListener('pointerdown', e => { held = true; row.setPointerCapture(e.pointerId); const v = val(e); fill.jump(v); paint(v); });

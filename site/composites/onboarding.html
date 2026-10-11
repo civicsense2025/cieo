@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Onboarding · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<style>
+body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canvas);color:var(--cieo-color-text)}
+.onboard-skip{position:absolute;inset-inline-start:var(--cieo-space-3);top:-120px;padding:var(--cieo-space-2) var(--cieo-space-3);border-radius:var(--cieo-radius-control);background:var(--cieo-color-accent);color:var(--cieo-color-on-accent);z-index:1}
+.onboard-skip:focus{top:var(--cieo-space-2)}
+.onboard-layout{display:grid;gap:var(--cieo-space-4);max-width:56rem;margin-inline:auto;padding:var(--cieo-space-4)}
+.onboard-stepper{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2);list-style:none;margin:0 0 var(--cieo-space-2);padding:0}
+.onboard-stepper button{font:inherit;padding:var(--cieo-space-2) var(--cieo-space-3);border:var(--cieo-border-width) solid var(--cieo-color-border);border-radius:var(--cieo-radius-control);background:var(--cieo-color-surface);color:var(--cieo-color-text);cursor:pointer}
+.onboard-stepper button[aria-current="step"]{border-color:var(--cieo-color-accent);background:var(--cieo-color-accent-soft);color:var(--cieo-color-accent)}
+.onboard-card{background:var(--cieo-color-surface);border:var(--cieo-border-width) solid var(--cieo-color-border);border-radius:var(--cieo-radius-surface);padding:var(--cieo-space-3)}
+.onboard-field{display:grid;gap:var(--cieo-space-1);margin-block-end:var(--cieo-space-3)}
+.onboard-field input[type="text"],.onboard-field input[type="email"],.onboard-field select{font:inherit;color:var(--cieo-color-text);background:var(--cieo-color-surface);border:var(--cieo-border-width) solid var(--cieo-color-border);border-radius:var(--cieo-radius-control);padding:var(--cieo-space-2) var(--cieo-space-3);min-height:var(--cieo-control-height)}
+.onboard-field [aria-invalid="true"]{border-color:var(--cieo-color-danger)}
+.onboard-avatars{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2)}
+.onboard-avatar{display:flex;align-items:center;gap:var(--cieo-space-2);border:var(--cieo-border-width) solid var(--cieo-color-border);border-radius:var(--cieo-radius-control);padding:var(--cieo-space-2) var(--cieo-space-3);cursor:pointer}
+.onboard-avatar input{accent-color:var(--cieo-color-accent)}
+.onboard-face{display:inline-grid;place-items:center;width:2rem;height:2rem;border-radius:var(--cieo-radius-pill);background:var(--cieo-color-accent-soft);color:var(--cieo-color-accent);font-weight:700}
+.onboard-check{display:flex;align-items:center;gap:var(--cieo-space-2);margin-block-end:var(--cieo-space-3)}
+.onboard-check input{accent-color:var(--cieo-color-accent)}
+.onboard-actions{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2);margin-block-start:var(--cieo-space-3)}
+.onboard-actions button{font:inherit;padding:var(--cieo-space-2) var(--cieo-space-3);min-height:var(--cieo-control-height);border:var(--cieo-border-width) solid var(--cieo-color-border);border-radius:var(--cieo-radius-control);background:var(--cieo-color-surface);color:var(--cieo-color-text);cursor:pointer}
+.onboard-actions button[data-next],.onboard-actions button[data-copy]{background:var(--cieo-color-accent);border-color:var(--cieo-color-accent);color:var(--cieo-color-on-accent)}
+.onboard-code{font-size:1.1rem;letter-spacing:.04em}
+.onboard-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.onboard-built ul{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2);list-style:none;margin:var(--cieo-space-2) 0 0;padding:0}
+:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
+@media (prefers-reduced-motion:reduce){.onboard-layout *{animation:none;transition:none}}
+</style>
+</head>
+<body>
+<a class="onboard-skip" href="#onboard-main">Skip to main content</a>
+<header class="onboard-layout">
+<p><a href="./index.html">Composites</a></p>
+<h1>Get set up in four short moves</h1>
+<p>Welcome, profile, preferences, done — every step reads on this page with scripts off, and the stepper only moves forward once each step checks out.</p>
+</header>
+<main class="onboard-layout" id="onboard-main" data-parts="Stepper Step ProgressBar Field FieldStatus Card Avatar RadioList RadioListItem Banner Badge Heading Text List ListItem MetadataList MetadataListItem Kbd">
+<section class="onboard-card" aria-label="Onboarding progress">
+<h2 class="cieo-p-heading">Where you are</h2>
+<ol class="cieo-p-stepper onboard-stepper" data-stepper aria-label="Onboarding steps">
+<li class="cieo-p-step"><button type="button" data-step="welcome" aria-current="step">Welcome</button></li>
+<li class="cieo-p-step"><button type="button" data-step="profile">Profile</button></li>
+<li class="cieo-p-step"><button type="button" data-step="preferences">Preferences</button></li>
+<li class="cieo-p-step"><button type="button" data-step="done">Done</button></li>
+</ol>
+<progress class="cieo cieo-progress" data-progress value="1" max="4" aria-label="Onboarding progress"></progress>
+<p class="cieo-p-text" data-progress-text>Step 1 of 4 — Welcome.</p>
+<p class="onboard-visually-hidden" role="status" data-status></p>
+</section>
+<section class="onboard-card" aria-labelledby="onboard-welcome-heading" data-step-panel="welcome">
+<h2 class="cieo-p-heading" id="onboard-welcome-heading" tabindex="-1">Welcome to Cieo</h2>
+<p class="cieo-p-text">Three minutes now saves ten later: tell us who is joining, shape a quiet workspace, then grab an invite code for a teammate.</p>
+<ul class="cieo cieo-p-list">
+<li class="cieo-p-list-item">Profile takes one screen — a name, an email, and a face for the room.</li>
+<li class="cieo-p-list-item">Preferences stay boring on purpose — a theme, a switch, and a digest rhythm.</li>
+<li class="cieo-p-list-item">Done lands with a summary and an invite code that never leaves this page.</li>
+</ul>
+<p class="onboard-actions"><button type="button" data-next="profile">Begin setup</button> <button type="button" data-skip="done">Skip setup</button></p>
+</section>
+<section class="onboard-card" aria-labelledby="onboard-profile-heading" data-step-panel="profile">
+<h2 class="cieo-p-heading" id="onboard-profile-heading" tabindex="-1">Tell us who is joining</h2>
+<p class="cieo-p-text">This is the name teammates see and the email receipts reach. Nothing is sent anywhere.</p>
+<div class="cieo-p-field onboard-field">
+<label for="onboard-name">Display name</label>
+<input id="onboard-name" name="name" type="text" autocomplete="name" data-name aria-describedby="onboard-name-error">
+<p class="cieo cieo-p-field-status" role="alert" data-name-error id="onboard-name-error" hidden>Add a display name so the room knows what to call you.</p>
+</div>
+<div class="cieo-p-field onboard-field">
+<label for="onboard-email">Email</label>
+<input id="onboard-email" name="email" type="email" autocomplete="email" data-email aria-describedby="onboard-email-error" placeholder="you@example.com">
+<p class="cieo cieo-p-field-status" role="alert" data-email-error id="onboard-email-error" hidden>Add an email like you@example.com — it needs text on both sides of the @ sign.</p>
+</div>
+<fieldset data-avatar-group>
+<legend>Pick an avatar</legend>
+<div class="onboard-avatars">
+<label class="onboard-avatar"><input type="radio" name="avatar" value="Harbor" checked> <span class="cieo-p-avatar onboard-face" aria-hidden="true">H</span> Harbor</label>
+<label class="onboard-avatar"><input type="radio" name="avatar" value="Dune" > <span class="cieo-p-avatar onboard-face" aria-hidden="true">D</span> Dune</label>
+<label class="onboard-avatar"><input type="radio" name="avatar" value="Meadow"> <span class="cieo-p-avatar onboard-face" aria-hidden="true">M</span> Meadow</label>
+</div>
+</fieldset>
+<p class="onboard-actions"><button type="button" data-back="welcome">Back</button> <button type="button" data-next="preferences">Continue</button> <button type="button" data-skip="preferences">Skip this step</button></p>
+</section>
+<section class="onboard-card" aria-labelledby="onboard-prefs-heading" data-step-panel="preferences">
+<h2 class="cieo-p-heading" id="onboard-prefs-heading" tabindex="-1">Shape the workspace</h2>
+<p class="cieo-p-text">Pick how Cieo looks and how loudly it talks to you. Both choices wait for you — the step holds until each has an answer.</p>
+<fieldset class="cieo-p-radio-list" data-theme-group>
+<legend>Theme</legend>
+<p class="cieo cieo-p-field-status" role="alert" data-theme-error id="onboard-theme-error" hidden>Pick a theme to continue — light, dark, or system.</p>
+<label class="cieo-p-radio-list-item"><input type="radio" name="theme" value="Light" data-theme> Light — paper-bright surfaces</label>
+<label class="cieo-p-radio-list-item"><input type="radio" name="theme" value="Dark" data-theme> Dark — low-light evenings</label>
+<label class="cieo-p-radio-list-item"><input type="radio" name="theme" value="System" data-theme> System — follow this device</label>
+</fieldset>
+<div class="onboard-check">
+<input id="onboard-notify" type="checkbox" role="switch" checked data-notify>
+<label for="onboard-notify">Product notifications</label>
+</div>
+<div class="cieo-p-field onboard-field">
+<label for="onboard-digest">Digest emails</label>
+<select id="onboard-digest" data-digest aria-describedby="onboard-digest-error">
+<option value="">Choose a rhythm…</option>
+<option value="daily">Daily roundup</option>
+<option value="weekly">Weekly roundup</option>
+<option value="off">Off — quiet please</option>
+</select>
+<p class="cieo cieo-p-field-status" role="alert" data-digest-error id="onboard-digest-error" hidden>Choose a digest rhythm to continue — daily, weekly, or off.</p>
+</div>
+<p class="onboard-actions"><button type="button" data-back="profile">Back</button> <button type="button" data-next="done">Finish setup</button> <button type="button" data-skip="done">Skip this step</button></p>
+</section>
+<section class="onboard-card" aria-labelledby="onboard-done-heading" data-step-panel="done" data-success>
+<h2 class="cieo-p-heading" id="onboard-done-heading" tabindex="-1" data-done-heading>All set</h2>
+<div class="cieo cieo-p-banner">
+<p class="cieo-p-banner-title">Setup complete.</p>
+</div>
+<p class="cieo-p-text"><span class="cieo cieo-badge" data-status="success" data-done-badge>Ready to explore</span> Here is what Cieo remembered — kept on this page only.</p>
+<dl class="cieo-metadata-list" data-summary>
+<div class="cieo-metadata-list-item"><dt>Name</dt><dd data-summary-name>—</dd></div>
+<div class="cieo-metadata-list-item"><dt>Email</dt><dd data-summary-email>—</dd></div>
+<div class="cieo-metadata-list-item"><dt>Avatar</dt><dd data-summary-avatar>—</dd></div>
+<div class="cieo-metadata-list-item"><dt>Theme</dt><dd data-summary-theme>—</dd></div>
+<div class="cieo-metadata-list-item"><dt>Notifications</dt><dd data-summary-notify>—</dd></div>
+<div class="cieo-metadata-list-item"><dt>Digest</dt><dd data-summary-digest>—</dd></div>
+</dl>
+<h3 class="cieo-p-heading">Invite a teammate</h3>
+<p class="cieo-p-text">Hand them this code at the door — it carries your initials so the room knows who sent them.</p>
+<p class="cieo-p-text"><code class="onboard-code" data-referral-code>CIEO-START-7Q2D</code></p>
+<p class="onboard-actions"><button type="button" data-copy>Copy invite code</button></p>
+<p class="cieo cieo-p-field-status" role="status" data-copy-status></p>
+<p class="onboard-actions"><button type="button" data-restart>Start over</button> <button type="button" data-back="preferences">Review preferences</button></p>
+</section>
+<section aria-label="Behavior">
+<h2 class="cieo-p-heading">Behavior</h2>
+<ul>
+<li>Every step reads with scripts disabled; the stepper only takes over once scripts load.</li>
+<li>Forward moves validate first — a missing name, a broken email, an unpicked theme, or an unchosen digest each raise their own inline note and hold the step.</li>
+<li>Skip links jump without validating; skipped answers read as — in the summary.</li>
+<li>The meter and the stepper track the open step and announce it to assistive tech.</li>
+<li>Copy uses the async clipboard first and drops to a local select-and-copy fallback; the code never leaves this page.</li>
+<li>Start over returns to Welcome and restores the defaults.</li>
+<li>Keyboard path: <kbd class="cieo cieo-p-kbd">Tab</kbd> reaches every control, <kbd class="cieo cieo-p-kbd">Enter</kbd> advances from a text field, <kbd class="cieo cieo-p-kbd">Left</kbd> and <kbd class="cieo cieo-p-kbd">Right</kbd> move across the stepper, <kbd class="cieo cieo-p-kbd">Esc</kbd> steps back one screen.</li>
+<li>Reduced motion is honored — transitions switch off and focus moves without scrolling.</li>
+</ul>
+</section>
+<section aria-label="Related screens">
+<h2 class="cieo-p-heading">Related screens</h2>
+<ul>
+<li><a href="./dashboard.html">Admin dashboard</a> — tune store settings once the workspace feels like home.</li>
+<li><a href="./booking.html">Booking</a> — put the new profile to work and hold a visit.</li>
+<li><a href="./chat.html">Chat workspace</a> — ask the local demo anything about theming.</li>
+<li><a href="./storefront.html">Storefront</a> — browse the shelves with fresh preferences in place.</li>
+</ul>
+</section>
+<section class="onboard-built" data-built-from>
+<h2 class="cieo-p-heading">Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
+<ul>
+<li><a href="../components/Stepper.html">Stepper</a></li>
+<li><a href="../components/Step.html">Step</a></li>
+<li><a href="../components/ProgressBar.html">ProgressBar</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Avatar.html">Avatar</a></li>
+<li><a href="../components/RadioList.html">RadioList</a></li>
+<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/Badge.html">Badge</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/List.html">List</a></li>
+<li><a href="../components/ListItem.html">ListItem</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/MetadataListItem.html">MetadataListItem</a></li>
+<li><a href="../components/Kbd.html">Kbd</a></li>
+</ul>
+</section>
+</main>
+<script src="./onboarding.js" defer></script>
+</body>
+</html>

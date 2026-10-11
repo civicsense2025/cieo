@@ -1,0 +1,4 @@
+/* design/styles/primitives/checkbox-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-checkbox-list { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; }
+}

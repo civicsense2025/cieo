@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inbox · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<style>
+.cieo-inbox-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans)}
+.cieo-inbox-grid{display:grid;gap:var(--cieo-space-4)}
+.cieo-inbox-search-row{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2);align-items:end}
+.cieo-inbox-list{overflow-y:auto;max-block-size:70vh;scroll-behavior:smooth}
+.cieo-inbox-threads ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--cieo-space-2)}
+.cieo-inbox-threads button{width:100%;text-align:start;font:inherit;color:var(--cieo-color-text);background:transparent;border:var(--cieo-border-width) solid transparent;border-radius:var(--cieo-radius-control);padding:var(--cieo-space-2) var(--cieo-space-3);cursor:pointer;display:grid;gap:var(--cieo-space-1)}
+.cieo-inbox-threads button[aria-current="true"]{background:var(--cieo-color-accent-soft);color:var(--cieo-color-accent);border-color:var(--cieo-color-accent)}
+.cieo-inbox-row-top{display:flex;gap:var(--cieo-space-2);align-items:center;justify-content:space-between}
+.cieo-inbox-subject{font-weight:600}
+.cieo-inbox-snippet{color:var(--cieo-color-muted)}
+.cieo-inbox-actions{display:flex;gap:var(--cieo-space-2);flex-wrap:wrap}
+.cieo-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
+@media (min-width:48rem){
+.cieo-inbox-grid{grid-template-columns:16rem minmax(0,1fr)}
+}
+@media (prefers-reduced-motion: reduce){
+.cieo-inbox-list{scroll-behavior:auto}
+}
+</style>
+</head>
+<body class="cieo">
+<div class="cieo-inbox-page">
+<header>
+<p><a href="./index.html">Composites</a></p>
+<h1 data-parts="Heading">Inbox</h1>
+<p data-parts="Text">Six seeded threads with local replies, archive, and undo — nothing ever leaves this page.</p>
+<nav aria-label="More demos">
+<p data-parts="Text">Also try the <a href="./chat.html">chat workspace</a>, the <a href="./booking.html">booking flow</a>, or the <a href="./dashboard.html">admin dashboard</a>.</p>
+</nav>
+</header>
+<main data-parts="Layout LayoutHeader LayoutContent LayoutPanel List ListItem Heading Text Badge Timestamp Avatar Field FieldStatus Banner EmptyState Card Kbd Toolbar MetadataList MetadataListItem" data-inbox>
+<div data-parts="Layout">
+<div data-parts="LayoutHeader">
+<div class="cieo-inbox-search-row" data-parts="Field">
+<label for="inbox-search">Search mail</label>
+<input id="inbox-search" data-search type="search" placeholder="Search senders or subjects…" autocomplete="off">
+<p data-parts="Text" data-count>6 threads, 3 unread</p>
+</div>
+</div>
+<div data-parts="LayoutContent" class="cieo-inbox-grid">
+<div data-parts="LayoutPanel">
+<nav class="cieo-inbox-threads" aria-label="Threads" data-threads>
+<h2 data-parts="Heading">Threads</h2>
+<ul data-parts="List" class="cieo-inbox-list">
+<li data-parts="ListItem" data-thread-row="kiln-schedule" data-unread>
+<button type="button" data-thread="kiln-schedule" aria-controls="panel-kiln-schedule" aria-current="true">
+<span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">MO</span><span data-parts="Badge" data-unread-badge>Unread</span></span>
+<span class="cieo-inbox-subject" data-thread-title>Kiln schedule for October</span>
+<span class="cieo-inbox-snippet" data-parts="Text">Mara Okonkwo — open shelves on the 14th</span>
+<time data-parts="Timestamp" datetime="2026-10-10T09:02">Oct 10 · 9:02 AM</time>
+</button>
+</li>
+<li data-parts="ListItem" data-thread-row="invoice-1042" data-unread>
+<button type="button" data-thread="invoice-1042" aria-controls="panel-invoice-1042">
+<span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">PN</span><span data-parts="Badge" data-unread-badge>Unread</span></span>
+<span class="cieo-inbox-subject" data-thread-title>Invoice 1042 is ready</span>
+<span class="cieo-inbox-snippet" data-parts="Text">Priya Nair — $86.40 due October 23</span>
+<time data-parts="Timestamp" datetime="2026-10-09T16:15">Oct 9 · 4:15 PM</time>
+</button>
+</li>
+<li data-parts="ListItem" data-thread-row="garden-rota">
+<button type="button" data-thread="garden-rota" aria-controls="panel-garden-rota">
+<span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">SW</span></span>
+<span class="cieo-inbox-subject" data-thread-title>Garden rota swap</span>
+<span class="cieo-inbox-snippet" data-parts="Text">Sam Whitfield — Saturday watering cover</span>
+<time data-parts="Timestamp" datetime="2026-10-09T11:20">Oct 9 · 11:20 AM</time>
+</button>
+</li>
+<li data-parts="ListItem" data-thread-row="book-club" data-unread>
+<button type="button" data-thread="book-club" aria-controls="panel-book-club">
+<span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">JP</span><span data-parts="Badge" data-unread-badge>Unread</span></span>
+<span class="cieo-inbox-subject" data-thread-title>Book club: next pick</span>
+<span class="cieo-inbox-snippet" data-parts="Text">June Park — the orchard memoir wins</span>
+<time data-parts="Timestamp" datetime="2026-10-08T18:05">Oct 8 · 6:05 PM</time>
+</button>
+</li>
+<li data-parts="ListItem" data-thread-row="lease-renewal">
+<button type="button" data-thread="lease-renewal" aria-controls="panel-lease-renewal">
+<span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">OB</span></span>
+<span class="cieo-inbox-subject" data-thread-title>Lease renewal paperwork</span>
+<span class="cieo-inbox-snippet" data-parts="Text">Otis Bell — sign both pages by the 20th</span>
+<time data-parts="Timestamp" datetime="2026-10-07T14:40">Oct 7 · 2:40 PM</time>
+</button>
+</li>
+<li data-parts="ListItem" data-thread-row="potluck">
+<button type="button" data-thread="potluck" aria-controls="panel-potluck">
+<span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">AR</span></span>
+<span class="cieo-inbox-subject" data-thread-title>Courtyard potluck list</span>
+<span class="cieo-inbox-snippet" data-parts="Text">Ana Ruiz — nine sides, no mains yet</span>
+<time data-parts="Timestamp" datetime="2026-10-06T10:12">Oct 6 · 10:12 AM</time>
+</button>
+</li>
+</ul>
+</nav>
+<div data-parts="EmptyState" data-empty-results hidden>
+<h2>No matching threads</h2>
+<p>No results for that search — clear it to see all six threads.</p>
+<p><button type="button" data-clear-search>Clear search</button></p>
+</div>
+<div data-parts="EmptyState" data-empty-threads hidden>
+<h2>No threads left</h2>
+<p>Empty inbox — every thread is archived or deleted. Undo above to bring one back.</p>
+</div>
+</div>
+<div data-parts="LayoutPanel" data-reading>
+<section data-thread-panel="kiln-schedule" id="panel-kiln-schedule" aria-label="Kiln schedule for October">
+<div data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-panel-heading>Kiln schedule for October</h2>
+<div data-parts="Toolbar" role="toolbar" aria-label="Actions for Kiln schedule for October">
+<button type="button" data-archive>Archive</button>
+<button type="button" data-delete>Delete</button>
+</div>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>From</dt><dd>Mara Okonkwo</dd></div>
+<div data-parts="MetadataListItem"><dt>Subject</dt><dd>Kiln schedule for October</dd></div>
+<div data-parts="MetadataListItem"><dt>Date</dt><dd><time data-parts="Timestamp" datetime="2026-10-10T09:02">Oct 10 · 9:02 AM</time></dd></div>
+</dl>
+<div data-messages>
+<p data-parts="Text">Morning — the gas kiln has open shelves on the 14th and the 21st. Reply with your cone and shelf count and I will hold a spot through Friday.</p>
+<p data-parts="Text">Glazes with zinc need the back shelves; everything else can go up front.</p>
+</div>
+</div>
+</section>
+<section data-thread-panel="invoice-1042" id="panel-invoice-1042" aria-label="Invoice 1042 is ready">
+<div data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-panel-heading>Invoice 1042 is ready</h2>
+<div data-parts="Toolbar" role="toolbar" aria-label="Actions for Invoice 1042 is ready">
+<button type="button" data-archive>Archive</button>
+<button type="button" data-delete>Delete</button>
+</div>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>From</dt><dd>Priya Nair</dd></div>
+<div data-parts="MetadataListItem"><dt>Subject</dt><dd>Invoice 1042 is ready</dd></div>
+<div data-parts="MetadataListItem"><dt>Date</dt><dd><time data-parts="Timestamp" datetime="2026-10-09T16:15">Oct 9 · 4:15 PM</time></dd></div>
+</dl>
+<div data-messages>
+<p data-parts="Text">Invoice 1042 for the September firing totals $86.40. The due date is October 23 — pay at the desk or reply here and I will send a receipt.</p>
+</div>
+</div>
+</section>
+<section data-thread-panel="garden-rota" id="panel-garden-rota" aria-label="Garden rota swap">
+<div data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-panel-heading>Garden rota swap</h2>
+<div data-parts="Toolbar" role="toolbar" aria-label="Actions for Garden rota swap">
+<button type="button" data-archive>Archive</button>
+<button type="button" data-delete>Delete</button>
+</div>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>From</dt><dd>Sam Whitfield</dd></div>
+<div data-parts="MetadataListItem"><dt>Subject</dt><dd>Garden rota swap</dd></div>
+<div data-parts="MetadataListItem"><dt>Date</dt><dd><time data-parts="Timestamp" datetime="2026-10-09T11:20">Oct 9 · 11:20 AM</time></dd></div>
+</dl>
+<div data-messages>
+<p data-parts="Text">Can anyone take my Saturday watering shift? The tomatoes are nearly done but the beds still need a soak. I can cover the following weekend in return.</p>
+</div>
+</div>
+</section>
+<section data-thread-panel="book-club" id="panel-book-club" aria-label="Book club: next pick">
+<div data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-panel-heading>Book club: next pick</h2>
+<div data-parts="Toolbar" role="toolbar" aria-label="Actions for Book club: next pick">
+<button type="button" data-archive>Archive</button>
+<button type="button" data-delete>Delete</button>
+</div>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>From</dt><dd>June Park</dd></div>
+<div data-parts="MetadataListItem"><dt>Subject</dt><dd>Book club: next pick</dd></div>
+<div data-parts="MetadataListItem"><dt>Date</dt><dd><time data-parts="Timestamp" datetime="2026-10-08T18:05">Oct 8 · 6:05 PM</time></dd></div>
+</dl>
+<div data-messages>
+<p data-parts="Text">Votes are in: we are reading the orchard memoir next. First thirty pages by Thursday, and bring one question you actually want answered.</p>
+</div>
+</div>
+</section>
+<section data-thread-panel="lease-renewal" id="panel-lease-renewal" aria-label="Lease renewal paperwork">
+<div data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-panel-heading>Lease renewal paperwork</h2>
+<div data-parts="Toolbar" role="toolbar" aria-label="Actions for Lease renewal paperwork">
+<button type="button" data-archive>Archive</button>
+<button type="button" data-delete>Delete</button>
+</div>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>From</dt><dd>Otis Bell</dd></div>
+<div data-parts="MetadataListItem"><dt>Subject</dt><dd>Lease renewal paperwork</dd></div>
+<div data-parts="MetadataListItem"><dt>Date</dt><dd><time data-parts="Timestamp" datetime="2026-10-07T14:40">Oct 7 · 2:40 PM</time></dd></div>
+</dl>
+<div data-messages>
+<p data-parts="Text">Your renewal form is on the noticeboard. Sign both pages and return them by the 20th — the rate holds through spring for current members.</p>
+</div>
+</div>
+</section>
+<section data-thread-panel="potluck" id="panel-potluck" aria-label="Courtyard potluck list">
+<div data-parts="Card">
+<h2 data-parts="Heading" tabindex="-1" data-panel-heading>Courtyard potluck list</h2>
+<div data-parts="Toolbar" role="toolbar" aria-label="Actions for Courtyard potluck list">
+<button type="button" data-archive>Archive</button>
+<button type="button" data-delete>Delete</button>
+</div>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>From</dt><dd>Ana Ruiz</dd></div>
+<div data-parts="MetadataListItem"><dt>Subject</dt><dd>Courtyard potluck list</dd></div>
+<div data-parts="MetadataListItem"><dt>Date</dt><dd><time data-parts="Timestamp" datetime="2026-10-06T10:12">Oct 6 · 10:12 AM</time></dd></div>
+</dl>
+<div data-messages>
+<p data-parts="Text">The potluck list is up: nine sides so far, no mains yet. Add your dish by noon Friday so we can fill the gaps.</p>
+</div>
+</div>
+</section>
+<div data-parts="Banner" data-undo-banner role="status" hidden>
+<p data-parts="Text" data-undo-text>Thread moved.</p>
+<p><button type="button" data-undo>Undo</button></p>
+</div>
+<form data-composer data-parts="Field" aria-label="Reply to this thread">
+<label for="inbox-reply">Reply to <span data-reply-target>Kiln schedule for October</span></label>
+<textarea id="inbox-reply" data-reply rows="3" placeholder="Write a reply…"></textarea>
+<p data-parts="FieldStatus" data-reply-error role="alert" hidden>Write a reply before sending — empty replies stay on this page.</p>
+<p class="cieo-inbox-actions"><button type="submit" data-send>Send reply</button></p>
+</form>
+<p class="cieo-visually-hidden" role="status" data-status></p>
+</div>
+</div>
+</div>
+<section aria-labelledby="inbox-shortcuts">
+<h2 id="inbox-shortcuts" data-parts="Heading">Keyboard shortcuts</h2>
+<ul data-parts="List">
+<li data-parts="ListItem"><kbd data-parts="Kbd">Up</kbd><span data-parts="Text"> and </span><kbd data-parts="Kbd">Down</kbd><span data-parts="Text"> move through the thread list.</span></li>
+<li data-parts="ListItem"><kbd data-parts="Kbd">Enter</kbd><span data-parts="Text"> opens the focused thread and marks it read.</span></li>
+<li data-parts="ListItem"><kbd data-parts="Kbd">/</kbd><span data-parts="Text"> focuses search; </span><kbd data-parts="Kbd">r</kbd><span data-parts="Text"> focuses the reply box; </span><kbd data-parts="Kbd">Cmd</kbd><span data-parts="Text"> + </span><kbd data-parts="Kbd">Enter</kbd><span data-parts="Text"> sends; </span><kbd data-parts="Kbd">Esc</kbd><span data-parts="Text"> returns to the thread list.</span></li>
+<li data-parts="ListItem"><kbd data-parts="Kbd">a</kbd><span data-parts="Text"> archives, </span><kbd data-parts="Kbd">d</kbd><span data-parts="Text"> deletes, and </span><kbd data-parts="Kbd">u</kbd><span data-parts="Text"> undoes the last move.</span></li>
+</ul>
+</section>
+<section aria-label="Behavior">
+<h2 data-parts="Heading">Behavior</h2>
+<ul>
+<li>Selecting a thread shows its full message and marks it read; unread counts update on the page.</li>
+<li>Replies validate: empty sends show a fix-it note and stay put; valid replies append to the open thread only.</li>
+<li>Archive and delete hide the thread and raise an undo banner; Undo restores it and reselects it.</li>
+<li>Search narrows senders and subjects locally; no match shows the no-results state, no threads shows the empty-inbox state.</li>
+<li>Keyboard path: Tab reaches the list, arrows move, Enter opens, / jumps to search, r jumps to reply, Cmd+Enter sends, a archives, d deletes, u undoes, Escape returns to the list.</li>
+<li>Everything runs locally — replies, moves, and search never leave the page.</li>
+</ul>
+</section>
+<section aria-label="Related screens">
+<h2 data-parts="Heading">Related screens</h2>
+<ul>
+<li><a href="./chat.html">Chat workspace</a> — short live threads with a token budget.</li>
+<li><a href="./booking.html">Booking flow</a> — pick a day and hold a visit.</li>
+<li><a href="./storefront.html">Storefront</a> — product page with a live bag.</li>
+</ul>
+</section>
+<section data-built-from>
+<h2 data-parts="Heading">Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
+<ul>
+<li><a href="../components/Layout.html">Layout</a></li>
+<li><a href="../components/LayoutHeader.html">LayoutHeader</a></li>
+<li><a href="../components/LayoutContent.html">LayoutContent</a></li>
+<li><a href="../components/LayoutPanel.html">LayoutPanel</a></li>
+<li><a href="../components/List.html">List</a></li>
+<li><a href="../components/ListItem.html">ListItem</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/Badge.html">Badge</a></li>
+<li><a href="../components/Timestamp.html">Timestamp</a></li>
+<li><a href="../components/Avatar.html">Avatar</a></li>
+<li><a href="../components/Field.html">Field</a></li>
+<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
+<li><a href="../components/Banner.html">Banner</a></li>
+<li><a href="../components/EmptyState.html">EmptyState</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Kbd.html">Kbd</a></li>
+<li><a href="../components/Toolbar.html">Toolbar</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/MetadataListItem.html">MetadataListItem</a></li>
+</ul>
+</section>
+</main>
+</div>
+<script src="./inbox.js" defer></script>
+</body>
+</html>

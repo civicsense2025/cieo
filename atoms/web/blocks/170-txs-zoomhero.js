@@ -13,16 +13,16 @@ const pct = p => Math.round(clamp(p)*100) + '%';
 const CAP = n => PhotoKit.CAPTIONS[n];
 
 const BASE = `<style>
-.txs-f{--txs-h:538px;position:absolute;inset:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden;text-align:left;isolation:isolate}
+.txs-f{--txs-h:538px;position:absolute;inset:10px 12px;border-radius:14px;background:var(--card);overflow:hidden;text-align:left;isolation:isolate}
 .txs-sc{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
 .txs-sc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-.txs-ro{position:absolute;top:10px;right:10px;z-index:8;pointer-events:none;font:500 11.5px/1 var(--mono);color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.txs-ro{position:absolute;top:10px;right:10px;z-index:8;pointer-events:none;font:500 11.5px/1 var(--mono);color:var(--ink);background:var(--raised);border-radius:999px;padding:5px 9px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .txs-pin{position:sticky;top:0;height:var(--txs-h);overflow:hidden}
 .txs-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .txs-body{max-width:600px;margin:0 auto;padding:40px 22px 56px;line-height:1.6;color:var(--muted);font-size:14.5px}
 .txs-body h4{margin:0 0 10px;color:var(--ink);font-size:20px;line-height:1.2;letter-spacing:-.02em;font-weight:600;text-wrap:balance}
 .txs-body p{margin:0 0 12px}
-.txs-k{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:6px}
+.txs-k{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:6px}
 .txs-tag{background:#0C1016;color:#EFF2F6;border-radius:8px;padding:6px 10px;font-size:12.5px;line-height:1.35}
 .txs-tag b{font-weight:600}
 </style>`;
@@ -167,7 +167,7 @@ atom({ id:'txs-stackcards', cat:CAT, name:'Stacking cards', block:'feature-cards
 .txs3-in h3{margin:0;font-size:24px;line-height:1.15;letter-spacing:-.03em;font-weight:600;color:var(--ink)}
 .txs3-in p{margin:4px 0 0;font-size:13.5px;color:var(--muted)}
 .txs3-ls{padding:16px 16px 0}
-.txs3-cd{position:sticky;display:flex;gap:0;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;transform-origin:50% 0;box-shadow:var(--shadow);will-change:transform}
+.txs3-cd{position:sticky;display:flex;gap:0;background:var(--card);border-radius:14px;overflow:hidden;transform-origin:50% 0;box-shadow:var(--shadow);will-change:transform}
 .txs3-cd canvas{display:block;flex:none;background:var(--raised)}
 .txs3-tx{display:flex;flex-direction:column;justify-content:center;gap:8px;padding:22px 24px;min-width:0}
 .txs3-tx h4{margin:0;font-size:22px;line-height:1.15;letter-spacing:-.025em;font-weight:600;color:var(--ink);text-wrap:balance}
@@ -267,7 +267,7 @@ atom({ id:'txs-chapters', cat:CAT, name:'Chapter scrollytelling', block:'scrolly
 .txs5-w[data-n] .txs5-im{border-radius:0}
 .txs5-w[data-n] .txs5-cp{display:none}
 .txs5-w[data-n] .txs5-st{position:relative;z-index:2;margin-top:calc(var(--txs-h)*-1);padding:0 14px}
-.txs5-w[data-n] .txs5-s>div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+.txs5-w[data-n] .txs5-s>div{background:var(--card);border-radius:12px;padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
 .txs5-w[data-n] .txs5-s h4{font-size:19px}
 .txs5-w[data-n] .txs5-s p{font-size:13.5px}
 </style><div class="txs5-w"><div class="txs5-fg"><div class="txs5-im">${CH.map(c => `<canvas role="img" aria-label="Photograph: ${CAP(c.n)}"></canvas>`).join('')}<div class="txs5-dt" aria-hidden="true">${CH.map(() => '<i></i>').join('')}</div></div><div class="txs5-cp">${CH.map(c => `<span class="layer">${CAP(c.n)}</span>`).join('')}</div></div>
@@ -487,7 +487,7 @@ atom({ id:'txs-chapterrail', cat:CAT, name:'Chapter rail with gentle snap', bloc
 .txs9-rb[aria-current="true"]{color:var(--ink);font-weight:500}
 .txs9-tr{position:relative;flex:none;width:3px;border-radius:2px;background:var(--line);overflow:hidden}
 .txs9-tr i{position:absolute;left:0;right:0;top:0;height:100%;background:var(--ink);transform-origin:50% 0;transform:scaleY(0)}
-.txs9-rb .num{margin-left:auto;font-size:12px;color:var(--faint)}
+.txs9-rb .num{margin-left:auto;font-size:12px;color:var(--muted)}
 .txs9-sn{position:absolute;left:12px;bottom:12px;z-index:8;display:flex;align-items:center;gap:8px;font-size:12.5px;background:var(--card)}
 .txs9-f[data-n] .txs9-sn{left:auto;bottom:auto;top:8px;right:10px;padding:5px 9px}
 .txs9-f[data-n] .txs-ro{top:auto;bottom:10px}

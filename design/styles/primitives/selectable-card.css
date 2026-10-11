@@ -1,0 +1,5 @@
+/* design/styles/primitives/selectable-card.css */
+@layer cieo.components {
+  :where(.cieo).cieo-selectable-card { display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); background: var(--cieo-color-surface); color: var(--cieo-color-text); border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); cursor: pointer; }
+  :where(.cieo).cieo-selectable-card[data-selected='true'] { border-color: var(--cieo-color-accent); box-shadow: 0 0 0 1px var(--cieo-color-accent); }
+}

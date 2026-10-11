@@ -1,0 +1,5 @@
+@layer cieo.components {
+  :where(.cieo).cieo-toolbar { display: flex; align-items: center; gap: var(--cieo-space-3); }
+  :where(.cieo) .cieo-toolbar-title { font-weight: var(--cieo-weight-medium); margin-inline-end: auto; }
+  :where(.cieo) .cieo-toolbar-actions { display: inline-flex; align-items: center; gap: var(--cieo-space-2); }
+}

@@ -1,0 +1,5 @@
+/* design/styles/primitives/outline.css */
+@layer cieo.components {
+  :where(.cieo).cieo-outline ul { display: flex; flex-direction: column; gap: var(--cieo-space-1); padding-inline-start: var(--cieo-space-3); }
+  :where(.cieo).cieo-outline a { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

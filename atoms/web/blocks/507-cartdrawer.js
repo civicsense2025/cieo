@@ -17,6 +17,7 @@ atom({ id:'cartdrawer', cat:'Commerce', name:'Cart drawer', block:'cart, drawer,
     scr.onclick = () => open.set(0); $(st,'.co').onclick = () => open.set(0); $(st,'.th').onchange = paint;
     sub.jump(0); tot.jump(0); paint(); sub.jump(S0); tot.jump(S0); fill.jump(Math.min(1, S0/th()));
     return t => { const p = clamp(open.at(t)); dw.style.transform = `translateX(${((1-p)*232).toFixed(1)}px)`;
+      dw.style.visibility = p < .01 ? 'hidden' : 'visible'; dw.setAttribute('aria-hidden', String(p < .01));
       scr.style.opacity = (p*.35).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       R.forEach((r,i) => { const q = open.target === 1 ? clamp(prog(t, t0 + i*.04)) : 1; r.style.opacity = q.toFixed(3); r.style.transform = `translateX(${((1-q)*16).toFixed(1)}px)`; });
       bar.style.width = (clamp(fill.at(t))*100).toFixed(1) + '%'; L.forEach((e,k) => sv.apply(e,k,t));

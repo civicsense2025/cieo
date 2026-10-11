@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.table-selection-toolbar",
+  "componentVersion": "1.0.0",
+  "name": "TableSelectionToolbar",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/TableSelectionToolbar/TableSelectionToolbar.tsx", "symbol": "TableSelectionToolbar" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "selectedCount", "type": { "kind": "integer" }, "required": true, "nullable": false, "constraints": { "min": 0 } }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "bar", "overrides": ["border"], "tokenRoles": ["border-subtle"] }],
+  "constraints": { "layout": ["above-or-below-table"], "content": ["count-matches-selection"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["selectedCount"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Selected-count bar with bulk table actions." },
+  "extensions": {}
+}

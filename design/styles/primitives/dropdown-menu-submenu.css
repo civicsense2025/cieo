@@ -1,0 +1,10 @@
+/* design/styles/primitives/dropdown-menu-submenu.css */
+@layer cieo.components {
+  :where(.cieo).cieo-dropdown-menu-submenu { position: relative; display: flex; flex-direction: column; }
+  :where(.cieo) .cieo-dropdown-menu-submenu-trigger { display: flex; align-items: center; inline-size: 100%; gap: var(--cieo-space-2); padding: var(--cieo-space-1) var(--cieo-space-2); border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: var(--cieo-color-text); font-size: var(--cieo-text-small); text-align: start; }
+  :where(.cieo) .cieo-dropdown-menu-submenu-panel { position: absolute; inset-block-start: 0; inset-inline-start: 100%; z-index: var(--cieo-popover-z); min-inline-size: 10rem; margin-inline-start: var(--cieo-space-1); padding: var(--cieo-space-1); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); opacity: 0; pointer-events: none; transition: opacity var(--motion-duration-snap, 200ms); }
+  :where(.cieo).cieo-dropdown-menu-submenu:hover .cieo-dropdown-menu-submenu-panel, :where(.cieo).cieo-dropdown-menu-submenu:focus-within .cieo-dropdown-menu-submenu-panel { opacity: 1; pointer-events: auto; }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-dropdown-menu-submenu-panel { transition: none; }
+  }
+}

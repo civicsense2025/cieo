@@ -1,0 +1,6 @@
+// src/primitives/SideNavCollapseButton/SideNavCollapseButton.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+export function SideNavCollapseButton({ expanded, onToggle, label = 'Collapse navigation' }) {
+    return (_jsx("button", { type: "button", "aria-expanded": expanded, "aria-label": label, onClick: onToggle, className: "cieo cieo-side-nav-collapse-button", children: label }));
+}

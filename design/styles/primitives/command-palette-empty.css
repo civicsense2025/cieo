@@ -1,0 +1,4 @@
+/* design/styles/primitives/command-palette-empty.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-command-palette-empty { margin: 0; padding: var(--cieo-space-2); font-size: var(--cieo-text-small); color: var(--cieo-color-text); text-align: center; }
+}

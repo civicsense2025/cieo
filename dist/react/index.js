@@ -160,7 +160,7 @@ export function useSwapEffect(ref, value, opts) {
     }, [value]);
 }
 /** Sliding indicator: when `key` changes, the indicator springs from its old span with a leading and a lagging edge. */
-export function useEdges(indicator, key) {
+export function useEdges(indicator, key, opts) {
     const last = useRef(null);
     useIso(() => {
         const el = indicator.current;
@@ -169,7 +169,7 @@ export function useEdges(indicator, key) {
         const r = el.getBoundingClientRect();
         const prev = last.current;
         last.current = { left: r.left, right: r.right };
-        if (prev)
+        if (prev && !opts?.disabled)
             return edges(el, prev, undefined);
     }, [key]);
 }
@@ -196,10 +196,16 @@ export function usePresence(open, opts = {}) {
     const [mounted, setMounted] = useState(open);
     const ref = useRef(null);
     const cancel = useRef(null);
-    if (open && !mounted)
+    if (opts.disabled) {
+        if (mounted !== open)
+            setMounted(open);
+    }
+    else if (open && !mounted)
         setMounted(true);
     /* No cleanup per change: enter and exit retarget the element's one presence spring, so reversing is continuous. */
     useIso(() => {
+        if (opts.disabled)
+            return;
         const el = ref.current;
         if (!el)
             return;

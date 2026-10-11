@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.grid",
+  "componentVersion": "1.0.0",
+  "name": "Grid",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": { "target": "web", "path": "src/primitives/Grid/Grid.tsx", "symbol": "Grid" },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    { "id": "columns", "type": { "kind": "integer" }, "required": false, "nullable": false, "default": 12, "constraints": { "min": 1, "max": 12 } },
+    { "id": "gap", "type": { "kind": "enum", "values": ["sm", "md", "lg"] }, "required": false, "nullable": false, "default": "md", "constraints": {} }
+  ],
+  "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [{ "id": "grid", "overrides": ["gap"], "tokenRoles": ["spacing"] }],
+  "constraints": { "layout": ["twelve-column"], "content": ["span-children"], "motion": ["no-motion"] },
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["columns", "gap"], "states": [], "events": [], "parts": ["grid"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "evidence": [],
+  "documentation": { "path": "README.md", "purpose": "Twelve-column grid for page and card layouts." },
+  "extensions": {}
+}

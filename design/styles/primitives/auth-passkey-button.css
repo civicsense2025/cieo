@@ -1,0 +1,18 @@
+/* design/styles/primitives/auth-passkey-button.css */
+@layer cieo.components {
+  :where(.cieo).cieo-auth-passkey-button { display: inline-flex; flex-direction: column; gap: 8px; }
+  :where(.cieo) .cieo-auth-passkey-button .cieo-auth-submit {
+    min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
+    background: var(--cieo-color-text); color: var(--cieo-color-surface);
+    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
+  }
+  :where(.cieo) .cieo-auth-passkey-button .cieo-auth-submit:disabled { opacity: .6; cursor: default; }
+  :where(.cieo) .cieo-auth-passkey-button .cieo-auth-submit:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  :where(.cieo) .cieo-auth-passkey-button .cieo-auth-note { font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+  @media (pointer: coarse) {
+    :where(.cieo) .cieo-auth-passkey-button .cieo-auth-submit { min-height: 44px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-auth-passkey-button * { animation: none; transition: none; }
+  }
+}

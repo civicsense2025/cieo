@@ -1,0 +1,5 @@
+/* design/styles/primitives/overflow-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-overflow-list { display: inline-flex; align-items: center; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-p-overflow-list-more { font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+}

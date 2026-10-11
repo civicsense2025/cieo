@@ -1,0 +1,9 @@
+/* design/styles/primitives/code-block.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-code-block {
+    margin: 0; padding: var(--cieo-space-4); overflow: auto;
+    font-family: var(--cieo-font-mono); font-size: var(--cieo-text-small); line-height: var(--cieo-leading-body);
+    color: var(--cieo-color-text); background: var(--cieo-color-sunken);
+    border: 1px solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface);
+  }
+}

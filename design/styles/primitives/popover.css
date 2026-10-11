@@ -1,0 +1,5 @@
+/* design/styles/primitives/popover.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-popover { position: relative; display: inline-flex; }
+  :where(.cieo) .cieo-p-popover-panel { position: absolute; inset-block-start: 100%; inset-inline-start: 0; margin-block-start: var(--cieo-space-1); border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); padding: var(--cieo-space-2); z-index: var(--cieo-popover-z, 50); }
+}

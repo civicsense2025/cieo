@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chat workspace · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<style>
+.cieo-chat-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans)}
+.cieo-chat-panes{display:grid;gap:var(--cieo-space-4)}
+.cieo-chat-list{overflow-y:auto;max-block-size:70vh;scroll-behavior:smooth}
+.cieo-chat-composer-row{display:flex;gap:var(--cieo-space-2)}
+.cieo-chat-fade{transition:opacity var(--motion-duration-base) var(--motion-ease-spring)}
+.cieo-chat-threads ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--cieo-space-2)}
+.cieo-chat-threads button{width:100%;text-align:start;font:inherit;color:var(--cieo-color-text);background:transparent;border:var(--cieo-border-width) solid transparent;border-radius:var(--cieo-radius-control);padding:var(--cieo-space-2) var(--cieo-space-3);cursor:pointer}
+.cieo-chat-threads button[aria-current="true"]{background:var(--cieo-color-accent-soft);color:var(--cieo-color-accent);border-color:var(--cieo-color-accent)}
+.cieo-chat-threads button span{display:block}
+.cieo-chat-thread-sub{color:var(--cieo-color-muted)}
+.cieo-chat-budget-meter{width:100%;accent-color:var(--cieo-color-accent)}
+.cieo-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
+@media (min-width:48rem){
+.cieo-chat-panes{grid-template-columns:12rem minmax(0,1fr)}
+.cieo-chat-rail{grid-column:1/-1;display:grid;gap:var(--cieo-space-4);grid-template-columns:repeat(2,1fr)}
+}
+@media (min-width:70rem){
+.cieo-chat-panes{grid-template-columns:14rem minmax(0,1fr) 18rem}
+.cieo-chat-rail{grid-column:auto;grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){
+.cieo-chat-list{scroll-behavior:auto}
+.cieo-chat-fade{transition:none}
+}
+</style>
+</head>
+<body class="cieo">
+<div class="cieo-chat-page" data-parts="ChatLayout">
+<header>
+<p><a href="./index.html">Composites</a></p>
+<h1 data-parts="Heading">Chat workspace</h1>
+<p data-parts="Text">Three seeded threads with local replies — no messages leave this page.</p>
+</header>
+<div class="cieo-chat-panes">
+<nav class="cieo-chat-threads" aria-label="Threads" data-threads>
+<h2 data-parts="Heading">Threads</h2>
+<ul class="cieo cieo-p-list" data-parts="List">
+<li class="cieo-p-list-item" data-parts="ListItem"><button type="button" data-thread="theming" aria-controls="thread-panel-theming" aria-current="true"><span data-thread-title>Theming help</span><span class="cieo-chat-thread-sub" data-parts="Text">Buttons and tokens</span></button></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><button type="button" data-thread="checkout" aria-controls="thread-panel-checkout"><span data-thread-title>Bag totals</span><span class="cieo-chat-thread-sub" data-parts="Text">Delivery math</span></button></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><button type="button" data-thread="fresh" aria-controls="thread-panel-fresh"><span data-thread-title>New idea</span><span class="cieo-chat-thread-sub" data-parts="Text">Blank thread</span></button></li>
+</ul>
+<p data-parts="Text">Tip: press <kbd class="cieo cieo-p-kbd" data-parts="Kbd">/</kbd> to jump to the composer.</p>
+</nav>
+<div data-pane="transcript">
+<section data-thread-panel="theming" id="thread-panel-theming" aria-label="Theming help">
+<div class="cieo-chat-list" data-parts="ChatMessageList" data-list="theming" role="log" aria-label="Conversation — Theming help">
+<div class="cieo-chat-message cieo-chat-fade" data-parts="ChatSystemMessage">Demo replies locally — no messages leave this page.</div>
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<div data-parts="ChatMessageMetadata"><span>You</span> <time>09:41</time></div>
+<div data-parts="ChatMessageBubble"><p data-parts="Text">How do I theme the buttons?</p></div>
+</article>
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<div data-parts="ChatMessageMetadata"><span>Cieo</span> <time>09:41</time></div>
+<div data-parts="ChatMessageBubble">
+<p data-parts="Text">Use the theme tokens, then render the control:</p>
+<pre data-parts="CodeBlock"><code data-parts="Code">import { Button } from 'cieo/Button';</code></pre>
+<p data-parts="Text">Related tokens: <span data-parts="Token">theme</span> <span data-parts="Token">tokens</span></p>
+</div>
+</article>
+</div>
+</section>
+<section data-thread-panel="checkout" id="thread-panel-checkout" aria-label="Bag totals">
+<div class="cieo-chat-list" data-parts="ChatMessageList" data-list="checkout" role="log" aria-label="Conversation — Bag totals">
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<div data-parts="ChatMessageMetadata"><span>You</span> <time>10:02</time></div>
+<div data-parts="ChatMessageBubble"><p data-parts="Text">Why does express add $12 at checkout?</p></div>
+</article>
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<div data-parts="ChatMessageMetadata"><span>Cieo</span> <time>10:02</time></div>
+<div data-parts="ChatMessageBubble">
+<p data-parts="Text">The demo bag charges $148 per runner, then adds $12 only for express delivery.</p>
+<p data-parts="Text">Same math runs on the <a href="./storefront.html">storefront page</a> — everything stays local.</p>
+</div>
+</article>
+</div>
+</section>
+<section data-thread-panel="fresh" id="thread-panel-fresh" aria-label="New idea">
+<div class="cieo-chat-list" data-parts="ChatMessageList" data-list="fresh" role="log" aria-label="Conversation — New idea"></div>
+<div class="cieo cieo-p-empty-state" data-parts="EmptyState" data-empty="fresh">
+<h2 class="cieo-p-empty-state-title">No messages yet</h2>
+<p class="cieo-p-empty-state-description">Send the first one — it stays on this page.</p>
+</div>
+</section>
+<form class="cieo-chat-composer-row" data-parts="ChatComposer" data-composer aria-label="Send a message">
+<div data-parts="ChatComposerInput">
+<label for="chat-input">Message</label>
+<textarea id="chat-input" data-input placeholder="Ask something…" rows="2"></textarea>
+</div>
+<button type="submit" data-send>Send</button>
+</form>
+<p class="cieo-visually-hidden" role="status" data-status></p>
+</div>
+<div class="cieo-chat-rail" data-pane="rail">
+<section data-parts="Card" aria-labelledby="run-details">
+<h2 id="run-details" data-parts="Heading">Run details</h2>
+<dl data-parts="MetadataList">
+<div data-parts="MetadataListItem"><dt>Model</dt><dd>cieo-demo</dd></div>
+<div data-parts="MetadataListItem"><dt>Replies</dt><dd>local</dd></div>
+<div data-parts="MetadataListItem"><dt>History</dt><dd>kept on page</dd></div>
+</dl>
+</section>
+<section data-parts="Card" aria-labelledby="token-budget">
+<h2 id="token-budget" data-parts="Heading">Token budget</h2>
+<progress class="cieo cieo-progress cieo-chat-budget-meter" data-parts="ProgressBar" data-budget value="54" max="4000" aria-label="Token budget for this thread"></progress>
+<p data-parts="Text" data-budget-text>54 of 4,000 tokens used in this thread.</p>
+<p data-parts="Text">Rough count at one token per four characters. Each thread tracks its own budget.</p>
+</section>
+<section data-parts="Card" aria-labelledby="related-screens">
+<h2 id="related-screens" data-parts="Heading">Related screens</h2>
+<ul class="cieo cieo-p-list" data-parts="List">
+<li class="cieo-p-list-item" data-parts="ListItem"><a href="./dashboard.html">Admin dashboard</a><span data-parts="Text"> — review orders and store settings.</span></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><a href="./storefront.html">Storefront</a><span data-parts="Text"> — check the live bag and the $12 express math.</span></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><a href="./booking.html">Booking</a><span data-parts="Text"> — pick a day and time, receive a reference.</span></li>
+</ul>
+</section>
+<section data-parts="Card" aria-labelledby="shortcuts">
+<h2 id="shortcuts" data-parts="Heading">Keyboard</h2>
+<ul class="cieo cieo-p-list" data-parts="List">
+<li class="cieo-p-list-item" data-parts="ListItem"><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Enter</kbd><span data-parts="Text"> sends; </span><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Shift</kbd><span data-parts="Text"> + </span><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Enter</kbd><span data-parts="Text"> adds a newline.</span></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><kbd class="cieo cieo-p-kbd" data-parts="Kbd">/</kbd><span data-parts="Text"> focuses the composer; </span><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Esc</kbd><span data-parts="Text"> returns to the thread list.</span></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Up</kbd><span data-parts="Text"> and </span><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Down</kbd><span data-parts="Text"> move between threads; </span><kbd class="cieo cieo-p-kbd" data-parts="Kbd">Home</kbd><span data-parts="Text"> and </span><kbd class="cieo cieo-p-kbd" data-parts="Kbd">End</kbd><span data-parts="Text"> jump to the ends.</span></li>
+</ul>
+</section>
+</div>
+</div>
+</div>
+<section aria-label="Behavior">
+<h2 data-parts="Heading">Behavior</h2>
+<ul>
+<li>Enter sends, Shift+Enter adds a newline; empty sends are ignored.</li>
+<li>Send disables for the 400ms local reply window, so double submits append once.</li>
+<li>The transcript scrolls to the newest message; replies never leave the page.</li>
+<li>Threads switch locally: click, or focus the list and use Up and Down, Home and End. Press / for the composer, Escape to return to the threads.</li>
+<li>Include the word “fail” to preview a failed reply, then Retry — focus moves to the retry control and the retry always lands.</li>
+<li>The meter counts about one token per four characters in the open thread and updates with every sent or retried reply.</li>
+</ul>
+</section>
+<section data-built-from>
+<h2 data-parts="Heading">Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
+<ul>
+<li><a href="../components/ChatLayout.html">ChatLayout</a></li>
+<li><a href="../components/ChatMessage.html">ChatMessage</a></li>
+<li><a href="../components/ChatMessageBubble.html">ChatMessageBubble</a></li>
+<li><a href="../components/ChatMessageList.html">ChatMessageList</a></li>
+<li><a href="../components/ChatMessageMetadata.html">ChatMessageMetadata</a></li>
+<li><a href="../components/ChatSystemMessage.html">ChatSystemMessage</a></li>
+<li><a href="../components/ChatComposer.html">ChatComposer</a></li>
+<li><a href="../components/ChatComposerInput.html">ChatComposerInput</a></li>
+<li><a href="../components/Token.html">Token</a></li>
+<li><a href="../components/Code.html">Code</a></li>
+<li><a href="../components/CodeBlock.html">CodeBlock</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/MetadataList.html">MetadataList</a></li>
+<li><a href="../components/MetadataListItem.html">MetadataListItem</a></li>
+<li><a href="../components/List.html">List</a></li>
+<li><a href="../components/ListItem.html">ListItem</a></li>
+<li><a href="../components/EmptyState.html">EmptyState</a></li>
+<li><a href="../components/ProgressBar.html">ProgressBar</a></li>
+<li><a href="../components/Kbd.html">Kbd</a></li>
+<li><a href="../components/Banner.html">Banner</a> (rendered by JS after a failed reply)</li>
+</ul>
+</section>
+<script src="./chat.js" defer></script>
+</body>
+</html>

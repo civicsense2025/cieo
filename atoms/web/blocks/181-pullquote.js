@@ -1,7 +1,7 @@
 
 
 atom({ id:'pullquote', cat:'Writing', name:'Pull-quote extractor', block:'quote, manuscript', fam:['D','M'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(320px,90%);padding:12px"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end"><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Drop quotes inline</span></label><div class="hint">Drag the quote into the story</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(320px,90%);padding:12px"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end;align-items:center;gap:10px"><span class="pq-st small muted" aria-live="polite"></span><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Drop quotes inline</span></label><div class="hint">Drag the quote into the story</div>`,
   desc:'Drag the quote and it lifts while the paragraphs spring aside. Dropping it grows the block open from zero height. Reset puts it back.',
   api:'drag(q): lift; sib.y.set(gap); drop: h.set(1,base); reset()',
   init(st){
@@ -35,7 +35,10 @@ atom({ id:'pullquote', cat:'Writing', name:'Pull-quote extractor', block:'quote,
         rows.forEach(r => r.y.set(0, S.base));
       }
     });
-    reset.onclick = () => { if (placed){ placed.remove(); placed = null; } h.jump(0); qrow.y.set(0, S.base); rows.forEach(r => r.y.set(0, S.base)); };
+    // Reset: take the dropped copy out of the story, put the quote back in its place in the list, and say so
+    const note = $(st,'.pq-st'); let noteT = 0;
+    reset.onclick = () => { if (placed){ placed.remove(); placed = null; } h.jump(0); qrow.y.set(0, S.base); rows.forEach(r => r.y.set(0, S.base)); dy = 0;
+      note.textContent = 'Quote back in the list'; clearTimeout(noteT); noteT = setTimeout(() => note.textContent = '', 1500); };
     return t => {
       q.style.transform = 'translateY(' + qrow.y.at(t).toFixed(2) + 'px) scale(' + (1 + .03*clamp(Math.abs(qrow.y.at(t))/60)).toFixed(3) + ')';
       rows.forEach(r => { r.d.style.transform = 'translateY(' + r.y.at(t).toFixed(2) + 'px)'; });
