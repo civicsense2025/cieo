@@ -1,0 +1,7 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+export function AuthPasskeyButton({ id, label = 'Continue with a passkey', pending, disabled, supported = true, style, onPress }) {
+    const busy = pending || disabled;
+    return (_jsxs("span", { className: "cieo cieo-auth-passkey-button", style: style, children: [_jsx("button", { type: "button", id: id, className: "cieo-auth-submit", disabled: busy, "aria-busy": pending || undefined, onClick: () => { if (!busy)
+                    onPress?.(); }, children: pending ? 'Waiting for your passkey…' : label }), supported ? null : (_jsx("span", { id: `${id}-fallback`, className: "cieo-auth-note", children: "This device can\u2019t use passkeys. Use your password or a code instead." }))] }));
+}

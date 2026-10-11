@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.auth-sso-buttons",
+  "componentVersion": "1.0.0",
+  "name": "AuthSsoButtons",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AuthSsoButtons/AuthSsoButtons.tsx",
+    "symbol": "AuthSsoButtons"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "id",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "providers",
+      "type": {
+        "kind": "array"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "pendingId",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [
+    {
+      "id": "onPress",
+      "payload": "string"
+    }
+  ],
+  "variants": [
+    "pending"
+  ],
+  "styleParts": [],
+  "constraints": {
+    "layout": [],
+    "content": [
+      "label-visible"
+    ],
+    "motion": [
+      "no-animation-in-rows"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "id",
+        "providers",
+        "pendingId"
+      ],
+      "states": [],
+      "events": [
+        "onPress"
+      ],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One button per identity provider with pending shown by text plus aria-busy."
+  },
+  "extensions": {}
+}
