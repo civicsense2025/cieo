@@ -30,5 +30,7 @@ public enum Metrics {
 
 public extension EnvironmentValues {
     @Entry var componentTheme = Theme()
+    @Entry var componentTypography = ComponentTypography()
+    @Entry var componentMetrics = ComponentMetrics()
     @Entry var renderPolicy = RenderPolicy()
 }

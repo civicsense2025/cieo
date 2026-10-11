@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "entryPoints": [
+    "README.md"
+  ],
+  "modules": [
+    {
+      "id": "apple-components",
+      "sources": [
+        "Sources/CieoUI/**/*",
+        "Tests/CieoUITests/**/*",
+        "Sources/CieoGallery/**/*"
+      ],
+      "docs": [
+        "docs/apple-components.md"
+      ]
+    },
+    {
+      "id": "motion-and-recipes",
+      "sources": [
+        "Sources/Cieo/**/*",
+        "Tests/CieoTests/**/*",
+        "Tests/CieoAtomsTests/**/*"
+      ],
+      "docs": [
+        "docs/apple-components.md"
+      ]
+    },
+    {
+      "id": "web-controls",
+      "sources": [
+        "src/controls/**/*"
+      ],
+      "docs": [
+        "README.md"
+      ]
+    },
+    {
+      "id": "portable-design",
+      "sources": [
+        "design/**/*"
+      ],
+      "docs": [
+        "docs/design-system.md"
+      ]
+    },
+    {
+      "id": "dependency-and-doc-tooling",
+      "sources": [
+        "Package.swift",
+        "package.json",
+        "package-lock.json",
+        "scripts/check-documentation.rb",
+        ".github/**/*",
+        "docs/source-map.json"
+      ],
+      "docs": [
+        "docs/documentation-maintenance.md"
+      ]
+    }
+  ]
+}

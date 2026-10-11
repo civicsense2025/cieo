@@ -2,8 +2,8 @@ import CieoUI
 import SwiftUI
 
 struct PatternExamples: View {
-    private enum State: String, CaseIterable { case empty = "Empty", loading = "Loading", error = "Error", offline = "Offline", ready = "Ready" }
-    @State private var state = State.empty
+    private enum ExampleState: String, CaseIterable { case empty = "Empty", loading = "Loading", error = "Error", offline = "Offline", ready = "Ready" }
+    @State private var state = ExampleState.empty
     @State private var progress = 0.4
     @State private var saved = false
 
@@ -16,7 +16,7 @@ struct PatternExamples: View {
             }
             Specimen(title: "Recovery states") {
                 Picker("State", selection: $state) {
-                    ForEach(State.allCases, id: \.self) { Text($0.rawValue).tag($0) }
+                    ForEach(ExampleState.allCases, id: \.self) { Text($0.rawValue).tag($0) }
                 }.pickerStyle(.menu)
                 StatePanel(panelTitle, detail: panelDetail, symbol: panelSymbol) {
                     ActionButton("Load example", isBusy: state == .loading) { state = .loading }
