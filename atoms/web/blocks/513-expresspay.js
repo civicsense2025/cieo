@@ -11,7 +11,9 @@ atom({ id:'expresspay', cat:'Commerce', name:'Express pay sheet', block:'checkou
       r.innerHTML = `<span class="muted">${a}</span><span class="num" style="font-variant-numeric:tabular-nums">${b}</span>`; $(st,'.ln').appendChild(r); return r; });
     sheet.jump(1); sheet.set(0, S.base, now() + .01);
     $(st,'.mo').onclick = () => sheet.set(1);
-    cf.onclick = e => { if (e.target.closest('.cf') && ok.target < .5){ ok.set(1); $(st,'.tx').textContent = 'Paid · Receipt sent'; } };
+    const pay = () => { if (ok.target < .5){ ok.set(1); $(st,'.tx').textContent = 'Paid · Receipt sent'; } };
+    // A wallet press opens the order sheet; a press with the sheet already open confirms, so every press responds.
+    cf.onclick = pay; WB.forEach(b => b.onclick = () => { if (sheet.target === 1) pay(); else sheet.set(1); });
     sh.onclick = e => { if (e.target === sh) sheet.set(0); };
     return t => { WB.forEach((b,i) => { const q = clamp(prog(t, t0 + i*.06)); b.style.opacity = q.toFixed(3); b.style.transform = `translateY(${((1-q)*10).toFixed(1)}px)`; });
       const p = clamp(sheet.at(t)); sh.style.transform = `translateY(${((1-p)*220).toFixed(1)}px)`;

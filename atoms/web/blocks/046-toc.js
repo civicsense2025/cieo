@@ -1,7 +1,7 @@
 
 
 atom({ id:'toc', cat:'Content', name:'Table of contents', block:'table-of-contents', fam:['E','D'], tall:true,
-  html:`<div class="card row" style="width:min(400px,94%);height:280px;align-items:stretch;gap:0;overflow:hidden"><nav class="tn" style="position:relative;width:118px;flex:none;padding:12px 0 12px 12px;border-right:1px solid var(--line-soft)"><i class="ti" style="position:absolute;left:12px;width:2px;border-radius:1px;background:var(--ink)"></i></nav><div class="ta small" style="flex:1;overflow:auto;padding:0 14px;line-height:1.6;overscroll-behavior:contain" tabindex="0" aria-label="Sample article"></div></div>`,
+  html:`<div class="card row" style="width:min(400px,94%);height:280px;align-items:stretch;gap:0;overflow:hidden"><nav class="tn" style="position:relative;width:118px;flex:none;padding:12px 0 12px 12px;border-right:1px solid var(--line-soft)"><i class="ti" style="position:absolute;left:12px;width:2px;border-radius:1px;background:var(--ink)"></i></nav><div class="ta small" style="flex:1;overflow:auto;padding:0 14px;line-height:1.6;overscroll-behavior:contain" tabindex="0" role="region" aria-label="Sample article"></div></div>`,
   desc:'The active marker tracks the section you are reading, with lagging edges so it stretches between short and long entries. Clicking an entry scrolls there on a spring.',
   api:'tap: active.set(i)   scroll: active = last heading above scrollTop   marker.go(top, bottom)',
   init(st){

@@ -17,7 +17,7 @@ atom({ id:'segswitch', cat:'Views', name:'Segmented view switch', block:'segment
     const swH = new Swap(0), swR = new Swap(0), h = new Track(V[0].H), e = edges(0, 0), dg = new Digits($(st,'.ct'), 2);
     let cur = 0; const rc = $(st,'.rc');
     const place = i => { const b = btns[i]; return [b.offsetLeft + 2, b.offsetLeft + b.offsetWidth - 2]; };
-    const go = i => { if (i === cur) return; cur = i; const [a, b] = place(i); e.go(a, b);
+    const go = i => { if (i === cur){ swH.cur = -1; swH.to(i); swR.cur = -1; swR.to(i, now() + .05); return; } cur = i; const [a, b] = place(i); e.go(a, b);
       swH.to(i); swR.to(i, now() + .05); h.set(V[i].H); if (rc.checked) dg.set(V[i].c); else dg.set(V[i].c, true); paint(); };
     const paint = () => btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; });
     btns.forEach((b, i) => b.onclick = () => go(i));

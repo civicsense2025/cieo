@@ -86,6 +86,7 @@ const CSS = `
 /* pins and cards: agents are rounded squares, people are circles */
 .§-pw{position:absolute;left:0;top:0;width:0;height:0}
 .§-pin{position:absolute;left:-13px;top:-13px;width:26px;height:26px;padding:0;border:0;border-radius:8px;background:var(--ink);color:var(--card);font:600 11.5px var(--sans);cursor:pointer;display:grid;place-items:center}
+.§-pw>.§-pin{max-width:none}
 .§-pin>span{grid-area:1/1}
 .§-pd{position:absolute;right:-4px;top:-4px;width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px var(--card);pointer-events:none}
 .§-ck{position:absolute;left:0;top:0;overflow:hidden;z-index:30;visibility:hidden}
@@ -153,6 +154,8 @@ class Pin {
   draw(t, x, y, on, vis = 1){
     const fo = clamp(this.fo.at(t)) * vis, fy = this.fy.at(t), rs = clamp(this.rs.at(t)), qm = clamp(this.qm.at(t)); if (this.sel.target !== (on ? 1 : 0)) this.sel.set(on ? 1 : 0); const s = clamp(this.sel.at(t));
     this.wrap.style.transform = `translate(${px(x)},${px(y)})`; this.wrap.style.zIndex = on ? 3 : 1;
+    // a hidden pin leaves the tab order too: visibility removes it from focus navigation
+    this.wrap.style.visibility = fo < .01 ? 'hidden' : 'visible';
     const b = this.btn.style; b.pointerEvents = fo > .5 ? 'auto' : 'none'; b.opacity = fo.toFixed(3); b.transform = `translateY(${px(fy)}) scale(${(.8 + .2 * fo).toFixed(3)})`;
     b.background = mix(rs, 'var(--success-tint)', 'var(--ink)'); b.color = mix(rs, 'var(--success)', 'var(--card)');
     b.boxShadow = `0 0 0 ${px(1.5 * rs)} ${mix(rs, 'var(--success)', 'transparent')}, 0 0 0 2px ${mix(s, 'var(--card)', 'transparent')}, 0 0 0 4px ${mix(s, 'var(--accent)', 'transparent')}, var(--shadow)`;
@@ -726,7 +729,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
   <div class="rvs-hd">${agentMark('rvs', 28)}${agentLine('rvs')}<i style="flex:1"></i><span class="rvs-run" role="status" aria-live="polite"><span class="rvs-r0"><i class="rvs-dot"></i>Reviewing</span><span class="rvs-r1">${ic(I.check, 13, 2.4)}Completed</span></span><button type="button" class="btn rvs-rp" style="padding:4px 10px;font-size:12.5px">Replay</button></div>
   <div class="rvs-sm">localhost:3000 · /pricing and /signup · 3 widths · 14 screenshots</div>
   <div class="rvs-fl" role="group" aria-label="Filter findings by severity"><button type="button" class="rvs-f" data-s="*" aria-pressed="true">All <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="block" aria-pressed="false">${ic(SEV.block.i, 13, 2)}Blocking <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="warn" aria-pressed="false">${ic(SEV.warn.i, 13, 2)}Should fix <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="info" aria-pressed="false">${ic(SEV.info.i, 13, 2)}Suggestions <span class="rvs-c"></span></button><span class="rvs-sh" aria-live="polite">Showing <span class="rvs-sn"></span> of <span class="rvs-st2"></span></span></div>
-  <div class="rvs-ls" role="list"><p class="rvs-em0">Assistant is reviewing /pricing and /signup…</p></div></section>`,
+  <div class="rvs-ls" role="list"><p class="rvs-em0" role="listitem">Assistant is reviewing /pricing and /signup…</p></div></section>`,
   desc:'Findings arrive one at a time, 130ms apart: each row fades up and opens its height while the severity counts roll up digit by digit and the Reviewing chip morphs to Completed. Severity chips are full-border chips and double as filters. Switching a filter closes unmatched rows to nothing while the rest slide up, and the Showing count rolls. Opening a finding eases its height open to the saved screenshot, the steps to reproduce, and expected against observed; opening another closes the first.',
   api:'row.en.set(1, t + i·130ms); digits.set(count)   chip.p.set(1): width, fill, label swap   row.vis.set(match ? 1 : 0)   row.h = (head + body·ex)·vis·en',
   init(st){

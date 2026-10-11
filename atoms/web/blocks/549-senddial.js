@@ -1,6 +1,6 @@
 
 atom({ id:'senddial', cat:'Email', name:'Send-later dial', block:'email, schedule send, dial', fam:['D','S','X'],
-  html:`<div class="col" style="gap:8px;width:min(280px,92%);align-items:center"><div class="card" style="padding:14px 16px;line-height:1.5;width:100%;position:relative"><b style="font-size:15px;font-weight:600">Re: Launch plan</b><div class="small muted" style="font-size:12.5px">To Maya · draft ready</div><div class="dl" style="position:relative;min-height:24px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px;touch-action:none;user-select:none;-webkit-user-select:none">Hold to schedule</button></div><div class="dial" style="position:absolute;left:50%;top:44%;width:148px;height:148px;margin:-74px 0 0 -74px"></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox" checked> send in their timezone</label></div><div class="hint">Hold the button, drag to a time</div>`,
+  html:`<div class="col" style="gap:8px;width:min(280px,92%);align-items:center"><div class="card" style="padding:14px 16px;line-height:1.5;width:100%;position:relative"><b style="font-size:15px;font-weight:600">Re: Launch plan</b><div class="small muted" style="font-size:12.5px">To Maya · draft ready</div><div class="dl" style="position:relative;min-height:24px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px;touch-action:none;user-select:none;-webkit-user-select:none">Hold to schedule</button></div><div class="dial" style="position:absolute;left:50%;top:44%;width:148px;height:148px;margin:-74px 0 0 -74px"></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox" checked> send in their timezone</label></div><div class="hint">Hold and drag to a time. Keyboard: Enter opens, arrows pick, Enter sends</div>`,
   desc:'A long press opens a radial dial on soft. Dragging sets the time 1:1 and the label swaps behind it. Release confirms with a snap to a scheduled terminal.',
   api:'hold .35s -> dial.set(1, soft)   drag angle -> slot, lab.to(i)   up: dial.set(0, snap), confirm',
   init(st){
@@ -22,7 +22,14 @@ atom({ id:'senddial', cat:'Email', name:'Send-later dial', block:'email, schedul
     btn.addEventListener('pointermove', e => { if (open && (e.buttons & 1)) pick(near(ang(e))); });
     const close = confirm => { clearTimeout(timer); if (!open){ sw.to(5); btn.textContent = 'Scheduled'; return; } open = false; dt.set(0, S.snap); sw.to(5); btn.textContent = 'Scheduled'; };
     btn.addEventListener('pointerup', () => close(true)); btn.addEventListener('pointercancel', () => { clearTimeout(timer); open = false; dt.set(0, S.snap); });
-    return t => { const p = clamp(dt.at(t));
+    // Keyboard path for the hold: Enter or Space opens the dial, arrows pick, Enter sends, Escape cancels.
+    btn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); if (e.repeat) return; if (open) close(true); else { clearTimeout(timer); open = true; dt.set(1, S.soft); sc.set(1, S.soft); pick(idx); } }
+      else if (open && (e.key === 'ArrowRight' || e.key === 'ArrowDown')){ e.preventDefault(); pick(idx + 1); }
+      else if (open && (e.key === 'ArrowLeft' || e.key === 'ArrowUp')){ e.preventDefault(); pick(idx - 1); }
+      else if (open && e.key === 'Escape'){ e.preventDefault(); open = false; dt.set(0, S.snap); sw.to(0); }
+    });
+    return t => { const p = clamp(dt.at(t)); btn.setAttribute('aria-pressed', String(open));
       dial.style.opacity = p.toFixed(3); dial.style.visibility = p < .02 ? 'hidden' : 'visible';
       dial.style.transform = `scale(${(0.92 + .08*p).toFixed(4)})`;
       dots.forEach((o, i) => { const on = open && i === idx;

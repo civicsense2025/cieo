@@ -18,11 +18,15 @@ atom({ id:'signature', cat:'Interactive', name:'Signature pad', block:'signature
     const bPad = document.createElement('button'); bPad.className = 'btn'; bPad.style.cssText += 'padding:2px 8px'; bPad.textContent = 'Pad';
     const bDone = document.createElement('button'); bDone.className = 'btn'; bDone.style.cssText += 'padding:2px 8px'; bDone.textContent = 'Saved';
     cust.appendChild(bPad); cust.appendChild(bDone); cust.appendChild(redraw);
-    const show = v => sw2.to(v);
-    bPad.onclick = () => show('pad'); bDone.onclick = () => { if (strokes.length) show('done'); };
-    redraw.onclick = () => { strokes = []; ink.jump(1); show('pad'); };
+    // Each press writes its result into the status line, so a repeat press on the current view still answers.
+    const PAD_TX = 'Sign with mouse or finger', SAVED_OK = '✓ Signature saved', SAVED_NONE = 'Nothing to save yet. Draw first.';
+    const show = v => { sw2.to(v); bPad.setAttribute('aria-pressed', String(v === 'pad')); bDone.setAttribute('aria-pressed', String(v === 'done')); };
+    bPad.setAttribute('aria-pressed', 'true'); bDone.setAttribute('aria-pressed', 'false');
+    bPad.onclick = () => { show('pad'); Lpad.firstChild.textContent = 'Ready. Sign below.'; };
+    bDone.onclick = () => { Ldone.firstChild.textContent = strokes.length ? SAVED_OK : SAVED_NONE; show('done'); };
+    redraw.onclick = () => { strokes = []; ink.jump(1); show('pad'); Lpad.firstChild.textContent = 'Cleared. Sign again.'; };
     cl.disabled = true;
-    drag(cv, { down:p => { if (ink.target === 0){ strokes = []; ink.jump(1); } show('pad'); cur = [{ x:p.x, y:p.y, t:now() }]; strokes.push(cur); },
+    drag(cv, { down:p => { if (ink.target === 0){ strokes = []; ink.jump(1); } show('pad'); Lpad.firstChild.textContent = PAD_TX; cur = [{ x:p.x, y:p.y, t:now() }]; strokes.push(cur); },
       move:p => { const a = cur[cur.length-1], dt = Math.max(1e-3, now() - a.t); cur.push({ x:p.x, y:p.y, t:now(), w:3.2 - clamp(Math.hypot(p.x - a.x, p.y - a.y)/dt/1800)*2 }); }, up:() => cur = null });
     cl.onclick = () => ink.set(0);
     sv.onclick = () => { if (strokes.length) show('done'); };

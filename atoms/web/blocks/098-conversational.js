@@ -15,12 +15,13 @@ atom({ id:'conversational', cat:'Forms', name:'One question at a time', block:'f
       else d.innerHTML = `<div class="row" style="gap:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path class="ck" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><b class="thx" style="font-size:22px;letter-spacing:-.02em"></b></div><span class="small muted">We’ll email your migration checklist shortly.</span><button class="btn again" style="align-self:flex-start">Start again</button>`;
       cv.appendChild(d); return d; });
     const sw = new Swap(0), prog2 = new Track(0); let cur = 0, pulse = null, adv = 0, tEnd = 0;
-    const go = i => { cur = i; sw.to(i); prog2.set(i/(Q.length - 1)); if (Q[i].t === 'text') setTimeout(() => $(panes[i],'input').focus({ preventScroll:true }), 120); if (Q[i].t === 'end'){ tEnd = now(); $(panes[i],'.thx').textContent = `Thanks, ${name.split(' ')[0]}.`; } };
+    const go = i => { if (i < 0 || i >= Q.length) return; cur = i; sw.to(i); prog2.set(i/(Q.length - 1)); if (Q[i].t === 'text') setTimeout(() => $(panes[i],'input').focus({ preventScroll:true }), 120); if (Q[i].t === 'end'){ tEnd = now(); $(panes[i],'.thx').textContent = `Thanks, ${name.split(' ')[0]}.`; } };
     const inp = $(panes[0],'input'), er = $(panes[0],'.er'), eT = new Track(0);
     const submitText = () => { if (!inp.value.trim()){ eT.set(1); inp.setAttribute('aria-invalid', true); return; } eT.set(0); inp.removeAttribute('aria-invalid'); name = inp.value.trim(); go(1); };
     $(panes[0],'.ok').onclick = submitText; inp.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); submitText(); } }; inp.oninput = () => { if (inp.value.trim()) eT.set(0); };
     panes.forEach((p,i) => $$(p,'.opt').forEach((b,j) => b.onclick = () => choose(i, j)));
-    const choose = (i, j) => { if (adv) return; pulse = { b:$$(panes[i],'.opt')[j], t:now() }; $$(panes[i],'.opt').forEach((b,k) => b.style.borderColor = k === j ? 'var(--ink)' : 'var(--line)'); adv = now() + .45; };
+    // A focused option in an earlier pane can still fire after the flow moves on; only the current question may answer.
+    const choose = (i, j) => { if (adv || i !== cur) return; pulse = { b:$$(panes[i],'.opt')[j], t:now() }; $$(panes[i],'.opt').forEach((b,k) => b.style.borderColor = k === j ? 'var(--ink)' : 'var(--line)'); adv = now() + .45; };
     st.addEventListener('keydown', e => { if (Q[cur].t !== 'choice' || e.metaKey || e.ctrlKey) return; const j = 'abc'.indexOf(e.key.toLowerCase()); if (j >= 0 && j < Q[cur].o.length) choose(cur, j); });
     $(panes[3],'.again').onclick = () => { inp.value = ''; name = ''; panes.forEach(p => $$(p,'.opt').forEach(b => { b.style.borderColor = 'var(--line)'; b.style.background = 'var(--card)'; })); go(0); };
     const ck = $(panes[3],'.ck');

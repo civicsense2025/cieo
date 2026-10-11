@@ -15,7 +15,10 @@ atom({ id:'swiperow', cat:'Email', name:'Swipe actions', block:'entry-list, inbo
       return r; });
     const paint = () => rows.forEach(r => { r.w.style.borderBottom = (!dv.checked || r.last) ? 'none' : '1px solid var(--line-soft)'; });
     dv.onchange = paint;
-    $(st,'.rs').onclick = () => rows.forEach(r => { r.x.set(0); r.h.set(1); });
+    const rs = $(st,'.rs'); let flashT = 0;
+    rs.onclick = () => { const had = rows.some(r => r.x.target !== 0 || r.h.target !== 1);
+      rows.forEach(r => { r.x.set(0); r.h.set(1); });
+      rs.textContent = had ? 'Restored' : 'All rows are here'; clearTimeout(flashT); flashT = setTimeout(() => { rs.textContent = 'Restore'; }, 1400); };
     return t => rows.forEach(r => { const x = r.held ? r.hx : r.x.at(t), a = clamp(Math.abs(x)/80), right = x > 0;
       r.fg.style.transform = `translateX(${px(x)})`; r.bk.style.background = a >= 1 ? (right ? 'var(--success)' : 'var(--warning)') : mix(a,'var(--muted)','var(--raised)');
       r.ia.style.opacity = right ? a : 0; r.is.style.opacity = right ? 0 : a; const sc = (.7 + .3*clamp(Math.abs(x)/80 - .2)).toFixed(3); r.ia.style.transform = r.is.style.transform = `scale(${sc})`;

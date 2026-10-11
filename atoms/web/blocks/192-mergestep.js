@@ -28,10 +28,11 @@ atom({ id:'mergestep', cat:'Writing', name:'Merge preview stepper', block:'merge
     const invL = R.map(r => { const e = document.createElement('span'); e.className = 'layer small'; e.textContent = r.f.find(f => f[2]) ? `${r.f.find(f => f[2])[0]} is missing` : ''; inv.appendChild(e); return e; });
     const tabs = [$(st,'.t0'), $(st,'.t1'), $(st,'.t2')];
     let cur = 0;
+    const flag = $(st,'.twk');
     const focus = i => Math.max(0, R[i].f.findIndex(f => f[2]));
     const go = n => {
       n = Math.max(0, Math.min(R.length - 1, n)); const t0 = now(), f = focus(n), nt = f*SLOT, nb = nt + PH;
-      const bad = R[n].f.some(f => f[2]) ? 1 : 0; cur = n;
+      const bad = flag.checked && R[n].f.some(f => f[2]) ? 1 : 0; cur = n;
       if (REDUCE){ sw.cur = n; sw.prev = null; sw.t = -9; pT.jump(nt); pB.jump(nb); err.jump(bad); }
       else {
         sw.to(n);
@@ -45,6 +46,7 @@ atom({ id:'mergestep', cat:'Writing', name:'Merge preview stepper', block:'merge
     };
     $(st,'.pv').onclick = () => go(cur - 1); $(st,'.nx').onclick = () => go(cur + 1);
     tabs.forEach((b,i) => b.onclick = () => go(i));
+    flag.onchange = () => err.set(flag.checked && R[cur].f.some(f => f[2]) ? 1 : 0, S.base);
     go(0); pT.jump(focus(0)*SLOT); pB.jump(focus(0)*SLOT + PH); err.jump(1);
     return t => {
       ttlL.forEach((el,k) => sw.apply(el, k, t)); recL.forEach((el,k) => sw.apply(el, k, t, 0));

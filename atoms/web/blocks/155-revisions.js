@@ -320,10 +320,12 @@ atom({ id:'annotate', cat:'Workflow', name:'Annotation review canvas', block:'Re
       at(EXIT + .03, () => { if (sel === p) $(L[1], '.rw-rs').focus({ preventScroll:true }); });
     }
     function resolve(p){
+      if (!p) return;
       p.state = 'done'; p.rs.set(1); p.row.sw.to(1); sel = null; plateTo(null); co.set(0, S.base); refresh(); syncAria();
       at(.3, () => p.btn.focus({ preventScroll:true }));
     }
     function reopen(p){
+      if (!p) return;
       p.state = 'open'; p.rs.set(0); p.row.sw.to(0); fillThread(L[1], p); csw.to(1); ch.set(L[1].offsetHeight); refresh();
       at(EXIT + .03, () => { if (sel === p) $(L[1], '.rw-rs').focus({ preventScroll:true }); });
     }

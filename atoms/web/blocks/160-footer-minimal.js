@@ -497,7 +497,8 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
       btns.forEach(b => { const on = b.dataset.s === kk; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('ink', on); });
       g.set(s.i); lab.put(s.label); lw.set(LW[kk]); if (kk !== 'ok') isw.to(kk); iO.set(kk === 'ok' ? 0 : 1, kk === 'ok' ? S.snap : S.base, kk === 'ok' ? t0 : t0 + .08);
       rows.forEach((r, i) => { const v = s.c[i]; if (v === r.v) return; r.v = v; const at = t0 + .1 + i*.045; r.c.set(v, S.base, at); q.push([at, () => r.tx.put(WORD[v])]); }); q.sort((a, b) => a[0] - b[0]); };
-    btns.forEach(b => { b.addEventListener('click', () => setS(b.dataset.s)); }); btns[0].classList.add('ink');
+    // Pressing the state already showing opens the per-service list, so every press has a visible result.
+    btns.forEach(b => { b.addEventListener('click', () => { if (b.dataset.s === cur){ if (!open) pill.click(); } else setS(b.dataset.s); }); }); btns[0].classList.add('ink');
     isw.cur = 'deg'; isw.prev = null; isw.t = -9;
     pill.addEventListener('click', () => { open = !open; dO.set(open ? 1 : 0, open ? S.base : S.snap); pill.setAttribute('aria-expanded', String(open)); det.style.visibility = 'visible'; if (k.max() - k.sc.scrollTop < 8) k.pin(); });
     const col = c => c <= 1 ? mix(c, 'var(--warning)', 'var(--success)') : mix(c - 1, 'var(--danger)', 'var(--warning)');

@@ -53,9 +53,9 @@ if (!document.getElementById('txi-css')){ const s = document.createElement('styl
 .txi-pn{position:absolute;top:0;overflow:hidden;border-radius:12px;background:${DARK}}
 .txi-hit{position:absolute;inset:0;touch-action:pan-y;cursor:grab}
 .txi-dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;padding:3px 5px;border-radius:999px;background:var(--card);box-shadow:var(--shadow)}
-.txi-dot{position:relative;width:22px;height:22px;border:0;padding:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px}
+.txi-dot{position:relative;width:24px;height:24px;border:0;padding:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px}
 .txi-dot i{width:6px;height:6px;border-radius:50%;background:var(--faint)}
-.txi-dind{position:absolute;left:0;top:11px;width:16px;height:6px;margin-top:-3px;border-radius:3px;background:var(--ink);pointer-events:none}
+.txi-dind{position:absolute;left:0;top:15px;width:16px;height:6px;margin-top:-3px;border-radius:3px;background:var(--ink);pointer-events:none}
 `; document.head.appendChild(s); }
 
 const shell = (id, label, inner = '', bare = false) => `<div class="txi-k"><div class="txi-f${bare ? ' txi-bare' : ''}" tabindex="0" role="group" aria-roledescription="slideshow" aria-label="${label}. Arrow keys or swipe to change photo.">${inner}</div><div class="txi-bar"><div class="txi-nav"><button type="button" class="txi-b" data-a="prev" aria-label="Previous photo">${ic(CL, 16)}</button><button type="button" class="txi-b" data-a="next" aria-label="Next photo">${ic(CR, 16)}</button></div><div class="txi-cap" aria-hidden="true"><span><b></b><i></i></span><span><b></b><i></i></span></div><span class="txi-live" aria-live="polite"></span><label class="txi-scr" for="${id}-scrub"><span>Scrub</span><input type="range" id="${id}-scrub" min="0" max="1000" step="1" value="1000" aria-label="Scrub through the last transition"><output class="num" for="${id}-scrub">100%</output></label></div></div>`;

@@ -101,6 +101,7 @@ atom({ id:'scrollfeatures', cat:'Landing', name:'Scroll-linked features', block:
 .lds-dt>div{position:relative;display:flex;gap:10px}
 .lds-dt button{position:relative;width:8px;height:8px;padding:0;border:0;border-radius:4px;background:var(--line);cursor:pointer}
 .lds-dt button::before{content:"";position:absolute;inset:-9px -4px}
+.lds-dt button[aria-current="true"]{background:var(--ink)}
 .lds-bar{position:absolute;top:0;height:8px;border-radius:4px;background:var(--ink);pointer-events:none}
 @media (max-width:480px){.lds-h{font-size:16px}.lds-p{font-size:12.5px}.lds-g{gap:14px;padding:0 16px}}
 </style>

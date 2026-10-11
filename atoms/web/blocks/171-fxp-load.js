@@ -832,6 +832,7 @@ atom({ id:'fxp-palette', cat:'Photo effects', name:'Theme from photo', block:'si
     const lerpC = (a, b, p) => a.map((v, i) => lerp(v, b[i], p));
     swb.addEventListener('keydown', e => { const d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault();
       const i = (btns.indexOf(document.activeElement) + d + btns.length) % btns.length; btns.forEach((b, j) => b.tabIndex = j === i ? 0 : -1); btns[i].focus(); choose(i); });
+    cta.onclick = () => { cta.textContent = 'Walk booked for Saturday'; };
     let pend = false;
     const seg = mkSeg($(st, '.seg'), i => { if (i === cur) return; prevScene = cur; cur = i; MX.jump(0).set(1); sw.to(i); sel = 0; hover = -1; A.set(0); pend = true; });
     return t => {
