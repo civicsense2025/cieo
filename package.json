@@ -62,9 +62,17 @@
       "types": "./dist/primitives/AspectRatio/AspectRatio.d.ts",
       "default": "./dist/primitives/AspectRatio/AspectRatio.js"
     },
+    "./AuthCredentialForm": {
+      "types": "./dist/primitives/AuthCredentialForm/AuthCredentialForm.d.ts",
+      "default": "./dist/primitives/AuthCredentialForm/AuthCredentialForm.js"
+    },
     "./AuthEmailField": {
       "types": "./dist/primitives/AuthEmailField/AuthEmailField.d.ts",
       "default": "./dist/primitives/AuthEmailField/AuthEmailField.js"
+    },
+    "./AuthMfaChallenge": {
+      "types": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.d.ts",
+      "default": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.js"
     },
     "./AuthOtpInput": {
       "types": "./dist/primitives/AuthOtpInput/AuthOtpInput.d.ts",
@@ -73,6 +81,10 @@
     "./AuthPasswordInput": {
       "types": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.d.ts",
       "default": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.js"
+    },
+    "./AuthResetForm": {
+      "types": "./dist/primitives/AuthResetForm/AuthResetForm.d.ts",
+      "default": "./dist/primitives/AuthResetForm/AuthResetForm.js"
     },
     "./Avatar": {
       "types": "./dist/primitives/Avatar/Avatar.d.ts",

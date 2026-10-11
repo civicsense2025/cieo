@@ -1,9 +1,12 @@
 export { AlertDialog } from './AlertDialog/AlertDialog.js';
 export { AppShell } from './AppShell/AppShell.js';
 export { AspectRatio } from './AspectRatio/AspectRatio.js';
+export { AuthCredentialForm } from './AuthCredentialForm/AuthCredentialForm.js';
 export { AuthEmailField } from './AuthEmailField/AuthEmailField.js';
+export { AuthMfaChallenge } from './AuthMfaChallenge/AuthMfaChallenge.js';
 export { AuthOtpInput } from './AuthOtpInput/AuthOtpInput.js';
 export { AuthPasswordInput } from './AuthPasswordInput/AuthPasswordInput.js';
+export { AuthResetForm } from './AuthResetForm/AuthResetForm.js';
 export { Avatar } from './Avatar/Avatar.js';
 export { AvatarGroup } from './AvatarGroup/AvatarGroup.js';
 export { AvatarGroupOverflow } from './AvatarGroupOverflow/AvatarGroupOverflow.js';

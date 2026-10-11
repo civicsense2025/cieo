@@ -1,0 +1,124 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.auth-reset-form",
+  "componentVersion": "1.0.0",
+  "name": "AuthResetForm",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AuthResetForm/AuthResetForm.tsx",
+    "symbol": "AuthResetForm"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "id",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "step",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "request",
+          "confirm"
+        ]
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "pending",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "error",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [
+    {
+      "id": "onRequest",
+      "payload": "string"
+    },
+    {
+      "id": "onConfirm",
+      "payload": "string"
+    }
+  ],
+  "variants": [
+    "error",
+    "pending"
+  ],
+  "styleParts": [],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-animation-in-rows"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "id",
+        "step",
+        "pending",
+        "error"
+      ],
+      "states": [],
+      "events": [
+        "onRequest",
+        "onConfirm"
+      ],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Request step plus confirm step for password reset."
+  },
+  "extensions": {}
+}

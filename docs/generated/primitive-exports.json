@@ -3,9 +3,12 @@
     "AlertDialog",
     "AppShell",
     "AspectRatio",
+    "AuthCredentialForm",
     "AuthEmailField",
+    "AuthMfaChallenge",
     "AuthOtpInput",
     "AuthPasswordInput",
+    "AuthResetForm",
     "Avatar",
     "AvatarGroup",
     "AvatarGroupOverflow",
@@ -158,5 +161,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 157
+  "count": 160
 }

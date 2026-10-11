@@ -1,9 +1,12 @@
 export { AlertDialog, type AlertDialogProps } from './AlertDialog/AlertDialog.js';
 export { AppShell, type AppShellProps } from './AppShell/AppShell.js';
 export { AspectRatio, type AspectRatioProps } from './AspectRatio/AspectRatio.js';
+export { AuthCredentialForm, type AuthCredentialFormProps } from './AuthCredentialForm/AuthCredentialForm.js';
 export { AuthEmailField, type AuthEmailFieldProps } from './AuthEmailField/AuthEmailField.js';
+export { AuthMfaChallenge, type AuthMfaChallengeProps } from './AuthMfaChallenge/AuthMfaChallenge.js';
 export { AuthOtpInput, type AuthOtpInputProps } from './AuthOtpInput/AuthOtpInput.js';
 export { AuthPasswordInput, type AuthPasswordInputProps } from './AuthPasswordInput/AuthPasswordInput.js';
+export { AuthResetForm, type AuthResetFormProps } from './AuthResetForm/AuthResetForm.js';
 export { Avatar, type AvatarProps } from './Avatar/Avatar.js';
 export { AvatarGroup, type AvatarPerson, type AvatarGroupProps } from './AvatarGroup/AvatarGroup.js';
 export { AvatarGroupOverflow, type AvatarGroupOverflowProps } from './AvatarGroupOverflow/AvatarGroupOverflow.js';
