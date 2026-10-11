@@ -11,6 +11,7 @@
   const nav=`${all}<div class="ui-navtitle">Collections <span>4</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4</span></a>`;
   document.getElementById('rail-nav').innerHTML=nav;
   document.getElementById('total-count').textContent=`${A.length} atoms`;
+  document.getElementById('atom-search').placeholder=`Search ${A.length} atoms`;
   const familyTab=(id,key,label,on)=>`<button type="button" role="tab" id="family-tab-${key}" data-family="${id}" aria-selected="${on}" aria-controls="groups" tabindex="${on?0:-1}">${id==='*'?'':`<i aria-hidden="true">${id}</i>`}${label}</button>`;
   document.getElementById('family-filter').innerHTML=familyTab('*','all','All motion',true)+Object.entries(c.familyNames).map(([id,name])=>familyTab(id,id,name,false)).join('');
   c.route=()=>{

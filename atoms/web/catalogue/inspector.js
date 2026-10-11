@@ -23,7 +23,7 @@
     preview.replaceChildren();held=null;placeholder=null;c.active=null;dispatchEvent(new Event('resize'));
   }
   dialog.addEventListener('close',()=>{restore();if(opener?.isConnected&&!opener.closest('[hidden]'))opener.focus({preventScroll:true})});
-  c.updateInspectorSave=()=>{if(!held)return;const b=document.getElementById('inspect-save'),saved=c.favorites.has(held.id);b.textContent=saved?'Saved':'Save';b.setAttribute('aria-pressed',String(saved))};
+  c.updateInspectorSave=()=>{if(!held)return;const b=document.getElementById('inspect-save'),saved=c.favorites.has(held.id);document.getElementById('inspect-save-label').textContent=saved?'Saved':'Save';b.setAttribute('aria-pressed',String(saved))};
   document.getElementById('inspect-save').onclick=()=>{if(held)c.toggleSave(held.id)};
   document.getElementById('copy-recipe').onclick=async()=>{
     if(!held)return;const text=held.api;

@@ -100,6 +100,10 @@
     document.getElementById('breadcrumb').textContent=route.category||route.collection||(route.saved?'Saved':'Everything');
     document.getElementById('collection-subtitle').textContent=query?`Results for “${search}”`:route.saved?'Your own little collection of good interactions.':'Small interactions. A little more feeling.';
     document.getElementById('count').textContent=`${count} ${count===1?'atom':'atoms'}`;
+    // A family tab and a category or collection both narrow the list; name both so the result is not silent.
+    const summary=document.getElementById('filter-summary'),scope=route.category||route.collection;
+    summary.hidden=!(c.family!=='*'&&scope);
+    if(!summary.hidden)summary.textContent=`${c.familyNames[c.family]} in ${scope}: ${count} ${count===1?'atom':'atoms'}`;
     document.getElementById('empty-state').hidden=count>0;c.markNavigation();c.invalidate?.();
   };
   const input=document.getElementById('atom-search');
