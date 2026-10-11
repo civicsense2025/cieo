@@ -70,6 +70,14 @@
     if(a.inited)return;a.inited=true;
     try{a.render=a.init(a.stage);a.el.dataset.ready='true'}catch(error){a.el.dataset.error='true';console.error('Atom initialization:',a.id,error);}
   };
+  // Focus and pointer input can arrive before IntersectionObserver delivers its
+  // first entry. Install the recipe's handlers before that first interaction.
+  const preparePreview=event=>{
+    const a=c.byElement.get(event.target.closest('.tile'));
+    if(a&&!a.el.hidden&&a.stage.contains(event.target)){c.initAtom(a);c.invalidate?.();}
+  };
+  grid.addEventListener('focus',preparePreview,true);
+  grid.addEventListener('pointerdown',preparePreview,true);
   c.observer=new IntersectionObserver(entries=>{
     for(const entry of entries){const a=c.byElement.get(entry.target);if(!a)continue;
       a.visible=entry.isIntersecting;if(a.visible&&!a.el.hidden)c.initAtom(a);

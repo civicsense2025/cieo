@@ -1,4 +1,7 @@
 <!doctype html><meta charset="utf-8">
+<link rel="stylesheet" href="../../design/themes.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<div id="dialog" class="cieo cieo-dialog" role="dialog" aria-label="Motion regression" data-entering="rise" hidden>Centered dialog</div>
 <div id="list"><div id="a" style="height:20px">A</div><div id="b" style="height:20px">B</div></div>
 <span id="label">Draft</span> <span id="num">9</span>
 <div id="pop" hidden style="width:50px;height:20px">pop</div>
@@ -29,6 +32,21 @@ const ind = document.getElementById('ind'); ind.style.left = '200px';
 edges(ind, { left: ind.getBoundingClientRect().left - 200, right: ind.getBoundingClientRect().right - 200 });
 await new Promise(r => setTimeout(r, 50)); out.edgesMid = ind.style.transform;
 await new Promise(r => setTimeout(r, 700)); out.edgesEnd = ind.style.transform;
+// Layout centering must survive both the CSS entrance and spring transforms.
+const dialog = document.getElementById('dialog');
+const centers = [];
+const recordCenter = () => {
+  const r = dialog.getBoundingClientRect();
+  centers.push({ x: r.left + r.width / 2 - innerWidth / 2, y: r.top + r.height / 2 - innerHeight / 2 });
+};
+enter(dialog); recordCenter();
+await new Promise(r => setTimeout(r, 40)); recordCenter();
+await new Promise(r => setTimeout(r, 650)); recordCenter();
+exit(dialog); recordCenter();
+await new Promise(r => setTimeout(r, 40)); recordCenter();
+await new Promise(r => setTimeout(r, 650));
+out.dialogCenters = centers;
+out.dialogCentered = centers.every(({ x, y }) => Math.abs(x) < 1 && Math.abs(y) <= 4.1) && dialog.hidden;
 // reduced motion jumps
 setMotionState(() => ({ reduced: true }));
 swap(document.getElementById('label'), 'Instant'); out.reduced = document.getElementById('label').textContent;

@@ -47,7 +47,9 @@ try{
   await page.evaluate(()=>location.hash='all');await delay();
  });
  await check('dropdown supports keyboard selection and closes with Escape',async()=>{
-  await page.locator('#dropdown .dd').focus();await page.keyboard.press('ArrowDown');await page.keyboard.press('End');await page.keyboard.press('Enter');await delay();
+  await page.locator('#dropdown .dd').focus();
+  assert.equal(await page.locator('#dropdown').getAttribute('data-ready'),'true');
+  await page.keyboard.press('ArrowDown');await page.keyboard.press('End');await page.keyboard.press('Enter');await delay();
   assert.equal(await page.locator('#dropdown [role=menuitemradio]').last().getAttribute('aria-checked'),'true');
   await page.locator('#dropdown .dd').focus();await page.keyboard.press('ArrowDown');await page.keyboard.press('Escape');assert.equal(await page.locator('#dropdown .dd').getAttribute('aria-expanded'),'false');
  });
@@ -82,20 +84,20 @@ try{
  });
  await check('view controls persist after reload',async()=>{await page.reload();await page.waitForFunction(()=>!!window.CIEO_REVIEW);assert.equal(await page.evaluate(()=>CieoCatalogue.appearance.settings.appearance),'dark');});
  await page.locator('.ui-topbar [data-open=appearance-dialog]').click();await page.getByRole('button',{name:'Light',exact:true}).click();await page.getByRole('button',{name:'Iris accent',exact:true}).click();await page.getByRole('button',{name:'Close appearance',exact:true}).click();
- for(const width of [360,390,600,768,1024,1440,1920]){
+ for(const width of [320,360,390,600,768,1024,1440,1920]){
   await check(`no page overflow at ${width}px`,async()=>{await page.setViewportSize({width,height:width<600?844:1000});await delay();assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));});
   if(width===390)await shot('catalogue-phone');if(width===768)await shot('catalogue-tablet');
  }
  await check('phone navigation opens and selects the full collection',async()=>{
   await page.setViewportSize({width:390,height:844});await page.getByRole('button',{name:'Browse collections',exact:true}).click();await delay();await shot('catalogue-phone-navigation');
-  await page.locator('#mobile-nav a[href="#all"]').click();await delay();assert.equal(await page.locator('#browse-dialog').isVisible(),false);assert.equal(await page.locator('.ui-sidebar').isVisible(),false);assert.equal(await page.locator('#collection-title').textContent(),'Everything, in motion.');
+  await page.getByRole('dialog', {name:'Collections',exact:true}).getByRole('link', {name:/^Everything /}).click();await delay();assert.equal(await page.locator('#browse-dialog').isVisible(),false);assert.equal(await page.locator('.ui-sidebar').isVisible(),false);assert.equal(await page.locator('#collection-title').textContent(),'Everything, in motion.');
  });
  await check('OS reduced motion pauses previews without removing controls',async()=>{await page.emulateMedia({reducedMotion:'reduce'});await delay();assert.equal(await page.evaluate(()=>CieoCatalogue.reduced),true);assert.equal(await page.locator('#pause-motion').getAttribute('aria-label'),'Reduced motion is enabled');});
  await check('forced colors preserve visible navigation',async()=>{await page.emulateMedia({forcedColors:'active'});assert.equal(await page.locator('#atom-search').isVisible(),true);});
  await check('no uncaught browser errors',async()=>assert.deepEqual(errors,[]));
 }catch(e){checks.push({name:'harness',pass:false,error:String(e)});console.error(e);}
 finally{
- fs.writeFileSync(path.join(out,'browser-report.json'),JSON.stringify({checks,errors,engine:'Chromium',viewports:[360,390,600,768,1024,1440,1920]},null,2));
+ fs.writeFileSync(path.join(out,'browser-report.json'),JSON.stringify({checks,errors,engine:'Chromium',viewports:[320,360,390,600,768,1024,1440,1920]},null,2));
  await browser.close();
 }
 if(checks.some(x=>!x.pass))process.exitCode=1;
