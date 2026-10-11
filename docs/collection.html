@@ -86,6 +86,11 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-families [role=tab] i{font:11px var(--mono);font-style:normal;color:inherit}
 .ui-families [role=tab]:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .ui-viewtools{display:flex;align-items:center;gap:8px}.ui-viewtools select{border:0;background:transparent;font-size:12px;padding:8px;min-height:40px}
+.ui-result-count{white-space:nowrap;font-variant-numeric:tabular-nums}.ui-speed{font-size:12px;color:var(--muted);padding-inline:4px 0}
+/* Visible word for the pause control. runtime.js owns the icon and aria-label, so the text comes from the pressed state. */
+#pause-motion::after{content:"Pause";font-size:12px;font-weight:500;line-height:16px}#pause-motion[aria-pressed=true]::after{content:"Resume"}
+#saved-toggle[aria-pressed=true] svg{fill:currentColor}
+.ui-filter-summary{margin:-16px auto 16px;max-width:1600px;font-size:13px;color:var(--muted)}
 .ui-empty{padding:80px 24px;text-align:center}.ui-empty h2{font-size:24px;letter-spacing:-.5px}.ui-empty p{color:var(--muted)}
 .ui-tile-caption{margin:0;padding:12px 0 0;font-size:12px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere;max-width:100%}
 #groups .tile>header{min-width:0}
@@ -95,9 +100,9 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-bottom{display:none}.ui-mobile-only{display:none!important}
 .ui-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;background:var(--ink);color:var(--card);padding:16px 24px;border-radius:16px;box-shadow:var(--float-shadow);max-width:calc(100vw - 32px);font-size:13px;pointer-events:none}
 @media(min-width:1840px){.ui-main{padding-inline:48px}}
-@media(max-width:1279px){:root{--sidebar:216px;--columns:2}.ui-main{padding-inline:24px}.ui-breadcrumb{display:none}.ui-search{margin-left:0;width:100%;max-width:400px}.ui-topbar>button:last-child{margin-left:auto}}
+@media(max-width:1279px){:root{--sidebar:216px;--columns:2}.ui-main{padding-inline:24px}.ui-breadcrumb{display:none}.ui-search{margin-left:0;width:100%;max-width:400px}.ui-topbar>button:last-child{margin-left:auto}.ui-families{flex-wrap:wrap;overflow-x:visible}}
 @media(max-width:1023px){.ui-sidebar{display:none}.ui-main{margin:0}.ui-mobile-only{display:inline-flex!important}.ui-topbar{min-height:72px}.ui-search{max-width:none}.ui-breadcrumb{display:none}.ui-heading{padding-top:24px}}
-@media(max-width:767px){:root{--columns:1}.ui-main{padding:0 16px 112px}.ui-topbar{gap:8px;min-height:72px}.ui-topbar>.ui-desktop-only{display:none}.ui-heading{padding-top:16px;align-items:center}.ui-heading h1{font-size:32px;letter-spacing:-1px}.ui-heading p{font-size:12px}.ui-heading-tools{display:none!important}.ui-search{padding-inline:12px}.ui-search kbd{display:none}.ui-toolbar{flex-wrap:wrap;gap:8px;margin-bottom:16px}.ui-families{width:100%;margin-inline:-4px;flex-wrap:wrap;overflow-x:visible}.ui-viewtools{width:100%;justify-content:space-between}.ui-families [role=tab]{padding-inline:16px}.ui-tile-caption{padding-top:8px}#groups .tile>header{gap:6px}.ui-bottom{display:flex;position:fixed;z-index:30;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:264px;justify-content:space-around;padding:8px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--float-shadow)}.ui-bottom button{width:72px;height:48px;display:flex;align-items:center;justify-content:center;gap:2px;flex-direction:column;background:none;border:0;color:var(--muted);border-radius:16px;font-size:10px}.ui-bottom button:hover{background:var(--raised)}.ui-bottom button svg{height:20px}.ui-toast{bottom:96px}.ui-button{min-height:48px}.ui-button.icon{width:48px}}
+@media(max-width:767px){:root{--columns:1}.ui-main{padding:0 16px 112px}.ui-topbar{gap:8px;min-height:72px}.ui-topbar>.ui-desktop-only{display:none}.ui-heading{padding-top:16px;align-items:center}.ui-heading h1{font-size:32px;letter-spacing:-1px}.ui-heading p{font-size:12px}.ui-heading-tools{display:none!important}.ui-search{padding-inline:12px;min-height:44px}.ui-search input{font-size:16px}.ui-filter-summary{margin-top:-8px}.ui-search kbd{display:none}.ui-toolbar{flex-wrap:wrap;gap:8px;margin-bottom:16px}.ui-families{width:100%;margin-inline:-4px;flex-wrap:wrap;overflow-x:visible}.ui-viewtools{width:100%;justify-content:space-between}.ui-families [role=tab]{padding-inline:16px}.ui-tile-caption{padding-top:8px}#groups .tile>header{gap:6px}.ui-bottom{display:flex;position:fixed;z-index:30;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:264px;justify-content:space-around;padding:8px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--float-shadow)}.ui-bottom button{width:72px;height:48px;display:flex;align-items:center;justify-content:center;gap:2px;flex-direction:column;background:none;border:0;color:var(--muted);border-radius:16px;font-size:10px}.ui-bottom button:hover{background:var(--raised)}.ui-bottom button svg{height:20px}.ui-toast{bottom:96px}.ui-button{min-height:48px}.ui-button.icon{width:48px}}
 
 /* Existing recipes keep their class names and measured geometry. These rules refine
    shared surfaces; atom-specific geometry is changed in its source, not forced here. */
@@ -108,7 +113,8 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .stage{position:relative;height:360px;display:grid;grid-template-columns:minmax(0,1fr);place-items:center;overflow:hidden;min-width:0;isolation:isolate}
 .tile.tall .stage{height:384px}.tile.big .stage{height:400px}.tile.wide .stage{height:400px}.tile.wide.tall .stage{height:560px}
 .tile>header{display:flex;align-items:center;gap:8px;padding:16px 0 8px}.tile h3{font-size:13px;line-height:1.4;font-weight:600;letter-spacing:-.1px;margin:0;flex:1}.tile>header p{margin:4px 0 0;font-size:11px;color:var(--muted)}
-.tile .ui-tile-name{border:0;background:transparent;padding:0;color:var(--ink);text-align:left;font:inherit;font-weight:600;display:block}.tile .ui-tile-name:hover{color:var(--accent)}
+.tile .ui-tile-name{border:0;background:transparent;padding:0;color:var(--ink);text-align:left;font:inherit;font-weight:600;display:block;cursor:pointer;text-underline-offset:3px}.tile .ui-tile-name:hover{color:var(--accent)}.tile .ui-tile-name:hover,.tile .ui-tile-name:focus-visible{text-decoration:underline}
+.tile .ui-tile-tools [data-save][aria-pressed=true] svg{fill:currentColor}
 .tile .ui-tile-tools{margin-left:auto;display:flex;gap:0}.tile .ui-tile-tools button{width:32px;height:32px;border:0;background:transparent;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
 .tile .ui-tile-tools button:hover{background:var(--raised)}.tile .ui-tile-tools button[aria-pressed=true]{color:var(--accent);background:var(--accent-tint)}.tile .ui-tile-tools svg{width:16px;height:16px}
 .ui-family-mark{display:flex;gap:4px;pointer-events:none;flex:none}.ui-family-mark span{width:16px;height:24px;display:grid;place-items:center;font:10px var(--mono);color:var(--muted);border-radius:8px;background:transparent}
@@ -133,6 +139,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-stage-footer{font-size:10px;color:var(--muted);letter-spacing:.03em}
 :root[data-corners=crisp] .stage :is(.card,.btn){border-radius:8px}
 @media(max-width:767px){#groups{gap:24px}.tile .ui-tile-name{min-height:44px;display:flex;align-items:center}.tile.wide{grid-column:auto}.tile .stage{height:320px}.tile.tall .stage,.tile.big .stage{height:400px}.tile.wide.tall .stage{height:560px}.tile .ui-tile-tools button{width:40px;height:40px}.tile>header{padding-top:8px}.stage .btn{min-height:40px}.ui-setting-row{padding:16px;gap:16px}}
+@media(pointer:fine) and (min-width:768px){.tile .ui-tile-name{min-height:32px;display:flex;align-items:center}}
 @media(pointer:coarse){.tile .ui-tile-name{min-height:44px;display:flex;align-items:center}.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-families [role=tab]{min-height:48px}}
 /* Prevent recipe image or SVG intrinsic widths from enlarging the gallery track. */
 .stage > :not(style){max-inline-size:100%}
@@ -157,6 +164,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-inspect-meta pre{font:11px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--page);padding:16px;border-radius:12px;margin:0 0 8px}
 .ui-inspect-meta a{font-size:12px;text-underline-offset:3px;overflow-wrap:anywhere}.ui-inspect-meta .ui-meta-tags{display:flex;flex-wrap:wrap;gap:8px}.ui-meta-tags span{padding:4px 8px;border-radius:8px;background:var(--raised);font-size:11px}
 .ui-inspect-note{margin-top:auto!important;font-size:11px!important}
+#inspect-save{gap:8px}#inspect-save[aria-pressed=true] svg{fill:currentColor}
 @media(max-width:767px){.ui-dialog{position:fixed;inset:auto 8px 8px;margin:0 auto;width:calc(100% - 16px)!important;border-radius:24px;max-height:calc(100dvh - 24px);padding-bottom:env(safe-area-inset-bottom)}.ui-dialog-heading{padding:8px 16px}#inspect-dialog{inset:0;margin:0;width:100vw!important;max-width:100vw;height:100dvh;max-height:100dvh;border-radius:0}.ui-inspect-body{display:flex;flex-direction:column;min-height:0}#inspect-preview{padding:16px;min-height:280px;overflow:auto}#inspect-preview .stage{height:320px!important}.ui-inspect-meta{padding:24px;gap:24px}.ui-rail-slot .ui-folders{grid-template-columns:repeat(2,1fr)}.ui-settings{padding:24px}.ui-setting-options{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}.ui-dialog::backdrop{backdrop-filter:none}}
 @media(forced-colors:active){.ui-dialog,.stage-shell,.ui-button,.ui-navlink[aria-current=page]{border:1px solid CanvasText}.ui-family-mark span{border:1px solid CanvasText}.ui-families [role=tab][aria-selected=true]{outline:2px solid CanvasText;outline-offset:-2px}}
@@ -175,15 +183,16 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
   <div class="ui-topbar">
     <button class="ui-button ghost icon ui-mobile-only" data-open="browse-dialog" aria-label="Browse collections" data-icon="sidebar"></button>
     <div class="ui-breadcrumb">Library <span>/</span> <b id="breadcrumb">Everything</b></div>
-    <label class="ui-search"><span data-icon="search"></span><span class="ui-sr">Search atoms</span><input id="atom-search" type="search" placeholder="Find a little inspiration…" autocomplete="off"><kbd>/</kbd></label>
+    <label class="ui-search"><span data-icon="search"></span><span class="ui-sr">Search atoms</span><input id="atom-search" type="search" placeholder="Search atoms" autocomplete="off"><kbd>/</kbd></label>
     <button class="ui-button ghost icon ui-desktop-only" id="details-toggle" aria-label="Show inline details" aria-pressed="false" data-icon="code"></button>
     <button class="ui-button ghost icon ui-desktop-only" data-open="appearance-dialog" aria-label="Collection appearance" data-icon="settings"></button>
   </div>
   <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span>Saved</button></div></div>
   <div class="ui-toolbar">
     <div class="ui-families" role="tablist" aria-label="Motion family" id="family-filter"></div>
-    <div class="ui-viewtools"><span id="count" class="ui-muted ui-result-count" aria-live="polite"></span><div class="row"><button class="ui-button ghost icon" id="pause-motion" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><label><span class="ui-sr">Preview speed</span><select id="motion-speed"><option value="1">1× speed</option><option value="0.25">¼× speed</option><option value="0.1">⅒× speed</option></select></label></div></div>
+    <div class="ui-viewtools"><span id="count" class="ui-muted ui-result-count" aria-live="polite"></span><div class="row"><button class="ui-button ghost" id="pause-motion" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><label class="ui-speed" for="motion-speed">Speed</label><select id="motion-speed"><option value="1">1× speed</option><option value="0.25">¼× speed</option><option value="0.1">⅒× speed</option></select></div></div>
   </div>
+  <p id="filter-summary" class="ui-filter-summary" aria-live="polite" hidden></p>
   <div id="groups" role="tabpanel" aria-labelledby="family-tab-all"></div>
   <div id="empty-state" class="ui-empty" hidden><span data-icon="search"></span><h2>Nothing here. Yet.</h2><p>Try another search, or save a few atoms to start a collection.</p><button class="ui-button" id="clear-filters">Show all atoms</button></div>
   <noscript><p>This catalogue needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
@@ -199,7 +208,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
     <p class="ui-muted" style="font-size:12px;margin:0">Appearance and saved atoms stay in this browser. Nothing is sent to a server.</p>
   </div>
 </dialog>
-<dialog class="ui-dialog" id="inspect-dialog" aria-labelledby="inspect-title"><div class="ui-dialog-heading"><h2 id="inspect-title">Atom details</h2><button class="ui-button ghost icon" data-close aria-label="Close atom details" data-icon="close"></button></div><div class="ui-inspect-body"><div id="inspect-preview"></div><div class="ui-inspect-meta"><p id="inspect-description"></p><div><h3>Motion</h3><div class="ui-meta-tags" id="inspect-families"></div></div><div><h3>Recipe</h3><pre id="inspect-code"></pre><button class="ui-button" id="copy-recipe"><span data-icon="copy"></span>Copy recipe</button></div><a id="inspect-source" target="_blank" rel="noopener noreferrer">View source</a><button id="inspect-save" class="ui-button" aria-pressed="false">Save atom</button><p class="ui-inspect-note">The original live atom, not a video. The recipe uses the catalogue runtime; adapt it through cieo/dom or cieo/react.</p></div></div></dialog>
+<dialog class="ui-dialog" id="inspect-dialog" aria-labelledby="inspect-title"><div class="ui-dialog-heading"><h2 id="inspect-title">Atom details</h2><button class="ui-button ghost icon" data-close aria-label="Close atom details" data-icon="close"></button></div><div class="ui-inspect-body"><div id="inspect-preview"></div><div class="ui-inspect-meta"><p id="inspect-description"></p><div><h3>Motion</h3><div class="ui-meta-tags" id="inspect-families"></div></div><div><h3>Recipe</h3><pre id="inspect-code"></pre><button class="ui-button" id="copy-recipe"><span data-icon="copy"></span>Copy recipe</button></div><a id="inspect-source" target="_blank" rel="noopener noreferrer">View source</a><button id="inspect-save" class="ui-button" aria-pressed="false"><span data-icon="bookmark"></span><span id="inspect-save-label">Save</span></button><p class="ui-inspect-note">The original live atom, not a video. The recipe uses the catalogue runtime; adapt it through cieo/dom or cieo/react.</p></div></div></dialog>
 <div id="announcer" class="ui-sr" role="status" aria-live="polite"></div><div id="toast" class="ui-toast" hidden></div>
 <script>
 window.CIEO_SOURCE_HINT="runtime.core.js";
@@ -536,7 +545,7 @@ window.CIEO_SOURCE_HINT="blocks/010-rating.js";
 
 
 atom({ id:'rating', cat:'Content', name:'Rating', block:'rating, reviews', fam:['D'],
-  html:`<div class="col" style="align-items:center;gap:12px"><div class="rt" style="position:relative;cursor:pointer;touch-action:none" role="slider" tabindex="0" aria-label="Rating" aria-valuemin="0" aria-valuemax="5"><div class="row stars" style="gap:4px;color:var(--line)"></div><div class="over" style="position:absolute;inset:0;overflow:hidden"><div class="row stars" style="gap:4px;color:var(--ink);width:max-content;flex-wrap:nowrap"></div></div></div><span class="num small muted val">3.5 of 5</span></div><div class="hint">Hover to preview, click to set</div>`,
+  html:`<div class="col" style="align-items:center;gap:12px"><div class="rt" style="position:relative;cursor:pointer;touch-action:none" role="slider" tabindex="0" aria-label="Rating" aria-valuemin="0" aria-valuemax="5" aria-valuenow="3.5" aria-valuetext="3.5 of 5"><div class="row stars" style="gap:4px;color:var(--line)"></div><div class="over" style="position:absolute;inset:0;overflow:hidden"><div class="row stars" style="gap:4px;color:var(--ink);width:max-content;flex-wrap:nowrap"></div></div></div><span class="num small muted val">3.5 of 5</span></div><div class="hint">Hover to preview, click to set</div>`,
   desc:'While the pointer is over it, the fill follows the cursor exactly. On leave it settles back to the saved value.',
   api:'fill = hovering ? pointerX : v.at(t)',
   init(st){
@@ -548,7 +557,7 @@ atom({ id:'rating', cat:'Content', name:'Rating', block:'rating, reviews', fam:[
     rt.onpointermove = e => hover = at(e); rt.onpointerleave = () => { if (hover !== null){ v.release(hover, 0, v.target); hover = null; } };
     rt.onclick = e => { const s = Math.max(.5, Math.round(at(e)*2)/2); v.jump(s); hover = at(e); };
     rt.onkeydown = e => { if (e.key === 'ArrowRight') v.set(Math.min(5, v.target + .5)); if (e.key === 'ArrowLeft') v.set(Math.max(.5, v.target - .5)); };
-    return t => { const x = hover ?? v.at(t); over.style.width = (x/5*100).toFixed(2) + '%'; val.textContent = `${v.target} of 5`; rt.setAttribute('aria-valuenow', v.target); };
+    return t => { const x = hover ?? v.at(t); over.style.width = (x/5*100).toFixed(2) + '%'; val.textContent = `${v.target} of 5`; rt.setAttribute('aria-valuenow', v.target); rt.setAttribute('aria-valuetext', `${v.target} of 5`); };
   }});
 window.CIEO_SOURCE_HINT="blocks/011-badge.js";
 
@@ -747,14 +756,14 @@ const scene = (ink) => `<svg viewBox="0 0 360 210" preserveAspectRatio="xMidYMid
 window.CIEO_SOURCE_HINT="blocks/021-beforeafter.js";
 
 atom({ id:'beforeafter', cat:'Media', name:'Before / after', block:'before-after', fam:['D'],
-  html:`<div class="ba" style="position:relative;width:min(360px,90%);aspect-ratio:12/7;max-width:100%;border-radius:12px;overflow:hidden;cursor:ew-resize;touch-action:none" role="slider" tabindex="0" aria-label="Comparison position"><div style="position:absolute;inset:0">${scene(true)}</div><div class="top" style="position:absolute;inset:0">${scene(false)}</div><div class="hd" style="position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--ink)"><span style="position:absolute;top:50%;left:50%;width:28px;height:28px;margin:-14px;border-radius:50%;background:var(--ink);box-shadow:var(--shadow)"></span></div><span class="small" style="position:absolute;left:10px;top:8px;color:var(--muted)">Sketch</span><span class="small" style="position:absolute;right:10px;top:8px;color:var(--card)">Final</span></div>`,
+  html:`<div class="ba" style="position:relative;width:min(360px,90%);aspect-ratio:12/7;max-width:100%;border-radius:12px;overflow:hidden;cursor:ew-resize;touch-action:none" role="slider" tabindex="0" aria-label="Comparison position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><div style="position:absolute;inset:0">${scene(true)}</div><div class="top" style="position:absolute;inset:0">${scene(false)}</div><div class="hd" style="position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--ink)"><span style="position:absolute;top:50%;left:50%;width:28px;height:28px;margin:-14px;border-radius:50%;background:var(--ink);box-shadow:var(--shadow)"></span></div><span class="small" style="position:absolute;left:10px;top:8px;color:var(--muted)">Sketch</span><span class="small" style="position:absolute;right:10px;top:8px;color:var(--card)">Final</span></div>`,
   desc:'The divider sits exactly under the pointer while dragging. Clicking elsewhere springs it there instead.',
   api:'x = held ? pointer : x.at(t)',
   init(st){
     const ba = $(st,'.ba'), top = $(st,'.top'), hd = $(st,'.hd'), x = new Track(.5); let held = false, hx = .5, moved = false;
     drag(ba, { down:p => { held = true; moved = false; hx = p.x/p.w; x.set(clamp(hx)); }, move:p => { moved = true; hx = clamp(p.x/p.w); }, up:() => { held = false; if (moved) x.jump(hx); } });
     ba.onkeydown = e => { if (e.key === 'ArrowRight') x.set(clamp(x.target + .1)); if (e.key === 'ArrowLeft') x.set(clamp(x.target - .1)); };
-    return t => { const v = held && moved ? hx : x.at(t); top.style.clipPath = `inset(0 ${((1-v)*100).toFixed(2)}% 0 0)`; hd.style.left = (v*100).toFixed(2) + '%'; };
+    return t => { const v = held && moved ? hx : x.at(t); top.style.clipPath = `inset(0 ${((1-v)*100).toFixed(2)}% 0 0)`; hd.style.left = (v*100).toFixed(2) + '%'; ba.setAttribute('aria-valuenow', Math.round(v*100)); };
   }});
 window.CIEO_SOURCE_HINT="blocks/022-carousel.js";
 
@@ -812,24 +821,29 @@ atom({ id:'lightbox', cat:'Media', name:'Gallery lightbox', block:'gallery, imag
     const gg = $(st,'.gg'), big = $(st,'.big'), scrim = $(st,'.scrim'), cap = $(st,'.cap');
     const C = [['var(--ink)','Harbor, 6am'],['var(--accent)','Moss study'],['var(--muted)','Concrete stair'],['var(--raised)','Fog bank'],['var(--faint)','Window light'],['var(--accent-tint)','Linen']];
     const art = c => `<svg viewBox="0 0 100 100" preserveAspectRatio="none" width="100%" height="100%"><rect width="100" height="100" fill="${c}"/><circle cx="72" cy="30" r="12" fill="var(--card)" opacity=".5"/><path d="M0 80 L35 52 L60 72 L100 45 L100 100 L0 100Z" fill="var(--card)" opacity=".25"/></svg>`;
-    const th = C.map(([c]) => { const b = document.createElement('button'); b.style.cssText = 'width:76px;height:76px;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:zoom-in'; b.innerHTML = art(c); gg.appendChild(b); return b; });
+    const th = C.map(([c, name]) => { const b = document.createElement('button'); b.setAttribute('aria-label', 'Zoom to ' + name); b.style.cssText = 'width:76px;height:76px;border:0;padding:0;border-radius:10px;overflow:hidden;cursor:zoom-in'; b.innerHTML = art(c); gg.appendChild(b); return b; });
     const T = { x:new Track(0), y:new Track(0), w:new Track(0), h:new Track(0), r:new Track(10), o:new Track(0) }; let cur = -1, open = false;
     const rectOf = el => { const a = el.getBoundingClientRect(), s = st.getBoundingClientRect(); return [a.left - s.left, a.top - s.top, a.width, a.height]; };
     const setBox = ([x,y,w,h], r, inst) => { const k = inst ? 'jump' : 'set'; T.x[k](x); T.y[k](y); T.w[k](w); T.h[k](h); T.r[k](r); };
-    th.forEach((b,i) => b.onclick = () => { cur = i; open = true; big.innerHTML = art(C[i][0]); big.style.display = 'block'; setBox(rectOf(b), 10, true); const W = st.clientWidth, H = st.clientHeight, s = Math.min(W - 40, H - 60); setBox([(W - s)/2, 16, s, s - 16], 14); T.o.set(1); cap.textContent = C[i][1]; });
-    big.onclick = () => { open = false; setBox(rectOf(th[cur]), 10); T.o.set(0, S.snap); };
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button'; closeBtn.setAttribute('aria-label', 'Close'); closeBtn.textContent = '×';
+    closeBtn.style.cssText = 'position:absolute;top:8px;right:8px;z-index:1;width:32px;height:32px;border:0;border-radius:999px;background:var(--card);color:var(--ink);font-size:20px;line-height:1;cursor:pointer';
+    const closeBox = () => { if (!open) return; open = false; setBox(rectOf(th[cur]), 10); T.o.set(0, S.snap); };
+    th.forEach((b,i) => b.onclick = () => { cur = i; open = true; big.innerHTML = art(C[i][0]); big.appendChild(closeBtn); big.style.display = 'block'; setBox(rectOf(b), 10, true); const W = st.clientWidth, H = st.clientHeight, s = Math.min(W - 40, H - 60); setBox([(W - s)/2, 16, s, s - 16], 14); T.o.set(1); cap.textContent = C[i][1]; closeBtn.focus({ preventScroll:true }); });
+    big.onclick = closeBox;
+    st.addEventListener('keydown', e => { if (e.key === 'Escape' && open){ e.preventDefault(); closeBox(); } });
     return t => { if (cur < 0) return; const settled = !open && T.x.prune(t) + T.w.prune(t) + T.y.prune(t) === 0;
       Object.assign(big.style, { left:px(T.x.at(t)), top:px(T.y.at(t)), width:px(T.w.at(t)), height:px(T.h.at(t)), borderRadius:px(T.r.at(t)) });
-      const o = clamp(T.o.at(t)); scrim.style.opacity = (o*.92).toFixed(3); fade(cap, o, (1-o)*6);
+      const o = clamp(T.o.at(t)); scrim.style.opacity = (o*.92).toFixed(3); fade(cap, o, (1-o)*6); closeBtn.style.opacity = o.toFixed(3);
       th.forEach((b,i) => b.style.visibility = i === cur && !settled ? 'hidden' : 'visible');
-      if (settled){ big.style.display = 'none'; th[cur].style.visibility = 'visible'; cur = -1; } };
+      if (settled){ big.style.display = 'none'; th[cur].style.visibility = 'visible'; th[cur].focus({ preventScroll:true }); cur = -1; } };
   }});
 window.CIEO_SOURCE_HINT="blocks/025-player.js";
 
 
 document.head.insertAdjacentHTML('beforeend', `<style id="player-opts">.pl-opts .btn{padding:3px 10px;font-size:12.5px}.pl-opts .btn[aria-pressed="true"]{background:var(--ink);color:var(--card);border-color:var(--ink)}</style>`);
 atom({ id:'player', cat:'Media', name:'Player', block:'video, embed', fam:['M','D'],
-  html:`<div class="card col" style="width:min(340px,88%);padding:16px;gap:14px"><div class="row" style="gap:12px"><div style="width:44px;height:44px;border-radius:10px;background:var(--ink)"></div><div style="flex:1;min-width:0"><b style="display:block;font-size:14px">Side A, Track 03</b><span class="small muted">Demo recording</span></div><button class="pp" aria-label="Play" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--ink);color:var(--card);display:grid;place-items:center;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor"/></svg></button></div><div class="sc" style="position:relative;height:20px;cursor:pointer;touch-action:none" role="slider" tabindex="0" aria-label="Seek"><div class="bar" style="position:absolute;left:0;right:0;top:50%;border-radius:4px;background:var(--raised);overflow:hidden"><div class="fl" style="height:100%;background:var(--ink)"></div></div><div class="th" style="position:absolute;top:50%;left:0;border-radius:50%;background:var(--ink)"></div></div><div class="row small muted num" style="justify-content:space-between;margin-top:-8px"><span class="tc">0:00</span><span>3:24</span></div><div class="row small muted pl-opts" style="justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:10px"><span>At end</span><span class="row" style="gap:6px" role="group" aria-label="What happens at the end"><button type="button" class="btn" data-m="stop" aria-pressed="true">Replay</button><button type="button" class="btn" data-m="loop" aria-pressed="false">Loop</button></span></div></div>`,
+  html:`<div class="card col" style="width:min(340px,88%);padding:16px;gap:14px"><div class="row" style="gap:12px"><div style="width:44px;height:44px;border-radius:10px;background:var(--ink)"></div><div style="flex:1;min-width:0"><b style="display:block;font-size:14px">Side A, Track 03</b><span class="small muted">Demo recording</span></div><button class="pp" aria-label="Play" style="width:40px;height:40px;border-radius:50%;border:0;background:var(--ink);color:var(--card);display:grid;place-items:center;cursor:pointer"><svg width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor"/></svg></button></div><div class="sc" style="position:relative;height:20px;cursor:pointer;touch-action:none" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="32" aria-valuetext="1:05 of 3:24"><div class="bar" style="position:absolute;left:0;right:0;top:50%;border-radius:4px;background:var(--raised);overflow:hidden"><div class="fl" style="height:100%;background:var(--ink)"></div></div><div class="th" style="position:absolute;top:50%;left:0;border-radius:50%;background:var(--ink)"></div></div><div class="row small muted num" style="justify-content:space-between;margin-top:-8px"><span class="tc">0:00</span><span>3:24</span></div><div class="row small muted pl-opts" style="justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:10px"><span>At end</span><span class="row" style="gap:6px" role="group" aria-label="What happens at the end"><button type="button" class="btn" data-m="stop" aria-pressed="true">Replay</button><button type="button" class="btn" data-m="loop" aria-pressed="false">Loop</button></span></div></div>`,
   desc:'Play and pause share eight points on one spring. Progress is computed from the play start time and clamps at the end, so the track lands in a paused replay state instead of wrapping; scrubbing just rewrites that start.',
   api:'progress(t) = playing ? min(1, p0 + (t − t0)/dur) : p0; at 1 → pause, Replay',
   init(st){
@@ -851,7 +865,7 @@ atom({ id:'player', cat:'Media', name:'Player', block:'video, embed', fam:['M','
       const p = held ? hp : pr(t), g = gr.at(t), W = sc.clientWidth, bh = 4 + 4*g, ts = 8 + 8*g;
       bar.style.height = px(bh); bar.style.transform = 'translateY(-50%)'; fl.style.width = (p*100).toFixed(3) + '%';
       th.style.width = th.style.height = px(ts); th.style.transform = `translate(${px(p*W - ts/2)}, -50%)`;
-      const s = p*DUR; tc.textContent = `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`; };
+      const s = p*DUR; tc.textContent = `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`; sc.setAttribute('aria-valuenow', Math.round(p*100)); sc.setAttribute('aria-valuetext', `${tc.textContent} of 3:24`); };
   }});
 window.CIEO_SOURCE_HINT="blocks/026-poll.js";
 
@@ -966,11 +980,15 @@ atom({ id:'signature', cat:'Interactive', name:'Signature pad', block:'signature
     const bPad = document.createElement('button'); bPad.className = 'btn'; bPad.style.cssText += 'padding:2px 8px'; bPad.textContent = 'Pad';
     const bDone = document.createElement('button'); bDone.className = 'btn'; bDone.style.cssText += 'padding:2px 8px'; bDone.textContent = 'Saved';
     cust.appendChild(bPad); cust.appendChild(bDone); cust.appendChild(redraw);
-    const show = v => sw2.to(v);
-    bPad.onclick = () => show('pad'); bDone.onclick = () => { if (strokes.length) show('done'); };
-    redraw.onclick = () => { strokes = []; ink.jump(1); show('pad'); };
+    // Each press writes its result into the status line, so a repeat press on the current view still answers.
+    const PAD_TX = 'Sign with mouse or finger', SAVED_OK = '✓ Signature saved', SAVED_NONE = 'Nothing to save yet. Draw first.';
+    const show = v => { sw2.to(v); bPad.setAttribute('aria-pressed', String(v === 'pad')); bDone.setAttribute('aria-pressed', String(v === 'done')); };
+    bPad.setAttribute('aria-pressed', 'true'); bDone.setAttribute('aria-pressed', 'false');
+    bPad.onclick = () => { show('pad'); Lpad.firstChild.textContent = 'Ready. Sign below.'; };
+    bDone.onclick = () => { Ldone.firstChild.textContent = strokes.length ? SAVED_OK : SAVED_NONE; show('done'); };
+    redraw.onclick = () => { strokes = []; ink.jump(1); show('pad'); Lpad.firstChild.textContent = 'Cleared. Sign again.'; };
     cl.disabled = true;
-    drag(cv, { down:p => { if (ink.target === 0){ strokes = []; ink.jump(1); } show('pad'); cur = [{ x:p.x, y:p.y, t:now() }]; strokes.push(cur); },
+    drag(cv, { down:p => { if (ink.target === 0){ strokes = []; ink.jump(1); } show('pad'); Lpad.firstChild.textContent = PAD_TX; cur = [{ x:p.x, y:p.y, t:now() }]; strokes.push(cur); },
       move:p => { const a = cur[cur.length-1], dt = Math.max(1e-3, now() - a.t); cur.push({ x:p.x, y:p.y, t:now(), w:3.2 - clamp(Math.hypot(p.x - a.x, p.y - a.y)/dt/1800)*2 }); }, up:() => cur = null });
     cl.onclick = () => ink.set(0);
     sv.onclick = () => { if (strokes.length) show('done'); };
@@ -987,7 +1005,7 @@ window.CIEO_SOURCE_HINT="blocks/030-slider.js";
 
 
 atom({ id:'slider', cat:'Interactive', name:'Rubber-band slider', block:'form (range), video volume', fam:['D'],
-  html:`<div class="row" style="width:min(320px,calc(100% - 48px));gap:16px;padding:16px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/></svg><div class="vr" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" style="position:relative;flex:1;height:48px;cursor:grab;touch-action:none"><div class="vp" style="position:absolute;left:0;top:50%;border-radius:999px;background:var(--raised);overflow:hidden"><div class="vf" style="position:absolute;left:0;top:0;bottom:0;background:var(--accent)"></div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div><div class="ro num">60%</div><div class="hint">Drag past either end</div>`,
+  html:`<div class="row" style="width:min(320px,calc(100% - 48px));gap:16px;padding:16px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/></svg><div class="vr" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="60" aria-valuetext="60%" style="position:relative;flex:1;height:48px;cursor:grab;touch-action:none"><div class="vp" style="position:absolute;left:0;top:50%;border-radius:999px;background:var(--raised);overflow:hidden"><div class="vf" style="position:absolute;left:0;top:0;bottom:0;background:var(--accent)"></div></div></div><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex:none"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></div><div class="ro num">60%</div><div class="hint">Drag past either end</div>`,
   desc:'While held, the value is the pointer. Past the ends the pill stretches with rising resistance, then springs back from release velocity.',
   api:'rb(x, d) = d·(1 − 1/(0.55x/d + 1))   o.release(o, v, 0)',
   init(st){
@@ -997,7 +1015,7 @@ atom({ id:'slider', cat:'Interactive', name:'Rubber-band slider', block:'form (r
     vr.onkeydown=e=>{const step=e.shiftKey?.1:.01;if(['ArrowRight','ArrowUp','ArrowLeft','ArrowDown','Home','End'].includes(e.key)){e.preventDefault();v.set(e.key==='Home'?0:e.key==='End'?1:clamp(v.target+(['ArrowRight','ArrowUp'].includes(e.key)?step:-step)))}};
     return t => { const W = vr.clientWidth, val = held ? hv : v.at(t), ov = held ? ho : o.at(t);
       vp.style.width = px(W + Math.abs(ov)); vp.style.height = px(10 - Math.min(3.5, Math.abs(ov)*.07)); vp.style.transform = `translate(${px(Math.min(0, ov))}, -50%)`;
-      vf.style.width = px(clamp(val)*(W + Math.abs(ov))); const pc = Math.round(clamp(val)*100); ro.textContent = pc + '%'; vr.setAttribute('aria-valuenow', pc); };
+      vf.style.width = px(clamp(val)*(W + Math.abs(ov))); const pc = Math.round(clamp(val)*100); ro.textContent = pc + '%'; vr.setAttribute('aria-valuenow', pc); vr.setAttribute('aria-valuetext', pc + '%'); };
   }});
 window.CIEO_SOURCE_HINT="blocks/031-navhover.js";
 
@@ -1024,7 +1042,7 @@ window.CIEO_SOURCE_HINT="blocks/032-longpage.js";
 
 atom({ id:'longpage', cat:'Chrome', name:'Header, progress, jump to top', block:'site-header, reading-progress, jump-to-top', fam:['M','D','X'], tall:true,
   html:`<div class="col" style="gap:8px;align-items:center"><div class="row small muted" style="gap:8px"><span>Center icon</span><button class="btn ct" aria-pressed="true">On</button></div><div class="lp card" style="position:relative;width:min(380px,92%);height:290px;overflow:auto;overscroll-behavior:contain" tabindex="0" aria-label="Scrollable sample page"><header class="hd" style="position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--card);border-bottom:1px solid var(--line-soft)"><b class="lg" style="transform-origin:0 50%;letter-spacing:-.02em">Field Notes</b><span class="small muted">Subscribe</span><i class="rp" style="position:absolute;left:0;bottom:-1px;height:2px;background:var(--ink)"></i></header><article class="small" style="padding:14px 16px 60px;line-height:1.65"></article><button class="jt" aria-label="Back to top" style="position:sticky;bottom:12px;left:100%;margin-right:12px;display:grid;place-items:center;line-height:0;width:36px;height:36px;border-radius:50%;border:0;background:var(--ink);color:var(--card);cursor:pointer;margin-top:-48px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button></div><div class="hint">Scroll inside the page</div></div>`,
-  desc:'The progress bar tracks scroll 1:1. The header compacts once you leave the top. The back-to-top button enters after one screen and scrolls home on a spring that any wheel input cancels.',
+  desc:'The progress bar tracks scroll 1:1. The header compacts once you leave the top. The back-to-top button enters after half a screen and scrolls home on a spring that any wheel input cancels.',
   api:'bar = scrollTop / max   hdr.set(scrolled ? 1 : 0)   scroll.set(0, S.soft)',
   init(st){
     const lp = $(st,'.lp'), hd = $(st,'.hd'), lg = $(st,'.lg'), rp = $(st,'.rp'), jt = $(st,'.jt'), ct = $(st,'.ct');
@@ -1033,13 +1051,14 @@ atom({ id:'longpage', cat:'Chrome', name:'Header, progress, jump to top', block:
       jt.style.display = centered ? 'grid' : 'block'; jt.style.placeItems = centered ? 'center' : ''; jt.style.lineHeight = centered ? '0' : ''; };
     $(st,'article').innerHTML = ['The river path was quiet before sunrise, and the only sound was gravel under our boots.','We counted eleven herons between the second bridge and the old mill. Most stood still enough to pass for posts.','By seven the fog lifted off the water in one sheet, and the far bank came back into view like a print developing.','Notes for next time: bring the long lens, leave before five, and take the east fork where the path forks at the mill.','The walk back took half as long. It always does once you know where the path goes.','We stopped at the bakery by the station and ate standing up at the window counter.'].map(p => `<p style="margin:0 0 12px">${p}</p>`).join('');
     const c = new Track(0), jo = new Track(0), sc = new Track(0, S.soft); let auto = false;
-    lp.onscroll = () => { const y = lp.scrollTop; c.set(y > 16 ? 1 : 0); jo.set(y > 180 ? 1 : 0, y > 180 ? S.base : S.snap); };
+    // Back-to-top enters after half a screen; the sample page is only about 1.6 screens tall, so 180px was out of reach.
+    lp.onscroll = () => { const y = lp.scrollTop, on = y > lp.clientHeight * .5; c.set(y > 16 ? 1 : 0); jo.set(on ? 1 : 0, on ? S.base : S.snap); };
     const stop = () => auto = false; lp.addEventListener('wheel', stop, { passive:true }); lp.addEventListener('touchstart', stop, { passive:true });
     jt.onclick = () => { sc.jump(lp.scrollTop).set(0); auto = true; };
     return t => { if (auto){ lp.scrollTop = sc.at(t); if (!sc.prune(t)) auto = false; }
       const k = clamp(c.at(t)), max = lp.scrollHeight - lp.clientHeight; hd.style.height = px(lerp(56, 42, k)); lg.style.transform = `scale(${lerp(1.15, 1, k).toFixed(4)})`;
       hd.style.boxShadow = k > .5 ? 'var(--shadow)' : 'none'; rp.style.width = (max > 0 ? lp.scrollTop/max*100 : 0).toFixed(2) + '%';
-      const o = clamp(jo.at(t)); jt.style.opacity = o.toFixed(3); jt.style.transform = `translateY(${px((1-o)*10)}) scale(${(.9+.1*o).toFixed(4)})`; jt.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
+      const o = clamp(jo.at(t)); jt.style.opacity = o.toFixed(3); jt.style.transform = `translateY(${px((1-o)*10)}) scale(${(.9+.1*o).toFixed(4)})`; jt.style.pointerEvents = o > .5 ? 'auto' : 'none'; jt.style.visibility = o < .02 ? 'hidden' : 'visible'; };
   }});
 window.CIEO_SOURCE_HINT="blocks/033-mobilemenu.js";
 
@@ -1400,7 +1419,7 @@ window.CIEO_SOURCE_HINT="blocks/046-toc.js";
 
 
 atom({ id:'toc', cat:'Content', name:'Table of contents', block:'table-of-contents', fam:['E','D'], tall:true,
-  html:`<div class="card row" style="width:min(400px,94%);height:280px;align-items:stretch;gap:0;overflow:hidden"><nav class="tn" style="position:relative;width:118px;flex:none;padding:12px 0 12px 12px;border-right:1px solid var(--line-soft)"><i class="ti" style="position:absolute;left:12px;width:2px;border-radius:1px;background:var(--ink)"></i></nav><div class="ta small" style="flex:1;overflow:auto;padding:0 14px;line-height:1.6;overscroll-behavior:contain" tabindex="0" aria-label="Sample article"></div></div>`,
+  html:`<div class="card row" style="width:min(400px,94%);height:280px;align-items:stretch;gap:0;overflow:hidden"><nav class="tn" style="position:relative;width:118px;flex:none;padding:12px 0 12px 12px;border-right:1px solid var(--line-soft)"><i class="ti" style="position:absolute;left:12px;width:2px;border-radius:1px;background:var(--ink)"></i></nav><div class="ta small" style="flex:1;overflow:auto;padding:0 14px;line-height:1.6;overscroll-behavior:contain" tabindex="0" role="region" aria-label="Sample article"></div></div>`,
   desc:'The active marker tracks the section you are reading, with lagging edges so it stretches between short and long entries. Clicking an entry scrolls there on a spring.',
   api:'tap: active.set(i)   scroll: active = last heading above scrollTop   marker.go(top, bottom)',
   init(st){
@@ -2203,7 +2222,7 @@ window.CIEO_SOURCE_HINT="blocks/086-resizable.js";
 
 
 atom({ id:'resizable', cat:'Layout', name:'Resizable panels', block:'columns, Resizable primitive', fam:['D'], wide:true,
-  html:`<div class="rz card" style="position:relative;width:min(560px,94%);height:200px;display:flex;overflow:hidden"><div class="pa" style="overflow:hidden;flex:none"><div class="small" style="padding:12px;min-width:120px"><b style="display:block;margin-bottom:6px">Pages</b><span class="muted">Home<br>About<br>Journal<br>Contact</span></div></div><div class="hd" role="separator" aria-orientation="vertical" aria-label="Resize panels" tabindex="0" style="position:relative;width:12px;margin:0 -6px;flex:none;cursor:col-resize;z-index:2;touch-action:none"><i style="position:absolute;left:5px;top:0;bottom:0;width:2px;background:var(--line)"></i><i class="gp" style="position:absolute;left:3px;top:50%;width:6px;height:28px;margin-top:-14px;border-radius:3px;background:var(--faint)"></i></div><div class="small" style="flex:1;padding:12px;min-width:0"><b style="display:block;margin-bottom:6px">Editor</b><span class="muted">Drag the divider. Pull it far left to collapse the sidebar, double-click it to reset.</span></div></div>`,
+  html:`<div class="rz card" style="position:relative;width:min(560px,94%);height:200px;display:flex;overflow:hidden"><div class="pa" style="overflow:hidden;flex:none"><div class="small" style="padding:12px;min-width:120px"><b style="display:block;margin-bottom:6px">Pages</b><span class="muted">Home<br>About<br>Journal<br>Contact</span></div></div><div class="hd" role="separator" aria-orientation="vertical" aria-label="Resize panels" aria-valuemin="0" aria-valuemax="100" aria-valuenow="45" aria-valuetext="180 pixels" tabindex="0" style="position:relative;width:12px;margin:0 -6px;flex:none;cursor:col-resize;z-index:2;touch-action:none"><i style="position:absolute;left:5px;top:0;bottom:0;width:2px;background:var(--line)"></i><i class="gp" style="position:absolute;left:3px;top:50%;width:6px;height:28px;margin-top:-14px;border-radius:3px;background:var(--faint)"></i></div><div class="small" style="flex:1;padding:12px;min-width:0"><b style="display:block;margin-bottom:6px">Editor</b><span class="muted">Drag the divider. Pull it far left to collapse the sidebar, double-click it to reset.</span></div></div>`,
   desc:'The divider follows the pointer exactly between its limits and rubber-bands beyond them. Releasing under 70px snaps the sidebar shut from your release velocity; a double-click springs it back.',
   api:'w = clamp(start + dx, 120, max) ± rb   release: w < 70 ? 0 : w',
   init(st){
@@ -2213,7 +2232,7 @@ atom({ id:'resizable', cat:'Layout', name:'Resizable panels', block:'columns, Re
       up:(p, v) => { held = false; act.set(0); w.release(hw, v.vx, hw < 70 ? 0 : clamp(hw, MIN, max())); } });
     hd.ondblclick = () => w.set(180); hd.onkeydown = ev => { if (ev.key === 'ArrowLeft') w.set(Math.max(0, w.target - 20)); if (ev.key === 'ArrowRight') w.set(Math.min(max(), w.target + 20)); };
     hd.onpointerenter = () => act.set(.6); hd.onpointerleave = () => { if (!held) act.set(0); };
-    return t => { pa.style.width = px(Math.max(0, held ? hw : w.at(t))); const a = clamp(act.at(t)); gp.style.background = mix(a,'var(--ink)','var(--faint)'); gp.style.transform = `scaleY(${(1 + .3*a).toFixed(3)})`; };
+    return t => { const wv = Math.max(0, held ? hw : w.at(t)); pa.style.width = px(wv); hd.setAttribute('aria-valuenow', Math.round(Math.min(1, wv / Math.max(1, max())) * 100)); hd.setAttribute('aria-valuetext', `${Math.round(wv)} pixels`); const a = clamp(act.at(t)); gp.style.background = mix(a,'var(--ink)','var(--faint)'); gp.style.transform = `scaleY(${(1 + .3*a).toFixed(3)})`; };
   }});
 window.CIEO_SOURCE_HINT="blocks/087-sidebar.js";
 
@@ -2454,12 +2473,13 @@ atom({ id:'conversational', cat:'Forms', name:'One question at a time', block:'f
       else d.innerHTML = `<div class="row" style="gap:12px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path class="ck" d="M7.5 12.5 10.5 15.5 16.5 9" pathLength="1" stroke-dasharray="1"/></svg><b class="thx" style="font-size:22px;letter-spacing:-.02em"></b></div><span class="small muted">We’ll email your migration checklist shortly.</span><button class="btn again" style="align-self:flex-start">Start again</button>`;
       cv.appendChild(d); return d; });
     const sw = new Swap(0), prog2 = new Track(0); let cur = 0, pulse = null, adv = 0, tEnd = 0;
-    const go = i => { cur = i; sw.to(i); prog2.set(i/(Q.length - 1)); if (Q[i].t === 'text') setTimeout(() => $(panes[i],'input').focus({ preventScroll:true }), 120); if (Q[i].t === 'end'){ tEnd = now(); $(panes[i],'.thx').textContent = `Thanks, ${name.split(' ')[0]}.`; } };
+    const go = i => { if (i < 0 || i >= Q.length) return; cur = i; sw.to(i); prog2.set(i/(Q.length - 1)); if (Q[i].t === 'text') setTimeout(() => $(panes[i],'input').focus({ preventScroll:true }), 120); if (Q[i].t === 'end'){ tEnd = now(); $(panes[i],'.thx').textContent = `Thanks, ${name.split(' ')[0]}.`; } };
     const inp = $(panes[0],'input'), er = $(panes[0],'.er'), eT = new Track(0);
     const submitText = () => { if (!inp.value.trim()){ eT.set(1); inp.setAttribute('aria-invalid', true); return; } eT.set(0); inp.removeAttribute('aria-invalid'); name = inp.value.trim(); go(1); };
     $(panes[0],'.ok').onclick = submitText; inp.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); submitText(); } }; inp.oninput = () => { if (inp.value.trim()) eT.set(0); };
     panes.forEach((p,i) => $$(p,'.opt').forEach((b,j) => b.onclick = () => choose(i, j)));
-    const choose = (i, j) => { if (adv) return; pulse = { b:$$(panes[i],'.opt')[j], t:now() }; $$(panes[i],'.opt').forEach((b,k) => b.style.borderColor = k === j ? 'var(--ink)' : 'var(--line)'); adv = now() + .45; };
+    // A focused option in an earlier pane can still fire after the flow moves on; only the current question may answer.
+    const choose = (i, j) => { if (adv || i !== cur) return; pulse = { b:$$(panes[i],'.opt')[j], t:now() }; $$(panes[i],'.opt').forEach((b,k) => b.style.borderColor = k === j ? 'var(--ink)' : 'var(--line)'); adv = now() + .45; };
     st.addEventListener('keydown', e => { if (Q[cur].t !== 'choice' || e.metaKey || e.ctrlKey) return; const j = 'abc'.indexOf(e.key.toLowerCase()); if (j >= 0 && j < Q[cur].o.length) choose(cur, j); });
     $(panes[3],'.again').onclick = () => { inp.value = ''; name = ''; panes.forEach(p => $$(p,'.opt').forEach(b => { b.style.borderColor = 'var(--line)'; b.style.background = 'var(--card)'; })); go(0); };
     const ck = $(panes[3],'.ck');
@@ -2540,7 +2560,7 @@ window.CIEO_SOURCE_HINT="blocks/102-range.js";
 
 
 atom({ id:'range', cat:'Forms', name:'Range slider', block:'collection-browser (price filter), form', fam:['D','M'], wide:true,
-  html:`<div class="col" style="width:min(520px,92%);gap:6px"><div class="row" style="justify-content:space-between"><b class="small">Price</b><span class="small num out"></span></div><div class="hs" style="display:flex;align-items:flex-end;gap:3px;height:60px;padding:0 9px"></div><div class="rr" style="position:relative;height:28px;touch-action:none;cursor:pointer"><i style="position:absolute;left:9px;right:9px;top:12px;height:4px;border-radius:2px;background:var(--raised)"></i><i class="fl" style="position:absolute;top:12px;height:4px;background:var(--ink)"></i><button class="th a" role="slider" aria-label="Minimum price" aria-valuemin="0" aria-valuemax="500" style="position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--card);padding:0;cursor:grab"></button><button class="th b" role="slider" aria-label="Maximum price" aria-valuemin="0" aria-valuemax="500" style="position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--card);padding:0;cursor:grab"></button></div></div>`,
+  html:`<div class="col" style="width:min(520px,92%);gap:6px"><div class="row" style="justify-content:space-between"><b class="small">Price</b><span class="small num out"></span></div><div class="hs" style="display:flex;align-items:flex-end;gap:3px;height:60px;padding:0 9px"></div><div class="rr" style="position:relative;height:28px;touch-action:none;cursor:pointer"><i style="position:absolute;left:9px;right:9px;top:12px;height:4px;border-radius:2px;background:var(--raised)"></i><i class="fl" style="position:absolute;top:12px;height:4px;background:var(--ink)"></i><button class="th a" role="slider" aria-label="Minimum price" aria-valuemin="0" aria-valuemax="500" aria-valuenow="80" aria-valuetext="$80" style="position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--card);padding:0;cursor:grab"></button><button class="th b" role="slider" aria-label="Maximum price" aria-valuemin="0" aria-valuemax="500" aria-valuenow="320" aria-valuetext="$320" style="position:absolute;top:5px;width:18px;height:18px;margin-left:-9px;border-radius:50%;border:2px solid var(--ink);background:var(--card);padding:0;cursor:grab"></button></div></div>`,
   desc:'Each thumb follows its drag exactly and stops at the other thumb. Histogram bars inside the range ink in while the rest fade, each on its own spring.',
   api:'lo = clamp(pointer, 0, hi − step)   bar[i].in.set(lo ≤ x ≤ hi)',
   init(st){
@@ -2548,7 +2568,7 @@ atom({ id:'range', cat:'Forms', name:'Range slider', block:'collection-browser (
     const H = [3,6,10,14,18,22,25,24,20,17,14,12,10,9,7,6,5,4,3,2].map(h => { const b = document.createElement('i'); b.style.cssText = `flex:1;height:${h*2.2}px;border-radius:2px 2px 0 0`; hs.appendChild(b); return { b, k:new Track(1) }; });
     let lo = 80, hi = 320; const lt = new Track(lo), ht = new Track(hi); let held = null, hv = 0;
     const toV = p => clamp(Math.round((p.x - 9)/(p.w - 18)*MAX/STEP)*STEP, 0, MAX);
-    const upd = () => { H.forEach((x,i) => { const c = (i + .5)/H.length*MAX; x.k.set(c >= lo && c <= hi ? 1 : 0); }); out.textContent = `$${lo} – $${hi}`; ta.setAttribute('aria-valuenow', lo); tb.setAttribute('aria-valuenow', hi); };
+    const upd = () => { H.forEach((x,i) => { const c = (i + .5)/H.length*MAX; x.k.set(c >= lo && c <= hi ? 1 : 0); }); out.textContent = `$${lo} – $${hi}`; ta.setAttribute('aria-valuenow', lo); tb.setAttribute('aria-valuenow', hi); ta.setAttribute('aria-valuetext', `$${lo}`); tb.setAttribute('aria-valuetext', `$${hi}`); };
     drag(rr, { down:p => { const v = toV(p); held = Math.abs(v - lo) <= Math.abs(v - hi) ? 'lo' : 'hi'; hv = v; }, move:p => { hv = toV(p); if (held === 'lo'){ lo = Math.min(hv, hi - STEP); lt.jump(lo); } else { hi = Math.max(hv, lo + STEP); ht.jump(hi); } upd(); }, up:() => held = null });
     rr.addEventListener('pointerdown', ev => { const r = rr.getBoundingClientRect(), v = toV({ x:ev.clientX - r.left, w:r.width }); if (held === 'lo'){ lo = Math.min(v, hi - STEP); lt.set(lo); } else { hi = Math.max(v, lo + STEP); ht.set(hi); } upd(); });
     [[ta,'lo'],[tb,'hi']].forEach(([b,k]) => b.onkeydown = e => { const d = e.key === 'ArrowRight' ? STEP : e.key === 'ArrowLeft' ? -STEP : 0; if (!d) return; e.preventDefault(); if (k === 'lo'){ lo = clamp(lo + d, 0, hi - STEP); lt.set(lo); } else { hi = clamp(hi + d, lo + STEP, MAX); ht.set(hi); } upd(); });
@@ -2616,7 +2636,7 @@ window.CIEO_SOURCE_HINT="blocks/107-autosave.js";
 
 
 atom({ id:'autosave', cat:'Writing', name:'Autosave status', block:'richtext editor, form', fam:['S'],
-  html:`<div class="col" style="width:min(320px,88%);gap:8px"><div class="row" style="justify-content:space-between"><b class="small">Draft · Spring launch</b><span class="as small" role="status" style="position:relative;width:130px;height:20px"></span></div><textarea id="as-ta" rows="4" style="resize:none;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.5 var(--sans);padding:10px;outline:none">We launch the spring collection on Thursday.</textarea></div><div class="hint">Type, then pause</div>`,
+  html:`<div class="col" style="width:min(320px,88%);gap:8px"><div class="row" style="justify-content:space-between"><b class="small">Draft · Spring launch</b><span class="as small" role="status" style="position:relative;width:130px;height:20px"></span></div><textarea id="as-ta" aria-label="Draft text" rows="4" style="resize:none;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.5 var(--sans);padding:10px;outline:none">We launch the spring collection on Thursday.</textarea></div><div class="hint">Type, then pause</div>`,
   desc:'The status moves through Editing, Saving with a spinner, and Saved with a success check, then relaxes to a quiet “Saved just now”. Each change is a blur swap timed from your last keystroke.',
   api:'on input: to("editing"); idle 0.8s → "saving"; +0.6s → "saved"; +2s → "idle"',
   init(st){
@@ -2714,7 +2734,7 @@ window.CIEO_SOURCE_HINT="blocks/112-colorpicker.js";
 
 
 atom({ id:'colorpicker', cat:'Design tools', name:'Color picker', block:'section (background), theme settings', fam:['D','M'], tall:true,
-  html:`<div class="card col" style="width:min(280px,calc(100% - 48px));padding:16px;gap:16px"><div class="sv" tabindex="0" role="slider" aria-label="Saturation and brightness; left or right adjusts saturation, up or down adjusts brightness" aria-valuemin="0" aria-valuemax="100" style="position:relative;height:128px;border-radius:12px;cursor:crosshair;touch-action:none"><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(90deg,#fff,transparent)"></div><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(0deg,#000,transparent)"></div><i class="k1" style="position:absolute;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><div class="hu" tabindex="0" role="slider" aria-label="Hue" aria-valuemin="0" aria-valuemax="360" style="position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;touch-action:none"><i class="k2" style="position:absolute;top:-2px;width:16px;height:16px;margin-left:-8px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><button class="cp" type="button" aria-label="Copy color value" title="Copy" style="display:flex;align-items:center;gap:8px;border:0;border-radius:8px;background:var(--raised);padding:8px 8px;min-height:40px;cursor:pointer;text-align:left"><i class="sw" style="width:28px;height:28px;border-radius:7px;border:0;flex:none"></i><span class="hxw" style="position:relative;flex:1;height:24px;overflow:hidden"><code class="hx small num layer" style="justify-content:flex-start"></code><span class="ok small layer" style="justify-content:flex-start;color:var(--success);font-weight:600"></span></span></button><div class="row cps" style="gap:8px"></div><div class="row small muted" style="gap:8px">Format<div class="seg fs" role="group" aria-label="Copy format" style="display:inline-flex"><div class="ind"></div><button type="button">Hex</button><button type="button">RGB</button></div></div></div>`,
+  html:`<div class="card col" style="width:min(280px,calc(100% - 48px));padding:16px;gap:16px"><div class="sv" tabindex="0" role="slider" aria-label="Saturation and brightness; left or right adjusts saturation, up or down adjusts brightness" aria-valuemin="0" aria-valuemax="100" aria-valuenow="44" aria-valuetext="Saturation 44%, brightness 78%" style="position:relative;height:128px;border-radius:12px;cursor:crosshair;touch-action:none"><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(90deg,#fff,transparent)"></div><div style="position:absolute;inset:0;border-radius:8px;background:linear-gradient(0deg,#000,transparent)"></div><i class="k1" style="position:absolute;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><div class="hu" tabindex="0" role="slider" aria-label="Hue" aria-valuemin="0" aria-valuemax="360" aria-valuenow="254" style="position:relative;height:12px;border-radius:6px;background:linear-gradient(90deg,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00);cursor:pointer;touch-action:none"><i class="k2" style="position:absolute;top:-2px;width:16px;height:16px;margin-left:-8px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3)"></i></div><button class="cp" type="button" aria-label="Copy color value" title="Copy" style="display:flex;align-items:center;gap:8px;border:0;border-radius:8px;background:var(--raised);padding:8px 8px;min-height:40px;cursor:pointer;text-align:left"><i class="sw" style="width:28px;height:28px;border-radius:7px;border:0;flex:none"></i><span class="hxw" style="position:relative;flex:1;height:24px;overflow:hidden"><code class="hx small num layer" style="justify-content:flex-start"></code><span class="ok small layer" style="justify-content:flex-start;color:var(--success);font-weight:600"></span></span></button><div class="row cps" style="gap:8px"></div><div class="row small muted" style="gap:8px">Format<div class="seg fs" role="group" aria-label="Copy format" style="display:inline-flex"><div class="ind"></div><button type="button">Hex</button><button type="button">RGB</button></div></div></div>`,
   desc:'Both handles follow the pointer exactly while dragging. Picking a preset springs both handles to that color, so you can see where it lives in the space. Tapping the value copies it: the value swaps out for a check and Copied pill, then relaxes back.',
   api:'held ? pointer : {s,v,h}.set(preset)   swatch = hsv(h, s, v)   tap: value.to(copied); pill.ok.set(1); after(1.6) back',
   init(st){
@@ -2812,7 +2832,10 @@ atom({ id:'swiperow', cat:'Email', name:'Swipe actions', block:'entry-list, inbo
       return r; });
     const paint = () => rows.forEach(r => { r.w.style.borderBottom = (!dv.checked || r.last) ? 'none' : '1px solid var(--line-soft)'; });
     dv.onchange = paint;
-    $(st,'.rs').onclick = () => rows.forEach(r => { r.x.set(0); r.h.set(1); });
+    const rs = $(st,'.rs'); let flashT = 0;
+    rs.onclick = () => { const had = rows.some(r => r.x.target !== 0 || r.h.target !== 1);
+      rows.forEach(r => { r.x.set(0); r.h.set(1); });
+      rs.textContent = had ? 'Restored' : 'All rows are here'; clearTimeout(flashT); flashT = setTimeout(() => { rs.textContent = 'Restore'; }, 1400); };
     return t => rows.forEach(r => { const x = r.held ? r.hx : r.x.at(t), a = clamp(Math.abs(x)/80), right = x > 0;
       r.fg.style.transform = `translateX(${px(x)})`; r.bk.style.background = a >= 1 ? (right ? 'var(--success)' : 'var(--warning)') : mix(a,'var(--muted)','var(--raised)');
       r.ia.style.opacity = right ? a : 0; r.is.style.opacity = right ? 0 : a; const sc = (.7 + .3*clamp(Math.abs(x)/80 - .2)).toFixed(3); r.ia.style.transform = r.is.style.transform = `scale(${sc})`;
@@ -4796,6 +4819,7 @@ atom({ id:'scrollfeatures', cat:'Landing', name:'Scroll-linked features', block:
 .lds-dt>div{position:relative;display:flex;gap:10px}
 .lds-dt button{position:relative;width:8px;height:8px;padding:0;border:0;border-radius:4px;background:var(--line);cursor:pointer}
 .lds-dt button::before{content:"";position:absolute;inset:-9px -4px}
+.lds-dt button[aria-current="true"]{background:var(--ink)}
 .lds-bar{position:absolute;top:0;height:8px;border-radius:4px;background:var(--ink);pointer-events:none}
 @media (max-width:480px){.lds-h{font-size:16px}.lds-p{font-size:12.5px}.lds-g{gap:14px;padding:0 16px}}
 </style>
@@ -7458,10 +7482,12 @@ atom({ id:'annotate', cat:'Workflow', name:'Annotation review canvas', block:'Re
       at(EXIT + .03, () => { if (sel === p) $(L[1], '.rw-rs').focus({ preventScroll:true }); });
     }
     function resolve(p){
+      if (!p) return;
       p.state = 'done'; p.rs.set(1); p.row.sw.to(1); sel = null; plateTo(null); co.set(0, S.base); refresh(); syncAria();
       at(.3, () => p.btn.focus({ preventScroll:true }));
     }
     function reopen(p){
+      if (!p) return;
       p.state = 'open'; p.rs.set(0); p.row.sw.to(0); fillThread(L[1], p); csw.to(1); ch.set(L[1].offsetHeight); refresh();
       at(EXIT + .03, () => { if (sel === p) $(L[1], '.rw-rs').focus({ preventScroll:true }); });
     }
@@ -11376,7 +11402,8 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
       btns.forEach(b => { const on = b.dataset.s === kk; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('ink', on); });
       g.set(s.i); lab.put(s.label); lw.set(LW[kk]); if (kk !== 'ok') isw.to(kk); iO.set(kk === 'ok' ? 0 : 1, kk === 'ok' ? S.snap : S.base, kk === 'ok' ? t0 : t0 + .08);
       rows.forEach((r, i) => { const v = s.c[i]; if (v === r.v) return; r.v = v; const at = t0 + .1 + i*.045; r.c.set(v, S.base, at); q.push([at, () => r.tx.put(WORD[v])]); }); q.sort((a, b) => a[0] - b[0]); };
-    btns.forEach(b => { b.addEventListener('click', () => setS(b.dataset.s)); }); btns[0].classList.add('ink');
+    // Pressing the state already showing opens the per-service list, so every press has a visible result.
+    btns.forEach(b => { b.addEventListener('click', () => { if (b.dataset.s === cur){ if (!open) pill.click(); } else setS(b.dataset.s); }); }); btns[0].classList.add('ink');
     isw.cur = 'deg'; isw.prev = null; isw.t = -9;
     pill.addEventListener('click', () => { open = !open; dO.set(open ? 1 : 0, open ? S.base : S.snap); pill.setAttribute('aria-expanded', String(open)); det.style.visibility = 'visible'; if (k.max() - k.sc.scrollTop < 8) k.pin(); });
     const col = c => c <= 1 ? mix(c, 'var(--warning)', 'var(--success)') : mix(c - 1, 'var(--danger)', 'var(--warning)');
@@ -13435,6 +13462,7 @@ const CSS = `
 /* pins and cards: agents are rounded squares, people are circles */
 .§-pw{position:absolute;left:0;top:0;width:0;height:0}
 .§-pin{position:absolute;left:-13px;top:-13px;width:26px;height:26px;padding:0;border:0;border-radius:8px;background:var(--ink);color:var(--card);font:600 11.5px var(--sans);cursor:pointer;display:grid;place-items:center}
+.§-pw>.§-pin{max-width:none}
 .§-pin>span{grid-area:1/1}
 .§-pd{position:absolute;right:-4px;top:-4px;width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px var(--card);pointer-events:none}
 .§-ck{position:absolute;left:0;top:0;overflow:hidden;z-index:30;visibility:hidden}
@@ -13502,6 +13530,8 @@ class Pin {
   draw(t, x, y, on, vis = 1){
     const fo = clamp(this.fo.at(t)) * vis, fy = this.fy.at(t), rs = clamp(this.rs.at(t)), qm = clamp(this.qm.at(t)); if (this.sel.target !== (on ? 1 : 0)) this.sel.set(on ? 1 : 0); const s = clamp(this.sel.at(t));
     this.wrap.style.transform = `translate(${px(x)},${px(y)})`; this.wrap.style.zIndex = on ? 3 : 1;
+    // a hidden pin leaves the tab order too: visibility removes it from focus navigation
+    this.wrap.style.visibility = fo < .01 ? 'hidden' : 'visible';
     const b = this.btn.style; b.pointerEvents = fo > .5 ? 'auto' : 'none'; b.opacity = fo.toFixed(3); b.transform = `translateY(${px(fy)}) scale(${(.8 + .2 * fo).toFixed(3)})`;
     b.background = mix(rs, 'var(--success-tint)', 'var(--ink)'); b.color = mix(rs, 'var(--success)', 'var(--card)');
     b.boxShadow = `0 0 0 ${px(1.5 * rs)} ${mix(rs, 'var(--success)', 'transparent')}, 0 0 0 2px ${mix(s, 'var(--card)', 'transparent')}, 0 0 0 4px ${mix(s, 'var(--accent)', 'transparent')}, var(--shadow)`;
@@ -14075,7 +14105,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
   <div class="rvs-hd">${agentMark('rvs', 28)}${agentLine('rvs')}<i style="flex:1"></i><span class="rvs-run" role="status" aria-live="polite"><span class="rvs-r0"><i class="rvs-dot"></i>Reviewing</span><span class="rvs-r1">${ic(I.check, 13, 2.4)}Completed</span></span><button type="button" class="btn rvs-rp" style="padding:4px 10px;font-size:12.5px">Replay</button></div>
   <div class="rvs-sm">localhost:3000 · /pricing and /signup · 3 widths · 14 screenshots</div>
   <div class="rvs-fl" role="group" aria-label="Filter findings by severity"><button type="button" class="rvs-f" data-s="*" aria-pressed="true">All <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="block" aria-pressed="false">${ic(SEV.block.i, 13, 2)}Blocking <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="warn" aria-pressed="false">${ic(SEV.warn.i, 13, 2)}Should fix <span class="rvs-c"></span></button><button type="button" class="rvs-f" data-s="info" aria-pressed="false">${ic(SEV.info.i, 13, 2)}Suggestions <span class="rvs-c"></span></button><span class="rvs-sh" aria-live="polite">Showing <span class="rvs-sn"></span> of <span class="rvs-st2"></span></span></div>
-  <div class="rvs-ls" role="list"><p class="rvs-em0">Assistant is reviewing /pricing and /signup…</p></div></section>`,
+  <div class="rvs-ls" role="list"><p class="rvs-em0" role="listitem">Assistant is reviewing /pricing and /signup…</p></div></section>`,
   desc:'Findings arrive one at a time, 130ms apart: each row fades up and opens its height while the severity counts roll up digit by digit and the Reviewing chip morphs to Completed. Severity chips are full-border chips and double as filters. Switching a filter closes unmatched rows to nothing while the rest slide up, and the Showing count rolls. Opening a finding eases its height open to the saved screenshot, the steps to reproduce, and expected against observed; opening another closes the first.',
   api:'row.en.set(1, t + i·130ms); digits.set(count)   chip.p.set(1): width, fill, label swap   row.vis.set(match ? 1 : 0)   row.h = (head + body·ex)·vis·en',
   init(st){
@@ -15713,9 +15743,9 @@ if (!document.getElementById('txi-css')){ const s = document.createElement('styl
 .txi-pn{position:absolute;top:0;overflow:hidden;border-radius:12px;background:${DARK}}
 .txi-hit{position:absolute;inset:0;touch-action:pan-y;cursor:grab}
 .txi-dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;padding:3px 5px;border-radius:999px;background:var(--card);box-shadow:var(--shadow)}
-.txi-dot{position:relative;width:22px;height:22px;border:0;padding:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px}
+.txi-dot{position:relative;width:24px;height:24px;border:0;padding:0;background:none;display:grid;place-items:center;cursor:pointer;border-radius:999px}
 .txi-dot i{width:6px;height:6px;border-radius:50%;background:var(--faint)}
-.txi-dind{position:absolute;left:0;top:11px;width:16px;height:6px;margin-top:-3px;border-radius:3px;background:var(--ink);pointer-events:none}
+.txi-dind{position:absolute;left:0;top:15px;width:16px;height:6px;margin-top:-3px;border-radius:3px;background:var(--ink);pointer-events:none}
 `; document.head.appendChild(s); }
 
 const shell = (id, label, inner = '', bare = false) => `<div class="txi-k"><div class="txi-f${bare ? ' txi-bare' : ''}" tabindex="0" role="group" aria-roledescription="slideshow" aria-label="${label}. Arrow keys or swipe to change photo.">${inner}</div><div class="txi-bar"><div class="txi-nav"><button type="button" class="txi-b" data-a="prev" aria-label="Previous photo">${ic(CL, 16)}</button><button type="button" class="txi-b" data-a="next" aria-label="Next photo">${ic(CR, 16)}</button></div><div class="txi-cap" aria-hidden="true"><span><b></b><i></i></span><span><b></b><i></i></span></div><span class="txi-live" aria-live="polite"></span><label class="txi-scr" for="${id}-scrub"><span>Scrub</span><input type="range" id="${id}-scrub" min="0" max="1000" step="1" value="1000" aria-label="Scrub through the last transition"><output class="num" for="${id}-scrub">100%</output></label></div></div>`;
@@ -19102,6 +19132,7 @@ atom({ id:'fxp-palette', cat:'Photo effects', name:'Theme from photo', block:'si
     const lerpC = (a, b, p) => a.map((v, i) => lerp(v, b[i], p));
     swb.addEventListener('keydown', e => { const d = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 0; if (!d) return; e.preventDefault();
       const i = (btns.indexOf(document.activeElement) + d + btns.length) % btns.length; btns.forEach((b, j) => b.tabIndex = j === i ? 0 : -1); btns[i].focus(); choose(i); });
+    cta.onclick = () => { cta.textContent = 'Walk booked for Saturday'; };
     let pend = false;
     const seg = mkSeg($(st, '.seg'), i => { if (i === cur) return; prevScene = cur; cur = i; MX.jump(0).set(1); sw.to(i); sel = 0; hover = -1; A.set(0); pend = true; });
     return t => {
@@ -19672,7 +19703,7 @@ window.CIEO_SOURCE_HINT="blocks/189-template.js";
 
 
 atom({ id:'template', cat:'Writing', name:'Template inserter', block:'template picker, doc', fam:['M','X','S'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(340px,90%);gap:8px;padding:12px"><div class="grid row" style="gap:8px"></div><div class="doc card" style="padding:14px;min-height:120px"><div class="ph small muted">Pick a template to insert</div><div class="blk card" style="overflow:hidden;padding:0 12px;background:var(--raised)"></div></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Insert with title</span></label><div class="hint">Pick a tile to insert it</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(340px,90%);gap:8px;padding:12px"><div class="grid row" style="gap:8px"></div><div class="doc card" style="padding:14px;min-height:120px"><div class="ph small muted">Pick a template to insert</div><div class="blk card" style="position:relative;overflow:hidden;padding:0 12px;background:var(--raised)"></div></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Insert with title</span></label><div class="hint">Pick a tile to insert it</div>`,
   desc:'Tiles rise in one after another. Picking one grows the doc block open and swaps its content in. Picking again swaps to the new template.',
   api:'tile.o.set(1,S.base,t+i*0.06)   blk.h.set(H,S.base); body.to(i)   REDUCE: jump',
   init(st){
@@ -19683,6 +19714,7 @@ atom({ id:'template', cat:'Writing', name:'Template inserter', block:'template p
     const tiles = TP.map((p,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = p.n; b.style.opacity = '0'; grid.appendChild(b);
       const o = new Track(0), y = new Track(10); const t0 = now() + i*.06; if (REDUCE){ o.jump(1); y.jump(0); } else { o.set(1, S.base, t0); y.set(0, S.base, t0); }
       b.onclick = () => { ph.style.display = 'none'; if (REDUCE){ sw.cur = i; sw.prev = null; sw.t = -9; h.jump(p.h); } else { sw.to(i); h.set(p.h, S.base); } }; return { b, o, y }; });
+    const tt = $(st,'.twk'); tt.onchange = () => bodies.forEach(l => { l.firstElementChild.style.display = tt.checked ? '' : 'none'; });
     return t => { tiles.forEach(r => { r.b.style.opacity = clamp(r.o.at(t)).toFixed(3); r.b.style.transform = `translateY(${r.y.at(t).toFixed(2)}px)`; });
       const hh = Math.max(0, h.at(t)); blk.style.height = px(hh); blk.style.opacity = hh > 2 ? '1' : '0'; bodies.forEach((l,k) => sw.apply(l, k, t)); };
   }});
@@ -19753,10 +19785,11 @@ atom({ id:'mergestep', cat:'Writing', name:'Merge preview stepper', block:'merge
     const invL = R.map(r => { const e = document.createElement('span'); e.className = 'layer small'; e.textContent = r.f.find(f => f[2]) ? `${r.f.find(f => f[2])[0]} is missing` : ''; inv.appendChild(e); return e; });
     const tabs = [$(st,'.t0'), $(st,'.t1'), $(st,'.t2')];
     let cur = 0;
+    const flag = $(st,'.twk');
     const focus = i => Math.max(0, R[i].f.findIndex(f => f[2]));
     const go = n => {
       n = Math.max(0, Math.min(R.length - 1, n)); const t0 = now(), f = focus(n), nt = f*SLOT, nb = nt + PH;
-      const bad = R[n].f.some(f => f[2]) ? 1 : 0; cur = n;
+      const bad = flag.checked && R[n].f.some(f => f[2]) ? 1 : 0; cur = n;
       if (REDUCE){ sw.cur = n; sw.prev = null; sw.t = -9; pT.jump(nt); pB.jump(nb); err.jump(bad); }
       else {
         sw.to(n);
@@ -19770,6 +19803,7 @@ atom({ id:'mergestep', cat:'Writing', name:'Merge preview stepper', block:'merge
     };
     $(st,'.pv').onclick = () => go(cur - 1); $(st,'.nx').onclick = () => go(cur + 1);
     tabs.forEach((b,i) => b.onclick = () => go(i));
+    flag.onchange = () => err.set(flag.checked && R[cur].f.some(f => f[2]) ? 1 : 0, S.base);
     go(0); pT.jump(focus(0)*SLOT); pB.jump(focus(0)*SLOT + PH); err.jump(1);
     return t => {
       ttlL.forEach((el,k) => sw.apply(el, k, t)); recL.forEach((el,k) => sw.apply(el, k, t, 0));
@@ -19784,7 +19818,7 @@ window.CIEO_SOURCE_HINT="blocks/193-resolvesweep.js";
 
 
 atom({ id:'resolvesweep', cat:'Writing', name:'Resolve sweep', block:'comment threads, resolve', fam:['M','E'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(340px,92%);gap:8px;padding:12px"><div class="row" style="align-items:center;gap:8px"><span class="small" style="font-weight:600">Open threads</span><span class="dg" aria-label="Open thread count"></span><span class="avs" style="display:flex;align-items:center" aria-hidden="true"></span><span style="flex:1"></span><button class="btn ink all">Resolve all</button></div><div class="col list" style="gap:8px"></div><button class="btn rs" style="align-self:flex-start">Reset</button></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Stack avatars</span></label><div class="hint">Resolve a thread, or all at once</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(340px,92%);gap:8px;padding:12px"><div class="row" style="align-items:center;gap:8px"><span class="small" style="font-weight:600">Open threads</span><span class="dg"></span><span class="avs" style="display:flex;align-items:center" aria-hidden="true"></span><span style="flex:1"></span><button class="btn ink all">Resolve all</button></div><div class="col list" style="gap:8px"></div><button class="btn rs" style="align-self:flex-start">Reset</button></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Stack avatars</span></label><div class="hint">Resolve a thread, or all at once</div>`,
   desc:'Resolving fades a card and its height springs shut. The open count rolls down after, and the avatar stack fans shut with it.',
   api:'o.set(0,S.snap) h.set(0,S.base,t+EXIT) dg.set(n) fan.set(open/3) · REDUCE: instant',
   init(st){
@@ -19891,16 +19925,19 @@ atom({ id:'sigchain', cat:'Writing', name:'Signature chain', block:'signature ch
     });
     const sts = ['Waiting for signatures','Collecting seals…','Signed — ready to file'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; stx.appendChild(e); return e; });
     let k = 0;
+    // "Require all seals" on: signed only with every seal. Off: signed once two seals are inked.
+    const req = $(st,'.twk'), stateOf = n => n >= (req.checked ? N.length - 1 : 1) ? 2 : n > 0 ? 1 : 0;
     const go = n => {
       n = Math.max(0, Math.min(N.length - 1, n)); const t0 = now(), fwd = n > k; k = n;
-      if (REDUCE){ line.jump(n); seals.forEach((s,i) => { s.ink.jump(i <= n ? 1 : 0); s.sw.cur = i < n || n === N.length-1 && i === n ? 1 : 0; s.sw.prev = null; s.sw.t = -9; }); done.cur = n === N.length-1 ? 2 : n > 0 ? 1 : 0; done.prev = null; done.t = -9; }
+      if (REDUCE){ line.jump(n); seals.forEach((s,i) => { s.ink.jump(i <= n ? 1 : 0); s.sw.cur = i < n || n === N.length-1 && i === n ? 1 : 0; s.sw.prev = null; s.sw.t = -9; }); done.cur = stateOf(n); done.prev = null; done.t = -9; }
       else {
         line.set(n); seals.forEach((s,i) => { s.ink.set(i <= n ? 1 : 0, S.base, t0 + (fwd ? LAG : 0)); s.sw.to(i < n || (n === N.length-1 && i === n) ? 1 : 0, t0 + (fwd ? LAG : 0)); });
-        done.to(n === N.length-1 ? 2 : n > 0 ? 1 : 0);
+        done.to(stateOf(n));
       }
       $(st,'.ad').disabled = n === N.length - 1;
     };
     $(st,'.ad').onclick = () => go(k + 1); $(st,'.rs').onclick = () => go(0);
+    req.onchange = () => done.to(stateOf(k));
     go(0);
     return t => {
       fill.style.height = (clamp(line.at(t)/(N.length-1))*100).toFixed(2) + '%';
@@ -19971,7 +20008,9 @@ atom({ id:'budget', cat:'Writing', name:'Assignment budget board', block:'assign
       else { h[i].set(RH, S.base, t0); out[i].to(0, t0 + EXIT); layout(t0, false); cDg.dir = 1; hDg.dir = 1; setTimeout(counts, EXIT*1000); }
     };
     rows.forEach((c,i) => c.btn.onclick = () => dead[i] ? restore(i) : kill(i));
-    $(st,'.rs').onclick = () => alive().length < A.length && A.forEach((_,i) => restore(i));
+    const rs = $(st,'.rs'); let flashT = 0;
+    rs.onclick = () => { const had = alive().length < A.length; if (had) A.forEach((_,i) => restore(i));
+      rs.textContent = had ? 'Restored' : 'All rows funded'; clearTimeout(flashT); flashT = setTimeout(() => { rs.textContent = 'Restore all'; }, 1400); };
     return t => {
       rows.forEach((c,i) => {
         c.r.style.top = px(y[i].at(t)); c.r.style.height = px(Math.max(0, h[i].at(t)));
@@ -20663,7 +20702,7 @@ atom({ id:'annotthread', cat:'Documents', name:'Annotation thread', block:'comme
 
 window.CIEO_SOURCE_HINT="blocks/220-fill-field.js";
 atom({ id:'fillfield', cat:'Forms', name:'Fillable field', block:'form, text input, validation', fam:['M','S'],
-  html:`<div class="col" style="width:min(320px,90%);gap:8px"><div class="card col" style="padding:14px 16px;gap:12px"><b style="font-size:15px">Exhibit title</b><div class="wrap" style="position:relative"><label class="fl" style="position:absolute;left:12px;font-size:14px;color:var(--muted);pointer-events:none">e.g. Delivery schedule</label><input class="in" type="text" autocomplete="off" style="width:100%;min-height:36px;border-radius:8px;border:1.5px solid var(--muted);padding:0 32px 0 10px;font-size:14px"><svg class="ck" width="18" height="18" viewBox="0 0 20 20" style="position:absolute;right:8px;top:9px"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="msg small" style="position:relative;min-height:22px;font-size:12.5px;line-height:1.5;display:grid"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="rq" checked> required field</label></div><div class="hint">Type 3+ letters, erase to feel danger</div>`,
+  html:`<div class="col" style="width:min(320px,90%);gap:8px"><div class="card col" style="padding:14px 16px;gap:12px"><b style="font-size:15px">Exhibit title</b><div class="wrap" style="position:relative"><label class="fl" style="position:absolute;left:12px;font-size:14px;color:var(--muted);pointer-events:none">e.g. Delivery schedule</label><input class="in" type="text" aria-label="Exhibit title" autocomplete="off" style="width:100%;min-height:36px;border-radius:8px;border:1.5px solid var(--muted);padding:0 32px 0 10px;font-size:14px"><svg class="ck" width="18" height="18" viewBox="0 0 20 20" style="position:absolute;right:8px;top:9px"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="msg small" style="position:relative;min-height:22px;font-size:12.5px;line-height:1.5;display:grid"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="rq" checked> required field</label></div><div class="hint">Type 3+ letters, erase to feel danger</div>`,
   desc:'The label floats up the moment typing starts. An empty required field rings danger with its message; a valid one inks a success check and holds a looks-good terminal.',
   api:'float.set(typing?1:0, base)   invalid: ring danger + msg.to(1)   valid: ck.set(1), msg.to(2)',
   init(st){
@@ -20779,7 +20818,7 @@ atom({ id:'datesign', cat:'Documents', name:'Date signed', block:'sign, date, ca
 
 window.CIEO_SOURCE_HINT="blocks/225-jurisdiction.js";
 atom({ id:'jurisdiction', cat:'Forms', name:'Jurisdiction pick', block:'form, dropdown, select', fam:['M'],
-  html:`<div class="col" style="width:min(320px,90%);gap:8px"><div class="card col" style="padding:14px 16px;gap:0"><b style="font-size:15px;padding-bottom:8px">Governing jurisdiction</b><button class="trig btn row" aria-haspopup="listbox" style="min-height:36px;border-radius:8px;justify-content:space-between"><span class="val" style="font-size:14px">Nevada</span><span class="chev" style="font-size:12px">▾</span></button><div class="list" role="listbox" style="overflow:hidden"></div><div class="msg small" style="position:relative;height:22px;font-size:12.5px;padding-top:4px"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="us" checked> US states only</label></div><div class="hint">Open it — arrow keys trail behind</div>`,
+  html:`<div class="col" style="width:min(320px,90%);gap:8px"><div class="card col" style="padding:14px 16px;gap:0"><b style="font-size:15px;padding-bottom:8px">Governing jurisdiction</b><button class="trig btn row" aria-haspopup="listbox" style="min-height:36px;border-radius:8px;justify-content:space-between"><span class="val" style="font-size:14px">Nevada</span><span class="chev" style="font-size:12px">▾</span></button><div class="list" role="listbox" aria-label="Governing jurisdiction" style="overflow:hidden"></div><div class="msg small" style="position:relative;height:22px;font-size:12.5px;padding-top:4px"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="us" checked> US states only</label></div><div class="hint">Open it — arrow keys trail behind</div>`,
   desc:'The list grows down from the trigger on a base spring while the arrow-key highlight trails sixty milliseconds behind the key. The pick swaps into the trigger and holds a filed success terminal.',
   api:'open.h.set(full, base) from trigger   hi.go(i) trails .06   pick: val.to(i), msg.to(1)',
   init(st){
@@ -21691,7 +21730,7 @@ atom({ id:'confmeter', cat:'AI chat', name:'Confidence meter', block:'chat, mete
 window.CIEO_SOURCE_HINT="blocks/270-voicewave.js";
 
 atom({ id:'voicewave', cat:'AI chat', name:'Voice waveform', block:'chat, voice', fam:['T','M','S'], tall:true,
-  html:`<div class="card col" style="width:min(340px,calc(100% - 24px));padding:14px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Voice reply</b><div class="bars" style="display:flex;align-items:center;gap:3px;height:48px;padding:0 2px" aria-hidden="true"></div><div class="tx small" style="position:relative;align-self:flex-start;max-width:75%;min-height:38px;overflow:hidden;background:var(--raised);border-radius:12px;font-size:13.5px;line-height:1.5"></div><div class="row" style="justify-content:space-between"><button class="btn ink mic" style="display:inline-flex;align-items:center;gap:8px;min-height:40px;border-radius:10px;touch-action:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Hold to talk</button><label class="row small muted" style="gap:6px;cursor:pointer;font-size:12px"><input type="checkbox" class="tr" checked> Transcript</label></div></div><div class="hint">Hold the button, then release</div>`,
+  html:`<div class="card col" style="width:min(340px,calc(100% - 24px));padding:14px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Voice reply</b><div class="bars" style="display:flex;align-items:center;gap:3px;height:48px;padding:0 2px" aria-hidden="true"></div><div class="tx small" style="position:relative;align-self:flex-start;max-width:75%;min-height:38px;overflow:hidden;background:var(--raised);border-radius:12px;font-size:13.5px;line-height:1.5"></div><div class="row" style="justify-content:space-between"><button class="btn ink mic" style="display:inline-flex;align-items:center;gap:8px;min-height:40px;border-radius:10px;touch-action:none"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>Hold to talk</button><label class="row small muted" style="gap:6px;cursor:pointer;font-size:12px"><input type="checkbox" class="tr" checked> Transcript</label></div></div><div class="hint">Hold the button, then release. Keyboard: Enter starts, Enter stops</div>`,
   desc:'Bars pulse live off the clock while held. On release they spring back and the transcript bubble swaps in as the terminal state.',
   api:'held: bar[i] = rest + live·pulse(t·9 − i·0.55)   release: live.set(0, S.soft), tx.swap.to(1)',
   init(st){
@@ -21701,12 +21740,15 @@ atom({ id:'voicewave', cat:'AI chat', name:'Voice waveform', block:'chat, voice'
     const L = ['', 'Ship it Thursday. QA signed off.'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.cssText += ';justify-content:flex-start;padding:8px 12px;white-space:normal;text-align:left'; e.textContent = s; tx.appendChild(e); return e; });
     const live = new Track(0, S.snap), sw = new Swap(0), th = new Track(0);
     let downAt = 0;
-    mic.onpointerdown = e => { mic.setPointerCapture(e.pointerId); downAt = now(); live.set(1, S.snap); };
+    const start = () => { downAt = now(); live.set(1, S.snap); };
+    mic.onpointerdown = e => { mic.setPointerCapture(e.pointerId); start(); };
+    // Keyboard path for the hold: Enter or Space starts talking, the same key stops.
+    mic.onkeydown = e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat){ e.preventDefault(); if (live.target) up(); else start(); } };
     const up = () => { if (!live.target) return; const t = now();
       if (REDUCE){ live.jump(0); sw.cur = tr.checked ? 1 : 0; sw.prev = null; sw.t = -9; th.jump(tr.checked ? 56 : 0); }
       else { live.set(0, S.soft); th.set(tr.checked ? 56 : 0, S.soft, t + .08); if (tr.checked) sw.to(1); else sw.to(0); } };
     mic.onpointerup = up; mic.onpointercancel = up;
-    return t => { const a = clamp(live.at(t));
+    return t => { const a = clamp(live.at(t)); mic.setAttribute('aria-pressed', String(!!live.target));
       els.forEach((b,i) => { const p = REDUCE ? (i % 3 === 0 ? .5 : .2) : (.5 + .5*Math.sin(t*9 - i*.55));
         const hh2 = 6 + a*30*p + (1-a)*2*(i % 2); b.style.height = px(hh2); b.style.opacity = (.35 + .65*(.3 + .7*a*p)).toFixed(3); });
       tx.style.height = px(Math.max(0, th.at(t))); L.forEach((e,k) => sw.apply(e,k,t)); };
@@ -22045,7 +22087,7 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
 
 window.CIEO_SOURCE_HINT="blocks/288-tzflip.js";
 atom({ id:'tzflip', cat:'Scheduling', name:'Timezone flip', block:'timezone, meeting times', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Team times</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:4px"><div class="rail" style="position:relative;display:flex;gap:4px;background:var(--raised);border-radius:10px;padding:4px;margin-bottom:8px" role="tablist"></div><div class="rows" style="display:flex;flex-direction:column"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:6px"><input type="checkbox" class="wh" checked style="width:16px;height:16px"><span style="font-size:12px">Working hours only</span></div></div></div><div class="hint">Flip zones — widths spring, never jump</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Team times</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:4px"><div class="rail" style="position:relative;display:flex;gap:4px;background:var(--raised);border-radius:10px;padding:4px;margin-bottom:8px" role="tablist"></div><div class="rows" style="display:flex;flex-direction:column"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:6px"><label style="display:contents"><input type="checkbox" class="wh" checked style="width:16px;height:16px"><span style="font-size:12px">Working hours only</span></label></div></div></div><div class="hint">Flip zones — widths spring, never jump</div>`,
   desc:'Each time blurs out and its replacement blurs in. The time column measures the longest new label and springs to fit it, so nothing jumps. Filtering to working hours only fades the late row.',
   api:'rows[i].sw.to(tz)   w.set(measure(longest))   late.o.set(wh?1:0)',
   init(st){
@@ -22181,7 +22223,7 @@ atom({ id:'holdconfirm', cat:'Scheduling', name:'Hold to confirm', block:'bookin
 
 window.CIEO_SOURCE_HINT="blocks/291-reschedrag.js";
 atom({ id:'reschedrag', cat:'Scheduling', name:'Reschedule drag', block:'reschedule, drag', fam:['M','S'], tall:true,
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Move design review</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:0"><div class="tl" style="position:relative"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:10px"><input type="checkbox" class="sn" checked style="width:16px;height:16px"><span style="font-size:12px">Snap to 15 min</span></div></div></div><div class="hint">Drag the event · it snaps to the grid</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Move design review</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:0"><div class="tl" style="position:relative"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;margin-top:10px"><label style="display:contents"><input type="checkbox" class="sn" checked style="width:16px;height:16px"><span style="font-size:12px">Snap to 15 min</span></label></div></div></div><div class="hint">Drag the event · it snaps to the grid</div>`,
   desc:'The chip follows your finger one to one. A gap opens softly at the landing slot while the others spring aside, and the chip label swaps to the snapped time on drop.',
   api:'drag 1:1 hy   rows[i].y springs around gap   chip sw.to(snapped) on drop',
   init(st){
@@ -22279,7 +22321,7 @@ atom({ id:'grouppoll', cat:'Scheduling', name:'Group-poll tally', block:'group p
 
 window.CIEO_SOURCE_HINT="blocks/293-buffersync.js";
 atom({ id:'buffersync', cat:'Scheduling', name:'Buffer editor', block:'buffer, sync status', fam:['M','S'], tall:true,
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Protect focus time</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="bl" style="font-size:13px;display:flex;justify-content:space-between"><span>Design review</span><b class="bm" style="font-variant-numeric:tabular-nums">30 min buffer</b></div><div class="bar" style="position:relative;height:56px;border-radius:10px;background:var(--raised)"></div><p class="cap" style="font-size:12px;color:var(--muted);margin:0">Drag the right handle — the buffer edge trails 60ms behind.</p><div class="srow" style="position:relative;display:flex;align-items:center;gap:8px;min-height:36px"><i class="dot" style="width:10px;height:10px;border-radius:50%;background:var(--ink);opacity:.35"></i><span class="sl" style="position:relative;flex:1;height:20px;font-size:13px;overflow:hidden"></span><button class="sy" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 14px;cursor:pointer;font-size:13px">Sync</button></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><input type="checkbox" class="au" checked style="width:16px;height:16px"><span style="font-size:12px">Auto-sync on release</span></div></div></div><div class="hint">Short buffers flag a conflict</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Protect focus time</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="bl" style="font-size:13px;display:flex;justify-content:space-between"><span>Design review</span><b class="bm" style="font-variant-numeric:tabular-nums">30 min buffer</b></div><div class="bar" style="position:relative;height:56px;border-radius:10px;background:var(--raised)"></div><p class="cap" style="font-size:12px;color:var(--muted);margin:0">Drag the right handle — the buffer edge trails 60ms behind.</p><div class="srow" style="position:relative;display:flex;align-items:center;gap:8px;min-height:36px"><i class="dot" style="width:10px;height:10px;border-radius:50%;background:var(--ink);opacity:.35"></i><span class="sl" style="position:relative;flex:1;height:20px;font-size:13px;overflow:hidden"></span><button class="sy" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 14px;cursor:pointer;font-size:13px">Sync</button></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><label style="display:contents"><input type="checkbox" class="au" checked style="width:16px;height:16px"><span style="font-size:12px">Auto-sync on release</span></label></div></div></div><div class="hint">Short buffers flag a conflict</div>`,
   desc:'The right handle drags the event edge one to one while the buffer edge trails sixty milliseconds behind. Syncing pulses the dot, then swaps Scheduled to Synced — or Conflict when the buffer runs under fifteen minutes.',
   api:'trail.set(v, base, t+.06) 60ms lag   sync: pulse then sw.to(1|2)',
   init(st){
@@ -22330,7 +22372,7 @@ atom({ id:'buffersync', cat:'Scheduling', name:'Buffer editor', block:'buffer, s
 
 window.CIEO_SOURCE_HINT="blocks/294-attendees.js";
 atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendees, invite form', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Invite attendees</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="f0" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Name</label><div class="iw" style="position:relative"><input class="in" type="text" autocomplete="name" placeholder="Ada Lovelace" style="width:100%;height:36px;border-radius:8px;border:1.5px solid var(--muted);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><div class="f1" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Email</label><div class="iw" style="position:relative"><input class="in" type="email" autocomplete="email" placeholder="ada@example.com" style="width:100%;height:36px;border-radius:8px;border:1.5px solid var(--muted);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><button class="go" style="min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);cursor:pointer;font-size:14px;font-weight:600">Send invite</button><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><input type="checkbox" class="ci" checked style="width:16px;height:16px"><span style="font-size:12px">Include calendar invite</span></div></div></div><div class="hint">Invalid rings red · valid earns a check</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Invite attendees</b><div class="card" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="f0" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Name</label><div class="iw" style="position:relative"><input class="in" type="text" autocomplete="name" placeholder="Ada Lovelace" style="width:100%;height:36px;border-radius:8px;border:1.5px solid var(--muted);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><div class="f1" style="display:flex;flex-direction:column;gap:4px"><label style="font-size:13px">Email</label><div class="iw" style="position:relative"><input class="in" type="email" autocomplete="email" placeholder="ada@example.com" style="width:100%;height:36px;border-radius:8px;border:1.5px solid var(--muted);background:var(--card);padding:0 32px 0 10px;font-size:13px;color:var(--ink)"></div><div class="mg" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><button class="go" style="min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);cursor:pointer;font-size:14px;font-weight:600">Send invite</button><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><label style="display:contents"><input type="checkbox" class="ci" checked style="width:16px;height:16px"><span style="font-size:12px">Include calendar invite</span></label></div></div></div><div class="hint">Invalid rings red · valid earns a check</div>`,
   desc:'Each field validates as you type. A bad value rings the field red and swaps in its message; a good one earns a success check. Sending with errors surfaces every message, and a clean invite holds its success state.',
   api:'err.set(1) danger ring + msg swap   ok.set(1) success check   send: all valid → terminal',
   init(st){
@@ -22531,31 +22573,35 @@ atom({ id:'placesheet', cat:'Maps', name:'Place card sheet', block:'map sheet, p
 
 window.CIEO_SOURCE_HINT="blocks/308-routecompare.js";
 atom({ id:'routecompare', cat:'Maps', name:'Route comparison', block:'directions, eta', fam:['M'], wide:true,
-  html:`<div class="card" style="width:min(440px,94%);padding:14px 16px"><p style="font-size:15px;font-weight:600;line-height:1.5;margin:0 0 2px">Pick a route</p><p style="font-size:12.5px;color:var(--muted);line-height:1.5;margin:0 0 10px">2 options · traffic now</p><div class="rts" style="position:relative;display:flex;flex-direction:column"></div><div class="row small muted" style="display:flex;align-items:center;gap:8px;padding:10px 2px 0;font-size:12.5px;color:var(--muted)"><span style="flex:1">Winner keeps the plate</span><button type="button" class="btn pg-tg" style="height:32px;border-radius:9px" aria-pressed="true">Traffic on</button></div></div><div class="hint">Tap a route to choose it</div>`,
-  desc:'Rival inks chase each other with the trailing edge 60ms behind. The winner plate lands leading-edge-first. ETAs roll on a base spring and the loser holds dimmed as the terminal.',
-  api:'edge.go(pick) trails .06   eta[i].digits.set(min)   plate.o.set(pick)',
+  html:`<div class="card" style="width:min(440px,94%);padding:14px 16px"><p style="font-size:15px;font-weight:600;line-height:1.5;margin:0 0 2px">Pick a route</p><p style="font-size:12.5px;color:var(--muted);line-height:1.5;margin:0 0 10px">2 options · traffic now</p><div class="rts" style="position:relative;display:flex;flex-direction:column;gap:4px"></div><div class="row small muted" style="display:flex;align-items:center;gap:8px;padding:10px 2px 0;font-size:12.5px;color:var(--muted)"><span class="rc-st" style="flex:1" aria-live="polite">Tap a route to select it</span><button type="button" class="btn pg-tg" style="height:32px;border-radius:9px" aria-pressed="true">Traffic on</button></div></div><div class="hint">Tap a route to choose it</div>`,
+  desc:'Rival inks chase each other with the trailing edge 60ms behind. The chosen route fills its bar and its plate lands leading-edge-first, while the other route dims. ETAs roll on a base spring and the loser holds dimmed as the terminal.',
+  api:'edge.go(w0, w1) trails .06   eta[i].digits.set(min)   plate.o.set(w_i)   bar.w = mix(w_i)',
   init(st){
-    const box = $(st,'.rts');
-    const R = [{ n:'Via Embarcadero', m:14, fast:true }, { n:'Via Market St', m:19, fast:false }];
-    const rows = R.map((r,i) => { const d = document.createElement('button'); d.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;cursor:pointer;padding:10px 10px;border-radius:10px' + (i ? ';border-top:1px solid var(--line-soft)' : '');
-      d.innerHTML = `<span class="plt" style="position:absolute;inset:4px;border-radius:8px;background:var(--raised)"></span><span style="position:relative;flex:1;min-width:0"><b style="display:block;font-size:14px;line-height:1.5">${r.n}</b><span style="display:block;height:5px;border-radius:3px;background:var(--line);margin-top:6px;overflow:hidden"><i class="ink" style="display:block;height:100%;border-radius:3px;background:var(--ink)"></i></span></span><span class="eta" style="position:relative;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums"></span><span style="position:relative;font-size:12.5px;color:var(--muted)">min</span>`;
-      d.setAttribute('aria-label', `${r.n}, ${r.m} minutes`); box.appendChild(d); return d; });
-    const e = edges(0, 1); e.jump(1, 0);
-    const etas = rows.map(r => { const d = new Digits($(r,'.eta'), 2); return d; });
-    etas.forEach((d,i) => d.set(String(R[i].m), true));
-    let pick = 0, traffic = true;
+    const box = $(st,'.rts'), status = $(st,'.rc-st');
+    const R = [{ n:'Via Embarcadero', m:14 }, { n:'Via Market St', m:19 }];
+    const rows = R.map((r,i) => { const d = document.createElement('button'); d.type = 'button'; d.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;cursor:pointer;padding:10px 10px;border-radius:10px;color:var(--ink)';
+      d.innerHTML = `<span class="plt" style="position:absolute;inset:4px;border-radius:8px;background:var(--raised);opacity:0"></span><span style="position:relative;flex:1;min-width:0"><b style="display:block;font-size:14px;line-height:1.5">${r.n}</b><span style="display:block;height:5px;border-radius:3px;background:var(--line);margin-top:6px;overflow:hidden"><i class="ink" style="display:block;height:100%;border-radius:3px;background:var(--ink);width:0"></i></span></span><span class="eta" style="position:relative;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums"></span><span style="position:relative;font-size:12.5px;color:var(--muted)">min</span>`;
+      d.setAttribute('aria-label', `${r.n}, ${r.m} minutes`); d.setAttribute('aria-pressed', 'false'); box.appendChild(d); return d; });
+    const e = edges(0, 0);
+    const etas = rows.map(r => new Digits($(r,'.eta'), 2));
+    let pick = -1, traffic = true;
     const tg = $(st,'.pg-tg');
-    const apply = inst => { const t0 = now();
-      if (inst || REDUCE){ e.jump(pick ? 0 : 1, pick ? 1 : 0); etas.forEach((d,i) => d.set(String(R[i].m + (traffic ? 0 : -2)), true)); }
-      else { e.go(pick ? 0 : 1, pick ? 1 : 0); etas.forEach((d,i) => d.set(String(R[i].m + (traffic ? 0 : -2)))); } };
-    rows.forEach((r,i) => r.onclick = () => { pick = i; apply(false); });
-    tg.onclick = () => { traffic = !traffic; tg.textContent = traffic ? 'Traffic on' : 'Traffic off'; tg.setAttribute('aria-pressed', traffic); apply(false); };
+    const apply = inst => {
+      const w0 = pick === 0 ? 1 : 0, w1 = pick === 1 ? 1 : 0, mins = i => R[i].m + (traffic ? 0 : -2);
+      if (inst || REDUCE) e.jump(w0, w1); else e.go(w0, w1);
+      etas.forEach((d,i) => d.set(String(mins(i)), inst || REDUCE));
+      rows.forEach((r,i) => r.setAttribute('aria-pressed', String(i === pick)));
+      status.textContent = pick < 0 ? 'Tap a route to select it' : `${R[pick].n} selected, ${mins(pick)} min`;
+    };
+    rows.forEach((r,i) => r.onclick = () => { pick = pick === i ? -1 : i; apply(false); });
+    tg.onclick = () => { traffic = !traffic; tg.textContent = traffic ? 'Traffic on' : 'Traffic off'; tg.setAttribute('aria-pressed', String(traffic)); apply(false); };
     apply(true);
-    return t => { const a = clamp(e.A.at(t)), b = clamp(e.B.at(t));
-      rows.forEach((r,i) => { const on = (i === pick ? a : 1-a), off = (i === pick ? b : 1-b);
-        r.querySelector('.plt').style.opacity = (i === pick ? .6+.4*b : .25*off).toFixed(3);
-        r.querySelector('.ink').style.width = ((i === pick ? b : .55*off)*100).toFixed(1) + '%';
-        r.style.opacity = (i === pick ? 1 : .55 + .2*off).toFixed(3); });
+    return t => { const ws = [clamp(e.A.at(t)), clamp(e.B.at(t))], any = clamp(ws[0] + ws[1]);
+      rows.forEach((r,i) => { const w = ws[i];
+        r.querySelector('.plt').style.opacity = w.toFixed(3);
+        r.querySelector('.ink').style.width = (R[i].m / 19 * 100 * (.5 + .5*w)).toFixed(1) + '%';
+        r.querySelector('.ink').style.background = mix(w, 'var(--ink)', 'var(--muted)');
+        r.style.opacity = (1 - .45*(1 - w)*any).toFixed(3); });
       etas.forEach(d => d.render(t)); };
   }});
 
@@ -23889,7 +23935,7 @@ atom({ id:'segswitch', cat:'Views', name:'Segmented view switch', block:'segment
     const swH = new Swap(0), swR = new Swap(0), h = new Track(V[0].H), e = edges(0, 0), dg = new Digits($(st,'.ct'), 2);
     let cur = 0; const rc = $(st,'.rc');
     const place = i => { const b = btns[i]; return [b.offsetLeft + 2, b.offsetLeft + b.offsetWidth - 2]; };
-    const go = i => { if (i === cur) return; cur = i; const [a, b] = place(i); e.go(a, b);
+    const go = i => { if (i === cur){ swH.cur = -1; swH.to(i); swR.cur = -1; swR.to(i, now() + .05); return; } cur = i; const [a, b] = place(i); e.go(a, b);
       swH.to(i); swR.to(i, now() + .05); h.set(V[i].H); if (rc.checked) dg.set(V[i].c); else dg.set(V[i].c, true); paint(); };
     const paint = () => btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; });
     btns.forEach((b, i) => b.onclick = () => go(i));
@@ -23902,14 +23948,19 @@ atom({ id:'segswitch', cat:'Views', name:'Segmented view switch', block:'segment
 window.CIEO_SOURCE_HINT="blocks/388-sheetdetents.js";
 
 atom({ id:'sheetdetents', cat:'Views', name:'Bottom-sheet detents', block:'sheet, bottom sheet, detents', fam:['M'], tall:true,
-  html:`<div class="tile" style="position:relative;width:min(360px,94%);height:280px;overflow:hidden;border-radius:12px;background:var(--fill)"><div class="dim" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none"></div><div style="padding:14px 16px;font-size:15px;font-weight:600;line-height:1.5">Inbox</div><div class="small muted" style="padding:0 16px;font-size:12.5px">Four threads sit under the sheet.</div><div class="sht" style="position:absolute;left:0;right:0;top:0;height:250px;background:var(--card);border-radius:14px 14px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.12);touch-action:none"><div class="grab" style="display:grid;place-items:center;padding:10px 0 4px;cursor:grab"><span style="width:36px;height:4px;border-radius:2px;background:var(--line)"></span></div><div style="padding:6px 16px 0;font-size:15px;font-weight:600;line-height:1.5">Route 12 hearing</div><div class="small muted" style="padding:0 16px 8px;font-size:12.5px">Tuesday · 6 pm · Library room B</div><div style="font-size:13px;line-height:1.5;padding:8px 16px;border-top:1px solid var(--line)">The board takes public comment first.</div><div style="font-size:13px;line-height:1.5;padding:8px 16px;border-top:1px solid var(--line)">Bring the Friday packet, page 14.</div></div></div><div class="row" style="gap:8px;align-items:center"><button class="btn hf">Half</button><button class="btn fl">Full</button><span class="small muted">drag the handle · dim only at full</span></div><div class="hint">Drag the sheet, or jump to a detent</div>`,
+  html:`<div class="tile" style="position:relative;width:min(360px,94%);height:280px;overflow:hidden;border-radius:12px;background:var(--fill)"><div class="dim" style="position:absolute;inset:0;background:#000;opacity:0;pointer-events:none"></div><div style="padding:14px 16px;font-size:15px;font-weight:600;line-height:1.5">Inbox</div><div class="small muted" style="padding:0 16px;font-size:12.5px">Four threads sit under the sheet.</div><div class="sht" style="position:absolute;left:0;right:0;top:0;height:250px;background:var(--card);border-radius:14px 14px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,.12);touch-action:none"><div class="grab" style="display:grid;place-items:center;padding:10px 0 4px;cursor:grab"><span style="width:36px;height:4px;border-radius:2px;background:var(--line)"></span></div><div style="padding:6px 16px 0;font-size:15px;font-weight:600;line-height:1.5">Route 12 hearing</div><div class="small muted" style="padding:0 16px 8px;font-size:12.5px">Tuesday · 6 pm · Library room B</div><div style="font-size:13px;line-height:1.5;padding:8px 16px;border-top:1px solid var(--line)">The board takes public comment first.</div><div style="font-size:13px;line-height:1.5;padding:8px 16px;border-top:1px solid var(--line)">Bring the Friday packet, page 14.</div></div></div><div class="row" style="gap:8px;align-items:center"><button type="button" class="btn hf" aria-pressed="true">Half</button><button type="button" class="btn fl" aria-pressed="false">Full</button><span class="sd-st small muted" aria-live="polite">Half detent · drag the handle</span></div><div class="hint">Drag the sheet, or jump to a detent</div>`,
   desc:'The sheet tracks the finger 1:1 and rubber-bands past its stops. Release velocity picks the detent: a fast fling up lands full, down lands half. The dim only fades in at full and the stops hold as terminals.',
   api:'drag 1:1 + rb past stops   vy<-500→full, vy>500→half, else nearest   dim.set(full?1:0)',
   init(st){
     const sht = $(st,'.sht'), dim = $(st,'.dim'), tile = $(st,'.tile');
     const FULL = 30, HALF = 150, CLOSED = 236;
     const y = new Track(HALF), dm = new Track(0); let startY = 0, startC = 0;
-    const settle = (to, t = now()) => { y.set(to, to === FULL ? S.base : S.soft, t); dm.set(to === FULL ? .45 : 0, S.base, t); };
+    const hf = $(st,'.hf'), fl = $(st,'.fl'), status = $(st,'.sd-st');
+    const settle = (to, t = now()) => { y.set(to, to === FULL ? S.base : S.soft, t); dm.set(to === FULL ? .45 : 0, S.base, t);
+      hf.setAttribute('aria-pressed', String(to === HALF)); fl.setAttribute('aria-pressed', String(to === FULL));
+      status.textContent = to === FULL ? 'Full detent · dimmed' : 'Half detent · drag the handle'; };
+    // A press on the detent already in place still answers: the sheet nudges up 10px and springs back.
+    const press = to => { if (y.target === to) y.release(to - 10, 0, to, S.base, now()); else settle(to); };
     const clampRb = v => v < FULL ? FULL + rb(v - FULL, 120) : v > CLOSED ? CLOSED + rb(v - CLOSED, 120) : v;
     drag(sht, { down:(p) => { startY = p.cy; startC = y.target; },
       move:(p) => { y.jump(clampRb(startC + (p.cy - startY))); dm.jump(y.target === FULL ? .45 : 0); },
@@ -23917,7 +23968,7 @@ atom({ id:'sheetdetents', cat:'Views', name:'Bottom-sheet detents', block:'sheet
         if (v.vy < -500) settle(FULL);
         else if (v.vy > 500) settle(cur > (HALF + CLOSED) / 2 ? CLOSED : HALF);
         else settle([FULL, HALF, CLOSED].reduce((a, b) => Math.abs(b - cur) < Math.abs(a - cur) ? b : a)); } });
-    $(st,'.hf').onclick = () => settle(HALF); $(st,'.fl').onclick = () => settle(FULL);
+    hf.onclick = () => press(HALF); fl.onclick = () => press(FULL);
     tile.addEventListener('click', e => { if (e.target === tile) settle(HALF); });
     return t => { sht.style.transform = `translateY(${y.at(t).toFixed(2)}px)`; dim.style.opacity = clamp(dm.at(t)).toFixed(3); };
   }});
@@ -23925,7 +23976,7 @@ atom({ id:'sheetdetents', cat:'Views', name:'Bottom-sheet detents', block:'sheet
 window.CIEO_SOURCE_HINT="blocks/389-drillin.js";
 
 atom({ id:'drillin', cat:'Views', name:'Drill-in navigation', block:'navigation, drill, master detail', fam:['S','M'],
-  html:`<div class="tile" style="position:relative;width:min(360px,94%);height:264px;overflow:hidden;border-radius:12px;background:var(--card)"><div class="mst" style="position:absolute;inset:0 0 44px 0;padding:14px 16px"><div style="font-size:15px;font-weight:600;line-height:1.5">Stories</div><div class="small muted" style="font-size:12.5px">Tap one to drill in.</div><button class="r0 btn" style="margin-top:8px">Who writes the agenda</button><button class="r1 btn" style="margin-top:8px">Reading a city budget</button></div><div class="dtl" style="position:absolute;top:0;bottom:44px;left:0;width:100%;background:var(--card);padding:14px 16px;touch-action:pan-y"><button class="bk" style="border:0;background:none;cursor:pointer;font-size:13px;color:var(--accent);padding:6px 0;position:relative;height:30px;display:block"><span class="layer">‹ Stories</span></button><b class="dh" style="display:block;position:relative;height:24px"><span class="layer" style="font-size:15px;font-weight:600;line-height:1.5">Who writes the agenda</span></b><div class="small muted" style="font-size:12.5px">Maya Okafor · Oct 2</div><div style="font-size:13px;line-height:1.6;margin-top:6px">The superintendent drafts it and the chair approves it. Ask the clerk eight days out.</div></div><div class="tab" style="position:absolute;left:0;right:0;bottom:0;height:44px;display:flex;border-top:1px solid var(--line);background:var(--card);font-size:12px;color:var(--muted)"><span style="flex:1;display:grid;place-items:center;color:var(--ink);font-weight:600">Read</span><span style="flex:1;display:grid;place-items:center">Saved</span><span style="flex:1;display:grid;place-items:center">Me</span></div></div><label class="row small muted" style="gap:6px"><input type="checkbox" class="dm" checked> dim parent</label><div class="hint">Open a story, swipe from the left edge to go back</div>`,
+  html:`<div class="tile" style="position:relative;width:min(360px,94%);height:264px;overflow:hidden;border-radius:12px;background:var(--card)"><div class="mst" style="position:absolute;inset:0 0 44px 0;padding:14px 16px"><div style="font-size:15px;font-weight:600;line-height:1.5">Stories</div><div class="small muted" style="font-size:12.5px">Tap one to drill in.</div><button class="r0 btn" style="margin-top:8px">Who writes the agenda</button><button class="r1 btn" style="margin-top:8px">Reading a city budget</button></div><div class="dtl" style="position:absolute;top:0;bottom:44px;left:0;width:100%;background:var(--card);padding:14px 16px;touch-action:pan-y"><button class="bk" style="border:0;background:none;cursor:pointer;font-size:13px;color:var(--accent);padding:6px 0;position:relative;height:30px;display:block"><span>‹ Stories</span></button><b class="dh" style="display:block;position:relative;height:24px"><span class="layer" style="font-size:15px;font-weight:600;line-height:1.5">Who writes the agenda</span></b><div class="small muted" style="font-size:12.5px">Maya Okafor · Oct 2</div><div style="font-size:13px;line-height:1.6;margin-top:6px">The superintendent drafts it and the chair approves it. Ask the clerk eight days out.</div><div class="edge" aria-hidden="true" style="position:absolute;left:0;top:0;bottom:0;width:16px;touch-action:pan-y"></div></div><div class="tab" style="position:absolute;left:0;right:0;bottom:0;height:44px;display:flex;border-top:1px solid var(--line);background:var(--card);font-size:12px;color:var(--muted)"><span style="flex:1;display:grid;place-items:center;color:var(--ink);font-weight:600">Read</span><span style="flex:1;display:grid;place-items:center">Saved</span><span style="flex:1;display:grid;place-items:center">Me</span></div></div><label class="row small muted" style="gap:6px"><input type="checkbox" class="dm" checked> dim parent</label><div class="hint">Open a story, swipe from the left edge to go back</div>`,
   desc:'The new pane slides in from the trailing edge while the current one shifts 28px and dims. The back label swaps to the parent title and the tab bar never moves. An edge swipe tracks the finger and commits or cancels on release.',
   api:'x.set(0) in, W out   mst shifts -28 + dims   bk.to(parent)   edge drag commits>90px',
   init(st){
@@ -23933,12 +23984,15 @@ atom({ id:'drillin', cat:'Views', name:'Drill-in navigation', block:'navigation,
     const W = 360, x = new Track(W), sh = new Track(0), dm = new Track(0);
     const sw = new Swap(0); let open = false, sx = 0, sx0 = 0, armed = false;
     const titles = ['‹ Stories', '‹ Stories'];
-    const show = i => { open = true; x.set(0, S.base); sh.set(-28, S.base); dm.set(dmBox.checked ? .45 : 0, S.base);
+    // inert: the closed detail pane (off-screen) and the covered master list leave the tab order.
+    dtl.inert = true;
+    const show = i => { open = true; dtl.inert = false; mst.inert = true; x.set(0, S.base); sh.set(-28, S.base); dm.set(dmBox.checked ? .45 : 0, S.base);
       bk.textContent = titles[i]; sw.to(1); };
-    const hide = () => { open = false; x.set(W, S.base); sh.set(0, S.base); dm.set(0, S.base); sw.to(0); };
+    const hide = () => { open = false; dtl.inert = true; mst.inert = false; x.set(W, S.base); sh.set(0, S.base); dm.set(0, S.base); sw.to(0); };
     $(st,'.r0').onclick = () => show(0); $(st,'.r1').onclick = () => show(1);
     $(st,'.bk').onclick = hide;
-    drag(dtl, { down:(p) => { armed = open && p.x < 30; sx = p.cx; sx0 = x.target; },
+    // The edge-swipe listens on a 16px strip only; on the whole pane its pointer capture swallowed taps on the back button.
+    drag($(st,'.edge'), { down:(p) => { armed = open && p.x < 30; sx = p.cx; sx0 = x.target; },
       move:(p) => { if (armed) x.jump(Math.max(0, sx0 + (p.cx - sx))); },
       up:(p, v) => { if (!armed) return; armed = false;
         if (sx0 + (p.cx - sx) > 90 || v.vx > 600) hide(); else x.set(0, S.base); } });
@@ -23966,7 +24020,7 @@ atom({ id:'tabrestore', cat:'Views', name:'Tab state restore', block:'tabs, stat
     let cur = 0;
     dgs.forEach((d, i) => d.set(String(counts[i]), true));
     const place = i => { const b = btns[i]; return [b.offsetLeft + 12, b.offsetLeft + b.offsetWidth - 12]; };
-    const go = i => { if (i === cur) return; saved[cur] = panes[cur].scrollTop;
+    const go = i => { if (i === cur){ sw.cur = -1; sw.to(i); return; } saved[cur] = panes[cur].scrollTop;
       cur = i; const [a, b] = place(i); e.go(a, b); sw.to(i);
       panes[i].scrollTop = saved[i]; counts[i] = 0; dgs[i].set('0');
       dp.textContent = ['Read', 'Saved', 'Me'][i] + ' · ' + depth[i] + ' deep'; paint(); };
@@ -24069,7 +24123,7 @@ atom({ id:'vcrossfade', cat:'Views', name:'View crossfade', block:'crossfade, tr
 window.CIEO_SOURCE_HINT="blocks/394-deeplink.js";
 
 atom({ id:'deeplink', cat:'Views', name:'Deep-link landing', block:'deep link, navigation, landing', fam:['S','M'],
-  html:`<div class="col" style="gap:8px;width:min(360px,94%)"><div class="card" style="padding:14px 16px"><button class="bk" style="border:0;background:none;cursor:pointer;font-size:13px;color:var(--accent);padding:2px 0;position:relative;height:26px;display:block"><span class="layer">‹ Home</span></button><b class="hh" style="display:block;position:relative;height:24px"></b><div class="cr small muted num" style="font-size:12px"></div><div class="tt" style="position:relative;height:66px;margin-top:6px"></div><div class="ld small muted" style="font-size:12px;margin-top:4px"></div></div><div class="row" style="gap:8px"><button class="btn l0">Open: budget story</button><button class="btn l1">Open: meeting note</button></div></div><div class="hint">A shared link builds the whole stack, then lands</div>`,
+  html:`<div class="col" style="gap:8px;width:min(360px,94%)"><div class="card" style="padding:14px 16px"><button class="bk" style="border:0;background:none;cursor:pointer;font-size:13px;color:var(--accent);padding:2px 0;position:relative;height:26px;display:block"><span aria-hidden="true" style="visibility:hidden">‹ City budget</span></button><b class="hh" style="display:block;position:relative;height:24px"></b><div class="cr small muted num" style="font-size:12px"></div><div class="tt" style="position:relative;height:66px;margin-top:6px"></div><div class="ld small muted" style="font-size:12px;margin-top:4px"></div></div><div class="row" style="gap:8px"><button class="btn l0">Open: budget story</button><button class="btn l1">Open: meeting note</button></div></div><div class="hint">A shared link builds the whole stack, then lands</div>`,
   desc:'Tapping a link builds the full stack instantly with no travel, then the final pane enters heading-first and body 50ms later. The back chain lands on the correct parent every step, ending home.',
   api:'stack jumps instant   hh.to(2) then tt.to(2,+.05)   bk.to(parent) per depth   end: landed',
   init(st){
@@ -24081,12 +24135,14 @@ atom({ id:'deeplink', cat:'Views', name:'Deep-link landing', block:'deep link, n
     const mk = (box, cls, style) => chain.map((s, k) => { const e = document.createElement('span'); e.className = 'layer ' + cls; e.style.cssText = style; box.appendChild(e); return e; });
     const HB = mk(hh, '', 'font-size:15px;font-weight:600;line-height:1.5'), BB = mk(tt, '', 'font-size:13px;line-height:1.6');
     HB.forEach((e, k) => e.textContent = chain[k].h); BB.forEach((e, k) => e.textContent = chain[k].b);
-    const BK = ['‹ Home', '‹ Home', '‹ City budget'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; bkBox.appendChild(e); return e; });
+    const BK = ['‹ Home', '‹ Home', '‹ City budget'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; bkBox.appendChild(e); return e; });
     const swB = new Swap(0), swH = new Swap(0), swT = new Swap(0);
     const cr = $(st,'.cr'), ld = $(st,'.ld'); let depth = 0;
     const land = d => { depth = d; const t = now();
       // stack builds instantly: crumbs + caption jump, no travel
       cr.textContent = chain[d].c; ld.textContent = chain[d].ld;
+      // Home has no parent: the back link is dimmed and removed from the tab order.
+      bkBox.disabled = d === 0; bkBox.style.opacity = d === 0 ? '.4' : '1';
       swB.to(d, t); swH.to(d, t); swT.to(d, t + .05); };
     $(st,'.l0').onclick = () => land(2); $(st,'.l1').onclick = () => land(1);
     bkBox.onclick = () => land(Math.max(0, depth - 1));
@@ -24470,12 +24526,12 @@ atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, count
 
 window.CIEO_SOURCE_HINT="blocks/417-reviewform.js";
 atom({ id:'reviewform', cat:'Forms', name:'Review form', block:'review form, photos, mood', fam:['M','S'],
-  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Write a review</h4><div class="ph row" role="group" aria-label="Photos" style="gap:6px"></div><div class="md row" role="radiogroup" aria-label="Mood" style="gap:4px;position:relative"></div><span class="ml small" style="position:relative;height:18px;font-size:12px;color:var(--muted);line-height:1.5"></span><textarea aria-label="Review" placeholder="What stood out? (optional)" style="min-height:56px;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;font:14px/1.5 var(--sans);resize:vertical"></textarea><div class="row" style="gap:8px"><button class="btn snd" style="height:36px;padding:0 16px;border-radius:9px;flex:1">Post review</button><label class="row small muted" style="gap:6px;cursor:pointer;align-items:center"><input type="checkbox" class="iph" checked> Include photos</label></div></div><div class="hint">Add photos, slide mood, then post</div>`,
+  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Write a review</h4><div class="ph row" role="group" aria-label="Photos" style="gap:6px"></div><div class="md row" role="radiogroup" aria-label="Mood" style="gap:4px;position:relative"></div><span class="ml small" style="position:relative;height:18px;font-size:12px;color:var(--muted);line-height:1.5"></span><textarea aria-label="Review" placeholder="What stood out? (optional)" style="min-height:56px;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;font:14px/1.5 var(--sans);resize:vertical"></textarea><div class="row" style="gap:8px"><button class="btn snd" style="position:relative;height:36px;padding:0 16px;border-radius:9px;flex:1;overflow:hidden"></button><label class="row small muted" style="gap:6px;cursor:pointer;align-items:center"><input type="checkbox" class="iph" checked> Include photos</label></div></div><div class="hint">Add photos, slide mood, then post</div>`,
   desc:'Photo tiles open their height first and sharpen after. Faces glide with the mood and the label swaps; posting morphs a held thanks.',
   api:'tile.h.set(open, base) → sharp.set(1)   mood.set(i, soft); label.to(i)   post.to(thanks)',
   init(st){
     const ph = $(st,'.ph'), md = $(st,'.md'), ml = $(st,'.ml'), snd = $(st,'.snd'), iph = $(st,'.iph');
-    const T = 3, tiles = [];
+    const T = 2, tiles = [];
     for (let i = 0; i < T; i++){ const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Add photo ' + (i + 1));
       b.style.cssText = 'flex:1;aspect-ratio:1;max-width:88px;border-radius:12px;border:1px dashed var(--line);background:var(--raised);padding:0;display:grid;place-items:center;cursor:pointer;color:var(--muted);overflow:hidden;height:0;min-height:0;opacity:0';
       b.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>';
@@ -24491,10 +24547,11 @@ atom({ id:'reviewform', cat:'Forms', name:'Review form', block:'review form, pho
     const PL = ['Post review', '✓ Thanks — posted'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; snd.appendChild(e); return e; });
     let mi = -1;
     faces.forEach((b, i) => b.onclick = () => { mi = i; mood.set(i, S.soft); msw.to(i + 1); faces.forEach((x, j) => x.setAttribute('aria-checked', j === i)); });
-    iph.onchange = () => tiles.forEach((tl, i) => { const o = iph.checked && i < 2; tl.b._on = o; tl.b.setAttribute('aria-pressed', o); tl.h.set(o ? 1 : 0, REDUCE ? S.base : S.soft); });
+    iph.onchange = () => tiles.forEach(tl => { const o = iph.checked; tl.b._on = o; tl.b.setAttribute('aria-pressed', o); tl.h.set(o ? 1 : 0, REDUCE ? S.base : S.soft);
+      if (o) setTimeout(() => tl.sh.set(1, S.soft), REDUCE ? 0 : 180); else tl.sh.jump(0); });
     setTimeout(() => { if (st.isConnected && iph.checked) iph.onchange(); }, 300);
     snd.onclick = () => { if (mi < 0){ faces[3].click(); } psw.to(1); snd.disabled = true; };
-    return t => { tiles.forEach(tl => { const o = clamp(tl.h.at(t)), s = clamp(tl.sh.at(t)); tl.b.style.height = 'auto'; tl.b.style.minHeight = (o * 72).toFixed(1) + 'px'; tl.b.style.opacity = o.toFixed(3);
+    return t => { tiles.forEach(tl => { const o = clamp(tl.h.at(t)), s = clamp(tl.sh.at(t)); tl.b.style.height = 'auto'; tl.b.style.minHeight = (o * 72).toFixed(1) + 'px'; tl.b.style.opacity = o.toFixed(3); tl.b.style.visibility = o < .02 ? 'hidden' : 'visible';
         tl.b.style.filter = s > .5 ? 'none' : `blur(${((1 - s) * 4).toFixed(2)}px)`; tl.b.style.borderStyle = tl.b._on ? 'solid' : 'dashed'; });
       const m = mood.at(t); faces.forEach((b, i) => { const d = 1 - Math.min(1, Math.abs(m - i)); b.style.opacity = (.55 + .45 * d).toFixed(3); b.style.filter = `grayscale(${((1 - d)).toFixed(2)})`; b.style.transform = `translateY(${(-4 * d).toFixed(2)}px) scale(${(1 + .1 * d).toFixed(3)})`; });
       L.forEach((el, k) => msw.apply(el, k, t)); PL.forEach((el, k) => psw.apply(el, k, t)); };
@@ -25714,7 +25771,7 @@ atom({ id:'downloads', cat:'Chrome', name:'Downloads shelf', block:'chrome, down
 
 window.CIEO_SOURCE_HINT="blocks/492-profileswitch.js";
 atom({ id:'profileswitch', cat:'Chrome', name:'Profile switcher', block:'chrome, profile, identity', fam:['S','M'],
-  html:`<div class="col" style="gap:8px;max-width:400px;margin:0 auto;width:100%"><div style="font-size:15px;font-weight:600;line-height:1.5">Profile switcher</div><div class="small muted" style="font-size:12.5px;line-height:1.5">Ring inks on base &middot; &#8593;&#8595; + Enter &middot; Esc snaps shut</div><div style="border:1px solid color-mix(in oklab, var(--ink) 14%, transparent);border-radius:12px;padding:15px;background:var(--card);display:flex;flex-direction:column;gap:8px"><button class="av" aria-haspopup="listbox" style="display:flex;align-items:center;gap:10px;min-height:40px;border-radius:8px;border:0;background:var(--raised);cursor:pointer;padding:5px 11px 5px 5px;text-align:left"><span class="ring" style="display:grid;place-items:center;padding:0;width:32px;height:32px;border-radius:50%;background:color-mix(in oklab, var(--ink) 8%, transparent);font-size:13px;font-weight:600;transform:translateY(.5px)">A</span><span class="who" style="position:relative;flex:1;font-size:13.5px;line-height:1.5;min-height:22px"></span><span class="small muted" style="font-size:12px">Esc</span></button><div class="panel" role="listbox" style="overflow:hidden;border-radius:10px"><div class="opts"></div></div><div class="foot small muted" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums"><span class="msg">1 of 3 active</span></div></div><label class="row small muted" style="gap:6px;font-size:12px;line-height:1.5"><input type="checkbox" class="wx" checked> spring width to longest name</label></div><div class="hint">Arrows choose &middot; Enter switches &middot; Esc snaps shut</div>`,
+  html:`<div class="col" style="gap:8px;max-width:400px;margin:0 auto;width:100%"><div style="font-size:15px;font-weight:600;line-height:1.5">Profile switcher</div><div class="small muted" style="font-size:12.5px;line-height:1.5">Ring inks on base &middot; &#8593;&#8595; + Enter &middot; Esc snaps shut</div><div style="border:1px solid color-mix(in oklab, var(--ink) 14%, transparent);border-radius:12px;padding:15px;background:var(--card);display:flex;flex-direction:column;gap:8px"><button class="av" aria-haspopup="listbox" style="display:flex;align-items:center;gap:10px;min-height:40px;border-radius:8px;border:0;background:var(--raised);cursor:pointer;padding:5px 11px 5px 5px;text-align:left"><span class="ring" style="display:grid;place-items:center;padding:0;width:32px;height:32px;border-radius:50%;background:color-mix(in oklab, var(--ink) 8%, transparent);font-size:13px;font-weight:600;transform:translateY(.5px)">A</span><span class="who" style="position:relative;flex:1;font-size:13.5px;line-height:1.5;min-height:22px"></span><span class="small muted" style="font-size:12px">Esc</span></button><div class="panel" role="listbox" aria-label="Profiles" style="overflow:hidden;border-radius:10px"><div class="opts"></div></div><div class="foot small muted" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums"><span class="msg">1 of 3 active</span></div></div><label class="row small muted" style="gap:6px;font-size:12px;line-height:1.5"><input type="checkbox" class="wx" checked> spring width to longest name</label></div><div class="hint">Arrows choose &middot; Enter switches &middot; Esc snaps shut</div>`,
   desc:'Avatar ring inks on a base spring. The panel swaps identity with blur while width springs to the longest name. Esc snaps shut on snap. Switching holds the terminal. Reduced motion jumps instantly.',
   api:'ring.set(active?1:0,S.base); w.set(nameW); sw.to(id)   end: switched \u2713, hold',
   init(st){
@@ -26229,7 +26286,9 @@ atom({ id:'expresspay', cat:'Commerce', name:'Express pay sheet', block:'checkou
       r.innerHTML = `<span class="muted">${a}</span><span class="num" style="font-variant-numeric:tabular-nums">${b}</span>`; $(st,'.ln').appendChild(r); return r; });
     sheet.jump(1); sheet.set(0, S.base, now() + .01);
     $(st,'.mo').onclick = () => sheet.set(1);
-    cf.onclick = e => { if (e.target.closest('.cf') && ok.target < .5){ ok.set(1); $(st,'.tx').textContent = 'Paid · Receipt sent'; } };
+    const pay = () => { if (ok.target < .5){ ok.set(1); $(st,'.tx').textContent = 'Paid · Receipt sent'; } };
+    // A wallet press opens the order sheet; a press with the sheet already open confirms, so every press responds.
+    cf.onclick = pay; WB.forEach(b => b.onclick = () => { if (sheet.target === 1) pay(); else sheet.set(1); });
     sh.onclick = e => { if (e.target === sh) sheet.set(0); };
     return t => { WB.forEach((b,i) => { const q = clamp(prog(t, t0 + i*.06)); b.style.opacity = q.toFixed(3); b.style.transform = `translateY(${((1-q)*10).toFixed(1)}px)`; });
       const p = clamp(sheet.at(t)); sh.style.transform = `translateY(${((1-p)*220).toFixed(1)}px)`;
@@ -26301,7 +26360,7 @@ atom({ id:'payfields', cat:'Commerce', name:'Payment fields', block:'checkout, c
 
 window.CIEO_SOURCE_HINT="blocks/516-autocomplete.js";
 atom({ id:'autocomplete', cat:'Commerce', name:'Address autocomplete', block:'checkout, combobox, address', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Delivery address</b><input class="q" placeholder="Start typing…" aria-label="Address search" role="combobox" aria-expanded="true" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><div class="ls col" role="listbox" style="gap:4px;overflow:hidden"></div><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="us" checked> US only</label></div><div class="hint">Type “ma”, pick a row</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Delivery address</b><input class="q" placeholder="Start typing…" aria-label="Address search" role="combobox" aria-expanded="true" aria-controls="ac-list" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><div id="ac-list" class="ls col" role="listbox" aria-label="Address suggestions" style="gap:4px;overflow:hidden"></div><label class="row small muted" style="gap:6px;font-size:12.5px"><input type="checkbox" class="us" checked> US only</label></div><div class="hint">Type “ma”, pick a row</div>`,
   desc:'Suggestions stay hidden until two characters are typed. Rows filter in place: matches spring into their slots while misses blur out. Picking swaps in the full address and collapses the list height to a receipt terminal.',
   api:'vis[i].set(match?1:0) springs slots   pick: full.to(1); listH.set(0)',
   init(st){
@@ -26630,7 +26689,7 @@ atom({ id:'snoozesheet', cat:'Email', name:'Snooze sheet', block:'email, snooze,
 window.CIEO_SOURCE_HINT="blocks/549-senddial.js";
 
 atom({ id:'senddial', cat:'Email', name:'Send-later dial', block:'email, schedule send, dial', fam:['D','S','X'],
-  html:`<div class="col" style="gap:8px;width:min(280px,92%);align-items:center"><div class="card" style="padding:14px 16px;line-height:1.5;width:100%;position:relative"><b style="font-size:15px;font-weight:600">Re: Launch plan</b><div class="small muted" style="font-size:12.5px">To Maya · draft ready</div><div class="dl" style="position:relative;min-height:24px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px;touch-action:none;user-select:none;-webkit-user-select:none">Hold to schedule</button></div><div class="dial" style="position:absolute;left:50%;top:44%;width:148px;height:148px;margin:-74px 0 0 -74px"></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox" checked> send in their timezone</label></div><div class="hint">Hold the button, drag to a time</div>`,
+  html:`<div class="col" style="gap:8px;width:min(280px,92%);align-items:center"><div class="card" style="padding:14px 16px;line-height:1.5;width:100%;position:relative"><b style="font-size:15px;font-weight:600">Re: Launch plan</b><div class="small muted" style="font-size:12.5px">To Maya · draft ready</div><div class="dl" style="position:relative;min-height:24px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px;touch-action:none;user-select:none;-webkit-user-select:none">Hold to schedule</button></div><div class="dial" style="position:absolute;left:50%;top:44%;width:148px;height:148px;margin:-74px 0 0 -74px"></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox" checked> send in their timezone</label></div><div class="hint">Hold and drag to a time. Keyboard: Enter opens, arrows pick, Enter sends</div>`,
   desc:'A long press opens a radial dial on soft. Dragging sets the time 1:1 and the label swaps behind it. Release confirms with a snap to a scheduled terminal.',
   api:'hold .35s -> dial.set(1, soft)   drag angle -> slot, lab.to(i)   up: dial.set(0, snap), confirm',
   init(st){
@@ -26652,7 +26711,14 @@ atom({ id:'senddial', cat:'Email', name:'Send-later dial', block:'email, schedul
     btn.addEventListener('pointermove', e => { if (open && (e.buttons & 1)) pick(near(ang(e))); });
     const close = confirm => { clearTimeout(timer); if (!open){ sw.to(5); btn.textContent = 'Scheduled'; return; } open = false; dt.set(0, S.snap); sw.to(5); btn.textContent = 'Scheduled'; };
     btn.addEventListener('pointerup', () => close(true)); btn.addEventListener('pointercancel', () => { clearTimeout(timer); open = false; dt.set(0, S.snap); });
-    return t => { const p = clamp(dt.at(t));
+    // Keyboard path for the hold: Enter or Space opens the dial, arrows pick, Enter sends, Escape cancels.
+    btn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); if (e.repeat) return; if (open) close(true); else { clearTimeout(timer); open = true; dt.set(1, S.soft); sc.set(1, S.soft); pick(idx); } }
+      else if (open && (e.key === 'ArrowRight' || e.key === 'ArrowDown')){ e.preventDefault(); pick(idx + 1); }
+      else if (open && (e.key === 'ArrowLeft' || e.key === 'ArrowUp')){ e.preventDefault(); pick(idx - 1); }
+      else if (open && e.key === 'Escape'){ e.preventDefault(); open = false; dt.set(0, S.snap); sw.to(0); }
+    });
+    return t => { const p = clamp(dt.at(t)); btn.setAttribute('aria-pressed', String(open));
       dial.style.opacity = p.toFixed(3); dial.style.visibility = p < .02 ? 'hidden' : 'visible';
       dial.style.transform = `scale(${(0.92 + .08*p).toFixed(4)})`;
       dots.forEach((o, i) => { const on = open && i === idx;
@@ -27066,6 +27132,7 @@ window.CIEO_SOURCE_HINT="catalogue/navigation.js";
   const nav=`${all}<div class="ui-navtitle">Collections <span>4</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4</span></a>`;
   document.getElementById('rail-nav').innerHTML=nav;
   document.getElementById('total-count').textContent=`${A.length} atoms`;
+  document.getElementById('atom-search').placeholder=`Search ${A.length} atoms`;
   const familyTab=(id,key,label,on)=>`<button type="button" role="tab" id="family-tab-${key}" data-family="${id}" aria-selected="${on}" aria-controls="groups" tabindex="${on?0:-1}">${id==='*'?'':`<i aria-hidden="true">${id}</i>`}${label}</button>`;
   document.getElementById('family-filter').innerHTML=familyTab('*','all','All motion',true)+Object.entries(c.familyNames).map(([id,name])=>familyTab(id,id,name,false)).join('');
   c.route=()=>{
@@ -27203,6 +27270,10 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
     document.getElementById('breadcrumb').textContent=route.category||route.collection||(route.saved?'Saved':'Everything');
     document.getElementById('collection-subtitle').textContent=query?`Results for “${search}”`:route.saved?'Your own little collection of good interactions.':'Small interactions. A little more feeling.';
     document.getElementById('count').textContent=`${count} ${count===1?'atom':'atoms'}`;
+    // A family tab and a category or collection both narrow the list; name both so the result is not silent.
+    const summary=document.getElementById('filter-summary'),scope=route.category||route.collection;
+    summary.hidden=!(c.family!=='*'&&scope);
+    if(!summary.hidden)summary.textContent=`${c.familyNames[c.family]} in ${scope}: ${count} ${count===1?'atom':'atoms'}`;
     document.getElementById('empty-state').hidden=count>0;c.markNavigation();c.invalidate?.();
   };
   const input=document.getElementById('atom-search');
@@ -27303,7 +27374,7 @@ window.CIEO_SOURCE_HINT="catalogue/inspector.js";
     preview.replaceChildren();held=null;placeholder=null;c.active=null;dispatchEvent(new Event('resize'));
   }
   dialog.addEventListener('close',()=>{restore();if(opener?.isConnected&&!opener.closest('[hidden]'))opener.focus({preventScroll:true})});
-  c.updateInspectorSave=()=>{if(!held)return;const b=document.getElementById('inspect-save'),saved=c.favorites.has(held.id);b.textContent=saved?'Saved':'Save';b.setAttribute('aria-pressed',String(saved))};
+  c.updateInspectorSave=()=>{if(!held)return;const b=document.getElementById('inspect-save'),saved=c.favorites.has(held.id);document.getElementById('inspect-save-label').textContent=saved?'Saved':'Save';b.setAttribute('aria-pressed',String(saved))};
   document.getElementById('inspect-save').onclick=()=>{if(held)c.toggleSave(held.id)};
   document.getElementById('copy-recipe').onclick=async()=>{
     if(!held)return;const text=held.api;
