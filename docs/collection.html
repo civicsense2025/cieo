@@ -97,7 +97,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 @media(min-width:1840px){.ui-main{padding-inline:48px}}
 @media(max-width:1279px){:root{--sidebar:216px;--columns:2}.ui-main{padding-inline:24px}.ui-breadcrumb{display:none}.ui-search{margin-left:0;width:100%;max-width:400px}.ui-topbar>button:last-child{margin-left:auto}}
 @media(max-width:1023px){.ui-sidebar{display:none}.ui-main{margin:0}.ui-mobile-only{display:inline-flex!important}.ui-topbar{min-height:72px}.ui-search{max-width:none}.ui-breadcrumb{display:none}.ui-heading{padding-top:24px}}
-@media(max-width:767px){:root{--columns:1}.ui-main{padding:0 16px 112px}.ui-topbar{gap:8px;min-height:72px}.ui-topbar>.ui-desktop-only{display:none}.ui-heading{padding-top:16px;align-items:center}.ui-heading h1{font-size:32px;letter-spacing:-1px}.ui-heading p{font-size:12px}.ui-heading-tools{display:none!important}.ui-search{padding-inline:12px}.ui-search kbd{display:none}.ui-toolbar{flex-wrap:wrap;gap:8px;margin-bottom:16px}.ui-families{width:100%;margin-inline:-4px}.ui-viewtools{width:100%;justify-content:space-between}.ui-families [role=tab]{padding-inline:16px}.ui-tile-caption{padding-top:8px}#groups .tile>header{gap:6px}.ui-bottom{display:flex;position:fixed;z-index:30;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:264px;justify-content:space-around;padding:8px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--float-shadow)}.ui-bottom button{width:72px;height:48px;display:flex;align-items:center;justify-content:center;gap:2px;flex-direction:column;background:none;border:0;color:var(--muted);border-radius:16px;font-size:10px}.ui-bottom button:hover{background:var(--raised)}.ui-bottom button svg{height:20px}.ui-toast{bottom:96px}.ui-button{min-height:48px}.ui-button.icon{width:48px}}
+@media(max-width:767px){:root{--columns:1}.ui-main{padding:0 16px 112px}.ui-topbar{gap:8px;min-height:72px}.ui-topbar>.ui-desktop-only{display:none}.ui-heading{padding-top:16px;align-items:center}.ui-heading h1{font-size:32px;letter-spacing:-1px}.ui-heading p{font-size:12px}.ui-heading-tools{display:none!important}.ui-search{padding-inline:12px}.ui-search kbd{display:none}.ui-toolbar{flex-wrap:wrap;gap:8px;margin-bottom:16px}.ui-families{width:100%;margin-inline:-4px;flex-wrap:wrap;overflow-x:visible}.ui-viewtools{width:100%;justify-content:space-between}.ui-families [role=tab]{padding-inline:16px}.ui-tile-caption{padding-top:8px}#groups .tile>header{gap:6px}.ui-bottom{display:flex;position:fixed;z-index:30;bottom:max(16px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:264px;justify-content:space-around;padding:8px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--float-shadow)}.ui-bottom button{width:72px;height:48px;display:flex;align-items:center;justify-content:center;gap:2px;flex-direction:column;background:none;border:0;color:var(--muted);border-radius:16px;font-size:10px}.ui-bottom button:hover{background:var(--raised)}.ui-bottom button svg{height:20px}.ui-toast{bottom:96px}.ui-button{min-height:48px}.ui-button.icon{width:48px}}
 
 /* Existing recipes keep their class names and measured geometry. These rules refine
    shared surfaces; atom-specific geometry is changed in its source, not forced here. */
@@ -113,8 +113,8 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .tile .ui-tile-tools button:hover{background:var(--raised)}.tile .ui-tile-tools button[aria-pressed=true]{color:var(--accent);background:var(--accent-tint)}.tile .ui-tile-tools svg{width:16px;height:16px}
 .ui-family-mark{display:flex;gap:4px;pointer-events:none;flex:none}.ui-family-mark span{width:16px;height:24px;display:grid;place-items:center;font:10px var(--mono);color:var(--muted);border-radius:8px;background:transparent}
 .tile .ui-detail{padding:8px 0 16px}.tile .ui-detail p{font-size:12px;color:var(--muted);margin:0 0 8px}.tile pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.6 var(--mono);padding:16px;border-radius:16px;background:var(--card);margin:0}
-.stage .btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:8px 16px;font-size:12px;line-height:1.3;font-weight:500;cursor:pointer;box-shadow:0 2px 4px #17142105}
-.stage .btn:hover{background:var(--raised)}.stage .btn.ink{background:var(--ink);border-color:var(--ink);color:var(--card)}
+.stage .btn{border:0;background:var(--raised);color:var(--ink);border-radius:10px;padding:8px 16px;font-size:12px;line-height:1.3;font-weight:500;cursor:pointer}
+.stage .btn:hover{background:var(--line)}.stage .btn.ink{background:var(--ink);color:var(--card)}
 .stage .card{background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
 .stage .seg{position:relative;display:flex;align-items:center;background:var(--raised);border-radius:12px;padding:4px}
 .stage .seg .ind{position:absolute;left:0;top:0;background:var(--card);border-radius:8px;box-shadow:0 2px 6px #1714210a;pointer-events:none}
@@ -132,8 +132,8 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-command-icon{width:24px;height:24px;border-radius:8px;background:var(--raised);display:grid;place-items:center;color:var(--muted);font-size:12px;flex:none}
 .ui-stage-footer{font-size:10px;color:var(--muted);letter-spacing:.03em}
 :root[data-corners=crisp] .stage :is(.card,.btn){border-radius:8px}
-@media(max-width:767px){#groups{gap:24px}.tile.wide{grid-column:auto}.tile .stage{height:320px}.tile.tall .stage,.tile.big .stage{height:400px}.tile.wide.tall .stage{height:560px}.tile .ui-tile-tools button{width:40px;height:40px}.tile>header{padding-top:8px}.stage .btn{min-height:40px}.ui-setting-row{padding:16px;gap:16px}}
-@media(pointer:coarse){.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-families [role=tab]{min-height:48px}}
+@media(max-width:767px){#groups{gap:24px}.tile .ui-tile-name{min-height:44px;display:flex;align-items:center}.tile.wide{grid-column:auto}.tile .stage{height:320px}.tile.tall .stage,.tile.big .stage{height:400px}.tile.wide.tall .stage{height:560px}.tile .ui-tile-tools button{width:40px;height:40px}.tile>header{padding-top:8px}.stage .btn{min-height:40px}.ui-setting-row{padding:16px;gap:16px}}
+@media(pointer:coarse){.tile .ui-tile-name{min-height:44px;display:flex;align-items:center}.tile .ui-tile-tools button{width:48px;height:48px}.stage .btn{min-height:48px}.ui-navlink{min-height:48px}.ui-families [role=tab]{min-height:48px}}
 /* Prevent recipe image or SVG intrinsic widths from enlarging the gallery track. */
 .stage > :not(style){max-inline-size:100%}
 /* Caret rule for every recipe select: the arrow sits 12px inside the right edge and the text keeps clear of it. */
@@ -157,7 +157,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 .ui-inspect-meta pre{font:11px/1.6 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--page);padding:16px;border-radius:12px;margin:0 0 8px}
 .ui-inspect-meta a{font-size:12px;text-underline-offset:3px;overflow-wrap:anywhere}.ui-inspect-meta .ui-meta-tags{display:flex;flex-wrap:wrap;gap:8px}.ui-meta-tags span{padding:4px 8px;border-radius:8px;background:var(--raised);font-size:11px}
 .ui-inspect-note{margin-top:auto!important;font-size:11px!important}
-@media(max-width:767px){.ui-dialog{position:fixed;inset:auto 8px 8px;margin:0 auto;width:calc(100% - 16px)!important;border-radius:24px;max-height:calc(100dvh - 24px);padding-bottom:env(safe-area-inset-bottom)}.ui-dialog-heading{padding:8px 16px}.ui-inspect-body{display:flex;flex-direction:column;min-height:0}#inspect-preview{padding:16px;min-height:280px;overflow:auto}#inspect-preview .stage{height:320px!important}.ui-inspect-meta{padding:24px;gap:24px}.ui-rail-slot .ui-folders{grid-template-columns:repeat(2,1fr)}.ui-settings{padding:24px}.ui-setting-options{flex-wrap:wrap}}
+@media(max-width:767px){.ui-dialog{position:fixed;inset:auto 8px 8px;margin:0 auto;width:calc(100% - 16px)!important;border-radius:24px;max-height:calc(100dvh - 24px);padding-bottom:env(safe-area-inset-bottom)}.ui-dialog-heading{padding:8px 16px}#inspect-dialog{inset:0;margin:0;width:100vw!important;max-width:100vw;height:100dvh;max-height:100dvh;border-radius:0}.ui-inspect-body{display:flex;flex-direction:column;min-height:0}#inspect-preview{padding:16px;min-height:280px;overflow:auto}#inspect-preview .stage{height:320px!important}.ui-inspect-meta{padding:24px;gap:24px}.ui-rail-slot .ui-folders{grid-template-columns:repeat(2,1fr)}.ui-settings{padding:24px}.ui-setting-options{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important}.ui-dialog::backdrop{backdrop-filter:none}}
 @media(forced-colors:active){.ui-dialog,.stage-shell,.ui-button,.ui-navlink[aria-current=page]{border:1px solid CanvasText}.ui-family-mark span{border:1px solid CanvasText}.ui-families [role=tab][aria-selected=true]{outline:2px solid CanvasText;outline-offset:-2px}}
 @media(prefers-reduced-transparency:reduce){.ui-topbar,.ui-bottom{background:var(--card);backdrop-filter:none}.ui-dialog::backdrop{backdrop-filter:none}.ui-folder-art::after{background:var(--card);backdrop-filter:none}}
@@ -567,7 +567,7 @@ window.CIEO_SOURCE_HINT="blocks/012-chip.js";
 
 
 atom({ id:'chip', cat:'Content', name:'Blur swap label', block:'buttons, cta-button', fam:['S','M'],
-  html:`<div class="col" style="gap:16px;align-items:center"><button class="chipb" style="position:relative;height:48px;border-radius:24px;background:var(--accent);color:var(--card);border:0;cursor:pointer;font-weight:500"></button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp"> loop</label></div><div class="hint">Click to advance</div>`,
+  html:`<div class="col" style="gap:16px;align-items:center"><button class="chipb" aria-label="Upload status" style="position:relative;height:48px;border-radius:24px;background:var(--accent);color:var(--card);border:0;cursor:pointer;font-weight:500"></button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp"> loop</label></div><div class="hint">Click to advance</div>`,
   desc:'Outgoing text blurs up and out in 100ms. Incoming text starts after it, while the pill width springs to fit. The last state holds as a success terminal instead of wrapping; tapping it starts over.',
   api:'w.set(measure(next)); swap.to(next)   end: success.set(1), hold',
   init(st){
@@ -659,9 +659,11 @@ atom({ id:'bars', cat:'Data', name:'Bar chart', block:'chart', fam:['M','T','E']
     let g = ''; for (const v of [0,50,100]) g += `<line x1="${X0}" x2="320" y1="${Y0 - v/100*H}" y2="${Y0 - v/100*H}" stroke="var(--line)"/><text x="${X0-6}" y="${Y0 - v/100*H + 4}" text-anchor="end" font-size="11" fill="var(--faint)">${v}</text>`;
     svg.innerHTML = g + DS[0].map((_,i) => `<rect x="${X0 + gap/2 + i*(bw+gap)}" width="${bw}" rx="4" fill="var(--ink)"/>`).join('');
     const rects = $$(svg,'rect'), tr = DS[0].map(v => new Track(0)), e = edges(0,0); let k = 0;
-    const sel = (i, inst) => { k = i; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth);
-      const t0 = now(); tr.forEach((x,j) => x.set(DS[i][j], S.base, t0 + j*.03)); };
-    btns.forEach((b,i) => b.onclick = () => sel(i)); requestAnimationFrame(() => sel(0, true)); document.fonts.ready.then(() => e.jump(btns[k].offsetLeft, btns[k].offsetLeft + btns[k].offsetWidth));
+    // opens on 2026 so that 2025 has something to switch from; re-clicking the active year replays its bars from zero
+    const sel = (i, inst) => { const again = !inst && i === k; k = i; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth);
+      btns.forEach((x,j) => x.setAttribute('aria-pressed', String(j === i)));
+      const t0 = now(); tr.forEach((x,j) => { if (again) x.jump(0); x.set(DS[i][j], S.base, t0 + j*.03); }); };
+    btns.forEach((b,i) => b.onclick = () => sel(i)); requestAnimationFrame(() => sel(1, true)); document.fonts.ready.then(() => e.jump(btns[k].offsetLeft, btns[k].offsetLeft + btns[k].offsetWidth));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       rects.forEach((r,i) => { const h = Math.max(0, tr[i].at(t))/100*H; r.setAttribute('y', (Y0 - h).toFixed(2)); r.setAttribute('height', h.toFixed(2)); }); };
   }});
@@ -917,7 +919,7 @@ window.CIEO_SOURCE_HINT="blocks/028-newsletter.js";
 
 
 atom({ id:'newsletter', cat:'Newsletter', name:'Subscribe', block:'newsletter', fam:['M','S'],
-  html:`<div class="col" style="align-items:center;gap:8px"><form class="nf" novalidate style="position:relative;display:flex;gap:6px;height:48px;padding:4px;border-radius:24px;background:var(--card);overflow:hidden"><input id="nl-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 14px"><button class="sb" style="position:relative;flex:none;height:40px;border-radius:20px;border:0;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="done layer" style="font-weight:500;color:var(--success)"></div></form><div class="ne small" role="alert" style="color:var(--danger);height:20px"></div></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Reset</button><div class="hint">Try an invalid address first, then a real one</div>`,
+  html:`<div class="col" style="align-items:center;gap:8px"><form class="nf" novalidate style="position:relative;display:flex;gap:6px;height:48px;padding:4px;border-radius:24px;background:var(--card);overflow:hidden"><input id="nl-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 14px"><button class="sb" aria-label="Subscribe" style="position:relative;flex:none;height:40px;border-radius:20px;border:0;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="done layer" style="font-weight:500;color:var(--success)"></div></form><div class="ne small" role="alert" style="color:var(--danger);height:20px"></div></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Reset</button><div class="hint">Try an invalid address first, then a real one</div>`,
   desc:'An invalid address rings the field in the danger color and opens a message. A valid one shrinks the button into a spinner, turns it success-colored with a check, then morphs the whole field into a tinted confirmation pill.',
   api:'err.set(1) → ring(danger)   plan(loading, check → success, done → success-tint)',
   init(st){
@@ -1113,7 +1115,7 @@ window.CIEO_SOURCE_HINT="blocks/036-cart.js";
 
 
 atom({ id:'cart', cat:'Commerce', name:'Add to cart', block:'product, productgrid', fam:['M','S'],
-  html:`<div class="card col" style="width:230px;padding:14px;gap:10px"><div style="height:92px;border-radius:10px;background:var(--raised);display:grid;place-items:center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="1.5"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></div><div class="row" style="justify-content:space-between"><b class="small">Canvas tote</b><span class="small muted">$32</span></div><button class="ad" style="position:relative;height:38px;border-radius:10px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer"></button></div><div style="position:absolute;top:14px;right:16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 7H6"/></svg><span class="cb" style="position:absolute;left:12px;top:-8px;height:18px;min-width:18px;padding:0 5px;border-radius:9px;background:var(--ink);color:var(--card);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center"><span class="d"></span></span></div>`,
+  html:`<div class="card col" style="width:230px;padding:14px;gap:10px"><div style="height:92px;border-radius:10px;background:var(--raised);display:grid;place-items:center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="1.5"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></div><div class="row" style="justify-content:space-between"><b class="small">Canvas tote</b><span class="small muted">$32</span></div><button class="ad" aria-label="Add to cart" style="position:relative;height:38px;border-radius:10px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer"></button></div><div style="position:absolute;top:14px;right:16px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 7H6"/></svg><span class="cb" style="position:absolute;left:12px;top:-8px;height:18px;min-width:18px;padding:0 5px;border-radius:9px;background:var(--ink);color:var(--card);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center"><span class="d"></span></span></div>`,
   desc:'The button confirms in place with a blur swap and fills with the success color, then returns. The cart count rolls when the item arrives, 300ms later.',
   api:'btn.to("added"); cart.set(n, t + 0.3); btn.to("add", t + 1.6)',
   init(st){
@@ -1210,7 +1212,7 @@ window.CIEO_SOURCE_HINT="blocks/040-dropdown.js";
 atom({
   id:'dropdown',cat:'Admin',name:'Dropdown',block:'Select / menu primitive',fam:['X','S'],tall:true,
   html:`<div style="position:absolute;top:40px;left:50%;transform:translateX(-50%);width:min(248px,88%)">
-    <button type="button" class="btn dd" aria-haspopup="menu" aria-expanded="false" style="position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:40px;justify-content:space-between;border-radius:16px;border:0;background:var(--raised)">
+    <button type="button" class="btn dd" aria-label="Sort collection" aria-haspopup="menu" aria-expanded="false" style="position:relative;display:flex;align-items:center;gap:8px;width:100%;min-height:40px;justify-content:space-between;border-radius:16px;border:0;background:var(--raised)">
       <span class="lbw" style="position:relative;height:24px;flex:1;text-align:left"></span><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
     </button><div class="mn card" role="menu" aria-label="Sort collection" aria-hidden="true" inert style="position:absolute;top:48px;left:0;width:100%;padding:8px;border-radius:16px;transform-origin:24px 0;visibility:hidden"></div>
   </div>`,
@@ -1303,7 +1305,7 @@ window.CIEO_SOURCE_HINT="blocks/043-surface.js";
 
 
 atom({ id:'surface', cat:'Admin', name:'Morph surface', block:'buttons → loader → island → toast', fam:['M','S'], wide:true, tall:true,
-  html:`<button class="sf" style="position:relative;border:0;cursor:pointer;font-weight:500;overflow:hidden;padding:0"></button><div class="ro st">button</div><div class="hint">Click the button</div>`,
+  html:`<button class="sf" aria-label="Start sequence" style="position:relative;border:0;cursor:pointer;font-weight:500;overflow:hidden;padding:0"></button><div class="ro st">button</div><div class="hint">Click the button</div>`,
   desc:'Button, loader, check, dynamic island and toast are one element. Width, height, radius and ink ride springs, and the check fills with the success color. Content swaps by the blur rule. The run is a list of timed events.',
   api:'plan([[0,"loader"],[1.1,"check"],[1.9,"island"],[3.6,"toast"],[5.6,"button"]])',
   init(st){
@@ -1426,12 +1428,15 @@ atom({ id:'breadcrumbs', cat:'Content', name:'Breadcrumbs', block:'breadcrumbs',
     const sep = '<span style="color:var(--muted);padding:0 6px">/</span>';
     const parts = N.map((n,i) => { const w = document.createElement('span'); w.style.cssText = 'display:inline-flex;overflow:hidden'; w.innerHTML = (i ? sep : '') + `<a href="#" style="color:${i === N.length-1 ? 'var(--ink)' : 'var(--muted)'};text-decoration:none;font-weight:${i === N.length-1 ? 600 : 400}">${n}</a>`; bc.appendChild(w); $(w,'a').onclick = e => e.preventDefault(); return { w, full:0, tr:new Track(1) }; });
     const el = document.createElement('span'); el.style.cssText = 'display:inline-flex;overflow:hidden'; el.innerHTML = sep + '<button aria-label="Show full path" style="border:0;background:var(--raised);border-radius:6px;padding:0 6px;cursor:pointer;color:var(--muted)">…</button>'; bc.insertBefore(el, parts[1].w);
-    const eo = new Track(0); let ew = 0, col = false;
+    // starts collapsed: the middle crumbs are hidden behind the ellipsis, which expands them
+    const eo = new Track(1); let ew = 0, col = true;
     const measure = () => { parts.forEach(p => { p.w.style.width = 'auto'; p.full = p.w.offsetWidth; }); el.style.width = 'auto'; ew = el.offsetWidth; };
-    const set = c => { col = c; const t0 = now(); [1,2,3].forEach((i,k) => parts[i].tr.set(c ? 0 : 1, S.base, t0 + k*.03)); eo.set(c ? 1 : 0, S.base, c ? t0 + .1 : t0); $(st,'.cl').textContent = c ? 'Expand' : 'Collapse'; };
+    const set = c => { col = c; const t0 = now(); [1,2,3].forEach((i,k) => parts[i].tr.set(c ? 0 : 1, S.base, t0 + k*.03)); eo.set(c ? 1 : 0, S.base, c ? t0 + .1 : t0); const b = $(st,'.cl'); b.textContent = c ? 'Expand' : 'Collapse'; b.setAttribute('aria-expanded', String(!c)); };
+    [1,2,3].forEach(i => parts[i].tr.jump(0)); $(st,'.cl').setAttribute('aria-expanded','false'); $(st,'.cl').textContent = 'Expand';
     $(st,'.cl').onclick = () => set(!col); $(el,'button').onclick = () => set(false);
-    document.fonts.ready.then(measure); measure();
-    return t => { parts.forEach(p => { const k = clamp(p.tr.at(t)); p.w.style.width = px(p.full*k); p.w.style.opacity = k.toFixed(3); });
+    el.querySelector('button').setAttribute('aria-expanded','false');
+    document.fonts.ready.then(measure);
+    return t => { if (!ew) measure(); parts.forEach(p => { const k = clamp(p.tr.at(t)); p.w.style.width = px(p.full*k); p.w.style.opacity = k.toFixed(3); });
       const o = clamp(eo.at(t)); el.style.width = px(ew*o); el.style.opacity = o.toFixed(3); };
   }});
 window.CIEO_SOURCE_HINT="blocks/048-checklist.js";
@@ -1509,7 +1514,9 @@ atom({ id:'facets', cat:'Dynamic', name:'Filtered collection', block:'collection
         if (on){ const x = (n % cols)*(cw + 10), y = Math.floor(n/cols)*88; inst || c.o.target === 0 ? (c.x.jump(x), c.y.jump(y)) : (c.x.set(x, S.base, t0 + n*.03), c.y.set(y, S.base, t0 + n*.03)); n++; }
         c.o.set(on ? 1 : 0, on ? S.base : S.snap, on ? t0 + EXIT : t0); c.c.style.pointerEvents = on ? 'auto' : 'none'; });
       const h = Math.ceil(n/cols)*88 - 10; inst ? H.jump(h) : H.set(h); };
-    const sel = (i, inst) => { f = btns[i].textContent; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); lay(inst); };
+    const sel = (i, inst) => { const same = !inst && f === btns[i].textContent; f = btns[i].textContent; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); lay(inst);
+      // re-picking the active filter replays the entrance so the press is visible
+      if (same) { const t0 = now(); cards.forEach((c, k) => { if (c.o.target === 1){ c.o.jump(0); c.o.set(1, S.base, t0 + k*.03); } }); } };
     btns.forEach((b,i) => b.onclick = () => sel(i)); const init = () => sel(btns.findIndex(b => b.textContent === f), true); document.fonts.ready.then(init); requestAnimationFrame(init); addEventListener('resize', () => lay(true));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       cg.style.height = px(H.at(t)); cards.forEach(c => { c.c.style.left = px(c.x.at(t)); c.c.style.top = px(c.y.at(t)); fade(c.c, c.o.at(t), null); c.c.style.visibility = c.o.at(t) < .01 ? 'hidden' : 'visible'; }); };
@@ -1518,7 +1525,7 @@ window.CIEO_SOURCE_HINT="blocks/052-donation.js";
 
 
 atom({ id:'donation', cat:'Commerce', name:'Donation amount', block:'donation', fam:['E','M','S'], tall:true,
-  html:`<div class="card col" style="width:min(320px,90%);padding:16px;gap:12px"><b>Support the newsroom</b><div class="seg da" style="display:flex"><div class="ind"></div><button>$10</button><button>$25</button><button>$50</button><button>$100</button><button>Other</button></div><div class="ow" style="overflow:hidden;height:0"><label class="row small" style="gap:6px;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card)"><span class="muted">$</span><input id="don-amt" inputmode="numeric" placeholder="Amount" aria-label="Custom amount" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></label></div><button class="btn ink go" style="position:relative;height:40px;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden"></button><div class="rc small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="rc-on" checked> Receipt</label></div>`,
+  html:`<div class="card col" style="width:min(320px,90%);padding:16px;gap:12px"><b>Support the newsroom</b><div class="seg da" style="display:flex"><div class="ind"></div><button>$10</button><button>$25</button><button>$50</button><button>$100</button><button>Other</button></div><div class="ow" style="overflow:hidden;height:0"><label class="row small" style="gap:6px;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card)"><span class="muted">$</span><input id="don-amt" inputmode="numeric" placeholder="Amount" aria-label="Custom amount" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></label></div><button class="btn ink go" aria-label="Donate" style="position:relative;height:40px;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden"></button><div class="rc small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="rc-on" checked> Receipt</label></div>`,
   desc:'The amount indicator stretches between chips. “Other” opens a field below on a height spring, and the button’s amount rolls digit by digit. Giving fills the button with success and swaps to a thank-you state with a receipt line, then settles back to a retryable Give.',
   api:'ind.go(l, r)   other.h.set(1)   digits.set(amount)   give: busy → thanks → idle   receipt.to(rc | none)',
   init(st){
@@ -1612,7 +1619,7 @@ window.CIEO_SOURCE_HINT="blocks/055-payment.js";
 
 
 atom({ id:'payment', cat:'Documents', name:'Pay button', block:'payment-methods, checkout', fam:['M','S'],
-  html:`<div class="card col" style="width:min(300px,88%);padding:16px;gap:10px"><div class="row" style="justify-content:space-between"><span class="muted small">Invoice INV-0042</span><b class="num tot"></b></div><button class="pay" style="position:relative;height:44px;border:0;border-radius:11px;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="pm small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" id="pay-decline" class="dc"> Simulate a declined card</label></div>`,
+  html:`<div class="card col" style="width:min(300px,88%);padding:16px;gap:10px"><div class="row" style="justify-content:space-between"><span class="muted small">Invoice INV-0042</span><b class="num tot"></b></div><button class="pay" aria-label="Pay invoice" style="position:relative;height:44px;border:0;border-radius:11px;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="pm small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" id="pay-decline" class="dc"> Simulate a declined card</label></div>`,
   desc:'Processing keeps the button in place with a spinner. Success fills it with the success color; a decline fills it with danger and opens a fix-it message. Both settle back to a retryable state. On success the invoice total counts up on a soft spring while the receipt swaps in.',
   api:'plan(processing → paid | declined)   fill = mix(success | danger, ink)   total.set(64.80, S.soft, t0 + .25)',
   init(st){
@@ -1770,7 +1777,7 @@ window.CIEO_SOURCE_HINT="blocks/067-popover.js";
 
 
 atom({ id:'popover', cat:'Overlays', name:'Popover', block:'Popover primitive, social-links', fam:['X','S'], tall:true,
-  html:`<div style="position:absolute;top:64px;left:50%;transform:translateX(-50%)"><button class="btn ink tr" aria-haspopup="dialog" aria-expanded="false" style="display:flex;gap:8px;align-items:center">${ic(I.link,14)}Share</button><div class="pv card" role="dialog" aria-label="Share" style="position:absolute;top:56px;left:50%;width:280px;margin-left:-140px;padding:24px;transform-origin:50% 0;visibility:hidden"><i style="position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;background:var(--card);transform:rotate(45deg);border-radius:2px"></i><b class="small" style="display:block">Anyone with the link can view</b><div class="row" style="margin-top:16px;gap:8px"><input id="pv-url" readonly value="example.site/p/spring-launch" aria-label="Link" style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:8px;padding:8px 8px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn cp" style="position:relative;width:80px;height:40px;padding:0"></button></div></div></div>`,
+  html:`<div style="position:absolute;top:64px;left:50%;transform:translateX(-50%)"><button class="btn ink tr" aria-haspopup="dialog" aria-expanded="false" style="display:flex;gap:8px;align-items:center">${ic(I.link,14)}Share</button><div class="pv card" role="dialog" aria-label="Share" style="position:absolute;top:56px;left:50%;width:280px;margin-left:-140px;padding:24px;transform-origin:50% 0;visibility:hidden"><i style="position:absolute;top:-5px;left:50%;width:10px;height:10px;margin-left:-5px;background:var(--card);transform:rotate(45deg);border-radius:2px"></i><b class="small" style="display:block">Anyone with the link can view</b><div class="row" style="margin-top:16px;gap:8px"><input id="pv-url" readonly value="example.site/p/spring-launch" aria-label="Link" style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:8px;padding:8px 8px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn cp" aria-label="Copy share link" style="position:relative;width:80px;height:40px;padding:0"></button></div></div></div>`,
   desc:'The panel and its arrow grow out of the trigger on one spring. Copy swaps in a success check, then reverts. Clicking outside or pressing Escape closes it faster than it opened.',
   api:'pv.o.set(open, open ? S.base : S.snap)   origin = arrow tip',
   init(st){
@@ -1789,7 +1796,7 @@ atom({ id:'contextmenu', cat:'Overlays', name:'Context menu', block:'Context men
   desc:'Right-click, or long-press on touch, opens the menu at the pointer. It grows from that exact corner and flips when it would overflow. Items fade in 25ms apart; the destructive item is danger-colored. Delete asks first in a danger confirm mirroring the dialog, then the row collapses and the hint swaps to trash with Undo, which springs the row back.',
   api:'menu.at(pointer); origin = flipped ? "right" : "left"; item[i].o = prog(t, tOpen + i·0.025)   delete: confirm.o.set(1); on confirm: row.o→0, row.h→0 (t+EXIT); undo: row.h→1, row.o→1 (t+EXIT)',
   init(st){
-    const cm = $(st,'.cm'), hint = $(st,'.st'), frw = $(st,'.frw'), fr = $(st,'.fr'), cf = $(st,'.cf'), un = $(st,'.un'), df = $(st,'.df'), IT = ['Open','Rename','Duplicate','Move to…','—','Delete'];
+    const cm = $(st,'.cm'), hint = $(st,'.st') || st.appendChild(Object.assign(document.createElement('div'), { className:'hint st' })), frw = $(st,'.frw'), fr = $(st,'.fr'), cf = $(st,'.cf'), un = $(st,'.un'), df = $(st,'.df'), IT = ['Open','Rename','Duplicate','Move to…','—','Delete'];
     let confirmOn = true, deleted = false;
     cf.onclick = () => { confirmOn = !confirmOn; cf.setAttribute('aria-pressed', String(confirmOn)); cf.textContent = confirmOn ? 'On' : 'Off'; };
     const items = IT.map(n => { if (n === '—'){ const h = document.createElement('hr'); h.style.cssText = 'border:0;border-top:1px solid var(--line-soft);margin:4px 0'; cm.appendChild(h); return { el:h }; }
@@ -1918,16 +1925,22 @@ window.CIEO_SOURCE_HINT="blocks/074-pagination.js";
 
 
 atom({ id:'pagination', cat:'Navigation', name:'Pagination', block:'postlist, collection-browser', fam:['E','M'],
-  html:`<nav class="row" aria-label="Pagination" style="gap:6px"><button class="btn pv" aria-label="Previous page">‹</button><div class="win" style="position:relative;width:180px;height:34px;overflow:hidden"><i class="in" style="position:absolute;top:0;height:34px;border-radius:9px;background:var(--ink)"></i><div class="sp" style="position:absolute;left:0;top:0;height:34px"></div></div><button class="btn nx" aria-label="Next page">›</button></nav>`,
+  html:`<nav class="row" aria-label="Pagination" style="gap:6px"><button class="btn pv" aria-label="Previous page">‹</button><div class="win" role="group" aria-label="Page numbers, scroll sideways for more" style="position:relative;width:180px;height:34px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none"><i class="in" style="position:absolute;top:0;height:34px;border-radius:9px;background:var(--ink)"></i><div class="sp" style="position:absolute;left:0;top:0;height:34px"></div></div><button class="btn nx" aria-label="Next page">›</button></nav>`,
   desc:'The number strip slides to keep the current page centered, clamped at the ends. The active plate moves with lagging edges, so it stretches on long jumps.',
   api:'strip.set(−clamp(i·36 − 72, 0, max))   plate.go(i·36, i·36 + 36)',
   init(st){
-    const sp = $(st,'.sp'), ind = $(st,'.in'), N = 12, C = 36;
-    const nums = [...Array(N)].map((_,i) => { const b = document.createElement('button'); b.textContent = i + 1; b.style.cssText = `position:absolute;top:0;left:${i*C}px;width:${C}px;height:34px;border:0;background:none;cursor:pointer;font:500 14px var(--sans);font-variant-numeric:tabular-nums`; sp.appendChild(b); b.onclick = () => go(i); return b; });
-    const off = new Track(0), e = edges(0, C); let cur = 0;
-    const go = i => { cur = clamp(i, 0, N-1); off.set(-clamp(cur*C - 72, 0, (N-5)*C)); e.go(cur*C + 2, cur*C + C - 2); nums.forEach((b,j) => b.setAttribute('aria-current', j === cur ? 'page' : 'false')); };
+    const win = $(st,'.win'), sp = $(st,'.sp'), ind = $(st,'.in'), N = 12, C = 36;
+    const nums = [...Array(N)].map((_,i) => { const b = document.createElement('button'); b.textContent = i + 1; b.setAttribute('aria-label', `Page ${i + 1}`); b.style.cssText = `position:absolute;top:0;left:${i*C}px;width:${C}px;height:34px;border:0;background:none;cursor:pointer;font:500 14px var(--sans);font-variant-numeric:tabular-nums`; sp.appendChild(b); b.onclick = () => go(i); return b; });
+    // the window scrolls sideways (wheel, trackpad, or a click on an off-screen page); the strip re-centers on the current page
+    const off = new Track(0), e = edges(0, C); let cur = 0, lastO = -1, lastFade = '';
+    const go = i => { cur = clamp(i, 0, N-1); off.set(clamp(cur*C - 72, 0, (N-5)*C)); e.go(cur*C + 2, cur*C + C - 2); nums.forEach((b,j) => { b.setAttribute('aria-current', j === cur ? 'page' : 'false'); }); };
     $(st,'.pv').onclick = () => go(cur - 1); $(st,'.nx').onclick = () => go(cur + 1); e.jump(2, C - 2);
-    return t => { const o = off.at(t), a = e.A.at(t), b = e.B.at(t); sp.style.transform = `translateX(${px(o)})`; ind.style.left = px(a + o); ind.style.width = px(b - a);
+    return t => { const o = off.at(t), a = e.A.at(t), b = e.B.at(t);
+      if (Math.abs(o - lastO) > .05){ lastO = o; win.scrollLeft = o; }   // write only when the target moves, so manual scrolling is not overridden
+      ind.style.left = px(a); ind.style.width = px(b - a);
+      // edge fades show that more pages sit past each end of the window
+      const max = win.scrollWidth - win.clientWidth, s = win.scrollLeft, fl = s > 1 ? 18 : 0, fr = s < max - 1 ? 18 : 0, fade = `linear-gradient(to right, transparent 0, #000 ${fl}px, #000 calc(100% - ${fr}px), transparent 100%)`;
+      if (fade !== lastFade){ lastFade = fade; win.style.maskImage = fade; win.style.webkitMaskImage = fade; }
       nums.forEach((n,j) => { const c = clamp(1 - Math.abs((a + b)/2 - (j*C + C/2))/C); n.style.color = mix(c,'var(--card)','var(--ink)'); }); };
   }});
 window.CIEO_SOURCE_HINT="blocks/075-radio.js";
@@ -2085,7 +2098,9 @@ window.CIEO_SOURCE_HINT="blocks/082-fab.js";
 
 
 atom({ id:'fab', cat:'Navigation', name:'Extended action button', block:'cta-button, Material FAB', fam:['M','S'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center"><div class="row small muted" style="gap:8px"><span>Dividers</span><button class="btn dv" aria-pressed="true">On</button></div><div class="card" style="position:relative;width:min(270px,84%);height:290px;overflow:hidden"><div class="ls" style="height:100%;overflow:auto;overscroll-behavior:contain" tabindex="0" aria-label="Sample inbox"></div><button class="fb" style="position:absolute;right:14px;bottom:14px;height:52px;border:0;border-radius:16px;background:var(--ink);color:var(--card);cursor:pointer;overflow:hidden;box-shadow:var(--shadow);display:flex;align-items:center;padding:0 0 0 16px;gap:10px"><span style="flex:none;display:grid">${ic(I.pen,20)}</span><span class="lb" style="font-weight:600;white-space:nowrap">Compose</span></button></div><div class="hint">Scroll down, then back up</div></div>`,
+  html:`<style>.fa-i{display:flex;align-items:center;gap:8px;height:40px;padding:0 14px 0 12px;border:0;border-radius:12px;background:var(--card);color:var(--ink);font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;box-shadow:var(--shadow)}.fa-i:hover,.fa-i:focus-visible{background:var(--raised)}.fa-i:focus-visible{outline:2px solid var(--accent);outline-offset:2px}</style><div class="col" style="gap:8px;align-items:center"><div class="row small muted" style="gap:8px"><span>Dividers</span><button class="btn dv" aria-pressed="true">On</button></div><div class="card" style="position:relative;width:min(270px,84%);height:290px;overflow:hidden"><div class="ls" style="height:100%;overflow:auto;overscroll-behavior:contain" tabindex="0" aria-label="Sample inbox"></div><button class="fb" style="position:absolute;right:14px;bottom:14px;height:52px;border:0;border-radius:16px;background:var(--ink);color:var(--card);cursor:pointer;overflow:hidden;box-shadow:var(--shadow);display:flex;align-items:center;padding:0 0 0 16px;gap:10px"><span style="flex:none;display:grid">${ic(I.pen,20)}</span><span class="lb" style="font-weight:600;white-space:nowrap">Compose</span></button>
+<div class="fa" role="group" aria-label="Compose actions" style="position:absolute;right:14px;bottom:76px;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+<button type="button" class="fa-i" data-k="note">${ic(I.pen,16)}<span>New note</span></button><button type="button" class="fa-i" data-k="task">${ic(I.check,16)}<span>New task</span></button><button type="button" class="fa-i" data-k="file">${ic(I.up,16)}<span>Upload file</span></button></div></div><div class="hint">Scroll down, then back up</div></div>`,
   desc:'Scrolling down hides the label first, then the button shrinks to its icon. Scrolling up reverses the order: the button widens, then the label fades in.',
   api:'collapse: label.o→0 now, w→52 at t + 0.1   expand: w now, label at t + 0.12',
   init(st){
@@ -2097,9 +2112,16 @@ atom({ id:'fab', cat:'Navigation', name:'Extended action button', block:'cta-but
     paint();
     dv.onclick = () => { dividers = !dividers; dv.setAttribute('aria-pressed', String(dividers)); dv.textContent = dividers ? 'On' : 'Off'; paint(); };
     const w = new Track(138), lo = new Track(1); let last = 0, ext = true;
-    ls.onscroll = () => { const y = ls.scrollTop, d = y - last; last = y; if (d > 2 && ext){ ext = false; lo.set(0, S.snap); w.set(52, S.base, now() + EXIT); } else if ((d < -2 || y < 8) && !ext){ ext = true; w.set(138); lo.set(1, S.base, now() + .12); } };
-    fb.setAttribute('aria-label','Compose');
-    return t => { fb.style.width = px(w.at(t)); fade(lb, lo.at(t), null); };
+    ls.onscroll = () => { const y = ls.scrollTop, d = y - last; last = y; if (d > 2 && menu) setMenu(false); if (d > 2 && ext){ ext = false; lo.set(0, S.snap); w.set(52, S.base, now() + EXIT); } else if ((d < -2 || y < 8) && !ext){ ext = true; w.set(138); lo.set(1, S.base, now() + .12); } };
+    fb.setAttribute('aria-label','Compose'); fb.setAttribute('aria-expanded','false');
+    // speed dial: Compose fans out three actions above it, last in first out
+    const fa = $(st,'.fa'), fai = $$(fa,'.fa-i'), ft = fai.map(() => new Track(0)); let menu = false, tmr = 0;
+    const setMenu = v => { if (v === menu) return; menu = v; const t0 = now(); fai.forEach((b,i) => { ft[i].set(v ? 1 : 0, S.base, v ? t0 + i*.035 : t0 + (fai.length - 1 - i)*.03); b.tabIndex = v ? 0 : -1; }); fb.setAttribute('aria-expanded', String(v)); };
+    fb.onclick = () => setMenu(!menu);
+    fai.forEach(b => { b.tabIndex = -1; b.onclick = () => { setMenu(false); const name = b.querySelector('span').textContent; lb.textContent = name; clearTimeout(tmr); tmr = setTimeout(() => { lb.textContent = 'Compose'; }, 1600); }; });
+    st.addEventListener('keydown', e => { if (e.key === 'Escape' && menu){ e.stopPropagation(); setMenu(false); fb.focus(); } });
+    ls.addEventListener('pointerdown', () => setMenu(false));
+    return t => { fb.style.width = px(w.at(t)); fade(lb, lo.at(t), null); fai.forEach((b,i) => pop(b, ft[i].at(t), 6)); };
   }});
 window.CIEO_SOURCE_HINT="blocks/083-speeddial.js";
 
@@ -2924,7 +2946,7 @@ window.CIEO_SOURCE_HINT="blocks/124-follow.js";
 
 
 atom({ id:'follow', cat:'Social', name:'Follow button', block:'profile-header, social-links', fam:['M','S'],
-  html:`<div class="row" style="gap:12px"><i style="width:44px;height:44px;border-radius:50%;background:var(--accent)"></i><span class="col" style="gap:0"><b class="small">Field Notes</b><span class="small muted">@fieldnotes</span></span><button class="fb" aria-pressed="false" style="position:relative;height:34px;border-radius:17px;border:1.5px solid var(--ink);cursor:pointer;font:600 13px var(--sans);overflow:hidden;margin-left:8px"></button></div><div class="hint">Follow, then hover the button</div>`,
+  html:`<div class="row" style="gap:12px"><i style="width:44px;height:44px;border-radius:50%;background:var(--accent)"></i><span class="col" style="gap:0"><b class="small">Field Notes</b><span class="small muted">@fieldnotes</span></span><button class="fb" aria-label="Follow or unfollow" aria-pressed="false" style="position:relative;height:34px;border-radius:17px;border:1.5px solid var(--ink);cursor:pointer;font:600 13px var(--sans);overflow:hidden;margin-left:8px"></button></div><div class="hint">Follow, then hover the button</div>`,
   desc:'Follow turns into an outlined Following with its width springing to fit. Hovering Following previews Unfollow in the danger color, so the destructive action is never a surprise.',
   api:'w.set(measure(label)); fill.set(!following); hover && following → label.to("unfollow")',
   init(st){
@@ -2968,7 +2990,8 @@ atom({ id:'charring', cat:'Social', name:'Character limit ring', block:'form (lo
   init(st){
     const ta = $(st,'textarea'), rg = $(st,'.rg'), lft = $(st,'.lft'), pb = $(st,'.pb'), MAX = 140, v = new Track(0), k1 = new Track(0), k2 = new Track(0), big = new Track(0);
     const upd = inst => { const n = ta.value.length, left = MAX - n, k = inst ? 'jump' : 'set'; v[k](Math.min(1, n/MAX)); k1[k](left < 20 ? 1 : 0); k2[k](left < 0 ? 1 : 0); big[k](left < 20 ? 1 : 0); lft.textContent = left < 20 ? left : ''; pb.disabled = left < 0 || !n; ta.setAttribute('aria-invalid', left < 0); };
-    ta.oninput = () => upd(); upd(true);
+    ta.oninput = () => { pb.textContent = 'Post'; upd(); }; upd(true);
+    pb.onclick = () => { if (pb.disabled) return; ta.value = ''; pb.textContent = 'Posted'; upd(); ta.focus(); };
     return t => { const a = clamp(k1.at(t)), b = clamp(k2.at(t)); rg.style.strokeDashoffset = (1 - clamp(v.at(t))).toFixed(4); rg.style.stroke = `color-mix(in oklab, var(--danger) ${(b*100).toFixed(1)}%, ${mix(a,'var(--warning)','var(--accent)')})`; rg.parentNode.style.transform = `scale(${(1 + .2*clamp(big.at(t))).toFixed(4)})`; lft.style.color = b > .5 ? 'var(--danger)' : 'var(--muted)'; };
   }});
 window.CIEO_SOURCE_HINT="blocks/127-newposts.js";
@@ -3096,7 +3119,7 @@ window.CIEO_SOURCE_HINT="blocks/133-streaming.js";
 
 /* ---------- Jobs: AI chat, scheduling, calls, guidance, maps ---------- */
 atom({ id:'streaming', cat:'AI chat', name:'Streaming answer', block:'richtext, chat', fam:['S','T'], tall:true,
-  html:`<div class="col" style="width:min(360px,92%);gap:10px"><div class="row" style="gap:6px"><input id="ai-q" value="How should I price a yearly plan?" aria-label="Question" style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:14px var(--sans)"><button class="btn ink go" style="position:relative;width:64px;height:36px;padding:0"></button></div><div class="card ans small" style="padding:12px 14px;line-height:1.65;min-height:150px"></div><div class="fa" style="position:relative;min-height:30px"></div><label class="row small muted" style="gap:6px;justify-content:center;cursor:pointer"><input type="checkbox" class="fu" checked> Follow-up actions</label></div>`,
+  html:`<div class="col" style="width:min(360px,92%);gap:10px"><div class="row" style="gap:6px"><input id="ai-q" value="How should I price a yearly plan?" aria-label="Question" style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:14px var(--sans)"><button class="btn ink go" aria-label="Start or stop answer" style="position:relative;width:64px;height:36px;padding:0"></button></div><div class="card ans small" style="padding:12px 14px;line-height:1.65;min-height:150px"></div><div class="fa" style="position:relative;min-height:30px"></div><label class="row small muted" style="gap:6px;justify-content:center;cursor:pointer"><input type="checkbox" class="fu" checked> Follow-up actions</label></div>`,
   desc:'Words arrive on a schedule and each one fades up out of a slight blur, so the text feels written rather than printed. A soft caret rides the last word. Stop freezes the answer where it is. On settle, follow-up actions swap in.',
   api:'word[i] visible at t0 + i·0.045   o = prog(t, tᵢ, S.snap)   stop: t0 frozen',
   init(st){
@@ -3824,6 +3847,10 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
     const underline = inst => { const [l,r] = g(links[cur]); inst ? u.jump(l + 12, r - 12) : u.go(l + 12, r - 12); };
     pg.onscroll = () => c.set(pg.scrollTop > 16 ? 1 : 0);
     cta.onpointerdown = () => cp.set(1); cta.onpointerup = cta.onpointerleave = () => cp.set(0);
+    // a press swaps the label to a confirmation for 1.8s, then restores it
+    let ctaT = 0;
+    const startFree = () => { cta.textContent = 'Trial started'; cta.style.background = 'var(--success)'; clearTimeout(ctaT); ctaT = setTimeout(() => { cta.textContent = 'Start free'; cta.style.background = ''; }, 1800); };
+    cta.onclick = startFree;
     const setSearch = on => { searchOn = on; sb.setAttribute('aria-expanded', on); const t0 = now(), W = hd.clientWidth, n = pg.clientWidth < 640;
       sxw.set(on ? (n ? Math.max(120, W - 76) : 220) : 36); sio.set(on ? 1 : 0, on ? S.base : S.snap, on ? t0 + .12 : t0);
       logoC.p.set(on && n ? 0 : 1); navC.p.set(on && !n && W < 980 ? 0 : 1); if (on) setTimeout(() => inp.focus(), 0); };
@@ -3834,7 +3861,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
       if (inst){ mo.jump(on ? 1 : 0); mitems.forEach(x => x.o.jump(on ? 1 : 0)); return; }
       mo.set(on ? 1 : 0); mitems.forEach((x,i) => on ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (on) setTimeout(() => mlinks[0].a.focus(), 0); };
     mb.onclick = () => setMenu(!menuOn);
-    mitems.forEach(x => x.a.onclick = e => { e.preventDefault(); if (menuOn) setMenu(false); });
+    mitems.forEach(x => x.a.onclick = e => { e.preventDefault(); if (x.a === mcta) startFree(); if (menuOn) setMenu(false); });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOn){ setMenu(false); mb.focus(); } });
     const measure = () => { navC.measure(); logoC.measure(); };
     const relayout = () => { measure(); underline(true); };
@@ -3960,7 +3987,7 @@ atom({ id:'productpage', cat:'Storefront', name:'Product page', block:'product, 
       <div class="pp-sk" role="status"></div>
       <div><div class="pp-lb"><span>Color</span><span class="pp-cn muted"></span></div><div class="pp-sw" role="group" aria-label="Color"></div></div>
       <div><div class="pp-lb"><span>Size</span></div><div class="pp-cp" role="group" aria-label="Size"></div></div>
-      <button type="button" class="pp-ad"></button>
+      <button type="button" class="pp-ad" aria-label="Add to cart"></button>
     </div>
   </div></div>
   <div class="pp-sc"></div>
@@ -4126,7 +4153,7 @@ atom({ id:'checkoutflow', cat:'Storefront', name:'Checkout', block:'checkout, li
   <div class="cf-mn"><div class="cf-pn"></div>
     <aside class="cf-tt" aria-label="Order summary"><div class="r"><span class="muted">Subtotal</span><span class="num"></span></div><div class="r"><span class="muted">Shipping</span><span class="num"></span></div><div class="r"><span class="muted">Tax (8%)</span><span class="num"></span></div><div class="r tot"><span>Total</span><span class="num"></span></div></aside>
   </div>
-  <div class="cf-ac"><button type="button" class="btn cf-bk">Back</button><button type="submit" class="cf-nx"></button></div>
+  <div class="cf-ac"><button type="button" class="btn cf-bk">Back</button><button type="submit" class="cf-nx" aria-label="Next step"></button></div>
 </form></div>`,
   desc:'One bar fills as you move Cart, Details, Payment, Receipt, and panels slide sideways in the direction of travel with the blur swap. Changing a quantity rolls its digit first, then every money value springs to the new total together; shipping goes free at $100. Empty required fields ring in danger. Pay shows a spinner, then fills success and slides to the receipt, where the check draws and the total counts up. With Simulate decline the button and bar flash danger, a message swaps in, and you stay on Payment.',
   api:'panel.to(i, dir)   bar.set((i + 1)/4)   totals.set(sum)   pay: busy → ok | bad   receipt: check.draw(t0 + .3); total.set(sum, t0 + .25)',
@@ -6174,7 +6201,7 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
 <button class="btn wfsu-rs" style="position:absolute;top:10px;right:12px">Reset</button>
 <div class="wfsu-pg"><div class="wfsu-hd">Danger zone</div>
 <div class="card wfsu-cd">
- <div class="wfsu-r1"><div class="wfsu-ri"><div><b>Delete this site</b><small>Removes harbor-studio.example.site, its pages and media.</small></div><button class="wfsu-bt" type="button"></button></div></div>
+ <div class="wfsu-r1"><div class="wfsu-ri"><div><b>Delete this site</b><small>Removes harbor-studio.example.site, its pages and media.</small></div><button class="wfsu-bt" type="button" aria-label="Delete site"></button></div></div>
  <div class="wfsu-ri"><div><b>Export content</b><small>Download every page as JSON.</small></div><span class="small muted">Available</span></div>
 </div>
 <div class="wfsu-st" role="status" aria-live="polite"></div></div>
@@ -6184,7 +6211,7 @@ atom({ id:'stepup', cat:'Workflow', name:'Step-up re-authentication', block:'Ste
  <p class="wfsu-cp">Deleting a site needs a fresh check. Enter the 6-digit code from your authenticator app.</p>
  <div class="wfsu-ob"><i class="wfsu-rg"></i><input class="wfsu-in" id="wfsu-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Six digit authenticator code"></div>
  <div class="wfsu-m" role="status" aria-live="polite"></div>
- <button class="wfsu-vb" type="button" aria-disabled="true"></button>
+ <button class="wfsu-vb" type="button" aria-disabled="true" aria-label="Verify owner access"></button>
  <div class="wfsu-lk"><button class="wfsu-pk" type="button">Use a passkey instead</button><button class="wfsu-cn" type="button">Cancel</button></div>
 </div></div>`,
   desc:'Delete site is blocked until you prove it is you. A scrim fades in while the dialog rises 8px from 97% scale, with focus in the code row and the ring sliding box to box. A wrong code turns the boxes danger, says why, then clears itself. A right code turns the boxes and button success, the dialog leaves, and only then does the blocked action resume: the button reads Deleting…, the row fades out and its space collapses, and a status line swaps in.',
@@ -6457,7 +6484,7 @@ atom({ id:'invite', cat:'Workflow', name:'Invite member', block:'InviteButton, m
 .wfiv-cf{display:flex;align-items:center;gap:6px;padding:6px 14px 10px;font-size:12px;color:var(--muted)}
 </style>
 <div class="card wfiv-cd">
- <div class="wfiv-hd"><div><b>Members</b><small>3 active</small></div><button class="wfiv-bt" type="button" aria-expanded="false"></button></div>
+ <div class="wfiv-hd"><div><b>Members</b><small>3 active</small></div><button class="wfiv-bt" type="button" aria-label="Show or hide details" aria-expanded="false"></button></div>
  <div class="wfiv-sl"><form class="wfiv-ly wfiv-fm" novalidate><div class="wfiv-fr"><input class="wfiv-in" id="wfiv-em" type="email" placeholder="name@work.com" aria-label="Email address" autocomplete="off"><select class="wfiv-se" aria-label="Role"><option>Editor</option><option>Viewer</option><option>Admin</option></select><button class="btn ink" type="submit">Send invite</button></div><div class="wfiv-hp"></div></form>
   <div class="wfiv-ly wfiv-mb"><span class="wfiv-av"></span><div class="wfiv-tx"><div class="wfiv-em"></div><div class="wfiv-l2"><span class="wfiv-cp"></span><span class="wfiv-ro"></span></div></div><div class="wfiv-ab"><button class="btn wfiv-rsd" type="button">Resend</button><button class="btn wfiv-rvk" type="button" style="color:var(--danger)">Revoke</button></div></div></div>
   <div class="wfiv-rw"><span class="wfiv-av">M</span><b>Maya Okafor</b><span class="muted">Owner</span></div>
@@ -6697,6 +6724,9 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
 .cn-in p{margin:0;font-size:13px;line-height:1.5;color:var(--muted);max-width:62ch}
 .cn-lks{display:flex;gap:14px;margin-top:6px}
 .cn-lk{border:0;background:none;padding:0;font-size:12.5px;font-weight:500;color:var(--ink);cursor:pointer;text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.cn-lk[aria-expanded="true"]{text-decoration-thickness:2px}
+.cn-pd{margin-top:8px;padding:9px 11px;border-radius:9px;background:var(--raised);font-size:12.5px;line-height:1.5;color:var(--ink);max-width:62ch}
+.cn-pd[hidden]{display:none}
 .cn-cats{overflow:hidden;flex:none;height:0}
 .cn-cin{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px;padding-top:8px}
 .cn-op{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line-soft);border-radius:10px;padding:7px 10px;cursor:pointer}
@@ -6715,15 +6745,19 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
 <button type="button" class="btn cn-re" style="position:absolute;top:7px;right:12px;z-index:6">Replay</button><div class="ro cn-ro" style="top:auto;bottom:18px;right:16px" aria-live="polite">No choice yet</div>
 <div class="cn-bx"><div class="cn-ct" role="dialog" aria-label="Privacy choices" aria-describedby="consent-copy"><span class="cn-k">Privacy choices</span>
 <div class="cn-tt"><h2>Your visit, your choice.</h2><h2>Choose what this site may use.</h2></div>
-<div class="cn-in"><div><p id="consent-copy">Necessary storage keeps this site working. Analytics, personalization and marketing stay off unless you choose them.</p><div class="cn-lks"><button type="button" class="cn-lk">Cookie policy</button><button type="button" class="cn-lk">Privacy policy</button></div></div></div>
+<div class="cn-in"><div><p id="consent-copy">Necessary storage keeps this site working. Analytics, personalization and marketing stay off unless you choose them.</p><div class="cn-lks"><button type="button" class="cn-lk" aria-expanded="false" aria-controls="consent-pd">Cookie policy</button><button type="button" class="cn-lk" aria-expanded="false" aria-controls="consent-pd">Privacy policy</button></div><div class="cn-pd" id="consent-pd" role="region" aria-live="polite" hidden></div></div></div>
 <div class="cn-cats"><div class="cn-cin"></div></div>
 <div class="cn-act"><button type="button" class="btn cn-no">Necessary only</button><button type="button" class="btn cn-mid" aria-expanded="false"><span>Choose preferences</span><span>Save preferences</span></button><button type="button" class="btn cn-all">Accept all</button></div></div>
 <button type="button" class="cn-tab" aria-label="Reopen privacy choices">${ic('<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.500 7-10V6z"/><path d="m9 12 2.200 2.200L15.500 10"/>', 15)}<span>Privacy choices</span></button></div>`,
-  desc:'The banner rises from the bottom edge. Customize does not open a dialog: the intro fades and its height collapses while the four categories grow in place and the title swaps, and the middle button swaps to Save preferences. Every optional switch starts off, the three buttons carry equal weight, and focus lands on Necessary only. After a choice the copy exits first, then the same surface morphs its size, radius and position into a small tab in the corner; the tab label enters last. Clicking the tab reverses it.',
+  desc:'The banner rises from the bottom edge. Customize does not open a dialog: the intro fades and its height collapses while the four categories grow in place and the title swaps, and the middle button swaps to Save preferences. Every optional switch starts off, the three buttons carry equal weight, and focus lands on Necessary only. After a choice the copy exits first, then the same surface morphs its size, radius and position into a small tab in the corner; the tab label enters last. Clicking the tab reverses it. Cookie policy and Privacy policy open a short note in place; the same link again closes it.',
   api:'rise: y.set(0)   customize: intro.h.set(0), cats.h.set(measure), title.swap()   choose: copy.set(0); box.{w,h,x,r}.set(tab, t + EXIT); label.set(1, t + EXIT + .1)',
   init(st){
     const bx = $(st,'.cn-bx'), ct = $(st,'.cn-ct'), tab = $(st,'.cn-tab'), tts = $$(st,'.cn-tt h2'), intro = $(st,'.cn-in'), introI = intro.firstElementChild, cats = $(st,'.cn-cats'), cin = $(st,'.cn-cin');
     const btnNo = $(st,'.cn-no'), btnMid = $(st,'.cn-mid'), btnAll = $(st,'.cn-all'), midL = $$(btnMid,'span'), ro = $(st,'.cn-ro'), re = $(st,'.cn-re');
+    const pd = $(st,'#consent-pd'), pdBtns = $$(st,'.cn-lk'), PD = ['Your choices are stored on this device. Necessary cookies keep checkout and saved choices working. Every other category stays off until you switch it on.', 'Analytics counts page views without identifying you. Personalization and marketing stay off unless you turn them on. Change any of this from the privacy choices tab.'];
+    let pdOpen = -1;
+    const setPd = i => { pdOpen = i; pdBtns.forEach((b, j) => b.setAttribute('aria-expanded', j === i)); pd.hidden = i < 0; if (i >= 0) pd.textContent = PD[i]; };
+    pdBtns.forEach((b, i) => b.onclick = () => setPd(pdOpen === i ? -1 : i));
     const OPT = [['Necessary','Required for security, checkout and saved privacy choices.'],['Analytics','Helps the site owner understand useful pages and drop-off.'],['Personalization','Remembers optional display and content preferences.'],['Marketing','Measures campaigns and relevant promotions.']];
     const sws = OPT.map(([n, d], i) => { const l = xEl('label'); l.className = 'cn-op';
       l.innerHTML = `<span><strong></strong><small></small></span><button type="button" role="switch" class="cn-sw" aria-checked="${i === 0}"><i></i></button>`;
@@ -6743,7 +6777,7 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
     const reopen = () => { if (state !== 'tab') return; const t = now(); state = 'open'; saved.forEach((v, i) => draft[i] = v); syncSwitches(true);
       TO.set(0, S.snap, t); M.set(0, S.base, t + EXIT); CO.set(1, S.base, t + EXIT + .1);
       xPush(q, t + EXIT + .22, () => { if (state === 'open') btnNo.focus({ preventScroll:true }); }); };
-    const replay = () => { const t = now(); state = 'open'; expanded = false; q.length = 0; draft.splice(0, 4, true, false, false, false); saved.splice(0, 4, true, false, false, false); syncSwitches(true);
+    const replay = () => { const t = now(); state = 'open'; expanded = false; setPd(-1); q.length = 0; draft.splice(0, 4, true, false, false, false); saved.splice(0, 4, true, false, false, false); syncSwitches(true);
       E.jump(0); M.jump(0); CO.jump(1); TO.jump(0); R.jump(0); R.set(1, S.soft, t + .12); tsw.cur = 0; tsw.prev = null; tsw.t = -9; msw.cur = 0; msw.prev = null; msw.t = -9;
       btnMid.setAttribute('aria-expanded', 'false'); ro.textContent = 'No choice yet'; xPush(q, t + .45, () => { if (state === 'open') btnNo.focus({ preventScroll:true }); }); };
     btnNo.onclick = () => choose([true, false, false, false]);
@@ -7189,13 +7223,13 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
     const m = new Track(0), cb = new Track(0);
 
     const H = (r, k) => r.l[k].offsetHeight;
-    const collapse = r => { r.state = 0; r.act.inert = true; r.ah.set(0); r.m.setAttribute('aria-pressed', 'false'); };
+    const collapse = r => { r.state = 0; r.ah.set(0); r.m.setAttribute('aria-pressed', 'false'); };
     const deselect = () => { if (sel){ collapse(sel); sel = null; } };
     const selectRow = r => {
       if (busy) return;
       if (sel === r){ deselect(); return; }
       if (sel) collapse(sel);
-      sel = r; r.state = 1; r.act.inert = false; r.ah.set(H(r, 0)); r.sw.to(0); r.m.setAttribute('aria-pressed', 'true');
+      sel = r; r.state = 1; r.ah.set(H(r, 0)); r.sw.to(0); r.m.setAttribute('aria-pressed', 'true');
     };
     const makeRow = d => {
       const w = WHO[d.who], el = mk('div', 'position:relative;overflow:hidden;padding:0 6px;height:0');
@@ -7205,7 +7239,6 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
         <div class="rw-l2" style="position:absolute;left:0;right:0;top:0;padding:0 8px 10px 42px"><button type="button" class="btn" disabled style="width:100%">Restoring…</button></div></div></div>`;
       const r = { id:++uid, d, p:d.p, born:d.born, el, in:$(el, '.rw-in'), m:$(el, '.rw-m'), tm:$(el, '.rw-tm'), act:$(el, '.rw-a'), l:[$(el, '.rw-l0'), $(el, '.rw-l1'), $(el, '.rw-l2')], go:$(el, '.rw-go'), no:$(el, '.rw-no'), yes:$(el, '.rw-yes'),
         e:new Track(0), ah:new Track(0), b:new Track(0), sw:new Swap(0), state:0, ts:'' };
-      r.act.inert = true;
       r.m.onclick = () => selectRow(r);
       r.el.addEventListener('pointerenter', () => { if (!busy) hover = r; });
       r.el.addEventListener('pointerleave', () => { if (hover === r) hover = null; });
@@ -7225,7 +7258,7 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
     const keyOf = want => want ? want.id + '@' + curRev : 'cur';
     const applyBody = (want, key) => {
       applied = key; const d = bodyHTML(want);
-      if (want){ flashUntil = 0; const w = WHO[want.d.who]; appliedLbl = d.add + d.del === 0 ? 'Same as the current draft' :
+      if (want){ const w = WHO[want.d.who]; appliedLbl = d.add + d.del === 0 ? 'Same as the current draft' :
         `Previewing ${hx(want.d.label.toLowerCase())} · ${ago(now() - want.born)} · <span style="color:var(--success)">+${d.add}</span> <span style="color:var(--danger)">−${d.del}</span> words`; }
       else appliedLbl = 'Current draft';
       bodyPair.put(d.html);
@@ -7291,7 +7324,7 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
         r.el.style.height = px(e * (MAIN + ah + 4)); fade(r.el, e, (1 - e) * -8, false);
         r.in.style.background = mix(clamp(r.b.at(t)) * .7, 'var(--raised)', 'transparent');
         if (r === sel && Math.abs(ah - r.ah.target) > .5){ const bot = r.el.offsetTop + e * (MAIN + ah + 4); if (bot > scroller.scrollTop + scroller.clientHeight) scroller.scrollTop = bot - scroller.clientHeight; }   // keep the opening row in view
-        r.act.style.height = px(ah); for (let k = 0; k < 3; k++) r.sw.apply(r.l[k], k, t, 3);
+        r.act.style.height = px(ah); r.act.style.visibility = r.state === 0 && ah < .5 ? 'hidden' : 'visible'; for (let k = 0; k < 3; k++) r.sw.apply(r.l[k], k, t, 3);
         const s = ago(t - r.born); if (s !== r.ts){ r.ts = s; r.tm.textContent = s; }
       }
     };
@@ -8111,9 +8144,9 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
 <div class="oag-ttl" id="oag-t" aria-live="polite"><h4>Assistant wants to connect to Northwind</h4><h4>Assistant is connected to Northwind</h4><h4>Request denied</h4></div>
 <div class="oag-sub"><span>Signed in as maya@northwind.co</span></div></div>
 <div class="oag-main"><ul class="oag-sc" aria-label="Requested permissions"></ul>
-<div class="oag-sum"><div class="oag-sin"><span class="oag-sl"></span><button type="button" class="oag-ul"></button></div></div>
+<div class="oag-sum"><div class="oag-sin"><span class="oag-sl"></span><button type="button" class="oag-ul" aria-label="Revoke access or ask again"></button></div></div>
 <div class="oag-ft"><div class="oag-hd"><div class="oag-cnt"><span class="oag-c1"></span><span>of</span><span class="oag-c2"></span><span>permissions selected</span></div></div>
-<div class="oag-act"><button type="button" class="btn oag-no"><span></span></button><button type="button" class="btn oag-yes"><span></span></button></div>
+<div class="oag-act"><button type="button" class="btn oag-no" aria-label="Deny"><span></span></button><button type="button" class="btn oag-yes" aria-label="Allow"><span></span></button></div>
 <div class="oag-fine">You can change these permissions at any time in Agent access.</div></div></div></section></div>`,
   desc:'Each scope toggle springs its knob, and the Allow count rolls. Turning on a sensitive scope grows a warning line under it. Allow morphs the button row: Deny shrinks to zero width while Allow grows, fills green and swaps to Connected, then the scopes you left off collapse 40ms apart and the toggles of the kept ones swap to checks. Deny runs the mirror image and fades red. The link between the two tiles fills as the grant lands.',
   api:'switch[i].set(v)   count.set(n)   allow: deny.w.set(0) → off-rows.h.set(0, t + i·0.04) → kept.toggle.swap(check)   line.fill.set(1)',
@@ -8315,7 +8348,7 @@ atom({ id:'toolcalllog', cat:'MCP and agents', name:'Tool call log', block:'Agen
 @container (max-width:560px){.tcl-hd{grid-template-columns:22px minmax(0,1fr) auto 14px}.tcl-ar{display:none}.tcl-nm em{display:none}.tcl-di{margin-left:14px}}
 </style>
 <div class="tcl-root"><div class="tcl-card"><div class="tcl-head"><div class="tcl-st"><h4><span class="tcl-hs" style="position:relative;display:block;height:20px"></span></h4><div class="tcl-sub"><b class="tcl-n1"></b><span>calls</span><span>·</span><b class="tcl-n2" style="color:var(--danger)"></b><span>failed</span></div></div>
-<div class="tcl-bt"><button type="button" class="btn tcl-pa"><span style="position:absolute;inset:0"></span></button><button type="button" class="btn tcl-re">Replay</button></div></div>
+<div class="tcl-bt"><button type="button" class="btn tcl-pa" aria-label="Pause or resume"><span style="position:absolute;inset:0"></span></button><button type="button" class="btn tcl-re">Replay</button></div></div>
 <ul class="tcl-list" aria-label="Tool calls, newest first"></ul><div class="tcl-empty" hidden><span class="tcl-es" style="position:relative;display:block;height:18px;overflow:hidden"></span></div></div><div class="row small muted" style="flex:none;display:flex;align-items:center;gap:8px;padding:8px 2px 0;font-size:12.5px;color:var(--muted)"><span style="flex:1">Empty-state preview</span><button type="button" class="btn tcl-prev" style="height:28px">Preview empty</button></div><div class="tcl-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Calls stream in on a run clock, newest at the top. Each row grows from zero height and its content fades up; the spinner turns on that clock, then swaps to a check or an error as the call finishes, and the duration stops counting. Several calls overlap, so more than one spinner can run. Pause freezes the run clock without losing the queue. Click a row to grow its arguments and result; failed rows open on the error.',
   api:'rt += dt (unless paused)   at ≥ call.at → row.open(true)   at ≥ call.at + dur → icon.swap(check | error)   expand: detail.h.set(open)',
@@ -8412,7 +8445,7 @@ atom({ id:'toolpermissions', cat:'MCP and agents', name:'Server tool permissions
 </style>
 <div class="tpm-root"><div class="tpm-card"><div class="tpm-head"><span class="tpm-ic">${ic('<circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="9" r="2"/><path d="M6 7v10M18 11c0 3-3 4-12 6"/>', 18, 1.75)}</span><div><h4>Source control tools</h4><div class="tpm-sub"><span class="tpm-n1"></span><span>of</span><span class="tpm-n2"></span><span>enabled for the assistant</span></div></div></div>
 <div class="tpm-tb"><div class="seg tpm-fs" role="group" aria-label="Filter tools"><div class="ind"></div><button type="button" data-f="all">All</button><button type="button" data-f="read">Read</button><button type="button" data-f="write">Write</button></div><span class="tpm-sp"></span>
-<button type="button" class="btn tpm-bulk"><span class="tpm-bh"></span></button><button type="button" class="btn tpm-off" style="height:32px">Disable all</button></div>
+<button type="button" class="btn tpm-bulk" aria-label="Toggle all permissions"><span class="tpm-bh"></span></button><button type="button" class="btn tpm-off" style="height:32px">Disable all</button></div>
 <ul class="tpm-list" aria-label="Source control tools"></ul></div><div class="tpm-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Switches spring one by one. Enable all read-only turns on every read tool still off, 60ms apart from the top, and the button swaps to a Read-only tools enabled label once none are left; flipping any read tool off brings the original label back. The filter indicator edges lag each other, and tools outside the filter collapse in height rather than disappearing. Enabling a destructive tool grows a warning line under it.',
   api:'tool[i].sw.set(1, t + i·0.06)   bulk.swap(allRead ? done : enable)   filter: ind.go(l, r), row.open(match)   destructive: warn.h.set(on)',
@@ -8504,11 +8537,11 @@ atom({ id:'apikeyreveal', cat:'MCP and agents', name:'API key reveal and rotate'
 .akr-empty{padding:28px 14px;text-align:center;font-size:13px;color:var(--muted)}
 @container (max-width:500px){.akr-r{flex-wrap:wrap}.akr-ab{width:100%}.akr-ab .btn{flex:1}.akr-kb{flex-direction:column}.akr-cp{width:100%;height:34px}}
 </style>
-<div class="akr-root"><div class="akr-card"><div class="akr-head"><div style="flex:1;min-width:0"><h4>API keys</h4><div class="akr-sub"><span class="akr-n"></span><span>active keys</span></div></div><button type="button" class="btn akr-mk" aria-expanded="false"><span style="position:absolute;inset:0"></span></button></div>
+<div class="akr-root"><div class="akr-card"><div class="akr-head"><div style="flex:1;min-width:0"><h4>API keys</h4><div class="akr-sub"><span class="akr-n"></span><span>active keys</span></div></div><button type="button" class="btn akr-mk" aria-label="Show or hide key" aria-expanded="false"><span style="position:absolute;inset:0"></span></button></div>
 <div class="akr-body"><div class="akr-cm"><form class="akr-fm" autocomplete="off"><div><label for="akr-name">Key name</label><input id="akr-name" value="Staging agent" maxlength="40"></div>
 <fieldset><legend>Access</legend><div class="seg akr-sg" role="radiogroup" aria-label="Access"><div class="ind"></div><button type="button" role="radio" data-a="Read only">Read only</button><button type="button" role="radio" data-a="Read and write">Read and write</button></div></fieldset>
 <div class="akr-fb"><button type="button" class="btn akr-cc">Cancel</button><button type="submit" class="btn ink akr-ok">Create key</button></div></form></div>
-<div class="akr-rw"><div class="akr-rv" role="group" aria-labelledby="akr-rt"><h5 id="akr-rt"></h5><p class="akr-rp">Copy it now. For security this is the only time it is shown.</p><div class="akr-kb"><code class="akr-kc" aria-label="New API key"></code><button type="button" class="btn akr-cp"><span style="position:absolute;inset:0"></span></button></div><div class="akr-rn"></div><div class="akr-rb"><button type="button" class="btn ink akr-dn">I have stored it</button></div></div></div>
+<div class="akr-rw"><div class="akr-rv" role="group" aria-labelledby="akr-rt"><h5 id="akr-rt"></h5><p class="akr-rp">Copy it now. For security this is the only time it is shown.</p><div class="akr-kb"><code class="akr-kc" aria-label="New API key"></code><button type="button" class="btn akr-cp" aria-label="Copy key"><span style="position:absolute;inset:0"></span></button></div><div class="akr-rn"></div><div class="akr-rb"><button type="button" class="btn ink akr-dn">I have stored it</button></div></div></div>
 <ul class="akr-list" aria-label="API keys"></ul></div></div><div class="akr-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Create key grows the form open and swaps its own label to Cancel. Creating collapses the form, grows the one-time reveal panel in its place and drops the new row in from zero height with a New tag. Copy swaps to Copied with a green fill and falls back after 1.8s. Done closes the panel and fades the tag. Rotate and Revoke open an inline confirmation under the row; Rotate swaps the masked prefix and reopens the reveal, Revoke dims the row, swaps its line to Revoked, then collapses it.',
   api:'form.open(v)   create: form.open(0) → reveal.open(1, +0.3), row.open(1)   copy: label.swap(Copied), +1.8s swap back   revoke: row.dim → +0.7s row.open(0)',
@@ -8626,7 +8659,7 @@ atom({ id:'serverstatus', cat:'MCP and agents', name:'Server connection health',
 <div class="srs-bd"><div class="srs-lat"><div class="srs-cap">Round-trip latency</div><div class="srs-big"><span class="srs-n"><span class="srs-d"></span><small>ms</small></span><span class="srs-dash" style="color:var(--muted)">—</span></div><div class="srs-spk" aria-hidden="true"></div></div>
 <div class="srs-sp"><ol class="srs-steps" aria-label="Connection steps"></ol><div class="srs-er"><div class="srs-ei"><b class="srs-em"></b><code class="srs-ec"></code><div class="srs-cd"><span class="srs-cl">Retrying in</span><span class="srs-c1"></span><span>s</span><span>·</span><span>attempt</span><span class="srs-c2"></span></div></div></div></div></div>
 <dl class="srs-stats"><div><dt>Uptime, 30 days</dt><dd><span>99.98%</span></dd></div><div><dt>Tools available</dt><dd><span class="srs-tl"></span></dd></div><div><dt>Protocol</dt><dd><span>2025-06-18</span></dd></div><div><dt>Last ping</dt><dd><span class="srs-lp"><span class="srs-lpd"></span><span>s ago</span></span><span class="srs-lx" style="color:var(--muted)">Never</span></dd></div></dl>
-<div class="srs-ft"><button type="button" class="btn srs-a" style="width:112px"><span style="position:absolute;inset:0"></span></button><button type="button" class="btn srs-b" style="width:140px"><span style="position:absolute;inset:0"></span></button></div></section><div class="srs-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
+<div class="srs-ft"><button type="button" class="btn srs-a" aria-label="Reconnect" style="width:112px"><span style="position:absolute;inset:0"></span></button><button type="button" class="btn srs-b" aria-label="Simulate outage or retry now" style="width:140px"><span style="position:absolute;inset:0"></span></button></div></section><div class="srs-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Connecting walks four steps in order: each swaps its ring for a spinner, then a check, 450 to 600ms apart, and the chip morphs to Connected when the last lands. The latency number rolls digit by digit with each ping while the sparkline shifts one bar left and every bar springs to its neighbor’s height. Simulate outage drops the bars flat and morphs everything to the error state; a countdown rolls down, the first auto retry fails at Initialize, and the second succeeds. Retry now skips the wait.',
   api:'steps[i]: wait → run → done | fail   latency.set(ms)   bars[i].set(vals[i+1])   outage: bars.set(0, t + i·0.02), err.open(1)   countdown = ceil(retryAt − t)',
   init(st){
@@ -8730,7 +8763,7 @@ atom({ id:'agentaccess', cat:'MCP and agents', name:'Agent permission matrix', b
 </style>
 <div class="aam-root"><section class="aam-card" aria-label="Assistant access to Northwind"><div class="aam-head"><span class="aam-ic">${ic('<path d="M12 4v16M5 8l14 8M19 8 5 16"/>', 18, 2)}</span><div class="aam-hm"><h4>Assistant</h4><span class="aam-sb"></span></div><span class="aam-ch"></span></div>
 <div class="aam-mx"><div class="aam-t" role="table" aria-label="What the assistant can do on Northwind"></div></div>
-<div class="aam-df"><div class="aam-dp"><div class="aam-dh"><span>Pending changes</span><span class="aam-nb"><span class="aam-dn"></span></span></div><ul class="aam-dl" aria-label="Pending changes"></ul><div class="aam-db"><button type="button" class="btn aam-dc" style="width:84px">Discard</button><button type="button" class="btn ink aam-sv" style="width:132px"><span style="position:absolute;inset:0"></span></button></div></div></div>
+<div class="aam-df"><div class="aam-dp"><div class="aam-dh"><span>Pending changes</span><span class="aam-nb"><span class="aam-dn"></span></span></div><ul class="aam-dl" aria-label="Pending changes"></ul><div class="aam-db"><button type="button" class="btn aam-dc" style="width:84px">Discard</button><button type="button" class="btn ink aam-sv" aria-label="Save changes" style="width:132px"><span style="position:absolute;inset:0"></span></button></div></div></div>
 </section><div class="aam-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
   desc:'Each cell is a checkbox. Toggling springs the fill and check, and the cell takes a full outline (ink for added, red with a faint check for removed) so the change is visible before saving. The pending panel grows up from the bottom edge and each change enters as its own row. The header chip morphs to Can publish or delete as soon as one of those grants is on. Save swaps to a spinner, then Saved, collapses the rows and settles every outline; Discard springs everything back.',
   api:'cell.p.set(draft)   cell.q.set(draft ≠ saved)   diff.open(any)   diff[key].open(add | remove)   save: label.swap(spin → Saved), q.set(0), panel.open(0, +0.7)',
@@ -10191,6 +10224,8 @@ document.head.insertAdjacentHTML('beforeend', `<style id="hx-shared">
 .hx-fg div{background:var(--raised);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .hx-fg span{font-size:12.5px;color:var(--muted)}.hx-fg b{font-size:22px;letter-spacing:-.03em;font-weight:600;font-variant-numeric:tabular-nums}
 .hx-ro{position:absolute;right:10px;bottom:8px;z-index:6;font-size:12px;color:var(--muted);pointer-events:none;height:20px;width:230px}
+.hx-nt{position:absolute;left:14px;bottom:12px;z-index:9;padding:6px 10px;border-radius:8px;background:var(--ink);color:var(--card);font-size:12.5px;line-height:1.4;white-space:nowrap;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .18s,transform .18s}
+.hx-nt[data-on]{opacity:1;transform:none}
 .hx-ro span{position:absolute;right:0;top:0;white-space:nowrap}
 </style>`);
 
@@ -10229,8 +10264,13 @@ function kit(st, o = {}){
     const pr = new Track(0, S.snap), hh = new Track(0, S.snap);
     b.addEventListener('pointerdown', () => pr.set(1)); ['pointerup','pointerleave','pointercancel'].forEach(e => b.addEventListener(e, () => pr.set(0)));
     b.addEventListener('pointerenter', () => hh.set(1)); b.addEventListener('pointerleave', () => hh.set(0));
+    b.addEventListener('click', () => K.note(label + ': demo, no page to open'));
     ctas.push({ b, block, pr, hh, ar:$(b,'i') }); return b;
   };
+  // short confirmation shown over the frame's bottom-left corner for 1.5 s; every header control calls it
+  let noteT = 0;
+  K.note = msg => { let n = fr.querySelector('.hx-nt'); if (!n){ n = document.createElement('div'); n.className = 'hx-nt'; n.setAttribute('role', 'status'); fr.appendChild(n); }
+    n.textContent = msg; n.setAttribute('data-on', ''); clearTimeout(noteT); noteT = setTimeout(() => n.removeAttribute('data-on'), 1500); };
   K.setVariant = i => { K.variant = i; VT[i].forEach((v,j) => vt[j].set(v)); segs.cta && segs.cta.pick(i); };
 
   // account zone: signed-out layer and signed-in layer share one container that morphs between their widths
@@ -10446,6 +10486,7 @@ atom({ id:'header-stacked', cat:'Headers', name:'Header: utility bar and main ro
   init(st){
     const K = kit(st, { bp:640, align0:0 }), hd = $(st,'.hd4-hd'), ut = $(st,'.hd4-ut'), ui = $(st,'.hd4-ui'), sd = $(st,'.hx-sd'), mn = $(st,'.hd4-mn'), nv = $(st,'.hd4-nv'), g = $(st,'.hd4-g'), ul = $(st,'.hd4-ul'), bd = $(mn,'.hx-bd');
     K.acts($(st,'.hx-ac'));
+    $$(st,'.hd4-ui button').forEach(b => b.addEventListener('click', () => K.note((b.getAttribute('aria-label') || b.textContent.trim()) + ': demo, no page to open')));
     const links = NAV.map(n => { const a = document.createElement('a'); a.href = '#'; a.className = 'hx-l'; a.textContent = n; g.appendChild(a); return K.link(a); });
     const u = edges(0,0); let cur = 0; const gg = a => [a.offsetLeft + 11, a.offsetLeft + a.offsetWidth - 11];
     const setCur = (i, inst) => { cur = i; links.forEach((l,j) => { l.setCur(j === i); j === i ? l.a.setAttribute('aria-current','page') : l.a.removeAttribute('aria-current'); }); const [l,r] = gg(links[i].a); inst ? u.jump(l, r) : u.go(l, r); };
@@ -10455,6 +10496,7 @@ atom({ id:'header-stacked', cat:'Headers', name:'Header: utility bar and main ro
     $(st,'.hx-pg').addEventListener('scroll', () => { const y = $(st,'.hx-pg').scrollTop, c = collapsed ? y > 10 : y > 40; if (c === collapsed) return; collapsed = c; const t0 = now();
       if (c){ uo.set(0, S.snap, t0); uh.set(0, S.base, t0 + .06); } else { uh.set(1, S.base, t0); uo.set(1, S.base, t0 + .1); } });
     K.panel({ id:'hd4-menu', mode:'drop', burger:$(st,'.hx-bg'), top:() => K.below(hd), links:MLINKS, extra:`<div class="hd4-xt"><a href="#">Help center</a><a href="#">Contact sales</a><a href="#">English</a></div>` });
+    $$(st,'.hd4-xt a').forEach(a => a.addEventListener('click', e => { e.preventDefault(); K.note(a.textContent + ': demo, no page to open'); }));
     return t => { ut.style.height = px(clamp(uh.at(t))*34); ui.style.opacity = clamp(uo.at(t)).toFixed(3); sd.style.opacity = clamp(K.sc.at(t)).toFixed(3); bd.style.opacity = '0';
       const a = u.A.at(t), b = u.B.at(t); ul.style.transform = `translateX(${px(a)})`; ul.style.width = px(b - a); sl(); K.draw(t); };
   }});
@@ -11076,7 +11118,7 @@ atom({ id:'footer-newsletter', cat:CAT, name:'Footer with newsletter signup', bl
 @container (max-width:760px){.${P4}gr{grid-template-columns:repeat(3,minmax(0,1fr))}.${P4}nl{grid-column:1/-1}}
 @container (max-width:520px){.${P4}gr{gap:22px 14px}.${P4}g ul{gap:6px}.${P4}in{padding:26px 18px 0}.${P4}pill{display:none}}`,
     ft:`<div class="${P4}ft" role="contentinfo"><div class="${P4}in"><div class="${P4}gr"><section class="${P4}nl" aria-labelledby="${P4}nh"><span class="${P4}brn">${logo()}Northlight</span><h3 id="${P4}nh">Field notes, monthly</h3><p class="${P4}sub">One email a month on what we shipped and why. 4,200 editors read it. Unsubscribe anytime.</p>
-<form class="${P4}nf" novalidate><div class="${P4}fd"><input id="${P4}email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@newsroom.org" aria-label="Email address" aria-describedby="${P4}msg"><button type="submit" class="${P4}sb"></button><div class="${P4}dn" aria-hidden="true">${ic(I.check, 16, 2.5)}<span>You’re on the list</span></div></div><div class="${P4}ms" id="${P4}msg" role="status" aria-live="polite"><div class="${P4}mi"></div></div></form></section>
+<form class="${P4}nf" novalidate><div class="${P4}fd"><input id="${P4}email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@newsroom.org" aria-label="Email address" aria-describedby="${P4}msg"><button type="submit" class="${P4}sb" aria-label="Subscribe"></button><div class="${P4}dn" aria-hidden="true">${ic(I.check, 16, 2.5)}<span>You’re on the list</span></div></div><div class="${P4}ms" id="${P4}msg" role="status" aria-live="polite"><div class="${P4}mi"></div></div></form></section>
 ${col(P4, 'Product', ['Editor', 'Commerce', 'Members', 'Pricing'])}${col(P4, 'Resources', ['Guides', 'Docs', ['Changelog', { after:'__new__' }], ['Status', { ar:'ur' }]])}${col(P4, 'Company', ['About', 'Customers', ['Careers', { after:'__hire__' }], 'Contact'])}</div>
 <div class="${P4}bm"><p>© 2026 Northlight Studio, Inc.</p><ul class="${P4}ls">${lis(P4, ['Privacy', 'Terms'])}</ul>${btt(P4)}</div></div></div>` }),
   desc:'Submit an invalid address and the field rings danger red while a message opens beneath. A valid one shrinks the button to a spinner, then resolves one of three ways: success turns the button green with a check, then the whole field morphs into a tinted confirmation; a server failure turns the button red with Try again; an address already on the list rings the field amber. Columns rise into view in order as the footer scrolls in.',
@@ -11316,7 +11358,7 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
 .${P7}bm .${P7}ls{display:flex;flex-wrap:wrap;gap:4px 18px}
 @container (max-width:520px){.${P7}in{padding:22px 18px 0}.${P7}bm p{width:100%}}`,
     ft:`<div class="${P7}ft" role="contentinfo"><div class="${P7}in"><div class="${P7}top"><div class="${P7}brand"><span class="${P7}brn">${logo()}Northlight</span><p class="${P7}tag">Publishing tools for small newsrooms and the people who read them.</p></div>
-<button type="button" class="${P7}pl" aria-expanded="false" aria-controls="${P7}det"><i class="${P7}dt"></i><span class="${P7}pt" aria-live="polite"></span><span class="${P7}pm" aria-hidden="true"></span><i class="${P7}cv">${ic(I.chev, 14, 2)}</i></button></div>
+<button type="button" class="${P7}pl" aria-label="Show details" aria-expanded="false" aria-controls="${P7}det"><i class="${P7}dt"></i><span class="${P7}pt" aria-live="polite"></span><span class="${P7}pm" aria-hidden="true"></span><i class="${P7}cv">${ic(I.chev, 14, 2)}</i></button></div>
 <div class="${P7}inc"><div class="${P7}ii" role="status"><div class="${P7}ib" data-i="deg"><span>${ic(I.alert, 16)}</span><div><b>Publishing is slower than usual</b><p>Some pages take up to a minute to go live. The editor and drafts are not affected. Next update by 14:30 UTC.</p>${lk(P7, 'View incident', { ar:'ur' })}</div></div>
 <div class="${P7}ib" data-i="out"><span>${ic(I.alert, 16)}</span><div><b>Publishing and the public API are down</b><p>We are working on a fix. Published sites keep serving from cache. Next update by 14:30 UTC.</p>${lk(P7, 'View incident', { ar:'ur' })}</div></div></div></div>
 <div class="${P7}det" id="${P7}det"><div class="${P7}di"><ul class="${P7}cg">${COMP.map(c => `<li class="${P7}cr"><i class="${P7}rd"></i><span class="${P7}rn">${c}</span><span class="${P7}rs"></span></li>`).join('')}</ul><p class="${P7}up">99.98% uptime over the last 90 days</p></div></div>
@@ -12193,6 +12235,7 @@ ${fauxCss('fz8-')}${DK('fz8-')}${colCss('fz8-')}
 .fz8-bt{display:flex;flex-wrap:wrap;gap:6px 18px;padding:2px 0 18px;font-size:12.5px;color:var(--muted)}
 .fz8-bt a{color:inherit;text-decoration:none}
 .fz8-rp{position:absolute;top:10px;right:12px;z-index:8}
+.fz8-pg{scrollbar-width:thin;scrollbar-color:var(--muted) transparent}
 @container (min-width:520px){.fz8-cs{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @container (min-width:760px){.fz8-bd{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}}
 @container (min-width:900px){.fz8-mn{grid-template-columns:minmax(0,4.5fr) minmax(0,7.5fr)}}
@@ -12206,7 +12249,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
   </section>
   <div class="fz8-mn">
     <div class="fz8-nl"><h4 class="fz8-nt" data-i="nlt">The Cairn letter</h4><p class="fz8-nx" data-i="nlx">One email a month. What we learned from 4,000 funnels, with no product pitches.</p>
-      <form class="fz8-nf" novalidate><div class="fz8-fw"><div class="fz8-fd"><input class="fz8-in" id="fz8-em" type="email" autocomplete="email" aria-label="Email address" placeholder="you@company.com"><button type="submit" class="fz8-sb"></button></div>
+      <form class="fz8-nf" novalidate><div class="fz8-fw"><div class="fz8-fd"><input class="fz8-in" id="fz8-em" type="email" autocomplete="email" aria-label="Email address" placeholder="you@company.com"><button type="submit" class="fz8-sb" aria-label="Subscribe"></button></div>
         <div class="fz8-ok" role="status" aria-live="polite">${ic(I.check, 16, 2.5)}<span data-i="okt">You are on the list.</span><button type="button" class="fz8-un" data-i="again">Use another address</button></div></div>
         <div class="fz8-mg" role="alert"><span></span></div></form></div>
     <nav class="fz8-cs" aria-label="Footer">${[['Product', ['Funnels', 'Session replays', 'Experiments', 'Warehouse sync', 'Pricing']], ['Resources', ['Documentation', 'Guides', 'Changelog', 'Research', 'Community']], ['Company', ['About', 'Careers', 'Press', 'Customers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Data processing', 'Subprocessors', 'Security']]].map(([h, ls], i) => `<div class="fz8-c"><h4 class="fz8-h" data-i="h${i}">${h}</h4><ul class="fz8-u">${ls.map(l => `<li><a class="fz8-lk" href="#"><span>${l}</span><i></i></a></li>`).join('')}</ul></div>`).join('')}</nav>
@@ -13400,14 +13443,14 @@ const CSS = `
 const css = p => CSS.replaceAll('§', p);
 
 const SITE = `<header class="§-nav"><b class="§-logo">Fieldnote</b><span>Product</span><span class="§-nl">Pricing</span><span class="§-nl">Docs</span><i style="flex:1"></i><span>Sign in</span></header>
-<section class="§-hero"><div><h2 class="§-h1" data-k="h1">Notes your whole team can trust</h2><p class="§-sub" data-k="sub">Fieldnote helps teams to collaborate on notes more easier.</p><div class="§-bt"><button type="button" class="§-cta" data-k="cta" tabindex="-1">Start free trial</button><span class="§-sec">Book a demo</span></div></div>
+<section class="§-hero"><div><h2 class="§-h1" data-k="h1">Notes your whole team can trust</h2><p class="§-sub" data-k="sub">Fieldnote helps teams to collaborate on notes more easier.</p><div class="§-bt"><button type="button" class="§-cta" data-k="cta">Start free trial</button><span class="§-sec">Book a demo</span></div></div>
 <div class="§-art" data-k="art"><svg viewBox="0 0 220 120" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><rect x="22" y="58" width="26" height="46" rx="5" fill="var(--faint)"/><rect x="60" y="38" width="26" height="66" rx="5" fill="var(--muted)"/><rect x="98" y="24" width="26" height="80" rx="5" fill="var(--accent)"/><rect x="136" y="46" width="26" height="58" rx="5" fill="var(--muted)"/><rect x="174" y="30" width="26" height="74" rx="5" fill="var(--ink)"/></svg></div></section>
 <section class="§-prc"><article class="§-pc"><div class="§-pn">Free</div><div class="§-pr"><span class="§-pv">$0</span><span class="§-pu">forever</span></div><ul class="§-pl"><li>Unlimited notes</li><li>Share links</li><li>7-day history</li></ul></article>
 <article class="§-pc" data-k="plan"><div class="§-pn">Team</div><div class="§-pr"><span class="§-pv">$12</span><span class="§-pu">per seat per month</span></div><ul class="§-pl"><li>Everything in Free</li><li>Shared workspaces</li><li>90-day history</li></ul></article>
 <article class="§-pc"><div class="§-pn">Business</div><div class="§-pr"><span class="§-pv">$24</span><span class="§-pu">per seat per month</span></div><ul class="§-pl"><li>Everything in Team</li><li>Single sign-on</li><li>Audit log</li></ul></article></section>
-<section class="§-nws"><div><b>Product updates, once a month</b><div class="§-ns">No spam. Unsubscribe any time.</div></div><div class="§-fm"><input class="§-em" data-k="email" placeholder="Work email" tabindex="-1"><button type="button" class="§-sx" tabindex="-1">Subscribe</button></div></section>
+<section class="§-nws"><div><b>Product updates, once a month</b><div class="§-ns">No spam. Unsubscribe any time.</div></div><div class="§-fm"><input class="§-em" data-k="email" placeholder="Work email"><button type="button" class="§-sx">Subscribe</button></div></section>
 <footer class="§-sf"><span>Privacy</span><span>Terms</span><span>Status</span></footer>`;
-const siteFrame = (p, url = 'localhost:3000/pricing') => `<div class="${p}-fr card"><div class="${p}-ub"><span class="${p}-url">${url}</span></div><div class="${p}-pg"><div class="${p}-ct" inert>${SITE.replaceAll('§', p)}</div><div class="${p}-ov"></div></div></div>`;
+const siteFrame = (p, url = 'localhost:3000/pricing') => `<div class="${p}-fr card"><div class="${p}-ub"><span class="${p}-url">${url}</span></div><div class="${p}-pg"><div class="${p}-ct">${SITE.replaceAll('§', p)}</div><div class="${p}-ov"></div></div></div>`;
 
 // element rect in the overlay's coordinates, read live so pins follow the page while it scrolls
 const liveRect = (ov, el) => { const r = el.getBoundingClientRect(), o = ov.getBoundingClientRect(); return { x:r.left - o.left, y:r.top - o.top, w:r.width, h:r.height }; };
@@ -14050,7 +14093,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
       FINDINGS.forEach((f, i) => {
         const el = mk('div'); el.className = 'rvs-r'; el.setAttribute('role', 'listitem');
         el.innerHTML = `<button type="button" class="rvs-h" aria-expanded="false">${chip('rvs', f.sev)}<span class="rvs-t">${hx(f.title)}</span><span class="rvs-pt num">#${f.pin}</span><span class="rvs-cv">${ic(I.chev, 15)}</span><span class="rvs-m"><span class="rvs-sel">${hx(f.sel)}</span><span>${f.route}</span></span></button>
-          <div class="rvs-bx"><div class="rvs-in"><div class="rvs-ev"><div class="rvs-tn" inert>${SPEC[f.sp].replaceAll('rvs-cta', 'rvs-cta')}</div><div class="rvs-cp">Saved screenshot · 1280 × 800<br>Pin #${f.pin} · ${AGENT.name} · agent</div></div><div class="rvs-tx"><b>Steps to reproduce</b><ol>${f.steps.map(x => `<li>${hx(x)}</li>`).join('')}</ol><div class="rvs-eo"><div><b>Expected</b><span>${hx(f.exp)}</span></div><div><b>Observed</b><span>${hx(f.obs)}</span></div></div></div></div></div>`;
+          <div class="rvs-bx"><div class="rvs-in"><div class="rvs-ev"><div class="rvs-tn">${SPEC[f.sp].replaceAll('rvs-cta', 'rvs-cta')}</div><div class="rvs-cp">Saved screenshot · 1280 × 800<br>Pin #${f.pin} · ${AGENT.name} · agent</div></div><div class="rvs-tx"><b>Steps to reproduce</b><ol>${f.steps.map(x => `<li>${hx(x)}</li>`).join('')}</ol><div class="rvs-eo"><div><b>Expected</b><span>${hx(f.exp)}</span></div><div><b>Observed</b><span>${hx(f.obs)}</span></div></div></div></div></div>`;
         ls.append(el);
         const r = { f, el, head:$(el, '.rvs-h'), bx:$(el, '.rvs-bx'), inn:$(el, '.rvs-in'), cv:$(el, '.rvs-cv'), en:new Track(0), vis:new Track(1), ex:new Track(0) };
         r.head.onclick = () => toggle(r); rows.push(r);
@@ -14467,9 +14510,9 @@ const gPageCSS = k => `
 const gPageHTML = (k, opt = {}) => `<div class="${k}-fr" role="group" aria-label="${opt.label || 'Page the agent is working on'}"><div class="${k}-bar"><span class="${k}-dots"><i></i><i></i><i></i></span><div class="${k}-url" data-s="url">${gi('lock', 11, 2)}<span>northwind.app</span><span class="${k}-up"></span></div></div><div class="${k}-bnw"></div><div class="${k}-vp"><div class="${k}-in">
 <div class="${k}-v" data-v="pricing"><div class="${k}-nav"><b><i></i>Northwind</b><span>Docs</span><span>Pricing</span><span>Sign in</span></div><div class="${k}-bd"><h5 class="${k}-h">Simple pricing for small teams</h5><p class="${k}-p">Invoices, payments and reports. Cancel any time.</p><div class="${k}-tg" data-s="toggle"><i></i><span>Monthly</span><span>Yearly</span></div>
 <div class="${k}-plans"><div class="${k}-pl"><b>Free</b><span class="${k}-pr">$0</span>1 workspace<span class="${k}-bt" data-s="start">Start free</span></div><div class="${k}-pl"><b>Team</b><span class="${k}-pr"><i style="font-style:normal" data-p="team">$24</i><small>/user</small></span>Unlimited use<span class="${k}-bt">Start trial</span></div><div class="${k}-pl"><b>Business</b><span class="${k}-pr"><i style="font-style:normal" data-p="biz">$48</i><small>/user</small></span>Audit log, SSO<span class="${k}-bt">Contact sales</span></div></div></div></div>
-<div class="${k}-v" data-v="signup"><div class="${k}-nav"><b><i></i>Northwind</b><span>Docs</span><span>Pricing</span><span>Sign in</span></div><div class="${k}-bd"><h5 class="${k}-h">Create your account</h5><p class="${k}-p">14 days free. No card needed.</p><div class="${k}-fl"><label class="w">Work email<input data-s="email" readonly tabindex="-1" aria-label="Work email" placeholder="you@company.com" autocomplete="off"></label><label>Company<input data-s="company" readonly tabindex="-1" aria-label="Company" placeholder="Company name" autocomplete="off"></label><label>Team size<input data-s="size" readonly tabindex="-1" aria-label="Team size" placeholder="Select size" autocomplete="off"></label></div><button type="button" tabindex="-1" class="${k}-bt pri" data-s="create">Create account</button></div></div>
+<div class="${k}-v" data-v="signup"><div class="${k}-nav"><b><i></i>Northwind</b><span>Docs</span><span>Pricing</span><span>Sign in</span></div><div class="${k}-bd"><h5 class="${k}-h">Create your account</h5><p class="${k}-p">14 days free. No card needed.</p><div class="${k}-fl"><label class="w">Work email<input data-s="email" readonly aria-label="Work email" placeholder="you@company.com" autocomplete="off"></label><label>Company<input data-s="company" readonly aria-label="Company" placeholder="Company name" autocomplete="off"></label><label>Team size<input data-s="size" readonly aria-label="Team size" placeholder="Select size" autocomplete="off"></label></div><button type="button" class="${k}-bt pri" data-s="create">Create account</button></div></div>
 <div class="${k}-v" data-v="done"><div class="${k}-nav"><b><i></i>Northwind</b><span>Docs</span><span>Pricing</span><span>Sign in</span></div><div class="${k}-dn"><span class="${k}-ok">${gi('check', 20, 2.4)}</span><h5 class="${k}-h">Check your inbox</h5><p class="${k}-p">We sent a confirmation link to <span data-m="email">maya@northwind.com</span>.</p></div></div>
-<div class="${k}-v" data-v="settings"><div class="${k}-nav"><b><i></i>Northwind</b><span>Billing</span><span>Members</span><span>Settings</span></div><div class="${k}-bd"><h5 class="${k}-h">Workspace settings</h5><div style="margin-top:8px"><div class="${k}-rw">Workspace<b>Northwind Studio</b></div><div class="${k}-rw">Billing email<b>maya@northwind.com</b></div></div><div class="${k}-dz"><span><b>Delete workspace</b>Removes 214 invoices and 18 clients for everyone.</span><button type="button" tabindex="-1" class="${k}-bt dg" data-s="delete">Delete</button></div></div></div>
+<div class="${k}-v" data-v="settings"><div class="${k}-nav"><b><i></i>Northwind</b><span>Billing</span><span>Members</span><span>Settings</span></div><div class="${k}-bd"><h5 class="${k}-h">Workspace settings</h5><div style="margin-top:8px"><div class="${k}-rw">Workspace<b>Northwind Studio</b></div><div class="${k}-rw">Billing email<b>maya@northwind.com</b></div></div><div class="${k}-dz"><span><b>Delete workspace</b>Removes 214 invoices and 18 clients for everyone.</span><button type="button" class="${k}-bt dg" data-s="delete">Delete</button></div></div></div>
 <div class="${k}-v" data-v="gone"><div class="${k}-nav"><b><i></i>Northwind</b><span>Billing</span><span>Members</span><span>Settings</span></div><div class="${k}-dn"><span class="${k}-ok" style="background:var(--danger-tint);color:var(--danger)">${gi('trash', 19, 2)}</span><h5 class="${k}-h">Workspace deleted</h5><p class="${k}-p">Northwind Studio and its data were removed.</p></div></div>
 </div></div><div class="${k}-ov"><div class="${k}-fs"></div><div class="${k}-fv"></div></div></div>`;
 const gPage = (root, k) => {
@@ -14496,7 +14539,7 @@ const gPage = (root, k) => {
     pin(key, name, on, inst){ let p = pins[key]; if (!p){ const e = gEl('span'); e.className = `${k}-pin`; e.innerHTML = gi('comment', 11, 2.4); ov.appendChild(e); p = pins[key] = { e, W:new Track(0), name }; } p.name = name; inst ? p.W.jump(on ? 1 : 0) : p.W.set(on ? 1 : 0, on ? S.base : S.snap); },
     flash(t = now()){ flashT = t; },
     flashSet(v){ flashV = v; },
-    editable(v){ fr.classList.toggle(`${k}-edit`, v); for (const n in fl){ fl[n].e.readOnly = !v; fl[n].e.tabIndex = v ? 0 : -1; } },
+    editable(v){ fr.classList.toggle(`${k}-edit`, v); for (const n in fl){ fl[n].e.readOnly = !v; } },
     mirror(){ $$(fr, '[data-m="email"]').forEach(e => e.textContent = fl.email.shown || 'maya@northwind.com'); },
     render(t){
       const w = vp.clientWidth; if (w > 10){ const s = Math.min(w/360, 1.7); if (Math.abs(s - scale) > .001){ scale = s; inn.style.transform = `scale(${s.toFixed(4)})`; } }
@@ -14543,7 +14586,7 @@ atom({ id:'agentstatus', cat:'Agent activity', name:'Agent status pill', block:'
 @container (max-width:420px){.as1-pk{grid-template-columns:repeat(2,minmax(0,1fr))}.as1-pk button{font-size:12px;gap:6px;padding:6px 5px}.as1-pk .as1-gl{width:22px!important;height:22px!important}}
 </style>
 <div class="as1-root"><div class="as1-card"><div class="as1-hd"><div class="as1-id"><span class="as1-av">${ic('<rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 4v4M9.5 13h.01M14.5 13h.01"/>', 19, 1.9)}</span><div style="min-width:0;flex:1"><h4>Northwind agent</h4><div class="as1-sb"></div></div></div>
-<div class="as1-rt"><div class="as1-pill"><span class="as1-ico"></span><span class="as1-lb"></span><span class="as1-ac2"></span><span class="as1-tmw"><span class="as1-tmi"><span class="as1-m"></span>:<span class="as1-s"></span></span></span></div><button type="button" class="btn as1-bt"></button></div></div>
+<div class="as1-rt"><div class="as1-pill"><span class="as1-ico"></span><span class="as1-lb"></span><span class="as1-ac2"></span><span class="as1-tmw"><span class="as1-tmi"><span class="as1-m"></span>:<span class="as1-s"></span></span></span></div><button type="button" class="btn as1-bt" aria-label="Continue demo"></button></div></div>
 <div class="as1-a2"><div class="as1-a2i">${ic(G.cursor, 14, 2)}<span class="as1-a2t"></span></div></div>
 <div class="as1-pk" role="group" aria-label="Preview an agent state"></div><p class="as1-cap">Pick a state to preview it, or let the sample run play. The pill changes shape and icon as well as color.</p></div>
 <div class="as1-card"><div class="as1-hh"><h4>Recent states</h4><span>Newest first</span></div><ul class="as1-ls" aria-label="Recent agent states, newest first"></ul></div>
@@ -14774,7 +14817,7 @@ ${gPageCSS('tkp')}
 @container (min-width:640px){.tko-body{flex-direction:row}.tko-main{flex:1 1 0}.tko-qi{width:264px}.tkp-fr{max-width:600px}}
 @container (max-width:639px){.tko-grp{margin-left:0;flex:1 1 100%}.tko-grp .btn{flex:1}}
 </style>
-<div class="tko-root"><div class="tko-bar"><span class="tko-chip"><span class="tko-ico"></span><span class="tko-cl"></span></span><div class="tko-grp"><button type="button" class="btn tko-a"></button><button type="button" class="btn tko-b"></button></div></div>
+<div class="tko-root"><div class="tko-bar"><span class="tko-chip"><span class="tko-ico"></span><span class="tko-cl"></span></span><div class="tko-grp"><button type="button" class="btn tko-a" aria-label="Pause or resume agent"></button><button type="button" class="btn tko-b" aria-label="Take over"></button></div></div>
 <div class="tko-body"><div class="tko-main">${gPageHTML('tkp', { label:'Page the assistant is working on. You can type in it while you are in control.' })}</div>
 <aside class="tko-q" aria-label="Queued agent actions"><div class="tko-qi"><div class="tko-qh">Queued actions<span class="tko-qc"></span></div><ul class="tko-ql"></ul><p class="tko-qn"></p></div></aside></div>
 <div class="tko-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
@@ -14830,6 +14873,7 @@ ${gPageCSS('tkp')}
     const restart = () => { pg.clear(); pg.view('signup'); pg.url('/signup'); si = 0; sc = 0; started = false; mode = 'run'; handing = false; ag.show(false, true); ag.go(pg.rect('page').w*.8, 50, true); ag.W.jump(0); ag.show(true); rows.forEach(r => { r.cur = -1; }); ui(); say('Replaying the run'); };
     A.onclick = () => mode === 'run' ? pause() : mode === 'pause' ? resume() : mode === 'done' ? restart() : 0;
     B.onclick = takeOver; hb.onclick = handBack;
+    $(pg.fr,'[data-s="create"]').onclick = () => { pg.view('done'); pg.url('/signup/done'); pg.mirror(); say('Account created. Check your inbox to confirm.'); };
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && mode === 'human') handBack(); });
     pg.vp.addEventListener('scroll', () => { if (mode !== 'human'){ pg.vp.scrollTop = 0; } });
     pg.fr.addEventListener('pointermove', e => { if (mode !== 'human') return; const r = pg.fr.getBoundingClientRect(); const x = e.clientX - r.left - pg.fr.clientLeft, y = e.clientY - r.top - pg.fr.clientTop; if (!ptr || Math.abs(ptr.x - x) + Math.abs(ptr.y - y) > 1.5){ ptr = { x, y }; hu.go(x, y, false, S.snap); } });
@@ -15085,6 +15129,7 @@ ${gPageCSS('aip')}
       gPush(Q, t + 1.7, () => { if (key === 'submit' && rules.length){ phase = 'result'; resL.innerHTML = `<div class="aia-rs"><span class="aia-hi" style="background:var(--success-tint);color:var(--success)">${gi('shield', 15, 2)}</span><div><b>Allowed by your rule</b><span class="aia-rd">${SC.submit.rule}. Assistant did not need to ask.</span></div></div>`; sw.cur = 1; sw.prev = null; sw.t = -9; fol.to(resL, true); chooseSide(); pT.set(1, S.base); say('Allowed by your rule. Assistant submitted the form.');
           gPush(Q, now() + .6, () => { pg.view('done'); pg.url('/signup/done'); pg.mirror(); }); gPush(Q, now() + 2.4, () => { phase = 'done'; close(); }); } else openAsk(); }); };
     scs.forEach((b, i) => b.onclick = () => start(i === 0 ? 'submit' : 'delete')); again.onclick = () => start(sc);
+    $(pg.fr,'[data-s="create"]').onclick = () => { if (phase === 'ask') return; pg.view('done'); pg.url('/signup/done'); pg.mirror(); say('Account created. Check your inbox to confirm.'); };
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && phase === 'ask'){ e.stopPropagation(); decide('deny'); } });
     pg.render(0); start('submit'); setRules(); resL.innerHTML = ''; fol.cur = askL;
     return t => {
@@ -16067,7 +16112,7 @@ void main(){ vec2 q = Q(); vec3 c = tx(q).rgb; float a;
 
 /* ================================================================ 10. Shared element: thumbnail to hero */
 atom({ id:'txi-flip', cat:'Image transitions', name:'Thumbnail to hero', block:'gallery with thumbnail strip, product images', fam:['M','D'], wide:true, tall:true,
-  html:shell('txi-flip', 'Thumbnail to hero gallery', `<div class="txi-hero"></div>${'<button type="button" class="txi-th"><img alt=""></button>'.repeat(6)}<div class="txi-ls"></div>`, true),
+  html:shell('txi-flip', 'Thumbnail to hero gallery', `<div class="txi-hero"></div>${'<button type="button" class="txi-th" aria-label="Show photo"><img alt=""></button>'.repeat(6)}<div class="txi-ls"></div>`, true),
   desc:'The thumbnail you choose lifts out of the strip and grows into the hero along a curved path: it rises first, then widens as it lands, while its slot stays outlined until it arrives and the old hero dims beneath. Use it for galleries with a visible strip or grid, so people see where the big photo came from.',
   api:'rect = { cx: lerp(th, hero, p), cy: lerp(th, hero, 1 − (1 − p)^1.8), size: lerp(th, hero, p^1.25) }',
   init(st){
@@ -16115,7 +16160,7 @@ void main(){ vec2 q = Q(); vec3 c = tx(q).rgb;
 
 /* ================================================================ 12. Fly-to strip (zoom out with speed, own invention) */
 atom({ id:'txi-flyto', cat:'Image transitions', name:'Fly-to strip', block:'chapters, numbered steps, long galleries', fam:['M','D'], wide:true, tall:true,
-  html:shell('txi-flyto', 'Fly-to strip', `<div class="txi-trk" aria-hidden="true">${'<div class="txi-pn"><img alt=""><i class="txi-sh"></i></div>'.repeat(8)}</div><div class="txi-hit"></div><div class="txi-dots" role="group" aria-label="Jump to photo"><i class="txi-dind"></i>${'<button type="button" class="txi-dot"><i></i></button>'.repeat(8)}</div>`),
+  html:shell('txi-flyto', 'Fly-to strip', `<div class="txi-trk" aria-hidden="true">${'<div class="txi-pn"><img alt=""><i class="txi-sh"></i></div>'.repeat(8)}</div><div class="txi-hit"></div><div class="txi-dots" role="group" aria-label="Jump to photo"><i class="txi-dind"></i>${'<button type="button" class="txi-dot" aria-label="Jump to photo"><i></i></button>'.repeat(8)}</div>`),
   desc:'The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.',
   api:'pos.set(i); zoom = 1 − min(.44, .1·|d pos/dt|^.85); view = translate(center − pos·(W + gap)·zoom) scale(zoom)',
   init(st){
@@ -16625,7 +16670,7 @@ atom({ id:'txc-sync', cat:'Carousels', name:'Synced thumbnail rail', block:'gall
 
 /* ---------- 7. Infinite loop ---------- */
 atom({ id:'txc-loop', cat:'Carousels', name:'Infinite loop', block:'carousel (testimonial, logo), slideshow', fam:['D','T'], wide:true, tall:true,
-  html:`<div class="txc-root"><div class="txc-hd"><div><div class="txc-t">Postcards from the coast road</div><div class="txc-m">Keeps going past the last card</div></div></div><div class="txc-vp txc-lp-vp" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Postcards from the coast road"></div><div class="txc-ft"><div class="txc-dots txc-lp-dots" aria-hidden="true"></div><span class="txc-m txc-n txc-lp-ct txc-wide" aria-hidden="true"></span><span style="flex:1"></span><button type="button" class="txc-lp-pp"></button>${nb('l','Previous postcard')}${nb('r','Next postcard')}</div><div class="txc-sr" aria-live="polite" aria-atomic="true"></div></div>`,
+  html:`<div class="txc-root"><div class="txc-hd"><div><div class="txc-t">Postcards from the coast road</div><div class="txc-m">Keeps going past the last card</div></div></div><div class="txc-vp txc-lp-vp" tabindex="0" role="region" aria-roledescription="carousel" aria-label="Postcards from the coast road"></div><div class="txc-ft"><div class="txc-dots txc-lp-dots" aria-hidden="true"></div><span class="txc-m txc-n txc-lp-ct txc-wide" aria-hidden="true"></span><span style="flex:1"></span><button type="button" class="txc-lp-pp" aria-label="Pause or resume loop"></button>${nb('l','Previous postcard')}${nb('r','Next postcard')}</div><div class="txc-sr" aria-live="polite" aria-atomic="true"></div></div>`,
   desc:'Each slide is placed modulo the loop length from one unbounded position, so the track never resets, velocity carries across the seam and a flick can be caught anywhere. Across the seam the dot indicator drains out of the last slot while it fills the first, so it never jumps back across the row. Autoplay steps every four seconds and holds while hovered or focused. Inspired by Embla’s slide looper; changed: placement is computed per slide, never by cloning or teleporting the track. Use when a set has no natural end, such as postcards, testimonials or logos.',
   api:'rel = ((i·step − x) mod L + 1.5L) mod L − L/2;  seam: dot[n−1] drains as dot[0] fills',
   init(st){
@@ -17133,6 +17178,7 @@ document.head.insertAdjacentHTML('beforeend', `<style id="txg-zm">
 .txg-zm-film button{flex:1 1 0;max-width:76px;min-width:0;height:48px;border-radius:9px;border:2px solid transparent;overflow:hidden;padding:0;background:var(--raised);position:relative}
 .txg-zm-film button img{position:absolute;inset:0}
 .txg-zm-film button[aria-current=true]{border-color:var(--ink)}
+.txg-zm-film button[aria-pressed=true]{border-color:var(--accent)}
 </style>`);
 atom({ id:'gal-zoom-pan', cat:'Galleries', name:'Lightbox with pinch, wheel and double-tap zoom', block:'lightbox, image zoom', fam:['D','M','S'], wide:true, tall:true,
   html:`<div class="txg txg-zm"><div class="txg-zm-vp txg-dk" tabindex="0" role="group" aria-roledescription="image viewer" aria-label="Photo viewer. Plus and minus zoom, zero fits, arrow keys pan.">
@@ -17146,10 +17192,12 @@ atom({ id:'gal-zoom-pan', cat:'Galleries', name:'Lightbox with pinch, wheel and 
     const root = $(st, '.txg-zm'), vp = $(root, '.txg-zm-vp'), ph = $(vp, '.txg-zm-ph'), img = $(ph, 'img'), pct = $(vp, '.txg-zm-pct'), map = $(vp, '.txg-zm-map'), mapI = $(map, 'i'), film = $(root, '.txg-zm-film'), hint = $(vp, '.txg-zm-hint');
     const items = [['ridge','l'], ['canyon','l'], ['portrait','p'], ['harbor','l'], ['studio','s'], ['city','l']], MAXZ = 5, L = loader(), TL = timeline(), W0 = S.soft.w;
     const Ts = new Track(1, S.soft), Tx = new Track(0, S.soft), Ty = new Track(0, S.soft);
-    let cur = 0, pend = -1, VW = 0, VH = 0, FW = 1, FH = 1, swT = -9, lastP = -1, curs = '';
-    const thumbs = items.map(([n, k], i) => { const b = document.createElement('button'); b.setAttribute('aria-label', `Show ${CAP[n]}`); b.innerHTML = '<img alt="" draggable="false">'; film.appendChild(b); L.add($(b, 'img'), n, k, { half:true }); b.onclick = () => go(i); return b; });
+    let cur = 0, pend = -1, VW = 0, VH = 0, FW = 1, FH = 1, swT = -9, lastP = -1, curs = '', mapOn = false;
+    const thumbs = items.map(([n, k], i) => { const b = document.createElement('button'); b.setAttribute('aria-label', `Show ${CAP[n]}`); b.innerHTML = '<img alt="" draggable="false">'; film.appendChild(b); L.add($(b, 'img'), n, k, { half:true }); b.onclick = () => (i === (pend < 0 ? cur : pend) ? toggleMap() : go(i)); return b; });
     items.forEach(([n, k]) => L.job(() => zbig(n, k)));
-    const sel = () => thumbs.forEach((b, j) => b.setAttribute('aria-current', j === (pend < 0 ? cur : pend)));
+    // the open photo's thumbnail toggles the corner locator (the overlay) and shows it pressed
+    const sel = () => thumbs.forEach((b, j) => { const on = j === (pend < 0 ? cur : pend); b.setAttribute('aria-current', on); b.setAttribute('aria-pressed', String(on && mapOn)); });
+    const toggleMap = () => { mapOn = !mapOn; sel(); };
     const fit = () => { VW = vp.clientWidth; VH = vp.clientHeight; const a = ASP[items[cur][1]], mw = VW - 24, mh = VH - 24; FW = Math.max(40, Math.min(mw, mh*a)); FH = FW/a;
       ph.style.width = FW + 'px'; ph.style.height = FH + 'px'; ph.style.marginLeft = -FW/2 + 'px'; ph.style.marginTop = -FH/2 + 'px'; map.style.height = (92/a) + 'px'; hint.textContent = VW < 480 ? 'Pinch or double-tap to zoom.' : 'Pinch, or hold Ctrl and scroll, to zoom. Double-tap to zoom in.'; };
     const B = s => ({ x:Math.max(0, (FW*s - VW)/2), y:Math.max(0, (FH*s - VH)/2) });
@@ -17192,14 +17240,14 @@ atom({ id:'gal-zoom-pan', cat:'Galleries', name:'Lightbox with pinch, wheel and 
       if (e.key === '+' || e.key === '='){ zoomBy(1.6); e.preventDefault(); } else if (e.key === '-' || e.key === '_'){ zoomBy(1/1.6); e.preventDefault(); } else if (e.key === '0'){ reset(); e.preventDefault(); }
       else if (e.key.startsWith('Arrow')){ e.preventDefault(); if (!z){ if (e.key === 'ArrowRight') go((cur + 1) % items.length); if (e.key === 'ArrowLeft') go((cur + items.length - 1) % items.length); } else { const d = 90; if (e.key === 'ArrowLeft') pan(Tx, d, b.x); if (e.key === 'ArrowRight') pan(Tx, -d, b.x); if (e.key === 'ArrowUp') pan(Ty, d, b.y); if (e.key === 'ArrowDown') pan(Ty, -d, b.y); } }
     });
-    function go(i){ const t = now(); if (i === (pend < 0 ? cur : pend)) return; pend = i; swT = t; sel(); TL.at(t + EXIT, () => { show(i); pend = -1; Ts.jump(1); Tx.jump(0); Ty.jump(0); sel(); }); }
+    function go(i){ const t = now(); if (i === (pend < 0 ? cur : pend)) return; mapOn = false; pend = i; swT = t; sel(); TL.at(t + EXIT, () => { show(i); pend = -1; Ts.jump(1); Tx.jump(0); Ty.jump(0); sel(); }); }
     new ResizeObserver(() => { fit(); const b = B(Ts.target); Tx.jump(clamp(Tx.target, -b.x, b.x)); Ty.jump(clamp(Ty.target, -b.y, b.y)); }).observe(vp); show(0); sel();
     return t => {
       L.pump(); TL.run(t); const v = view(t);
       ph.style.transform = `translate(${v.x.toFixed(2)}px,${v.y.toFixed(2)}px) scale(${v.s.toFixed(4)})`; ph.style.opacity = swapO(t, swT).toFixed(3);
       const p = Math.round(v.s*100); if (p !== lastP){ lastP = p; pct.textContent = p + '%'; }
-      const o = clamp((v.s - 1.02)/.25); hint.style.opacity = (1 - o).toFixed(3); map.style.opacity = o.toFixed(3); map.style.visibility = o < .01 ? 'hidden' : 'visible';
-      if (o > 0){ const vw = Math.min(1, VW/(FW*v.s)), vh = Math.min(1, VH/(FH*v.s)), cx = .5 - v.x/(FW*v.s), cy = .5 - v.y/(FH*v.s);
+      const o = clamp((v.s - 1.02)/.25), om = mapOn ? 1 : o; hint.style.opacity = (1 - o).toFixed(3); map.style.opacity = om.toFixed(3); map.style.visibility = om < .01 ? 'hidden' : 'visible';
+      if (om > 0){ const vw = Math.min(1, VW/(FW*v.s)), vh = Math.min(1, VH/(FH*v.s)), cx = .5 - v.x/(FW*v.s), cy = .5 - v.y/(FH*v.s);
         mapI.style.left = ((cx - vw/2)*100).toFixed(2) + '%'; mapI.style.top = ((cy - vh/2)*100).toFixed(2) + '%'; mapI.style.width = (vw*100).toFixed(2) + '%'; mapI.style.height = (vh*100).toFixed(2) + '%'; }
       const c = held ? 'grabbing' : v.s > 1.02 ? 'grab' : 'zoom-in'; if (c !== curs){ curs = c; vp.style.cursor = c; }
     };
@@ -18702,8 +18750,9 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), rg = $(st, '#fxp-screen-p'), s = surface(fr, cv), ph = lazyPhoto('coast');
     let mode = 0, sig = '', theme = -1, ink = [0, 0, 0], paper = [1, 1, 1]; const P = new Tw(0);
-    const seg = mkSeg($(st, '.seg'), i => mode = i);
     const play = () => { P.jump(0).to(1, 2.2); }; $(st, '.fxp-rp').onclick = play;
+    // picking a screen (even the one already on) replays the resolve, so every click shows the change
+    const seg = mkSeg($(st, '.seg'), i => { mode = i; play(); });
     rg.oninput = () => P.jump(rg.value/100); onView(st, () => P.jump(0).to(1, 2.2, now() + .4));
     return t => {
       seg.render(t); const img = ph.need(s.cw, s.ch); if (!img) return;
@@ -19337,7 +19386,7 @@ window.CIEO_SOURCE_HINT="blocks/181-pullquote.js";
 
 
 atom({ id:'pullquote', cat:'Writing', name:'Pull-quote extractor', block:'quote, manuscript', fam:['D','M'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(320px,90%);padding:12px"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end"><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Drop quotes inline</span></label><div class="hint">Drag the quote into the story</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;margin:0 auto;width:min(320px,90%);padding:12px"><div class="pq-list col" style="gap:8px"></div><div class="row" style="justify-content:flex-end;align-items:center;gap:10px"><span class="pq-st small muted" aria-live="polite"></span><button class="pq-reset small" style="cursor:pointer">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Drop quotes inline</span></label><div class="hint">Drag the quote into the story</div>`,
   desc:'Drag the quote and it lifts while the paragraphs spring aside. Dropping it grows the block open from zero height. Reset puts it back.',
   api:'drag(q): lift; sib.y.set(gap); drop: h.set(1,base); reset()',
   init(st){
@@ -19371,7 +19420,10 @@ atom({ id:'pullquote', cat:'Writing', name:'Pull-quote extractor', block:'quote,
         rows.forEach(r => r.y.set(0, S.base));
       }
     });
-    reset.onclick = () => { if (placed){ placed.remove(); placed = null; } h.jump(0); qrow.y.set(0, S.base); rows.forEach(r => r.y.set(0, S.base)); };
+    // Reset: take the dropped copy out of the story, put the quote back in its place in the list, and say so
+    const note = $(st,'.pq-st'); let noteT = 0;
+    reset.onclick = () => { if (placed){ placed.remove(); placed = null; } h.jump(0); qrow.y.set(0, S.base); rows.forEach(r => r.y.set(0, S.base)); dy = 0;
+      note.textContent = 'Quote back in the list'; clearTimeout(noteT); noteT = setTimeout(() => note.textContent = '', 1500); };
     return t => {
       q.style.transform = 'translateY(' + qrow.y.at(t).toFixed(2) + 'px) scale(' + (1 + .03*clamp(Math.abs(qrow.y.at(t))/60)).toFixed(3) + ')';
       rows.forEach(r => { r.d.style.transform = 'translateY(' + r.y.at(t).toFixed(2) + 'px)'; });
@@ -19383,7 +19435,7 @@ window.CIEO_SOURCE_HINT="blocks/182-deadline.js";
 
 
 atom({ id:'deadline', cat:'Writing', name:'Deadline ticker', block:'richtext editor, status bar', fam:['M','S'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;align-items:center;padding:12px;margin:0 auto;max-width:360px"><div class="card dd" style="position:relative;padding:14px 16px;text-align:center;min-width:238px"><div class="small muted">Submission closes in</div><div class="row" style="justify-content:center;align-items:baseline;gap:3px;font:600 30px var(--mono);font-variant-numeric:tabular-nums"><span class="dm"></span><span>:</span><span class="ds"></span></div><div class="db" style="position:relative;height:3px;margin-top:8px;background:var(--line-soft);border-radius:2px"><i style="position:absolute;top:0;bottom:0;left:0;right:0;background:var(--ink);border-radius:2px"></i></div><div style="margin-top:10px"><button class="btn pp" type="button" style="position:relative;height:32px;min-width:86px"></button></div></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Warn under 10:00</span></label><div class="hint">Pauses in place; danger under 10:00</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="gap:8px;align-items:center;padding:12px;margin:0 auto;max-width:360px"><div class="card dd" style="position:relative;padding:14px 16px;text-align:center;min-width:238px"><div class="small muted">Submission closes in</div><div class="row" style="justify-content:center;align-items:baseline;gap:3px;font:600 30px var(--mono);font-variant-numeric:tabular-nums"><span class="dm"></span><span>:</span><span class="ds"></span></div><div class="db" style="position:relative;height:3px;margin-top:8px;background:var(--line-soft);border-radius:2px"><i style="position:absolute;top:0;bottom:0;left:0;right:0;background:var(--ink);border-radius:2px"></i></div><div style="margin-top:10px"><button class="btn pp" type="button" aria-label="Pause or resume" style="position:relative;height:32px;min-width:86px"></button></div></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Warn under 10:00</span></label><div class="hint">Pauses in place; danger under 10:00</div>`,
   desc:'The minutes and seconds roll on lazy springs while the plate edges trail 60ms behind. Under ten minutes the tile turns danger. Pause freezes the count in place.',
   api:'tick: rem-=dt; dm/ds.set(mm:ss, REDUCE)   rem<600: dg.set(1); eg.go(i,i)   pp toggles paused',
   init(st){
@@ -19527,7 +19579,7 @@ atom({ id:'voicenote', cat:'Writing', name:'Audio-note insert', block:'richtext 
 .vn-tray{position:absolute;left:14px;right:14px;bottom:56px;height:72px;border-radius:12px;border:0;background:var(--bg)}
 .vn-ctl{position:absolute;left:14px;right:14px;bottom:12px;display:flex;gap:8px}
 </style>
-<div class="card vn"><div class="vn-doc"><b>Spring launch</b><br>Doors at 6 pm, talk at 7. Press play on the note, or drop it into the draft.</div><div class="vs"><i></i></div><div class="vn-tray"></div><div class="vt"><span class="vw" style="display:flex;align-items:center;gap:2.5px;height:26px"></span><span class="small muted">0:12</span></div><div class="vn-ctl"><button class="btn pl" type="button" style="position:relative;height:32px;min-width:70px"></button><button class="btn insb" type="button" style="position:relative;height:32px;min-width:78px"></button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Preview waveform</span></label><div class="hint">Drag the note, or use Insert</div>`,
+<div class="card vn"><div class="vn-doc"><b>Spring launch</b><br>Doors at 6 pm, talk at 7. Press play on the note, or drop it into the draft.</div><div class="vs"><i></i></div><div class="vn-tray"></div><div class="vt"><span class="vw" style="display:flex;align-items:center;gap:2.5px;height:26px"></span><span class="small muted">0:12</span></div><div class="vn-ctl"><button class="btn pl" type="button" aria-label="Play or pause note" style="position:relative;height:32px;min-width:70px"></button><button class="btn insb" type="button" aria-label="Insert into draft" style="position:relative;height:32px;min-width:78px"></button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Preview waveform</span></label><div class="hint">Drag the note, or use Insert</div>`,
   desc:'The tile lifts under your pointer and follows it. Dropping it over the draft draws the waveform bar by bar on soft and opens the slot on a height spring. Play and Insert do the same without dragging.',
   api:'down: lft.set(1)   drop in: x/y.set(slot, soft); bars i·.03 soft; hs.set(64)   pl/ib mirror',
   init(st){
@@ -20122,7 +20174,7 @@ atom({ id:'flatplan', cat:'Writing', name:'Flatplan paginator', block:'page-edit
 
 window.CIEO_SOURCE_HINT="blocks/203-shipcheck.js";
 atom({ id:'shipcheck', cat:'Writing', name:'Ship checklist', block:'checklist, publish', fam:['M','S','T'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(300px,88%);gap:8px;padding:12px"><div class="row small muted" style="justify-content:space-between"><span>Ship readiness</span><span class="row" style="gap:8px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="var(--line)" stroke-width="2.5"/><circle class="arc" cx="10" cy="10" r="8" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="50.3" stroke-dashoffset="50.3" transform="rotate(-90 10 10)"/></svg><span><span class="dn"></span> of 3</span></span></div><div class="cl col" style="gap:8px"></div><div class="row" style="gap:8px"><button class="btn ink sh" style="position:relative;flex:none;height:36px;padding:0;overflow:hidden"></button><button class="btn rs">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Stamp on complete</span></label><div class="hint">Finish all three to stamp it shipped</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col" style="margin:0 auto;width:min(300px,88%);gap:8px;padding:12px"><div class="row small muted" style="justify-content:space-between"><span>Ship readiness</span><span class="row" style="gap:8px"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="var(--line)" stroke-width="2.5"/><circle class="arc" cx="10" cy="10" r="8" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="50.3" stroke-dashoffset="50.3" transform="rotate(-90 10 10)"/></svg><span><span class="dn"></span> of 3</span></span></div><div class="cl col" style="gap:8px"></div><div class="row" style="gap:8px"><button class="btn ink sh" aria-label="Fix next issue" style="position:relative;flex:none;height:36px;padding:0;overflow:hidden"></button><button class="btn rs">Reset</button></div></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Stamp on complete</span></label><div class="hint">Finish all three to stamp it shipped</div>`,
   desc:'Each check fills its box, draws the tick, then runs the strike 40ms later. The ring fills and the count rolls with every step, and the ship button swaps into a success stamp on the last one. Reset clears the board.',
   api:'box.set(1); tick.set(1); strike.set(1, S.base, t+.04)   ring.set(n/3); dg.set(n)   all: swap.to(1), w.set(measure)',
   init(st){
@@ -21663,7 +21715,7 @@ atom({ id:'voicewave', cat:'AI chat', name:'Voice waveform', block:'chat, voice'
 window.CIEO_SOURCE_HINT="blocks/271-humanhandoff.js";
 
 atom({ id:'humanhandoff', cat:'AI chat', name:'Human handoff', block:'chat, handoff', fam:['S','M'], tall:true,
-  html:`<div class="card col" style="width:min(340px,calc(100% - 24px));padding:14px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Talk to a person</b><div class="row" style="gap:10px"><span class="av" style="position:relative;width:36px;height:36px;border-radius:50%;flex:none;overflow:hidden"></span><span class="col" style="gap:0;flex:1;min-width:0"><b class="nm small" style="position:relative;display:block;height:20px;font-size:13px"></b><span class="small muted" style="font-size:12px">Typically replies in minutes</span></span><span class="qpill" style="position:relative;min-width:118px;height:26px;background:var(--raised);border-radius:999px;font-size:12px;overflow:hidden"></span></div><div class="row" style="gap:6px"><span class="small muted" style="font-size:12px">Wait</span><span class="wt num" style="font-size:13px"></span><span class="small muted" style="font-size:12px">min</span></div><div class="tsum small" style="overflow:hidden;font-size:13px;line-height:1.55">Summary sent: launch date plus the pricing question.</div><div class="row" style="justify-content:space-between"><button class="btn ink ask" style="position:relative;min-width:170px;min-height:36px;border-radius:9px;overflow:hidden"></button><label class="row small muted" style="gap:6px;cursor:pointer;font-size:12px"><input type="checkbox" class="st" checked> Transcript</label></div></div><div class="hint">Ask for a person, then watch the queue</div>`,
+  html:`<div class="card col" style="width:min(340px,calc(100% - 24px));padding:14px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.5">Talk to a person</b><div class="row" style="gap:10px"><span class="av" style="position:relative;width:36px;height:36px;border-radius:50%;flex:none;overflow:hidden"></span><span class="col" style="gap:0;flex:1;min-width:0"><b class="nm small" style="position:relative;display:block;height:20px;font-size:13px"></b><span class="small muted" style="font-size:12px">Typically replies in minutes</span></span><span class="qpill" style="position:relative;min-width:118px;height:26px;background:var(--raised);border-radius:999px;font-size:12px;overflow:hidden"></span></div><div class="row" style="gap:6px"><span class="small muted" style="font-size:12px">Wait</span><span class="wt num" style="font-size:13px"></span><span class="small muted" style="font-size:12px">min</span></div><div class="tsum small" style="overflow:hidden;font-size:13px;line-height:1.55">Summary sent: launch date plus the pricing question.</div><div class="row" style="justify-content:space-between"><button class="btn ink ask" aria-label="Ask assistant" style="position:relative;min-width:170px;min-height:36px;border-radius:9px;overflow:hidden"></button><label class="row small muted" style="gap:6px;cursor:pointer;font-size:12px"><input type="checkbox" class="st" checked> Transcript</label></div></div><div class="hint">Ask for a person, then watch the queue</div>`,
   desc:'The avatar swaps to your teammate while the queue pill drops in on base. Digits count the wait down, then the transcript unfolds to a joined terminal.',
   api:'ask: avatar.swap.to(1), pill drops (S.base)   wait 03→00, 1.1s each   at 00: joined, tsum.h.set(H)',
   init(st){
@@ -21956,7 +22008,7 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
     const plate = document.createElement('div');
     plate.style.cssText = 'position:absolute;top:4px;bottom:4px;border-radius:8px;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.15)';
     rail.prepend(plate);
-    let dur = 30, day = 0;
+    let dur = 60, day = 0;
     const cells = [];
     for (let i = 0; i < 6; i++){
       const b = document.createElement('button');
@@ -21978,10 +22030,10 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
     const d0 = $(st,'.d0'), d1 = $(st,'.d1');
     const goDur = d => { dur = d; paint(); const t0 = now();
       cells.forEach((c,k) => c.sw.to(day, t0 + k*.03));
-      d0.style.boxShadow = d === 30 ? 'inset 0 -2px 0 var(--ink)' : 'none';
-      d1.style.boxShadow = d === 60 ? 'inset 0 -2px 0 var(--ink)' : 'none'; };
+      d0.style.boxShadow = d === 30 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d0.setAttribute('aria-pressed', d === 30); d0.style.fontWeight = d === 30 ? '600' : '400';
+      d1.style.boxShadow = d === 60 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d1.setAttribute('aria-pressed', d === 60); d1.style.fontWeight = d === 60 ? '600' : '400'; };
     d0.onclick = () => goDur(30); d1.onclick = () => goDur(60);
-    paint(); goDur(30);
+    paint(); goDur(dur);
     const first = () => pl.jump(tabs[0].offsetLeft, tabs[0].offsetLeft + tabs[0].offsetWidth);
     document.fonts.ready.then(first); first(); tabs[0].style.fontWeight = '600';
     return t => { plate.style.left = px(pl.A.at(t)); plate.style.width = px(Math.max(0, pl.B.at(t) - pl.A.at(t)));
@@ -22335,7 +22387,7 @@ atom({ id:'attendees', cat:'Scheduling', name:'Attendee fields', block:'attendee
 
 window.CIEO_SOURCE_HINT="blocks/295-intakeq.js";
 atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, booking flow', fam:['M','S'],
-  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Book a visit</b><div class="card qcard" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="prow" style="display:flex;align-items:center;gap:8px"><div class="ptrack" style="position:relative;flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i class="pfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);border-radius:3px"></i></div><span class="pcap" style="font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap">1 of 3</span></div><div class="qa" style="position:relative;display:grid;min-height:132px"></div><div class="row small muted" style="gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><button class="bk" style="min-height:32px;border-radius:8px;border:0;background:none;padding:0 4px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">← Back</button><button class="sv" style="margin-left:auto;min-height:32px;border-radius:8px;background:var(--raised);padding:0 12px;cursor:pointer;font-size:12px;color:var(--ink);opacity:.7">Save draft</button></div></div></div><div class="hint">Answer to advance · empty continues shake</div>`,
+  html:`<div class="col" style="width:min(340px,90%);margin:0 auto;gap:8px;line-height:1.5"><b style="font-size:15px;font-weight:600">Book a visit</b><div class="card qcard" style="padding:14px 16px;display:flex;flex-direction:column;gap:10px"><div class="prow" style="display:flex;align-items:center;gap:8px"><div class="ptrack" style="position:relative;flex:1;height:6px;border-radius:3px;background:var(--raised);overflow:hidden"><i class="pfill" style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ink);border-radius:3px"></i></div><span class="pcap" style="font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap">1 of 3</span></div><div class="qa" style="position:relative;display:grid;min-height:132px"></div><div class="row small muted" style="gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:10px"><button class="bk" style="min-height:32px;border-radius:8px;border:0;background:none;padding:0 4px;cursor:pointer;font-size:12px;color:var(--muted)">← Back</button><button class="sv" style="margin-left:auto;min-height:32px;border-radius:8px;background:var(--raised);padding:0 12px;cursor:pointer;font-size:12px;color:var(--muted)">Save draft</button></div></div></div><div class="hint">Answer to advance · empty continues shake</div>`,
   desc:'Each answer slides the next question up from below while the progress bar fills. Continuing empty snaps the card side to side and swaps in what is missing. The sent summary holds as the terminal.',
   api:'qa.to(step+1) rises   pr.set(step/3) fills   empty: sh.release shake + need.to(1)',
   init(st){
@@ -22738,7 +22790,7 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
 window.CIEO_SOURCE_HINT="blocks/327-liveticker.js";
 
 atom({ id:'liveticker', cat:'Dynamic', name:'Live value ticker', block:'metric, ticker', fam:['S','M'],
-  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Portfolio value</b><span class="row" style="gap:6px;align-items:center;font-size:12px;line-height:1.5"><i class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--success)"></i><span class="pl">Live</span></span></div><div class="row" style="align-items:baseline;gap:6px"><span style="font-size:20px;font-weight:600;line-height:1.45">$</span><span class="v num" style="font-size:20px;font-weight:600;line-height:1.45;font-variant-numeric:tabular-nums"></span><span class="dg num" style="font-size:13px;font-weight:600;line-height:1.5;font-variant-numeric:tabular-nums"></span></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Ticks on the clock · slots keep width so the row never shifts</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="au" checked> auto-tick</label></div></div><div class="hint">Pause to hold a terminal state</div>`,
+  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Portfolio value</b><span class="row" style="gap:6px;align-items:center;font-size:12px;line-height:1.5"><i class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--success)"></i><span class="pl">Live</span></span></div><div class="row" style="align-items:baseline;gap:6px"><span style="font-size:20px;font-weight:600;line-height:1.45">$</span><span class="v num" style="font-size:20px;font-weight:600;line-height:1.45;font-variant-numeric:tabular-nums"></span><span class="dg num" style="font-size:13px;font-weight:600;line-height:1.5;font-variant-numeric:tabular-nums"></span></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Ticks on the clock · slots keep width so the row never shifts</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" aria-label="Pause or resume" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="au" checked> auto-tick</label></div></div><div class="hint">Pause to hold a terminal state</div>`,
   desc:'Only changed digits roll toward the new value while an up or down tint cross-fades in and drains away. Every slot keeps its width, so the row never shifts.',
   api:'d.dir = sign; d.set(next)   tint.set(±1); tint.set(0, S.lazy, t + .7)',
   init(st){
@@ -22800,7 +22852,7 @@ atom({ id:'presencelive', cat:'Dynamic', name:'Presence avatars', block:'avatars
 window.CIEO_SOURCE_HINT="blocks/329-updateflash.js";
 
 atom({ id:'updateflash', cat:'Dynamic', name:'Update flash', block:'metric, feed', fam:['S','M'],
-  html:`<div class="card col" style="width:min(400px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">Metrics</b><div class="rows col" style="gap:0"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Press push · the row never moves</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="tw" checked> tint wash</label></div></div><div class="hint">Fresh cells wash, then settle</div>`,
+  html:`<div class="card col" style="width:min(400px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">Metrics</b><div class="rows col" style="gap:0"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Press push · the row never moves</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" aria-label="Pause or resume" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="tw" checked> tint wash</label></div></div><div class="hint">Fresh cells wash, then settle</div>`,
   desc:'A fresh cell gets a soft tint wash that fades on the lazy spring while its value swaps underneath. Rows keep fixed height, so nothing ever moves.',
   api:'wash.set(.5); wash.set(0, S.lazy, t + .15)   val.o dip + text swap at midpoint',
   init(st){
@@ -22829,7 +22881,7 @@ atom({ id:'updateflash', cat:'Dynamic', name:'Update flash', block:'metric, feed
 window.CIEO_SOURCE_HINT="blocks/330-pauselive.js";
 
 atom({ id:'pauselive', cat:'Dynamic', name:'Pause-live buffer', block:'feed, ticker', fam:['S','M'], tall:true,
-  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Deploy feed</b><span class="row" style="gap:6px;align-items:center;font-size:12px;line-height:1.5"><i class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--success)"></i><span class="pl num" style="font-variant-numeric:tabular-nums">Live</span></span></div><div class="list col" style="gap:0;min-height:136px"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Live · caught up</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="kb" checked> keep buffer</label></div></div><div class="hint">Freeze to pile up · resume drains top-down</div>`,
+  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Deploy feed</b><span class="row" style="gap:6px;align-items:center;font-size:12px;line-height:1.5"><i class="dot" style="width:8px;height:8px;border-radius:50%;background:var(--success)"></i><span class="pl num" style="font-variant-numeric:tabular-nums">Live</span></span></div><div class="list col" style="gap:0;min-height:136px"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Live · caught up</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" aria-label="Pause or resume" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="kb" checked> keep buffer</label></div></div><div class="hint">Freeze to pile up · resume drains top-down</div>`,
   desc:'Freeze raises a paused pill with a rolling backlog count. Resume drains the backlog top-down with stagger, then the pill settles back to live.',
   api:'backlog.n.set(k)   drain[i].o.set(1, S.base, t + i·.12)',
   init(st){
@@ -22893,7 +22945,7 @@ atom({ id:'deltaarrows', cat:'Dynamic', name:'Delta arrows', block:'metric, chip
 window.CIEO_SOURCE_HINT="blocks/332-logtail.js";
 
 atom({ id:'logtail', cat:'Dynamic', name:'Streaming log tail', block:'log, feed', fam:['S','M'], tall:true,
-  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Deploy log</b><span class="pl small num" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums">Live tail</span></div><div class="box col" style="gap:0;height:132px;overflow-y:auto;overflow-x:hidden;border-radius:10px;padding:6px 10px;background:var(--raised)"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Stuck to the latest · scroll up to read back</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="sk" checked> stick to latest</label></div></div><div class="hint">New rows open, then fade up</div>`,
+  html:`<div class="card col" style="width:min(420px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><div class="row" style="justify-content:space-between;align-items:center"><b style="font-size:15px;font-weight:600;line-height:1.45">Deploy log</b><span class="pl small num" style="font-size:12px;line-height:1.5;font-variant-numeric:tabular-nums">Live tail</span></div><div class="box col" style="gap:0;height:132px;overflow-y:auto;overflow-x:hidden;border-radius:10px;padding:6px 10px;background:var(--raised)"></div><div class="cap small muted" style="font-size:12px;line-height:1.5">Stuck to the latest · scroll up to read back</div><div class="row" style="gap:8px;align-items:center"><button class="btn ps" aria-label="Pause or resume" style="min-height:32px;position:relative"></button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="sk" checked> stick to latest</label></div></div><div class="hint">New rows open, then fade up</div>`,
   desc:'A new row opens its height first, then fades up into place while older rows spring down. The tail auto-sticks unless you scrolled up to read back.',
   api:'row.h.set(1, S.base) → o.set(1)   olds.y.release(-8, v, 0)   stick: scrollTop = scrollHeight',
   init(st){
@@ -23578,11 +23630,12 @@ window.CIEO_SOURCE_HINT="blocks/371-shortcutsheet.js";
 
 
 atom({ id:'shortcutsheet', cat:'Guidance', name:'Shortcut sheet', block:'shortcuts, hotkeys', fam:['X','M','S'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px;min-height:250px;text-align:center"><b style="font-size:15px;font-weight:600;line-height:1.5">Editor</b><div class="small muted" style="line-height:1.5">Hold the button to peek at shortcuts.</div><button class="btn ink hold" style="min-height:32px;padding:6px 14px;margin-top:10px;touch-action:none">Hold for shortcuts</button><div class="sh" style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--card);border:0;border-radius:10px;box-shadow:var(--shadow);padding:12px 14px;visibility:hidden;text-align:left"><div class="row" style="justify-content:space-between"><b style="font-size:13px;line-height:1.5">Shortcuts</b><span class="cap" style="font-size:12px;color:var(--muted);line-height:1.5">release to close</span></div><div class="kg" style="position:relative;min-height:108px;margin-top:8px"></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Keys:</span></div></div><div class="hint">Hold to open · tap a keycap · release to close</div>`,
-  desc:'Holding springs the sheet up; each keycap snaps down under the pointer and the grid swaps by category. Letting go snaps shut instantly — the resting state is the terminal.',
+  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px;min-height:280px;text-align:center"><b style="font-size:15px;font-weight:600;line-height:1.5">Editor</b><div class="small muted" style="line-height:1.5">Hold the button to peek at shortcuts.</div><button class="btn ink hold" aria-describedby="sc-hint" style="position:relative;overflow:hidden;min-height:32px;padding:6px 14px;margin-top:10px;touch-action:none">Hold for shortcuts<i class="hp" aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent);transform:scaleX(0);transform-origin:0 50%"></i></button><div class="shk" style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--card);border:0;border-radius:10px;box-shadow:var(--shadow);padding:12px 14px;visibility:hidden;text-align:left"><div class="row" style="justify-content:space-between"><b style="font-size:13px;line-height:1.5">Shortcuts</b><span class="cap" aria-live="polite" style="font-size:12px;color:var(--muted);line-height:1.5">release to close</span></div><div class="kg" style="position:relative;min-height:108px;margin-top:8px"></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Keys:</span></div></div><div class="hint" id="sc-hint">Hold to peek, or tap to pin · tap a keycap to select it</div>`,
+  desc:'Pressing fills a bar under the button. Held for half a second, the sheet springs up; each keycap snaps down under the pointer and its shortcut replaces the caption, and the grid swaps by category. Letting go snaps shut. A quick tap pins the sheet open until the next tap or Escape.',
   api:'hold: sheet.o.set(1, base)   key: k.set(1, snap)   cat.to(n)   release: o.set(0, snap) · REDUCE: jump',
   init(st){
-    const kg = $(st,'.kg'), sh = $(st,'.sh'), hold = $(st,'.hold'), tw = $(st,'.tw');
+    const kg = $(st,'.kg'), sh = $(st,'.shk'), hold = $(st,'.hold'), hp = $(st,'.hp'), cap = $(st,'.cap'), tw = $(st,'.tw');
+    const PEEK = .5; // seconds a press must last before the sheet opens while held
     const CATS = [[['⌘K','Command menu'],['⌘S','Save draft'],['⌘⏎','Publish']],[['⌘Z','Undo'],['⇧⌘Z','Redo'],['⌘D','Duplicate']]];
     const NAMES = ['General','Edit'];
     const L = CATS.map(rows => { const e = document.createElement('div'); e.className = 'layer'; e.style.cssText += 'flex-direction:column;gap:6px;align-items:stretch;white-space:normal';
@@ -23593,17 +23646,26 @@ atom({ id:'shortcutsheet', cat:'Guidance', name:'Shortcut sheet', block:'shortcu
     const keys = L.map((e,ci) => [...e.querySelectorAll('.key')].map(k => { const s = new Track(0);
       k.addEventListener('pointerdown', ev => { ev.stopPropagation(); REDUCE ? s.jump(1) : s.set(1, S.snap); });
       ['pointerup','pointerleave','pointercancel'].forEach(ev => k.addEventListener(ev, () => REDUCE ? s.jump(0) : s.set(0, S.snap)));
-      k.onclick = ev => ev.stopPropagation(); return { k, s }; }));
+      k.onclick = ev => { ev.stopPropagation(); cap.textContent = k.querySelector('kbd').textContent + ' · ' + k.querySelector('span').textContent; }; return { k, s }; }));
     L.forEach((e,ci) => { if (ci !== cur){ e.style.opacity = 0; e.style.visibility = 'hidden'; } });
     const open = () => REDUCE ? o.jump(1) : o.set(1, S.base);
-    const shut = () => REDUCE ? o.jump(0) : o.set(0, S.snap);
-    hold.addEventListener('pointerdown', e => { e.preventDefault(); hold.setPointerCapture && e.pointerId !== undefined && hold.setPointerCapture(e.pointerId); open(); });
-    ['pointerup','pointercancel','lostpointercapture'].forEach(ev => hold.addEventListener(ev, shut));
-    hold.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') open(); });
-    hold.addEventListener('keyup', shut);
+    const shut = () => { cap.textContent = 'release to close'; REDUCE ? o.jump(0) : o.set(0, S.snap); };
+    // press state: a press that lasts PEEK opens the sheet while held (progress bar fills first);
+    // a shorter tap pins the sheet open until the next tap, Escape, or Enter/Space on the button
+    let down = false, peeking = false, pinned = false, hs = 0;
+    const pin = on => { pinned = on; if (on){ cap.textContent = 'tap to close'; open(); } else shut(); };
+    hold.addEventListener('pointerdown', e => { if (e.button) return; e.preventDefault(); down = true; peeking = false; hs = now(); });
+    const release = () => { if (!down) return; down = false; if (peeking){ peeking = false; pinned = false; shut(); } else pin(!pinned); };
+    addEventListener('pointerup', release); addEventListener('pointercancel', release);
+    hold.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat){ e.preventDefault(); pin(!pinned); } });
+    st.addEventListener('keydown', e => { if (e.key === 'Escape' && pinned){ e.stopPropagation(); pin(false); hold.focus(); } });
     NAMES.forEach((n,ci) => { const b = document.createElement('button'); b.className = 'btn' + (ci === 0 ? ' ink' : ''); b.style.cssText += 'min-height:32px;padding:6px 10px;font-size:12px'; b.textContent = n; b.setAttribute('aria-pressed', ci === 0);
       b.onclick = () => { cur = ci; REDUCE ? (cat.cur = ci, cat.prev = null, cat.t = -9) : cat.to(ci); $$(tw,'.btn').forEach((x,j) => { x.classList.toggle('ink', j === ci); x.setAttribute('aria-pressed', j === ci); }); }; tw.appendChild(b); });
-    return t => { pop(sh, o.at(t), 8); L.forEach((el,k) => cat.apply(el,k,t));
+    return t => {
+      const pr = down ? clamp((t - hs) / PEEK) : 0;
+      hp.style.transform = `scaleX(${pr.toFixed(3)})`;
+      if (down && !peeking && pr >= 1){ peeking = true; cap.textContent = 'release to close'; open(); }
+      pop(sh, o.at(t), 8); L.forEach((el,k) => cat.apply(el,k,t));
       keys.forEach(ks => ks.forEach(({k,s}) => { const p = clamp(s.at(t)); k.querySelector('kbd').style.transform = `translateY(${(p*2).toFixed(2)}px) scale(${(1 - .06*p).toFixed(3)})`; })); };
   }});
 
@@ -24287,9 +24349,12 @@ atom({ id:'reviewstars', cat:'Forms', name:'Review stars input', block:'stars, r
       b.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"><path d="M12 3.5 14.8 9l5.9.6-4.4 4 1.2 5.9L12 16.4 6.5 19.5l1.2-5.9-4.4-4L9.2 9z"/></svg>';
       row.appendChild(b); stars.push(b); }
     const fill = new Track(0), sw = new Swap(0), done = new Track(0), bsw = new Swap(0);
+    // the caption layers are absolute: anchor them to the button so they cannot cover the stars
+    sub.style.position = 'relative'; sub.style.overflow = 'hidden'; sub.textContent = '';
     const BL = ['Submit review', 'Thanks — review posted']; const BLy = BL.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; sub.appendChild(e); return e; });
     let score = 0, held = false;
-    const val = e => { const r = row.getBoundingClientRect(); const p = clamp((e.clientX - r.left) / r.width) * 5; return hf.checked ? Math.round(p * 2) / 2 : Math.round(p); };
+    // map the pointer onto the five stars themselves, not the row (the row is wider than the stars)
+    const val = e => { const a = stars[0].getBoundingClientRect(), z = stars[4].getBoundingClientRect(); const p = clamp((e.clientX - a.left) / (z.right - a.left)) * 5; return hf.checked ? Math.round(p * 2) / 2 : Math.round(p); };
     const paint = v => stars.forEach((b, i) => { const f = clamp(v - i, 0, 1); b.style.color = mix(f, 'var(--warning)', 'var(--faint)'); b.firstChild.setAttribute('fill', f > .75 ? 'currentColor' : 'none'); b.style.transform = `scale(${(1 + .12 * (f > 0 && f < 1 ? 1 : 0)).toFixed(3)})`; });
     stars.forEach((b, i) => { b.onclick = () => { score = i + 1; fill.set(score, S.base); sw.to(score); stars.forEach((x, j) => x.setAttribute('aria-checked', j < score)); }; });
     row.addEventListener('pointerdown', e => { held = true; row.setPointerCapture(e.pointerId); const v = val(e); fill.jump(v); paint(v); });
@@ -24659,7 +24724,7 @@ atom({ id:'faqacc', cat:'Landing', name:'FAQ accordion', block:'Landing faq', fa
 
 window.CIEO_SOURCE_HINT="blocks/433-emailcapture.js";
 atom({ id:'emailcapture', cat:'Landing', name:'Email capture', block:'Landing signup', fam:['S','M'],
-  html:`<div class="col" style="gap:0;align-items:center;max-width:380px;margin:0 auto;padding:44px 16px;text-align:center"><p style="margin:0;font-size:15px;font-weight:600;line-height:1.45">Get the launch issue</p><p class="small muted" style="margin:6px 0 0;font-size:13px;line-height:1.5">One email a month. Unsubscribe anytime.</p><form class="fm" style="display:flex;gap:8px;margin-top:16px;width:100%" novalidate><input type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" style="flex:1;min-width:0;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);padding:0 12px;outline:none"><button class="btn go" style="position:relative;flex:none;min-height:36px;min-width:96px;border-radius:10px;display:grid;place-items:center;padding:0;overflow:hidden"></button></form><div class="msg" style="position:relative;margin-top:10px;height:20px;display:grid;justify-items:center;font-size:12.5px;line-height:1.5"></div><button class="btn rs small muted" style="margin-top:8px;min-height:36px;border-radius:10px;font-size:12.5px">Reset demo</button></div><div class="hint">Invalid rings danger · valid spins, checks, then holds the pill</div>`,
+  html:`<div class="col" style="gap:0;align-items:center;max-width:380px;margin:0 auto;padding:44px 16px;text-align:center"><p style="margin:0;font-size:15px;font-weight:600;line-height:1.45">Get the launch issue</p><p class="small muted" style="margin:6px 0 0;font-size:13px;line-height:1.5">One email a month. Unsubscribe anytime.</p><form class="fm" style="display:flex;gap:8px;margin-top:16px;width:100%" novalidate><input type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" style="flex:1;min-width:0;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);padding:0 12px;outline:none"><button class="btn go" aria-label="Submit email" style="position:relative;flex:none;min-height:36px;min-width:96px;border-radius:10px;display:grid;place-items:center;padding:0;overflow:hidden"></button></form><div class="msg" style="position:relative;margin-top:10px;height:20px;display:grid;justify-items:center;font-size:12.5px;line-height:1.5"></div><button class="btn rs small muted" style="margin-top:8px;min-height:36px;border-radius:10px;font-size:12.5px">Reset demo</button></div><div class="hint">Invalid rings danger · valid spins, checks, then holds the pill</div>`,
   desc:'Submit settles into neutral, invalid or valid. Invalid rings the field danger with a swapped message; valid spins the button, lands a check, and holds the success pill as the terminal state.',
   api:'status.to(ok|err)   btn: join → sending → done(hold)   ring = mix(danger)',
   init(st){
@@ -24998,7 +25063,7 @@ window.CIEO_SOURCE_HINT="blocks/467-inlinesuccess.js";
 
 
 atom({ id:'inlinesuccess', cat:'Newsletter', name:'Inline success', block:'newsletter, subscribe', fam:['M','S'],
-  html:`<div class="card col" style="width:min(360px,92%);padding:16px;gap:8px;line-height:1.55"><b style="font-size:15px;font-weight:600;line-height:1.5">Get the Sunday letter</b><span style="font-size:13.5px;line-height:1.55">One email a week. Unsubscribe any time.</span><form class="nf row" novalidate style="gap:8px;margin-top:8px"><input type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;height:44px;border:1.5px solid var(--muted);border-radius:10px;padding:0 12px;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;outline:none"><button class="sb" style="position:relative;flex:none;height:44px;min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);font-weight:600;font-size:14px;cursor:pointer;overflow:hidden"></button></form><div class="meta row" style="gap:8px;align-items:center"><span class="cnt num" style="font-variant-numeric:tabular-nums;font-size:13.5px"></span><span class="muted" style="font-size:12.5px;line-height:1.5">readers already in</span></div><div class="ref" style="position:relative;height:22px;font-size:12.5px;color:var(--muted);line-height:1.5"></div><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;font-size:12.5px"><input type="checkbox" class="lp"> replayable demo</label></div><button class="btn rs" style="position:absolute;top:10px;right:12px;min-height:36px;border-radius:9px">Reset</button><div class="hint">Try a real address</div>`,
+  html:`<div class="card col" style="width:min(360px,92%);padding:16px;gap:8px;line-height:1.55"><b style="font-size:15px;font-weight:600;line-height:1.5">Get the Sunday letter</b><span style="font-size:13.5px;line-height:1.55">One email a week. Unsubscribe any time.</span><form class="nf row" novalidate style="gap:8px;margin-top:8px"><input type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;height:44px;border:1.5px solid var(--muted);border-radius:10px;padding:0 12px;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;outline:none"><button class="sb" aria-label="Subscribe" style="position:relative;flex:none;height:44px;min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);font-weight:600;font-size:14px;cursor:pointer;overflow:hidden"></button></form><div class="meta row" style="gap:8px;align-items:center"><span class="cnt num" style="font-variant-numeric:tabular-nums;font-size:13.5px"></span><span class="muted" style="font-size:12.5px;line-height:1.5">readers already in</span></div><div class="ref" style="position:relative;height:22px;font-size:12.5px;color:var(--muted);line-height:1.5"></div><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;font-size:12.5px"><input type="checkbox" class="lp"> replayable demo</label></div><button class="btn rs" style="position:absolute;top:10px;right:12px;min-height:36px;border-radius:9px">Reset</button><div class="hint">Try a real address</div>`,
   desc:'A valid address shrinks the button into a spinner, then morphs it into a success pill. The count rides digits to the subscriber total and a referral line swaps in. The success state holds.',
   api:'sw.to(loading → done) · bw.set(44 → pill, S.base) · digits.set(total) · ref.to(1)',
   init(st){
@@ -26012,6 +26077,7 @@ atom({ id:'cartdrawer', cat:'Commerce', name:'Cart drawer', block:'cart, drawer,
     scr.onclick = () => open.set(0); $(st,'.co').onclick = () => open.set(0); $(st,'.th').onchange = paint;
     sub.jump(0); tot.jump(0); paint(); sub.jump(S0); tot.jump(S0); fill.jump(Math.min(1, S0/th()));
     return t => { const p = clamp(open.at(t)); dw.style.transform = `translateX(${((1-p)*232).toFixed(1)}px)`;
+      dw.style.visibility = p < .01 ? 'hidden' : 'visible'; dw.setAttribute('aria-hidden', String(p < .01));
       scr.style.opacity = (p*.35).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       R.forEach((r,i) => { const q = open.target === 1 ? clamp(prog(t, t0 + i*.04)) : 1; r.style.opacity = q.toFixed(3); r.style.transform = `translateX(${((1-q)*16).toFixed(1)}px)`; });
       bar.style.width = (clamp(fill.at(t))*100).toFixed(1) + '%'; L.forEach((e,k) => sv.apply(e,k,t));
@@ -27048,7 +27114,7 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
   c.toggleSave=(id)=>{
     c.favorites.has(id)?c.favorites.delete(id):c.favorites.add(id);
     if(!c.save('cieo-catalogue-saved',[...c.favorites]))c.announce('Saved for this session. Browser storage is unavailable.');
-    document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>b.setAttribute('aria-pressed',String(c.favorites.has(id))));
+    const saved=c.favorites.has(id);document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>{b.setAttribute('aria-pressed',String(saved));b.setAttribute('aria-label',`${saved?'Saved':'Save'} ${c.byId.get(id).name}`)});
     c.markNavigation();c.updateInspectorSave?.();if(c.route().saved)c.filter();
   };
   // Captions: recipe demos keep a trailing `<div class="hint">…</div>` inside
@@ -27090,7 +27156,7 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
     const h=document.createElement('h3'),button=document.createElement('button');button.className='ui-tile-name';button.textContent=a.name;button.dataset.inspect=a.id;h.append(button);
     const category=document.createElement('p');category.textContent=a.cat;title.append(h,category);
     const tools=document.createElement('div');tools.className='ui-tile-tools';
-    tools.innerHTML=`<button data-save="${a.id}" aria-label="Save ${a.id}" aria-pressed="${c.favorites.has(a.id)}">${c.icon('bookmark')}</button><button data-inspect="${a.id}" aria-label="Inspect ${a.id}">${c.icon('expand')}</button>`;
+    tools.innerHTML=`<button data-save="${a.id}" aria-label="${c.favorites.has(a.id)?'Saved':'Save'} ${a.name}" aria-pressed="${c.favorites.has(a.id)}">${c.icon('bookmark')}</button><button data-inspect="${a.id}" aria-label="Show details for ${a.name}">${c.icon('expand')}</button>`;
     header.append(title,marks,tools);
     const detail=document.createElement('div');detail.className='ui-detail';detail.hidden=true;
     const desc=document.createElement('p');desc.textContent=a.desc;const code=document.createElement('pre');code.textContent=a.api;detail.append(desc,code);
@@ -27237,7 +27303,7 @@ window.CIEO_SOURCE_HINT="catalogue/inspector.js";
     preview.replaceChildren();held=null;placeholder=null;c.active=null;dispatchEvent(new Event('resize'));
   }
   dialog.addEventListener('close',()=>{restore();if(opener?.isConnected&&!opener.closest('[hidden]'))opener.focus({preventScroll:true})});
-  c.updateInspectorSave=()=>{if(!held)return;const b=document.getElementById('inspect-save'),saved=c.favorites.has(held.id);b.textContent=saved?'Saved to your collection':'Save atom';b.setAttribute('aria-pressed',String(saved))};
+  c.updateInspectorSave=()=>{if(!held)return;const b=document.getElementById('inspect-save'),saved=c.favorites.has(held.id);b.textContent=saved?'Saved':'Save';b.setAttribute('aria-pressed',String(saved))};
   document.getElementById('inspect-save').onclick=()=>{if(held)c.toggleSave(held.id)};
   document.getElementById('copy-recipe').onclick=async()=>{
     if(!held)return;const text=held.api;
