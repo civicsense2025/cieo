@@ -4,9 +4,13 @@ export { AspectRatio, type AspectRatioProps } from './AspectRatio/AspectRatio.js
 export { AuthCredentialForm, type AuthCredentialFormProps } from './AuthCredentialForm/AuthCredentialForm.js';
 export { AuthEmailField, type AuthEmailFieldProps } from './AuthEmailField/AuthEmailField.js';
 export { AuthMfaChallenge, type AuthMfaChallengeProps } from './AuthMfaChallenge/AuthMfaChallenge.js';
+export { AuthMfaFlow, type AuthMfaFlowProps } from './AuthMfaFlow/AuthMfaFlow.js';
 export { AuthOtpInput, type AuthOtpInputProps } from './AuthOtpInput/AuthOtpInput.js';
 export { AuthPasswordInput, type AuthPasswordInputProps } from './AuthPasswordInput/AuthPasswordInput.js';
+export { AuthResetFlow, type AuthResetFlowProps } from './AuthResetFlow/AuthResetFlow.js';
 export { AuthResetForm, type AuthResetFormProps } from './AuthResetForm/AuthResetForm.js';
+export { AuthCardShell, AuthSignInCard, type AuthSignInCardProps } from './AuthSignInCard/AuthSignInCard.js';
+export { AuthSignUpCard, type AuthSignUpCardProps } from './AuthSignUpCard/AuthSignUpCard.js';
 export { Avatar, type AvatarProps } from './Avatar/Avatar.js';
 export { AvatarGroup, type AvatarPerson, type AvatarGroupProps } from './AvatarGroup/AvatarGroup.js';
 export { AvatarGroupOverflow, type AvatarGroupOverflowProps } from './AvatarGroupOverflow/AvatarGroupOverflow.js';

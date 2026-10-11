@@ -10,9 +10,13 @@
 @import './styles/primitives/auth-credential-form.css';
 @import './styles/primitives/auth-email-field.css';
 @import './styles/primitives/auth-mfa-challenge.css';
+@import './styles/primitives/auth-mfa-flow.css';
 @import './styles/primitives/auth-otp-input.css';
 @import './styles/primitives/auth-password-input.css';
+@import './styles/primitives/auth-reset-flow.css';
 @import './styles/primitives/auth-reset-form.css';
+@import './styles/primitives/auth-sign-in-card.css';
+@import './styles/primitives/auth-sign-up-card.css';
 @import './styles/primitives/avatar-group-overflow.css';
 @import './styles/primitives/avatar-group.css';
 @import './styles/primitives/avatar-status-dot.css';

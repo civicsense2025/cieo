@@ -1,0 +1,15 @@
+/* design/styles/primitives/auth-reset-flow.css */
+@layer cieo.components {
+  :where(.cieo).cieo-auth-card {
+    display: inline-flex; flex-direction: column; gap: 14px;
+    background: var(--cieo-color-surface); border-radius: 14px; padding: 20px;
+    max-width: 22.5rem;
+  }
+  :where(.cieo) .cieo-auth-card-title { margin: 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-status { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-routes { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-auth-routes a { color: var(--cieo-color-text); }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-auth-card * { animation: none; transition: none; }
+  }
+}

@@ -5,7 +5,7 @@
   :where(.cieo) .cieo-auth-otp-boxes { display: inline-flex; gap: 8px; }
   :where(.cieo) .cieo-auth-otp-box {
     width: 2.75rem; height: 2.75rem; border-radius: 9px; text-align: center;
-    border: 1.5px solid var(--cieo-color-text-muted, #66676f);
+    border: 1.5px solid var(--cieo-color-muted);
     background: var(--cieo-color-surface); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-variant-numeric: tabular-nums;
   }

@@ -74,6 +74,10 @@
       "types": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.d.ts",
       "default": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.js"
     },
+    "./AuthMfaFlow": {
+      "types": "./dist/primitives/AuthMfaFlow/AuthMfaFlow.d.ts",
+      "default": "./dist/primitives/AuthMfaFlow/AuthMfaFlow.js"
+    },
     "./AuthOtpInput": {
       "types": "./dist/primitives/AuthOtpInput/AuthOtpInput.d.ts",
       "default": "./dist/primitives/AuthOtpInput/AuthOtpInput.js"
@@ -82,9 +86,21 @@
       "types": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.d.ts",
       "default": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.js"
     },
+    "./AuthResetFlow": {
+      "types": "./dist/primitives/AuthResetFlow/AuthResetFlow.d.ts",
+      "default": "./dist/primitives/AuthResetFlow/AuthResetFlow.js"
+    },
     "./AuthResetForm": {
       "types": "./dist/primitives/AuthResetForm/AuthResetForm.d.ts",
       "default": "./dist/primitives/AuthResetForm/AuthResetForm.js"
+    },
+    "./AuthSignInCard": {
+      "types": "./dist/primitives/AuthSignInCard/AuthSignInCard.d.ts",
+      "default": "./dist/primitives/AuthSignInCard/AuthSignInCard.js"
+    },
+    "./AuthSignUpCard": {
+      "types": "./dist/primitives/AuthSignUpCard/AuthSignUpCard.d.ts",
+      "default": "./dist/primitives/AuthSignUpCard/AuthSignUpCard.js"
     },
     "./Avatar": {
       "types": "./dist/primitives/Avatar/Avatar.d.ts",

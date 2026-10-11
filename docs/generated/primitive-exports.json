@@ -6,9 +6,13 @@
     "AuthCredentialForm",
     "AuthEmailField",
     "AuthMfaChallenge",
+    "AuthMfaFlow",
     "AuthOtpInput",
     "AuthPasswordInput",
+    "AuthResetFlow",
     "AuthResetForm",
+    "AuthSignInCard",
+    "AuthSignUpCard",
     "Avatar",
     "AvatarGroup",
     "AvatarGroupOverflow",
@@ -161,5 +165,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 160
+  "count": 164
 }

@@ -4,7 +4,7 @@
   :where(.cieo) .cieo-auth-label { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-input {
     min-height: 2.75rem; border-radius: 9px; padding: 0 12px;
-    border: 1.5px solid var(--cieo-color-text-muted, #66676f);
+    border: 1.5px solid var(--cieo-color-muted);
     background: var(--cieo-color-surface); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body);
   }
