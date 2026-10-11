@@ -3,16 +3,21 @@
     "AlertDialog",
     "AppShell",
     "AspectRatio",
+    "AuthAccountCard",
     "AuthCredentialForm",
     "AuthEmailField",
+    "AuthInviteAccept",
     "AuthMfaChallenge",
     "AuthMfaFlow",
     "AuthOtpInput",
+    "AuthPasskeyButton",
     "AuthPasswordInput",
     "AuthResetFlow",
     "AuthResetForm",
+    "AuthSessionList",
     "AuthSignInCard",
     "AuthSignUpCard",
+    "AuthSsoButtons",
     "Avatar",
     "AvatarGroup",
     "AvatarGroupOverflow",
@@ -165,5 +170,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 164
+  "count": 169
 }

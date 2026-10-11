@@ -202,8 +202,8 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
 .oag-ft{display:flex;flex-direction:column;gap:10px}
 .oag-hd{overflow:hidden}
 .oag-cnt{display:flex;padding-top:10px;gap:4px;align-items:center;font-size:12.5px;line-height:18px;color:var(--muted)}
-.oag-act{display:flex;height:40px}
-.oag-act .btn{position:relative;flex:1 1 0;min-width:0;height:40px;padding:0;overflow:hidden;font-size:14px}
+.oag-act{display:flex;min-height:44px}
+.oag-act .btn{position:relative;flex:1 1 0;min-width:0;min-height:44px;padding:0;overflow:hidden;font-size:14px}
 .oag-act .btn>span{position:absolute;inset:0}
 .oag-fine{font-size:12px;line-height:17px;color:var(--muted)}
 @container (min-width:620px){

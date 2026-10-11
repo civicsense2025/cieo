@@ -62,6 +62,10 @@
       "types": "./dist/primitives/AspectRatio/AspectRatio.d.ts",
       "default": "./dist/primitives/AspectRatio/AspectRatio.js"
     },
+    "./AuthAccountCard": {
+      "types": "./dist/primitives/AuthAccountCard/AuthAccountCard.d.ts",
+      "default": "./dist/primitives/AuthAccountCard/AuthAccountCard.js"
+    },
     "./AuthCredentialForm": {
       "types": "./dist/primitives/AuthCredentialForm/AuthCredentialForm.d.ts",
       "default": "./dist/primitives/AuthCredentialForm/AuthCredentialForm.js"
@@ -69,6 +73,10 @@
     "./AuthEmailField": {
       "types": "./dist/primitives/AuthEmailField/AuthEmailField.d.ts",
       "default": "./dist/primitives/AuthEmailField/AuthEmailField.js"
+    },
+    "./AuthInviteAccept": {
+      "types": "./dist/primitives/AuthInviteAccept/AuthInviteAccept.d.ts",
+      "default": "./dist/primitives/AuthInviteAccept/AuthInviteAccept.js"
     },
     "./AuthMfaChallenge": {
       "types": "./dist/primitives/AuthMfaChallenge/AuthMfaChallenge.d.ts",
@@ -82,6 +90,10 @@
       "types": "./dist/primitives/AuthOtpInput/AuthOtpInput.d.ts",
       "default": "./dist/primitives/AuthOtpInput/AuthOtpInput.js"
     },
+    "./AuthPasskeyButton": {
+      "types": "./dist/primitives/AuthPasskeyButton/AuthPasskeyButton.d.ts",
+      "default": "./dist/primitives/AuthPasskeyButton/AuthPasskeyButton.js"
+    },
     "./AuthPasswordInput": {
       "types": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.d.ts",
       "default": "./dist/primitives/AuthPasswordInput/AuthPasswordInput.js"
@@ -94,6 +106,10 @@
       "types": "./dist/primitives/AuthResetForm/AuthResetForm.d.ts",
       "default": "./dist/primitives/AuthResetForm/AuthResetForm.js"
     },
+    "./AuthSessionList": {
+      "types": "./dist/primitives/AuthSessionList/AuthSessionList.d.ts",
+      "default": "./dist/primitives/AuthSessionList/AuthSessionList.js"
+    },
     "./AuthSignInCard": {
       "types": "./dist/primitives/AuthSignInCard/AuthSignInCard.d.ts",
       "default": "./dist/primitives/AuthSignInCard/AuthSignInCard.js"
@@ -101,6 +117,10 @@
     "./AuthSignUpCard": {
       "types": "./dist/primitives/AuthSignUpCard/AuthSignUpCard.d.ts",
       "default": "./dist/primitives/AuthSignUpCard/AuthSignUpCard.js"
+    },
+    "./AuthSsoButtons": {
+      "types": "./dist/primitives/AuthSsoButtons/AuthSsoButtons.d.ts",
+      "default": "./dist/primitives/AuthSsoButtons/AuthSsoButtons.js"
     },
     "./Avatar": {
       "types": "./dist/primitives/Avatar/Avatar.d.ts",

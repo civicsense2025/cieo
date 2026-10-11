@@ -22,7 +22,7 @@
     <button class="ui-button ghost icon ui-desktop-only" id="details-toggle" aria-label="Show inline details" aria-pressed="false" data-icon="code"></button>
     <button class="ui-button ghost icon ui-desktop-only" data-open="appearance-dialog" aria-label="Collection appearance" data-icon="settings"></button>
   </div>
-  <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span>Saved</button></div></div>
+  <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span><span>Saved <span id="saved-count">0</span></span></button></div></div>
   <div class="ui-toolbar">
     <div class="ui-families" role="tablist" aria-label="Motion family" id="family-filter"></div>
     <div class="ui-viewtools"><span id="count" class="ui-muted ui-result-count" aria-live="polite"></span><div class="row"><button class="ui-button ghost" id="pause-motion" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><label class="ui-speed" for="motion-speed">Speed</label><select id="motion-speed"><option value="1">1× speed</option><option value="0.25">¼× speed</option><option value="0.1">⅒× speed</option></select></div></div>
@@ -32,7 +32,7 @@
   <div id="empty-state" class="ui-empty" hidden><span data-icon="search"></span><h2>Nothing here. Yet.</h2><p>Try another search, or save a few atoms to start a collection.</p><button class="ui-button" id="clear-filters">Show all atoms</button></div>
   <noscript><p>This catalogue needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
 </main>
-<nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span>Saved</button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
+<nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span><span>Saved <span id="mobile-saved-count">0</span></span></button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
 <dialog class="ui-dialog" id="browse-dialog" aria-labelledby="browse-title"><div class="ui-dialog-heading"><h2 id="browse-title">Collections</h2><button class="ui-button ghost icon" data-close aria-label="Close collections" data-icon="close"></button></div><div class="ui-rail-slot" id="rail-slot"></div></dialog>
 <dialog class="ui-dialog" id="appearance-dialog" aria-labelledby="appearance-title"><div class="ui-dialog-heading"><h2 id="appearance-title">Make room for your taste.</h2><button class="ui-button ghost icon" data-close aria-label="Close appearance" data-icon="close"></button></div>
   <div class="ui-settings">

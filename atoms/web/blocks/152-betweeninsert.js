@@ -401,7 +401,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
 .qc-mi:hover,.qc-mi:focus-visible{background:var(--raised)}
 .qc-mi:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .qc-kc{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:999px;background:var(--raised);font-size:12px;font-weight:500;flex:none}
-.qc-in{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:13.5px;color:var(--ink);padding:4px 2px;border-radius:6px;user-select:text;-webkit-user-select:text}
+.qc-in{flex:1;min-width:0;border:0;border-bottom:1.5px solid var(--muted);background:none;font:inherit;font-size:13.5px;color:var(--ink);padding:4px 2px;border-radius:6px;user-select:text;-webkit-user-select:text}
 .qc-go:disabled{opacity:.4;cursor:default}
 .qc-x{display:grid;place-items:center;width:26px;height:26px;flex:none;border:0;border-radius:7px;background:none;color:var(--muted);cursor:pointer}
 .qc-x:hover{background:var(--raised);color:var(--ink)}

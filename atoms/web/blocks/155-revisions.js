@@ -194,7 +194,7 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
 
 /* ================================================================ 2. Annotation review canvas */
 const MOCK = `<svg viewBox="0 0 480 300" width="100%" height="100%" preserveAspectRatio="none" style="display:block" aria-hidden="true"><rect width="480" height="300" fill="var(--card)"/><rect width="480" height="36" fill="var(--tile)"/><path d="M0 36.5H480" stroke="var(--line)"/><rect x="20" y="13" width="46" height="10" rx="5" fill="var(--ink)"/><rect x="300" y="14" width="30" height="8" rx="4" fill="var(--faint)"/><rect x="344" y="14" width="30" height="8" rx="4" fill="var(--faint)"/><rect x="388" y="14" width="22" height="8" rx="4" fill="var(--faint)"/><rect x="420" y="9" width="44" height="18" rx="9" fill="var(--accent)"/><rect x="28" y="72" width="214" height="16" rx="8" fill="var(--ink)"/><rect x="28" y="96" width="176" height="16" rx="8" fill="var(--ink)"/><rect x="28" y="120" width="112" height="16" rx="8" fill="var(--ink)"/><rect x="28" y="150" width="200" height="7" rx="3.5" fill="var(--faint)"/><rect x="28" y="164" width="170" height="7" rx="3.5" fill="var(--faint)"/><rect x="28" y="182" width="96" height="26" rx="13" fill="var(--accent)"/><rect x="134" y="182.75" width="74" height="24.5" rx="12.25" fill="none" stroke="var(--faint)" stroke-width="1.5"/><rect x="272" y="62" width="184" height="150" rx="12" fill="var(--raised)"/><circle cx="418" cy="100" r="16" fill="var(--accent)"/><path d="M272 200 L330 130 L370 168 L408 140 L456 196 L456 200 A12 12 0 0 1 444 212 L284 212 A12 12 0 0 1 272 200Z" fill="var(--ink)"/><rect x="28" y="236" width="128" height="48" rx="8" fill="var(--tile)" stroke="var(--line)"/><rect x="176" y="236" width="128" height="48" rx="8" fill="var(--tile)" stroke="var(--line)"/><rect x="324" y="236" width="128" height="48" rx="8" fill="var(--tile)" stroke="var(--line)"/><rect x="40" y="249" width="52" height="7" rx="3.5" fill="var(--ink)"/><rect x="40" y="264" width="84" height="6" rx="3" fill="var(--faint)"/><rect x="188" y="249" width="52" height="7" rx="3.5" fill="var(--ink)"/><rect x="188" y="264" width="84" height="6" rx="3" fill="var(--faint)"/><rect x="336" y="249" width="52" height="7" rx="3.5" fill="var(--ink)"/><rect x="336" y="264" width="84" height="6" rx="3" fill="var(--faint)"/></svg>`;
-const TA = 'display:block;width:100%;resize:none;margin-top:8px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:13px/1.45 var(--sans);padding:7px 10px;outline:none';
+const TA = 'display:block;width:100%;resize:none;margin-top:8px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:13px/1.45 var(--sans);padding:7px 10px;outline:none';
 const XB = `<button type="button" class="rw-xb" aria-label="Close comment" style="flex:none;border:0;background:none;color:var(--muted);padding:3px;border-radius:7px;cursor:pointer;display:grid;place-items:center">${ic(I.x, 14)}</button>`;
 const threadHead = `<div class="row" style="align-items:flex-start;gap:8px"><span class="rw-av"></span><div style="flex:1;min-width:0"><b class="small rw-au" style="display:block;line-height:18px"></b><span class="muted" style="font-size:12px">Image point <span class="rw-no"></span></span></div>${XB}</div><p class="rw-tt" style="margin:8px 0 0;font-size:13px;line-height:1.45;overflow-wrap:anywhere"></p>`;
 const LY = 'position:absolute;left:0;top:0;width:100%;padding:12px';
@@ -376,7 +376,7 @@ atom({ id:'annotate', cat:'Workflow', name:'Annotation review canvas', block:'Re
         cs.background = mix(clamp(o * 1.5), 'var(--card)', fill); cs.pointerEvents = o > .5 ? 'auto' : 'none';
         const cin = clamp((o - .5) * 2); fade(cc, cin, (1 - cin) * 3);
         for (let k = 0; k < 3; k++) csw.apply(L[k], k, t, 3);
-        ta.style.borderColor = mix(clamp(tf.at(t)), 'var(--accent)', 'var(--line)'); sub.style.opacity = (.45 + .55 * clamp(sbT.at(t))).toFixed(3);
+        ta.style.borderColor = mix(clamp(tf.at(t)), 'var(--accent)', 'var(--muted)'); sub.style.opacity = (.45 + .55 * clamp(sbT.at(t))).toFixed(3);
       } else card.style.visibility = 'hidden';
       plate(plateEl, pe.A.at(t), pe.B.at(t)); plateEl.style.opacity = clamp(po.at(t)).toFixed(3);
       for (const p of pins){ const r = p.row; if (!r) continue; const e = clamp(r.e.at(t)), rs = clamp(p.rs.at(t));
@@ -387,7 +387,7 @@ atom({ id:'annotate', cat:'Workflow', name:'Annotation review canvas', block:'Re
   }});
 
 /* ================================================================ 3. Auth shell */
-const INP = 'display:block;width:100%;height:36px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:15px var(--sans);padding:0 11px;outline:none';
+const INP = 'display:block;width:100%;height:36px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:15px var(--sans);padding:0 11px;outline:none';
 const field = (id, label, type, ph) => `<div><label for="${id}" class="small" style="display:block;font-weight:500;line-height:16px;margin-bottom:3px">${label}</label><input id="${id}" type="${type}" placeholder="${ph}" autocomplete="off" style="${INP}"></div>`;
 const pane = (n, inner) => `<form class="rw-pn" data-p="${n}" novalidate style="position:absolute;left:0;right:0;top:0;padding:14px 16px 12px">${inner}</form>`;
 const H2 = t => `<h2 style="margin:0 0 10px;font-size:20px;line-height:24px;letter-spacing:-.02em;font-weight:600">${t}</h2>`;
@@ -466,7 +466,7 @@ atom({ id:'authshell', cat:'Workflow', name:'Auth shell', block:'AuthShell, Auth
       P.forEach((p, i) => {
         sw.apply(p.f, i, t); if (p.sub){ p.bsw.apply(p.b0, 0, t, 3); p.bsw.apply(p.b1, 1, t, 3); }
         const er = clamp(p.er.at(t)); if (p.erEl){ p.erEl.style.height = px(er * p.eh); p.em.style.opacity = er.toFixed(3); eh += er * p.eh; }
-        p.ins.forEach(inp => { inp.style.borderColor = mix(clamp(inp._iv.at(t)), 'var(--danger)', mix(clamp(inp._tf.at(t)), 'var(--accent)', inp._fl ? mix(clamp(inp._fl.at(t)), 'var(--ink)', 'var(--line)') : 'var(--line)')); });
+        p.ins.forEach(inp => { inp.style.borderColor = mix(clamp(inp._iv.at(t)), 'var(--danger)', mix(clamp(inp._tf.at(t)), 'var(--accent)', inp._fl ? mix(clamp(inp._fl.at(t)), 'var(--ink)', 'var(--muted)') : 'var(--muted)')); });
       });
       ab.style.height = px(h.at(t) + eh);
       const v = clamp(sv.at(t)); so.style.opacity = v.toFixed(3); so.style.visibility = v < .01 ? 'hidden' : 'visible';

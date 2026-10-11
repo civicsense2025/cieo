@@ -90,7 +90,7 @@ document.head.insertAdjacentHTML('beforeend', `<style id="txg-shared">
 .txg-hint{font-size:12px;color:var(--muted);text-align:right;max-width:34ch}
 @container (max-width:479px){.txg-hint{display:none}}
 .txg-dk{--dk:#0C1016;--dk-ink:#EFF2F6;--dk-mut:#ABAEB3;--dk-line:#2A2F36;color:#EFF2F6}
-.txg-ib{width:40px;height:40px;border-radius:50%;border:1px solid color-mix(in oklab,#EFF2F6 22%,transparent);background:color-mix(in oklab,#0C1016 74%,transparent);color:#EFF2F6;display:grid;place-items:center;padding:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.txg-ib{width:40px;height:40px;border-radius:50%;border:1.5px solid #EFF2F6;background:color-mix(in oklab,#0C1016 74%,transparent);color:#EFF2F6;display:grid;place-items:center;padding:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .txg-ib:hover{background:#0C1016}
 .txg-ib:focus-visible,.txg-dk button:focus-visible,.txg-dk [tabindex]:focus-visible{outline:2px solid #EFF2F6;outline-offset:2px}
 .txg-ph{position:absolute;left:0;top:0;transform-origin:0 0;visibility:hidden}

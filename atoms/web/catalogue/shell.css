@@ -15,8 +15,9 @@ a{color:inherit} [data-icon] svg, .ui-icon{width:20px;height:20px;flex:none;poin
 .ui-navigation{flex:1;overflow:auto;scrollbar-width:thin;min-height:0;padding:0 0 16px}
 .ui-navlink{display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:12px;text-decoration:none;font-size:13px;color:var(--muted)}
 .ui-navlink:hover{background:var(--raised);color:var(--ink)}.ui-navlink[aria-current=page]{background:var(--accent-tint);color:var(--accent);font-weight:600}
-.ui-navlink span:nth-last-child(1){margin-left:auto;font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
-.ui-navtitle{display:flex;justify-content:space-between;margin:24px 16px 8px;font-size:12px;color:var(--muted);font-weight:500}
+.ui-navlink span:nth-last-child(1){margin-left:auto;font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.ui-navtitle{display:flex;justify-content:space-between;gap:8px;margin:24px 16px 8px;font-size:12px;color:var(--muted);font-weight:500}
+.ui-navtitle span{white-space:nowrap}
 .ui-folders{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 0}
 .ui-folder{min-width:0;height:96px;text-decoration:none;padding:8px;border-radius:16px;background:var(--card);text-align:center;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;gap:8px;font-size:11px;color:var(--ink)}
 .ui-folder:hover{background:var(--raised)}.ui-folder[aria-current=page]{background:var(--accent-tint);color:var(--accent);font-weight:600}

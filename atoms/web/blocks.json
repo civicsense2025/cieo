@@ -405,5 +405,7 @@
  "blocks/555-composefields.js",
  "blocks/556-templatevars.js",
  "blocks/557-emailpoll.js",
- "blocks/558-auth-wave1.js"
+ "blocks/558-auth-wave1.js",
+ "blocks/559-auth-wave2.js",
+ "blocks/560-auth-wave3.js"
 ]

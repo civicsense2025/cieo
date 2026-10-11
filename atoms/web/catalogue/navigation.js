@@ -5,10 +5,10 @@
   c.categoryCounts=new Map(); A.forEach(a=>c.categoryCounts.set(a.cat,(c.categoryCounts.get(a.cat)||0)+1));
   const slug=s=>s.toLowerCase().replace(/\s+/g,'-');c.slug=slug;
   const link=(label,href,count,icon='dot')=>`<a class="ui-navlink" href="#${href}">${c.icon(icon)}${label}<span>${count}</span></a>`;
-  const all=link('Everything','all',A.length,'grid')+link('Saved','saved','0','bookmark');
+  const all=link('Everything','all',`${A.length} ${A.length===1?'atom':'atoms'}`,'grid')+link('Saved','saved','0 atoms','bookmark');
   const folders=Object.keys(c.collections).map((name,i)=>`<a class="ui-folder" href="#collection-${slug(name)}"><span class="ui-folder-art" style="--accent:${['#8576cd','#79a7c0','#c68c63','#86a285'][i]}"><i></i><i></i><i></i></span>${name}</a>`).join('');
-  const categoryLinks=[...c.categoryCounts].sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>link(name,'cat-'+slug(name),n)).join('');
-  const nav=`${all}<div class="ui-navtitle">Collections <span>4</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4</span></a>`;
+  const categoryLinks=[...c.categoryCounts].sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>link(name,'cat-'+slug(name),`${n} ${n===1?'atom':'atoms'}`)).join('');
+  const nav=`${all}<div class="ui-navtitle">Collections <span>4 collections</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size} ${c.categoryCounts.size===1?'category':'categories'}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4 flows</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4 flows</span></a>`;
   document.getElementById('rail-nav').innerHTML=nav;
   document.getElementById('total-count').textContent=`${A.length} atoms`;
   document.getElementById('atom-search').placeholder=`Search ${A.length} atoms`;
@@ -25,8 +25,11 @@
     const route=c.route();document.querySelectorAll('.ui-navlink:not([data-flows]),.ui-folder').forEach(a=>{
       const selected=a.hash===location.hash||a.hash==='#all'&&(!location.hash||route.atom);
       if(selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
-      if(a.hash==='#saved'&&a.lastElementChild)a.lastElementChild.textContent=c.favorites?.size||0;
+      if(a.hash==='#saved'&&a.lastElementChild)a.lastElementChild.textContent=`${c.favorites?.size||0} ${(c.favorites?.size||0)===1?'atom':'atoms'}`;
     });
+    const savedCount=c.favorites?.size||0;
+    const headerSaved=document.getElementById('saved-count');if(headerSaved)headerSaved.textContent=savedCount;
+    const mobileSaved=document.getElementById('mobile-saved-count');if(mobileSaved)mobileSaved.textContent=savedCount;
     document.getElementById('saved-toggle').setAttribute('aria-pressed',String(route.saved));
   };
   document.getElementById('saved-toggle').onclick=()=>{location.hash=c.route().saved?'all':'saved'};

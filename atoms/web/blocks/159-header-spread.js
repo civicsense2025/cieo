@@ -604,7 +604,7 @@ atom({ id:'header-search', cat:'Headers', name:'Header: search expands in place'
 .hd10-lw{flex:none;overflow:hidden}
 .hd10-nv{position:relative;flex:1;min-width:0;height:36px;overflow:hidden}
 .hd10-g{position:absolute;left:0;top:0;display:flex;gap:2px;height:36px}
-.hd10-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:0 0 36px}
+.hd10-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);box-shadow:inset 0 0 0 1.5px var(--muted);overflow:hidden;flex:0 0 36px}
 .hd10-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:var(--ink);z-index:1}
 .hd10-sx input{position:absolute;left:36px;right:40px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;user-select:text;-webkit-user-select:text;min-width:0;width:calc(100% - 76px)}
 .hd10-sx input::-webkit-search-cancel-button{display:none}

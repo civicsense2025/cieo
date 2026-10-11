@@ -56,8 +56,9 @@ a{color:inherit} [data-icon] svg, .ui-icon{width:20px;height:20px;flex:none;poin
 .ui-navigation{flex:1;overflow:auto;scrollbar-width:thin;min-height:0;padding:0 0 16px}
 .ui-navlink{display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border-radius:12px;text-decoration:none;font-size:13px;color:var(--muted)}
 .ui-navlink:hover{background:var(--raised);color:var(--ink)}.ui-navlink[aria-current=page]{background:var(--accent-tint);color:var(--accent);font-weight:600}
-.ui-navlink span:nth-last-child(1){margin-left:auto;font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted)}
-.ui-navtitle{display:flex;justify-content:space-between;margin:24px 16px 8px;font-size:12px;color:var(--muted);font-weight:500}
+.ui-navlink span:nth-last-child(1){margin-left:auto;font-size:11px;font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+.ui-navtitle{display:flex;justify-content:space-between;gap:8px;margin:24px 16px 8px;font-size:12px;color:var(--muted);font-weight:500}
+.ui-navtitle span{white-space:nowrap}
 .ui-folders{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 0}
 .ui-folder{min-width:0;height:96px;text-decoration:none;padding:8px;border-radius:16px;background:var(--card);text-align:center;display:flex;align-items:center;justify-content:flex-end;flex-direction:column;gap:8px;font-size:11px;color:var(--ink)}
 .ui-folder:hover{background:var(--raised)}.ui-folder[aria-current=page]{background:var(--accent-tint);color:var(--accent);font-weight:600}
@@ -187,7 +188,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
     <button class="ui-button ghost icon ui-desktop-only" id="details-toggle" aria-label="Show inline details" aria-pressed="false" data-icon="code"></button>
     <button class="ui-button ghost icon ui-desktop-only" data-open="appearance-dialog" aria-label="Collection appearance" data-icon="settings"></button>
   </div>
-  <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span>Saved</button></div></div>
+  <div class="ui-heading"><div><h1 id="collection-title">Everything, in motion.</h1><p id="collection-subtitle">Small interactions. A little more feeling.</p></div><div class="ui-heading-tools"><span class="ui-muted" id="total-count"></span><button class="ui-button" id="saved-toggle" aria-pressed="false"><span data-icon="bookmark"></span><span>Saved <span id="saved-count">0</span></span></button></div></div>
   <div class="ui-toolbar">
     <div class="ui-families" role="tablist" aria-label="Motion family" id="family-filter"></div>
     <div class="ui-viewtools"><span id="count" class="ui-muted ui-result-count" aria-live="polite"></span><div class="row"><button class="ui-button ghost" id="pause-motion" aria-label="Pause previews" aria-pressed="false" data-icon="pause"></button><label class="ui-speed" for="motion-speed">Speed</label><select id="motion-speed"><option value="1">1× speed</option><option value="0.25">¼× speed</option><option value="0.1">⅒× speed</option></select></div></div>
@@ -197,7 +198,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
   <div id="empty-state" class="ui-empty" hidden><span data-icon="search"></span><h2>Nothing here. Yet.</h2><p>Try another search, or save a few atoms to start a collection.</p><button class="ui-button" id="clear-filters">Show all atoms</button></div>
   <noscript><p>This catalogue needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
 </main>
-<nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span>Saved</button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
+<nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span><span>Saved <span id="mobile-saved-count">0</span></span></button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
 <dialog class="ui-dialog" id="browse-dialog" aria-labelledby="browse-title"><div class="ui-dialog-heading"><h2 id="browse-title">Collections</h2><button class="ui-button ghost icon" data-close aria-label="Close collections" data-icon="close"></button></div><div class="ui-rail-slot" id="rail-slot"></div></dialog>
 <dialog class="ui-dialog" id="appearance-dialog" aria-labelledby="appearance-title"><div class="ui-dialog-heading"><h2 id="appearance-title">Make room for your taste.</h2><button class="ui-button ghost icon" data-close aria-label="Close appearance" data-icon="close"></button></div>
   <div class="ui-settings">
@@ -933,7 +934,7 @@ window.CIEO_SOURCE_HINT="blocks/028-newsletter.js";
 
 
 atom({ id:'newsletter', cat:'Newsletter', name:'Subscribe', block:'newsletter', fam:['M','S'],
-  html:`<div class="col" style="align-items:center;gap:8px"><form class="nf" novalidate style="position:relative;display:flex;gap:6px;height:48px;padding:4px;border-radius:24px;background:var(--card);overflow:hidden"><input id="nl-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 14px"><button class="sb" aria-label="Subscribe" style="position:relative;flex:none;height:40px;border-radius:20px;border:0;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="done layer" style="font-weight:500;color:var(--success)"></div></form><div class="ne small" role="alert" style="color:var(--danger);height:20px"></div></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Reset</button><div class="hint">Try an invalid address first, then a real one</div>`,
+  html:`<div class="col" style="align-items:center;gap:8px"><form class="nf" novalidate style="position:relative;display:flex;gap:6px;height:48px;padding:4px;border:1.5px solid var(--muted);border-radius:24px;background:var(--card);overflow:hidden"><input id="nl-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 14px"><button class="sb" aria-label="Subscribe" style="position:relative;flex:none;height:40px;border-radius:20px;border:0;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="done layer" style="font-weight:500;color:var(--success)"></div></form><div class="ne small" role="alert" style="color:var(--danger);height:20px"></div></div><button class="btn rs" style="position:absolute;top:10px;right:12px">Reset</button><div class="hint">Try an invalid address first, then a real one</div>`,
   desc:'An invalid address rings the field in the danger color and opens a message. A valid one shrinks the button into a spinner, turns it success-colored with a check, then morphs the whole field into a tinted confirmation pill.',
   api:'err.set(1) → ring(danger)   plan(loading, check → success, done → success-tint)',
   init(st){
@@ -1084,7 +1085,7 @@ window.CIEO_SOURCE_HINT="blocks/034-search.js";
 
 
 atom({ id:'search', cat:'Chrome', name:'Search expand', block:'search-trigger', fam:['M','S','X','E'], tall:true,
-  html:`<div class="sw0" style="position:absolute;top:24px;left:50%;transform:translateX(-50%);width:min(340px,88%)"><div class="card row" style="height:52px;padding:0 8px 0 16px;justify-content:space-between"><b class="brand" style="letter-spacing:-.02em">Paper Trail</b><div class="sx" style="position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:none"><button class="sb" aria-label="Search" style="position:absolute;left:0;top:0;width:36px;height:36px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><input id="srch" role="combobox" aria-expanded="false" aria-autocomplete="list" placeholder="Search posts" aria-label="Search posts" autocomplete="off" style="position:absolute;left:34px;right:12px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></div></div><div class="rs card" role="listbox" style="position:absolute;top:58px;left:0;right:0;overflow:hidden;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:8px;background:var(--raised)"></i><div class="em small muted" style="position:absolute;left:0;right:0;top:0;height:52px;display:grid;place-items:center"></div></div></div><div class="hint">Click the magnifier, then type “pri” or “fog” · Esc closes</div>`,
+  html:`<div class="sw0" style="position:absolute;top:24px;left:50%;transform:translateX(-50%);width:min(340px,88%)"><div class="card row" style="height:52px;padding:0 8px 0 16px;justify-content:space-between"><b class="brand" style="letter-spacing:-.02em">Paper Trail</b><div class="sx" style="position:relative;height:36px;border-radius:18px;background:var(--raised);box-shadow:inset 0 0 0 1.5px var(--muted);overflow:hidden;flex:none"><button class="sb" aria-label="Search" style="position:absolute;left:0;top:0;width:36px;height:36px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button><input id="srch" role="combobox" aria-expanded="false" aria-autocomplete="list" placeholder="Search posts" aria-label="Search posts" autocomplete="off" style="position:absolute;left:34px;right:12px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></div></div><div class="rs card" role="listbox" style="position:absolute;top:58px;left:0;right:0;overflow:hidden;transform-origin:50% 0;visibility:hidden"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:8px;background:var(--raised)"></i><div class="em small muted" style="position:absolute;left:0;right:0;top:0;height:52px;display:grid;place-items:center"></div></div></div><div class="hint">Click the magnifier, then type “pri” or “fog” · Esc closes</div>`,
   desc:'The icon button widens into the field while the brand fades, and the input appears once the shape has mostly opened. As you type, results open below. Matching rows spring into place with the match in bold, misses blur out, and the highlight follows the arrow keys.',
   api:'w.set(open ? 220 : 36)   results.o.set(query)   row.y.set(k·52)   row.o.set(match)',
   init(st){
@@ -1544,7 +1545,7 @@ window.CIEO_SOURCE_HINT="blocks/052-donation.js";
 
 
 atom({ id:'donation', cat:'Commerce', name:'Donation amount', block:'donation', fam:['E','M','S'], tall:true,
-  html:`<div class="card col" style="width:min(320px,90%);padding:16px;gap:12px"><b>Support the newsroom</b><div class="seg da" style="display:flex"><div class="ind"></div><button>$10</button><button>$25</button><button>$50</button><button>$100</button><button>Other</button></div><div class="ow" style="overflow:hidden;height:0"><label class="row small" style="gap:6px;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card)"><span class="muted">$</span><input id="don-amt" inputmode="numeric" placeholder="Amount" aria-label="Custom amount" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></label></div><button class="btn ink go" aria-label="Donate" style="position:relative;height:40px;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden"></button><div class="rc small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="rc-on" checked> Receipt</label></div>`,
+  html:`<div class="card col" style="width:min(320px,90%);padding:16px;gap:12px"><b>Support the newsroom</b><div class="seg da" style="display:flex"><div class="ind"></div><button>$10</button><button>$25</button><button>$50</button><button>$100</button><button>Other</button></div><div class="ow" style="overflow:hidden;height:0"><label class="row small" style="gap:6px;border:1.5px solid var(--muted);border-radius:9px;padding:8px 10px;background:var(--card)"><span class="muted">$</span><input id="don-amt" inputmode="numeric" placeholder="Amount" aria-label="Custom amount" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none"></label></div><button class="btn ink go" aria-label="Donate" style="position:relative;height:40px;display:flex;align-items:center;justify-content:center;gap:4px;overflow:hidden"></button><div class="rc small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="rc-on" checked> Receipt</label></div>`,
   desc:'The amount indicator stretches between chips. “Other” opens a field below on a height spring, and the button’s amount rolls digit by digit. Giving fills the button with success and swaps to a thank-you state with a receipt line, then settles back to a retryable Give.',
   api:'ind.go(l, r)   other.h.set(1)   digits.set(amount)   give: busy → thanks → idle   receipt.to(rc | none)',
   init(st){
@@ -2085,7 +2086,7 @@ window.CIEO_SOURCE_HINT="blocks/081-dropzone.js";
 
 
 atom({ id:'dropzone', cat:'Inputs', name:'File drop zone', block:'form, gallery upload', fam:['X','M','T'], tall:true,
-  html:`<div class="col" style="width:min(336px,calc(100% - 48px));gap:8px"><label class="dz" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;border:1px dashed var(--line);border-radius:16px;cursor:pointer;text-align:center">${ic(I.up,20)}<span class="small"><b>Drop files</b> or browse</span><span class="small muted">PNG, JPG or PDF · 5 MB max</span><input id="dz-in" type="file" aria-label="Choose files" accept=".png,.jpg,.jpeg,.pdf" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn sm" style="align-self:flex-end">Use sample files</button><label class="row small muted" style="gap:6px;align-items:center;align-self:flex-end;cursor:pointer"><input type="checkbox" class="thm" checked> Thumbnails</label><div class="fl col" role="status" style="gap:8px;max-height:144px;overflow:auto"></div></div>`,
+  html:`<div class="col" style="width:min(336px,calc(100% - 48px));gap:8px"><label class="dz" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px;border:1.5px dashed var(--muted);border-radius:16px;cursor:pointer;text-align:center">${ic(I.up,20)}<span class="small"><b>Drop files</b> or browse</span><span class="small muted">PNG, JPG or PDF · 5 MB max</span><input id="dz-in" type="file" aria-label="Choose files" accept=".png,.jpg,.jpeg,.pdf" multiple style="position:absolute;inset:0;opacity:0;cursor:pointer"></label><button class="btn sm" style="align-self:flex-end">Use sample files</button><label class="row small muted" style="gap:6px;align-items:center;align-self:flex-end;cursor:pointer"><input type="checkbox" class="thm" checked> Thumbnails</label><div class="fl col" role="status" style="gap:8px;max-height:144px;overflow:auto"></div></div>`,
   desc:'Dragging a file over the zone inks its border and tints it. Each file opens its row, fills its bar, then ends in a success check or a danger message. Files never leave your browser.',
   api:'zone.over.set(dragging)   bar = load.at(t)   end → success | danger',
   init(st){
@@ -2105,7 +2106,7 @@ atom({ id:'dropzone', cat:'Inputs', name:'File drop zone', block:'form, gallery 
     dz.addEventListener('dragenter', ev => { if (hasFiles(ev)) over.set(1); }); dz.addEventListener('dragleave', () => over.set(0)); dz.addEventListener('dragover',ev=>{if(hasFiles(ev))ev.preventDefault()});dz.addEventListener('drop',ev=>{if(hasFiles(ev)){ev.preventDefault();[...ev.dataTransfer.files].forEach(f=>add(f.name,f.size,f))}over.set(0)});
     fin.onchange = () => { [...fin.files].forEach(f => add(f.name, f.size, f)); fin.value = ''; };
     $(st,'.sm').onclick = () => { add('cover-photo.jpg', 1.8e6); setTimeout(() => add('annual-report.pdf', 8.4e6), 250/clock.scale); };
-    return t => { const o = clamp(over.at(t)); dz.style.borderColor = mix(o,'var(--ink)','var(--line)'); dz.style.background = mix(o,'var(--raised)','transparent'); dz.style.transform = `scale(${(1 + .01*o).toFixed(4)})`;
+    return t => { const o = clamp(over.at(t)); dz.style.borderColor = mix(o,'var(--ink)','var(--muted)'); dz.style.background = mix(o,'var(--raised)','transparent'); dz.style.transform = `scale(${(1 + .01*o).toFixed(4)})`;
       files.forEach(f => { if (f.doneAt && t >= f.doneAt){ f.doneAt = 0; f.end.set(1); } const e = clamp(f.end.at(t));
         f.r.style.height = px(clamp(f.h.at(t))*(f.in.offsetHeight)); fade(f.in, f.h.at(t), null);
         f.br.style.width = (clamp(f.ld.at(t))*100).toFixed(2) + '%'; f.br.style.background = f.bad ? mix(e,'var(--danger)','var(--ink)') : mix(e,'var(--success)','var(--ink)');
@@ -2290,7 +2291,7 @@ window.CIEO_SOURCE_HINT="blocks/090-phone.js";
 
 
 atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:['S','M'],
-  html:`<div class="col" style="width:min(300px,88%);gap:6px"><label class="small" for="ph" style="font-weight:500">Mobile number</label><div class="pw row" style="height:42px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);gap:0;overflow:hidden"><button class="cc" aria-label="Change country" style="position:relative;width:70px;height:100%;border:0;border-right:1px solid var(--line-soft);background:none;cursor:pointer;font:500 13px var(--sans)"></button><input id="ph" inputmode="tel" autocomplete="tel" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 10px;font-variant-numeric:tabular-nums"><span class="ok" style="padding-right:10px;color:var(--success)">${ic(I.check,16,2.5)}</span></div><span class="small muted">Click the country code to switch</span></div>`,
+  html:`<div class="col" style="width:min(300px,88%);gap:6px"><label class="small" for="ph" style="font-weight:500">Mobile number</label><div class="pw row" style="height:42px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);gap:0;overflow:hidden"><button class="cc" aria-label="Change country" style="position:relative;width:70px;height:100%;border:0;border-right:1px solid var(--line-soft);background:none;cursor:pointer;font:500 13px var(--sans)"></button><input id="ph" inputmode="tel" autocomplete="tel" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 10px;font-variant-numeric:tabular-nums"><span class="ok" style="padding-right:10px;color:var(--success)">${ic(I.check,16,2.5)}</span></div><span class="small muted">Click the country code to switch</span></div>`,
   desc:'Digits format as you type for the chosen country. Switching country swaps the code with a blur and reformats the number. A complete number earns a success check.',
   api:'value = format(digits, country)   cc.to(country)   ok.set(complete)',
   init(st){
@@ -2300,7 +2301,7 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const sw = new Swap(0), ok = new Track(0); let k = 0;
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
     inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); };
-    inp.onfocus = () => pw.style.borderColor = 'var(--ink)'; inp.onblur = () => pw.style.borderColor = 'var(--line)'; fmt();
+    inp.onfocus = () => pw.style.borderColor = 'var(--ink)'; inp.onblur = () => pw.style.borderColor = 'var(--muted)'; fmt();
     return t => { L.forEach((e,i) => sw.apply(e,i,t)); const p = clamp(ok.at(t)); okEl.style.opacity = p.toFixed(3); okEl.style.transform = `scale(${(.6+.4*p).toFixed(3)})`; };
   }});
 window.CIEO_SOURCE_HINT="blocks/091-multiselect.js";
@@ -2540,7 +2541,7 @@ window.CIEO_SOURCE_HINT="blocks/101-password.js";
 
 
 atom({ id:'password', cat:'Forms', name:'Password with strength', block:'form, account', fam:['M','S'], tall:true,
-  html:`<div class="col" style="width:min(300px,88%);gap:8px"><label class="small" for="pw" style="font-weight:500">New password</label><div class="row" style="height:42px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);padding:0 4px 0 11px;gap:4px"><input id="pw" type="password" autocomplete="new-password" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none"><button class="ey" aria-label="Show password" aria-pressed="false" style="width:34px;height:34px;border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="sl" d="M4 4l16 16" pathLength="1" stroke-dasharray="1"/></svg></button></div><div class="row mt" style="gap:4px"></div><div class="row small" style="justify-content:space-between"><span class="muted">Strength</span><span class="lv" style="position:relative;width:70px;height:20px;font-weight:600"></span></div><div class="col rq small" style="gap:4px"></div></div>`,
+  html:`<div class="col" style="width:min(300px,88%);gap:8px"><label class="small" for="pw" style="font-weight:500">New password</label><div class="row" style="height:42px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);padding:0 4px 0 11px;gap:4px"><input id="pw" type="password" autocomplete="new-password" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none"><button class="ey" aria-label="Show password" aria-pressed="false" style="width:34px;height:34px;border:0;background:none;cursor:pointer;color:var(--muted);display:grid;place-items:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="sl" d="M4 4l16 16" pathLength="1" stroke-dasharray="1"/></svg></button></div><div class="row mt" style="gap:4px"></div><div class="row small" style="justify-content:space-between"><span class="muted">Strength</span><span class="lv" style="position:relative;width:70px;height:20px;font-weight:600"></span></div><div class="col rq small" style="gap:4px"></div></div>`,
   desc:'Meter segments fill in order as strength rises, shifting from danger to warning to success. Each requirement draws its own check when met. The eye icon’s slash draws on and off.',
   api:'seg[i].set(score > i, S.base, t + i·0.04)   req.check.set(met)   slash.set(hidden)',
   init(st){
@@ -3007,7 +3008,7 @@ window.CIEO_SOURCE_HINT="blocks/126-charring.js";
 
 
 atom({ id:'charring', cat:'Social', name:'Character limit ring', block:'form (long answer), comments', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,90%);padding:12px;gap:10px"><textarea id="post-ta" rows="3" placeholder="What’s new?" style="resize:none;border:0;background:none;color:var(--ink);font:15px/1.5 var(--sans);outline:none">Spring launch is Thursday. Members get first-day access to every drop, and yearly plans now save 20%.</textarea><div class="row" style="justify-content:flex-end;gap:10px"><span style="position:relative;width:26px;height:26px"><svg viewBox="0 0 26 26" width="26" height="26" aria-hidden="true"><circle cx="13" cy="13" r="10" fill="none" stroke="var(--raised)" stroke-width="2.5"/><circle class="rg" cx="13" cy="13" r="10" fill="none" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 13 13)"/></svg><span class="lft num" style="position:absolute;inset:0;display:grid;place-items:center;font:600 10px var(--sans)"></span></span><button class="btn ink pb">Post</button></div></div>`,
+  html:`<div class="card col" style="width:min(320px,90%);padding:12px;gap:10px"><textarea id="post-ta" rows="3" placeholder="What’s new?" style="resize:none;border:1.5px solid var(--muted);border-radius:10px;padding:8px 10px;box-sizing:border-box;width:100%;background:var(--card);color:var(--ink);font:15px/1.5 var(--sans);outline:none">Spring launch is Thursday. Members get first-day access to every drop, and yearly plans now save 20%.</textarea><div class="row" style="justify-content:flex-end;gap:10px"><span style="position:relative;width:26px;height:26px"><svg viewBox="0 0 26 26" width="26" height="26" aria-hidden="true"><circle cx="13" cy="13" r="10" fill="none" stroke="var(--raised)" stroke-width="2.5"/><circle class="rg" cx="13" cy="13" r="10" fill="none" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 13 13)"/></svg><span class="lft num" style="position:absolute;inset:0;display:grid;place-items:center;font:600 10px var(--sans)"></span></span><button class="btn ink pb">Post</button></div></div>`,
   desc:'The ring fills with the length of the post. Under 20 characters left it grows slightly and shows the countdown inside; past the limit it turns danger, the number goes negative and Post is disabled.',
   api:'ring.set(len/280)   size.set(left < 20)   color = band(left)',
   init(st){
@@ -3818,7 +3819,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
 .sh-hl{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--raised);opacity:0}
 .sh-ul{position:absolute;left:0;bottom:3px;height:2px;border-radius:1px;background:var(--ink)}
 .sh-rt{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
-.sh-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:none}
+.sh-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);box-shadow:inset 0 0 0 1.5px var(--muted);overflow:hidden;flex:none}
 .sh-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;padding:0;background:none;cursor:pointer;display:grid;place-items:center}
 .sh-sx input{position:absolute;left:34px;right:12px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;user-select:text;-webkit-user-select:text}
 .sh-cta{height:36px;padding:0 14px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-size:14px;font-weight:500;cursor:pointer;white-space:nowrap}
@@ -5987,7 +5988,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
 .qc-mi:hover,.qc-mi:focus-visible{background:var(--raised)}
 .qc-mi:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .qc-kc{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:999px;background:var(--raised);font-size:12px;font-weight:500;flex:none}
-.qc-in{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:13.5px;color:var(--ink);padding:4px 2px;border-radius:6px;user-select:text;-webkit-user-select:text}
+.qc-in{flex:1;min-width:0;border:0;border-bottom:1.5px solid var(--muted);background:none;font:inherit;font-size:13.5px;color:var(--ink);padding:4px 2px;border-radius:6px;user-select:text;-webkit-user-select:text}
 .qc-go:disabled{opacity:.4;cursor:default}
 .qc-x{display:grid;place-items:center;width:26px;height:26px;flex:none;border:0;border-radius:7px;background:none;color:var(--muted);cursor:pointer}
 .qc-x:hover{background:var(--raised);color:var(--ink)}
@@ -7356,7 +7357,7 @@ atom({ id:'revisions', cat:'Workflow', name:'Revision history', block:'RevisionH
 
 /* ================================================================ 2. Annotation review canvas */
 const MOCK = `<svg viewBox="0 0 480 300" width="100%" height="100%" preserveAspectRatio="none" style="display:block" aria-hidden="true"><rect width="480" height="300" fill="var(--card)"/><rect width="480" height="36" fill="var(--tile)"/><path d="M0 36.5H480" stroke="var(--line)"/><rect x="20" y="13" width="46" height="10" rx="5" fill="var(--ink)"/><rect x="300" y="14" width="30" height="8" rx="4" fill="var(--faint)"/><rect x="344" y="14" width="30" height="8" rx="4" fill="var(--faint)"/><rect x="388" y="14" width="22" height="8" rx="4" fill="var(--faint)"/><rect x="420" y="9" width="44" height="18" rx="9" fill="var(--accent)"/><rect x="28" y="72" width="214" height="16" rx="8" fill="var(--ink)"/><rect x="28" y="96" width="176" height="16" rx="8" fill="var(--ink)"/><rect x="28" y="120" width="112" height="16" rx="8" fill="var(--ink)"/><rect x="28" y="150" width="200" height="7" rx="3.5" fill="var(--faint)"/><rect x="28" y="164" width="170" height="7" rx="3.5" fill="var(--faint)"/><rect x="28" y="182" width="96" height="26" rx="13" fill="var(--accent)"/><rect x="134" y="182.75" width="74" height="24.5" rx="12.25" fill="none" stroke="var(--faint)" stroke-width="1.5"/><rect x="272" y="62" width="184" height="150" rx="12" fill="var(--raised)"/><circle cx="418" cy="100" r="16" fill="var(--accent)"/><path d="M272 200 L330 130 L370 168 L408 140 L456 196 L456 200 A12 12 0 0 1 444 212 L284 212 A12 12 0 0 1 272 200Z" fill="var(--ink)"/><rect x="28" y="236" width="128" height="48" rx="8" fill="var(--tile)" stroke="var(--line)"/><rect x="176" y="236" width="128" height="48" rx="8" fill="var(--tile)" stroke="var(--line)"/><rect x="324" y="236" width="128" height="48" rx="8" fill="var(--tile)" stroke="var(--line)"/><rect x="40" y="249" width="52" height="7" rx="3.5" fill="var(--ink)"/><rect x="40" y="264" width="84" height="6" rx="3" fill="var(--faint)"/><rect x="188" y="249" width="52" height="7" rx="3.5" fill="var(--ink)"/><rect x="188" y="264" width="84" height="6" rx="3" fill="var(--faint)"/><rect x="336" y="249" width="52" height="7" rx="3.5" fill="var(--ink)"/><rect x="336" y="264" width="84" height="6" rx="3" fill="var(--faint)"/></svg>`;
-const TA = 'display:block;width:100%;resize:none;margin-top:8px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:13px/1.45 var(--sans);padding:7px 10px;outline:none';
+const TA = 'display:block;width:100%;resize:none;margin-top:8px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:13px/1.45 var(--sans);padding:7px 10px;outline:none';
 const XB = `<button type="button" class="rw-xb" aria-label="Close comment" style="flex:none;border:0;background:none;color:var(--muted);padding:3px;border-radius:7px;cursor:pointer;display:grid;place-items:center">${ic(I.x, 14)}</button>`;
 const threadHead = `<div class="row" style="align-items:flex-start;gap:8px"><span class="rw-av"></span><div style="flex:1;min-width:0"><b class="small rw-au" style="display:block;line-height:18px"></b><span class="muted" style="font-size:12px">Image point <span class="rw-no"></span></span></div>${XB}</div><p class="rw-tt" style="margin:8px 0 0;font-size:13px;line-height:1.45;overflow-wrap:anywhere"></p>`;
 const LY = 'position:absolute;left:0;top:0;width:100%;padding:12px';
@@ -7538,7 +7539,7 @@ atom({ id:'annotate', cat:'Workflow', name:'Annotation review canvas', block:'Re
         cs.background = mix(clamp(o * 1.5), 'var(--card)', fill); cs.pointerEvents = o > .5 ? 'auto' : 'none';
         const cin = clamp((o - .5) * 2); fade(cc, cin, (1 - cin) * 3);
         for (let k = 0; k < 3; k++) csw.apply(L[k], k, t, 3);
-        ta.style.borderColor = mix(clamp(tf.at(t)), 'var(--accent)', 'var(--line)'); sub.style.opacity = (.45 + .55 * clamp(sbT.at(t))).toFixed(3);
+        ta.style.borderColor = mix(clamp(tf.at(t)), 'var(--accent)', 'var(--muted)'); sub.style.opacity = (.45 + .55 * clamp(sbT.at(t))).toFixed(3);
       } else card.style.visibility = 'hidden';
       plate(plateEl, pe.A.at(t), pe.B.at(t)); plateEl.style.opacity = clamp(po.at(t)).toFixed(3);
       for (const p of pins){ const r = p.row; if (!r) continue; const e = clamp(r.e.at(t)), rs = clamp(p.rs.at(t));
@@ -7549,7 +7550,7 @@ atom({ id:'annotate', cat:'Workflow', name:'Annotation review canvas', block:'Re
   }});
 
 /* ================================================================ 3. Auth shell */
-const INP = 'display:block;width:100%;height:36px;border:1.5px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);font:15px var(--sans);padding:0 11px;outline:none';
+const INP = 'display:block;width:100%;height:36px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink);font:15px var(--sans);padding:0 11px;outline:none';
 const field = (id, label, type, ph) => `<div><label for="${id}" class="small" style="display:block;font-weight:500;line-height:16px;margin-bottom:3px">${label}</label><input id="${id}" type="${type}" placeholder="${ph}" autocomplete="off" style="${INP}"></div>`;
 const pane = (n, inner) => `<form class="rw-pn" data-p="${n}" novalidate style="position:absolute;left:0;right:0;top:0;padding:14px 16px 12px">${inner}</form>`;
 const H2 = t => `<h2 style="margin:0 0 10px;font-size:20px;line-height:24px;letter-spacing:-.02em;font-weight:600">${t}</h2>`;
@@ -7628,7 +7629,7 @@ atom({ id:'authshell', cat:'Workflow', name:'Auth shell', block:'AuthShell, Auth
       P.forEach((p, i) => {
         sw.apply(p.f, i, t); if (p.sub){ p.bsw.apply(p.b0, 0, t, 3); p.bsw.apply(p.b1, 1, t, 3); }
         const er = clamp(p.er.at(t)); if (p.erEl){ p.erEl.style.height = px(er * p.eh); p.em.style.opacity = er.toFixed(3); eh += er * p.eh; }
-        p.ins.forEach(inp => { inp.style.borderColor = mix(clamp(inp._iv.at(t)), 'var(--danger)', mix(clamp(inp._tf.at(t)), 'var(--accent)', inp._fl ? mix(clamp(inp._fl.at(t)), 'var(--ink)', 'var(--line)') : 'var(--line)')); });
+        p.ins.forEach(inp => { inp.style.borderColor = mix(clamp(inp._iv.at(t)), 'var(--danger)', mix(clamp(inp._tf.at(t)), 'var(--accent)', inp._fl ? mix(clamp(inp._fl.at(t)), 'var(--ink)', 'var(--muted)') : 'var(--muted)')); });
       });
       ab.style.height = px(h.at(t) + eh);
       const v = clamp(sv.at(t)); so.style.opacity = v.toFixed(3); so.style.visibility = v < .01 ? 'hidden' : 'visible';
@@ -8153,8 +8154,8 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
 .oag-ft{display:flex;flex-direction:column;gap:10px}
 .oag-hd{overflow:hidden}
 .oag-cnt{display:flex;padding-top:10px;gap:4px;align-items:center;font-size:12.5px;line-height:18px;color:var(--muted)}
-.oag-act{display:flex;height:40px}
-.oag-act .btn{position:relative;flex:1 1 0;min-width:0;height:40px;padding:0;overflow:hidden;font-size:14px}
+.oag-act{display:flex;min-height:44px}
+.oag-act .btn{position:relative;flex:1 1 0;min-width:0;min-height:44px;padding:0;overflow:hidden;font-size:14px}
 .oag-act .btn>span{position:absolute;inset:0}
 .oag-fine{font-size:12px;line-height:17px;color:var(--muted)}
 @container (min-width:620px){
@@ -10750,7 +10751,7 @@ atom({ id:'header-search', cat:'Headers', name:'Header: search expands in place'
 .hd10-lw{flex:none;overflow:hidden}
 .hd10-nv{position:relative;flex:1;min-width:0;height:36px;overflow:hidden}
 .hd10-g{position:absolute;left:0;top:0;display:flex;gap:2px;height:36px}
-.hd10-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);overflow:hidden;flex:0 0 36px}
+.hd10-sx{position:relative;height:36px;border-radius:18px;background:var(--raised);box-shadow:inset 0 0 0 1.5px var(--muted);overflow:hidden;flex:0 0 36px}
 .hd10-sb{position:absolute;left:0;top:0;width:36px;height:36px;border:0;background:none;cursor:pointer;display:grid;place-items:center;color:var(--ink);z-index:1}
 .hd10-sx input{position:absolute;left:36px;right:40px;top:0;height:36px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;user-select:text;-webkit-user-select:text;min-width:0;width:calc(100% - 76px)}
 .hd10-sx input::-webkit-search-cancel-button{display:none}
@@ -11129,7 +11130,7 @@ atom({ id:'footer-newsletter', cat:CAT, name:'Footer with newsletter signup', bl
 .${P4}nl p.${P4}sub{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:42ch}
 .${P4}nl{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0}
 .${P4}nf{margin:0;max-width:420px}
-.${P4}fd{position:relative;display:flex;align-items:center;gap:6px;height:46px;padding:4px;border-radius:12px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.${P4}fd{position:relative;display:flex;align-items:center;gap:6px;height:46px;padding:4px;border-radius:12px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--muted)}
 .${P4}fd:focus-within{outline:2px solid var(--accent);outline-offset:2px}
 .${P4}fd input{flex:1;min-width:0;height:100%;border:0;background:none;padding:0 10px;font:inherit;font-size:14px;color:var(--ink);outline:none!important;user-select:text;-webkit-user-select:text}
 .${P4}sb{position:relative;flex:none;height:100%;width:96px;border:0;border-radius:9px;background:var(--ink);color:var(--card);font-size:13.5px;font-weight:500;cursor:pointer;overflow:hidden;white-space:nowrap}
@@ -11180,7 +11181,7 @@ ${col(P4, 'Product', ['Editor', 'Commerce', 'Members', 'Pricing'])}${col(P4, 'Re
     put({ s:'idle' }); [dg, wr, okr, bsu, bdg, dnT, bo, inO, bw, mh].forEach(x => x.jump(x.target)); lsw.cur = 0; lsw.prev = null; lsw.t = -9; msw.cur = 0; msw.prev = null; msw.t = -9;
     return t => { while (q.length && q[0][0] <= t) q.shift()[1]();
       const D = clamp(dg.at(t)), W = clamp(wr.at(t)), O = clamp(okr.at(t)), N = clamp(dnT.at(t));
-      fd.style.boxShadow = `inset 0 0 0 1.5px ${mix(O, 'var(--success)', mix(W, 'var(--warning)', mix(D, 'var(--danger)', 'var(--line)')))}`;
+      fd.style.boxShadow = `inset 0 0 0 1.5px ${mix(O, 'var(--success)', mix(W, 'var(--warning)', mix(D, 'var(--danger)', 'var(--muted)')))}`;
       fd.style.background = mix(N, 'var(--success-tint)', 'var(--card)');
       const su = clamp(bsu.at(t)), bd = clamp(bdg.at(t)); sb.style.width = px(Math.max(0, bw.at(t))); sb.style.background = mix(su, 'var(--success)', mix(bd, 'var(--danger)', 'var(--ink)')); sb.style.color = mix(clamp(su + bd), '#fff', 'var(--card)');
       sb.style.opacity = clamp(bo.at(t)).toFixed(3); sb.style.pointerEvents = bo.target ? 'auto' : 'none';
@@ -17017,7 +17018,7 @@ document.head.insertAdjacentHTML('beforeend', `<style id="txg-shared">
 .txg-hint{font-size:12px;color:var(--muted);text-align:right;max-width:34ch}
 @container (max-width:479px){.txg-hint{display:none}}
 .txg-dk{--dk:#0C1016;--dk-ink:#EFF2F6;--dk-mut:#ABAEB3;--dk-line:#2A2F36;color:#EFF2F6}
-.txg-ib{width:40px;height:40px;border-radius:50%;border:1px solid color-mix(in oklab,#EFF2F6 22%,transparent);background:color-mix(in oklab,#0C1016 74%,transparent);color:#EFF2F6;display:grid;place-items:center;padding:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.txg-ib{width:40px;height:40px;border-radius:50%;border:1.5px solid #EFF2F6;background:color-mix(in oklab,#0C1016 74%,transparent);color:#EFF2F6;display:grid;place-items:center;padding:0;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .txg-ib:hover{background:#0C1016}
 .txg-ib:focus-visible,.txg-dk button:focus-visible,.txg-dk [tabindex]:focus-visible{outline:2px solid #EFF2F6;outline-offset:2px}
 .txg-ph{position:absolute;left:0;top:0;transform-origin:0 0;visibility:hidden}
@@ -20332,7 +20333,7 @@ atom({ id:'backlink', cat:'Writing', name:'Backlink popover', block:'richtext ed
 
 window.CIEO_SOURCE_HINT="blocks/206-tagpill.js";
 atom({ id:'tagpill', cat:'Writing', name:'Tag pill autocomplete', block:'tag input, editor', fam:['M','X','E'],
-  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col ed" style="margin:0 auto;width:min(340px,92%);gap:8px"><label class="tg card" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-height:46px;padding:14px;cursor:text"><input placeholder="Write something, try #de…" autocomplete="off" aria-label="Editor line" style="flex:1;min-width:120px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:4px"></label></div><div class="mn card" role="listbox" style="position:absolute;left:0;top:0;width:200px;padding:6px;visibility:hidden;transform-origin:0 0"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:7px;background:var(--raised)"></i></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Filter on #</span></label><div class="hint">Type # to filter tags, Enter makes a pill</div>`,
+  html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="col ed" style="margin:0 auto;width:min(340px,92%);gap:8px"><label class="tg card" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-height:46px;padding:14px;cursor:text;border:1.5px solid var(--muted);border-radius:12px"><input placeholder="Write something, try #de…" autocomplete="off" aria-label="Editor line" style="flex:1;min-width:120px;border:0;background:none;color:var(--ink);font:14px var(--sans);outline:none;padding:4px"></label></div><div class="mn card" role="listbox" style="position:absolute;left:0;top:0;width:200px;padding:6px;visibility:hidden;transform-origin:0 0"><i class="hl" style="position:absolute;left:6px;right:6px;top:0;border-radius:7px;background:var(--raised)"></i></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Filter on #</span></label><div class="hint">Type # to filter tags, Enter makes a pill</div>`,
   desc:'Typing # filters the list inline: matches spring into their slots while misses blur out. The plate trails the top match by 60ms, and Enter morphs the word into a pill that springs open before its text fades in.',
   api:'rows.filter(#q)   match: y.set(slot); miss: o.set(0)   plate.go(first)   pill: w.set(1); o.set(1, S.base, t+.06)',
   init(st){
@@ -23314,7 +23315,7 @@ atom({ id:'postracker', cat:'SEO', name:'Position tracker', block:'seo ranks, sp
 
 window.CIEO_SOURCE_HINT="blocks/351-snippeted.js";
 atom({ id:'snippeted', cat:'SEO', name:'Snippet preview editor', block:'seo snippet, serp preview', fam:['M','S','E'],
-  html:`<div class="col" style="width:min(400px,94%);gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">Snippet preview</b><div class="seg tabsx" role="tablist" style="align-self:flex-start"><div class="ind"></div><button role="tab">Desktop</button><button role="tab">Mobile</button></div><div class="col" style="gap:8px"><label class="small" for="sn-t" style="font-weight:500;font-size:13px">Title</label><input id="sn-t" value="Spring launch: new member tiers and yearly pricing" style="border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);outline:none"><label class="small" for="sn-d" style="font-weight:500;font-size:13px">Description</label><textarea id="sn-d" rows="2" style="resize:none;border:1.5px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:13px/1.55 var(--sans);outline:none">Members get first-day access to every drop, and yearly plans save 20% over monthly billing.</textarea></div><div class="card pv" style="padding:14px 16px;position:relative;overflow:hidden"><div style="position:relative;height:22px"><div class="layer t1" style="justify-content:flex-start;font-size:13px;color:var(--accent);font-weight:500"></div><div class="layer t2" style="justify-content:flex-start;font-size:13px;color:var(--accent);font-weight:500"></div></div><div style="position:relative;height:40px"><div class="layer d1" style="justify-content:flex-start;align-items:flex-start;white-space:normal;font-size:13px;line-height:1.5;color:var(--muted)"></div><div class="layer d2" style="justify-content:flex-start;align-items:flex-start;white-space:normal;font-size:13px;line-height:1.5;color:var(--muted)"></div></div><div class="xt" style="overflow:hidden"><div class="small" style="display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)">★ 4.8 · 212 reviews · Updated Mar 2026</div></div></div><div class="row small muted" style="gap:6px;font-size:12.5px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" class="rich" checked> rich result extras</label></div></div>`,
+  html:`<div class="col" style="width:min(400px,94%);gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">Snippet preview</b><div class="seg tabsx" role="tablist" style="align-self:flex-start"><div class="ind"></div><button role="tab">Desktop</button><button role="tab">Mobile</button></div><div class="col" style="gap:8px"><label class="small" for="sn-t" style="font-weight:500;font-size:13px">Title</label><input id="sn-t" value="Spring launch: new member tiers and yearly pricing" style="border:1.5px solid var(--muted);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);outline:none"><label class="small" for="sn-d" style="font-weight:500;font-size:13px">Description</label><textarea id="sn-d" rows="2" style="resize:none;border:1.5px solid var(--muted);border-radius:9px;padding:8px 10px;background:var(--card);color:var(--ink);font:13px/1.55 var(--sans);outline:none">Members get first-day access to every drop, and yearly plans save 20% over monthly billing.</textarea></div><div class="card pv" style="padding:14px 16px;position:relative;overflow:hidden"><div style="position:relative;height:22px"><div class="layer t1" style="justify-content:flex-start;font-size:13px;color:var(--accent);font-weight:500"></div><div class="layer t2" style="justify-content:flex-start;font-size:13px;color:var(--accent);font-weight:500"></div></div><div style="position:relative;height:40px"><div class="layer d1" style="justify-content:flex-start;align-items:flex-start;white-space:normal;font-size:13px;line-height:1.5;color:var(--muted)"></div><div class="layer d2" style="justify-content:flex-start;align-items:flex-start;white-space:normal;font-size:13px;line-height:1.5;color:var(--muted)"></div></div><div class="xt" style="overflow:hidden"><div class="small" style="display:flex;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)">★ 4.8 · 212 reviews · Updated Mar 2026</div></div></div><div class="row small muted" style="gap:6px;font-size:12.5px"><label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" class="rich" checked> rich result extras</label></div></div>`,
   desc:'Desktop and mobile tabs morph the preview height on base while the title and description swap with blur as you type. The rich-result row fades in and out, and the truncated preview holds as the terminal state.',
   api:'pv.h.set(measure(next)) title.swap.to(text) desc.swap.to(text) rich.o.set(on)',
   init(st){
@@ -23719,7 +23720,7 @@ window.CIEO_SOURCE_HINT="blocks/372-hintbubble.js";
 
 
 atom({ id:'hintbubble', cat:'Guidance', name:'Hint bubble', block:'form hints, coachmarks', fam:['X','E','S'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px"><b style="font-size:15px;font-weight:600;line-height:1.5">Billing details</b><div class="small muted" style="line-height:1.5">The bubble follows your focus.</div><div class="flds" style="margin-top:6px"><label class="f0" style="display:block;padding:10px 0;border-bottom:1px solid var(--line-soft)"><span style="display:block;font-size:12px;color:var(--muted);line-height:1.5">Name</span><input class="in" aria-label="Name" placeholder="Ada Lovelace" style="width:100%;border:0;background:none;font:inherit;font-size:14px;line-height:1.5;padding:2px 0;outline:none"></label><label class="f1" style="display:block;padding:10px 0"><span style="display:block;font-size:12px;color:var(--muted);line-height:1.5">Email</span><input class="in" aria-label="Email" placeholder="ada@analytical.engine" style="width:100%;border:0;background:none;font:inherit;font-size:14px;line-height:1.5;padding:2px 0;outline:none"></label></div><div class="bb" style="position:absolute;width:190px;background:var(--ink);color:var(--card);border-radius:10px;padding:10px 12px;visibility:hidden"><div class="bt" style="position:relative;min-height:40px"></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Field:</span></div></div><div class="hint">Click a field · typing dismisses fast</div>`,
+  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px"><b style="font-size:15px;font-weight:600;line-height:1.5">Billing details</b><div class="small muted" style="line-height:1.5">The bubble follows your focus.</div><div class="flds" style="margin-top:6px"><label class="f0" style="display:block;padding:10px 0;border-bottom:1.5px solid var(--muted)"><span style="display:block;font-size:12px;color:var(--muted);line-height:1.5">Name</span><input class="in" aria-label="Name" placeholder="Ada Lovelace" style="width:100%;border:0;background:none;font:inherit;font-size:14px;line-height:1.5;padding:2px 0;outline:none"></label><label class="f1" style="display:block;padding:10px 0;border-bottom:1.5px solid var(--muted)"><span style="display:block;font-size:12px;color:var(--muted);line-height:1.5">Email</span><input class="in" aria-label="Email" placeholder="ada@analytical.engine" style="width:100%;border:0;background:none;font:inherit;font-size:14px;line-height:1.5;padding:2px 0;outline:none"></label></div><div class="bb" style="position:absolute;width:190px;background:var(--ink);color:var(--card);border-radius:10px;padding:10px 12px;visibility:hidden"><div class="bt" style="position:relative;min-height:40px"></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Field:</span></div></div><div class="hint">Click a field · typing dismisses fast</div>`,
   desc:'The bubble rises beside the focused field and glides field to field with both edges trailing 60ms behind; only its text swaps. Typing snaps it shut — the quiet form is the terminal.',
   api:'bubble.{x,y} edges-trail .06   tip.to(field)   typing: o.set(0, snap) · REDUCE: jump',
   init(st){
@@ -24123,7 +24124,7 @@ atom({ id:'vcrossfade', cat:'Views', name:'View crossfade', block:'crossfade, tr
 window.CIEO_SOURCE_HINT="blocks/394-deeplink.js";
 
 atom({ id:'deeplink', cat:'Views', name:'Deep-link landing', block:'deep link, navigation, landing', fam:['S','M'],
-  html:`<div class="col" style="gap:8px;width:min(360px,94%)"><div class="card" style="padding:14px 16px"><button class="bk" style="border:0;background:none;cursor:pointer;font-size:13px;color:var(--accent);padding:2px 0;position:relative;height:26px;display:block"><span aria-hidden="true" style="visibility:hidden">‹ City budget</span></button><b class="hh" style="display:block;position:relative;height:24px"></b><div class="cr small muted num" style="font-size:12px"></div><div class="tt" style="position:relative;height:66px;margin-top:6px"></div><div class="ld small muted" style="font-size:12px;margin-top:4px"></div></div><div class="row" style="gap:8px"><button class="btn l0">Open: budget story</button><button class="btn l1">Open: meeting note</button></div></div><div class="hint">A shared link builds the whole stack, then lands</div>`,
+  html:`<div class="col" style="gap:8px;width:min(360px,94%)"><div class="card" style="padding:14px 16px"><button class="bk" aria-label="Back" style="border:0;background:none;cursor:pointer;font-size:13px;color:var(--accent);padding:2px 0;position:relative;height:26px;display:block"><span aria-hidden="true" style="visibility:hidden">‹ City budget</span></button><b class="hh" style="display:block;position:relative;height:24px"></b><div class="cr small muted num" style="font-size:12px"></div><div class="tt" style="position:relative;height:66px;margin-top:6px"></div><div class="ld small muted" style="font-size:12px;margin-top:4px"></div></div><div class="row" style="gap:8px"><button class="btn l0">Open: budget story</button><button class="btn l1">Open: meeting note</button></div></div><div class="hint">A shared link builds the whole stack, then lands</div>`,
   desc:'Tapping a link builds the full stack instantly with no travel, then the final pane enters heading-first and body 50ms later. The back chain lands on the correct parent every step, ending home.',
   api:'stack jumps instant   hh.to(2) then tt.to(2,+.05)   bk.to(parent) per depth   end: landed',
   init(st){
@@ -24464,7 +24465,7 @@ atom({ id:'pickuptime', cat:'Storefront', name:'Pickup time picker', block:'pick
 
 window.CIEO_SOURCE_HINT="blocks/415-checkoutfields.js";
 atom({ id:'checkoutfields', cat:'Forms', name:'Checkout fields', block:'checkout form, inputs, validation', fam:['S','M'],
-  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Payment details</h4><div class="fd" style="position:relative"><input class="in nm" id="co-nm" type="text" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-nm" class="lb lb0" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Full name</label><span class="ok ok0" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em0" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><div class="fd" style="position:relative"><input class="in em2" id="co-em" type="email" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--line);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-em" class="lb lb1" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Email</label><span class="ok ok1" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em1" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><button class="btn go" style="height:36px;border-radius:9px">Pay $24.00</button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lv" checked> Validate live</label></div><div class="hint">Leave a field empty, then fix it</div>`,
+  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Payment details</h4><div class="fd" style="position:relative"><input class="in nm" id="co-nm" type="text" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--muted);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-nm" class="lb lb0" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Full name</label><span class="ok ok0" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em0" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><div class="fd" style="position:relative"><input class="in em2" id="co-em" type="email" placeholder=" " autocomplete="off" style="height:44px;width:100%;border:1.5px solid var(--muted);border-radius:9px;padding:14px 12px 4px;font-size:14px;line-height:1.5;background:var(--card)"><label for="co-em" class="lb lb1" style="position:absolute;left:12px;top:12px;font-size:14px;color:var(--muted);pointer-events:none;line-height:1.5">Email</label><span class="ok ok1" style="position:absolute;right:10px;top:12px;color:var(--success);opacity:0">✓</span><div class="em em1" style="position:relative;min-height:18px;font-size:12px;line-height:1.5;display:grid"></div></div><button class="btn go" style="height:36px;border-radius:9px">Pay $24.00</button><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lv" checked> Validate live</label></div><div class="hint">Leave a field empty, then fix it</div>`,
   desc:'Labels snap up on focus or fill. An invalid submit rings danger and swaps in a message; fixing a field swaps it out and stamps a success check that holds.',
   api:'label.set(float, snap)   err.set(1); msg.to(err)   ok.set(valid)',
   init(st){
@@ -24484,14 +24485,14 @@ atom({ id:'checkoutfields', cat:'Forms', name:'Checkout fields', block:'checkout
       go.textContent = '✓ Paid — receipt sent'; go.disabled = true; };
     return t => { F.forEach((f, i) => { const fl = clamp(f.fl.at(t)), er = clamp(f.er.at(t)), gd = clamp(f.gd.at(t));
         f.lb.style.transform = `translateY(${(-fl * 9).toFixed(2)}px) scale(${(1 - fl * .18).toFixed(3)})`; f.lb.style.transformOrigin = 'left top';
-        f.inp.style.borderColor = mix(er, 'var(--danger)', 'var(--line)'); f.inp.style.boxShadow = `0 0 0 ${(er * 3).toFixed(1)}px color-mix(in oklab, var(--danger) ${(er * 18).toFixed(1)}%, transparent)`;
+        f.inp.style.borderColor = mix(er, 'var(--danger)', 'var(--muted)'); f.inp.style.boxShadow = `0 0 0 ${(er * 3).toFixed(1)}px color-mix(in oklab, var(--danger) ${(er * 18).toFixed(1)}%, transparent)`;
         f.ok.style.opacity = gd.toFixed(3); f.ok.style.transform = `scale(${(.6 + .4 * gd).toFixed(3)})`;
         layers.forEach((el, k) => { if (k === i) sw[i].apply(el, i, t); else { el.style.opacity = '0'; el.style.visibility = 'hidden'; } }); }); };
   }});
 
 window.CIEO_SOURCE_HINT="blocks/416-addressform.js";
 atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, country, postcode', fam:['S','E'],
-  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Shipping address</h4><div class="seg row" role="group" aria-label="Country" style="gap:4px;position:relative"><i class="ind" style="position:absolute;top:0;bottom:0;left:0;border-radius:8px;background:var(--ink);opacity:0"></i></div><div class="set" style="position:relative;overflow:hidden"><div class="us col" style="gap:8px"><div class="row" style="gap:8px"><input aria-label="ZIP code" class="zp" placeholder="ZIP code" inputmode="numeric" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--line);border-radius:9px;padding:0 12px;font-size:14px;line-height:1.5"><input aria-label="State" class="ct2" placeholder="State" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--line);border-radius:9px;padding:0 12px;font-size:14px;line-height:1.5"></div><span class="cy small" style="position:relative;height:18px;font-size:12px;color:var(--muted);line-height:1.5"></span></div></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp2" checked> Look up city from postcode</label></div><div class="hint">Flip country, then type 94110</div>`,
+  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Shipping address</h4><div class="seg row" role="group" aria-label="Country" style="gap:4px;position:relative"><i class="ind" style="position:absolute;top:0;bottom:0;left:0;border-radius:8px;background:var(--ink);opacity:0"></i></div><div class="set" style="position:relative;overflow:hidden"><div class="us col" style="gap:8px"><div class="row" style="gap:8px"><input aria-label="ZIP code" class="zp" placeholder="ZIP code" inputmode="numeric" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px;line-height:1.5"><input aria-label="State" class="ct2" placeholder="State" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px;line-height:1.5"></div><span class="cy small" style="position:relative;height:18px;font-size:12px;color:var(--muted);line-height:1.5"></span></div></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" class="lp2" checked> Look up city from postcode</label></div><div class="hint">Flip country, then type 94110</div>`,
   desc:'Switching country cross-fades the field set while the wrapper height springs to fit. Typing a known postcode swaps the city in with blur.',
   api:'set.to(country) + h.set(natural, base)   city.to(match)',
   init(st){
@@ -24500,7 +24501,7 @@ atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, count
       b.style.cssText = 'position:relative;flex:1;height:32px;border-radius:8px;border:0;background:none;cursor:pointer;font-size:13px;font-weight:500;z-index:1'; seg.appendChild(b); return b; });
     const us = $(st,'.us');
     const uk = document.createElement('div'); uk.className = 'col'; uk.style.cssText = 'gap:8px;position:absolute;inset:0 0 auto 0';
-    uk.innerHTML = `<div class="row" style="gap:8px"><input aria-label="Postcode" class="zp2" placeholder="Postcode" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--line);border-radius:9px;padding:0 12px;font-size:14px"><input aria-label="County" placeholder="County" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--line);border-radius:9px;padding:0 12px;font-size:14px"></div><span class="cy2 small" style="font-size:12px;color:var(--muted);line-height:1.5">Try SW1A 1AA.</span>`;
+    uk.innerHTML = `<div class="row" style="gap:8px"><input aria-label="Postcode" class="zp2" placeholder="Postcode" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"><input aria-label="County" placeholder="County" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"></div><span class="cy2 small" style="font-size:12px;color:var(--muted);line-height:1.5">Try SW1A 1AA.</span>`;
     set.appendChild(uk);
     const e = edges(0, 0), sw = new Swap(0), h = new Track(76), csw = new Swap(0);
     const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'Unknown ZIP — keep typing'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
@@ -24526,14 +24527,14 @@ atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, count
 
 window.CIEO_SOURCE_HINT="blocks/417-reviewform.js";
 atom({ id:'reviewform', cat:'Forms', name:'Review form', block:'review form, photos, mood', fam:['M','S'],
-  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Write a review</h4><div class="ph row" role="group" aria-label="Photos" style="gap:6px"></div><div class="md row" role="radiogroup" aria-label="Mood" style="gap:4px;position:relative"></div><span class="ml small" style="position:relative;height:18px;font-size:12px;color:var(--muted);line-height:1.5"></span><textarea aria-label="Review" placeholder="What stood out? (optional)" style="min-height:56px;border:1.5px solid var(--line);border-radius:9px;padding:8px 12px;font:14px/1.5 var(--sans);resize:vertical"></textarea><div class="row" style="gap:8px"><button class="btn snd" style="position:relative;height:36px;padding:0 16px;border-radius:9px;flex:1;overflow:hidden"></button><label class="row small muted" style="gap:6px;cursor:pointer;align-items:center"><input type="checkbox" class="iph" checked> Include photos</label></div></div><div class="hint">Add photos, slide mood, then post</div>`,
+  html:`<div class="col" style="gap:8px;width:min(320px,100%)"><h4 style="margin:0;font-size:15px;font-weight:600;line-height:1.5">Write a review</h4><div class="ph row" role="group" aria-label="Photos" style="gap:6px"></div><div class="md row" role="radiogroup" aria-label="Mood" style="gap:4px;position:relative"></div><span class="ml small" style="position:relative;height:18px;font-size:12px;color:var(--muted);line-height:1.5"></span><textarea aria-label="Review" placeholder="What stood out? (optional)" style="min-height:56px;border:1.5px solid var(--muted);border-radius:9px;padding:8px 12px;font:14px/1.5 var(--sans);resize:vertical"></textarea><div class="row" style="gap:8px"><button class="btn snd" aria-label="Post review" style="position:relative;height:36px;padding:0 16px;border-radius:9px;flex:1;overflow:hidden"></button><label class="row small muted" style="gap:6px;cursor:pointer;align-items:center"><input type="checkbox" class="iph" checked> Include photos</label></div></div><div class="hint">Add photos, slide mood, then post</div>`,
   desc:'Photo tiles open their height first and sharpen after. Faces glide with the mood and the label swaps; posting morphs a held thanks.',
   api:'tile.h.set(open, base) → sharp.set(1)   mood.set(i, soft); label.to(i)   post.to(thanks)',
   init(st){
     const ph = $(st,'.ph'), md = $(st,'.md'), ml = $(st,'.ml'), snd = $(st,'.snd'), iph = $(st,'.iph');
     const T = 2, tiles = [];
     for (let i = 0; i < T; i++){ const b = document.createElement('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Add photo ' + (i + 1));
-      b.style.cssText = 'flex:1;aspect-ratio:1;max-width:88px;border-radius:12px;border:1px dashed var(--line);background:var(--raised);padding:0;display:grid;place-items:center;cursor:pointer;color:var(--muted);overflow:hidden;height:0;min-height:0;opacity:0';
+      b.style.cssText = 'flex:1;aspect-ratio:1;max-width:88px;border-radius:12px;border:1.5px dashed var(--muted);background:var(--raised);padding:0;display:grid;place-items:center;cursor:pointer;color:var(--muted);overflow:hidden;height:0;min-height:0;opacity:0';
       b.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2.5h5L16 6"/></svg>';
       ph.appendChild(b); const h = new Track(0), sh = new Track(0); tiles.push({ b, h, sh, on:false });
       b.onclick = () => { const o = !b._on; b._on = o; b.setAttribute('aria-pressed', o); tiles[i].h.set(o ? 1 : 0, S.base);
@@ -24781,7 +24782,7 @@ atom({ id:'faqacc', cat:'Landing', name:'FAQ accordion', block:'Landing faq', fa
 
 window.CIEO_SOURCE_HINT="blocks/433-emailcapture.js";
 atom({ id:'emailcapture', cat:'Landing', name:'Email capture', block:'Landing signup', fam:['S','M'],
-  html:`<div class="col" style="gap:0;align-items:center;max-width:380px;margin:0 auto;padding:44px 16px;text-align:center"><p style="margin:0;font-size:15px;font-weight:600;line-height:1.45">Get the launch issue</p><p class="small muted" style="margin:6px 0 0;font-size:13px;line-height:1.5">One email a month. Unsubscribe anytime.</p><form class="fm" style="display:flex;gap:8px;margin-top:16px;width:100%" novalidate><input type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" style="flex:1;min-width:0;min-height:36px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);padding:0 12px;outline:none"><button class="btn go" aria-label="Submit email" style="position:relative;flex:none;min-height:36px;min-width:96px;border-radius:10px;display:grid;place-items:center;padding:0;overflow:hidden"></button></form><div class="msg" style="position:relative;margin-top:10px;height:20px;display:grid;justify-items:center;font-size:12.5px;line-height:1.5"></div><button class="btn rs small muted" style="margin-top:8px;min-height:36px;border-radius:10px;font-size:12.5px">Reset demo</button></div><div class="hint">Invalid rings danger · valid spins, checks, then holds the pill</div>`,
+  html:`<div class="col" style="gap:0;align-items:center;max-width:380px;margin:0 auto;padding:44px 16px;text-align:center"><p style="margin:0;font-size:15px;font-weight:600;line-height:1.45">Get the launch issue</p><p class="small muted" style="margin:6px 0 0;font-size:13px;line-height:1.5">One email a month. Unsubscribe anytime.</p><form class="fm" style="display:flex;gap:8px;margin-top:16px;width:100%" novalidate><input type="email" autocomplete="email" placeholder="you@example.com" aria-label="Email address" style="flex:1;min-width:0;min-height:36px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);color:var(--ink);font:14px/1.45 var(--sans);padding:0 12px;outline:none"><button class="btn go" aria-label="Submit email" style="position:relative;flex:none;min-height:36px;min-width:96px;border-radius:10px;display:grid;place-items:center;padding:0;overflow:hidden"></button></form><div class="msg" style="position:relative;margin-top:10px;height:20px;display:grid;justify-items:center;font-size:12.5px;line-height:1.5"></div><button class="btn rs small muted" style="margin-top:8px;min-height:36px;border-radius:10px;font-size:12.5px">Reset demo</button></div><div class="hint">Invalid rings danger · valid spins, checks, then holds the pill</div>`,
   desc:'Submit settles into neutral, invalid or valid. Invalid rings the field danger with a swapped message; valid spins the button, lands a check, and holds the success pill as the terminal state.',
   api:'status.to(ok|err)   btn: join → sending → done(hold)   ring = mix(danger)',
   init(st){
@@ -24807,7 +24808,7 @@ atom({ id:'emailcapture', cat:'Landing', name:'Email capture', block:'Landing si
         if (t >= due){ phase = 'done'; bsw.to(2); msw.to(2); ok.set(1); bad.set(0); inp.disabled = true; }
       }
       const g = clamp(ok.at(t)), k = clamp(bad.at(t));
-      inp.style.borderColor = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, var(--line)))`;
+      inp.style.borderColor = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, var(--muted)))`;
       inp.style.boxShadow = k > .02 ? `0 0 0 3px color-mix(in oklab, var(--danger) ${(k*28).toFixed(1)}%, transparent)` : 'none';
       go.style.background = mix(g,'var(--success)','var(--ink)');
       go.style.borderColor = mix(g,'var(--success)','var(--ink)');
@@ -25050,7 +25051,7 @@ atom({ id:'framemeter', cat:'Foundations', name:'Frame meter', block:'performanc
 
 window.CIEO_SOURCE_HINT="blocks/455-focusring.js";
 atom({ id:'focusring', cat:'Foundations', name:'Focus ring', block:'focus ring, accessibility, snap spring', fam:['T'],
-  html:`<div class="card col fz" style="position:relative;width:min(360px,92%);padding:18px;gap:16px"><div class="rg" style="position:absolute;border-radius:10px;pointer-events:none;opacity:0;border:2px solid var(--accent)"></div><input class="fi" type="text" value="Spring essay" aria-label="Title" style="height:40px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:0 12px;font-size:14px;outline:none"><div class="row" style="gap:8px"><button class="btn fb" style="flex:1;min-height:40px">Save draft</button><button class="btn fb2" style="flex:1;min-height:40px">Share</button></div><div class="ro" style="font:13px var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)">accent · 2px · snap</div><div class="row small muted" style="gap:8px;align-items:center"><select class="th" aria-label="Ring theme" style="min-height:32px;font-size:13px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink)"><option value="accent">accent</option><option value="ink">ink</option><option value="success">success</option><option value="danger">danger</option></select><input type="range" class="wd" min="1" max="4" step="1" value="2" aria-label="Ring width pixels" style="flex:1;min-height:32px"></div></div><div class="hint">One snap ring serves every input — tab through them</div>`,
+  html:`<div class="card col fz" style="position:relative;width:min(360px,92%);padding:18px;gap:16px"><div class="rg" style="position:absolute;border-radius:10px;pointer-events:none;opacity:0;border:2px solid var(--accent)"></div><input class="fi" type="text" value="Spring essay" aria-label="Title" style="height:40px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);color:var(--ink);padding:0 12px;font-size:14px;outline:none"><div class="row" style="gap:8px"><button class="btn fb" style="flex:1;min-height:40px">Save draft</button><button class="btn fb2" style="flex:1;min-height:40px">Share</button></div><div class="ro" style="font:13px var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)">accent · 2px · snap</div><div class="row small muted" style="gap:8px;align-items:center"><select class="th" aria-label="Ring theme" style="min-height:32px;font-size:13px;border:1.5px solid var(--muted);border-radius:9px;background:var(--card);color:var(--ink)"><option value="accent">accent</option><option value="ink">ink</option><option value="success">success</option><option value="danger">danger</option></select><input type="range" class="wd" min="1" max="4" step="1" value="2" aria-label="Ring width pixels" style="flex:1;min-height:32px"></div></div><div class="hint">One snap ring serves every input — tab through them</div>`,
   desc:'A single snap ring frames whichever input has focus. Theme and width stay consistent everywhere by construction.',
   api:'focusin → ring.set(1, S.snap) · focusout → ring.set(0)',
   init(st){
@@ -25096,7 +25097,7 @@ atom({ id:'pressstates', cat:'Foundations', name:'Press states', block:'press fe
 
 window.CIEO_SOURCE_HINT="blocks/457-validationshake.js";
 atom({ id:'validationshake', cat:'Foundations', name:'Validation shake', block:'validation, error states, danger ring', fam:['T','S'],
-  html:`<div class="card col" style="width:min(360px,92%);padding:18px;gap:16px"><input class="em" type="email" value="ada@" aria-label="Email" spellcheck="false" style="height:40px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:0 12px;font-size:14px;outline:none"><div class="ms" style="position:relative;min-height:20px;font-size:12px;color:var(--danger)"></div><div class="row" style="gap:8px"><button class="btn go" style="flex:1;min-height:36px">Validate</button></div><div class="row small muted" style="gap:8px;align-items:center"><span style="font-size:12px">Distance</span><input type="range" class="dl" min="4" max="16" step="1" value="8" aria-label="Shake distance pixels" style="flex:1;min-height:32px"><b class="dlv" style="font:13px var(--mono);font-variant-numeric:tabular-nums">8px</b></div></div><div class="hint">Distance dials the shake · the danger ring and message persist</div>`,
+  html:`<div class="card col" style="width:min(360px,92%);padding:18px;gap:16px"><input class="em" type="email" value="ada@" aria-label="Email" spellcheck="false" style="height:40px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);color:var(--ink);padding:0 12px;font-size:14px;outline:none"><div class="ms" style="position:relative;min-height:20px;font-size:12px;color:var(--danger)"></div><div class="row" style="gap:8px"><button class="btn go" style="flex:1;min-height:36px">Validate</button></div><div class="row small muted" style="gap:8px;align-items:center"><span style="font-size:12px">Distance</span><input type="range" class="dl" min="4" max="16" step="1" value="8" aria-label="Shake distance pixels" style="flex:1;min-height:32px"><b class="dlv" style="font:13px var(--mono);font-variant-numeric:tabular-nums">8px</b></div></div><div class="hint">Distance dials the shake · the danger ring and message persist</div>`,
   desc:'Failed validation shakes the field, rings it in danger and swaps in the message. Distance is the only dial; everything else is fixed.',
   api:'amp.set(0, S.soft) envelope · ring.set(1, S.snap) → danger',
   init(st){
@@ -25112,7 +25113,7 @@ atom({ id:'validationshake', cat:'Foundations', name:'Validation shake', block:'
       else { ring.set(1, S.snap, t0); t0s = t0; amp.jump(1); amp.set(0, S.soft, t0); sw.to(1, t0); } };
     return t => { const a = REDUCE ? 0 : clamp(amp.at(t));
       inp.style.transform = a > .002 ? `translateX(${((+dl.value) * a * Math.sin((t - t0s) * 30)).toFixed(2)}px)` : 'none';
-      inp.style.borderColor = mix(clamp(ring.at(t)), 'var(--danger)', 'var(--line)');
+      inp.style.borderColor = mix(clamp(ring.at(t)), 'var(--danger)', 'var(--muted)');
       L.forEach((el, k) => sw.apply(el, k, REDUCE ? sw.t + 9 : t)); };
   }});
 
@@ -25339,7 +25340,7 @@ window.CIEO_SOURCE_HINT="blocks/475-signupfields.js";
 
 
 atom({ id:'signupfields', cat:'Newsletter', name:'Signup fields', block:'newsletter, form', fam:['M','S'],
-  html:`<div class="card col" style="width:min(360px,92%);padding:16px;gap:8px;line-height:1.55"><b style="font-size:15px;font-weight:600;line-height:1.5">Join the letter</b><span class="muted" style="font-size:12.5px;line-height:1.5">Name first, then a valid email.</span><label class="fw" style="position:relative;display:block;height:54px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);cursor:text;margin-top:4px"><span class="lb" style="position:absolute;left:13px;top:16px;transform-origin:0 0;color:var(--muted);font-size:14px">First name</span><input class="nm" type="text" autocomplete="off" style="position:absolute;left:12px;right:40px;bottom:7px;border:0;background:none;color:var(--ink);font-size:14px;outline:none;padding:0"><span class="ic" style="position:absolute;right:12px;top:17px;width:18px;height:18px;display:grid;place-items:center;padding:0;transform:translateY(.5px)"></span></label><label class="fw2" style="position:relative;display:block;height:54px;border:1.5px solid var(--line);border-radius:10px;background:var(--card);cursor:text"><span class="lb2" style="position:absolute;left:13px;top:16px;transform-origin:0 0;color:var(--muted);font-size:14px">Email address</span><input class="em" type="email" autocomplete="off" style="position:absolute;left:12px;right:40px;bottom:7px;border:0;background:none;color:var(--ink);font-size:14px;outline:none;padding:0"><span class="ic2" style="position:absolute;right:12px;top:17px;width:18px;height:18px;display:grid;place-items:center;padding:0;transform:translateY(.5px)"></span></label><div class="er" style="position:relative;overflow:hidden;height:0"><span class="small" role="alert" style="display:block;padding-top:6px;color:var(--danger);font-size:12.5px">Enter an address like name@example.com</span></div><button class="go" style="height:44px;min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);font-weight:600;font-size:14px;cursor:pointer">Subscribe</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;font-size:12.5px"><input type="checkbox" class="lv" checked> validate as I type</label></div><div class="hint">Leave email wrong once, then fix it</div>`,
+  html:`<div class="card col" style="width:min(360px,92%);padding:16px;gap:8px;line-height:1.55"><b style="font-size:15px;font-weight:600;line-height:1.5">Join the letter</b><span class="muted" style="font-size:12.5px;line-height:1.5">Name first, then a valid email.</span><label class="fw" style="position:relative;display:block;height:54px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);cursor:text;margin-top:4px"><span class="lb" style="position:absolute;left:13px;top:16px;transform-origin:0 0;color:var(--muted);font-size:14px">First name</span><input class="nm" type="text" autocomplete="off" style="position:absolute;left:12px;right:40px;bottom:7px;border:0;background:none;color:var(--ink);font-size:14px;outline:none;padding:0"><span class="ic" style="position:absolute;right:12px;top:17px;width:18px;height:18px;display:grid;place-items:center;padding:0;transform:translateY(.5px)"></span></label><label class="fw2" style="position:relative;display:block;height:54px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);cursor:text"><span class="lb2" style="position:absolute;left:13px;top:16px;transform-origin:0 0;color:var(--muted);font-size:14px">Email address</span><input class="em" type="email" autocomplete="off" style="position:absolute;left:12px;right:40px;bottom:7px;border:0;background:none;color:var(--ink);font-size:14px;outline:none;padding:0"><span class="ic2" style="position:absolute;right:12px;top:17px;width:18px;height:18px;display:grid;place-items:center;padding:0;transform:translateY(.5px)"></span></label><div class="er" style="position:relative;overflow:hidden;height:0"><span class="small" role="alert" style="display:block;padding-top:6px;color:var(--danger);font-size:12.5px">Enter an address like name@example.com</span></div><button class="go" style="height:44px;min-height:36px;border-radius:10px;border:0;background:var(--ink);color:var(--card);font-weight:600;font-size:14px;cursor:pointer">Subscribe</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;font-size:12.5px"><input type="checkbox" class="lv" checked> validate as I type</label></div><div class="hint">Leave email wrong once, then fix it</div>`,
   desc:'Labels float on focus. A complete field snaps a success check; an incomplete one rings danger with a message. A valid form holds subscribed.',
   api:'float.set(focus||value) · ok.set(1, S.snap) · bad.set(1) → ring + message',
   init(st){
@@ -25355,7 +25356,7 @@ atom({ id:'signupfields', cat:'Newsletter', name:'Signup fields', block:'newslet
     const paint = F => t => { const p = clamp(F.f.at(t)), g = clamp(F.ok.at(t)), k = clamp(F.bad.at(t));
       F.lb.style.transform = `translateY(${(-9*p).toFixed(2)}px) scale(${(1-.2*p).toFixed(4)})`;
       F.lb.style.color = k > .5 ? 'var(--danger)' : g > .5 ? 'var(--success)' : 'var(--faint)';
-      F.fw.style.borderColor = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, var(--line)))`;
+      F.fw.style.borderColor = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, var(--muted)))`;
       F.sw.apply(F.okI, 0, t, 0); };
     const pA = paint(A), pB = paint(B);
     B.inp.oninput = () => { if (!lv.checked) return;
@@ -26903,7 +26904,7 @@ atom({ id:'mailjump', cat:'Email', name:'Command-K jump', block:'email, palette,
 window.CIEO_SOURCE_HINT="blocks/555-composefields.js";
 
 atom({ id:'composefields', cat:'Email', name:'Compose fields', block:'email, compose, chips', fam:['M','S'],
-  html:`<style>.cmp-tin:focus-visible{outline:2px solid var(--accent);outline-offset:2px}</style><div class="col" style="gap:8px;width:min(320px,94%)"><div class="card cmp" style="padding:14px 16px;line-height:1.5"><b style="font-size:15px;font-weight:600">New message</b><div class="torow" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;min-height:52px"><span class="chips" style="display:flex;gap:6px;flex-wrap:wrap"></span><input class="tin cmp-tin" placeholder="To…" style="flex:1;min-width:90px;min-height:32px;border:0;font-size:13.5px;background:none;color:var(--ink)"></div><div class="msg" style="position:relative;min-height:22px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px">Send</button><button class="btn cc" style="min-height:32px">Cc</button></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox"> send copy to self</label></div><div class="hint">Type an email, hit Enter</div>`,
+  html:`<style>.cmp-tin:focus-visible{outline:2px solid var(--accent);outline-offset:2px}</style><div class="col" style="gap:8px;width:min(320px,94%)"><div class="card cmp" style="padding:14px 16px;line-height:1.5;border:1.5px solid var(--muted)"><b style="font-size:15px;font-weight:600">New message</b><div class="torow" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;min-height:52px"><span class="chips" style="display:flex;gap:6px;flex-wrap:wrap"></span><input class="tin cmp-tin" placeholder="To…" style="flex:1;min-width:90px;min-height:32px;border:0;font-size:13.5px;background:none;color:var(--ink)"></div><div class="msg" style="position:relative;min-height:22px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px">Send</button><button class="btn cc" style="min-height:32px">Cc</button></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox"> send copy to self</label></div><div class="hint">Type an email, hit Enter</div>`,
   desc:'Recipient chips open width-first and the text fades in after. Bad addresses flag danger with a message; good ones settle into a success check terminal.',
   api:'w.set(measure, base) then tx.to(1)   bad: danger + msg   end: ready check, hold',
   init(st){
@@ -26938,7 +26939,7 @@ atom({ id:'composefields', cat:'Email', name:'Compose fields', block:'email, com
     return t => { items.forEach(o => { o.c.style.width = px(Math.max(0, o.w.at(t))); const q = clamp(o.txo.at(t));
         o.tx.style.opacity = q.toFixed(3); o.tx.style.filter = q < .98 ? `blur(${((1-q)*BLUR).toFixed(2)}px)` : 'none'; });
       const p = clamp(bd.at(t));
-      cmp.style.borderColor = p > .3 ? 'var(--success)' : p < -.3 ? 'var(--danger)' : 'var(--line)';
+      cmp.style.borderColor = p > .3 ? 'var(--success)' : p < -.3 ? 'var(--danger)' : 'var(--muted)';
       ml.forEach((e, k) => msw.apply(e, k, t)); };
   }});
 
@@ -27090,6 +27091,120 @@ atom({ id:'auth-reset', cat:'Auth', name:'Password reset', block:'auth, password
     return () => {};
   }});
 
+window.CIEO_SOURCE_HINT="blocks/559-auth-wave2.js";
+
+atom({ id:'auth-passkey', cat:'Auth', name:'Passkey sign in', block:'auth, passkey, webauthn', fam:['M','S'],
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Sign in with a passkey</b><p class="small" style="font-size:12.5px;line-height:1.5;margin:0;color:var(--muted)">No password to type. Your device checks it is really you.</p><button class="pk" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Continue with a passkey</button><p class="nt small" style="font-size:12.5px;line-height:1.5;margin:0;color:var(--muted)" hidden>This device can’t use passkeys. Use your password or a code instead.</p><p class="sm small" role="status" aria-live="polite" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:var(--success)"></p><button class="tg" aria-pressed="false" style="border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:4px 0;text-align:left">Simulate an unavailable device</button></div><div class="hint">Press the button, then flip the unavailable toggle</div>`,
+  desc:'The button busies with waiting text while the ceremony runs, then lands a signed-in status. Flipping the toggle reveals the fallback note and parks the button.',
+  api:'press: label.swap(waiting) + aria-busy → status.to(signed in)   toggle: fallback.hidden.set(!unavailable)',
+  init(st){
+    const pk = $(st,'.pk'), nt = $(st,'.nt'), sm = $(st,'.sm'), tg = $(st,'.tg');
+    let unavailable = false, doneAt = 0;
+    pk.onclick = () => {
+      if (unavailable || doneAt) return;
+      pk.disabled = true; pk.setAttribute('aria-busy', 'true'); pk.textContent = 'Waiting for your passkey…';
+      sm.textContent = ''; doneAt = now() + 1.2;
+    };
+    tg.onclick = () => {
+      unavailable = !unavailable;
+      nt.hidden = !unavailable; pk.disabled = unavailable;
+      tg.textContent = unavailable ? 'Simulate an available device' : 'Simulate an unavailable device';
+      tg.setAttribute('aria-pressed', String(unavailable));
+      if (unavailable) sm.textContent = '';
+    };
+    return t => { if (doneAt && t >= doneAt){ doneAt = 0; pk.disabled = false; pk.removeAttribute('aria-busy'); pk.textContent = 'Continue with a passkey'; sm.textContent = 'Signed in with your passkey.'; } };
+  }});
+
+atom({ id:'auth-sso', cat:'Auth', name:'Single sign-on', block:'auth, sso, oauth', fam:['M','S'],
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Continue with</b><button data-p="google" data-label="Google" style="height:44px;border-radius:9px;border:1.5px solid var(--muted);background:var(--card);color:var(--ink);font-weight:500;cursor:pointer;font-size:14px">Continue with Google</button><button data-p="github" data-label="GitHub" style="height:44px;border-radius:9px;border:1.5px solid var(--muted);background:var(--card);color:var(--ink);font-weight:500;cursor:pointer;font-size:14px">Continue with GitHub</button><button data-p="okta" data-label="Okta" style="height:44px;border-radius:9px;border:1.5px solid var(--muted);background:var(--card);color:var(--ink);font-weight:500;cursor:pointer;font-size:14px">Continue with Okta</button><p class="se small" role="alert" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:var(--danger)"></p><p class="sm small" role="status" aria-live="polite" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:var(--success)"></p></div><div class="hint">Press a provider, watch it busy, then retry after the error</div>`,
+  desc:'Each provider owns its accessible name. A press busies that button with connecting text; the first attempt lands an inline error and the retry signs in.',
+  api:'press: label.swap(connecting) + aria-busy → error.to(alert, try 1) | status.to(signed in, try 2)',
+  init(st){
+    const btns = [...st.querySelectorAll('[data-p]')], se = $(st,'.se'), sm = $(st,'.sm');
+    const label = b => b.getAttribute('data-label');
+    let busy = null, doneAt = 0, tries = 0;
+    btns.forEach(b => b.onclick = () => {
+      if (busy) return;
+      busy = b; tries += 1;
+      btns.forEach(x => { x.disabled = true; });
+      b.setAttribute('aria-busy', 'true'); b.textContent = `Connecting to ${label(b)}…`;
+      se.textContent = ''; sm.textContent = ''; doneAt = now() + 1.2;
+    });
+    return t => { if (doneAt && t >= doneAt){ doneAt = 0; const b = busy; busy = null;
+      btns.forEach(x => { x.disabled = false; });
+      b.removeAttribute('aria-busy'); b.textContent = `Continue with ${label(b)}`;
+      if (tries % 2 === 1) se.textContent = `${label(b)} didn’t approve the sign-in. Try again.`;
+      else sm.textContent = `Signed in with ${label(b)}.`; } };
+  }});
+
+window.CIEO_SOURCE_HINT="blocks/560-auth-wave3.js";
+
+atom({ id:'auth-invite', cat:'Auth', name:'Org invite', block:'auth, invite, team', fam:['M','S'],
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">You are invited</b><p style="font-size:13.5px;line-height:1.5;margin:0">Priya invited you to join Acme Studio as Editor.</p><div class="st-main col" style="gap:8px"><button class="ac" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Accept invite to Acme Studio</button><button class="dc" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Decline invite to Acme Studio</button></div><div class="st-cf col" style="gap:8px" hidden><p style="font-size:13.5px;line-height:1.5;margin:0">Decline the invite to Acme Studio?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm decline</button><button class="kp" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Keep my invite</button></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Accept lands, decline asks first</div>`,
+  desc:'Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never colour alone.',
+  api:'accept -> welcomed   decline -> confirm -> declined | kept',
+  init(st){
+    const main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm');
+    const done = (s) => { main.hidden = true; cf.hidden = true; sm.textContent = s; };
+    $(st,'.ac').onclick = () => done('You are in! Welcome to Acme Studio.');
+    $(st,'.dc').onclick = () => { main.hidden = true; cf.hidden = false; sm.textContent = ''; };
+    $(st,'.kp').onclick = () => { cf.hidden = true; main.hidden = false; };
+    $(st,'.cf').onclick = () => done('Invite declined. Priya was notified.');
+    return () => {};
+  }});
+
+atom({ id:'auth-sessions', cat:'Auth', name:'Sessions', block:'auth, sessions, devices', fam:['M','S'], tall:true,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">Your sessions</b><ul class="rows" role="list" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px"></ul><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Revoke a device, the row goes away</div>`,
+  desc:'Each row names its device and city. The current row reads This device and carries no revoke button; revoking any other row removes it and says so in text.',
+  api:'revoke(id) removes row + status   current has no revoke',
+  init(st){
+    const rows = $(st,'.rows'), sm = $(st,'.sm');
+    const data = [
+      { id:'mbp', device:'MacBook Pro', meta:'Portland · Active now', current:true },
+      { id:'ip15', device:'iPhone 15', meta:'Portland · 2 hours ago', current:false },
+      { id:'ipad', device:'iPad Air', meta:'Seattle · Yesterday', current:false },
+    ];
+    for (const s of data) {
+      const li = document.createElement('li');
+      li.setAttribute('role', 'listitem');
+      li.style.cssText = 'display:flex;flex-direction:column;gap:2px;background:#f6f6f6;border-radius:9px;padding:10px 12px';
+      const name = document.createElement('span');
+      name.style.cssText = 'font-size:13.5px;font-weight:600;color:#171717';
+      name.textContent = s.device;
+      const meta = document.createElement('span');
+      meta.style.cssText = 'font-size:12.5px;color:#404040';
+      meta.textContent = s.meta;
+      li.append(name, meta);
+      if (s.current) {
+        const cur = document.createElement('span');
+        cur.style.cssText = 'font-size:12.5px;font-weight:600;color:#171717';
+        cur.textContent = 'This device';
+        li.append(cur);
+      } else {
+        const rv = document.createElement('button');
+        rv.style.cssText = 'align-self:flex-start;min-height:44px;border:0;border-radius:9px;background:none;color:#b3261e;font-weight:500;cursor:pointer;font-size:13.5px;padding:0 4px';
+        rv.setAttribute('aria-label', `Revoke ${s.device} session`);
+        rv.textContent = `Revoke ${s.device}`;
+        rv.onclick = () => { li.remove(); sm.textContent = `${s.device} session revoked.`; };
+        li.append(rv);
+      }
+      rows.append(li);
+    }
+    return () => {};
+  }});
+
+atom({ id:'auth-account', cat:'Auth', name:'Account', block:'auth, account, sign out', fam:['M','S'],
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">Account</b><div class="row" style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:#171717;color:#fff;font-size:14px;font-weight:700">JW</span><span class="col" style="display:flex;flex-direction:column;gap:2px"><b style="font-size:13.5px">Jo Warren</b><span style="font-size:12.5px;color:#404040">jo@studio.co</span></span></div><div class="st-main col" style="gap:8px"><button class="so" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Sign out</button></div><div class="st-cf col" style="gap:8px" hidden><p style="font-size:13.5px;line-height:1.5;margin:0">Sign out of all devices?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm sign out</button><button class="cx" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Cancel</button></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Sign out asks before it signs out</div>`,
+  desc:'Sign out opens an inline Sign out of all devices step with Confirm and Cancel. Confirm lands a signed-out line; Cancel returns to the profile untouched.',
+  api:'sign out -> confirm? -> signed out | back',
+  init(st){
+    const main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm');
+    $(st,'.so').onclick = () => { main.hidden = true; cf.hidden = false; sm.textContent = ''; };
+    $(st,'.cx').onclick = () => { cf.hidden = true; main.hidden = false; };
+    $(st,'.cf').onclick = () => { cf.hidden = true; sm.textContent = 'Signed out of all devices.'; };
+    return () => {};
+  }});
+
 window.CIEO_SOURCE_HINT="catalogue/icons.js";
 /* Original 20px stroke icons. No icon font, network, or framework dependency. */
 window.CieoCatalogue = (() => {
@@ -27192,10 +27307,10 @@ window.CIEO_SOURCE_HINT="catalogue/navigation.js";
   c.categoryCounts=new Map(); A.forEach(a=>c.categoryCounts.set(a.cat,(c.categoryCounts.get(a.cat)||0)+1));
   const slug=s=>s.toLowerCase().replace(/\s+/g,'-');c.slug=slug;
   const link=(label,href,count,icon='dot')=>`<a class="ui-navlink" href="#${href}">${c.icon(icon)}${label}<span>${count}</span></a>`;
-  const all=link('Everything','all',A.length,'grid')+link('Saved','saved','0','bookmark');
+  const all=link('Everything','all',`${A.length} ${A.length===1?'atom':'atoms'}`,'grid')+link('Saved','saved','0 atoms','bookmark');
   const folders=Object.keys(c.collections).map((name,i)=>`<a class="ui-folder" href="#collection-${slug(name)}"><span class="ui-folder-art" style="--accent:${['#8576cd','#79a7c0','#c68c63','#86a285'][i]}"><i></i><i></i><i></i></span>${name}</a>`).join('');
-  const categoryLinks=[...c.categoryCounts].sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>link(name,'cat-'+slug(name),n)).join('');
-  const nav=`${all}<div class="ui-navtitle">Collections <span>4</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4</span></a>`;
+  const categoryLinks=[...c.categoryCounts].sort(([a],[b])=>a.localeCompare(b)).map(([name,n])=>link(name,'cat-'+slug(name),`${n} ${n===1?'atom':'atoms'}`)).join('');
+  const nav=`${all}<div class="ui-navtitle">Collections <span>4 collections</span></div><div class="ui-folders">${folders}</div><div class="ui-navtitle">Explore by category <span>${c.categoryCounts.size} ${c.categoryCounts.size===1?'category':'categories'}</span></div>${categoryLinks}<div class="ui-navtitle">Organism flows <span>4 flows</span></div><a class="ui-navlink" data-flows href="../site/composites/index.html">${c.icon('layers')}Flows<span>4 flows</span></a>`;
   document.getElementById('rail-nav').innerHTML=nav;
   document.getElementById('total-count').textContent=`${A.length} atoms`;
   document.getElementById('atom-search').placeholder=`Search ${A.length} atoms`;
@@ -27212,8 +27327,11 @@ window.CIEO_SOURCE_HINT="catalogue/navigation.js";
     const route=c.route();document.querySelectorAll('.ui-navlink:not([data-flows]),.ui-folder').forEach(a=>{
       const selected=a.hash===location.hash||a.hash==='#all'&&(!location.hash||route.atom);
       if(selected)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
-      if(a.hash==='#saved'&&a.lastElementChild)a.lastElementChild.textContent=c.favorites?.size||0;
+      if(a.hash==='#saved'&&a.lastElementChild)a.lastElementChild.textContent=`${c.favorites?.size||0} ${(c.favorites?.size||0)===1?'atom':'atoms'}`;
     });
+    const savedCount=c.favorites?.size||0;
+    const headerSaved=document.getElementById('saved-count');if(headerSaved)headerSaved.textContent=savedCount;
+    const mobileSaved=document.getElementById('mobile-saved-count');if(mobileSaved)mobileSaved.textContent=savedCount;
     document.getElementById('saved-toggle').setAttribute('aria-pressed',String(route.saved));
   };
   document.getElementById('saved-toggle').onclick=()=>{location.hash=c.route().saved?'all':'saved'};

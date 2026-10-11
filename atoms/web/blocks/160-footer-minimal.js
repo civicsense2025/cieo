@@ -224,7 +224,7 @@ atom({ id:'footer-newsletter', cat:CAT, name:'Footer with newsletter signup', bl
 .${P4}nl p.${P4}sub{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted);max-width:42ch}
 .${P4}nl{display:flex;flex-direction:column;align-items:stretch;gap:8px;min-width:0}
 .${P4}nf{margin:0;max-width:420px}
-.${P4}fd{position:relative;display:flex;align-items:center;gap:6px;height:46px;padding:4px;border-radius:12px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.${P4}fd{position:relative;display:flex;align-items:center;gap:6px;height:46px;padding:4px;border-radius:12px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--muted)}
 .${P4}fd:focus-within{outline:2px solid var(--accent);outline-offset:2px}
 .${P4}fd input{flex:1;min-width:0;height:100%;border:0;background:none;padding:0 10px;font:inherit;font-size:14px;color:var(--ink);outline:none!important;user-select:text;-webkit-user-select:text}
 .${P4}sb{position:relative;flex:none;height:100%;width:96px;border:0;border-radius:9px;background:var(--ink);color:var(--card);font-size:13.5px;font-weight:500;cursor:pointer;overflow:hidden;white-space:nowrap}
@@ -275,7 +275,7 @@ ${col(P4, 'Product', ['Editor', 'Commerce', 'Members', 'Pricing'])}${col(P4, 'Re
     put({ s:'idle' }); [dg, wr, okr, bsu, bdg, dnT, bo, inO, bw, mh].forEach(x => x.jump(x.target)); lsw.cur = 0; lsw.prev = null; lsw.t = -9; msw.cur = 0; msw.prev = null; msw.t = -9;
     return t => { while (q.length && q[0][0] <= t) q.shift()[1]();
       const D = clamp(dg.at(t)), W = clamp(wr.at(t)), O = clamp(okr.at(t)), N = clamp(dnT.at(t));
-      fd.style.boxShadow = `inset 0 0 0 1.5px ${mix(O, 'var(--success)', mix(W, 'var(--warning)', mix(D, 'var(--danger)', 'var(--line)')))}`;
+      fd.style.boxShadow = `inset 0 0 0 1.5px ${mix(O, 'var(--success)', mix(W, 'var(--warning)', mix(D, 'var(--danger)', 'var(--muted)')))}`;
       fd.style.background = mix(N, 'var(--success-tint)', 'var(--card)');
       const su = clamp(bsu.at(t)), bd = clamp(bdg.at(t)); sb.style.width = px(Math.max(0, bw.at(t))); sb.style.background = mix(su, 'var(--success)', mix(bd, 'var(--danger)', 'var(--ink)')); sb.style.color = mix(clamp(su + bd), '#fff', 'var(--card)');
       sb.style.opacity = clamp(bo.at(t)).toFixed(3); sb.style.pointerEvents = bo.target ? 'auto' : 'none';

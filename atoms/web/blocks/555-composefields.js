@@ -1,6 +1,6 @@
 
 atom({ id:'composefields', cat:'Email', name:'Compose fields', block:'email, compose, chips', fam:['M','S'],
-  html:`<style>.cmp-tin:focus-visible{outline:2px solid var(--accent);outline-offset:2px}</style><div class="col" style="gap:8px;width:min(320px,94%)"><div class="card cmp" style="padding:14px 16px;line-height:1.5"><b style="font-size:15px;font-weight:600">New message</b><div class="torow" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;min-height:52px"><span class="chips" style="display:flex;gap:6px;flex-wrap:wrap"></span><input class="tin cmp-tin" placeholder="To…" style="flex:1;min-width:90px;min-height:32px;border:0;font-size:13.5px;background:none;color:var(--ink)"></div><div class="msg" style="position:relative;min-height:22px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px">Send</button><button class="btn cc" style="min-height:32px">Cc</button></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox"> send copy to self</label></div><div class="hint">Type an email, hit Enter</div>`,
+  html:`<style>.cmp-tin:focus-visible{outline:2px solid var(--accent);outline-offset:2px}</style><div class="col" style="gap:8px;width:min(320px,94%)"><div class="card cmp" style="padding:14px 16px;line-height:1.5;border:1.5px solid var(--muted)"><b style="font-size:15px;font-weight:600">New message</b><div class="torow" style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-top:8px;min-height:52px"><span class="chips" style="display:flex;gap:6px;flex-wrap:wrap"></span><input class="tin cmp-tin" placeholder="To…" style="flex:1;min-width:90px;min-height:32px;border:0;font-size:13.5px;background:none;color:var(--ink)"></div><div class="msg" style="position:relative;min-height:22px;margin-top:6px"></div><div class="row" style="gap:8px;margin-top:8px"><button class="btn ink snd" style="min-height:32px">Send</button><button class="btn cc" style="min-height:32px">Cc</button></div></div><label class="row small muted" style="gap:6px;font-size:12px;cursor:pointer"><input type="checkbox"> send copy to self</label></div><div class="hint">Type an email, hit Enter</div>`,
   desc:'Recipient chips open width-first and the text fades in after. Bad addresses flag danger with a message; good ones settle into a success check terminal.',
   api:'w.set(measure, base) then tx.to(1)   bad: danger + msg   end: ready check, hold',
   init(st){
@@ -35,6 +35,6 @@ atom({ id:'composefields', cat:'Email', name:'Compose fields', block:'email, com
     return t => { items.forEach(o => { o.c.style.width = px(Math.max(0, o.w.at(t))); const q = clamp(o.txo.at(t));
         o.tx.style.opacity = q.toFixed(3); o.tx.style.filter = q < .98 ? `blur(${((1-q)*BLUR).toFixed(2)}px)` : 'none'; });
       const p = clamp(bd.at(t));
-      cmp.style.borderColor = p > .3 ? 'var(--success)' : p < -.3 ? 'var(--danger)' : 'var(--line)';
+      cmp.style.borderColor = p > .3 ? 'var(--success)' : p < -.3 ? 'var(--danger)' : 'var(--muted)';
       ml.forEach((e, k) => msw.apply(e, k, t)); };
   }});
