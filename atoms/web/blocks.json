@@ -404,5 +404,6 @@
  "blocks/554-mailjump.js",
  "blocks/555-composefields.js",
  "blocks/556-templatevars.js",
- "blocks/557-emailpoll.js"
+ "blocks/557-emailpoll.js",
+ "blocks/558-auth-wave1.js"
 ]
