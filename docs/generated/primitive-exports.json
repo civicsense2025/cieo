@@ -3,6 +3,7 @@
     "AlertDialog",
     "AppShell",
     "AspectRatio",
+    "AuthEmailField",
     "Avatar",
     "AvatarGroup",
     "AvatarGroupOverflow",
@@ -155,5 +156,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 154
+  "count": 155
 }

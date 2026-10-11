@@ -1,6 +1,7 @@
 export { AlertDialog } from './AlertDialog/AlertDialog.js';
 export { AppShell } from './AppShell/AppShell.js';
 export { AspectRatio } from './AspectRatio/AspectRatio.js';
+export { AuthEmailField } from './AuthEmailField/AuthEmailField.js';
 export { Avatar } from './Avatar/Avatar.js';
 export { AvatarGroup } from './AvatarGroup/AvatarGroup.js';
 export { AvatarGroupOverflow } from './AvatarGroupOverflow/AvatarGroupOverflow.js';

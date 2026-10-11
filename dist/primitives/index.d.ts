@@ -1,6 +1,7 @@
 export { AlertDialog, type AlertDialogProps } from './AlertDialog/AlertDialog.js';
 export { AppShell, type AppShellProps } from './AppShell/AppShell.js';
 export { AspectRatio, type AspectRatioProps } from './AspectRatio/AspectRatio.js';
+export { AuthEmailField, type AuthEmailFieldProps } from './AuthEmailField/AuthEmailField.js';
 export { Avatar, type AvatarProps } from './Avatar/Avatar.js';
 export { AvatarGroup, type AvatarPerson, type AvatarGroupProps } from './AvatarGroup/AvatarGroup.js';
 export { AvatarGroupOverflow, type AvatarGroupOverflowProps } from './AvatarGroupOverflow/AvatarGroupOverflow.js';

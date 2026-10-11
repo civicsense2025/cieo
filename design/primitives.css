@@ -7,6 +7,7 @@
 @import './styles/primitives/alert-dialog.css';
 @import './styles/primitives/appshell.css';
 @import './styles/primitives/aspectratio.css';
+@import './styles/primitives/auth-email-field.css';
 @import './styles/primitives/avatar-group-overflow.css';
 @import './styles/primitives/avatar-group.css';
 @import './styles/primitives/avatar-status-dot.css';
