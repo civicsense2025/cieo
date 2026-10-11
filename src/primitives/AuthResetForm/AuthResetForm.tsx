@@ -2,8 +2,8 @@
 /* AuthResetForm (static). Request step plus confirm step for password reset. */
 import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
-import { AuthEmailField } from '../AuthEmailField/AuthEmailField';
-import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput';
+import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
+import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 
 export interface AuthResetFormProps {
   id: string;

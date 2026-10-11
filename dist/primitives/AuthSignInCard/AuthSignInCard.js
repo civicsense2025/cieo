@@ -1,6 +1,6 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
-import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm';
+import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';
 export function AuthCardShell({ id, title, status, style, children, footer }) {
     return (_jsxs("section", { className: "cieo cieo-auth-card", "aria-labelledby": `${id}-title`, style: style, children: [_jsx("h2", { className: "cieo-auth-card-title", id: `${id}-title`, children: title }), children, status ? _jsx("p", { className: "cieo-auth-status", role: "status", children: status }) : null, footer ? _jsx("p", { className: "cieo-auth-routes", children: footer }) : null] }));
 }

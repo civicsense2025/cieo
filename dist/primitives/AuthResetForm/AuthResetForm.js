@@ -2,8 +2,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AuthResetForm (static). Request step plus confirm step for password reset. */
 import { useState } from 'react';
-import { AuthEmailField } from '../AuthEmailField/AuthEmailField';
-import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput';
+import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
+import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 export function AuthResetForm({ id, step, pending, error, style, onRequest, onConfirm }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

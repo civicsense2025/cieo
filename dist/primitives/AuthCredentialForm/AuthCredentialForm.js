@@ -2,8 +2,8 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AuthCredentialForm (static). Email plus password plus submit for sign in and sign up. */
 import { useState } from 'react';
-import { AuthEmailField } from '../AuthEmailField/AuthEmailField';
-import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput';
+import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
+import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 export function AuthCredentialForm({ id, mode = 'signin', pending, error, style, onSubmit }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

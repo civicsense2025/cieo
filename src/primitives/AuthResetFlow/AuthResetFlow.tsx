@@ -1,8 +1,8 @@
 'use client';
 /* AuthResetFlow (static). Reset card switching request and confirm steps. */
 import type { CSSProperties } from 'react';
-import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard';
-import { AuthResetForm } from '../AuthResetForm/AuthResetForm';
+import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard.js';
+import { AuthResetForm } from '../AuthResetForm/AuthResetForm.js';
 
 export interface AuthResetFlowProps {
   id: string;

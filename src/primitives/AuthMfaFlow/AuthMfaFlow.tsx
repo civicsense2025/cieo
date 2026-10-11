@@ -1,8 +1,8 @@
 'use client';
 /* AuthMfaFlow (static). MFA card with challenge, resend, and status. */
 import type { CSSProperties } from 'react';
-import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard';
-import { AuthMfaChallenge } from '../AuthMfaChallenge/AuthMfaChallenge';
+import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard.js';
+import { AuthMfaChallenge } from '../AuthMfaChallenge/AuthMfaChallenge.js';
 
 export interface AuthMfaFlowProps {
   id: string;

@@ -2,7 +2,7 @@
 /* AuthMfaChallenge (static). OTP plus verify, with a recovery-code fallback toggle. */
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
-import { AuthOtpInput } from '../AuthOtpInput/AuthOtpInput';
+import { AuthOtpInput } from '../AuthOtpInput/AuthOtpInput.js';
 
 export interface AuthMfaChallengeProps {
   id: string;

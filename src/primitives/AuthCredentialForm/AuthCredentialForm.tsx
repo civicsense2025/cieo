@@ -2,8 +2,8 @@
 /* AuthCredentialForm (static). Email plus password plus submit for sign in and sign up. */
 import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
-import { AuthEmailField } from '../AuthEmailField/AuthEmailField';
-import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput';
+import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
+import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 
 export interface AuthCredentialFormProps {
   id: string;

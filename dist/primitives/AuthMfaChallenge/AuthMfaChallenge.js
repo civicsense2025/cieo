@@ -2,7 +2,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AuthMfaChallenge (static). OTP plus verify, with a recovery-code fallback toggle. */
 import { useState } from 'react';
-import { AuthOtpInput } from '../AuthOtpInput/AuthOtpInput';
+import { AuthOtpInput } from '../AuthOtpInput/AuthOtpInput.js';
 export function AuthMfaChallenge({ id, pending, error, style, onSubmit, onRecovery }) {
     const [useRecovery, setUseRecovery] = useState(false);
     const [recovery, setRecovery] = useState('');
