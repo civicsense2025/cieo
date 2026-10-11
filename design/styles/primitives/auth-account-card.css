@@ -1,0 +1,44 @@
+/* design/styles/primitives/auth-account-card.css */
+@layer cieo.components {
+  :where(.cieo).cieo-auth-account-card {
+    display: inline-flex; flex-direction: column; gap: 12px;
+    background: var(--cieo-color-surface); border-radius: 14px; padding: 20px;
+    max-width: 22.5rem;
+  }
+  :where(.cieo) .cieo-auth-card-title { margin: 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-profile { margin: 0; display: flex; align-items: center; gap: 12px; }
+  :where(.cieo) .cieo-auth-avatar {
+    width: 2.75rem; height: 2.75rem; flex: none; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--cieo-color-text); color: var(--cieo-color-surface);
+    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-strong);
+  }
+  :where(.cieo) .cieo-auth-identity { display: inline-flex; flex-direction: column; gap: 2px; min-width: 0; }
+  :where(.cieo) .cieo-auth-name { font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-email { font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-signout {
+    min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
+    background: var(--cieo-color-surface-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
+    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
+  }
+  :where(.cieo) .cieo-auth-signout-confirm { display: flex; flex-direction: column; gap: 8px; }
+  :where(.cieo) .cieo-auth-status { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-auth-invite-actions { display: flex; flex-direction: column; gap: 8px; }
+  :where(.cieo) .cieo-auth-accept {
+    min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
+    background: var(--cieo-color-text); color: var(--cieo-color-surface);
+    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
+  }
+  :where(.cieo) .cieo-auth-decline {
+    min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
+    background: var(--cieo-color-surface-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
+    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
+  }
+  :where(.cieo) .cieo-auth-signout:focus-visible, :where(.cieo) .cieo-auth-accept:focus-visible, :where(.cieo) .cieo-auth-decline:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  @media (max-width: 30rem), (pointer: coarse) {
+    :where(.cieo) .cieo-auth-signout, :where(.cieo) .cieo-auth-accept, :where(.cieo) .cieo-auth-decline { min-height: 2.75rem; padding-block: 12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-auth-account-card * { animation: none; transition: none; }
+  }
+}
