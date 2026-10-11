@@ -11,7 +11,7 @@
   c.toggleSave=(id)=>{
     c.favorites.has(id)?c.favorites.delete(id):c.favorites.add(id);
     if(!c.save('cieo-catalogue-saved',[...c.favorites]))c.announce('Saved for this session. Browser storage is unavailable.');
-    document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>b.setAttribute('aria-pressed',String(c.favorites.has(id))));
+    const saved=c.favorites.has(id);document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>{b.setAttribute('aria-pressed',String(saved));b.setAttribute('aria-label',`${saved?'Saved':'Save'} ${c.byId.get(id).name}`)});
     c.markNavigation();c.updateInspectorSave?.();if(c.route().saved)c.filter();
   };
   // Captions: recipe demos keep a trailing `<div class="hint">…</div>` inside
@@ -53,7 +53,7 @@
     const h=document.createElement('h3'),button=document.createElement('button');button.className='ui-tile-name';button.textContent=a.name;button.dataset.inspect=a.id;h.append(button);
     const category=document.createElement('p');category.textContent=a.cat;title.append(h,category);
     const tools=document.createElement('div');tools.className='ui-tile-tools';
-    tools.innerHTML=`<button data-save="${a.id}" aria-label="Save ${a.id}" aria-pressed="${c.favorites.has(a.id)}">${c.icon('bookmark')}</button><button data-inspect="${a.id}" aria-label="Inspect ${a.id}">${c.icon('expand')}</button>`;
+    tools.innerHTML=`<button data-save="${a.id}" aria-label="${c.favorites.has(a.id)?'Saved':'Save'} ${a.name}" aria-pressed="${c.favorites.has(a.id)}">${c.icon('bookmark')}</button><button data-inspect="${a.id}" aria-label="Show details for ${a.name}">${c.icon('expand')}</button>`;
     header.append(title,marks,tools);
     const detail=document.createElement('div');detail.className='ui-detail';detail.hidden=true;
     const desc=document.createElement('p');desc.textContent=a.desc;const code=document.createElement('pre');code.textContent=a.api;detail.append(desc,code);
