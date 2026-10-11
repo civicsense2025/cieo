@@ -1,7 +1,7 @@
 'use client';
 /* AuthSignInCard (static). Full sign-in card with heading, credentials, routes, and status. */
 import type { CSSProperties, ReactNode } from 'react';
-import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm';
+import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';
 
 export interface AuthSignInCardProps {
   id: string;
