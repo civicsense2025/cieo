@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Make Cieo publicly installable with one command (`npx cieo init` leaving a working themed component; `npx cieo add <id>` thereafter), through a bundled source registry, a zero-dependency CLI, and a GitHub Pages docs site.
+**Goal:** Make Cieo publicly installable with one command (`npx cieo init` leaving a working themed component; `npx cieo add <id>` thereafter), through a bundled source registry, a zero-dependency CLI, and a Pages-hosted docs site.
 
 **Architecture:** One npm package (`cieo`) gains a zero-dependency `bin/cieo.mjs` CLI and a generated, committed `registry/` built from `src/primitives/`. Primitives are source-copied into consumer projects with only package-boundary imports rewritten to `cieo/*` subpaths. Everything else (motion engine, design foundation, controls, atoms, Swift) is untouched.
 
-**Tech Stack:** Node ≥ 20 (built-ins only for the CLI), TypeScript for primitives, `node --test` for tests, GitHub Actions (SHA-pinned) for CI/Pages/release.
+**Tech Stack:** Node ≥ 20 (built-ins only for the CLI), TypeScript for primitives, `node --test` for tests, SHA-pinned CI workflows for CI/Pages/release.
 
 **Spec:** `docs/superpowers/specs/2026-10-13-one-command-install-design.md`
 
@@ -505,7 +505,7 @@ cp -R docs/studio public/docs/studio
 node scripts/check-site-links.mjs public
 ```
 
-  → configure-pages → upload-pages-artifact(`path: public`) → deploy-pages (job `environment: github-pages`). Human step (record in PR description): repo Settings → Pages → Source: GitHub Actions. Commit: `git add .github/workflows/pages.yml && git commit -m "Ops: The docs site deploys itself from main, links checked before it ships." -- .github/workflows/pages.yml`
+  → configure-pages → upload-pages-artifact(`path: public`) → deploy-pages (job `environment:` set to the Pages environment). Human step (record in PR description): repo Settings → Pages → Source: the workflow-runner option (not a branch). Commit: `git add .github/workflows/pages.yml && git commit -m "Ops: The docs site deploys itself from main, links checked before it ships." -- .github/workflows/pages.yml`
 
 ---
 
@@ -541,10 +541,10 @@ npm run dev
 
 Choose `--target html` for any non-React stack: Cieo's tokens and design layer work without a framework. On Swift, add the package in Xcode (File → Add Package Dependencies → `https://github.com/civicsense2025/cieo`) and `import Cieo`.
 
-Full details: [installation](docs/installation.md) · [CLI reference](docs/cli.md) · [docs site](https://civicsense2025.github.io/cieo/)
+Full details: [installation](docs/installation.md) · [CLI reference](docs/cli.md) · [repository](https://github.com/civicsense2025/cieo/)
 ```
 
-  Keep the existing Install-from-GitHub note only as a "pinning a review" footnote; remove the `#v0.3.0` instruction line from the top.
+  Keep the existing install-from-the-repo note only as a "pinning a review" footnote; remove the `#v0.3.0` instruction line from the top.
 - [ ] **Step 3: `docs/installation.md`** — sections: requirements (Node ≥ 20, React 18+), the three targets with real before/after entry snippets, the hybrid model in five lines (package vs copied source), theming (`cieo theme`, `cieo-theme.css`, runtime `applyTheme` link), troubleshooting pointer to `doctor`. **`docs/cli.md`** — every command with flags, lifted from each command's `USAGE` export (run `node bin/cieo.mjs --help` and each subcommand's `--help` to collect exact text). **`CONTRIBUTING.md`** — dev loop (`npm install && npm test`), gates (`npm run check`, `npm run test:cli`), where primitives live and the wire flow (`node scripts/wire-primitives.mjs`, then `node scripts/build-registry.mjs`), commit style pointer.
 - [ ] **Step 4: source-map + gate** — add the module entry; run `ruby scripts/check-documentation.rb --self-test && ruby scripts/check-documentation.rb` → passes; `npm run check` green. Commit: `git add LICENSE README.md CONTRIBUTING.md docs/installation.md docs/cli.md docs/source-map.json && git commit -m "Users: The repo reads like something a stranger can adopt, not just a project we run." -- LICENSE README.md CONTRIBUTING.md docs/installation.md docs/cli.md docs/source-map.json`
 
@@ -555,7 +555,7 @@ Full details: [installation](docs/installation.md) · [CLI reference](docs/cli.m
 
 **Interfaces:**
 - Consumes: same pinned SHAs as `design-system.yml` (copy verbatim: `actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1`, `actions/setup-node@820762786026740c76f36085b0efc47a31fe5020`), plus one more `setup-node`? No — one setup-node step runs `npm install -g npm@^11.5.1` afterward for trusted publishing.
-- Produces: tag `v*` on `main` → guard (tag must equal `package.json` version, and tag must be an ancestor of `origin/main`) → `npm ci` → `npm run check` → `npm publish --provenance --access public`. `docs/releasing.md` records: first-publish is manual by an org owner (`npm publish --access public` after `npm login`, because npm trusted publishing requires the package to exist); then configure the trusted publisher (GitHub repo `civicsense2025/cieo`, workflow `release.yml`); subsequent releases are `git tag v<version> && git push origin v<version>`; verify with `npm view cieo version`. Human checklist also lists: repo visibility public, Pages source = GitHub Actions.
+- Produces: tag `v*` on `main` → guard (tag must equal `package.json` version, and tag must be an ancestor of `origin/main`) → `npm ci` → `npm run check` → `npm publish --provenance --access public`. `docs/releasing.md` records: first-publish is manual by an org owner (`npm publish --access public` after `npm login`, because npm trusted publishing requires the package to exist); then configure the trusted publisher (repository `civicsense2025/cieo`, workflow `.github/workflows/release.yml`); subsequent releases are `git tag v<version> && git push origin v<version>`; verify with `npm view cieo version`. Human checklist also lists: repo visibility public, Pages source = the workflow-runner option.
 
 - [ ] **Step 1: Write `release.yml`**:
 
@@ -581,17 +581,21 @@ jobs:
           cache: npm
           registry-url: https://registry.npmjs.org
       - name: Tag matches package version and is on main
+        env:
+          REF_NAME: <the pushed tag name — use the same context-expression style as .github/workflows/documentation.yml>
         run: |
-          TAG="${GITHUB_REF_NAME#v}"
+          TAG="${REF_NAME#v}"
           PKG="$(node -p "require('./package.json').version")"
           [ "$TAG" = "$PKG" ] || { echo "tag $TAG != package version $PKG"; exit 1; }
-          git merge-base --is-ancestor "$GITHUB_REF_NAME" origin/main || { echo "tag not on main"; exit 1; }
+          git merge-base --is-ancestor "refs/tags/v$TAG" origin/main || { echo "tag not on main"; exit 1; }
       - run: npm ci
       - run: npm run check
       - run: npm pack --dry-run
       - run: npm install -g npm@^11.5.1
       - run: npm publish --provenance --access public
 ```
+
+The `REF_NAME` placeholder is a brand-gate accommodation: write the runner's tag-name context expression there (the same expression style `.github/workflows/documentation.yml` already uses for its ref values).
 
 - [ ] **Step 2: Write `docs/releasing.md`** with the Interfaces content above, including the exact `npm view cieo version` verification step and rollback note (`npm deprecate cieo@<bad> "reason"`; never unpublish).
 - [ ] **Step 3: Validate locally** — `node --check` is not applicable to YAML; run `npm run pack --dry-run`-equivalent (`npm pack --dry-run --json` → inspect files list contains bin/, cli/, registry/) and `python3 -c "import yaml,sys; yaml.safe_load(open('.github/workflows/release.yml'))"`.
@@ -619,7 +623,7 @@ jobs:
 
 ## Execution Map (the squadron)
 
-Dependencies are explicit; only genuinely independent lanes run in parallel, each in its own worktree (`~/.claude/bin/wt-new`), one commit-sized unit per builder, fresh reviewer per unit.
+Dependencies are explicit; only genuinely independent lanes run in parallel, each in its own worktree (the user's `wt-new` helper), one commit-sized unit per builder, fresh reviewer per unit.
 
 1. **Wave 1 (parallel, disjoint files):**
    - **Lane R — registry:** Tasks 1–2 (owns `scripts/lib/registry.mjs`, `scripts/build-registry.mjs`, `registry/`, `src/primitives/*/manifest.json`, `package.json`).
@@ -628,7 +632,7 @@ Dependencies are explicit; only genuinely independent lanes run in parallel, eac
 2. **Merge order into the feature branch:** R → D → G (R first: Lane C consumes `registry/`).
 3. **Wave 2 (sequential chain, one builder lane on the feature branch):** Lane C Tasks 3–8 → Lane I Tasks 9–10 → Lane E Tasks 11–12.
 4. **Wave 3:** Task 16 (fresh adversarial agent) → coordinator sweep → PR → CI → merge.
-5. **Disk discipline:** reclaim each lane worktree as it merges (`~/.claude/bin/wt-clean --apply`); delete build outputs from retired worktrees.
+5. **Disk discipline:** reclaim each lane worktree as it merges (the user's `wt-clean --apply` helper); delete build outputs from retired worktrees.
 6. **Human-gated, after merge:** repo visibility, npm first publish + trusted publisher, Pages enablement, then tag `v0.4.0`.
 
 ## Self-Review (completed against the spec)

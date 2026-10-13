@@ -11,7 +11,7 @@ Locked decisions (brainstorming, 2026-10-13):
 1. **Hybrid distribution.** The compiled package carries the motion engine (`cieo`, `cieo/dom`, `cieo/react`, `cieo/live`), tokens, design foundation (`cieo/design`), and controls. The 171 primitives ship as **source-copy** through a registry: `npx cieo add dialog` copies real TSX into the consumer's repo, which they own and edit.
 2. **Public npm, MIT.** `private` flips off; an MIT LICENSE is added; the `civicsense2025` org owns the publish. `cieo` is unclaimed on npm (verified 2026-10-13).
 3. **Launch targets.** Next.js App Router and Vite + React get the full experience; any other stack gets the tokens/design-only path (`--target html`). No other frameworks at launch.
-4. **Docs site.** The existing generated site (component pages, catalogue) is hosted on GitHub Pages with a light catalogue cleanup and a quickstart strip. No landing-page redesign.
+4. **Docs site.** The existing generated site (component pages, catalogue) is hosted on the repository's Pages site with a light catalogue cleanup and a quickstart strip. No landing-page redesign.
 
 ## Architecture
 
@@ -88,7 +88,7 @@ Written by `init`, read by every other command; validated against `design/theme.
 
 ## Docs site
 
-- `.github/workflows/pages.yml` (SHA-pinned actions, house style): run the existing site build chain, deploy `site/` to GitHub Pages.
+- `.github/workflows/pages.yml` (SHA-pinned actions, house style): run the existing site build chain, deploy `site/` to the Pages site.
 - Component page footers rewrite the `data-install` line to `npx cieo add <Name>`; the import banner stays. README's install section becomes the quickstart.
 - Catalogue top gets a quickstart strip (one command, 60-second result) and a light cleanup; no redesign, no marketing page.
 - Swift install remains SwiftPM (already one step) in README and `docs/apple-components.md`.
@@ -100,7 +100,7 @@ Written by `init`, read by every other command; validated against `design/theme.
 - README top: 60-second quickstart with the one command; existing detail restructured below.
 - Minimal `CONTRIBUTING.md` (dev loop is `npm install && npm test`).
 - `.github/workflows/release.yml` on `v*` tag: `npm ci` → `npm run check` → `npm pack --dry-run` sanity → `npm publish --provenance --access public` via npm trusted publishing (OIDC, no long-lived token).
-- **Human steps (cannot be automated):** flip repo visibility to public; configure npm org ownership and trusted publisher; enable GitHub Pages. Listed as a checklist with the exact clicks at delivery.
+- **Human steps (cannot be automated):** flip repo visibility to public; configure npm org ownership and trusted publisher; enable the Pages site. Listed as a checklist with the exact clicks at delivery.
 
 ## Testing and proof
 
