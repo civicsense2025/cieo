@@ -67,7 +67,7 @@ Written by `init`, read by every other command; validated against `design/theme.
 3. **Install** `cieo` with the detected package manager (lockfile sniffing: npm, pnpm, yarn, bun); `--skip-install` writes everything but runs nothing.
 4. **Wire styles** in a marker-delimited idempotent block (`/* cieo:start */ ... /* cieo:end */`): `next` → `app/layout.tsx` JS imports; `vite` → `src/main.tsx`; `html` → generated snippet printed, never edits unknown HTML. Order: `cieo/tokens.css`, `cieo/design.css`, `cieo/primitives.css`, `./cieo-theme.css`.
 5. **Generate `cieo-theme.css`** from the chosen axes with the existing exporter (`toCSS`), so static theming needs no runtime JS. Runtime `applyTheme` stays documented as the dynamic path.
-6. **Write `cieo.json`**, print one next step (`npx cieo add dialog`) and the docs link. Re-running detects existing config and offers update; it never silently clobbers.
+6. **Write `cieo.json`**, then end interactive mode by offering a starter component (Dialog recommended, any registry id, or skip) copied through the exact `add` path — so one interactive command leaves a working, themed component. `--with <id>` does the same non-interactively; `--no-starter` skips. Always print the docs link. Re-running detects existing config and offers update; it never silently clobbers.
 
 ### `npx cieo add <id>`
 
@@ -106,13 +106,13 @@ Written by `init`, read by every other command; validated against `design/theme.
 
 - **Unit** (`node --test`, existing style): detection, config validation, edge classification, rewriting (including fail-loud on unknown edges), transitive resolution, idempotence, typo matching, non-TTY behavior.
 - **Fixtures** (committed): `test/cli/fixtures/next-app`, `vite-react`, `static-html` — minimal but real apps.
-- **End-to-end**: pack the real tarball (`npm pack`), install it into a temp copy of each fixture **from the tarball, not the working tree**, run `init --yes` and `add`, then assert: files copied with correct shape, zero package-territory imports remain, second run is a byte-for-byte no-op, `css` imports wired in the entry file. The Vite fixture compiles (`tsc --noEmit` + `vite build`); the Next fixture typechecks. No network beyond the local tarball.
+- **End-to-end**: pack the real tarball (`npm pack`), install it into a temp copy of each fixture **from the tarball, not the working tree**, run `init --yes` (including `--with dialog` on the Vite fixture) and `add`, then assert: files copied with correct shape, zero package-territory imports remain, second run is a byte-for-byte no-op, `css` imports wired in the entry file. The Vite fixture compiles (`tsc --noEmit` + `vite build`); the Next fixture typechecks. No network beyond the local tarball.
 - **Gates**: registry parity joins `npm run check`; the CLI suite is `npm run test:cli`, wired into `npm run check` so drift cannot merge.
 - **The stranger test (acceptance)**: on a clean machine state, from the packed tarball: `npx cieo init --yes` in a fresh Vite app, `npx cieo add dialog`, build succeeds, theme visible. Run once by the implementing agent and once by a separate adversarial agent using only the README.
 
 ## Success criteria
 
-1. A stranger with a Vite or Next app reaches a themed, working Cieo component with two commands: `npx cieo init` then `npx cieo add <component>`.
+1. A stranger with a Vite or Next app reaches a themed, working Cieo component with one interactive command (`npx cieo init`, answering the starter prompt — or `npx cieo init --with dialog`), and can keep adding components with `npx cieo add <id>`.
 2. Any other stack reaches themed tokens with one command (`init --target html` snippet) and zero framework assumptions.
 3. `registry/` can never disagree with `src/primitives/` — the drift gate enforces it.
 4. `npm publish` produces a tarball whose contents are provably sufficient: the e2e tests only ever use that tarball.
