@@ -774,6 +774,7 @@
     "studio:standalone": "node scripts/build-standalone.mjs"
   },
   "bin": {
+    "cieo": "bin/cieo.mjs",
     "cieo-theme": "scripts/export-theme.mjs"
   }
 }
