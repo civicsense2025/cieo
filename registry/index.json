@@ -1,0 +1,1440 @@
+{
+  "schemaVersion": 1,
+  "shared": [
+    "motion.ts"
+  ],
+  "components": {
+    "AlertDialog": {
+      "files": [
+        "AlertDialog/AlertDialog.tsx"
+      ],
+      "registryDependencies": [
+        "Dialog"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AppShell": {
+      "files": [
+        "AppShell/AppShell.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AspectRatio": {
+      "files": [
+        "AspectRatio/AspectRatio.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthAccountCard": {
+      "files": [
+        "AuthAccountCard/AuthAccountCard.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthCredentialForm": {
+      "files": [
+        "AuthCredentialForm/AuthCredentialForm.tsx"
+      ],
+      "registryDependencies": [
+        "AuthEmailField",
+        "AuthPasswordInput"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthEmailField": {
+      "files": [
+        "AuthEmailField/AuthEmailField.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthInviteAccept": {
+      "files": [
+        "AuthInviteAccept/AuthInviteAccept.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthMfaChallenge": {
+      "files": [
+        "AuthMfaChallenge/AuthMfaChallenge.tsx"
+      ],
+      "registryDependencies": [
+        "AuthOtpInput"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthMfaFlow": {
+      "files": [
+        "AuthMfaFlow/AuthMfaFlow.tsx"
+      ],
+      "registryDependencies": [
+        "AuthMfaChallenge",
+        "AuthSignInCard"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthOtpInput": {
+      "files": [
+        "AuthOtpInput/AuthOtpInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthPasskeyButton": {
+      "files": [
+        "AuthPasskeyButton/AuthPasskeyButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthPasswordInput": {
+      "files": [
+        "AuthPasswordInput/AuthPasswordInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthResetFlow": {
+      "files": [
+        "AuthResetFlow/AuthResetFlow.tsx"
+      ],
+      "registryDependencies": [
+        "AuthResetForm",
+        "AuthSignInCard"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthResetForm": {
+      "files": [
+        "AuthResetForm/AuthResetForm.tsx"
+      ],
+      "registryDependencies": [
+        "AuthEmailField",
+        "AuthPasswordInput"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthSessionList": {
+      "files": [
+        "AuthSessionList/AuthSessionList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthSignInCard": {
+      "files": [
+        "AuthSignInCard/AuthSignInCard.tsx"
+      ],
+      "registryDependencies": [
+        "AuthCredentialForm"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthSignUpCard": {
+      "files": [
+        "AuthSignUpCard/AuthSignUpCard.tsx"
+      ],
+      "registryDependencies": [
+        "AuthCredentialForm",
+        "AuthSignInCard"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AuthSsoButtons": {
+      "files": [
+        "AuthSsoButtons/AuthSsoButtons.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Avatar": {
+      "files": [
+        "Avatar/Avatar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AvatarGroup": {
+      "files": [
+        "AvatarGroup/AvatarGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AvatarGroupOverflow": {
+      "files": [
+        "AvatarGroupOverflow/AvatarGroupOverflow.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AvatarStatusDot": {
+      "files": [
+        "AvatarStatusDot/AvatarStatusDot.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Badge": {
+      "files": [
+        "Badge/Badge.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "Banner": {
+      "files": [
+        "Banner/Banner.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Blockquote": {
+      "files": [
+        "Blockquote/Blockquote.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "BottomSheet": {
+      "files": [
+        "BottomSheet/BottomSheet.tsx"
+      ],
+      "registryDependencies": [
+        "Overlay"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "motion.ts"
+      ]
+    },
+    "BottomSheetSwitcher": {
+      "files": [
+        "BottomSheetSwitcher/BottomSheetSwitcher.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "BreadcrumbItem": {
+      "files": [
+        "BreadcrumbItem/BreadcrumbItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Breadcrumbs": {
+      "files": [
+        "Breadcrumbs/Breadcrumbs.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ButtonGroup": {
+      "files": [
+        "ButtonGroup/ButtonGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Calendar": {
+      "files": [
+        "Calendar/Calendar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Card": {
+      "files": [
+        "Card/Card.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Carousel": {
+      "files": [
+        "Carousel/Carousel.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/dom"
+      ],
+      "sharedFiles": []
+    },
+    "Center": {
+      "files": [
+        "Center/Center.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatComposer": {
+      "files": [
+        "ChatComposer/ChatComposer.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatComposerInput": {
+      "files": [
+        "ChatComposerInput/ChatComposerInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatLayout": {
+      "files": [
+        "ChatLayout/ChatLayout.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatMessage": {
+      "files": [
+        "ChatMessage/ChatMessage.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatMessageBubble": {
+      "files": [
+        "ChatMessageBubble/ChatMessageBubble.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatMessageList": {
+      "files": [
+        "ChatMessageList/ChatMessageList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatMessageMetadata": {
+      "files": [
+        "ChatMessageMetadata/ChatMessageMetadata.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ChatSystemMessage": {
+      "files": [
+        "ChatSystemMessage/ChatSystemMessage.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CheckboxInput": {
+      "files": [
+        "CheckboxInput/CheckboxInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "CheckboxList": {
+      "files": [
+        "CheckboxList/CheckboxList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CheckboxListItem": {
+      "files": [
+        "CheckboxListItem/CheckboxListItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "Citation": {
+      "files": [
+        "Citation/Citation.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ClickableCard": {
+      "files": [
+        "ClickableCard/ClickableCard.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Code": {
+      "files": [
+        "Code/Code.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CodeBlock": {
+      "files": [
+        "CodeBlock/CodeBlock.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Collapsible": {
+      "files": [
+        "Collapsible/Collapsible.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CollapsibleGroup": {
+      "files": [
+        "CollapsibleGroup/CollapsibleGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPalette": {
+      "files": [
+        "CommandPalette/CommandPalette.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPaletteEmpty": {
+      "files": [
+        "CommandPaletteEmpty/CommandPaletteEmpty.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPaletteFooter": {
+      "files": [
+        "CommandPaletteFooter/CommandPaletteFooter.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPaletteGroup": {
+      "files": [
+        "CommandPaletteGroup/CommandPaletteGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPaletteInput": {
+      "files": [
+        "CommandPaletteInput/CommandPaletteInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPaletteItem": {
+      "files": [
+        "CommandPaletteItem/CommandPaletteItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommandPaletteList": {
+      "files": [
+        "CommandPaletteList/CommandPaletteList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ComplexSelector": {
+      "files": [
+        "ComplexSelector/ComplexSelector.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DateInput": {
+      "files": [
+        "DateInput/DateInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DateRangeInput": {
+      "files": [
+        "DateRangeInput/DateRangeInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DateTimeInput": {
+      "files": [
+        "DateTimeInput/DateTimeInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Dialog": {
+      "files": [
+        "Dialog/Dialog.tsx"
+      ],
+      "registryDependencies": [
+        "Overlay"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "motion.ts"
+      ]
+    },
+    "DialogHeader": {
+      "files": [
+        "DialogHeader/DialogHeader.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Divider": {
+      "files": [
+        "Divider/Divider.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenu": {
+      "files": [
+        "DropdownMenu/DropdownMenu.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuCheckboxItem": {
+      "files": [
+        "DropdownMenuCheckboxItem/DropdownMenuCheckboxItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuDivider": {
+      "files": [
+        "DropdownMenuDivider/DropdownMenuDivider.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuGroup": {
+      "files": [
+        "DropdownMenuGroup/DropdownMenuGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuItem": {
+      "files": [
+        "DropdownMenuItem/DropdownMenuItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuRadioGroup": {
+      "files": [
+        "DropdownMenuRadioGroup/DropdownMenuRadioGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuRadioItem": {
+      "files": [
+        "DropdownMenuRadioItem/DropdownMenuRadioItem.tsx"
+      ],
+      "registryDependencies": [
+        "DropdownMenuRadioGroup"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DropdownMenuSubMenu": {
+      "files": [
+        "DropdownMenuSubMenu/DropdownMenuSubMenu.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "motion.ts"
+      ]
+    },
+    "EmptyState": {
+      "files": [
+        "EmptyState/EmptyState.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Field": {
+      "files": [
+        "Field/Field.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "FieldStatus": {
+      "files": [
+        "FieldStatus/FieldStatus.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "FileInput": {
+      "files": [
+        "FileInput/FileInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "FormLayout": {
+      "files": [
+        "FormLayout/FormLayout.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Grid": {
+      "files": [
+        "Grid/Grid.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "GridSpan": {
+      "files": [
+        "GridSpan/GridSpan.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "HStack": {
+      "files": [
+        "HStack/HStack.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Heading": {
+      "files": [
+        "Heading/Heading.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "HoverCard": {
+      "files": [
+        "HoverCard/HoverCard.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "motion.ts"
+      ]
+    },
+    "Icon": {
+      "files": [
+        "Icon/Icon.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "IconButton": {
+      "files": [
+        "IconButton/IconButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "InputGroup": {
+      "files": [
+        "InputGroup/InputGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "InputGroupText": {
+      "files": [
+        "InputGroupText/InputGroupText.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Kbd": {
+      "files": [
+        "Kbd/Kbd.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Layout": {
+      "files": [
+        "Layout/Layout.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "LayoutContent": {
+      "files": [
+        "LayoutContent/LayoutContent.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "LayoutFooter": {
+      "files": [
+        "LayoutFooter/LayoutFooter.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "LayoutHeader": {
+      "files": [
+        "LayoutHeader/LayoutHeader.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "LayoutPanel": {
+      "files": [
+        "LayoutPanel/LayoutPanel.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Lightbox": {
+      "files": [
+        "Lightbox/Lightbox.tsx"
+      ],
+      "registryDependencies": [
+        "Overlay"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "motion.ts"
+      ]
+    },
+    "List": {
+      "files": [
+        "List/List.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ListItem": {
+      "files": [
+        "ListItem/ListItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Markdown": {
+      "files": [
+        "Markdown/Markdown.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "MetadataList": {
+      "files": [
+        "MetadataList/MetadataList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "MetadataListItem": {
+      "files": [
+        "MetadataListItem/MetadataListItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "MobileNav": {
+      "files": [
+        "MobileNav/MobileNav.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "MobileNavToggle": {
+      "files": [
+        "MobileNavToggle/MobileNavToggle.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "MoreMenu": {
+      "files": [
+        "MoreMenu/MoreMenu.tsx"
+      ],
+      "registryDependencies": [
+        "DropdownMenu",
+        "IconButton"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "MultiSelector": {
+      "files": [
+        "MultiSelector/MultiSelector.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "NavHeadingMenu": {
+      "files": [
+        "NavHeadingMenu/NavHeadingMenu.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "NavIcon": {
+      "files": [
+        "NavIcon/NavIcon.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "NumberInput": {
+      "files": [
+        "NumberInput/NumberInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Outline": {
+      "files": [
+        "Outline/Outline.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "OverflowList": {
+      "files": [
+        "OverflowList/OverflowList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Overlay": {
+      "files": [
+        "Overlay/Overlay.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Pagination": {
+      "files": [
+        "Pagination/Pagination.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "Popover": {
+      "files": [
+        "Popover/Popover.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "PowerSearch": {
+      "files": [
+        "PowerSearch/PowerSearch.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "ProgressBar": {
+      "files": [
+        "ProgressBar/ProgressBar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "RadioList": {
+      "files": [
+        "RadioList/RadioList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "RadioListItem": {
+      "files": [
+        "RadioListItem/RadioListItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "ResizeHandle": {
+      "files": [
+        "ResizeHandle/ResizeHandle.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ScrollableArea": {
+      "files": [
+        "ScrollableArea/ScrollableArea.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Section": {
+      "files": [
+        "Section/Section.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SegmentedControl": {
+      "files": [
+        "SegmentedControl/SegmentedControl.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SegmentedControlItem": {
+      "files": [
+        "SegmentedControlItem/SegmentedControlItem.tsx"
+      ],
+      "registryDependencies": [
+        "SegmentedControl"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SelectableCard": {
+      "files": [
+        "SelectableCard/SelectableCard.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Selector": {
+      "files": [
+        "Selector/Selector.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "SelectorOption": {
+      "files": [
+        "SelectorOption/SelectorOption.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SideNav": {
+      "files": [
+        "SideNav/SideNav.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SideNavCollapseButton": {
+      "files": [
+        "SideNavCollapseButton/SideNavCollapseButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SideNavHeading": {
+      "files": [
+        "SideNavHeading/SideNavHeading.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SideNavItem": {
+      "files": [
+        "SideNavItem/SideNavItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "SideNavSection": {
+      "files": [
+        "SideNavSection/SideNavSection.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Skeleton": {
+      "files": [
+        "Skeleton/Skeleton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Slider": {
+      "files": [
+        "Slider/Slider.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "Spinner": {
+      "files": [
+        "Spinner/Spinner.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Stack": {
+      "files": [
+        "Stack/Stack.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "StackItem": {
+      "files": [
+        "StackItem/StackItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "StatusDot": {
+      "files": [
+        "StatusDot/StatusDot.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Step": {
+      "files": [
+        "Step/Step.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Stepper": {
+      "files": [
+        "Stepper/Stepper.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Tab": {
+      "files": [
+        "Tab/Tab.tsx"
+      ],
+      "registryDependencies": [
+        "TabList"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TabList": {
+      "files": [
+        "TabList/TabList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "TabMenu": {
+      "files": [
+        "TabMenu/TabMenu.tsx"
+      ],
+      "registryDependencies": [
+        "TabList"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Table": {
+      "files": [
+        "Table/Table.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableBody": {
+      "files": [
+        "TableBody/TableBody.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableCell": {
+      "files": [
+        "TableCell/TableCell.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableFooter": {
+      "files": [
+        "TableFooter/TableFooter.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableHeader": {
+      "files": [
+        "TableHeader/TableHeader.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableHeaderCell": {
+      "files": [
+        "TableHeaderCell/TableHeaderCell.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableRow": {
+      "files": [
+        "TableRow/TableRow.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TableSelectionToolbar": {
+      "files": [
+        "TableSelectionToolbar/TableSelectionToolbar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Text": {
+      "files": [
+        "Text/Text.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Thumbnail": {
+      "files": [
+        "Thumbnail/Thumbnail.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TimeInput": {
+      "files": [
+        "TimeInput/TimeInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Timer": {
+      "files": [
+        "Timer/Timer.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Timestamp": {
+      "files": [
+        "Timestamp/Timestamp.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ToggleButton": {
+      "files": [
+        "ToggleButton/ToggleButton.tsx"
+      ],
+      "registryDependencies": [
+        "ToggleButtonGroup"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "ToggleButtonGroup": {
+      "files": [
+        "ToggleButtonGroup/ToggleButtonGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Token": {
+      "files": [
+        "Token/Token.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Tokenizer": {
+      "files": [
+        "Tokenizer/Tokenizer.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Toolbar": {
+      "files": [
+        "Toolbar/Toolbar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Tooltip": {
+      "files": [
+        "Tooltip/Tooltip.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "motion.ts"
+      ]
+    },
+    "TopNav": {
+      "files": [
+        "TopNav/TopNav.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TopNavHeading": {
+      "files": [
+        "TopNavHeading/TopNavHeading.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TopNavItem": {
+      "files": [
+        "TopNavItem/TopNavItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TopNavMegaMenu": {
+      "files": [
+        "TopNavMegaMenu/TopNavMegaMenu.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TopNavMegaMenuFeaturedCard": {
+      "files": [
+        "TopNavMegaMenuFeaturedCard/TopNavMegaMenuFeaturedCard.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TopNavMegaMenuItem": {
+      "files": [
+        "TopNavMegaMenuItem/TopNavMegaMenuItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TopNavMenu": {
+      "files": [
+        "TopNavMenu/TopNavMenu.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TreeList": {
+      "files": [
+        "TreeList/TreeList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Typeahead": {
+      "files": [
+        "Typeahead/Typeahead.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "TypeaheadItem": {
+      "files": [
+        "TypeaheadItem/TypeaheadItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "VStack": {
+      "files": [
+        "VStack/VStack.tsx"
+      ],
+      "registryDependencies": [
+        "Stack"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    }
+  }
+}

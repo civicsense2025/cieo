@@ -15,7 +15,7 @@
     "path": "src/primitives/AuthResetForm/AuthResetForm.tsx",
     "symbol": "AuthResetForm"
   },
-  "dependencies": [],
+  "dependencies": ["AuthEmailField", "AuthPasswordInput"],
   "nativePrimitives": [],
   "properties": [
     {

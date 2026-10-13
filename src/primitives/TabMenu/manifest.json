@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/TabMenu/TabMenu.tsx", "symbol": "TabMenu" },
-  "dependencies": [],
+  "dependencies": ["TabList"],
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },

@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": ["Stack"],
   "source": { "target": "web", "path": "src/primitives/VStack/VStack.tsx", "symbol": "VStack" },
-  "dependencies": [],
+  "dependencies": ["Stack"],
   "nativePrimitives": [],
   "properties": [
     { "id": "gap", "type": { "kind": "enum", "values": ["sm", "md", "lg"] }, "required": false, "nullable": false, "default": "md", "constraints": {} }
