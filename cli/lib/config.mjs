@@ -5,6 +5,7 @@ import { createTheme } from '../../design/index.js';
 export const CONFIG_NAME = 'cieo.json';
 
 const TARGETS = ['next', 'vite', 'html'];
+const KNOWN_KEYS = new Set(['version', 'target', 'componentsDir', 'alias', 'theme']);
 const FOREIGN_ABSOLUTE = /^(?:[A-Za-z]:[\\/]|[\\/])/;
 
 function plainObject(value) {
@@ -47,6 +48,17 @@ export function validateConfig(config) {
   };
 }
 
+/* Unknown top-level keys (e.g. $schema, tooling metadata) survive a read/write
+   pass and are emitted after the known keys, in their original input order. */
+function splitKnown(config) {
+  const validated = validateConfig(config);
+  const extras = {};
+  for (const key of Object.keys(config)) {
+    if (!KNOWN_KEYS.has(key)) extras[key] = config[key];
+  }
+  return { validated, extras };
+}
+
 export function readConfig(root) {
   const path = join(root, CONFIG_NAME);
   let source;
@@ -62,17 +74,19 @@ export function readConfig(root) {
   } catch (error) {
     throw new Error(`${path} is not valid JSON: ${error.message}`);
   }
-  return { path, config: validateConfig(parsed) };
+  const { validated, extras } = splitKnown(parsed);
+  return { path, config: { ...validated, ...extras } };
 }
 
 export function writeConfig(root, config) {
-  const validated = validateConfig(config);
+  const { validated, extras } = splitKnown(config);
   const ordered = {
     version: validated.version,
     target: validated.target,
     componentsDir: validated.componentsDir,
     ...(validated.alias === undefined ? {} : { alias: validated.alias }),
     theme: validated.theme,
+    ...extras,
   };
   writeFileSync(join(root, CONFIG_NAME), `${JSON.stringify(ordered, null, 2)}\n`);
 }

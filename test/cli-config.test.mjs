@@ -156,6 +156,29 @@ test('writeConfig validates before writing and leaves no file behind on invalid 
   }
 });
 
+test('readConfig and writeConfig preserve unknown top-level keys after the known ones', () => {
+  const root = tempRoot();
+  try {
+    const source = `{
+  "version": 1,
+  "target": "vite",
+  "componentsDir": "src/components/cieo",
+  "theme": {},
+  "$schema": "https://cieo.dev/schemas/cieo.json"
+}
+`;
+    const file = join(root, CONFIG_NAME);
+    writeFileSync(file, source);
+    const read = readConfig(root);
+    assert.equal(read.config.$schema, 'https://cieo.dev/schemas/cieo.json');
+    assert.deepEqual(read.config.theme, {});
+    writeConfig(root, read.config);
+    assert.equal(readFileSync(file, 'utf8'), source);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test('writeConfig never mutates the caller config', () => {
   const root = tempRoot();
   try {
