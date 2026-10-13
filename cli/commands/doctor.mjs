@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { parseArgs, UsageError } from '../lib/args.mjs';
 import { readConfig } from '../lib/config.mjs';
 import { packageRoot, projectRoot } from '../lib/paths.mjs';
@@ -67,12 +67,18 @@ function checkConfig(root) {
   }
 }
 
-function checkPackage(root) {
+function checkPackage(root, config) {
   const cli = readJson(join(packageRoot(), 'package.json'));
   const cliVersion = typeof cli?.version === 'string' ? cli.version : 'unknown';
   const projectPath = join(root, 'package.json');
   const project = readJson(projectPath);
   if (project === null) {
+    if (config.target === 'html' && !existsSync(projectPath)) {
+      return warn(
+        'package',
+        'tokens-only project — no package needed for CSS; run npm install cieo only if you use the package imports',
+      );
+    }
     const detail = existsSync(projectPath) ? 'package.json is not valid JSON' : `no package.json found in ${root}`;
     return fail('package', detail, INSTALL_FIX);
   }
@@ -119,11 +125,27 @@ function checkEntry(root, config) {
 function checkComponents(root, config) {
   const registry = loadRegistry();
   const ids = Object.keys(registry.components).sort(byCodeUnit);
-  const copied = ids.filter((id) =>
-    registry.components[id].files.every((rel) => existsSync(join(root, config.componentsDir, rel))),
-  );
-  if (copied.length === 0) {
+  const present = [];
+  const missingOwn = [];
+  for (const id of ids) {
+    const files = registry.components[id].files;
+    const missing = files.filter((rel) => !existsSync(join(root, config.componentsDir, rel)));
+    /* Every component owns exactly one file today, so a deleted file leaves the
+       destination folder as the only evidence the component was ever copied. */
+    const folder = dirname(files[0]);
+    const folderPresent = folder !== '.' && existsSync(join(root, config.componentsDir, folder));
+    if (missing.length < files.length || folderPresent) {
+      present.push(id);
+      if (missing.length > 0) missingOwn.push({ id, files: missing });
+    }
+  }
+  const shared = Array.isArray(registry.shared) ? registry.shared : [];
+  const sharedPresent = shared.filter((rel) => existsSync(join(root, config.componentsDir, rel)));
+  if (present.length === 0 && sharedPresent.length === 0) {
     return ok('components', "no components copied yet — run 'npx cieo add <id>' to install one");
+  }
+  if (present.length === 0) {
+    return ok('components', `only shared files present (${sharedPresent.join(', ')}) — run 'npx cieo add <id>' to install a component`);
   }
 
   const registrySources = new Map();
@@ -138,14 +160,16 @@ function checkComponents(root, config) {
     if (!modified.includes(rel)) modified.push(rel);
   };
 
-  for (const id of copied) {
+  for (const id of present) {
     for (const rel of registry.components[id].files) {
-      if (readFileSync(join(root, config.componentsDir, rel), 'utf8') !== registryContent(rel)) noteModified(rel);
+      const path = join(root, config.componentsDir, rel);
+      if (!existsSync(path)) continue;
+      if (readFileSync(path, 'utf8') !== registryContent(rel)) noteModified(rel);
     }
   }
 
   const missingShared = [];
-  for (const id of copied) {
+  for (const id of present) {
     for (const rel of plan(registry, id).sharedFiles) {
       if (missingShared.includes(rel)) continue;
       const path = join(root, config.componentsDir, rel);
@@ -157,9 +181,16 @@ function checkComponents(root, config) {
     }
   }
 
+  const edits = modified.length > 0 ? `; ${modified.length} local file(s) differ (your edits are kept)` : '';
+  if (missingOwn.length > 0) {
+    const parts = missingOwn.slice(0, 3).map(({ id, files }) => `${id} is missing ${files.join(', ')}`);
+    const extra = missingOwn.length > 3 ? `; and ${missingOwn.length - 3} more component(s)` : '';
+    const sharedNote =
+      missingShared.length > 0 ? `; ${missingShared.slice(0, 3).join(', ')} required by copied components but missing` : '';
+    return fail('components', `${parts.join('; ')}${extra}${sharedNote}${edits}`, `npx cieo add ${missingOwn[0].id} --overwrite`);
+  }
   if (missingShared.length > 0) {
-    const owner = copied.find((id) => plan(registry, id).sharedFiles.includes(missingShared[0])) ?? copied[0];
-    const edits = modified.length > 0 ? `; ${modified.length} local file(s) differ (your edits are kept)` : '';
+    const owner = present.find((id) => plan(registry, id).sharedFiles.includes(missingShared[0])) ?? present[0];
     return fail(
       'components',
       `${missingShared.slice(0, 3).join(', ')} required by copied components but missing${edits}`,
@@ -173,8 +204,8 @@ function checkComponents(root, config) {
       `${modified.length} local ${noun} from the registry (your edits are kept): ${modified.slice(0, 3).join(', ')}`,
     );
   }
-  const noun = copied.length === 1 ? 'component matches' : 'components match';
-  return ok('components', `${copied.length} copied ${noun} the registry`);
+  const noun = present.length === 1 ? 'component matches' : 'components match';
+  return ok('components', `${present.length} copied ${noun} the registry`);
 }
 
 function checkAlias(root, config) {
@@ -214,7 +245,7 @@ export default async function run(rest) {
         return fail(name, error.message, INSTALL_FIX);
       }
     };
-    checks.push(guarded('package', () => checkPackage(root)));
+    checks.push(guarded('package', () => checkPackage(root, config)));
     checks.push(guarded('entry', () => checkEntry(root, config)));
     checks.push(guarded('components', () => checkComponents(root, config)));
     checks.push(guarded('alias', () => checkAlias(root, config)));

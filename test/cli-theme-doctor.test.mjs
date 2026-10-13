@@ -289,6 +289,66 @@ test('doctor warns about a user-modified component file and still exits 0', () =
   }
 });
 
+test('doctor fails when a present component is missing its own file', () => {
+  const dir = makeProject();
+  try {
+    addDialog(dir);
+    rmSync(join(dir, DIR, 'Dialog', 'Dialog.tsx'));
+    const result = runCli(['doctor'], dir);
+    assert.equal(result.status, 1);
+    assert.match(result.stdout, /^fail components: Dialog is missing Dialog\/Dialog\.tsx.*\n {2}fix: npx cieo add Dialog --overwrite$/m);
+    assert.doesNotMatch(result.stdout, /no components copied yet/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('a missing own file still fails when other components are present', () => {
+  const dir = makeProject();
+  try {
+    addDialog(dir);
+    const badge = runCli(['add', 'badge'], dir);
+    assert.equal(badge.status, 0, badge.stderr);
+    rmSync(join(dir, DIR, 'Dialog', 'Dialog.tsx'));
+    const result = runCli(['doctor'], dir);
+    assert.equal(result.status, 1);
+    assert.match(result.stdout, /^fail components: Dialog is missing Dialog\/Dialog\.tsx$/m);
+    assert.match(result.stdout, /fix: npx cieo add Dialog --overwrite/);
+    assert.doesNotMatch(result.stdout, /Badge/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('doctor treats an html target without package.json as a tokens-only project', () => {
+  const dir = makeProject({ ...CONFIG, target: 'html', componentsDir: '.' });
+  try {
+    assert.equal(runCli(['theme'], dir).status, 0);
+    const result = runCli(['doctor'], dir);
+    assert.equal(result.status, 0, result.stdout + result.stderr);
+    assert.match(
+      result.stdout,
+      /^warn package: tokens-only project — no package needed for CSS; run npm install cieo only if you use the package imports$/m,
+    );
+    assert.doesNotMatch(result.stdout, /^fail /m);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('doctor still fails an html target whose package.json lacks cieo', () => {
+  const dir = makeProject({ ...CONFIG, target: 'html', componentsDir: '.' });
+  try {
+    assert.equal(runCli(['theme'], dir).status, 0);
+    writeFileSync(join(dir, 'package.json'), `${JSON.stringify({ name: 'site', dependencies: {} }, null, 2)}\n`);
+    const result = runCli(['doctor'], dir);
+    assert.equal(result.status, 1);
+    assert.match(result.stdout, /^fail package: package.json does not list cieo.*\n {2}fix: npm install cieo@latest$/m);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('doctor --json prints machine-readable results and exits by the same rule', () => {
   const dir = makeBrokenProject();
   try {
