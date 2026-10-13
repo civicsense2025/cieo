@@ -192,7 +192,7 @@ export function scanRegistrySources(root) {
 
 **Files:**
 - Create: `scripts/build-registry.mjs`
-- Modify: `package.json` (add `bin/`, `cli/`, `registry/` to `files[]`; add registry check to `check`; add `test:cli` + `test:cli:e2e` scripts; `engines`; remove `private`; `license`; version `0.4.0` — package.json is single-writer in this lane)
+- Modify: `package.json` (add `bin/`, `cli/`, `registry/` to `files[]`; add registry check to `check`; add `test:cli` script — single name, no `test:cli:e2e`; `engines`; remove `private`; `license`; version `0.4.0` — package.json is single-writer in this lane, and the existing `"bin": { "cieo-theme": ... }` key must be preserved when Task 3 extends it)
 - Modify: `src/primitives/*/manifest.json` (generator-synced `dependencies`; initially ~N files change)
 - Create (generated): `registry/index.json`, `registry/<Name>/<Name>.tsx`, `registry/motion.ts`
 - Test: `test/registry-build.test.mjs`
@@ -236,7 +236,7 @@ export function scanRegistrySources(root) {
 - Test: `test/cli-config.test.mjs`
 
 **Interfaces:**
-- Produces: `CONFIG_NAME = 'cieo.json'`; `readConfig(root): { path, config } | null`; `validateConfig(config): Config` (throws `Error` with actionable text); `writeConfig(root, config): void` (stable key order: version, target, componentsDir, alias, theme; 2-space indent + trailing newline). `Config = { version: 1, target: 'next'|'vite'|'html', componentsDir: string, alias?: string, theme: object }`. Theme validity delegates to `createTheme` from `../design/index.js` (already the CLI's only cross-tree import, mirroring `scripts/export-theme.mjs`).
+- Produces: `CONFIG_NAME = 'cieo.json'`; `readConfig(root): { path, config } | null`; `validateConfig(config): Config` (throws `Error` with actionable text); `writeConfig(root, config): void` (stable key order: version, target, componentsDir, alias, theme; 2-space indent + trailing newline). `Config = { version: 1, target: 'next'|'vite'|'html', componentsDir: string, alias?: string, theme: object }`. Theme validity delegates to `createTheme` from `../../design/index.js` (depth-2 relative from `cli/lib/`, unlike `scripts/export-theme.mjs` which sits at depth 1 — verified; `cieo/design` self-reference would also work but the relative path keeps the CLI dependency-free of package resolution).
 - Consumes: design `createTheme`.
 
 - [ ] **Step 1: Failing test** — roundtrip; missing file → null; `version: 2`, bad target, absolute `componentsDir`, `..` traversal, `componentsDir: ''`, invalid brand → each throws with the field named; partial theme (`{ brand: 'lagoon' }`) is valid.
@@ -278,7 +278,7 @@ export function scanRegistrySources(root) {
 - Test: `test/cli-add.test.mjs`
 
 **Interfaces:**
-- Produces: `copyPlan({ root, config, id, overwrite, dryRun, prompt }): Promise<{ copied: string[], skipped: string[], unchanged: string[], conflicts: string[] }>` — every destination under `join(root, config.componentsDir)/<rel>`; equal content → `unchanged`; differing file without `--overwrite`: TTY → ask overwrite/skip/diff, non-TTY → `skipped` + notice; `dryRun` → report only. Commands: `add <id> [--dry-run] [--overwrite] [--yes]`, `list`, `diff <id>`; `add` refuses with the exact init command when `cieo.json` is missing, and refuses with "components need a React project (target next/vite)" when `config.target === 'html'`.
+- Produces: `copyPlan({ root, config, id, overwrite, dryRun, prompt }): Promise<{ copied: string[], skipped: string[], unchanged: string[], conflicts: string[] }>` — every destination under `join(root, config.componentsDir)/<rel>`; equal content → `unchanged`; differing file without `--overwrite`: TTY → ask overwrite/skip/diff, non-TTY → `skipped` + notice; `dryRun` → report only. After copying, warn (not fail) when the installed `cieo` version differs from the CLI's own. Commands: `add <id> [--dry-run] [--overwrite] [--yes]`, `list`, `diff <id>`; `add` refuses with the exact init command when `cieo.json` is missing, and refuses with "components need a React project (target next/vite)" when `config.target === 'html'`.
 - Consumes: Tasks 4–6.
 
 - [ ] **Step 1: Failing tests** (spawn CLI with `cwd` = tmp project): (a) no config → stderr contains `npx cieo init`, exit 1; (b) happy add copies `Dialog/Dialog.tsx`, `Overlay/Overlay.tsx`, `motion.ts`, rewritten, `assertNoPackageTerritoryImports` clean, exit 0; (c) second run → all `unchanged`, zero writes (mtime check); (d) user-edited file → non-TTY skip + notice; with `--overwrite` → overwritten; (e) `--dry-run` touches nothing; (f) `list` shows `✓` for copied; (g) `diff` on edited file exits 1 and prints `-/+` lines; on identical exits 0; (h) `cieo.json` with `target: "html"` → exit 1, message contains `components need a React project`.
@@ -462,8 +462,9 @@ const setup = (fixture) => {
 **Files:**
 - Create: `scripts/check-site-links.mjs`, `test/site-links.test.mjs`
 - Create: `.github/workflows/pages.yml`
-- Modify: `scripts/build-component-pages.mjs` (footer `data-install` line ~52), `site/component.html` (reference shell footer), regenerate `site/components/**` (171 files)
-- Modify: `scripts/build-library.mjs` (catalogue template: quickstart strip), regenerate `docs/catalogue.html`
+- Create: `site/index.html` (authored landing: quickstart + links; nothing generates it today — verified absent)
+- Modify: `scripts/build-component-pages.mjs` (footer `data-install` line ~52), `site/component.html` (reference shell footer), regenerate `site/components/**` (169 pages + generated `components/index.html`)
+- Modify: `atoms/web/shell.library.before.html` (the catalogue's real header at `<header class="top">` ~line 121 — NOT `scripts/build-library.mjs`, which has no markup; verified), regenerate `docs/catalogue.html`
 
 **Interfaces:**
 - Produces: `checkSiteLinks(dir): string[]` (list of `file → missing target` for every relative `href`/`src` in `**/*.html`; skips `http(s):`, `mailto:`, `#`, `data:`; `/`-rooted resolved against `dir`; trailing-slash targets require `index.html`). CLI exit 1 on nonempty. Pages artifact layout: `public/` = contents of `site/` + `tokens/` + `design/` + selected `docs/` surfaces (`catalogue.html`, `agent-identity.html`, `workbench.html`, `studio/`) — so existing `../../tokens/...`, `../../design/...`, `../../docs/workbench.html` references resolve; component URLs stay `/components/<Name>.html`, root is `/index.html`.
@@ -471,14 +472,21 @@ const setup = (fixture) => {
 - [ ] **Step 1: Failing test** — `test/site-links.test.mjs` builds three tmp trees (clean, missing target, external-only) and asserts `checkSiteLinks`. Then run `node scripts/check-site-links.mjs site` on the current tree: record the baseline failures (site pages reference `../../tokens/` outside the tree — expected; the checker runs against the assembled `public/`, so document that the site-only run is informational).
 - [ ] **Step 2: Implement checker + test** → PASS. Commit check-only: `git add scripts/check-site-links.mjs test/site-links.test.mjs && git commit -m "Dev: The Pages build can no longer ship with silently broken links." -- scripts/check-site-links.mjs test/site-links.test.mjs`
 - [ ] **Step 3: Footer command swap** — in `scripts/build-component-pages.mjs` replace `<code data-install>npm install github:civicsense2025/cieo#v0.3.0</code>` with `<code data-install>npx cieo add ${dir}</code>` (the per-component id); mirror in `site/component.html`; regenerate pages; `node scripts/build-component-pages.mjs --check` green. Commit: `git add scripts/build-component-pages.mjs site && git commit -m "Users: Every component page now shows the one command that actually brings it in." -- scripts/build-component-pages.mjs site` (site/component.html and site/components/** travel together).
-- [ ] **Step 4: Catalogue quickstart strip** — in `scripts/build-library.mjs`, insert directly after the opening `<header...>` closing tag (locate with `grep -n "<header" scripts/build-library.mjs | head`):
+- [ ] **Step 4: Catalogue quickstart strip** — edit `atoms/web/shell.library.before.html` (the catalogue shell): insert directly after its header, `<header class="top">` (verified at ~line 121):
 
 ```html
 <div class="cieo-quickstart" role="note"><p><strong>Use Cieo in one command:</strong> <code>npx cieo init</code> sets up themed tokens, wires the CSS, and adds your first component. Then <code>npx cieo add dialog</code> for more. <a href="../">Component docs</a></p></div>
 ```
 
-  Style it with one inline-safe rule added to the template's style block: `.cieo-quickstart{display:flex;gap:.5rem;padding:.75rem 1rem;border:1px solid var(--border-control, rgba(0,0,0,.2));border-radius:var(--radius-control,10px);margin:1rem 0}`. Regenerate: `node scripts/build-catalogue.mjs`; `npm run check`'s catalogue gate (if any) stays green. Commit: `git add scripts/build-library.mjs docs/catalogue.html && git commit -m "Users: The catalogue opens with the one command that gets you started." -- scripts/build-library.mjs docs/catalogue.html`
-- [ ] **Step 5: Pages workflow** — resolve action SHAs first (never invent one):
+  Style it with one rule added to that file's style block: `.cieo-quickstart{display:flex;gap:.5rem;padding:.75rem 1rem;border:1px solid var(--border-control, rgba(0,0,0,.2));border-radius:var(--radius-control,10px);margin:1rem 0}`. Regenerate: `node scripts/build-catalogue.mjs`. Commit: `git add atoms/web/shell.library.before.html docs/catalogue.html && git commit -m "Users: The catalogue opens with the one command that gets you started." -- atoms/web/shell.library.before.html docs/catalogue.html`
+- [ ] **Step 5: Root landing page** — create `site/index.html` (nothing generates it; the Pages checker and the catalogue strip's `href="../"` require it):
+
+```html
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cieo</title><link rel="stylesheet" href="tokens/tokens.css"><link rel="stylesheet" href="design/primitives.css"></head><body class="cieo"><main><h1>Cieo</h1><p>Calm, critically damped spring motion with a design foundation, for the web and SwiftUI.</p><p><code>npx cieo init</code> — themed tokens, wired CSS, and your first component in one command.</p><nav><a href="components/">Component docs</a> · <a href="docs/catalogue.html">Catalogue</a> · <a href="docs/studio/">Studio</a> · <a href="docs/workbench.html">Workbench</a></nav></main></body></html>
+```
+
+  Commit: `git add site/index.html && git commit -m "Users: The docs site gets a front door that says how to start." -- site/index.html`
+- [ ] **Step 6: Pages workflow** — resolve action SHAs first (never invent one):
 
 ```sh
 gh api repos/actions/configure-pages/git/ref/tags/v5 --jq '.object.sha'
@@ -527,7 +535,7 @@ node scripts/check-site-links.mjs public
 
 ```sh
 npx cieo init        # detects your framework, themes the tokens, wires CSS, adds a starter component
-npx cieo add dialog  # copy any of the 171 primitives into your project — you own the source
+npx cieo add dialog  # copy any of the 169 primitives into your project — you own the source
 npm run dev
 ```
 
@@ -580,6 +588,7 @@ jobs:
           git merge-base --is-ancestor "$GITHUB_REF_NAME" origin/main || { echo "tag not on main"; exit 1; }
       - run: npm ci
       - run: npm run check
+      - run: npm pack --dry-run
       - run: npm install -g npm@^11.5.1
       - run: npm publish --provenance --access public
 ```
@@ -595,7 +604,7 @@ jobs:
 ### Task 16: Adversarial acceptance by a fresh agent
 
 **Files:**
-- Create: `.superpowers/sdd/one-command-install/acceptance.md`
+- Create: `.superpowers/sdd/2026-10-13-one-command-install/acceptance.md` (workspace convention supersedes the spec's folder name)
 - No source changes. Any failure found reverts to the owning lane's task (never patch here).
 
 **Interfaces:**
@@ -603,7 +612,7 @@ jobs:
 - Produces: a verdict with raw command transcripts: each command, exit code, and the exact output (trimmed), plus explicit "not verified" lines.
 
 - [ ] **Step 1: Fresh agent, cold read** — dispatch with: "You are a stranger evaluating this repo. Use only `README.md` and what the CLI tells you." Give it: `npm pack` output path, a scratch dir, and 30 minutes. It must, without reading any other doc: (a) create a fresh Vite React-TS app (`npm create vite@latest -- --template react-ts`), (b) install the tarball (`npm install <tarball>`), (c) follow README to init + add a component, (d) `npm run build`, (e) run `npx tsc --noEmit`, (f) try to break it: re-run add after editing a copied file (must not clobber), run `add nonsense` (must suggest), run in a JS-only dir (must refuse clearly), run non-TTY (`</dev/null`, must not hang). Time each step.
-- [ ] **Step 2: Report** — `acceptance.md` with PASS/FAIL per step, transcript excerpts, wall-clock, and any README sentence that misled it. Commit: `git add .superpowers/sdd/one-command-install/acceptance.md && git commit -m "Dev: A stranger installed Cieo from the README alone — here is the receipt." -- .superpowers/sdd/one-command-install/acceptance.md`
+- [ ] **Step 2: Report** — `acceptance.md` with PASS/FAIL per step, transcript excerpts, wall-clock, and any README sentence that misled it. It lives in the git-ignored SDD workspace, so no commit is possible or expected there; the coordinator copies its findings into the final report. (Ledger ruling: workspace convention supersedes the plan's old folder path.)
 - [ ] **Step 3: Coordinator final sweep** — on the merged tip: `npm run check`, `npm run test:cli`, `npm pack --dry-run`, `swift build && swift test` (prove untouched), `git log --oneline main..HEAD` reviewed. Open the PR; after CI green, merge per house flow. Publish + Pages + visibility are the human checklist from `docs/releasing.md`.
 
 ---
