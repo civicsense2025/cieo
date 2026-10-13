@@ -197,8 +197,8 @@ test('init on a plain directory takes the html path: theme file plus printed lin
     assert.deepEqual(stored.theme, { brand: 'iris', scheme: 'light' });
     assert.equal(
       stored.componentsDir,
-      '.',
-      'the committed config library requires componentsDir for every target; html keeps "." so theme and doctor can read it',
+      'components/cieo',
+      'the committed config library requires componentsDir for every target; html keeps the inert default so doctor can read it',
     );
 
     assert.equal(

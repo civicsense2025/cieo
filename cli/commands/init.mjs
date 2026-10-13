@@ -146,7 +146,7 @@ async function init(root, flags, prompt) {
   const brand = flags.brand ?? (await prompt.choose('Brand:', [...BRAND_OPTIONS], { default: 0 }));
   const scheme = flags.scheme ?? (await prompt.choose('Appearance:', [...SCHEME_OPTIONS], { default: 0 }));
   const componentsDir =
-    target === 'html' ? '.' : flags.dir ?? (await prompt.ask('Components directory:', { default: DEFAULT_DIR }));
+    target === 'html' ? DEFAULT_DIR : flags.dir ?? (await prompt.ask('Components directory:', { default: DEFAULT_DIR }));
 
   const theme = { brand, scheme };
   try {
