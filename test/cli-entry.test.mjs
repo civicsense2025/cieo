@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { MARKER_BLOCK, entryFileFor, wireEntry } from '../cli/lib/entry.mjs';
@@ -168,6 +168,63 @@ test('wireEntry leaves CRLF files CRLF and untouched bytes identical', () => {
     assert.doesNotMatch(inserted, /(?<!\r)\n/);
     assert.equal(wireEntry(root, 'vite').changed, false);
     assert.equal(readFileSync(join(root, 'src', 'main.tsx'), 'utf8'), expected);
+  });
+});
+
+test('wireEntry refuses a stray start marker instead of deleting what follows it', () => {
+  const before = "/* cieo:start */\nimport A from 'a';\nconst x = 1;";
+  withTree({ 'src/main.tsx': before }, (root) => {
+    const file = join(root, 'src', 'main.tsx');
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      assert.throws(
+        () => wireEntry(root, 'vite'),
+        (error) => {
+          assert.ok(error instanceof Error);
+          assert.match(error.message, /cieo:start/);
+          assert.match(error.message, /cieo:end/);
+          assert.ok(error.message.includes(file), `message must name ${file}`);
+          assert.match(error.message, /fix or remove/);
+          return true;
+        },
+      );
+      assert.equal(readFileSync(file, 'utf8'), before);
+      assert.deepEqual(readdirSync(join(root, 'src')), ['main.tsx']);
+    }
+  });
+});
+
+test('wireEntry ignores marker-looking text inside strings and longer comments', () => {
+  const before =
+    "import A from 'a';\n" +
+    "const s = '/* cieo:start */';\n" +
+    '// do not remove /* cieo:end */ here\n' +
+    'render();\n';
+  const header = "import A from 'a';\n";
+  withTree({ 'src/main.tsx': before }, (root) => {
+    assert.equal(wireEntry(root, 'vite').changed, true);
+    const after = readFileSync(join(root, 'src', 'main.tsx'), 'utf8');
+    assert.equal(after, header + BLOCK_LF + before.slice(header.length));
+    assert.equal(wireEntry(root, 'vite').changed, false);
+    assert.equal(readFileSync(join(root, 'src', 'main.tsx'), 'utf8'), after);
+  });
+});
+
+test('wireEntry refuses an ambiguous file with a stray start after a real block', () => {
+  const before =
+    "import A from 'a';\n" +
+    '/* cieo:start */\n' +
+    "import 'cieo/tokens.css';\n" +
+    '/* cieo:end */\n' +
+    '/* cieo:start */\n' +
+    'const x = 1;\n';
+  const nested = '/* cieo:start */\n/* cieo:start */\n/* cieo:end */\n';
+  withTree({ 'src/main.tsx': before }, (root) => {
+    assert.throws(() => wireEntry(root, 'vite'), /cieo:end/);
+    assert.equal(readFileSync(join(root, 'src', 'main.tsx'), 'utf8'), before);
+  });
+  withTree({ 'src/main.tsx': nested }, (root) => {
+    assert.throws(() => wireEntry(root, 'vite'), /cieo:end/);
+    assert.equal(readFileSync(join(root, 'src', 'main.tsx'), 'utf8'), nested);
   });
 });
 

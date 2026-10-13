@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { parseArgs, UsageError } from '../lib/args.mjs';
 import { readConfig } from '../lib/config.mjs';
+import { MARKER_BLOCK } from '../lib/entry.mjs';
 import { packageRoot, projectRoot } from '../lib/paths.mjs';
 import { loadRegistry, plan } from '../lib/registry.mjs';
 import { rewriteImports } from '../lib/rewrite.mjs';
@@ -19,13 +20,6 @@ const FLAGS = { json: 'boolean', help: 'boolean' };
 const ENTRY_FILES = { next: 'app/layout.tsx', vite: 'src/main.tsx' };
 const INSTALL_FIX = 'npm install cieo@latest';
 const CHECK_ORDER = ['config', 'package', 'entry', 'components', 'alias'];
-
-export const MARKER_BLOCK = `/* cieo:start */
-import 'cieo/tokens.css';
-import 'cieo/design.css';
-import 'cieo/primitives.css';
-import './cieo-theme.css';
-/* cieo:end */`;
 
 function ok(name, detail) {
   return { name, status: 'ok', detail };
