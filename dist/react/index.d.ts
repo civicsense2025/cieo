@@ -1,7 +1,6 @@
 import { type ReactNode, type RefObject } from 'react';
 import { type MotionKind, type Preset, type SpringConfig } from '../core/spring.js';
 import { type PresenceOptions } from '../dom/index.js';
-/** True while the user (or the app, via data-motion="reduced") asks for reduced motion. */
 export declare function useReducedMotion(): boolean;
 export interface SpringOptions {
     preset?: Preset | SpringConfig;

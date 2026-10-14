@@ -32,6 +32,9 @@ export declare class Typeahead {
     private timeout;
     private buffer;
     private last;
+    /** Caps retained keystrokes; the buffer keeps the *prefix* and freezes past the cap, so a long query keeps
+        prefix semantics instead of a sliding window silently turning it into a suffix search. */
+    static readonly maxBuffer = 256;
     constructor(timeout?: number);
     get pending(): boolean;
     /** Returns the matching index or -1. `t` is in milliseconds. */

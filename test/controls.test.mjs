@@ -71,6 +71,35 @@ test('listbox: type-ahead builds a string, cycles on repeats and times out', () 
   assert.equal(key(closed, 'a', {}, new Typeahead(), 0).state.active, 3, 'a printable key opens on the match');
 });
 
+test('listbox: type-ahead reads labels lazily (immediate match costs O(1), not O(N))', () => {
+  let reads = 0;
+  const big = Array.from({ length: 10000 }, (_, i) => {
+    const v = i === 0 ? 'apple' : `zzz-option-${i}`;
+    return {
+      get label() {
+        reads += 1;
+        return v;
+      },
+    };
+  });
+  const ta = new Typeahead(500);
+  assert.equal(ta.find('a', big, -1, 0), 0);
+  assert.ok(reads <= 10, `immediate match should read O(1) labels, read ${reads}`);
+});
+
+test('listbox: type-ahead keeps prefix semantics past 32 chars (shared-prefix X/Y)', () => {
+  const S = 'a'.repeat(32);
+  const pair = [{ label: `${S}X` }, { label: `${S}Y` }];
+  const ta = new Typeahead(500);
+  let hit = -1;
+  let t = 0;
+  for (const ch of `${S}Y`.toLowerCase()) {
+    hit = ta.find(ch, pair, 0, t);
+    t += 10;
+  }
+  assert.equal(hit, 1, 'typing the full shared-prefix+Y label selects the Y option');
+});
+
 test('field status: settles on blur, relaxes while typing, never scolds mid-word', () => {
   const r = (empty, valid, checks = true) => ({ empty, valid, checks });
   assert.equal(nextFieldStatus('neutral', 'input', r(false, false)), 'neutral', 'typing an incomplete value stays neutral');

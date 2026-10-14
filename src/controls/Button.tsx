@@ -43,7 +43,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const width = useRef<Driver | null>(null);
 
   /* Width morph: inactive layers are out of flow, so the natural width is the active layer's. Spring from the width
-     on screen to the new natural width, then hand the width back to layout. */
+     on screen to the new natural width, then hand the width back to layout. The clear-plus-measure is one
+     write/read pair (a single layout, only on state change while morphing); the from≈natural path below jumps
+     the Driver without the extra px(from) write. */
   useIso(() => {
     const el = own.current;
     if (!el || !morph || block) return;

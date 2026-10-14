@@ -1,6 +1,10 @@
 import { type ReactNode } from 'react';
 import { type ControlSize } from './classes.js';
 import { type SelectOption } from './native.js';
+export declare function resolveOptionNodes(box: HTMLDivElement | null, cached: HTMLElement[], open: boolean): HTMLElement[];
+export declare function paintLiveOptions(holder: {
+    current: HTMLElement[];
+}, lastQ: Map<HTMLElement, number>, qFor: (index: number) => number): void;
 export type { SelectOption };
 export interface SelectProps {
     /** Visible label (required: it names both the native select and the combobox). */

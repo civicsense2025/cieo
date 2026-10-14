@@ -43,7 +43,12 @@ export function TabList({ label, value, defaultValue, onValueChange, motion, chi
   useLayoutEffect(() => {
     function measure() {
       const el = current !== undefined ? tabsRef.current.get(current) : undefined;
-      if (el) setStyle({ left: el.offsetLeft, width: el.offsetWidth });
+      /* offsetLeft/offsetWidth read layout, so skip the state write (and its re-render) when nothing moved. */
+      if (el) {
+        const left = el.offsetLeft;
+        const width = el.offsetWidth;
+        setStyle((p: { left: number; width: number }) => (p.left === left && p.width === width ? p : { left, width }));
+      }
     }
     measure();
     window.addEventListener('resize', measure);

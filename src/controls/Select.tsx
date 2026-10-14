@@ -5,7 +5,7 @@
    written to it with a real change event. Motion follows the dropdown recipe: the list grows from the trigger at
    97% scale, options fade in 30ms apart, and the highlight plate leads with one edge and trails with the other. */
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ChangeEvent, type KeyboardEvent, type ReactNode } from 'react';
-import { BLUR, LAG, S, STAGGER_MAX, Track, allowed, clamp, config, now, prog, run } from '../core/spring.js';
+import { BLUR, LAG, S, STAGGER_MAX, Track, active as activeJobs, allowed, clamp, config, now, prog, run } from '../core/spring.js';
 import { SwapText } from '../react/index.js';
 import { cx, type ControlSize } from './classes.js';
 import { CheckIcon, ChevronIcon } from './icons.js';
@@ -14,6 +14,58 @@ import { px } from './motion.js';
 import { indexOfValue, normalizeOptions, setNativeValue, submitOwner, type SelectOption } from './native.js';
 
 const useIso = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+const OPTION_SELECTOR = '[role="option"]';
+
+/* Resolve the option nodes to paint. Open always takes one fresh query (the
+   per-open single-query win); close reuses the cache only when it is still
+   live — every cached node connected and contained, and the live option count
+   (children scan, no selector query) unchanged — otherwise it re-queries. */
+export function resolveOptionNodes(box: HTMLDivElement | null, cached: HTMLElement[], open: boolean): HTMLElement[] {
+  if (!box) return cached;
+  if (open || cached.length === 0) return [...box.querySelectorAll<HTMLElement>(OPTION_SELECTOR)];
+  for (const n of cached) {
+    if (!n.isConnected || !box.contains(n)) return [...box.querySelectorAll<HTMLElement>(OPTION_SELECTOR)];
+  }
+  let liveCount = 0;
+  const kids = box.children;
+  for (let i = 0; i < kids.length; i += 1) {
+    if (kids[i].getAttribute('role') === 'option') liveCount += 1;
+  }
+  if (liveCount !== cached.length) return [...box.querySelectorAll<HTMLElement>(OPTION_SELECTOR)];
+  return cached;
+}
+
+/* Per-open stagger step (capped): identical for a stable list whenever it is
+   recomputed, so re-deriving it per frame changes no paint math. */
+const optionGap = (n: number) => Math.min(0.03, STAGGER_MAX / Math.max(1, n - 1));
+
+/* Paint one presence frame over the holder's LIVE node list. The running
+   presence job calls this every frame with the optionCache ref (not an
+   effect-time snapshot), so an option-DOM replacement that refreshes the
+   cache mid-animation is picked up on the very next frame: new nodes paint
+   from a fresh entry, surviving nodes keep per-node (not per-index)
+   continuity, and detached nodes are pruned. Quantization (epsilon,
+   ''-clear) matches the inline loop this replaces. */
+export function paintLiveOptions(
+  holder: { current: HTMLElement[] },
+  lastQ: Map<HTMLElement, number>,
+  qFor: (index: number) => number,
+): void {
+  const nodes = holder.current;
+  for (let i = 0; i < nodes.length; i += 1) {
+    const node = nodes[i];
+    const prev = lastQ.get(node) ?? -1;
+    const q = qFor(i);
+    if (Math.abs(q - prev) < 0.0005 && (q > 0.999) === (prev > 0.999)) continue;
+    node.style.opacity = q > 0.999 ? '' : q.toFixed(3);
+    lastQ.set(node, q);
+  }
+  if (lastQ.size > nodes.length) {
+    const live = new Set(nodes);
+    for (const key of lastQ.keys()) if (!live.has(key)) lastQ.delete(key);
+  }
+}
 
 export type { SelectOption };
 
@@ -83,6 +135,7 @@ export function Select(props: SelectProps) {
   /* `at` comes from the keyboard model (which may have just fed the type-ahead); a pointer open starts fresh. */
   const show = (next: boolean, at?: number) => {
     if (next && trigger.current && pop.current && typeof window !== 'undefined') {
+      /* One batched read pass per open (no writes between the rect and scrollHeight reads); setSide bails when unchanged. */
       const r = trigger.current.getBoundingClientRect();
       const h = Math.min(pop.current.scrollHeight, 320);
       setSide(r.bottom + h + 8 > window.innerHeight && r.top > h + 8 ? 'top' : 'bottom');
@@ -130,25 +183,79 @@ export function Select(props: SelectProps) {
 
   /* Presence: one spring for the list, options staggered on open. */
   const presence = useRef<{ o: Track; t0: number; stop: (() => void) | null }>({ o: new Track(0), t0: -9, stop: null });
+  /* Option elements are cached once per open; closing reuses the cache instead of re-querying. */
+  const optionCache = useRef<HTMLElement[]>([]);
   useIso(() => {
     const el = pop.current;
     if (!el) return;
     const p = presence.current;
-    const items = list.current ? [...list.current.querySelectorAll<HTMLElement>('[role="option"]')] : [];
-    const gap = Math.min(0.03, STAGGER_MAX / Math.max(1, items.length - 1));
+    if (open) {
+      p.t0 = now();
+      if (list.current) optionCache.current = resolveOptionNodes(list.current, optionCache.current, true);
+    } else if (list.current) {
+      optionCache.current = resolveOptionNodes(list.current, optionCache.current, false);
+    }
+    const up = side === 'top' ? 1 : -1;
+    /* Coalesced presence paint over the holder's live option list (layout win: one query per
+        open via resolveOptionNodes, stable closes reuse the cache with zero selector
+        queries; the per-frame option pass re-reads optionCache.current so a refresh
+        mid-animation retargets the already-running job instead of stranding it on an
+        effect-time snapshot): container transform/opacity/filter and each
+        option opacity are rewritten only when moved beyond quantization epsilon; identity
+        clears to '' instead of full strings. Blur (paint work, while will-change covers
+        transform,opacity) is gated: popups wider than ~800px or >8 concurrent jobs fall
+        back to opacity+transform only. Width is measured once per open (no per-frame
+        layout reads). */
+    let lastV = -1;
+    let lastVis = '';
+    let lastOClear = false;
+    let lastTClear = false;
+    let lastFClear = true;
+    let popW = -1;
+    const lastQ = new Map<HTMLElement, number>();
     const paint = (t: number) => {
       const v = clamp(p.o.at(t));
-      const up = side === 'top' ? 1 : -1;
-      el.style.visibility = v < 0.01 && !p.o.target ? 'hidden' : 'visible';
-      el.style.opacity = v.toFixed(3);
-      el.style.transform = v > 0.999 ? '' : `translateY(${px((1 - v) * 4 * up)}) scale(${(0.97 + 0.03 * v).toFixed(4)})`;
-      el.style.filter = v < 0.98 ? `blur(${((1 - v) * BLUR).toFixed(2)}px)` : '';
-      items.forEach((it, i) => {
-        const q = p.o.target ? clamp(prog(t, p.t0 + 0.04 + i * gap, S.base)) : v;
-        it.style.opacity = q > 0.999 ? '' : q.toFixed(3);
-      });
+      const vis = v < 0.01 && !p.o.target ? 'hidden' : 'visible';
+      if (vis !== lastVis) {
+        el.style.visibility = vis;
+        lastVis = vis;
+      }
+      const vMoved = lastV < 0 || Math.abs(v - lastV) >= 0.0005;
+      if (vMoved) {
+        const oClear = v > 0.999;
+        if (oClear !== lastOClear || vMoved) {
+          el.style.opacity = oClear ? '' : v.toFixed(3);
+          lastOClear = oClear;
+        }
+        const tClear = v > 0.999;
+        if (tClear !== lastTClear || vMoved) {
+          el.style.transform = tClear ? '' : `translateY(${px((1 - v) * 4 * up)}) scale(${(0.97 + 0.03 * v).toFixed(4)})`;
+          lastTClear = tClear;
+        }
+        let wantBlur = v < 0.98;
+        if (wantBlur) {
+          if (popW < 0) {
+            try {
+              popW = el.offsetWidth || el.getBoundingClientRect().width;
+            } catch {
+              popW = 0;
+            }
+          }
+          if (popW > 800 || activeJobs() > 8) wantBlur = false;
+        }
+        const fClear = !wantBlur;
+        if (fClear !== lastFClear || (wantBlur && vMoved)) {
+          el.style.filter = fClear ? '' : `blur(${((1 - v) * BLUR).toFixed(2)}px)`;
+          lastFClear = fClear;
+        }
+        lastV = v;
+      }
+      /* Live option pass: re-read the holder every frame so a cache refresh
+         mid-animation retargets this (possibly already-running) job. */
+      const nodes = optionCache.current;
+      const gap = optionGap(nodes.length);
+      paintLiveOptions(optionCache, lastQ, (i) => (p.o.target ? clamp(prog(t, p.t0 + 0.04 + i * gap, S.base)) : v));
     };
-    if (open) p.t0 = now();
     if (!allowed('feedback', trigger.current)) {
       p.stop?.();
       p.o.jump(open ? 1 : 0);
@@ -161,7 +268,8 @@ export function Select(props: SelectProps) {
         kind: 'feedback',
         step: (t) => {
           paint(t);
-          return p.o.prune(t) > 0 || (!!p.o.target && t < p.t0 + 0.04 + items.length * gap + 0.3);
+          const live = optionCache.current.length;
+          return p.o.prune(t) > 0 || (!!p.o.target && t < p.t0 + 0.04 + live * optionGap(live) + 0.3);
         },
         finish: () => {
           p.stop = null;

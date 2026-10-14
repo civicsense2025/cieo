@@ -4,8 +4,16 @@ import { S, Track, allowed, config, run, type MotionKind, type SpringConfig } fr
 import { enter, gapFor, hold, list, type Cancel, type From } from './index.js';
 
 const noop: Cancel = () => {};
+/* Kept a Map (not a WeakMap, which cannot be iterated): revealNow must visit every waiting
+   element. Entries are deleted eagerly in show()/stop()/observer-prune, reveal() prunes
+   orphans below, and the size is bounded by the caller's els.length per active reveal(). */
 const pending = new Map<Element, (el: Element) => void>();
+/* One active scroll per scroller; WeakMap so a dropped element never pins its cancel closure. */
 const scrolls = new WeakMap<Element, Cancel>();
+
+function prunePending(): void {
+  for (const [el] of pending) if (!el.isConnected) pending.delete(el);
+}
 
 /** Elements inside root that still wait to reveal take their final state at once. Call before a user-requested scrollTo. */
 export function revealNow(root: Element | null | undefined): void {
@@ -24,6 +32,7 @@ export function reveal(
   const kind = opts.kind || 'entrance';
   const els = list(targets);
   if (!els.length || !allowed(kind) || typeof IntersectionObserver === 'undefined') return noop;
+  prunePending(); /* collect orphans left by a dropped Cancel whose element detached unseen */
   const from: From = { x: 0, y: 8, scale: 1, opacity: 0, blur: 0, ...opts.from };
   const waiting = new Map<Element, () => void>();
   let observer: IntersectionObserver;
@@ -105,7 +114,14 @@ export function scrollTo(scroller: Element | Window | null, x?: number, y?: numb
   let cancel: Cancel = noop;
   const interrupt = () => {
     stopped = true;
+    detach();
     cancel();
+  };
+  /* removeEventListener matches on capture only, so { capture: true } pairs with attach's
+     { capture: true, passive: true }. Detach runs on both paths: interrupt detaches at once
+     and finish() detaches again (harmless) when the loop settles on its own. */
+  const detach = () => {
+    INPUTS.forEach((type) => removeEventListener(type, interrupt, { capture: true }));
   };
   const cancelThis: Cancel = () => {
     stopped = true;
@@ -121,7 +137,7 @@ export function scrollTo(scroller: Element | Window | null, x?: number, y?: numb
       return tx.prune(t) + ty.prune(t) > 0;
     },
     finish() {
-      INPUTS.forEach((type) => removeEventListener(type, interrupt, { capture: true }));
+      detach();
       if (!stopped) go(X, Y);
       if (scrolls.get(node) === cancelThis) scrolls.delete(node);
       node.style.scrollSnapType = snap;

@@ -61,21 +61,62 @@ export class Track {
         return this;
     }
     at(t = now()) {
+        const events = this.ev;
+        const n = events.length;
+        if (n === 0)
+            return this.target;
         let v = this.target;
-        for (const e of this.ev)
-            v += resp(t - e.t, e.x0, e.v0, e.cfg);
+        for (let i = 0; i < n; i += 1) {
+            const e = events[i];
+            const dt = t - e.t;
+            // resp(dt <= 0) is exactly x0, without touching Math.exp.
+            v += dt <= 0 ? e.x0 : resp(dt, e.x0, e.v0, e.cfg);
+        }
         return v;
     }
     velocity(t = now()) {
+        const events = this.ev;
+        const n = events.length;
+        if (n === 0)
+            return 0;
         let v = 0;
-        for (const e of this.ev)
-            v += vel(t - e.t, e.x0, e.v0, e.cfg);
+        for (let i = 0; i < n; i += 1) {
+            const e = events[i];
+            const dt = t - e.t;
+            // vel(dt <= 0) is exactly v0, without touching Math.exp.
+            v += dt <= 0 ? e.v0 : vel(dt, e.x0, e.v0, e.cfg);
+        }
         return v;
     }
     /** Drops springs whose remaining envelope is under 1e-3; returns how many still move. */
     prune(t = now()) {
-        this.ev = this.ev.filter((e) => t < e.t || Math.exp(-e.cfg.w * (t - e.t)) * (1 + e.cfg.w * (t - e.t)) * (Math.abs(e.x0) + Math.abs(e.v0) / e.cfg.w) > 1e-3);
-        return this.ev.length;
+        const events = this.ev;
+        const n = events.length;
+        if (n === 0)
+            return 0;
+        // In-place compaction: same keep/drop predicate as the old filter, no new array.
+        let kept = 0;
+        for (let i = 0; i < n; i += 1) {
+            const e = events[i];
+            const age = t - e.t;
+            // Future events are always kept; also skips Math.exp for dt < 0.
+            if (age < 0) {
+                if (kept !== i)
+                    events[kept] = e;
+                kept += 1;
+                continue;
+            }
+            const w = e.cfg.w;
+            const wAge = w * age;
+            if (Math.exp(-wAge) * (1 + wAge) * (Math.abs(e.x0) + Math.abs(e.v0) / w) > 1e-3) {
+                if (kept !== i)
+                    events[kept] = e;
+                kept += 1;
+            }
+        }
+        if (kept !== n)
+            events.length = kept;
+        return kept;
     }
     get moving() {
         return this.ev.length > 0;
@@ -116,7 +157,14 @@ export function onscreen(el) {
 export function allowed(kind = 'feedback', el) {
     if (!KINDS.includes(kind))
         throw new TypeError(`Unknown motion kind: ${kind}`);
-    const s = state();
+    return allowedWith(state(), kind, el);
+}
+/* Per-job check against an already-read MotionState. Same predicate as allowed():
+   callers hoist one state() read per frame pass instead of one per job per frame.
+   The kind guard is repeated so tick()/sync() keep the throw for unknown kinds. */
+function allowedWith(s, kind, el) {
+    if (!KINDS.includes(kind))
+        throw new TypeError(`Unknown motion kind: ${kind}`);
     if (s.reduced || s.hidden)
         return false;
     if (s.paused && kind !== 'feedback')
@@ -140,10 +188,14 @@ function settle(job) {
 function tick() {
     raf = null;
     const t = now();
+    // One motion-state read per frame pass: document/override polling is O(1), not O(jobs).
+    // Per-job onscreen(el) checks still run inside allowedWith; jobs carry no el today.
+    const s = state();
+    // Snapshot: a step may add or cancel jobs, and new jobs wait for the next frame.
     for (const job of [...jobs]) {
         if (!jobs.has(job))
             continue;
-        if (!allowed(job.kind ?? 'feedback')) {
+        if (!allowedWith(s, job.kind ?? 'feedback')) {
             settle(job);
             continue;
         }
@@ -162,14 +214,26 @@ function tick() {
 }
 /** When the motion state changes, running springs that are no longer allowed jump to their end state. */
 export function sync() {
-    for (const job of [...jobs])
-        if (!allowed(job.kind ?? 'feedback'))
+    // Snapshot: a finishing job may flip the motion state and run() an allowed
+    // replacement, which lands in the live Set mid-pass. The pre-pass gate must
+    // never settle jobs created by this pass, so new jobs wait for the next pass.
+    const s = state();
+    for (const job of [...jobs]) {
+        if (!jobs.has(job))
+            continue;
+        if (!allowedWith(s, job.kind ?? 'feedback'))
             settle(job);
+    }
     if (!jobs.size && raf !== null) {
         cancelAnimationFrame(raf);
         raf = null;
     }
 }
+/* Process-lifetime singleton on purpose: one motion:change + one visibilitychange + one media
+   listener serves every job, added once on first run() and never removed. Deliberately no
+   unlisten export: removing them while jobs run would strand springs on a stale gate, and
+   re-adding per run would churn listeners. No per-instance accumulation: run() adds no
+   listeners itself, it only flips `listening`. */
 function listen() {
     if (listening || typeof document === 'undefined')
         return;
