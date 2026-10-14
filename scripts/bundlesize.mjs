@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 // scripts/bundlesize.mjs — delivery budget gate (node built-ins only).
 // Fails (exit 1) when a canonical payload exceeds its recorded budget.
-// Budgets = measured 2026-10-14 baseline +10%, rounded up:
+// Budgets = pre-PR origin/main (f26451b) git-blob sizes +10%, rounded up
+// (verified: primitives 181745, dist total 330120, catalogue 3175205,
+// collection 3227087, library 3175205, workbench 3243715):
 //
 //   dist/primitives (non-min)   181745 -> budget 199920
 //   dist total (non-min)         330120 -> budget 363132
@@ -10,9 +12,13 @@
 //   docs/library.html           3175205 -> budget 3492726
 //   docs/workbench.html         3243715 -> budget 3568087
 //
-// Derived *.min.js / *.min.css files are EXCLUDED from the canonical totals
-// (they are byte-functions of the sources) and reported as INFO rows with
-// the minified ratio instead. Run: npm run check:size
+// NOTE (honest framing): derived *.min.js / *.min.css are sidecars, NOT
+// served — no package.json exports entry points at them yet, so the "-32%"
+// is disk savings only until a minified delivery graph is wired (follow-up).
+// They are EXCLUDED from the canonical totals (byte-functions of sources)
+// and reported as INFO rows with the minified ratio instead.
+// Current dist total sits near 98% of budget: follow-up growth must cut or
+// justify. Run: npm run check:size
 import { readdirSync, statSync, existsSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
