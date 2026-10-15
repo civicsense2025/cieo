@@ -2,7 +2,7 @@
 /* Shared text-field frame, after the field recipe. The label floats on focus or once there is a value (pure CSS, so it
    works before hydration). The status machine settles the field into neutral, valid or invalid; the border, label
    and icon follow, and the message area opens on a height spring. */
-import { useEffect, useId, useMemo, useRef, useState, type FocusEvent, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type FocusEvent, type ReactNode } from 'react';
 import { cx } from './classes.js';
 import { nextFieldStatus, resolveFieldStatus, type FieldEvent, type FieldStatus } from './field-state.js';
 import { AlertIcon, CheckIcon } from './icons.js';
@@ -99,7 +99,11 @@ export function useField<T extends TextControl>(own: FieldOwnProps, rules: Rules
     const f = el?.form ?? null;
     if (!el) return;
     const onInvalid = () => fireRef.current('invalid', el);
-    const onReset = () => setMachine('neutral');
+    const onReset = (event: Event) => {
+      setTimeout(() => {
+        if (!event.defaultPrevented && ref.current === el) setMachine('neutral');
+      });
+    };
     el.addEventListener('invalid', onInvalid);
     f?.addEventListener('reset', onReset);
     return () => {
@@ -120,8 +124,10 @@ export function useField<T extends TextControl>(own: FieldOwnProps, rules: Rules
       id: ids.control,
       'aria-invalid': status === 'invalid' || undefined,
       'aria-describedby': describedBy,
-      onBlurCapture: (e: FocusEvent<T>) => fire('blur', e.currentTarget),
-      onInputCapture: (e: FormEvent<T>) => fire('input', e.currentTarget),
+      onBlur: (e: FocusEvent<T>) => fire('blur', e.currentTarget),
+      // Validate in the change bubble, after React has extracted the native value.
+      // Capture-phase state updates can restore a controlled value before onChange.
+      onChange: (e: ChangeEvent<T>) => fire('input', e.currentTarget),
     },
   };
 }

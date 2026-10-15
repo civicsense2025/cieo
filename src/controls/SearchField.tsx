@@ -26,7 +26,8 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   const inputId = id ?? `${uid}i`;
   const input = useRef<HTMLInputElement | null>(null);
   const [enhanced, setEnhanced] = useState(false);
-  const [filled, setFilled] = useState(String(rest.value ?? rest.defaultValue ?? '').length > 0);
+  const [uncontrolledFilled, setFilled] = useState(String(rest.value ?? rest.defaultValue ?? '').length > 0);
+  const filled = rest.value !== undefined ? String(rest.value).length > 0 : uncontrolledFilled;
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
@@ -34,8 +35,18 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
     if (collapsible && !input.current?.value) setOpen(false);
   }, []);
   useEffect(() => {
-    if (rest.value !== undefined) setFilled(String(rest.value).length > 0);
-  }, [rest.value]);
+    const el = input.current;
+    const form = el?.form;
+    if (!el || !form) return;
+    const reset = (event: Event) => {
+      setTimeout(() => {
+        if (event.defaultPrevented || input.current !== el) return;
+        setFilled(el.value.length > 0);
+      });
+    };
+    form.addEventListener('reset', reset);
+    return () => form.removeEventListener('reset', reset);
+  });
 
   const setRef = (el: HTMLInputElement | null) => {
     input.current = el;

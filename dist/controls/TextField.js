@@ -14,5 +14,11 @@ export const TextField = forwardRef(function TextField(props, ref) {
         else if (ref)
             ref.current = el;
     };
-    return (_jsx(FieldFrame, { kind: "input", own: own, field: field, floated: !!placeholder, className: className, children: _jsx("input", { ...rest, ...field.control, ref: setRef, type: type, placeholder: placeholder ?? ' ', className: "cieo-field-control" }) }));
+    return (_jsx(FieldFrame, { kind: "input", own: own, field: field, floated: !!placeholder, className: className, children: _jsx("input", { ...rest, ...field.control, ref: setRef, type: type, placeholder: placeholder ?? ' ', onChange: (e) => {
+                rest.onChange?.(e);
+                field.control.onChange(e);
+            }, onBlur: (e) => {
+                field.control.onBlur(e);
+                rest.onBlur?.(e);
+            }, className: "cieo-field-control" }) }));
 });

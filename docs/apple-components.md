@@ -11,6 +11,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Interactive gallery](#interactive-gallery)
 - [Soft surfaces](#soft-surfaces)
 - [Host configuration and semantic copy](#host-configuration-and-semantic-copy)
+- [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
 
 ## Implementation contract
@@ -70,9 +71,28 @@ accepts clearAccessibilityLabel. These `LocalizedStringKey` defaults remain
 compatible; hosts supply interface copy and resolved strings through the native
 localization API. Host actions and asynchronous lifetimes remain outside Cieo.
 
-These additive contracts are local source changes. Unit/build and consumer UI
+These additive contracts shipped in PR #9. They are unreleased and are not part of consumer 0.3.0. Unit/build and consumer UI
 receipts must identify their actual candidate; source inspection alone does not
 establish localization, focus or VoiceOver acceptance.
+
+## Consumer rollout boundary
+
+Principle's current native consumer uses published Cieo 0.3.0 Theme,
+renderingPreferences and renderPolicy with host-owned native brand styles.
+The additive configuration APIs above remain unreleased draft producer APIs; they
+are not a release blocker or dependency of that repaired consumer.
+
+Consumer review closes three bounded waves: input reliability, native search
+and filter rendering policy, and web Library forms; state/empty/error and
+form controls; navigation and reader details. Consumer references record
+implemented bridges, retained platform/domain controls and incompatible
+installed API boundaries rather than treating every surface as a replacement. Consumers document
+exact adapter/feature/test ownership in their existing adoption references and
+source maps. A stock Cieo visual style does not replace platform behavior or
+Principle brand geometry. Native focus, submit, selection identity and roles,
+and web input/textarea/select/button/link semantics remain explicit contracts.
+Each wave records locale/RTL, focus, disabled/busy, accessibility and constrained
+rendering observations; producer tests alone do not establish consumer acceptance.
 
 ## Documentation ownership
 

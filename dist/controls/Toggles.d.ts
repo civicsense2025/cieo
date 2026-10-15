@@ -31,10 +31,10 @@ export interface RadioGroupProps {
     children: ReactNode;
 }
 export declare function RadioGroup(props: RadioGroupProps): import("react/jsx-runtime").JSX.Element;
-export type RadioProps = Omit<InputBase, 'value' | 'name'> & ToggleOwn & {
+export type RadioProps = Omit<InputBase, 'value'> & ToggleOwn & {
     value: string;
 };
-export declare const Radio: import("react").ForwardRefExoticComponent<Omit<InputBase, "name" | "value"> & ToggleOwn & {
+export declare const Radio: import("react").ForwardRefExoticComponent<Omit<InputBase, "value"> & ToggleOwn & {
     value: string;
 } & import("react").RefAttributes<HTMLInputElement>>;
 export {};
