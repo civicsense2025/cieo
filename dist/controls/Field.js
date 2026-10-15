@@ -65,7 +65,12 @@ export function useField(own, rules, id) {
         if (!el)
             return;
         const onInvalid = () => fireRef.current('invalid', el);
-        const onReset = () => setMachine('neutral');
+        const onReset = (event) => {
+            setTimeout(() => {
+                if (!event.defaultPrevented && ref.current === el)
+                    setMachine('neutral');
+            });
+        };
         el.addEventListener('invalid', onInvalid);
         f?.addEventListener('reset', onReset);
         return () => {
@@ -85,8 +90,10 @@ export function useField(own, rules, id) {
             id: ids.control,
             'aria-invalid': status === 'invalid' || undefined,
             'aria-describedby': describedBy,
-            onBlurCapture: (e) => fire('blur', e.currentTarget),
-            onInputCapture: (e) => fire('input', e.currentTarget),
+            onBlur: (e) => fire('blur', e.currentTarget),
+            // Validate in the change bubble, after React has extracted the native value.
+            // Capture-phase state updates can restore a controlled value before onChange.
+            onChange: (e) => fire('input', e.currentTarget),
         },
     };
 }

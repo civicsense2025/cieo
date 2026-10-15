@@ -3,7 +3,7 @@
    platform does) laid over a drawn visual. The motion is CSS keyed off :checked, on the spring tokens:
    the checkbox fills, then its check draws 40ms later (checklist recipe); the radio dot grows on snap; the switch
    knob leads with one edge and trails with the other, and widens toward its destination while pressed (switch recipe). */
-import { createContext, forwardRef, useContext, useEffect, useId, useRef, useState, type ChangeEvent, type ForwardedRef, type InputHTMLAttributes, type ReactNode } from 'react';
+import { createContext, forwardRef, useContext, useEffect, useId, useRef, type ChangeEvent, type ForwardedRef, type InputHTMLAttributes, type ReactNode } from 'react';
 import { cx } from './classes.js';
 
 type InputBase = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'>;
@@ -84,6 +84,7 @@ export const Switch = forwardRef<HTMLInputElement, SwitchProps>(function Switch(
 interface RadioCtx {
   name: string;
   value: string | undefined;
+  controlled: boolean;
   defaultValue?: string;
   disabled?: boolean;
   required?: boolean;
@@ -112,17 +113,16 @@ export interface RadioGroupProps {
 export function RadioGroup(props: RadioGroupProps) {
   const { label, hideLabel, description, name, onValueChange, disabled, required, form, orientation = 'vertical', className, children } = props;
   const uid = useId();
-  const [inner, setInner] = useState(props.defaultValue);
   const controlled = props.value !== undefined;
   const ctx: RadioCtx = {
     name,
-    value: controlled ? props.value : inner,
+    value: props.value,
+    controlled,
     defaultValue: props.defaultValue,
     disabled,
     required,
     form,
     pick: (v) => {
-      if (!controlled) setInner(v);
       onValueChange?.(v);
     },
   };
@@ -141,14 +141,15 @@ export function RadioGroup(props: RadioGroupProps) {
   );
 }
 
-export type RadioProps = Omit<InputBase, 'value' | 'name'> & ToggleOwn & { value: string };
+export type RadioProps = Omit<InputBase, 'value'> & ToggleOwn & { value: string };
 
 export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(props, ref) {
   const { label, hideLabel, description, className, value, onChange, ...rest } = props;
   const g = useContext(Group);
   const uid = useId();
-  /* Inside a group the group owns checked; it is always controlled after hydration and server-rendered checked. */
-  const checked = g ? g.value === value : rest.checked;
+  /* Uncontrolled groups retain native checked ownership, including grouping and form reset. */
+  const checked = g ? (g.controlled ? g.value === value : undefined) : rest.checked;
+  const defaultChecked = g ? (g.controlled ? undefined : g.defaultValue === value) : rest.defaultChecked;
   return (
     <label className={cx('cieo-ctl', 'cieo-toggle', 'cieo-radio', className)}>
       <span className="cieo-toggle-hit">
@@ -156,11 +157,12 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(function Radio(pro
           {...rest}
           ref={ref}
           type="radio"
-          name={g?.name}
+          name={g?.name ?? rest.name}
           value={value}
           form={g?.form ?? rest.form}
           required={g?.required ?? rest.required}
           checked={checked}
+          defaultChecked={defaultChecked}
           onChange={(e) => {
             g?.pick(value, e);
             onChange?.(e);

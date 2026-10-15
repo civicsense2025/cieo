@@ -22,7 +22,22 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
   return (
     <FieldFrame kind="input" own={own} field={field} floated={!!placeholder} className={className}>
       {/* A single-space placeholder lets CSS float the label with :placeholder-shown before hydration. */}
-      <input {...rest} {...field.control} ref={setRef} type={type} placeholder={placeholder ?? ' '} className="cieo-field-control" />
+      <input
+        {...rest}
+        {...field.control}
+        ref={setRef}
+        type={type}
+        placeholder={placeholder ?? ' '}
+        onChange={(e) => {
+          rest.onChange?.(e);
+          field.control.onChange(e);
+        }}
+        onBlur={(e) => {
+          field.control.onBlur(e);
+          rest.onBlur?.(e);
+        }}
+        className="cieo-field-control"
+      />
     </FieldFrame>
   );
 });

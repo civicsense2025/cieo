@@ -1,4 +1,4 @@
-import { type FocusEvent, type FormEvent, type ReactNode } from 'react';
+import { type ChangeEvent, type FocusEvent, type ReactNode } from 'react';
 import { type FieldStatus } from './field-state.js';
 export type { FieldStatus };
 /** Return a message (or false) when the value is invalid; null, undefined or true when it is fine. */
@@ -43,8 +43,8 @@ export declare function useField<T extends TextControl>(own: FieldOwnProps, rule
         id: string;
         'aria-invalid': true | undefined;
         'aria-describedby': string | undefined;
-        onBlurCapture: (e: FocusEvent<T>) => void;
-        onInputCapture: (e: FormEvent<T>) => void;
+        onBlur: (e: FocusEvent<T>) => void;
+        onChange: (e: ChangeEvent<T>) => void;
     };
 };
 /** The frame around a control: border box, floating label, status icon, description and message. */

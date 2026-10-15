@@ -49,11 +49,34 @@ export const TextArea = forwardRef(function TextArea(props, ref) {
         }
     }, [rest.value]);
     useEffect(() => () => height.current?.cancel(), []);
+    useEffect(() => {
+        const el = field.ref.current;
+        const form = el?.form;
+        if (!el || !form)
+            return;
+        // Reset fires before the browser restores defaultValue; cancelled resets do nothing.
+        const reset = (event) => {
+            setTimeout(() => {
+                if (event.defaultPrevented || field.ref.current !== el)
+                    return;
+                setCount(el.value.length);
+                grow(true);
+            });
+        };
+        form.addEventListener('reset', reset);
+        return () => form.removeEventListener('reset', reset);
+    });
     const input = (e) => {
         setCount(e.currentTarget.value.length);
         grow(false);
         onInput?.(e);
     };
     const footer = showCount ? (_jsxs("span", { className: "cieo-field-count", "aria-hidden": "true", children: [_jsx(Digits, { value: count }), rest.maxLength ? _jsxs("span", { children: ["\u2009/\u2009", rest.maxLength] }) : null] })) : null;
-    return (_jsx(FieldFrame, { kind: "textarea", own: own, field: field, floated: !!placeholder, className: className, footer: footer, children: _jsx("textarea", { ...rest, ...field.control, ref: setRef, rows: minRows, placeholder: placeholder ?? ' ', onInput: input, className: "cieo-field-control" }) }));
+    return (_jsx(FieldFrame, { kind: "textarea", own: own, field: field, floated: !!placeholder, className: className, footer: footer, children: _jsx("textarea", { ...rest, ...field.control, ref: setRef, rows: minRows, placeholder: placeholder ?? ' ', onInput: input, onChange: (e) => {
+                rest.onChange?.(e);
+                field.control.onChange(e);
+            }, onBlur: (e) => {
+                field.control.onBlur(e);
+                rest.onBlur?.(e);
+            }, className: "cieo-field-control" }) }));
 });

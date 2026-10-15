@@ -104,6 +104,46 @@ import 'cieo/controls.css';
 | `RadioGroup`, `Radio` | group: `label` (legend), `name`, `value` or `defaultValue`, `onValueChange`, `orientation`; radio: `value`, `label` |
 | `Range` | `label` (required), `min`, `max`, `step`, `showValue`, `formatValue` |
 
+Text inputs and textareas retain native `value`/`defaultValue`, forwarded refs,
+form names and browser validity. In the current local source, `TextField` and
+`TextArea` call the host's `onChange` once before internal validation in the
+change bubble. Validation does not update React state during input capture,
+which could restore a controlled value before React reads the edit. Native
+`onInput` remains available; `TextArea` also uses it for count and height.
+`onBlur` performs the field transition and preserves the host callback. Explicit
+`status` takes precedence over the field machine, and host `error` supplies the
+message. Hosts own asynchronous submission, errors, cancellation and persistence.
+
+The controlled/uncontrolled regression fixtures are
+[test/browser/inputs.tsx](test/browser/inputs.tsx) and
+[test/browser/inputs.py](test/browser/inputs.py). These callback repairs are
+unpublished local source changes, not a claim about installed version 0.3.0.
+On an uncancelled native form reset, SearchField refreshes its filled/clear
+affordance and TextArea refreshes count and bounded height after the browser
+restores defaultValue. Cancelled resets preserve values, status and presentation;
+controlled fields retain host-owned values. Reset does not invoke search/clear or
+change callbacks. Current local browser fixtures pass 109 checks with actual
+control CSS in Chromium 153 at 900px and reduced motion, covering edits, callback
+order, validation/recovery, controlled updates, native reset and cancelled reset.
+That receipt does not establish localization or assistive-technology acceptance.
+
+The local [Radio implementation](src/controls/Toggles.tsx) forwards a standalone
+native `name`. Uncontrolled RadioGroup uses native defaultChecked ownership;
+reset restores its initial choice and cancelled reset preserves the current
+choice through unrelated host rerenders, without selection callbacks. Controlled
+groups retain host-owned checked values and prop updates. The
+[Radio fixture](test/browser/radio.tsx) and [browser checks](test/browser/radio.py)
+pass 31 checks with actual CSS in Chromium 153 at 900px and reduced motion,
+including ref/label/description, Space/arrows, disabled fieldsets, FormData and
+independent names. These are unpublished source repairs. Existing controlled
+consumer usage against installed 0.3.0 remains a distinct boundary.
+
+The reconciled local producer package receipt records 771 passing tests and
+two skips, alongside 140 browser checks (109 text-input/reset and 31 Radio).
+These checks apply to the local source candidate; the original draft PR #9 at
+`f7319de` remains a separate reviewed source identity. No merge, release or
+consumer dependency update is implied.
+
 How they behave without scripts: `Select` is a styled native select (after hydration it becomes a combobox and listbox with arrows, Home, End, Page keys, type-ahead, Enter, Space, Escape and Tab; the native select stays in the form, invisible and hidden from assistive tech, and receives every pick as a real `change` event). Field labels float with CSS alone, a server `error` shows its message, and `Range` draws its fill at the initial value. `autoSubmit` needs scripts, so keep a submit button in the form.
 
 Next.js: the components are client modules (`'use client'` per file); a server component can render them with serialisable props (`options`, `autoSubmit`), but not `onValueChange`. The listbox is positioned inside the control, so an ancestor with `overflow: hidden` clips it.
