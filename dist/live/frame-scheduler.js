@@ -26,6 +26,8 @@ export class FrameScheduler {
             this.ticking = true;
             this.epoch += 1;
             try {
+                /* Set iteration is delete-safe: finish() removes the current entry without disturbing
+                   the remaining walk, and jobs started mid-tick carry born > epoch so they wait a frame. */
                 for (const entry of this.jobs) {
                     if (entry.born > this.epoch)
                         continue;
@@ -51,8 +53,9 @@ export class FrameScheduler {
     start(job) {
         if (this.closed)
             throw new Error('The scheduler is disposed.');
+        /* Backpressure guard: fail fast with the live count instead of queueing unbounded work. */
         if (this.jobs.size >= this.capacity)
-            throw new RangeError('The scheduler is at capacity.');
+            throw new RangeError(`The scheduler is at capacity (${this.jobs.size}/${this.capacity} active). Free a job before starting another.`);
         const entry = { job, born: this.epoch + 1 };
         if (!this.environment.allowed()) {
             this.finish(entry, 'gated', true);
@@ -74,8 +77,9 @@ export class FrameScheduler {
     }
     dispose() {
         if (this.closed)
-            return;
+            return; /* idempotent: a second dispose finishes nothing twice */
         this.closed = true;
+        // Clear first because finish handlers are allowed to cancel other jobs (same as sync()).
         const entries = [...this.jobs];
         this.jobs.clear();
         this.cancelIdleFrame();

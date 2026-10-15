@@ -12,3 +12,12 @@ test/browser/artifacts/
 review-artifact/
 atoms/web/catalogue/boot.js
 __pycache__/
+
+# PROPOSAL (not enforced: tracked files stay tracked until an explicit
+# `git rm` + release-policy decision): move build outputs to publish-only.
+# dist/ (tsc + scripts/minify.mjs output, incl. *.min.js/*.min.css) and any
+# cieo-*.tgz pack artifacts are regenerable via `npm run build` and do not
+# need to live in git. When adopted: `git rm -r --cached dist *.tgz`,
+# uncomment the lines below, and let `prepack`/CI build them on demand.
+# dist/
+# *.tgz

@@ -1,6 +1,6 @@
 export { buttonClassName, cx, type ButtonClassOptions, type ButtonVariant, type ControlSize } from './classes.js';
 export { Button, type ButtonProps, type ButtonState } from './Button.js';
-export { Select, type SelectProps, type SelectOption } from './Select.js';
+export { Select, resolveOptionNodes, paintLiveOptions, type SelectProps, type SelectOption } from './Select.js';
 export { TextField, type TextFieldProps, type TextFieldType } from './TextField.js';
 export { TextArea, type TextAreaProps } from './TextArea.js';
 export { SearchField, type SearchFieldProps } from './SearchField.js';

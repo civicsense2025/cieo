@@ -3,7 +3,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* Shared text-field frame, after the field recipe. The label floats on focus or once there is a value (pure CSS, so it
    works before hydration). The status machine settles the field into neutral, valid or invalid; the border, label
    and icon follow, and the message area opens on a height spring. */
-import { useEffect, useId, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { cx } from './classes.js';
 import { nextFieldStatus, resolveFieldStatus } from './field-state.js';
 import { AlertIcon, CheckIcon } from './icons.js';
@@ -13,7 +13,20 @@ export function useField(own, rules, id) {
     const ids = { control: id ?? `${uid}c`, desc: `${uid}d`, msg: `${uid}m` };
     const [machine, setMachine] = useState('neutral');
     const [custom, setCustom] = useState('');
-    const ref = useRef(null);
+    /* Element-tracking ref: TextField/TextArea assign `field.ref.current = el` on commit. The setter mirrors the node
+       into state so the subscription below rebinds when the element (or its form owner) changes. Reads and writes stay
+       compatible with the existing `field.ref.current` call sites. */
+    const target = useRef(null);
+    const [element, setElement] = useState(null);
+    const ref = useMemo(() => ({
+        get current() {
+            return target.current;
+        },
+        set current(el) {
+            target.current = el;
+            setElement((prev) => (prev === el ? prev : el));
+        },
+    }), []);
     const checks = !!(own.validate || rules.required || rules.pattern || rules.minLength || rules.min !== undefined || rules.max !== undefined || rules.type === 'email' || rules.type === 'url');
     const read = (el) => {
         const v = el.value;
@@ -38,12 +51,20 @@ export function useField(own, rules, id) {
     const shown = useRef(message);
     if (message)
         shown.current = message;
+    /* Rebind on element/form-owner identity: the handlers read through a ref so re-renders never re-subscribe.
+       `formId` is the `form` attribute (TextField/TextArea spread it through `rules` at runtime); depending on it lets
+       the effect follow a `form` prop change, while `owner` (the resolved `el.form`) covers moves of the same node.
+       The effect reads the live owner at subscribe time, so reset always clears the current form and never a stale one. */
+    const fireRef = useRef(fire);
+    fireRef.current = fire;
+    const formId = rules.form;
+    const owner = element?.form ?? null;
     useEffect(() => {
-        const el = ref.current;
-        const f = el?.form;
+        const el = element;
+        const f = el?.form ?? null;
         if (!el)
             return;
-        const onInvalid = () => fire('invalid', el);
+        const onInvalid = () => fireRef.current('invalid', el);
         const onReset = () => setMachine('neutral');
         el.addEventListener('invalid', onInvalid);
         f?.addEventListener('reset', onReset);
@@ -51,7 +72,8 @@ export function useField(own, rules, id) {
             el.removeEventListener('invalid', onInvalid);
             f?.removeEventListener('reset', onReset);
         };
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [element, owner, formId]);
     const describedBy = cx(own.description ? ids.desc : null, status === 'invalid' && message ? ids.msg : null) || undefined;
     return {
         ids,

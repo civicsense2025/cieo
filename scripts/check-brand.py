@@ -10,6 +10,8 @@ FORBIDDEN = re.compile(r"lamina|meridian|\bvelo\b|claude|github|linear\b|/Users/
 ALLOWED = re.compile(
     r"(?:https://github\.com/|github:)civicsense2025/(?:cieo|forma-gesso)(?=[#/'\"`\s]|$)"
     r"|\.github/workflows/[a-zA-Z0-9_-]+\.ya?ml\b"
+    r"|\.github/pull_request_template\.md\b"
+    r"|['\"]\.github/(?:\*\*/\*)?['\"]"
     r"|\.linear\(duration:|linear-gradient|['\"]linear['\"]"
     r"|linear(?=[)\"'])|linear light|linear scale|linear-ish|(?<=s )linear(?= )",
     re.IGNORECASE,

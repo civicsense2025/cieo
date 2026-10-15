@@ -4398,5 +4398,69 @@
   "summary": "Sheet rests at peek, half or full detents on base. A fast flick skips the middle detent. The grabber stays visible and the page behind stays inert.",
   "file": "blocks/528-sheetdetents.js",
   "api": "y.set(detent); flick: skip middle when |vy|>700; inert: aria-hidden while open"
+ },
+ {
+  "id": "auth-magic-link",
+  "category": "Auth",
+  "name": "Magic link",
+  "summary": "Send delivers a link state and starts a 30 second resend countdown. Hammering resend never starts two timers: each send carries a guard token and stale ticks are ignored.",
+  "file": "blocks/558-auth-wave1.js",
+  "api": "auth, email, passwordless"
+ },
+ {
+  "id": "auth-mfa-challenge",
+  "category": "Auth",
+  "name": "MFA challenge",
+  "summary": "Six boxes mirror one input and a wrong code clears itself after a beat. The recovery toggle swaps the boxes for a single field that forgives spaces and dashes.",
+  "file": "blocks/558-auth-wave1.js",
+  "api": "auth, otp, recovery code"
+ },
+ {
+  "id": "auth-reset",
+  "category": "Auth",
+  "name": "Password reset",
+  "summary": "Request swaps to a confirm step with a live strength meter. Short passwords stay on the step with a text error; a strong save lands a confirmation.",
+  "file": "blocks/558-auth-wave1.js",
+  "api": "auth, password, recovery"
+ },
+ {
+  "id": "auth-passkey",
+  "category": "Auth",
+  "name": "Passkey sign in",
+  "summary": "The button busies with waiting text while the ceremony runs, then lands a signed-in status. Flipping the toggle reveals the fallback note and parks the button.",
+  "file": "blocks/559-auth-wave2.js",
+  "api": "auth, passkey, webauthn"
+ },
+ {
+  "id": "auth-sso",
+  "category": "Auth",
+  "name": "Single sign-on",
+  "summary": "Each provider owns its accessible name. A press busies that button with connecting text; the first attempt lands an inline error and the retry signs in.",
+  "file": "blocks/559-auth-wave2.js",
+  "api": "auth, sso, oauth"
+ },
+ {
+  "id": "auth-invite",
+  "category": "Auth",
+  "name": "Org invite",
+  "summary": "Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never colour alone.",
+  "file": "blocks/560-auth-wave3.js",
+  "api": "auth, invite, team"
+ },
+ {
+  "id": "auth-sessions",
+  "category": "Auth",
+  "name": "Sessions",
+  "summary": "Each row names its device and city. The current row reads This device and carries no revoke button; revoking any other row removes it and says so in text.",
+  "file": "blocks/560-auth-wave3.js",
+  "api": "auth, sessions, devices"
+ },
+ {
+  "id": "auth-account",
+  "category": "Auth",
+  "name": "Account",
+  "summary": "Sign out opens an inline Sign out of all devices step with Confirm and Cancel. Confirm lands a signed-out line; Cancel returns to the profile untouched.",
+  "file": "blocks/560-auth-wave3.js",
+  "api": "auth, account, sign out"
  }
 ]

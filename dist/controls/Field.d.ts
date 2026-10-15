@@ -33,7 +33,9 @@ export declare function useField<T extends TextControl>(own: FieldOwnProps, rule
         desc: string;
         msg: string;
     };
-    ref: import("react").RefObject<T | null>;
+    ref: {
+        current: T | null;
+    };
     status: FieldStatus;
     message: ReactNode;
     open: boolean;

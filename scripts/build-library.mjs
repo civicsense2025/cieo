@@ -16,8 +16,10 @@ const blocks = JSON.parse(read('blocks.json'));
 const CAPTION_CSS = '\n.ui-tile-caption{margin:0;padding:12px 20px 0;color:var(--muted);font-size:13px;line-height:1.5;overflow-wrap:anywhere}\n';
 const CAPTION_JS = `
 /* Captions (injected by scripts/build-library.mjs): lift a trailing
-   plain-text .hint out of each stage into a caption below it. */
+   plain-text .hint out of each stage into a caption below it.
+   Deferred to idle: below-fold DOM shuffling stays off the critical path. */
 ;(() => {
+  const run = () => {
   const trailing = (node, stage) => {
     let cur = node;
     while (cur && cur !== stage) {
@@ -46,6 +48,9 @@ const CAPTION_JS = `
     cap.textContent = text;
     stage.after(cap);
   }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 2000 });
+  else setTimeout(run, 0);
 })();
 `;
 const before = read('shell.library.before.html').replace('</style>', () => `${CAPTION_CSS}</style>`);
