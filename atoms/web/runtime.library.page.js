@@ -1,5 +1,5 @@
 /* ================================================================ library.page */
-const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories'];
+const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories','Auth'];
 const groupsEl = document.getElementById('groups'), groupEls = {};
 CATS.forEach(c => {
   const id = 'cat-' + c.toLowerCase().replace(/\s+/g,'-'), g = document.createElement('section'); g.className = 'group'; g.id = id;
@@ -7,7 +7,7 @@ CATS.forEach(c => {
 });
 const CATGROUPS = { 'Photos and transitions':['Photo effects','Image transitions','Carousels','Galleries','Scroll stories'],
   'Basics':['Foundations','Content','Layout','Interactive','Dynamic','Media'],
-  'Forms and input':['Forms','Inputs','Newsletter','Scheduling','Guidance'],
+  'Forms and input':['Forms','Inputs','Auth','Newsletter','Scheduling','Guidance'],
   'Overlays and navigation':['Overlays','Navigation','Mega menus','Headers','Footers','Chrome'],
   'Data and admin':['Data','Admin','Admin kit','Status and records','Views'],
   'Workflows and editing':['Workflow','Editor','Documents','Writing','Design tools','Files and browsing'],
