@@ -764,6 +764,7 @@
     "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check",
     "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
     "test:browser": "python3 test/browser/smoke.py",
+    "test:nps": "python3 test/browser/nps.py",
     "test:composites": "python3 test/browser/composites.py",
     "prepare": "node scripts/build-design.mjs",
     "prepack": "node scripts/build-design.mjs",
