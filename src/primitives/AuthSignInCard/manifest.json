@@ -15,7 +15,7 @@
     "path": "src/primitives/AuthSignInCard/AuthSignInCard.tsx",
     "symbol": "AuthSignInCard"
   },
-  "dependencies": [],
+  "dependencies": ["AuthCredentialForm"],
   "nativePrimitives": [],
   "properties": [
     {

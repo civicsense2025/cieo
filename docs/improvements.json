@@ -275,7 +275,7 @@
     {"category":"Distribution","improvement":"Provide a server-rendering example with no DOM dependency.","path":"examples/ssr.mjs","anchor":"toCSS(theme)","verification":"source contract plus the packaged tests/report","id":"CIEO-269"},
     {"category":"Distribution","improvement":"Provide a standard-library Python JSON consumer.","path":"examples/consume_tokens.py","anchor":"def load_tokens","verification":"source contract plus the packaged tests/report","id":"CIEO-270"},
     {"category":"Distribution","improvement":"Document the boundary between portable tokens and native component implementations.","path":"docs/design-system.md","anchor":"not a universal widget runtime","verification":"source contract plus the packaged tests/report","id":"CIEO-271"},
-    {"category":"Distribution","improvement":"Keep the private license and publication settings unchanged.","path":"package.json","anchor":"UNLICENSED","verification":"source contract plus the packaged tests/report","id":"CIEO-272"},
+    {"category":"Distribution","improvement":"Publish under the MIT license with public-release metadata.","path":"package.json","anchor":"\"license\": \"MIT\"","verification":"source contract plus the packaged tests/report","id":"CIEO-272"},
     {"category":"Distribution","improvement":"Add read-only continuous-integration checks with bounded execution time.","path":".github/workflows/design-system.yml","anchor":"timeout-minutes: 15","verification":"source contract plus the packaged tests/report","id":"CIEO-273"}
   ]
 }

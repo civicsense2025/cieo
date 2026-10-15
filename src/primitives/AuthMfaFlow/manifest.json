@@ -15,7 +15,7 @@
     "path": "src/primitives/AuthMfaFlow/AuthMfaFlow.tsx",
     "symbol": "AuthMfaFlow"
   },
-  "dependencies": [],
+  "dependencies": ["AuthMfaChallenge", "AuthSignInCard"],
   "nativePrimitives": [],
   "properties": [
     {

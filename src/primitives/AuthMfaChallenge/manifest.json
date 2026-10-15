@@ -15,7 +15,7 @@
     "path": "src/primitives/AuthMfaChallenge/AuthMfaChallenge.tsx",
     "symbol": "AuthMfaChallenge"
   },
-  "dependencies": [],
+  "dependencies": ["AuthOtpInput"],
   "nativePrimitives": [],
   "properties": [
     {

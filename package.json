@@ -1,10 +1,12 @@
 {
   "name": "cieo",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
-  "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "sideEffects": [
     "**/*.css",
     "./dist/controls/*.css",
@@ -12,6 +14,9 @@
   ],
   "files": [
     "dist",
+    "bin",
+    "cli",
+    "registry",
     "tokens",
     "atoms/web",
     "README.md",
@@ -745,15 +750,19 @@
   },
   "devDependencies": {
     "@types/react": "19.0.4",
+    "@types/react-dom": "19.1.11",
+    "@vitejs/plugin-react": "6.1.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vite": "8.3.3"
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.json && cp src/controls/controls.css dist/controls/controls.css && node scripts/minify.mjs",
     "test": "npm run build && node --test test/*.test.mjs",
+    "test:cli": "node test/cli/e2e.mjs",
     "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check",
-    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && git diff --exit-code -- dist design/themes.css design/theme.schema.json",
+    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
     "test:browser": "python3 test/browser/smoke.py",
     "test:composites": "python3 test/browser/composites.py",
     "prepare": "node scripts/build-design.mjs",
@@ -769,6 +778,7 @@
     "check:size": "node scripts/bundlesize.mjs"
   },
   "bin": {
+    "cieo": "bin/cieo.mjs",
     "cieo-theme": "scripts/export-theme.mjs"
   }
 }

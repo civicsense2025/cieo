@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/Dialog/Dialog.tsx", "symbol": "Dialog" },
-  "dependencies": [],
+  "dependencies": ["Overlay"],
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
