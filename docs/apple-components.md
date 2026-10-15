@@ -4,6 +4,15 @@ Cieo owns the reusable Swift source. `CieoUI` depends only on the existing Cieo 
 
 The [catalogue migration receipt](catalogue-inventory.md) records current recipe identities and source hashes; it does not establish production component readiness.
 
+## Contents
+
+- [Implementation contract](#implementation-contract)
+- [Rendering and acceptance](#rendering-and-acceptance)
+- [Interactive gallery](#interactive-gallery)
+- [Soft surfaces](#soft-surfaces)
+- [Host configuration and semantic copy](#host-configuration-and-semantic-copy)
+- [Documentation ownership](#documentation-ownership)
+
 ## Implementation contract
 
 1. Foundations own semantic palette, spacing and the rendering policy.
@@ -31,3 +40,40 @@ Spring tracks use the shared Snap/Base/Soft presets. The Metal highlight accepts
 Gallery specimens and production atoms have no decorative exterior outlines. Neutral recipe outlines use filled surfaces. Control selection and error outlines use translucent state fills. Focus indicators, progress arcs, charts and illustration geometry retain meaningful drawing strokes. The source inventory and generated index are tested as an exact union, including ten formerly unindexed Chrome recipes. Shared hardware-keyboard adapters use the iOS 17/macOS 14 key-press API.
 
 The complete portable export includes CieoAtoms and its registry tests. Native source inclusion and compilation do not establish visual or performance acceptance for every recipe.
+
+## Host configuration and semantic copy
+
+[ComponentConfiguration](../Sources/CieoUI/Foundations/ComponentConfiguration.swift)
+adds `ComponentTypography` (action, selection, field, fieldLabel), immutable
+`ComponentMetrics` (compact, standard, corner, touchTarget), and per-control
+`ControlAppearance`. Install `componentTypography`, `componentMetrics` and
+`componentTheme` through [Theme](../Sources/CieoUI/Foundations/Theme.swift).
+Defaults preserve existing callers. Geometry rejects nonfinite overrides,
+normalizes negative dimensions and retains a 44-point minimum target.
+
+[ActionButtonStyle](../Sources/CieoUI/Atoms/ActionButtonStyle.swift) accepts
+`appearance`; [fieldChrome](../Sources/CieoUI/Molecules/FieldChrome.swift) styles
+a host-owned native field without taking focus, submit, validation or text state.
+Appearance overrides font, padding, minimum dimensions, radius and semantic
+colors, including an optional host border. `borderPlacement` selects centered
+or inset drawing; inset remains the default. `pressedOpacity`, `disabledOpacity`
+and `pressedScale` accept finite 0...1 values, defaulting to .75/.5/.98. Hosts
+can preserve steady existing interactions without disabling native semantics.
+Hosts keep field input purpose and
+platform keyboard/content configuration.
+
+[ActionButton](../Sources/CieoUI/Atoms/ActionButton.swift) accepts emphasis,
+appearance, readyAccessibilityValue and busyAccessibilityValue.
+[SelectionChip](../Sources/CieoUI/Atoms/SelectionChip.swift) accepts selected and
+unselected accessibility values; [SearchField](../Sources/CieoUI/Molecules/SearchField.swift)
+accepts clearAccessibilityLabel. These `LocalizedStringKey` defaults remain
+compatible; hosts supply interface copy and resolved strings through the native
+localization API. Host actions and asynchronous lifetimes remain outside Cieo.
+
+These additive contracts are local source changes. Unit/build and consumer UI
+receipts must identify their actual candidate; source inspection alone does not
+establish localization, focus or VoiceOver acceptance.
+
+## Documentation ownership
+
+[Maintenance process](documentation-maintenance.md) records same-PR and after-merge checks. [Source map](source-map.json) assigns current API documentation ownership.

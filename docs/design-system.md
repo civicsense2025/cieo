@@ -2,6 +2,16 @@
 
 Cieo keeps the existing spring engine and adds an optional visual layer. The same semantic decisions travel as CSS, typed JSON, or native constants. Importing the motion engine does not load this layer, and importing the design API does not touch the document or start an animation. Apple applications can also import the separate [CieoUI component foundation](apple-components.md); it does not depend on the reference recipe catalogue.
 
+## Contents
+
+- [Quick start](#quick-start)
+- [A visual identity without a framework dependency](#a-visual-identity-without-a-framework-dependency)
+- [Accessibility boundaries](#accessibility-boundaries)
+- [Portable files, not a universal widget runtime](#portable-files-not-a-universal-widget-runtime)
+- [Integration matrix](#integration-matrix)
+- [Studio and command-line tools](#studio-and-command-line-tools)
+- [Building, packaging and review](#building-packaging-and-review)
+
 ## Quick start
 
 ```html
@@ -108,3 +118,5 @@ The CLI sends only the artifact to standard output and errors to standard error.
 The original spring engine, React API, DOM API, SwiftUI package, and recipe files remain unchanged. Existing import paths still resolve. The package stays private and UNLICENSED; this change does not authorize public redistribution or publish a release. The dependency versions don't change. The lockfile only gains the command-line entry metadata.
 
 Run `npm run test:design`, `npm run test:design:types`, and `npm run test:design:browser`. Native compilation tests skip unavailable compilers explicitly. The browser test renders the offline artifact without network access; it does not certify every browser or platform. The complete repository still needs `npm run check` and the macOS Swift package checks. See `review.md`, `improvements.json`, and the packaged verification report for exact scope and results.
+
+Current API changes follow the [documentation maintenance process](documentation-maintenance.md) and [source map](source-map.json).

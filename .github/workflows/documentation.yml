@@ -1,0 +1,27 @@
+name: Cieo documentation
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7, official immutable pin
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Check current docs and changed-module coverage
+        env:
+          DOC_BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          ruby scripts/check-documentation.rb --self-test
+          if [[ "$DOC_BASE_SHA" =~ ^[0-9a-f]{40}$ && ! "$DOC_BASE_SHA" =~ ^0+$ ]]; then
+            ruby scripts/check-documentation.rb --base "$DOC_BASE_SHA" --receipt "$GITHUB_STEP_SUMMARY"
+          else
+            ruby scripts/check-documentation.rb --receipt "$GITHUB_STEP_SUMMARY"
+          fi

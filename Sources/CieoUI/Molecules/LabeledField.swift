@@ -1,7 +1,8 @@
 import SwiftUI
 
 public struct LabeledField: View {
-    @Environment(\.componentTheme) private var theme
+    @Environment(\.componentTypography) private var typography
+    @Environment(\.componentMetrics) private var metrics
     private let title: LocalizedStringKey
     private let error: LocalizedStringKey?
     @Binding private var text: String
@@ -11,12 +12,10 @@ public struct LabeledField: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: Metrics.compact) {
-            Text(title).font(.headline)
+        VStack(alignment: .leading, spacing: metrics.compact) {
+            Text(title).font(typography.fieldLabel)
             TextField(title, text: $text).textFieldStyle(.plain)
-                .padding(.horizontal, Metrics.standard)
-                .frame(minHeight: Metrics.touchTarget)
-                .background(theme.surface, in: .rect(cornerRadius: Metrics.corner))
+                .fieldChrome()
             if let error { Label(error, systemImage: "exclamationmark.circle").foregroundStyle(.red) }
         }
     }
