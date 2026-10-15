@@ -4,6 +4,7 @@ export declare class Driver {
     private settled?;
     private tr;
     private stop;
+    private last;
     constructor(initial: number, paint: (v: number) => void, settled?: ((v: number) => void) | undefined);
     get value(): number;
     get target(): number;

@@ -3,8 +3,17 @@
 import { S, Track, allowed, config, run } from '../core/spring.js';
 import { enter, gapFor, hold, list } from './index.js';
 const noop = () => { };
+/* Kept a Map (not a WeakMap, which cannot be iterated): revealNow must visit every waiting
+   element. Entries are deleted eagerly in show()/stop()/observer-prune, reveal() prunes
+   orphans below, and the size is bounded by the caller's els.length per active reveal(). */
 const pending = new Map();
+/* One active scroll per scroller; WeakMap so a dropped element never pins its cancel closure. */
 const scrolls = new WeakMap();
+function prunePending() {
+    for (const [el] of pending)
+        if (!el.isConnected)
+            pending.delete(el);
+}
 /** Elements inside root that still wait to reveal take their final state at once. Call before a user-requested scrollTo. */
 export function revealNow(root) {
     if (!root)
@@ -22,6 +31,7 @@ export function reveal(targets, opts = {}) {
     const els = list(targets);
     if (!els.length || !allowed(kind) || typeof IntersectionObserver === 'undefined')
         return noop;
+    prunePending(); /* collect orphans left by a dropped Cancel whose element detached unseen */
     const from = { x: 0, y: 8, scale: 1, opacity: 0, blur: 0, ...opts.from };
     const waiting = new Map();
     let observer;
@@ -106,7 +116,14 @@ export function scrollTo(scroller, x, y, opts = {}) {
     let cancel = noop;
     const interrupt = () => {
         stopped = true;
+        detach();
         cancel();
+    };
+    /* removeEventListener matches on capture only, so { capture: true } pairs with attach's
+       { capture: true, passive: true }. Detach runs on both paths: interrupt detaches at once
+       and finish() detaches again (harmless) when the loop settles on its own. */
+    const detach = () => {
+        INPUTS.forEach((type) => removeEventListener(type, interrupt, { capture: true }));
     };
     const cancelThis = () => {
         stopped = true;
@@ -122,7 +139,7 @@ export function scrollTo(scroller, x, y, opts = {}) {
             return tx.prune(t) + ty.prune(t) > 0;
         },
         finish() {
-            INPUTS.forEach((type) => removeEventListener(type, interrupt, { capture: true }));
+            detach();
             if (!stopped)
                 go(X, Y);
             if (scrolls.get(node) === cancelThis)

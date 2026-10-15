@@ -26529,8 +26529,10 @@ function frame(ms){
 requestAnimationFrame(frame);
 
 /* Captions (injected by scripts/build-library.mjs): lift a trailing
-   plain-text .hint out of each stage into a caption below it. */
+   plain-text .hint out of each stage into a caption below it.
+   Deferred to idle: below-fold DOM shuffling stays off the critical path. */
 ;(() => {
+  const run = () => {
   const trailing = (node, stage) => {
     let cur = node;
     while (cur && cur !== stage) {
@@ -26559,5 +26561,8 @@ requestAnimationFrame(frame);
     cap.textContent = text;
     stage.after(cap);
   }
+  };
+  if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 2000 });
+  else setTimeout(run, 0);
 })();
 </script>

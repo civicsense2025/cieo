@@ -64,6 +64,9 @@ export function step(items: readonly ListItem[], from: number, by: number): numb
 export class Typeahead {
   private buffer = '';
   private last = -Infinity;
+  /** Caps retained keystrokes; the buffer keeps the *prefix* and freezes past the cap, so a long query keeps
+      prefix semantics instead of a sliding window silently turning it into a suffix search. */
+  static readonly maxBuffer = 256;
 
   constructor(private timeout = 500) {}
 
@@ -73,17 +76,28 @@ export class Typeahead {
 
   /** Returns the matching index or -1. `t` is in milliseconds. */
   find(char: string, items: readonly ListItem[], from: number, t: number): number {
+    if (!items.length || !char) return -1;
     if (t - this.last > this.timeout) this.buffer = '';
     this.last = t;
-    this.buffer += char.toLowerCase();
-    const same = [...this.buffer].every((c) => c === this.buffer[0]);
+    if (this.buffer.length < Typeahead.maxBuffer) this.buffer += char.toLowerCase();
+    /* Same-character repeat (cycling) without allocating [...buffer]: early-out on first mismatch. */
+    let same = true;
+    for (let i = 1; i < this.buffer.length; i += 1) {
+      if (this.buffer[i] !== this.buffer[0]) {
+        same = false;
+        break;
+      }
+    }
     const query = same ? this.buffer[0] : this.buffer;
     /* A fresh or repeated single character starts after the active option; a longer string may match the active one. */
     const start = query.length === 1 ? from + 1 : Math.max(from, 0);
     const n = items.length;
+    /* Lazily lowercase each visited enabled label and stop at the first match: an immediate match reads O(1)
+       labels instead of lowercasing all N up front, and disabled labels are never touched. */
     for (let k = 0; k < n; k += 1) {
       const i = (((start + k) % n) + n) % n;
-      if (!items[i].disabled && items[i].label.toLowerCase().startsWith(query)) return i;
+      if (items[i].disabled) continue;
+      if (items[i].label.toLowerCase().startsWith(query)) return i;
     }
     return -1;
   }

@@ -9,6 +9,41 @@ const noop = () => { };
 const st = (el) => el.style;
 export const list = (x) => typeof x === 'string' ? [...document.querySelectorAll(x)] : x instanceof Element ? [x] : [...(x || [])];
 export const gapFor = (n, gap) => Math.min(gap || 0, STAGGER_MAX / Math.max(1, n - 1));
+/* Paint coalescing + blur gating (default ON, no public API).
+   - Per-element last-value cache: transform/opacity writes are skipped unless the new value moved
+     beyond quantization epsilon since the last write (0.0005 opacity, 0.01px x/y, 0.0005 scale).
+     Identity is always painted explicitly (1.000 / full translate+scale string / none), never
+     cleared to '': under author stylesheets a cleared inline would let author opacity, transform
+     or blur leak through mid-paint. hold() restores the saved inline state at completion only.
+   - Blur writes are skipped unless blur moved across the 0.05 threshold. Blur is a paint effect
+     (not composite) while will-change only covers transform,opacity, so it is gated: elements wider
+     than ~800px or more than 8 elements animating concurrently fall back to opacity+transform only
+     (blur forced to 0, still painted as none, without the filter will-change upgrade).
+     Width is measured once per animation and cached (no per-frame layout reads).
+   - will-change: hold() sets 'transform, opacity'; the first active blur write upgrades it to
+     'transform, opacity, filter' for the rest of the animation. Settle restores the saved inline
+     will-change via hold's release (removing it when we added it). */
+let liveEls = 0;
+const BLUR_WIDE_PX = 800;
+const BLUR_MAX_ELS = 8;
+const BLUR_EPS = 0.05;
+const lastPaint = new WeakMap();
+const wideCache = new WeakMap();
+function blurOK(el) {
+    if (liveEls > BLUR_MAX_ELS)
+        return false;
+    let w = wideCache.get(el);
+    if (w === undefined) {
+        try {
+            w = el.offsetWidth || el.getBoundingClientRect().width;
+        }
+        catch {
+            w = 0;
+        }
+        wideCache.set(el, w);
+    }
+    return w <= BLUR_WIDE_PX;
+}
 /** Saves the inline values this module may write and returns a function that puts them back. */
 export function hold(el, moving = true) {
     const hadStyle = el.hasAttribute('style');
@@ -20,6 +55,9 @@ export function hold(el, moving = true) {
         saved.forEach(([p, v, priority]) => (v ? s.setProperty(p, v, priority) : s.removeProperty(p)));
         if (!hadStyle && !el.getAttribute('style'))
             el.removeAttribute('style');
+        /* Paint caches reflect inline values; the restore above invalidates them. */
+        lastPaint.delete(el);
+        wideCache.delete(el);
     };
 }
 /** One motion per element: claiming finishes any earlier motion on it first. */
@@ -27,6 +65,7 @@ export function animate(els, job) {
     els = [...new Set(els)];
     els.forEach((el) => owners.get(el)?.());
     const releases = els.map((el) => hold(el));
+    liveEls += els.length;
     let finished = false;
     let stop = noop;
     const cancel = () => { stop(); done(); };
@@ -34,6 +73,7 @@ export function animate(els, job) {
         if (finished)
             return;
         finished = true;
+        liveEls = Math.max(0, liveEls - els.length);
         let failure;
         let failed = false;
         for (const release of releases) {
@@ -81,9 +121,52 @@ export function animate(els, job) {
 }
 export function paint(el, o, y = 0, blur = 0, x = 0, scale = 1) {
     const s = st(el);
-    s.opacity = clamp(o).toFixed(3);
-    s.transform = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
-    s.filter = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : 'none';
+    const oClear = o > 0.999;
+    const tClear = Math.abs(x) < 0.01 && Math.abs(y) < 0.01 && Math.abs(scale - 1) < 0.0005;
+    let b = blur;
+    if (b > BLUR_EPS && !blurOK(el))
+        b = 0;
+    const fClear = b <= BLUR_EPS;
+    const last = lastPaint.get(el);
+    /* Identity paints explicitly: a cleared inline would let author stylesheets leak through. */
+    const oStr = clamp(o).toFixed(3);
+    const tStr = `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${scale.toFixed(4)})`;
+    if (!last) {
+        s.opacity = oStr;
+        s.transform = tStr;
+        if (fClear) {
+            s.filter = 'none';
+        }
+        else {
+            s.filter = `blur(${b.toFixed(2)}px)`;
+            s.willChange = 'transform, opacity, filter';
+        }
+        lastPaint.set(el, { o, x, y, sc: scale, b, oClear, tClear, fClear });
+        return;
+    }
+    if (oClear !== last.oClear || Math.abs(o - last.o) >= 0.0005) {
+        s.opacity = oStr;
+        last.o = o;
+        last.oClear = oClear;
+    }
+    if (tClear !== last.tClear || Math.abs(x - last.x) >= 0.01 || Math.abs(y - last.y) >= 0.01 || Math.abs(scale - last.sc) >= 0.0005) {
+        s.transform = tStr;
+        last.x = x;
+        last.y = y;
+        last.sc = scale;
+        last.tClear = tClear;
+    }
+    if (fClear !== last.fClear || Math.abs(b - last.b) >= BLUR_EPS) {
+        if (fClear) {
+            s.filter = 'none';
+        }
+        else {
+            s.filter = `blur(${b.toFixed(2)}px)`;
+            s.willChange = 'transform, opacity, filter';
+        }
+        last.b = b;
+        last.fClear = fClear;
+    }
 }
 const paintFrom = (el, p, f) => {
     const q = 1 - p;
@@ -201,14 +284,21 @@ export function flip(container, mutate, opts = {}) {
         opts.done?.();
         return noop;
     }
-    [...container.children].forEach((el) => owners.get(el)?.());
-    const before = opts.before ?? new Map([...container.children].map((el) => [el, el.getBoundingClientRect()]));
+    const kids = [...container.children];
+    kids.forEach((el) => owners.get(el)?.());
+    /* Batch the reads: one contiguous pass for before rects (skipped when the caller measured), mutate, then one
+       contiguous pass for after rects plus the optional clip. No DOM writes happen between the passes, so each pass
+       costs at most one layout; longMove/inside/inView semantics below are unchanged. */
+    const before = opts.before ?? new Map(kids.map((el) => [el, el.getBoundingClientRect()]));
     mutate();
-    const moves = [];
+    const afterKids = [...container.children];
+    const after = afterKids.map((el) => el.getBoundingClientRect());
     const clip = opts.clip?.getBoundingClientRect();
     const arrive = opts.arrive ?? ARRIVE;
-    for (const el of container.children) {
-        const a = el.getBoundingClientRect();
+    const moves = [];
+    for (let i = 0; i < afterKids.length; i += 1) {
+        const el = afterKids[i];
+        const a = after[i];
         const b = before.get(el);
         const was = !!b && b.width + b.height > 0;
         if (!(a.width + a.height) || !(inView(a) || (was && inView(b))))
@@ -293,15 +383,30 @@ export function digits(el, value, opts = {}) {
     }
     const t0 = now();
     const cfg = config(kind, opts.cfg || S.base);
+    /* amp/cfg/t0 hoisted; no layout reads in the per-frame loop (paint caches width once).
+       Ends as plain text; old slots stay aria-hidden. The old halves get one terminal zero-opacity
+       paint on the first frame past EXIT before their writes stop, so no stale mid-EXIT value lingers. */
+    let oldDone = false;
     return animate([el], {
         kind,
         step(t) {
-            const e = clamp((t - t0) / EXIT) ** 2;
+            const after = t >= t0 + EXIT;
+            const e = after ? 1 : clamp((t - t0) / EXIT) ** 2;
             const p = clamp(prog(t, t0 + EXIT, cfg));
-            slots.forEach((s) => {
-                paint(s.old, 1 - e, -e * amp);
-                paint(s.fresh, p, (1 - p) * amp);
-            });
+            const fq = (1 - p) * amp;
+            if (!after) {
+                const eo = -e * amp;
+                const oo = 1 - e;
+                for (const s of slots)
+                    paint(s.old, oo, eo);
+            }
+            else if (!oldDone) {
+                oldDone = true;
+                for (const s of slots)
+                    paint(s.old, 0, -amp);
+            }
+            for (const s of slots)
+                paint(s.fresh, p, fq);
             return t < t0 + EXIT || 1 - p > 1e-3;
         },
         finish() {
@@ -314,10 +419,16 @@ const span = (x) => (x instanceof Element ? x.getBoundingClientRect() : x);
 /** An indicator already laid out at its new place springs from an old span; the leading edge moves first, the trailing edge LAG later. */
 export function edges(el, from, to, opts = {}) {
     const kind = opts.kind || 'feedback';
+    /* No layout reads when motion is off; still claim the element so an in-flight motion cannot keep writing to it. */
+    if (!allowed(kind, el)) {
+        owners.get(el)?.();
+        opts.done?.();
+        return noop;
+    }
     const A = span(from);
     owners.get(el)?.();
     const B = span(to ?? el);
-    if (!allowed(kind, el) || Math.abs(A.left - B.left) + Math.abs(A.right - B.right) < 0.5) {
+    if (Math.abs(A.left - B.left) + Math.abs(A.right - B.right) < 0.5) {
         opts.done?.();
         return noop;
     }
@@ -342,7 +453,11 @@ export function edges(el, from, to, opts = {}) {
     });
 }
 /* track: spring one value on an element and keep it as that element's state. x, y (px), scale and opacity
-   compose into transform/opacity and are removed at identity; a custom property such as '--open' keeps its value. */
+   compose into transform/opacity and are removed at identity; a custom property such as '--open' keeps its value.
+   Per-frame cost: no array spreads or literal-array .map/.some per frame (for..of only); transform/opacity and
+   each custom property are rewritten only when moved beyond quantization epsilon, so settled tails and idle
+   props cost no style writes or toFixed allocs. The first owned draw and the settle draw always write:
+   the identity-initialized cache is no evidence the DOM already agrees. */
 const IDENTITY = { x: 0, y: 0, scale: 1, opacity: 1 };
 const tracked = new WeakMap();
 export function track(el, prop, value, opts = {}) {
@@ -352,27 +467,58 @@ export function track(el, prop, value, opts = {}) {
         throw new TypeError(`track cannot move ${prop}`);
     let rec = tracked.get(el);
     if (!rec) {
-        rec = { tracks: new Map(), job: null };
+        /* fresh: the numeric cache is not DOM evidence. The first owned draw and the terminal
+           settle draw write unconditionally, so pre-existing inline values are actually cleared. */
+        rec = { tracks: new Map(), job: null, fresh: true, lx: 0, ly: 0, ls: 1, lo: 1, ltClear: true, loClear: true, lc: new Map() };
         tracked.set(el, rec);
     }
     const r = rec;
     if (!r.tracks.has(prop))
         r.tracks.set(prop, new Track(custom ? value : IDENTITY[prop]));
-    const draw = (t) => {
-        const v = (k) => (r.tracks.has(k) ? r.tracks.get(k).at(t) : IDENTITY[k]);
-        const [x, y, s, o] = ['x', 'y', 'scale', 'opacity'].map(v);
-        if (['x', 'y', 'scale'].some((k) => r.tracks.has(k)))
-            st(el).transform = x || y || s !== 1 ? `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(4)})` : '';
-        if (r.tracks.has('opacity'))
-            st(el).opacity = o === 1 ? '' : clamp(o).toFixed(3);
-        r.tracks.forEach((tr, k) => {
-            if (k.startsWith('--'))
-                st(el).setProperty(k, String(+tr.at(t).toFixed(4)));
-        });
+    const draw = (t, force = false) => {
+        const first = force || r.fresh;
+        const tx = r.tracks.get('x');
+        const ty = r.tracks.get('y');
+        const ts = r.tracks.get('scale');
+        const to = r.tracks.get('opacity');
+        const x = tx ? tx.at(t) : 0;
+        const y = ty ? ty.at(t) : 0;
+        const s = ts ? ts.at(t) : 1;
+        const o = to ? to.at(t) : 1;
+        if (tx !== undefined || ty !== undefined || ts !== undefined) {
+            const tClear = !(x || y || s !== 1);
+            if (first || tClear !== r.ltClear || Math.abs(x - r.lx) >= 0.01 || Math.abs(y - r.ly) >= 0.01 || Math.abs(s - r.ls) >= 0.0005) {
+                st(el).transform = tClear ? '' : `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+                r.lx = x;
+                r.ly = y;
+                r.ls = s;
+                r.ltClear = tClear;
+            }
+        }
+        if (to !== undefined) {
+            const oClear = o === 1;
+            if (first || oClear !== r.loClear || Math.abs(o - r.lo) >= 0.0005) {
+                st(el).opacity = oClear ? '' : clamp(o).toFixed(3);
+                r.lo = o;
+                r.loClear = oClear;
+            }
+        }
+        for (const entry of r.tracks) {
+            const k = entry[0];
+            if (k.charCodeAt(0) !== 45 || !k.startsWith('--'))
+                continue;
+            const cv = entry[1].at(t);
+            const prev = r.lc.get(k);
+            if (prev === undefined || Math.abs(cv - prev) >= 0.00005) {
+                st(el).setProperty(k, String(+cv.toFixed(4)));
+                r.lc.set(k, cv);
+            }
+        }
+        r.fresh = false;
     };
     const settle = () => {
         r.tracks.forEach((tr) => tr.jump(tr.target));
-        draw(now());
+        draw(now(), true);
         st(el).removeProperty('will-change');
         if (r.job && owners.get(el) === r.job)
             owners.delete(el);
@@ -386,13 +532,18 @@ export function track(el, prop, value, opts = {}) {
         settle();
         return noop;
     }
+    /* config() resolved once per retarget (hoisted out of the per-frame step). */
     r.tracks.get(prop).set(value, config(kind, opts.cfg || S.base));
     if (!r.job) {
         owners.get(el)?.();
         st(el).willChange = 'transform, opacity';
         r.job = run({ kind, step: (t) => {
                 draw(t);
-                return [...r.tracks.values()].some((tr) => tr.prune(t) > 0);
+                let moving = false;
+                for (const tr of r.tracks.values())
+                    if (tr.prune(t) > 0)
+                        moving = true;
+                return moving;
             }, finish: settle });
         owners.set(el, r.job);
     }
