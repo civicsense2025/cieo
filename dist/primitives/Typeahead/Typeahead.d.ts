@@ -8,6 +8,8 @@ export interface TypeaheadProps {
     onChange?: (value: string) => void;
     /** Whether the match list shows; host sets from match presence. Optional. */
     open?: boolean;
+    /** Asks the host to open or close the list (Escape closes, ArrowDown opens). Optional. */
+    onOpenChange?: (open: boolean) => void;
     children: ReactNode;
 }
-export declare function Typeahead({ label, value, onChange, open, children }: TypeaheadProps): import("react/jsx-runtime").JSX.Element;
+export declare function Typeahead({ label, value, onChange, open, onOpenChange, children }: TypeaheadProps): import("react/jsx-runtime").JSX.Element;

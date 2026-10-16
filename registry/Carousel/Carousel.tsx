@@ -20,7 +20,7 @@ export function Carousel({ label, motion, children }: CarouselProps) {
   };
   return (
     <div className="cieo cieo-carousel" data-motion={motion === false ? 'off' : undefined}>
-      <div ref={trackRef} role="region" aria-label={label} className="cieo cieo-carousel-track">
+      <div ref={trackRef} role="region" aria-label={label} tabIndex={0} className="cieo cieo-carousel-track">
         {children}
       </div>
       <button type="button" onClick={() => scrollBy(-1)} aria-label="Previous items">

@@ -18,8 +18,8 @@ export function Stepper({ label, steps }: StepperProps) {
   return (
     <nav aria-label={label} className="cieo cieo-stepper">
       <ol>
-        {steps.map((step) => (
-          <li key={step.label} data-state={step.state} aria-current={step.state === 'current' ? 'step' : undefined}>
+        {steps.map((step, i) => (
+          <li key={`${i}-${step.label}`} data-state={step.state} aria-current={step.state === 'current' ? 'step' : undefined}>
             {step.label}
           </li>
         ))}

@@ -1,5 +1,16 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function DateRangeInput({ label }) {
-    return (_jsxs("div", { role: "group", "aria-label": label, className: "cieo", children: [_jsxs("label", { className: "cieo", children: [_jsx("span", { className: "cieo-label", children: "Start" }), _jsx("input", { type: "date", className: "cieo cieo-input", name: "start" })] }), _jsxs("label", { className: "cieo", children: [_jsx("span", { className: "cieo-label", children: "End" }), _jsx("input", { type: "date", className: "cieo cieo-input", name: "end" })] })] }));
+/* DateRangeInput. Start and end date fields in one group. Works controlled via value or uncontrolled via defaultValue; onChange gets both ends. */
+import { useId, useState } from 'react';
+export function DateRangeInput({ label, value, defaultValue, onChange, disabled }) {
+    const [inner, setInner] = useState(defaultValue ?? { start: '', end: '' });
+    const current = value ?? inner;
+    const id = useId();
+    const set = (patch) => {
+        const next = { ...current, ...patch };
+        if (value === undefined)
+            setInner(next);
+        onChange?.(next);
+    };
+    return (_jsxs("div", { role: "group", "aria-label": label, className: "cieo", children: [_jsxs("label", { className: "cieo", htmlFor: `${id}-start`, children: [_jsx("span", { className: "cieo-label", children: "Start" }), _jsx("input", { id: `${id}-start`, type: "date", className: "cieo cieo-input", name: "start", value: current.start, max: current.end || undefined, disabled: disabled, onChange: (e) => set({ start: e.currentTarget.value }) })] }), _jsxs("label", { className: "cieo", htmlFor: `${id}-end`, children: [_jsx("span", { className: "cieo-label", children: "End" }), _jsx("input", { id: `${id}-end`, type: "date", className: "cieo cieo-input", name: "end", value: current.end, min: current.start || undefined, disabled: disabled, onChange: (e) => set({ end: e.currentTarget.value }) })] })] }));
 }

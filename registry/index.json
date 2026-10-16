@@ -1443,7 +1443,9 @@
         "Toolbar/Toolbar.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "Tooltip": {
@@ -1529,7 +1531,9 @@
         "Typeahead/Typeahead.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "TypeaheadItem": {

@@ -13,14 +13,23 @@ export interface ComplexSelectorProps {
   label: string;
   /** Grouped sections rendered as optgroups. Required. */
   sections: ComplexSelectorSection[];
+  /** Controlled value. */
+  value?: string;
+  /** Initial value when uncontrolled. */
+  defaultValue?: string;
+  /** Called with the chosen option value. */
+  onChange?: (value: string) => void;
+  /** Form field name. */
+  name?: string;
+  disabled?: boolean;
 }
 
-export function ComplexSelector({ label, sections }: ComplexSelectorProps) {
+export function ComplexSelector({ label, sections, value, defaultValue, onChange, name, disabled }: ComplexSelectorProps) {
   const id = useId();
   return (
     <div className="cieo cieo-p-complex-selector">
       <label htmlFor={id}>{label}</label>
-      <select id={id} className="cieo-input">
+      <select id={id} name={name} disabled={disabled} value={value} defaultValue={value === undefined ? defaultValue : undefined} onChange={(e) => onChange?.(e.currentTarget.value)} className="cieo-input">
         {sections.map((s) => (
           <optgroup key={s.label} label={s.label}>
             {s.options.map((o) => (

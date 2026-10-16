@@ -1,5 +1,16 @@
 export interface TimeInputProps {
-    /** Visible label for the field (e.g. "Opens at"). Required. */
     label: string;
+    /** Form field name. */
+    name?: string;
+    /** Controlled value (ISO string). */
+    value?: string;
+    /** Initial value when uncontrolled. */
+    defaultValue?: string;
+    /** Called with the new value string. */
+    onChange?: (value: string) => void;
+    min?: string;
+    max?: string;
+    disabled?: boolean;
+    required?: boolean;
 }
-export declare function TimeInput({ label }: TimeInputProps): import("react/jsx-runtime").JSX.Element;
+export declare function TimeInput({ label, name, value, defaultValue, onChange, min, max, disabled, required }: TimeInputProps): import("react/jsx-runtime").JSX.Element;

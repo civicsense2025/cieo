@@ -1,24 +1,32 @@
 'use client';
-// src/primitives/NumberInput/NumberInput.tsx
-/* NumberInput. Labelled numeric field: one native number input reusing the shared input style from styles/controls.css. No new CSS. */
+/* NumberInput. Numeric field. Value, name and change events reach the host; onChange gets a number, or null when the field is empty. */
+import type { ChangeEvent } from 'react';
+
 export interface NumberInputProps {
-  /** Visible label for the field (e.g. "Quantity"). Required. */
   label: string;
-  /** Minimum value. Optional. */
   min?: number;
-  /** Maximum value. Optional. */
   max?: number;
-  /** Step between values. Optional. */
   step?: number;
-  /** Initial value (uncontrolled). Optional. */
   defaultValue?: number;
+  /** Controlled value; null shows an empty field. */
+  value?: number | null;
+  /** Form field name. */
+  name?: string;
+  disabled?: boolean;
+  required?: boolean;
+  /** Called with the parsed number, or null when emptied. */
+  onChange?: (value: number | null) => void;
 }
 
-export function NumberInput({ label, min, max, step, defaultValue }: NumberInputProps) {
+export function NumberInput({ label, min, max, step, defaultValue, value, name, disabled, required, onChange }: NumberInputProps) {
+  const handle = (e: ChangeEvent<HTMLInputElement>) => {
+    const raw = e.currentTarget.value;
+    onChange?.(raw === '' || Number.isNaN(e.currentTarget.valueAsNumber) ? null : e.currentTarget.valueAsNumber);
+  };
   return (
     <label className="cieo">
       <span className="cieo-label">{label}</span>
-      <input type="number" className="cieo cieo-input" min={min} max={max} step={step} defaultValue={defaultValue} />
+      <input type="number" className="cieo cieo-input" name={name} min={min} max={max} step={step} value={value === undefined ? undefined : (value ?? '')} defaultValue={value === undefined ? defaultValue : undefined} disabled={disabled} required={required} onChange={handle} />
     </label>
   );
 }
