@@ -20,7 +20,7 @@ atom({ id:'line', cat:'Data', name:'Line chart', block:'chart', fam:['T','M'], w
       if (ho.target === 0){ hx.jump(P[i][0]); hy.jump(P[i][1]); } ho.set(1); if (i !== idx){ idx = i; hx.set(P[i][0]); hy.set(P[i][1]); tip.textContent = `${M[i]} · ${D[i]}k readers`; } };
     svg.onpointerleave = () => { ho.set(0); idx = -1; };
     return t => { const p = clamp(draw.at(t)); ln.style.strokeDashoffset = (L*(1-p)).toFixed(2); ar.setAttribute('opacity', (p*p*.07).toFixed(3));
-      const o = clamp(ho.at(t))*(p > .98 ? 1 : 0), x = hx.at(t), y = hy.at(t), s = wrap.clientWidth/520;
+      const o = clamp(ho.at(t))*(p > .98 ? 1 : 0), x = hx.at(t), y = hy.at(t), s = size(wrap).cw/520;
       dt.setAttribute('cx', x); dt.setAttribute('cy', y); dt.setAttribute('opacity', o); gd.setAttribute('x1', x); gd.setAttribute('x2', x); gd.setAttribute('opacity', o*.8);
       tip.style.opacity = o; tip.style.transform = `translate(calc(${px(x*s)} - 50%), ${px(y*s - 38 + 6*(1-o))})`; };
   }});

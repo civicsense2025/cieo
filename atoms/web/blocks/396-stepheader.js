@@ -32,7 +32,7 @@ atom({ id:'stepheader', cat:'Forms', name:'Stepper header', block:'stepper, step
       cur = Math.max(0, names.indexOf(keep)); if (cur < 0) cur = 0; build();
       sws.forEach((s, k) => { s.cur = k < cur ? 1 : 0; s.t = -9; }); paint(); };
     build(); cur = 0; sws.forEach(s => { s.cur = 0; s.t = -9; }); go(0); e.jump(nodes[0].b.offsetLeft, nodes[0].b.offsetLeft + nodes[0].b.offsetWidth);
-    vw.onscroll = () => {};
+    let vwL = 0; vw.addEventListener('scroll', () => { vwL = vw.scrollLeft; }, { passive:true });
     return t => { const f = clamp(fill.at(t)), n = names.length;
       plate.style.left = px(e.A.at(t)); plate.style.width = px(Math.max(0, e.B.at(t) - e.A.at(t)));
       segs.forEach((s, k) => s.style.width = (clamp(f * (n - 1) - k, 0, 1) * 100).toFixed(1) + '%');
@@ -40,6 +40,6 @@ atom({ id:'stepheader', cat:'Forms', name:'Stepper header', block:'stepper, step
         nd.dot.style.background = mix(ink, 'var(--accent)', 'transparent');
         nd.dot.style.borderRadius = '50%'; nd.dot.style.color = ink > .5 ? 'var(--card)' : 'var(--muted)';
         const kids = nd.dot.querySelectorAll('.layer'); sws[k].apply(kids[0], 0, t, 0); sws[k].apply(kids[1], 1, t, 0); });
-      const ml = vw.scrollLeft, mr = vw.scrollWidth - vw.clientWidth - ml;
+      const ml = vwL, mr = size(vw).sw - size(vw).cw - ml;
       $(st,'.fdl').style.opacity = clamp(ml / 16).toFixed(2); $(st,'.fdr').style.opacity = clamp(mr / 16).toFixed(2); };
   }});

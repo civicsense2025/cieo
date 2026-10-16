@@ -13,5 +13,5 @@ atom({ id:'newposts', cat:'Social', name:'New posts pill', block:'postlist, entr
     pl.onclick = () => { const t0 = now(); pending.forEach((s,i) => row(s, false).h.set(1, S.base, t0 + .1 + i*.05)); pending = []; o.set(0, S.snap); ls.parentNode.scrollTop = 0; };
     return t => { if (t >= next){ next = t + 3.5; pending.push(P[k++ % P.length]); d.set(String(Math.min(99, pending.length))); o.set(1); }
       const p = clamp(o.at(t)); pl.style.opacity = p.toFixed(3); pl.style.visibility = p < .01 ? 'hidden' : 'visible'; pl.style.transform = `translate(-50%, ${px((1 - p)*-16)})`; pl.style.pointerEvents = p > .5 ? 'auto' : 'none'; d.render(t);
-      items.forEach(it => { const h = clamp(it.h.at(t)); it.r.style.height = px(h*it.r.firstChild.offsetHeight); it.r.firstChild.style.opacity = h.toFixed(3); }); };
+      items.forEach(it => { const h = clamp(it.h.at(t)); it.r.style.height = px(h*size(it.r.firstChild).h); it.r.firstChild.style.opacity = h.toFixed(3); }); };
   }});

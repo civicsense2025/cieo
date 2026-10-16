@@ -13,7 +13,7 @@ atom({ id:'tokeninspector', cat:'Foundations', name:'Token inspector', block:'to
     show(1);
     $(st,'.run').onclick = () => { const v = probe.target ? 0 : 1;
       if (REDUCE) probe.jump(v); else probe.set(v, CF[pi][1]); };
-    return t => { const W = Math.max(1, lane.clientWidth - 30), v = clamp(probe.at(t));
+    return t => { const W = Math.max(1, size(lane).cw - 30), v = clamp(probe.at(t));
       dot.style.transform = `translateX(${px(v * W)})`;
       ro.textContent = 'probe ' + v.toFixed(3) + ' · ' + CF[pi][0] + (REDUCE ? ' · instant' : ''); };
   }});

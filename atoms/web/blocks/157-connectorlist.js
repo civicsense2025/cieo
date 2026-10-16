@@ -25,7 +25,7 @@ const mSlot = (host, inner, open = 0) => {
     jump(v){ o.h.jump(v ? 1 : 0); o.a.jump(v ? 1 : 0); },
     get on(){ return o.h.target === 1; },
     render(t){ const h = clamp(o.h.at(t)), a = clamp(o.a.at(t));
-      host.style.height = h > .9995 && o.h.target === 1 ? 'auto' : px(h*inner.offsetHeight);
+      host.style.height = h > .9995 && o.h.target === 1 ? 'auto' : px(h*size(inner).h);
       const hid = h < .004 && a < .004; host.style.visibility = hid ? 'hidden' : 'visible'; host.inert = o.h.target === 0;
       fade(inner, a, null); } };
   return o;
@@ -34,7 +34,7 @@ const mSlot = (host, inner, open = 0) => {
 const mFollow = host => {
   const f = { cur:null, off:new Track(0), h:0,
     to(el, inst){ const old = f.h; f.cur = el; if (!inst){ f.off.jump(old - el.offsetHeight); f.off.set(0, S.base); } },
-    render(t){ if (!f.cur) return; f.h = Math.max(0, f.cur.offsetHeight + f.off.at(t)); host.style.height = px(f.h); } };
+    render(t){ if (!f.cur) return; f.h = Math.max(0, size(f.cur).h + f.off.at(t)); host.style.height = px(f.h); } };
   return f;
 };
 const mSw = (label, on, onChange) => {
@@ -157,7 +157,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
       mDrain(q, t);
       for (const r of rows){
         r.slot.render(t); r.chip.render(t); r.act.render(t);
-        const e = clamp(r.er.at(t)); r.erHost.style.height = px(e*r.erIn.offsetHeight + (e > 0 ? 0 : 0)); r.erHost.style.visibility = e < .004 ? 'hidden' : 'visible'; fade(r.erIn, e, (1 - e)*-4);
+        const e = clamp(r.er.at(t)); r.erHost.style.height = px(e*size(r.erIn).h + (e > 0 ? 0 : 0)); r.erHost.style.visibility = e < .004 ? 'hidden' : 'visible'; fade(r.erIn, e, (1 - e)*-4);
         const p = clamp(r.ok.at(t)); r.btn.style.background = mix(p, 'var(--ink)', 'var(--card)'); r.btn.style.color = mix(p, 'var(--card)', 'var(--ink)'); r.btn.style.borderColor = mix(p, 'var(--ink)', 'var(--line)');
         const d = clamp(r.dim.at(t)); r.nm.style.color = mix(1 - d*.55, 'var(--ink)', 'var(--muted)'); r.ic.style.opacity = (1 - d*.45).toFixed(3);
       }
@@ -271,7 +271,7 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
     return t => {
       mDrain(q, t);
       rows.forEach(r => { r.sw.render(t); r.sl.render(t);
-        const w = clamp(r.w.at(t)); r.wn.style.height = px(w*r.wi.offsetHeight); fade(r.wi, w, (1 - w)*-3);
+        const w = clamp(r.w.at(t)); r.wn.style.height = px(w*size(r.wi).h); fade(r.wi, w, (1 - w)*-3);
         const cw = clamp(r.cw.at(t)); r.sw.el.style.opacity = (1 - cw).toFixed(3); r.sw.el.style.pointerEvents = cw > .5 ? 'none' : 'auto'; r.ck.style.opacity = cw.toFixed(3); r.ck.style.transform = `scale(${(.85 + .15*cw).toFixed(3)})`; });
       ttl.forEach((e, k) => tsw.apply(e, k, t, 5)); tf.render(t);
       const d = clamp(gD.at(t), 0, 1.6), y = clamp(gY.at(t), 0, 1.6), cdn = clamp(cD.at(t)), cyn = clamp(cY.at(t));
@@ -383,7 +383,7 @@ atom({ id:'toolapproval', cat:'MCP and agents', name:'Tool call approval', block
     showReq(0, true);
     return t => {
       mDrain(q, t);
-      blocks.forEach((o, k) => { reqSw.apply(o.b, k, t, 4); const e = clamp(o.e.at(t)), full = o.pre.offsetHeight, pvH = o.r.args.length > o.PV ? (o.PV + 1)*lineH + 16 : full; // braces + three lines + padding
+      blocks.forEach((o, k) => { reqSw.apply(o.b, k, t, 4); const e = clamp(o.e.at(t)), full = size(o.pre).h, pvH = o.r.args.length > o.PV ? (o.PV + 1)*lineH + 16 : full; // braces + three lines + padding
         o.pw.style.height = px(lerp(Math.min(full, pvH), full, e)); if (o.svg) o.svg.style.transform = `rotate(${(e*180).toFixed(1)}deg)`; o.lab.render(t); o.b.style.pointerEvents = k === reqSw.cur ? 'auto' : 'none'; });
       [A, R, D].forEach((e, k) => { znSw.apply(e, k, t, 4); e.style.pointerEvents = k === znSw.cur ? 'auto' : 'none'; });
       sp.style.transform = `rotate(${((t*540)%360).toFixed(1)}deg)`;
@@ -563,7 +563,7 @@ atom({ id:'toolpermissions', cat:'MCP and agents', name:'Server tool permissions
     const init = () => pick(filt, true); document.fonts.ready.then(init); requestAnimationFrame(init);
     new ResizeObserver(() => { const b = fb.find(x => x.dataset.f === filt); e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth); ey.jump(b.offsetTop, b.offsetTop + b.offsetHeight); }).observe(fs);
     return t => {
-      rows.forEach(r => { r.sw.render(t); r.sl.render(t); const w = clamp(r.w.at(t)); r.wn.style.height = px(w*r.wi.offsetHeight); fade(r.wi, w, (1 - w)*-3); });
+      rows.forEach(r => { r.sw.render(t); r.sl.render(t); const w = clamp(r.w.at(t)); r.wn.style.height = px(w*size(r.wi).h); fade(r.wi, w, (1 - w)*-3); });
       const a = e.A.at(t), b = e.B.at(t), c = ey.A.at(t), d = ey.B.at(t); ind.style.transform = `translate(${px(a)},${px(c)})`; ind.style.width = px(b - a); ind.style.height = px(d - c);
       bl.render(t); bh.style.width = px(bw.at(t)); n1.render(t); n2.render(t);
     };
@@ -677,7 +677,7 @@ atom({ id:'apikeyreveal', cat:'MCP and agents', name:'API key reveal and rotate'
       const co = clamp(cpOn.at(t)); cp.style.background = mix(co, 'var(--success-tint)', 'var(--card)'); cp.style.color = mix(co, 'var(--success)', 'var(--ink)'); cp.style.borderColor = mix(co, 'var(--success-tint)', 'var(--line)');
       for (const r of rows){ r.slot.render(t); r.px.render(t); r.mt.render(t);
         const nw = clamp(r.nw.at(t)); r.nwE.style.maxWidth = px(nw*60); r.nwE.style.opacity = nw.toFixed(3); r.nwE.style.padding = nw < .02 ? '0' : '0 7px';
-        const f = clamp(r.cf.at(t)); r.cfH.style.height = px(f*r.cfI.offsetHeight + (f > 0 ? f*0 : 0)); r.cfH.style.visibility = f < .004 ? 'hidden' : 'visible'; fade(r.cfI, f, (1 - f)*-4);
+        const f = clamp(r.cf.at(t)); r.cfH.style.height = px(f*size(r.cfI).h + (f > 0 ? f*0 : 0)); r.cfH.style.visibility = f < .004 ? 'hidden' : 'visible'; fade(r.cfI, f, (1 - f)*-4);
         const dm = clamp(r.dim.at(t)); r.in.firstChild.style.opacity = (1 - .5*dm).toFixed(3); r.mt.s.forEach(s => s.style.color = dm > .5 ? 'var(--danger)' : ''); }
       if (t < pin) body.scrollTop = 0;
     };

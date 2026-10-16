@@ -15,5 +15,5 @@ atom({ id:'dialog', cat:'Overlays', name:'Confirm dialog', block:'Dialog / Alert
     st.addEventListener('keydown', ev => { if (ev.key === 'Escape') set(false); });
     return t => { const p = clamp(o.at(t)); scr.style.opacity = (p*.35).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       dl.style.opacity = p.toFixed(3); dl.style.visibility = p < .01 ? 'hidden' : 'visible'; dl.style.transform = `translate(-50%, calc(-50% + ${px((1-p)*8)})) scale(${(.96+.04*p).toFixed(4)})`; dl.style.pointerEvents = p > .5 ? 'auto' : 'none';
-      rows.forEach(r => { r.r.style.height = px(clamp(r.h.at(t))*r.in.offsetHeight); fade(r.in, r.o.at(t), null); }); };
+      rows.forEach(r => { r.r.style.height = px(clamp(r.h.at(t))*size(r.in).h); fade(r.in, r.o.at(t), null); }); };
   }});

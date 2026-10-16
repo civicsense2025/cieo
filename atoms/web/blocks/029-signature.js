@@ -30,7 +30,7 @@ atom({ id:'signature', cat:'Interactive', name:'Signature pad', block:'signature
       move:p => { const a = cur[cur.length-1], dt = Math.max(1e-3, now() - a.t); cur.push({ x:p.x, y:p.y, t:now(), w:3.2 - clamp(Math.hypot(p.x - a.x, p.y - a.y)/dt/1800)*2 }); }, up:() => cur = null });
     cl.onclick = () => ink.set(0);
     sv.onclick = () => { if (strokes.length) show('done'); };
-    return t => { const dpr = devicePixelRatio || 1, W = cv.clientWidth, H = cv.clientHeight;
+    return t => { const dpr = devicePixelRatio || 1, W = size(cv).cw, H = size(cv).ch;
       if (W !== lastW || H !== lastH){ cv.width = W*dpr; cv.height = H*dpr; lastW = W; lastH = H; }
       cx.setTransform(dpr,0,0,dpr,0,0); cx.clearRect(0,0,W,H);
       cx.strokeStyle = getComputedStyle(cv).color; cx.globalAlpha = clamp(ink.at(t)); cx.lineCap = cx.lineJoin = 'round';

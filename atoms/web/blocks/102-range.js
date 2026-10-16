@@ -14,5 +14,5 @@ atom({ id:'range', cat:'Forms', name:'Range slider', block:'collection-browser (
     rr.addEventListener('pointerdown', ev => { const r = rr.getBoundingClientRect(), v = toV({ x:ev.clientX - r.left, w:r.width }); if (held === 'lo'){ lo = Math.min(v, hi - STEP); lt.set(lo); } else { hi = Math.max(v, lo + STEP); ht.set(hi); } upd(); });
     [[ta,'lo'],[tb,'hi']].forEach(([b,k]) => b.onkeydown = e => { const d = e.key === 'ArrowRight' ? STEP : e.key === 'ArrowLeft' ? -STEP : 0; if (!d) return; e.preventDefault(); if (k === 'lo'){ lo = clamp(lo + d, 0, hi - STEP); lt.set(lo); } else { hi = clamp(hi + d, lo + STEP, MAX); ht.set(hi); } upd(); });
     upd();
-    return t => { const W = rr.clientWidth - 18, a = 9 + lt.at(t)/MAX*W, b = 9 + ht.at(t)/MAX*W; ta.style.left = px(a); tb.style.left = px(b); fl.style.left = px(a); fl.style.width = px(b - a); H.forEach(x => x.b.style.background = mix(x.k.at(t),'var(--ink)','var(--raised)')); };
+    return t => { const W = size(rr).cw - 18, a = 9 + lt.at(t)/MAX*W, b = 9 + ht.at(t)/MAX*W; ta.style.left = px(a); tb.style.left = px(b); fl.style.left = px(a); fl.style.width = px(b - a); H.forEach(x => x.b.style.background = mix(x.k.at(t),'var(--ink)','var(--raised)')); };
   }});

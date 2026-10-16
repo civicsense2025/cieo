@@ -520,7 +520,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
     const qp = new Track(0, S.lazy); let qv = -1, lastQ = -9, bv = -1;
     return t => {
       lk(t); q.run(t); csw.apply(cl[0], 0, t, 4); csw.apply(cl[1], 1, t, 4);
-      const H = pg.clientHeight, v = pg.scrollTop + H - topIn(app, pg) > 120 ? 1 : 0; if (v !== qv){ qv = v; qp.set(v); }
+      const H = size(pg).ch, v = pg.scrollTop + H - topIn(app, pg) > 120 ? 1 : 0; if (v !== qv){ qv = v; qp.set(v); }
       const p = qp.at(t); if (Math.abs(p - lastQ) > .002){ lastQ = p; for (let i = 0; i < rects.length; i++) rects[i].style.opacity = clamp(p * 2 - cells[i]).toFixed(2); }
       const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + i * .06)); }
       bds.forEach((b, i) => { const r = clamp(bt[i].at(t)), h = clamp(hv[i].h.at(t)); fade(b, r, (1 - r) * 10);

@@ -33,7 +33,7 @@ atom({
       const base=mix(q,'var(--accent)','var(--muted)');
       fw.style.borderColor=`color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, color-mix(in oklab, var(--success) ${(g*100).toFixed(1)}%, ${base}))`;
       lb.style.color=k>.5?'var(--danger)':g>.5?'var(--success)':'var(--muted)';
-      icons.forEach((el,i)=>sw.apply(el,i,t,0));er.style.height=px(k*msg.offsetHeight);fade(msg,k,(1-k)*-4);
+      icons.forEach((el,i)=>sw.apply(el,i,t,0));er.style.height=px(k*size(msg).h);fade(msg,k,(1-k)*-4);
     };
   },
 });

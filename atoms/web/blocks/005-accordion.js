@@ -27,6 +27,6 @@ atom({
       open=open===i?-1:i;
       rows.forEach((x,j)=>{const selected=open===j;x.h.set(selected?1:0);x.btn.setAttribute('aria-expanded',String(selected));x.body.inert=!selected;x.body.setAttribute('aria-hidden',String(!selected));});
     });
-    return t=>rows.forEach(r=>{const p=clamp(r.h.at(t));r.body.style.height=px(p*r.inner.offsetHeight);r.chev.style.transform=`rotate(${(p*180).toFixed(1)}deg)`;fade(r.inner,p,(1-p)*-4);});
+    return t=>rows.forEach(r=>{const p=clamp(r.h.at(t));r.body.style.height=px(p*size(r.inner).h);r.chev.style.transform=`rotate(${(p*180).toFixed(1)}deg)`;fade(r.inner,p,(1-p)*-4);});
   }
 });

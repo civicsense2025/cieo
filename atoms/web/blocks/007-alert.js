@@ -8,5 +8,5 @@ atom({ id:'alert', cat:'Content', name:'Dismissible alert', block:'alert, callou
     const wrap = $(st,'.aw'), al = $(st,'.al'), o = new Track(1), h = new Track(1);
     $(st,'.x').onclick = () => { o.set(0, S.snap); h.set(0, S.base, now() + EXIT); };
     $(st,'.restore').onclick = () => { h.set(1); o.set(1, S.base, now() + .12); };
-    return t => { wrap.style.height = px(clamp(h.at(t))*al.offsetHeight); fade(al, o.at(t), null); };
+    return t => { wrap.style.height = px(clamp(h.at(t))*size(al).h); fade(al, o.at(t), null); };
   }});

@@ -662,7 +662,7 @@ atom({ id:'presencebar', cat:'Agent activity', name:'Presence bar', block:'Revie
     const refresh = inst => {
       const f = follow && find(follow);
       fb.put(f ? (compact ? `${f.d.name} · ${f.act}` : `Following ${f.d.name} · ${f.act}`) : 'Tap anyone to jump to where they are.', inst);
-      who.put(f ? (st.clientWidth < 460 ? 'Their view' : `${f.d.name}’s view`) : 'Your view', inst); myT.set(f ? 1 : 0);
+      who.put(f ? (size(st).cw < 460 ? 'Their view' : `${f.d.name}’s view`) : 'Your view', inst); myT.set(f ? 1 : 0);
       P.forEach(p => { const on = follow === p.d.id; p.sel.set(on ? 1 : 0); p.cl.setAttribute('aria-pressed', on); p.cl.setAttribute('aria-label', `${on ? 'Following' : 'Jump to'} ${p.d.name}, ${p.d.tag}. ${p.act}`); });
     };
     const jump = p => { if (!p.present) return; follow = follow === p.d.id ? null : p.d.id; if (follow){ setRoute(p.route); say(`Following ${p.d.name}`); } else { setRoute('home'); say('Back to your view'); } refresh(); };
@@ -696,11 +696,11 @@ atom({ id:'presencebar', cat:'Agent activity', name:'Presence bar', block:'Revie
     join(find('maya'), true); join(find('rev'), true); P.forEach(p => { p.e.jump(p.present ? 1 : 0); p.a.jump(p.present ? 1 : 0); }); cnt.set(String(nPresent()), true); putPath('/', 1); pl[pk].textContent = '/'; psw.cur = pk; psw.prev = null; psw.t = -9; refresh(true); runS();
     return t => {
       q.run(t);
-      const cw = st.clientWidth < 820; if (cw !== compact || (st.clientWidth < 460) !== nar){ compact = cw; nar = st.clientWidth < 460; refresh(true); }
-      if (pw.clientWidth !== W || pw.clientHeight !== H){ W = pw.clientWidth; H = pw.clientHeight; }
+      const cw = size(st).cw < 820; if (cw !== compact || (size(st).cw < 460) !== nar){ compact = cw; nar = size(st).cw < 460; refresh(true); }
+      if (size(pw).cw !== W || size(pw).ch !== H){ W = size(pw).cw; H = size(pw).ch; }
       for (const k in L) vsw.apply(L[k], k, t, 20); pl.forEach((e, i) => psw.apply(e, i, t, 10));
       // measure first, then write
-      for (const p of P) p.nat = compact ? p.cl.offsetHeight : p.cl.offsetWidth;
+      for (const p of P) p.nat = compact ? size(p.cl).h : size(p.cl).w;
       for (const p of P){
         const e = clamp(p.e.at(t)), a = clamp(p.a.at(t)), s = clamp(p.sel.at(t));
         if (compact){ p.wr.style.width = ''; p.wr.style.height = e > .999 ? '' : px(e*p.nat); } else { p.wr.style.height = ''; p.wr.style.width = e > .999 ? '' : px(e*p.nat); }
@@ -923,7 +923,7 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
     const chips = AM_SECS.map(n => { const b = gEl('button', ''); b.type = 'button'; b.className = 'agm-ch'; b.innerHTML = `<i></i><span></span><b>${ic(I.check, 13, 2.6)}</b>`; $(b, 'span').textContent = n; chipH.appendChild(b); return { n, b, fill:$(b, 'i'), ck:$(b, 'b'), lo:0, hi:0, fr:0, full:new Track(0, S.base) }; });
     const finds = []; let W = 0, H = 0, ph = 0, vh = 0, kx = 0, ky = 0, mw = 0, mh = 0, lastLay = -9, lastKey = '', si = 0, seenN = 0, fndN = 0, curSec = '', lastSec = '';
     const say = s => { live.textContent = s; };
-    const maxS = () => Math.max(0, sc.scrollHeight - sc.clientHeight);
+    const maxS = () => Math.max(0, sc.scrollHeight - size(sc).ch);
     const secOf = y => { const r = chips.find(c => y >= c.lo && y < c.hi) || chips[chips.length - 1]; return r.n; };
     const build = () => {
       pw_ = sc.clientWidth; ph = sc.scrollHeight; vh = sc.clientHeight; const mpr = mp.getBoundingClientRect(); mw = Math.max(20, mp.clientWidth - 12); mh = Math.max(40, mp.clientHeight - 12);
@@ -974,7 +974,7 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
     sc.scrollTop = 0; build(); n1.set('0', true); n2.set('0', true); ss.put('Review agent is at the top of the page', true); ea.jump(0, vh*ky); q.at(now() + .8, step);
     return t => {
       q.run(t);
-      if (t - lastLay > .25){ lastLay = t; const key = sc.clientWidth + ':' + sc.scrollHeight + ':' + sc.clientHeight + ':' + (mp.clientHeight - 12); if (key !== lastKey) build(); }
+      if (t - lastLay > .25){ lastLay = t; const key = size(sc).cw + ':' + sc.scrollHeight + ':' + size(sc).ch + ':' + (size(mp).ch - 12); if (key !== lastKey) build(); }
       if (anim){ const v = u.at(t); sc.scrollTop = v; if (Math.abs(v - u.target) < .4 && !u.ev.length) anim = false; }
       const a = A.at(t);
       // which bands has the agent covered?
@@ -986,7 +986,7 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
       // windows on the map
       const t1 = ea.A.at(t), b1 = ea.B.at(t); wa.style.top = px(t1); wa.style.height = px(Math.max(4, b1 - t1));
       const su = sc.scrollTop; wu.style.top = px(su*ky); wu.style.height = px(Math.max(6, vh*ky)); wu.setAttribute('aria-valuenow', Math.round(su/Math.max(1, maxS())*100)); wu.setAttribute('aria-valuetext', `${Math.round(su/Math.max(1, maxS())*100)} percent down the page`);
-      const chipY = clamp(t1 + 6, 6, Math.max(6, mh - 16)); agL.style.transform = `translate(${px(-(mp.offsetWidth + 6))},${px(chipY)})`; agL.style.left = 'auto'; agL.style.right = '0px';
+      const chipY = clamp(t1 + 6, 6, Math.max(6, mh - 16)); agL.style.transform = `translate(${px(-(size(mp).w + 6))},${px(chipY)})`; agL.style.left = 'auto'; agL.style.right = '0px';
       // section chips
       chips.forEach(c => { let s = 0, n = 0; for (let i = 0; i < NB; i++){ const cy = (i + .5)*bh; if (cy >= c.lo && cy < c.hi){ s += clamp(bands[i].f.at(t)); n++; } } const fr = n ? s/n : 0; c.fr = fr; c.fill.style.transform = `scaleX(${fr.toFixed(3)})`;
         const full = fr > .985; if (full !== (c.full.target === 1)) c.full.set(full ? 1 : 0); const fp = clamp(c.full.at(t)); c.ck.style.width = px(fp*13); c.ck.style.opacity = fp.toFixed(3); c.b.style.borderStyle = fr > .02 ? 'solid' : 'dashed'; c.b.style.borderColor = mix(clamp(fr*3), 'var(--line)', 'var(--line)'); c.b.style.color = mix(clamp(fr*2), 'var(--ink)', 'var(--muted)'); });

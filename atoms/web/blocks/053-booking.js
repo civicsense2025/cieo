@@ -35,7 +35,7 @@ atom({ id:'booking', cat:'Interactive', name:'Date and time picker', block:'book
     days.forEach((b,i) => b.onclick = () => pick(i+1));
     slots.forEach((S2,i) => { const prev = S2.b.onclick; S2.b.onclick = () => { prev(); $(cf,'.lb').textContent = `Oct ${day} · ${slotsFor(day)[i]}`; }; });
     const init = () => pick(day || 7, true); document.fonts.ready.then(init); requestAnimationFrame(init);
-    return t => { const b = days[(day || 7)-1]; if (b && b.offsetWidth){ Object.assign(selEl.style, { width:px(b.offsetWidth), height:px(b.offsetHeight), transform:`translate(${px(x.at(t))},${px(y.at(t))})`, opacity:clamp(o.at(t)) }); }
+    return t => { const b = days[(day || 7)-1]; if (b && size(b).w){ Object.assign(selEl.style, { width:px(size(b).w), height:px(size(b).h), transform:`translate(${px(x.at(t))},${px(y.at(t))})`, opacity:clamp(o.at(t)) }); }
       slots.forEach(s => { for (const k in s.L) s.sw.apply(s.L[k], k, t); const on = clamp(s.on.at(t)); s.b.style.background = mix(on,'var(--ink)','var(--card)'); s.b.style.color = mix(on,'var(--card)','var(--ink)'); });
       sw2.apply(p0, 0, t); sw2.apply(p1, 1, t); p0.style.pointerEvents = sw2.cur === 0 ? 'auto' : 'none'; p1.style.pointerEvents = sw2.cur === 1 ? 'auto' : 'none'; };
   }});

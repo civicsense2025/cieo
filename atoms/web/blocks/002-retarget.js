@@ -7,5 +7,5 @@ atom({ id:'retarget', cat:'Foundations', name:'Retarget as a sum', block:'every 
   init(st){
     const puck = $(st,'.puck'), n = $(st,'.ro span'), x = new Track(.5, S.soft);
     st.onpointerdown = e => { const r = st.getBoundingClientRect(); x.set(clamp(((e.clientX - r.left)/r.width - .08)/.84)); };
-    return t => { const W = st.clientWidth; puck.style.left = px(W*.08 + x.at(t)*W*.84); n.textContent = x.prune(t); };
+    return t => { const W = size(st).cw; puck.style.left = px(W*.08 + x.at(t)*W*.84); n.textContent = x.prune(t); };
   }});

@@ -27,5 +27,5 @@ atom({ id:'slashmenu', cat:'Writing', name:'Slash command menu', block:'richtext
     inp.onkeydown = ev => { if (!o.target || !vis.length) return; if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp'){ ev.preventDefault(); hi = (hi + (ev.key === 'ArrowDown' ? 1 : vis.length - 1)) % vis.length; e.go(P + hi*R, P + (hi+1)*R); } if (ev.key === 'Enter'){ ev.preventDefault(); insert(vis[hi]); } if (ev.key === 'Escape') o.set(0, S.snap); };
     rows.forEach(r => { r.d.onmousedown = ev => ev.preventDefault(); r.d.onclick = () => insert(r); r.d.onpointerenter = () => { const k = vis.indexOf(r); if (k >= 0){ hi = k; e.go(P + k*R, P + (k+1)*R); } }; });
     return t => { pop(mn, o.at(t), 0); mn.style.height = px(H.at(t)); plate(hl, e.A.at(t), e.B.at(t)); rows.forEach(r => { r.d.style.transform = `translateY(${px(r.y.at(t))})`; const k = clamp(r.o.at(t)); r.d.style.opacity = k.toFixed(3); r.d.style.pointerEvents = r.o.target ? 'auto' : 'none'; });
-      ins.forEach(b => { const h = clamp(b.h.at(t)); b.d.style.height = px(h*b.d.firstChild.offsetHeight); b.d.style.opacity = h.toFixed(3); }); };
+      ins.forEach(b => { const h = clamp(b.h.at(t)); b.d.style.height = px(h*size(b.d.firstChild).h); b.d.style.opacity = h.toFixed(3); }); };
   }});

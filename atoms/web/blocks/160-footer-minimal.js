@@ -47,7 +47,7 @@ const fx = (st, pal = PAL) => {
 const kit = (st, p, o = {}) => {
   const sc = $(st, '.' + p + 'sc'), ft = $(st, '.' + p + 'ft'), h1 = $(st, '.' + p + 'h1'), w = $(st, '.' + p + 'w');
   const sp = new Track(0, S.soft); let auto = false, goal = 0, done = null, touched = false, pinTo = 0;
-  const max = () => Math.max(0, sc.scrollHeight - sc.clientHeight);
+  const max = () => Math.max(0, sc.scrollHeight - size(sc).ch);
   const stop = () => { auto = false; touched = true; pinTo = 0; };
   ['wheel', 'touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(e => sc.addEventListener(e, stop, { passive:true }));
   const go = (y, fn) => { sp.jump(sc.scrollTop).set(y); goal = y; auto = true; done = fn || null; };
@@ -283,7 +283,7 @@ ${col(P4, 'Product', ['Editor', 'Commerce', 'Members', 'Pricing'])}${col(P4, 'Re
       fade(dn, N, (1 - N)*4);
       LB.forEach((e, i) => lsw.apply(e, i, t, 4)); sp.style.transform = `rotate(${(t*420 % 360).toFixed(1)}deg)`;
       MS.forEach((e, i) => msw.apply(e, i, t, 3));
-      const mh_ = msw.cur ? MS[msw.cur].offsetHeight : 0; if (Math.abs(mh_ - mh.target) > .5) mh.set(mh_); ms.style.height = px(Math.max(0, mh.at(t)));
+      const mh_ = msw.cur ? size(MS[msw.cur]).h : 0; if (Math.abs(mh_ - mh.target) > .5) mh.set(mh_); ms.style.height = px(Math.max(0, mh.at(t)));
       rv(); k.tick(t); }; } });
 
 /* ================================================================ 5. Accordion on mobile, columns on desktop */

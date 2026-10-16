@@ -11,7 +11,7 @@ atom({ id:'durationladder', cat:'Foundations', name:'Duration ladder', block:'du
       if (REDUCE) T[i].jump(v); else T[i].set(v); });
     $(st,'.all').onclick = () => { const t0 = now();
       T.forEach(x => { if (REDUCE) x.jump(1); else x.set(1, undefined, t0); }); };
-    return t => { dots.forEach((d, i) => { const w = Math.max(1, d.parentNode.clientWidth - 14);
+    return t => { dots.forEach((d, i) => { const w = Math.max(1, size(d.parentNode).cw - 14);
         d.style.transform = `translateX(${px(clamp(T[i].at(t)) * w)})`; });
       D.forEach(d => d.render(t)); };
   }});

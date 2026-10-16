@@ -9,7 +9,7 @@ atom({ id:'slider', cat:'Interactive', name:'Rubber-band slider', block:'form (r
     const at = p => { if (p.x > p.w){ hv = 1; ho = rb(p.x - p.w, 60); } else if (p.x < 0){ hv = 0; ho = rb(p.x, 60); } else { hv = p.x/p.w; ho = 0; } };
     drag(vr, { down:p => { held = true; at(p); }, move:at, up:(p, vel) => { held = false; v.jump(hv); o.release(ho, ho ? vel.vx*.3 : 0, 0); } });
     vr.onkeydown=e=>{const step=e.shiftKey?.1:.01;if(['ArrowRight','ArrowUp','ArrowLeft','ArrowDown','Home','End'].includes(e.key)){e.preventDefault();v.set(e.key==='Home'?0:e.key==='End'?1:clamp(v.target+(['ArrowRight','ArrowUp'].includes(e.key)?step:-step)))}};
-    return t => { const W = vr.clientWidth, val = held ? hv : v.at(t), ov = held ? ho : o.at(t);
+    return t => { const W = size(vr).cw, val = held ? hv : v.at(t), ov = held ? ho : o.at(t);
       vp.style.width = px(W + Math.abs(ov)); vp.style.height = px(10 - Math.min(3.5, Math.abs(ov)*.07)); vp.style.transform = `translate(${px(Math.min(0, ov))}, -50%)`;
       vf.style.width = px(clamp(val)*(W + Math.abs(ov))); const pc = Math.round(clamp(val)*100); ro.textContent = pc + '%'; vr.setAttribute('aria-valuenow', pc); vr.setAttribute('aria-valuetext', pc + '%'); };
   }});

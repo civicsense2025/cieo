@@ -61,7 +61,7 @@ const gSlot = (host, inner, open = 0) => {
     jump(v){ o.h.jump(v ? 1 : 0); o.a.jump(v ? 1 : 0); },
     get on(){ return o.h.target === 1; },
     render(t){ const h = clamp(o.h.at(t)), a = clamp(o.a.at(t));
-      host.style.height = h > .9995 && o.h.target === 1 ? 'auto' : px(h*inner.offsetHeight);
+      host.style.height = h > .9995 && o.h.target === 1 ? 'auto' : px(h*size(inner).h);
       const hid = h < .004 && a < .004; host.style.visibility = hid ? 'hidden' : 'visible'; host.inert = o.h.target === 0;
       fade(inner, a, null); } };
   return o;
@@ -70,7 +70,7 @@ const gSlot = (host, inner, open = 0) => {
 const gFollow = host => {
   const f = { cur:null, off:new Track(0), h:0,
     to(el, inst){ const old = f.h; f.cur = el; if (!inst){ f.off.jump(old - el.offsetHeight); f.off.set(0, S.base); } },
-    render(t){ if (!f.cur) return; f.h = Math.max(0, f.cur.offsetHeight + f.off.at(t)); host.style.height = px(f.h); } };
+    render(t){ if (!f.cur) return; f.h = Math.max(0, size(f.cur).h + f.off.at(t)); host.style.height = px(f.h); } };
   return f;
 };
 const gBtn = (txt, cls = '', css = '') => { const b = gEl('button', css, txt); b.type = 'button'; b.className = 'btn ' + cls; return b; };
@@ -176,7 +176,7 @@ const gPage = (root, k) => {
     editable(v){ fr.classList.toggle(`${k}-edit`, v); for (const n in fl){ fl[n].e.readOnly = !v; } },
     mirror(){ $$(fr, '[data-m="email"]').forEach(e => e.textContent = fl.email.shown || 'maya@northwind.com'); },
     render(t){
-      const w = vp.clientWidth; if (w > 10){ const s = Math.min(w/360, 1.7); if (Math.abs(s - scale) > .001){ scale = s; inn.style.transform = `scale(${s.toFixed(4)})`; } }
+      const w = size(vp).cw; if (w > 10){ const s = Math.min(w/360, 1.7); if (Math.abs(s - scale) > .001){ scale = s; inn.style.transform = `scale(${s.toFixed(4)})`; } }
       const need = Math.round(32 + 1 + 250*scale + 2); if (need !== frameH){ frameH = need; fr.style.height = need + 'px'; }
       for (const n in V) sw.apply(V[n], n, t, 4);
       for (const n in V) V[n].style.pointerEvents = n === sw.cur ? 'auto' : 'none';
@@ -411,12 +411,12 @@ ${gPageCSS('afp')}
       gDrain(q, t);
       const dt = last == null ? 0 : Math.min(.1, Math.max(0, t - last)); last = t; rt += dt;
       while (idx < EV.length && EV[idx].at <= rt) fire(EV[idx++]);
-      const w = pg.fr.clientWidth; if (w !== lastW){ lastW = w; aim(true); const it = newest; if (it){ const c = pg.center(it.ev.spot); cursor.go(c.x, c.y, true); } }
+      const w = size(pg.fr).cw; if (w !== lastW){ lastW = w; aim(true); const it = newest; if (it){ const c = pg.center(it.ev.spot); cursor.go(c.x, c.y, true); } }
       pg.render(t); cursor.render(t); ring.render(t); pst.render(t);
       chips.forEach(c => { const wv = clamp(c.w.at(t)); c.b.style.background = mix(wv, 'var(--ink)', 'var(--card)'); c.b.style.color = mix(wv, 'var(--card)', 'var(--ink)'); c.b.style.borderColor = mix(wv, 'var(--ink)', 'var(--line)'); c.dg.render(t); });
       const sh = shown();
       groups.forEach(g => { g.slot.render(t); g.ch.render(t); g.tt.render(t); g.dg.render(t);
-        const bw = clamp(g.bnT.at(t)); g.nw.style.width = px(bw*(g.dg.slots[0].s.offsetWidth + g.dg.slots[1].s.offsetWidth + 12 + 10)); g.nw.style.opacity = bw.toFixed(3); g.nw.style.marginLeft = '0';
+        const bw = clamp(g.bnT.at(t)); g.nw.style.width = px(bw*(size(g.dg.slots[0].s).w + size(g.dg.slots[1].s).w + 12 + 10)); g.nw.style.opacity = bw.toFixed(3); g.nw.style.marginLeft = '0';
         g.cv.style.transform = `rotate(${(clamp(g.ch.h.at(t))*180).toFixed(1)}deg)`;
         const inG = sh && sh.g === g, hw = inG && !g.open ? 1 : 0; g.hw.set(hw, S.base); const hv = clamp(g.hw.at(t));
         g.hd.style.background = mix(hv, 'var(--accent-tint)', 'transparent'); g.ic.style.background = mix(hv, 'var(--accent)', 'var(--raised)'); g.ic.style.color = mix(hv, 'var(--card)', 'var(--muted)');
@@ -735,7 +735,7 @@ ${gPageCSS('aip')}
     const result = (d) => { const c = SC[sc], r = c.done[d], bad = d === 'deny', warn = d !== 'deny' && c.risky;
       resL.innerHTML = `<div class="aia-rs"><span class="aia-hi" style="background:${bad ? 'var(--raised)' : warn ? 'var(--danger-tint)' : 'var(--success-tint)'};color:${bad ? 'var(--muted)' : warn ? 'var(--danger)' : 'var(--success)'}">${gi(bad ? 'x' : 'check', 15, 2.6)}</span><div><b>${r[0]}</b><span class="aia-rd">${r[1]}</span></div></div>`; };
     const place = () => { const rr = root.getBoundingClientRect(), fr = pg.fr.getBoundingClientRect(), a = pg.rect(SC[sc].spot); const ax = fr.left - rr.left + pg.fr.clientLeft + a.x, ay = fr.top - rr.top + pg.fr.clientTop + a.y;
-      const W = Math.min(340, root.clientWidth - 24), H = pp.offsetHeight, x = clamp(ax + a.w/2 - W/2, 12, root.clientWidth - W - 12);
+      const W = Math.min(340, size(root).cw - 24), H = size(pp).h, x = clamp(ax + a.w/2 - W/2, 12, size(root).cw - W - 12);
       if (phase === 'ask' && side === 'x') side = 'above';
       const above = side === 'above'; let y = above ? ay - H - 14 : ay + a.h + 14;
       pp.style.width = W + 'px'; pp.style.left = px(x); pp.style.top = px(y); pp.style.transformOrigin = `${(ax + a.w/2 - x).toFixed(0)}px ${above ? '100%' : '0'}`;
@@ -768,7 +768,7 @@ ${gPageCSS('aip')}
     pg.render(0); start('submit'); setRules(); resL.innerHTML = ''; fol.cur = askL;
     return t => {
       gDrain(Q, t);
-      const w = pg.fr.clientWidth; if (w !== lastW){ lastW = w; if (phase === 'ask' || phase === 'result'){ chooseSide(); ring.W.target && ring.to(pg.rect(SC[sc].spot), true); } if (phase === 'move'){ const p = pg.center(SC[sc].spot); ag.go(p.x, p.y, true); } }
+      const w = size(pg.fr).cw; if (w !== lastW){ lastW = w; if (phase === 'ask' || phase === 'result'){ chooseSide(); ring.W.target && ring.to(pg.rect(SC[sc].spot), true); } if (phase === 'move'){ const p = pg.center(SC[sc].spot); ag.go(p.x, p.y, true); } }
       pg.render(t); ag.render(t); ring.render(t);
       const p = clamp(pT.at(t)); sw.apply(askL, 0, t, 0); sw.apply(resL, 1, t, 0); askL.style.pointerEvents = sw.cur === 0 ? 'auto' : 'none'; resL.style.pointerEvents = sw.cur === 1 ? 'auto' : 'none'; askL.inert = sw.cur !== 0; resL.inert = sw.cur !== 1;
       fol.render(t); place(); pop(pp, p, side === 'above' ? 6 : -6); ar.style.opacity = '1';
@@ -843,7 +843,7 @@ ${gPageCSS('rpg')}
       $(li,'b').textContent = e.t; $(li,'.rrp-tx span').textContent = e.sub; ls.appendChild(li); const b = $(li,'.rrp-r'); b.onclick = () => seek(e.at + .05); return { li, b, ic:$(li,'.rrp-ic'), cw:new Track(0), pw:new Track(0) }; });
     const pt = new Track(0, S.base), scT = new Track(0, S.soft); let playing = true, dragging = false, was = false, spd = 1, last = null, curI = -1, lastW = 0, hover = false, txt = '', lastView = null, lastTog = null, ringI = -2, pinSt = {};
     const startPos = () => { const w = pg.rect('page'); return { x:w.w*.74, y:52 }; };
-    const trackW = () => Math.max(40, sb.clientWidth - 16);
+    const trackW = () => Math.max(40, size(sb).cw - 16);
     const xOf = s => 8 + clamp(s/END)*trackW();
     const say = s => { live.textContent = s; };
     const setPlaying = v => { playing = v; psw.to(v ? 1 : 0); play.setAttribute('aria-label', v ? 'Pause' : 'Play'); };
@@ -882,7 +882,7 @@ ${gPageCSS('rpg')}
       let ph = pt.at(t);
       if (playing && !dragging){ ph = Math.min(END, ph + dt*spd); pt.jump(ph); if (ph >= END){ setPlaying(false); say('Replay finished'); } }
       ph = clamp(ph, 0, END); if (!dragging && !playing && (pt.at(t) < 0 || pt.at(t) > END)) pt.jump(ph);
-      const w = pg.fr.clientWidth; if (w !== lastW){ lastW = w; ringI = -2; }
+      const w = size(pg.fr).cw; if (w !== lastW){ lastW = w; ringI = -2; }
       pg.render(t); apply(ph, t);
       const ci = curIdx(ph);
       if (ci !== curI){ curI = ci; rows.forEach((r, i) => { r.cw.set(i === ci ? 1 : 0, S.base); r.pw.set(i <= ci ? 1 : 0, S.base); });
@@ -893,7 +893,7 @@ ${gPageCSS('rpg')}
       if (ci !== ringI){ ringI = ci; if (ci >= 0) ring.to(pg.rect(E[ci].spot), ci < 0); else ring.hide(); } else if (ci >= 0 && w !== lastW) ring.to(pg.rect(E[ci].spot), true);
       ag.render(t); ring.render(t);
       const bw = trackW(); ticks.forEach((i, k) => { i.style.left = px(8 + E[k].at/END*bw); i.style.background = k === ci ? 'var(--accent)' : E[k].at <= ph ? 'var(--ink)' : 'var(--faint)'; i.style.height = k === ci ? '16px' : '12px'; i.style.top = k === ci ? '20px' : '22px'; });
-      const x = xOf(ph); phE.style.transform = `translateX(${px(x)})`; pf.style.transform = `scaleX(${(clamp(ph/END)*bw/Math.max(1, sb.clientWidth - 16)).toFixed(4)})`;
+      const x = xOf(ph); phE.style.transform = `translateX(${px(x)})`; pf.style.transform = `scaleX(${(clamp(ph/END)*bw/Math.max(1, size(sb).cw - 16)).toFixed(4)})`;
       const bv = clamp(bT.at(t)); bb.style.opacity = bv.toFixed(3); bb.style.visibility = bv < .01 ? 'hidden' : 'visible'; bb.style.transform = `translateX(-50%) translateY(${px((1 - bv)*4)})`;
       const s = gfmt(ph); if (s !== txt){ txt = s; bb.textContent = s; ck.innerHTML = `${s} <span>/ ${gfmt(END)}</span>`; sb.setAttribute('aria-valuenow', Math.round(ph)); }
       pls.forEach((e, i) => psw.apply(e, i, t, 0));

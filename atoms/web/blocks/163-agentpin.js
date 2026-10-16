@@ -111,7 +111,7 @@ class Site {
     this.fr = $(root, '.' + p + '-fr'); this.pg = $(this.fr, '.' + p + '-pg'); this.ct = $(this.pg, '.' + p + '-ct'); this.ov = $(this.pg, '.' + p + '-ov');
     this.els = {}; $$(this.ct, '[data-k]').forEach(e => this.els[e.dataset.k] = e); this.sc = new Track(0, S.soft); this.cover = 0;
   }
-  max(){ return Math.max(0, this.ct.offsetHeight - this.pg.clientHeight + this.cover); }
+  max(){ return Math.max(0, size(this.ct).h - size(this.pg).ch + this.cover); }
   // scroll that puts an element at about 40% of the visible page (cover = height hidden by a sheet at the bottom)
   want(k){ const r = this.els[k].getBoundingClientRect(), c = this.ct.getBoundingClientRect(); return clamp(r.top - c.top + r.height / 2 - (this.pg.clientHeight - this.cover) * .4, 0, this.max()); }
   go(k, inst){ const y = this.want(k), moved = Math.abs(y - this.sc.target) > 4; inst ? this.sc.jump(y) : this.sc.set(y); return moved; }
@@ -201,7 +201,7 @@ atom({ id:'agentpin', cat:'Agent activity', name:'Agent pin and comment', block:
     const box = new Box(), cp = new Track(0, S.soft), cd = new Track(0, S.snap), co = new Track(0), ch = new Track(150), oxT = new Track(0), oyT = new Track(0);
     let pins = [], cur = null, sel = null, cardPin = null, W = 0, H = 0, CW = 280, started = false, idx = -1, lastBox = null, cs = { x:0, y:0 }, lastKey = '', tagFlip = false;
     const pad = r => ({ x:r.x - 4, y:r.y - 4, w:r.w + 8, h:r.h + 8 });
-    const layout = () => { W = ov.clientWidth; H = ov.clientHeight; if (!W) return; root.dataset.n = st.clientWidth < 560 ? 1 : 0; CW = Math.round(clamp(W - 16, 220, 300)); cc.style.width = px(CW); lastKey = st.clientWidth + ':' + W + ':' + H; };
+    const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; root.dataset.n = size(st).cw < 560 ? 1 : 0; CW = Math.round(clamp(W - 16, 220, 300)); cc.style.width = px(CW); lastKey = size(st).cw + ':' + W + ':' + H; };
     const anchorOf = p => { const r = site.rect(p.f.k); return { x:clamp(r.x + r.w, 14, W - 14), y:clamp(r.y, 14, H - 14) }; };
     const fill = p => {
       const f = p.f, done = p.state === 'done';
@@ -244,7 +244,7 @@ atom({ id:'agentpin', cat:'Agent activity', name:'Agent pin and comment', block:
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && sel){ e.preventDefault(); close(true); } });
     layout(); cs = { x:W * .82, y:H * .9 };
     return t => {
-      run(t); if (st.clientWidth + ':' + ov.clientWidth + ':' + ov.clientHeight !== lastKey) layout(); if (!W) return;
+      run(t); if (size(st).cw + ':' + size(ov).cw + ':' + size(ov).ch !== lastKey) layout(); if (!W) return;
       if (!started){ started = true; show(0); }
       site.draw(t);
       // read every live rect first, then write
@@ -328,9 +328,9 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
     const co = new Track(0), lh = new Track(0, S.soft), oxT = new Track(0), oyT = new Track(0), tf = new Track(0, S.snap);
     let pin = null, sel = false, resolved = false, dsel = 1, busy = false, started = false, replies = 0, msgs = [], W = 0, H = 0, CW = 300, narrow = false, maxLh = 300, lastKey = '';
     const layout = () => {
-      W = ov.clientWidth; H = ov.clientHeight; if (!W) return; narrow = W < 480; root.dataset.n = st.clientWidth < 560 ? 1 : 0;
+      W = size(ov).cw; H = size(ov).ch; if (!W) return; narrow = W < 480; root.dataset.n = size(st).cw < 560 ? 1 : 0;
       CW = Math.round(narrow ? W - 16 : clamp(W * .36, 300, 340)); ck.style.width = px(CW); cc.style.width = px(CW); if (sel) site.cover = narrow ? H - 200 : 0;
-      maxLh = Math.max(110, (narrow ? H - 200 : H - 16) - hd.offsetHeight - fo.offsetHeight - 2); lastKey = st.clientWidth + ':' + W + ':' + H;
+      maxLh = Math.max(110, (narrow ? H - 200 : H - 16) - size(hd).h - size(fo).h - 2); lastKey = size(st).cw + ':' + W + ':' + H;
     };
     const anchor = () => { const r = site.rect('email'); return { x:clamp(r.x + r.w, 14, W - 14), y:clamp(r.y, 14, H - 14), r }; };
     const nat = () => Math.min(inn.offsetHeight, maxLh);
@@ -352,7 +352,7 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
       });
     }
     function open(){
-      layout(); sel = true; site.cover = narrow ? H - 200 : 0; site.go('email'); const a = anchor(), h0 = nat() + hd.offsetHeight + fo.offsetHeight + 2, pl = placeBeside(a.x, a.y, CW, h0, W, H, a.r); oxT.jump(pl.x - a.x); oyT.jump(pl.y - a.y);
+      layout(); sel = true; site.cover = narrow ? H - 200 : 0; site.go('email'); const a = anchor(), h0 = nat() + size(hd).h + size(fo).h + 2, pl = placeBeside(a.x, a.y, CW, h0, W, H, a.r); oxT.jump(pl.x - a.x); oyT.jump(pl.y - a.y);
       lh.jump(nat()); co.set(1, S.base); pin.label(true);
     }
     function close(focus){ if (!sel) return; sel = false; co.set(0, S.base); pin.label(false); if (site.cover){ site.sc.set(Math.min(site.sc.target, site.ct.offsetHeight - site.pg.clientHeight)); at(.6, () => { if (!sel) site.cover = 0; }); } if (focus) at(.06, () => pin.btn.focus({ preventScroll:true })); }
@@ -384,19 +384,19 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && sel){ e.preventDefault(); close(true); } });
     layout();
     return t => {
-      run(t); if (st.clientWidth + ':' + ov.clientWidth + ':' + ov.clientHeight !== lastKey) layout(); if (!W) return;
+      run(t); if (size(st).cw + ':' + size(ov).cw + ':' + size(ov).ch !== lastKey) layout(); if (!W) return;
       if (!started){ started = true; start(); }
       site.draw(t);
       const a = anchor();
       if (pin) pin.draw(t, a.x, a.y, sel);
       const o = clamp(co.at(t));
       if (pin && o > .002){
-        const hh = hd.offsetHeight, fh = fo.offsetHeight, lhh = lh.at(t), chh = hh + lhh + fh + 2, s = ck.style;
+        const hh = size(hd).h, fh = size(fo).h, lhh = lh.at(t), chh = hh + lhh + fh + 2, s = ck.style;
         const tx = narrow ? 8 : clamp(a.x + oxT.at(t), 8, Math.max(8, W - CW - 8)), ty = narrow ? H - chh - 8 : clamp(a.y + oyT.at(t), 8, Math.max(8, H - chh - 8));
         const fillc = mix(clamp(pin.rs.at(t)), 'var(--success-tint)', 'var(--ink)'), w = lerp(26, CW, o), h = lerp(26, chh, o);
         s.visibility = 'visible'; s.transform = `translate(${px(lerp(a.x - 13, tx, o))},${px(lerp(a.y - 13, ty, o))})`; s.width = px(w); s.height = px(h); s.borderRadius = px(lerp(8, 14, o));
         s.background = mix(clamp(o * 1.5), 'var(--card)', fillc); s.pointerEvents = o > .5 ? 'auto' : 'none';
-        ls.style.height = px(lhh); ls.style.overflowY = inn.offsetHeight > maxLh ? 'auto' : 'hidden';
+        ls.style.height = px(lhh); ls.style.overflowY = size(inn).h > maxLh ? 'auto' : 'hidden';
         const cin = clamp((o - .5) * 2); fade(cc, cin, (1 - cin) * 3);
         layers(dec, drL, t, 3);
         ip.style.borderColor = mix(clamp(tf.at(t)), 'var(--accent)', 'var(--line)'); sn.style.opacity = sn.disabled ? '.45' : '1';
@@ -473,7 +473,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
     const shot = it => { const w = it.w + 16, h = it.h + 16, ph = mk('div'); ph.className = 'evc-ph'; ph.style.width = px(w); ph.style.height = px(h); ph.setAttribute('inert', ''); const c = it.node.cloneNode(true); c.removeAttribute('data-k'); c.style.cssText = `position:absolute;left:8px;top:8px;margin:0;width:${px(it.w)};height:${px(it.h)}`; ph.append(c); return ph; };
     const fitInto = (ph, it, bw, bh, max = 9) => { const w = it.w + 16, h = it.h + 16, s = Math.min(bw / w, bh / h, max); ph.style.transform = `translate(${px((bw - w * s) / 2)},${px((bh - h * s) / 2)}) scale(${s.toFixed(4)})`; };
     const toRoot = r => { const rr = root.getBoundingClientRect(); return { x:r.left - rr.left, y:r.top - rr.top, w:r.width, h:r.height }; };
-    const layout = () => { W = ov.clientWidth; H = ov.clientHeight; if (!W) return; narrow = st.clientWidth < 560; root.dataset.n = narrow ? 1 : 0; lastKey = st.clientWidth + ':' + W + ':' + H;
+    const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; narrow = size(st).cw < 560; root.dataset.n = narrow ? 1 : 0; lastKey = size(st).cw + ':' + W + ':' + H;
       VW = Math.round(Math.min(st.clientWidth - 24 - 24, 560)); VH = Math.round(Math.min(st.clientHeight - 24 - 24, 400)); vc.style.width = px(VW); vc.style.height = px(VH); items.forEach(fit); };
     const fit = it => fitInto($(it.th, '.evc-ph'), it, it.th.clientWidth, it.th.clientHeight, 2);
     function makeItem(spec, node, w, h, instant, ago){
@@ -538,7 +538,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
     capB.onclick = next; rpB.onclick = () => { reset(); at(.4, next); };
     layout();
     return t => {
-      run(t); if (st.clientWidth + ':' + ov.clientWidth + ':' + ov.clientHeight !== lastKey) layout(); if (!W) return;
+      run(t); if (size(st).cw + ':' + size(ov).cw + ':' + size(ov).ch !== lastKey) layout(); if (!W) return;
       if (!started){ started = true; reset(); at(.5, next); }
       site.draw(t);
       // slots grow in; the thumbnail waits until the snapshot lands
@@ -628,7 +628,7 @@ atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'A
       c.ac.onclick = () => decide(c, c.state === 1 ? 0 : 1); c.rj.onclick = () => decide(c, c.state === 2 ? 0 : 2); return c;
     });
     let cur = -1, started = false, W = 0, H = 0, CW = 300, lastKey = '', lastBox = null;
-    const layout = () => { W = ov.clientWidth; H = ov.clientHeight; if (!W) return; root.dataset.n = st.clientWidth < 560 ? 1 : 0; CW = Math.round(clamp(W - 16, 250, 340)); cards.forEach(c => c.el.style.width = px(CW)); lastKey = st.clientWidth + ':' + W + ':' + H; };
+    const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; root.dataset.n = size(st).cw < 560 ? 1 : 0; CW = Math.round(clamp(W - 16, 250, 340)); cards.forEach(c => c.el.style.width = px(CW)); lastKey = size(st).cw + ':' + W + ':' + H; };
     function decide(c, s){
       c.state = s; c.a.set(s === 1 ? 1 : 0); c.r.set(s === 2 ? 1 : 0); if (s === 1) c.tn.jump(1), c.tn.set(0, S.lazy, now() + .5);
       c.ac.setAttribute('aria-label', s === 1 ? 'Undo applied edit' : 'Accept edit'); c.rj.setAttribute('aria-label', s === 2 ? 'Undo rejected edit' : 'Reject edit');
@@ -639,14 +639,14 @@ atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'A
       cur = i; const c = cards[i], f = c.ed, d = (prev ? EXIT + .05 : 0) + (site.go(f.k) ? .6 : .1);
       stEls[1].innerHTML = `${f.kind} on <span class="sge-sel">${hx(f.sel)}</span>: ${c.state === 1 ? 'applied to the page' : c.state === 2 ? 'rejected' : 'waiting for your review'}`; stw.to(0); box.o.set(0, S.snap);
       at(d, () => { const r = site.rect(f.k), to = { x:r.x - 4, y:r.y - 4, w:r.w + 8, h:r.h + 8 }; box.go(lastBox && box.o.at(now()) > .05 ? lastBox : { x:to.x + to.w / 2, y:to.y + to.h / 2, w:0, h:0 }, to); box.o.set(1, S.base); stw.to(1); });
-      at(d + .5, () => { const a = site.rect(f.k), pl = placeBeside(a.x + a.w, a.y, CW, c.el.offsetHeight || 260, W, H, a, 16); c.ox = pl.x - a.x; c.oy = pl.y - a.y; c.t0 = now(); c.o.set(1, S.base); });
+      at(d + .5, () => { const a = site.rect(f.k), pl = placeBeside(a.x + a.w, a.y, CW, size(c.el).h || 260, W, H, a, 16); c.ox = pl.x - a.x; c.oy = pl.y - a.y; c.t0 = now(); c.o.set(1, S.base); });
     }
     nx.onclick = () => show((cur + 1) % cards.length);
     rp.onclick = () => { cards.forEach(c => { if (c.state) decide(c, 0); }); show(0); };
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && cur >= 0 && cards[cur].o.target === 1){ e.preventDefault(); cards[cur].o.set(0, S.base); box.o.set(0, S.base); nx.focus(); } });
     layout();
     return t => {
-      run(t); if (st.clientWidth + ':' + ov.clientWidth + ':' + ov.clientHeight !== lastKey) layout(); if (!W) return;
+      run(t); if (size(st).cw + ':' + size(ov).cw + ':' + size(ov).ch !== lastKey) layout(); if (!W) return;
       if (!started){ started = true; show(0); }
       site.draw(t);
       // page: removed words close up, added words open out, a style edit eases the fill
@@ -657,12 +657,12 @@ atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'A
       if (live && bo > .005){ const r = box.at(t, { x:live.x - 4, y:live.y - 4, w:live.w + 8, h:live.h + 8 }); lastBox = r; const s = tf.style; s.visibility = 'visible'; s.opacity = bo.toFixed(3); s.transform = `translate(${px(r.x)},${px(r.y)})`; s.width = px(r.w); s.height = px(r.h); } else tf.style.visibility = 'hidden';
       cards.forEach((c, ci) => {
         const o = clamp(c.o.at(t)); if (o < .005){ c.el.style.visibility = 'hidden'; return; }
-        const a = site.rect(c.ed.k), h = c.el.offsetHeight, s = c.el.style;
+        const a = site.rect(c.ed.k), h = size(c.el).h, s = c.el.style;
         s.left = px(clamp(a.x + c.ox, 8, Math.max(8, W - CW - 8))); s.top = px(clamp(a.y + c.oy, 8, Math.max(8, H - h - 8))); pop(c.el, o, 6); s.transformOrigin = '0 0';
         // diff words reveal in order, then the strikes draw
         c.ws.forEach((w, i) => { const q = clamp(prog(t, c.t0 + .1 + i * .035, S.snap)); w.style.opacity = q.toFixed(3); if (w.classList.contains('sge-d')) w.style.setProperty('--s', clamp(prog(t, c.t0 + .45 + i * .035, S.base)).toFixed(3)); });
         // accept / reject: one row, one morph
-        const aa = clamp(c.a.at(t)), rr = clamp(c.r.at(t)), BW = c.br.clientWidth, g = 8 * (1 - aa) * (1 - rr), rw = (92 + (BW - 92) * rr) * (1 - aa), aw = BW - rw - g;
+        const aa = clamp(c.a.at(t)), rr = clamp(c.r.at(t)), BW = size(c.br).cw, g = 8 * (1 - aa) * (1 - rr), rw = (92 + (BW - 92) * rr) * (1 - aa), aw = BW - rw - g;
         c.rj.style.left = '0'; c.rj.style.width = px(rw); c.rj.style.opacity = clamp(1 - aa * 1.6).toFixed(3); c.rj.style.pointerEvents = aa > .5 ? 'none' : 'auto';
         c.ac.style.left = px(rw + g); c.ac.style.width = px(Math.max(0, aw)); c.ac.style.opacity = clamp(1 - rr * 1.6).toFixed(3); c.ac.style.pointerEvents = rr > .5 ? 'none' : 'auto';
         c.ac.style.background = mix(aa, 'var(--success-tint)', 'var(--ink)'); c.ac.style.color = mix(aa, 'var(--success)', 'var(--card)'); c.ac.style.borderColor = mix(aa, 'var(--success)', 'var(--ink)');
@@ -766,16 +766,16 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
       paint(); rows.forEach((r, j) => r.vis.set(match(r) ? 1 : 0, S.base, now() + (match(r) ? .06 : 0) + j * .012)); if (openR && !match(openR)) toggle(openR); dShow.set(String(rows.filter(r => r.en.target === 1 && match(r)).length));
     });
     rp.onclick = start;
-    const layout = () => { pn.dataset.n = st.clientWidth < 560 ? 1 : 0; r0.dataset.w = r0.offsetWidth; rw0 = r0.offsetWidth + 18; rw1 = r1.offsetWidth + 18; lastKey = st.clientWidth; };
+    const layout = () => { pn.dataset.n = size(st).cw < 560 ? 1 : 0; r0.dataset.w = size(r0).w; rw0 = size(r0).w + 18; rw1 = size(r1).w + 18; lastKey = size(st).cw; };
     layout();
     return t => {
-      runQ(t); if (st.clientWidth !== lastKey) layout(); if (!started){ started = true; layout(); start(); }
+      runQ(t); if (size(st).cw !== lastKey) layout(); if (!started){ started = true; layout(); start(); }
       if (!rw0 || !rw1) layout();
       const p = clamp(pr.at(t)); run.style.width = px(lerp(rw0, rw1, p)); run.style.background = mix(p, 'var(--success-tint)', 'transparent'); run.style.color = mix(p, 'var(--success)', 'var(--muted)'); run.style.borderColor = mix(p, 'var(--success)', 'var(--muted)');
       fade(r0, 1 - clamp(p * 2), 0, false); fade(r1, clamp(p * 2 - 1), 0, false); r0.querySelector('i').style.opacity = (.35 + .65 * (.5 + .5 * Math.sin(Math.PI * 2 * t * .9))).toFixed(3);
       emp.style.opacity = clamp(emT.at(t)).toFixed(3);
       rows.forEach(r => {
-        const en = clamp(r.en.at(t)), v = clamp(r.vis.at(t)), ex = clamp(r.ex.at(t)), hh = r.head.offsetHeight, bh = r.inn.offsetHeight, m = en * v;
+        const en = clamp(r.en.at(t)), v = clamp(r.vis.at(t)), ex = clamp(r.ex.at(t)), hh = size(r.head).h, bh = size(r.inn).h, m = en * v;
         r.el.style.height = px(Math.max(0, (hh + bh * ex) * m)); r.el.style.opacity = clamp(m * 1.4).toFixed(3); r.el.style.visibility = m < .01 ? 'hidden' : 'visible';
         r.head.style.transform = `translateY(${px((1 - en) * 8)})`; r.cv.style.transform = `rotate(${(ex * 180).toFixed(1)}deg)`; r.bx.style.opacity = clamp(ex * 1.3).toFixed(3); r.bx.style.filter = ex < .98 ? `blur(${((1 - ex) * BLUR).toFixed(2)}px)` : 'none';
       });
@@ -839,9 +839,9 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
     const mT = new Track(0, S.base), sT = new Track(0), dh = new Track(40, S.soft), plate = edges(0, 0);
     let pins = [], cur = -1, open = false, started = false, W = 0, H = 0, SW = 400, SLW = 300, lastKey = '', lastBox = null, count = 0, narrow = false, dismissed = false;
     const anchorRaw = p => { const r = site.rect(p.f.k); return { x:clamp(r.x + r.w, 14, W - 14), y:r.y, r }; };
-    const layout = () => { W = ov.clientWidth; H = ov.clientHeight; if (!W) return; narrow = W < 480; root.dataset.n = st.clientWidth < 560 ? 1 : 0; SW = Math.min(W - 16, 440); SLW = W - 16; sn.style.width = px(SW); sl.style.width = px(SLW); lastKey = st.clientWidth + ':' + W + ':' + H; tickGeo(true); };
+    const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; narrow = W < 480; root.dataset.n = size(st).cw < 560 ? 1 : 0; SW = Math.min(W - 16, 440); SLW = W - 16; sn.style.width = px(SW); sl.style.width = px(SLW); lastKey = size(st).cw + ':' + W + ':' + H; tickGeo(true); };
     const tickGeo = inst => { if (cur < 0) return; const b = tks[cur], l = b.offsetLeft, r = l + b.offsetWidth; inst ? plate.jump(l, r) : plate.go(l, r); };
-    const sheetH = () => sl.offsetHeight;
+    const sheetH = () => size(sl).h;
     const fillDetail = (i, k) => { const q = QUEUE[i]; dps[k].textContent = q.text; };
     function go(i, inst){
       if (i < 0 || i >= QUEUE.length) return; const q = QUEUE[i], first = cur < 0; cur = i; const k = dsw.cur ^ 1; fillDetail(i, k); if (!first) dsw.to(k); else { dsw.cur = k; dsw.prev = null; dsw.t = -9; }
@@ -875,7 +875,7 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
     rp.onclick = start;
     layout();
     return t => {
-      run(t); if (st.clientWidth + ':' + ov.clientWidth + ':' + ov.clientHeight !== lastKey) layout(); if (!W) return;
+      run(t); if (size(st).cw + ':' + size(ov).cw + ':' + size(ov).ch !== lastKey) layout(); if (!W) return;
       if (!started){ started = true; start(); }
       site.draw(t);
       pins.forEach((p, i) => { const a = anchorRaw(p), vis = clamp(1 - Math.max(0, -a.y + 4, a.y - H + 4) / 14); p.draw(t, a.x, clamp(a.y, 14, H - 14), open && cur === i, vis * clamp(((open ? H - sheetH() - 10 : H) - a.y) / 14 + .5)); });
@@ -967,7 +967,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
     const sc = new Chip($(cc, '.hno-sc'), [{ ...CHIP_W }, { ...CHIP_S }, { ...CHIP_N }]), hd = $(cc, '.hno-hd'), q = $(cc, '.hno-q'), ow = $(cc, '.hno-ow'), oi = $(cc, '.hno-oi'), pl = $(cc, '.hno-pl'), os = $$(cc, '.hno-o'), sd = $(cc, '.hno-sd'), hn = $(cc, '.hno-fo .hn'), aw = $(cc, '.hno-aw'), ai = $(cc, '.hno-ai'), yc = $(cc, '.hno-yc'), at2 = $(cc, '.hno-at'), rn = $(cc, '.hno-rn'), ri = $(cc, '.hno-ri'), rls = $$(ri, 'span.l'), rdot = $(ri, '.hno-dot');
     const co = new Track(0), oxT = new Track(0), oyT = new Track(0), ans = new Track(0, S.base), ak = new Track(0, S.base), rt = new Track(0, S.base), sT = new Track(0, S.snap), po = new Track(0), rds = os.map(() => new Track(0, S.snap));
     let pin = null, sel = false, choice = -1, answered = false, started = false, W = 0, H = 0, CW = 320, narrow = false, lastKey = '', words = [], ts = 0, natO = 0, natA = 0;
-    const layout = () => { W = ov.clientWidth; H = ov.clientHeight; if (!W) return; narrow = W < 480; root.dataset.n = st.clientWidth < 560 ? 1 : 0; CW = Math.round(narrow ? W - 16 : clamp(W * .34, 300, 340)); ck.style.width = px(CW); cc.style.width = px(CW); lastKey = st.clientWidth + ':' + W + ':' + H; topChip.measure(); sc.measure(); };
+    const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; narrow = W < 480; root.dataset.n = size(st).cw < 560 ? 1 : 0; CW = Math.round(narrow ? W - 16 : clamp(W * .34, 300, 340)); ck.style.width = px(CW); cc.style.width = px(CW); lastKey = size(st).cw + ':' + W + ':' + H; topChip.measure(); sc.measure(); };
     const anchor = () => { const r = site.rect('plan'); return { x:clamp(r.x + r.w, 14, W - 14), y:clamp(r.y, 14, H - 14), r }; };
     const rowGeo = i => [os[i].offsetTop, os[i].offsetTop + os[i].offsetHeight];
     function choose(i){
@@ -995,7 +995,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && sel){ e.preventDefault(); close(true); } });
     layout();
     return t => {
-      run(t); if (st.clientWidth + ':' + ov.clientWidth + ':' + ov.clientHeight !== lastKey) layout(); if (!W) return;
+      run(t); if (size(st).cw + ':' + size(ov).cw + ':' + size(ov).ch !== lastKey) layout(); if (!W) return;
       if (!started){ started = true; start(); }
       site.draw(t); const a = anchor(); if (pin) pin.draw(t, a.x, a.y, sel);
       topChip.draw(t);
@@ -1004,7 +1004,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
         // option and answer blocks have animated heights; the card height follows
         if (!natO) natO = oi.offsetHeight; const an = clamp(ans.at(t)), akk = clamp(ak.at(t)), rr = clamp(rt.at(t));
         ow.style.height = an > .999 ? '0px' : px(natO * (1 - an)); ow.style.opacity = clamp(1 - an * 1.6).toFixed(3); aw.style.height = akk < .001 ? '0px' : px((natA || ai.offsetHeight) * akk); aw.style.opacity = clamp(akk * 1.4).toFixed(3); rn.style.height = px(34 * rr); rn.style.opacity = rr.toFixed(3);
-        const chh = cc.offsetHeight, s = ck.style, w = lerp(26, CW, o), h = lerp(26, chh, o);
+        const chh = size(cc).h, s = ck.style, w = lerp(26, CW, o), h = lerp(26, chh, o);
         const tx = narrow ? 8 : clamp(a.x + oxT.at(t), 8, Math.max(8, W - CW - 8)), ty = narrow ? H - chh - 8 : clamp(a.y + oyT.at(t), 8, Math.max(8, H - chh - 8));
         s.visibility = 'visible'; s.transform = `translate(${px(lerp(a.x - 13, tx, o))},${px(lerp(a.y - 13, ty, o))})`; s.width = px(w); s.height = px(h); s.borderRadius = px(lerp(8, 14, o)); s.background = mix(clamp(o * 1.5), 'var(--card)', 'var(--ink)'); s.pointerEvents = o > .5 ? 'auto' : 'none'; s.overflow = 'hidden'; s.zIndex = 30;
         const cin = clamp((o - .5) * 2); fade(cc, cin, (1 - cin) * 3);

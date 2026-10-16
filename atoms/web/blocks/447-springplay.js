@@ -12,7 +12,7 @@ atom({ id:'springplay', cat:'Foundations', name:'Spring playground', block:'spri
       ro.textContent = CF[i][0] + ' · ω' + CF[i][1].w + ' · ~' + CF[i][2] + 'ms' + (REDUCE ? ' · instant' : ''); };
     btns.forEach((b, i) => b.onclick = () => show(i));
     show(1);
-    const span = () => Math.max(1, strip.clientWidth - 48);
+    const span = () => Math.max(1, size(strip).cw - 48);
     const frac = x => clamp((x - 24) / span());
     drag(strip, {
       down: p => { on = true; const f = frac(p.x); play.jump(f); lanes.forEach(l => l.jump(f)); },
@@ -26,6 +26,6 @@ atom({ id:'springplay', cat:'Foundations', name:'Spring playground', block:'spri
       play.release(play.at(t0), 0, to, CF[pi][1], t0); lanes.forEach(l => l.release(l.at(t0), 0, to, undefined, t0)); };
     return t => { const W = span();
       dot.style.transform = `translateX(${px(clamp(play.at(t)) * W)})`;
-      dots.forEach((d, i) => { const w = Math.max(1, d.parentNode.clientWidth - 14);
+      dots.forEach((d, i) => { const w = Math.max(1, size(d.parentNode).cw - 14);
         d.style.transform = `translateX(${px(clamp(lanes[i].at(t)) * w)})`; }); };
   }});

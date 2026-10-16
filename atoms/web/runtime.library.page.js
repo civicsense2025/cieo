@@ -150,6 +150,8 @@ const agentRender = t => {
   // scroll-linked zoom: nearest-to-center tile owns the zoom, target follows scroll continuously
   for (const a of A) {
     if (!a.fx) continue;
+    // off-screen tiles can never be nearest the center; skipping them keeps this loop from measuring ~80 tiles per frame
+    if (!a.visible && a !== held) { a._d = 9; a.dismissed = false; continue; }
     const anchor = (a.ph || a.el).getBoundingClientRect();
     a._d = Math.abs(anchor.top + anchor.height / 2 - mid) / (vh * 0.5);
     if (a._d > 0.6) a.dismissed = false;
@@ -185,16 +187,18 @@ const agentRender = t => {
       }
     }
   }
-  scrim.style.opacity = peak.toFixed(3);
+  // writes are guarded: re-setting the hidden attribute every frame invalidates style even when nothing changed
   const show = peak > 0.01;
-  scrim.hidden = !show;
+  scrim.style.opacity = peak.toFixed(3);
+  if (scrim.hidden === show) scrim.hidden = !show;
   scrim.style.visibility = show ? 'visible' : 'hidden';
   scrim.style.pointerEvents = show ? 'auto' : 'none';
 };
 
 function frame(ms){
   const dt = Math.min(.05, (ms - clock.last)/1000); clock.last = ms; clock.t += dt*clock.scale; const t = clock.t;
-  famRender(t); spdRender(t); colRender(t); themeRender(t); twRender(t); agentRender(t);
+  // agentRender reads layout, so it runs before anything writes styles this frame (one layout per frame, not one per reader)
+  agentRender(t); famRender(t); spdRender(t); colRender(t); themeRender(t); twRender(t);
   for (const a of A) if (a.render && a.visible && !a.el.hidden) a.render(t);
   requestAnimationFrame(frame);
 }

@@ -161,15 +161,15 @@ atom({ id:'consent', cat:'Status and records', name:'Consent banner', block:'Con
     return t => {
       if (!started){ started = true; R.set(1, S.soft, t); }
       xDrain(q, t);
-      const W = st.clientWidth, Hh = st.clientHeight, ow = Math.min(W - 24, 640);
+      const W = size(st).cw, Hh = size(st).ch, ow = Math.min(W - 24, 640);
       if (ow !== lastOw){ lastOw = ow; ct.style.width = px(ow); ct.classList.toggle('cn-nr', ow < 460); }
       ct.style.maxHeight = px(Hh - 26);
       const e = clamp(E.at(t)), m = clamp(M.at(t)), co = clamp(CO.at(t)), r = clamp(R.at(t));
-      intro.style.height = px((1 - e)*introI.offsetHeight); fade(intro, 1 - e, null);
-      cats.style.height = px(e*cin.offsetHeight); fade(cats, e, null);
+      intro.style.height = px((1 - e)*size(introI).h); fade(intro, 1 - e, null);
+      cats.style.height = px(e*size(cin).h); fade(cats, e, null);
       tts.forEach((h, k) => tsw.apply(h, k, t)); midL.forEach((s, k) => msw.apply(s, k, t));
       SW.forEach((tr, i) => { const p = clamp(tr.at(t)); sws[i].style.background = mix(p, 'var(--accent)', 'var(--line)'); sws[i].firstChild.style.transform = `translateX(${px(p*14)})`; });
-      const oh = ct.offsetHeight, tabW = 148, tabH = 34, w = lerp(ow, tabW, m), h = lerp(oh, tabH, m);
+      const oh = size(ct).h, tabW = 148, tabH = 34, w = lerp(ow, tabW, m), h = lerp(oh, tabH, m);
       Object.assign(bx.style, { width:px(w), height:px(h), left:px(lerp((W - ow)/2, 12, m)), borderRadius:px(lerp(14, 17, m)), transform:`translateY(${px((1 - r)*(h + 26))})` });
       fade(ct, co, null); ct.style.visibility = co < .01 ? 'hidden' : 'visible'; ct.inert = state !== 'open';
       const to = clamp(TO.at(t)); fade(tab, to, null); tab.style.visibility = to < .01 ? 'hidden' : 'visible'; tab.inert = state !== 'tab';

@@ -21,7 +21,7 @@ atom({ id:'faqacc', cat:'Landing', name:'FAQ accordion', block:'Landing faq', fa
     const m = (location.hash || '').match(/#faq-(\d)/);
     if (m){ const k = +m[1]-1; if (rows[k]){ open = k; apply(true); } }
     return t => rows.forEach(r => { const p = clamp(r.h.at(t));
-      r.body.style.height = px(p*r.inner.offsetHeight);
+      r.body.style.height = px(p*size(r.inner).h);
       r.chev.style.transform = `rotate(${(p*180).toFixed(1)}deg)`;
       r.root.style.opacity = clamp(r.dim.at(t)).toFixed(3);
       fade(r.inner, p, (1-p)*-4); });

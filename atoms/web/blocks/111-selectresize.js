@@ -19,7 +19,8 @@ atom({ id:'selectresize', cat:'Design tools', name:'Select, move and snap', bloc
         else { let w = Math.max(40, s0.w + dx), h = Math.max(40, s0.h + dy); const cx2 = near(B.x.target + w, xs), cy2 = near(B.y.target + h, ys); if (cx2 !== null) w = cx2 - B.x.target; if (cy2 !== null) h = cy2 - B.y.target;
           B.w.set(w); B.h.set(h); ox.set(cx2 !== null ? 1 : 0); oy.set(cy2 !== null ? 1 : 0); if (cx2 !== null) gX = cx2; if (cy2 !== null) gY = cy2; } },
       up:() => { mode = null; ox.set(0); oy.set(0); } });
+    let dimTxt = '', dimW = 0;
     return t => { const x = B.x.at(t), y = B.y.at(t), w = B.w.at(t), h = B.h.at(t); Object.assign(sh.style, { left:px(x), top:px(y), width:px(w), height:px(h) });
       gx.style.left = px(gX); gx.style.opacity = clamp(ox.at(t)).toFixed(3); gy.style.top = px(gY); gy.style.opacity = clamp(oy.at(t)).toFixed(3);
-      dim.textContent = `${Math.round(B.w.target)} × ${Math.round(B.h.target)}`; dim.style.left = px(x + w/2 - dim.offsetWidth/2); dim.style.top = px(y + h + 8); };
+      const lbl = `${Math.round(B.w.target)} × ${Math.round(B.h.target)}`; if (lbl !== dimTxt){ dimTxt = lbl; dim.textContent = lbl; dimW = dim.offsetWidth; } dim.style.left = px(x + w/2 - dimW/2); dim.style.top = px(y + h + 8); };
   }});
