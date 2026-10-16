@@ -1,7 +1,7 @@
 // src/primitives/ToggleButton/ToggleButton.tsx
 'use client';
 /* ToggleButton. Two-state press button. Standalone it reports pressed via prop; inside ToggleButtonGroup it follows the group value by its value key. */
-import { useContext, type ReactNode } from 'react';
+import { useContext, useState, type ReactNode } from 'react';
 import { ToggleButtonGroupContext } from '../ToggleButtonGroup/ToggleButtonGroup.js';
 
 export interface ToggleButtonProps {
@@ -9,6 +9,8 @@ export interface ToggleButtonProps {
   label: string;
   /** Pressed state when used standalone. Defaults to false; inside a group the group value wins. */
   pressed?: boolean;
+  /** Initial pressed state when uncontrolled. Defaults to false. */
+  defaultPressed?: boolean;
   /** Group participation key. Only read inside ToggleButtonGroup; ignored standalone. */
   value?: string;
   /** Called with the next pressed state when used standalone. */
@@ -16,16 +18,19 @@ export interface ToggleButtonProps {
   children: ReactNode;
 }
 
-export function ToggleButton({ label, pressed = false, value, onPressedChange, children }: ToggleButtonProps) {
+export function ToggleButton({ label, pressed, defaultPressed = false, value, onPressedChange, children }: ToggleButtonProps) {
   const group = useContext(ToggleButtonGroupContext);
+  const [internal, setInternal] = useState(defaultPressed);
+  const own = pressed ?? internal;
   const inGroup = group !== null && value !== undefined;
-  const isPressed = inGroup ? group.value === value : pressed;
+  const isPressed = inGroup ? group.value === value : own;
   function handleClick() {
     if (inGroup) {
       group.onSelect?.(value as string);
       return;
     }
-    onPressedChange?.(!pressed);
+    if (pressed === undefined) setInternal(!own);
+    onPressedChange?.(!own);
   }
   return (
     <button type="button" aria-pressed={isPressed} aria-label={label} data-pressed={isPressed} onClick={handleClick} className="cieo cieo-toggle-button">

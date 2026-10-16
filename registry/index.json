@@ -1283,7 +1283,9 @@
       "registryDependencies": [
         "TabList"
       ],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "Table": {

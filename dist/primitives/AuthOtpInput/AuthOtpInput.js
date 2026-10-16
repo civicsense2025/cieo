@@ -4,6 +4,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useRef, useState } from 'react';
 export function AuthOtpInput({ id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }) {
     const [digits, setDigits] = useState(() => Array.from({ length }, () => ''));
+    if (digits.length !== length)
+        setDigits(Array.from({ length }, (_, i) => digits[i] ?? ''));
     const boxes = useRef([]);
     const describedBy = error ? `${id}-error` : undefined;
     const commit = (next) => {
@@ -41,5 +43,13 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
                     }, onKeyDown: e => {
                         if (e.key === 'Backspace' && !digits[i])
                             focusBox(i - 1);
+                        else if (e.key === 'ArrowLeft') {
+                            e.preventDefault();
+                            focusBox(i - 1);
+                        }
+                        else if (e.key === 'ArrowRight') {
+                            e.preventDefault();
+                            focusBox(i + 1);
+                        }
                     }, onPaste: e => { e.preventDefault(); onPasteText(e.clipboardData.getData('text'), i); } }, i))) }), error ? _jsx("span", { id: `${id}-error`, className: "cieo-auth-error", role: "alert", children: error }) : null] }));
 }

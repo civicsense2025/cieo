@@ -1,8 +1,8 @@
 // src/primitives/TabList/TabList.tsx
 'use client';
 /* TabList. Tab row owning the selected value (controlled or not). Exports TabContext for Tab and TabMenu. */
-import { createContext, useCallback, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { useEdges } from '../../react/index.js';
+import { createContext, useCallback, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { roveFocus, useEdges } from '../../react/index.js';
 
 export interface TabContextValue {
   value?: string;
@@ -31,6 +31,7 @@ export function TabList({ label, value, defaultValue, onValueChange, motion, chi
   const current = value ?? internal;
   const tabsRef = useRef(new Map<string, HTMLButtonElement>());
   const indicatorRef = useRef<HTMLSpanElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const [style, setStyle] = useState({ left: 0, width: 0 });
   function handleSelect(next: string) {
     if (value === undefined) setInternal(next);
@@ -56,7 +57,7 @@ export function TabList({ label, value, defaultValue, onValueChange, motion, chi
   }, [current]);
   useEdges(indicatorRef, current, { disabled: motion === false });
   return (
-    <div role="tablist" aria-label={label} className="cieo cieo-tab-list" data-motion={motion === false ? 'off' : undefined}>
+    <div ref={listRef} role="tablist" aria-label={label} onKeyDown={(e: KeyboardEvent) => { roveFocus(e, listRef.current, '[role="tab"]', { orientation: 'horizontal', activate: true }); }} className="cieo cieo-tab-list" data-motion={motion === false ? 'off' : undefined}>
       <TabContext.Provider value={{ value: current, onSelect: handleSelect, registerTab }}>
         {children}
       </TabContext.Provider>

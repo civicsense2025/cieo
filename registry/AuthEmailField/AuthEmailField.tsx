@@ -32,7 +32,7 @@ export function AuthEmailField({ id, label = 'Email', value, defaultValue, error
         autoComplete="email"
         inputMode="email"
         value={value}
-        defaultValue={defaultValue}
+        defaultValue={value === undefined ? defaultValue : undefined}
         disabled={disabled}
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={describedBy}

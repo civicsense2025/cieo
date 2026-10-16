@@ -1,7 +1,8 @@
 // src/primitives/TabMenu/TabMenu.tsx
 'use client';
 /* TabMenu. Menu-styled twin of TabList: same TabContext contract, vertical menu visuals. Host owns panels and persistence. */
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { roveFocus } from '../../react/index.js';
 import { TabContext } from '../TabList/TabList.js';
 
 export interface TabMenuProps {
@@ -18,13 +19,14 @@ export interface TabMenuProps {
 
 export function TabMenu({ label, value, defaultValue, onValueChange, children }: TabMenuProps) {
   const [internal, setInternal] = useState(defaultValue);
+  const listRef = useRef<HTMLDivElement>(null);
   const current = value ?? internal;
   function handleSelect(next: string) {
     if (value === undefined) setInternal(next);
     onValueChange?.(next);
   }
   return (
-    <div role="tablist" aria-label={label} data-variant="menu" className="cieo cieo-tab-menu">
+    <div ref={listRef} role="tablist" aria-label={label} data-variant="menu" onKeyDown={(e: KeyboardEvent) => { roveFocus(e, listRef.current, '[role="tab"]', { orientation: 'both', activate: true }); }} className="cieo cieo-tab-menu">
       <TabContext.Provider value={{ value: current, onSelect: handleSelect }}>
         {children}
       </TabContext.Provider>
