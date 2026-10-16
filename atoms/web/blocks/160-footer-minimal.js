@@ -47,7 +47,7 @@ const fx = (st, pal = PAL) => {
 const kit = (st, p, o = {}) => {
   const sc = $(st, '.' + p + 'sc'), ft = $(st, '.' + p + 'ft'), h1 = $(st, '.' + p + 'h1'), w = $(st, '.' + p + 'w');
   const sp = new Track(0, S.soft); let auto = false, goal = 0, done = null, touched = false, pinTo = 0;
-  const max = () => Math.max(0, sc.scrollHeight - size(sc).ch);
+  const max = () => Math.max(0, frameLayout(sc).sh - size(sc).ch);
   const stop = () => { auto = false; touched = true; pinTo = 0; };
   ['wheel', 'touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(e => sc.addEventListener(e, stop, { passive:true }));
   const go = (y, fn) => { sp.jump(sc.scrollTop).set(y); goal = y; auto = true; done = fn || null; };
@@ -65,9 +65,9 @@ const kit = (st, p, o = {}) => {
 // columns rise as the footer scrolls into view, 45ms apart, and reset when it leaves
 const reveal = (sc, els) => {
   const R = els.map((el, i) => ({ el, i, p:new Track(0, S.soft), on:false })); let first = true;
-  return () => { const base = sc.getBoundingClientRect().top, H = sc.clientHeight, t = now();
+  return () => { const base = frameLayout(sc).rect.top, H = frameLayout(sc).ch, t = now();
     for (const r of R){
-      const y = r.el.getBoundingClientRect().top - base, want = r.on ? y < H + 6 : y < H - 24;
+      const y = frameLayout(r.el).rect.top - base, want = r.on ? y < H + 6 : y < H - 24;
       if (first){ r.on = want; r.p.jump(want ? 1 : 0); }
       else if (want !== r.on){ r.on = want; r.p.set(want ? 1 : 0, want ? S.soft : S.snap, want ? t + r.i*.045 : t); }
       const o = clamp(r.p.at(t)); r.el.style.opacity = o.toFixed(3); r.el.style.transform = o > .999 ? 'none' : `translateY(${px((1 - o)*10)})`;

@@ -161,7 +161,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
         const p = clamp(r.ok.at(t)); r.btn.style.background = mix(p, 'var(--ink)', 'var(--card)'); r.btn.style.color = mix(p, 'var(--card)', 'var(--ink)'); r.btn.style.borderColor = mix(p, 'var(--ink)', 'var(--line)');
         const d = clamp(r.dim.at(t)); r.nm.style.color = mix(1 - d*.55, 'var(--ink)', 'var(--muted)'); r.ic.style.opacity = (1 - d*.45).toFixed(3);
       }
-      if (t < pin) list.scrollTop = list.scrollHeight;
+      if (t < pin) list.scrollTop = frameLayout(list).sh;
       const none = !rows.some(r => !r.dead); empty.hidden = !none;
       n1.render(t); n2.render(t);
     };

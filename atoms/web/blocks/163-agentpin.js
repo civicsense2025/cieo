@@ -105,7 +105,7 @@ const SITE = `<header class="§-nav"><b class="§-logo">Fieldnote</b><span>Produ
 const siteFrame = (p, url = 'localhost:3000/pricing') => `<div class="${p}-fr card"><div class="${p}-ub"><span class="${p}-url">${url}</span></div><div class="${p}-pg"><div class="${p}-ct">${SITE.replaceAll('§', p)}</div><div class="${p}-ov"></div></div></div>`;
 
 // element rect in the overlay's coordinates, read live so pins follow the page while it scrolls
-const liveRect = (ov, el) => { const r = el.getBoundingClientRect(), o = ov.getBoundingClientRect(); return { x:r.left - o.left, y:r.top - o.top, w:r.width, h:r.height }; };
+const liveRect = (ov, el) => { const r = frameLayout(el).rect, o = frameLayout(ov).rect; return { x:r.left - o.left, y:r.top - o.top, w:r.width, h:r.height }; };
 class Site {
   constructor(root, p){
     this.fr = $(root, '.' + p + '-fr'); this.pg = $(this.fr, '.' + p + '-pg'); this.ct = $(this.pg, '.' + p + '-ct'); this.ov = $(this.pg, '.' + p + '-ov');
@@ -113,7 +113,7 @@ class Site {
   }
   max(){ return Math.max(0, size(this.ct).h - size(this.pg).ch + this.cover); }
   // scroll that puts an element at about 40% of the visible page (cover = height hidden by a sheet at the bottom)
-  want(k){ const r = this.els[k].getBoundingClientRect(), c = this.ct.getBoundingClientRect(); return clamp(r.top - c.top + r.height / 2 - (this.pg.clientHeight - this.cover) * .4, 0, this.max()); }
+  want(k){ const r = frameLayout(this.els[k]).rect, c = frameLayout(this.ct).rect; return clamp(r.top - c.top + r.height / 2 - (size(this.pg).ch - this.cover) * .4, 0, this.max()); }
   go(k, inst){ const y = this.want(k), moved = Math.abs(y - this.sc.target) > 4; inst ? this.sc.jump(y) : this.sc.set(y); return moved; }
   draw(t){ this.ct.style.transform = `translateY(${px(-Math.min(this.sc.at(t), this.max()))})`; }
   rect(k){ return liveRect(this.ov, this.els[k]); }
@@ -472,7 +472,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
     const MAX = 6;
     const shot = it => { const w = it.w + 16, h = it.h + 16, ph = mk('div'); ph.className = 'evc-ph'; ph.style.width = px(w); ph.style.height = px(h); ph.setAttribute('inert', ''); const c = it.node.cloneNode(true); c.removeAttribute('data-k'); c.style.cssText = `position:absolute;left:8px;top:8px;margin:0;width:${px(it.w)};height:${px(it.h)}`; ph.append(c); return ph; };
     const fitInto = (ph, it, bw, bh, max = 9) => { const w = it.w + 16, h = it.h + 16, s = Math.min(bw / w, bh / h, max); ph.style.transform = `translate(${px((bw - w * s) / 2)},${px((bh - h * s) / 2)}) scale(${s.toFixed(4)})`; };
-    const toRoot = r => { const rr = root.getBoundingClientRect(); return { x:r.left - rr.left, y:r.top - rr.top, w:r.width, h:r.height }; };
+    const toRoot = r => { const rr = frameLayout(root).rect; return { x:r.left - rr.left, y:r.top - rr.top, w:r.width, h:r.height }; };
     const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; narrow = size(st).cw < 560; root.dataset.n = narrow ? 1 : 0; lastKey = size(st).cw + ':' + W + ':' + H;
       VW = Math.round(Math.min(st.clientWidth - 24 - 24, 560)); VH = Math.round(Math.min(st.clientHeight - 24 - 24, 400)); vc.style.width = px(VW); vc.style.height = px(VH); items.forEach(fit); };
     const fit = it => fitInto($(it.th, '.evc-ph'), it, it.th.clientWidth, it.th.clientHeight, 2);
@@ -483,7 +483,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
       it.btn.onclick = () => openViewer(it); instant ? it.ent.jump(1) : it.ent.set(1, S.base); items.unshift(it); label(); fit(it); return it;
     }
     const label = () => items.forEach((it, i) => it.btn.setAttribute('aria-label', `View screenshot ${items.length - i} of ${items.length}, ${it.spec.sel}`));
-    const nat = it => narrow ? it.btn.offsetWidth : it.btn.offsetHeight;
+    const nat = it => narrow ? frameLayout(it.btn).w : frameLayout(it.btn).h;
     const snap = k => { const el = site.els[k], n = el.cloneNode(true); return { node:n, w:el.offsetWidth, h:el.offsetHeight }; };
     function capture(spec){
       if (busy || items.length >= MAX) return; cur = spec; busy = true; capB.disabled = true; clear(); stw.to(0); stEls[1].innerHTML = `Framing <span class="evc-sel">${hx(spec.sel)}</span>`;
@@ -551,7 +551,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
       });
       // snapshot flight
       if (flyIt && fl.target === 1 && f < .999 && flyFrom){
-        const to = toRoot(flyIt.th.getBoundingClientRect()), q = f, ph = fly.firstChild, w = lerp(flyFrom.w, to.w, q), h = lerp(flyFrom.h, to.h, q);
+        const to = toRoot(frameLayout(flyIt.th).rect), q = f, ph = fly.firstChild, w = lerp(flyFrom.w, to.w, q), h = lerp(flyFrom.h, to.h, q);
         fly.style.visibility = 'visible'; fly.style.transform = `translate(${px(lerp(flyFrom.x, to.x, q))},${px(lerp(flyFrom.y, to.y, q))})`; fly.style.width = px(w); fly.style.height = px(h); fly.style.opacity = (f > .9 ? clamp(1 - (f - .9) * 10) : 1).toFixed(3);
         fitInto(ph, flyIt, w - 2, h - 2, 2);
       } else { fly.style.visibility = 'hidden'; if (f >= .999 && flyIt) flyIt = null; }

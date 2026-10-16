@@ -158,7 +158,7 @@ const gPage = (root, k) => {
   const pins = {}; let scale = 1, flashT = -9, flashV = null, frameH = 0, curView = 'pricing';
   const spot = n => n === 'url' ? urlEl : n === 'page' ? vp : $(fr, `[data-s="${n}"]`);
   const o = { fr, ov, vp, bnw, bar:barEl, get scale(){ return scale; }, get view(){ return curView; },
-    rect(n){ const el = spot(n); if (!el) return { x:0, y:0, w:0, h:0 }; const r = el.getBoundingClientRect(), f = fr.getBoundingClientRect(); return { x:r.left - f.left - fr.clientLeft, y:r.top - f.top - fr.clientTop, w:r.width, h:r.height }; },
+    rect(n){ const el = spot(n); if (!el) return { x:0, y:0, w:0, h:0 }; const r = frameLayout(el).rect, f = frameLayout(fr).rect; return { x:r.left - f.left - frameLayout(fr).cl, y:r.top - f.top - frameLayout(fr).ct, w:r.width, h:r.height }; },
     center(n){ const r = o.rect(n); return { x:r.x + r.w*.5, y:r.y + r.h*.5 }; },
     view(v, inst){ curView = v; if (inst){ sw.cur = v; sw.prev = null; sw.t = -9; } else sw.to(v); },
     url(path, inst){ up.put(path, inst); },
@@ -734,7 +734,7 @@ ${gPageCSS('aip')}
       pp.setAttribute('aria-labelledby', 'aia-ttl'); };
     const result = (d) => { const c = SC[sc], r = c.done[d], bad = d === 'deny', warn = d !== 'deny' && c.risky;
       resL.innerHTML = `<div class="aia-rs"><span class="aia-hi" style="background:${bad ? 'var(--raised)' : warn ? 'var(--danger-tint)' : 'var(--success-tint)'};color:${bad ? 'var(--muted)' : warn ? 'var(--danger)' : 'var(--success)'}">${gi(bad ? 'x' : 'check', 15, 2.6)}</span><div><b>${r[0]}</b><span class="aia-rd">${r[1]}</span></div></div>`; };
-    const place = () => { const rr = root.getBoundingClientRect(), fr = pg.fr.getBoundingClientRect(), a = pg.rect(SC[sc].spot); const ax = fr.left - rr.left + pg.fr.clientLeft + a.x, ay = fr.top - rr.top + pg.fr.clientTop + a.y;
+    const place = () => { const rr = frameLayout(root).rect, fr = frameLayout(pg.fr).rect, a = pg.rect(SC[sc].spot); const ax = fr.left - rr.left + frameLayout(pg.fr).cl + a.x, ay = fr.top - rr.top + frameLayout(pg.fr).ct + a.y;
       const W = Math.min(340, size(root).cw - 24), H = size(pp).h, x = clamp(ax + a.w/2 - W/2, 12, size(root).cw - W - 12);
       if (phase === 'ask' && side === 'x') side = 'above';
       const above = side === 'above'; let y = above ? ay - H - 14 : ay + a.h + 14;
@@ -886,7 +886,7 @@ ${gPageCSS('rpg')}
       pg.render(t); apply(ph, t);
       const ci = curIdx(ph);
       if (ci !== curI){ curI = ci; rows.forEach((r, i) => { r.cw.set(i === ci ? 1 : 0, S.base); r.pw.set(i <= ci ? 1 : 0, S.base); });
-        if (!hover && ci >= 0){ const r = rows[ci].li; scT.set(clamp(r.offsetTop - (ls.clientHeight - r.offsetHeight)/2, 0, Math.max(0, ls.scrollHeight - ls.clientHeight))); } else if (!hover) scT.set(0);
+        if (!hover && ci >= 0){ const r = rows[ci].li; scT.set(clamp(frameLayout(r).ot - (frameLayout(ls).ch - frameLayout(r).h)/2, 0, Math.max(0, frameLayout(ls).sh - frameLayout(ls).ch))); } else if (!hover) scT.set(0);
         sb.setAttribute('aria-valuetext', `${gfmt(ph)} of ${gfmt(END)}${ci >= 0 ? ', ' + E[ci].t : ''}`); if (playing) say(ci >= 0 ? E[ci].t : ''); }
       if (!hover) ls.scrollTop = scT.at(t);
       const c = cursorAt(ph); if (c){ ag.go(c.x, c.y, true); ag.show(true, true); } else ag.show(false, true);

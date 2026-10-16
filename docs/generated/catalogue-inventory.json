@@ -72,7 +72,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -147,7 +147,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -322,7 +322,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -397,7 +397,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -422,7 +422,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -497,7 +497,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -522,7 +522,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -547,7 +547,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -597,7 +597,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -622,7 +622,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -647,7 +647,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -747,7 +747,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -797,7 +797,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -2500,7 +2500,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -2825,7 +2825,7 @@
           "symbol": null,
           "category": "Workspace",
           "path": "atoms/web/blocks/149-dashboard.js",
-          "sha256": "da4f0a784c7bbdbe7ee97f8cdd566b1b401b5ab9c523d3c2b15f70e3b687a524",
+          "sha256": "8c061b85953ab4ca8d9d7b0bb13cae00588692e6b0a6836d896180128830a139",
           "artifactKind": "recipe"
         }
       ]
@@ -2975,7 +2975,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -3075,7 +3075,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -3175,7 +3175,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -3675,7 +3675,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -4225,7 +4225,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -4250,7 +4250,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4275,7 +4275,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4300,7 +4300,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4325,7 +4325,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4350,7 +4350,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4375,7 +4375,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4400,7 +4400,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4425,7 +4425,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/160-footer-minimal.js",
-          "sha256": "debb4c82a9e8b75f08c8ac80490c23f57e82390f9285af398a1da7dcdcc53586",
+          "sha256": "b36b51893eab6d30fbf29154538b153e9cd82403b780b07fa26b925363a5320b",
           "artifactKind": "recipe"
         }
       ]
@@ -4500,7 +4500,7 @@
           "symbol": null,
           "category": "Workspace",
           "path": "atoms/web/blocks/156-funnel.js",
-          "sha256": "65a2ed1eaf1fbc31c1123322a349aff1258df0568e9763131a1e5b4a96473e63",
+          "sha256": "e7c9aee6319c3dc9d3123c1b3ddb20e472f78ee78092dd4e8a49dcd503341aa3",
           "artifactKind": "recipe"
         }
       ]
@@ -4825,7 +4825,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -4850,7 +4850,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -4875,7 +4875,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -4900,7 +4900,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -4925,7 +4925,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -4950,7 +4950,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -4975,7 +4975,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -5000,7 +5000,7 @@
           "symbol": null,
           "category": "Footers",
           "path": "atoms/web/blocks/161-fz1-wordmark.js",
-          "sha256": "09633214acc62ca67808a03b5286f3bb8e9834ce663006f02e1b296f21b99438",
+          "sha256": "e502a7b3a3de013975f2b058a23c7742c89b03ef0225c551058f7afa9cf2c5e7",
           "artifactKind": "recipe"
         }
       ]
@@ -5400,7 +5400,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -5450,7 +5450,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5475,7 +5475,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5500,7 +5500,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5525,7 +5525,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5550,7 +5550,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5575,7 +5575,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5600,7 +5600,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5625,7 +5625,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5650,7 +5650,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5675,7 +5675,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5700,7 +5700,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -5725,7 +5725,7 @@
           "symbol": null,
           "category": "Headers",
           "path": "atoms/web/blocks/159-header-spread.js",
-          "sha256": "9427c4705f33eea96d1f060f3dd8dfd5de241a6120555ab45e0549a739b2d0dd",
+          "sha256": "d9f28393c6f6b716bf9285ce2d134b7838aed305b5f551c1110e12eceb668e68",
           "artifactKind": "recipe"
         }
       ]
@@ -6150,7 +6150,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -7500,7 +7500,7 @@
           "symbol": null,
           "category": "Workspace",
           "path": "atoms/web/blocks/149-dashboard.js",
-          "sha256": "da4f0a784c7bbdbe7ee97f8cdd566b1b401b5ab9c523d3c2b15f70e3b687a524",
+          "sha256": "8c061b85953ab4ca8d9d7b0bb13cae00588692e6b0a6836d896180128830a139",
           "artifactKind": "recipe"
         }
       ]
@@ -7600,7 +7600,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -7725,7 +7725,7 @@
           "symbol": null,
           "category": "Workspace",
           "path": "atoms/web/blocks/149-dashboard.js",
-          "sha256": "da4f0a784c7bbdbe7ee97f8cdd566b1b401b5ab9c523d3c2b15f70e3b687a524",
+          "sha256": "8c061b85953ab4ca8d9d7b0bb13cae00588692e6b0a6836d896180128830a139",
           "artifactKind": "recipe"
         }
       ]
@@ -7800,7 +7800,7 @@
           "symbol": null,
           "category": "Editor",
           "path": "atoms/web/blocks/145-pageeditor.js",
-          "sha256": "505eef6eae504fa6d0d28b7f607fc9d3666e6c2c04ce7c4a9e6464849990a8e1",
+          "sha256": "17dfe90f58d1c232f48b86cd2b94ae2554cdc53d8a3b77e86c6bb0ead9c96012",
           "artifactKind": "recipe"
         }
       ]
@@ -8225,7 +8225,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -8525,7 +8525,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -9550,7 +9550,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -9675,7 +9675,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -9775,7 +9775,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -9875,7 +9875,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -10050,7 +10050,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -10125,7 +10125,7 @@
           "symbol": null,
           "category": "Workspace",
           "path": "atoms/web/blocks/156-funnel.js",
-          "sha256": "65a2ed1eaf1fbc31c1123322a349aff1258df0568e9763131a1e5b4a96473e63",
+          "sha256": "e7c9aee6319c3dc9d3123c1b3ddb20e472f78ee78092dd4e8a49dcd503341aa3",
           "artifactKind": "recipe"
         }
       ]
@@ -10432,7 +10432,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -10582,7 +10582,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/162-agentcursor.js",
-          "sha256": "7bf7aef4d5300a80bdcc01885c8b6df3ab7c6c35c1f11753b69f99b10e368449",
+          "sha256": "c92564dafe47f8fd787f85fbe145d4221e47d3cbda3038f5cb9b33a24f95d5b5",
           "artifactKind": "recipe"
         }
       ]
@@ -11232,7 +11232,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -11607,7 +11607,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/163-agentpin.js",
-          "sha256": "68b7bb8ab9f34cbe2b9eed8bc1ca5b6e13f9f8f51c6d4d98c241947e89ee5e50",
+          "sha256": "f9707db7435a1a26bf38f6c535e9d6dfe9b3e312fa4a12c3a30810f26d4fa293",
           "artifactKind": "recipe"
         }
       ]
@@ -11957,7 +11957,7 @@
           "symbol": null,
           "category": "Agent activity",
           "path": "atoms/web/blocks/164-agentstatus.js",
-          "sha256": "fb80bcd6dbd32ba4f02e458d98b0f546e3479c74ca3edb3acb0feff6e42a99c6",
+          "sha256": "6f0e9c697f25dd1d3d4f583b4b10ae159d2b9aded34db0dbc4249eaa79d954fd",
           "artifactKind": "recipe"
         }
       ]
@@ -12107,7 +12107,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -12232,7 +12232,7 @@
           "symbol": null,
           "category": "Admin kit",
           "path": "atoms/web/blocks/151-sidesheet.js",
-          "sha256": "c9886759ba81bee4eb7a24488fe0f81cf2c91cdb9e5d9391384ea05b4db1dcb4",
+          "sha256": "f4decfd089bebfa4d9f3052298198e10ef2ca2377426bd4043c293ee8fe70f8b",
           "artifactKind": "recipe"
         }
       ]
@@ -12407,7 +12407,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -12432,7 +12432,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]
@@ -12482,7 +12482,7 @@
           "symbol": null,
           "category": "MCP and agents",
           "path": "atoms/web/blocks/157-connectorlist.js",
-          "sha256": "4426ad0a5d52da8d87bb18ecc03426a0716427ac52286a03e0b0c5531ad418f9",
+          "sha256": "7d1553aa0710000952c5648325b6fc467ee1721d23bc40d5eb1bd60fc84c9a8c",
           "artifactKind": "recipe"
         }
       ]

@@ -105,6 +105,18 @@ function reflow(...els){ const s = { v:0 }, ro = new ResizeObserver(() => { s.v+
 // Scroll position and range of a scroll container, kept current by events and observers instead of read each frame.
 function scrollState(el){ const s = { top:el.scrollTop, max:0 }, upd = () => { s.max = Math.max(0, el.scrollHeight - el.clientHeight); };
   const ro = new ResizeObserver(upd); ro.observe(el); [...el.children].forEach(c => ro.observe(c)); el.addEventListener('scroll', () => { s.top = el.scrollTop; }, { passive:true }); upd(); return s; }
+// Layout reads for frame loops. Layout is clean at the start of an animation frame, so values are read there, in one batch, for every
+// element a frame asked about recently; frameLayout(el) then hands back that snapshot (at most one frame old) instead of forcing a layout
+// mid-frame after styles were written. An element seen for the first time is read live once. Event handlers and one-off measurements
+// that must see a just-changed DOM should keep reading the element directly.
+const FRAME_LAYOUT = { epoch:0, map:new Map() };
+const snapRead = (el, epoch) => { const r = el.getBoundingClientRect();
+  return { epoch, used:epoch, rect:{ left:r.left, top:r.top, right:r.right, bottom:r.bottom, width:r.width, height:r.height },
+    ol:el.offsetLeft, ot:el.offsetTop, w:el.offsetWidth, h:el.offsetHeight, cw:el.clientWidth, ch:el.clientHeight, cl:el.clientLeft, ct:el.clientTop,
+    sw:el.scrollWidth, sh:el.scrollHeight, sl:el.scrollLeft, st:el.scrollTop }; };
+function frameLayout(el){ let s = FRAME_LAYOUT.map.get(el); if (!s || s.epoch !== FRAME_LAYOUT.epoch) s = snapRead(el, FRAME_LAYOUT.epoch); s.used = FRAME_LAYOUT.epoch; FRAME_LAYOUT.map.set(el, s); return s; }
+(function layTick(){ requestAnimationFrame(layTick); FRAME_LAYOUT.epoch++;
+  for (const [el, s] of FRAME_LAYOUT.map){ if (FRAME_LAYOUT.epoch - s.used > 4) FRAME_LAYOUT.map.delete(el); else if (s.epoch !== FRAME_LAYOUT.epoch){ const f = snapRead(el, FRAME_LAYOUT.epoch); f.used = s.used; FRAME_LAYOUT.map.set(el, f); } } })();
 const money = v => '$' + v.toFixed(2);
 // measure an element's natural width by rendering a hidden clone
 function measureW(el, text){

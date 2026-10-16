@@ -260,6 +260,18 @@ function reflow(...els){ const s = { v:0 }, ro = new ResizeObserver(() => { s.v+
 // Scroll position and range of a scroll container, kept current by events and observers instead of read each frame.
 function scrollState(el){ const s = { top:el.scrollTop, max:0 }, upd = () => { s.max = Math.max(0, el.scrollHeight - el.clientHeight); };
   const ro = new ResizeObserver(upd); ro.observe(el); [...el.children].forEach(c => ro.observe(c)); el.addEventListener('scroll', () => { s.top = el.scrollTop; }, { passive:true }); upd(); return s; }
+// Layout reads for frame loops. Layout is clean at the start of an animation frame, so values are read there, in one batch, for every
+// element a frame asked about recently; frameLayout(el) then hands back that snapshot (at most one frame old) instead of forcing a layout
+// mid-frame after styles were written. An element seen for the first time is read live once. Event handlers and one-off measurements
+// that must see a just-changed DOM should keep reading the element directly.
+const FRAME_LAYOUT = { epoch:0, map:new Map() };
+const snapRead = (el, epoch) => { const r = el.getBoundingClientRect();
+  return { epoch, used:epoch, rect:{ left:r.left, top:r.top, right:r.right, bottom:r.bottom, width:r.width, height:r.height },
+    ol:el.offsetLeft, ot:el.offsetTop, w:el.offsetWidth, h:el.offsetHeight, cw:el.clientWidth, ch:el.clientHeight, cl:el.clientLeft, ct:el.clientTop,
+    sw:el.scrollWidth, sh:el.scrollHeight, sl:el.scrollLeft, st:el.scrollTop }; };
+function frameLayout(el){ let s = FRAME_LAYOUT.map.get(el); if (!s || s.epoch !== FRAME_LAYOUT.epoch) s = snapRead(el, FRAME_LAYOUT.epoch); s.used = FRAME_LAYOUT.epoch; FRAME_LAYOUT.map.set(el, s); return s; }
+(function layTick(){ requestAnimationFrame(layTick); FRAME_LAYOUT.epoch++;
+  for (const [el, s] of FRAME_LAYOUT.map){ if (FRAME_LAYOUT.epoch - s.used > 4) FRAME_LAYOUT.map.delete(el); else if (s.epoch !== FRAME_LAYOUT.epoch){ const f = snapRead(el, FRAME_LAYOUT.epoch); f.used = s.used; FRAME_LAYOUT.map.set(el, f); } } })();
 const money = v => '$' + v.toFixed(2);
 // measure an element's natural width by rendering a hidden clone
 function measureW(el, text){
@@ -2332,7 +2344,7 @@ atom({ id:'range', cat:'Forms', name:'Range slider', block:'collection-browser (
   }});
 
 /* ---------- Jobs: writing, designing, email ---------- */
-const relRect = (st, r) => { const s = st.getBoundingClientRect(); return { x:r.left - s.left, y:r.top - s.top, w:r.width, h:r.height }; };
+const relRect = (st, r) => { const s = frameLayout(st).rect; return { x:r.left - s.left, y:r.top - s.top, w:r.width, h:r.height }; };
 const wordSpans = (el, text) => { el.innerHTML = text.split(' ').map(w => `<span>${w}</span>`).join(' '); return $$(el,'span'); };
 
 atom({ id:'seltoolbar', cat:'Writing', name:'Selection toolbar', block:'richtext editor', fam:['X','M'],
@@ -3347,7 +3359,7 @@ atom({ id:'pageeditor', cat:'Editor', name:'Page editor', block:'section, headin
     const R = [0,1,2,3].map(() => new Track(0)), ringO = new Track(0), plO = new Track(0), inspO = new Track(0), pEd = edges(0,0), sw = new Swap(0), sc = new Track(0, S.soft);
     // block rects are cached until a block or the canvas reflows, so the ring following a block costs no layout read per frame
     const rfl = reflow(cv, bks), rc = [];
-    const rectOf = k => { if (rc[k] && rc[k].v === rfl.v) return rc[k].r; const b = bks[k], r = [b.offsetLeft - 3, b.offsetTop - 3, b.offsetWidth + 6, b.offsetHeight + 6]; rc[k] = { v:rfl.v, r }; return r; };
+    const rectOf = k => { if (rc[k] && rc[k].v === rfl.v) return rc[k].r; const b = bks[k], r = [frameLayout(b).ol - 3, frameLayout(b).ot - 3, frameLayout(b).w + 6, frameLayout(b).h + 6]; rc[k] = { v:rfl.v, r }; return r; };
     const geo = k => { const r = rows[k]; return narrow ? [r.offsetLeft, r.offsetLeft + r.offsetWidth] : [r.offsetTop, r.offsetTop + r.offsetHeight]; };
     const replate = () => { Object.assign(pl.style, narrow ? { left:'0', right:'auto', top:'0', bottom:'0', width:'0', height:'auto' } : { left:'0', right:'0', top:'0', bottom:'auto', width:'auto', height:'0' }); const [a,b] = geo(lastK); pEd.jump(a, b); };
     const reveal = k => { const b = bks[k], vh = cv.clientHeight - (narrow ? SH : 0), cur = cv.scrollTop, top = b.offsetTop - 8, bot = b.offsetTop + b.offsetHeight + 8; let dest = cur;
@@ -4342,7 +4354,7 @@ ${SRCSS}
         f:new Track(0), c:new Track(0), s:new Track(0), open:new Track(0) }; });
     const setOpen = (r, v, t = now()) => { r.open.set(v ? 1 : 0, S.base, t); r.th.setAttribute('aria-expanded', !!v); };
     $(st,'.dt-on').onchange = ev => tl.toggleAttribute('data-nd', !ev.target.checked);
-    const nat = k => Math.min(LY[k].scrollHeight, st.clientHeight - (st.clientWidth < 520 ? 44 : 14) - 10);
+    const nat = k => Math.min(frameLayout(LY[k]).sh, frameLayout(st).ch - (frameLayout(st).cw < 520 ? 44 : 14) - 10);
     const showHeight = (k, t0) => H.set(nat(k), S.base, t0 + EXIT);
     const toState = (k, t0) => { sw.to(k, t0); showHeight(k, t0); steadyAt = t0 + EXIT + .55; };
     const refocus = (el, d) => setTimeout(() => { if (card.contains(document.activeElement) || document.activeElement === document.body) el.focus(); }, d);
@@ -4369,7 +4381,7 @@ ${SRCSS}
       const steady = t > steadyAt, narrow = size(st).cw < 520, top = narrow ? 44 : 14;
       let hh; if (steady){ hh = nat(sw.cur); H.jump(hh); } else hh = H.at(t);
       card.style.height = px(Math.max(0, hh)); card.style.transform = `translate(-50%,${px(top)})`; card.style.pointerEvents = steady ? '' : 'none';
-      LY.c.style.maxHeight = steady ? px(hh) : 'none'; LY.c.style.overflowY = steady && LY.c.scrollHeight > hh + 1 ? 'auto' : 'hidden';
+      LY.c.style.maxHeight = steady ? px(hh) : 'none'; LY.c.style.overflowY = steady && frameLayout(LY.c).sh > hh + 1 ? 'auto' : 'hidden';
       const amp = sw.cur === 'd' || sw.prev === 'd' ? 14 : 5; Object.keys(LY).forEach(k => sw.apply(LY[k], k, t, amp));
       const p = clamp(ring.at(t)), fin = clamp((p - .75)*4);
       pr.setAttribute('stroke-dasharray', `${(p*100).toFixed(2)} 100`); pr.style.stroke = mix(fin,'var(--success)','var(--ink)'); dn.render(t);
@@ -4880,7 +4892,7 @@ atom({ id:'scrollfade', cat:CAT, name:'Scroll-fade row', block:'ScrollFadeRow', 
     sb.forEach((b, i) => b.onclick = () => { many = i === 1; place(false); chips.forEach((c, k) => c.vis.set(many || k < 4 ? 1 : 0, S.base, now() + (many ? Math.max(0, k - 4) : Math.max(0, 10 - k))*.03)); });
     document.fonts.ready.then(() => place(true)); place(true);
     return t => {
-      const scr = row.scrollWidth > size(row).cw + 1, s = scr && row.scrollLeft > 0, en = scr && row.scrollLeft + size(row).cw < row.scrollWidth - 1;
+      const scr = frameLayout(row).sw > size(row).cw + 1, s = scr && frameLayout(row).sl > 0, en = scr && frameLayout(row).sl + size(row).cw < frameLayout(row).sw - 1;
       if (s !== ws){ ws = s; fs.set(s ? 28 : 0); row.toggleAttribute('data-fade-start', s); }
       if (en !== we){ we = en; fe.set(en ? 28 : 0); row.toggleAttribute('data-fade-end', en); }
       if (auto){ row.scrollLeft = sc.at(t); if (Math.abs(sc.at(t) - tgt) < .5 && Math.abs(row.scrollLeft - tgt) < 1) auto = false; }
@@ -7393,8 +7405,8 @@ atom({ id:'funnel', cat:'Workspace', name:'Funnel report', block:'FunnelReportSc
       chipD.forEach((d, j) => d.set(i < 0 || i === j || i === j - 1 ? 1 : .4, S.snap, t0));
     };
     const tipPos = (i, t = now()) => {
-      const li = lis[i], ah = ba.clientHeight, ty = ol.offsetTop + 66, bh = clamp(frac[i].at(t))*ah;
-      const x = clamp(ol.offsetLeft + li.offsetLeft + li.offsetWidth/2 - tip.offsetWidth/2, 8, Math.max(8, fn.clientWidth - tip.offsetWidth - 8));
+      const li = lis[i], ah = frameLayout(ba).ch, ty = frameLayout(ol).ot + 66, bh = clamp(frac[i].at(t))*ah;
+      const x = clamp(frameLayout(ol).ol + frameLayout(li).ol + frameLayout(li).w/2 - frameLayout(tip).w/2, 8, Math.max(8, frameLayout(fn).cw - frameLayout(tip).w - 8));
       const y = Math.max(ty + 2, ty + ah - bh - size(tip).h - 6);
       return [x, y];
     };
@@ -7766,7 +7778,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
         const p = clamp(r.ok.at(t)); r.btn.style.background = mix(p, 'var(--ink)', 'var(--card)'); r.btn.style.color = mix(p, 'var(--card)', 'var(--ink)'); r.btn.style.borderColor = mix(p, 'var(--ink)', 'var(--line)');
         const d = clamp(r.dim.at(t)); r.nm.style.color = mix(1 - d*.55, 'var(--ink)', 'var(--muted)'); r.ic.style.opacity = (1 - d*.45).toFixed(3);
       }
-      if (t < pin) list.scrollTop = list.scrollHeight;
+      if (t < pin) list.scrollTop = frameLayout(list).sh;
       const none = !rows.some(r => !r.dead); empty.hidden = !none;
       n1.render(t); n2.render(t);
     };
@@ -9923,7 +9935,7 @@ function kit(st, o = {}){
   const ctas = [], hovers = [], acts = [], avs = [], panels = [], foots = [], segs = {}, extra = [];
   K.sc = new Track(0, S.snap); K.au = au;
   pg.addEventListener('scroll', () => { const y = pg.scrollTop; if (y > 12) K.sc.set(1); else if (y < 4) K.sc.set(0); });
-  K.below = el => el.getBoundingClientRect().bottom - fr.getBoundingClientRect().top - fr.clientTop;
+  K.below = el => frameLayout(el).rect.bottom - frameLayout(fr).rect.top - frameLayout(fr).ct;
   K.watch = (el, fn) => { new ResizeObserver(fn).observe(el); document.fonts.ready.then(fn); };
 
   // hover / focus colour as a spring instead of a CSS state
@@ -10321,7 +10333,7 @@ atom({ id:'header-pill', cat:'Headers', name:'Header: floating pill with plate',
       pp.style.visibility = p > .01 || open ? 'visible' : 'hidden'; pp.style.opacity = p.toFixed(3); K.burgerDraw(bg, p); L.draw(t);
       const a = e.A.at(t), b = e.B.at(t); pt.style.transform = `translateX(${px(a)})`; pt.style.width = px(b - a);
       // 2px ink underline stays under the current page's link, not the hovered one
-      const cl = links[cur].a; ul.style.transform = `translate(${px(cl.offsetLeft + 10)},34px)`; ul.style.width = px(cl.offsetWidth - 20);
+      const cl = links[cur].a; ul.style.transform = `translate(${px(frameLayout(cl).ol + 10)},34px)`; ul.style.width = px(frameLayout(cl).w - 20);
       K.draw(t); };
     function fr(s){ return size($(s,'.hx-fr')).cw - (K._s || 0); }
   }});
@@ -10447,17 +10459,18 @@ atom({ id:'header-search', cat:'Headers', name:'Header: search expands in place'
     K.onNarrow.push(() => { if (open) setOpen(false); });
     filter(); rows.forEach(r => { r.h.jump(r.h.target); r.o.jump(0); }); ph.jump(0); emo.jump(0);
     K.panel({ id:'hd10-menu', mode:'drop', burger:bg, top:() => K.below(hd), links:MLINKS });
-    let lwNat = 0;
+    let lwNat = 0, wasN = true, lastLwW = -1;
     return t => {
       const n = K.narrow, o = n ? clamp(nar.at(t)) : 0, io = clamp(sio.at(t));
-      if (!lwNat || !n){ lw.style.width = 'auto'; lwNat = lw.scrollWidth; }
+      // natural width is re-measured only when the bar becomes wide or its width changes, not every frame
+      const lwW = size(lw).w; if (!lwNat || (!n && (wasN || lwW !== lastLwW))){ lw.style.width = 'auto'; lwNat = lw.scrollWidth; lastLwW = lwW; } wasN = n;
       lw.style.width = n ? px((1 - o)*lwNat) : 'auto'; lw.style.opacity = (1 - o).toFixed(3);
       K.accFold = o; bg.style.width = px(36*(1 - o)); bg.style.opacity = (1 - o).toFixed(3); ac.style.opacity = (1 - o).toFixed(3);
       if (n){ sx.style.flex = `${o.toFixed(4)} 0 36px`; sx.style.width = ''; cn.style.display = 'block'; cn.style.width = px(CN*o); cn.style.opacity = o.toFixed(3); }
       else { sx.style.flex = '0 0 auto'; sx.style.width = px(sxw.at(t)); cn.style.display = 'none'; }
       fade(inp, io, null); inp.style.visibility = io < .01 && !open ? 'hidden' : 'visible'; kb.style.opacity = (io*(inp.value ? 0 : 1)).toFixed(3);
       const fits = size(nv).cw >= size(g).w - 1; lv.set(fits ? 1 : 0, S.base); const lo = clamp(lv.at(t)); g.style.opacity = lo.toFixed(3); g.style.filter = lo < .98 ? `blur(${((1 - lo)*BLUR).toFixed(2)}px)` : 'none'; g.style.visibility = lo < .01 ? 'hidden' : 'visible'; sl();
-      const p = clamp(ro.at(t)), r = relRect(fr, sx.getBoundingClientRect()), FW = size(fr).cw - (K._s || 0), rw = n ? FW - 24 : 360, rx = n ? 12 : clamp(r.x + r.w - 360, 12, FW - 360 - 12);
+      const p = clamp(ro.at(t)), r = relRect(fr, frameLayout(sx).rect), FW = size(fr).cw - (K._s || 0), rw = n ? FW - 24 : 360, rx = n ? 12 : clamp(r.x + r.w - 360, 12, FW - 360 - 12);
       rs.style.left = px(rx); rs.style.width = px(rw); rs.style.top = px(r.y + r.h + 8); rs.style.height = px(Math.max(0, ph.at(t))); rs.style.transformOrigin = '100% 0'; pop(rs, p, -6); rs.style.visibility = p < .01 ? 'hidden' : 'visible';
       rows.forEach(x => { x.b.style.height = px(Math.max(0, x.h.at(t))); x.b.style.opacity = clamp(x.o.at(t)).toFixed(3); });
       const eo = clamp(emo.at(t)); em.style.opacity = eo.toFixed(3); em.style.height = px(eo*44);
@@ -10543,7 +10556,7 @@ atom({ id:'header-minimal', cat:'Headers', name:'Header: minimal with fullscreen
     K.escs.push(() => { if (!open) return false; set(false, false, true); return true; });
     K.onNarrow.push(() => { if (open) set(false, true); });
     return t => { const p = clamp(mo.at(t)); bd.style.opacity = clamp(K.sc.at(t)).toFixed(3) * (1 - p);
-      const W = size(fr).cw, H = size(fr).ch, br = mb.getBoundingClientRect(), fb = fr.getBoundingClientRect(), cx = br.left + br.width/2 - fb.left, cy = br.top + br.height/2 - fb.top, R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
+      const W = size(fr).cw, H = size(fr).ch, br = frameLayout(mb).rect, fb = frameLayout(fr).rect, cx = br.left + br.width/2 - fb.left, cy = br.top + br.height/2 - fb.top, R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
       ov.style.clipPath = `circle(${(p*R).toFixed(1)}px at ${cx.toFixed(1)}px ${cy.toFixed(1)}px)`; ov.style.visibility = p > .001 || open ? 'visible' : 'hidden'; ov.style.pointerEvents = p > .5 ? 'auto' : 'none';
       hd.style.background = mix(1 - p, 'var(--card)', 'transparent'); hd.style.setProperty('--hx-fg', mix(p, 'var(--card)', 'var(--ink)')); hd.style.setProperty('--hx-bg', mix(p, 'var(--ink)', 'var(--card)')); hd.style.setProperty('--hx-ln', mix(p, 'color-mix(in oklab, var(--card) 35%, transparent)', 'var(--line)'));
       bs[0].style.transform = `translateY(${px(-3 + 3*p)}) rotate(${(45*p).toFixed(2)}deg)`; bs[1].style.transform = `translateY(${px(3 - 3*p)}) rotate(${(-45*p).toFixed(2)}deg)`;
@@ -10600,7 +10613,7 @@ const fx = (st, pal = PAL) => {
 const kit = (st, p, o = {}) => {
   const sc = $(st, '.' + p + 'sc'), ft = $(st, '.' + p + 'ft'), h1 = $(st, '.' + p + 'h1'), w = $(st, '.' + p + 'w');
   const sp = new Track(0, S.soft); let auto = false, goal = 0, done = null, touched = false, pinTo = 0;
-  const max = () => Math.max(0, sc.scrollHeight - size(sc).ch);
+  const max = () => Math.max(0, frameLayout(sc).sh - size(sc).ch);
   const stop = () => { auto = false; touched = true; pinTo = 0; };
   ['wheel', 'touchstart', 'pointerdown', 'mousedown', 'keydown'].forEach(e => sc.addEventListener(e, stop, { passive:true }));
   const go = (y, fn) => { sp.jump(sc.scrollTop).set(y); goal = y; auto = true; done = fn || null; };
@@ -10618,9 +10631,9 @@ const kit = (st, p, o = {}) => {
 // columns rise as the footer scrolls into view, 45ms apart, and reset when it leaves
 const reveal = (sc, els) => {
   const R = els.map((el, i) => ({ el, i, p:new Track(0, S.soft), on:false })); let first = true;
-  return () => { const base = sc.getBoundingClientRect().top, H = sc.clientHeight, t = now();
+  return () => { const base = frameLayout(sc).rect.top, H = frameLayout(sc).ch, t = now();
     for (const r of R){
-      const y = r.el.getBoundingClientRect().top - base, want = r.on ? y < H + 6 : y < H - 24;
+      const y = frameLayout(r.el).rect.top - base, want = r.on ? y < H + 6 : y < H - 24;
       if (first){ r.on = want; r.p.jump(want ? 1 : 0); }
       else if (want !== r.on){ r.on = want; r.p.set(want ? 1 : 0, want ? S.soft : S.snap, want ? t + r.i*.045 : t); }
       const o = clamp(r.p.at(t)); r.el.style.opacity = o.toFixed(3); r.el.style.transform = o > .999 ? 'none' : `translateY(${px((1 - o)*10)})`;
@@ -11114,7 +11127,7 @@ const E = (tag, css, text) => { const e = document.createElement(tag); if (css) 
 const queue = () => { const q = []; return { at(t, fn){ q.push([t, fn]); q.sort((a, b) => a[0] - b[0]); }, run(t){ while (q.length && q[0][0] <= t) q.shift()[1](); }, clear(){ q.length = 0; } }; };
 const noNav = st => st.addEventListener('click', e => { if (e.target.closest('a[href="#"]')) e.preventDefault(); });
 // where an element sits inside the scrolling page, independent of offsetParent
-const topIn = (el, pg) => el.getBoundingClientRect().top - pg.getBoundingClientRect().top + pg.scrollTop;
+const topIn = (el, pg) => frameLayout(el).rect.top - frameLayout(pg).rect.top + frameLayout(pg).st;
 // one value followed by several springs, each starting a little later than the one before
 const follow = (trs, v, t, gap = .035) => trs.forEach((x, i) => x.set(v, S.soft, t + i*gap));
 const DK = p => `.${p}dk{--ink:#EFF2F6;--muted:#ABAEB3;--faint:#82868A;--line:#2A2F36;--line-soft:#1E2228;--card:#171B21;--raised:#23272C;--accent:#939668;--accent-tint:#23261A;--success:#A3A76E;--success-tint:#23261A;--danger:#D0584F;--danger-tint:#2E1A19;--warning:#D6822F;--warning-tint:#2D2114;background:#0C1016;color:var(--ink)}`;
@@ -11632,7 +11645,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
       const p = qp.at(t); if (Math.abs(p - lastQ) > .002){ lastQ = p; for (let i = 0; i < rects.length; i++) rects[i].style.opacity = clamp(p * 2 - cells[i]).toFixed(2); }
       const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + i * .06)); }
       bds.forEach((b, i) => { const r = clamp(bt[i].at(t)), h = clamp(hv[i].h.at(t)); fade(b, r, (1 - r) * 10);
-        b.style.boxShadow = `0 0 0 1.5px color-mix(in oklab, var(--ink) ${(h * 100).toFixed(1)}%, transparent), var(--shadow)`; pop(tps[i], tt[i].at(t), 4); tps[i].style.left = px(Math.max(0, Math.min(b.parentNode.offsetLeft, tr.clientWidth - tps[i].offsetWidth))); });
+        b.style.boxShadow = `0 0 0 1.5px color-mix(in oklab, var(--ink) ${(h * 100).toFixed(1)}%, transparent), var(--shadow)`; pop(tps[i], tt[i].at(t), 4); tps[i].style.left = px(Math.max(0, Math.min(frameLayout(b.parentNode).ol, frameLayout(tr).cw - frameLayout(tps[i]).w))); });
       sbs.forEach(({ a, h }) => { const x = clamp(h.h.at(t)), d = clamp(h.d.at(t)); a.style.borderRadius = px(lerp(12, 20, x)); a.style.background = mix(x, '#2A2F36', '#0C1016'); a.style.transform = `scale(${(1 - .03 * d).toFixed(4)})`; });
       pls.forEach(({ a, h, u }) => { const x = clamp(h.h.at(t)), d = clamp(h.d.at(t)); a.style.background = mix(x, 'var(--ink)', 'transparent'); a.style.color = mix(x, 'var(--card)', 'var(--ink)'); a.style.borderColor = mix(x, 'var(--ink)', 'var(--faint)');
         u.style.transform = `translate(${px(x * 2)},${px(-x * 2)})`; a.style.transform = `scale(${(1 - .03 * d).toFixed(4)})`; });
@@ -12945,14 +12958,14 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
     const chips = AM_SECS.map(n => { const b = gEl('button', ''); b.type = 'button'; b.className = 'agm-ch'; b.innerHTML = `<i></i><span></span><b>${ic(I.check, 13, 2.6)}</b>`; $(b, 'span').textContent = n; chipH.appendChild(b); return { n, b, fill:$(b, 'i'), ck:$(b, 'b'), lo:0, hi:0, fr:0, full:new Track(0, S.base) }; });
     const finds = []; let W = 0, H = 0, ph = 0, vh = 0, kx = 0, ky = 0, mw = 0, mh = 0, lastLay = -9, lastKey = '', si = 0, seenN = 0, fndN = 0, curSec = '', lastSec = '';
     const say = s => { live.textContent = s; };
-    const maxS = () => Math.max(0, sc.scrollHeight - size(sc).ch);
+    const maxS = () => Math.max(0, frameLayout(sc).sh - size(sc).ch);
     const secOf = y => { const r = chips.find(c => y >= c.lo && y < c.hi) || chips[chips.length - 1]; return r.n; };
     const build = () => {
       pw_ = sc.clientWidth; ph = sc.scrollHeight; vh = sc.clientHeight; const mpr = mp.getBoundingClientRect(); mw = Math.max(20, mp.clientWidth - 12); mh = Math.max(40, mp.clientHeight - 12);
       kx = mw/pw_; ky = mh/ph; Object.assign(mi.style, { width:px(mw), height:px(mh) });
       const pr_ = pg.getBoundingClientRect(), top0 = pr_.top, left0 = pr_.left;
       bars.forEach(b => b.remove()); bars.length = 0;
-      $$(pg, '.agm-nv,.agm-ey,.agm-h1,.agm-sub,.agm-b1,.agm-b2,.agm-cd,.agm-sh,.agm-ss,.agm-fq,.agm-ps,.agm-ft').forEach(e => { const r = e.getBoundingClientRect(); if (!r.width || !r.height) return;
+      $$(pg, '.agm-nv,.agm-ey,.agm-h1,.agm-sub,.agm-b1,.agm-b2,.agm-cd,.agm-sh,.agm-ss,.agm-fq,.agm-ps,.agm-ft').forEach(e => { const r = frameLayout(e).rect; if (!r.width || !r.height) return;
         const b = gEl('i', ''); b.className = 'agm-br' + (/(nv|h1|sh)$/.test(e.className.split(' ')[0]) ? ' h' : ''); b.style.cssText = `left:${((r.left - left0)*kx).toFixed(1)}px;top:${((r.top - top0)*ky).toFixed(1)}px;width:${Math.max(2, r.width*kx).toFixed(1)}px;height:${Math.max(2, Math.min(r.height*ky, r.height*ky)).toFixed(1)}px`; mi.appendChild(b); bars.push(b); });
       // bands go under the bars
       if (!bands.length) for (let i = 0; i < NB; i++){ const d = gEl('i', ''); d.className = 'agm-bd'; mi.insertBefore(d, mi.firstChild); bands.push({ el:d, on:false, f:new Track(0, S.soft) }); }
@@ -12996,7 +13009,7 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
     sc.scrollTop = 0; build(); n1.set('0', true); n2.set('0', true); ss.put('Review agent is at the top of the page', true); ea.jump(0, vh*ky); q.at(now() + .8, step);
     return t => {
       q.run(t);
-      if (t - lastLay > .25){ lastLay = t; const key = size(sc).cw + ':' + sc.scrollHeight + ':' + size(sc).ch + ':' + (size(mp).ch - 12); if (key !== lastKey) build(); }
+      if (t - lastLay > .25){ lastLay = t; const key = size(sc).cw + ':' + frameLayout(sc).sh + ':' + size(sc).ch + ':' + (size(mp).ch - 12); if (key !== lastKey) build(); }
       if (anim){ const v = u.at(t); sc.scrollTop = v; if (Math.abs(v - u.target) < .4 && !u.ev.length) anim = false; }
       const a = A.at(t);
       // which bands has the agent covered?
@@ -13123,7 +13136,7 @@ const SITE = `<header class="§-nav"><b class="§-logo">Fieldnote</b><span>Produ
 const siteFrame = (p, url = 'localhost:3000/pricing') => `<div class="${p}-fr card"><div class="${p}-ub"><span class="${p}-url">${url}</span></div><div class="${p}-pg"><div class="${p}-ct">${SITE.replaceAll('§', p)}</div><div class="${p}-ov"></div></div></div>`;
 
 // element rect in the overlay's coordinates, read live so pins follow the page while it scrolls
-const liveRect = (ov, el) => { const r = el.getBoundingClientRect(), o = ov.getBoundingClientRect(); return { x:r.left - o.left, y:r.top - o.top, w:r.width, h:r.height }; };
+const liveRect = (ov, el) => { const r = frameLayout(el).rect, o = frameLayout(ov).rect; return { x:r.left - o.left, y:r.top - o.top, w:r.width, h:r.height }; };
 class Site {
   constructor(root, p){
     this.fr = $(root, '.' + p + '-fr'); this.pg = $(this.fr, '.' + p + '-pg'); this.ct = $(this.pg, '.' + p + '-ct'); this.ov = $(this.pg, '.' + p + '-ov');
@@ -13131,7 +13144,7 @@ class Site {
   }
   max(){ return Math.max(0, size(this.ct).h - size(this.pg).ch + this.cover); }
   // scroll that puts an element at about 40% of the visible page (cover = height hidden by a sheet at the bottom)
-  want(k){ const r = this.els[k].getBoundingClientRect(), c = this.ct.getBoundingClientRect(); return clamp(r.top - c.top + r.height / 2 - (this.pg.clientHeight - this.cover) * .4, 0, this.max()); }
+  want(k){ const r = frameLayout(this.els[k]).rect, c = frameLayout(this.ct).rect; return clamp(r.top - c.top + r.height / 2 - (size(this.pg).ch - this.cover) * .4, 0, this.max()); }
   go(k, inst){ const y = this.want(k), moved = Math.abs(y - this.sc.target) > 4; inst ? this.sc.jump(y) : this.sc.set(y); return moved; }
   draw(t){ this.ct.style.transform = `translateY(${px(-Math.min(this.sc.at(t), this.max()))})`; }
   rect(k){ return liveRect(this.ov, this.els[k]); }
@@ -13490,7 +13503,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
     const MAX = 6;
     const shot = it => { const w = it.w + 16, h = it.h + 16, ph = mk('div'); ph.className = 'evc-ph'; ph.style.width = px(w); ph.style.height = px(h); ph.setAttribute('inert', ''); const c = it.node.cloneNode(true); c.removeAttribute('data-k'); c.style.cssText = `position:absolute;left:8px;top:8px;margin:0;width:${px(it.w)};height:${px(it.h)}`; ph.append(c); return ph; };
     const fitInto = (ph, it, bw, bh, max = 9) => { const w = it.w + 16, h = it.h + 16, s = Math.min(bw / w, bh / h, max); ph.style.transform = `translate(${px((bw - w * s) / 2)},${px((bh - h * s) / 2)}) scale(${s.toFixed(4)})`; };
-    const toRoot = r => { const rr = root.getBoundingClientRect(); return { x:r.left - rr.left, y:r.top - rr.top, w:r.width, h:r.height }; };
+    const toRoot = r => { const rr = frameLayout(root).rect; return { x:r.left - rr.left, y:r.top - rr.top, w:r.width, h:r.height }; };
     const layout = () => { W = size(ov).cw; H = size(ov).ch; if (!W) return; narrow = size(st).cw < 560; root.dataset.n = narrow ? 1 : 0; lastKey = size(st).cw + ':' + W + ':' + H;
       VW = Math.round(Math.min(st.clientWidth - 24 - 24, 560)); VH = Math.round(Math.min(st.clientHeight - 24 - 24, 400)); vc.style.width = px(VW); vc.style.height = px(VH); items.forEach(fit); };
     const fit = it => fitInto($(it.th, '.evc-ph'), it, it.th.clientWidth, it.th.clientHeight, 2);
@@ -13501,7 +13514,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
       it.btn.onclick = () => openViewer(it); instant ? it.ent.jump(1) : it.ent.set(1, S.base); items.unshift(it); label(); fit(it); return it;
     }
     const label = () => items.forEach((it, i) => it.btn.setAttribute('aria-label', `View screenshot ${items.length - i} of ${items.length}, ${it.spec.sel}`));
-    const nat = it => narrow ? it.btn.offsetWidth : it.btn.offsetHeight;
+    const nat = it => narrow ? frameLayout(it.btn).w : frameLayout(it.btn).h;
     const snap = k => { const el = site.els[k], n = el.cloneNode(true); return { node:n, w:el.offsetWidth, h:el.offsetHeight }; };
     function capture(spec){
       if (busy || items.length >= MAX) return; cur = spec; busy = true; capB.disabled = true; clear(); stw.to(0); stEls[1].innerHTML = `Framing <span class="evc-sel">${hx(spec.sel)}</span>`;
@@ -13569,7 +13582,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
       });
       // snapshot flight
       if (flyIt && fl.target === 1 && f < .999 && flyFrom){
-        const to = toRoot(flyIt.th.getBoundingClientRect()), q = f, ph = fly.firstChild, w = lerp(flyFrom.w, to.w, q), h = lerp(flyFrom.h, to.h, q);
+        const to = toRoot(frameLayout(flyIt.th).rect), q = f, ph = fly.firstChild, w = lerp(flyFrom.w, to.w, q), h = lerp(flyFrom.h, to.h, q);
         fly.style.visibility = 'visible'; fly.style.transform = `translate(${px(lerp(flyFrom.x, to.x, q))},${px(lerp(flyFrom.y, to.y, q))})`; fly.style.width = px(w); fly.style.height = px(h); fly.style.opacity = (f > .9 ? clamp(1 - (f - .9) * 10) : 1).toFixed(3);
         fitInto(ph, flyIt, w - 2, h - 2, 2);
       } else { fly.style.visibility = 'hidden'; if (f >= .999 && flyIt) flyIt = null; }
@@ -14194,7 +14207,7 @@ const gPage = (root, k) => {
   const pins = {}; let scale = 1, flashT = -9, flashV = null, frameH = 0, curView = 'pricing';
   const spot = n => n === 'url' ? urlEl : n === 'page' ? vp : $(fr, `[data-s="${n}"]`);
   const o = { fr, ov, vp, bnw, bar:barEl, get scale(){ return scale; }, get view(){ return curView; },
-    rect(n){ const el = spot(n); if (!el) return { x:0, y:0, w:0, h:0 }; const r = el.getBoundingClientRect(), f = fr.getBoundingClientRect(); return { x:r.left - f.left - fr.clientLeft, y:r.top - f.top - fr.clientTop, w:r.width, h:r.height }; },
+    rect(n){ const el = spot(n); if (!el) return { x:0, y:0, w:0, h:0 }; const r = frameLayout(el).rect, f = frameLayout(fr).rect; return { x:r.left - f.left - frameLayout(fr).cl, y:r.top - f.top - frameLayout(fr).ct, w:r.width, h:r.height }; },
     center(n){ const r = o.rect(n); return { x:r.x + r.w*.5, y:r.y + r.h*.5 }; },
     view(v, inst){ curView = v; if (inst){ sw.cur = v; sw.prev = null; sw.t = -9; } else sw.to(v); },
     url(path, inst){ up.put(path, inst); },
@@ -14770,7 +14783,7 @@ ${gPageCSS('aip')}
       pp.setAttribute('aria-labelledby', 'aia-ttl'); };
     const result = (d) => { const c = SC[sc], r = c.done[d], bad = d === 'deny', warn = d !== 'deny' && c.risky;
       resL.innerHTML = `<div class="aia-rs"><span class="aia-hi" style="background:${bad ? 'var(--raised)' : warn ? 'var(--danger-tint)' : 'var(--success-tint)'};color:${bad ? 'var(--muted)' : warn ? 'var(--danger)' : 'var(--success)'}">${gi(bad ? 'x' : 'check', 15, 2.6)}</span><div><b>${r[0]}</b><span class="aia-rd">${r[1]}</span></div></div>`; };
-    const place = () => { const rr = root.getBoundingClientRect(), fr = pg.fr.getBoundingClientRect(), a = pg.rect(SC[sc].spot); const ax = fr.left - rr.left + pg.fr.clientLeft + a.x, ay = fr.top - rr.top + pg.fr.clientTop + a.y;
+    const place = () => { const rr = frameLayout(root).rect, fr = frameLayout(pg.fr).rect, a = pg.rect(SC[sc].spot); const ax = fr.left - rr.left + frameLayout(pg.fr).cl + a.x, ay = fr.top - rr.top + frameLayout(pg.fr).ct + a.y;
       const W = Math.min(340, size(root).cw - 24), H = size(pp).h, x = clamp(ax + a.w/2 - W/2, 12, size(root).cw - W - 12);
       if (phase === 'ask' && side === 'x') side = 'above';
       const above = side === 'above'; let y = above ? ay - H - 14 : ay + a.h + 14;
@@ -14922,7 +14935,7 @@ ${gPageCSS('rpg')}
       pg.render(t); apply(ph, t);
       const ci = curIdx(ph);
       if (ci !== curI){ curI = ci; rows.forEach((r, i) => { r.cw.set(i === ci ? 1 : 0, S.base); r.pw.set(i <= ci ? 1 : 0, S.base); });
-        if (!hover && ci >= 0){ const r = rows[ci].li; scT.set(clamp(r.offsetTop - (ls.clientHeight - r.offsetHeight)/2, 0, Math.max(0, ls.scrollHeight - ls.clientHeight))); } else if (!hover) scT.set(0);
+        if (!hover && ci >= 0){ const r = rows[ci].li; scT.set(clamp(frameLayout(r).ot - (frameLayout(ls).ch - frameLayout(r).h)/2, 0, Math.max(0, frameLayout(ls).sh - frameLayout(ls).ch))); } else if (!hover) scT.set(0);
         sb.setAttribute('aria-valuetext', `${gfmt(ph)} of ${gfmt(END)}${ci >= 0 ? ', ' + E[ci].t : ''}`); if (playing) say(ci >= 0 ? E[ci].t : ''); }
       if (!hover) ls.scrollTop = scT.at(t);
       const c = cursorAt(ph); if (c){ ag.go(c.x, c.y, true); ag.show(true, true); } else ag.show(false, true);

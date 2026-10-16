@@ -127,7 +127,7 @@ function kit(st, o = {}){
   const ctas = [], hovers = [], acts = [], avs = [], panels = [], foots = [], segs = {}, extra = [];
   K.sc = new Track(0, S.snap); K.au = au;
   pg.addEventListener('scroll', () => { const y = pg.scrollTop; if (y > 12) K.sc.set(1); else if (y < 4) K.sc.set(0); });
-  K.below = el => el.getBoundingClientRect().bottom - fr.getBoundingClientRect().top - fr.clientTop;
+  K.below = el => frameLayout(el).rect.bottom - frameLayout(fr).rect.top - frameLayout(fr).ct;
   K.watch = (el, fn) => { new ResizeObserver(fn).observe(el); document.fonts.ready.then(fn); };
 
   // hover / focus colour as a spring instead of a CSS state
@@ -525,7 +525,7 @@ atom({ id:'header-pill', cat:'Headers', name:'Header: floating pill with plate',
       pp.style.visibility = p > .01 || open ? 'visible' : 'hidden'; pp.style.opacity = p.toFixed(3); K.burgerDraw(bg, p); L.draw(t);
       const a = e.A.at(t), b = e.B.at(t); pt.style.transform = `translateX(${px(a)})`; pt.style.width = px(b - a);
       // 2px ink underline stays under the current page's link, not the hovered one
-      const cl = links[cur].a; ul.style.transform = `translate(${px(cl.offsetLeft + 10)},34px)`; ul.style.width = px(cl.offsetWidth - 20);
+      const cl = links[cur].a; ul.style.transform = `translate(${px(frameLayout(cl).ol + 10)},34px)`; ul.style.width = px(frameLayout(cl).w - 20);
       K.draw(t); };
     function fr(s){ return size($(s,'.hx-fr')).cw - (K._s || 0); }
   }});
@@ -651,17 +651,18 @@ atom({ id:'header-search', cat:'Headers', name:'Header: search expands in place'
     K.onNarrow.push(() => { if (open) setOpen(false); });
     filter(); rows.forEach(r => { r.h.jump(r.h.target); r.o.jump(0); }); ph.jump(0); emo.jump(0);
     K.panel({ id:'hd10-menu', mode:'drop', burger:bg, top:() => K.below(hd), links:MLINKS });
-    let lwNat = 0;
+    let lwNat = 0, wasN = true, lastLwW = -1;
     return t => {
       const n = K.narrow, o = n ? clamp(nar.at(t)) : 0, io = clamp(sio.at(t));
-      if (!lwNat || !n){ lw.style.width = 'auto'; lwNat = lw.scrollWidth; }
+      // natural width is re-measured only when the bar becomes wide or its width changes, not every frame
+      const lwW = size(lw).w; if (!lwNat || (!n && (wasN || lwW !== lastLwW))){ lw.style.width = 'auto'; lwNat = lw.scrollWidth; lastLwW = lwW; } wasN = n;
       lw.style.width = n ? px((1 - o)*lwNat) : 'auto'; lw.style.opacity = (1 - o).toFixed(3);
       K.accFold = o; bg.style.width = px(36*(1 - o)); bg.style.opacity = (1 - o).toFixed(3); ac.style.opacity = (1 - o).toFixed(3);
       if (n){ sx.style.flex = `${o.toFixed(4)} 0 36px`; sx.style.width = ''; cn.style.display = 'block'; cn.style.width = px(CN*o); cn.style.opacity = o.toFixed(3); }
       else { sx.style.flex = '0 0 auto'; sx.style.width = px(sxw.at(t)); cn.style.display = 'none'; }
       fade(inp, io, null); inp.style.visibility = io < .01 && !open ? 'hidden' : 'visible'; kb.style.opacity = (io*(inp.value ? 0 : 1)).toFixed(3);
       const fits = size(nv).cw >= size(g).w - 1; lv.set(fits ? 1 : 0, S.base); const lo = clamp(lv.at(t)); g.style.opacity = lo.toFixed(3); g.style.filter = lo < .98 ? `blur(${((1 - lo)*BLUR).toFixed(2)}px)` : 'none'; g.style.visibility = lo < .01 ? 'hidden' : 'visible'; sl();
-      const p = clamp(ro.at(t)), r = relRect(fr, sx.getBoundingClientRect()), FW = size(fr).cw - (K._s || 0), rw = n ? FW - 24 : 360, rx = n ? 12 : clamp(r.x + r.w - 360, 12, FW - 360 - 12);
+      const p = clamp(ro.at(t)), r = relRect(fr, frameLayout(sx).rect), FW = size(fr).cw - (K._s || 0), rw = n ? FW - 24 : 360, rx = n ? 12 : clamp(r.x + r.w - 360, 12, FW - 360 - 12);
       rs.style.left = px(rx); rs.style.width = px(rw); rs.style.top = px(r.y + r.h + 8); rs.style.height = px(Math.max(0, ph.at(t))); rs.style.transformOrigin = '100% 0'; pop(rs, p, -6); rs.style.visibility = p < .01 ? 'hidden' : 'visible';
       rows.forEach(x => { x.b.style.height = px(Math.max(0, x.h.at(t))); x.b.style.opacity = clamp(x.o.at(t)).toFixed(3); });
       const eo = clamp(emo.at(t)); em.style.opacity = eo.toFixed(3); em.style.height = px(eo*44);
@@ -747,7 +748,7 @@ atom({ id:'header-minimal', cat:'Headers', name:'Header: minimal with fullscreen
     K.escs.push(() => { if (!open) return false; set(false, false, true); return true; });
     K.onNarrow.push(() => { if (open) set(false, true); });
     return t => { const p = clamp(mo.at(t)); bd.style.opacity = clamp(K.sc.at(t)).toFixed(3) * (1 - p);
-      const W = size(fr).cw, H = size(fr).ch, br = mb.getBoundingClientRect(), fb = fr.getBoundingClientRect(), cx = br.left + br.width/2 - fb.left, cy = br.top + br.height/2 - fb.top, R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
+      const W = size(fr).cw, H = size(fr).ch, br = frameLayout(mb).rect, fb = frameLayout(fr).rect, cx = br.left + br.width/2 - fb.left, cy = br.top + br.height/2 - fb.top, R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
       ov.style.clipPath = `circle(${(p*R).toFixed(1)}px at ${cx.toFixed(1)}px ${cy.toFixed(1)}px)`; ov.style.visibility = p > .001 || open ? 'visible' : 'hidden'; ov.style.pointerEvents = p > .5 ? 'auto' : 'none';
       hd.style.background = mix(1 - p, 'var(--card)', 'transparent'); hd.style.setProperty('--hx-fg', mix(p, 'var(--card)', 'var(--ink)')); hd.style.setProperty('--hx-bg', mix(p, 'var(--ink)', 'var(--card)')); hd.style.setProperty('--hx-ln', mix(p, 'color-mix(in oklab, var(--card) 35%, transparent)', 'var(--line)'));
       bs[0].style.transform = `translateY(${px(-3 + 3*p)}) rotate(${(45*p).toFixed(2)}deg)`; bs[1].style.transform = `translateY(${px(3 - 3*p)}) rotate(${(-45*p).toFixed(2)}deg)`;
