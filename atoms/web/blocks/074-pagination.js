@@ -11,11 +11,13 @@ atom({ id:'pagination', cat:'Navigation', name:'Pagination', block:'postlist, co
     const off = new Track(0), e = edges(0, C); let cur = 0, lastO = -1, lastFade = '';
     const go = i => { cur = clamp(i, 0, N-1); off.set(clamp(cur*C - 72, 0, (N-5)*C)); e.go(cur*C + 2, cur*C + C - 2); nums.forEach((b,j) => { b.setAttribute('aria-current', j === cur ? 'page' : 'false'); }); };
     $(st,'.pv').onclick = () => go(cur - 1); $(st,'.nx').onclick = () => go(cur + 1); e.jump(2, C - 2);
+    // scroll position and range are tracked from events and the cached size, so the frame never reads layout
+    let sl = 0; const max0 = () => Math.max(0, size(win).sw - size(win).cw); win.addEventListener('scroll', () => { sl = win.scrollLeft; }, { passive:true });
     return t => { const o = off.at(t), a = e.A.at(t), b = e.B.at(t);
-      if (Math.abs(o - lastO) > .05){ lastO = o; win.scrollLeft = o; }   // write only when the target moves, so manual scrolling is not overridden
+      if (Math.abs(o - lastO) > .05){ lastO = o; win.scrollLeft = o; sl = clamp(o, 0, max0()); }   // write only when the target moves, so manual scrolling is not overridden
       ind.style.left = px(a); ind.style.width = px(b - a);
       // edge fades show that more pages sit past each end of the window
-      const max = win.scrollWidth - win.clientWidth, s = win.scrollLeft, fl = s > 1 ? 18 : 0, fr = s < max - 1 ? 18 : 0, fade = `linear-gradient(to right, transparent 0, #000 ${fl}px, #000 calc(100% - ${fr}px), transparent 100%)`;
+      const max = max0(), s = sl, fl = s > 1 ? 18 : 0, fr = s < max - 1 ? 18 : 0, fade = `linear-gradient(to right, transparent 0, #000 ${fl}px, #000 calc(100% - ${fr}px), transparent 100%)`;
       if (fade !== lastFade){ lastFade = fade; win.style.maskImage = fade; win.style.webkitMaskImage = fade; }
       nums.forEach((n,j) => { const c = clamp(1 - Math.abs((a + b)/2 - (j*C + C/2))/C); n.style.color = mix(c,'var(--card)','var(--ink)'); }); };
   }});

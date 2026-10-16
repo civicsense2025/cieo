@@ -20,8 +20,9 @@ atom({ id:'tabstrip', cat:'Files and browsing', name:'Browser tabs', block:'tabs
     // indicator = live rect of the active tab + a decaying offset from the previous tab (edges lag)
     const dL = new Track(0), dR = new Track(0); let shownL = 0, shownR = 0, prevAct = null;
     return t => { tabs = tabs.filter(tb => { if (tb.gone && tb.w.prune(t) === 0){ tb.b.remove(); tb.pane.remove(); return false; } return true; });
-      tabs.forEach(tb => { tb.b.style.width = px(W*clamp(tb.w.at(t))); fade(tb.lb, tb.o.at(t), null); psw.apply(tb.pane, tb, t, 0); });
-      if (!act) return; const l = act.b.offsetLeft, r = l + act.b.offsetWidth;
+      // tab geometry comes from the same widths just written (6px strip padding, no gap), so nothing is read back from layout
+      let cx = 6; tabs.forEach(tb => { const tw = W*clamp(tb.w.at(t)); tb.b.style.width = px(tw); tb.x = cx; tb.tw = tw; cx += tw; fade(tb.lb, tb.o.at(t), null); psw.apply(tb.pane, tb, t, 0); });
+      if (!act) return; const l = act.x, r = l + act.tw;
       if (act !== prevAct){ if (prevAct){ const right = l >= shownL; dL.jump(shownL - l).set(0, S.base, t + (right ? LAG : 0)); dR.jump(shownR - r).set(0, S.base, t + (right ? 0 : LAG)); } prevAct = act; }
       shownL = l + dL.at(t); shownR = r + dR.at(t); ind.style.left = px(shownL); ind.style.width = px(Math.max(0, shownR - shownL)); };
   }});

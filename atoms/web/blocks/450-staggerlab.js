@@ -18,7 +18,7 @@ atom({ id:'staggerlab', cat:'Foundations', name:'Stagger lab', block:'stagger co
     $(st,'.slide').onclick = () => { eo = eo ? 0 : 1;
       if (REDUCE) e.jump(eo, eo); else e.go(eo, eo); };
     return t => { T.forEach((x, i) => bars[i].style.height = px(Math.max(8, clamp(x.at(t)) * 96)));
-      const W = Math.max(1, eg.clientWidth - 32);
+      const W = Math.max(1, size(eg).cw - 32);
       ea.style.transform = `translateX(${px(clamp(e.A.at(t)) * W)})`;
       eb.style.transform = `translateX(${px(clamp(e.B.at(t)) * W)})`; };
   }});

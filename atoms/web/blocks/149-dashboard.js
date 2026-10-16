@@ -348,7 +348,7 @@ ${SRCSS}
       if (sw.cur !== 'w'){ toState('w', t0); q.push([t0 + EXIT + .05, () => { [c1,c2,tt,tm,tb].forEach(x => x.jump(0)); }]); refocus(go, 300); } };
     return t => {
       while (q.length && q[0][0] <= t) q.shift()[1]();
-      const steady = t > steadyAt, narrow = st.clientWidth < 520, top = narrow ? 44 : 14;
+      const steady = t > steadyAt, narrow = size(st).cw < 520, top = narrow ? 44 : 14;
       let hh; if (steady){ hh = nat(sw.cur); H.jump(hh); } else hh = H.at(t);
       card.style.height = px(Math.max(0, hh)); card.style.transform = `translate(-50%,${px(top)})`; card.style.pointerEvents = steady ? '' : 'none';
       LY.c.style.maxHeight = steady ? px(hh) : 'none'; LY.c.style.overflowY = steady && LY.c.scrollHeight > hh + 1 ? 'auto' : 'hidden';
@@ -360,7 +360,7 @@ ${SRCSS}
         r.ln.style.width = (s*100).toFixed(1) + '%'; r.tx.style.color = mix(s,'var(--muted)','var(--ink)');
         r.cv.style.transform = `rotate(${(o*180).toFixed(1)}deg)`;
         if (o < .0005){ r.bd.style.height = '0px'; r.bd.style.visibility = 'hidden'; }
-        else { r.bd.style.visibility = 'visible'; r.bd.style.height = o > .9995 ? 'auto' : px(o*r.inn.offsetHeight); fade(r.inn, o, (1 - o)*-4); } });
+        else { r.bd.style.visibility = 'visible'; r.bd.style.height = o > .9995 ? 'auto' : px(o*size(r.inn).h); fade(r.inn, o, (1 - o)*-4); } });
       const k1 = clamp(c1.at(t)), k2 = clamp(c2.at(t));
       dc.setAttribute('fill-opacity', k1.toFixed(3)); rg2.style.strokeDashoffset = (1 - k1).toFixed(3); ck.style.strokeDashoffset = (1 - k2).toFixed(3);
       fade(dt, tt.at(t), (1 - clamp(tt.at(t)))*6); fade(dm, tm.at(t), (1 - clamp(tm.at(t)))*6); fade(cont, tb.at(t), (1 - clamp(tb.at(t)))*6);

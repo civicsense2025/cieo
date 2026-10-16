@@ -14,5 +14,5 @@ atom({ id:'marquee', cat:'Media', name:'Marquee', block:'marquee, logo', fam:['T
     mq.onpointerenter = () => setV(.15); mq.onpointerleave = () => setV(1);
     const pos = t => { let x = v0*t + c; for (const e of ev) if (t > e.t) x += e.d*((t - e.t) - R(t - e.t)); return x; };
     return t => { ev = ev.filter(e => { if (Math.exp(-w*(t - e.t)) < 1e-6){ v0 += e.d; c += e.d*(-e.t - 2/w); return false; } return true; });
-      const half = mr.scrollWidth/2; mr.style.transform = `translateX(${px(-((pos(t)*60) % half))})`; };
+      const half = size(mr).sw/2; mr.style.transform = `translateX(${px(-((pos(t)*60) % half))})`; };
   }});

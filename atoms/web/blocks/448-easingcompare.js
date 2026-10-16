@@ -11,7 +11,7 @@ atom({ id:'easingcompare', cat:'Foundations', name:'Easing compare', block:'spri
       if (REDUCE) T.forEach(x => x.jump(v)); else T.forEach(x => x.set(v, undefined, t0)); };
     $(st,'.run').onclick = () => { to = to ? 0 : 1; go(to); };
     $(st,'.rt').onclick = () => go(.15);
-    return t => { dots.forEach((d, i) => { const w = Math.max(1, d.parentNode.clientWidth - 14);
+    return t => { dots.forEach((d, i) => { const w = Math.max(1, size(d.parentNode).cw - 14);
         d.style.transform = `translateX(${px(clamp(T[i].at(t), -.15, 1.15) * w)})`; });
       ro.textContent = names.map((n, i) => n + ' ' + clamp(T[i].at(t)).toFixed(2)).join(' · ') + (REDUCE ? ' · instant' : ''); };
   }});

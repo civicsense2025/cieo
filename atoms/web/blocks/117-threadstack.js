@@ -14,5 +14,5 @@ atom({ id:'threadstack', cat:'Email', name:'Collapsed thread', block:'entry-list
     stack.onclick = () => { open = !open; stack.setAttribute('aria-expanded', open); const t0 = now(); msgs.slice(0,3).forEach((m,i) => m.h.set(open ? 1 : 0, S.base, t0 + (open ? i*.05 : (2 - i)*.03))); so.set(open ? 0 : 1, S.snap); };
     const less = document.createElement('button'); less.className = 'btn'; less.textContent = 'Collapse earlier'; less.style.alignSelf = 'center'; th.appendChild(less); less.onclick = () => stack.onclick();
     return t => { const s = clamp(so.at(t)); stack.style.height = px(28*s + (1 - s)*0); stack.style.opacity = s.toFixed(3); stack.style.pointerEvents = s > .5 ? 'auto' : 'none'; less.style.opacity = (1 - s).toFixed(3); less.style.pointerEvents = s < .5 ? 'auto' : 'none';
-      msgs.forEach(m => { const h = clamp(m.h.at(t)); m.d.style.height = px(h*m.d.firstChild.offsetHeight); m.d.style.marginBottom = px(-6*(1 - h)); m.d.firstChild.style.opacity = h.toFixed(3); }); };
+      msgs.forEach(m => { const h = clamp(m.h.at(t)); m.d.style.height = px(h*size(m.d.firstChild).h); m.d.style.marginBottom = px(-6*(1 - h)); m.d.firstChild.style.opacity = h.toFixed(3); }); };
   }});

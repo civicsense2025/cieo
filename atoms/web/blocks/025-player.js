@@ -21,7 +21,7 @@ atom({ id:'player', cat:'Media', name:'Player', block:'video, embed', fam:['M','
     return t => { if (playing && !loop && p0 + (t - t0)/DUR >= 1) stopAtEnd();
       const k = clamp(ic.at(t)), pts = PLAY.map((p,i) => [lerp(p[0], PAUSE[i][0], k), lerp(p[1], PAUSE[i][1], k)]);
       path.setAttribute('d', q(pts.slice(0,4)) + q(pts.slice(4)));
-      const p = held ? hp : pr(t), g = gr.at(t), W = sc.clientWidth, bh = 4 + 4*g, ts = 8 + 8*g;
+      const p = held ? hp : pr(t), g = gr.at(t), W = size(sc).cw, bh = 4 + 4*g, ts = 8 + 8*g;
       bar.style.height = px(bh); bar.style.transform = 'translateY(-50%)'; fl.style.width = (p*100).toFixed(3) + '%';
       th.style.width = th.style.height = px(ts); th.style.transform = `translate(${px(p*W - ts/2)}, -50%)`;
       const s = p*DUR; tc.textContent = `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`; sc.setAttribute('aria-valuenow', Math.round(p*100)); sc.setAttribute('aria-valuetext', `${tc.textContent} of 3:24`); };

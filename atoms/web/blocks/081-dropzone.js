@@ -23,7 +23,7 @@ atom({ id:'dropzone', cat:'Inputs', name:'File drop zone', block:'form, gallery 
     $(st,'.sm').onclick = () => { add('cover-photo.jpg', 1.8e6); setTimeout(() => add('annual-report.pdf', 8.4e6), 250/clock.scale); };
     return t => { const o = clamp(over.at(t)); dz.style.borderColor = mix(o,'var(--ink)','var(--muted)'); dz.style.background = mix(o,'var(--raised)','transparent'); dz.style.transform = `scale(${(1 + .01*o).toFixed(4)})`;
       files.forEach(f => { if (f.doneAt && t >= f.doneAt){ f.doneAt = 0; f.end.set(1); } const e = clamp(f.end.at(t));
-        f.r.style.height = px(clamp(f.h.at(t))*(f.in.offsetHeight)); fade(f.in, f.h.at(t), null);
+        f.r.style.height = px(clamp(f.h.at(t))*(size(f.in).h)); fade(f.in, f.h.at(t), null);
         f.br.style.width = (clamp(f.ld.at(t))*100).toFixed(2) + '%'; f.br.style.background = f.bad ? mix(e,'var(--danger)','var(--ink)') : mix(e,'var(--success)','var(--ink)');
         const ls = $$(f.st,'.layer'); ls[0].style.opacity = f.bad ? 0 : e; ls[1].style.opacity = f.bad ? e : 0; ls.forEach(l => l.style.transform = `scale(${(.6+.4*e).toFixed(3)})`);
         f.st.style.background = f.bad ? mix(e,'var(--danger-tint)','transparent') : mix(e,'var(--success-tint)','transparent');

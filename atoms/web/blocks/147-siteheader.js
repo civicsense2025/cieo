@@ -65,13 +65,14 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
       a.onclick = e => { e.preventDefault(); links[cur].removeAttribute('aria-current'); cur = i; a.setAttribute('aria-current','page'); const [l,r] = g(a); u.go(l + 12, r - 12); }; });
     nv.onpointerleave = () => { shown = false; ho.set(0, S.snap); };
     const underline = inst => { const [l,r] = g(links[cur]); inst ? u.jump(l + 12, r - 12) : u.go(l + 12, r - 12); };
+    const ps = scrollState(pg);
     pg.onscroll = () => c.set(pg.scrollTop > 16 ? 1 : 0);
     cta.onpointerdown = () => cp.set(1); cta.onpointerup = cta.onpointerleave = () => cp.set(0);
     // a press swaps the label to a confirmation for 1.8s, then restores it
     let ctaT = 0;
     const startFree = () => { cta.textContent = 'Trial started'; cta.style.background = 'var(--success)'; clearTimeout(ctaT); ctaT = setTimeout(() => { cta.textContent = 'Start free'; cta.style.background = ''; }, 1800); };
     cta.onclick = startFree;
-    const setSearch = on => { searchOn = on; sb.setAttribute('aria-expanded', on); const t0 = now(), W = hd.clientWidth, n = pg.clientWidth < 640;
+    const setSearch = on => { searchOn = on; sb.setAttribute('aria-expanded', on); const t0 = now(), W = size(hd).cw, n = size(pg).cw < 640;
       sxw.set(on ? (n ? Math.max(120, W - 76) : 220) : 36); sio.set(on ? 1 : 0, on ? S.base : S.snap, on ? t0 + .12 : t0);
       logoC.p.set(on && n ? 0 : 1); navC.p.set(on && !n && W < 980 ? 0 : 1); if (on) setTimeout(() => inp.focus(), 0); };
     sb.onclick = () => setSearch(!searchOn);
@@ -88,17 +89,17 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
     const init = () => { narrow = pg.clientWidth < 640; sh.toggleAttribute('data-n', narrow); relayout(); }; document.fonts.ready.then(init); requestAnimationFrame(init);
     addEventListener('resize', () => { if (narrow !== null) relayout(); });
     return t => {
-      const n = pg.clientWidth < 640; if (n !== narrow){ narrow = n; sh.toggleAttribute('data-n', n); if (!n && menuOn) setMenu(false, true); if (searchOn) setSearch(false); relayout(); }
+      const n = size(pg).cw < 640; if (n !== narrow){ narrow = n; sh.toggleAttribute('data-n', n); if (!n && menuOn) setMenu(false, true); if (searchOn) setSearch(false); relayout(); }
       const k = clamp(c.at(t)); hd.style.height = px(lerp(narrow ? 60 : 76, narrow ? 52 : 56, k)); lg.style.transform = `scale(${lerp(1.14, 1, k).toFixed(4)})`; sd.style.opacity = k.toFixed(3);
-      const max = pg.scrollHeight - pg.clientHeight; rp.style.width = (max > 0 ? pg.scrollTop/max*100 : 0).toFixed(2) + '%';
+      rp.style.width = (ps.max > 0 ? ps.top/ps.max*100 : 0).toFixed(2) + '%';
       navC.draw(t); logoC.draw(t);
       const a = h.A.at(t), b = h.B.at(t); hl.style.transform = `translateX(${px(a)})`; hl.style.width = px(b - a); hl.style.opacity = clamp(ho.at(t)).toFixed(3);
       const c2 = u.A.at(t), d = u.B.at(t); ul.style.transform = `translateX(${px(c2)})`; ul.style.width = px(d - c2);
       sx.style.width = px(sxw.at(t)); fade(inp, sio.at(t), null); inp.style.visibility = sio.at(t) < .01 ? 'hidden' : 'visible';
       cta.style.transform = `scale(${(1 - .03*clamp(cp.at(t))).toFixed(4)})`;
-      const p = clamp(mo.at(t)), hh = hd.offsetHeight;
+      const p = clamp(mo.at(t)), hh = size(hd).h;
       lines[0].style.transform = `translateY(${px(11 + 6*p)}) rotate(${(45*p).toFixed(2)}deg)`; lines[1].style.transform = 'translateY(17px)'; lines[1].style.opacity = (1 - p).toFixed(3); lines[2].style.transform = `translateY(${px(23 - 6*p)}) rotate(${(-45*p).toFixed(2)}deg)`;
-      mp.style.top = px(hh); mp.style.height = px(p*Math.max(0, sh.clientHeight - hh)); mp.style.visibility = p < .01 ? 'hidden' : 'visible'; mp.style.pointerEvents = p > .5 ? 'auto' : 'none';
+      mp.style.top = px(hh); mp.style.height = px(p*Math.max(0, size(sh).ch - hh)); mp.style.visibility = p < .01 ? 'hidden' : 'visible'; mp.style.pointerEvents = p > .5 ? 'auto' : 'none';
       mitems.forEach(x => { const o = clamp(x.o.at(t)); fade(x.a, o, (1 - o)*8); });
     };
   }});

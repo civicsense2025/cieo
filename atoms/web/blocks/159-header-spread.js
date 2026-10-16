@@ -209,7 +209,7 @@ function kit(st, o = {}){
     return { items, groups, host,
       show(v, inst){ const t0 = now(); items.forEach((x,i) => inst ? x.o.jump(v ? 1 : 0) : v ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (!v) groups.forEach(g => { g.open = false; g.gb.setAttribute('aria-expanded','false'); g.h.set(0, S.snap); g.r.set(0, S.snap); g.subs.forEach(s => s.o.set(0, S.snap)); }); },
       draw(t){ items.forEach(x => { const p = clamp(x.o.at(t)); fade(x.el, p, (1 - p)*8); });
-        groups.forEach(g => { g.gs.style.height = px(clamp(g.h.at(t))*g.gi.offsetHeight); g.chev.style.transform = `rotate(${(180*clamp(g.r.at(t))).toFixed(1)}deg)`; g.subs.forEach(s => { const p = clamp(s.o.at(t)); fade(s.el, p, (1 - p)*4); }); }); } };
+        groups.forEach(g => { g.gs.style.height = px(clamp(g.h.at(t))*size(g.gi).h); g.chev.style.transform = `rotate(${(180*clamp(g.r.at(t))).toFixed(1)}deg)`; g.subs.forEach(s => { const p = clamp(s.o.at(t)); fade(s.el, p, (1 - p)*4); }); }); } };
   };
   K.burgerDraw = (btn, p) => { const l = $$(btn,'i'); l[0].style.transform = `translateY(${px(-6 + 6*p)}) rotate(${(45*p).toFixed(2)}deg)`; l[1].style.opacity = (1 - p).toFixed(3); l[2].style.transform = `translateY(${px(6 - 6*p)}) rotate(${(-45*p).toFixed(2)}deg)`; };
 
@@ -231,24 +231,24 @@ function kit(st, o = {}){
     K.escs.push(() => { if (!open) return false; set(false, false, true); return true; });
     const P = { el, open:() => open, close:(inst) => set(false, inst), set,
       draw(t){ const p = clamp(o2.at(t)), vis = p > .01 || open; el.style.visibility = vis ? 'visible' : 'hidden'; el.style.pointerEvents = p > .5 ? 'auto' : 'none'; bg && K.burgerDraw(bg, p);
-        if (mode === 'drop'){ const top = c.top(), H = Math.max(0, Math.min(pi.offsetHeight, fr.clientHeight - top)); el.style.top = px(top); el.style.height = px(p*H); el.style.overflowY = p > .99 ? 'auto' : 'hidden'; el.style.boxShadow = p > .2 ? 'var(--shadow)' : 'none'; el.style.borderBottomWidth = p > .01 ? '1px' : '0'; }
-        else { const W = Math.min(320, fr.clientWidth*.86); el.style.width = px(W); el.style.transform = `translateX(${px((mode === 'right' ? 1 : -1)*(1 - p)*W)})`; sc.style.opacity = p.toFixed(3); sc.style.visibility = vis ? 'visible' : 'hidden'; sc.style.pointerEvents = p > .5 ? 'auto' : 'none'; }
+        if (mode === 'drop'){ const top = c.top(), H = Math.max(0, Math.min(size(pi).h, size(fr).ch - top)); el.style.top = px(top); el.style.height = px(p*H); el.style.overflowY = p > .99 ? 'auto' : 'hidden'; el.style.boxShadow = p > .2 ? 'var(--shadow)' : 'none'; el.style.borderBottomWidth = p > .01 ? '1px' : '0'; }
+        else { const W = Math.min(320, size(fr).cw*.86); el.style.width = px(W); el.style.transform = `translateX(${px((mode === 'right' ? 1 : -1)*(1 - p)*W)})`; sc.style.opacity = p.toFixed(3); sc.style.visibility = vis ? 'visible' : 'hidden'; sc.style.pointerEvents = p > .5 ? 'auto' : 'none'; }
         L.draw(t); } };
     panels.push(P); return P;
   };
 
   // links that slide inside their box when the alignment option changes
-  K.slider = (box, g, vals = [0, .5, 1]) => { const a = new Track(vals[K.align] ?? 0); K.onAlign.push(i => a.set(vals[i])); return () => g.style.transform = `translateX(${px(a.at(now()) * Math.max(0, box.clientWidth - g.offsetWidth))})`; };
+  K.slider = (box, g, vals = [0, .5, 1]) => { const a = new Track(vals[K.align] ?? 0); K.onAlign.push(i => a.set(vals[i])); return () => g.style.transform = `translateX(${px(a.at(now()) * Math.max(0, size(box).cw - size(g).w))})`; };
 
   // controls
   $$(st,'.hx-cg').forEach(g => { const k = g.dataset.k, i0 = k === 'align' ? K.align : 0;
     segs[k] = hxSeg($(g,'.seg'), i0, i => { if (k === 'auth') K.setSigned(i === 1); else if (k === 'cta') K.setVariant(i); else if (k === 'align'){ K.align = i; K.onAlign.forEach(f => f(i)); } else if (o.onExtra) o.onExtra(k, i); }); });
   st.addEventListener('keydown', e => { if (e.key === 'Escape') for (const f of K.escs) if (f()){ e.stopPropagation(); break; } });
 
-  K.measure = () => { fr.toggleAttribute('data-m', fr.clientWidth < (o.mid || 0)); const n = fr.clientWidth < K.bp; if (n !== K.narrow){ const was = K.narrow; K.narrow = n; fr.toggleAttribute('data-n', n); closeMenu(); if (!n) panels.forEach(p => p.close(true)); K.onNarrow.forEach(f => f(n, was)); } };
+  K.measure = () => { fr.toggleAttribute('data-m', size(fr).cw < (o.mid || 0)); const n = size(fr).cw < K.bp; if (n !== K.narrow){ const was = K.narrow; K.narrow = n; fr.toggleAttribute('data-n', n); closeMenu(); if (!n) panels.forEach(p => p.close(true)); K.onNarrow.forEach(f => f(n, was)); } };
   K.measure();
   K.draw = t => {
-    K.measure(); const s = pg.offsetWidth - pg.clientWidth; if (s !== K._s){ K._s = s; fr.style.setProperty('--sbw', s + 'px'); }
+    K.measure(); const s = size(pg).w - size(pg).cw; if (s !== K._s){ K._s = s; fr.style.setProperty('--sbw', s + 'px'); }
     for (const k in segs) segs[k].draw(t);
     for (const x of hovers){ const p = Math.max(clamp(x.h.at(t)), clamp(x.cu.at(t))); if (x.kind === 'color') x.el.style.color = mix(p, x.a, x.b); else x.el.style.background = mix(p, x.a, 'transparent'); }
     const f = clamp(vt[0].at(t)), bo = clamp(vt[1].at(t)), pd = clamp(vt[2].at(t)), ar = clamp(vt[3].at(t));
@@ -256,7 +256,7 @@ function kit(st, o = {}){
       s2.borderColor = `color-mix(in oklab, var(--hx-fg,var(--ink)) ${(f*100).toFixed(1)}%, color-mix(in oklab, var(--hx-ln,var(--line)) ${(bo*100).toFixed(1)}%, transparent))`;
       if (!c.block) s2.paddingInline = px(lerp(2, 14, pd)); c.ar.style.width = px(14*ar); c.ar.style.opacity = ar.toFixed(3); c.ar.style.marginLeft = px(6*ar); c.ar.style.transform = `translateX(${px(3*hh*ar)})`; s2.transform = `scale(${(1 - .03*clamp(c.pr.at(t))).toFixed(4)})`; }
     const k = clamp(au.at(t));
-    for (const a of acts){ a.host.style.width = px(lerp(a.ol.offsetWidth, a.il.offsetWidth, k)*(1 - (K.accFold || 0))); a.host.style.overflow = K.accFold > 0 ? 'hidden' : ''; sw.apply(a.ol, 'out', t, 6); sw.apply(a.il, 'in', t, 6); }
+    for (const a of acts){ a.host.style.width = px(lerp(size(a.ol).w, size(a.il).w, k)*(1 - (K.accFold || 0))); a.host.style.overflow = K.accFold > 0 ? 'hidden' : ''; sw.apply(a.ol, 'out', t, 6); sw.apply(a.il, 'in', t, 6); }
     for (const x of foots){ sw.apply(x.fo, 'out', t, 6); sw.apply(x.fi, 'in', t, 6); }
     extra.forEach(f2 => f2(t));
     for (const p of panels) p.draw(t);
@@ -434,7 +434,7 @@ atom({ id:'header-autohide', cat:'Headers', name:'Header: hides on scroll down',
     const pnl = K.panel({ id:'hd6-menu', mode:'drop', burger:$(st,'.hx-bg'), top:() => K.below(hd), links:MLINKS, onToggle:v => { if (v) reveal(); } });
     pg.addEventListener('scroll', () => { const y = pg.scrollTop, dy = y - last; if (y < 8){ reveal(); go('top'); } else if (dy > 4 && y > 80 && !K.menuOpen && !pnl.open() && !hd.contains(document.activeElement)){ hide.set(1, S.snap); go('down'); } else if (dy < -4){ reveal(); go('up'); } if (Math.abs(dy) > 4 || y < 8) last = y; });
     hd.addEventListener('focusin', reveal);
-    return t => { const k = clamp(hide.at(t)); hd.style.transform = `translateY(${px(-k*(hd.offsetHeight + 2))})`; sd.style.opacity = clamp(K.sc.at(t)).toFixed(3); bd.style.opacity = '0'; sl();
+    return t => { const k = clamp(hide.at(t)); hd.style.transform = `translateY(${px(-k*(size(hd).h + 2))})`; sd.style.opacity = clamp(K.sc.at(t)).toFixed(3); bd.style.opacity = '0'; sl();
       for (const k2 in msg) rsw.apply(msg[k2], k2, t, 4); K.draw(t); };
   }});
 
@@ -519,15 +519,15 @@ atom({ id:'header-pill', cat:'Headers', name:'Header: floating pill with plate',
     return t => {
       const n = K.narrow, k = clamp(sc.at(t)), f = clamp(fw.at(t)), p = clamp(mo.at(t)), w = clamp(wm.at(t));
       wr.style.top = px(lerp(14, 8, k)); lw.style.width = n ? '' : px(22 + w*(natW + 8)); $(lgs,'span').style.opacity = n ? '1' : w.toFixed(3);
-      const natural = 14 + 8 + 12 + lw.offsetWidth + (g.offsetWidth) + $(st,'.hx-ac').offsetWidth, full = Math.min(920, fr(st) - 24);
+      const natural = 14 + 8 + 12 + size(lw).w + (size(g).w) + size($(st,'.hx-ac')).w, full = Math.min(920, fr(st) - 24);
       const W = n ? fr(st) - 24 : lerp(Math.min(natural, fr(st) - 24), full, f); pl.style.width = px(W);
-      const ph = pp.offsetHeight; pl.style.height = px(52 + p*ph); pl.style.borderRadius = px(lerp(26, 22, p)); pl.style.boxShadow = `0 1px 2px rgba(16,20,26,${(.05 + .04*k).toFixed(3)}), 0 ${px(6*k)} ${px(18*k)} rgba(16,20,26,${(.06*k).toFixed(3)})`;
+      const ph = size(pp).h; pl.style.height = px(52 + p*ph); pl.style.borderRadius = px(lerp(26, 22, p)); pl.style.boxShadow = `0 1px 2px rgba(16,20,26,${(.05 + .04*k).toFixed(3)}), 0 ${px(6*k)} ${px(18*k)} rgba(16,20,26,${(.06*k).toFixed(3)})`;
       pp.style.visibility = p > .01 || open ? 'visible' : 'hidden'; pp.style.opacity = p.toFixed(3); K.burgerDraw(bg, p); L.draw(t);
       const a = e.A.at(t), b = e.B.at(t); pt.style.transform = `translateX(${px(a)})`; pt.style.width = px(b - a);
       // 2px ink underline stays under the current page's link, not the hovered one
       const cl = links[cur].a; ul.style.transform = `translate(${px(cl.offsetLeft + 10)},34px)`; ul.style.width = px(cl.offsetWidth - 20);
       K.draw(t); };
-    function fr(s){ return $(s,'.hx-fr').clientWidth - (K._s || 0); }
+    function fr(s){ return size($(s,'.hx-fr')).cw - (K._s || 0); }
   }});
 
 /* ================================================================ 9. rail */
@@ -660,8 +660,8 @@ atom({ id:'header-search', cat:'Headers', name:'Header: search expands in place'
       if (n){ sx.style.flex = `${o.toFixed(4)} 0 36px`; sx.style.width = ''; cn.style.display = 'block'; cn.style.width = px(CN*o); cn.style.opacity = o.toFixed(3); }
       else { sx.style.flex = '0 0 auto'; sx.style.width = px(sxw.at(t)); cn.style.display = 'none'; }
       fade(inp, io, null); inp.style.visibility = io < .01 && !open ? 'hidden' : 'visible'; kb.style.opacity = (io*(inp.value ? 0 : 1)).toFixed(3);
-      const fits = nv.clientWidth >= g.offsetWidth - 1; lv.set(fits ? 1 : 0, S.base); const lo = clamp(lv.at(t)); g.style.opacity = lo.toFixed(3); g.style.filter = lo < .98 ? `blur(${((1 - lo)*BLUR).toFixed(2)}px)` : 'none'; g.style.visibility = lo < .01 ? 'hidden' : 'visible'; sl();
-      const p = clamp(ro.at(t)), r = relRect(fr, sx.getBoundingClientRect()), FW = fr.clientWidth - (K._s || 0), rw = n ? FW - 24 : 360, rx = n ? 12 : clamp(r.x + r.w - 360, 12, FW - 360 - 12);
+      const fits = size(nv).cw >= size(g).w - 1; lv.set(fits ? 1 : 0, S.base); const lo = clamp(lv.at(t)); g.style.opacity = lo.toFixed(3); g.style.filter = lo < .98 ? `blur(${((1 - lo)*BLUR).toFixed(2)}px)` : 'none'; g.style.visibility = lo < .01 ? 'hidden' : 'visible'; sl();
+      const p = clamp(ro.at(t)), r = relRect(fr, sx.getBoundingClientRect()), FW = size(fr).cw - (K._s || 0), rw = n ? FW - 24 : 360, rx = n ? 12 : clamp(r.x + r.w - 360, 12, FW - 360 - 12);
       rs.style.left = px(rx); rs.style.width = px(rw); rs.style.top = px(r.y + r.h + 8); rs.style.height = px(Math.max(0, ph.at(t))); rs.style.transformOrigin = '100% 0'; pop(rs, p, -6); rs.style.visibility = p < .01 ? 'hidden' : 'visible';
       rows.forEach(x => { x.b.style.height = px(Math.max(0, x.h.at(t))); x.b.style.opacity = clamp(x.o.at(t)).toFixed(3); });
       const eo = clamp(emo.at(t)); em.style.opacity = eo.toFixed(3); em.style.height = px(eo*44);
@@ -698,7 +698,7 @@ atom({ id:'header-announce', cat:'Headers', name:'Header: announcement bar', blo
       if (!v){ o.set(0, S.snap, t0); h.set(0, S.base, t0 + .06); if (focus) setTimeout(() => $(st,'.hx-lg').focus(), 0); } else { h.set(1, S.base, t0); o.set(1, S.base, t0 + .1); if (focus) setTimeout(() => x.focus(), 0); } };
     x.onclick = () => set(false, true); rs.onclick = () => set(true, true); rs.disabled = true;
     K.panel({ id:'hd11-menu', mode:'drop', burger:$(st,'.hx-bg'), top:() => K.below(hd), links:MLINKS });
-    return t => { const p = clamp(h.at(t)), nat = ai.offsetHeight; an.style.height = p > .999 && shown ? 'auto' : px(p*nat); an.style.visibility = p < .005 ? 'hidden' : 'visible'; fade(ai, clamp(o.at(t)), 0, false); ai.style.opacity = clamp(o.at(t)).toFixed(3); x.style.opacity = clamp(o.at(t)).toFixed(3);
+    return t => { const p = clamp(h.at(t)), nat = size(ai).h; an.style.height = p > .999 && shown ? 'auto' : px(p*nat); an.style.visibility = p < .005 ? 'hidden' : 'visible'; fade(ai, clamp(o.at(t)), 0, false); ai.style.opacity = clamp(o.at(t)).toFixed(3); x.style.opacity = clamp(o.at(t)).toFixed(3);
       bd.style.opacity = clamp(K.sc.at(t)).toFixed(3); sl(); K.draw(t); };
   }});
 
@@ -747,7 +747,7 @@ atom({ id:'header-minimal', cat:'Headers', name:'Header: minimal with fullscreen
     K.escs.push(() => { if (!open) return false; set(false, false, true); return true; });
     K.onNarrow.push(() => { if (open) set(false, true); });
     return t => { const p = clamp(mo.at(t)); bd.style.opacity = clamp(K.sc.at(t)).toFixed(3) * (1 - p);
-      const W = fr.clientWidth, H = fr.clientHeight, br = mb.getBoundingClientRect(), fb = fr.getBoundingClientRect(), cx = br.left + br.width/2 - fb.left, cy = br.top + br.height/2 - fb.top, R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
+      const W = size(fr).cw, H = size(fr).ch, br = mb.getBoundingClientRect(), fb = fr.getBoundingClientRect(), cx = br.left + br.width/2 - fb.left, cy = br.top + br.height/2 - fb.top, R = Math.hypot(Math.max(cx, W - cx), Math.max(cy, H - cy));
       ov.style.clipPath = `circle(${(p*R).toFixed(1)}px at ${cx.toFixed(1)}px ${cy.toFixed(1)}px)`; ov.style.visibility = p > .001 || open ? 'visible' : 'hidden'; ov.style.pointerEvents = p > .5 ? 'auto' : 'none';
       hd.style.background = mix(1 - p, 'var(--card)', 'transparent'); hd.style.setProperty('--hx-fg', mix(p, 'var(--card)', 'var(--ink)')); hd.style.setProperty('--hx-bg', mix(p, 'var(--ink)', 'var(--card)')); hd.style.setProperty('--hx-ln', mix(p, 'color-mix(in oklab, var(--card) 35%, transparent)', 'var(--line)'));
       bs[0].style.transform = `translateY(${px(-3 + 3*p)}) rotate(${(45*p).toFixed(2)}deg)`; bs[1].style.transform = `translateY(${px(3 - 3*p)}) rotate(${(-45*p).toFixed(2)}deg)`;

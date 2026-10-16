@@ -94,6 +94,17 @@ const fade = (el, o, y = 0, blur = true) => {
   el.style.filter = blur && o < .98 ? `blur(${((1-clamp(o))*BLUR).toFixed(2)}px)` : 'none';
   if (y !== null) el.style.transform = `translateY(${y.toFixed(2)}px)`;
 };
+// An element's own size, measured once and kept current by a ResizeObserver, so frame loops never force a layout.
+// Only for elements whose size does not depend on what the same frame writes (a container's width, the inner box of a collapsing row).
+// w/h = offset size, cw/ch = client size, sw = scroll width.
+const SZ = new WeakMap(), szRead = el => ({ w:el.offsetWidth, h:el.offsetHeight, cw:el.clientWidth, ch:el.clientHeight, sw:el.scrollWidth });
+const SZO = new ResizeObserver(es => es.forEach(e => SZ.set(e.target, szRead(e.target))));
+function size(el){ let s = SZ.get(el); if (!s){ s = szRead(el); SZ.set(el, s); SZO.observe(el); } return s; }
+// Counts reflows of the given elements (a size change in any of them), so position reads can be cached until something moves.
+function reflow(...els){ const s = { v:0 }, ro = new ResizeObserver(() => { s.v++; }); els.flat().forEach(e => ro.observe(e)); return s; }
+// Scroll position and range of a scroll container, kept current by events and observers instead of read each frame.
+function scrollState(el){ const s = { top:el.scrollTop, max:0 }, upd = () => { s.max = Math.max(0, el.scrollHeight - el.clientHeight); };
+  const ro = new ResizeObserver(upd); ro.observe(el); [...el.children].forEach(c => ro.observe(c)); el.addEventListener('scroll', () => { s.top = el.scrollTop; }, { passive:true }); upd(); return s; }
 const money = v => '$' + v.toFixed(2);
 // measure an element's natural width by rendering a hidden clone
 function measureW(el, text){

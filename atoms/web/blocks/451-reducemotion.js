@@ -13,7 +13,7 @@ atom({ id:'reducemotion', cat:'Foundations', name:'Reduced-motion simulator', bl
     sim.onchange = paint; paint();
     $(st,'.run').onclick = () => { k ^= 1;
       if (instant()){ mv.jump(k); sw.to(k); } else { mv.set(k); sw.to(k); } paint(); };
-    return t => { const W = Math.max(1, lane.clientWidth - 40);
+    return t => { const W = Math.max(1, size(lane).cw - 40);
       dot.style.transform = `translateX(${px(clamp(mv.at(t)) * W)})`;
       const tt = instant() ? sw.t + 9 : t;
       L.forEach((el, i) => sw.apply(el, i, tt)); };

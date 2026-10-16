@@ -19,5 +19,5 @@ atom({ id:'confirmhold', cat:'Overlays', name:'Hold to confirm', block:'Danger s
     return t => { const p = clamp(o.at(t)); sr.style.opacity = (p*.35).toFixed(3); sr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       const q = clamp(do2.at(t)); dl.style.opacity = p.toFixed(3); dl.style.visibility = p < .01 ? 'hidden' : 'visible'; dl.style.pointerEvents = p > .5 ? 'auto' : 'none';
       dl.style.transform = `translate(calc(-50% + ${px((1-q)*24)}),-50%) scale(${(.96+.04*p).toFixed(4)})`;
-      rw.style.height = px(Math.max(0, clamp(rh.at(t))*fr.offsetHeight)); fade(fr, ro.at(t), null); dg.render(t); };
+      rw.style.height = px(Math.max(0, clamp(rh.at(t))*size(fr).h)); fade(fr, ro.at(t), null); dg.render(t); };
   }});

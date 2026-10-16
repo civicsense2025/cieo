@@ -25,7 +25,7 @@ atom({ id:'stepper', cat:'Content', name:'Stepper', block:'stepper', fam:['E','M
     const pickCf = v => { confirm = v; cf.forEach((b,i) => { const on = (i === 0) === v; b.setAttribute('aria-pressed', on); b.classList.toggle('ink', on); }); if (!v && finished){ finished = false; show(0); } };
     cf.forEach((b,i) => b.onclick = () => pickCf(i === 0)); pickCf(true);
     const finL = $$(st,'.fin .layer');
-    return t => { const W = sp.clientWidth - 30, p = line.at(t)/(N-1); fill.style.width = px(W*p);
+    return t => { const W = size(sp).cw - 30, p = line.at(t)/(N-1); fill.style.width = px(W*p);
       nodes.forEach((x,i) => { const k = clamp(x.ink.at(t)); x.n.style.left = px(W*i/(N-1)); x.n.style.background = mix(k,'var(--ink)','var(--tile)'); x.n.style.borderColor = mix(k,'var(--ink)','var(--line)'); x.n.style.color = mix(k,'var(--card)','var(--muted)'); x.l.forEach((el,j) => x.sw.apply(el,j,t)); });
       finL.forEach((el,j) => done.apply(el,j,t)); };
   }});

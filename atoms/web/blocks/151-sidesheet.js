@@ -246,7 +246,7 @@ atom({ id:'scrollfade', cat:CAT, name:'Scroll-fade row', block:'ScrollFadeRow', 
     sb.forEach((b, i) => b.onclick = () => { many = i === 1; place(false); chips.forEach((c, k) => c.vis.set(many || k < 4 ? 1 : 0, S.base, now() + (many ? Math.max(0, k - 4) : Math.max(0, 10 - k))*.03)); });
     document.fonts.ready.then(() => place(true)); place(true);
     return t => {
-      const scr = row.scrollWidth > row.clientWidth + 1, s = scr && row.scrollLeft > 0, en = scr && row.scrollLeft + row.clientWidth < row.scrollWidth - 1;
+      const scr = row.scrollWidth > size(row).cw + 1, s = scr && row.scrollLeft > 0, en = scr && row.scrollLeft + size(row).cw < row.scrollWidth - 1;
       if (s !== ws){ ws = s; fs.set(s ? 28 : 0); row.toggleAttribute('data-fade-start', s); }
       if (en !== we){ we = en; fe.set(en ? 28 : 0); row.toggleAttribute('data-fade-end', en); }
       if (auto){ row.scrollLeft = sc.at(t); if (Math.abs(sc.at(t) - tgt) < .5 && Math.abs(row.scrollLeft - tgt) < 1) auto = false; }
@@ -254,7 +254,7 @@ atom({ id:'scrollfade', cat:CAT, name:'Scroll-fade row', block:'ScrollFadeRow', 
       pv.disabled = !(row.scrollLeft > 0); nx.disabled = !(en);
       ta.style.opacity = (.35 + .65*clamp(fs.at(t)/28)).toFixed(3); tb.style.opacity = (.35 + .65*clamp(fe.at(t)/28)).toFixed(3); ta.style.color = s ? 'var(--ink)' : 'var(--faint)'; tb.style.color = en ? 'var(--ink)' : 'var(--faint)';
       chips.forEach(c => { const p = clamp(c.vis.at(t)), k = clamp(c.on.at(t));
-        c.w.style.width = p > .999 ? 'auto' : px(p*(c.b.offsetWidth + 6)); c.w.style.overflow = p > .999 ? 'visible' : 'hidden'; c.w.style.visibility = p < .01 ? 'hidden' : 'visible'; c.w.style.opacity = p.toFixed(3);
+        c.w.style.width = p > .999 ? 'auto' : px(p*(size(c.b).w + 6)); c.w.style.overflow = p > .999 ? 'visible' : 'hidden'; c.w.style.visibility = p < .01 ? 'hidden' : 'visible'; c.w.style.opacity = p.toFixed(3);
         c.b.style.background = mix(k, 'var(--ink)', 'var(--card)'); c.b.style.color = mix(k, 'var(--card)', 'var(--ink)'); c.b.style.borderColor = mix(k, 'var(--ink)', 'var(--line)'); });
       const a = e.A.at(t), b = e.B.at(t); Object.assign(segI.style, { transform:`translate(${px(a)},3px)`, width:px(b - a), height:'calc(100% - 6px)' });
     };
@@ -556,7 +556,7 @@ atom({ id:'disclosure', cat:CAT, name:'Disclosure group', block:'EditorDisclosur
     rs.onclick = () => { Object.keys(saved).forEach(k => delete saved[k]); sync(); };
     groups.forEach(o => { o.h.jump(isOpen(o.g) ? 1 : 0); });
     return t => { for (let i = groups.length - 1; i >= 0; i--){ const o = groups[i], p = clamp(o.h.at(t));
-      o.body.style.height = p > .9995 ? 'auto' : px(p*o.inner.offsetHeight); o.body.style.visibility = p < .01 ? 'hidden' : 'visible';
+      o.body.style.height = p > .9995 ? 'auto' : px(p*size(o.inner).h); o.body.style.visibility = p < .01 ? 'hidden' : 'visible';
       o.chev.style.transform = `rotate(${((p - 1)*90).toFixed(1)}deg)`; fade(o.inner, p, (1 - p)*-4); } };
   }});
 

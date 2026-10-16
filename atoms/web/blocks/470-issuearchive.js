@@ -18,5 +18,5 @@ atom({ id:'issuearchive', cat:'Newsletter', name:'Issue archive', block:'newslet
     rows.forEach((r,i) => r.btn.onclick = () => { open = open === i ? -1 : i; const t0 = now();
       rows.forEach((x,j) => { x.h.set(open === j ? 1 : 0); x.btn.setAttribute('aria-expanded', open === j);
         if (stg.checked && !REDUCE && open >= 0 && j !== open) x.sw.to(1, t0 + Math.abs(j-open)*.04); else x.sw.to(0); }); });
-    return t => rows.forEach(r => { const p = clamp(r.h.at(t)); r.body.style.height = px(p*(20 + r.inner.offsetHeight)); r.chev.style.transform = `rotate(${(p*180).toFixed(1)}deg)`; r.H.forEach((x,j) => r.sw.apply(x,j,t)); fade(r.inner, p, (1-p)*-4); });
+    return t => rows.forEach(r => { const p = clamp(r.h.at(t)); r.body.style.height = px(p*(20 + size(r.inner).h)); r.chev.style.transform = `rotate(${(p*180).toFixed(1)}deg)`; r.H.forEach((x,j) => r.sw.apply(x,j,t)); fade(r.inner, p, (1-p)*-4); });
   }});

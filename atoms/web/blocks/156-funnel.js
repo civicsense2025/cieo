@@ -98,7 +98,7 @@ atom({ id:'funnel', cat:'Workspace', name:'Funnel report', block:'FunnelReportSc
     const tipPos = (i, t = now()) => {
       const li = lis[i], ah = ba.clientHeight, ty = ol.offsetTop + 66, bh = clamp(frac[i].at(t))*ah;
       const x = clamp(ol.offsetLeft + li.offsetLeft + li.offsetWidth/2 - tip.offsetWidth/2, 8, Math.max(8, fn.clientWidth - tip.offsetWidth - 8));
-      const y = Math.max(ty + 2, ty + ah - bh - tip.offsetHeight - 6);
+      const y = Math.max(ty + 2, ty + ah - bh - size(tip).h - 6);
       return [x, y];
     };
     lis.forEach((li, i) => { li.onpointerenter = () => hover(i); bs[i].onfocus = () => hover(i); bs[i].onblur = () => hover(-1); });
@@ -111,11 +111,11 @@ atom({ id:'funnel', cat:'Workspace', name:'Funnel report', block:'FunnelReportSc
     new IntersectionObserver((es, ob) => { if (es.some(x => x.isIntersecting) && !started){ started = true; play(true); ob.disconnect(); } }).observe(st);
 
     return t => {
-      const n = st.clientWidth < 520;
+      const n = size(st).cw < 520;
       if (n !== narrow){ narrow = n; fn.toggleAttribute('data-n', n); init(); }
       const a = e.A.at(t), b = e.B.at(t); ind.style.transform = `translateX(${px(a)})`; ind.style.width = px(b - a);
       per.forEach((el, k) => psw.apply(el, k, t, 4));
-      const ah = ba.clientHeight, v = FN_RANGES[r].v;
+      const ah = size(ba).ch, v = FN_RANGES[r].v;
       for (let i = 0; i < N; i++){
         bars[i].style.height = px(Math.max(0, frac[i].at(t))*ah);
         const c = fnNum(cnt[i].at(t)); if (c !== cache.n[i]){ cache.n[i] = c; nums[i].textContent = c; }

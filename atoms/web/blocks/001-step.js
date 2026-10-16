@@ -11,5 +11,5 @@ atom({ id:'step', cat:'Foundations', name:'Spring presets', block:'every block',
     const go = () => tr.forEach(x => x.set(x.target ? 0 : 1));
     st.onclick = go;
     st.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
-    return t => { const w = dots[0].parentNode.clientWidth - 14; tr.forEach((x,i) => dots[i].style.transform = `translateX(${px(x.at(t)*w)})`); };
+    return t => { const w = size(dots[0].parentNode).cw - 14; tr.forEach((x,i) => dots[i].style.transform = `translateX(${px(x.at(t)*w)})`); };
   }});

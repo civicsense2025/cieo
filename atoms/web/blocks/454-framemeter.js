@@ -17,6 +17,6 @@ atom({ id:'framemeter', cat:'Foundations', name:'Frame meter', block:'performanc
         if (ms > 25){ drop = Math.min(9999, drop + 1); dd.set(String(drop)); }
         if (Math.abs(mv.target - mv.at(t)) < .005) mv.set(mv.target ? 0 : 1, S.soft, t); }
       fd.render(t); dd.render(t);
-      const W = Math.max(1, lane.clientWidth - 40);
+      const W = Math.max(1, size(lane).cw - 40);
       dot.style.transform = `translateX(${px(clamp(mv.at(t)) * W)})`; };
   }});

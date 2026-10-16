@@ -33,9 +33,9 @@ atom({ id:'listdetail', cat:'Views', name:'List to detail', block:'postlist, ent
     const T = { x:new Track(0), y:new Track(0), w:new Track(0), h:new Track(0), r:new Track(14), ah:new Track(0) };
     const sib = new Track(1), face_ = new Track(1), IT = items.map(() => new Track(0));
     let cur = -1, state = 'closed', tClose = 0, sz = [0, 0], narrow = false;
-    const frame = () => { const W = st.clientWidth, H = st.clientHeight; return [10, 10, W - 20, H - 20]; };
+    const frame = () => { const W = size(st).cw, H = size(st).ch; return [10, 10, W - 20, H - 20]; };
     const detailArt = () => narrow ? 72 : 112;
-    const layout = () => { const W = st.clientWidth, H = st.clientHeight, c = W >= 640 ? 4 : 2; narrow = W < 640; sz = [W, H];
+    const layout = () => { const W = size(st).cw, H = size(st).ch, c = W >= 640 ? 4 : 2; narrow = W < 640; sz = [W, H];
       grid.style.setProperty('--c', c); grid.style.setProperty('--rh', (c === 4 ? 232 : Math.floor((H - 14 - 30 - 12)/2)) + 'px');
       $(fd,'.i1 b').style.fontSize = narrow ? '17px' : '20px'; fd.style.fontSize = narrow ? '13px' : '13.5px'; };
     const jumpBox = (r, rad, ah) => { T.x.jump(r[0]); T.y.jump(r[1]); T.w.jump(r[2]); T.h.jump(r[3]); T.r.jump(rad); T.ah.jump(ah); };
@@ -58,7 +58,7 @@ atom({ id:'listdetail', cat:'Views', name:'List to detail', block:'postlist, ent
     fb.onclick = close; st.addEventListener('keydown', e => { if (e.key === 'Escape' && state === 'open'){ e.preventDefault(); close(); } });
     layout();
     return t => {
-      if (st.clientWidth !== sz[0] || st.clientHeight !== sz[1]){ layout(); if (state === 'open') jumpBox(frame(), 18, detailArt()); }
+      if (size(st).cw !== sz[0] || size(st).ch !== sz[1]){ layout(); if (state === 'open') jumpBox(frame(), 18, detailArt()); }
       if (state === 'closed') return;
       Object.assign(fl.style, { left:px(T.x.at(t)), top:px(T.y.at(t)), width:px(T.w.at(t)), height:px(T.h.at(t)), borderRadius:px(T.r.at(t)) });
       const ah = T.ah.at(t); fa.style.height = px(ah); ff.style.top = px(ah); fd.style.top = px(ah); fade(ff, face_.at(t), null);
@@ -139,13 +139,17 @@ atom({ id:'inbox', cat:'Views', name:'Master–detail inbox', block:'entry-list,
       ls.style.width = px(LW); pn.style.left = px(narrow ? 0 : LW); pn.style.width = px(narrow ? fw : fw - LW); cs.style.left = px(narrow ? 0 : LW); cs.style.width = px(narrow ? fw : fw - LW);
       pb.style.display = narrow ? 'flex' : 'none'; pcs.style.top = narrow ? '44px' : '0'; setInert(); };
     layout(st.clientWidth);
+    let rowBase = null;
     return t => {
-      if (st.clientWidth !== lastW) layout(st.clientWidth);
+      if (size(st).cw !== lastW) layout(size(st).cw);
       while (q.length && q[0][0] <= t) q.shift()[1]();
-      rows.forEach(r => { r.w.style.height = px(clamp(r.h.at(t))*RH); fade(r.in, r.o.at(t), null); const d = clamp(r.dotT.at(t));
+      // the selected row's top is the sum of the heights written just below, so the plate needs no layout read
+      if (rowBase === null && rows.length) rowBase = rows[0].w.offsetTop;
+      let ry = rowBase || 0, top = 0, bot = 0;
+      rows.forEach(r => { const rh = clamp(r.h.at(t))*RH; r.w.style.height = px(rh); if (r === selR){ top = ry; bot = ry + rh; } ry += rh; fade(r.in, r.o.at(t), null); const d = clamp(r.dotT.at(t));
         r.dot.style.transform = `scale(${d.toFixed(3)})`; r.dot.style.opacity = d.toFixed(3); r.nm.style.color = mix(d, 'var(--ink)', 'var(--muted)'); });
       for (let i = rows.length - 1; i >= 0; i--) if (rows[i].dead && rows[i].h.at(t) < .01){ rows[i].w.remove(); rows[i].pane.remove(); delete panes[rows[i].id]; rows.splice(i, 1); }
-      const top = selR.w.offsetTop, bot = top + selR.w.offsetHeight; plate(pl, top + pA.at(t), bot + pB.at(t));
+      plate(pl, top + pA.at(t), bot + pB.at(t));
       Object.values(panes).forEach(r => sw.apply(r.pane, r.id, t, 14*dir));
       const nvv = clamp(nv.at(t)); pn.style.transform = narrow ? `translateX(${((1 - nvv)*100).toFixed(2)}%)` : 'none';
       const c = clamp(cv.at(t)); cs.style.transform = `translateX(${((1 - c)*100).toFixed(2)}%)`; cs.style.opacity = clamp(c*2).toFixed(3); cs.style.visibility = c < .005 ? 'hidden' : 'visible';

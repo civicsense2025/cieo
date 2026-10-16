@@ -12,11 +12,13 @@ atom({ id:'longpage', cat:'Chrome', name:'Header, progress, jump to top', block:
     $(st,'article').innerHTML = ['The river path was quiet before sunrise, and the only sound was gravel under our boots.','We counted eleven herons between the second bridge and the old mill. Most stood still enough to pass for posts.','By seven the fog lifted off the water in one sheet, and the far bank came back into view like a print developing.','Notes for next time: bring the long lens, leave before five, and take the east fork where the path forks at the mill.','The walk back took half as long. It always does once you know where the path goes.','We stopped at the bakery by the station and ate standing up at the window counter.'].map(p => `<p style="margin:0 0 12px">${p}</p>`).join('');
     const c = new Track(0), jo = new Track(0), sc = new Track(0, S.soft); let auto = false;
     // Back-to-top enters after half a screen; the sample page is only about 1.6 screens tall, so 180px was out of reach.
-    lp.onscroll = () => { const y = lp.scrollTop, on = y > lp.clientHeight * .5; c.set(y > 16 ? 1 : 0); jo.set(on ? 1 : 0, on ? S.base : S.snap); };
+    const art = $(st,'article'); let top = 0, max = 0;
+    const mx = new ResizeObserver(() => { max = lp.scrollHeight - lp.clientHeight; }); mx.observe(lp); mx.observe(art);
+    lp.onscroll = () => { const y = top = lp.scrollTop, on = y > lp.clientHeight * .5; c.set(y > 16 ? 1 : 0); jo.set(on ? 1 : 0, on ? S.base : S.snap); };
     const stop = () => auto = false; lp.addEventListener('wheel', stop, { passive:true }); lp.addEventListener('touchstart', stop, { passive:true });
     jt.onclick = () => { sc.jump(lp.scrollTop).set(0); auto = true; };
-    return t => { if (auto){ lp.scrollTop = sc.at(t); if (!sc.prune(t)) auto = false; }
-      const k = clamp(c.at(t)), max = lp.scrollHeight - lp.clientHeight; hd.style.height = px(lerp(56, 42, k)); lg.style.transform = `scale(${lerp(1.15, 1, k).toFixed(4)})`;
-      hd.style.boxShadow = k > .5 ? 'var(--shadow)' : 'none'; rp.style.width = (max > 0 ? lp.scrollTop/max*100 : 0).toFixed(2) + '%';
+    return t => { if (auto){ lp.scrollTop = sc.at(t); top = clamp(sc.at(t), 0, max); if (!sc.prune(t)) auto = false; }
+      const k = clamp(c.at(t)); hd.style.height = px(lerp(56, 42, k)); lg.style.transform = `scale(${lerp(1.15, 1, k).toFixed(4)})`;
+      hd.style.boxShadow = k > .5 ? 'var(--shadow)' : 'none'; rp.style.width = (max > 0 ? top/max*100 : 0).toFixed(2) + '%';
       const o = clamp(jo.at(t)); jt.style.opacity = o.toFixed(3); jt.style.transform = `translateY(${px((1-o)*10)}) scale(${(.9+.1*o).toFixed(4)})`; jt.style.pointerEvents = o > .5 ? 'auto' : 'none'; jt.style.visibility = o < .02 ? 'hidden' : 'visible'; };
   }});

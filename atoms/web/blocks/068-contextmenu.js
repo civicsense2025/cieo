@@ -31,7 +31,7 @@ atom({ id:'contextmenu', cat:'Overlays', name:'Context menu', block:'Context men
     let lp = 0; st.addEventListener('pointerdown', ev => { if (!cm.contains(ev.target)) set(false); if (ev.pointerType === 'touch'){ const p = at(ev); lp = setTimeout(() => set(true, ...p), 450); } });
     st.addEventListener('pointerup', () => clearTimeout(lp)); st.addEventListener('pointermove', () => clearTimeout(lp)); st.addEventListener('keydown', ev => { if (ev.key === 'Escape'){ if (co.target) setConfirm(false); else set(false); } });
     return t => { const p = clamp(o.at(t)); pop(cm, p, 0); items.forEach((x,i) => x.el.style.opacity = (o.target ? clamp(prog(t, tOpen + .03 + i*.025)) : p).toFixed(3)); ml.forEach((e,k) => sw.apply(e,k,t));
-      frw.style.height = px(Math.max(0, clamp(fh.at(t)) * fr.offsetHeight)); fade(fr, fo.at(t), null);
+      frw.style.height = px(Math.max(0, clamp(fh.at(t)) * size(fr).h)); fade(fr, fo.at(t), null);
       const cp = clamp(co.at(t)); df.style.opacity = cp.toFixed(3); df.style.visibility = cp < .01 && !co.target ? 'hidden' : 'visible';
       df.style.transform = `translate(-50%, calc(-50% + ${px((1-cp)*8)})) scale(${(.96+.04*cp).toFixed(4)})`; df.style.pointerEvents = cp > .5 ? 'auto' : 'none';
       fade(un, uo.at(t), null); un.style.visibility = (uo.target || uo.at(t) > .01) ? 'visible' : 'hidden'; un.disabled = !uo.target; };
