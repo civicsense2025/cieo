@@ -625,7 +625,9 @@
         "DropdownMenu/DropdownMenu.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "DropdownMenuCheckboxItem": {
@@ -656,7 +658,9 @@
       "files": [
         "DropdownMenuItem/DropdownMenuItem.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "DropdownMenu"
+      ],
       "packageImports": [],
       "sharedFiles": []
     },
@@ -683,7 +687,9 @@
         "DropdownMenuSubMenu/DropdownMenuSubMenu.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": [
         "motion.ts"
       ]

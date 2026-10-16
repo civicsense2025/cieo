@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/DropdownMenuItem/DropdownMenuItem.tsx", "symbol": "DropdownMenuItem" },
-  "dependencies": [],
+  "dependencies": ["DropdownMenu"],
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },

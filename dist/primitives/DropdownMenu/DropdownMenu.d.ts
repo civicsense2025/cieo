@@ -1,4 +1,9 @@
 import { type ReactNode } from 'react';
+export interface DropdownMenuContextValue {
+    /** Closes the menu and returns focus to the trigger. */
+    close: () => void;
+}
+export declare const DropdownMenuContext: import("react").Context<DropdownMenuContextValue | null>;
 export interface DropdownMenuProps {
     /** Accessible name for the menu (e.g. "File actions"). Required. */
     label: string;
@@ -6,7 +11,7 @@ export interface DropdownMenuProps {
     open?: boolean;
     /** Initial open state when uncontrolled. Defaults to false. */
     defaultOpen?: boolean;
-    /** Called with the next open state. Host trigger calls onOpenChange(true). */
+    /** Called with the next open state. */
     onOpenChange?: (open: boolean) => void;
     /** Opener control (usually a Button). Exactly one. */
     trigger: ReactNode;

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 export interface DropdownMenuItemProps {
     /** Accessible name when children carry no readable text. */
     label?: string;
