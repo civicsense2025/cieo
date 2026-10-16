@@ -93,7 +93,7 @@ atom({ id:'pageeditor', cat:'Editor', name:'Page editor', block:'section, headin
     const R = [0,1,2,3].map(() => new Track(0)), ringO = new Track(0), plO = new Track(0), inspO = new Track(0), pEd = edges(0,0), sw = new Swap(0), sc = new Track(0, S.soft);
     // block rects are cached until a block or the canvas reflows, so the ring following a block costs no layout read per frame
     const rfl = reflow(cv, bks), rc = [];
-    const rectOf = k => { if (rc[k] && rc[k].v === rfl.v) return rc[k].r; const b = bks[k], r = [b.offsetLeft - 3, b.offsetTop - 3, b.offsetWidth + 6, b.offsetHeight + 6]; rc[k] = { v:rfl.v, r }; return r; };
+    const rectOf = k => { if (rc[k] && rc[k].v === rfl.v) return rc[k].r; const b = bks[k], r = [frameLayout(b).ol - 3, frameLayout(b).ot - 3, frameLayout(b).w + 6, frameLayout(b).h + 6]; rc[k] = { v:rfl.v, r }; return r; };
     const geo = k => { const r = rows[k]; return narrow ? [r.offsetLeft, r.offsetLeft + r.offsetWidth] : [r.offsetTop, r.offsetTop + r.offsetHeight]; };
     const replate = () => { Object.assign(pl.style, narrow ? { left:'0', right:'auto', top:'0', bottom:'0', width:'0', height:'auto' } : { left:'0', right:'0', top:'0', bottom:'auto', width:'auto', height:'0' }); const [a,b] = geo(lastK); pEd.jump(a, b); };
     const reveal = k => { const b = bks[k], vh = cv.clientHeight - (narrow ? SH : 0), cur = cv.scrollTop, top = b.offsetTop - 8, bot = b.offsetTop + b.offsetHeight + 8; let dest = cur;

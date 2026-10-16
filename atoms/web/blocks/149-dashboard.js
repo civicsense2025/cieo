@@ -324,7 +324,7 @@ ${SRCSS}
         f:new Track(0), c:new Track(0), s:new Track(0), open:new Track(0) }; });
     const setOpen = (r, v, t = now()) => { r.open.set(v ? 1 : 0, S.base, t); r.th.setAttribute('aria-expanded', !!v); };
     $(st,'.dt-on').onchange = ev => tl.toggleAttribute('data-nd', !ev.target.checked);
-    const nat = k => Math.min(LY[k].scrollHeight, st.clientHeight - (st.clientWidth < 520 ? 44 : 14) - 10);
+    const nat = k => Math.min(frameLayout(LY[k]).sh, frameLayout(st).ch - (frameLayout(st).cw < 520 ? 44 : 14) - 10);
     const showHeight = (k, t0) => H.set(nat(k), S.base, t0 + EXIT);
     const toState = (k, t0) => { sw.to(k, t0); showHeight(k, t0); steadyAt = t0 + EXIT + .55; };
     const refocus = (el, d) => setTimeout(() => { if (card.contains(document.activeElement) || document.activeElement === document.body) el.focus(); }, d);
@@ -351,7 +351,7 @@ ${SRCSS}
       const steady = t > steadyAt, narrow = size(st).cw < 520, top = narrow ? 44 : 14;
       let hh; if (steady){ hh = nat(sw.cur); H.jump(hh); } else hh = H.at(t);
       card.style.height = px(Math.max(0, hh)); card.style.transform = `translate(-50%,${px(top)})`; card.style.pointerEvents = steady ? '' : 'none';
-      LY.c.style.maxHeight = steady ? px(hh) : 'none'; LY.c.style.overflowY = steady && LY.c.scrollHeight > hh + 1 ? 'auto' : 'hidden';
+      LY.c.style.maxHeight = steady ? px(hh) : 'none'; LY.c.style.overflowY = steady && frameLayout(LY.c).sh > hh + 1 ? 'auto' : 'hidden';
       const amp = sw.cur === 'd' || sw.prev === 'd' ? 14 : 5; Object.keys(LY).forEach(k => sw.apply(LY[k], k, t, amp));
       const p = clamp(ring.at(t)), fin = clamp((p - .75)*4);
       pr.setAttribute('stroke-dasharray', `${(p*100).toFixed(2)} 100`); pr.style.stroke = mix(fin,'var(--success)','var(--ink)'); dn.render(t);

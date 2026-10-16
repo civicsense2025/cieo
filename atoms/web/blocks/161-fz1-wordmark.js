@@ -6,7 +6,7 @@ const E = (tag, css, text) => { const e = document.createElement(tag); if (css) 
 const queue = () => { const q = []; return { at(t, fn){ q.push([t, fn]); q.sort((a, b) => a[0] - b[0]); }, run(t){ while (q.length && q[0][0] <= t) q.shift()[1](); }, clear(){ q.length = 0; } }; };
 const noNav = st => st.addEventListener('click', e => { if (e.target.closest('a[href="#"]')) e.preventDefault(); });
 // where an element sits inside the scrolling page, independent of offsetParent
-const topIn = (el, pg) => el.getBoundingClientRect().top - pg.getBoundingClientRect().top + pg.scrollTop;
+const topIn = (el, pg) => frameLayout(el).rect.top - frameLayout(pg).rect.top + frameLayout(pg).st;
 // one value followed by several springs, each starting a little later than the one before
 const follow = (trs, v, t, gap = .035) => trs.forEach((x, i) => x.set(v, S.soft, t + i*gap));
 const DK = p => `.${p}dk{--ink:#EFF2F6;--muted:#ABAEB3;--faint:#82868A;--line:#2A2F36;--line-soft:#1E2228;--card:#171B21;--raised:#23272C;--accent:#939668;--accent-tint:#23261A;--success:#A3A76E;--success-tint:#23261A;--danger:#D0584F;--danger-tint:#2E1A19;--warning:#D6822F;--warning-tint:#2D2114;background:#0C1016;color:var(--ink)}`;
@@ -524,7 +524,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
       const p = qp.at(t); if (Math.abs(p - lastQ) > .002){ lastQ = p; for (let i = 0; i < rects.length; i++) rects[i].style.opacity = clamp(p * 2 - cells[i]).toFixed(2); }
       const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + i * .06)); }
       bds.forEach((b, i) => { const r = clamp(bt[i].at(t)), h = clamp(hv[i].h.at(t)); fade(b, r, (1 - r) * 10);
-        b.style.boxShadow = `0 0 0 1.5px color-mix(in oklab, var(--ink) ${(h * 100).toFixed(1)}%, transparent), var(--shadow)`; pop(tps[i], tt[i].at(t), 4); tps[i].style.left = px(Math.max(0, Math.min(b.parentNode.offsetLeft, tr.clientWidth - tps[i].offsetWidth))); });
+        b.style.boxShadow = `0 0 0 1.5px color-mix(in oklab, var(--ink) ${(h * 100).toFixed(1)}%, transparent), var(--shadow)`; pop(tps[i], tt[i].at(t), 4); tps[i].style.left = px(Math.max(0, Math.min(frameLayout(b.parentNode).ol, frameLayout(tr).cw - frameLayout(tps[i]).w))); });
       sbs.forEach(({ a, h }) => { const x = clamp(h.h.at(t)), d = clamp(h.d.at(t)); a.style.borderRadius = px(lerp(12, 20, x)); a.style.background = mix(x, '#2A2F36', '#0C1016'); a.style.transform = `scale(${(1 - .03 * d).toFixed(4)})`; });
       pls.forEach(({ a, h, u }) => { const x = clamp(h.h.at(t)), d = clamp(h.d.at(t)); a.style.background = mix(x, 'var(--ink)', 'transparent'); a.style.color = mix(x, 'var(--card)', 'var(--ink)'); a.style.borderColor = mix(x, 'var(--ink)', 'var(--faint)');
         u.style.transform = `translate(${px(x * 2)},${px(-x * 2)})`; a.style.transform = `scale(${(1 - .03 * d).toFixed(4)})`; });

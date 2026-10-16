@@ -923,14 +923,14 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
     const chips = AM_SECS.map(n => { const b = gEl('button', ''); b.type = 'button'; b.className = 'agm-ch'; b.innerHTML = `<i></i><span></span><b>${ic(I.check, 13, 2.6)}</b>`; $(b, 'span').textContent = n; chipH.appendChild(b); return { n, b, fill:$(b, 'i'), ck:$(b, 'b'), lo:0, hi:0, fr:0, full:new Track(0, S.base) }; });
     const finds = []; let W = 0, H = 0, ph = 0, vh = 0, kx = 0, ky = 0, mw = 0, mh = 0, lastLay = -9, lastKey = '', si = 0, seenN = 0, fndN = 0, curSec = '', lastSec = '';
     const say = s => { live.textContent = s; };
-    const maxS = () => Math.max(0, sc.scrollHeight - size(sc).ch);
+    const maxS = () => Math.max(0, frameLayout(sc).sh - size(sc).ch);
     const secOf = y => { const r = chips.find(c => y >= c.lo && y < c.hi) || chips[chips.length - 1]; return r.n; };
     const build = () => {
       pw_ = sc.clientWidth; ph = sc.scrollHeight; vh = sc.clientHeight; const mpr = mp.getBoundingClientRect(); mw = Math.max(20, mp.clientWidth - 12); mh = Math.max(40, mp.clientHeight - 12);
       kx = mw/pw_; ky = mh/ph; Object.assign(mi.style, { width:px(mw), height:px(mh) });
       const pr_ = pg.getBoundingClientRect(), top0 = pr_.top, left0 = pr_.left;
       bars.forEach(b => b.remove()); bars.length = 0;
-      $$(pg, '.agm-nv,.agm-ey,.agm-h1,.agm-sub,.agm-b1,.agm-b2,.agm-cd,.agm-sh,.agm-ss,.agm-fq,.agm-ps,.agm-ft').forEach(e => { const r = e.getBoundingClientRect(); if (!r.width || !r.height) return;
+      $$(pg, '.agm-nv,.agm-ey,.agm-h1,.agm-sub,.agm-b1,.agm-b2,.agm-cd,.agm-sh,.agm-ss,.agm-fq,.agm-ps,.agm-ft').forEach(e => { const r = frameLayout(e).rect; if (!r.width || !r.height) return;
         const b = gEl('i', ''); b.className = 'agm-br' + (/(nv|h1|sh)$/.test(e.className.split(' ')[0]) ? ' h' : ''); b.style.cssText = `left:${((r.left - left0)*kx).toFixed(1)}px;top:${((r.top - top0)*ky).toFixed(1)}px;width:${Math.max(2, r.width*kx).toFixed(1)}px;height:${Math.max(2, Math.min(r.height*ky, r.height*ky)).toFixed(1)}px`; mi.appendChild(b); bars.push(b); });
       // bands go under the bars
       if (!bands.length) for (let i = 0; i < NB; i++){ const d = gEl('i', ''); d.className = 'agm-bd'; mi.insertBefore(d, mi.firstChild); bands.push({ el:d, on:false, f:new Track(0, S.soft) }); }
@@ -974,7 +974,7 @@ atom({ id:'agentscroll-map', cat:'Agent activity', name:'Agent scroll map', bloc
     sc.scrollTop = 0; build(); n1.set('0', true); n2.set('0', true); ss.put('Review agent is at the top of the page', true); ea.jump(0, vh*ky); q.at(now() + .8, step);
     return t => {
       q.run(t);
-      if (t - lastLay > .25){ lastLay = t; const key = size(sc).cw + ':' + sc.scrollHeight + ':' + size(sc).ch + ':' + (size(mp).ch - 12); if (key !== lastKey) build(); }
+      if (t - lastLay > .25){ lastLay = t; const key = size(sc).cw + ':' + frameLayout(sc).sh + ':' + size(sc).ch + ':' + (size(mp).ch - 12); if (key !== lastKey) build(); }
       if (anim){ const v = u.at(t); sc.scrollTop = v; if (Math.abs(v - u.target) < .4 && !u.ev.length) anim = false; }
       const a = A.at(t);
       // which bands has the agent covered?

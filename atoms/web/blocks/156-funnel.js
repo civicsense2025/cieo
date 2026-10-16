@@ -96,8 +96,8 @@ atom({ id:'funnel', cat:'Workspace', name:'Funnel report', block:'FunnelReportSc
       chipD.forEach((d, j) => d.set(i < 0 || i === j || i === j - 1 ? 1 : .4, S.snap, t0));
     };
     const tipPos = (i, t = now()) => {
-      const li = lis[i], ah = ba.clientHeight, ty = ol.offsetTop + 66, bh = clamp(frac[i].at(t))*ah;
-      const x = clamp(ol.offsetLeft + li.offsetLeft + li.offsetWidth/2 - tip.offsetWidth/2, 8, Math.max(8, fn.clientWidth - tip.offsetWidth - 8));
+      const li = lis[i], ah = frameLayout(ba).ch, ty = frameLayout(ol).ot + 66, bh = clamp(frac[i].at(t))*ah;
+      const x = clamp(frameLayout(ol).ol + frameLayout(li).ol + frameLayout(li).w/2 - frameLayout(tip).w/2, 8, Math.max(8, frameLayout(fn).cw - frameLayout(tip).w - 8));
       const y = Math.max(ty + 2, ty + ah - bh - size(tip).h - 6);
       return [x, y];
     };

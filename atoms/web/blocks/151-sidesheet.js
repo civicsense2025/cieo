@@ -246,7 +246,7 @@ atom({ id:'scrollfade', cat:CAT, name:'Scroll-fade row', block:'ScrollFadeRow', 
     sb.forEach((b, i) => b.onclick = () => { many = i === 1; place(false); chips.forEach((c, k) => c.vis.set(many || k < 4 ? 1 : 0, S.base, now() + (many ? Math.max(0, k - 4) : Math.max(0, 10 - k))*.03)); });
     document.fonts.ready.then(() => place(true)); place(true);
     return t => {
-      const scr = row.scrollWidth > size(row).cw + 1, s = scr && row.scrollLeft > 0, en = scr && row.scrollLeft + size(row).cw < row.scrollWidth - 1;
+      const scr = frameLayout(row).sw > size(row).cw + 1, s = scr && frameLayout(row).sl > 0, en = scr && frameLayout(row).sl + size(row).cw < frameLayout(row).sw - 1;
       if (s !== ws){ ws = s; fs.set(s ? 28 : 0); row.toggleAttribute('data-fade-start', s); }
       if (en !== we){ we = en; fe.set(en ? 28 : 0); row.toggleAttribute('data-fade-end', en); }
       if (auto){ row.scrollLeft = sc.at(t); if (Math.abs(sc.at(t) - tgt) < .5 && Math.abs(row.scrollLeft - tgt) < 1) auto = false; }
