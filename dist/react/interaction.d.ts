@@ -21,3 +21,19 @@ export declare function useDismiss(open: boolean, onDismiss: (reason: 'escape' |
     escape?: boolean;
     outside?: boolean;
 }): void;
+/** While active: moves focus into the container, keeps Tab inside it, and restores the previous focus on close. Returns the keydown handler to attach. */
+export declare function useModalFocus(active: boolean, ref: RefObject<HTMLElement | null>): (event: {
+    key: string;
+    shiftKey: boolean;
+    preventDefault(): void;
+}) => void;
+/** Hover/focus hints that Escape can dismiss until the pointer and focus leave. Spread `handlers` on the wrapper; style from `dismissed`. */
+export declare function useDismissibleHint(): {
+    dismissed: boolean;
+    handlers: {
+        onMouseEnter(): void;
+        onMouseLeave(): void;
+        onFocus(): void;
+        onBlur(): void;
+    };
+};

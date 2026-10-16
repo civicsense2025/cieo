@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 /** Next index for a roving-focus key, or null when the key does not move focus. Wraps at both ends unless loop is false. */
 export function roveIndex(key, current, count, opts = {}) {
     if (count <= 0)
@@ -69,4 +69,65 @@ export function useDismiss(open, onDismiss, inside, opts = {}) {
             document.removeEventListener('pointerdown', onPress);
         };
     }, [open, escape, outside]);
+}
+const TABBABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+/** While active: moves focus into the container, keeps Tab inside it, and restores the previous focus on close. Returns the keydown handler to attach. */
+export function useModalFocus(active, ref) {
+    useEffect(() => {
+        const el = ref.current;
+        if (!active || !el)
+            return;
+        const previous = document.activeElement;
+        if (!el.contains(previous))
+            (enabledIn(el, TABBABLE)[0] ?? el).focus({ preventScroll: true });
+        return () => {
+            if (previous?.isConnected)
+                previous.focus({ preventScroll: true });
+        };
+    }, [active, ref]);
+    return (event) => {
+        if (event.key !== 'Tab')
+            return;
+        const el = ref.current;
+        if (!el)
+            return;
+        const items = enabledIn(el, TABBABLE);
+        if (items.length === 0) {
+            event.preventDefault();
+            el.focus();
+            return;
+        }
+        const first = items[0];
+        const last = items[items.length - 1];
+        const at = document.activeElement;
+        if (event.shiftKey && (at === first || at === el)) {
+            event.preventDefault();
+            last.focus();
+        }
+        else if (!event.shiftKey && at === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    };
+}
+/** Hover/focus hints that Escape can dismiss until the pointer and focus leave. Spread `handlers` on the wrapper; style from `dismissed`. */
+export function useDismissibleHint() {
+    const [hovered, setHovered] = useState(false);
+    const [focused, setFocused] = useState(false);
+    const [dismissed, setDismissed] = useState(false);
+    const active = hovered || focused;
+    useEffect(() => {
+        if (!active)
+            setDismissed(false);
+    }, [active]);
+    useDismiss(active && !dismissed, () => setDismissed(true), [], { outside: false });
+    return {
+        dismissed,
+        handlers: {
+            onMouseEnter: () => setHovered(true),
+            onMouseLeave: () => setHovered(false),
+            onFocus: () => setFocused(true),
+            onBlur: () => setFocused(false),
+        },
+    };
 }

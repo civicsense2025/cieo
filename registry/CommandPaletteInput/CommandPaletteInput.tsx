@@ -1,7 +1,8 @@
 // src/primitives/CommandPaletteInput/CommandPaletteInput.tsx
 'use client';
 /* CommandPaletteInput. Filter field for CommandPalette. Label stays available to assistive tech; value/onChange pass through. */
-import { useId } from 'react';
+import { useContext, useId } from 'react';
+import { CommandPaletteContext } from '../CommandPalette/CommandPalette.js';
 
 export interface CommandPaletteInputProps {
   /** Accessible name for the filter field (e.g. "Filter commands"). Required. */
@@ -16,6 +17,9 @@ export interface CommandPaletteInputProps {
 
 export function CommandPaletteInput({ label, value, onChange, placeholder }: CommandPaletteInputProps) {
   const id = useId();
+  const palette = useContext(CommandPaletteContext);
+  const current = value ?? palette?.query;
+  const emit = onChange ?? palette?.onQueryChange;
   return (
     <div className="cieo cieo-p-command-palette-input">
       <label htmlFor={id} className="cieo-vh">
@@ -27,9 +31,9 @@ export function CommandPaletteInput({ label, value, onChange, placeholder }: Com
         role="combobox"
         aria-expanded="true"
         aria-autocomplete="list"
-        value={value}
+        value={current}
         placeholder={placeholder}
-        onChange={(e) => onChange?.(e.currentTarget.value)}
+        onChange={(e) => emit?.(e.currentTarget.value)}
         className="cieo-p-command-palette-input-field"
       />
     </div>

@@ -309,5 +309,5 @@ export function usePresence(open, opts = {}) {
     useIso(() => () => cancel.current?.(), []);
     return { mounted, ref };
 }
-export { roveIndex, enabledIn, roveFocus, useDismiss } from './interaction.js';
+export { roveIndex, enabledIn, roveFocus, useDismiss, useModalFocus, useDismissibleHint } from './interaction.js';
 export { S, EXIT, LAG, ARRIVE, Track, allowed, now, resp, prog, setMotionState } from '../core/spring.js';

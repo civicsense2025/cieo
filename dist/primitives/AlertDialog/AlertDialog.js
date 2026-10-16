@@ -3,7 +3,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { Dialog } from '../Dialog/Dialog.js';
 export function AlertDialog({ label, open, onClose, children }) {
-    if (!open)
-        return null;
-    return (_jsx(Dialog, { label: label, open: open, onClose: onClose, children: _jsx("div", { role: "alertdialog", "aria-label": label, className: "cieo cieo-alert-dialog", children: children }) }));
+    return (_jsx(Dialog, { label: label, role: "alertdialog", open: open, onClose: onClose, dismissOnOutsidePress: false, children: _jsx("div", { className: "cieo cieo-alert-dialog", children: children }) }));
 }

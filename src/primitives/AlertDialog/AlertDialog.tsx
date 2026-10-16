@@ -1,13 +1,13 @@
 // src/primitives/AlertDialog/AlertDialog.tsx
 'use client';
-/* AlertDialog. Dialog wrapper that marks urgent content with alertdialog semantics. Renders null when closed. */
+/* AlertDialog. Dialog with alertdialog semantics for urgent content. Scrim press does not dismiss; Escape does. */
 import type { ReactNode } from 'react';
 import { Dialog } from '../Dialog/Dialog.js';
 
 export interface AlertDialogProps {
   /** Accessible name for the alert (e.g. "Delete conversation"). Required. */
   label: string;
-  /** Whether the alert is open. Renders null when false or omitted. */
+  /** Whether the alert is open. Plays the exit before unmounting when closed. */
   open?: boolean;
   /** Called on Escape or host close affordances. Optional. */
   onClose?: () => void;
@@ -15,10 +15,9 @@ export interface AlertDialogProps {
 }
 
 export function AlertDialog({ label, open, onClose, children }: AlertDialogProps) {
-  if (!open) return null;
   return (
-    <Dialog label={label} open={open} onClose={onClose}>
-      <div role="alertdialog" aria-label={label} className="cieo cieo-alert-dialog">
+    <Dialog label={label} role="alertdialog" open={open} onClose={onClose} dismissOnOutsidePress={false}>
+      <div className="cieo cieo-alert-dialog">
         {children}
       </div>
     </Dialog>

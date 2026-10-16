@@ -5,4 +5,5 @@
   @media (prefers-reduced-motion: reduce) {
     :where(.cieo) .cieo-p-tooltip-bubble { transition: none; }
   }
+  :where(.cieo).cieo-p-tooltip[data-dismissed] .cieo-p-tooltip-bubble { opacity: 0; }
 }

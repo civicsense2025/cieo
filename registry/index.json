@@ -507,7 +507,9 @@
         "CommandPalette/CommandPalette.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "CommandPaletteEmpty": {
@@ -538,7 +540,9 @@
       "files": [
         "CommandPaletteInput/CommandPaletteInput.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "CommandPalette"
+      ],
       "packageImports": [],
       "sharedFiles": []
     },
@@ -771,7 +775,9 @@
         "HoverCard/HoverCard.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": [
         "motion.ts"
       ]
@@ -915,7 +921,9 @@
         "MobileNav/MobileNav.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "MobileNavToggle": {
@@ -1008,7 +1016,9 @@
         "Popover/Popover.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "PowerSearch": {
@@ -1439,7 +1449,9 @@
         "Tooltip/Tooltip.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": [
         "motion.ts"
       ]
@@ -1473,7 +1485,9 @@
         "TopNavMegaMenu/TopNavMegaMenu.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "TopNavMegaMenuFeaturedCard": {

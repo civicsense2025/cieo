@@ -1,15 +1,26 @@
 // src/primitives/Popover/Popover.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/* Popover. Controlled disclosure shell: trigger plus a simple absolute panel below it. Host owns edge positioning and persistence. */
-import { useState } from 'react';
+/* Popover. Disclosure shell: trigger plus a simple absolute panel below it. Escape and outside press close it; host owns edge positioning. */
+import { cloneElement, isValidElement, useId, useRef, useState } from 'react';
+import { useDismiss } from '../../react/index.js';
 export function Popover({ trigger, open, defaultOpen = false, onOpenChange, children }) {
     const [inner, setInner] = useState(defaultOpen);
     const visible = open ?? inner;
+    const panelId = useId();
+    const rootRef = useRef(null);
+    const triggerRef = useRef(null);
     const set = (next) => {
         if (open === undefined)
             setInner(next);
         onOpenChange?.(next);
     };
-    return (_jsxs("span", { className: "cieo cieo-p-popover", children: [_jsx("span", { onClick: () => set(!visible), className: "cieo-p-popover-trigger", children: trigger }), visible ? _jsx("span", { className: "cieo-p-popover-panel", children: children }) : null] }));
+    useDismiss(visible, (reason) => {
+        set(false);
+        if (reason === 'escape')
+            triggerRef.current?.querySelector('button,a[href],[tabindex]')?.focus();
+    }, [rootRef]);
+    const aria = { 'aria-haspopup': 'dialog', 'aria-expanded': visible, 'aria-controls': visible ? panelId : undefined };
+    const triggerNode = isValidElement(trigger) ? cloneElement(trigger, aria) : trigger;
+    return (_jsxs("span", { ref: rootRef, className: "cieo cieo-p-popover", children: [_jsx("span", { ref: triggerRef, onClick: () => set(!visible), className: "cieo-p-popover-trigger", children: triggerNode }), visible ? _jsx("span", { id: panelId, className: "cieo-p-popover-panel", children: children }) : null] }));
 }
