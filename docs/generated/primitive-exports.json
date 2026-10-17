@@ -1,7 +1,12 @@
 {
   "names": [
+    "AgentActivity",
+    "AgentIcon",
+    "AgentLanes",
+    "AgentStatus",
     "AlertDialog",
     "AppShell",
+    "ApprovalRequest",
     "AspectRatio",
     "AuthAccountCard",
     "AuthCredentialForm",
@@ -116,6 +121,7 @@
     "RadioList",
     "RadioListItem",
     "ResizeHandle",
+    "RunControls",
     "ScrollableArea",
     "Section",
     "SegmentedControl",
@@ -136,6 +142,7 @@
     "StatusDot",
     "Step",
     "Stepper",
+    "StreamingMessage",
     "Tab",
     "TabList",
     "TabMenu",
@@ -156,6 +163,7 @@
     "ToggleButtonGroup",
     "Token",
     "Tokenizer",
+    "ToolCallDisclosure",
     "Toolbar",
     "Tooltip",
     "TopNav",
@@ -170,5 +178,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 169
+  "count": 177
 }

@@ -1,0 +1,133 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.agent-status",
+  "componentVersion": "1.0.0",
+  "name": "AgentStatus",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AgentStatus/AgentStatus.tsx",
+    "symbol": "AgentStatus"
+  },
+  "dependencies": ["StatusDot"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "status",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "starting",
+          "running",
+          "waiting",
+          "completed",
+          "stopped",
+          "failed",
+          "interrupted",
+          "disconnected"
+        ]
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    {
+      "id": "name",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "status",
+      "overrides": [],
+      "tokenRoles": [
+        "text"
+      ]
+    },
+    {
+      "id": "dot",
+      "overrides": [],
+      "tokenRoles": [
+        "status"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "inline-row"
+    ],
+    "content": [
+      "text-names-state"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "status",
+        "label",
+        "name"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "status",
+        "dot"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "A dot plus words that name an agent's or run's reported state."
+  },
+  "extensions": {}
+}

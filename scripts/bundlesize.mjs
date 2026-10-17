@@ -24,11 +24,18 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const AGENT_COMPONENTS = ['AgentActivity', 'AgentIcon', 'AgentLanes', 'AgentStatus', 'ApprovalRequest', 'RunControls', 'StreamingMessage', 'ToolCallDisclosure'];
 const BUDGETS = [
   { label: 'dist/primitives', kind: 'dir', path: 'dist/primitives', exclude: /\.min\.(js|css)$/, budget: 199920 },
+  // The agent components sit inside dist/primitives and also carry their own row (measured 15831 at introduction
+  // +10%), so their growth is visible on its own instead of eating the shared headroom unnoticed.
+  { label: 'dist/primitives agent components', kind: 'dirs', path: 'dist/primitives', dirs: AGENT_COMPONENTS, exclude: /\.min\.(js|css)$/, budget: 17415 },
   // dist/agent carries its own budget (measured 32968 at introduction +10%); dist total grows by exactly that.
-  { label: 'dist/agent', kind: 'dir', path: 'dist/agent', exclude: /\.min\.(js|css)$/, budget: 36265 },
-  { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 399397 },
+  { label: 'dist/agent', kind: 'dir', path: 'dist/agent', exclude: /(\.min\.(js|css)|\/icons\.(js|d\.ts))$/, budget: 36265 },
+  // Agent icon data is generated from the icon atom (measured 17265 at introduction +10%).
+  { label: 'dist/agent icons', kind: 'files', path: 'dist/agent', files: ['icons.js', 'icons.d.ts'], budget: 18992 },
+  // dist total grows by exactly the agent component and icon budgets above.
+  { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 435804 },
   { label: 'docs/catalogue.html', kind: 'file', path: 'docs/catalogue.html', budget: 3492726 },
   { label: 'docs/collection.html', kind: 'file', path: 'docs/collection.html', budget: 3549796 },
   { label: 'docs/library.html', kind: 'file', path: 'docs/library.html', budget: 3492726 },
@@ -60,7 +67,10 @@ for (const b of BUDGETS) {
     failures += 1;
     continue;
   }
-  const size = b.kind === 'dir' ? dirSize(full, b.exclude).total : statSync(full).size;
+  const size = b.kind === 'dir' ? dirSize(full, b.exclude).total
+    : b.kind === 'dirs' ? b.dirs.reduce((sum, d) => sum + dirSize(join(full, d), b.exclude).total, 0)
+    : b.kind === 'files' ? b.files.reduce((sum, f) => sum + statSync(join(full, f)).size, 0)
+    : statSync(full).size;
   const ok = size <= b.budget;
   if (!ok) failures += 1;
   rows.push(`${ok ? 'PASS' : 'FAIL'} ${b.label} ${size} <= ${b.budget} (${(100 * size / b.budget).toFixed(1)}% of budget)`);

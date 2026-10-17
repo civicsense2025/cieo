@@ -1,0 +1,11 @@
+/* design/styles/primitives/tool-call-disclosure.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-tool-call-disclosure { border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-p-tool-call-disclosure > summary { display: flex; align-items: center; gap: var(--cieo-space-2); padding: var(--cieo-space-2) var(--cieo-space-3); cursor: pointer; }
+  :where(.cieo).cieo-p-tool-call-disclosure > summary > [data-name] { font-family: var(--cieo-font-mono); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-p-tool-call-disclosure > summary > [data-phase-text] { color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-tool-call-disclosure[data-phase='failed'] > summary > [data-phase-text] { color: var(--cieo-color-danger); }
+  :where(.cieo).cieo-p-tool-call-disclosure > [data-body] { display: grid; gap: var(--cieo-space-1); padding: 0 var(--cieo-space-3) var(--cieo-space-2); }
+  :where(.cieo).cieo-p-tool-call-disclosure > [data-body] > p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  :where(.cieo).cieo-p-tool-call-disclosure [data-error] { color: var(--cieo-color-danger); }
+}

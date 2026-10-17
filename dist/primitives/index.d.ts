@@ -1,5 +1,10 @@
+export { AgentActivity, type AgentActivityProps } from './AgentActivity/AgentActivity.js';
+export { AgentIcon, type AgentIconProps } from './AgentIcon/AgentIcon.js';
+export { AgentLanes, type AgentLanesProps } from './AgentLanes/AgentLanes.js';
+export { AgentStatus, AGENT_STATUS_TONES, AGENT_STATUS_WORDS, type AgentStatusProps } from './AgentStatus/AgentStatus.js';
 export { AlertDialog, type AlertDialogProps } from './AlertDialog/AlertDialog.js';
 export { AppShell, type AppShellProps } from './AppShell/AppShell.js';
+export { ApprovalRequest, APPROVAL_STATUS_WORDS, type ApprovalRequestProps } from './ApprovalRequest/ApprovalRequest.js';
 export { AspectRatio, type AspectRatioProps } from './AspectRatio/AspectRatio.js';
 export { AuthAccountCard, type AuthAccountCardProps } from './AuthAccountCard/AuthAccountCard.js';
 export { AuthCredentialForm, type AuthCredentialFormProps } from './AuthCredentialForm/AuthCredentialForm.js';
@@ -114,6 +119,7 @@ export { ProgressBar, type ProgressBarProps } from './ProgressBar/ProgressBar.js
 export { RadioList, type RadioListProps } from './RadioList/RadioList.js';
 export { RadioListItem, type RadioListItemProps } from './RadioListItem/RadioListItem.js';
 export { ResizeHandle, type ResizeHandleProps } from './ResizeHandle/ResizeHandle.js';
+export { RunControls, type RunControlsProps } from './RunControls/RunControls.js';
 export { ScrollableArea, type ScrollableAreaProps } from './ScrollableArea/ScrollableArea.js';
 export { Section, type SectionProps } from './Section/Section.js';
 export { SegmentedControl, SegmentedControlContext, type SegmentedControlContextValue, type SegmentedControlProps } from './SegmentedControl/SegmentedControl.js';
@@ -134,6 +140,7 @@ export { StackItem, type StackItemProps } from './StackItem/StackItem.js';
 export { StatusDot, type StatusDotProps, type StatusDotStatus } from './StatusDot/StatusDot.js';
 export { Step, type StepProps } from './Step/Step.js';
 export { Stepper, type StepperStep, type StepperProps } from './Stepper/Stepper.js';
+export { StreamingMessage, type StreamingMessageProps } from './StreamingMessage/StreamingMessage.js';
 export { Tab, type TabProps } from './Tab/Tab.js';
 export { TabList, TabContext, type TabContextValue, type TabListProps } from './TabList/TabList.js';
 export { TabMenu, type TabMenuProps } from './TabMenu/TabMenu.js';
@@ -154,6 +161,7 @@ export { ToggleButton, type ToggleButtonProps } from './ToggleButton/ToggleButto
 export { ToggleButtonGroup, ToggleButtonGroupContext, type ToggleButtonGroupContextValue, type ToggleButtonGroupProps } from './ToggleButtonGroup/ToggleButtonGroup.js';
 export { Token, type TokenProps } from './Token/Token.js';
 export { Tokenizer, type TokenizerProps } from './Tokenizer/Tokenizer.js';
+export { ToolCallDisclosure, TOOL_PHASE_WORDS, type ToolCallDisclosureProps } from './ToolCallDisclosure/ToolCallDisclosure.js';
 export { Toolbar, type ToolbarProps } from './Toolbar/Toolbar.js';
 export { Tooltip, type TooltipProps } from './Tooltip/Tooltip.js';
 export { TopNav, type TopNavProps } from './TopNav/TopNav.js';

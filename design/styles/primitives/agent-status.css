@@ -1,0 +1,8 @@
+/* design/styles/primitives/agent-status.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-agent-status { display: inline-flex; align-items: center; gap: var(--cieo-space-2); font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-agent-status > [data-name] { font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-p-agent-status > [data-label] { color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-agent-status[data-tone='warning'] > [data-label] { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-p-agent-status[data-tone='danger'] > [data-label] { color: var(--cieo-color-danger); }
+}

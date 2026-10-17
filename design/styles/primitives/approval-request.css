@@ -1,0 +1,9 @@
+/* design/styles/primitives/approval-request.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-approval-request { display: grid; gap: var(--cieo-space-2); padding: var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-approval-request[data-status='pending'] { border-color: var(--cieo-color-warning); background: var(--cieo-color-warning-soft); }
+  :where(.cieo).cieo-p-approval-request > :is(h2, h3, h4, h5, h6) { margin: 0; font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-strong); }
+  :where(.cieo).cieo-p-approval-request > p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  :where(.cieo).cieo-p-approval-request > [data-status-text] { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-approval-request > [data-actions] { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); }
+}

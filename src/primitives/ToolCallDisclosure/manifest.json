@@ -1,0 +1,112 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.tool-call-disclosure",
+  "componentVersion": "1.0.0",
+  "name": "ToolCallDisclosure",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/ToolCallDisclosure/ToolCallDisclosure.tsx",
+    "symbol": "ToolCallDisclosure"
+  },
+  "dependencies": ["StatusDot"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "call",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "ToolCallView from cieo/agent."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "component",
+        "text"
+      ],
+      "min": 0,
+      "max": 4,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "summary",
+      "overrides": [],
+      "tokenRoles": [
+        "text",
+        "status"
+      ]
+    },
+    {
+      "id": "body",
+      "overrides": [],
+      "tokenRoles": [
+        "text",
+        "danger"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "disclosure"
+    ],
+    "content": [
+      "summary-names-phase"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "call"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "summary",
+        "body"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One tool call as a native disclosure: name and phase, then summary and error."
+  },
+  "extensions": {}
+}

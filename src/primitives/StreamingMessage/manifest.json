@@ -1,0 +1,139 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.streaming-message",
+  "componentVersion": "1.0.0",
+  "name": "StreamingMessage",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/StreamingMessage/StreamingMessage.tsx",
+    "symbol": "StreamingMessage"
+  },
+  "dependencies": ["ChatMessage"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "message",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "MessageView from cieo/agent."
+    },
+    {
+      "id": "author",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    {
+      "id": "time",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    {
+      "id": "truncatedText",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Truncated",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 64
+      }
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "text",
+      "overrides": [],
+      "tokenRoles": [
+        "text"
+      ]
+    },
+    {
+      "id": "truncated",
+      "overrides": [],
+      "tokenRoles": [
+        "muted"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "stacked-message"
+    ],
+    "content": [
+      "plain-text-only"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "message",
+        "author",
+        "time",
+        "truncatedText"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "text",
+        "truncated"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "An agent message that may still be arriving, rendered as plain text."
+  },
+  "extensions": {}
+}

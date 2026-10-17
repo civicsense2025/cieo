@@ -67,6 +67,22 @@
     },
     "./design.css": "./design/themes.css",
     "./primitives.css": "./design/primitives.css",
+    "./AgentActivity": {
+      "types": "./dist/primitives/AgentActivity/AgentActivity.d.ts",
+      "default": "./dist/primitives/AgentActivity/AgentActivity.js"
+    },
+    "./AgentIcon": {
+      "types": "./dist/primitives/AgentIcon/AgentIcon.d.ts",
+      "default": "./dist/primitives/AgentIcon/AgentIcon.js"
+    },
+    "./AgentLanes": {
+      "types": "./dist/primitives/AgentLanes/AgentLanes.d.ts",
+      "default": "./dist/primitives/AgentLanes/AgentLanes.js"
+    },
+    "./AgentStatus": {
+      "types": "./dist/primitives/AgentStatus/AgentStatus.d.ts",
+      "default": "./dist/primitives/AgentStatus/AgentStatus.js"
+    },
     "./AlertDialog": {
       "types": "./dist/primitives/AlertDialog/AlertDialog.d.ts",
       "default": "./dist/primitives/AlertDialog/AlertDialog.js"
@@ -74,6 +90,10 @@
     "./AppShell": {
       "types": "./dist/primitives/AppShell/AppShell.d.ts",
       "default": "./dist/primitives/AppShell/AppShell.js"
+    },
+    "./ApprovalRequest": {
+      "types": "./dist/primitives/ApprovalRequest/ApprovalRequest.d.ts",
+      "default": "./dist/primitives/ApprovalRequest/ApprovalRequest.js"
     },
     "./AspectRatio": {
       "types": "./dist/primitives/AspectRatio/AspectRatio.d.ts",
@@ -531,6 +551,10 @@
       "types": "./dist/primitives/ResizeHandle/ResizeHandle.d.ts",
       "default": "./dist/primitives/ResizeHandle/ResizeHandle.js"
     },
+    "./RunControls": {
+      "types": "./dist/primitives/RunControls/RunControls.d.ts",
+      "default": "./dist/primitives/RunControls/RunControls.js"
+    },
     "./ScrollableArea": {
       "types": "./dist/primitives/ScrollableArea/ScrollableArea.d.ts",
       "default": "./dist/primitives/ScrollableArea/ScrollableArea.js"
@@ -611,6 +635,10 @@
       "types": "./dist/primitives/Stepper/Stepper.d.ts",
       "default": "./dist/primitives/Stepper/Stepper.js"
     },
+    "./StreamingMessage": {
+      "types": "./dist/primitives/StreamingMessage/StreamingMessage.d.ts",
+      "default": "./dist/primitives/StreamingMessage/StreamingMessage.js"
+    },
     "./Tab": {
       "types": "./dist/primitives/Tab/Tab.d.ts",
       "default": "./dist/primitives/Tab/Tab.js"
@@ -690,6 +718,10 @@
     "./Tokenizer": {
       "types": "./dist/primitives/Tokenizer/Tokenizer.d.ts",
       "default": "./dist/primitives/Tokenizer/Tokenizer.js"
+    },
+    "./ToolCallDisclosure": {
+      "types": "./dist/primitives/ToolCallDisclosure/ToolCallDisclosure.d.ts",
+      "default": "./dist/primitives/ToolCallDisclosure/ToolCallDisclosure.js"
     },
     "./Toolbar": {
       "types": "./dist/primitives/Toolbar/Toolbar.d.ts",
