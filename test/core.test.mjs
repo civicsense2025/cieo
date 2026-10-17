@@ -80,3 +80,10 @@ test('state() honours data-motion="full" over reduced-motion media', async () =>
   if (!prev.document) delete globalThis.document;
   if (!prev.matchMedia) delete globalThis.matchMedia;
 });
+
+test('motion is disallowed inside a subtree that reduces motion, and allowed beside it', () => {
+  const inside = { closest: (q) => (q === '[data-reduced-motion="true"]' ? {} : null) };
+  const beside = { closest: () => null };
+  assert.equal(allowed('feedback', inside), false);
+  assert.equal(allowed('feedback', beside), true);
+});

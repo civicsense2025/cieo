@@ -168,6 +168,10 @@ Theme with these variables (all optional; the fallbacks are system colours, so d
 
 On touch screens (`pointer: coarse`) every control has at least a 44px hit area. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
 
+## Agents
+
+`cieo/agent` folds an agent host's ordered event log (run and agent status, streamed messages, tool calls, approvals, anchored drafts, artifacts) into bounded, render-ready state. It also follows a server-sent event stream that resumes from the last applied event. It has no DOM and no dependencies. `cieo/agent/react` adds `useAgentStore` and `useAgentStream`. Approvals are never optimistic: the host reports every decision. See [docs/agent.md](docs/agent.md).
+
 ## Develop
 
 ```bash

@@ -26,7 +26,9 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const BUDGETS = [
   { label: 'dist/primitives', kind: 'dir', path: 'dist/primitives', exclude: /\.min\.(js|css)$/, budget: 199920 },
-  { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 363132 },
+  // dist/agent carries its own budget (measured 32968 at introduction +10%); dist total grows by exactly that.
+  { label: 'dist/agent', kind: 'dir', path: 'dist/agent', exclude: /\.min\.(js|css)$/, budget: 36265 },
+  { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 399397 },
   { label: 'docs/catalogue.html', kind: 'file', path: 'docs/catalogue.html', budget: 3492726 },
   { label: 'docs/collection.html', kind: 'file', path: 'docs/collection.html', budget: 3549796 },
   { label: 'docs/library.html', kind: 'file', path: 'docs/library.html', budget: 3492726 },
