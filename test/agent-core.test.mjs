@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  createAgentState, createAgentStore, parseAgentEvent, reduce,
+  CORE_EVENT_TYPES, createAgentState, createAgentStore, parseAgentEvent, reduce,
   selectActivity, selectAgents, selectAttention, selectOpenDrafts, selectPendingApprovals, selectRuns, selectStreamingMessage,
 } from '../dist/agent/index.js';
 
@@ -13,7 +13,7 @@ test('envelope guard rejects malformed frames and accepts well-formed ones', () 
   for (const bad of [
     null, [], 'x', { ...ev(1, 'run.status'), v: 2 }, { ...ev(0, 'run.status') }, { ...ev(1.5, 'run.status') },
     { ...ev(1, 'run.status'), runId: '' }, { ...ev(1, 'run.status'), agentId: 'has space' }, { ...ev(1, 'run.status'), agentId: 'a'.repeat(257) },
-    { ...ev(1, 'Run.Status') }, { ...ev(1, 'nodot') }, { ...ev(1, 'run.status'), data: [] }, { ...ev(1, 'run.status'), data: new Date() },
+    { ...ev(1, 'Run.Status') }, { ...ev(1, '.leading') }, { ...ev(1, 'trailing.') }, { ...ev(1, 'run.status'), data: [] }, { ...ev(1, 'run.status'), data: new Date() },
   ]) assert.equal(parseAgentEvent(bad), null, JSON.stringify(bad));
   assert.equal(parseAgentEvent({ ...ev(1, 'run.status'), parentAgentId: undefined }).parentAgentId, null);
 });
@@ -154,3 +154,14 @@ test('selectors keep their value while the map they read is unchanged', () => {
 });
 
 function defaults() { return { maxActivity: 500, maxTextChars: 20000, maxEntities: 500, contiguous: true }; }
+
+test('every core type passes the envelope guard and folds through the store', () => {
+  for (const type of CORE_EVENT_TYPES) assert.ok(parseAgentEvent(ev(1, type)), type);
+  const store = createAgentStore();
+  store.apply([ev(1, 'agent.status', { status: 'running' }), ev(2, 'navigation', { location: '/pricing' }), ev(3, 'run.status', { status: 'completed' })]);
+  const s = store.getSnapshot();
+  assert.equal(s.cursor, 3);
+  assert.equal(s.gap, null);
+  assert.equal(store.dropped, 0);
+  assert.equal(s.agents.get('a1').location, '/pricing');
+});
