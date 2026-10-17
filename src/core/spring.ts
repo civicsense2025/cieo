@@ -203,7 +203,10 @@ function allowedWith(s: MotionState, kind: MotionKind, el?: Element | null): boo
   if (!KINDS.includes(kind)) throw new TypeError(`Unknown motion kind: ${kind}`);
   if (s.reduced || s.hidden) return false;
   if (s.paused && kind !== 'feedback') return false;
-  return el ? onscreen(el) : true;
+  if (!el) return true;
+  // A host can reduce motion for one subtree (a dialog with its own preference); a descendant cannot opt back in.
+  if (typeof el.closest === 'function' && el.closest('[data-reduced-motion="true"]')) return false;
+  return onscreen(el);
 }
 
 /** The preset a helper should use: paused feedback still shows, on the fastest spring. */
