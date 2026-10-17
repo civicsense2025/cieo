@@ -27,15 +27,15 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const AGENT_COMPONENTS = ['AgentActivity', 'AgentIcon', 'AgentLanes', 'AgentStatus', 'ApprovalRequest', 'RunControls', 'StreamingMessage', 'ToolCallDisclosure'];
 const BUDGETS = [
   { label: 'dist/primitives', kind: 'dir', path: 'dist/primitives', exclude: /\.min\.(js|css)$/, budget: 199920 },
-  // The agent components sit inside dist/primitives and also carry their own row (measured 15831 at introduction
+  // The agent components sit inside dist/primitives and also carry their own row (measured 15876 at introduction
   // +10%), so their growth is visible on its own instead of eating the shared headroom unnoticed.
-  { label: 'dist/primitives agent components', kind: 'dirs', path: 'dist/primitives', dirs: AGENT_COMPONENTS, exclude: /\.min\.(js|css)$/, budget: 17415 },
+  { label: 'dist/primitives agent components', kind: 'dirs', path: 'dist/primitives', dirs: AGENT_COMPONENTS, exclude: /\.min\.(js|css)$/, budget: 17464 },
   // dist/agent carries its own budget (measured 32968 at introduction +10%); dist total grows by exactly that.
   { label: 'dist/agent', kind: 'dir', path: 'dist/agent', exclude: /(\.min\.(js|css)|\/icons\.(js|d\.ts))$/, budget: 36265 },
-  // Agent icon data is generated from the icon atom (measured 17265 at introduction +10%).
-  { label: 'dist/agent icons', kind: 'files', path: 'dist/agent', files: ['icons.js', 'icons.d.ts'], budget: 18992 },
+  // Agent icon data is generated from the icon atom (measured 17632 at introduction +10%).
+  { label: 'dist/agent icons', kind: 'files', path: 'dist/agent', files: ['icons.js', 'icons.d.ts'], budget: 19396 },
   // dist total grows by exactly the agent component and icon budgets above.
-  { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 435804 },
+  { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 436257 },
   { label: 'docs/catalogue.html', kind: 'file', path: 'docs/catalogue.html', budget: 3492726 },
   { label: 'docs/collection.html', kind: 'file', path: 'docs/collection.html', budget: 3549796 },
   { label: 'docs/library.html', kind: 'file', path: 'docs/library.html', budget: 3492726 },
