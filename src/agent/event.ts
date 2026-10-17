@@ -38,7 +38,8 @@ export interface AgentEvent {
 
 const MAX_ID = 256;
 const MAX_AT = 64;
-const TYPE = /^[a-z][a-z0-9-]*(?:\.[a-z0-9_-]+)+$/;
+// Single-word core types (navigation) are valid; dotted segments are optional.
+const TYPE = /^[a-z][a-z0-9-]*(?:\.[a-z0-9_-]+)*$/;
 // Ids are opaque, but whitespace and control characters in one usually mean a host bug or an injected value.
 const ID = /^[^\s\u0000-\u001f\u007f]+$/;
 
