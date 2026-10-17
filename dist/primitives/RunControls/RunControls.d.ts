@@ -10,5 +10,7 @@ export interface RunControlsProps {
     stopLabel?: string;
     /** Accessible name for the group. Defaults to "Run controls". */
     label?: string;
+    /** Words for the run's status, e.g. a translation. Defaults to the English words. */
+    statusLabel?: (status: RunView['status']) => string;
 }
-export declare function RunControls({ run, onStop, busy, stopLabel, label }: RunControlsProps): import("react/jsx-runtime").JSX.Element;
+export declare function RunControls({ run, onStop, busy, stopLabel, label, statusLabel }: RunControlsProps): import("react/jsx-runtime").JSX.Element;

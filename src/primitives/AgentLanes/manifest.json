@@ -53,6 +53,15 @@
         "minLength": 1,
         "maxLength": 128
       }
+    },
+    {
+      "id": "statusLabel",
+      "type": {
+        "kind": "function"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
     }
   ],
   "slots": [],
@@ -89,7 +98,8 @@
       "properties": [
         "agents",
         "renderLane",
-        "label"
+        "label",
+        "statusLabel"
       ],
       "states": [],
       "events": [],

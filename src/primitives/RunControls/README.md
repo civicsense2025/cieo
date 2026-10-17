@@ -31,7 +31,7 @@ A run's reported status and a Stop command while the run is live.
 
 ## Customization
 
-`stopLabel`, `label`.
+`stopLabel`, `label`, `statusLabel` (translate the status words).
 
 ## Limitations
 
