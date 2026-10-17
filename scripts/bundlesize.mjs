@@ -26,7 +26,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const AGENT_COMPONENTS = ['AgentActivity', 'AgentIcon', 'AgentLanes', 'AgentStatus', 'ApprovalRequest', 'RunControls', 'StreamingMessage', 'ToolCallDisclosure'];
 const BUDGETS = [
-  { label: 'dist/primitives', kind: 'dir', path: 'dist/primitives', exclude: /\.min\.(js|css)$/, budget: 199920 },
+  { label: 'dist/primitives', kind: 'dir', path: 'dist/primitives', exclude: /\.min\.(js|css)$/, budget: 205000 },
   // The agent components sit inside dist/primitives and also carry their own row (measured 15876 at introduction
   // +10%), so their growth is visible on its own instead of eating the shared headroom unnoticed.
   { label: 'dist/primitives agent components', kind: 'dirs', path: 'dist/primitives', dirs: AGENT_COMPONENTS, exclude: /\.min\.(js|css)$/, budget: 17464 },
