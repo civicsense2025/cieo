@@ -4,8 +4,11 @@ const PACKAGE_AREAS = {
   live: 'cieo/live',
   controls: 'cieo/controls',
   design: 'cieo/design',
+  agent: 'cieo/agent',
   core: 'cieo',
 };
+// Modules with their own package subpath, checked before the area they live in. Mirrored in scripts/lib/registry.mjs.
+const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
 
 /* Deliberately shape-based, mirroring scanImportSpecifiers in scripts/lib/registry.mjs:
    the registry generator and this rewriter must treat the same text as import
@@ -32,6 +35,7 @@ function classifyRelative(spec, fromFile) {
     throw unclassifiedImport(spec, fromFile);
   }
   if (ups === 2) {
+    if (PACKAGE_FILES[rest]) return { kind: 'package', packageImport: PACKAGE_FILES[rest] };
     const [area] = rest.split('/');
     if (PACKAGE_AREAS[area]) return { kind: 'package', packageImport: PACKAGE_AREAS[area] };
   }

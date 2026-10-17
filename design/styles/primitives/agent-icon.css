@@ -1,0 +1,7 @@
+/* design/styles/primitives/agent-icon.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-agent-icon { display: inline-block; flex: none; vertical-align: middle; color: inherit; }
+  :where(.cieo).cieo-p-agent-icon[data-tone='success'] { color: var(--cieo-color-success); }
+  :where(.cieo).cieo-p-agent-icon[data-tone='warning'] { color: var(--cieo-color-warning); }
+  :where(.cieo).cieo-p-agent-icon[data-tone='danger'] { color: var(--cieo-color-danger); }
+}

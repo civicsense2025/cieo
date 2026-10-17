@@ -1,0 +1,8 @@
+/* design/styles/primitives/agent-lanes.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-agent-lanes, :where(.cieo).cieo-p-agent-lanes ul { display: grid; gap: var(--cieo-space-3); margin: 0; padding: 0; list-style: none; }
+  :where(.cieo).cieo-p-agent-lanes ul { margin-block-start: var(--cieo-space-3); padding-inline-start: var(--cieo-space-4); border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo).cieo-p-agent-lanes section { display: grid; gap: var(--cieo-space-2); }
+  :where(.cieo).cieo-p-agent-lanes header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cieo-space-2); }
+  :where(.cieo).cieo-p-agent-lanes [data-agent-name] { font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
+}

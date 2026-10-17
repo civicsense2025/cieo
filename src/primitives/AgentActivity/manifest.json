@@ -1,0 +1,133 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.agent-activity",
+  "componentVersion": "1.0.0",
+  "name": "AgentActivity",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AgentActivity/AgentActivity.tsx",
+    "symbol": "AgentActivity"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "entries",
+      "type": {
+        "kind": "array",
+        "items": {
+          "kind": "record",
+          "fields": []
+        }
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "ActivityEntry[] from cieo/agent, in log order."
+    },
+    {
+      "id": "describe",
+      "type": {
+        "kind": "function"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Turns one entry into the row's content."
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Agent activity",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    {
+      "id": "emptyText",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 256
+      }
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "log",
+      "overrides": [],
+      "tokenRoles": [
+        "text",
+        "border"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "stacked-list"
+    ],
+    "content": [
+      "log-has-label"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "entries",
+        "describe",
+        "label",
+        "emptyText"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "log"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "The ordered log of what an agent run did, one row per confirmed event."
+  },
+  "extensions": {}
+}

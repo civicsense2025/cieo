@@ -1,0 +1,10 @@
+// src/primitives/RunControls/RunControls.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { isSettled } from '../../agent/event.js';
+import { Button } from '../../controls/Button.js';
+import { AgentStatus } from '../AgentStatus/AgentStatus.js';
+export function RunControls({ run, onStop, busy = false, stopLabel = 'Stop', label = 'Run controls' }) {
+    const live = !isSettled(run.status);
+    return (_jsxs("div", { className: "cieo cieo-p-run-controls", role: "group", "aria-label": label, "data-status": run.status, children: [_jsx(AgentStatus, { status: run.status }), live && onStop ? (_jsx(Button, { variant: "secondary", state: busy ? 'pending' : 'idle', pendingLabel: `${stopLabel}: sending`, "aria-disabled": busy || undefined, onClick: onStop, children: stopLabel })) : null] }));
+}

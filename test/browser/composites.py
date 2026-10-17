@@ -8,6 +8,8 @@ try:
     with sync_playwright() as p:
         b = p.chromium.launch(); pg = b.new_page()
         errors = []; pg.on('pageerror', lambda e: errors.append(str(e)))
+        # The agent store reports a broken view through console.error instead of throwing, so count those too.
+        pg.on('console', lambda m: errors.append(m.text) if m.type == 'error' and not m.text.startswith('Failed to load resource') else None)
         pg.goto('http://127.0.0.1:4799/site/composites/dashboard.html')
         pg.click('[data-nav="settings"]'); pg.fill('input[data-setting="store"]', 'Drift Goods 2')
         pg.click('[data-save]'); checks['settings-panel'] = pg.locator('[data-saved]').is_visible()
@@ -50,10 +52,25 @@ try:
         pg.select_option('[data-digest]', index=1)
         pg.click('[data-next="done"]')
         checks['onboarding-done'] = pg.locator('[data-step-panel="done"]').is_visible()
+        pg.goto('http://127.0.0.1:4799/site/composites/agent-run.html')
+        pg.wait_for_selector('[data-approval] [data-approve]', timeout=15000)
+        checks['agent-stream-plain'] = 'Writer will ask' in (pg.text_content('[data-message="lead"] [data-text]') or '') and pg.get_attribute('[data-message="lead"]', 'aria-busy') is None
+        pg.click('[data-approve]')
+        busy_text = pg.text_content('[data-approval] [data-status-text]')
+        checks['agent-approval-not-optimistic'] = busy_text == 'Waiting for your decision' and pg.get_attribute('[data-deny]', 'aria-disabled') == 'true'
+        pg.wait_for_function("document.querySelector('[data-run-status] [data-label]').textContent === 'Done'", timeout=15000)
+        checks['agent-run-done'] = (pg.text_content('[data-approval] [data-status-text]') == 'Approved' and pg.locator('[data-approval] button').count() == 0
+            and pg.locator('[data-stop]').is_hidden() and 'Pricing FAQ' in pg.text_content('[data-artifacts]')
+            and pg.locator('[data-activity] li[data-seq]').count() >= 12)
+        pg.click('[data-replay]'); pg.wait_for_selector('[data-tools] details', timeout=15000)
+        pg.click('[data-stop]')
+        checks['agent-stop-not-optimistic'] = pg.text_content('[data-run-status] [data-label]') == 'Working' and pg.get_attribute('[data-stop]', 'aria-disabled') == 'true'
+        pg.wait_for_function("document.querySelector('[data-run-status] [data-label]').textContent === 'Stopped'", timeout=15000)
+        checks['agent-stopped'] = pg.locator('[data-stop]').is_hidden()
         checks['no-errors'] = (errors == [])
         b.close()
     print(json.dumps(checks, indent=1))
-    ok = all(checks.values()) and len(checks) == 11
+    ok = all(checks.values()) and len(checks) == 16
     print('COMPOSITES', 'PASS' if ok else 'FAIL'); sys.exit(0 if ok else 1)
 finally:
     srv.terminate()

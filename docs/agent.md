@@ -62,3 +62,22 @@ The status set is `starting`, `running`, `waiting`, `completed`, `stopped`, `fai
 ## Motion
 
 Motion helpers also check the nearest `[data-reduced-motion="true"]` ancestor. A host can reduce motion for one subtree, such as a dialog with its own preference, while its siblings keep animating. A descendant can't opt back in.
+
+## Components
+
+React components that render these views live with the other primitives. Each takes a view from the store and host callbacks. None of them changes a view on its own.
+
+| Component | Renders |
+| --- | --- |
+| `AgentStatus` | A status as a dot plus words. The words always name the state. |
+| `RunControls` | The run's status and a Stop command while the run isn't settled. |
+| `AgentLanes` | One lane per agent, with child agents nested under their parent. |
+| `StreamingMessage` | Message text as plain text. It stays `aria-busy` until complete. |
+| `ToolCallDisclosure` | A tool call as native `details`, with its phase in words. |
+| `ApprovalRequest` | Approve and Deny. While `busy`, both are disabled, and the text still says it's waiting until the host resolves the approval. |
+| `AgentActivity` | The activity ring as a labelled `role="log"` list. |
+| `AgentIcon` | One agent action or state icon from `cieo/agent-icons`. |
+
+`cieo/agent-icons` exports the 24 agent action and state icons as plain SVG data. Each icon has three detail tiers and no globals. `scripts/build-agent-icons.mjs` generates the data from the icon atom, and `npm run check` fails when the data drifts from the atom.
+
+`site/composites/agent-run.html` replays a recorded run into a real store, so you can watch every component react to the log.

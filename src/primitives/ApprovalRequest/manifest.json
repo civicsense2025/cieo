@@ -1,0 +1,193 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.approval-request",
+  "componentVersion": "1.0.0",
+  "name": "ApprovalRequest",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/ApprovalRequest/ApprovalRequest.tsx",
+    "symbol": "ApprovalRequest"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "approval",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "ApprovalView from cieo/agent."
+    },
+    {
+      "id": "onApprove",
+      "type": {
+        "kind": "function"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "onDeny",
+      "type": {
+        "kind": "function"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "busy",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "approve",
+          "deny"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "null when no command is in flight."
+    },
+    {
+      "id": "approveLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Approve",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    {
+      "id": "denyLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Deny",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    {
+      "id": "fallbackTitle",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Approval needed",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    {
+      "id": "headingLevel",
+      "type": {
+        "kind": "integer"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 3,
+      "constraints": {
+        "min": 2,
+        "max": 6
+      }
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "request",
+      "overrides": [],
+      "tokenRoles": [
+        "surface",
+        "border",
+        "warning"
+      ]
+    },
+    {
+      "id": "actions",
+      "overrides": [],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "stacked-panel"
+    ],
+    "content": [
+      "section-labelled-by-title",
+      "no-decision-while-pending"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "approval",
+        "onApprove",
+        "onDeny",
+        "busy",
+        "approveLabel",
+        "denyLabel",
+        "fallbackTitle",
+        "headingLevel"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "request",
+        "actions"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Asks a person to approve or deny an agent action, never optimistically."
+  },
+  "extensions": {}
+}

@@ -1,0 +1,11 @@
+// src/primitives/ToolCallDisclosure/ToolCallDisclosure.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { StatusDot } from '../StatusDot/StatusDot.js';
+/** Words for each phase. */
+export const TOOL_PHASE_WORDS = { started: 'Running', finished: 'Done', failed: 'Failed' };
+const TONES = { started: 'info', finished: 'success', failed: 'danger' };
+export function ToolCallDisclosure({ call, children }) {
+    const failed = call.phase === 'failed';
+    return (_jsxs("details", { className: "cieo cieo-p-tool-call-disclosure", "data-phase": call.phase, children: [_jsxs("summary", { children: [_jsx(StatusDot, { status: TONES[call.phase] }), _jsx("span", { "data-name": true, children: call.name }), _jsx("span", { "data-phase-text": true, children: TOOL_PHASE_WORDS[call.phase] })] }), _jsxs("div", { "data-body": true, children: [call.summary ? _jsx("p", { "data-summary": true, children: call.summary }) : null, failed && call.error ? _jsx("p", { "data-error": true, children: call.error }) : null, children] })] }));
+}

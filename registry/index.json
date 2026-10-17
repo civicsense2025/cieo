@@ -4,6 +4,50 @@
     "motion.ts"
   ],
   "components": {
+    "AgentActivity": {
+      "files": [
+        "AgentActivity/AgentActivity.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/agent"
+      ],
+      "sharedFiles": []
+    },
+    "AgentIcon": {
+      "files": [
+        "AgentIcon/AgentIcon.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/agent-icons"
+      ],
+      "sharedFiles": []
+    },
+    "AgentLanes": {
+      "files": [
+        "AgentLanes/AgentLanes.tsx"
+      ],
+      "registryDependencies": [
+        "AgentStatus"
+      ],
+      "packageImports": [
+        "cieo/agent"
+      ],
+      "sharedFiles": []
+    },
+    "AgentStatus": {
+      "files": [
+        "AgentStatus/AgentStatus.tsx"
+      ],
+      "registryDependencies": [
+        "StatusDot"
+      ],
+      "packageImports": [
+        "cieo/agent"
+      ],
+      "sharedFiles": []
+    },
     "AlertDialog": {
       "files": [
         "AlertDialog/AlertDialog.tsx"
@@ -20,6 +64,17 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "ApprovalRequest": {
+      "files": [
+        "ApprovalRequest/ApprovalRequest.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/agent",
+        "cieo/controls"
+      ],
       "sharedFiles": []
     },
     "AspectRatio": {
@@ -994,6 +1049,19 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "RunControls": {
+      "files": [
+        "RunControls/RunControls.tsx"
+      ],
+      "registryDependencies": [
+        "AgentStatus"
+      ],
+      "packageImports": [
+        "cieo/agent",
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
     "ScrollableArea": {
       "files": [
         "ScrollableArea/ScrollableArea.tsx"
@@ -1158,6 +1226,18 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "StreamingMessage": {
+      "files": [
+        "StreamingMessage/StreamingMessage.tsx"
+      ],
+      "registryDependencies": [
+        "ChatMessage"
+      ],
+      "packageImports": [
+        "cieo/agent"
+      ],
       "sharedFiles": []
     },
     "Tab": {
@@ -1326,6 +1406,18 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "ToolCallDisclosure": {
+      "files": [
+        "ToolCallDisclosure/ToolCallDisclosure.tsx"
+      ],
+      "registryDependencies": [
+        "StatusDot"
+      ],
+      "packageImports": [
+        "cieo/agent"
+      ],
       "sharedFiles": []
     },
     "Toolbar": {

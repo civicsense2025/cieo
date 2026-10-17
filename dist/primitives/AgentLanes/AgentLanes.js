@@ -1,0 +1,27 @@
+// src/primitives/AgentLanes/AgentLanes.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/* AgentLanes. One lane per agent, headed by its name and reported status. A child agent nests inside its
+   parent's lane; an agent whose parent is not in the list starts its own top-level lane. */
+import { useId } from 'react';
+import { AgentStatus } from '../AgentStatus/AgentStatus.js';
+function Lane({ agent, depth, tree, seen, renderLane }) {
+    const nameId = useId();
+    const path = new Set(seen).add(agent.id);
+    // A malformed host log could make an agent its own ancestor; the path guard stops that from recursing forever.
+    const kids = (tree.get(agent.id) ?? []).filter((k) => !path.has(k.id));
+    return (_jsx("li", { "data-agent-id": agent.id, "data-depth": depth, "data-status": agent.status, children: _jsxs("section", { "aria-labelledby": nameId, children: [_jsxs("header", { children: [_jsx("span", { id: nameId, "data-agent-name": true, children: agent.name ?? agent.id }), _jsx(AgentStatus, { status: agent.status })] }), _jsx("div", { "data-lane-body": true, children: renderLane(agent) }), kids.length ? (_jsx("ul", { children: kids.map((k) => _jsx(Lane, { agent: k, depth: depth + 1, tree: tree, seen: path, renderLane: renderLane }, k.id)) })) : null] }) }));
+}
+export function AgentLanes({ agents, renderLane, label = 'Agents' }) {
+    const ids = new Set(agents.map((a) => a.id));
+    const tree = new Map();
+    for (const agent of agents) {
+        const parent = agent.parentAgentId && ids.has(agent.parentAgentId) && agent.parentAgentId !== agent.id ? agent.parentAgentId : null;
+        const list = tree.get(parent);
+        if (list)
+            list.push(agent);
+        else
+            tree.set(parent, [agent]);
+    }
+    return (_jsx("ul", { className: "cieo cieo-p-agent-lanes", "aria-label": label, children: (tree.get(null) ?? []).map((a) => _jsx(Lane, { agent: a, depth: 0, tree: tree, seen: new Set(), renderLane: renderLane }, a.id)) }));
+}

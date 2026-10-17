@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.agent-lanes",
+  "componentVersion": "1.0.0",
+  "name": "AgentLanes",
+  "layer": "organism",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AgentLanes/AgentLanes.tsx",
+    "symbol": "AgentLanes"
+  },
+  "dependencies": ["AgentStatus"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "agents",
+      "type": {
+        "kind": "array",
+        "items": {
+          "kind": "record",
+          "fields": []
+        }
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "AgentView[] from cieo/agent."
+    },
+    {
+      "id": "renderLane",
+      "type": {
+        "kind": "function"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Agents",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "lane",
+      "overrides": [],
+      "tokenRoles": [
+        "text",
+        "border"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "nested-list"
+    ],
+    "content": [
+      "lane-labelled-by-name"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "agents",
+        "renderLane",
+        "label"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "lane"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One lane per agent, headed by name and status, with child agents nested."
+  },
+  "extensions": {}
+}

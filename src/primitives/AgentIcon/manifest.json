@@ -1,0 +1,128 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.agent-icon",
+  "componentVersion": "1.0.0",
+  "name": "AgentIcon",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AgentIcon/AgentIcon.tsx",
+    "symbol": "AgentIcon"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "icon",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "An id from cieo/agent-icons, or an AgentIconDefinition."
+    },
+    {
+      "id": "size",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 24,
+      "constraints": {
+        "min": 8
+      }
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    {
+      "id": "outline",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": true,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "icon",
+      "overrides": [],
+      "tokenRoles": [
+        "text",
+        "status"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "inline-icon"
+    ],
+    "content": [
+      "decorative-unless-labelled"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "icon",
+        "size",
+        "label",
+        "outline"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "icon"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One agent action or state icon at rest, in currentColor."
+  },
+  "extensions": {}
+}

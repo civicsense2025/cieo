@@ -1,0 +1,6 @@
+/* design/styles/primitives/streaming-message.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-streaming-message { display: grid; gap: var(--cieo-space-1); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-streaming-message > [data-text] { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: var(--cieo-leading-body); }
+  :where(.cieo).cieo-p-streaming-message > [data-truncated] { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}

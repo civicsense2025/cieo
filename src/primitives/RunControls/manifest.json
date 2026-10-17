@@ -1,0 +1,140 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.run-controls",
+  "componentVersion": "1.0.0",
+  "name": "RunControls",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/RunControls/RunControls.tsx",
+    "symbol": "RunControls"
+  },
+  "dependencies": ["AgentStatus"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "run",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "RunView from cieo/agent."
+    },
+    {
+      "id": "onStop",
+      "type": {
+        "kind": "function"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "busy",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "stopLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Stop",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Run controls",
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 128
+      }
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "group",
+      "overrides": [],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "inline-row"
+    ],
+    "content": [
+      "stop-only-while-live"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "run",
+        "onStop",
+        "busy",
+        "stopLabel",
+        "label"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "group"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "A run's reported status and a Stop command while it is live."
+  },
+  "extensions": {}
+}

@@ -1,0 +1,7 @@
+/* design/styles/primitives/agent-activity.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-agent-activity { display: grid; gap: var(--cieo-space-1); margin: 0; padding: 0; list-style: none; font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-agent-activity > li { padding-block: var(--cieo-space-1); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo).cieo-p-agent-activity > li:last-child { border-block-end: 0; }
+  :where(.cieo).cieo-p-agent-activity > li[data-empty] { color: var(--cieo-color-muted); }
+}
