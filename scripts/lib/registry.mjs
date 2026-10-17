@@ -1,7 +1,9 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { existsSync } from 'node:fs';
 
-const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', controls: 'cieo/controls', design: 'cieo/design', core: 'cieo' };
+const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', controls: 'cieo/controls', design: 'cieo/design', agent: 'cieo/agent', core: 'cieo' };
+// Modules with their own package subpath, checked before the area they live in. Mirrored in cli/lib/rewrite.mjs.
+const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
 
 export function classifyImport(spec) {
   if (spec === 'react' || spec.startsWith('react/')) return { kind: 'peer' };
@@ -15,6 +17,7 @@ export function classifyImport(spec) {
     throw new Error(`Unclassified import '${spec}' — registry generation refuses to guess`);
   }
   if (ups === 2) {
+    if (PACKAGE_FILES[rest]) return { kind: 'package', packageImport: PACKAGE_FILES[rest] };
     const [area] = rest.split('/');
     if (PACKAGE_AREAS[area]) return { kind: 'package', packageImport: PACKAGE_AREAS[area] };
   }

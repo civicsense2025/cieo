@@ -49,6 +49,10 @@
       "types": "./dist/agent/react.d.ts",
       "default": "./dist/agent/react.js"
     },
+    "./agent-icons": {
+      "types": "./dist/agent/icons.d.ts",
+      "default": "./dist/agent/icons.js"
+    },
     "./controls": {
       "types": "./dist/controls/index.d.ts",
       "default": "./dist/controls/index.js"
@@ -770,7 +774,7 @@
     "test": "npm run build && node --test test/*.test.mjs",
     "test:cli": "node test/cli/e2e.mjs",
     "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check",
-    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
+    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/build-agent-icons.mjs --check && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
     "test:browser": "python3 test/browser/smoke.py",
     "test:nps": "python3 test/browser/nps.py",
     "test:frames": "python3 test/browser/frame-reads.py",
