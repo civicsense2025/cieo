@@ -73,6 +73,15 @@
         "minLength": 1,
         "maxLength": 128
       }
+    },
+    {
+      "id": "statusLabel",
+      "type": {
+        "kind": "function"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
     }
   ],
   "slots": [],
@@ -110,7 +119,8 @@
         "onStop",
         "busy",
         "stopLabel",
-        "label"
+        "label",
+        "statusLabel"
       ],
       "states": [],
       "events": [],

@@ -30,7 +30,7 @@ An agent nests under the agent named by `parentAgentId`. If that parent is not i
 
 ## Customization
 
-`label` and lane content. Indent and dividers from tokens; `data-depth` is there for your own styling.
+`label`, `statusLabel` (translate each lane's status words) and lane content. Indent and dividers from tokens; `data-depth` is there for your own styling.
 
 ## Limitations
 

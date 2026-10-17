@@ -240,3 +240,17 @@ test('agent icons match the atom drawing at rest, at every size tier', () => {
     }
   }
 });
+
+test('AgentLanes and RunControls: statusLabel translates every status; English defaults remain', () => {
+  const fr = (s) => `fr-${s}`;
+  for (const status of AGENT_STATUSES) {
+    const lanes = render(AgentLanes, { agents: [agent('a', status)], renderLane: () => null, statusLabel: fr });
+    assert.match(lanes, new RegExp(`<span data-label="true">fr-${status}</span>`));
+    const controls = render(RunControls, { run: { id: 'r1', status }, statusLabel: fr });
+    assert.match(controls, new RegExp(`fr-${status}`));
+  }
+  const plain = render(AgentLanes, { agents: [agent('a', 'running')], renderLane: () => null });
+  assert.match(plain, /Working/);
+  assert.doesNotMatch(plain, /fr-/);
+  assert.match(render(RunControls, { run: { id: 'r1', status: 'running' } }), /Working/);
+});

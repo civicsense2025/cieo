@@ -1,6 +1,6 @@
 {
   "name": "cieo",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
   "license": "MIT",
   "type": "module",

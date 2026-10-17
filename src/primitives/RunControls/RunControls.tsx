@@ -19,13 +19,15 @@ export interface RunControlsProps {
   stopLabel?: string;
   /** Accessible name for the group. Defaults to "Run controls". */
   label?: string;
+  /** Words for the run's status, e.g. a translation. Defaults to the English words. */
+  statusLabel?: (status: RunView['status']) => string;
 }
 
-export function RunControls({ run, onStop, busy = false, stopLabel = 'Stop', label = 'Run controls' }: RunControlsProps) {
+export function RunControls({ run, onStop, busy = false, stopLabel = 'Stop', label = 'Run controls', statusLabel }: RunControlsProps) {
   const live = !isSettled(run.status);
   return (
     <div className="cieo cieo-p-run-controls" role="group" aria-label={label} data-status={run.status}>
-      <AgentStatus status={run.status} />
+      <AgentStatus status={run.status} label={statusLabel?.(run.status)} />
       {live && onStop ? (
         <Button variant="secondary" state={busy ? 'pending' : 'idle'} pendingLabel={`${stopLabel}: sending`} aria-disabled={busy || undefined} onClick={onStop}>
           {stopLabel}
