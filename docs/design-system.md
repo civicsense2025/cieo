@@ -115,7 +115,7 @@ The CLI sends only the artifact to standard output and errors to standard error.
 
 `npm run build:design` regenerates the standalone schema, default styles, 24 named palette stylesheets, two typed JSON artifacts, and six native outputs. Generated language/palette files live under `design/generated/`, stay out of source control, and enter npm tarballs through `prepare`/`prepack`. The handoff ZIP includes them too. `design/themes.css` and `design/theme.schema.json` remain tracked and receive drift checks. The generator has no third-party dependencies.
 
-The original spring engine, React API, DOM API, SwiftUI package, and recipe files remain unchanged. Existing import paths still resolve. The package stays private and UNLICENSED; this change does not authorize public redistribution or publish a release. The dependency versions don't change. The lockfile only gains the command-line entry metadata.
+The original spring engine, React API, DOM API, SwiftUI package, and recipe files remain unchanged. Existing import paths still resolve. The package is MIT licensed (see `LICENSE`). The dependency versions don't change. The lockfile only gains the command-line entry metadata.
 
 Run `npm run test:design`, `npm run test:design:types`, and `npm run test:design:browser`. Native compilation tests skip unavailable compilers explicitly. The browser test renders the offline artifact without network access; it does not certify every browser or platform. The complete repository still needs `npm run check` and the macOS Swift package checks. See `review.md`, `improvements.json`, and the packaged verification report for exact scope and results.
 
