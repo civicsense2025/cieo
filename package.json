@@ -41,6 +41,14 @@
       "types": "./dist/live/index.d.ts",
       "default": "./dist/live/index.js"
     },
+    "./agent": {
+      "types": "./dist/agent/index.d.ts",
+      "default": "./dist/agent/index.js"
+    },
+    "./agent/react": {
+      "types": "./dist/agent/react.d.ts",
+      "default": "./dist/agent/react.js"
+    },
     "./controls": {
       "types": "./dist/controls/index.d.ts",
       "default": "./dist/controls/index.js"
