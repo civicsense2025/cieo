@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent run · Cieo</title>
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../../design/primitives.css">
+<style>
+.cieo-run-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans);padding-inline:var(--cieo-space-4)}
+.cieo-run-panes{display:grid;gap:var(--cieo-space-4)}
+.cieo-run-main,.cieo-run-rail{display:grid;gap:var(--cieo-space-4);align-content:start;min-inline-size:0}
+.cieo-run-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--cieo-space-3)}
+.cieo-run-tools{display:grid;gap:var(--cieo-space-2)}
+.cieo-run-draft{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.cieo-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
+@media (min-width:60rem){.cieo-run-panes{grid-template-columns:minmax(0,1fr) 20rem}}
+</style>
+</head>
+<body class="cieo">
+<div class="cieo-run-page">
+<header>
+<p><a href="./index.html">Composites</a></p>
+<h1 data-parts="Heading">Agent run</h1>
+<p data-parts="Text">A recorded agent run replays into a real agent store. Nothing leaves this page, and every change on screen comes from an event in the log.</p>
+</header>
+<div class="cieo-run-bar">
+<div class="cieo cieo-p-run-controls" data-parts="RunControls" role="group" aria-label="Run controls" data-run-controls data-status="starting">
+<span class="cieo cieo-p-agent-status" data-parts="AgentStatus" data-run-status data-status="starting" data-tone="info"><span aria-hidden="true" data-status="info" class="cieo cieo-p-status-dot" data-parts="StatusDot"></span><span data-label>Starting</span></span>
+<button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md" data-stop>Stop</button>
+</div>
+<button type="button" class="cieo-ctl cieo-btn cieo-btn--ghost cieo-btn--md" data-replay>Replay</button>
+</div>
+<div class="cieo-run-panes">
+<div class="cieo-run-main">
+<ul class="cieo cieo-p-agent-lanes" data-parts="AgentLanes" aria-label="Agents" data-lanes>
+<li data-agent-id="lead" data-depth="0" data-status="starting">
+<section aria-labelledby="lane-lead">
+<header><span id="lane-lead" data-agent-name>Lead</span><span class="cieo cieo-p-agent-status" data-parts="AgentStatus" data-agent-status="lead" data-status="starting" data-tone="info"><span aria-hidden="true" data-status="info" class="cieo cieo-p-status-dot"></span><span data-label>Starting</span></span></header>
+<div data-lane-body>
+<article class="cieo cieo-chat-message" data-parts="ChatMessage StreamingMessage"><span data-author>Lead</span><div class="cieo cieo-p-streaming-message" data-message="lead" data-complete="false" aria-busy="true"><p data-text>Waiting for the run to start.</p></div></article>
+</div>
+<ul>
+<li data-agent-id="writer" data-depth="1" data-status="starting">
+<section aria-labelledby="lane-writer">
+<header><span id="lane-writer" data-agent-name>Writer</span><span class="cieo cieo-p-agent-status" data-parts="AgentStatus" data-agent-status="writer" data-status="starting" data-tone="info"><span aria-hidden="true" data-status="info" class="cieo cieo-p-status-dot"></span><span data-label>Starting</span></span></header>
+<div data-lane-body>
+<div class="cieo-run-tools" data-tools></div>
+<section data-parts="Card" aria-labelledby="draft-title" data-draft hidden>
+<h3 id="draft-title" data-parts="Heading">Draft</h3>
+<p class="cieo-run-draft" data-parts="Text" data-draft-text></p>
+<p data-parts="Text" data-draft-status></p>
+</section>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+<div data-approval-slot></div>
+</div>
+<div class="cieo-run-rail">
+<section data-parts="Card" aria-labelledby="activity-title">
+<h2 id="activity-title" data-parts="Heading">Activity</h2>
+<ol class="cieo cieo-p-agent-activity" data-parts="AgentActivity" role="log" aria-label="Agent activity" data-activity><li data-empty>No events yet.</li></ol>
+</section>
+<section data-parts="Card" aria-labelledby="saved-title">
+<h2 id="saved-title" data-parts="Heading">Saved</h2>
+<p data-parts="Text" data-artifacts>Nothing saved yet.</p>
+</section>
+</div>
+</div>
+<p class="cieo-visually-hidden" role="status" data-announce></p>
+</div>
+<section aria-label="Behavior">
+<h2 data-parts="Heading">Behavior</h2>
+<ul>
+<li>The page replays a fixed event log into a real agent store, one event at a time. The screen renders only what the store holds.</li>
+<li>The run pauses on an approval. Approve or Deny disables both buttons while the decision is sent, and the request keeps saying it is waiting until the log reports the decision.</li>
+<li>Stop shows only while the run is live. While the stop is sent, the status stays what the log last said.</li>
+<li>Streamed text is set as plain text, never as HTML. The message is busy until the log completes it.</li>
+<li>Replay starts over from an empty store.</li>
+</ul>
+</section>
+<section data-built-from>
+<h2 data-parts="Heading">Built from</h2>
+<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
+<ul>
+<li><a href="../components/RunControls.html">RunControls</a></li>
+<li><a href="../components/AgentStatus.html">AgentStatus</a></li>
+<li><a href="../components/StatusDot.html">StatusDot</a></li>
+<li><a href="../components/AgentLanes.html">AgentLanes</a></li>
+<li><a href="../components/StreamingMessage.html">StreamingMessage</a></li>
+<li><a href="../components/ChatMessage.html">ChatMessage</a></li>
+<li><a href="../components/ToolCallDisclosure.html">ToolCallDisclosure</a> (rendered by JS for each tool call)</li>
+<li><a href="../components/ApprovalRequest.html">ApprovalRequest</a> (rendered by JS when the run asks)</li>
+<li><a href="../components/AgentActivity.html">AgentActivity</a></li>
+<li><a href="../components/Card.html">Card</a></li>
+<li><a href="../components/Heading.html">Heading</a></li>
+<li><a href="../components/Text.html">Text</a></li>
+</ul>
+</section>
+<script type="module" src="./agent-run.js"></script>
+</body>
+</html>
