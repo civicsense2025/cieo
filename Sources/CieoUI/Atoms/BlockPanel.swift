@@ -35,6 +35,8 @@ public struct BlockPanel<Content: View>: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) { content }
             .foregroundStyle(foreground)
+            // Text stays clear of the circle, so it never sits on the accent at low contrast.
+            .padding(.trailing, bleed.map(Self.reservedWidth) ?? 0)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 20)
             .padding(.vertical, 24)
@@ -68,6 +70,11 @@ public struct BlockPanel<Content: View>: View {
             }
         }
         .clipped()
+    }
+
+    /// The width of the circle that shows inside the panel (70% of it), minus the panel's own padding.
+    public static func reservedWidth(_ bleed: Bleed) -> CGFloat {
+        max(0, bleed.diameter * 0.7 - 20)
     }
 
     /// The circle sits 30% outside its corner, as the study's bleeding circles do.
