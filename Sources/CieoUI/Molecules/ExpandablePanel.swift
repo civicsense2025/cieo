@@ -1,6 +1,7 @@
 import SwiftUI
 
 public struct ExpandablePanel<Content: View>: View {
+    @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
     private let title: LocalizedStringKey
@@ -17,7 +18,7 @@ public struct ExpandablePanel<Content: View>: View {
         DisclosureGroup(isExpanded: $isExpanded) {
             content.padding(.top, metrics.compact)
         } label: {
-            Text(title).font(typography.heading).frame(minHeight: metrics.touchTarget)
+            Text(title).font(typography.heading).foregroundStyle(theme.foreground).frame(minHeight: metrics.touchTarget)
         }
         .motionAnimation(.base, value: isExpanded)
     }
