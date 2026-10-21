@@ -4,6 +4,7 @@ public struct SelectionChip: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.componentIcons) private var icons
     private let selectedAccessibilityValue: LocalizedStringKey
     private let unselectedAccessibilityValue: LocalizedStringKey
     private let title: LocalizedStringKey
@@ -21,14 +22,14 @@ public struct SelectionChip: View {
     public var body: some View {
         Button { isSelected.toggle() } label: {
             HStack {
-                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                icons(isSelected ? .selected : .unselected)
                     .accessibilityHidden(true)
                 Text(title)
             }
             .font(typography.selection)
             .padding(.horizontal, metrics.standard)
             .frame(minHeight: metrics.touchTarget)
-            .background(isSelected ? theme.accent.opacity(0.2) : theme.surface, in: .capsule)
+            .background(isSelected ? theme.tint : theme.surface, in: .capsule)
         }
         .buttonStyle(.plain)
         .foregroundStyle(theme.foreground)
