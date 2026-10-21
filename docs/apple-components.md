@@ -11,6 +11,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Interactive gallery](#interactive-gallery)
 - [Soft surfaces](#soft-surfaces)
 - [Host configuration and semantic copy](#host-configuration-and-semantic-copy)
+- [Display type, colour blocks and cuts](#display-type-colour-blocks-and-cuts)
 - [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
 
@@ -74,6 +75,16 @@ localization API. Host actions and asynchronous lifetimes remain outside Cieo.
 These additive contracts shipped in PR #9. They are unreleased and are not part of consumer 0.3.0. Unit/build and consumer UI
 receipts must identify their actual candidate; source inspection alone does not
 establish localization, focus or VoiceOver acceptance.
+
+## Display type, colour blocks and cuts
+
+These foundations carry an editorial look built from flat colour blocks, heavy type and geometric cuts in place of boxes and rules. They hold no brand values: the host installs its palette and fonts once at the root.
+
+- [Theme](../Sources/CieoUI/Foundations/Theme.swift) adds `onAccent`, `tint` (defaults to the accent at 18%), `track` (the unfilled part of bars and connectors), and `block`, `onBlock`, `onBlockSecondary` for a dark panel that holds live state.
+- [DisplayTypography](../Sources/CieoUI/Foundations/DisplayTypography.swift) has six roles: `display`, `title`, `headline` and three numeral sizes. Defaults are sized for a phone (30, 22 and 20 points; numerals 64, 44 and 28) with black or heavy weights and tracking written as a fraction of the size, like CSS `em`. Every role scales with Dynamic Type relative to its text style, stops at `maximumSize`, and never shrinks below half its size. Numerals use monospaced digits. Install `displayTypography` with larger values on wide layouts, then use `.displayText(.title)`.
+- [CutShape](../Sources/CieoUI/Foundations/CutShape.swift) has nine cuts: `arch`, `invertedArch`, `circle`, `leadingPill`, `square` and `quarter(corner)`. Curves meet the frame's edges, so a cut fills any frame. Corners are named by reading direction, and the shape mirrors in right-to-left layouts.
+
+[FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 
 ## Consumer rollout boundary
 
