@@ -9,8 +9,9 @@ public struct DisplayStyle: Sendable, Equatable {
     public let weight: Font.Weight
     /// Letter spacing as a fraction of the font size, as CSS `em` tracking is written.
     public let tracking: CGFloat
-    /// A custom font face to use instead of the system font, by PostScript name. The face carries its own
-    /// weight, so `weight` applies only to the system font. Nil keeps the system font.
+    /// A custom font family face to use instead of the system font, by PostScript name. `weight` still
+    /// applies, so name the family's regular face and let the weight pick its heavy one; a weight-varied
+    /// copy registered at run time does not resolve on iOS. Nil keeps the system font.
     public let fontName: String?
     public let monospacedDigits: Bool
 
@@ -31,7 +32,8 @@ public struct DisplayStyle: Sendable, Equatable {
 
     /// The font at an already scaled size.
     public func font(at size: CGFloat) -> Font {
-        let base: Font = fontName.map { .custom($0, fixedSize: size) } ?? .system(size: size, weight: weight)
+        let base: Font = fontName.map { .custom($0, fixedSize: size).weight(weight) }
+            ?? .system(size: size, weight: weight)
         return monospacedDigits ? base.monospacedDigit() : base
     }
 
