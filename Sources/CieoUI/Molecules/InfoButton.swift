@@ -29,6 +29,8 @@ public struct InfoButton: View {
 
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentIcons) private var icons
+    @Environment(\.componentTypography) private var typography
+    @Environment(\.componentMetrics) private var metrics
     @State private var isPresented = false
     private let title: String
     private let groups: [QuestionGroup]
@@ -47,54 +49,55 @@ public struct InfoButton: View {
 
     public var body: some View {
         if !groups.isEmpty {
-            Button { isPresented = true } label: { label }
-                .buttonStyle(.plain)
-                .accessibilityLabel(Text(title))
-                .sheet(isPresented: $isPresented) { sheet }
+            trigger.sheet(isPresented: $isPresented) { sheet }
         }
     }
 
-    @ViewBuilder private var label: some View {
+    @ViewBuilder private var trigger: some View {
         switch style {
         case .icon:
-            icons(.info).font(.title3).foregroundStyle(theme.accent)
-                .frame(width: Metrics.touchTarget, height: Metrics.touchTarget)
-                .contentShape(Rectangle())
+            IconButton(.info, label: Text(title), prominent: true) { isPresented = true }
         case .row:
-            HStack(spacing: 12) {
-                icons(.info).font(.title3).foregroundStyle(theme.accent)
-                Text(title).font(.body.weight(.semibold)).foregroundStyle(theme.foreground)
-                Spacer(minLength: 0)
-                icons(.disclosure).font(.footnote.weight(.semibold)).foregroundStyle(theme.secondary)
-            }
-            .frame(minHeight: Metrics.touchTarget)
-            .contentShape(Rectangle())
+            Button { isPresented = true } label: { row }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(title))
         }
+    }
+
+    private var row: some View {
+        HStack(spacing: metrics.medium) {
+            icons(.info).font(typography.prominentGlyph).foregroundStyle(theme.accent)
+            Text(title).font(typography.strongBody).foregroundStyle(theme.foreground)
+            Spacer(minLength: 0)
+            icons(.disclosure).font(typography.glyph).foregroundStyle(theme.secondary)
+        }
+        .frame(minHeight: metrics.touchTarget)
+        .contentShape(Rectangle())
     }
 
     private var sheet: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: Metrics.section) {
+                VStack(alignment: .leading, spacing: metrics.section) {
                     ForEach(groups) { group in
-                        VStack(alignment: .leading, spacing: Metrics.compact) {
+                        VStack(alignment: .leading, spacing: metrics.compact) {
                             if let heading = group.title {
-                                Text(heading).font(.headline.weight(.heavy)).accessibilityAddTraits(.isHeader)
+                                Text(heading).font(typography.strongHeading).accessibilityAddTraits(.isHeader)
                             }
                             ForEach(group.questions) { item in
                                 DisclosureGroup {
                                     Text(item.answer).foregroundStyle(theme.secondary)
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.top, 4)
+                                        .padding(.top, metrics.tight)
                                 } label: {
-                                    Text(item.question).font(.body.weight(.semibold)).foregroundStyle(theme.foreground)
-                                        .frame(minHeight: Metrics.touchTarget, alignment: .leading)
+                                    Text(item.question).font(typography.strongBody).foregroundStyle(theme.foreground)
+                                        .frame(minHeight: metrics.touchTarget, alignment: .leading)
                                 }
                             }
                         }
                     }
                 }
-                .padding(Metrics.standard)
+                .padding(metrics.standard)
             }
             .navigationTitle(title)
             .toolbar {
