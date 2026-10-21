@@ -1,0 +1,225 @@
+import SwiftUI
+
+/// Where a step stands on a path.
+public enum PathwayStage: Sendable, Equatable {
+    case done, current, upcoming
+}
+
+/// The line drawn between two nodes.
+public enum PathwayStroke: Sendable {
+    /// Round dots, for a learning path.
+    case dotted
+    /// Short dashes, for a process such as a bill's stages.
+    case dashed
+
+    var dash: [CGFloat] { self == .dotted ? [2, 7] : [6, 7] }
+    var width: CGFloat { self == .dotted ? 2.5 : 3 }
+}
+
+/// Steps as round nodes joined by a curved line. Vertically, nodes step side to side and a curve joins
+/// each pair; horizontally, nodes sit in a row joined by arches. Lines behind finished steps take the accent.
+/// At accessibility text sizes the vertical path straightens so labels keep the full width.
+public struct Pathway<Item: Identifiable, Label: View>: View {
+    public enum Axis: Sendable { case vertical, horizontal }
+
+    /// Sideways offsets for each node in turn, repeated down the path.
+    public static var compactOffsets: [CGFloat] { [0, 36, 64, 36] }
+    public static var wideOffsets: [CGFloat] { [0, 72, 152, 104, 24, 128, 48, 176] }
+
+    @Environment(\.componentTheme) private var theme
+    @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.horizontalSizeClass) private var sizeClass
+    @ScaledMetric(relativeTo: .headline) private var scaledNode: CGFloat = 56
+
+    private let items: [Item]
+    private let stage: (Item) -> PathwayStage
+    private let axis: Axis
+    private let stroke: PathwayStroke
+    private let offsets: [CGFloat]?
+    private let accessibilityName: (Item) -> Text
+    private let action: ((Item) -> Void)?
+    private let label: (Item, Int) -> Label
+
+    /// `accessibilityName` is the step's name as VoiceOver should read it, such as the lesson title.
+    public init(_ items: [Item], axis: Axis = .vertical, stroke: PathwayStroke = .dotted, offsets: [CGFloat]? = nil,
+                stage: @escaping (Item) -> PathwayStage, accessibilityName: @escaping (Item) -> Text,
+                action: ((Item) -> Void)? = nil, @ViewBuilder label: @escaping (Item, Int) -> Label)
+    {
+        self.items = items
+        self.axis = axis
+        self.stroke = stroke
+        self.offsets = offsets
+        self.stage = stage
+        self.accessibilityName = accessibilityName
+        self.action = action
+        self.label = label
+    }
+
+    /// The node's sideways offset at a position, for a pattern of offsets.
+    public static func offset(at index: Int, in pattern: [CGFloat]) -> CGFloat {
+        let usable = pattern.filter { $0.isFinite }.map { max(0, $0) }
+        guard !usable.isEmpty, index >= 0 else { return 0 }
+        return usable[index % usable.count]
+    }
+
+    /// A line is walked when the step it leaves is done.
+    public static func isWalked(from stage: PathwayStage) -> Bool { stage == .done }
+
+    /// How VoiceOver names a step's state.
+    public static func spokenStage(_ stage: PathwayStage) -> String {
+        switch stage {
+        case .done: "done"
+        case .current: "current"
+        case .upcoming: "not started"
+        }
+    }
+
+    private var node: CGFloat { min(88, scaledNode) }
+
+    private var pattern: [CGFloat] {
+        if typeSize.isAccessibilitySize { return [0] }
+        if let offsets { return offsets }
+        #if os(macOS)
+        return Self.wideOffsets
+        #else
+        return sizeClass == .regular ? Self.wideOffsets : Self.compactOffsets
+        #endif
+    }
+
+    public var body: some View {
+        Group {
+            switch axis {
+            case .vertical: vertical
+            case .horizontal: horizontal
+            }
+        }
+        .accessibilityElement(children: .contain)
+    }
+
+    private var vertical: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                if index > 0 {
+                    let from = Self.offset(at: index - 1, in: pattern) + node / 2
+                    let to = Self.offset(at: index, in: pattern) + node / 2
+                    PathwayBend(from: from, to: to)
+                        .stroke(lineColor(after: items[index - 1]), style: lineStyle)
+                        .frame(height: node)
+                        .accessibilityHidden(true)
+                }
+                row(item, index: index) {
+                    HStack(alignment: .center, spacing: 14) {
+                        nodeView(item, index: index)
+                        label(item, index).frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(.leading, Self.offset(at: index, in: pattern))
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var horizontal: some View {
+        HStack(alignment: .top, spacing: 0) {
+            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+                row(item, index: index) {
+                    VStack(spacing: 10) {
+                        nodeView(item, index: index)
+                        label(item, index).multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .background(alignment: .top) {
+                    if index > 0 {
+                        // Spans from the previous column's centre to this one's, arching above the line of nodes.
+                        GeometryReader { proxy in
+                            PathwayArch()
+                                .stroke(lineColor(after: items[index - 1]), style: lineStyle)
+                                .frame(width: proxy.size.width - node, height: node / 2)
+                                .offset(x: -proxy.size.width / 2 + node / 2, y: 0)
+                        }
+                        .frame(height: node / 2)
+                        .accessibilityHidden(true)
+                    }
+                }
+            }
+        }
+    }
+
+    private var lineStyle: StrokeStyle {
+        StrokeStyle(lineWidth: stroke.width, lineCap: .round, dash: stroke.dash)
+    }
+
+    private func lineColor(after item: Item) -> Color {
+        Self.isWalked(from: stage(item)) ? theme.accent : theme.secondary.opacity(0.55)
+    }
+
+    @ViewBuilder
+    private func row(_ item: Item, index: Int, @ViewBuilder content: () -> some View) -> some View {
+        let spoken = Text("Step \(index + 1) of \(items.count), ") + accessibilityName(item)
+            + Text(", \(Self.spokenStage(stage(item)))")
+        if let action {
+            Button { action(item) } label: { content().contentShape(Rectangle()) }
+                .buttonStyle(.plain)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(spoken)
+        } else {
+            content()
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel(spoken)
+        }
+    }
+
+    private func nodeView(_ item: Item, index: Int) -> some View {
+        let current = stage(item)
+        let fill: Color = current == .done ? theme.accent : current == .current ? theme.foreground : theme.surface
+        return ZStack {
+            if current == .current {
+                // A still halo marks the reader's place; it does not pulse.
+                Circle().fill(theme.accent.opacity(0.28)).frame(width: node + 12, height: node + 12)
+            }
+            Circle().fill(fill).frame(width: node, height: node)
+            Group {
+                if current == .done {
+                    Image(systemName: "checkmark").font(.headline.weight(.black)).foregroundStyle(theme.onAccent)
+                } else {
+                    // The current node inverts: screen colour on the foreground colour.
+                    Text("\(index + 1)").font(.headline.weight(.black)).monospacedDigit()
+                        .foregroundStyle(current == .current ? AnyShapeStyle(.background) : AnyShapeStyle(theme.foreground))
+                }
+            }
+            .minimumScaleFactor(0.5)
+        }
+        .frame(width: node + 12, height: node + 12)
+        .padding(-6)
+        .accessibilityHidden(true)
+    }
+}
+
+/// An S-curve from one node's centre above to the next node's centre below.
+struct PathwayBend: Shape {
+    var from: CGFloat
+    var to: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let mid = rect.minY + rect.height / 2
+        path.move(to: CGPoint(x: rect.minX + from, y: rect.minY))
+        path.addCurve(to: CGPoint(x: rect.minX + to, y: rect.maxY),
+                      control1: CGPoint(x: rect.minX + from, y: mid),
+                      control2: CGPoint(x: rect.minX + to, y: mid))
+        return path
+    }
+}
+
+/// An arch from the bottom left to the bottom right of its frame.
+struct PathwayArch: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addCurve(to: CGPoint(x: rect.maxX, y: rect.maxY),
+                      control1: CGPoint(x: rect.minX + rect.width * 0.2, y: rect.minY),
+                      control2: CGPoint(x: rect.maxX - rect.width * 0.2, y: rect.minY))
+        return path
+    }
+}

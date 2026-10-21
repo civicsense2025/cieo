@@ -103,6 +103,13 @@ Molecules built on the atoms:
 
 [MoleculeTests](../Tests/CieoUITests/MoleculeTests.swift) pin rank numbering, the bar bounds, the empty-sheet rule and the narrow-width header, and they draw every molecule in both schemes.
 
+Organisms built on them:
+
+- [Pathway](../Sources/CieoUI/Organisms/Pathway.swift): steps as round nodes joined by a curved line, dotted for learning paths and dashed for processes. Vertically, nodes step sideways in a repeating pattern (0, 36, 64, 36 points on compact widths; eight wider steps on regular widths and the Mac) joined by S-curves. Horizontally, they sit in a row joined by arches. Lines leaving finished steps take the accent; the current node inverts and carries a still halo, with no pulsing. At accessibility text sizes the vertical path straightens. VoiceOver reads each step as "Step 2 of 6, Committee, current".
+- [ContentRail](../Sources/CieoUI/Organisms/ContentRail.swift): a sideways rail that snaps to each item. On the Mac, where there is no swipe, previous and next buttons page it and stop at the ends. It draws nothing when empty.
+
+[OrganismTests](../Tests/CieoUITests/OrganismTests.swift) pin the offset pattern, the walked-line rule, the spoken states and the paging bounds, and they draw both pathway axes. `ImageRenderer` doesn't draw scroll view content, so the rail's cards are checked on the simulator by the consumer.
+
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 
 ## Consumer rollout boundary
