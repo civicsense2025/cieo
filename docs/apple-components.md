@@ -133,6 +133,7 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error.
 - `IconButton(icon, label:, prominent:)` is a glyph-only button with a spoken label and a full touch target.
 - `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.
+- SelectionChip, BlockPanel, CutSurface, ShareBar and ActionButton read every style from the slots. A share bar's seam is the `hairline` width.
 
 `scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`.
 
