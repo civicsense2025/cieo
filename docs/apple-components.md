@@ -90,7 +90,7 @@ Atoms built on them:
 - [BigNumber](../Sources/CieoUI/Atoms/BigNumber.swift) sets a numeral in a numeral role with its label inline or stacked, read as one phrase.
 - [ShareBar](../Sources/CieoUI/Atoms/ShareBar.swift) draws shares of a whole as one bar and draws nothing unless every share is a positive number, so a missing figure never shows as a fake split.
 - [SegmentedProgress](../Sources/CieoUI/Atoms/SegmentedProgress.swift) draws one segment per step, from 1 to 60, and reads "4 of 10".
-- [BlockPanel](../Sources/CieoUI/Atoms/BlockPanel.swift) is a flat block, surface or accent panel for the one thing a section's reader is working in, with an optional circle bleeding 30% past a corner.
+- [BlockPanel](../Sources/CieoUI/Atoms/BlockPanel.swift) is a flat block, surface or accent panel for the one thing a section's reader is working in, with an optional circle bleeding 30% past a corner. Its text keeps out of the circle's visible width, so words never sit on the accent.
 
 [AtomTests](../Tests/CieoUITests/AtomTests.swift) pin those rules and draw every atom at 390 points in light and dark. Set `CIEO_RENDER_DIR` to save the drawings for review. macOS does not apply Dynamic Type, so text scaling is checked on the iOS simulator by the consumer.
 
@@ -109,6 +109,8 @@ Organisms built on them:
 - [ContentRail](../Sources/CieoUI/Organisms/ContentRail.swift): a sideways rail that snaps to each item. On the Mac, where there is no swipe, previous and next buttons page it and stop at the ends. It draws nothing when empty.
 
 [OrganismTests](../Tests/CieoUITests/OrganismTests.swift) pin the offset pattern, the walked-line rule, the spoken states and the paging bounds, and they draw both pathway axes. `ImageRenderer` doesn't draw scroll view content, so the rail's cards are checked on the simulator by the consumer.
+
+- [ComponentIcons](../Sources/CieoUI/Foundations/ComponentIcons.swift): the glyphs these pieces draw themselves (disclosure, info, check, previous, next). They default to SF Symbols; an app with its own icon set installs `componentIcons` once at the root.
 
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 

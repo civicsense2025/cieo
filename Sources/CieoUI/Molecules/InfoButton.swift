@@ -28,6 +28,7 @@ public struct InfoButton: View {
     }
 
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentIcons) private var icons
     @State private var isPresented = false
     private let title: String
     private let groups: [QuestionGroup]
@@ -56,15 +57,15 @@ public struct InfoButton: View {
     @ViewBuilder private var label: some View {
         switch style {
         case .icon:
-            Image(systemName: "info.circle").font(.title3).foregroundStyle(theme.accent)
+            icons(.info).font(.title3).foregroundStyle(theme.accent)
                 .frame(width: Metrics.touchTarget, height: Metrics.touchTarget)
                 .contentShape(Rectangle())
         case .row:
             HStack(spacing: 12) {
-                Image(systemName: "info.circle").font(.title3).foregroundStyle(theme.accent)
+                icons(.info).font(.title3).foregroundStyle(theme.accent)
                 Text(title).font(.body.weight(.semibold)).foregroundStyle(theme.foreground)
                 Spacer(minLength: 0)
-                Image(systemName: "chevron.forward").font(.footnote.weight(.semibold)).foregroundStyle(theme.secondary)
+                icons(.disclosure).font(.footnote.weight(.semibold)).foregroundStyle(theme.secondary)
             }
             .frame(minHeight: Metrics.touchTarget)
             .contentShape(Rectangle())

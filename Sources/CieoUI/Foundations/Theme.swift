@@ -51,5 +51,6 @@ public extension EnvironmentValues {
     @Entry var componentTypography = ComponentTypography()
     @Entry var componentMetrics = ComponentMetrics()
     @Entry var displayTypography = DisplayTypography()
+    @Entry var componentIcons = ComponentIcons.system
     @Entry var renderPolicy = RenderPolicy()
 }

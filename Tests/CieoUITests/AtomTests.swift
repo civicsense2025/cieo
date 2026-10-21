@@ -34,6 +34,11 @@ final class AtomTests: XCTestCase {
         XCTAssertEqual(lower.height, 30)
     }
 
+    func testBlockPanelTextStaysClearOfTheCircle() {
+        XCTAssertEqual(BlockPanel<EmptyView>.reservedWidth(.init(diameter: 200)), 120)
+        XCTAssertEqual(BlockPanel<EmptyView>.reservedWidth(.init(diameter: 20)), 0)
+    }
+
     func testBlockPanelBleedStaysBounded() {
         XCTAssertEqual(BlockPanel<EmptyView>.Bleed(diameter: .infinity).diameter, 200)
         XCTAssertEqual(BlockPanel<EmptyView>.Bleed(diameter: -5).diameter, 0)

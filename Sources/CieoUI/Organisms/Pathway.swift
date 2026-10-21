@@ -27,6 +27,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
     public static var wideOffsets: [CGFloat] { [0, 72, 152, 104, 24, 128, 48, 176] }
 
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentIcons) private var icons
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .headline) private var scaledNode: CGFloat = 56
@@ -181,7 +182,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
             Circle().fill(fill).frame(width: node, height: node)
             Group {
                 if current == .done {
-                    Image(systemName: "checkmark").font(.headline.weight(.black)).foregroundStyle(theme.onAccent)
+                    icons(.check).font(.headline.weight(.black)).foregroundStyle(theme.onAccent)
                 } else {
                     // The current node inverts: screen colour on the foreground colour.
                     Text("\(index + 1)").font(.headline.weight(.black)).monospacedDigit()

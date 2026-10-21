@@ -4,6 +4,7 @@ import SwiftUI
 /// the row's data (progress, share, count). The host wraps it in a Button or NavigationLink.
 public struct IndexRow: View {
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentIcons) private var icons
     private let rank: String?
     private let title: Text
     private let note: Text?
@@ -58,7 +59,7 @@ public struct IndexRow: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             if showsDisclosure {
-                Image(systemName: "chevron.forward").font(.footnote.weight(.semibold))
+                icons(.disclosure).font(.footnote.weight(.semibold))
                     .foregroundStyle(theme.secondary).accessibilityHidden(true)
             }
         }
