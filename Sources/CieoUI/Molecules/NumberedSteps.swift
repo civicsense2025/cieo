@@ -14,6 +14,7 @@ public struct NumberedSteps: View {
     }
 
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentMetrics) private var metrics
     private let steps: [Step]
 
     public init(_ steps: [Step]) {
@@ -26,19 +27,13 @@ public struct NumberedSteps: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .leading, spacing: metrics.loose) {
             ForEach(Array(steps.enumerated()), id: \.element.id) { position, step in
-                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                HStack(alignment: .firstTextBaseline, spacing: metrics.medium) {
                     Text("\(position + 1)").displayText(.numeralMedium).foregroundStyle(theme.accent)
-                        .frame(minWidth: 44, alignment: .leading)
+                        .frame(minWidth: metrics.touchTarget, alignment: .leading)
                         .accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(step.title).font(.headline.weight(.heavy)).foregroundStyle(theme.foreground)
-                        if let detail = step.detail {
-                            Text(detail).font(.subheadline).foregroundStyle(theme.secondary)
-                        }
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
+                    Heading(Text(step.title), detail: step.detail.map { Text($0) }, level: .strongHeading)
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Step \(position + 1) of \(steps.count): \(step.title)"))

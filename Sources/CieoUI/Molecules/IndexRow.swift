@@ -5,6 +5,8 @@ import SwiftUI
 public struct IndexRow: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentIcons) private var icons
+    @Environment(\.componentTypography) private var typography
+    @Environment(\.componentMetrics) private var metrics
     private let rank: String?
     private let title: Text
     private let note: Text?
@@ -32,18 +34,13 @@ public struct IndexRow: View {
     }
 
     public var body: some View {
-        HStack(alignment: .center, spacing: 14) {
+        HStack(alignment: .center, spacing: metrics.medium) {
             if let rank {
                 Text(rank).displayText(.numeralSmall).foregroundStyle(theme.accent)
                     .accessibilityHidden(true)
             }
-            VStack(alignment: .leading, spacing: 4) {
-                title.font(.headline.weight(.heavy)).foregroundStyle(theme.foreground)
-                    .fixedSize(horizontal: false, vertical: true)
-                if let note {
-                    note.font(.subheadline).foregroundStyle(theme.secondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
+            VStack(alignment: .leading, spacing: metrics.tight) {
+                Heading(title, detail: note, level: .strongHeading)
                 if let fraction {
                     GeometryReader { proxy in
                         ZStack(alignment: .leading) {
@@ -51,20 +48,19 @@ public struct IndexRow: View {
                             Capsule().fill(theme.accent).frame(width: proxy.size.width * fraction)
                         }
                     }
-                    .frame(height: 6)
-                    .padding(.top, 2)
+                    .frame(height: metrics.thinBar)
                     .motionAnimation(.soft, value: fraction)
                     .accessibilityHidden(true)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             if showsDisclosure {
-                icons(.disclosure).font(.footnote.weight(.semibold))
+                icons(.disclosure).font(typography.glyph)
                     .foregroundStyle(theme.secondary).accessibilityHidden(true)
             }
         }
-        .frame(minHeight: Metrics.touchTarget)
-        .padding(.vertical, 10)
+        .frame(minHeight: metrics.touchTarget)
+        .padding(.vertical, metrics.compact)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
         .accessibilityValue(fraction.map { Text($0, format: .percent.precision(.fractionLength(0))) } ?? Text(""))
