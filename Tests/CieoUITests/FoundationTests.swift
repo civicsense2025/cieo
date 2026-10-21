@@ -99,3 +99,32 @@ final class FoundationTests: XCTestCase {
         _ = Color.blue.clipShape(CutShape(.quarter(.bottomTrailing)))
     }
 }
+
+final class ComponentIconTests: XCTestCase {
+    func testEveryGlyphHasASystemDefault() {
+        let names = ComponentIcon.allCases.map(ComponentIcons.systemName)
+        XCTAssertEqual(names.count, 5)
+        XCTAssertFalse(names.contains(""))
+    }
+
+    @MainActor
+    func testHostGlyphsReplaceTheDefaults() throws {
+        // A host glyph that is a solid red square makes the swap visible in pixels.
+        let host = ComponentIcons { _ in Color.red.frame(width: 20, height: 20) }
+        let row = IndexRow(rank: nil, title: Text("Row")).environment(\.componentIcons, host).frame(width: 200)
+        let image = try XCTUnwrap(ImageRenderer(content: row).cgImage)
+        XCTAssertTrue(Self.containsRed(image), "the row's chevron is the host glyph")
+        let plain = try XCTUnwrap(ImageRenderer(content: IndexRow(rank: nil, title: Text("Row")).frame(width: 200)).cgImage)
+        XCTAssertFalse(Self.containsRed(plain))
+    }
+
+    static func containsRed(_ image: CGImage) -> Bool {
+        let width = image.width, height = image.height
+        var pixels = [UInt8](repeating: 0, count: width * height * 4)
+        guard let context = CGContext(data: &pixels, width: width, height: height, bitsPerComponent: 8, bytesPerRow: width * 4,
+                                      space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)
+        else { return false }
+        context.draw(image, in: CGRect(x: 0, y: 0, width: width, height: height))
+        return stride(from: 0, to: pixels.count, by: 4).contains { pixels[$0] > 200 && pixels[$0 + 1] < 60 && pixels[$0 + 2] < 60 }
+    }
+}

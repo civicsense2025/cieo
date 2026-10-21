@@ -110,6 +110,8 @@ Organisms built on them:
 
 [OrganismTests](../Tests/CieoUITests/OrganismTests.swift) pin the offset pattern, the walked-line rule, the spoken states and the paging bounds, and they draw both pathway axes. `ImageRenderer` doesn't draw scroll view content, so the rail's cards are checked on the simulator by the consumer.
 
+- [ComponentIcons](../Sources/CieoUI/Foundations/ComponentIcons.swift): the glyphs these pieces draw themselves (disclosure, info, check, previous, next). They default to SF Symbols; an app with its own icon set installs `componentIcons` once at the root.
+
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 
 ## Consumer rollout boundary

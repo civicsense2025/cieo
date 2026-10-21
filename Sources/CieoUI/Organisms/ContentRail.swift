@@ -4,6 +4,7 @@ import SwiftUI
 /// where there is no swipe, previous and next buttons page the rail. The host owns the one vertical scroll.
 public struct ContentRail<Item: Identifiable, Card: View>: View {
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentIcons) private var icons
     @State private var position: Item.ID?
     private let items: [Item]
     private let itemWidth: CGFloat
@@ -63,20 +64,20 @@ public struct ContentRail<Item: Identifiable, Card: View>: View {
 
     private var pager: some View {
         HStack(spacing: 4) {
-            pageButton("chevron.backward", step: -1, name: Text("Previous"))
-            pageButton("chevron.forward", step: 1, name: Text("Next"))
+            pageButton(.previous, step: -1, name: Text("Previous"))
+            pageButton(.next, step: 1, name: Text("Next"))
         }
         .padding(.trailing, margin)
     }
 
-    private func pageButton(_ symbol: String, step: Int, name: Text) -> some View {
+    private func pageButton(_ icon: ComponentIcon, step: Int, name: Text) -> some View {
         let target = Self.neighbour(of: index, step: step, count: items.count)
         let atEnd = target == (index ?? 0)
         return Button {
             guard let target else { return }
             withAnimation(.snappy) { position = items[target].id }
         } label: {
-            Image(systemName: symbol).font(.body.weight(.semibold))
+            icons(icon).font(.body.weight(.semibold))
                 .frame(width: Metrics.touchTarget, height: Metrics.touchTarget)
                 .background(Circle().fill(theme.surface))
                 .contentShape(Circle())
