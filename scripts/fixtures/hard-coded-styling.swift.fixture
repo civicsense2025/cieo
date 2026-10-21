@@ -1,0 +1,6 @@
+// Every line below must be caught by scripts/check-swift-literals.sh; CI fails if any slips through.
+Text("Title").font(.headline)
+Image(systemName: "star")
+VStack(spacing: 12) {}
+Text("Error").foregroundStyle(.red)
+Color.accentColor.opacity(0.3)

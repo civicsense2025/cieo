@@ -22,7 +22,7 @@ pattern+='|\.padding\((\.[a-z]+, *)?[0-9]'
 pattern+='|opacity\(0?\.[0-9]'
 pattern+='|Metrics\.(tight|compact|medium|standard|loose|section|corner|touchTarget)\b'
 
-if hits=$(grep -nE "$pattern" "${files[@]}" | grep -v 'literal-ok'); then
+if hits=$(grep -HnE "$pattern" "${files[@]}" | grep -v 'literal-ok'); then
   echo "Hard-coded styling in components (read it from the environment instead):"
   echo "$hits"
   exit 1

@@ -139,7 +139,7 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - ContentSection, StatePanel, TaskPanel, Pathway and ContentRail read every style from the slots.
 - ProgressRing, SegmentedProgress, BigNumber, HighlightSurface and SymbolMark read every style from the slots.
 
-`scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`.
+`scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`. CI runs it in the `swift` job, and also proves it still catches every line in `scripts/fixtures/hard-coded-styling.swift.fixture`.
 
 ## Consumer rollout boundary
 
