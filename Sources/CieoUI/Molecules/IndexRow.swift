@@ -40,7 +40,7 @@ public struct IndexRow: View {
                     .accessibilityHidden(true)
             }
             VStack(alignment: .leading, spacing: metrics.tight) {
-                Heading(title, detail: note, level: .strongHeading)
+                Heading(title, detail: note, level: .strongHeading, isHeader: false)
                 if let fraction {
                     GeometryReader { proxy in
                         ZStack(alignment: .leading) {

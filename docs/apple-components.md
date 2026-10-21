@@ -129,7 +129,7 @@ Components choose a role and never a value. A host changes one value at the root
 
 Content goes in through `@ViewBuilder` slots or `Text`, never through styling flags. Molecules and organisms are built from atoms, never from raw `Text` and `Image` with their own fonts:
 
-- `Heading(title, detail:, level:)` is the title-and-detail pair every row, notice, panel and section shares.
+- `Heading(title, detail:, level:, isHeader:)` is the title-and-detail pair every row, notice, panel and section shares. Inside a row, button or toggle pass `isHeader: false`, so VoiceOver reads a list as rows, not as a run of headings.
 - `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error.
 - `IconButton(icon, label:, prominent:)` is a glyph-only button with a spoken label and a full touch target.
 - `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.

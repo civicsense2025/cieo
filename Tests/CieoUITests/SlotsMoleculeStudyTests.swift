@@ -120,4 +120,15 @@ final class SlotsMoleculeStudyTests: XCTestCase {
         XCTAssertTrue(ComponentIconTests.containsRed(try image(header.environment(\.componentTheme, Theme(accent: red)))))
         XCTAssertFalse(ComponentIconTests.containsRed(try image(header)))
     }
+
+    func testRowsAndStepsAreNotAnnouncedAsHeadings() throws {
+        XCTAssertEqual(Heading.traits(isHeader: true), .isHeader)
+        XCTAssertEqual(Heading.traits(isHeader: false), [])
+        // A ten-row list must read as ten rows, not ten headings.
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        for file in ["IndexRow", "NumberedSteps"] {
+            let source = try String(contentsOf: root.appendingPathComponent("Sources/CieoUI/Molecules/\(file).swift"), encoding: .utf8)
+            XCTAssertTrue(source.contains("isHeader: false"), "\(file) labels its row, not a heading")
+        }
+    }
 }

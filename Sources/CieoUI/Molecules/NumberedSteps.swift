@@ -33,7 +33,7 @@ public struct NumberedSteps: View {
                     Text("\(position + 1)").displayText(.numeralMedium).foregroundStyle(theme.accent)
                         .frame(minWidth: metrics.touchTarget, alignment: .leading)
                         .accessibilityHidden(true)
-                    Heading(Text(step.title), detail: step.detail.map { Text($0) }, level: .strongHeading)
+                    Heading(Text(step.title), detail: step.detail.map { Text($0) }, level: .strongHeading, isHeader: false)
                 }
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel(Text("Step \(position + 1) of \(steps.count): \(step.title)"))
