@@ -33,6 +33,10 @@ The checker covers Swift sources/tests and reusable web control/design sources,
 not every catalogue recipe or generated site. Existing catalogue checks retain
 that responsibility. No product build is performed by the docs checker.
 
+The `swift` CI job also runs `scripts/check-swift-literals.sh`, which fails when a
+SwiftUI component hard-codes styling, and proves on its fixture that it still
+catches each kind of hard-coded line.
+
 ## After merge and consumer upgrades
 
 Verify actual merged state, immutable resulting SHA and pushed range, then review

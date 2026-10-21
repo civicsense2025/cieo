@@ -25,4 +25,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Components read styling from the host
+        run: |
+          scripts/check-swift-literals.sh
+          caught=$(scripts/check-swift-literals.sh scripts/fixtures/hard-coded-styling.swift.fixture | grep -c 'fixture:' || true)
+          test "$caught" -eq 5 || { echo "The styling check missed hard-coded lines in its fixture ($caught of 5)"; exit 1; }
       - run: swift build && swift test
