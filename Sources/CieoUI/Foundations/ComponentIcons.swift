@@ -1,9 +1,10 @@
 import SwiftUI
 
 /// The glyphs the components draw themselves: a row's disclosure chevron, the info button, a finished
-/// step's check and a rail's paging arrows.
+/// step's check, a rail's paging arrows, a search field's magnifier and clear button, an error mark and
+/// a choice's selected and unselected states.
 public enum ComponentIcon: Sendable, CaseIterable {
-    case disclosure, info, check, previous, next
+    case disclosure, info, check, previous, next, search, clear, error, selected, unselected
 }
 
 /// Host-owned glyphs. Defaults are SF Symbols; an app with its own icon set installs it once at the root.
@@ -28,6 +29,11 @@ public struct ComponentIcons {
         case .check: "checkmark"
         case .previous: "chevron.backward"
         case .next: "chevron.forward"
+        case .search: "magnifyingglass"
+        case .clear: "xmark.circle.fill"
+        case .error: "exclamationmark.circle"
+        case .selected: "checkmark.circle.fill"
+        case .unselected: "circle"
         }
     }
 

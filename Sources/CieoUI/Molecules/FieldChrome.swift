@@ -18,20 +18,9 @@ public struct FieldChrome: ViewModifier {
             .frame(minWidth: appearance.minWidth, minHeight: appearance.minHeight ?? metrics.touchTarget)
             .background(appearance.background ?? theme.surface,
                         in: .rect(cornerRadius: appearance.cornerRadius ?? metrics.corner))
-            .overlay {
-                if let border = appearance.border {
-                    Group {
-                        if appearance.borderPlacement == .centered {
-                            RoundedRectangle(cornerRadius: appearance.cornerRadius ?? metrics.corner)
-                                .stroke(border, lineWidth: appearance.borderWidth)
-                        } else {
-                            RoundedRectangle(cornerRadius: appearance.cornerRadius ?? metrics.corner)
-                                .strokeBorder(border, lineWidth: appearance.borderWidth)
-                        }
-                    }
-                    .allowsHitTesting(false).accessibilityHidden(true)
-                }
-            }
+            .componentBorder(appearance.border, width: appearance.borderWidth,
+                             cornerRadius: appearance.cornerRadius ?? metrics.corner,
+                             placement: appearance.borderPlacement)
     }
 }
 
