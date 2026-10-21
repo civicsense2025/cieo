@@ -30,7 +30,7 @@ public struct Notice: View {
                 .font(typography.heading)
                 .foregroundStyle(theme.foreground)
                 .accessibilityHidden(true)
-            Heading(title, detail: detail, level: .heading)
+            Heading(title, detail: detail, level: .heading, isHeader: false)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .accessibilityElement(children: .combine)

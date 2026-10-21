@@ -152,4 +152,13 @@ final class SlotsMoleculeRowsTests: XCTestCase {
         let field = SearchField("Search", text: .constant("")).environment(\.componentMetrics, ComponentMetrics(touchTarget: 90))
         XCTAssertGreaterThanOrEqual(try height(field), 90)
     }
+
+    func testToggleAndNoticeTextIsNotAnnouncedAsAHeading() throws {
+        // A toggle's title labels the switch; a notice is one combined element. Neither is a section heading.
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        for file in ["PreferenceRow", "Notice"] {
+            let source = try String(contentsOf: root.appendingPathComponent("Sources/CieoUI/Molecules/\(file).swift"), encoding: .utf8)
+            XCTAssertTrue(source.contains("isHeader: false"), "\(file) labels its control, not a heading")
+        }
+    }
 }

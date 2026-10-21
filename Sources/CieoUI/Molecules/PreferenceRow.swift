@@ -14,7 +14,7 @@ public struct PreferenceRow: View {
 
     public var body: some View {
         Toggle(isOn: $isOn) {
-            Heading(title, detail: detail, level: .heading)
+            Heading(title, detail: detail, level: .heading, isHeader: false)
         }
         .frame(minHeight: metrics.touchTarget)
     }
