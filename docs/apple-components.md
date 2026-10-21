@@ -94,6 +94,15 @@ Atoms built on them:
 
 [AtomTests](../Tests/CieoUITests/AtomTests.swift) pin those rules and draw every atom at 390 points in light and dark. Set `CIEO_RENDER_DIR` to save the drawings for review. macOS does not apply Dynamic Type, so text scaling is checked on the iOS simulator by the consumer.
 
+Molecules built on the atoms:
+
+- [SectionHeader](../Sources/CieoUI/Molecules/SectionHeader.swift): a display title with an optional trailing action, "See all" by default. When the width is too narrow it stacks the action under the title instead of truncating.
+- [IndexRow](../Sources/CieoUI/Molecules/IndexRow.swift): a ranked row with a two-digit rank ("01"), a title, a muted note, an optional bar that carries the row's figure, and a chevron. The host wraps it in a Button or NavigationLink.
+- [NumberedSteps](../Sources/CieoUI/Molecules/NumberedSteps.swift): a short ordered process led by large numerals, read as "Step 1 of 4".
+- [InfoButton](../Sources/CieoUI/Molecules/InfoButton.swift): questions about a screen behind an ⓘ that opens a sheet, as an icon for a toolbar or a row for a list. It hides itself when there are no questions.
+
+[MoleculeTests](../Tests/CieoUITests/MoleculeTests.swift) pin rank numbering, the bar bounds, the empty-sheet rule and the narrow-width header, and they draw every molecule in both schemes.
+
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 
 ## Consumer rollout boundary
