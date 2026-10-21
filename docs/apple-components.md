@@ -135,6 +135,7 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.
 - SelectionChip, BlockPanel, CutSurface, ShareBar and ActionButton read every style from the slots. A share bar's seam is the `hairline` width.
 - IndexRow, NumberedSteps, InfoButton and SectionHeader read every style from the slots.
+- ActionRow, PreferenceRow, Notice, ExpandablePanel, LabeledField and SearchField read every style from the slots. Setting rows and notices label their control, so their headings pass `isHeader: false`.
 
 `scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`.
 
