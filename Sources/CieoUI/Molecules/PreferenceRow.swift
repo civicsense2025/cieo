@@ -1,6 +1,7 @@
 import SwiftUI
 
 public struct PreferenceRow: View {
+    @Environment(\.componentMetrics) private var metrics
     private let title: LocalizedStringKey
     private let detail: LocalizedStringKey
     @Binding private var isOn: Bool
@@ -13,11 +14,8 @@ public struct PreferenceRow: View {
 
     public var body: some View {
         Toggle(isOn: $isOn) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title).font(.headline)
-                Text(detail).font(.subheadline).foregroundStyle(.secondary)
-            }
+            Heading(title, detail: detail, level: .heading, isHeader: false)
         }
-        .frame(minHeight: Metrics.touchTarget)
+        .frame(minHeight: metrics.touchTarget)
     }
 }

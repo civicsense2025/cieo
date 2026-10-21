@@ -16,7 +16,7 @@ public struct LabeledField: View {
             Text(title).font(typography.fieldLabel)
             TextField(title, text: $text).textFieldStyle(.plain)
                 .fieldChrome()
-            if let error { Label(error, systemImage: "exclamationmark.circle").foregroundStyle(.red) }
+            if let error { StatusLabel(error, icon: .error, tone: .danger) }
         }
     }
 }

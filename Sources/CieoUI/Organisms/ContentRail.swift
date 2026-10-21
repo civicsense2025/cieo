@@ -4,7 +4,7 @@ import SwiftUI
 /// where there is no swipe, previous and next buttons page the rail. The host owns the one vertical scroll.
 public struct ContentRail<Item: Identifiable, Card: View>: View {
     @Environment(\.componentTheme) private var theme
-    @Environment(\.componentIcons) private var icons
+    @Environment(\.componentMetrics) private var metrics
     @State private var position: Item.ID?
     private let items: [Item]
     private let itemWidth: CGFloat
@@ -37,7 +37,7 @@ public struct ContentRail<Item: Identifiable, Card: View>: View {
 
     public var body: some View {
         if !items.isEmpty {
-            VStack(alignment: .trailing, spacing: 8) {
+            VStack(alignment: .trailing, spacing: metrics.compact) {
                 #if os(macOS)
                 pager
                 #endif
@@ -63,7 +63,7 @@ public struct ContentRail<Item: Identifiable, Card: View>: View {
     }
 
     private var pager: some View {
-        HStack(spacing: 4) {
+        HStack(spacing: metrics.tight) {
             pageButton(.previous, step: -1, name: Text("Previous"))
             pageButton(.next, step: 1, name: Text("Next"))
         }
@@ -73,18 +73,11 @@ public struct ContentRail<Item: Identifiable, Card: View>: View {
     private func pageButton(_ icon: ComponentIcon, step: Int, name: Text) -> some View {
         let target = Self.neighbour(of: index, step: step, count: items.count)
         let atEnd = target == (index ?? 0)
-        return Button {
+        return IconButton(icon, label: name + Text(", ") + label) {
             guard let target else { return }
             withAnimation(.snappy) { position = items[target].id }
-        } label: {
-            icons(icon).font(.body.weight(.semibold))
-                .frame(width: Metrics.touchTarget, height: Metrics.touchTarget)
-                .background(Circle().fill(theme.surface))
-                .contentShape(Circle())
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(theme.foreground)
+        .background(Circle().fill(theme.surface))
         .disabled(atEnd)
-        .accessibilityLabel(name + Text(", ") + label)
     }
 }
