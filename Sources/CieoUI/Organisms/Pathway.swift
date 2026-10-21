@@ -12,8 +12,8 @@ public enum PathwayStroke: Sendable {
     /// Short dashes, for a process such as a bill's stages.
     case dashed
 
-    var dash: [CGFloat] { self == .dotted ? [2, 7] : [6, 7] }
-    var width: CGFloat { self == .dotted ? 2.5 : 3 }
+    var dash: [CGFloat] { self == .dotted ? [2, 7] : [6, 7] } // literal-ok: path dash geometry has no host role
+    var width: CGFloat { self == .dotted ? 2.5 : 3 } // literal-ok: path stroke geometry has no host role
 }
 
 /// Steps as round nodes joined by a curved line. Vertically, nodes step side to side and a curve joins
@@ -28,6 +28,8 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
 
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentIcons) private var icons
+    @Environment(\.componentTypography) private var typography
+    @Environment(\.componentMetrics) private var metrics
     @Environment(\.dynamicTypeSize) private var typeSize
     @Environment(\.horizontalSizeClass) private var sizeClass
     @ScaledMetric(relativeTo: .headline) private var scaledNode: CGFloat = 56
@@ -98,7 +100,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
     }
 
     private var vertical: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 0) { // literal-ok: rows butt together, the path supplies the gap
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 if index > 0 {
                     let from = Self.offset(at: index - 1, in: pattern) + node / 2
@@ -109,7 +111,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
                         .accessibilityHidden(true)
                 }
                 row(item, index: index) {
-                    HStack(alignment: .center, spacing: 14) {
+                    HStack(alignment: .center, spacing: metrics.medium) {
                         nodeView(item, index: index)
                         label(item, index).frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -121,10 +123,10 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
     }
 
     private var horizontal: some View {
-        HStack(alignment: .top, spacing: 0) {
+        HStack(alignment: .top, spacing: 0) { // literal-ok: columns butt together, the arches supply the gap
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 row(item, index: index) {
-                    VStack(spacing: 10) {
+                    VStack(spacing: metrics.compact) {
                         nodeView(item, index: index)
                         label(item, index).multilineTextAlignment(.center)
                     }
@@ -152,7 +154,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
     }
 
     private func lineColor(after item: Item) -> Color {
-        Self.isWalked(from: stage(item)) ? theme.accent : theme.secondary.opacity(0.55)
+        Self.isWalked(from: stage(item)) ? theme.accent : theme.subtle
     }
 
     @ViewBuilder
@@ -177,15 +179,15 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
         return ZStack {
             if current == .current {
                 // A still halo marks the reader's place; it does not pulse.
-                Circle().fill(theme.accent.opacity(0.28)).frame(width: node + 12, height: node + 12)
+                Circle().fill(theme.tint).frame(width: node + 12, height: node + 12)
             }
             Circle().fill(fill).frame(width: node, height: node)
             Group {
                 if current == .done {
-                    icons(.check).font(.headline.weight(.black)).foregroundStyle(theme.onAccent)
+                    icons(.check).font(typography.marker).foregroundStyle(theme.onAccent)
                 } else {
                     // The current node inverts: screen colour on the foreground colour.
-                    Text("\(index + 1)").font(.headline.weight(.black)).monospacedDigit()
+                    Text("\(index + 1)").font(typography.marker).monospacedDigit()
                         .foregroundStyle(current == .current ? AnyShapeStyle(.background) : AnyShapeStyle(theme.foreground))
                 }
             }
