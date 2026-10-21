@@ -84,6 +84,16 @@ These foundations carry an editorial look built from flat colour blocks, heavy t
 - [DisplayTypography](../Sources/CieoUI/Foundations/DisplayTypography.swift) has six roles: `display`, `title`, `headline` and three numeral sizes. Defaults are sized for a phone (30, 22 and 20 points; numerals 64, 44 and 28) with black or heavy weights and tracking written as a fraction of the size, like CSS `em`. Every role scales with Dynamic Type relative to its text style, stops at `maximumSize`, and never shrinks below half its size. Numerals use monospaced digits. Install `displayTypography` with larger values on wide layouts, then use `.displayText(.title)`.
 - [CutShape](../Sources/CieoUI/Foundations/CutShape.swift) has nine cuts: `arch`, `invertedArch`, `circle`, `leadingPill`, `square` and `quarter(corner)`. Curves meet the frame's edges, so a cut fills any frame. Corners are named by reading direction, and the shape mirrors in right-to-left layouts.
 
+Atoms built on them:
+
+- [CutSurface](../Sources/CieoUI/Atoms/CutSurface.swift) cuts a photo or colour block into a `CutShape`. With no content it is a decorative block hidden from VoiceOver.
+- [BigNumber](../Sources/CieoUI/Atoms/BigNumber.swift) sets a numeral in a numeral role with its label inline or stacked, read as one phrase.
+- [ShareBar](../Sources/CieoUI/Atoms/ShareBar.swift) draws shares of a whole as one bar and draws nothing unless every share is a positive number, so a missing figure never shows as a fake split.
+- [SegmentedProgress](../Sources/CieoUI/Atoms/SegmentedProgress.swift) draws one segment per step, from 1 to 60, and reads "4 of 10".
+- [BlockPanel](../Sources/CieoUI/Atoms/BlockPanel.swift) is a flat block, surface or accent panel for the one thing a section's reader is working in, with an optional circle bleeding 30% past a corner.
+
+[AtomTests](../Tests/CieoUITests/AtomTests.swift) pin those rules and draw every atom at 390 points in light and dark. Set `CIEO_RENDER_DIR` to save the drawings for review. macOS does not apply Dynamic Type, so text scaling is checked on the iOS simulator by the consumer.
+
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 
 ## Consumer rollout boundary
