@@ -110,7 +110,7 @@ final class ComponentIconTests: XCTestCase {
     @MainActor
     func testHostGlyphsReplaceTheDefaults() throws {
         // A host glyph that is a solid red square makes the swap visible in pixels.
-        let host = ComponentIcons { _ in Color.red.frame(width: 20, height: 20) }
+        let host = ComponentIcons { _ in Color(red: 1, green: 0, blue: 0).frame(width: 20, height: 20) }
         let row = IndexRow(rank: nil, title: Text("Row")).environment(\.componentIcons, host).frame(width: 200)
         let image = try XCTUnwrap(ImageRenderer(content: row).cgImage)
         XCTAssertTrue(Self.containsRed(image), "the row's chevron is the host glyph")
