@@ -133,6 +133,7 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error.
 - `IconButton(icon, label:, prominent:)` is a glyph-only button with a spoken label and a full touch target.
 - `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.
+- `FlowStack(spacing:)` fills rows and starts a new one when the next item doesn't fit, so a group of chips stacks at large text sizes instead of breaking words.
 - SelectionChip, BlockPanel, CutSurface, ShareBar and ActionButton read every style from the slots. A share bar's seam is the `hairline` width.
 - IndexRow, NumberedSteps, InfoButton and SectionHeader read every style from the slots.
 - ActionRow, PreferenceRow, Notice, ExpandablePanel, LabeledField and SearchField read every style from the slots. Setting rows and notices label their control, so their headings pass `isHeader: false`.
