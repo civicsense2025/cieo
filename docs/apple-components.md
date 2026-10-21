@@ -90,7 +90,7 @@ Atoms built on them:
 - [BigNumber](../Sources/CieoUI/Atoms/BigNumber.swift) sets a numeral in a numeral role with its label inline or stacked, read as one phrase.
 - [ShareBar](../Sources/CieoUI/Atoms/ShareBar.swift) draws shares of a whole as one bar and draws nothing unless every share is a positive number, so a missing figure never shows as a fake split.
 - [SegmentedProgress](../Sources/CieoUI/Atoms/SegmentedProgress.swift) draws one segment per step, from 1 to 60, and reads "4 of 10".
-- [BlockPanel](../Sources/CieoUI/Atoms/BlockPanel.swift) is a flat block, surface or accent panel for the one thing a section's reader is working in, with an optional circle bleeding 30% past a corner.
+- [BlockPanel](../Sources/CieoUI/Atoms/BlockPanel.swift) is a flat block, surface or accent panel for the one thing a section's reader is working in, with an optional circle bleeding 30% past a corner. Its text keeps out of the circle's visible width, so words never sit on the accent.
 
 [AtomTests](../Tests/CieoUITests/AtomTests.swift) pin those rules and draw every atom at 390 points in light and dark. Set `CIEO_RENDER_DIR` to save the drawings for review. macOS does not apply Dynamic Type, so text scaling is checked on the iOS simulator by the consumer.
 
