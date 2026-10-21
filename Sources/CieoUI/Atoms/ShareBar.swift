@@ -39,7 +39,7 @@ public struct ShareBar: View {
     public var body: some View {
         if let fractions {
             GeometryReader { proxy in
-                let gap = metrics.tight
+                let gap = metrics.hairline
                 let usable = max(0, proxy.size.width - gap * CGFloat(fractions.count - 1))
                 HStack(spacing: gap) {
                     ForEach(fractions.indices, id: \.self) { index in

@@ -29,7 +29,7 @@ public struct BlockPanel<Content: View>: View {
     {
         self.tone = tone
         self.bleed = bleed
-        self.cornerRadius = cornerRadius.isFinite ? max(0, cornerRadius) : 32 // literal-ok: same as above
+        self.cornerRadius = cornerRadius.isFinite ? max(0, cornerRadius) : 32 // literal-ok: fallback for an invalid radius, matching the default
         self.content = content()
     }
 

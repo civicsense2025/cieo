@@ -127,17 +127,17 @@ final class SlotsAtomSurfacesTests: XCTestCase {
 
     @MainActor
     func testShareBarSegmentGapFollowsTheHostTightStep() throws {
-        // Two equal segments in a 200-point bar. With a tight step of 40, the first segment ends at x = 80;
-        // with the default tight step of 4 it runs to x = 98. Column 90 is clear only in the wide-gap bar.
-        func alphaAtColumn90(_ tight: CGFloat) throws -> UInt8 {
+        // Two equal segments in a 200-point bar. With a hairline of 40, the first segment ends at x = 80;
+        // with the default hairline of 1 it runs to x = 99.5. Column 90 is clear only in the wide-gap bar.
+        func alphaAtColumn90(_ hairline: CGFloat) throws -> UInt8 {
             let bar = ShareBar([.init(1, color: .blue), .init(1, color: .blue)], label: Text("Split"))
-                .environment(\.componentMetrics, ComponentMetrics(tight: tight)).frame(width: 200)
+                .environment(\.componentMetrics, ComponentMetrics(hairline: hairline)).frame(width: 200)
             let image = try render(bar)
             let row = image.height / 2
             return rgba(image)[(row * image.width + 90) * 4 + 3]
         }
         XCTAssertEqual(try alphaAtColumn90(40), 0, "a wide host gap leaves column 90 clear")
-        XCTAssertGreaterThan(try alphaAtColumn90(4), 0, "the default gap keeps column 90 filled")
+        XCTAssertGreaterThan(try alphaAtColumn90(1), 0, "the default gap keeps column 90 filled")
     }
 
     // MARK: ActionButton
