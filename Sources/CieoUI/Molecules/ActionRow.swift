@@ -1,6 +1,7 @@
 import SwiftUI
 
 public struct ActionRow: View {
+    @Environment(\.componentMetrics) private var metrics
     private let title: LocalizedStringKey
     private let detail: LocalizedStringKey
     private let actionTitle: LocalizedStringKey
@@ -14,9 +15,8 @@ public struct ActionRow: View {
 
     public var body: some View {
         // A vertical arrangement stays readable at accessibility text sizes and narrow widths.
-        VStack(alignment: .leading, spacing: Metrics.compact) {
-            Text(title).font(.headline).accessibilityAddTraits(.isHeader)
-            Text(detail).foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: metrics.compact) {
+            Heading(title, detail: detail, level: .heading)
             Button(actionTitle, action: action).buttonStyle(ActionButtonStyle(.quiet))
         }.frame(maxWidth: .infinity, alignment: .leading)
     }
