@@ -12,6 +12,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Soft surfaces](#soft-surfaces)
 - [Host configuration and semantic copy](#host-configuration-and-semantic-copy)
 - [Display type, colour blocks and cuts](#display-type-colour-blocks-and-cuts)
+- [Slots, not hard-coded styling](#slots-not-hard-coded-styling)
 - [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
 
@@ -113,6 +114,27 @@ Organisms built on them:
 - [ComponentIcons](../Sources/CieoUI/Foundations/ComponentIcons.swift): the glyphs these pieces draw themselves (disclosure, info, check, previous, next). They default to SF Symbols; an app with its own icon set installs `componentIcons` once at the root.
 
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
+
+## Slots, not hard-coded styling
+
+Components choose a role and never a value. A host changes one value at the root and every component that uses that role follows.
+
+| Slot | Where | Roles |
+| --- | --- | --- |
+| Colour | `componentTheme` | accent, onAccent, tint, surface, foreground, secondary, subtle, border, track, block, onBlock, onBlockSecondary, danger |
+| Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, glyph, prominentGlyph, value, marker, plus the control roles action, selection, field, fieldLabel |
+| Spacing and strokes | `componentMetrics` | tight 4, compact 8, medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline |
+| Glyphs | `componentIcons` | disclosure, info, check, previous, next, search, clear, error, selected, unselected |
+| Display type | `displayTypography` | display, title, subtitle and three numeral sizes |
+
+Content goes in through `@ViewBuilder` slots or `Text`, never through styling flags. Molecules and organisms are built from atoms, never from raw `Text` and `Image` with their own fonts:
+
+- `Heading(title, detail:, level:)` is the title-and-detail pair every row, notice, panel and section shares.
+- `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error.
+- `IconButton(icon, label:, prominent:)` is a glyph-only button with a spoken label and a full touch target.
+- `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.
+
+`scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`.
 
 ## Consumer rollout boundary
 

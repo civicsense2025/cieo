@@ -17,12 +17,17 @@ public struct Theme {
     public var block: Color
     public var onBlock: Color
     public var onBlockSecondary: Color
+    /// Errors and destructive states.
+    public var danger: Color
+    /// Quiet marks that must stay visible: an unwalked path, an empty dot.
+    public var subtle: Color
 
     public init(accent: Color = .accentColor, surface: Color = .primary.opacity(0.04),
                 foreground: Color = .primary, secondary: Color = .secondary,
                 border: Color = .primary.opacity(0.22), onAccent: Color = .white,
                 tint: Color? = nil, track: Color = .primary.opacity(0.12),
-                block: Color = .black, onBlock: Color = .white, onBlockSecondary: Color = .white.opacity(0.72))
+                block: Color = .black, onBlock: Color = .white, onBlockSecondary: Color = .white.opacity(0.72),
+                danger: Color = .red, subtle: Color = .secondary.opacity(0.55))
     {
         self.accent = accent
         self.surface = surface
@@ -35,9 +40,12 @@ public struct Theme {
         self.block = block
         self.onBlock = onBlock
         self.onBlockSecondary = onBlockSecondary
+        self.danger = danger
+        self.subtle = subtle
     }
 }
 
+/// Fixed fallbacks for code outside a view. Components read `componentMetrics` so a host can change them.
 public enum Metrics {
     public static let compact: CGFloat = 8
     public static let standard: CGFloat = 16

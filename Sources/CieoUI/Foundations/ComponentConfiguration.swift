@@ -1,32 +1,87 @@
 import SwiftUI
 
-/// Host-owned text roles. Prefer scalable system or custom fonts.
+/// Host-owned text roles. Prefer scalable system or custom fonts. Components pick a role, never a font,
+/// so one host value restyles every place that role appears.
 public struct ComponentTypography {
     public var action: Font
     public var selection: Font
     public var field: Font
     public var fieldLabel: Font
+    /// A section or panel title.
+    public var title: Font
+    /// A smaller panel title.
+    public var subtitle: Font
+    /// A row or notice heading.
+    public var heading: Font
+    /// A heading that has to hold its own next to display type: ranked rows, steps, sheet sections.
+    public var strongHeading: Font
+    public var body: Font
+    public var strongBody: Font
+    /// Supporting text under a heading.
+    public var detail: Font
+    /// A short bold caption, such as the label beside a big number.
+    public var strongDetail: Font
+    /// A glyph that sits beside text, such as a disclosure chevron or pager arrow.
+    public var glyph: Font
+    /// A standalone glyph that is the control, such as the info button.
+    public var prominentGlyph: Font
+    /// A value read at a glance, such as a ring's percentage.
+    public var value: Font
+    /// A step number or check inside a marker.
+    public var marker: Font
 
     public init(action: Font = .body.weight(.semibold), selection: Font = .body,
-                field: Font = .body, fieldLabel: Font = .headline) {
+                field: Font = .body, fieldLabel: Font = .headline,
+                title: Font = .title2.bold(), subtitle: Font = .title3.bold(),
+                heading: Font = .headline, strongHeading: Font = .headline.weight(.heavy),
+                body: Font = .body, strongBody: Font = .body.weight(.semibold),
+                detail: Font = .subheadline, strongDetail: Font = .subheadline.weight(.bold),
+                glyph: Font = .footnote.weight(.semibold), prominentGlyph: Font = .title3,
+                value: Font = .headline.monospacedDigit(), marker: Font = .headline.weight(.black)) {
         self.action = action; self.selection = selection
         self.field = field; self.fieldLabel = fieldLabel
+        self.title = title; self.subtitle = subtitle
+        self.heading = heading; self.strongHeading = strongHeading
+        self.body = body; self.strongBody = strongBody
+        self.detail = detail; self.strongDetail = strongDetail
+        self.glyph = glyph; self.prominentGlyph = prominentGlyph
+        self.value = value; self.marker = marker
     }
 }
 
 /// Validated host geometry; controls retain a 44-point target floor.
+/// Spacing is a scale (`tight` 4, `compact` 8, `medium` 12, `standard` 16, `loose` 20, `section` 24) so
+/// components choose a step, never a number.
 public struct ComponentMetrics {
+    public let tight: CGFloat
     public let compact: CGFloat
+    public let medium: CGFloat
     public let standard: CGFloat
+    public let loose: CGFloat
+    public let section: CGFloat
     public let corner: CGFloat
     public let touchTarget: CGFloat
+    /// Thickness of a bar, ring or segment that carries a value.
+    public let bar: CGFloat
+    /// Thickness of a bar that sits inside a row beside text.
+    public let thinBar: CGFloat
+    /// Width of an outline or divider.
+    public let hairline: CGFloat
 
-    public init(compact: CGFloat = 8, standard: CGFloat = 16,
-                corner: CGFloat = 12, touchTarget: CGFloat = 44) {
+    public init(tight: CGFloat = 4, compact: CGFloat = 8, medium: CGFloat = 12, standard: CGFloat = 16,
+                loose: CGFloat = 20, section: CGFloat = 24, corner: CGFloat = 12, touchTarget: CGFloat = 44,
+                bar: CGFloat = 8, thinBar: CGFloat = 6, hairline: CGFloat = 1) {
+        self.tight = Self.dimension(tight, fallback: 4)
         self.compact = Self.dimension(compact, fallback: 8)
+        self.medium = Self.dimension(medium, fallback: 12)
         self.standard = Self.dimension(standard, fallback: 16)
+        self.loose = Self.dimension(loose, fallback: 20)
+        self.section = Self.dimension(section, fallback: 24)
         self.corner = Self.dimension(corner, fallback: 12)
         self.touchTarget = max(44, Self.dimension(touchTarget, fallback: 44))
+        self.bar = Self.dimension(bar, fallback: 8)
+        self.thinBar = Self.dimension(thinBar, fallback: 6)
+        self.hairline = Self.dimension(hairline, fallback: 1)
     }
 
     static func dimension(_ value: CGFloat, fallback: CGFloat) -> CGFloat {
