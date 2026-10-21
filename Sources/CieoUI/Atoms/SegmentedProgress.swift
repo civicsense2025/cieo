@@ -3,6 +3,7 @@ import SwiftUI
 /// Progress through a fixed number of steps, such as a test's questions, drawn as one segment per step.
 public struct SegmentedProgress: View {
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentMetrics) private var metrics
     private let total: Int
     private let completed: Int
     private let label: Text?
@@ -23,9 +24,9 @@ public struct SegmentedProgress: View {
     }
 
     public var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: metrics.compact) {
             ForEach(0..<total, id: \.self) { index in
-                Capsule().fill(index < completed ? theme.accent : theme.track).frame(height: 8)
+                Capsule().fill(index < completed ? theme.accent : theme.track).frame(height: metrics.bar)
             }
         }
         .motionAnimation(.base, value: completed)

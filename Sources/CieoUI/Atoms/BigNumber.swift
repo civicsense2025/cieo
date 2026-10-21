@@ -5,6 +5,8 @@ public struct BigNumber: View {
     public enum Layout: Sendable { case inline, stacked }
 
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentTypography) private var typography
+    @Environment(\.componentMetrics) private var metrics
     private let value: String
     private let label: String?
     private let role: DisplayRole
@@ -28,9 +30,9 @@ public struct BigNumber: View {
         Group {
             switch layout {
             case .inline:
-                HStack(alignment: .firstTextBaseline, spacing: 10) { numeral; caption }
+                HStack(alignment: .firstTextBaseline, spacing: metrics.compact) { numeral; caption }
             case .stacked:
-                VStack(alignment: .leading, spacing: 4) { numeral; caption }
+                VStack(alignment: .leading, spacing: metrics.tight) { numeral; caption }
             }
         }
         .accessibilityElement(children: .ignore)
@@ -39,7 +41,7 @@ public struct BigNumber: View {
 
     @ViewBuilder private var caption: some View {
         if let label {
-            Text(label).font(.subheadline.weight(.bold)).foregroundStyle(theme.foreground)
+            Text(label).font(typography.strongDetail).foregroundStyle(theme.foreground)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
