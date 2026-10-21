@@ -129,10 +129,12 @@ Components choose a role and never a value. A host changes one value at the root
 
 Content goes in through `@ViewBuilder` slots or `Text`, never through styling flags. Molecules and organisms are built from atoms, never from raw `Text` and `Image` with their own fonts:
 
-- `Heading(title, detail:, level:)` is the title-and-detail pair every row, notice, panel and section shares.
+- `Heading(title, detail:, level:, isHeader:)` is the title-and-detail pair every row, notice, panel and section shares. Inside a row, button or toggle pass `isHeader: false`, so VoiceOver reads a list as rows, not as a run of headings.
 - `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error.
 - `IconButton(icon, label:, prominent:)` is a glyph-only button with a spoken label and a full touch target.
 - `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.
+- SelectionChip, BlockPanel, CutSurface, ShareBar and ActionButton read every style from the slots. A share bar's seam is the `hairline` width.
+- IndexRow, NumberedSteps, InfoButton and SectionHeader read every style from the slots.
 - ProgressRing, SegmentedProgress, BigNumber, HighlightSurface and SymbolMark read every style from the slots.
 
 `scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`.

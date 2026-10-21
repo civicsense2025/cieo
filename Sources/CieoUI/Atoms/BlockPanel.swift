@@ -18,6 +18,7 @@ public struct BlockPanel<Content: View>: View {
     }
 
     @Environment(\.componentTheme) private var theme
+    @Environment(\.componentMetrics) private var metrics
     private let tone: Tone
     private let bleed: Bleed?
     private let cornerRadius: CGFloat
@@ -28,18 +29,18 @@ public struct BlockPanel<Content: View>: View {
     {
         self.tone = tone
         self.bleed = bleed
-        self.cornerRadius = cornerRadius.isFinite ? max(0, cornerRadius) : 32
+        self.cornerRadius = cornerRadius.isFinite ? max(0, cornerRadius) : 32 // literal-ok: fallback for an invalid radius, matching the default
         self.content = content()
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: 12) { content }
+        VStack(alignment: .leading, spacing: metrics.medium) { content }
             .foregroundStyle(foreground)
             // Text stays clear of the circle, so it never sits on the accent at low contrast.
-            .padding(.trailing, bleed.map(Self.reservedWidth) ?? 0)
+            .padding(.trailing, bleed.map { Self.reservedWidth($0, inset: metrics.loose) } ?? 0)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 24)
+            .padding(.horizontal, metrics.loose)
+            .padding(.vertical, metrics.section)
             .background { background }
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
     }
@@ -72,9 +73,9 @@ public struct BlockPanel<Content: View>: View {
         .clipped()
     }
 
-    /// The width of the circle that shows inside the panel (70% of it), minus the panel's own padding.
-    public static func reservedWidth(_ bleed: Bleed) -> CGFloat {
-        max(0, bleed.diameter * 0.7 - 20)
+    /// The width of the circle that shows inside the panel (70% of it), minus the panel's own horizontal padding.
+    public static func reservedWidth(_ bleed: Bleed, inset: CGFloat = ComponentMetrics().loose) -> CGFloat {
+        max(0, bleed.diameter * 0.7 - inset)
     }
 
     /// The circle sits 30% outside its corner, as the study's bleeding circles do.
