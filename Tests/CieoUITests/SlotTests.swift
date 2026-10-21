@@ -77,4 +77,18 @@ final class SlotTests: XCTestCase {
         let roomy = IconButton(.clear, label: "Clear") {}.environment(\.componentMetrics, ComponentMetrics(touchTarget: 60))
         XCTAssertGreaterThanOrEqual(try XCTUnwrap(ImageRenderer(content: roomy).cgImage).width, 60)
     }
+
+    /// A host glyph with main-actor state, such as a size that follows Dynamic Type, installs without an
+    /// isolation warning and draws in place of the default.
+    @MainActor
+    func testHostGlyphsMayHoldMainActorState() throws {
+        struct ScaledSquare: View {
+            @ScaledMetric private var side: CGFloat
+            init(side: CGFloat) { _side = ScaledMetric(wrappedValue: side) }
+            var body: some View { Color(red: 1, green: 0, blue: 0).frame(width: side, height: side) }
+        }
+        let host = ComponentIcons { _ in ScaledSquare(side: 16) }
+        let label = StatusLabel("Saved", icon: .check).environment(\.componentIcons, host).frame(width: 200)
+        XCTAssertTrue(ComponentIconTests.containsRed(try XCTUnwrap(ImageRenderer(content: label).cgImage)))
+    }
 }

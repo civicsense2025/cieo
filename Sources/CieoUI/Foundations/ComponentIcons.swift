@@ -11,12 +11,15 @@ public enum ComponentIcon: Sendable, CaseIterable {
 /// Components set the font and colour around each glyph, so a host glyph should size itself to the
 /// current font or carry its own frame.
 public struct ComponentIcons {
-    private let make: (ComponentIcon) -> AnyView
+    private let make: @MainActor (ComponentIcon) -> AnyView
 
-    public init<Glyph: View>(@ViewBuilder _ make: @escaping (ComponentIcon) -> Glyph) {
+    /// `make` runs on the main actor, where components draw, so a host glyph can be any view, including
+    /// one with `@ScaledMetric` or other main-actor state.
+    public init<Glyph: View>(@ViewBuilder _ make: @escaping @MainActor (ComponentIcon) -> Glyph) {
         self.make = { AnyView(make($0)) }
     }
 
+    @MainActor
     public func callAsFunction(_ icon: ComponentIcon) -> AnyView {
         make(icon)
     }
