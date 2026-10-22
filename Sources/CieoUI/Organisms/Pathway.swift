@@ -39,12 +39,19 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
     private let axis: Axis
     private let stroke: PathwayStroke
     private let offsets: [CGFloat]?
+    private let firstNumber: Int
+    private let total: Int?
     private let accessibilityName: (Item) -> Text
     private let action: ((Item) -> Void)?
     private let label: (Item, Int) -> Label
 
     /// `accessibilityName` is the step's name as VoiceOver should read it, such as the lesson title.
+    /// `firstNumber` is the number on the first row and `total` the length of the whole path, for a host that
+    /// shows a window of a longer one (lessons 11 to 20 of 40). A `nil` total means the rows are the whole path.
+    /// Both are clamped by ``stepNumber(at:firstNumber:)`` and ``stepCount(rows:firstNumber:total:)``.
+    /// The `label` closure still receives the row's position in `items`, starting at 0.
     public init(_ items: [Item], axis: Axis = .vertical, stroke: PathwayStroke = .dotted, offsets: [CGFloat]? = nil,
+                firstNumber: Int = 1, total: Int? = nil,
                 stage: @escaping (Item) -> PathwayStage, accessibilityName: @escaping (Item) -> Text,
                 action: ((Item) -> Void)? = nil, @ViewBuilder label: @escaping (Item, Int) -> Label)
     {
@@ -52,6 +59,8 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
         self.axis = axis
         self.stroke = stroke
         self.offsets = offsets
+        self.firstNumber = firstNumber
+        self.total = total
         self.stage = stage
         self.accessibilityName = accessibilityName
         self.action = action
@@ -63,6 +72,24 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
         let usable = pattern.filter { $0.isFinite }.map { max(0, $0) }
         guard !usable.isEmpty, index >= 0 else { return 0 }
         return usable[index % usable.count]
+    }
+
+    /// The number shown on the row at `index`. A first number below 1 counts from 1.
+    public static func stepNumber(at index: Int, firstNumber: Int) -> Int {
+        let (number, overflow) = max(1, firstNumber).addingReportingOverflow(max(0, index))
+        return overflow ? Int.max : number
+    }
+
+    /// How many steps the whole path has: `total`, or the row count when it is `nil`, and never fewer than
+    /// the last number shown, so VoiceOver never reads "Step 12 of 10".
+    public static func stepCount(rows: Int, firstNumber: Int, total: Int?) -> Int {
+        let last = rows > 0 ? stepNumber(at: rows - 1, firstNumber: firstNumber) : 0
+        return max(total ?? rows, last)
+    }
+
+    /// How VoiceOver places a row on the path, such as "Step 3 of 40".
+    public static func spokenPosition(at index: Int, rows: Int, firstNumber: Int = 1, total: Int? = nil) -> String {
+        "Step \(stepNumber(at: index, firstNumber: firstNumber)) of \(stepCount(rows: rows, firstNumber: firstNumber, total: total))"
     }
 
     /// A line is walked when the step it leaves is done.
@@ -159,7 +186,8 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
 
     @ViewBuilder
     private func row(_ item: Item, index: Int, @ViewBuilder content: () -> some View) -> some View {
-        let spoken = Text("Step \(index + 1) of \(items.count), ") + accessibilityName(item)
+        let position = Self.spokenPosition(at: index, rows: items.count, firstNumber: firstNumber, total: total)
+        let spoken = Text("\(position), ") + accessibilityName(item)
             + Text(", \(Self.spokenStage(stage(item)))")
         if let action {
             Button { action(item) } label: { content().contentShape(Rectangle()) }
@@ -187,7 +215,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
                     icons(.check).font(typography.marker).foregroundStyle(theme.onAccent)
                 } else {
                     // The current node inverts: screen colour on the foreground colour.
-                    Text("\(index + 1)").font(typography.marker).monospacedDigit()
+                    Text("\(Self.stepNumber(at: index, firstNumber: firstNumber))").font(typography.marker).monospacedDigit()
                         .foregroundStyle(current == .current ? AnyShapeStyle(.background) : AnyShapeStyle(theme.foreground))
                 }
             }
