@@ -212,7 +212,11 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
             Circle().fill(fill).frame(width: node, height: node)
             Group {
                 if current == .done {
-                    InlineGlyph { icons(.check) }.font(typography.marker).foregroundStyle(theme.onAccent)
+                    // The check fills the node, not a line of text: a share of the node for drawn shapes,
+                    // the prominent glyph role for symbols.
+                    icons(.check).font(typography.prominentGlyph)
+                        .frame(width: node * metrics.glyphScale / 2, height: node * metrics.glyphScale / 2)
+                        .foregroundStyle(theme.onAccent)
                 } else {
                     // The current node inverts: screen colour on the foreground colour.
                     Text("\(Self.stepNumber(at: index, firstNumber: firstNumber))").font(typography.marker).monospacedDigit()

@@ -153,6 +153,19 @@ final class InlineGlyphTests: XCTestCase {
                           "a drawn glyph takes its size from the glyph font, not the whole touch target")
     }
 
+    private struct Step: Identifiable { let id: Int }
+
+    @MainActor
+    func testPathwayCheckIsSizedFromTheNodeNotTheNumberText() throws {
+        let shape = Self.hosts[1].1
+        let node = try rows(Pathway([Step(id: 0)], stage: { _ in .done }, accessibilityName: { _ in Text("One") }) { _, _ in
+            Text("H").foregroundStyle(.black)
+        }.environment(\.componentIcons, shape))
+        // A node is about 56pt at the default size; its check should read at roughly 40% of it, as before
+        // inline glyphs, not at the small number text's line height.
+        XCTAssertGreaterThanOrEqual(node.glyph.count, 16 * Int(Self.scale), "the check fills a share of the node")
+    }
+
     func testGlyphScaleStaysAShare() {
         XCTAssertEqual(ComponentMetrics().glyphScale, 0.8)
         XCTAssertEqual(ComponentMetrics(glyphScale: .nan).glyphScale, 0.8)
