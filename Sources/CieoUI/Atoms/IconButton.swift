@@ -27,7 +27,7 @@ public struct IconButton: View {
 
     public var body: some View {
         Button(action: action) {
-            icons(icon)
+            InlineGlyph { icons(icon) }
                 .font(prominent ? typography.prominentGlyph : typography.glyph)
                 .foregroundStyle(prominent ? theme.accent : theme.secondary)
                 .frame(minWidth: metrics.touchTarget, minHeight: metrics.touchTarget)

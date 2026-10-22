@@ -16,7 +16,7 @@ public struct SearchField: View {
 
     public var body: some View {
         HStack(spacing: metrics.compact) {
-            icons(.search).accessibilityHidden(true)
+            InlineGlyph { icons(.search) }.font(typography.field).accessibilityHidden(true)
             TextField(title, text: $text).textFieldStyle(.plain).font(typography.field)
             IconButton(.clear, label: clearAccessibilityLabel) { text = "" }
                 .disabled(text.isEmpty)

@@ -67,10 +67,13 @@ public struct ComponentMetrics {
     public let thinBar: CGFloat
     /// Width of an outline or divider.
     public let hairline: CGFloat
+    /// A glyph's side as a share of the line of text it sits beside, from 0 to 1. A drawn shape fills a
+    /// square this size; an SF Symbol keeps the size its font gives it.
+    public let glyphScale: CGFloat
 
     public init(tight: CGFloat = 4, compact: CGFloat = 8, medium: CGFloat = 12, standard: CGFloat = 16,
                 loose: CGFloat = 20, section: CGFloat = 24, corner: CGFloat = 12, touchTarget: CGFloat = 44,
-                bar: CGFloat = 8, thinBar: CGFloat = 6, hairline: CGFloat = 1) {
+                bar: CGFloat = 8, thinBar: CGFloat = 6, hairline: CGFloat = 1, glyphScale: CGFloat = 0.8) {
         self.tight = Self.dimension(tight, fallback: 4)
         self.compact = Self.dimension(compact, fallback: 8)
         self.medium = Self.dimension(medium, fallback: 12)
@@ -82,6 +85,7 @@ public struct ComponentMetrics {
         self.bar = Self.dimension(bar, fallback: 8)
         self.thinBar = Self.dimension(thinBar, fallback: 6)
         self.hairline = Self.dimension(hairline, fallback: 1)
+        self.glyphScale = min(1, Self.dimension(glyphScale, fallback: 0.8))
     }
 
     static func dimension(_ value: CGFloat, fallback: CGFloat) -> CGFloat {

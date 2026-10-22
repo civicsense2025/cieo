@@ -8,8 +8,10 @@ public enum ComponentIcon: Sendable, CaseIterable {
 }
 
 /// Host-owned glyphs. Defaults are SF Symbols; an app with its own icon set installs it once at the root.
-/// Components set the font and colour around each glyph, so a host glyph should size itself to the
-/// current font or carry its own frame.
+/// Components set the font and colour around each glyph and offer it a square sized from the text it sits
+/// beside, centred on that text's first line. A drawn shape should fill the square it is offered (a bare
+/// `Shape` does) so it follows the text role and Dynamic Type; a glyph with its own fixed frame keeps that
+/// size and is only centred.
 public struct ComponentIcons {
     private let make: @MainActor (ComponentIcon) -> AnyView
 

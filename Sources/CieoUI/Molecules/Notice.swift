@@ -26,7 +26,7 @@ public struct Notice: View {
 
     public var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: metrics.compact) {
-            glyphView
+            InlineGlyph { glyphView }
                 .font(typography.heading)
                 .foregroundStyle(theme.foreground)
                 .accessibilityHidden(true)
