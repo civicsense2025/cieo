@@ -111,7 +111,7 @@ Organisms built on them:
 
 [OrganismTests](../Tests/CieoUITests/OrganismTests.swift) pin the offset pattern, the walked-line rule, the spoken states and the paging bounds, and they draw both pathway axes. `ImageRenderer` doesn't draw scroll view content, so the rail's cards are checked on the simulator by the consumer.
 
-- [ComponentIcons](../Sources/CieoUI/Foundations/ComponentIcons.swift): the glyphs these pieces draw themselves (disclosure, info, check, previous, next). They default to SF Symbols; an app with its own icon set installs `componentIcons` once at the root.
+- [ComponentIcons](../Sources/CieoUI/Foundations/ComponentIcons.swift): the glyphs these pieces draw themselves (disclosure, info, check, previous, next). They default to SF Symbols; an app with its own icon set installs `componentIcons` once at the root. Components centre each glyph on the first line of the text beside it and offer it a square sized from that text, so a host's drawn glyph should fill what it is offered rather than carry its own frame. [InlineGlyphTests](../Tests/CieoUITests/InlineGlyphTests.swift) pin both, for SF Symbols, bare shapes and fixed-frame shapes, at default and accessibility text sizes.
 
 [FoundationTests](../Tests/CieoUITests/FoundationTests.swift) pin the cuts' geometry, the phone sizes, the scaling bounds and the theme defaults. Rendered checks at large text sizes belong to the consumer.
 
@@ -123,14 +123,15 @@ Components choose a role and never a value. A host changes one value at the root
 | --- | --- | --- |
 | Colour | `componentTheme` | accent, onAccent, tint, surface, foreground, secondary, subtle, border, track, block, onBlock, onBlockSecondary, danger |
 | Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, glyph, prominentGlyph, value, marker, plus the control roles action, selection, field, fieldLabel |
-| Spacing and strokes | `componentMetrics` | tight 4, compact 8, medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline |
+| Spacing and strokes | `componentMetrics` | tight 4, compact 8, medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
 | Glyphs | `componentIcons` | disclosure, info, check, previous, next, search, clear, error, selected, unselected (the host closure runs on the main actor, so a glyph may hold `@ScaledMetric` state) |
 | Display type | `displayTypography` | display, title, subtitle and three numeral sizes |
 
 Content goes in through `@ViewBuilder` slots or `Text`, never through styling flags. Molecules and organisms are built from atoms, never from raw `Text` and `Image` with their own fonts:
 
 - `Heading(title, detail:, level:, isHeader:)` is the title-and-detail pair every row, notice, panel and section shares. Inside a row, button or toggle pass `isHeader: false`, so VoiceOver reads a list as rows, not as a run of headings.
-- `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error.
+- `StatusLabel(text, icon:, tone:)` is a glyph and a line of text in one tone, such as a field error. The glyph sits centred on the first line of text and takes its size from the label's font.
+- `InlineGlyph(font:) { glyph }` is how every component puts a glyph beside text: StatusLabel, Notice, SelectionChip, InfoButton's row, SearchField, IndexRow's chevron, and the glyph-only IconButton, StatePanel mark and Pathway check. A glyph has no text baseline, so in a `.firstTextBaseline` row a bare glyph rests its bottom edge on the baseline and floats above the letters. `InlineGlyph` carries one line of the text's font, so it takes that line's baseline and centres the glyph on it. A drawn shape fills a square of `glyphScale` times the line height, so it follows the text role and Dynamic Type; an SF Symbol keeps the size its font gives it. A host glyph with its own fixed frame keeps that size and is only centred, so a host icon set should hand components bare shapes.
 - `IconButton(icon, label:, prominent:)` is a glyph-only button with a spoken label and a full touch target.
 - `.componentBorder(color, width:, cornerRadius:, placement:)` is the one outline that controls and fields share.
 - `FlowStack(spacing:)` fills rows and starts a new one when the next item doesn't fit, so a group of chips stacks at large text sizes instead of breaking words.

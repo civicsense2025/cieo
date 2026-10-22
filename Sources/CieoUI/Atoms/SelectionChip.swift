@@ -21,8 +21,8 @@ public struct SelectionChip: View {
 
     public var body: some View {
         Button { isSelected.toggle() } label: {
-            HStack {
-                icons(isSelected ? .selected : .unselected)
+            HStack(alignment: .firstTextBaseline) {
+                InlineGlyph { icons(isSelected ? .selected : .unselected) }
                     .accessibilityHidden(true)
                 Text(title)
             }

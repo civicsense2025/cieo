@@ -41,7 +41,7 @@ public struct StatePanel<Actions: View>: View {
     private var markView: some View {
         switch mark {
         case .symbol(let name): SymbolMark(name)
-        case .icon(let icon): icons(icon).font(typography.prominentGlyph).accessibilityHidden(true)
+        case .icon(let icon): InlineGlyph { icons(icon) }.font(typography.prominentGlyph).accessibilityHidden(true)
         }
     }
 }

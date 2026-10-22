@@ -65,11 +65,13 @@ public struct InfoButton: View {
     }
 
     private var row: some View {
-        HStack(spacing: metrics.medium) {
-            icons(.info).font(typography.prominentGlyph).foregroundStyle(theme.accent)
+        HStack(alignment: .firstTextBaseline, spacing: metrics.medium) {
+            InlineGlyph(font: typography.strongBody) { icons(.info).font(typography.prominentGlyph) }
+                .foregroundStyle(theme.accent)
             Text(title).font(typography.strongBody).foregroundStyle(theme.foreground)
             Spacer(minLength: 0)
-            icons(.disclosure).font(typography.glyph).foregroundStyle(theme.secondary)
+            InlineGlyph(font: typography.strongBody) { icons(.disclosure).font(typography.glyph) }
+                .foregroundStyle(theme.secondary)
         }
         .frame(minHeight: metrics.touchTarget)
         .contentShape(Rectangle())

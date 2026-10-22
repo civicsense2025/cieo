@@ -212,7 +212,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
             Circle().fill(fill).frame(width: node, height: node)
             Group {
                 if current == .done {
-                    icons(.check).font(typography.marker).foregroundStyle(theme.onAccent)
+                    InlineGlyph { icons(.check) }.font(typography.marker).foregroundStyle(theme.onAccent)
                 } else {
                     // The current node inverts: screen colour on the foreground colour.
                     Text("\(Self.stepNumber(at: index, firstNumber: firstNumber))").font(typography.marker).monospacedDigit()

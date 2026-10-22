@@ -55,7 +55,7 @@ public struct IndexRow: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             if showsDisclosure {
-                icons(.disclosure).font(typography.glyph)
+                InlineGlyph { icons(.disclosure) }.font(typography.glyph)
                     .foregroundStyle(theme.secondary).accessibilityHidden(true)
             }
         }
