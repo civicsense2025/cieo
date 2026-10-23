@@ -760,7 +760,8 @@ final class AudioCaptureTests: XCTestCase {
         recorder.captureFinishReceipt(successfully: true, at: 80)
         clock.advance(by: 0.25)
 
-        model.poll()
+        model.handleInterruptionBegan()
+        XCTAssertEqual(model.state.phase, .recording)
         Task { @MainActor in
             try? await Task.sleep(for: .milliseconds(1_000))
             recorder.deliverPendingFinish()
@@ -926,12 +927,67 @@ final class AudioCaptureTests: XCTestCase {
 
         model.handleInterruptionBegan()
 
+        XCTAssertEqual(model.state.phase, .recording, "interruption waits through the bounded delegate confirmation window")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        XCTAssertNotNil(sessions.activeOwner)
+        let timeout = Date().addingTimeInterval(1)
+        while model.state.phase == .recording && Date() < timeout {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
         XCTAssertEqual(model.state.phase, .error)
         XCTAssertEqual(model.state.reason, .failed)
         XCTAssertTrue(clips.isEmpty)
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
         XCTAssertNil(sessions.activeOwner)
         XCTAssertEqual(recorder.stopCount, 1)
+        model.teardown()
+    }
+
+    @MainActor
+    func testInterruptionWaitsForReceiptCapturedDuringConfirmationGrace() async throws {
+        var device: FakeVoiceRecorder?
+        let clock = ManualRecorderClock(50)
+        let sessions = FakeCaptureSessionManager()
+        let model = Recorder(maxDuration: 30, permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions, monotonicNow: { clock.now() })
+        var clips: [Recorder.Clip] = []
+        model.onRecorded = { clips.append($0) }
+        model.start()
+        try await Task.sleep(for: .milliseconds(30))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        recorder.currentTime = 0
+        recorder.simulateUnexpectedStop()
+        clock.advance(by: 30.25)
+
+        model.handleInterruptionBegan()
+        XCTAssertEqual(model.state.phase, .recording)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        recorder.captureFinishReceipt(successfully: true, at: 80)
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(1_000))
+            recorder.deliverPendingFinish()
+        }
+
+        let timeout = Date().addingTimeInterval(0.75)
+        while model.state.phase == .recording && Date() < timeout {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        XCTAssertEqual(model.state.phase, .done)
+        XCTAssertEqual(clips.count, 1)
+        XCTAssertEqual(clips.first?.duration, 30)
+        XCTAssertNil(sessions.activeOwner)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        try await Task.sleep(for: .milliseconds(1_000))
+        XCTAssertEqual(clips.count, 1, "the queued delegate cannot consume or emit the receipt a second time")
+        try? FileManager.default.removeItem(at: url)
         model.teardown()
     }
 

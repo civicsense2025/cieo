@@ -699,10 +699,10 @@ public final class VoiceRecorderModel {
         announce(.failed)
     }
 
-    /// Discards an interrupted recording; an already-paused take remains available for normal resume or cancel.
+    /// Confirms the finish receipt after an interruption; already-paused takes remain available to resume or cancel.
     func handleInterruptionBegan() {
         guard state.phase == .recording else { return }
-        fail()
+        awaitStoppedRecorderCompletion()
     }
 
     /// Stops the timer and recorder and deactivates the audio session; optionally deletes the file.
@@ -717,7 +717,7 @@ public final class VoiceRecorderModel {
     }
 
     #if os(iOS)
-    /// An interruption during recording discards the take; an already-paused take remains resumable.
+    /// An interruption during recording enters bounded finish confirmation; an already-paused take remains resumable.
     private func observeInterruptions() {
         guard interruption == nil else { return }
         interruption = NotificationCenter.default.addObserver(
