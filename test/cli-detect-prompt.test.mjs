@@ -7,6 +7,10 @@ import { PassThrough } from 'node:stream';
 import { detectPackageManager, detectTarget, hasReact, readPackageJson } from '../cli/lib/detect.mjs';
 import { createPrompt } from '../cli/lib/prompt.mjs';
 
+// CI runners export CI=true, which makes every prompt non-interactive. These tests choose the
+// environment themselves (the CI test sets it explicitly), so the host's value must not leak in.
+delete process.env.CI;
+
 function stubTree(entries) {
   const root = mkdtempSync(join(tmpdir(), 'cieo-detect-'));
   for (const [rel, content] of Object.entries(entries)) {
