@@ -1,0 +1,42 @@
+/* design/styles/primitives/comment.css */
+@layer cieo.components {
+  :where(.cieo).cieo-comment {
+    --_av: 2.25rem; --_gap: var(--cieo-space-3); --_pad: var(--cieo-space-3); --_rail: 2px;
+    position: relative; display: grid; grid-template-columns: var(--_av) minmax(0, 1fr); column-gap: var(--_gap); padding-block-start: var(--_pad); color: var(--cieo-color-text); font-size: var(--cieo-text-body); border-radius: var(--cieo-radius-control);
+  }
+  :where(.cieo).cieo-comment[data-depth]:not([data-depth='0']) { --_av: 1.5rem; }
+  :where(.cieo) .cieo-comment-rail { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: center; min-block-size: 0; }
+  :where(.cieo) .cieo-comment-avatar { flex: none; inline-size: var(--_av); block-size: var(--_av); display: flex; }
+  :where(.cieo) .cieo-comment-avatar > .cieo-p-avatar-one, :where(.cieo) .cieo-comment-avatar > img { inline-size: 100%; block-size: 100%; }
+  :where(.cieo) .cieo-comment-avatar[data-empty] { border-radius: var(--cieo-radius-pill); background: var(--cieo-color-sunken); }
+  :where(.cieo) .cieo-comment-line { flex: 1; inline-size: var(--_rail); min-block-size: var(--cieo-space-2); margin-block-start: var(--cieo-space-1); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-border); }
+  :where(.cieo) .cieo-comment-main { grid-column: 2; grid-row: 1; min-inline-size: 0; display: grid; gap: var(--cieo-space-1); align-content: start; padding-block-end: var(--cieo-space-2); }
+  :where(.cieo) .cieo-comment-head { display: flex; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo) .cieo-comment-head > .cieo-by-line { flex: 1 1 auto; }
+  :where(.cieo) .cieo-comment-menu { flex: none; margin-inline-start: auto; display: inline-flex; }
+  :where(.cieo) .cieo-comment-body { overflow-wrap: anywhere; line-height: 1.45; }
+  :where(.cieo) .cieo-comment-attachments { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; margin-block-start: var(--cieo-space-1); }
+  :where(.cieo) .cieo-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-1); margin-inline-start: calc(var(--cieo-space-2) * -1); color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-comment-status { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-comment-status[data-tone='danger'] { color: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-comment-deleted { margin: 0; padding-block: var(--cieo-space-1); font-size: var(--cieo-text-small); font-style: italic; color: var(--cieo-color-subtle); }
+  :where(.cieo) .cieo-comment-replies { grid-column: 2; grid-row: 2; min-inline-size: 0; }
+  :where(.cieo).cieo-comment[data-state='pending'] > .cieo-comment-main, :where(.cieo).cieo-comment[data-state='pending'] > .cieo-comment-rail { opacity: 0.6; }
+  :where(.cieo).cieo-comment[data-state='failed'] > .cieo-comment-main > .cieo-comment-body { color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-comment[data-state='highlighted'] { background: var(--cieo-color-accent-soft); animation: cieo-comment-highlight calc(var(--motion-duration-base, 300ms) * 6) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) calc(var(--motion-duration-base, 300ms) * 2) both; }
+  /* The curve: from the parent's rail, down and into this reply's avatar; the straight run keeps the rail going to the next sibling. */
+  :where(.cieo) .cieo-comment-elbow { position: absolute; inset-block: 0; inset-inline-start: calc((var(--_gap) + var(--_pav, 2.25rem) / 2) * -1); inline-size: calc(var(--_gap) + var(--_pav, 2.25rem) / 2 - var(--cieo-space-1)); pointer-events: none; }
+  :where(.cieo) .cieo-comment-elbow::before { content: ''; position: absolute; inset-block-start: 0; inset-inline: 0; block-size: calc(var(--_pad) + var(--_av) / 2); box-sizing: border-box; border-inline-start: var(--_rail) solid var(--cieo-color-border); border-block-end: var(--_rail) solid var(--cieo-color-border); border-end-start-radius: var(--cieo-radius-surface); }
+  :where(.cieo) .cieo-comment-elbow::after { content: ''; position: absolute; inset-block: calc(var(--_pad) + var(--_av) / 2) 0; inset-inline-start: 0; border-inline-start: var(--_rail) solid var(--cieo-color-border); }
+  :where(.cieo) .cieo-comment-replies { --_pav: var(--_av); }
+  :where(.cieo) .cieo-comment-thread-item:last-child > .cieo-comment > .cieo-comment-elbow::after, :where(.cieo) .cieo-comment-replies > .cieo-comment:last-child > .cieo-comment-elbow::after { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    :where(.cieo).cieo-comment[data-entering] { animation: cieo-comment-rise var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  }
+  @keyframes cieo-comment-rise { from { opacity: 0.45; transform: translateY(var(--motion-drift, 4px)); } }
+  @keyframes cieo-comment-highlight { to { background: transparent; } }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-comment { animation: none; }
+  }
+  [data-motion='off'] :where(.cieo).cieo-comment, :where(.cieo)[data-motion='off'].cieo-comment { animation: none; }
+}

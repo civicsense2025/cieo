@@ -1,0 +1,22 @@
+// src/primitives/Comment/Comment.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+/* Comment. One post in a thread: avatar, byline, body, and slots for attachments, actions and nested replies. Host owns all content; this owns layout, the rail and the state looks. */
+import { useId } from 'react';
+import { ByLine } from '../ByLine/ByLine.js';
+/** Depth as a whole number of at least 0; anything else is 0. */
+export function commentDepth(depth) {
+    return typeof depth === 'number' && Number.isFinite(depth) ? Math.max(0, Math.floor(depth)) : 0;
+}
+/** True when the rail should run below the avatar. */
+export function commentHasRail(railed, hasReplies) {
+    return Boolean(railed) || hasReplies;
+}
+export function Comment({ author, avatar, authorHref, badge, context, time, dateTime, menu, children, attachments, actions, replies, state = 'default', status, depth, railed, id, entering }) {
+    const lineId = useId();
+    const level = commentDepth(depth);
+    const hasReplies = replies !== undefined && replies !== null && replies !== false;
+    const deleted = state === 'deleted';
+    const rail = commentHasRail(railed, hasReplies);
+    return (_jsxs("article", { id: id, "aria-labelledby": lineId, "aria-busy": state === 'pending' ? true : undefined, className: "cieo cieo-comment", "data-state": state, "data-depth": level, "data-railed": rail ? '' : undefined, "data-entering": entering ? '' : undefined, children: [level > 0 ? _jsx("span", { className: "cieo-comment-elbow", "aria-hidden": "true" }) : null, _jsxs("div", { className: "cieo-comment-rail", children: [_jsx("div", { className: "cieo-comment-avatar", "data-empty": deleted ? '' : undefined, children: deleted ? null : avatar }), rail ? _jsx("span", { className: "cieo-comment-line", "aria-hidden": "true" }) : null] }), _jsx("div", { className: "cieo-comment-main", children: deleted ? (_jsx("p", { id: lineId, className: "cieo-comment-deleted", children: "This comment was deleted" })) : (_jsxs(_Fragment, { children: [_jsxs("div", { className: "cieo-comment-head", children: [_jsx(ByLine, { id: lineId, author: author, href: authorHref, badge: badge, context: context, time: time, dateTime: dateTime }), menu ? _jsx("div", { className: "cieo-comment-menu", children: menu }) : null] }), children ? _jsx("div", { className: "cieo-comment-body", children: children }) : null, attachments ? _jsx("div", { className: "cieo-comment-attachments", children: attachments }) : null, actions ? _jsx("div", { className: "cieo-comment-actions", children: actions }) : null, state === 'pending' ? (_jsx("p", { className: "cieo-comment-status", "data-tone": "muted", role: "status", children: "Posting\u2026" })) : null, state === 'failed' ? (_jsx("div", { className: "cieo-comment-status", "data-tone": "danger", role: "alert", children: status ?? 'Could not post this comment.' })) : null] })) }), hasReplies ? _jsx("div", { className: "cieo-comment-replies", children: replies }) : null] }));
+}

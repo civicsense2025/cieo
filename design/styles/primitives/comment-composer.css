@@ -1,0 +1,31 @@
+/* design/styles/primitives/comment-composer.css */
+@layer cieo.components {
+  :where(.cieo).cieo-comment-composer { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; padding: var(--cieo-space-3); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-comment-composer[data-disabled] { opacity: 0.6; }
+  :where(.cieo) .cieo-comment-composer-reply { padding-inline-start: calc(2.25rem + var(--cieo-space-3)); }
+  :where(.cieo) .cieo-comment-composer-row { display: flex; align-items: flex-start; gap: var(--cieo-space-3); min-inline-size: 0; }
+  :where(.cieo) .cieo-comment-composer-avatar { flex: none; inline-size: 2.25rem; block-size: 2.25rem; display: flex; }
+  :where(.cieo) .cieo-comment-composer-avatar > .cieo-p-avatar-one { inline-size: 100%; block-size: 100%; }
+  :where(.cieo) .cieo-comment-composer-main { flex: 1; min-inline-size: 0; display: grid; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-comment-composer-panes { display: grid; min-inline-size: 0; }
+  :where(.cieo) .cieo-comment-composer-pane { grid-area: 1 / 1; min-inline-size: 0; outline: none; }
+  :where(.cieo) .cieo-comment-composer-pane[data-phase='leave'] { pointer-events: none; animation: cieo-composer-out var(--motion-duration-exit, 100ms) cubic-bezier(.4,0,1,1) both; }
+  :where(.cieo) .cieo-comment-composer-pane[data-phase='enter'] { animation: cieo-composer-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit, 100ms) both; }
+  :where(.cieo) .cieo-comment-composer-input { display: block; inline-size: 100%; box-sizing: border-box; min-block-size: 1.5em; max-block-size: calc(1.5em * 6); margin: 0; padding: 0; border: 0; outline: none; resize: none; overflow-y: auto; background: transparent; color: inherit; font: inherit; font-size: var(--cieo-text-body); line-height: 1.5; }
+  :where(.cieo) .cieo-comment-composer-input::placeholder { color: var(--cieo-color-subtle); }
+  :where(.cieo) .cieo-comment-composer-input:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 4px; border-radius: var(--cieo-radius-small); }
+  :where(.cieo) .cieo-comment-composer-attachments { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo) .cieo-comment-composer-bar { display: flex; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo) .cieo-comment-composer-tools { display: flex; align-items: center; flex-wrap: wrap; gap: var(--cieo-space-1); flex: 1; min-inline-size: 0; color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-comment-composer-bar > span:first-child:empty { flex: 1; }
+  :where(.cieo) .cieo-comment-composer-submit { flex: none; min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-4); border: 0; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); cursor: pointer; transition: opacity var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo) .cieo-comment-composer-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+  :where(.cieo) .cieo-comment-composer-submit:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (pointer: coarse) { :where(.cieo) .cieo-comment-composer-submit { min-block-size: var(--cieo-touch-target); } }
+  @keyframes cieo-composer-out { to { opacity: 0; } }
+  @keyframes cieo-composer-in { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-comment-composer-pane[data-phase], :where(.cieo) .cieo-comment-composer-submit { animation: none; transition: none; }
+  }
+  [data-motion='off'] :where(.cieo) .cieo-comment-composer-pane[data-phase], [data-motion='off'] :where(.cieo) .cieo-comment-composer-submit, :where(.cieo)[data-motion='off'] .cieo-comment-composer-pane[data-phase] { animation: none; transition: none; }
+}
