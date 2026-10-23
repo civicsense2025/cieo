@@ -37,6 +37,9 @@ The `swift` CI job also runs `scripts/check-swift-literals.sh`, which fails when
 SwiftUI component hard-codes styling, and proves on its fixture that it still
 catches each kind of hard-coded line.
 
+New primitives change `package.json` only through the deep `./<Name>` exports that
+`scripts/wire-primitives.mjs` regenerates; hand edits there are overwritten.
+
 ## After merge and consumer upgrades
 
 Verify actual merged state, immutable resulting SHA and pushed range, then review
