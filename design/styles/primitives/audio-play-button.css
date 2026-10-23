@@ -1,0 +1,23 @@
+/* design/styles/primitives/audio-play-button.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-play-button { --size: var(--cieo-control-height); position: relative; display: inline-flex; align-items: center; justify-content: center; flex: none; inline-size: var(--size); block-size: var(--size); padding: 0; border: 0; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); cursor: pointer; transition: transform calc(var(--motion-duration-base, 300ms) / 3) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo).cieo-audio-play-button[data-size='sm'] { --size: var(--cieo-control-small); }
+  :where(.cieo).cieo-audio-play-button[data-size='lg'] { --size: var(--cieo-control-large); }
+  @media (pointer: coarse) { :where(.cieo).cieo-audio-play-button { min-inline-size: var(--cieo-touch-target); min-block-size: var(--cieo-touch-target); } }
+  :where(.cieo).cieo-audio-play-button:active { transform: scale(0.94); }
+  :where(.cieo).cieo-audio-play-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-audio-play-button-icon { display: flex; inline-size: 40%; block-size: 40%; }
+  :where(.cieo) .cieo-audio-play-button-half { flex: 1; background: currentColor; transition: clip-path var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo) .cieo-audio-play-button-half[data-half='left'] { clip-path: polygon(0 0, 100% 25%, 100% 75%, 0 100%); }
+  :where(.cieo) .cieo-audio-play-button-half[data-half='right'] { clip-path: polygon(0 25%, 100% 50%, 100% 50%, 0 75%); }
+  :where(.cieo).cieo-audio-play-button[data-playing] .cieo-audio-play-button-half[data-half='left'] { clip-path: polygon(10% 0, 80% 0, 80% 100%, 10% 100%); }
+  :where(.cieo).cieo-audio-play-button[data-playing] .cieo-audio-play-button-half[data-half='right'] { clip-path: polygon(20% 0, 90% 0, 90% 100%, 20% 100%); }
+  :where(.cieo) .cieo-audio-play-button-ring { position: absolute; inset: -3px; border-radius: inherit; border: 2px solid transparent; border-block-start-color: currentColor; opacity: 0; pointer-events: none; transition: opacity var(--motion-duration-exit, 100ms) ease-out; color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-audio-play-button[data-loading] .cieo-audio-play-button-ring { opacity: 1; animation: cieo-audio-play-spin calc(var(--motion-duration-base, 300ms) * 3) steps(60) infinite; }
+  @keyframes cieo-audio-play-spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-audio-play-button, :where(.cieo) .cieo-audio-play-button-half, :where(.cieo) .cieo-audio-play-button-ring { transition: none; animation: none; }
+    :where(.cieo).cieo-audio-play-button:active { transform: none; }
+  }
+  :where(.cieo)[data-motion='off'].cieo-audio-play-button, :where(.cieo)[data-motion='off'] .cieo-audio-play-button, :where(.cieo)[data-motion='off'] .cieo-audio-play-button-half, :where(.cieo)[data-motion='off'] .cieo-audio-play-button-ring { transition: none; animation: none; }
+}

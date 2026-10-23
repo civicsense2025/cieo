@@ -1,0 +1,12 @@
+/* design/styles/primitives/audio-waveform.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-waveform { --progress: 0; position: relative; display: block; flex: 1; min-inline-size: 0; block-size: var(--cieo-control-height); touch-action: pan-y; }
+  :where(.cieo).cieo-audio-waveform[data-seekable] { cursor: pointer; }
+  :where(.cieo).cieo-audio-waveform:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; border-radius: var(--cieo-radius-small); }
+  :where(.cieo) .cieo-audio-waveform-bars { position: absolute; inset: 0; display: flex; align-items: center; gap: 2px; color: var(--cieo-color-border-strong); }
+  :where(.cieo) .cieo-audio-waveform-played { color: var(--cieo-color-accent); clip-path: inset(0 calc(100% * (1 - var(--cieo-audio-progress, var(--progress)))) 0 0); }
+  :where(.cieo) .cieo-audio-waveform-bar { flex: 1; min-inline-size: 2px; block-size: calc(100% * var(--h)); border-radius: var(--cieo-radius-pill); background: currentColor; transform-origin: center; animation: cieo-audio-waveform-grow var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; animation-delay: calc(var(--i) * var(--step)); }
+  @keyframes cieo-audio-waveform-grow { from { transform: scaleY(0.1); opacity: 0; } to { transform: scaleY(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-audio-waveform-bar { animation: none; } }
+  :where(.cieo)[data-motion='off'] .cieo-audio-waveform-bar, :where(.cieo)[data-motion='off'].cieo-audio-waveform .cieo-audio-waveform-bar { animation: none; }
+}
