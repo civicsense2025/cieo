@@ -244,11 +244,11 @@ public final class VoiceRecorderModel {
     }
 
     /// Points the finger may slide left in hold mode before the take is thrown away.
-    nonisolated public static let holdCancelDistance: Double = 80 // literal-ok: the web slide-to-cancel distance
+    nonisolated public static let holdCancelDistance: Double = HoldPolicy.slideCancelDistance
 
     /// Hold-to-record gesture: sliding left past 80 points means cancel, anything else keeps recording.
     nonisolated public static func holdGesture(dx: Double) -> HoldOutcome {
-        dx.isFinite && dx < -holdCancelDistance ? .cancel : .record
+        HoldPolicy.slideCancels(dx: dx) ? .cancel : .record
     }
 
     /// Whole seconds left before the limit, never below 0.
