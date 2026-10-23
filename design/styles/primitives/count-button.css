@@ -1,0 +1,26 @@
+/* design/styles/primitives/count-button.css */
+@layer cieo.components {
+  :where(.cieo).cieo-count-button { --cieo-count-button-tone: var(--cieo-color-text); --cieo-count-button-soft: var(--cieo-color-sunken); display: inline-flex; align-items: center; gap: var(--cieo-space-1); min-block-size: var(--cieo-control-height); min-inline-size: var(--cieo-control-height); padding: 0 var(--cieo-space-2); border: 0; border-radius: var(--cieo-radius-pill); background: transparent; color: var(--cieo-color-muted); font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); font-variant-numeric: tabular-nums; cursor: pointer; transition: color var(--motion-duration-exit, 100ms) ease-out, background-color var(--motion-duration-exit, 100ms) ease-out; }
+  :where(.cieo).cieo-count-button[data-size='sm'] { min-block-size: var(--cieo-control-small); min-inline-size: var(--cieo-control-small); padding: 0 var(--cieo-space-1); }
+  @media (pointer: coarse) {
+    :where(.cieo).cieo-count-button { min-block-size: var(--cieo-touch-target); min-inline-size: var(--cieo-touch-target); }
+  }
+  :where(.cieo).cieo-count-button[data-tone='accent'] { --cieo-count-button-tone: var(--cieo-color-accent); --cieo-count-button-soft: var(--cieo-color-accent-soft); }
+  :where(.cieo).cieo-count-button[data-tone='danger'] { --cieo-count-button-tone: var(--cieo-color-danger); --cieo-count-button-soft: var(--cieo-color-danger-soft); }
+  :where(.cieo).cieo-count-button[data-tone='success'] { --cieo-count-button-tone: var(--cieo-color-success); --cieo-count-button-soft: var(--cieo-color-success-soft); }
+  :where(.cieo).cieo-count-button:hover:not(:disabled) { background: var(--cieo-count-button-soft); color: var(--cieo-count-button-tone); }
+  :where(.cieo).cieo-count-button[data-pressed] { color: var(--cieo-count-button-tone); }
+  :where(.cieo).cieo-count-button:disabled { opacity: 0.5; cursor: not-allowed; }
+  :where(.cieo).cieo-count-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-count-button-icon { display: inline-grid; place-items: center; font-size: 1.25em; line-height: 1; will-change: transform; }
+  :where(.cieo) .cieo-count-button-glyph { grid-area: 1 / 1; display: inline-flex; transition: opacity var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo) .cieo-count-button-glyph[data-glyph='active'] { opacity: 0; }
+  :where(.cieo).cieo-count-button[data-pressed][data-has-active-icon] .cieo-count-button-glyph[data-glyph='base'] { opacity: 0; }
+  :where(.cieo).cieo-count-button[data-pressed][data-has-active-icon] .cieo-count-button-glyph[data-glyph='active'] { opacity: 1; }
+  :where(.cieo) .cieo-count-button-count:empty { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-count-button, :where(.cieo) .cieo-count-button-glyph { transition: none; }
+    :where(.cieo) .cieo-count-button-icon { transform: none !important; }
+  }
+  :where(.cieo)[data-motion='off'] .cieo-count-button, :where(.cieo).cieo-count-button[data-motion='off'], :where([data-motion='off']) .cieo-count-button, :where([data-motion='off']) .cieo-count-button-glyph { transition: none; }
+}
