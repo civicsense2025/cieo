@@ -12,10 +12,17 @@ struct AudioPlaybackExamples: View {
     @State private var broken = AudioPlaybackModel(simulatedDuration: 63, state: .error)
 
     private let peaks: [Double] = Self.waveformPeaks()
-    private let words: [AudioTranscript.Word] = {
+    private let words: [AudioTranscript.Word] = Self.transcriptWords()
+
+    private static func transcriptWords() -> [AudioTranscript.Word] {
         let text = "Thanks for calling back so quickly. I wanted to walk you through what changed in the committee vote and what happens next for the bill on the floor tomorrow morning."
-        return text.split(separator: " ").enumerated().map { AudioTranscript.Word(String($1), start: Double($0) * 0.45, end: Double($0) * 0.45 + 0.4) }
-    }()
+        var words: [AudioTranscript.Word] = []
+        for (index, word) in text.split(separator: " ").enumerated() {
+            let start: Double = Double(index) * 0.45
+            words.append(AudioTranscript.Word(String(word), start: start, end: start + 0.4))
+        }
+        return words
+    }
 
     private static func waveformPeaks() -> [Double] {
         (0..<120).map { index -> Double in

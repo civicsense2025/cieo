@@ -47,10 +47,13 @@ public struct Poll<Footnote: View>: View {
         let exact = clean.map { Double($0) / Double(total) * 100 }
         var floors = exact.map { Int($0.rounded(.down)) }
         var left = 100 - floors.reduce(0, +)
-        let order = exact.enumerated().map { (i: $0.offset, r: $0.element - $0.element.rounded(.down)) }
-            .sorted { $0.r != $1.r ? $0.r > $1.r : $0.i < $1.i }
+        var order: [(index: Int, remainder: Double)] = []
+        for (index, value) in exact.enumerated() {
+            order.append((index: index, remainder: value - value.rounded(.down)))
+        }
+        order.sort { a, b in a.remainder != b.remainder ? a.remainder > b.remainder : a.index < b.index }
         for entry in order where left > 0 {
-            floors[entry.i] += 1
+            floors[entry.index] += 1
             left -= 1
         }
         return floors
