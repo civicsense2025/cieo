@@ -4,6 +4,8 @@ import SwiftUI
 /// A star rating: tap a star (or swipe up and down with VoiceOver) to set it, or show it read-only. Newly
 /// filled stars pop in turn on the snap spring, the whole stagger inside 150 ms. The host owns the value.
 public struct Rating: View {
+    /// Maximum number of stars a rating displays or animates.
+    public static let maximumStars = 10
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentIcons) private var icons
@@ -43,7 +45,7 @@ public struct Rating: View {
         self.init(readOnlyValue: readOnlyValue, max: max, label: Text(label))
     }
 
-    private static func stars(_ max: Int) -> Int { Swift.max(1, max) }
+    private static func stars(_ max: Int) -> Int { Swift.min(maximumStars, Swift.max(1, max)) }
 
     private static func rounded(_ value: Double, top: Int) -> Int {
         value.isFinite ? Int(Swift.min(Double(top), Swift.max(0, value)).rounded()) : 0
@@ -75,7 +77,9 @@ public struct Rating: View {
 
     /// Start delays (ms) for stars `from..<to` popping in turn; the last starts by `window`, so the whole stagger fits in it.
     public static func ratingPopDelays(from: Int, to: Int, window: Int = 150) -> [Int] {
-        let n = Swift.max(0, to - Swift.max(0, from))
+        let start = Swift.min(maximumStars, Swift.max(0, from))
+        let end = Swift.min(maximumStars, Swift.max(0, to))
+        let n = Swift.max(0, end - start)
         guard n > 0 else { return [] }
         let step = n == 1 ? 0 : Swift.min(40.0, Double(window) / Double(n - 1))
         return (0..<n).map { Int((Double($0) * step).rounded()) }

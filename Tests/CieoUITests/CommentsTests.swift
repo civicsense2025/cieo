@@ -1,6 +1,15 @@
-import CieoUI
+@testable import CieoUI
 import SwiftUI
 import XCTest
+
+private final class DeepCommentNode: CommentTreeNode {
+    let id: Int
+    weak var next: DeepCommentNode?
+
+    init(_ id: Int) { self.id = id }
+
+    var children: [DeepCommentNode] { next.map { [$0] } ?? [] }
+}
 
 final class CommentsTests: XCTestCase {
     // MARK: Mention
@@ -24,6 +33,12 @@ final class CommentsTests: XCTestCase {
         for value in bad { XCTAssertNil(Mention.safeURL(value), value) }
         XCTAssertNil(Mention.safeURL(nil))
         XCTAssertNil(Mention.safeURL("/u/joel", allowRelative: false))
+    }
+
+    func testSafeURLRejectsCredentialBearingAbsoluteAddresses() {
+        for value in ["https://user:secret@example.com/path", "http://user@example.com/", "https://:secret@example.com/"] {
+            XCTAssertNil(Mention.safeURL(value, allowRelative: false), value)
+        }
     }
 
     func testByLineSafeURLRefusesOtherSchemesAndProtocolRelative() {
@@ -75,6 +90,16 @@ final class CommentsTests: XCTestCase {
         XCTAssertEqual(Array(types("end https://a.com/x.").suffix(2)), ["url:https://a.com/x", "text:."])
     }
 
+    func testTrimUrlUsesLinearWorkForManyUnmatchedClosingParentheses() {
+        let closers = String(repeating: ")", count: 8_000)
+        let started = ProcessInfo.processInfo.systemUptime
+        let (url, rest) = RichText.trimUrl("https://example.com/story" + closers)
+        let elapsed = ProcessInfo.processInfo.systemUptime - started
+        XCTAssertEqual(url, "https://example.com/story")
+        XCTAssertEqual(rest, closers)
+        XCTAssertLessThan(elapsed, 2.0, "a long trailing run should be processed in linear time")
+    }
+
     func testTokenizeNeverLinksUnsafeSchemes() {
         let evil = ["javascript:alert(1)", "JAVASCRIPT:alert(1)", "data:text/html,<script>alert(1)</script>", "vbscript:msgbox(1)",
                     "file:///etc/passwd", "ftp://x.com/a", "blob:https://x.com/uuid", "javascript://x.com/%0Aalert(1)"]
@@ -90,6 +115,14 @@ final class CommentsTests: XCTestCase {
         let attributed = RichText.attributedString("javascript:alert(1) and <script>alert(1)</script> and <img src=x onerror=alert(1)>")
         XCTAssertTrue(attributed.runs.allSatisfy { $0.link == nil })
         XCTAssertTrue(String(attributed.characters).contains("<script>"))
+    }
+
+    func testTokenizeNeverLinksCredentialBearingHosts() {
+        for value in ["https://user:secret@example.com/path", "https://trusted.com@evil.example/path"] {
+            let tokens = RichText.tokenizeRichText(value)
+            XCTAssertFalse(tokens.contains { $0.kind == .url }, value)
+            XCTAssertEqual(tokens.map(\.value).joined(), value, "unsafe addresses stay lossless plain text")
+        }
     }
 
     func testEmailsAndMidWordAtAreNotMentions() {
@@ -121,17 +154,22 @@ final class CommentsTests: XCTestCase {
         }
     }
 
-    func testShortenUrlDropsSchemeAndWwwAndEllipsizesTheEnd() {
-        XCTAssertEqual(RichText.shortenUrl("https://www.example.com/"), "example.com")
+    func testShortenUrlKeepsTheParsedHostAndEllipsizesOnlyTheSuffix() {
+        XCTAssertEqual(RichText.shortenUrl("https://www.example.com/"), "www.example.com")
         XCTAssertEqual(RichText.shortenUrl("http://x.com/joelw"), "x.com/joelw")
         let long = RichText.shortenUrl("https://floridapolitics.com/archives/123456/long-story")
         XCTAssertEqual(long.unicodeScalars.count, 28)
         XCTAssertTrue(long.hasSuffix("…"))
         XCTAssertTrue(long.hasPrefix("floridapolitics.com/archive"))
-        XCTAssertEqual(RichText.shortenUrl("x.com/abcdefghij", max: 5), "x.co…")
-        XCTAssertEqual(RichText.shortenUrl("abc", max: 0), "…")
+        XCTAssertEqual(RichText.shortenUrl("x.com/abcdefghij", max: 5), "x.com")
+        XCTAssertEqual(RichText.shortenUrl("abc", max: 0), "abc")
         XCTAssertEqual(RichText.shortenUrl("", max: 10), "")
         XCTAssertLessThanOrEqual(RichText.shortenUrl("https://a.com/🚀🚀🚀🚀", max: 9).unicodeScalars.count, 9)
+    }
+
+    func testShortenUrlKeepsTheFullParsedHostWhenItExceedsTheDisplayLimit() {
+        XCTAssertEqual(RichText.shortenUrl("https://service.example.attacker.test/a/long/path", max: 12),
+                       "service.example.attacker.test")
     }
 
     func testAttributedStringLinksShortenedTextToTheFullAddress() throws {
@@ -147,18 +185,29 @@ final class CommentsTests: XCTestCase {
         XCTAssertTrue(evil.runs.allSatisfy { $0.link == nil })
         let cut = RichText.attributedString("https://floridapolitics.com/archives/123456/long", maxUrlLength: 12)
         let run = try XCTUnwrap(cut.runs.first)
-        XCTAssertEqual(String(cut[run.range].characters), "floridapoli…")
+        XCTAssertEqual(String(cut[run.range].characters), "floridapolitics.com")
         XCTAssertEqual(run.link?.absoluteString, "https://floridapolitics.com/archives/123456/long")
     }
 
     // MARK: LinkPreview
 
-    func testDisplayDomainReturnsTheHostWithoutWww() {
-        XCTAssertEqual(LinkPreview.displayDomain("https://www.floridapolitics.com/a/b"), "floridapolitics.com")
+    func testDisplayDomainReturnsTheExactParsedHost() {
+        XCTAssertEqual(LinkPreview.displayDomain("https://www.floridapolitics.com/a/b"), "www.floridapolitics.com")
         XCTAssertEqual(LinkPreview.displayDomain("http://x.com"), "x.com")
         XCTAssertEqual(LinkPreview.displayDomain("not a url"), "")
         XCTAssertEqual(LinkPreview.displayDomain("javascript:alert(1)"), "")
         XCTAssertEqual(LinkPreview.displayDomain(""), "")
+    }
+
+    func testDisplayDomainRejectsCredentialAddressesAndRetainsSubdomains() {
+        XCTAssertEqual(LinkPreview.displayDomain("https://media.example.com/article"), "media.example.com")
+        XCTAssertEqual(LinkPreview.displayDomain("https://user:secret@example.com/article"), "")
+    }
+
+    func testLinkPreviewKeepsDestinationHostBesideOptionalBranding() {
+        XCTAssertEqual(LinkPreview.siteLabel(url: "https://media.example.com/article", siteName: "Daily Journal"),
+                       "media.example.com · Daily Journal")
+        XCTAssertEqual(LinkPreview.siteLabel(url: "https://media.example.com/article", siteName: nil), "media.example.com")
     }
 
     // MARK: NewItemsPill
@@ -260,6 +309,28 @@ final class CommentsTests: XCTestCase {
         XCTAssertEqual(loop.count, 2)
         XCTAssertEqual(CommentTree.countDescendants(loop[0]) + CommentTree.countDescendants(loop[1]) + loop.count, 3)
         XCTAssertEqual(CommentTree.buildCommentTree(flat: [Item("k", parent: "k")]).count, 1)
+
+        let orderedCycle = CommentTree.buildCommentTree(flat: [Item("a", parent: "b"), Item("b", parent: "c"), Item("c", parent: "a")])
+        XCTAssertEqual(orderedCycle.map(\.id), ["c"])
+        XCTAssertEqual(orderedCycle[0].children.map(\.id), ["b"])
+        XCTAssertEqual(orderedCycle[0].children[0].children.map(\.id), ["a"])
+    }
+
+    func testBuildCommentTreeHandlesLongChainsWithoutRecursiveConstruction() {
+        let count = 10_000
+        let flat = (0..<count).map { index in
+            Item(String(index), parent: index == 0 ? nil : String(index - 1))
+        }
+        let roots = CommentTree.buildCommentTree(flat: flat)
+        XCTAssertEqual(roots.map(\.id), ["0"])
+
+        var node = roots[0]
+        var visited = 1
+        while let child = node.children.first {
+            node = child
+            visited += 1
+        }
+        XCTAssertEqual(visited, count)
     }
 
     func testBuildCommentTreeCarriesHostFieldsThrough() {
@@ -302,6 +373,27 @@ final class CommentsTests: XCTestCase {
             CommentNode(item: Item("e")),
         ]
         XCTAssertEqual(CommentTree.flattenReplies(tree).map(\.id), ["b", "c", "d", "e"])
+    }
+
+    func testFlattenRepliesHandlesDeepTreesWithoutRecursion() {
+        let count = 20_000
+        let nodes = (0..<count).map(DeepCommentNode.init)
+        for index in 0..<(count - 1) { nodes[index].next = nodes[index + 1] }
+
+        let flattened = CommentTree.flattenReplies([nodes[0]])
+        XCTAssertEqual(flattened.count, count)
+        XCTAssertEqual(flattened.first?.id, 0)
+        XCTAssertEqual(flattened.last?.id, count - 1)
+    }
+
+    func testLevelEntriesFlattenAtTheDepthCapAndStopPastIt() {
+        let children = [CommentNode(item: Item("b"), children: [CommentNode(item: Item("c"))])]
+        typealias Thread = CommentThread<CommentNode<Item>, EmptyView>
+
+        XCTAssertEqual(Thread.levelEntries(children, level: 3, maxDepth: 3).map(\.id), ["b", "c"])
+        XCTAssertTrue(Thread.levelEntries(children, level: 4, maxDepth: 3).isEmpty)
+        XCTAssertEqual(Thread.levelEntries(children, level: 32, maxDepth: Int.max).map(\.id), ["b", "c"])
+        XCTAssertTrue(Thread.levelEntries(children, level: 33, maxDepth: Int.max).isEmpty)
     }
 
     // MARK: CommentComposer helpers

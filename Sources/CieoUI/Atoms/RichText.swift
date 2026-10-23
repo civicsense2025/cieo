@@ -34,9 +34,17 @@ public struct RichText: View {
     /// punctuation, and a closing parenthesis only when it has no opening partner in the address.
     public static func trimUrl(_ raw: String) -> (url: String, rest: String) {
         var chars = Array(raw)
+        var unmatchedClosers = 0
+        for char in chars {
+            if char == ")" { unmatchedClosers += 1 }
+            else if char == "(" { unmatchedClosers -= 1 }
+        }
         while let last = chars.last {
-            let closesStray = last == ")" && chars.filter { $0 == ")" }.count > chars.filter { $0 == "(" }.count
-            if trailing.contains(last) || closesStray { chars.removeLast() } else { break }
+            let closesStray = last == ")" && unmatchedClosers > 0
+            guard trailing.contains(last) || closesStray else { break }
+            chars.removeLast()
+            if last == ")" { unmatchedClosers -= 1 }
+            else if last == "(" { unmatchedClosers += 1 }
         }
         let url = String(chars)
         return (url, String(raw.dropFirst(url.count)))
@@ -109,14 +117,33 @@ public struct RichText: View {
         return out
     }
 
-    /// The display form of an address: no scheme, no "www.", no trailing slash, and the end ellipsized so
-    /// the result is at most `max` characters (counted as Unicode scalars, as the web twin does).
+    /// The display form keeps the parsed destination host intact and shortens only its path when needed.
+    /// The scheme is omitted; length is counted in Unicode scalars, as the web twin does.
     public static func shortenUrl(_ url: String?, max: Int = 28) -> String {
         var bare = (url ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let limit = Swift.max(1, max)
+        let candidate = matches(scheme, bare) ? bare : "https://" + bare
+        if let parsed = Mention.safeURL(candidate, allowRelative: false),
+           let host = parsed.host(percentEncoded: false), !host.isEmpty,
+           let components = URLComponents(url: parsed, resolvingAgainstBaseURL: false) {
+            let path = components.percentEncodedPath == "/" ? "" : components.percentEncodedPath
+            var suffix = path
+            if let query = components.percentEncodedQuery { suffix += "?" + query }
+            if let fragment = components.percentEncodedFragment { suffix += "#" + fragment }
+            let hostScalars = Array(host.unicodeScalars)
+            let suffixScalars = Array(suffix.unicodeScalars)
+            let complete = host + suffix
+            if Array(complete.unicodeScalars).count <= limit { return complete }
+            guard hostScalars.count < limit else { return host }
+            let suffixLimit = limit - hostScalars.count - 1
+            var display = String.UnicodeScalarView()
+            display.append(contentsOf: hostScalars)
+            display.append(contentsOf: suffixScalars.prefix(suffixLimit))
+            return String(display) + "…"
+        }
         if let r = bare.range(of: "^[a-z][a-z0-9+.-]*://", options: [.regularExpression, .caseInsensitive]) { bare.removeSubrange(r) }
         if let r = bare.range(of: "^www\\.", options: [.regularExpression, .caseInsensitive]) { bare.removeSubrange(r) }
         if bare.hasSuffix("/") { bare.removeLast() }
-        let limit = Swift.max(1, max)
         let scalars = Array(bare.unicodeScalars)
         if scalars.count <= limit { return bare }
         var view = String.UnicodeScalarView()

@@ -14,16 +14,16 @@ public struct AudioWaveform: View {
     private let onSeek: ((TimeInterval) -> Void)?
     @FocusState private var focused: Bool
 
-    /// `peaks` can be any length and scale; empty draws a row of ticks. `bars` fixes the bar count,
-    /// otherwise as many bars as fit the width are drawn. Without `onSeek` the waveform is a labelled
-    /// picture. `label` names what it is ("Voice note from Ana").
+    /// `peaks` can be any length and scale; empty draws a row of ticks. `bars` fixes the bar count up to
+    /// `maximumBarCount`, otherwise as many bars as fit the width are drawn. Without `onSeek` the waveform
+    /// is a labelled picture. `label` names what it is ("Voice note from Ana").
     public init(peaks: [Double], duration: TimeInterval, current: TimeInterval, label: String,
                 bars: Int? = nil, onSeek: ((TimeInterval) -> Void)? = nil) {
         self.peaks = peaks
         self.duration = duration
         self.current = current
         self.label = label
-        self.bars = bars.map { max(1, $0) }
+        self.bars = bars.map { Self.boundedBarCount(max(1, $0)) }
         self.onSeek = onSeek
     }
 
@@ -77,20 +77,31 @@ public struct AudioWaveform: View {
     static func fitCount(width: CGFloat, metrics: ComponentMetrics) -> Int {
         guard width.isFinite, width > 0 else { return 1 }
         let step = barWidth(metrics) + gap(metrics)
-        return max(1, Int(((width + gap(metrics)) / step).rounded(.down)))
+        guard step.isFinite, step > 0 else { return 1 }
+        let fitted = ((width + gap(metrics)) / step).rounded(.down)
+        guard fitted.isFinite, fitted >= 1 else { return 1 }
+        guard fitted < CGFloat(maximumBarCount) else { return maximumBarCount }
+        return max(1, Int(fitted))
     }
 
     // MARK: Pure helpers
 
     /// Shortest a bar can be, as a fraction of full height, so silence still shows a tick.
     public static let floor: Double = 0.08 // literal-ok: minimum bar share
+    /// Shared social-audio cap: the web track's 2-pixel bars and gaps fit 128 across 512 pixels.
+    /// The same cap is used when voice recordings are downsampled.
+    nonisolated public static let maximumBarCount = 128
     /// Seconds one arrow key or VoiceOver adjustment moves the playhead.
     public static let keySeconds: TimeInterval = 5 // literal-ok: step size
+
+    static func boundedBarCount(_ count: Int) -> Int {
+        count > 0 ? min(count, maximumBarCount) : 0
+    }
 
     /// Reduces peaks to `count` bars: each bar is the loudest peak in its bucket, scaled so the loudest
     /// bar is 1, never below the floor. Empty or silent input gives all floor values.
     public static func waveformBars(_ peaks: [Double], count: Int) -> [Double] {
-        let n = max(0, count)
+        let n = boundedBarCount(count)
         guard n > 0 else { return [] }
         let total = peaks.count
         guard total > 0 else { return Array(repeating: floor, count: n) }
