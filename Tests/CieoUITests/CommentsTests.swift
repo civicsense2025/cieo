@@ -357,11 +357,14 @@ final class CommentsTests: XCTestCase {
 
     func testBuildCommentTreeHandlesLongChainsWithoutRecursiveConstruction() {
         let count = 10_000
-        let flat = (0..<count).map { index in
-            Item(String(index), parent: index == 0 ? nil : String(index - 1))
+        var flat: [Item] = []
+        flat.reserveCapacity(count)
+        for index in 0..<count {
+            let parent: String? = index == 0 ? nil : String(index - 1)
+            flat.append(Item(String(index), parent: parent))
         }
-        let roots = CommentTree.buildCommentTree(flat: flat)
-        XCTAssertEqual(roots.map(\.id), ["0"])
+        let roots: [CommentNode<Item>] = CommentTree.buildCommentTree(flat: flat)
+        XCTAssertEqual(roots.map { $0.id }, ["0"])
 
         var node = roots[0]
         var visited = 1

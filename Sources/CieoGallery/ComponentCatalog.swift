@@ -26,12 +26,7 @@ struct FoundationCatalog: View {
                     case .atoms: AtomExamples()
                     case .molecules: MoleculeExamples()
                     case .patterns: PatternExamples()
-                    case .social:
-                        CommentsExamples()
-                        EngagementExamples()
-                        AudioPlaybackExamples()
-                        AudioCaptureExamples()
-                        MessagingFeedbackExamples()
+                    case .social: SocialExamples()
                     }
                 }
                 .padding(16)
@@ -59,6 +54,17 @@ struct FoundationCatalog: View {
             }
         }
         .renderingPreferences(effectsEnabled: effects, motionDisabled: reduceMotion)
+    }
+}
+
+/// The social, audio and engagement pieces, grouped so the catalog body stays small to type-check.
+private struct SocialExamples: View {
+    var body: some View {
+        CommentsExamples()
+        EngagementExamples()
+        AudioPlaybackExamples()
+        AudioCaptureExamples()
+        MessagingFeedbackExamples()
     }
 }
 
