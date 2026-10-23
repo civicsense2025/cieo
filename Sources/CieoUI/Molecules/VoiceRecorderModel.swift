@@ -2,6 +2,27 @@ import AVFoundation
 import Foundation
 import Observation
 
+struct VoiceRecorderFinishReceipt: Sendable {
+    let successfully: Bool
+    let finishedAt: TimeInterval
+}
+
+private final class VoiceRecorderFinishReceiptStore: @unchecked Sendable {
+    private let lock = NSLock()
+    private var pending: VoiceRecorderFinishReceipt?
+
+    func store(_ receipt: VoiceRecorderFinishReceipt) {
+        lock.lock(); defer { lock.unlock() }
+        if pending == nil { pending = receipt }
+    }
+
+    func take() -> VoiceRecorderFinishReceipt? {
+        lock.lock(); defer { lock.unlock() }
+        defer { pending = nil }
+        return pending
+    }
+}
+
 @MainActor
 protocol VoiceRecorderDevice: AnyObject {
     var isRecording: Bool { get }
@@ -11,6 +32,8 @@ protocol VoiceRecorderDevice: AnyObject {
     var onEncodingError: (@MainActor () -> Void)? { get set }
     /// Called when the device stops by itself, with the monotonic time of its delegate event.
     var onFinished: (@MainActor (Bool, TimeInterval) -> Void)? { get set }
+    /// One-shot receipt captured by the nonisolated delegate before its MainActor delivery is queued.
+    nonisolated func takePendingFinish() -> VoiceRecorderFinishReceipt?
     func prepareToRecord() -> Bool
     /// Records for at most `seconds`; the device stops itself at the limit, with no timer needed.
     func record(forDuration seconds: TimeInterval) -> Bool
@@ -24,6 +47,7 @@ typealias VoiceRecorderFactory = @MainActor (URL, [String: Any]) throws -> any V
 @MainActor
 private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AVAudioRecorderDelegate {
     private let recorder: AVAudioRecorder
+    nonisolated private let finishReceipts = VoiceRecorderFinishReceiptStore()
     var onEncodingError: (@MainActor () -> Void)?
     var onFinished: (@MainActor (Bool, TimeInterval) -> Void)?
 
@@ -46,6 +70,7 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
     func pause() { recorder.pause() }
     func stop() { recorder.stop() }
     func updateMeters() { recorder.updateMeters() }
+    nonisolated func takePendingFinish() -> VoiceRecorderFinishReceipt? { finishReceipts.take() }
 
     nonisolated func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         let recorderID = ObjectIdentifier(recorder)
@@ -57,10 +82,11 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
 
     nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         let recorderID = ObjectIdentifier(recorder)
-        let finishedAt = ProcessInfo.processInfo.systemUptime
+        finishReceipts.store(VoiceRecorderFinishReceipt(successfully: flag, finishedAt: ProcessInfo.processInfo.systemUptime))
         Task { @MainActor [weak self] in
-            guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
-            self.onFinished?(flag, finishedAt)
+            guard let self, ObjectIdentifier(self.recorder) == recorderID,
+                  let receipt = self.takePendingFinish() else { return }
+            self.onFinished?(receipt.successfully, receipt.finishedAt)
         }
     }
 }
@@ -553,8 +579,10 @@ public final class VoiceRecorderModel {
             }
             recorder.onFinished = { [weak self, weak recorder] successfully, finishedAt in
                 guard let self, let recorder, self.recorder === recorder else { return }
-                if successfully, self.hasReachedLimit(at: finishedAt) { self.finish(.limit) }
-                else { self.fail() }
+                self.handleRecorderFinish(
+                    VoiceRecorderFinishReceipt(successfully: successfully, finishedAt: finishedAt),
+                    from: recorder
+                )
             }
             guard recorder.prepareToRecord() else { throw CocoaError(.fileWriteUnknown) }
             let startedAt = monotonicNow()
@@ -595,13 +623,23 @@ public final class VoiceRecorderModel {
         return abs(time - activeDeadline) <= Self.limitTolerance(for: activeSegmentDuration)
     }
 
+    private func handleRecorderFinish(_ receipt: VoiceRecorderFinishReceipt, from recorder: any VoiceRecorderDevice) {
+        guard self.recorder === recorder else { return }
+        if receipt.successfully, hasReachedLimit(at: receipt.finishedAt) { finish(.limit) }
+        else { fail() }
+    }
+
     private func awaitStoppedRecorderCompletion() {
         guard state.phase == .recording || state.phase == .paused,
               stopConfirmationTimer == nil else { return }
         timer?.invalidate()
         timer = nil
         let confirmationTimer = Timer(timeInterval: Self.stoppedRecorderDelegateGrace, repeats: false) { [weak self] _ in
-            MainActor.assumeIsolated { self?.fail() }
+            MainActor.assumeIsolated {
+                guard let self, let recorder = self.recorder else { return }
+                guard let receipt = recorder.takePendingFinish() else { self.fail(); return }
+                self.handleRecorderFinish(receipt, from: recorder)
+            }
         }
         RunLoop.main.add(confirmationTimer, forMode: .common)
         stopConfirmationTimer = confirmationTimer
@@ -661,9 +699,9 @@ public final class VoiceRecorderModel {
         announce(.failed)
     }
 
-    /// Discards an active take when the audio session is interrupted; an interruption is never a natural limit.
+    /// Discards an interrupted recording; an already-paused take remains available for normal resume or cancel.
     func handleInterruptionBegan() {
-        guard state.phase == .recording || state.phase == .paused else { return }
+        guard state.phase == .recording else { return }
         fail()
     }
 
@@ -679,7 +717,7 @@ public final class VoiceRecorderModel {
     }
 
     #if os(iOS)
-    /// An interruption can stop AVAudioRecorder without a finish callback, so discard the take immediately.
+    /// An interruption during recording discards the take; an already-paused take remains resumable.
     private func observeInterruptions() {
         guard interruption == nil else { return }
         interruption = NotificationCenter.default.addObserver(
