@@ -196,6 +196,7 @@ final class AudioCaptureTests: XCTestCase {
         XCTAssertTrue(AudioLevelMeter.levelBars(.nan, count: 3).allSatisfy { $0 == 0.1 })
         XCTAssertEqual(AudioLevelMeter.levelBars(0.5, count: 0), [])
         XCTAssertEqual(AudioLevelMeter.levelBars(1, count: 1), [1])
+        XCTAssertEqual(AudioLevelMeter.levelBars(1, count: 1_000_000).count, 32, "the public helper has the same bounded bar count as the view")
     }
 
     // MARK: Recorder state machine
@@ -337,6 +338,13 @@ final class AudioCaptureTests: XCTestCase {
 
         recorder.simulateUnexpectedStop()
         model.poll()
+
+        XCTAssertEqual(model.state.phase, .recording, "the delegate confirmation window preserves the take briefly")
+        let timeout = Date().addingTimeInterval(1)
+        while model.state.phase != .error && Date() < timeout {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
         XCTAssertEqual(model.state.phase, .error)
         XCTAssertEqual(model.state.reason, .failed) // elapsed depends on runner speed, so it is not pinned
         XCTAssertEqual(recorder.stopCount, 1)
@@ -582,7 +590,38 @@ final class AudioCaptureTests: XCTestCase {
     }
 
     @MainActor
-    func testPollAtDeadlineFinalizesLimitBeforeTheDelegateCallback() async throws {
+    func testPollAtDeviceLimitFinishesWhileRecorderIsStillRecording() async throws {
+        var device: FakeVoiceRecorder?
+        let sessions = FakeCaptureSessionManager()
+        let model = Recorder(maxDuration: 30, permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions)
+        var clips: [Recorder.Clip] = []
+        model.onRecorded = { clips.append($0) }
+        model.start()
+        try await Task.sleep(for: .milliseconds(30))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        recorder.currentTime = 30
+        XCTAssertTrue(recorder.isRecording)
+
+        model.poll()
+
+        XCTAssertEqual(model.state.phase, .done)
+        XCTAssertEqual(clips.count, 1)
+        XCTAssertEqual(clips.first?.duration, 30)
+        XCTAssertNil(sessions.activeOwner)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        try? FileManager.default.removeItem(at: url)
+        model.teardown()
+    }
+
+    @MainActor
+    func testPollAtDeadlineWaitsForDelegateBeforeFinishingLimit() async throws {
         var device: FakeVoiceRecorder?
         let clock = ManualRecorderClock(50)
         let sessions = FakeCaptureSessionManager()
@@ -605,6 +644,13 @@ final class AudioCaptureTests: XCTestCase {
 
         model.poll()
 
+        XCTAssertEqual(model.state.phase, .recording)
+        XCTAssertTrue(clips.isEmpty)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        XCTAssertNotNil(sessions.activeOwner)
+
+        recorder.emitFinished(successfully: true, at: 80)
+
         XCTAssertEqual(model.state.phase, .done)
         XCTAssertEqual(clips.count, 1)
         XCTAssertEqual(clips.first?.duration, 30)
@@ -612,6 +658,46 @@ final class AudioCaptureTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: url.path), "the handed-off limit clip remains host-owned")
         recorder.emitLateFinish(successfully: true, at: clock.now())
         XCTAssertEqual(clips.count, 1, "the later delegate callback cannot emit a second clip")
+        try? FileManager.default.removeItem(at: url)
+        model.teardown()
+    }
+
+    @MainActor
+    func testLatePollUsesNaturalLimitTimestampFromDelegate() async throws {
+        var device: FakeVoiceRecorder?
+        let clock = ManualRecorderClock(50)
+        let sessions = FakeCaptureSessionManager()
+        let model = Recorder(maxDuration: 30, permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions, monotonicNow: { clock.now() })
+        var clips: [Recorder.Clip] = []
+        model.onRecorded = { clips.append($0) }
+        model.start()
+        try await Task.sleep(for: .milliseconds(30))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        clock.advance(by: 30.25)
+        recorder.currentTime = 0
+        recorder.simulateUnexpectedStop()
+
+        model.poll()
+
+        XCTAssertEqual(model.state.phase, .recording)
+        XCTAssertTrue(clips.isEmpty)
+
+        recorder.emitFinished(successfully: true, at: 80)
+
+        XCTAssertEqual(model.state.phase, .done)
+        XCTAssertEqual(clips.count, 1)
+        XCTAssertEqual(clips.first?.duration, 30)
+        XCTAssertNil(sessions.activeOwner)
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        recorder.emitLateFinish(successfully: true, at: 80)
+        XCTAssertEqual(clips.count, 1)
         try? FileManager.default.removeItem(at: url)
         model.teardown()
     }
@@ -640,12 +726,132 @@ final class AudioCaptureTests: XCTestCase {
         clock.advance(by: 21) // The first poll is delayed until well after the early stop.
 
         model.poll()
+        model.poll()
+        model.poll()
+
+        XCTAssertEqual(model.state.phase, .recording, "the stopped take stays active during the delegate confirmation window")
+        XCTAssertTrue(FileManager.default.fileExists(atPath: url.path))
+        XCTAssertNotNil(sessions.activeOwner)
+
+        let timeout = Date().addingTimeInterval(1)
+        while model.state.phase != .error && Date() < timeout {
+            try await Task.sleep(for: .milliseconds(10))
+        }
 
         XCTAssertEqual(model.state.phase, .error)
         XCTAssertEqual(model.state.reason, .failed)
         XCTAssertTrue(clips.isEmpty)
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
         XCTAssertNil(sessions.activeOwner)
+        XCTAssertEqual(recorder.stopCount, 1)
+        let failureAnnouncement = try XCTUnwrap(model.announcement)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssertEqual(model.announcement, failureAnnouncement, "the expired confirmation cannot fail or announce twice")
+        XCTAssertEqual(recorder.stopCount, 1)
+        model.teardown()
+    }
+
+    @MainActor
+    func testTeardownCancelsPendingStoppedRecorderConfirmation() async throws {
+        var device: FakeVoiceRecorder?
+        let sessions = FakeCaptureSessionManager()
+        let model = Recorder(permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions)
+        var clips: [Recorder.Clip] = []
+        model.onRecorded = { clips.append($0) }
+        model.start()
+        try await Task.sleep(for: .milliseconds(30))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        recorder.currentTime = 10
+        recorder.simulateUnexpectedStop()
+
+        model.poll()
+        XCTAssertEqual(model.state.phase, .recording)
+        model.teardown()
+
+        let tornDownState = model.state
+        let tornDownAnnouncement = model.announcement
+        XCTAssertEqual(tornDownState, Recorder.idle)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
+        XCTAssertNil(sessions.activeOwner)
+        try await Task.sleep(for: .milliseconds(350))
+        XCTAssertEqual(model.state, tornDownState)
+        XCTAssertEqual(model.announcement, tornDownAnnouncement)
+        XCTAssertTrue(clips.isEmpty)
+        XCTAssertEqual(recorder.stopCount, 1)
+    }
+
+    @MainActor
+    func testPauseOnStoppedRecorderWaitsForNaturalLimitDelegate() async throws {
+        var device: FakeVoiceRecorder?
+        let clock = ManualRecorderClock(50)
+        let sessions = FakeCaptureSessionManager()
+        let model = Recorder(maxDuration: 30, permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions, monotonicNow: { clock.now() })
+        var clips: [Recorder.Clip] = []
+        model.onRecorded = { clips.append($0) }
+        model.start()
+        try await Task.sleep(for: .milliseconds(30))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        recorder.currentTime = 29.95
+        clock.advance(by: 29.95)
+        recorder.simulateUnexpectedStop()
+
+        model.togglePause()
+
+        XCTAssertEqual(model.state.phase, .recording)
+        XCTAssertTrue(clips.isEmpty)
+        recorder.emitFinished(successfully: true, at: 80)
+        XCTAssertEqual(model.state.phase, .done)
+        XCTAssertEqual(clips.count, 1)
+        XCTAssertEqual(clips.first?.duration, 30)
+        XCTAssertNil(sessions.activeOwner)
+        try? FileManager.default.removeItem(at: url)
+        model.teardown()
+    }
+
+    @MainActor
+    func testInterruptionNearDeadlineFailsAndDeletesStoppedTake() async throws {
+        var device: FakeVoiceRecorder?
+        let clock = ManualRecorderClock(50)
+        let sessions = FakeCaptureSessionManager()
+        let model = Recorder(maxDuration: 30, permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions, monotonicNow: { clock.now() })
+        var clips: [Recorder.Clip] = []
+        model.onRecorded = { clips.append($0) }
+        model.start()
+        try await Task.sleep(for: .milliseconds(30))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        recorder.currentTime = 29.95
+        clock.advance(by: 29.95)
+        recorder.simulateUnexpectedStop()
+
+        model.handleInterruptionBegan()
+
+        XCTAssertEqual(model.state.phase, .error)
+        XCTAssertEqual(model.state.reason, .failed)
+        XCTAssertTrue(clips.isEmpty)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
+        XCTAssertNil(sessions.activeOwner)
+        XCTAssertEqual(recorder.stopCount, 1)
         model.teardown()
     }
 
@@ -671,6 +877,9 @@ final class AudioCaptureTests: XCTestCase {
         recorder.simulateUnexpectedStop()
 
         model.stop()
+        XCTAssertEqual(model.state.phase, .recording)
+        XCTAssertTrue(clips.isEmpty)
+        recorder.emitFinished(successfully: true, at: 80)
 
         XCTAssertEqual(model.state.phase, .done)
         XCTAssertEqual(clips.count, 1)

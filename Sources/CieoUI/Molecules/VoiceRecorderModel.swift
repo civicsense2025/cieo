@@ -69,18 +69,20 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
 private struct VoiceRecorderCleanupSnapshot: @unchecked Sendable {
     let recorder: (any VoiceRecorderDevice)?
     let timer: Timer?
+    let stopConfirmationTimer: Timer?
     let fileURL: URL?
     let sessionOwner: UUID?
     let interruption: NSObjectProtocol?
     let audioSession: AudioSessionManaging
 
     var hasResources: Bool {
-        recorder != nil || timer != nil || fileURL != nil || sessionOwner != nil || interruption != nil
+        recorder != nil || timer != nil || stopConfirmationTimer != nil || fileURL != nil || sessionOwner != nil || interruption != nil
     }
 
     @MainActor
     func clean(deleteFile: Bool) {
         timer?.invalidate()
+        stopConfirmationTimer?.invalidate()
         if let recorder {
             recorder.onEncodingError = nil
             recorder.onFinished = nil
@@ -100,6 +102,7 @@ private final class VoiceRecorderCleanupState: @unchecked Sendable {
     private let audioSession: AudioSessionManaging
     private var storedRecorder: (any VoiceRecorderDevice)?
     private var storedTimer: Timer?
+    private var storedStopConfirmationTimer: Timer?
     private var storedFileURL: URL?
     private var storedSessionOwner: UUID?
     private var storedInterruption: NSObjectProtocol?
@@ -114,6 +117,11 @@ private final class VoiceRecorderCleanupState: @unchecked Sendable {
     @MainActor var timer: Timer? {
         get { lock.lock(); defer { lock.unlock() }; return storedTimer }
         set { lock.lock(); defer { lock.unlock() }; storedTimer = newValue }
+    }
+
+    @MainActor var stopConfirmationTimer: Timer? {
+        get { lock.lock(); defer { lock.unlock() }; return storedStopConfirmationTimer }
+        set { lock.lock(); defer { lock.unlock() }; storedStopConfirmationTimer = newValue }
     }
 
     @MainActor var fileURL: URL? {
@@ -136,6 +144,7 @@ private final class VoiceRecorderCleanupState: @unchecked Sendable {
         let snapshot = VoiceRecorderCleanupSnapshot(
             recorder: storedRecorder,
             timer: storedTimer,
+            stopConfirmationTimer: storedStopConfirmationTimer,
             fileURL: storedFileURL,
             sessionOwner: storedSessionOwner,
             interruption: storedInterruption,
@@ -143,6 +152,7 @@ private final class VoiceRecorderCleanupState: @unchecked Sendable {
         )
         storedRecorder = nil
         storedTimer = nil
+        storedStopConfirmationTimer = nil
         storedFileURL = nil
         storedSessionOwner = nil
         storedInterruption = nil
@@ -244,6 +254,7 @@ public final class VoiceRecorderModel {
 
     private static let limitCompletionTolerance: TimeInterval = 0.1 // literal-ok: bound delegate and timer ordering jitter at the requested endpoint
     private static let limitCompletionToleranceFraction: TimeInterval = 0.1 // literal-ok: scale the tolerance down for short recording segments
+    private static let stoppedRecorderDelegateGrace: TimeInterval = 0.25 // literal-ok: bounded time for AVAudioRecorder's queued finish callback to reach MainActor
 
     @ObservationIgnored private let permission: PermissionRequest
     @ObservationIgnored private let recorderFactory: VoiceRecorderFactory
@@ -272,6 +283,10 @@ public final class VoiceRecorderModel {
     private var timer: Timer? {
         get { cleanupState.timer }
         set { cleanupState.timer = newValue }
+    }
+    private var stopConfirmationTimer: Timer? {
+        get { cleanupState.stopConfirmationTimer }
+        set { cleanupState.stopConfirmationTimer = newValue }
     }
     private var interruption: NSObjectProtocol? {
         get { cleanupState.interruption }
@@ -446,7 +461,7 @@ public final class VoiceRecorderModel {
         guard let recorder else { return }
         switch state.phase {
         case .recording:
-            guard recorder.isRecording else { finishStoppedRecorder(); return }
+            guard recorder.isRecording else { awaitStoppedRecorderCompletion(); return }
             recorder.pause()
             let remaining = remainingTake(recorder)
             guard remaining.isFinite else { fail(); return }
@@ -477,7 +492,7 @@ public final class VoiceRecorderModel {
     /// Finishes the take and hands the clip to `onRecorded`.
     public func stop() {
         if state.phase == .recording, let recorder, !recorder.isRecording {
-            finishStoppedRecorder()
+            awaitStoppedRecorderCompletion()
         } else {
             finish(.stop)
         }
@@ -580,9 +595,16 @@ public final class VoiceRecorderModel {
         return abs(time - activeDeadline) <= Self.limitTolerance(for: activeSegmentDuration)
     }
 
-    private func finishStoppedRecorder() {
-        if hasReachedLimit(at: monotonicNow()) { finish(.limit) }
-        else { fail() }
+    private func awaitStoppedRecorderCompletion() {
+        guard state.phase == .recording || state.phase == .paused,
+              stopConfirmationTimer == nil else { return }
+        timer?.invalidate()
+        timer = nil
+        let confirmationTimer = Timer(timeInterval: Self.stoppedRecorderDelegateGrace, repeats: false) { [weak self] _ in
+            MainActor.assumeIsolated { self?.fail() }
+        }
+        RunLoop.main.add(confirmationTimer, forMode: .common)
+        stopConfirmationTimer = confirmationTimer
     }
 
     private static func limitTolerance(for segmentDuration: TimeInterval) -> TimeInterval {
@@ -601,7 +623,7 @@ public final class VoiceRecorderModel {
     func poll() {
         guard let recorder else { return }
         guard recorder.isRecording else {
-            if state.phase == .recording { finishStoppedRecorder() }
+            if state.phase == .recording { awaitStoppedRecorderCompletion() }
             return
         }
         recorder.updateMeters()
@@ -639,6 +661,12 @@ public final class VoiceRecorderModel {
         announce(.failed)
     }
 
+    /// Discards an active take when the audio session is interrupted; an interruption is never a natural limit.
+    func handleInterruptionBegan() {
+        guard state.phase == .recording || state.phase == .paused else { return }
+        fail()
+    }
+
     /// Stops the timer and recorder and deactivates the audio session; optionally deletes the file.
     private func releaseRecorder(deleteFile: Bool) {
         session += 1
@@ -651,7 +679,7 @@ public final class VoiceRecorderModel {
     }
 
     #if os(iOS)
-    /// A phone call or alarm pauses the take instead of silently ending it.
+    /// An interruption can stop AVAudioRecorder without a finish callback, so discard the take immediately.
     private func observeInterruptions() {
         guard interruption == nil else { return }
         interruption = NotificationCenter.default.addObserver(
@@ -659,7 +687,7 @@ public final class VoiceRecorderModel {
         ) { [weak self] note in
             let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
             MainActor.assumeIsolated {
-                if raw == AVAudioSession.InterruptionType.began.rawValue, self?.state.phase == .recording { self?.togglePause() }
+                if raw == AVAudioSession.InterruptionType.began.rawValue { self?.handleInterruptionBegan() }
             }
         }
     }
