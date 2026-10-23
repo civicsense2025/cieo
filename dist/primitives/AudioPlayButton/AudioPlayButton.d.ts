@@ -1,5 +1,9 @@
-/** Accessible name for the button: "Play Voice note" or "Pause Voice note". */
-export declare function audioPlayButtonName(playing: boolean, label: string): string;
+/** Accessible name for the button: "Play Voice note" or "Pause Voice note". Hosts in other languages
+ *  pass their own verbs; the clip's name always follows them. */
+export declare function audioPlayButtonName(playing: boolean, label: string, verbs?: {
+    play?: string;
+    pause?: string;
+}): string;
 export interface AudioPlayButtonProps {
     /** True while the clip plays; the button then offers Pause. */
     playing: boolean;
@@ -11,5 +15,9 @@ export interface AudioPlayButtonProps {
     onToggle: () => void;
     /** Button size. Defaults to md. */
     size?: 'sm' | 'md' | 'lg';
+    /** The verb read before `label` while paused, in the host's language. Defaults to "Play". */
+    playLabel?: string;
+    /** The verb read before `label` while playing, in the host's language. Defaults to "Pause". */
+    pauseLabel?: string;
 }
-export declare function AudioPlayButton({ playing, loading, label, onToggle, size }: AudioPlayButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function AudioPlayButton({ playing, loading, label, onToggle, size, playLabel, pauseLabel }: AudioPlayButtonProps): import("react/jsx-runtime").JSX.Element;
