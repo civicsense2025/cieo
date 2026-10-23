@@ -20,7 +20,7 @@ def build(out: pathlib.Path):
 
 def install_audio_fakes(page, scenario='normal', hold_stop=False):
     page.evaluate('''({ scenario, holdStop }) => {
-      const state = { scenario, holdStop, contexts: [], recorders: [], tracks: [], streams: [], requests: 0, resolvePermissions: [], pendingStops: 0, order: [], reads: 0, errorHandlers: [] };
+      const state = { scenario, holdStop, contexts: [], sources: [], recorders: [], tracks: [], streams: [], requests: 0, resolvePermissions: [], pendingStops: 0, order: [], reads: 0, errorHandlers: [] };
       class Track {
         constructor() { this.readyState = 'live'; this.stopCalls = 0; this.listeners = new Map(); }
         addEventListener(type, fn) { const set = this.listeners.get(type) || new Set(); set.add(fn); this.listeners.set(type, set); }
@@ -43,9 +43,11 @@ def install_audio_fakes(page, scenario='normal', hold_stop=False):
         }
         createMediaStreamSource() {
           if (scenario === 'meter-source-throws') throw new Error('source setup failed');
-          return { connect() {}, disconnect() {} };
+          const source = { disconnectCalls: 0, connect() {}, disconnect() { this.disconnectCalls++; } };
+          state.sources.push(source);
+          return source;
         }
-        resume() { return Promise.resolve(); }
+        resume() { if (scenario === 'meter-resume-throws') throw new Error('resume failed'); return Promise.resolve(); }
         close() { this.closeCalls++; this.state = 'closed'; return Promise.resolve(); }
       }
       class FakeMediaRecorder {
@@ -602,25 +604,45 @@ def run_mode(browser, port, mode):
     check('audio-player-source-reset', audio_player_source_reset)
 
     def meter_setup_failure():
-        install_audio_fakes(page, 'meter-source-throws')
-        page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
-        closed = until(lambda: page.evaluate('() => window.__audioFake.contexts.length === 1 && window.__audioFake.contexts[0].closeCalls === 1'))
-        track_owned = page.evaluate('() => window.__audioFake.tracks[0].stopCalls === 0')
-        page.evaluate('() => window.hooks.resetMeterLifecycle()')
-        return closed and track_owned
+        results = []
+        for scenario in ['meter-source-throws', 'meter-analyser-throws']:
+            install_audio_fakes(page, scenario)
+            page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
+            closed = until(lambda: page.evaluate('() => window.__audioFake.contexts.length === 1 && window.__audioFake.contexts[0].closeCalls === 1'))
+            track_owned = page.evaluate('() => window.__audioFake.tracks[0].stopCalls === 0')
+            results.append(closed and track_owned)
+            page.evaluate('() => window.hooks.resetMeterLifecycle()')
+        return all(results)
     check('audio-meter-setup-failure', meter_setup_failure)
+
+    def meter_resume_failure():
+        install_audio_fakes(page, 'meter-resume-throws')
+        page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
+        closed = until(lambda: page.evaluate('() => window.__audioFake.contexts[0]?.closeCalls === 1'))
+        resources = page.evaluate('() => ({ sourceDisconnects: window.__audioFake.sources[0]?.disconnectCalls ?? 0, trackStops: window.__audioFake.tracks[0].stopCalls })')
+        page.evaluate('() => window.hooks.resetMeterLifecycle()')
+        result = closed and resources == {'sourceDisconnects': 1, 'trackStops': 0}
+        if not result:
+            notes['audio-meter-resume-failure'] = json.dumps({'closed': closed, 'resources': resources})
+        return result
+    check('audio-meter-resume-failure', meter_resume_failure)
 
     def meter_track_end():
         install_audio_fakes(page, 'meter-track-end')
         page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
         sampled = until(lambda: page.evaluate('() => window.__audioFake.reads > 0'))
-        page.evaluate('() => window.__audioFake.tracks[0].end()')
+        # stop() changes readyState but intentionally does not dispatch `ended` per MDN.
+        page.evaluate('() => window.__audioFake.tracks[0].stop()')
+        host_stop_calls = page.evaluate('() => window.__audioFake.tracks[0].stopCalls')
         closed = until(lambda: page.evaluate('() => window.__audioFake.contexts[0].closeCalls === 1'))
         reads = page.evaluate('() => window.__audioFake.reads')
         page.wait_for_timeout(100)
-        stopped = page.evaluate('(before) => window.__audioFake.reads === before && window.__audioFake.tracks[0].stopCalls === 0', reads)
+        state = page.evaluate('(before) => ({ readsUnchanged: window.__audioFake.reads === before, trackStopCalls: window.__audioFake.tracks[0].stopCalls, sourceDisconnects: window.__audioFake.sources[0]?.disconnectCalls ?? 0 })', reads)
         page.evaluate('() => window.hooks.resetMeterLifecycle()')
-        return sampled and closed and stopped
+        result = sampled and closed and state == {'readsUnchanged': True, 'trackStopCalls': host_stop_calls, 'sourceDisconnects': 1}
+        if not result:
+            notes['audio-meter-stops-after-track-end'] = json.dumps({'sampled': sampled, 'closed': closed, 'state': state})
+        return result
     check('audio-meter-stops-after-track-end', meter_track_end)
 
     def recorder_error_failclose():

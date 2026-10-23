@@ -69,42 +69,7 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
         let source = null;
         let analyser;
         let tracks = [];
-        try {
-            tracks = stream.getAudioTracks();
-            if (tracks.length === 0 || tracks.every((track) => track.readyState === 'ended'))
-                throw new Error('stream has no live audio tracks');
-            source = ctx.createMediaStreamSource(stream);
-            analyser = ctx.createAnalyser();
-            analyser.fftSize = 1024;
-            source.connect(analyser);
-        }
-        catch {
-            try {
-                source?.disconnect();
-            }
-            catch {
-                /* setup was incomplete */
-            }
-            try {
-                void ctx.close().catch(() => { });
-            }
-            catch {
-                /* context already closed */
-            }
-            return;
-        }
-        void ctx.resume?.().catch(() => { });
-        const buffer = new Float32Array(analyser.fftSize);
-        let raf = 0;
-        let lastAt = 0;
-        let last = 0;
-        let stopped = false;
-        const stopSampling = () => {
-            if (stopped)
-                return;
-            stopped = true;
-            cancelAnimationFrame(raf);
-            tracks.forEach((track) => track.removeEventListener('ended', onTrackEnded));
+        const releaseAudioGraph = () => {
             try {
                 source?.disconnect();
             }
@@ -117,6 +82,39 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
             catch {
                 /* context already closed */
             }
+        };
+        try {
+            tracks = stream.getAudioTracks();
+            if (tracks.length === 0 || tracks.every((track) => track.readyState === 'ended'))
+                throw new Error('stream has no live audio tracks');
+            source = ctx.createMediaStreamSource(stream);
+            analyser = ctx.createAnalyser();
+            analyser.fftSize = 1024;
+            source.connect(analyser);
+        }
+        catch {
+            releaseAudioGraph();
+            return;
+        }
+        try {
+            void ctx.resume?.().catch(() => { });
+        }
+        catch {
+            releaseAudioGraph();
+            return;
+        }
+        const buffer = new Float32Array(analyser.fftSize);
+        let raf = 0;
+        let lastAt = 0;
+        let last = 0;
+        let stopped = false;
+        const stopSampling = () => {
+            if (stopped)
+                return;
+            stopped = true;
+            cancelAnimationFrame(raf);
+            tracks.forEach((track) => track.removeEventListener('ended', onTrackEnded));
+            releaseAudioGraph();
             setHeard(0);
         };
         const onTrackEnded = () => {
@@ -131,6 +129,10 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
         const loop = (t) => {
             if (stopped)
                 return;
+            if (tracks.every((track) => track.readyState === 'ended')) {
+                stopSampling();
+                return;
+            }
             raf = requestAnimationFrame(loop);
             if (t - lastAt < 50)
                 return;
