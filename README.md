@@ -7,7 +7,7 @@ Calm, critically damped spring motion for the web (plain DOM and React) and Swif
 Web (from this private repo; pin a tag):
 
 ```bash
-npm install github:civicsense2025/cieo#v0.5.1
+npm install github:civicsense2025/cieo#v0.6.0
 ```
 
 SwiftUI: in Xcode, File → Add Package Dependencies → `https://github.com/civicsense2025/cieo`, then add `Cieo` (and `CieoAtoms` for the reference atoms).

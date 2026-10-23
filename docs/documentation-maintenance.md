@@ -4,6 +4,7 @@
 
 - [Owners and scope](#owners-and-scope)
 - [Same PR checks](#same-pr-checks)
+- [Releasing a version](#releasing-a-version)
 - [After merge and consumer upgrades](#after-merge-and-consumer-upgrades)
 - [Evidence limits](#evidence-limits)
 
@@ -43,6 +44,16 @@ New primitives change `package.json` only through the deep `./<Name>` exports th
 `npm run test:social` is a local browser gate for the social and audio primitives:
 it drives each interactive piece with and without reduced motion and fails on any
 page or console error. Run it with the unit tests when those components change.
+
+## Releasing a version
+
+A release is one PR that changes the version in `package.json`, both versions in
+`package-lock.json` and the install tag in the README, then a tag on the merged
+commit. `test/release-version.test.mjs` fails when those three disagree. Before
+tagging, run `npm run check`, `npm pack --dry-run`, `scripts/check-swift-literals.sh`
+and `swift build && swift test`, the same gates CI runs. Tag only the merged
+`origin/main` commit (`git tag -a vX.Y.Z <sha> && git push origin vX.Y.Z`); Apple
+consumers pin the tag in `Package.swift`, web consumers in `package.json`.
 
 ## After merge and consumer upgrades
 
