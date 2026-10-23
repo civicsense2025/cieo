@@ -103,7 +103,7 @@ final class FoundationTests: XCTestCase {
 final class ComponentIconTests: XCTestCase {
     func testEveryGlyphHasASystemDefault() {
         let names = ComponentIcon.allCases.map(ComponentIcons.systemName)
-        XCTAssertEqual(names.count, 10)
+        XCTAssertEqual(names.count, 33)
         XCTAssertFalse(names.contains(""))
     }
 

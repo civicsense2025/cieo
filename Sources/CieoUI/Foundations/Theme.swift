@@ -21,13 +21,19 @@ public struct Theme {
     public var danger: Color
     /// Quiet marks that must stay visible: an unwalked path, an empty dot.
     public var subtle: Color
+    // MARK: - Social and audio
+    /// Confirmed or finished states, such as a completed action or a success badge.
+    public var success: Color
+    /// A caution that is not yet an error, such as a limit that is close.
+    public var warning: Color
 
     public init(accent: Color = .accentColor, surface: Color = .primary.opacity(0.04),
                 foreground: Color = .primary, secondary: Color = .secondary,
                 border: Color = .primary.opacity(0.22), onAccent: Color = .white,
                 tint: Color? = nil, track: Color = .primary.opacity(0.12),
                 block: Color = .black, onBlock: Color = .white, onBlockSecondary: Color = .white.opacity(0.72),
-                danger: Color = .red, subtle: Color = .secondary.opacity(0.55))
+                danger: Color = .red, subtle: Color = .secondary.opacity(0.55),
+                success: Color = .green, warning: Color = .orange)
     {
         self.accent = accent
         self.surface = surface
@@ -42,6 +48,8 @@ public struct Theme {
         self.onBlockSecondary = onBlockSecondary
         self.danger = danger
         self.subtle = subtle
+        self.success = success
+        self.warning = warning
     }
 }
 

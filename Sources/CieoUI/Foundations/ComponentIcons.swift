@@ -5,6 +5,11 @@ import SwiftUI
 /// a choice's selected and unselected states.
 public enum ComponentIcon: Sendable, CaseIterable {
     case disclosure, info, check, previous, next, search, clear, error, selected, unselected
+    // MARK: - Social and audio
+    case microphone, microphoneOff, discard, pause, play, leave, handRaised
+    case verified, dismiss, link
+    case bell, bellFilled, share, star, starFilled, add, thumbUp, thumbDown
+    case sending, delivered, read, muted, pinned
 }
 
 /// Host-owned glyphs. Defaults are SF Symbols; an app with its own icon set installs it once at the root.
@@ -39,6 +44,30 @@ public struct ComponentIcons {
         case .error: "exclamationmark.circle"
         case .selected: "checkmark.circle.fill"
         case .unselected: "circle"
+        // MARK: - Social and audio
+        case .microphone: "mic.fill"
+        case .microphoneOff: "mic.slash.fill"
+        case .discard: "trash"
+        case .pause: "pause.fill"
+        case .play: "play.fill"
+        case .leave: "rectangle.portrait.and.arrow.right"
+        case .handRaised: "hand.raised.fill"
+        case .verified: "checkmark.seal.fill"
+        case .dismiss: "xmark"
+        case .link: "link"
+        case .bell: "bell"
+        case .bellFilled: "bell.fill"
+        case .share: "square.and.arrow.up"
+        case .star: "star"
+        case .starFilled: "star.fill"
+        case .add: "plus"
+        case .thumbUp: "hand.thumbsup"
+        case .thumbDown: "hand.thumbsdown"
+        case .sending: "clock"
+        case .delivered: "checkmark.circle"
+        case .read: "checkmark.circle.fill"
+        case .muted: "bell.slash"
+        case .pinned: "pin"
         }
     }
 
