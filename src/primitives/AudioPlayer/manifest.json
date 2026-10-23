@@ -1,0 +1,198 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.audio-player",
+  "componentVersion": "1.0.0",
+  "name": "AudioPlayer",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AudioPlayer/AudioPlayer.tsx",
+    "symbol": "AudioPlayer"
+  },
+  "dependencies": ["AudioPlayButton", "AudioTime", "AudioWaveform", "PlaybackRateButton"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "src",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "peaks",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "duration",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "variant",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "compact",
+          "full"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "compact",
+      "constraints": {}
+    },
+    {
+      "id": "rates",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "1, 1.5, 2",
+      "constraints": {}
+    },
+    {
+      "id": "onPlay",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is () => void."
+    },
+    {
+      "id": "onPause",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is () => void."
+    },
+    {
+      "id": "onEnded",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is () => void."
+    },
+    {
+      "id": "onTimeUpdate",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (seconds: number) => void."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "smooth-progress",
+      "one-at-a-time",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "src",
+        "label",
+        "peaks",
+        "duration",
+        "variant",
+        "rates",
+        "onPlay",
+        "onPause",
+        "onEnded",
+        "onTimeUpdate"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One audio clip with play/pause, a waveform or progress scrubber, a clock and speed; only one plays at a time per page."
+  },
+  "extensions": {}
+}

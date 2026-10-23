@@ -1,0 +1,12 @@
+/* design/styles/primitives/annotation-layer.css */
+@layer cieo.components {
+  :where(.cieo).cieo-annotation-layer { position: relative; display: block; }
+  :where(.cieo) .cieo-annotation-layer-content { position: relative; }
+  :where(.cieo) .cieo-annotation-layer-overlay { position: absolute; inset: 0; z-index: 1; cursor: crosshair; background: color-mix(in srgb, var(--cieo-color-accent) 4%, transparent); outline: 2px dashed var(--cieo-color-accent); outline-offset: -2px; touch-action: manipulation; }
+  :where(.cieo) .cieo-annotation-layer-overlay:focus-visible { outline: 2px solid var(--cieo-color-focus); }
+  :where(.cieo) .cieo-annotation-layer-reticle { position: absolute; inline-size: 1.25rem; block-size: 1.25rem; margin: -0.625rem 0 0 -0.625rem; border: 2px solid var(--cieo-color-accent); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-canvas); box-shadow: 0 0 0 2px var(--cieo-color-canvas); pointer-events: none; }
+  :where(.cieo) .cieo-annotation-layer-pins { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  :where(.cieo) .cieo-annotation-layer-pin { display: contents; }
+  :where(.cieo) .cieo-annotation-layer-popover { position: absolute; z-index: 3; }
+  :where(.cieo) .cieo-annotation-layer-popover > .cieo-feedback-popover { position: static; }
+}

@@ -18,6 +18,7 @@
     'Creating & editing':['Workflow','Editor','Documents','Writing','Design tools','Files and browsing'],
     'Sites & commerce':['Commerce','Storefront','Landing','Workspace','Maps'],
     'Connected work':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'],
+    'Audio & conversation':['Audio','Comments','Messaging','Feedback'],
     'Photos & transitions':['Photo effects','Image transitions','Carousels','Galleries','Scroll stories'],
   };
   L.normalize = value => String(value ?? '').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();

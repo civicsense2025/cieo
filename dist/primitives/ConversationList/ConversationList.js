@@ -1,0 +1,83 @@
+// src/primitives/ConversationList/ConversationList.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+/* ConversationList. The inbox: a list of ConversationListItem rows with one tab stop, arrow-key movement, and rows that glide to their new places when the order changes. The host owns the conversations and their order. */
+import { Children, cloneElement, createContext, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { roveFocus, roveIndex, useFlip } from '../../react/index.js';
+/** Ids of the rows in `children`, in the order the host wrote them. Anything without a string id is ignored. */
+export function conversationIds(children) {
+    return Children.toArray(children)
+        .filter((c) => isValidElement(c) && typeof c.props.id === 'string')
+        .map((c) => c.props.id);
+}
+/** Display order: ids in `order` first (unknown ids dropped, repeats ignored), then any remaining ids in their written order. Without `order`, the written order. */
+export function conversationOrder(ids, order) {
+    const known = new Set(ids);
+    const first = [...new Set(order ?? [])].filter((id) => known.has(id));
+    const placed = new Set(first);
+    return [...first, ...ids.filter((id) => !placed.has(id))];
+}
+/** Which row should be the single tab stop: the one last focused, else the selected one, else the first. Null for an empty list. */
+export function conversationTabbable(ids, activeId, selectedId) {
+    if (activeId !== null && ids.includes(activeId))
+        return activeId;
+    if (selectedId !== undefined && ids.includes(selectedId))
+        return selectedId;
+    return ids[0] ?? null;
+}
+/** Row index a key moves focus to, or null for keys that do nothing. ArrowUp/ArrowDown step, Home/End jump, and it stops at both ends. */
+export function conversationRove(key, current, count) {
+    return roveIndex(key, current, count, { orientation: 'vertical', loop: false });
+}
+export const ConversationListContext = createContext(null);
+const ROW = '[data-conversation-row]';
+export function ConversationList({ label, children, order, selectedId }) {
+    const ref = useRef(null);
+    const [activeId, setActiveId] = useState(null);
+    const held = useRef(null);
+    const timer = useRef(null);
+    const items = Children.toArray(children).filter((c) => isValidElement(c) && typeof c.props.id === 'string');
+    const byId = new Map(items.map((c) => [c.props.id, c]));
+    const shown = conversationOrder(items.map((c) => c.props.id), order);
+    const rows = shown.map((id) => cloneElement(byId.get(id), { key: id }));
+    const orderKey = shown.join('\u0000');
+    useFlip(ref, orderKey);
+    /* Moving a focused row in the DOM can drop focus to the page. The row that held focus gets it back, so focus stays on the same conversation. */
+    useLayoutEffect(() => {
+        const id = held.current;
+        const el = ref.current;
+        if (!id || !el || el.contains(document.activeElement))
+            return;
+        el.querySelector(`${ROW}[data-conversation-id="${CSS.escape(id)}"]`)?.focus({ preventScroll: true });
+    }, [orderKey]);
+    useEffect(() => () => {
+        if (timer.current)
+            clearTimeout(timer.current);
+    }, []);
+    const rowId = (target) => target?.closest?.(ROW)?.getAttribute('data-conversation-id') ?? null;
+    const onFocus = (e) => {
+        const id = rowId(e.target);
+        if (!id)
+            return;
+        if (timer.current)
+            clearTimeout(timer.current);
+        held.current = id;
+        setActiveId(id);
+    };
+    const onBlur = () => {
+        if (timer.current)
+            clearTimeout(timer.current);
+        /* A re-order blurs and refocuses within one task; only a blur that survives it is real. */
+        timer.current = setTimeout(() => {
+            if (!ref.current?.contains(document.activeElement))
+                held.current = null;
+        }, 0);
+    };
+    const onKeyDown = (e) => {
+        if (!rowId(e.target))
+            return;
+        roveFocus(e, ref.current, ROW, { orientation: 'vertical', loop: false });
+    };
+    const context = { tabbableId: conversationTabbable(shown, activeId, selectedId), selectedId };
+    return (_jsx(ConversationListContext.Provider, { value: context, children: _jsx("div", { ref: ref, role: "list", "aria-label": label, onFocusCapture: onFocus, onBlurCapture: onBlur, onKeyDown: onKeyDown, className: "cieo cieo-conversation-list", children: rows }) }));
+}

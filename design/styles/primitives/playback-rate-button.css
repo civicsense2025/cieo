@@ -1,0 +1,9 @@
+/* design/styles/primitives/playback-rate-button.css */
+@layer cieo.components {
+  :where(.cieo).cieo-playback-rate-button { display: inline-flex; align-items: center; justify-content: center; flex: none; min-inline-size: calc(var(--cieo-control-height) * 1.4); min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); font-variant-numeric: tabular-nums; cursor: pointer; transition: transform calc(var(--motion-duration-base, 300ms) / 3) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  @media (pointer: coarse) { :where(.cieo).cieo-playback-rate-button { min-block-size: var(--cieo-touch-target); } }
+  :where(.cieo).cieo-playback-rate-button:active { transform: scale(0.96); }
+  :where(.cieo).cieo-playback-rate-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo).cieo-playback-rate-button { transition: none; } :where(.cieo).cieo-playback-rate-button:active { transform: none; } }
+  :where(.cieo)[data-motion='off'].cieo-playback-rate-button, :where(.cieo)[data-motion='off'] .cieo-playback-rate-button { transition: none; }
+}

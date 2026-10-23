@@ -1,0 +1,113 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.group-avatar",
+  "componentVersion": "1.0.0",
+  "name": "GroupAvatar",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/GroupAvatar/GroupAvatar.tsx",
+    "symbol": "GroupAvatar"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "people",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is GroupAvatarPerson[]."
+    },
+    {
+      "id": "size",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "md",
+      "constraints": {}
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "people",
+        "size"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One circle that stands for a whole conversation: one to four faces packed inside it, or three plus a +n tile."
+  },
+  "extensions": {}
+}

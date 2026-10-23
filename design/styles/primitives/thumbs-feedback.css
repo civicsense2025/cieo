@@ -1,0 +1,30 @@
+/* design/styles/primitives/thumbs-feedback.css */
+@layer cieo.components {
+  :where(.cieo).cieo-thumbs-feedback { display: block; color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-thumbs-panel { overflow: clip; overflow-clip-margin: 4px; }
+  :where(.cieo) .cieo-thumbs-inner { position: relative; }
+  :where(.cieo) .cieo-thumbs-leaving { position: absolute; inset: 0 0 auto 0; pointer-events: none; animation: cieo-thumbs-out var(--motion-duration-exit, 100ms) cubic-bezier(.4,0,1,1) both; }
+  :where(.cieo) .cieo-thumbs-entering[data-swap] { animation: cieo-thumbs-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit, 100ms) both; }
+  :where(.cieo) .cieo-thumbs-view { display: grid; gap: var(--cieo-space-2); padding: var(--cieo-space-1); }
+  :where(.cieo) .cieo-thumbs-view[data-view='ask'], :where(.cieo) .cieo-thumbs-head { display: flex; align-items: center; gap: var(--cieo-space-3); flex-wrap: wrap; }
+  :where(.cieo) .cieo-thumbs-question, :where(.cieo) .cieo-thumbs-thanks { margin: 0; }
+  :where(.cieo) .cieo-thumbs-thanks:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-thumbs-buttons { display: inline-flex; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-thumbs-thumb { display: inline-flex; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-height); min-block-size: var(--cieo-control-height); padding: 0; border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-surface); color: inherit; cursor: pointer; transition: background-color var(--motion-duration-snap, 150ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo) .cieo-thumbs-thumb:hover { background: var(--cieo-color-sunken); }
+  :where(.cieo) .cieo-thumbs-thumb[aria-pressed='true'] { background: var(--cieo-color-accent-soft); border-color: var(--cieo-color-accent); }
+  :where(.cieo) .cieo-thumbs-reasons { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-thumbs-reason, :where(.cieo) .cieo-thumbs-submit, :where(.cieo) .cieo-thumbs-skip { min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-surface); color: inherit; font: inherit; font-size: var(--cieo-text-small); cursor: pointer; }
+  :where(.cieo) .cieo-thumbs-reason[aria-pressed='true'] { background: var(--cieo-color-accent-soft); border-color: var(--cieo-color-accent); }
+  :where(.cieo) .cieo-thumbs-submit { background: var(--cieo-color-accent); border-color: var(--cieo-color-accent); color: var(--cieo-color-on-accent); }
+  :where(.cieo) .cieo-thumbs-skip { border-color: transparent; background: transparent; color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-thumbs-comment-label { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-thumbs-comment { inline-size: 100%; box-sizing: border-box; padding: var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: inherit; font: inherit; resize: vertical; }
+  :where(.cieo) .cieo-thumbs-actions { display: flex; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-thumbs-thumb:focus-visible, :where(.cieo) .cieo-thumbs-reason:focus-visible, :where(.cieo) .cieo-thumbs-submit:focus-visible, :where(.cieo) .cieo-thumbs-skip:focus-visible, :where(.cieo) .cieo-thumbs-comment:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (pointer: coarse) { :where(.cieo) .cieo-thumbs-thumb { min-inline-size: var(--cieo-touch-target); min-block-size: var(--cieo-touch-target); } :where(.cieo) .cieo-thumbs-reason, :where(.cieo) .cieo-thumbs-submit, :where(.cieo) .cieo-thumbs-skip { min-block-size: var(--cieo-touch-target); } }
+  @keyframes cieo-thumbs-out { to { opacity: 0; } }
+  @keyframes cieo-thumbs-in { from { opacity: 0; transform: translateY(var(--motion-drift, 4px)); } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-thumbs-leaving, :where(.cieo) .cieo-thumbs-entering[data-swap], :where(.cieo) .cieo-thumbs-thumb { animation: none; transition: none; } }
+  :where(.cieo)[data-motion='off'] .cieo-thumbs-leaving, :where([data-motion='off']) :where(.cieo) .cieo-thumbs-leaving, :where([data-motion='off']) :where(.cieo) .cieo-thumbs-entering, :where([data-motion='off']) :where(.cieo) .cieo-thumbs-thumb { animation: none; transition: none; }
+}

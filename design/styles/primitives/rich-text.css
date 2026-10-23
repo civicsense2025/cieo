@@ -1,0 +1,8 @@
+/* design/styles/primitives/rich-text.css */
+@layer cieo.components {
+  :where(.cieo).cieo-rich-text { overflow-wrap: anywhere; white-space: normal; }
+  :where(.cieo) .cieo-rich-text-link, :where(.cieo) .cieo-rich-text-tag { color: var(--cieo-color-accent); text-decoration: none; }
+  :where(.cieo) .cieo-rich-text-link { text-decoration: underline; text-decoration-color: var(--cieo-color-border-strong); text-underline-offset: 0.15em; }
+  :where(.cieo) .cieo-rich-text-link:hover, :where(.cieo) a.cieo-rich-text-tag:hover { text-decoration-color: currentColor; text-decoration-line: underline; }
+  :where(.cieo) .cieo-rich-text-link:focus-visible, :where(.cieo) a.cieo-rich-text-tag:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; border-radius: var(--cieo-radius-small); }
+}

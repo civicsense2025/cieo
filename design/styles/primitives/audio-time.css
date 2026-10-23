@@ -1,0 +1,4 @@
+/* design/styles/primitives/audio-time.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-time { display: inline-flex; font-size: var(--cieo-text-small); font-variant-numeric: tabular-nums; color: var(--cieo-color-muted); white-space: nowrap; }
+}

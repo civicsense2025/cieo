@@ -1,0 +1,20 @@
+/* design/styles/primitives/audio-room.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-room { display: grid; gap: var(--cieo-space-4); padding: var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-audio-room-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cieo-space-3); }
+  :where(.cieo) .cieo-audio-room-title { margin: 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); min-inline-size: 0; overflow-wrap: anywhere; }
+  :where(.cieo) .cieo-audio-room-listeners { display: inline-flex; align-items: center; gap: var(--cieo-space-2); color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-audio-room-count { display: inline-flex; align-items: baseline; gap: var(--cieo-space-1); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  :where(.cieo) .cieo-audio-room-stage { display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--cieo-control-height) * 3), 1fr)); gap: var(--cieo-space-4); margin: 0; padding: var(--cieo-space-2) 0; list-style: none; }
+  :where(.cieo) .cieo-audio-room-seat { display: grid; justify-items: center; min-inline-size: 0; }
+  :where(.cieo) .cieo-audio-room-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--cieo-space-2); padding-block-start: var(--cieo-space-3); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo) .cieo-audio-room-reactions { display: inline-flex; align-items: center; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-audio-room-button { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-touch-target); padding-inline: var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-raised); color: inherit; font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); cursor: pointer; transition: background var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo) .cieo-audio-room-button[aria-pressed='true'] { background: var(--cieo-color-accent-soft); border-color: var(--cieo-color-accent); color: var(--cieo-color-accent); }
+  :where(.cieo) .cieo-audio-room-button[data-tone='danger'] { border-color: var(--cieo-color-danger); background: var(--cieo-color-danger-soft); color: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-audio-room-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-audio-room-button { transition: none !important; }
+  }
+  :where(.cieo)[data-motion='off'] .cieo-audio-room-button, :where(.cieo).cieo-audio-room[data-motion='off'] .cieo-audio-room-button { transition: none !important; }
+}

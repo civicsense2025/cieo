@@ -1,0 +1,282 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.comment-composer",
+  "componentVersion": "1.0.0",
+  "name": "CommentComposer",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/CommentComposer/CommentComposer.tsx",
+    "symbol": "CommentComposer"
+  },
+  "dependencies": ["CharacterCountRing", "ReplyPreview"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "value",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "onValueChange",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (value: string) => void."
+    },
+    {
+      "id": "onSubmit",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (value: string) => void."
+    },
+    {
+      "id": "placeholder",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Add to thread…",
+      "constraints": {}
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Add to thread",
+      "constraints": {}
+    },
+    {
+      "id": "avatar",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode."
+    },
+    {
+      "id": "tools",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode."
+    },
+    {
+      "id": "attachments",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode."
+    },
+    {
+      "id": "hasAttachments",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "recorder",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode."
+    },
+    {
+      "id": "replyingTo",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is { author: string; excerpt: string }."
+    },
+    {
+      "id": "onCancelReply",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is () => void."
+    },
+    {
+      "id": "maxLength",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "submitLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Post",
+      "constraints": {}
+    },
+    {
+      "id": "pending",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [
+    {
+      "id": "tools",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    },
+    {
+      "id": "attachments",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    },
+    {
+      "id": "recorder",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    },
+    {
+      "id": "avatar",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "pane-cross-fade",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "value",
+        "onValueChange",
+        "onSubmit",
+        "placeholder",
+        "label",
+        "avatar",
+        "tools",
+        "attachments",
+        "hasAttachments",
+        "recorder",
+        "replyingTo",
+        "onCancelReply",
+        "maxLength",
+        "submitLabel",
+        "pending",
+        "disabled"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Input row for a thread: autosizing text, slots for tools, attachments and a recorder, reply context and a character ring."
+  },
+  "extensions": {}
+}

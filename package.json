@@ -1,6 +1,6 @@
 {
   "name": "cieo",
-  "version": "0.5.1",
+  "version": "0.4.0",
   "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
   "license": "MIT",
   "type": "module",
@@ -41,18 +41,6 @@
       "types": "./dist/live/index.d.ts",
       "default": "./dist/live/index.js"
     },
-    "./agent": {
-      "types": "./dist/agent/index.d.ts",
-      "default": "./dist/agent/index.js"
-    },
-    "./agent/react": {
-      "types": "./dist/agent/react.d.ts",
-      "default": "./dist/agent/react.js"
-    },
-    "./agent-icons": {
-      "types": "./dist/agent/icons.d.ts",
-      "default": "./dist/agent/icons.js"
-    },
     "./controls": {
       "types": "./dist/controls/index.d.ts",
       "default": "./dist/controls/index.js"
@@ -67,6 +55,14 @@
     },
     "./design.css": "./design/themes.css",
     "./primitives.css": "./design/primitives.css",
+    "./ActionBar": {
+      "types": "./dist/primitives/ActionBar/ActionBar.d.ts",
+      "default": "./dist/primitives/ActionBar/ActionBar.js"
+    },
+    "./ActivityItem": {
+      "types": "./dist/primitives/ActivityItem/ActivityItem.d.ts",
+      "default": "./dist/primitives/ActivityItem/ActivityItem.js"
+    },
     "./AgentActivity": {
       "types": "./dist/primitives/AgentActivity/AgentActivity.d.ts",
       "default": "./dist/primitives/AgentActivity/AgentActivity.js"
@@ -87,6 +83,14 @@
       "types": "./dist/primitives/AlertDialog/AlertDialog.d.ts",
       "default": "./dist/primitives/AlertDialog/AlertDialog.js"
     },
+    "./AnnotationLayer": {
+      "types": "./dist/primitives/AnnotationLayer/AnnotationLayer.d.ts",
+      "default": "./dist/primitives/AnnotationLayer/AnnotationLayer.js"
+    },
+    "./AnnotationPin": {
+      "types": "./dist/primitives/AnnotationPin/AnnotationPin.d.ts",
+      "default": "./dist/primitives/AnnotationPin/AnnotationPin.js"
+    },
     "./AppShell": {
       "types": "./dist/primitives/AppShell/AppShell.d.ts",
       "default": "./dist/primitives/AppShell/AppShell.js"
@@ -98,6 +102,34 @@
     "./AspectRatio": {
       "types": "./dist/primitives/AspectRatio/AspectRatio.d.ts",
       "default": "./dist/primitives/AspectRatio/AspectRatio.js"
+    },
+    "./AudioLevelMeter": {
+      "types": "./dist/primitives/AudioLevelMeter/AudioLevelMeter.d.ts",
+      "default": "./dist/primitives/AudioLevelMeter/AudioLevelMeter.js"
+    },
+    "./AudioPlayButton": {
+      "types": "./dist/primitives/AudioPlayButton/AudioPlayButton.d.ts",
+      "default": "./dist/primitives/AudioPlayButton/AudioPlayButton.js"
+    },
+    "./AudioPlayer": {
+      "types": "./dist/primitives/AudioPlayer/AudioPlayer.d.ts",
+      "default": "./dist/primitives/AudioPlayer/AudioPlayer.js"
+    },
+    "./AudioRoom": {
+      "types": "./dist/primitives/AudioRoom/AudioRoom.d.ts",
+      "default": "./dist/primitives/AudioRoom/AudioRoom.js"
+    },
+    "./AudioTime": {
+      "types": "./dist/primitives/AudioTime/AudioTime.d.ts",
+      "default": "./dist/primitives/AudioTime/AudioTime.js"
+    },
+    "./AudioTranscript": {
+      "types": "./dist/primitives/AudioTranscript/AudioTranscript.d.ts",
+      "default": "./dist/primitives/AudioTranscript/AudioTranscript.js"
+    },
+    "./AudioWaveform": {
+      "types": "./dist/primitives/AudioWaveform/AudioWaveform.d.ts",
+      "default": "./dist/primitives/AudioWaveform/AudioWaveform.js"
     },
     "./AuthAccountCard": {
       "types": "./dist/primitives/AuthAccountCard/AuthAccountCard.d.ts",
@@ -207,6 +239,10 @@
       "types": "./dist/primitives/ButtonGroup/ButtonGroup.d.ts",
       "default": "./dist/primitives/ButtonGroup/ButtonGroup.js"
     },
+    "./ByLine": {
+      "types": "./dist/primitives/ByLine/ByLine.d.ts",
+      "default": "./dist/primitives/ByLine/ByLine.js"
+    },
     "./Calendar": {
       "types": "./dist/primitives/Calendar/Calendar.d.ts",
       "default": "./dist/primitives/Calendar/Calendar.js"
@@ -222,6 +258,10 @@
     "./Center": {
       "types": "./dist/primitives/Center/Center.d.ts",
       "default": "./dist/primitives/Center/Center.js"
+    },
+    "./CharacterCountRing": {
+      "types": "./dist/primitives/CharacterCountRing/CharacterCountRing.d.ts",
+      "default": "./dist/primitives/CharacterCountRing/CharacterCountRing.js"
     },
     "./ChatComposer": {
       "types": "./dist/primitives/ChatComposer/ChatComposer.d.ts",
@@ -319,9 +359,37 @@
       "types": "./dist/primitives/CommandPaletteList/CommandPaletteList.d.ts",
       "default": "./dist/primitives/CommandPaletteList/CommandPaletteList.js"
     },
+    "./Comment": {
+      "types": "./dist/primitives/Comment/Comment.d.ts",
+      "default": "./dist/primitives/Comment/Comment.js"
+    },
+    "./CommentComposer": {
+      "types": "./dist/primitives/CommentComposer/CommentComposer.d.ts",
+      "default": "./dist/primitives/CommentComposer/CommentComposer.js"
+    },
+    "./CommentThread": {
+      "types": "./dist/primitives/CommentThread/CommentThread.d.ts",
+      "default": "./dist/primitives/CommentThread/CommentThread.js"
+    },
+    "./CompactCount": {
+      "types": "./dist/primitives/CompactCount/CompactCount.d.ts",
+      "default": "./dist/primitives/CompactCount/CompactCount.js"
+    },
     "./ComplexSelector": {
       "types": "./dist/primitives/ComplexSelector/ComplexSelector.d.ts",
       "default": "./dist/primitives/ComplexSelector/ComplexSelector.js"
+    },
+    "./ConversationList": {
+      "types": "./dist/primitives/ConversationList/ConversationList.d.ts",
+      "default": "./dist/primitives/ConversationList/ConversationList.js"
+    },
+    "./ConversationListItem": {
+      "types": "./dist/primitives/ConversationListItem/ConversationListItem.d.ts",
+      "default": "./dist/primitives/ConversationListItem/ConversationListItem.js"
+    },
+    "./CountButton": {
+      "types": "./dist/primitives/CountButton/CountButton.d.ts",
+      "default": "./dist/primitives/CountButton/CountButton.js"
     },
     "./DateInput": {
       "types": "./dist/primitives/DateInput/DateInput.d.ts",
@@ -334,6 +402,10 @@
     "./DateTimeInput": {
       "types": "./dist/primitives/DateTimeInput/DateTimeInput.d.ts",
       "default": "./dist/primitives/DateTimeInput/DateTimeInput.js"
+    },
+    "./DeliveryStatus": {
+      "types": "./dist/primitives/DeliveryStatus/DeliveryStatus.d.ts",
+      "default": "./dist/primitives/DeliveryStatus/DeliveryStatus.js"
     },
     "./Dialog": {
       "types": "./dist/primitives/Dialog/Dialog.d.ts",
@@ -383,6 +455,10 @@
       "types": "./dist/primitives/EmptyState/EmptyState.d.ts",
       "default": "./dist/primitives/EmptyState/EmptyState.js"
     },
+    "./FeedbackPopover": {
+      "types": "./dist/primitives/FeedbackPopover/FeedbackPopover.d.ts",
+      "default": "./dist/primitives/FeedbackPopover/FeedbackPopover.js"
+    },
     "./Field": {
       "types": "./dist/primitives/Field/Field.d.ts",
       "default": "./dist/primitives/Field/Field.js"
@@ -395,6 +471,10 @@
       "types": "./dist/primitives/FileInput/FileInput.d.ts",
       "default": "./dist/primitives/FileInput/FileInput.js"
     },
+    "./FollowButton": {
+      "types": "./dist/primitives/FollowButton/FollowButton.d.ts",
+      "default": "./dist/primitives/FollowButton/FollowButton.js"
+    },
     "./FormLayout": {
       "types": "./dist/primitives/FormLayout/FormLayout.d.ts",
       "default": "./dist/primitives/FormLayout/FormLayout.js"
@@ -406,6 +486,10 @@
     "./GridSpan": {
       "types": "./dist/primitives/GridSpan/GridSpan.d.ts",
       "default": "./dist/primitives/GridSpan/GridSpan.js"
+    },
+    "./GroupAvatar": {
+      "types": "./dist/primitives/GroupAvatar/GroupAvatar.d.ts",
+      "default": "./dist/primitives/GroupAvatar/GroupAvatar.js"
     },
     "./HStack": {
       "types": "./dist/primitives/HStack/HStack.d.ts",
@@ -463,6 +547,10 @@
       "types": "./dist/primitives/Lightbox/Lightbox.d.ts",
       "default": "./dist/primitives/Lightbox/Lightbox.js"
     },
+    "./LinkPreview": {
+      "types": "./dist/primitives/LinkPreview/LinkPreview.d.ts",
+      "default": "./dist/primitives/LinkPreview/LinkPreview.js"
+    },
     "./List": {
       "types": "./dist/primitives/List/List.d.ts",
       "default": "./dist/primitives/List/List.js"
@@ -474,6 +562,10 @@
     "./Markdown": {
       "types": "./dist/primitives/Markdown/Markdown.d.ts",
       "default": "./dist/primitives/Markdown/Markdown.js"
+    },
+    "./Mention": {
+      "types": "./dist/primitives/Mention/Mention.d.ts",
+      "default": "./dist/primitives/Mention/Mention.js"
     },
     "./MetadataList": {
       "types": "./dist/primitives/MetadataList/MetadataList.d.ts",
@@ -507,6 +599,14 @@
       "types": "./dist/primitives/NavIcon/NavIcon.d.ts",
       "default": "./dist/primitives/NavIcon/NavIcon.js"
     },
+    "./NewItemsPill": {
+      "types": "./dist/primitives/NewItemsPill/NewItemsPill.d.ts",
+      "default": "./dist/primitives/NewItemsPill/NewItemsPill.js"
+    },
+    "./NotifyToggle": {
+      "types": "./dist/primitives/NotifyToggle/NotifyToggle.d.ts",
+      "default": "./dist/primitives/NotifyToggle/NotifyToggle.js"
+    },
     "./NumberInput": {
       "types": "./dist/primitives/NumberInput/NumberInput.d.ts",
       "default": "./dist/primitives/NumberInput/NumberInput.js"
@@ -526,6 +626,14 @@
     "./Pagination": {
       "types": "./dist/primitives/Pagination/Pagination.d.ts",
       "default": "./dist/primitives/Pagination/Pagination.js"
+    },
+    "./PlaybackRateButton": {
+      "types": "./dist/primitives/PlaybackRateButton/PlaybackRateButton.d.ts",
+      "default": "./dist/primitives/PlaybackRateButton/PlaybackRateButton.js"
+    },
+    "./Poll": {
+      "types": "./dist/primitives/Poll/Poll.d.ts",
+      "default": "./dist/primitives/Poll/Poll.js"
     },
     "./Popover": {
       "types": "./dist/primitives/Popover/Popover.d.ts",
@@ -547,9 +655,29 @@
       "types": "./dist/primitives/RadioListItem/RadioListItem.d.ts",
       "default": "./dist/primitives/RadioListItem/RadioListItem.js"
     },
+    "./Rating": {
+      "types": "./dist/primitives/Rating/Rating.d.ts",
+      "default": "./dist/primitives/Rating/Rating.js"
+    },
+    "./ReactionPicker": {
+      "types": "./dist/primitives/ReactionPicker/ReactionPicker.d.ts",
+      "default": "./dist/primitives/ReactionPicker/ReactionPicker.js"
+    },
+    "./ReactionSummary": {
+      "types": "./dist/primitives/ReactionSummary/ReactionSummary.d.ts",
+      "default": "./dist/primitives/ReactionSummary/ReactionSummary.js"
+    },
+    "./ReplyPreview": {
+      "types": "./dist/primitives/ReplyPreview/ReplyPreview.d.ts",
+      "default": "./dist/primitives/ReplyPreview/ReplyPreview.js"
+    },
     "./ResizeHandle": {
       "types": "./dist/primitives/ResizeHandle/ResizeHandle.d.ts",
       "default": "./dist/primitives/ResizeHandle/ResizeHandle.js"
+    },
+    "./RichText": {
+      "types": "./dist/primitives/RichText/RichText.d.ts",
+      "default": "./dist/primitives/RichText/RichText.js"
     },
     "./RunControls": {
       "types": "./dist/primitives/RunControls/RunControls.d.ts",
@@ -562,6 +690,10 @@
     "./Section": {
       "types": "./dist/primitives/Section/Section.d.ts",
       "default": "./dist/primitives/Section/Section.js"
+    },
+    "./SeenBy": {
+      "types": "./dist/primitives/SeenBy/SeenBy.d.ts",
+      "default": "./dist/primitives/SeenBy/SeenBy.js"
     },
     "./SegmentedControl": {
       "types": "./dist/primitives/SegmentedControl/SegmentedControl.d.ts",
@@ -582,6 +714,10 @@
     "./SelectorOption": {
       "types": "./dist/primitives/SelectorOption/SelectorOption.d.ts",
       "default": "./dist/primitives/SelectorOption/SelectorOption.js"
+    },
+    "./ShareButton": {
+      "types": "./dist/primitives/ShareButton/ShareButton.d.ts",
+      "default": "./dist/primitives/ShareButton/ShareButton.js"
     },
     "./SideNav": {
       "types": "./dist/primitives/SideNav/SideNav.d.ts",
@@ -618,6 +754,10 @@
     "./SortableListItem": {
       "types": "./dist/primitives/SortableListItem/SortableListItem.d.ts",
       "default": "./dist/primitives/SortableListItem/SortableListItem.js"
+    },
+    "./SpeakerTile": {
+      "types": "./dist/primitives/SpeakerTile/SpeakerTile.d.ts",
+      "default": "./dist/primitives/SpeakerTile/SpeakerTile.js"
     },
     "./Spinner": {
       "types": "./dist/primitives/Spinner/Spinner.d.ts",
@@ -699,6 +839,10 @@
       "types": "./dist/primitives/Thumbnail/Thumbnail.d.ts",
       "default": "./dist/primitives/Thumbnail/Thumbnail.js"
     },
+    "./ThumbsFeedback": {
+      "types": "./dist/primitives/ThumbsFeedback/ThumbsFeedback.d.ts",
+      "default": "./dist/primitives/ThumbsFeedback/ThumbsFeedback.js"
+    },
     "./TimeInput": {
       "types": "./dist/primitives/TimeInput/TimeInput.d.ts",
       "default": "./dist/primitives/TimeInput/TimeInput.js"
@@ -779,9 +923,25 @@
       "types": "./dist/primitives/TypeaheadItem/TypeaheadItem.d.ts",
       "default": "./dist/primitives/TypeaheadItem/TypeaheadItem.js"
     },
+    "./TypingIndicator": {
+      "types": "./dist/primitives/TypingIndicator/TypingIndicator.d.ts",
+      "default": "./dist/primitives/TypingIndicator/TypingIndicator.js"
+    },
+    "./UnreadDivider": {
+      "types": "./dist/primitives/UnreadDivider/UnreadDivider.d.ts",
+      "default": "./dist/primitives/UnreadDivider/UnreadDivider.js"
+    },
     "./VStack": {
       "types": "./dist/primitives/VStack/VStack.d.ts",
       "default": "./dist/primitives/VStack/VStack.js"
+    },
+    "./VerifiedBadge": {
+      "types": "./dist/primitives/VerifiedBadge/VerifiedBadge.d.ts",
+      "default": "./dist/primitives/VerifiedBadge/VerifiedBadge.js"
+    },
+    "./VoiceRecorder": {
+      "types": "./dist/primitives/VoiceRecorder/VoiceRecorder.d.ts",
+      "default": "./dist/primitives/VoiceRecorder/VoiceRecorder.js"
     },
     "./primitives": {
       "types": "./dist/primitives/index.d.ts",
@@ -814,11 +974,12 @@
     "test": "npm run build && node --test test/*.test.mjs",
     "test:cli": "node test/cli/e2e.mjs",
     "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check",
-    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/build-agent-icons.mjs --check && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
+    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
     "test:browser": "python3 test/browser/smoke.py",
     "test:nps": "python3 test/browser/nps.py",
     "test:frames": "python3 test/browser/frame-reads.py",
     "test:composites": "python3 test/browser/composites.py",
+    "test:social": "python3 test/browser/social.py",
     "prepare": "node scripts/build-design.mjs",
     "prepack": "node scripts/build-design.mjs",
     "build:design": "node scripts/build-design.mjs",

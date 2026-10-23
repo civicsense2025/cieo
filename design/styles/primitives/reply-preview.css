@@ -1,0 +1,15 @@
+/* design/styles/primitives/reply-preview.css */
+@layer cieo.components {
+  :where(.cieo).cieo-reply-preview { display: flex; align-items: stretch; gap: var(--cieo-space-2); inline-size: 100%; min-inline-size: 0; box-sizing: border-box; padding: var(--cieo-space-1) var(--cieo-space-2) var(--cieo-space-1) 0; margin: 0; border: 0; background: transparent; color: var(--cieo-color-muted); font: inherit; font-size: var(--cieo-text-small); text-align: start; }
+  :where(button.cieo).cieo-reply-preview { cursor: pointer; border-radius: var(--cieo-radius-control); min-block-size: var(--cieo-touch-target); align-items: center; }
+  :where(.cieo).cieo-reply-preview[data-interactive]:hover { background: var(--cieo-color-sunken); }
+  :where(.cieo).cieo-reply-preview:focus-visible, :where(.cieo) .cieo-reply-preview-dismiss:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-reply-preview-bar { flex: none; inline-size: 3px; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent); }
+  :where(.cieo) .cieo-reply-preview-text { flex: 1; min-inline-size: 0; display: grid; gap: 0; }
+  :where(.cieo) .cieo-reply-preview-author { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  :where(.cieo) .cieo-reply-preview-excerpt { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
+  :where(.cieo).cieo-reply-preview[data-variant='composer'] .cieo-reply-preview-excerpt { -webkit-line-clamp: 1; line-clamp: 1; }
+  :where(.cieo) .cieo-reply-preview-dismiss { flex: none; align-self: center; display: inline-flex; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-small); min-block-size: var(--cieo-control-small); padding: 0; border: 0; border-radius: var(--cieo-radius-pill); background: transparent; color: inherit; cursor: pointer; }
+  :where(.cieo) .cieo-reply-preview-dismiss:hover { background: var(--cieo-color-sunken); color: var(--cieo-color-text); }
+  @media (pointer: coarse) { :where(.cieo) .cieo-reply-preview-dismiss { min-inline-size: var(--cieo-touch-target); min-block-size: var(--cieo-touch-target); } }
+}

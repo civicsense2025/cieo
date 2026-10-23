@@ -1,0 +1,16 @@
+/* design/styles/primitives/feedback-popover.css */
+@layer cieo.components {
+  :where(.cieo).cieo-feedback-popover { display: grid; gap: var(--cieo-space-2); inline-size: min(17.5rem, 100%); box-sizing: border-box; padding: var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-raised); color: var(--cieo-color-text); box-shadow: 0 8px 24px color-mix(in srgb, var(--cieo-color-text) 14%, transparent); font-size: var(--cieo-text-small); transform-origin: var(--cieo-feedback-origin, 0 0); }
+  :where(.cieo).cieo-feedback-popover[data-placed='true'] { position: absolute; z-index: var(--cieo-layer-popover, 20); }
+  :where(.cieo) .cieo-feedback-popover-title { margin: 0; font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-strong); }
+  :where(.cieo) .cieo-feedback-popover-thread { display: grid; gap: var(--cieo-space-2); max-block-size: 14rem; overflow-y: auto; }
+  :where(.cieo) .cieo-feedback-popover-field { box-sizing: border-box; inline-size: 100%; min-block-size: var(--cieo-control-large); resize: vertical; padding: var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: inherit; font: inherit; }
+  :where(.cieo) .cieo-feedback-popover-field:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-feedback-popover-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-feedback-popover-submit { min-block-size: var(--cieo-control-height); padding-inline: var(--cieo-space-3); border: 0; border-radius: var(--cieo-radius-control); background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); font: inherit; font-weight: var(--cieo-weight-medium); cursor: pointer; transition: opacity var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo) .cieo-feedback-popover-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+  :where(.cieo) .cieo-feedback-popover-submit:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (pointer: coarse) { :where(.cieo) .cieo-feedback-popover-submit { min-block-size: var(--cieo-touch-target); } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-feedback-popover-submit { transition: none; } }
+  :where([data-motion='off']) :where(.cieo) .cieo-feedback-popover-submit { transition: none; }
+}

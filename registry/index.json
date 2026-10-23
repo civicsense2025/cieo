@@ -4,6 +4,24 @@
     "motion.ts"
   ],
   "components": {
+    "ActionBar": {
+      "files": [
+        "ActionBar/ActionBar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "ActivityItem": {
+      "files": [
+        "ActivityItem/ActivityItem.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
     "AgentActivity": {
       "files": [
         "AgentActivity/AgentActivity.tsx"
@@ -58,6 +76,25 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "AnnotationLayer": {
+      "files": [
+        "AnnotationLayer/AnnotationLayer.tsx"
+      ],
+      "registryDependencies": [
+        "AnnotationPin",
+        "FeedbackPopover"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AnnotationPin": {
+      "files": [
+        "AnnotationPin/AnnotationPin.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
     "AppShell": {
       "files": [
         "AppShell/AppShell.tsx"
@@ -82,6 +119,78 @@
         "AspectRatio/AspectRatio.tsx"
       ],
       "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AudioLevelMeter": {
+      "files": [
+        "AudioLevelMeter/AudioLevelMeter.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "AudioPlayButton": {
+      "files": [
+        "AudioPlayButton/AudioPlayButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AudioPlayer": {
+      "files": [
+        "AudioPlayer/AudioPlayer.tsx"
+      ],
+      "registryDependencies": [
+        "AudioPlayButton",
+        "AudioTime",
+        "AudioWaveform",
+        "PlaybackRateButton"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AudioRoom": {
+      "files": [
+        "AudioRoom/AudioRoom.tsx"
+      ],
+      "registryDependencies": [
+        "CompactCount",
+        "SpeakerTile"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "AudioTime": {
+      "files": [
+        "AudioTime/AudioTime.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "AudioTranscript": {
+      "files": [
+        "AudioTranscript/AudioTranscript.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "AudioWaveform": {
+      "files": [
+        "AudioWaveform/AudioWaveform.tsx"
+      ],
+      "registryDependencies": [
+        "AudioTime"
+      ],
       "packageImports": [],
       "sharedFiles": []
     },
@@ -328,6 +437,16 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "ByLine": {
+      "files": [
+        "ByLine/ByLine.tsx"
+      ],
+      "registryDependencies": [
+        "Mention"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
     "Calendar": {
       "files": [
         "Calendar/Calendar.tsx"
@@ -360,6 +479,16 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "CharacterCountRing": {
+      "files": [
+        "CharacterCountRing/CharacterCountRing.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "ChatComposer": {
@@ -562,12 +691,90 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "Comment": {
+      "files": [
+        "Comment/Comment.tsx"
+      ],
+      "registryDependencies": [
+        "ByLine"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "CommentComposer": {
+      "files": [
+        "CommentComposer/CommentComposer.tsx"
+      ],
+      "registryDependencies": [
+        "CharacterCountRing",
+        "ReplyPreview"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "CommentThread": {
+      "files": [
+        "CommentThread/CommentThread.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "CompactCount": {
+      "files": [
+        "CompactCount/CompactCount.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
     "ComplexSelector": {
       "files": [
         "ComplexSelector/ComplexSelector.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "ConversationList": {
+      "files": [
+        "ConversationList/ConversationList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "ConversationListItem": {
+      "files": [
+        "ConversationListItem/ConversationListItem.tsx"
+      ],
+      "registryDependencies": [
+        "ConversationList",
+        "TypingIndicator"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "CountButton": {
+      "files": [
+        "CountButton/CountButton.tsx"
+      ],
+      "registryDependencies": [
+        "CompactCount"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "DateInput": {
@@ -589,6 +796,14 @@
     "DateTimeInput": {
       "files": [
         "DateTimeInput/DateTimeInput.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "DeliveryStatus": {
+      "files": [
+        "DeliveryStatus/DeliveryStatus.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -706,6 +921,16 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "FeedbackPopover": {
+      "files": [
+        "FeedbackPopover/FeedbackPopover.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
     "Field": {
       "files": [
         "Field/Field.tsx"
@@ -730,6 +955,16 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "FollowButton": {
+      "files": [
+        "FollowButton/FollowButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
     "FormLayout": {
       "files": [
         "FormLayout/FormLayout.tsx"
@@ -749,6 +984,14 @@
     "GridSpan": {
       "files": [
         "GridSpan/GridSpan.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "GroupAvatar": {
+      "files": [
+        "GroupAvatar/GroupAvatar.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -876,6 +1119,18 @@
         "motion.ts"
       ]
     },
+    "LinkPreview": {
+      "files": [
+        "LinkPreview/LinkPreview.tsx"
+      ],
+      "registryDependencies": [
+        "Mention"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
     "List": {
       "files": [
         "List/List.tsx"
@@ -895,6 +1150,14 @@
     "Markdown": {
       "files": [
         "Markdown/Markdown.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "Mention": {
+      "files": [
+        "Mention/Mention.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -969,6 +1232,28 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "NewItemsPill": {
+      "files": [
+        "NewItemsPill/NewItemsPill.tsx"
+      ],
+      "registryDependencies": [
+        "CompactCount"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "NotifyToggle": {
+      "files": [
+        "NotifyToggle/NotifyToggle.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
     "NumberInput": {
       "files": [
         "NumberInput/NumberInput.tsx"
@@ -1006,6 +1291,28 @@
         "Pagination/Pagination.tsx"
       ],
       "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "PlaybackRateButton": {
+      "files": [
+        "PlaybackRateButton/PlaybackRateButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "Poll": {
+      "files": [
+        "Poll/Poll.tsx"
+      ],
+      "registryDependencies": [
+        "CompactCount"
+      ],
       "packageImports": [
         "cieo/react"
       ],
@@ -1057,11 +1364,63 @@
       ],
       "sharedFiles": []
     },
+    "Rating": {
+      "files": [
+        "Rating/Rating.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "ReactionPicker": {
+      "files": [
+        "ReactionPicker/ReactionPicker.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "ReactionSummary": {
+      "files": [
+        "ReactionSummary/ReactionSummary.tsx"
+      ],
+      "registryDependencies": [
+        "CompactCount",
+        "Popover",
+        "ReactionPicker"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "ReplyPreview": {
+      "files": [
+        "ReplyPreview/ReplyPreview.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
     "ResizeHandle": {
       "files": [
         "ResizeHandle/ResizeHandle.tsx"
       ],
       "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "RichText": {
+      "files": [
+        "RichText/RichText.tsx"
+      ],
+      "registryDependencies": [
+        "Mention"
+      ],
       "packageImports": [],
       "sharedFiles": []
     },
@@ -1092,6 +1451,18 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "SeenBy": {
+      "files": [
+        "SeenBy/SeenBy.tsx"
+      ],
+      "registryDependencies": [
+        "GroupAvatar"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "SegmentedControl": {
@@ -1136,6 +1507,16 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "ShareButton": {
+      "files": [
+        "ShareButton/ShareButton.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "SideNav": {
@@ -1214,6 +1595,16 @@
         "SortableList"
       ],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "SpeakerTile": {
+      "files": [
+        "SpeakerTile/SpeakerTile.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "Spinner": {
@@ -1386,6 +1777,16 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": []
+    },
+    "ThumbsFeedback": {
+      "files": [
+        "ThumbsFeedback/ThumbsFeedback.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
       "sharedFiles": []
     },
     "TimeInput": {
@@ -1564,12 +1965,50 @@
       "packageImports": [],
       "sharedFiles": []
     },
+    "TypingIndicator": {
+      "files": [
+        "TypingIndicator/TypingIndicator.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "UnreadDivider": {
+      "files": [
+        "UnreadDivider/UnreadDivider.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
     "VStack": {
       "files": [
         "VStack/VStack.tsx"
       ],
       "registryDependencies": [
         "Stack"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "VerifiedBadge": {
+      "files": [
+        "VerifiedBadge/VerifiedBadge.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": []
+    },
+    "VoiceRecorder": {
+      "files": [
+        "VoiceRecorder/VoiceRecorder.tsx"
+      ],
+      "registryDependencies": [
+        "AudioLevelMeter",
+        "AudioTime",
+        "IconButton"
       ],
       "packageImports": [],
       "sharedFiles": []

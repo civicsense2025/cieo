@@ -26368,8 +26368,548 @@ atom({ id:'auth-account', cat:'Auth', name:'Account', block:'auth, account, sign
     $(st,'.cf').onclick = () => { cf.hidden = true; sm.textContent = 'Signed out of all devices.'; };
     return () => {};
   }});
+
+// Audio recipes. Levels and time are simulated from the clock: no network, no audio playback.
+const AU_FMT = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+// A fixed pseudo-waveform: the same shape on every load, shaped like a phrase.
+const AU_AMP = (i, n) => clamp(.2 + .8*Math.abs(Math.sin(i*1.9)*Math.cos(i*.47) + .35*Math.sin(i*.8))*(.55 + .45*Math.sin(i/n*Math.PI)), .14, 1);
+// A simulated microphone envelope: syllable bursts riding a slow phrase swell.
+const AU_LEVEL = t => clamp(.1 + .62*Math.abs(Math.sin(t*5.3))*(.55 + .45*Math.sin(t*1.7 + 1)) + .18*Math.abs(Math.sin(t*13.1)), 0, 1);
+const AU_PLAY = [[7,5],[12.5,8.4],[12.5,15.6],[7,19],[12.5,8.4],[19,12],[19,12],[12.5,15.6]], AU_PAUSE = [[6,5],[10,5],[10,19],[6,19],[14,5],[18,5],[18,19],[14,19]];
+// Play and pause are the same eight points; k morphs one into the other.
+const AU_ICON = k => { const p = AU_PLAY.map((a,i) => [lerp(a[0], AU_PAUSE[i][0], k), lerp(a[1], AU_PAUSE[i][1], k)]), q = a => `M${a.map(v => v[0].toFixed(2) + ' ' + v[1].toFixed(2)).join('L')}Z`; return q(p.slice(0,4)) + q(p.slice(4)); };
+const AU_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
+const AU_BTN = 'border:0;border-radius:50%;width:44px;height:44px;flex:none;display:grid;place-items:center;cursor:pointer;padding:0;';
+
+atom({ id:'audio-voice-note', cat:'Audio', name:'Voice note player', block:'audio, voice note, player', fam:['M','S','D','T'],
+  html:`<div class="card col" style="width:min(340px,94%);padding:12px;gap:8px"><div class="row" style="gap:10px"><button class="vn-pp" aria-label="Play voice note" style="${AU_BTN}background:var(--ink);color:var(--card)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="vn-ic"/></svg></button><div class="vn-sc" role="slider" tabindex="0" aria-label="Seek voice note" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="position:relative;flex:1;min-width:0;height:44px;display:flex;align-items:center;gap:2px;cursor:pointer;touch-action:none"></div><button class="vn-rate" aria-label="Playback speed 1x" style="position:relative;width:52px;height:44px;flex:none;border:0;border-radius:10px;background:var(--raised);color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;padding:0"></button></div><div class="row small muted num" style="justify-content:space-between;padding:0 2px"><span class="vn-t">0:00</span><span>0:23</span></div></div><div class="hint">Play, drag the waveform or press the arrow keys to scrub, tap the speed to change it</div>`,
+  desc:'Play and pause are one shape on one spring. The waveform fills continuously with the playhead, the speed button swaps 1x, 1.5x and 2x without a jump in position, and dragging or the arrow keys scrub.',
+  api:'pos(t) = playing ? min(1, p0 + (t − t0)·rate/DUR) : p0   rate: p0 = pos(now); t0 = now',
+  init(st){
+    const DUR = 23, N = 40, RATES = [1, 1.5, 2], LABELS = ['1×', '1.5×', '2×'];
+    const vnPlay = $(st,'button.vn-pp');
+    const vnRate = $(st,'button.vn-rate');
+    const path = $(st,'.vn-ic'), sc = $(st,'.vn-sc'), tc = $(st,'.vn-t');
+    const bars = [...Array(N)].map((_,i) => { const b = AU_EL('i', `flex:1;min-width:2px;border-radius:2px;height:${(AU_AMP(i,N)*32).toFixed(1)}px;background:var(--raised);transform-origin:50% 50%`); sc.appendChild(b); return b; });
+    const dot = AU_EL('i', 'position:absolute;left:0;top:50%;width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--accent);pointer-events:none'); sc.appendChild(dot);
+    const rl = LABELS.map(s => { const e = AU_EL('span', 'font-variant-numeric:tabular-nums', s); e.className = 'layer'; vnRate.appendChild(e); return e; });
+    const rsw = new Swap(0), ic = new Track(0, S.snap), gr = new Track(0, S.snap);
+    let playing = false, p0 = 0, t0 = 0, rate = 0, held = false, hp = 0, ended = false;
+    const pos = t => playing ? Math.min(1, p0 + (t - t0)*RATES[rate]/DUR) : p0;
+    const label = () => vnPlay.setAttribute('aria-label', ended ? 'Replay voice note' : playing ? 'Pause voice note' : 'Play voice note');
+    const seek = p => { p0 = clamp(p); t0 = now(); ended = false; label(); };
+    vnPlay.onclick = () => { const t = now(); if (ended || p0 >= 1) p0 = 0; else p0 = pos(t); t0 = t; ended = false; playing = !playing; if (REDUCE) ic.jump(playing ? 1 : 0); else ic.set(playing ? 1 : 0); label(); };
+    vnRate.onclick = () => { const t = now(); p0 = pos(t); t0 = t; rate = (rate + 1) % RATES.length; rsw.to(rate); vnRate.setAttribute('aria-label', `Playback speed ${LABELS[rate].replace('×','x')}`); };
+    drag(sc, { down:p => { held = true; hp = clamp(p.x/p.w); gr.set(1); }, move:p => { hp = clamp(p.x/p.w); }, up:() => { held = false; seek(hp); gr.set(0); } });
+    sc.onkeydown = e => { const d = { ArrowRight:.05, ArrowUp:.05, ArrowLeft:-.05, ArrowDown:-.05 }[e.key]; const jump = e.key === 'Home' ? 0 : e.key === 'End' ? .999 : null;
+      if (d || jump !== null){ e.preventDefault(); seek(jump !== null ? jump : pos(now()) + d); } };
+    const cache = new Array(N).fill('');
+    return t => {
+      if (playing && !held && p0 + (t - t0)*RATES[rate]/DUR >= 1){ playing = false; p0 = 1; ended = true; if (REDUCE) ic.jump(0); else ic.set(0); label(); }
+      const k = clamp(ic.at(t)); path.setAttribute('d', AU_ICON(k));
+      const p = held ? hp : pos(t), W = size(sc).cw, g = clamp(gr.at(t)), ds = 10 + 6*g;
+      bars.forEach((b,i) => { const f = Math.round(clamp(p*N - i)*20)/20, c = mix(f, 'var(--accent)', 'var(--raised)'); if (cache[i] !== c){ cache[i] = c; b.style.background = c; }
+        const lift = playing && !REDUCE ? 1 + .35*Math.max(0, 1 - Math.abs(p*N - i - .5)) : 1; b.style.transform = `scaleY(${lift.toFixed(3)})`; });
+      dot.style.width = dot.style.height = px(ds); dot.style.marginTop = px(-ds/2); dot.style.transform = `translateX(${px(p*W - ds/2)})`;
+      tc.textContent = AU_FMT(p*DUR); sc.setAttribute('aria-valuenow', Math.round(p*100)); sc.setAttribute('aria-valuetext', `${AU_FMT(p*DUR)} of 0:23`);
+      rl.forEach((e,i) => rsw.apply(e, i, t));
+    };
+  }});
+
+atom({ id:'audio-recorder', cat:'Audio', name:'Voice recorder', block:'audio, record, waveform', fam:['M','S','T'], tall:true,
+  html:`<div class="col rc-root" style="width:min(340px,94%);gap:12px;align-items:flex-start"><div class="rc-pill" style="position:relative;height:56px;width:56px;border-radius:28px;background:var(--card);box-shadow:var(--shadow);overflow:hidden"><button class="rc-mic" aria-label="Record a voice note" style="${AU_BTN}position:absolute;left:6px;top:6px;background:var(--ink);color:var(--card)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><div class="rc-rec" style="position:absolute;inset:0;display:flex;align-items:center;gap:6px;padding:0 6px"><button class="rc-cancel" aria-label="Cancel recording" style="${AU_BTN}background:var(--raised);color:var(--ink)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="rc-live" aria-hidden="true" style="flex:1;min-width:0;height:36px;display:flex;align-items:center;gap:2px;overflow:hidden"></div><span class="rc-tm num" role="timer" aria-label="Recording time" style="display:inline-flex;align-items:center;font-size:14px;font-weight:600;flex:none;white-space:nowrap"><span class="rc-m"></span><span>:</span><span class="rc-s"></span></span><button class="rc-stop" aria-label="Stop and keep recording" style="${AU_BTN}background:var(--danger);color:var(--card)"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg></button></div><div class="rc-clip" style="position:absolute;inset:0;display:flex;align-items:center;gap:8px;padding:0 6px"><button class="rc-play" aria-label="Play clip" style="${AU_BTN}background:var(--ink);color:var(--card)"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="rc-ic"/></svg></button><div class="rc-bars" aria-hidden="true" style="flex:1;min-width:0;height:36px;display:flex;align-items:center;gap:2px"></div><span class="rc-len num" style="font-size:13px;font-weight:600;min-width:34px;text-align:right"></span><button class="rc-del" aria-label="Delete clip" style="${AU_BTN}background:var(--raised);color:var(--ink)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div></div><span class="small muted rc-note" aria-live="polite" style="min-height:19px;padding-left:4px"></span></div><div class="hint">Tap the mic, then Stop to keep the clip or Cancel to collapse. Escape cancels</div>`,
+  desc:'Tapping the mic grows the pill into live level bars and rolling mm:ss digits. Cancel collapses it back. Stop springs the bars from the live heights into a static waveform and the pill becomes a clip card.',
+  api:'level(t) = envelope(t − t0)   bars = rolling history   stop: bar[i].spring(live[i] → resample(history)[i])',
+  init(st){
+    const NL = 26, NC = 30;
+    const root = $(st,'.rc-root'), pill = $(st,'.rc-pill');
+    const rcMic = $(st,'button.rc-mic');
+    const rcCancel = $(st,'button.rc-cancel');
+    const rcStop = $(st,'button.rc-stop');
+    const rcPlay = $(st,'button.rc-play');
+    const rcDel = $(st,'button.rc-del');
+    const recEl = $(st,'.rc-rec'), clipEl = $(st,'.rc-clip'), live = $(st,'.rc-live'), cbars = $(st,'.rc-bars'), note = $(st,'.rc-note'), len = $(st,'.rc-len'), ic = $(st,'.rc-ic');
+    const dm = new Digits($(st,'.rc-m'), 1), ds = new Digits($(st,'.rc-s'), 2); dm.set('0', true); ds.set('00', true);
+    const lb = [...Array(NL)].map(() => { const b = AU_EL('i', 'flex:1;min-width:2px;border-radius:2px;height:4px;background:var(--danger)'); live.appendChild(b); return b; });
+    const cb = [...Array(NC)].map(() => { const b = AU_EL('i', 'flex:1;min-width:2px;border-radius:2px;height:4px;background:var(--raised)'); cbars.appendChild(b); return b; });
+    const ch = cb.map(() => new Track(4, S.soft)), width = new Track(56, S.base), icon = new Track(0, S.snap), sw = new Swap('idle'), mic = new Swap('idle');
+    let state = 'idle', t0 = 0, hist = Array(NL).fill(0), samples = [], lastS = -1, sec = -1, clipLen = 1, playing = false, pp = 0, pt0 = 0;
+    const target = () => Math.min(size(root).cw || 320, 330);
+    const go = (next, w, t) => { state = next; sw.to(next, t); mic.to(next, t); if (REDUCE) width.jump(w); else width.set(w, S.base, t); };
+    const say = s => { note.textContent = s; };
+    rcMic.onclick = () => { const t = now(); t0 = t; hist = Array(NL).fill(0); samples = []; lastS = -1; sec = -1; dm.set('0', true); ds.set('00', true); go('rec', target(), t); say('Recording'); rcStop.focus({ preventScroll:true }); };
+    const cancel = () => { if (state !== 'rec') return; go('idle', 56, now()); say('Recording cancelled'); rcMic.focus({ preventScroll:true }); };
+    rcCancel.onclick = cancel;
+    pill.onkeydown = e => { if (e.key === 'Escape') cancel(); };
+    rcStop.onclick = () => { const t = now(), el = t - t0; clipLen = Math.max(1, Math.round(el));
+      const src = samples.length ? samples : [.4], out = [...Array(NC)].map((_,i) => { const a = Math.floor(i/NC*src.length), b = Math.max(a + 1, Math.floor((i + 1)/NC*src.length)); return Math.max(...src.slice(a, b)); });
+      const top = Math.max(...out) || 1;
+      cb.forEach((_,i) => { const from = 4 + hist[Math.min(NL - 1, Math.floor(i/NC*NL))]*32, to = 4 + clamp(out[i]/top, .12, 1)*32; ch[i].jump(from); if (REDUCE) ch[i].jump(to); else ch[i].set(to, S.soft, t + i*.012); });
+      len.textContent = AU_FMT(clipLen); pp = 0; playing = false; icon.jump(0); go('clip', target(), t); say(`Clip saved, ${AU_FMT(clipLen)}`); rcPlay.focus({ preventScroll:true }); };
+    rcPlay.onclick = () => { const t = now(); if (!playing){ if (pp >= 1) pp = 0; pt0 = t - pp*clipLen; playing = true; } else { pp = clamp((t - pt0)/clipLen); playing = false; } if (REDUCE) icon.jump(playing ? 1 : 0); else icon.set(playing ? 1 : 0); rcPlay.setAttribute('aria-label', playing ? 'Pause clip' : 'Play clip'); };
+    rcDel.onclick = () => { playing = false; pp = 0; icon.jump(0); go('idle', 56, now()); say('Clip deleted'); rcMic.focus({ preventScroll:true }); };
+    return t => {
+      if (state === 'rec'){ const el = t - t0, lv = AU_LEVEL(el), s = Math.floor(el*14);
+        if (s !== lastS){ lastS = s; hist.push(lv); hist.shift(); samples.push(lv); }
+        const n = Math.floor(el); if (n !== sec){ sec = n; dm.set(String(Math.floor(n/60)), REDUCE); ds.set(String(n%60).padStart(2,'0'), REDUCE); }
+        lb.forEach((b,i) => { b.style.height = px(4 + hist[i]*32); }); }
+      dm.render(t); ds.render(t);
+      const w = width.at(t); pill.style.width = px(Math.max(56, w)); pill.style.borderRadius = '28px';
+      sw.apply(recEl, 'rec', t); sw.apply(clipEl, 'clip', t); mic.apply(rcMic, 'idle', t);
+      if (state === 'clip'){ if (playing && t - pt0 >= clipLen){ playing = false; pp = 1; if (REDUCE) icon.jump(0); else icon.set(0); rcPlay.setAttribute('aria-label', 'Play clip'); }
+        const p = playing ? clamp((t - pt0)/clipLen) : pp;
+        cb.forEach((b,i) => { b.style.height = px(Math.max(3, ch[i].at(t))); b.style.background = mix(clamp(p*NC - i), 'var(--ink)', 'var(--raised)'); }); }
+      ic.setAttribute('d', AU_ICON(clamp(icon.at(t))));
+    };
+  }});
+
+atom({ id:'audio-transcript', cat:'Audio', name:'Transcript follow-along', block:'audio, transcript, captions', fam:['M','T'],
+  html:`<div class="card col" style="width:min(340px,94%);padding:14px;gap:10px"><div class="row" style="gap:10px"><button class="tr-pp" aria-label="Play" style="${AU_BTN}background:var(--ink);color:var(--card)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path class="tr-ic"/></svg></button><div style="flex:1;min-width:0"><div class="row small muted num" style="justify-content:space-between"><span class="tr-t">0:00</span><span class="tr-d"></span></div><div style="height:4px;border-radius:2px;background:var(--raised);overflow:hidden;margin-top:4px"><i class="tr-bar" style="display:block;height:100%;width:0;background:var(--accent)"></i></div></div></div><p class="tr-txt" style="position:relative;margin:0;font-size:16px;line-height:2.3;color:var(--muted)"></p></div><div class="hint">Press play and the pill follows the voice. Tap or Tab to any word to jump there</div>`,
+  desc:'A highlight pill glides from word to word as a simulated clock plays, taking each word\'s own box so it stretches across long and short words. Tapping any word moves the clock there and keeps playing.',
+  api:'i = last word with start ≤ clock   pill.{x,y,w,h}.set(word.box)   word click: p0 = start[i]',
+  init(st){
+    const TEXT = 'Okay so the plan is to ship the new onboarding on Thursday, then walk support through the changes on Friday morning.';
+    const trPlay = $(st,'button.tr-pp');
+    const path = $(st,'.tr-ic'), txt = $(st,'.tr-txt'), tt = $(st,'.tr-t'), bar = $(st,'.tr-bar');
+    const words = TEXT.split(' '), starts = []; let acc = .3;
+    words.forEach(w => { starts.push(acc); acc += .17 + .04*w.length + (/[,.]$/.test(w) ? .3 : 0); });
+    const TOTAL = acc; $(st,'.tr-d').textContent = AU_FMT(TOTAL);
+    const pill = AU_EL('span', 'position:absolute;left:0;top:0;border-radius:10px;background:color-mix(in oklab, var(--accent) 20%, transparent);pointer-events:none;opacity:0'); txt.appendChild(pill);
+    function mkWord(w, i){ const trWord = AU_EL('button', 'position:relative;display:inline-block;border:0;background:none;padding:0 3px;margin:0;font:inherit;color:inherit;cursor:pointer;line-height:inherit;min-height:36px', w); trWord.type = 'button'; trWord.onclick = () => { const t = now(); p0 = starts[i] + .01; t0 = t; ended = false; setPlay(true); focusWord(i, t); }; txt.appendChild(trWord); txt.appendChild(document.createTextNode(' ')); return trWord; }
+    const trWords = words.map(mkWord);
+    const px_ = new Track(0, S.base), py = new Track(0, S.base), pw = new Track(0, S.base), ph = new Track(0, S.base), po = new Track(0, S.snap), ic = new Track(0, S.snap);
+    let playing = false, p0 = 0, t0 = 0, cur = -1, ended = false;
+    const pos = t => playing ? Math.min(TOTAL, p0 + (t - t0)) : p0;
+    const idxAt = p => { let k = -1; starts.forEach((s,i) => { if (p >= s) k = i; }); return k; };
+    const focusWord = (k, t) => { if (k === cur) return; cur = k;
+      trWords.forEach((b,i) => { b.style.color = i < k ? 'var(--ink)' : i === k ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = i === k ? '600' : '400'; if (i === k) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current'); });
+      if (k < 0){ po.set(0, S.snap, t); return; }
+      const b = trWords[k], fresh = po.target === 0;
+      if (REDUCE || fresh){ px_.jump(b.offsetLeft); py.jump(b.offsetTop); pw.jump(b.offsetWidth); ph.jump(b.offsetHeight); }
+      else { px_.set(b.offsetLeft, S.base, t); py.set(b.offsetTop, S.base, t); pw.set(b.offsetWidth, S.base, t); ph.set(b.offsetHeight, S.base, t); }
+      po.set(1, S.snap, t); };
+    const setPlay = on => { playing = on; trPlay.setAttribute('aria-label', on ? 'Pause' : ended ? 'Replay' : 'Play'); if (REDUCE) ic.jump(on ? 1 : 0); else ic.set(on ? 1 : 0); };
+    trPlay.onclick = () => { const t = now(); if (playing){ p0 = pos(t); setPlay(false); } else { if (ended || p0 >= TOTAL){ p0 = 0; ended = false; } t0 = t; setPlay(true); } };
+    return t => {
+      if (playing && p0 + (t - t0) >= TOTAL){ p0 = TOTAL; ended = true; setPlay(false); }
+      const p = pos(t); focusWord(idxAt(p), t);
+      path.setAttribute('d', AU_ICON(clamp(ic.at(t))));
+      pill.style.opacity = clamp(po.at(t)).toFixed(3); pill.style.width = px(Math.max(0, pw.at(t))); pill.style.height = px(Math.max(0, ph.at(t))); pill.style.transform = `translate(${px(px_.at(t))},${px(py.at(t))})`;
+      bar.style.width = (p/TOTAL*100).toFixed(2) + '%'; tt.textContent = AU_FMT(p);
+    };
+  }});
+
+atom({ id:'audio-room', cat:'Audio', name:'Audio room', block:'audio, room, speakers', fam:['M','S','E','T'], tall:true,
+  html:`<div class="card col" style="width:min(340px,94%);padding:12px;gap:10px"><div class="row" style="justify-content:space-between"><b style="font-size:15px;font-weight:600">Product sync</b><span class="small muted rm-n" aria-live="polite"></span></div><div class="rm-grid" role="group" aria-label="People in the room" style="position:relative;height:168px"></div><div class="row" style="flex-wrap:wrap;gap:8px"><button class="rm-join" style="min-height:44px;padding:0 14px;border:0;border-radius:10px;background:var(--ink);color:var(--card);font-size:13px;font-weight:500;cursor:pointer">Someone joins</button><button class="rm-leave" style="min-height:44px;padding:0 14px;border:0;border-radius:10px;background:var(--raised);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer">Someone leaves</button><button class="rm-hand" aria-pressed="false" style="min-height:44px;padding:0 14px;border:0;border-radius:10px;background:var(--raised);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer">Raise hand</button></div></div><div class="hint">Tap a person to mute them. Join and leave re-flow the grid on a spring</div>`,
+  desc:'Speaker tiles breathe with simulated voice levels. A join springs every tile to its new slot, raising a hand pops a badge past its rest size, and muting draws a slash across the mic while the ring settles.',
+  api:'slot(i, n): cols = n≤3 ? n : n≤4 ? 2 : 3   tile.{x,y,w,h}.set(slot)   ring = 1 + 0.45·smooth(level)',
+  init(st){
+    const grid = $(st,'.rm-grid'), count = $(st,'.rm-n');
+    const rmJoin = $(st,'button.rm-join');
+    const rmLeave = $(st,'button.rm-leave');
+    const rmHand = $(st,'button.rm-hand');
+    const PEOPLE = ['Ava','Ben','You','Cy','Dee','Eli','Fay'], HUES = ['var(--accent)','var(--success)','var(--ink)','var(--danger)','var(--warning)','var(--muted)','var(--accent)'], MAX = 7;
+    const POP = { w:22, z:.5 };
+    let tiles = [], leaving = [], nextName = 0, last = 0;
+    const slot = (i, n) => { const W = size(grid).cw || 316, H = 168, gap = 8, cols = n <= 3 ? n : n <= 4 ? 2 : 3, rows = Math.ceil(n/cols);
+      const w = (W - gap*(cols - 1))/cols, h = clamp((H - gap*(rows - 1))/rows, 72, 110), r = Math.floor(i/cols), c = i % cols, inRow = r === rows - 1 ? n - r*cols : cols;
+      const off = (cols - inRow)*(w + gap)/2; return { x:c*(w + gap) + off, y:r*(h + gap), w, h }; };
+    const relayout = (t, jump) => tiles.forEach((tl, i) => { const s = slot(i, tiles.length); const set = (tr, v) => (jump || REDUCE) ? tr.jump(v) : tr.set(v, S.base, t); set(tl.x, s.x); set(tl.y, s.y); set(tl.w, s.w); set(tl.h, s.h); });
+    function add(name, idx, t, instant){
+      const rmTile = AU_EL('button', 'position:absolute;left:0;top:0;border:0;border-radius:14px;background:var(--raised);color:var(--ink);padding:0;cursor:pointer;overflow:visible;transform-origin:50% 50%',
+        `<span class="ring" style="position:absolute;left:50%;top:14px;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:var(--accent);opacity:0;pointer-events:none"></span><span style="position:absolute;left:50%;top:14px;width:44px;height:44px;margin-left:-22px;border-radius:50%;display:grid;place-items:center;font:600 16px var(--sans);color:var(--card);background:${HUES[idx % HUES.length]}">${name[0]}</span><span style="position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;line-height:1.2">${name}</span><svg class="mu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:8px;top:8px"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/><path class="sl" d="M4 4L20 20" pathLength="1" stroke="var(--danger)" stroke-width="2.4" stroke-dasharray="1" stroke-dashoffset="1"/></svg><span class="hd" aria-hidden="true" style="position:absolute;right:6px;top:4px;font-size:16px;line-height:1">✋</span>`);
+      const tl = { name, idx, el:rmTile, ring:$(rmTile,'.ring'), sl:$(rmTile,'.sl'), mu:$(rmTile,'.mu'), hd:$(rmTile,'.hd'), x:new Track(0), y:new Track(0), w:new Track(100), h:new Track(100), sc:new Track(instant || REDUCE ? 1 : 0, S.base), msl:new Track(0, S.snap), hand:new Track(0, POP), muted:false, up:false, s:0 };
+      rmTile.setAttribute('aria-pressed', 'false'); rmTile.setAttribute('aria-label', `Mute ${name}`);
+      rmTile.onclick = () => { tl.muted = !tl.muted; tl.msl.set(tl.muted ? 1 : 0); rmTile.setAttribute('aria-pressed', String(tl.muted)); rmTile.setAttribute('aria-label', `${tl.muted ? 'Unmute' : 'Mute'} ${name}`); };
+      grid.appendChild(rmTile); tiles.push(tl);
+      const s = slot(tiles.length - 1, tiles.length); tl.x.jump(s.x); tl.y.jump(s.y); tl.w.jump(s.w); tl.h.jump(s.h);
+      if (!instant) tl.sc.set(1, S.base, t); return tl; }
+    const status = () => { count.textContent = `${tiles.length} here`; rmJoin.disabled = tiles.length >= MAX; rmLeave.disabled = tiles.length <= 2; rmJoin.style.opacity = rmJoin.disabled ? '.45' : '1'; rmLeave.style.opacity = rmLeave.disabled ? '.45' : '1'; };
+    PEOPLE.slice(0, 3).forEach((n,i) => add(n, i, 0, true)); nextName = 3; relayout(0, true); status();
+    rmJoin.onclick = () => { if (tiles.length >= MAX) return; const t = now(); add(PEOPLE[nextName++ % PEOPLE.length], nextName, t, false); relayout(t); status(); };
+    rmLeave.onclick = () => { if (tiles.length <= 2) return; const t = now(), tl = tiles.pop(); leaving.push(tl); tl.msl.jump(0); tl.sc.set(0, S.base, t); setTimeout(() => { tl.el.remove(); leaving = leaving.filter(x => x !== tl); }, REDUCE ? 60 : 700); relayout(t); status(); };
+    rmHand.onclick = () => { const me = tiles.find(x => x.name === 'You') || tiles[0]; me.up = !me.up; me.hand.set(me.up ? 1 : 0, me.up && !REDUCE ? POP : S.snap); rmHand.setAttribute('aria-pressed', String(me.up)); rmHand.textContent = me.up ? 'Lower hand' : 'Raise hand'; };
+    return t => { const dt = Math.min(.1, Math.max(0, t - last)); last = t;
+      for (const tl of tiles.concat(leaving)){
+        const gate = clamp((Math.sin(t*.6 + tl.idx*2.3) + .25)*1.6), raw = tl.muted ? 0 : AU_LEVEL(t*.9 + tl.idx*3.7)*gate;
+        tl.s += (raw - tl.s)*(1 - Math.exp(-dt*(REDUCE ? 40 : 12)));
+        const e = tl.el, sc = Math.max(0, tl.sc.at(t));
+        e.style.width = px(Math.max(0, tl.w.at(t))); e.style.height = px(Math.max(0, tl.h.at(t)));
+        e.style.transform = `translate(${px(tl.x.at(t))},${px(tl.y.at(t))}) scale(${sc.toFixed(3)})`; e.style.opacity = clamp(sc).toFixed(3);
+        const lv = REDUCE ? (raw > .25 ? .5 : 0) : tl.s; tl.ring.style.transform = `scale(${(1 + .5*lv).toFixed(3)})`; tl.ring.style.opacity = (lv > .02 ? .18 + .5*lv : 0).toFixed(3);
+        tl.sl.setAttribute('stroke-dashoffset', (1 - clamp(tl.msl.at(t))).toFixed(3)); tl.mu.style.color = tl.muted ? 'var(--danger)' : 'var(--muted)';
+        const h = Math.max(0, tl.hand.at(t)); tl.hd.style.transform = `scale(${h.toFixed(3)})`; tl.hd.style.opacity = clamp(h).toFixed(3);
+      } };
+  }});
+
+// Comment recipes: threads, reactions, voice replies and link previews. All content is local and simulated.
+const CM_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
+const CM_FMT = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const CM_AV = (name, size, hue) => `<span aria-hidden="true" style="flex:none;width:${size}px;height:${size}px;border-radius:50%;display:grid;place-items:center;background:${hue};color:var(--card);font:600 ${Math.round(size*.42)}px var(--sans)">${name[0].toUpperCase()}</span>`;
+const CM_ICON = {
+  heart:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="fill" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  chat:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.1A8 8 0 1 1 20 12z"/></svg>',
+  repost:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3l3 3-3 3M4 11V9a3 3 0 0 1 3-3h13M7 21l-3-3 3-3M20 13v2a3 3 0 0 1-3 3H4"/></svg>',
+  send:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3L10 14M21 3l-7 18-4-7-7-4 18-7z"/></svg>',
+  mic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  x:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  stop:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>',
+  play:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>',
+  pause:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+  smile:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4 4 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg>',
+};
+const CM_BTN = 'border:0;border-radius:50%;width:44px;height:44px;flex:none;display:grid;place-items:center;cursor:pointer;padding:0;';
+const CM_LEVEL = t => clamp(.1 + .62*Math.abs(Math.sin(t*5.3))*(.55 + .45*Math.sin(t*1.7 + 1)) + .18*Math.abs(Math.sin(t*13.1)), 0, 1);
+
+atom({ id:'comments-thread', cat:'Comments', name:'Threaded replies', block:'comments, thread, replies', fam:['M','S','E'], tall:true,
+  html:`<div class="card ct-card" style="width:min(340px,94%);max-height:310px;overflow:auto;padding:12px 12px 4px"><div class="ct-post"></div><div class="ct-list"></div></div><div class="hint">Like and repost roll their counts. View more opens the rest of the thread on a height spring</div>`,
+  desc:'A post with a rail that runs from the parent avatar and curves into each reply. The like and repost counts roll digit by digit, and View 3 more replies opens the nested replies on a height spring while the rail grows with them.',
+  api:'rail = connector(border-left + radius) per reply   more.h.set(measure(inner))   count.set(n ± 1) → Digits',
+  init(st){
+    const card = $(st,'.ct-card'), post = $(st,'.ct-post'), list = $(st,'.ct-list');
+    const LINE = 'background:var(--line)', ROW = 'position:relative;display:grid;gap:8px;padding-bottom:10px';
+    const reply = (name, hue, when, text, last) => `<div class="ct-r" style="${ROW};grid-template-columns:28px 1fr;margin-left:46px"><i style="position:absolute;left:-29px;top:-10px;width:27px;height:24px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);border-bottom-left-radius:14px;box-sizing:border-box"></i>${last ? '' : `<i style="position:absolute;left:-29px;top:12px;bottom:-10px;width:2px;${LINE}"></i>`}${CM_AV(name, 28, hue)}<div style="min-width:0"><div style="font-size:13px;line-height:20px"><b style="font-weight:600">${name}</b> <span class="muted">· ${when}</span></div><div style="font-size:14px;line-height:1.4">${text}</div></div></div>`;
+    post.innerHTML = `<div style="${ROW};grid-template-columns:36px 1fr;padding-bottom:6px"><div style="position:relative">${CM_AV('ginandtanic', 36, 'var(--accent)')}<i style="position:absolute;left:17px;top:42px;bottom:-6px;width:2px;${LINE}"></i></div><div style="min-width:0"><div style="font-size:13px;line-height:20px;display:flex;align-items:center;gap:4px;flex-wrap:wrap"><b style="font-weight:600">ginandtanic</b><svg width="14" height="14" viewBox="0 0 24 24" aria-label="Verified" role="img"><circle cx="12" cy="12" r="11" fill="var(--accent)"/><path d="M7 12.5l3.4 3.4L17 9" fill="none" stroke="var(--card)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="muted">› midterms 2026 · 1d</span></div><div style="font-size:14px;line-height:1.45;margin-top:2px">Early voting turnout in the county is already past 2022 totals. Worth a look before polls open.</div><div class="ct-acts" style="display:flex;align-items:center;margin:0 -10px"><button class="ct-like" aria-pressed="false" aria-label="Like, 164" style="display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 10px;border:0;background:none;color:var(--ink);cursor:pointer;font-size:13px">${CM_ICON.heart}<span class="ct-ln num"></span></button><button class="ct-cmt" aria-label="Replies, 2" style="display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 10px;border:0;background:none;color:var(--ink);cursor:pointer;font-size:13px">${CM_ICON.chat}<span class="ct-cn num"></span></button><button class="ct-rep" aria-pressed="false" aria-label="Repost, 6" style="display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 10px;border:0;background:none;color:var(--ink);cursor:pointer;font-size:13px">${CM_ICON.repost}<span class="ct-rn num"></span></button><button class="ct-send" aria-label="Copy link" style="display:inline-flex;align-items:center;min-height:44px;padding:0 10px;border:0;background:none;color:var(--ink);cursor:pointer">${CM_ICON.send}</button><span class="ct-say small muted" role="status" style="position:relative;display:block;flex:1;min-width:0;height:20px"></span></div></div></div>`;
+    list.innerHTML = reply('mara.k', 'var(--success)', '22h', 'Same here, lines wrapped past the block at 7am.') + reply('theo_p', 'var(--warning)', '20h', 'Sharing this in the neighbourhood thread.') +
+      `<div class="ct-vm" style="position:relative;margin-left:46px"><i style="position:absolute;left:-29px;top:-10px;width:27px;height:34px;border-left:2px solid var(--line);border-bottom:2px solid var(--line);border-bottom-left-radius:14px;box-sizing:border-box"></i><div class="ct-vmc" style="height:100%;overflow:hidden"><button class="ct-more" aria-expanded="false" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0;border:0;background:none;color:var(--muted);font-size:13px;cursor:pointer;margin-left:4px"><span style="display:flex;margin-right:2px">${['var(--accent)','var(--danger)','var(--ink)'].map((h,i) => `<span style="margin-left:${i ? -6 : 0}px;box-shadow:0 0 0 2px var(--card);border-radius:50%;display:flex">${CM_AV('abc'[i], 18, h)}</span>`).join('')}</span>View 3 more replies</button></div></div>` +
+      `<div class="ct-more-box" style="overflow:hidden;height:0;visibility:hidden"><div class="ct-in">${reply('sol.n', 'var(--danger)', '18h', 'Polls near the library were quick this morning.')}${reply('ines.d', 'var(--accent)', '16h', 'Did anyone check the county site for wait times?')}${reply('ravi', 'var(--muted)', '12h', 'Yes, it updates every fifteen minutes.', true)}</div></div>`;
+    const ctLike = $(st,'button.ct-like');
+    const ctCmt = $(st,'button.ct-cmt');
+    const ctRep = $(st,'button.ct-rep');
+    const ctSend = $(st,'button.ct-send');
+    const ctMore = $(st,'button.ct-more');
+    const ln = new Digits($(st,'.ct-ln'), 3), cn = new Digits($(st,'.ct-cn'), 2), rn = new Digits($(st,'.ct-rn'), 2); ln.set('164', true); cn.set('2', true); rn.set('6', true);
+    const heartFill = $(ctLike,'.fill'), repIcon = $(ctRep,'svg'), say = $(st,'.ct-say'), vm = $(st,'.ct-vm'), box = $(st,'.ct-more-box'), inner = $(st,'.ct-in');
+    const sayEl = ['', 'Link copied'].map(s => { const e = CM_EL('span', 'position:absolute;left:4px;top:0;font-size:12px;line-height:20px', s); say.appendChild(e); return e; }); const ssw = new Swap(0);
+    const pop = { w:24, z:.45 }, hs = new Track(1, S.snap), rs = new Track(1, S.snap), mh = new Track(0, S.base), vh = new Track(44, S.base), vo = new Track(1, S.base);
+    let liked = false, reposted = false, open = false, copyAt = 0;
+    ctLike.onclick = () => { liked = !liked; ln.set(String(164 + (liked ? 1 : 0)), REDUCE); ctLike.setAttribute('aria-pressed', String(liked)); ctLike.setAttribute('aria-label', `Like, ${164 + (liked ? 1 : 0)}`); if (REDUCE) hs.jump(1); else { hs.jump(.7); hs.set(1, pop); } ctLike.style.color = liked ? 'var(--danger)' : 'var(--ink)'; heartFill.setAttribute('fill', liked ? 'currentColor' : 'none'); };
+    ctRep.onclick = () => { reposted = !reposted; rn.set(String(6 + (reposted ? 1 : 0)), REDUCE); ctRep.setAttribute('aria-pressed', String(reposted)); ctRep.setAttribute('aria-label', `Repost, ${6 + (reposted ? 1 : 0)}`); if (REDUCE) rs.jump(1); else { rs.jump(.7); rs.set(1, pop); } ctRep.style.color = reposted ? 'var(--success)' : 'var(--ink)'; };
+    ctSend.onclick = () => { ssw.to(1); copyAt = now() + 1.6; };
+    const expand = () => { if (open) return; open = true; ctMore.setAttribute('aria-expanded', 'true'); box.style.visibility = 'visible'; const H = inner.offsetHeight;
+      if (REDUCE){ mh.jump(H); vh.jump(0); vo.jump(0); } else { mh.set(H, S.soft); vh.set(0, S.soft); vo.set(0, S.snap); } };
+    ctMore.onclick = expand; ctCmt.onclick = () => { expand(); if (!REDUCE) box.scrollIntoView({ block:'nearest', behavior:'smooth' }); };
+    return t => { if (copyAt && t >= copyAt){ copyAt = 0; ssw.to(0); }
+      ln.render(t); cn.render(t); rn.render(t); sayEl.forEach((e,i) => ssw.apply(e, i, t));
+      heartFill.parentNode.style.transform = `scale(${hs.at(t).toFixed(3)})`; repIcon.style.transform = `scale(${rs.at(t).toFixed(3)})`;
+      box.style.height = px(Math.max(0, mh.at(t))); vm.style.height = open ? px(Math.max(0, vh.at(t))) : ''; vm.style.opacity = clamp(vo.at(t)).toFixed(3); if (open && vh.at(t) < 1){ vm.style.visibility = 'hidden'; } };
+  }});
+
+atom({ id:'comments-reactions', cat:'Comments', name:'Reaction picker', block:'comments, reactions, emoji', fam:['M','S','X'], tall:true,
+  html:`<div class="card rp-card" style="position:relative;width:min(340px,94%);padding:12px;display:flex;flex-direction:column;gap:6px"><div class="row" style="align-items:flex-start;gap:10px"><span aria-hidden="true" style="flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--success);color:var(--card);font:600 13px var(--sans)">M</span><div style="min-width:0"><div style="font-size:13px;line-height:20px"><b style="font-weight:600">mara.k</b> <span class="muted">· 4m</span></div><div style="font-size:14px;line-height:1.45">Pushed the fix. Can you try it on staging?</div></div></div><div class="row" style="gap:6px;flex-wrap:wrap;padding-left:42px"><button class="rp-open" aria-haspopup="true" aria-expanded="false" aria-label="Add a reaction" style="${CM_BTN}background:var(--raised);color:var(--ink)">${CM_ICON.smile}</button><span class="rp-chips" style="display:contents"></span></div><div class="rp-pick" role="group" aria-label="Choose a reaction" style="position:absolute;left:46px;bottom:66px;display:flex;gap:0;padding:4px;border-radius:999px;background:var(--card);box-shadow:var(--float-shadow, var(--shadow));transform-origin:0% 100%;visibility:hidden"></div></div><div class="hint">Click or press and hold the smile to open the row. Arrow keys move, Enter picks, Escape closes</div>`,
+  desc:'The picker row rises staggered from the smile button. The chosen emoji flies to its summary chip on a spring and the count rolls when it lands; picking again, or tapping your own chip, takes the reaction back.',
+  api:'pick[i].{y,o}.set(0,1, base, t0 + i·0.04)   fly.{x,y}.set(chip.center)   on land: count.set(n ± 1)',
+  init(st){
+    const E = ['👍','❤️','😂','🎉','👀','🙏'], NAMES = ['thumbs up','heart','laughing','party','eyes','thanks'], card = $(st,'.rp-card'), pick = $(st,'.rp-pick'), chipsEl = $(st,'.rp-chips');
+    const rpOpen = $(st,'button.rp-open');
+    const counts = [3, 2, 0, 1, 0, 0], digits = [];
+    function mkPick(e, i){ const rpPick = CM_EL('button', 'width:44px;height:44px;border:0;border-radius:50%;background:none;font-size:22px;line-height:1;cursor:pointer;padding:0', e); rpPick.type = 'button'; rpPick.setAttribute('aria-label', `React ${NAMES[i]}`); rpPick.setAttribute('aria-pressed', 'false'); rpPick.onclick = () => toggleMine(i, rpPick); pick.appendChild(rpPick); return { el:rpPick, y:new Track(16, S.base), o:new Track(0, S.base) }; }
+    const picks = E.map(mkPick);
+    function mkChip(e, i){ const rpChip = CM_EL('button', 'min-height:44px;border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font-size:13px;position:relative', `<span class="in" style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--raised);box-shadow:0 0 0 1.5px transparent"><span aria-hidden="true" style="font-size:15px">${e}</span><span class="num"></span></span>`); rpChip.type = 'button'; rpChip.onclick = () => toggleMine(i, rpChip); chipsEl.appendChild(rpChip);
+      const d = new Digits($(rpChip,'.num'), 2); d.set(String(counts[i]), true); digits.push(d); return { el:rpChip, inn:$(rpChip,'.in'), o:new Track(counts[i] ? 1 : 0, S.snap), sc:new Track(1, S.snap) }; }
+    const chips = E.map(mkChip);
+    const pop = { w:24, z:.45 }, shell = new Track(0, S.base), flies = [], q = [];
+    let isOpen = false, mine = -1, hold = 0, held = false;
+    const sync = () => chips.forEach((c,i) => { const on = counts[i] > 0; c.el.hidden = !on && c.o.target === 0 && !c.pend; c.el.setAttribute('aria-pressed', String(mine === i)); c.el.setAttribute('aria-label', `${E[i]} ${NAMES[i]}, ${counts[i]}${mine === i ? ', you reacted' : ''}`); c.inn.style.boxShadow = mine === i ? '0 0 0 1.5px var(--accent)' : '0 0 0 1.5px transparent'; c.inn.style.background = mine === i ? 'color-mix(in oklab, var(--accent) 14%, var(--raised))' : 'var(--raised)'; });
+    const setOpen = (on, byKey) => { if (on === isOpen) return; isOpen = on; rpOpen.setAttribute('aria-expanded', String(on)); const t = now();
+      if (on){ pick.style.visibility = 'visible'; picks.forEach((p,i) => { p.y.jump(REDUCE ? 0 : 16); p.o.jump(REDUCE ? 1 : 0); if (!REDUCE){ p.y.set(0, S.base, t + i*.04); p.o.set(1, S.base, t + i*.04); } }); if (REDUCE) shell.jump(1); else shell.set(1, S.base, t); if (byKey) picks[Math.max(0, mine)].el.focus({ preventScroll:true }); }
+      else { if (REDUCE){ shell.jump(0); picks.forEach(p => p.o.jump(0)); } else { shell.set(0, S.snap, t); picks.forEach(p => p.o.set(0, S.snap, t)); } } };
+    const change = (i, delta, t) => { counts[i] = Math.max(0, counts[i] + delta); digits[i].set(String(counts[i]), REDUCE); const c = chips[i]; c.pend = false; if (counts[i] > 0){ c.el.hidden = false; c.o.set(1, S.snap, t); } else c.o.set(0, S.snap, t); if (!REDUCE && delta > 0){ c.sc.jump(.8); c.sc.set(1, pop, t); } sync(); };
+    const toggleMine = (i, from) => { const t = now(); const cardR = card.getBoundingClientRect();
+      if (mine === i){ mine = -1; change(i, -1, t); picks.forEach((p,k) => p.el.setAttribute('aria-pressed', 'false')); return; }
+      const prev = mine; mine = i; picks.forEach((p,k) => p.el.setAttribute('aria-pressed', String(k === i)));
+      if (prev >= 0) change(prev, -1, t);
+      const c = chips[i]; c.pend = true; c.el.hidden = false; c.o.jump(counts[i] > 0 ? 1 : 0); sync();
+      const cr = c.inn.getBoundingClientRect(), sr = from.getBoundingClientRect(), f = CM_EL('span', 'position:absolute;left:0;top:0;font-size:22px;line-height:1;pointer-events:none;will-change:transform', E[i]); card.appendChild(f);
+      const sx = sr.left - cardR.left + sr.width/2 - 11, sy = sr.top - cardR.top + sr.height/2 - 11, ex = cr.left - cardR.left + 10, ey = cr.top - cardR.top + cr.height/2 - 11;
+      if (REDUCE){ f.remove(); change(i, 1, t); return; }
+      const fl = { f, x:new Track(sx, S.soft), y:new Track(sy, S.soft), s:new Track(1.35, S.soft) }; fl.x.jump(sx); fl.y.jump(sy); fl.x.set(ex, S.soft, t); fl.y.set(ey, S.soft, t); fl.s.jump(1.35); fl.s.set(1, S.soft, t); flies.push(fl);
+      q.push([t + .5, () => { f.remove(); flies.splice(flies.indexOf(fl), 1); change(i, 1, now()); }]); setOpen(false); };
+    rpOpen.onclick = () => { if (held){ held = false; return; } setOpen(!isOpen, false); };
+    rpOpen.onpointerdown = () => { clearTimeout(hold); hold = setTimeout(() => { held = true; setOpen(true, false); }, 420); };
+    rpOpen.onpointerup = rpOpen.onpointerleave = () => clearTimeout(hold);
+    rpOpen.onkeydown = e => { if (e.key === 'ArrowUp' || e.key === 'ArrowRight'){ e.preventDefault(); setOpen(true, true); } };
+    pick.onkeydown = e => { const k = picks.findIndex(p => p.el === document.activeElement); if (e.key === 'Escape'){ setOpen(false); rpOpen.focus({ preventScroll:true }); }
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft'){ e.preventDefault(); picks[(k + (e.key === 'ArrowRight' ? 1 : picks.length - 1)) % picks.length].el.focus({ preventScroll:true }); } };
+    sync();
+    return t => { while (q.length && q[0][0] <= t) q.shift()[1]();
+      const s = clamp(shell.at(t)); pick.style.opacity = s.toFixed(3); pick.style.transform = `scale(${(.85 + .15*s).toFixed(3)})`; if (!isOpen && s < .02) pick.style.visibility = 'hidden';
+      picks.forEach(p => { fade(p.el, clamp(p.o.at(t)), p.y.at(t), false); });
+      chips.forEach(c => { c.el.style.opacity = clamp(c.o.at(t)).toFixed(3); c.inn.style.transform = `scale(${c.sc.at(t).toFixed(3)})`; });
+      digits.forEach(d => d.render(t));
+      flies.forEach(fl => { fl.f.style.transform = `translate(${px(fl.x.at(t))},${px(fl.y.at(t))}) scale(${fl.s.at(t).toFixed(3)})`; }); };
+  }});
+
+atom({ id:'comments-voice-reply', cat:'Comments', name:'Voice reply in a thread', block:'comments, voice, composer', fam:['M','S','X','T'], tall:true,
+  html:`<div class="card col" style="width:min(340px,94%);padding:12px;gap:8px"><div class="row" style="align-items:flex-start;gap:10px"><span aria-hidden="true" style="flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--card);font:600 13px var(--sans)">R</span><div style="min-width:0"><div style="font-size:13px;line-height:20px"><b style="font-weight:600">ravi</b> <span class="muted">· 2h</span></div><div style="font-size:14px;line-height:1.4">Does the new release fix the export bug?</div></div></div><div class="vr-list" aria-live="polite" style="display:flex;flex-direction:column;padding-left:42px"></div><div class="vr-comp" style="position:relative;height:52px"><div class="vr-type" style="position:absolute;inset:0;display:flex;align-items:center;gap:6px"><input class="vr-in" autocomplete="off" aria-label="Add to thread" placeholder="Add to thread…" style="flex:1;min-width:0;height:44px;border-radius:22px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);padding:0 14px;font-size:14px"><button class="vr-mic" aria-label="Record a voice reply" style="${CM_BTN}background:var(--raised);color:var(--ink)">${CM_ICON.mic}</button><button class="vr-send" aria-label="Send reply" style="${CM_BTN}background:var(--ink);color:var(--card)">${CM_ICON.send}</button></div><div class="vr-rec" style="position:absolute;inset:0;display:flex;align-items:center;gap:6px;padding:0 4px;border-radius:26px;background:var(--raised)"><button class="vr-cancel" aria-label="Cancel recording" style="${CM_BTN}background:none;color:var(--ink)">${CM_ICON.x}</button><div class="vr-live" aria-hidden="true" style="flex:1;min-width:0;height:32px;display:flex;align-items:center;gap:2px;overflow:hidden"></div><span class="num" role="timer" aria-label="Recording time" style="display:inline-flex;font-size:13px;font-weight:600;flex:none"><span class="vr-m"></span><span>:</span><span class="vr-s"></span></span><button class="vr-stop" aria-label="Stop and add to thread" style="${CM_BTN}background:var(--danger);color:var(--card)">${CM_ICON.stop}</button></div></div></div><div class="hint">Type and press Enter, or tap the mic, record and press Stop. The reply rises into the thread</div>`,
+  desc:'The mic in the composer swaps the text field for live level bars and rolling digits. Stop sends the clip into the thread as a new reply that rises in on a height spring and carries its own mini player; typed replies land the same way.',
+  api:'composer: swap(type ↔ rec)   reply.{h,y,o}.set(measure, soft)   mini player: fill = (t − t0)/dur',
+  init(st){
+    const list = $(st,'.vr-list'), inp = $(st,'input.vr-in');
+    const vrMic = $(st,'button.vr-mic');
+    const vrSend = $(st,'button.vr-send');
+    const vrCancel = $(st,'button.vr-cancel');
+    const vrStop = $(st,'button.vr-stop');
+    const typeEl = $(st,'.vr-type'), recEl = $(st,'.vr-rec'), live = $(st,'.vr-live'), NL = 22, NB = 22;
+    const dm = new Digits($(st,'.vr-m'), 1), ds = new Digits($(st,'.vr-s'), 2); dm.set('0', true); ds.set('00', true);
+    const lb = [...Array(NL)].map(() => { const b = CM_EL('i', 'flex:1;min-width:2px;border-radius:2px;height:4px;background:var(--danger)'); live.appendChild(b); return b; });
+    const sw = new Swap('type'); let rec = false, t0 = 0, hist = Array(NL).fill(0), samples = [], lastS = -1, sec = -1, rows = [], n = 0;
+    const row = (inner, who) => { const el = CM_EL('div', 'overflow:hidden;position:relative', `<div class="in" style="display:grid;grid-template-columns:28px 1fr;gap:8px;padding:4px 0 8px">${CM_AV(who, 28, who === 'you' ? 'var(--ink)' : 'var(--success)')}<div style="min-width:0"><div style="font-size:13px;line-height:20px"><b style="font-weight:600">${who}</b> <span class="muted">· now</span></div>${inner}</div></div>`);
+      list.appendChild(el); const H = $(el,'.in').offsetHeight; const r = { el, H, h:new Track(REDUCE ? H : 0, S.soft), y:new Track(REDUCE ? 0 : 14, S.soft), o:new Track(REDUCE ? 1 : 0, S.base), gone:false }; if (!REDUCE){ r.h.set(H); r.y.set(0); r.o.set(1, S.base, now() + .08); } el.style.height = px(r.h.at(now())); rows.push(r); trim(); return r; };
+    const trim = () => { const live2 = rows.filter(r => !r.gone); if (live2.length > 3){ const old = live2[0]; old.gone = true; old.done = false; old.h.set(0, S.soft); old.o.set(0, S.snap); setTimeout(() => { old.el.remove(); rows = rows.filter(r => r !== old); }, REDUCE ? 60 : 800); } };
+    const players = [];
+    const voice = (dur, amps) => { const id = ++n, bars = amps.map(a => `<i style="flex:1;min-width:2px;border-radius:2px;height:${(4 + a*20).toFixed(1)}px;background:var(--raised)"></i>`).join('');
+      const r = row(`<div class="vr-mp${id}" style="display:flex;align-items:center;gap:8px;margin-top:2px"><button class="vr-pp" aria-label="Play voice reply" style="${CM_BTN}width:44px;height:44px;background:var(--ink);color:var(--card);position:relative"><span class="pl" style="display:grid;place-items:center">${CM_ICON.play}</span><span class="pa" style="position:absolute;display:grid;place-items:center;opacity:0">${CM_ICON.pause}</span></button><div class="wv" aria-hidden="true" style="flex:1;min-width:0;height:28px;display:flex;align-items:center;gap:2px">${bars}</div><span class="num muted" style="font-size:12px;flex:none">${CM_FMT(dur)}</span></div>`, 'you');
+      const vrRow = r.el;
+      const vrPlay = $(vrRow,'button.vr-pp');
+      const ws = [...r.el.querySelectorAll('.wv i')], P = { dur, ws, on:false, p:0, t0:0, pl:$(vrPlay,'.pl'), pa:$(vrPlay,'.pa'), k:new Track(0, S.snap) }; players.push(P);
+      vrPlay.onclick = () => { const t = now(); if (!P.on){ if (P.p >= 1) P.p = 0; P.t0 = t - P.p*dur; P.on = true; } else { P.p = clamp((t - P.t0)/dur); P.on = false; } if (REDUCE) P.k.jump(P.on ? 1 : 0); else P.k.set(P.on ? 1 : 0); vrPlay.setAttribute('aria-label', P.on ? 'Pause voice reply' : 'Play voice reply'); }; };
+    const esc = v => v.replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+    const text = () => { const v = inp.value.trim(); if (!v) return; row(`<div style="font-size:14px;line-height:1.4;overflow-wrap:anywhere">${esc(v)}</div>`, 'you'); inp.value = ''; };
+    vrSend.onclick = text; inp.onkeydown = e => { if (e.key === 'Enter'){ e.preventDefault(); text(); } };
+    const startRec = () => { const t = now(); rec = true; t0 = t; hist = Array(NL).fill(0); samples = []; lastS = -1; sec = -1; dm.set('0', true); ds.set('00', true); sw.to('rec', t); vrStop.focus({ preventScroll:true }); };
+    const endRec = (keep) => { if (!rec) return; const t = now(), el = Math.max(1, Math.round(t - t0)); rec = false; sw.to('type', t);
+      if (keep){ const src = samples.length ? samples : [.4], amps = [...Array(NB)].map((_,i) => { const a = Math.floor(i/NB*src.length), b = Math.max(a + 1, Math.floor((i + 1)/NB*src.length)); return Math.max(...src.slice(a, b)); }), top = Math.max(...amps) || 1; voice(el, amps.map(a => clamp(a/top, .15, 1))); }
+      vrMic.focus({ preventScroll:true }); };
+    vrMic.onclick = startRec; vrCancel.onclick = () => endRec(false); vrStop.onclick = () => endRec(true);
+    recEl.onkeydown = e => { if (e.key === 'Escape') endRec(false); };
+    // Seed the thread with one existing reply.
+    (() => { const r = row('<div style="font-size:14px;line-height:1.4">Yes, shipped in 2.4. Update and try again.</div>', 'dev'); r.h.jump(r.H); r.y.jump(0); r.o.jump(1); })();
+    return t => {
+      if (rec){ const el = t - t0, lv = CM_LEVEL(el), s = Math.floor(el*14); if (s !== lastS){ lastS = s; hist.push(lv); hist.shift(); samples.push(lv); }
+        const k = Math.floor(el); if (k !== sec){ sec = k; dm.set(String(Math.floor(k/60)), REDUCE); ds.set(String(k % 60).padStart(2,'0'), REDUCE); if (k >= 59) endRec(true); }
+        lb.forEach((b,i) => { b.style.height = px(4 + hist[i]*28); }); }
+      dm.render(t); ds.render(t); sw.apply(typeEl, 'type', t); sw.apply(recEl, 'rec', t);
+      rows.forEach(r => { if (!r.done){ r.el.style.height = px(Math.max(0, r.h.at(t))); if (!r.h.prune(t)){ r.done = true; if (!r.gone) r.el.style.height = ''; } } $(r.el,'.in').style.opacity = clamp(r.o.at(t)).toFixed(3); $(r.el,'.in').style.transform = `translateY(${px(r.y.at(t))})`; });
+      players.forEach(P => { if (P.on && t - P.t0 >= P.dur){ P.on = false; P.p = 1; P.k.set(0); } const p = P.on ? clamp((t - P.t0)/P.dur) : P.p, k = clamp(P.k.at(t));
+        P.ws.forEach((b,i) => { b.style.background = mix(clamp(p*P.ws.length - i), 'var(--accent)', 'var(--raised)'); }); P.pl.style.opacity = (1 - k).toFixed(3); P.pa.style.opacity = k.toFixed(3); });
+    };
+  }});
+
+atom({ id:'comments-link-preview', cat:'Comments', name:'Link preview unfurl', block:'comments, link, preview', fam:['M','S','X'],
+  html:`<div class="card col" style="width:min(340px,94%);padding:12px;gap:8px"><div class="row" style="gap:6px"><input class="lu-in" type="url" inputmode="url" autocomplete="off" aria-label="Link to share" placeholder="Paste a link…" style="flex:1;min-width:0;height:44px;border-radius:22px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);padding:0 14px;font-size:14px"><button class="lu-paste" style="height:44px;padding:0 14px;border:0;border-radius:22px;background:var(--ink);color:var(--card);font-size:13px;font-weight:500;cursor:pointer;flex:none">Paste link</button></div><div class="lu-box" role="status" aria-live="polite" style="position:relative;overflow:hidden;height:0;border-radius:12px"><div class="lu-sk" aria-hidden="true" style="position:absolute;inset:0;display:flex;gap:10px;background:var(--raised);border-radius:12px;overflow:hidden"><i class="lu-sk-i" style="width:84px;flex:none;background:var(--line)"></i><span style="flex:1;padding:12px 12px 12px 0;display:flex;flex-direction:column;gap:8px;justify-content:center"><i class="lu-sk-i" style="display:block;height:10px;width:40%;border-radius:5px;background:var(--line)"></i><i class="lu-sk-i" style="display:block;height:12px;width:92%;border-radius:6px;background:var(--line)"></i><i class="lu-sk-i" style="display:block;height:12px;width:64%;border-radius:6px;background:var(--line)"></i></span></div><div class="lu-card" style="position:absolute;inset:0;display:flex;gap:10px;background:var(--raised);border-radius:12px;overflow:hidden"><div class="lu-img" style="width:84px;flex:none;overflow:hidden">${scene(true)}</div><div style="flex:1;min-width:0;padding:10px 40px 10px 0;display:flex;flex-direction:column;justify-content:center;gap:4px"><span class="lu-dom small muted" style="font-size:12px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span><b class="lu-title" style="font-size:14px;line-height:1.3;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden"></b></div><button class="lu-x" aria-label="Remove link preview" style="position:absolute;right:0;top:0;width:44px;height:44px;border:0;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center">${CM_ICON.x}</button></div></div></div><div class="hint">Paste a link, or tap Paste link. A skeleton holds the space, then the card cross-fades in</div>`,
+  desc:'Pasting a URL opens a reserved slot with a pulsing skeleton, then the real card cross-fades in with its image, domain and two-line title. The slot height springs to the card and the remove button collapses it again.',
+  api:'url → box.h.set(84)   sk → card via Swap after 1.1s   title = slug(path).titleCase   input change → collapse',
+  init(st){
+    const inp = $(st,'input.lu-in');
+    const luPaste = $(st,'button.lu-paste');
+    const luX = $(st,'button.lu-x');
+    const box = $(st,'.lu-box'), sk = $(st,'.lu-sk'), card = $(st,'.lu-card'), dom = $(st,'.lu-dom'), title = $(st,'.lu-title'), pulse = [...st.querySelectorAll('.lu-sk-i')];
+    const sw = new Swap('none'), h = new Track(0, S.soft), SAMPLE = 'https://www.fieldnotes.example.org/essays/slow-motion-for-fast-interfaces';
+    let url = '', readyAt = 0;
+    const parse = v => { try { const u = new URL(v.trim()); if (!/^https?:$/.test(u.protocol) || !u.hostname.includes('.')) return null; return u; } catch { return null; } };
+    const titleOf = u => { const seg = u.pathname.split('/').filter(Boolean).pop() || ''; const s = decodeURIComponent(seg).replace(/\.[a-z0-9]{2,4}$/i, '').replace(/[-_]+/g, ' ').trim(); return s ? s.replace(/\b\w/g, c => c.toUpperCase()) : 'Untitled page'; };
+    const collapse = () => { url = ''; readyAt = 0; sw.to('none'); if (REDUCE) h.jump(0); else h.set(0, S.soft); };
+    const show = v => { const u = parse(v); if (!u){ if (url) collapse(); return; } if (u.href === url) return; url = u.href;
+      dom.textContent = u.hostname.replace(/^www\./, ''); title.textContent = titleOf(u); const t = now();
+      if (REDUCE){ h.jump(84); sw.cur = 'card'; sw.prev = null; sw.t = -9; return; }
+      sw.to('sk', t); h.set(84, S.soft, t); readyAt = t + 1.1; };
+    inp.oninput = () => show(inp.value); inp.onpaste = () => setTimeout(() => show(inp.value), 0); inp.onkeydown = e => { if (e.key === 'Enter') show(inp.value); };
+    luPaste.onclick = () => { inp.value = SAMPLE; show(SAMPLE); inp.focus({ preventScroll:true }); };
+    luX.onclick = () => { inp.value = ''; collapse(); luPaste.focus({ preventScroll:true }); };
+    return t => { if (readyAt && t >= readyAt){ readyAt = 0; sw.to('card', t); }
+      box.style.height = px(Math.max(0, h.at(t))); sw.apply(sk, 'sk', t); sw.apply(card, 'card', t);
+      pulse.forEach((e,i) => { e.style.opacity = (.45 + .55*(REDUCE ? .5 : .5 + .5*Math.sin(t*5 - i*.7))).toFixed(3); }); };
+  }});
+
+// Messaging recipes: typing, delivery state, inbox order and group avatars. Everything is simulated locally.
+const MS_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
+const MS_AV = (name, size, hue) => `<span aria-hidden="true" style="flex:none;width:${size}px;height:${size}px;border-radius:50%;display:grid;place-items:center;background:${hue};color:var(--card);font:600 ${Math.round(size*.42)}px var(--sans)">${name[0].toUpperCase()}</span>`;
+const MS_BTN = 'min-height:44px;padding:0 16px;border:0;border-radius:12px;background:var(--ink);color:var(--card);font-size:13px;font-weight:500;cursor:pointer;';
+const MS_POP = { w:24, z:.45 };
+
+atom({ id:'msg-typing', cat:'Messaging', name:'Typing to message', block:'messaging, typing, reply', fam:['M','S','X','T'], tall:true,
+  html:`<div class="card col" style="width:min(340px,94%);padding:0;gap:0;overflow:hidden"><div class="mt-th" role="log" aria-live="polite" style="height:236px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:12px;overflow:hidden"></div><div class="row" style="padding:8px 12px;border-top:1px solid var(--line-soft);justify-content:space-between"><span class="small muted">Priya</span><button class="mt-ask" style="${MS_BTN}">Send a question</button></div></div><div class="hint">Send a question. Three dots wave, then the dots grow into the reply bubble</div>`,
+  desc:'Your message rises into the thread, then three dots wave on a phase offset. When the reply arrives the same bubble grows to the measured size of the text and the words fade in.',
+  api:'dots: y = −2·wave(t·6 − i·0.9)   bubble.{w,h}.set(measure(reply), soft)   text.o.set(1, base, t + 0.12)',
+  init(st){
+    const th = $(st,'.mt-th');
+    const mtAsk = $(st,'button.mt-ask');
+    const Q = [['Can you send the deck?', 'Sending it now. Slides 4 to 9 changed since Monday.'], ['Is Thursday still good?', 'Yes. Room is booked for ten, with a call link in the invite.'], ['Any blockers?', 'None. Waiting on one sign-off from legal, due tomorrow morning.']];
+    const q = [], items = []; let k = 0, busy = false;
+    const bubble = (mine, inner) => { const b = MS_EL('div', `align-self:${mine ? 'flex-end' : 'flex-start'};max-width:80%;padding:8px 12px;border-radius:18px;font-size:14px;line-height:1.4;overflow:hidden;position:relative;${mine ? 'background:var(--ink);color:var(--card)' : 'background:var(--raised);color:var(--ink)'}`, inner); th.appendChild(b); while (th.children.length > 5) th.firstChild.remove(); return b; };
+    const rise = (b, t) => { const it = { b, y:new Track(REDUCE ? 0 : 14, S.soft), o:new Track(REDUCE ? 1 : 0, S.base) }; if (!REDUCE){ it.y.set(0, S.soft, t); it.o.set(1, S.base, t); } items.push(it); return it; };
+    const measure = txt => { const m = MS_EL('div', 'position:absolute;visibility:hidden;max-width:80%;padding:8px 12px;font-size:14px;line-height:1.4;width:max-content', ''); m.textContent = txt; th.appendChild(m); const W = Math.min(m.offsetWidth, th.clientWidth*.8), H = m.offsetHeight; m.remove(); return { W:W + 1, H }; };
+    const ask = () => { if (busy) return; busy = true; mtAsk.disabled = true; mtAsk.style.opacity = '.5'; const [qs, rs] = Q[k++ % Q.length], t0 = now();
+      const mine = bubble(true, ''); mine.textContent = qs; rise(mine, t0);
+      q.push([t0 + .6, () => { const dots = bubble(false, '<span class="d" style="display:inline-flex;gap:4px;padding:4px 2px">' + '<i style="width:7px;height:7px;border-radius:50%;background:var(--muted)"></i>'.repeat(3) + '</span>'); const it = rise(dots, now()); it.typing = now(); it.w = new Track(54); it.h = new Track(34); dots.style.width = '54px'; it.reply = rs; }]);
+      q.push([t0 + 2.2, () => { const it = items.find(x => x.typing && !x.done); if (!it) return; const { W, H } = measure(it.reply); it.done = true; it.text = MS_EL('span', 'position:absolute;left:12px;top:8px;right:12px;opacity:0'); it.text.textContent = it.reply; it.b.appendChild(it.text);
+        if (REDUCE){ it.w.jump(W); it.h.jump(H); } else { it.w.set(W, S.soft); it.h.set(H, S.soft); } it.o2 = new Track(REDUCE ? 1 : 0, S.base); if (!REDUCE) it.o2.set(1, S.base, now() + .12); it.settle = true; }]);
+      q.push([t0 + 2.9, () => { busy = false; mtAsk.disabled = false; mtAsk.style.opacity = '1'; }]); };
+    mtAsk.onclick = ask; q.push([.7, ask]);
+    return t => { while (q.length && q[0][0] <= t) q.shift()[1]();
+      for (const it of items){ it.b.style.opacity = clamp(it.o.at(t)).toFixed(3); it.b.style.transform = `translateY(${px(it.y.at(t))})`;
+        if (it.typing && !it.done){ $$(it.b,'.d i').forEach((d,i) => { const w = REDUCE ? .5 : .5 + .5*Math.sin((t - it.typing)*6 - i*.9); d.style.opacity = (.35 + .65*w).toFixed(3); d.style.transform = `translateY(${px(-2*w)})`; }); }
+        else if (it.done){ const d = $(it.b,'.d'); const o = clamp(it.o2.at(t)); it.b.style.width = px(it.w.at(t)); it.b.style.height = px(it.h.at(t)); if (d) d.style.opacity = Math.max(0, 1 - o*3).toFixed(3); it.text.style.opacity = o.toFixed(3);
+          if (it.settle && !it.w.prune(t) && !it.h.prune(t) && !it.o2.prune(t)){ it.settle = false; it.b.style.width = it.b.style.height = ''; if (d) d.remove(); it.text.style.cssText = ''; } } } };
+  }});
+
+atom({ id:'msg-delivery', cat:'Messaging', name:'Delivery ticks', block:'messaging, delivery, read receipts', fam:['M','S','E','T'],
+  html:`<div class="card col" style="width:min(340px,94%);padding:14px;gap:10px"><div style="align-self:flex-end;max-width:84%;padding:8px 12px 6px;border-radius:18px 18px 4px 18px;background:var(--raised);color:var(--ink)"><div style="font-size:14px;line-height:1.4">Running ten minutes late, start without me.</div><div class="row" style="justify-content:flex-end;gap:6px;margin-top:2px;font-size:11px;line-height:16px"><span class="mk-st" aria-live="polite" style="position:relative;display:block;height:16px;min-width:52px;text-align:right"></span><svg class="mk-tk" width="22" height="14" viewBox="0 0 22 14" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="ck"><circle cx="7" cy="7" r="5.2" stroke="currentColor" opacity=".8"/><path class="hand" d="M7 7V3.8" stroke="currentColor"/></g><path class="c1" d="M2.5 7.5l3.2 3.2L12 4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path class="c2" d="M9 9.2l1.5 1.5L16.8 4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></div></div><div class="mk-seen row" style="justify-content:flex-end;gap:8px;min-height:24px;font-size:12px"><span class="muted mk-lbl" style="opacity:0">Seen by</span><span class="mk-av" style="display:flex"></span></div><button class="mk-send" style="${MS_BTN}align-self:flex-start">Send again</button></div><div class="hint">Watch one message go from sending to sent, delivered and read, then the seen avatars slide in</div>`,
+  desc:'The clock hand turns while sending. A first check draws in on Sent, a second slides in beside it on Delivered, both turn to the accent colour on Read, then the Seen by avatars slide in one after another.',
+  api:'status: 0 sending → 1 sent (c1.draw) → 2 delivered (c2.draw) → 3 read (tint.set(1)) → seen[i].x.set(0, base, t + i·0.06)',
+  init(st){
+    const tk = $(st,'.mk-tk'), c1 = $(st,'.c1'), c2 = $(st,'.c2'), clock = $(st,'.ck'), hand = $(st,'.hand'), stEl = $(st,'.mk-st'), lbl = $(st,'.mk-lbl'), avs = $(st,'.mk-av');
+    const mkSend = $(st,'button.mk-send');
+    const TXT = ['Sending', 'Sent', 'Delivered', 'Read'], layers = TXT.map(s => { const e = MS_EL('span', 'position:absolute;right:0;top:0;white-space:nowrap', s); stEl.appendChild(e); return e; });
+    const NAMES = ['Priya', 'Sol', 'Mara'], HUES = ['var(--accent)', 'var(--success)', 'var(--warning)'];
+    const seen = NAMES.map((n,i) => { const e = MS_EL('span', `display:grid;place-items:center;width:22px;height:22px;border-radius:50%;margin-left:${i ? -6 : 0}px;box-shadow:0 0 0 2px var(--card);background:${HUES[i]};color:var(--card);font:600 10px var(--sans)`, n[0]); e.title = n; avs.appendChild(e); return { e, x:new Track(REDUCE ? 0 : 14, S.base), o:new Track(REDUCE ? 1 : 0, S.base) }; });
+    const sw = new Swap(0), kc = new Track(1, S.snap), k1 = new Track(0, S.base), k2 = new Track(0, S.base), rd = new Track(0, S.soft), lo = new Track(0, S.snap);
+    const SCHED = [0, .9, 1.9, 3.0], SEEN = 3.4; let t0 = 0, step = 0, seenOn = false;
+    const reset = t => { t0 = t; step = 0; seenOn = false; sw.cur = 0; sw.prev = null; sw.t = -9; kc.jump(1); k1.jump(0); k2.jump(0); rd.jump(0); lo.jump(0); seen.forEach(s => { s.x.jump(REDUCE ? 0 : 14); s.o.jump(0); }); mkSend.disabled = true; mkSend.style.opacity = '.5'; };
+    const go = (n, t) => { step = n; sw.to(n, t);
+      if (n === 1){ kc.set(0, S.snap, t); REDUCE ? k1.jump(1) : k1.set(1, S.base, t); }
+      if (n === 2){ REDUCE ? k2.jump(1) : k2.set(1, S.base, t); }
+      if (n === 3){ REDUCE ? rd.jump(1) : rd.set(1, S.soft, t); } };
+    mkSend.onclick = () => { reset(now()); };
+    reset(0.3);
+    return t => { const dt0 = t - t0;
+      for (let n = step + 1; n < SCHED.length; n++) if (dt0 >= SCHED[n]) go(n, t);
+      if (!seenOn && dt0 >= SEEN){ seenOn = true; lo.set(1, S.snap, t); seen.forEach((s,i) => { if (REDUCE){ s.x.jump(0); s.o.jump(1); } else { s.x.set(0, S.base, t + i*.06); s.o.set(1, S.base, t + i*.06); } }); mkSend.disabled = false; mkSend.style.opacity = '1'; }
+      layers.forEach((e,i) => sw.apply(e, i, t));
+      tk.style.stroke = 'currentColor'; tk.style.color = mix(clamp(rd.at(t)), 'var(--accent)', 'var(--muted)');
+      clock.style.opacity = clamp(kc.at(t)).toFixed(3); hand.style.transformOrigin = '7px 7px'; hand.style.transform = `rotate(${REDUCE ? 0 : ((t*180) % 360).toFixed(1)}deg)`;
+      c1.setAttribute('stroke-dashoffset', (1 - clamp(k1.at(t))).toFixed(3)); c2.setAttribute('stroke-dashoffset', (1 - clamp(k2.at(t))).toFixed(3)); c2.style.transform = `translateX(${px((1 - clamp(k2.at(t)))*-3)})`;
+      lbl.style.opacity = clamp(lo.at(t)).toFixed(3);
+      seen.forEach(s => { s.e.style.opacity = clamp(s.o.at(t)).toFixed(3); s.e.style.transform = `translateX(${px(s.x.at(t))})`; }); };
+  }});
+
+atom({ id:'msg-inbox', cat:'Messaging', name:'Inbox reorder', block:'messaging, inbox, unread', fam:['M','S','E','X'], tall:true,
+  html:`<div class="card col" style="width:min(340px,94%);padding:8px;gap:8px"><div class="mi-list" role="list" aria-label="Conversations" style="position:relative;height:232px"></div><div class="row" style="justify-content:space-between;padding:0 4px"><span class="small muted mi-note" role="status" aria-live="polite"></span><button class="mi-new" style="${MS_BTN}">New message</button></div></div><div class="hint">Send a new message, or open a conversation to clear its unread badge</div>`,
+  desc:'A new message makes its conversation slide to the top while every row in between slides down by one slot. Its unread badge pops past full size and the count rolls; opening the conversation shrinks the badge away.',
+  api:'order = [touched, ...rest]   row[i].y.set(slot(order.indexOf(i)), base)   badge.s.set(1, {w:24,z:.45})   count → Digits',
+  init(st){
+    const list = $(st,'.mi-list'), note = $(st,'.mi-note');
+    const mi_new = $(st,'button.mi-new');
+    const C = [['Priya', 'var(--accent)', 'Slides look great.', 'Tue'], ['Design team', 'var(--success)', 'Mara: moved the review to 3.', 'Tue'], ['Sol', 'var(--warning)', 'Lunch tomorrow?', 'Mon'], ['Build alerts', 'var(--danger)', 'Deploy 482 finished.', 'Mon']];
+    const NEW = [['Priya', 'Can you look at slide 6?'], ['Design team', 'Theo: new icons are in the file.'], ['Sol', 'I can do 12:30.'], ['Build alerts', 'Deploy 483 started.'], ['Priya', 'Thanks, shipping at 4.'], ['Sol', 'Booked the corner table.']];
+    const H = 58;
+    const openRow = r => { if (!r.unread) return; r.unread = 0; if (REDUCE) r.s.jump(0); else r.s.set(0, S.snap); label(r); note.textContent = `${r.name} opened`; };
+    function mkRow(c, i){ const mi_row = MS_EL('button', `position:absolute;left:0;right:0;top:0;height:${H - 2}px;display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;text-align:left;padding:0 10px;border:0;border-radius:12px;background:none;color:var(--ink);cursor:pointer;font:inherit`,
+        `<span aria-hidden="true" style="width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:${c[1]};color:var(--card);font:600 16px var(--sans)">${c[0][0]}</span><span style="min-width:0"><span style="display:block;font-size:14px;line-height:20px;font-weight:600">${c[0]}</span><span class="pv" style="display:block;font-size:13px;line-height:18px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span></span><span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><span class="tm" style="font-size:11px;line-height:16px;color:var(--muted)"></span><span class="bd" aria-hidden="true" style="min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:10px;background:var(--accent);color:var(--card);font-size:12px;line-height:20px;font-weight:600;display:flex;align-items:center;justify-content:center;transform:scale(0)"><span class="nb"></span></span></span>`);
+      mi_row.setAttribute('role', 'listitem'); $(mi_row,'.pv').textContent = c[2]; $(mi_row,'.tm').textContent = c[3]; list.appendChild(mi_row);
+      const d = new Digits($(mi_row,'.nb'), 2); const r = { el:mi_row, i, name:c[0], bd:$(mi_row,'.bd'), pv:$(mi_row,'.pv'), tm:$(mi_row,'.tm'), d, unread:0, y:new Track(i*H, S.base), s:new Track(0, MS_POP), fl:new Track(0, S.lazy) }; mi_row.onclick = () => openRow(r); return r; }
+    const rows = C.map(mkRow);
+    let order = rows.map((_,i) => i), n = 0;
+    const slots = t => order.forEach((ri, pos) => { const r = rows[ri]; if (REDUCE) r.y.jump(pos*H); else r.y.set(pos*H, S.base, t); });
+    const label = r => r.el.setAttribute('aria-label', `${r.name}, ${r.pv.textContent}${r.unread ? `, ${r.unread} unread` : ''}`);
+    rows.forEach(r => label(r));
+    mi_new.onclick = () => { const [name, text] = NEW[n++ % NEW.length], r = rows.find(x => x.name === name), t = now();
+      r.unread = Math.min(99, r.unread + 1); r.pv.textContent = text; r.tm.textContent = 'now'; r.d.set(String(r.unread), REDUCE); if (r.s.target < 1){ if (REDUCE) r.s.jump(1); else { r.s.jump(.2); r.s.set(1, MS_POP, t); } } else if (!REDUCE){ r.s.jump(.75); r.s.set(1, MS_POP, t); }
+      r.fl.jump(1); r.fl.set(0, S.lazy, t); order = [rows.indexOf(r), ...order.filter(x => x !== rows.indexOf(r))]; slots(t); label(r); note.textContent = `New message from ${name}`; };
+    return t => { rows.forEach(r => { r.el.style.transform = `translateY(${px(r.y.at(t))})`; r.bd.style.transform = `scale(${Math.max(0, r.s.at(t)).toFixed(3)})`; r.el.style.background = `color-mix(in oklab, var(--accent) ${(clamp(r.fl.at(t))*14).toFixed(1)}%, transparent)`; r.d.render(t); }); };
+  }});
+
+atom({ id:'msg-group-avatar', cat:'Messaging', name:'Group avatar', block:'messaging, group, avatar', fam:['M','E'],
+  html:`<div class="card col" style="width:min(340px,94%);padding:16px;gap:10px;align-items:center"><div class="mg-av" role="img" aria-label="Group avatar" style="position:relative;width:96px;height:96px"></div><b style="font-size:15px;font-weight:600">Weekend crew</b><span class="small muted mg-n" aria-live="polite" style="min-height:19px"></span><div class="row" style="gap:8px"><button class="mg-add" style="${MS_BTN}">Add member</button><button class="mg-rm" style="${MS_BTN}background:var(--raised);color:var(--ink)">Remove</button></div></div><div class="hint">Add members one at a time. The avatar re-lays out from one, to two, three, four and then a plus count</div>`,
+  desc:'Every member circle springs between layout slots as people join: one fills the circle, two split diagonally, three form a triangle, four tile a grid, and past four the fourth slot becomes a plus count that rolls.',
+  api:'layout(n): 1 → [full]   2 → diag   3 → triangle   4 → grid   ≥5 → 3 + "+k"   member.{x,y,s}.set(slot(i, n), base)',
+  init(st){
+    const av = $(st,'.mg-av'), note = $(st,'.mg-n');
+    const mgAdd = $(st,'button.mg-add');
+    const mgRm = $(st,'button.mg-rm');
+    const P = ['Ava','Ben','Cy','Dee','Eli','Fay','Gus','Hal'], HUES = ['var(--accent)','var(--success)','var(--warning)','var(--danger)','var(--ink)','var(--muted)','var(--accent)','var(--success)'];
+    const L = { 1:[[0,0,96]], 2:[[0,0,62],[34,34,62]], 3:[[23,0,50],[0,46,50],[46,46,50]], 4:[[0,0,46],[50,0,46],[0,50,46],[50,50,46]] };
+    const slot = (i, n) => { const set = L[Math.min(n, 4)]; return n >= 5 && i >= 3 ? [set[3][0] + 23, set[3][1] + 23, 0] : set[i] || [48, 48, 0]; };
+    const mk = (name, hue) => { const e = MS_EL('span', `position:absolute;left:0;top:0;border-radius:50%;display:grid;place-items:center;background:${hue};color:var(--card);font-weight:600;box-shadow:0 0 0 2px var(--card);overflow:hidden`, name[0]); av.appendChild(e); return e; };
+    const members = [...Array(8)].map((_,i) => ({ e:mk(P[i], HUES[i]), x:new Track(48), y:new Track(48), s:new Track(0) }));
+    const chip = MS_EL('span', 'position:absolute;left:0;top:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--raised);color:var(--ink);font-weight:600;box-shadow:0 0 0 2px var(--card);font-variant-numeric:tabular-nums', '<span>+</span><span class="cn"></span>'); av.appendChild(chip);
+    const cd = new Digits($(chip,'.cn'), 2), cs = { x:new Track(48), y:new Track(48), s:new Track(0) }; cd.set('', true);
+    let n = 1;
+    const apply = (t, jump) => { const put = (tr, v) => (jump || REDUCE) ? tr.jump(v) : tr.set(v, S.base, t);
+      members.forEach((m,i) => { const visible = i < Math.min(n, n >= 5 ? 3 : 4), [x, y, s] = visible ? slot(i, n) : [48, 48, 0]; put(m.x, x); put(m.y, y); put(m.s, visible ? s : 0); });
+      const [cx, cy] = L[4][3], on = n >= 5; put(cs.x, on ? cx : 48); put(cs.y, on ? cy : 48); put(cs.s, on ? 46 : 0); if (on) cd.set(String(n - 3), REDUCE);
+      note.textContent = `${n} ${n === 1 ? 'member' : 'members'}: ${P.slice(0, Math.min(n, 3)).join(', ')}${n > 3 ? ` and ${n - 3} more` : ''}`; mgAdd.disabled = n >= 8; mgRm.disabled = n <= 1; mgAdd.style.opacity = n >= 8 ? '.45' : '1'; mgRm.style.opacity = n <= 1 ? '.45' : '1';
+      av.setAttribute('aria-label', `Group avatar, ${n} ${n === 1 ? 'member' : 'members'}`); };
+    mgAdd.onclick = () => { if (n < 8){ n++; apply(now()); } };
+    mgRm.onclick = () => { if (n > 1){ n--; apply(now()); } };
+    apply(0, true);
+    return t => { const put = (e, o) => { const s = Math.max(0, o.s.at(t)); e.style.width = e.style.height = px(s); e.style.transform = `translate(${px(o.x.at(t))},${px(o.y.at(t))})`; e.style.fontSize = px(Math.max(1, s*.4)); e.style.opacity = s < 1 ? '0' : '1'; };
+      members.forEach(m => put(m.e, m)); put(chip, cs); cd.render(t); };
+  }});
+
+// Feedback recipes: pin-and-comment review and a helpful/not helpful panel. Nothing leaves the page.
+const FB_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
+const FB_POP = { w:24, z:.45 };
+const FB_BTN = 'min-height:44px;padding:0 14px;border:0;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;';
+
+atom({ id:'feedback-pin-review', cat:'Feedback', name:'Pin and comment review', block:'feedback, review, annotations', fam:['M','S','X'], tall:true,
+  html:`<div class="card col" style="width:min(340px,94%);padding:10px;gap:8px"><div class="row" style="justify-content:space-between"><button class="fb-mode" aria-pressed="false" style="${FB_BTN}background:var(--raised);color:var(--ink)">Comment mode: off</button><span class="small muted fb-n" role="status" aria-live="polite"></span></div><div class="fb-page" style="position:relative;height:210px;border-radius:10px;background:var(--bg);overflow:hidden;border:1px solid var(--line)"><div aria-hidden="true" style="position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px"><i style="display:block;height:10px;width:30%;border-radius:5px;background:var(--line)"></i><i style="display:block;height:18px;width:72%;border-radius:6px;background:var(--raised)"></i><i style="display:block;height:10px;width:90%;border-radius:5px;background:var(--line-soft)"></i><i style="display:block;height:10px;width:60%;border-radius:5px;background:var(--line-soft)"></i><i style="display:block;flex:1;border-radius:8px;background:var(--raised)"></i><i style="display:block;height:26px;width:38%;border-radius:8px;background:var(--line)"></i></div><button class="fb-hit" tabindex="-1" aria-label="Page canvas. Press Enter to drop a pin at the crosshair, arrow keys move it" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:none;padding:0;pointer-events:none;border-radius:0"></button><i class="fb-cross" aria-hidden="true" style="position:absolute;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;pointer-events:none;opacity:0"><b style="position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--accent)"></b><b style="position:absolute;top:8px;left:0;right:0;height:2px;background:var(--accent)"></b></i><div class="fb-pins"></div><div class="fb-po" role="dialog" aria-label="Comment" style="position:absolute;left:0;top:0;width:176px;padding:8px;border-radius:12px;background:var(--card);box-shadow:var(--float-shadow, var(--shadow));visibility:hidden;opacity:0"><div class="po-edit"><textarea class="po-text" rows="2" aria-label="Your comment" placeholder="Add a comment" style="width:100%;box-sizing:border-box;resize:none;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:6px 8px;font:13px/1.35 var(--sans)"></textarea><div class="row" style="gap:6px;margin-top:6px"><button class="po-post" style="${FB_BTN}flex:1;padding:0 8px;background:var(--ink);color:var(--card)">Post</button><button class="po-cancel" style="${FB_BTN}flex:1;padding:0 8px;background:var(--raised);color:var(--ink)">Cancel</button></div></div><div class="po-view" hidden><div class="po-msg" style="font-size:13px;line-height:1.35;padding:2px 2px 6px;overflow-wrap:anywhere"></div><div class="row" style="gap:6px"><button class="po-resolve" style="${FB_BTN}flex:1;padding:0 8px;background:var(--success);color:var(--card)">Resolve</button><button class="po-close" style="${FB_BTN}flex:1;padding:0 8px;background:var(--raised);color:var(--ink)">Close</button></div></div></div></div></div><div class="hint">Turn on comment mode, then click the page. Without a mouse use arrow keys and Enter</div>`,
+  desc:'In comment mode a crosshair follows the pointer or the arrow keys, and a click drops a numbered pin that pops past its rest size. A popover opens beside it and flips to the other side near the edge; Post turns the pin solid and Resolve fades it away.',
+  api:'pin.s.set(1, {w:24,z:.45})   side = pin.x > W/2 ? left : right   po.{x,y} = clamp(pin ± 22, edge)   post: fill.set(1)   resolve: o.set(0)',
+  init(st){
+    const page = $(st,'.fb-page'), pinsEl = $(st,'.fb-pins'), po = $(st,'.fb-po'), cross = $(st,'.fb-cross'), count = $(st,'.fb-n'), ta = $(st,'.po-text'), edit = $(st,'.po-edit'), view = $(st,'.po-view'), msg = $(st,'.po-msg');
+    const fbMode = $(st,'button.fb-mode');
+    const fbHit = $(st,'button.fb-hit');
+    const poPost = $(st,'button.po-post');
+    const poCancel = $(st,'button.po-cancel');
+    const poResolve = $(st,'button.po-resolve');
+    const poClose = $(st,'button.po-close');
+    const PW = 176, PIN = 28; let mode = false, cx = 150, cy = 105, nextNo = 1, pins = [], open = null;
+    const po_o = new Track(0, S.snap), po_s = new Track(.9, S.base), xs = new Track(0, S.base), ys = new Track(0, S.base), cr = new Track(0, S.snap);
+    let origin = '0% 50%';
+    const W = () => page.clientWidth || 300, H = () => page.clientHeight || 210;
+    const sync = () => { const n = pins.filter(p => p.state !== 'resolved').length; count.textContent = n ? `${n} open` : 'No comments yet'; };
+    const place = pin => { const w = W(), h = H(), ph = pin.state === 'draft' ? 128 : 96, right = pin.x < w/2;
+      const x = right ? Math.min(w - PW - 4, pin.x + PIN/2 + 8) : Math.max(4, pin.x - PIN/2 - 8 - PW), y = clamp(pin.y - 24, 4, Math.max(4, h - ph - 4)); origin = right ? '0% 40%' : '100% 40%'; return { x, y }; };
+    const show = (pin, focus) => { open = pin; const draft = pin.state === 'draft'; edit.hidden = !draft; view.hidden = draft; msg.textContent = pin.text;
+      const pos = place(pin), fresh = po_o.target === 0; po.style.transformOrigin = origin; if (REDUCE || fresh){ xs.jump(pos.x); ys.jump(pos.y); } else { xs.set(pos.x); ys.set(pos.y); }
+      po.style.visibility = 'visible'; if (REDUCE){ po_o.jump(1); po_s.jump(1); } else { po_o.set(1, S.snap); po_s.jump(.9); po_s.set(1, S.base); }
+      if (draft){ ta.value = pin.text; poPost.disabled = !ta.value.trim(); poPost.style.opacity = poPost.disabled ? '.5' : '1'; if (focus) setTimeout(() => ta.focus({ preventScroll:true }), 30); } else if (focus) setTimeout(() => poResolve.focus({ preventScroll:true }), 30); };
+    const hide = () => { const was = open; open = null; if (REDUCE){ po_o.jump(0); po.style.visibility = 'hidden'; } else po_o.set(0, S.snap); return was; };
+    const drop = (x, y) => { if (open && open.state === 'draft') cancel(); const t = now(); const btn = FB_EL('button', `position:absolute;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;border:0;background:none;padding:0;cursor:pointer;transform-origin:50% 50%`, `<span class="pn" style="display:grid;place-items:center;width:${PIN}px;height:${PIN}px;margin:auto;border-radius:50% 50% 50% 4px;border:2px solid var(--accent);box-sizing:border-box;background:var(--card);color:var(--accent);font:600 12px var(--sans)"></span>`);
+      const pin = { no:nextNo++, x:clamp(x, 18, W() - 18), y:clamp(y, 18, H() - 18), text:'', state:'draft', el:btn, pn:$(btn,'.pn'), s:new Track(REDUCE ? 1 : 0, FB_POP), o:new Track(1, S.base), f:new Track(0, S.base) };
+      pin.pn.textContent = String(pin.no); btn.setAttribute('aria-label', `Comment ${pin.no}, draft`); btn.style.left = px(pin.x); btn.style.top = px(pin.y); btn.onclick = () => { if (open === pin) return; if (open && open.state === 'draft') cancel(); if (pin.state === 'resolved') return; show(pin, true); };
+      pinsEl.appendChild(btn); pins.push(pin); if (!REDUCE) pin.s.set(1, FB_POP, t); show(pin, true); sync(); };
+    const cancel = () => { const p = hide(); if (p && p.state === 'draft'){ p.state = 'resolved'; p.gone = true; if (REDUCE) p.o.jump(0); else p.o.set(0, S.snap); setTimeout(() => p.el.remove(), REDUCE ? 40 : 500); pins = pins.filter(x => x !== p); sync(); } };
+    const post = () => { const v = ta.value.trim(); if (!open || !v) return; const p = open; p.text = v; p.state = 'posted'; p.el.setAttribute('aria-label', `Comment ${p.no}: ${v}`); if (REDUCE) p.f.jump(1); else p.f.set(1); hide(); p.el.focus({ preventScroll:true }); sync(); };
+    const resolve = () => { if (!open) return; const p = open; p.state = 'resolved'; hide(); if (REDUCE) p.o.jump(0); else p.o.set(0, S.soft); setTimeout(() => { p.el.remove(); pins = pins.filter(x => x !== p); }, REDUCE ? 40 : 900); sync(); fbMode.focus({ preventScroll:true }); };
+    const setMode = on => { mode = on; fbMode.setAttribute('aria-pressed', String(on)); fbMode.textContent = on ? 'Comment mode: on' : 'Comment mode: off'; fbMode.style.background = on ? 'var(--ink)' : 'var(--raised)'; fbMode.style.color = on ? 'var(--card)' : 'var(--ink)';
+      fbHit.style.pointerEvents = on ? 'auto' : 'none'; fbHit.style.cursor = on ? 'crosshair' : 'default'; fbHit.tabIndex = on ? 0 : -1; if (REDUCE) cr.jump(on ? 1 : 0); else cr.set(on ? 1 : 0); if (!on && open && open.state === 'draft') cancel(); };
+    fbMode.onclick = () => setMode(!mode);
+    fbHit.onpointermove = e => { const r = page.getBoundingClientRect(); cx = e.clientX - r.left; cy = e.clientY - r.top; };
+    fbHit.onclick = e => { const r = page.getBoundingClientRect(); if (e.detail === 0) drop(cx, cy); else drop(e.clientX - r.left, e.clientY - r.top); };
+    fbHit.onkeydown = e => { const d = { ArrowLeft:[-12,0], ArrowRight:[12,0], ArrowUp:[0,-12], ArrowDown:[0,12] }[e.key]; if (d){ e.preventDefault(); cx = clamp(cx + d[0], 4, W() - 4); cy = clamp(cy + d[1], 4, H() - 4); } };
+    ta.oninput = () => { poPost.disabled = !ta.value.trim(); poPost.style.opacity = poPost.disabled ? '.5' : '1'; };
+    ta.onkeydown = e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)){ e.preventDefault(); post(); } };
+    poPost.onclick = post; poCancel.onclick = cancel; poResolve.onclick = resolve; poClose.onclick = () => { hide(); };
+    po.onkeydown = e => { if (e.key === 'Escape'){ e.preventDefault(); const p = open; if (p && p.state === 'draft') cancel(); else hide(); (p ? p.el : fbMode).focus({ preventScroll:true }); } };
+    sync();
+    return t => { for (const p of pins){ const s = Math.max(0, p.s.at(t)), f = clamp(p.f.at(t)); p.el.style.opacity = clamp(p.o.at(t)).toFixed(3); p.el.style.transform = `scale(${s.toFixed(3)})`;
+        p.pn.style.background = mix(f, 'var(--accent)', 'var(--card)'); p.pn.style.color = mix(f, 'var(--card)', 'var(--accent)'); p.pn.style.borderStyle = f > .5 ? 'solid' : 'dashed'; }
+      const o = clamp(po_o.at(t)); po.style.opacity = o.toFixed(3); po.style.transform = `translate(${px(xs.at(t))},${px(ys.at(t))}) scale(${po_s.at(t).toFixed(3)})`; if (!open && o < .02 && po.style.visibility !== 'hidden') po.style.visibility = 'hidden';
+      cross.style.opacity = clamp(cr.at(t)).toFixed(3); cross.style.transform = `translate(${px(cx)},${px(cy)})`; };
+  }});
+
+atom({ id:'feedback-helpful', cat:'Feedback', name:'Helpful thumbs', block:'feedback, helpful, survey', fam:['M','S','E'],
+  html:`<div class="card" style="width:min(340px,94%);padding:0;overflow:hidden"><div class="fh-panel" style="position:relative;height:96px"><div class="fh-ask" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:10px"><b style="font-size:15px;font-weight:600">Was this article helpful?</b><div class="row" style="gap:8px"><button class="fh-up" aria-pressed="false" style="${FB_BTN}display:flex;align-items:center;gap:8px;background:var(--raised);color:var(--ink)"><span aria-hidden="true" style="font-size:18px">👍</span>Yes</button><button class="fh-down" aria-pressed="false" style="${FB_BTN}display:flex;align-items:center;gap:8px;background:var(--raised);color:var(--ink)"><span aria-hidden="true" style="font-size:18px">👎</span>No</button></div></div><div class="fh-why" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:10px"><b class="fh-q" style="font-size:15px;font-weight:600"></b><div class="fh-chips" role="group" aria-label="Reasons" style="display:flex;flex-wrap:wrap;gap:6px"></div><div class="row" style="gap:8px"><button class="fh-send" style="${FB_BTN}background:var(--ink);color:var(--card)">Send feedback</button><button class="fh-back" style="${FB_BTN}background:none;color:var(--muted)">Back</button></div></div><div class="fh-done" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:6px"><b style="font-size:15px;font-weight:600">Thanks, that helps us.</b><span class="small muted fh-sum" style="font-size:13px;line-height:1.4"></span><button class="fh-change" style="${FB_BTN}align-self:flex-start;background:none;color:var(--accent);padding:0 4px">Change answer</button></div></div></div><div class="hint">Choose Yes or No, tick the reasons, send. The panel height follows each step</div>`,
+  desc:'Choosing a thumb swaps the question for reason chips that fit that answer, and sending swaps in a thank-you that repeats what was chosen. The panel height springs to the measured size of each step instead of jumping.',
+  api:'step.to(ask | why | done)   panel.h.set(measure(layer), soft)   chips: aria-pressed toggles   Change answer → ask',
+  init(st){
+    const panel = $(st,'.fh-panel'), ask = $(st,'.fh-ask'), why = $(st,'.fh-why'), done = $(st,'.fh-done'), q = $(st,'.fh-q'), chipsEl = $(st,'.fh-chips'), sum = $(st,'.fh-sum');
+    const fhUp = $(st,'button.fh-up');
+    const fhDown = $(st,'button.fh-down');
+    const fhSend = $(st,'button.fh-send');
+    const fhBack = $(st,'button.fh-back');
+    const fhChange = $(st,'button.fh-change');
+    const R = { up:['Clear steps', 'Accurate', 'Saved me time'], down:['Hard to follow', 'Out of date', 'Missing steps'] };
+    const L = { ask, why, done }, sw = new Swap('ask'), h = new Track(96, S.soft); let kind = '', picked = new Set();
+    const go = (k, focus) => { sw.to(k); const H = L[k].offsetHeight; if (REDUCE) h.jump(H); else h.set(H); if (focus) setTimeout(() => focus.focus({ preventScroll:true }), 140); };
+    const choose = k => { kind = k; picked = new Set(); fhUp.setAttribute('aria-pressed', String(k === 'up')); fhDown.setAttribute('aria-pressed', String(k === 'down'));
+      q.textContent = k === 'up' ? 'Glad it helped. What worked?' : 'Sorry about that. What went wrong?'; chipsEl.textContent = '';
+      R[k].forEach(label => { const fhChip = FB_EL('button', `${FB_BTN}border-radius:999px;background:var(--raised);color:var(--ink)`, label); fhChip.type = 'button'; fhChip.setAttribute('aria-pressed', 'false');
+        fhChip.onclick = () => { const on = !picked.has(label); on ? picked.add(label) : picked.delete(label); fhChip.setAttribute('aria-pressed', String(on)); fhChip.style.background = on ? 'var(--ink)' : 'var(--raised)'; fhChip.style.color = on ? 'var(--card)' : 'var(--ink)'; }; chipsEl.appendChild(fhChip); });
+      go('why', chipsEl.firstChild); };
+    fhUp.onclick = () => choose('up'); fhDown.onclick = () => choose('down');
+    fhBack.onclick = () => go('ask', kind === 'up' ? fhUp : fhDown);
+    fhSend.onclick = () => { const why2 = [...picked]; sum.textContent = `You said: ${kind === 'up' ? 'Helpful' : 'Not helpful'}${why2.length ? `, ${why2.join(', ').toLowerCase()}` : ''}.`; go('done', fhChange); };
+    fhChange.onclick = () => { fhUp.setAttribute('aria-pressed', 'false'); fhDown.setAttribute('aria-pressed', 'false'); go('ask', fhUp); };
+    why.addEventListener('keydown', e => { if (e.key === 'Escape') go('ask', kind === 'up' ? fhUp : fhDown); });
+    h.jump(ask.offsetHeight); panel.style.height = px(h.at(0));
+    return t => { Object.keys(L).forEach(k => sw.apply(L[k], k, t)); panel.style.height = px(h.at(t)); };
+  }});
 /* ================================================================ library.page */
-const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories','Auth'];
+const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories','Auth','Audio','Comments','Messaging','Feedback'];
 const groupsEl = document.getElementById('groups'), groupEls = {};
 CATS.forEach(c => {
   const id = 'cat-' + c.toLowerCase().replace(/\s+/g,'-'), g = document.createElement('section'); g.className = 'group'; g.id = id;
@@ -26382,7 +26922,8 @@ const CATGROUPS = { 'Photos and transitions':['Photo effects','Image transitions
   'Data and admin':['Data','Admin','Admin kit','Status and records','Views'],
   'Workflows and editing':['Workflow','Editor','Documents','Writing','Design tools','Files and browsing'],
   'Sites and commerce':['Commerce','Storefront','Landing','Workspace','Maps'],
-  'Online jobs':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'] };
+  'Online jobs':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'],
+  'Audio and conversation':['Audio','Comments','Messaging','Feedback'] };
 const placed = new Set(Object.values(CATGROUPS).flat()), rest = CATS.filter(c => !placed.has(c)); if (rest.length) CATGROUPS['More'] = rest;
 const jumpEl = document.getElementById('jump'), jumpBtn = document.getElementById('jumpbtn'), jumpLinks = {};
 Object.entries(CATGROUPS).forEach(([gname, cs]) => { const d = document.createElement('div'); d.innerHTML = `<h4>${gname}</h4>`;

@@ -1,0 +1,195 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.activity-item",
+  "componentVersion": "1.0.0",
+  "name": "ActivityItem",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/ActivityItem/ActivityItem.tsx",
+    "symbol": "ActivityItem"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "actor",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "icon",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode."
+    },
+    {
+      "id": "tone",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "neutral",
+          "accent",
+          "danger",
+          "success"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "neutral",
+      "constraints": {}
+    },
+    {
+      "id": "preview",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "time",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "dateTime",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "unread",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "href",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "onSelect",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is () => void."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "component"
+      ],
+      "min": 1,
+      "order": "document"
+    },
+    {
+      "id": "actions",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "unread-dot-fade",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "actor",
+        "icon",
+        "tone",
+        "preview",
+        "time",
+        "dateTime",
+        "unread",
+        "href",
+        "onSelect"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One notification or activity row: who did what, a quoted snippet and when, with an unread dot and optional actions."
+  },
+  "extensions": {}
+}

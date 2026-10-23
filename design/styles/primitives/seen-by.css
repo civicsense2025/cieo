@@ -1,0 +1,9 @@
+/* design/styles/primitives/seen-by.css */
+@layer cieo.components {
+  :where(.cieo).cieo-seen-by { display: inline-flex; align-items: center; }
+  :where(.cieo) .cieo-seen-by-stack { display: inline-flex; align-items: center; }
+  :where(.cieo) .cieo-seen-by-face { box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; inline-size: 16px; block-size: 16px; overflow: hidden; border-radius: var(--cieo-radius-pill); border: 1.5px solid var(--cieo-color-canvas); background: var(--cieo-color-accent-soft); color: var(--cieo-color-accent); font-size: 7px; font-weight: var(--cieo-weight-medium); line-height: 1; }
+  :where(.cieo) .cieo-seen-by-face + .cieo-seen-by-face { margin-inline-start: -5px; }
+  :where(.cieo) .cieo-seen-by-face img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  :where(.cieo) .cieo-seen-by-more { background: var(--cieo-color-sunken); color: var(--cieo-color-muted); }
+}

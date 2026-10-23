@@ -1,0 +1,16 @@
+/* design/styles/primitives/rating.css */
+@layer cieo.components {
+  :where(.cieo).cieo-rating { display: inline-flex; align-items: center; gap: var(--cieo-space-0); color: var(--cieo-color-warning); font-size: var(--cieo-text-lead); line-height: 1; }
+  :where(.cieo).cieo-rating[data-size='sm'] { font-size: var(--cieo-text-body); }
+  :where(.cieo) .cieo-rating-radio { display: inline-flex; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-small); min-block-size: var(--cieo-control-small); border-radius: var(--cieo-radius-control); cursor: pointer; }
+  @media (pointer: coarse) {
+    :where(.cieo) .cieo-rating-radio { min-inline-size: var(--cieo-touch-target); min-block-size: var(--cieo-touch-target); }
+  }
+  :where(.cieo) .cieo-rating-radio:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-rating-star { inline-size: 1em; block-size: 1em; color: var(--cieo-color-subtle); transition: color var(--motion-duration-exit, 100ms) ease-out; }
+  :where(.cieo) .cieo-rating-star[data-filled] { color: var(--cieo-color-warning); }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-rating-star { transition: none; }
+  }
+  :where([data-motion='off']) .cieo-rating-star { transition: none; }
+}

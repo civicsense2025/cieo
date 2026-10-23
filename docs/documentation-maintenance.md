@@ -40,6 +40,10 @@ catches each kind of hard-coded line.
 New primitives change `package.json` only through the deep `./<Name>` exports that
 `scripts/wire-primitives.mjs` regenerates; hand edits there are overwritten.
 
+`npm run test:social` is a local browser gate for the social and audio primitives:
+it drives each interactive piece with and without reduced motion and fails on any
+page or console error. Run it with the unit tests when those components change.
+
 ## After merge and consumer upgrades
 
 Verify actual merged state, immutable resulting SHA and pushed range, then review

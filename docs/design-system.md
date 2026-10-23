@@ -57,6 +57,8 @@ An accent seed can change when contrast requires it. The resolved accent is avai
 
 Component stylesheets live one per primitive under `design/styles/primitives/` and read only these tokens; for example, the reorderable list's lifted row uses `border-strong` for its ring, so a theme change restyles it with everything else.
 
+The [social, audio and engagement kit](social-kit.md) (comments and nested replies, voice notes, reactions, group messaging, pin-and-comment review) styles itself only through these tokens, one stylesheet per component under `design/styles/primitives/`, so a theme change recolors it with everything else.
+
 ## Accessibility boundaries
 
 The color auditor checks 32 named pairs: text and accents against four neutral surfaces, control boundaries, focus, selection, filled and soft accents, and four feedback surfaces. Standard text targets 4.5:1; the high-contrast option targets 7:1. Boundaries and focus target 3:1. These are color-pair checks, not a WCAG conformance certificate.

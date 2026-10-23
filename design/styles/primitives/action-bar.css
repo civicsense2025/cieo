@@ -1,0 +1,6 @@
+/* design/styles/primitives/action-bar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-action-bar { display: flex; align-items: center; gap: var(--cieo-space-1); }
+  :where(.cieo).cieo-action-bar[data-align='between'] { justify-content: space-between; }
+  :where(.cieo).cieo-action-bar[data-size='sm'] { gap: var(--cieo-space-0); }
+}

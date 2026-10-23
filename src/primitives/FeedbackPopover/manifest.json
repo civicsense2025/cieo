@@ -1,0 +1,191 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.feedback-popover",
+  "componentVersion": "1.0.0",
+  "name": "FeedbackPopover",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/FeedbackPopover/FeedbackPopover.tsx",
+    "symbol": "FeedbackPopover"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "open",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "onOpenChange",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (open: boolean) => void."
+    },
+    {
+      "id": "onSubmit",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (text: string) => void."
+    },
+    {
+      "id": "placeholder",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Add a comment",
+      "constraints": {}
+    },
+    {
+      "id": "submitLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Comment",
+      "constraints": {}
+    },
+    {
+      "id": "title",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "anchor",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "container",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "gap",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 8,
+      "constraints": {}
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    },
+    {
+      "id": "secondaryActions",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "scale-.96-fade-in-from-anchor-side",
+      "exit-100ms",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "open",
+        "onOpenChange",
+        "onSubmit",
+        "placeholder",
+        "submitLabel",
+        "title",
+        "anchor",
+        "container",
+        "gap"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "A small non-modal comment box with an optional thread above it, placed beside a point and flipped to stay inside its container."
+  },
+  "extensions": {}
+}

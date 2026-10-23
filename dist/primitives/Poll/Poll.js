@@ -1,0 +1,71 @@
+// src/primitives/Poll/Poll.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+/* Poll. One question, several options. Before a vote each option is a button; after a vote (or when closed) the same rows become result bars. The host owns the counts. */
+import { useEffect, useId, useRef, useState } from 'react';
+import { Digits, roveFocus, useSpring } from '../../react/index.js';
+import { CompactCount } from '../CompactCount/CompactCount.js';
+/** Whole-number percentages that sum to exactly 100 (largest-remainder rounding; ties go to the earlier option). All zeros when there are no votes. */
+export function pollPercentages(votes) {
+    const clean = votes.map((v) => (Number.isFinite(v) && v > 0 ? Math.floor(v) : 0));
+    const total = clean.reduce((a, b) => a + b, 0);
+    if (total === 0)
+        return clean.map(() => 0);
+    const exact = clean.map((v) => (v / total) * 100);
+    const floors = exact.map(Math.floor);
+    let left = 100 - floors.reduce((a, b) => a + b, 0);
+    const order = exact.map((x, i) => ({ i, r: x - Math.floor(x) })).sort((a, b) => b.r - a.r || a.i - b.i);
+    for (const { i } of order) {
+        if (left <= 0)
+            break;
+        floors[i] += 1;
+        left -= 1;
+    }
+    return floors;
+}
+/** Sentence for the live region after a vote: "Vote counted. Option A leads with 54%." Ties and empty polls are named honestly. */
+export function pollAnnouncement(options) {
+    const pct = pollPercentages(options.map((o) => o.votes));
+    const top = Math.max(0, ...pct);
+    if (top === 0)
+        return 'Vote counted.';
+    const leaders = options.filter((_, i) => pct[i] === top);
+    if (leaders.length === 1)
+        return `Vote counted. ${leaders[0].label} leads with ${top}%.`;
+    return `Vote counted. ${leaders.map((o) => o.label).join(' and ')} are tied at ${top}%.`;
+}
+const STAGGER_MS = 50;
+const STAGGER_CAP_MS = 300;
+function PollRow({ option, pct, index, results, chosen, leader, onVote, tabbable }) {
+    const fillRef = useRef(null);
+    const [revealed, setRevealed] = useState(results);
+    useEffect(() => {
+        if (!results)
+            return setRevealed(false);
+        const id = setTimeout(() => setRevealed(true), Math.min(index * STAGGER_MS, STAGGER_CAP_MS));
+        return () => clearTimeout(id);
+    }, [results, index]);
+    const shown = results && revealed ? pct : 0;
+    useSpring(shown, (v) => fillRef.current?.style.setProperty('--cieo-poll-fill', `${v}%`), { preset: 'soft' });
+    const body = (_jsxs(_Fragment, { children: [_jsx("span", { ref: fillRef, "aria-hidden": "true", className: "cieo-poll-fill", style: { ['--cieo-poll-fill']: `${shown}%` } }), _jsx("span", { className: "cieo-poll-label", children: option.label }), chosen ? (_jsxs("span", { className: "cieo-poll-check", children: [_jsx("svg", { "aria-hidden": "true", viewBox: "0 0 16 16", width: "16", height: "16", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: _jsx("path", { d: "M3.5 8.5l3 3 6-7" }) }), _jsx("span", { className: "cieo-sr-only", children: "Your vote" })] })) : null, _jsxs("span", { "aria-hidden": "true", className: "cieo-poll-percent", children: [_jsx(Digits, { value: shown }), "%"] }), results ? _jsx("span", { className: "cieo-sr-only", children: `${pct}%, ${option.votes} ${option.votes === 1 ? 'vote' : 'votes'}` }) : null] }));
+    return (_jsx("div", { role: results ? 'listitem' : 'presentation', className: "cieo-poll-option", "data-state": results ? 'result' : 'choice', "data-chosen": chosen ? '' : undefined, "data-leader": results && leader ? '' : undefined, children: results ? (_jsx("div", { className: "cieo-poll-row", children: body })) : (_jsx("button", { type: "button", role: "radio", "aria-checked": false, className: "cieo-poll-row", tabIndex: tabbable ? 0 : -1, onClick: () => onVote(option.id), children: body })) }));
+}
+export function Poll({ question, options, voted = null, onVote, closed = false, footnote }) {
+    const titleId = useId();
+    const groupRef = useRef(null);
+    const results = closed || voted != null;
+    const pct = pollPercentages(options.map((o) => o.votes));
+    const top = Math.max(0, ...pct);
+    const total = options.reduce((sum, o) => sum + (Number.isFinite(o.votes) && o.votes > 0 ? Math.floor(o.votes) : 0), 0);
+    const [announce, setAnnounce] = useState('');
+    const hadVote = useRef(voted != null);
+    useEffect(() => {
+        const has = voted != null;
+        if (has && !hadVote.current)
+            setAnnounce(pollAnnouncement(options));
+        if (!has)
+            setAnnounce('');
+        hadVote.current = has;
+    }, [voted]); // eslint-disable-line react-hooks/exhaustive-deps -- announce once per vote, not on every count change
+    return (_jsxs("div", { className: "cieo cieo-poll", "data-closed": closed ? '' : undefined, "data-results": results ? '' : undefined, children: [_jsx("p", { id: titleId, className: "cieo-poll-question", children: question }), _jsx("div", { ref: groupRef, className: "cieo-poll-options", role: results ? 'list' : 'radiogroup', "aria-labelledby": titleId, onKeyDown: results ? undefined : (e) => { roveFocus(e, groupRef.current, '[role="radio"]', { orientation: 'vertical' }); }, children: options.map((o, i) => (_jsx(PollRow, { option: o, pct: pct[i], index: i, results: results, chosen: voted === o.id, leader: top > 0 && pct[i] === top, onVote: onVote, tabbable: i === 0 }, o.id))) }), _jsxs("p", { className: "cieo-poll-total", children: [_jsx(CompactCount, { value: total, unit: total === 1 ? 'vote' : 'votes', hideZero: false }), _jsxs("span", { "aria-hidden": "true", children: [" ", total === 1 ? 'vote' : 'votes'] }), closed ? _jsx("span", { className: "cieo-poll-closed", children: " \u00B7 Closed" }) : null] }), footnote ? _jsx("p", { className: "cieo-poll-footnote", children: footnote }) : null, _jsx("span", { className: "cieo-sr-only", role: "status", "aria-live": "polite", children: announce })] }));
+}

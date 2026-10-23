@@ -1,0 +1,18 @@
+/* design/styles/primitives/notify-toggle.css */
+@layer cieo.components {
+  :where(.cieo).cieo-notify-toggle { display: inline-flex; align-items: center; justify-content: center; min-block-size: var(--cieo-control-height); min-inline-size: var(--cieo-control-height); padding: 0; border: 0; border-radius: var(--cieo-radius-pill); background: transparent; color: var(--cieo-color-muted); font: inherit; cursor: pointer; transition: color var(--motion-duration-exit, 100ms) ease-out, background-color var(--motion-duration-exit, 100ms) ease-out; }
+  :where(.cieo).cieo-notify-toggle[data-size='sm'] { min-block-size: var(--cieo-control-small); min-inline-size: var(--cieo-control-small); }
+  @media (pointer: coarse) {
+    :where(.cieo).cieo-notify-toggle { min-block-size: var(--cieo-touch-target); min-inline-size: var(--cieo-touch-target); }
+  }
+  :where(.cieo).cieo-notify-toggle:hover { background: var(--cieo-color-sunken); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-notify-toggle[data-on] { color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-notify-toggle:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-notify-toggle-icon { position: relative; display: inline-flex; font-size: 1.1em; }
+  :where(.cieo) .cieo-notify-toggle-badge { position: absolute; inset-block-start: -0.25em; inset-inline-end: -0.3em; box-sizing: border-box; inline-size: 0.8em; block-size: 0.8em; padding: 0.12em; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-success); color: var(--cieo-color-on-accent); transform: scale(0); opacity: 0; transition: transform var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), opacity var(--motion-duration-exit, 100ms) ease-out; }
+  :where(.cieo).cieo-notify-toggle[data-on] .cieo-notify-toggle-badge { transform: scale(1); opacity: 1; }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-notify-toggle, :where(.cieo) .cieo-notify-toggle-badge { transition: none; }
+  }
+  :where([data-motion='off']) .cieo-notify-toggle, :where([data-motion='off']) .cieo-notify-toggle-badge, :where(.cieo).cieo-notify-toggle[data-motion='off'] { transition: none; }
+}

@@ -1,0 +1,16 @@
+/* design/styles/primitives/character-count-ring.css */
+@layer cieo.components {
+  :where(.cieo).cieo-character-count-ring { position: relative; display: inline-flex; align-items: center; justify-content: center; inline-size: 1.5rem; block-size: 1.5rem; flex: none; color: var(--cieo-color-muted); transition: transform var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo).cieo-character-count-ring[data-grown] { transform: scale(1.25); }
+  :where(.cieo).cieo-character-count-ring svg { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; }
+  :where(.cieo) .cieo-character-count-ring-track { stroke: var(--cieo-color-border); }
+  :where(.cieo) .cieo-character-count-ring-arc { stroke: var(--cieo-color-accent); transition: stroke var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo).cieo-character-count-ring[data-tone='warning'] .cieo-character-count-ring-arc { stroke: var(--cieo-color-warning); }
+  :where(.cieo).cieo-character-count-ring[data-tone='danger'] .cieo-character-count-ring-arc { stroke: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-character-count-ring-number { position: relative; font-size: 0.5625rem; font-weight: var(--cieo-weight-medium); font-variant-numeric: tabular-nums; line-height: 1; color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-character-count-ring[data-tone='danger'] .cieo-character-count-ring-number { color: var(--cieo-color-danger); }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo).cieo-character-count-ring, :where(.cieo) .cieo-character-count-ring-arc { transition: none; }
+  }
+  [data-motion='off'] :where(.cieo).cieo-character-count-ring, [data-motion='off'] :where(.cieo) .cieo-character-count-ring-arc, :where(.cieo)[data-motion='off'].cieo-character-count-ring { transition: none; }
+}

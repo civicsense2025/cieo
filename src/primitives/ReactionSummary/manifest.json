@@ -1,0 +1,124 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.reaction-summary",
+  "componentVersion": "1.0.0",
+  "name": "ReactionSummary",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/ReactionSummary/ReactionSummary.tsx",
+    "symbol": "ReactionSummary"
+  },
+  "dependencies": ["CompactCount", "Popover", "ReactionPicker"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "reactions",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is { id: string; emoji: string; label: string; count: number; mine?: boolean }[]."
+    },
+    {
+      "id": "onToggle",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (id: string) => void."
+    },
+    {
+      "id": "onAdd",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (id: string) => void."
+    },
+    {
+      "id": "available",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is { id: string; emoji: string; label: string }[]."
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "digit-roll",
+      "chip-open-close",
+      "flip-reorder",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "reactions",
+        "onToggle",
+        "onAdd",
+        "available"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Chips under a message or comment showing which reactions it has, how many people used each, and whether you are one of them."
+  },
+  "extensions": {}
+}

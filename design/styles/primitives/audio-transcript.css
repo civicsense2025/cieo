@@ -1,0 +1,14 @@
+/* design/styles/primitives/audio-transcript.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-transcript { position: relative; overflow-y: auto; max-block-size: 100%; line-height: 1.7; font-size: var(--cieo-text-body); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-audio-transcript:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; border-radius: var(--cieo-radius-small); }
+  :where(.cieo) .cieo-audio-transcript-word { position: relative; display: inline-block; padding: 0 2px; border-radius: var(--cieo-radius-small); transition: color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo).cieo-audio-transcript[data-seekable] .cieo-audio-transcript-word { cursor: pointer; }
+  :where(.cieo) .cieo-audio-transcript-word[data-active] { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-audio-transcript:focus-visible .cieo-audio-transcript-word[data-focused] { outline: 2px solid var(--cieo-color-focus); outline-offset: 0; }
+  :where(.cieo) .cieo-audio-transcript-highlight { position: absolute; inset-block-start: 0; inset-inline-start: 0; inline-size: var(--w); block-size: var(--h); transform: translate(var(--x), var(--y)); border-radius: var(--cieo-radius-small); background: var(--cieo-color-accent-soft); opacity: 0; pointer-events: none; }
+  :where(.cieo) .cieo-audio-transcript-highlight[data-visible='true'] { opacity: 1; }
+  :where(.cieo) .cieo-audio-transcript-highlight[data-ready] { transition: transform var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), inline-size var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), block-size var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), opacity var(--motion-duration-exit, 100ms) ease-out; }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-audio-transcript-highlight, :where(.cieo) .cieo-audio-transcript-highlight[data-ready], :where(.cieo) .cieo-audio-transcript-word { transition: none; } }
+  :where(.cieo)[data-motion='off'] .cieo-audio-transcript-highlight, :where(.cieo)[data-motion='off'] .cieo-audio-transcript-word, :where(.cieo)[data-motion='off'].cieo-audio-transcript .cieo-audio-transcript-highlight { transition: none; }
+}

@@ -12,7 +12,8 @@ const CATGROUPS = { 'Photos and transitions':['Photo effects','Image transitions
   'Data and admin':['Data','Admin','Admin kit','Status and records','Views'],
   'Workflows and editing':['Workflow','Editor','Documents','Writing','Design tools','Files and browsing'],
   'Sites and commerce':['Commerce','Storefront','Landing','Workspace','Maps'],
-  'Online jobs':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'] };
+  'Online jobs':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'],
+  'Audio and conversation':['Audio','Comments','Messaging','Feedback'] };
 const placed = new Set(Object.values(CATGROUPS).flat()), rest = CATS.filter(c => !placed.has(c)); if (rest.length) CATGROUPS['More'] = rest;
 const jumpEl = document.getElementById('jump'), jumpBtn = document.getElementById('jumpbtn'), jumpLinks = {};
 Object.entries(CATGROUPS).forEach(([gname, cs]) => { const d = document.createElement('div'); d.innerHTML = `<h4>${gname}</h4>`;

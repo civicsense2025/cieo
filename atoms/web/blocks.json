@@ -407,5 +407,9 @@
  "blocks/557-emailpoll.js",
  "blocks/558-auth-wave1.js",
  "blocks/559-auth-wave2.js",
- "blocks/560-auth-wave3.js"
+ "blocks/560-auth-wave3.js",
+ "blocks/561-audio.js",
+ "blocks/562-comments.js",
+ "blocks/563-messaging.js",
+ "blocks/564-feedback.js"
 ]

@@ -1,0 +1,25 @@
+/* design/styles/primitives/activity-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-activity-item { position: relative; display: flex; align-items: flex-start; gap: var(--cieo-space-3); padding: var(--cieo-space-3); border-radius: var(--cieo-radius-control); color: var(--cieo-color-text); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-activity-item[data-interactive='true']:hover { background: var(--cieo-color-sunken); }
+  :where(.cieo) .cieo-activity-item-lead { position: relative; flex: none; }
+  :where(.cieo) .cieo-activity-item-badge { position: absolute; inset-inline-end: -0.25rem; inset-block-end: -0.25rem; display: grid; place-items: center; inline-size: 1.125rem; block-size: 1.125rem; border: 2px solid var(--cieo-color-canvas); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-sunken); color: var(--cieo-color-muted); font-size: var(--cieo-text-caption); }
+  :where(.cieo).cieo-activity-item[data-tone='accent'] .cieo-activity-item-badge { background: var(--cieo-color-accent-soft); color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-activity-item[data-tone='danger'] .cieo-activity-item-badge { background: var(--cieo-color-danger-soft); color: var(--cieo-color-danger); }
+  :where(.cieo).cieo-activity-item[data-tone='success'] .cieo-activity-item-badge { background: var(--cieo-color-success-soft); color: var(--cieo-color-success); }
+  :where(.cieo) .cieo-activity-item-main { flex: 1; min-inline-size: 0; display: grid; gap: var(--cieo-space-1); padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: start; text-decoration: none; }
+  :where(.cieo) a.cieo-activity-item-main, :where(.cieo) button.cieo-activity-item-main { cursor: pointer; }
+  :where(.cieo) a.cieo-activity-item-main::after, :where(.cieo) button.cieo-activity-item-main::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  :where(.cieo) .cieo-activity-item-main:focus-visible { outline: none; }
+  :where(.cieo) .cieo-activity-item-main:focus-visible::after { outline: 2px solid var(--cieo-color-focus); outline-offset: -2px; }
+  :where(.cieo) .cieo-activity-item-actor { font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-activity-item[data-unread='true'] .cieo-activity-item-what { font-weight: var(--cieo-weight-medium); }
+  :where(.cieo) .cieo-activity-item-preview { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; padding-inline-start: var(--cieo-space-2); border-inline-start: 2px solid var(--cieo-color-border); color: var(--cieo-color-muted); }
+  :where(.cieo) .cieo-activity-item-time { color: var(--cieo-color-subtle); white-space: nowrap; }
+  :where(.cieo) .cieo-activity-item-dot { flex: none; align-self: center; inline-size: 0.5rem; block-size: 0.5rem; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent); opacity: 0; transition: opacity var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+  :where(.cieo).cieo-activity-item[data-unread='true'] .cieo-activity-item-dot { opacity: 1; }
+  :where(.cieo) .cieo-activity-item-actions { position: relative; z-index: 1; flex: none; align-self: center; display: inline-flex; gap: var(--cieo-space-2); }
+  @media (pointer: coarse) { :where(.cieo).cieo-activity-item[data-interactive='true'] { min-block-size: var(--cieo-touch-target); } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-activity-item-dot { transition: none; } }
+  :where([data-motion='off']) :where(.cieo) .cieo-activity-item-dot { transition: none; }
+}

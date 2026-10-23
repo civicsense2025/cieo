@@ -1,0 +1,12 @@
+/* design/styles/primitives/by-line.css */
+@layer cieo.components {
+  :where(.cieo).cieo-by-line { display: flex; align-items: baseline; gap: var(--cieo-space-1); min-inline-size: 0; max-inline-size: 100%; color: var(--cieo-color-muted); font-size: var(--cieo-text-small); line-height: 1.4; white-space: nowrap; }
+  :where(.cieo) .cieo-by-line-author { flex: 0 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; color: var(--cieo-color-text); font-weight: var(--cieo-weight-strong); text-decoration: none; }
+  :where(.cieo) a.cieo-by-line-author:hover, :where(.cieo) a.cieo-by-line-context:hover { text-decoration: underline; }
+  :where(.cieo) .cieo-by-line-badge { flex: none; display: inline-flex; align-self: center; color: var(--cieo-color-accent); }
+  :where(.cieo) .cieo-by-line-handle { flex: 0 100 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  :where(.cieo) .cieo-by-line-context { flex: 0 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; color: var(--cieo-color-muted); text-decoration: none; }
+  :where(.cieo) .cieo-by-line-sep { flex: none; color: var(--cieo-color-subtle); }
+  :where(.cieo) .cieo-by-line-time { flex: none; color: var(--cieo-color-muted); }
+  :where(.cieo) a.cieo-by-line-author:focus-visible, :where(.cieo) a.cieo-by-line-context:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; border-radius: var(--cieo-radius-small); }
+}

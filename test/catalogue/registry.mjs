@@ -7,6 +7,7 @@ const directory = new URL('../../atoms/web/', import.meta.url);
 const context = vm.createContext({
   window: {}, document: { currentScript: null, getElementById: () => null, createElement: () => ({}), head: { insertAdjacentHTML() {}, appendChild() {} } },
   matchMedia: () => ({ matches: false }), performance: { now: () => 0 },
+  ResizeObserver: class { observe() {} }, requestAnimationFrame() {},
 });
 const blocks = JSON.parse(fs.readFileSync(new URL('blocks.json', directory), 'utf8'));
 for (const file of ['runtime.core.js', ...blocks]) {

@@ -1,0 +1,170 @@
+// src/primitives/CommentThread/CommentThread.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/* CommentThread. Tree manager for comments: nested lists, depth cap, "view more replies" per branch. The host renders every comment; this owns structure, expansion and reveal motion. */
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useFlip, useReducedMotion } from '../../react/index.js';
+/** Turns a flat list into a tree. Keeps input order, orphans (unknown parent) become roots, and cycles are broken so it always terminates. Duplicate ids keep the first. */
+export function buildCommentTree(flat) {
+    const nodes = new Map();
+    for (const item of flat)
+        if (!nodes.has(item.id))
+            nodes.set(item.id, { ...item, children: [] });
+    const parentOf = new Map();
+    const roots = [];
+    const seen = new Set();
+    for (const item of flat) {
+        if (seen.has(item.id))
+            continue;
+        seen.add(item.id);
+        const node = nodes.get(item.id);
+        const pid = item.parentId;
+        const parent = typeof pid === 'string' && pid !== item.id ? nodes.get(pid) : undefined;
+        let cyclic = false;
+        for (let at = parent?.id, hops = 0; at !== undefined && hops <= nodes.size; at = parentOf.get(at), hops += 1) {
+            if (at === item.id) {
+                cyclic = true;
+                break;
+            }
+        }
+        if (parent && !cyclic) {
+            parentOf.set(item.id, parent.id);
+            parent.children.push(node);
+        }
+        else
+            roots.push(node);
+    }
+    return roots;
+}
+/** Number of nodes below `node`, at any depth. Safe on malformed data: a node is counted once. */
+export function countDescendants(node) {
+    if (!node)
+        return 0;
+    const seen = new Set([node]);
+    const stack = [...(node.children ?? [])];
+    let count = 0;
+    while (stack.length) {
+        const next = stack.pop();
+        if (!next || seen.has(next))
+            continue;
+        seen.add(next);
+        count += 1;
+        if (next.children)
+            stack.push(...next.children);
+    }
+    return count;
+}
+/** Replies to show now, and how many stay hidden. Expanded shows everything; otherwise only the first `initial` (a whole number of at least 0). */
+export function visibleReplies(children, expanded, initial) {
+    const all = children ?? [];
+    const first = Number.isFinite(initial) ? Math.max(0, Math.floor(initial)) : 2;
+    if (expanded || first >= all.length)
+        return { visible: [...all], hidden: 0 };
+    return { visible: all.slice(0, first), hidden: all.length - first };
+}
+/** Depth-first list of every node below `children`, each stripped of its own children. Used past the depth cap. */
+export function flattenReplies(children) {
+    const out = [];
+    const walk = (list, guard) => {
+        for (const n of list) {
+            if (guard.has(n))
+                continue;
+            guard.add(n);
+            out.push({ ...n, children: undefined });
+            if (n.children?.length)
+                walk(n.children, guard);
+        }
+    };
+    walk(children ?? [], new Set());
+    return out;
+}
+/** Default label for the reveal button. */
+export function moreRepliesLabel(count) {
+    return count === 1 ? 'View 1 more reply' : `View ${count} more replies`;
+}
+const useIso = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+function levelEntries(children, level, maxDepth) {
+    if (!children?.length)
+        return [];
+    return level >= maxDepth ? flattenReplies(children) : children;
+}
+function Branch({ shared, parent, entries, depth }) {
+    const box = useRef(null);
+    const list = useRef(null);
+    const reduced = useReducedMotion();
+    const expanded = parent ? shared.isOpen(parent.id) : true;
+    const { visible, hidden } = visibleReplies(entries, expanded, shared.initial);
+    const from = useRef(null);
+    const revealed = useRef(false);
+    const shown = useRef(visible.length);
+    useFlip(list, visible.map((n) => n.id).join('\u0000'));
+    useIso(() => {
+        const el = box.current;
+        const startedAt = from.current;
+        from.current = null;
+        if (!el || startedAt === null)
+            return;
+        const to = el.scrollHeight;
+        const off = typeof el.closest === 'function' && el.closest("[data-motion='off']");
+        if (reduced || off || typeof el.animate !== 'function' || to === startedAt)
+            return;
+        el.style.overflow = 'hidden';
+        const run = el.animate([{ blockSize: `${startedAt}px` }, { blockSize: `${to}px` }], { duration: 300, easing: 'cubic-bezier(.2,.15,.2,1)' });
+        const clear = () => {
+            el.style.overflow = '';
+        };
+        run.onfinish = clear;
+        run.oncancel = clear;
+    }, [expanded]);
+    useEffect(() => {
+        if (revealed.current && visible.length > shown.current) {
+            list.current?.children[shown.current]?.focus({ preventScroll: true });
+        }
+        revealed.current = false;
+        shown.current = visible.length;
+    });
+    const reveal = () => {
+        if (!parent)
+            return;
+        from.current = box.current?.offsetHeight ?? null;
+        revealed.current = true;
+        shared.open(parent.id);
+    };
+    return (_jsxs("div", { ref: box, className: "cieo-comment-thread-branch", "data-depth": depth, children: [_jsx("ul", { ref: list, role: "list", className: "cieo-comment-thread-list", "aria-label": parent && shared.branchLabel ? shared.branchLabel(parent) : undefined, children: visible.map((node) => {
+                    const kids = levelEntries(node.children, depth + 1, shared.maxDepth);
+                    const own = visibleReplies(kids, shared.isOpen(node.id), shared.initial);
+                    return (_jsx("li", { tabIndex: -1, className: "cieo-comment-thread-item", "data-new": shared.fresh.has(node.id) ? '' : undefined, children: shared.renderItem(node, {
+                            depth,
+                            hasReplies: kids.length > 0,
+                            hiddenCount: own.hidden,
+                            replies: kids.length > 0 ? _jsx(Branch, { shared: shared, parent: node, entries: kids, depth: depth + 1 }) : null,
+                        }) }, node.id));
+                }) }), hidden > 0 ? (_jsx("button", { type: "button", className: "cieo-comment-thread-more", onClick: reveal, children: shared.moreLabel(hidden) })) : null] }));
+}
+export function CommentThread({ label, items, renderItem, maxDepth = 3, initialReplies = 2, moreLabel = moreRepliesLabel, newIds, branchLabel, expanded, onExpandedChange }) {
+    const [inner, setInner] = useState([]);
+    const open = expanded ?? inner;
+    const live = useRef({ open, onExpandedChange });
+    live.current = { open, onExpandedChange };
+    const shared = {
+        renderItem,
+        maxDepth: Number.isFinite(maxDepth) ? Math.max(0, Math.floor(maxDepth)) : 3,
+        initial: initialReplies,
+        moreLabel,
+        fresh: new Set(newIds ?? []),
+        branchLabel,
+        isOpen: (id) => open.includes(id),
+        open: (id) => {
+            const cur = live.current;
+            if (cur.open.includes(id))
+                return;
+            const next = [...cur.open, id];
+            if (cur.onExpandedChange)
+                cur.onExpandedChange(next);
+            if (expanded === undefined)
+                setInner(next);
+        },
+    };
+    const roots = levelEntries(items, 0, shared.maxDepth);
+    return (_jsx("section", { "aria-label": label, className: "cieo cieo-comment-thread", children: _jsx(Branch, { shared: shared, entries: roots, depth: 0 }) }));
+}

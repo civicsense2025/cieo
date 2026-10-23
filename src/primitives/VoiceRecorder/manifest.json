@@ -1,0 +1,148 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.voice-recorder",
+  "componentVersion": "1.0.0",
+  "name": "VoiceRecorder",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/VoiceRecorder/VoiceRecorder.tsx",
+    "symbol": "VoiceRecorder"
+  },
+  "dependencies": ["AudioLevelMeter", "AudioTime", "IconButton"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "onRecorded",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (clip: { blob: Blob; mimeType: string; duration: number; peaks: number[] }) => void."
+    },
+    {
+      "id": "onCancel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is () => void."
+    },
+    {
+      "id": "maxDuration",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 120,
+      "constraints": {}
+    },
+    {
+      "id": "autoStart",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Record a voice reply",
+      "constraints": {}
+    },
+    {
+      "id": "mode",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "tap",
+          "hold"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "tap",
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "pulsing-record-dot",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "onRecorded",
+        "onCancel",
+        "maxDuration",
+        "autoStart",
+        "label",
+        "mode"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Records a voice clip from the microphone and hands the host a blob with its length and waveform peaks."
+  },
+  "extensions": {}
+}

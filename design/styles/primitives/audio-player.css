@@ -1,0 +1,18 @@
+/* design/styles/primitives/audio-player.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-player { --cieo-audio-progress: 0; display: flex; align-items: center; gap: var(--cieo-space-3); max-inline-size: 100%; color: var(--cieo-color-text); }
+  :where(.cieo).cieo-audio-player[data-variant='compact'] { inline-size: max-content; min-inline-size: min(100%, 14rem); padding: var(--cieo-space-1) var(--cieo-space-3) var(--cieo-space-1) var(--cieo-space-1); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-sunken); }
+  :where(.cieo).cieo-audio-player[data-variant='full'] { padding: var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
+  :where(.cieo) .cieo-audio-player > audio { display: none; }
+  :where(.cieo) .cieo-audio-player-main { flex: 1; min-inline-size: 0; display: grid; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-audio-player-times { display: flex; justify-content: space-between; }
+  :where(.cieo) .cieo-audio-player-track { position: relative; block-size: var(--cieo-space-2); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-border); cursor: pointer; touch-action: pan-y; }
+  :where(.cieo) .cieo-audio-player-track::before { content: ''; position: absolute; inset: calc(var(--cieo-space-3) * -1) 0; }
+  :where(.cieo) .cieo-audio-player-track:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-audio-player-fill { position: absolute; inset: 0; border-radius: inherit; background: var(--cieo-color-accent); transform-origin: left center; transform: scaleX(var(--cieo-audio-progress)); }
+  :where(.cieo).cieo-audio-player[data-state='error'] { color: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-audio-player-error { display: flex; align-items: center; flex-wrap: wrap; gap: var(--cieo-space-2); font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-audio-player-retry { min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid currentColor; border-radius: var(--cieo-radius-pill); background: transparent; color: inherit; font: inherit; cursor: pointer; }
+  @media (pointer: coarse) { :where(.cieo) .cieo-audio-player-retry { min-block-size: var(--cieo-touch-target); } }
+  :where(.cieo) .cieo-audio-player-retry:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+}

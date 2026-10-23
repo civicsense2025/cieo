@@ -1,0 +1,7 @@
+/* design/styles/primitives/verified-badge.css */
+@layer cieo.components {
+  :where(.cieo).cieo-verified-badge { display: inline-block; flex: none; inline-size: 1.15em; block-size: 1.15em; vertical-align: -0.2em; color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-verified-badge[data-size='sm'] { inline-size: 1em; block-size: 1em; vertical-align: -0.15em; }
+  :where(.cieo) .cieo-verified-badge-seal { fill: currentColor; }
+  :where(.cieo) .cieo-verified-badge-check { stroke: var(--cieo-color-on-accent); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+}
