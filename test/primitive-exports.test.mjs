@@ -17,6 +17,24 @@ test('package.json exposes deep primitive exports with types', () => {
   assert.ok(pkg.exports['./primitives'], 'missing exports[./primitives]');
 });
 
+test('package.json keeps the non-primitive entry points apps import', () => {
+  const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+  const entries = {
+    '.': 'dist/core/spring.js',
+    './react': 'dist/react/index.js',
+    './dom': 'dist/dom/index.js',
+    './controls': 'dist/controls/index.js',
+    './agent': 'dist/agent/index.js',
+    './agent/react': 'dist/agent/react.js',
+    './agent-icons': 'dist/agent/icons.js',
+  };
+  for (const [key, file] of Object.entries(entries)) {
+    assert.equal(pkg.exports[key]?.default, `./${file}`, `exports[${key}] must point at ${file}`);
+    assert.ok(pkg.exports[key]?.types, `exports[${key}] missing types`);
+    assert.ok(existsSync(file), `${file} is missing (run npm run build first)`);
+  }
+});
+
 test('primitives barrel re-exports all lanes', () => {
   const src = readFileSync('src/primitives/index.ts', 'utf8');
   for (const name of names) {

@@ -1,6 +1,6 @@
 {
   "name": "cieo",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
   "license": "MIT",
   "type": "module",
@@ -40,6 +40,18 @@
     "./live": {
       "types": "./dist/live/index.d.ts",
       "default": "./dist/live/index.js"
+    },
+    "./agent": {
+      "types": "./dist/agent/index.d.ts",
+      "default": "./dist/agent/index.js"
+    },
+    "./agent/react": {
+      "types": "./dist/agent/react.d.ts",
+      "default": "./dist/agent/react.js"
+    },
+    "./agent-icons": {
+      "types": "./dist/agent/icons.d.ts",
+      "default": "./dist/agent/icons.js"
     },
     "./controls": {
       "types": "./dist/controls/index.d.ts",
