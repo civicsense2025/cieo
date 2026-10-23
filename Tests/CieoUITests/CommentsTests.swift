@@ -100,6 +100,45 @@ final class CommentsTests: XCTestCase {
         XCTAssertLessThan(elapsed, 2.0, "a long trailing run should be processed in linear time")
     }
 
+    func testTokenizingTwentyThousandTrailingParenthesesIsFastAndLossless() {
+        let input = "https://a.com/" + String(repeating: ")", count: 20_000)
+        let started = ProcessInfo.processInfo.systemUptime
+        let tokens = RichText.tokenizeRichText(input)
+        let elapsed = ProcessInfo.processInfo.systemUptime - started
+        XCTAssertLessThan(elapsed, 0.2)
+        XCTAssertEqual(tokens.map(\.value).joined(), input)
+    }
+
+    func testLookalikeUserinfoAddressStaysPlainText() {
+        let input = "https://paypal.com@evil.example/"
+        let tokens = RichText.tokenizeRichText(input)
+        XCTAssertFalse(tokens.contains { $0.kind == .url })
+        XCTAssertEqual(tokens.map(\.value).joined(), input)
+    }
+
+    func testEmailLocalPartsNeverYieldAMention() {
+        for email in ["jean-@example.com", "a+b@x.com", "x'y@x.com", "!#$%&'*+/=?^_`{|}~-@x.com"] {
+            XCTAssertFalse(RichText.tokenizeRichText(email).contains { $0.kind == .mention }, email)
+            XCTAssertEqual(RichText.tokenizeRichText(email).map(\.value).joined(), email)
+        }
+    }
+
+    func testOverlongOrHyphenatedHandlesAreNeverTruncatedIntoAMention() {
+        let long = "@" + String(repeating: "a", count: 40)
+        XCTAssertFalse(RichText.tokenizeRichText(long).contains { $0.kind == .mention })
+        XCTAssertFalse(RichText.tokenizeRichText("@bob-smith").contains { $0.kind == .mention })
+        XCTAssertEqual(RichText.tokenizeRichText("@bob-smith").map(\.value).joined(), "@bob-smith")
+        XCTAssertEqual(types("hi @bob, ok"), ["text:hi ", "mention:@bob", "text:, ok"])
+    }
+
+    func testLinkPreviewMediaAddressesMustBeAbsoluteHttp() {
+        XCTAssertNotNil(LinkPreview.mediaURL("https://cdn.example.com/a.png"))
+        for bad in ["/a.png", "//cdn.example.com/a.png", "a.png", "javascript:alert(1)", "data:image/png;base64,AA",
+                    "https://u:p@cdn.example.com/a.png", "", nil] {
+            XCTAssertNil(LinkPreview.mediaURL(bad), bad ?? "nil")
+        }
+    }
+
     func testTokenizeNeverLinksUnsafeSchemes() {
         let evil = ["javascript:alert(1)", "JAVASCRIPT:alert(1)", "data:text/html,<script>alert(1)</script>", "vbscript:msgbox(1)",
                     "file:///etc/passwd", "ftp://x.com/a", "blob:https://x.com/uuid", "javascript://x.com/%0Aalert(1)"]

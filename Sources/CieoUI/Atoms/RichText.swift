@@ -68,7 +68,7 @@ public struct RichText: View {
         let source = [
             "(?<break>\\r\\n|\\r|\\n)",
             "(?<url>https?:\\/\\/[^\\s<>]+|(?<![\\p{L}\\p{N}_@./:#%-])(?:www\\.)?(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,}\\/[^\\s<>]*)",
-            "(?<mention>(?<![\\p{L}\\p{N}_@./:#&])@[\\p{L}\\p{N}_](?:[\\p{L}\\p{N}_.]{0,28}[\\p{L}\\p{N}_])?)",
+            "(?<mention>(?<![\\p{L}\\p{N}_@./:#&!$%'*+=?^`{|}~-])@[\\p{L}\\p{N}_](?:[\\p{L}\\p{N}_.]{0,28}[\\p{L}\\p{N}_])?(?![\\p{L}\\p{N}_@-]))",
             "(?<tag>(?<![\\p{L}\\p{N}_&#/])#\\p{L}[\\p{L}\\p{N}_]*)",
         ].joined(separator: "|")
         return try! NSRegularExpression(pattern: source, options: [.caseInsensitive])

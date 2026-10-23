@@ -36,6 +36,9 @@ public struct LinkPreview: View {
         return host
     }
 
+    /// An image or icon address: absolute http(s) only, never a relative path or a credential-bearing host.
+    static func mediaURL(_ address: String?) -> URL? { Mention.safeURL(address, allowRelative: false) }
+
     static func siteLabel(url: String, siteName: String?) -> String {
         let host = displayDomain(url)
         guard !host.isEmpty else { return "" }
@@ -101,7 +104,7 @@ public struct LinkPreview: View {
         .componentBorder(theme.border, width: metrics.hairline, cornerRadius: metrics.corner)
     }
 
-    private var showsMedia: Bool { loading || (image.flatMap { Mention.safeURL($0.src, allowRelative: false) } != nil) }
+    private var showsMedia: Bool { loading || (image.flatMap { Self.mediaURL($0.src) } != nil) }
 
     private func frame16x9(_ media: some View) -> some View {
         Color.clear
@@ -126,7 +129,7 @@ public struct LinkPreview: View {
 
     @ViewBuilder
     private var siteRow: some View {
-        let icon = Mention.safeURL(favicon, allowRelative: false)
+        let icon = Self.mediaURL(favicon)
         if icon != nil || !site.isEmpty {
             HStack(spacing: metrics.tight) {
                 if let icon {
@@ -145,7 +148,7 @@ public struct LinkPreview: View {
 
     @ViewBuilder
     private var mediaView: some View {
-        if let image, let source = Mention.safeURL(image.src, allowRelative: false) {
+        if let image, let source = Self.mediaURL(image.src) {
             AsyncImage(url: source) { phase in
                 switch phase {
                 case .success(let loaded):
