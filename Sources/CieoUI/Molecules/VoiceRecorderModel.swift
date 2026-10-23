@@ -9,8 +9,11 @@ protocol VoiceRecorderDevice: AnyObject {
     var averagePower: Float { get }
     var isMeteringEnabled: Bool { get set }
     var onEncodingError: (@MainActor () -> Void)? { get set }
+    /// Called when the device stops by itself; `true` when it reached its requested length.
+    var onFinished: (@MainActor (Bool) -> Void)? { get set }
     func prepareToRecord() -> Bool
-    func record() -> Bool
+    /// Records for at most `seconds`; the device stops itself at the limit, with no timer needed.
+    func record(forDuration seconds: TimeInterval) -> Bool
     func pause()
     func stop()
     func updateMeters()
@@ -22,6 +25,7 @@ typealias VoiceRecorderFactory = @MainActor (URL, [String: Any]) throws -> any V
 private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AVAudioRecorderDelegate {
     private let recorder: AVAudioRecorder
     var onEncodingError: (@MainActor () -> Void)?
+    var onFinished: (@MainActor (Bool) -> Void)?
 
     init(url: URL, settings: [String: Any]) throws {
         recorder = try AVAudioRecorder(url: url, settings: settings)
@@ -38,7 +42,7 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
     }
 
     func prepareToRecord() -> Bool { recorder.prepareToRecord() }
-    func record() -> Bool { recorder.record() }
+    func record(forDuration seconds: TimeInterval) -> Bool { recorder.record(forDuration: seconds) }
     func pause() { recorder.pause() }
     func stop() { recorder.stop() }
     func updateMeters() { recorder.updateMeters() }
@@ -48,6 +52,14 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
         Task { @MainActor [weak self] in
             guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
             self.onEncodingError?()
+        }
+    }
+
+    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        let recorderID = ObjectIdentifier(recorder)
+        Task { @MainActor [weak self] in
+            guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
+            self.onFinished?(flag)
         }
     }
 }
@@ -314,7 +326,7 @@ public final class VoiceRecorderModel {
             send(.pause)
             announce(.paused)
         case .paused:
-            guard recorder.record() else { fail(); return }
+            guard recorder.record(forDuration: remainingTake(recorder)) else { fail(); return }
             send(.resume)
             announce(.recording)
         default: break
@@ -377,7 +389,11 @@ public final class VoiceRecorderModel {
                 guard let self, let recorder, self.recorder === recorder else { return }
                 self.fail()
             }
-            guard recorder.prepareToRecord(), recorder.record() else { throw CocoaError(.fileWriteUnknown) }
+            recorder.onFinished = { [weak self, weak recorder] reachedEnd in
+                guard let self, let recorder, self.recorder === recorder else { return }
+                if reachedEnd { self.finish(.limit) } else if self.state.phase == .recording { self.fail() }
+            }
+            guard recorder.prepareToRecord(), recorder.record(forDuration: maxDuration) else { throw CocoaError(.fileWriteUnknown) }
             peaks = []
             send(.granted)
             announce(.recording)
@@ -387,6 +403,11 @@ public final class VoiceRecorderModel {
             send(.fail)
             announce(.failed)
         }
+    }
+
+    /// Seconds still allowed in the take, so the device's own limit survives pause and resume.
+    private func remainingTake(_ recorder: any VoiceRecorderDevice) -> TimeInterval {
+        max(0.1, maxDuration - recorder.currentTime) // literal-ok: shortest sensible resume
     }
 
     private func startPolling() {
@@ -416,7 +437,8 @@ public final class VoiceRecorderModel {
 
     private func finish(_ event: Event) {
         guard state.phase == .recording || state.phase == .paused, let recorder, let url = fileURL else { return }
-        let duration = min(maxDuration, (recorder.currentTime * 10).rounded() / 10) // literal-ok: tenths of a second
+        // A device that stopped itself at the limit has already reset its clock, so the limit is the length.
+        let duration = event == .limit ? maxDuration : min(maxDuration, (recorder.currentTime * 10).rounded() / 10) // literal-ok: tenths of a second
         let previous = state
         let readings = peaks
         releaseRecorder(deleteFile: false)
@@ -444,6 +466,7 @@ public final class VoiceRecorderModel {
         timer?.invalidate()
         timer = nil
         recorder?.onEncodingError = nil
+        recorder?.onFinished = nil
         recorder?.stop()
         recorder = nil
         if deleteFile, let url = fileURL { try? FileManager.default.removeItem(at: url) }
