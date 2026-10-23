@@ -9,7 +9,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   review:
-    runs-on: ubuntu-latest
+    # Playwright 1.55 cannot install its browser on the ubuntu-latest image (26.04); move with a Playwright upgrade.
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     env:
       GENERATED_PAGES: library catalogue collection workbench
