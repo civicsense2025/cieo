@@ -1,0 +1,17 @@
+/* design/styles/primitives/annotation-pin.css */
+@layer cieo.components {
+  :where(.cieo).cieo-annotation-pin { --pin-size: 1.75rem; position: absolute; inline-size: 0; block-size: 0; padding: 0; margin: 0; border: 0; background: none; overflow: visible; pointer-events: auto; z-index: 1; transform-origin: 0 0; animation: cieo-annotation-pin-pop var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  :where(.cieo).cieo-annotation-pin[data-state='resolved'] { --pin-size: 1.25rem; }
+  :where(.cieo).cieo-annotation-pin[data-selected='true'] { z-index: 2; }
+  :where(.cieo) .cieo-annotation-pin-body { position: absolute; inset-inline-start: calc(var(--pin-size) / -2); inset-block-start: calc(var(--pin-size) * -1.2071); inline-size: var(--pin-size); block-size: var(--pin-size); display: grid; place-items: center; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); border: 2px solid var(--cieo-color-canvas); box-sizing: border-box; font-size: var(--cieo-text-caption); font-weight: var(--cieo-weight-strong); font-variant-numeric: tabular-nums; line-height: 1; }
+  :where(.cieo) .cieo-annotation-pin-body::before { content: ''; position: absolute; inset: -0.5rem; transform: rotate(45deg); }
+  :where(.cieo) .cieo-annotation-pin-text { transform: rotate(45deg); }
+  :where(.cieo).cieo-annotation-pin[data-state='draft'] .cieo-annotation-pin-body { background: var(--cieo-color-raised); color: var(--cieo-color-text); border-color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-annotation-pin[data-state='resolved'] .cieo-annotation-pin-body { background: var(--cieo-color-sunken); color: var(--cieo-color-muted); border-color: var(--cieo-color-border); }
+  :where(.cieo).cieo-annotation-pin[data-selected='true'] .cieo-annotation-pin-body { box-shadow: 0 0 0 2px var(--cieo-color-focus); }
+  :where(.cieo).cieo-annotation-pin:focus-visible { outline: none; }
+  :where(.cieo).cieo-annotation-pin:focus-visible .cieo-annotation-pin-body { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @keyframes cieo-annotation-pin-pop { from { transform: scale(0.45); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo).cieo-annotation-pin { animation: none; } }
+  :where([data-motion='off']) :where(.cieo).cieo-annotation-pin, :where(.cieo)[data-motion='off'].cieo-annotation-pin { animation: none; }
+}
