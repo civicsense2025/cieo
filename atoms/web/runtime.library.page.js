@@ -1,5 +1,5 @@
 /* ================================================================ library.page */
-const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories','Auth'];
+const CATS = ['Foundations','Content','Forms','Inputs','Overlays','Navigation','Layout','Data','Media','Interactive','Dynamic','Newsletter','Chrome','Commerce','Documents','Admin','Writing','Design tools','Email','SEO','Social','Files and browsing','AI chat','Scheduling','Video calls','Guidance','Maps','Views','Editor','Storefront','Workspace','Landing','Admin kit','Workflow','Status and records','MCP and agents','Agent activity','Mega menus','Headers','Footers','Photo effects','Image transitions','Carousels','Galleries','Scroll stories','Auth','Audio','Comments','Messaging','Feedback'];
 const groupsEl = document.getElementById('groups'), groupEls = {};
 CATS.forEach(c => {
   const id = 'cat-' + c.toLowerCase().replace(/\s+/g,'-'), g = document.createElement('section'); g.className = 'group'; g.id = id;
@@ -12,7 +12,8 @@ const CATGROUPS = { 'Photos and transitions':['Photo effects','Image transitions
   'Data and admin':['Data','Admin','Admin kit','Status and records','Views'],
   'Workflows and editing':['Workflow','Editor','Documents','Writing','Design tools','Files and browsing'],
   'Sites and commerce':['Commerce','Storefront','Landing','Workspace','Maps'],
-  'Online jobs':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'] };
+  'Online jobs':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'],
+  'Audio and conversation':['Audio','Comments','Messaging','Feedback'] };
 const placed = new Set(Object.values(CATGROUPS).flat()), rest = CATS.filter(c => !placed.has(c)); if (rest.length) CATGROUPS['More'] = rest;
 const jumpEl = document.getElementById('jump'), jumpBtn = document.getElementById('jumpbtn'), jumpLinks = {};
 Object.entries(CATGROUPS).forEach(([gname, cs]) => { const d = document.createElement('div'); d.innerHTML = `<h4>${gname}</h4>`;

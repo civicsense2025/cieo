@@ -853,6 +853,70 @@
       ]
     },
     {
+      "id": "audio-recorder",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "audio-recorder",
+          "symbol": null,
+          "category": "Audio",
+          "path": "atoms/web/blocks/561-audio.js",
+          "sha256": "8520ff928d7a6e255dca8e39f2fe9d6bd36e2a02a4340606a95f37f2d9cd9450",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "audio-room",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "audio-room",
+          "symbol": null,
+          "category": "Audio",
+          "path": "atoms/web/blocks/561-audio.js",
+          "sha256": "8520ff928d7a6e255dca8e39f2fe9d6bd36e2a02a4340606a95f37f2d9cd9450",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "audio-transcript",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "audio-transcript",
+          "symbol": null,
+          "category": "Audio",
+          "path": "atoms/web/blocks/561-audio.js",
+          "sha256": "8520ff928d7a6e255dca8e39f2fe9d6bd36e2a02a4340606a95f37f2d9cd9450",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "audio-voice-note",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "audio-voice-note",
+          "symbol": null,
+          "category": "Audio",
+          "path": "atoms/web/blocks/561-audio.js",
+          "sha256": "8520ff928d7a6e255dca8e39f2fe9d6bd36e2a02a4340606a95f37f2d9cd9450",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
       "id": "auditintake",
       "artifactKind": "recipe",
       "platformStatus": "paired",
@@ -2301,6 +2365,70 @@
           "category": "Inputs",
           "path": "atoms/web/blocks/066-combobox.js",
           "sha256": "7685e7b7d139504f953de46cd0d0e9066439ea8f95220dfa4db64588a66e9f0c",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "comments-link-preview",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "comments-link-preview",
+          "symbol": null,
+          "category": "Comments",
+          "path": "atoms/web/blocks/562-comments.js",
+          "sha256": "7055e4587b8e57a37c9fad4fd65dfcedf845de7caa6a80a2ddd955ad366ddb99",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "comments-reactions",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "comments-reactions",
+          "symbol": null,
+          "category": "Comments",
+          "path": "atoms/web/blocks/562-comments.js",
+          "sha256": "7055e4587b8e57a37c9fad4fd65dfcedf845de7caa6a80a2ddd955ad366ddb99",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "comments-thread",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "comments-thread",
+          "symbol": null,
+          "category": "Comments",
+          "path": "atoms/web/blocks/562-comments.js",
+          "sha256": "7055e4587b8e57a37c9fad4fd65dfcedf845de7caa6a80a2ddd955ad366ddb99",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "comments-voice-reply",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "comments-voice-reply",
+          "symbol": null,
+          "category": "Comments",
+          "path": "atoms/web/blocks/562-comments.js",
+          "sha256": "7055e4587b8e57a37c9fad4fd65dfcedf845de7caa6a80a2ddd955ad366ddb99",
           "artifactKind": "recipe"
         }
       ]
@@ -3901,6 +4029,38 @@
           "category": "Guidance",
           "path": "atoms/web/blocks/370-fbeacon.js",
           "sha256": "43c98e22eb8df40b44dcc5e539822ffcdb8b6065b042aacce0b9fb08d3b9b6c6",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "feedback-helpful",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "feedback-helpful",
+          "symbol": null,
+          "category": "Feedback",
+          "path": "atoms/web/blocks/564-feedback.js",
+          "sha256": "d0860a1308eb69590588fb17a20a44ccf7fa9a98060ae9c8816bcec00c6e17e0",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "feedback-pin-review",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "feedback-pin-review",
+          "symbol": null,
+          "category": "Feedback",
+          "path": "atoms/web/blocks/564-feedback.js",
+          "sha256": "d0860a1308eb69590588fb17a20a44ccf7fa9a98060ae9c8816bcec00c6e17e0",
           "artifactKind": "recipe"
         }
       ]
@@ -7276,6 +7436,70 @@
           "category": "Chrome",
           "path": "atoms/web/blocks/033-mobilemenu.js",
           "sha256": "31c322f045eecfcc324d6628b43b871bd0953c3d037c55a7a76b2d6534735298",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "msg-delivery",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "msg-delivery",
+          "symbol": null,
+          "category": "Messaging",
+          "path": "atoms/web/blocks/563-messaging.js",
+          "sha256": "494e58d6eed8515497bd919c726d17086889d7ad3b9b4e727c2846ce34c9a0c7",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "msg-group-avatar",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "msg-group-avatar",
+          "symbol": null,
+          "category": "Messaging",
+          "path": "atoms/web/blocks/563-messaging.js",
+          "sha256": "494e58d6eed8515497bd919c726d17086889d7ad3b9b4e727c2846ce34c9a0c7",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "msg-inbox",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "msg-inbox",
+          "symbol": null,
+          "category": "Messaging",
+          "path": "atoms/web/blocks/563-messaging.js",
+          "sha256": "494e58d6eed8515497bd919c726d17086889d7ad3b9b4e727c2846ce34c9a0c7",
+          "artifactKind": "recipe"
+        }
+      ]
+    },
+    {
+      "id": "msg-typing",
+      "artifactKind": "recipe",
+      "platformStatus": "web-only",
+      "sources": [
+        {
+          "platform": "web",
+          "id": "msg-typing",
+          "symbol": null,
+          "category": "Messaging",
+          "path": "atoms/web/blocks/563-messaging.js",
+          "sha256": "494e58d6eed8515497bd919c726d17086889d7ad3b9b4e727c2846ce34c9a0c7",
           "artifactKind": "recipe"
         }
       ]

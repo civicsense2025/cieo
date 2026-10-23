@@ -11,6 +11,7 @@
     'Work & creation':['Writing','Design tools','Editor','Documents','Workflow','Files and browsing'],
     'Data & commerce':['Data','Admin','Admin kit','Status and records','Views','Commerce','Storefront','Landing','Workspace','Maps'],
     'Connected experiences':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'],
+    'Audio & conversation':['Audio','Comments','Messaging','Feedback'],
     'Images & stories':['Photo effects','Image transitions','Carousels','Galleries','Scroll stories'],
   };
   const listed = new Set(Object.values(L.groups).flat());

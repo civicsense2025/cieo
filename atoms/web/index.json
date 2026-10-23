@@ -4462,5 +4462,117 @@
   "summary": "Sign out opens an inline Sign out of all devices step with Confirm and Cancel. Confirm lands a signed-out line; Cancel returns to the profile untouched.",
   "file": "blocks/560-auth-wave3.js",
   "api": "auth, account, sign out"
+ },
+ {
+  "id": "audio-voice-note",
+  "category": "Audio",
+  "name": "Voice note player",
+  "summary": "Play and pause are one shape on one spring. The waveform fills continuously with the playhead, the speed button swaps 1x, 1.5x and 2x without a jump in position, and dragging or the arrow keys scrub.",
+  "file": "blocks/561-audio.js",
+  "api": "pos(t) = playing ? min(1, p0 + (t − t0)·rate/DUR) : p0   rate: p0 = pos(now); t0 = now"
+ },
+ {
+  "id": "audio-recorder",
+  "category": "Audio",
+  "name": "Voice recorder",
+  "summary": "Tapping the mic grows the pill into live level bars and rolling mm:ss digits. Cancel collapses it back. Stop springs the bars from the live heights into a static waveform and the pill becomes a clip card.",
+  "file": "blocks/561-audio.js",
+  "api": "level(t) = envelope(t − t0)   bars = rolling history   stop: bar[i].spring(live[i] → resample(history)[i])"
+ },
+ {
+  "id": "audio-transcript",
+  "category": "Audio",
+  "name": "Transcript follow-along",
+  "summary": "A highlight pill glides from word to word as a simulated clock plays, taking each word's own box so it stretches across long and short words. Tapping any word moves the clock there and keeps playing.",
+  "file": "blocks/561-audio.js",
+  "api": "i = last word with start ≤ clock   pill.{x,y,w,h}.set(word.box)   word click: p0 = start[i]"
+ },
+ {
+  "id": "audio-room",
+  "category": "Audio",
+  "name": "Audio room",
+  "summary": "Speaker tiles breathe with simulated voice levels. A join springs every tile to its new slot, raising a hand pops a badge past its rest size, and muting draws a slash across the mic while the ring settles.",
+  "file": "blocks/561-audio.js",
+  "api": "slot(i, n): cols = n≤3 ? n : n≤4 ? 2 : 3   tile.{x,y,w,h}.set(slot)   ring = 1 + 0.45·smooth(level)"
+ },
+ {
+  "id": "comments-thread",
+  "category": "Comments",
+  "name": "Threaded replies",
+  "summary": "A post with a rail that runs from the parent avatar and curves into each reply. The like and repost counts roll digit by digit, and View 3 more replies opens the nested replies on a height spring while the rail grows with them.",
+  "file": "blocks/562-comments.js",
+  "api": "rail = connector(border-left + radius) per reply   more.h.set(measure(inner))   count.set(n ± 1) → Digits"
+ },
+ {
+  "id": "comments-reactions",
+  "category": "Comments",
+  "name": "Reaction picker",
+  "summary": "The picker row rises staggered from the smile button. The chosen emoji flies to its summary chip on a spring and the count rolls when it lands; picking again, or tapping your own chip, takes the reaction back.",
+  "file": "blocks/562-comments.js",
+  "api": "pick[i].{y,o}.set(0,1, base, t0 + i·0.04)   fly.{x,y}.set(chip.center)   on land: count.set(n ± 1)"
+ },
+ {
+  "id": "comments-voice-reply",
+  "category": "Comments",
+  "name": "Voice reply in a thread",
+  "summary": "The mic in the composer swaps the text field for live level bars and rolling digits. Stop sends the clip into the thread as a new reply that rises in on a height spring and carries its own mini player; typed replies land the same way.",
+  "file": "blocks/562-comments.js",
+  "api": "composer: swap(type ↔ rec)   reply.{h,y,o}.set(measure, soft)   mini player: fill = (t − t0)/dur"
+ },
+ {
+  "id": "comments-link-preview",
+  "category": "Comments",
+  "name": "Link preview unfurl",
+  "summary": "Pasting a URL opens a reserved slot with a pulsing skeleton, then the real card cross-fades in with its image, domain and two-line title. The slot height springs to the card and the remove button collapses it again.",
+  "file": "blocks/562-comments.js",
+  "api": "url → box.h.set(84)   sk → card via Swap after 1.1s   title = slug(path).titleCase   input change → collapse"
+ },
+ {
+  "id": "msg-typing",
+  "category": "Messaging",
+  "name": "Typing to message",
+  "summary": "Your message rises into the thread, then three dots wave on a phase offset. When the reply arrives the same bubble grows to the measured size of the text and the words fade in.",
+  "file": "blocks/563-messaging.js",
+  "api": "dots: y = −2·wave(t·6 − i·0.9)   bubble.{w,h}.set(measure(reply), soft)   text.o.set(1, base, t + 0.12)"
+ },
+ {
+  "id": "msg-delivery",
+  "category": "Messaging",
+  "name": "Delivery ticks",
+  "summary": "The clock hand turns while sending. A first check draws in on Sent, a second slides in beside it on Delivered, both turn to the accent colour on Read, then the Seen by avatars slide in one after another.",
+  "file": "blocks/563-messaging.js",
+  "api": "status: 0 sending → 1 sent (c1.draw) → 2 delivered (c2.draw) → 3 read (tint.set(1)) → seen[i].x.set(0, base, t + i·0.06)"
+ },
+ {
+  "id": "msg-inbox",
+  "category": "Messaging",
+  "name": "Inbox reorder",
+  "summary": "A new message makes its conversation slide to the top while every row in between slides down by one slot. Its unread badge pops past full size and the count rolls; opening the conversation shrinks the badge away.",
+  "file": "blocks/563-messaging.js",
+  "api": "order = [touched, ...rest]   row[i].y.set(slot(order.indexOf(i)), base)   badge.s.set(1, {w:24,z:.45})   count → Digits"
+ },
+ {
+  "id": "msg-group-avatar",
+  "category": "Messaging",
+  "name": "Group avatar",
+  "summary": "Every member circle springs between layout slots as people join: one fills the circle, two split diagonally, three form a triangle, four tile a grid, and past four the fourth slot becomes a plus count that rolls.",
+  "file": "blocks/563-messaging.js",
+  "api": "layout(n): 1 → [full]   2 → diag   3 → triangle   4 → grid   ≥5 → 3 + \"+k\"   member.{x,y,s}.set(slot(i, n), base)"
+ },
+ {
+  "id": "feedback-pin-review",
+  "category": "Feedback",
+  "name": "Pin and comment review",
+  "summary": "In comment mode a crosshair follows the pointer or the arrow keys, and a click drops a numbered pin that pops past its rest size. A popover opens beside it and flips to the other side near the edge; Post turns the pin solid and Resolve fades it away.",
+  "file": "blocks/564-feedback.js",
+  "api": "pin.s.set(1, {w:24,z:.45})   side = pin.x > W/2 ? left : right   po.{x,y} = clamp(pin ± 22, edge)   post: fill.set(1)   resolve: o.set(0)"
+ },
+ {
+  "id": "feedback-helpful",
+  "category": "Feedback",
+  "name": "Helpful thumbs",
+  "summary": "Choosing a thumb swaps the question for reason chips that fit that answer, and sending swaps in a thank-you that repeats what was chosen. The panel height springs to the measured size of each step instead of jumping.",
+  "file": "blocks/564-feedback.js",
+  "api": "step.to(ask | why | done)   panel.h.set(measure(layer), soft)   chips: aria-pressed toggles   Change answer → ask"
  }
 ]
