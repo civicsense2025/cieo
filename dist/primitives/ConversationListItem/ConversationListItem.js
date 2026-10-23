@@ -1,0 +1,59 @@
+// src/primitives/ConversationListItem/ConversationListItem.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+/* ConversationListItem. One row of the inbox: avatar, title and time, preview and unread badge. The host owns the content and what a click does; the row owns the layout, the badge motion and the spoken summary. */
+import { Children, isValidElement, useContext } from 'react';
+import { Digits, S, usePresence } from '../../react/index.js';
+import { ConversationListContext } from '../ConversationList/ConversationList.js';
+import { TypingIndicator, typingLabel } from '../TypingIndicator/TypingIndicator.js';
+/** Plain text of a React node: strings and numbers are kept, elements contribute their children, everything else is dropped. Used to read a preview aloud. */
+export function nodeText(node) {
+    if (node === null || node === undefined || typeof node === 'boolean')
+        return '';
+    if (typeof node === 'string' || typeof node === 'number')
+        return String(node);
+    if (Array.isArray(node))
+        return node.map(nodeText).join('');
+    if (isValidElement(node)) {
+        const props = node.props;
+        if (props['aria-hidden'] === true || props['aria-hidden'] === 'true')
+            return '';
+        return Children.toArray(props.children).map(nodeText).join('');
+    }
+    return '';
+}
+/** Whole unread count shown on the badge: negative, fractional and non-finite input clamps to a whole count of at least 0; above 99 it reads "99+". */
+export function unreadBadgeText(unread) {
+    const n = Number.isFinite(unread) ? Math.max(0, Math.floor(unread)) : 0;
+    return n > 99 ? '99+' : String(n);
+}
+/** Spoken name of a row: "Design team, 3 unread, Ava: see you at 3, 9:41 AM". Typing replaces the preview; a draft says so. */
+export function conversationLabel(s) {
+    const unread = Number.isFinite(s.unread) ? Math.max(0, Math.floor(s.unread ?? 0)) : 0;
+    const typing = s.typing && s.typing.length > 0 ? typingLabel(s.typing) : '';
+    const preview = s.preview?.trim() ?? '';
+    const body = typing || (s.draft ? `Draft: ${preview}`.trim() : preview);
+    return [s.title, unread > 0 ? `${unread} unread` : '', s.muted ? 'muted' : '', s.pinned ? 'pinned' : '', body, s.time ?? ''].filter(Boolean).join(', ');
+}
+const bell = (_jsxs("svg", { "aria-hidden": "true", focusable: "false", viewBox: "0 0 16 16", width: "14", height: "14", fill: "none", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", children: [_jsx("path", { d: "M4.5 6.5a3.5 3.5 0 0 1 6.2-2.2M11.5 7.5c0 2.5 1 3.5 1.5 4H3.5c.5-.5 1-1.5 1-4" }), _jsx("path", { d: "M6.7 13a1.4 1.4 0 0 0 2.6 0M2 2l12 12" })] }));
+const pin = (_jsx("svg", { "aria-hidden": "true", focusable: "false", viewBox: "0 0 16 16", width: "14", height: "14", fill: "none", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round", children: _jsx("path", { d: "M9.5 2l4.5 4.5-2 .5-2.5 2.5.5 3-1 1-2.5-2.5L3 13.5M6.5 5.5L5 6l-1 1 5 5" }) }));
+export function ConversationListItem({ id, title, avatar, preview, time, dateTime, unread = 0, muted, pinned, draft, typing = [], selected, href, onSelect }) {
+    const list = useContext(ConversationListContext);
+    const count = Number.isFinite(unread) ? Math.max(0, Math.floor(unread)) : 0;
+    const isSelected = selected ?? (list?.selectedId !== undefined && list.selectedId === id);
+    const isTyping = typing.some((n) => n.trim() !== '');
+    const badge = usePresence(count > 0, { from: { y: 0, scale: 0.6 }, cfg: S.snap });
+    const name = conversationLabel({ title, unread: count, muted, pinned, draft, typing, preview: nodeText(preview), time });
+    const tabIndex = list ? (list.tabbableId === id ? 0 : -1) : 0;
+    const common = {
+        'data-conversation-row': '',
+        'data-conversation-id': id,
+        'aria-current': isSelected ? 'true' : undefined,
+        'aria-label': name,
+        tabIndex,
+        className: 'cieo-conversation-list-item-row',
+        onClick: onSelect ? () => onSelect(id) : undefined,
+    };
+    const body = (_jsxs(_Fragment, { children: [_jsx("span", { "aria-hidden": "true", className: "cieo-conversation-list-item-avatar", children: avatar }), _jsxs("span", { className: "cieo-conversation-list-item-main", children: [_jsxs("span", { className: "cieo-conversation-list-item-top", children: [_jsx("span", { className: "cieo-conversation-list-item-title", children: title }), time ? (_jsx("time", { dateTime: dateTime, className: "cieo-conversation-list-item-time", children: time })) : null] }), _jsxs("span", { className: "cieo-conversation-list-item-bottom", children: [_jsxs("span", { className: "cieo-conversation-list-item-line", children: [_jsxs("span", { className: "cieo-conversation-list-item-preview", "data-hidden": isTyping ? '' : undefined, children: [draft ? _jsx("span", { className: "cieo-conversation-list-item-draft", children: "Draft: " }) : null, preview] }), _jsx("span", { className: "cieo-conversation-list-item-typing", "data-shown": isTyping ? '' : undefined, children: _jsx(TypingIndicator, { names: typing, variant: "inline" }) })] }), _jsxs("span", { className: "cieo-conversation-list-item-flags", children: [muted ? _jsx("span", { className: "cieo-conversation-list-item-icon", children: bell }) : null, pinned && count === 0 ? _jsx("span", { className: "cieo-conversation-list-item-icon", children: pin }) : null, badge.mounted ? (_jsx("span", { ref: badge.ref, className: "cieo-conversation-list-item-badge", children: _jsx(Digits, { value: unreadBadgeText(count) }) })) : null] })] })] })] }));
+    return (_jsx("div", { role: "listitem", "data-selected": isSelected ? '' : undefined, "data-unread": count > 0 ? '' : undefined, "data-muted": muted ? '' : undefined, "data-pinned": pinned ? '' : undefined, className: "cieo cieo-conversation-list-item", children: href ? (_jsx("a", { href: href, ...common, children: body })) : (_jsx("button", { type: "button", ...common, children: body })) }));
+}

@@ -1,0 +1,15 @@
+/* design/styles/primitives/typing-indicator.css */
+@layer cieo.components {
+  :where(.cieo).cieo-typing-indicator { display: inline-flex; align-items: center; color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-typing-indicator[data-empty] { display: none; }
+  :where(.cieo).cieo-typing-indicator[data-variant='bubble'] .cieo-typing-indicator-body { padding: var(--cieo-space-2) var(--cieo-space-3); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-sunken); }
+  :where(.cieo) .cieo-typing-indicator-body { display: inline-flex; align-items: center; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-typing-indicator-dots { display: inline-flex; align-items: center; gap: var(--cieo-space-1); }
+  :where(.cieo) .cieo-typing-indicator-dot { inline-size: 6px; block-size: 6px; border-radius: var(--cieo-radius-pill); background: currentColor; opacity: 0.5; animation: cieo-typing-wave calc(var(--motion-duration-base, 300ms) * 4) ease-in-out infinite; }
+  :where(.cieo) .cieo-typing-indicator-dot:nth-child(2) { animation-delay: calc(var(--motion-duration-base, 300ms) / 2); }
+  :where(.cieo) .cieo-typing-indicator-dot:nth-child(3) { animation-delay: var(--motion-duration-base, 300ms); }
+  :where(.cieo) .cieo-typing-indicator-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @keyframes cieo-typing-wave { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-3px); opacity: 0.9; } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-typing-indicator-dot { animation: none; opacity: 0.6; } }
+  :where([data-motion='off']) .cieo-typing-indicator-dot, :where(.cieo)[data-motion='off'] .cieo-typing-indicator-dot { animation: none; opacity: 0.6; }
+}

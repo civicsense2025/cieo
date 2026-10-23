@@ -1,0 +1,22 @@
+/* design/styles/primitives/group-avatar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-group-avatar { --cieo-group-avatar-size: 40px; position: relative; display: inline-block; flex: none; inline-size: var(--cieo-group-avatar-size); block-size: var(--cieo-group-avatar-size); }
+  :where(.cieo).cieo-group-avatar[data-size='sm'] { --cieo-group-avatar-size: 32px; }
+  :where(.cieo).cieo-group-avatar[data-size='lg'] { --cieo-group-avatar-size: 56px; }
+  :where(.cieo) .cieo-group-avatar-face { --face: 100%; position: absolute; inline-size: var(--face); block-size: var(--face); box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center; overflow: hidden; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent-soft); color: var(--cieo-color-accent); border: 2px solid var(--cieo-color-canvas); font-size: calc(var(--cieo-group-avatar-size) * 0.4); font-weight: var(--cieo-weight-medium); line-height: 1; }
+  :where(.cieo)[data-count='1'] .cieo-group-avatar-face { inset: 0; }
+  :where(.cieo) .cieo-group-avatar-face img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  :where(.cieo) .cieo-group-avatar-more { background: var(--cieo-color-sunken); color: var(--cieo-color-muted); }
+  :where(.cieo)[data-count='2'] .cieo-group-avatar-face { --face: 66%; font-size: calc(var(--cieo-group-avatar-size) * 0.26); }
+  :where(.cieo)[data-count='2'] .cieo-group-avatar-face:nth-child(1) { inset-block-start: 0; inset-inline-start: 0; }
+  :where(.cieo)[data-count='2'] .cieo-group-avatar-face:nth-child(2) { inset-block-end: 0; inset-inline-end: 0; }
+  :where(.cieo)[data-count='3'] .cieo-group-avatar-face { --face: 54%; font-size: calc(var(--cieo-group-avatar-size) * 0.2); }
+  :where(.cieo)[data-count='3'] .cieo-group-avatar-face:nth-child(1) { inset-block-start: 0; inset-inline-start: 23%; }
+  :where(.cieo)[data-count='3'] .cieo-group-avatar-face:nth-child(2) { inset-block-end: 0; inset-inline-start: 0; }
+  :where(.cieo)[data-count='3'] .cieo-group-avatar-face:nth-child(3) { inset-block-end: 0; inset-inline-end: 0; }
+  :where(.cieo)[data-count='4'] .cieo-group-avatar-face, :where(.cieo)[data-count='5'] .cieo-group-avatar-face { --face: 50%; font-size: calc(var(--cieo-group-avatar-size) * 0.18); }
+  :where(.cieo):is([data-count='4'], [data-count='5']) .cieo-group-avatar-face:nth-child(1) { inset-block-start: 0; inset-inline-start: 0; }
+  :where(.cieo):is([data-count='4'], [data-count='5']) .cieo-group-avatar-face:nth-child(2) { inset-block-start: 0; inset-inline-end: 0; }
+  :where(.cieo):is([data-count='4'], [data-count='5']) .cieo-group-avatar-face:nth-child(3) { inset-block-end: 0; inset-inline-start: 0; }
+  :where(.cieo):is([data-count='4'], [data-count='5']) .cieo-group-avatar-face:nth-child(4) { inset-block-end: 0; inset-inline-end: 0; }
+}

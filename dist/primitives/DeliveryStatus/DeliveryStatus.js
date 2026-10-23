@@ -1,0 +1,21 @@
+// src/primitives/DeliveryStatus/DeliveryStatus.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+/** Word for a delivery state, read aloud and shown for failures. */
+export function deliveryLabel(status) {
+    if (status === 'sending')
+        return 'Sending';
+    if (status === 'sent')
+        return 'Sent';
+    if (status === 'delivered')
+        return 'Delivered';
+    if (status === 'read')
+        return 'Read';
+    return 'Not delivered';
+}
+const stroke = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.75, strokeLinecap: 'round', strokeLinejoin: 'round' };
+export function DeliveryStatus({ status, time }) {
+    const label = deliveryLabel(status);
+    const failed = status === 'failed';
+    return (_jsxs("span", { role: failed ? 'alert' : undefined, "data-status": status, className: "cieo cieo-delivery-status", children: [_jsx("span", { "aria-hidden": "true", className: "cieo-delivery-status-icon", children: _jsxs("svg", { viewBox: "0 0 20 16", width: "20", height: "16", focusable: "false", children: [_jsxs("g", { className: "cieo-delivery-status-glyph", "data-glyph": "sending", ...stroke, children: [_jsx("circle", { cx: "10", cy: "8", r: "5.5" }), _jsx("path", { d: "M10 5v3.2l2 1.3" })] }), _jsx("g", { className: "cieo-delivery-status-glyph", "data-glyph": "sent", ...stroke, children: _jsx("path", { d: "M6.5 8.5l2.6 2.6L14 5.5" }) }), _jsxs("g", { className: "cieo-delivery-status-glyph", "data-glyph": "double", ...stroke, children: [_jsx("path", { d: "M3.5 8.5l2.6 2.6L11 5.5" }), _jsx("path", { d: "M9.5 10.9l.5.2L16 5.5" })] }), _jsxs("g", { className: "cieo-delivery-status-glyph", "data-glyph": "failed", ...stroke, children: [_jsx("path", { d: "M10 4.5v4.4" }), _jsx("path", { d: "M10 11.6v.1" })] })] }) }), failed ? _jsx("span", { "aria-hidden": "true", className: "cieo-delivery-status-text", children: label }) : null, time ? (_jsx("span", { "aria-hidden": "true", className: "cieo-delivery-status-time", children: time })) : null, _jsx("span", { className: "cieo-sr-only", children: time ? `${label}, ${time}` : label })] }));
+}

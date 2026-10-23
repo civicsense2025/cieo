@@ -1,0 +1,9 @@
+/* design/styles/primitives/unread-divider.css */
+@layer cieo.components {
+  :where(.cieo).cieo-unread-divider { display: flex; align-items: center; gap: var(--cieo-space-3); margin-block: var(--cieo-space-3); color: var(--cieo-color-accent); font-size: var(--cieo-text-caption); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo) .cieo-unread-divider-rule { flex: 1; block-size: 0; border-block-start: var(--cieo-border-width) solid var(--cieo-color-accent); opacity: 0.4; }
+  :where(.cieo) .cieo-unread-divider-label { white-space: nowrap; animation: cieo-unread-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  @keyframes cieo-unread-in { from { opacity: 0; transform: translateY(var(--motion-drift, 4px)); } }
+  @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-unread-divider-label { animation: none; } }
+  :where([data-motion='off']) .cieo-unread-divider-label, :where(.cieo)[data-motion='off'] .cieo-unread-divider-label { animation: none; }
+}
