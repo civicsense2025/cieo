@@ -1,5 +1,45 @@
 import AVFoundation
+import Foundation
 import Observation
+
+enum AudioSessionUse: Sendable { case playback, recording }
+
+protocol AudioSessionManaging: Sendable {
+    func activate(_ use: AudioSessionUse, owner: UUID) throws
+    func deactivate(owner: UUID)
+}
+
+final class SystemAudioSessionManager: AudioSessionManaging, @unchecked Sendable {
+    static let shared = SystemAudioSessionManager()
+
+    private let lock = NSLock()
+    private var activeOwner: UUID?
+
+    func activate(_ use: AudioSessionUse, owner: UUID) throws {
+        #if os(iOS)
+        lock.lock(); defer { lock.unlock() }
+        guard activeOwner != owner else { return }
+        let session = AVAudioSession.sharedInstance()
+        switch use {
+        case .playback:
+            try session.setCategory(.playback)
+        case .recording:
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+        }
+        try session.setActive(true)
+        activeOwner = owner
+        #endif
+    }
+
+    func deactivate(owner: UUID) {
+        #if os(iOS)
+        lock.lock(); defer { lock.unlock() }
+        guard activeOwner == owner else { return }
+        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        activeOwner = nil
+        #endif
+    }
+}
 
 /// Anything the coordinator can pause when another clip starts.
 @MainActor
@@ -72,16 +112,26 @@ public final class AudioPlaybackModel: AudioPausable {
 
     @ObservationIgnored private let url: URL?
     @ObservationIgnored private let coordinator: AudioPlaybackCoordinator
+    @ObservationIgnored private let sessionManager: AudioSessionManaging
+    @ObservationIgnored private var engineSessionOwner: UUID?
     @ObservationIgnored private var engine: Engine?
     @ObservationIgnored private var simulation: Task<Void, Never>?
 
     /// Plays the audio at `url` (a file or a remote address). `duration` is the length when known, so the
     /// clock is right before metadata loads.
-    public init(url: URL, duration: TimeInterval? = nil, coordinator: AudioPlaybackCoordinator? = nil) {
+    public convenience init(url: URL, duration: TimeInterval? = nil, coordinator: AudioPlaybackCoordinator? = nil) {
+        self.init(url: url, duration: duration, coordinator: coordinator, sessionManager: SystemAudioSessionManager.shared)
+    }
+
+    init(url: URL, duration: TimeInterval? = nil, coordinator: AudioPlaybackCoordinator? = nil,
+         sessionManager: AudioSessionManaging) {
         self.url = url
         self.duration = Self.usable(duration)
         self.coordinator = coordinator ?? .shared
-        let engine = Engine(url: url)
+        self.sessionManager = sessionManager
+        let owner = UUID()
+        engineSessionOwner = owner
+        let engine = Engine(url: url, sessionManager: sessionManager, sessionOwner: owner)
         self.engine = engine
         engine.attach(self)
     }
@@ -95,6 +145,8 @@ public final class AudioPlaybackModel: AudioPausable {
         self.state = state
         self.currentTime = currentTime
         self.coordinator = coordinator ?? .shared
+        self.sessionManager = SystemAudioSessionManager.shared
+        engineSessionOwner = nil
     }
 
     /// Releases the audio and observers. Safe to call more than once; also runs when the model goes away.
@@ -103,6 +155,7 @@ public final class AudioPlaybackModel: AudioPausable {
         simulation = nil
         engine?.teardown()
         engine = nil
+        engineSessionOwner = nil
         coordinator.release(self)
     }
 
@@ -131,6 +184,7 @@ public final class AudioPlaybackModel: AudioPausable {
     public func pause() {
         guard state == .playing else { return }
         engine?.pause()
+        engine?.deactivateSession()
         simulation?.cancel()
         simulation = nil
         coordinator.release(self)
@@ -163,8 +217,10 @@ public final class AudioPlaybackModel: AudioPausable {
         apply(.retry)
         if let url {
             engine?.teardown()
-            let fresh = Engine(url: url)
+            let owner = UUID()
+            let fresh = Engine(url: url, sessionManager: sessionManager, sessionOwner: owner)
             engine = fresh
+            engineSessionOwner = owner
             fresh.attach(self)
         } else {
             apply(.loadedMetadata)
@@ -202,7 +258,8 @@ public final class AudioPlaybackModel: AudioPausable {
 
     // MARK: Engine callbacks
 
-    func engineLoaded(duration: TimeInterval?) {
+    func engineLoaded(duration: TimeInterval?, owner: UUID) {
+        guard engineSessionOwner == owner else { return }
         if let d = Self.usable(duration) { self.duration = d }
         apply(.loadedMetadata)
     }
@@ -213,14 +270,39 @@ public final class AudioPlaybackModel: AudioPausable {
         onTimeUpdate?(currentTime)
     }
 
+    func engineTime(_ seconds: TimeInterval, owner: UUID) {
+        guard engineSessionOwner == owner else { return }
+        engineTime(seconds)
+    }
+
     func engineEnded() {
+        finishPlayback(owner: engineSessionOwner)
+    }
+
+    func engineEnded(owner: UUID) {
+        guard engineSessionOwner == owner else { return }
+        finishPlayback(owner: owner)
+    }
+
+    private func finishPlayback(owner: UUID?) {
         engine?.seek(to: 0)
+        if owner != nil { engine?.deactivateSession() }
         currentTime = 0
         coordinator.release(self)
         apply(.ended)
     }
 
     func engineFailed() {
+        finishFailure(owner: engineSessionOwner)
+    }
+
+    func engineFailed(owner: UUID) {
+        guard engineSessionOwner == owner else { return }
+        finishFailure(owner: owner)
+    }
+
+    private func finishFailure(owner: UUID?) {
+        if owner != nil { engine?.deactivateSession() }
         coordinator.release(self)
         apply(.error)
     }
@@ -255,25 +337,30 @@ public final class AudioPlaybackModel: AudioPausable {
 private final class Engine: @unchecked Sendable {
     private let player: AVPlayer
     private let item: AVPlayerItem
+    private let sessionManager: AudioSessionManaging
+    private let sessionOwner: UUID
     private var timeObserver: Any?
     private var tokens: [NSObjectProtocol] = []
     private var observations: [NSKeyValueObservation] = []
 
-    init(url: URL) {
+    init(url: URL, sessionManager: AudioSessionManaging, sessionOwner: UUID) {
         item = AVPlayerItem(url: url)
         player = AVPlayer(playerItem: item)
+        self.sessionManager = sessionManager
+        self.sessionOwner = sessionOwner
         player.automaticallyWaitsToMinimizeStalling = true
     }
 
     @MainActor
     func attach(_ model: AudioPlaybackModel) {
+        let owner = sessionOwner
         observations.append(item.observe(\.status, options: [.initial, .new]) { [weak model] item, _ in
             let status = item.status
             let length = item.duration.seconds
             Task { @MainActor [weak model] in
                 switch status {
-                case .readyToPlay: model?.engineLoaded(duration: length)
-                case .failed: model?.engineFailed()
+                case .readyToPlay: model?.engineLoaded(duration: length, owner: owner)
+                case .failed: model?.engineFailed(owner: owner)
                 default: break
                 }
             }
@@ -281,7 +368,7 @@ private final class Engine: @unchecked Sendable {
         observations.append(item.observe(\.duration, options: [.new]) { [weak model] item, _ in
             let length = item.duration.seconds
             Task { @MainActor [weak model] in
-                if length.isFinite, length > 0 { model?.engineLoaded(duration: length) }
+                if length.isFinite, length > 0 { model?.engineLoaded(duration: length, owner: owner) }
             }
         })
         timeObserver = player.addPeriodicTimeObserver(
@@ -290,25 +377,23 @@ private final class Engine: @unchecked Sendable {
         ) { [weak model] time in
             MainActor.assumeIsolated {
                 guard let model, model.state == .playing else { return }
-                model.engineTime(time.seconds)
+                model.engineTime(time.seconds, owner: owner)
             }
         }
         tokens.append(NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: item, queue: .main) { [weak model] _ in
-            MainActor.assumeIsolated { model?.engineEnded() }
+            MainActor.assumeIsolated { model?.engineEnded(owner: owner) }
         })
         tokens.append(NotificationCenter.default.addObserver(forName: .AVPlayerItemFailedToPlayToEndTime, object: item, queue: .main) { [weak model] _ in
-            MainActor.assumeIsolated { model?.engineFailed() }
+            MainActor.assumeIsolated { model?.engineFailed(owner: owner) }
         })
     }
 
     /// Configures the audio session for playback, on iOS and only when the reader presses play.
     func activateSession() {
-        #if os(iOS)
-        let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(.playback)
-        try? session.setActive(true)
-        #endif
+        try? sessionManager.activate(.playback, owner: sessionOwner)
     }
+
+    func deactivateSession() { sessionManager.deactivate(owner: sessionOwner) }
 
     func play(rate: Double) {
         player.defaultRate = Float(rate)
@@ -328,6 +413,7 @@ private final class Engine: @unchecked Sendable {
 
     func teardown() {
         player.pause()
+        deactivateSession()
         if let timeObserver { player.removeTimeObserver(timeObserver) }
         timeObserver = nil
         tokens.forEach(NotificationCenter.default.removeObserver)

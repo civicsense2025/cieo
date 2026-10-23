@@ -8,6 +8,34 @@ private final class FakePlayer: AudioPausable {
     func pause() { pauses += 1 }
 }
 
+private final class FakeAudioSessionManager: AudioSessionManaging, @unchecked Sendable {
+    private let lock = NSLock()
+    private var owner: UUID?
+    private var deactivations = 0
+
+    var activeOwner: UUID? {
+        lock.lock(); defer { lock.unlock() }
+        return owner
+    }
+
+    var deactivationCount: Int {
+        lock.lock(); defer { lock.unlock() }
+        return deactivations
+    }
+
+    func activate(_ use: AudioSessionUse, owner: UUID) throws {
+        lock.lock(); defer { lock.unlock() }
+        self.owner = owner
+    }
+
+    func deactivate(owner: UUID) {
+        lock.lock(); defer { lock.unlock() }
+        guard self.owner == owner else { return }
+        self.owner = nil
+        deactivations += 1
+    }
+}
+
 final class AudioPlaybackTests: XCTestCase {
     // MARK: AudioTime
 
@@ -69,6 +97,14 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertEqual(PlaybackRateButton.nextRate([], after: 1.5), 1.5)
     }
 
+    func testRateCycleSkipsInvalidRatesAndUsesASafeFallback() {
+        XCTAssertEqual(PlaybackRateButton.nextRate([0, .nan, -1, 1.5, .infinity, 2], after: 1.5), 2)
+        XCTAssertEqual(PlaybackRateButton.nextRate([0, .nan, -1], after: 1.5), 1)
+        XCTAssertEqual(PlaybackRateButton.nextRate([], after: .nan), 1)
+        XCTAssertEqual(PlaybackRateButton.display(.nan), PlaybackRateButton.display(1))
+        XCTAssertEqual(PlaybackRateButton.accessibleName(0), "Playback speed, 1 time")
+    }
+
     func testRateShowsTimesSignAndNamesItInWords() {
         XCTAssertEqual(PlaybackRateButton.display(1.5), "1.5×".replacingOccurrences(of: ".", with: Locale.current.decimalSeparator ?? "."))
         XCTAssertEqual(PlaybackRateButton.display(2), "2×")
@@ -94,6 +130,11 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertTrue(AudioWaveform.waveformBars([.nan, 1, -1], count: 3).allSatisfy { $0.isFinite && $0 > 0 })
         XCTAssertEqual(AudioWaveform.waveformBars([1], count: 0), [])
         XCTAssertEqual(AudioWaveform.waveformBars([1], count: -3), [])
+    }
+
+    func testWaveformBarsAndFitCountRespectTheSharedAllocationLimit() {
+        XCTAssertEqual(AudioWaveform.waveformBars([], count: 50_000).count, 128)
+        XCTAssertLessThanOrEqual(AudioWaveform.fitCount(width: 1_000_000_000_000, metrics: ComponentMetrics()), 128)
     }
 
     func testSeekFromPointerMapsAndClamps() {
@@ -229,6 +270,68 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertEqual(model.currentTime, 0)
         model.teardown()
         model.teardown()
+    }
+
+    @MainActor
+    func testEngineReleasesItsSessionOnQuietPathsWithoutDeactivatingANewerPlayer() {
+        let manager = FakeAudioSessionManager()
+        let coordinator = AudioPlaybackCoordinator()
+        let first = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"), coordinator: coordinator,
+                                       sessionManager: manager)
+        let second = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"), coordinator: coordinator,
+                                        sessionManager: manager)
+
+        first.play()
+        let firstOwner = manager.activeOwner
+        second.play()
+        let secondOwner = manager.activeOwner
+        XCTAssertNotEqual(firstOwner, secondOwner)
+        XCTAssertEqual(manager.deactivationCount, 1, "claiming the second player quiets the first")
+
+        first.engineFailed()
+        XCTAssertEqual(manager.activeOwner, secondOwner, "a late old-player callback cannot quiet the current player")
+        XCTAssertEqual(manager.deactivationCount, 1)
+
+        second.pause()
+        XCTAssertNil(manager.activeOwner)
+        XCTAssertEqual(manager.deactivationCount, 2)
+        second.play()
+        second.engineEnded()
+        XCTAssertNil(manager.activeOwner)
+        XCTAssertEqual(manager.deactivationCount, 3)
+        second.play()
+        second.engineFailed()
+        XCTAssertNil(manager.activeOwner)
+        XCTAssertEqual(manager.deactivationCount, 4)
+        second.retry()
+        second.play()
+        second.teardown()
+        XCTAssertNil(manager.activeOwner)
+        XCTAssertEqual(manager.deactivationCount, 5)
+        second.teardown()
+        XCTAssertEqual(manager.deactivationCount, 5, "teardown is idempotent")
+        first.teardown()
+    }
+
+    @MainActor
+    func testLateCallbackFromBeforeRetryCannotDeactivateTheRetriedEngine() throws {
+        let manager = FakeAudioSessionManager()
+        let model = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"), coordinator: AudioPlaybackCoordinator(),
+                                       sessionManager: manager)
+        model.play()
+        let firstOwner = try XCTUnwrap(manager.activeOwner)
+        model.engineFailed()
+        model.retry()
+        model.play()
+        let retriedOwner = manager.activeOwner
+        XCTAssertNotEqual(firstOwner, retriedOwner)
+
+        model.engineFailed(owner: firstOwner)
+        XCTAssertEqual(manager.activeOwner, retriedOwner)
+        XCTAssertEqual(manager.deactivationCount, 1, "a stale failure belongs to the torn-down engine")
+        model.teardown()
+        XCTAssertNil(manager.activeOwner)
+        XCTAssertEqual(manager.deactivationCount, 2)
     }
 
     // MARK: AudioTranscript

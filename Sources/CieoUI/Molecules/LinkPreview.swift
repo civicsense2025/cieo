@@ -29,15 +29,22 @@ public struct LinkPreview: View {
     private let variant: Variant
     private let loading: Bool
 
-    /// The host name without a leading "www.", or an empty string when the address is not http(s).
+    /// The exact parsed http(s) host, or an empty string when the address is unsafe or has no host.
     public static func displayDomain(_ url: String?) -> String {
-        guard let parsed = URL(string: (url ?? "").trimmingCharacters(in: .whitespacesAndNewlines)),
-              let scheme = parsed.scheme?.lowercased(), scheme == "http" || scheme == "https",
-              let host = parsed.host(percentEncoded: false) else { return "" }
-        return host.lowercased().hasPrefix("www.") ? String(host.dropFirst(4)) : host
+        guard let parsed = Mention.safeURL(url, allowRelative: false),
+              let host = parsed.host(percentEncoded: false), !host.isEmpty else { return "" }
+        return host
     }
 
-    /// `summary` shows on the large card only. `siteName` defaults to the domain.
+    static func siteLabel(url: String, siteName: String?) -> String {
+        let host = displayDomain(url)
+        guard !host.isEmpty else { return "" }
+        let brand = siteName?.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard let brand, !brand.isEmpty, brand.caseInsensitiveCompare(host) != .orderedSame else { return host }
+        return "\(host) · \(brand)"
+    }
+
+    /// `summary` shows on the large card only. A supplied `siteName` follows the parsed destination host.
     public init(url: String, title: String, siteName: String? = nil, summary: String? = nil, image: Image? = nil,
                 favicon: String? = nil, variant: Variant = .large, loading: Bool = false) {
         self.url = url; self.title = title; self.siteName = siteName; self.summary = summary
@@ -45,7 +52,7 @@ public struct LinkPreview: View {
     }
 
     private var destination: URL? { Mention.safeURL(url, allowRelative: false) }
-    private var site: String { (siteName?.isEmpty == false ? siteName : nil) ?? Self.displayDomain(url) }
+    private var site: String { Self.siteLabel(url: url, siteName: siteName) }
 
     public var body: some View {
         ZStack {
@@ -130,7 +137,7 @@ public struct LinkPreview: View {
                     .accessibilityHidden(true)
                 }
                 if !site.isEmpty {
-                    Text(site).font(typography.detail).foregroundStyle(theme.secondary).lineLimit(1)
+                    Text(site).font(typography.detail).foregroundStyle(theme.secondary)
                 }
             }
         }

@@ -11,11 +11,21 @@ struct AudioPlaybackExamples: View {
     @State private var memo = AudioPlaybackModel(simulatedDuration: 252, currentTime: 80)
     @State private var broken = AudioPlaybackModel(simulatedDuration: 63, state: .error)
 
-    private let peaks: [Double] = (0..<120).map { abs(sin(Double($0) / 7)) * (0.4 + 0.6 * abs(cos(Double($0) / 3))) }
+    private let peaks: [Double] = Self.waveformPeaks()
     private let words: [AudioTranscript.Word] = {
         let text = "Thanks for calling back so quickly. I wanted to walk you through what changed in the committee vote and what happens next for the bill on the floor tomorrow morning."
         return text.split(separator: " ").enumerated().map { AudioTranscript.Word(String($1), start: Double($0) * 0.45, end: Double($0) * 0.45 + 0.4) }
     }()
+
+    private static func waveformPeaks() -> [Double] {
+        (0..<120).map { index -> Double in
+            let phase = Double(index)
+            let carrier: Double = abs(sin(phase / 7))
+            let modulation: Double = abs(cos(phase / 3))
+            let envelope: Double = 0.4 + 0.6 * modulation
+            return carrier * envelope
+        }
+    }
 
     var body: some View {
         VStack(spacing: 24) {

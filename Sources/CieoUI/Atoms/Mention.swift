@@ -31,7 +31,8 @@ public struct Mention: View {
         if allowRelative, isRelative(value) { return URL(string: value) }
         guard let url = URL(string: value), let scheme = url.scheme?.lowercased(),
               scheme == "http" || scheme == "https",
-              let host = url.host(percentEncoded: false), !host.isEmpty else { return nil }
+              let host = url.host(percentEncoded: false), !host.isEmpty,
+              url.user == nil, url.password == nil else { return nil }
         return url
     }
 

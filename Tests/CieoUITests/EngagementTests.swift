@@ -116,6 +116,13 @@ final class EngagementTests: XCTestCase {
         XCTAssertEqual(Rating.ratingLabel(.nan, max: 5), "0 out of 5")
     }
 
+    func testRatingCapsStarCountAndStaggerAllocation() {
+        XCTAssertEqual(Rating.ratingLabel(99, max: Int.max), "10 out of 10")
+        XCTAssertEqual(Rating.ratingKeyStep("End", value: 1, max: Int.max), 10)
+        XCTAssertEqual(Rating.ratingPopDelays(from: 0, to: 10_000).count, 10)
+        XCTAssertEqual(Rating.ratingPopDelays(from: 0, to: 10).count, 10)
+    }
+
     func testRatingPopStaggerFitsInOneHundredFiftyMilliseconds() {
         XCTAssertEqual(Rating.ratingPopDelays(from: 3, to: 3), [])
         XCTAssertEqual(Rating.ratingPopDelays(from: 4, to: 2), [])

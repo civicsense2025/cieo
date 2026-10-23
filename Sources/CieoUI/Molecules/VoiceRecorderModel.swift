@@ -2,6 +2,56 @@ import AVFoundation
 import Foundation
 import Observation
 
+@MainActor
+protocol VoiceRecorderDevice: AnyObject {
+    var isRecording: Bool { get }
+    var currentTime: TimeInterval { get }
+    var averagePower: Float { get }
+    var isMeteringEnabled: Bool { get set }
+    var onEncodingError: (@MainActor () -> Void)? { get set }
+    func prepareToRecord() -> Bool
+    func record() -> Bool
+    func pause()
+    func stop()
+    func updateMeters()
+}
+
+typealias VoiceRecorderFactory = @MainActor (URL, [String: Any]) throws -> any VoiceRecorderDevice
+
+@MainActor
+private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AVAudioRecorderDelegate {
+    private let recorder: AVAudioRecorder
+    var onEncodingError: (@MainActor () -> Void)?
+
+    init(url: URL, settings: [String: Any]) throws {
+        recorder = try AVAudioRecorder(url: url, settings: settings)
+        super.init()
+        recorder.delegate = self
+    }
+
+    var isRecording: Bool { recorder.isRecording }
+    var currentTime: TimeInterval { recorder.currentTime }
+    var averagePower: Float { recorder.averagePower(forChannel: 0) }
+    var isMeteringEnabled: Bool {
+        get { recorder.isMeteringEnabled }
+        set { recorder.isMeteringEnabled = newValue }
+    }
+
+    func prepareToRecord() -> Bool { recorder.prepareToRecord() }
+    func record() -> Bool { recorder.record() }
+    func pause() { recorder.pause() }
+    func stop() { recorder.stop() }
+    func updateMeters() { recorder.updateMeters() }
+
+    nonisolated func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
+        let recorderID = ObjectIdentifier(recorder)
+        Task { @MainActor [weak self] in
+            guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
+            self.onEncodingError?()
+        }
+    }
+}
+
 /// Records a voice clip from the microphone with `AVAudioRecorder` and hands it to the host as a file with
 /// its length and waveform peaks. The host owns what happens to the file; the model owns the microphone.
 ///
@@ -87,8 +137,11 @@ public final class VoiceRecorderModel {
     // MARK: - Internals
 
     @ObservationIgnored private let permission: PermissionRequest
-    @ObservationIgnored private var recorder: AVAudioRecorder?
+    @ObservationIgnored private let recorderFactory: VoiceRecorderFactory
+    @ObservationIgnored private let audioSession: AudioSessionManaging
+    @ObservationIgnored private var recorder: (any VoiceRecorderDevice)?
     @ObservationIgnored private var fileURL: URL?
+    @ObservationIgnored private var sessionOwner: UUID?
     @ObservationIgnored private var timer: Timer?
     @ObservationIgnored private var peaks: [Double] = []
     @ObservationIgnored private var session = 0
@@ -96,10 +149,19 @@ public final class VoiceRecorderModel {
     @ObservationIgnored private var interruption: NSObjectProtocol?
 
     /// `maxDuration` is clamped to at least one second.
-    public init(maxDuration: TimeInterval = 120, // literal-ok: default take limit
-                permission: @escaping PermissionRequest = VoiceRecorderModel.systemPermission) {
+    public convenience init(maxDuration: TimeInterval = 120, // literal-ok: default take limit
+                            permission: @escaping PermissionRequest = VoiceRecorderModel.systemPermission) {
+        self.init(maxDuration: maxDuration, permission: permission,
+                  recorderFactory: { url, settings in try SystemVoiceRecorderDevice(url: url, settings: settings) },
+                  sessionManager: SystemAudioSessionManager.shared)
+    }
+
+    init(maxDuration: TimeInterval = 120, permission: @escaping PermissionRequest,
+         recorderFactory: @escaping VoiceRecorderFactory, sessionManager: AudioSessionManaging) {
         self.maxDuration = maxDuration.isFinite ? max(1, maxDuration) : 120 // literal-ok: default take limit
         self.permission = permission
+        self.recorderFactory = recorderFactory
+        audioSession = sessionManager
     }
 
     // MARK: - Pure helpers
@@ -149,14 +211,15 @@ public final class VoiceRecorderModel {
         isActive(previous.phase) && next.phase == .done
     }
 
-    /// Shrinks loudness readings (0...1) to `count` bars, each the loudest reading in its slice. Empty input
-    /// gives `[]`; non-finite readings count as silence.
+    /// Shrinks loudness readings (0...1) to at most `AudioWaveform.maximumBarCount` bars, each the loudest
+    /// reading in its slice. Empty input gives `[]`; non-finite readings count as silence.
     nonisolated public static func downsamplePeaks(_ samples: [Double], count: Int = 64) -> [Double] { // literal-ok: waveform bar count shared with the web
         let n = samples.count
         guard n > 0, count > 0 else { return [] }
-        return (0..<count).map { i in
-            let start = i * n / count
-            let end = max(start + 1, (i + 1) * n / count)
+        let outputCount = min(count, AudioWaveform.maximumBarCount)
+        return (0..<outputCount).map { i in
+            let start = min(n - 1, i * n / outputCount)
+            let end = max(start + 1, (i + 1) * n / outputCount)
             var peak = 0.0
             var j = start
             while j < end && j < n {
@@ -293,24 +356,28 @@ public final class VoiceRecorderModel {
         }
         #endif
         do {
+            let owner = UUID()
+            try audioSession.activate(.recording, owner: owner)
+            sessionOwner = owner
             #if os(iOS)
-            let audioSession = AVAudioSession.sharedInstance()
-            try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
-            try audioSession.setActive(true)
             observeInterruptions()
             #endif
             let url = FileManager.default.temporaryDirectory.appendingPathComponent("voice-\(UUID().uuidString).m4a")
+            fileURL = url
             let settings: [String: Any] = [
                 AVFormatIDKey: kAudioFormatMPEG4AAC,
                 AVSampleRateKey: 44_100, // literal-ok: CD-quality sample rate
                 AVNumberOfChannelsKey: 1, // literal-ok: mono voice
                 AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
             ]
-            let recorder = try AVAudioRecorder(url: url, settings: settings)
-            recorder.isMeteringEnabled = true
-            guard recorder.prepareToRecord(), recorder.record() else { throw CocoaError(.fileWriteUnknown) }
+            let recorder = try recorderFactory(url, settings)
             self.recorder = recorder
-            fileURL = url
+            recorder.isMeteringEnabled = true
+            recorder.onEncodingError = { [weak self, weak recorder] in
+                guard let self, let recorder, self.recorder === recorder else { return }
+                self.fail()
+            }
+            guard recorder.prepareToRecord(), recorder.record() else { throw CocoaError(.fileWriteUnknown) }
             peaks = []
             send(.granted)
             announce(.recording)
@@ -331,10 +398,14 @@ public final class VoiceRecorderModel {
         self.timer = timer
     }
 
-    private func poll() {
-        guard let recorder, recorder.isRecording else { return }
+    func poll() {
+        guard let recorder else { return }
+        guard recorder.isRecording else {
+            if state.phase == .recording { fail() }
+            return
+        }
         recorder.updateMeters()
-        let heard = AudioLevelMeter.decibelsLevel(Double(recorder.averagePower(forChannel: 0)))
+        let heard = AudioLevelMeter.decibelsLevel(Double(recorder.averagePower))
         peaks.append(heard)
         let quantized = (heard * 50).rounded() / 50 // literal-ok: 0.02 steps
         if quantized != level { level = quantized }
@@ -353,11 +424,14 @@ public final class VoiceRecorderModel {
         send(event)
         announce(event == .limit ? .limit : .stopped, seconds: duration)
         if Self.shouldEmitClip(from: previous, to: state) {
-            onRecorded?(Clip(url: url, duration: duration, peaks: Self.downsamplePeaks(readings)))
+            let clip = Clip(url: url, duration: duration, peaks: Self.downsamplePeaks(readings))
+            if let onRecorded { onRecorded(clip) }
+            else { try? FileManager.default.removeItem(at: url) }
         }
     }
 
     private func fail() {
+        guard state.phase == .recording || state.phase == .paused else { return }
         releaseRecorder(deleteFile: true)
         level = 0
         send(.fail)
@@ -369,6 +443,7 @@ public final class VoiceRecorderModel {
         session += 1
         timer?.invalidate()
         timer = nil
+        recorder?.onEncodingError = nil
         recorder?.stop()
         recorder = nil
         if deleteFile, let url = fileURL { try? FileManager.default.removeItem(at: url) }
@@ -377,8 +452,11 @@ public final class VoiceRecorderModel {
         #if os(iOS)
         if let interruption { NotificationCenter.default.removeObserver(interruption) }
         interruption = nil
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         #endif
+        if let sessionOwner {
+            audioSession.deactivate(owner: sessionOwner)
+            self.sessionOwner = nil
+        }
     }
 
     #if os(iOS)
