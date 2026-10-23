@@ -9,8 +9,8 @@ protocol VoiceRecorderDevice: AnyObject {
     var averagePower: Float { get }
     var isMeteringEnabled: Bool { get set }
     var onEncodingError: (@MainActor () -> Void)? { get set }
-    /// Called when the device stops by itself; `true` when it reached its requested length.
-    var onFinished: (@MainActor (Bool) -> Void)? { get set }
+    /// Called when the device stops by itself, with the monotonic time of its delegate event.
+    var onFinished: (@MainActor (Bool, TimeInterval) -> Void)? { get set }
     func prepareToRecord() -> Bool
     /// Records for at most `seconds`; the device stops itself at the limit, with no timer needed.
     func record(forDuration seconds: TimeInterval) -> Bool
@@ -25,7 +25,7 @@ typealias VoiceRecorderFactory = @MainActor (URL, [String: Any]) throws -> any V
 private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AVAudioRecorderDelegate {
     private let recorder: AVAudioRecorder
     var onEncodingError: (@MainActor () -> Void)?
-    var onFinished: (@MainActor (Bool) -> Void)?
+    var onFinished: (@MainActor (Bool, TimeInterval) -> Void)?
 
     init(url: URL, settings: [String: Any]) throws {
         recorder = try AVAudioRecorder(url: url, settings: settings)
@@ -57,9 +57,10 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
 
     nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
         let recorderID = ObjectIdentifier(recorder)
+        let finishedAt = ProcessInfo.processInfo.systemUptime
         Task { @MainActor [weak self] in
             guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
-            self.onFinished?(flag)
+            self.onFinished?(flag, finishedAt)
         }
     }
 }
@@ -241,13 +242,20 @@ public final class VoiceRecorderModel {
 
     // MARK: - Internals
 
+    private static let limitCompletionTolerance: TimeInterval = 0.1 // literal-ok: bound delegate and timer ordering jitter at the requested endpoint
+    private static let limitCompletionToleranceFraction: TimeInterval = 0.1 // literal-ok: scale the tolerance down for short recording segments
+
     @ObservationIgnored private let permission: PermissionRequest
     @ObservationIgnored private let recorderFactory: VoiceRecorderFactory
     @ObservationIgnored private let audioSession: AudioSessionManaging
     @ObservationIgnored private let cleanupState: VoiceRecorderCleanupState
+    @ObservationIgnored private let monotonicNow: @Sendable () -> TimeInterval
     @ObservationIgnored private var peaks: [Double] = []
     @ObservationIgnored private var session = 0
     @ObservationIgnored private var announced = 0
+    @ObservationIgnored private var activeDeadline: TimeInterval?
+    @ObservationIgnored private var activeSegmentDuration: TimeInterval?
+    @ObservationIgnored private var remainingWhenPaused: TimeInterval?
 
     private var recorder: (any VoiceRecorderDevice)? {
         get { cleanupState.recorder }
@@ -279,12 +287,14 @@ public final class VoiceRecorderModel {
     }
 
     init(maxDuration: TimeInterval = 120, permission: @escaping PermissionRequest,
-         recorderFactory: @escaping VoiceRecorderFactory, sessionManager: AudioSessionManaging) {
+         recorderFactory: @escaping VoiceRecorderFactory, sessionManager: AudioSessionManaging,
+         monotonicNow: @escaping @Sendable () -> TimeInterval = { ProcessInfo.processInfo.systemUptime }) {
         self.maxDuration = maxDuration.isFinite ? max(1, maxDuration) : 120 // literal-ok: default take limit
         self.permission = permission
         self.recorderFactory = recorderFactory
         audioSession = sessionManager
         cleanupState = VoiceRecorderCleanupState(audioSession: sessionManager)
+        self.monotonicNow = monotonicNow
     }
 
     deinit {
@@ -436,12 +446,28 @@ public final class VoiceRecorderModel {
         guard let recorder else { return }
         switch state.phase {
         case .recording:
+            guard recorder.isRecording else { finishStoppedRecorder(); return }
             recorder.pause()
+            let remaining = remainingTake(recorder)
+            guard remaining.isFinite else { fail(); return }
+            remainingWhenPaused = remaining
+            activeDeadline = nil
+            activeSegmentDuration = nil
             level = 0
             send(.pause)
             announce(.paused)
         case .paused:
-            guard recorder.record(forDuration: remainingTake(recorder)) else { fail(); return }
+            let deviceRemaining = remainingOnDevice(recorder)
+            guard deviceRemaining.isFinite else { fail(); return }
+            let remaining = min(remainingWhenPaused ?? deviceRemaining, deviceRemaining)
+            guard remaining.isFinite else { fail(); return }
+            guard remaining > 0 else { finish(.limit); return }
+            let resumedAt = monotonicNow()
+            guard resumedAt.isFinite, (resumedAt + remaining).isFinite else { fail(); return }
+            guard recorder.record(forDuration: remaining) else { fail(); return }
+            activeDeadline = resumedAt + remaining
+            activeSegmentDuration = remaining
+            remainingWhenPaused = nil
             send(.resume)
             announce(.recording)
         default: break
@@ -449,7 +475,13 @@ public final class VoiceRecorderModel {
     }
 
     /// Finishes the take and hands the clip to `onRecorded`.
-    public func stop() { finish(.stop) }
+    public func stop() {
+        if state.phase == .recording, let recorder, !recorder.isRecording {
+            finishStoppedRecorder()
+        } else {
+            finish(.stop)
+        }
+    }
 
     /// Throws the take away without ever emitting a clip, and deletes its file.
     public func cancel(notify: Bool = true) {
@@ -504,11 +536,18 @@ public final class VoiceRecorderModel {
                 guard let self, let recorder, self.recorder === recorder else { return }
                 self.fail()
             }
-            recorder.onFinished = { [weak self, weak recorder] reachedEnd in
+            recorder.onFinished = { [weak self, weak recorder] successfully, finishedAt in
                 guard let self, let recorder, self.recorder === recorder else { return }
-                if reachedEnd { self.finish(.limit) } else { self.fail() }
+                if successfully, self.hasReachedLimit(at: finishedAt) { self.finish(.limit) }
+                else { self.fail() }
             }
-            guard recorder.prepareToRecord(), recorder.record(forDuration: maxDuration) else { throw CocoaError(.fileWriteUnknown) }
+            guard recorder.prepareToRecord() else { throw CocoaError(.fileWriteUnknown) }
+            let startedAt = monotonicNow()
+            guard startedAt.isFinite, (startedAt + maxDuration).isFinite else { throw CocoaError(.fileWriteUnknown) }
+            activeDeadline = startedAt + maxDuration
+            activeSegmentDuration = maxDuration
+            remainingWhenPaused = nil
+            guard recorder.record(forDuration: maxDuration) else { throw CocoaError(.fileWriteUnknown) }
             peaks = []
             send(.granted)
             announce(.recording)
@@ -522,7 +561,32 @@ public final class VoiceRecorderModel {
 
     /// Seconds still allowed in the take, so the device's own limit survives pause and resume.
     private func remainingTake(_ recorder: any VoiceRecorderDevice) -> TimeInterval {
-        max(0.1, maxDuration - recorder.currentTime) // literal-ok: shortest sensible resume
+        let deviceRemaining = remainingOnDevice(recorder)
+        guard deviceRemaining.isFinite else { return .nan }
+        guard let activeDeadline else { return deviceRemaining }
+        let now = monotonicNow()
+        guard now.isFinite else { return deviceRemaining }
+        return min(deviceRemaining, max(0, activeDeadline - now))
+    }
+
+    private func remainingOnDevice(_ recorder: any VoiceRecorderDevice) -> TimeInterval {
+        let elapsed = recorder.currentTime
+        guard elapsed.isFinite else { return .nan }
+        return max(0, maxDuration - elapsed)
+    }
+
+    private func hasReachedLimit(at time: TimeInterval) -> Bool {
+        guard let activeDeadline, let activeSegmentDuration, time.isFinite else { return false }
+        return abs(time - activeDeadline) <= Self.limitTolerance(for: activeSegmentDuration)
+    }
+
+    private func finishStoppedRecorder() {
+        if hasReachedLimit(at: monotonicNow()) { finish(.limit) }
+        else { fail() }
+    }
+
+    private static func limitTolerance(for segmentDuration: TimeInterval) -> TimeInterval {
+        min(limitCompletionTolerance, segmentDuration * limitCompletionToleranceFraction)
     }
 
     private func startPolling() {
@@ -537,7 +601,7 @@ public final class VoiceRecorderModel {
     func poll() {
         guard let recorder else { return }
         guard recorder.isRecording else {
-            if state.phase == .recording { fail() }
+            if state.phase == .recording { finishStoppedRecorder() }
             return
         }
         recorder.updateMeters()
@@ -578,6 +642,9 @@ public final class VoiceRecorderModel {
     /// Stops the timer and recorder and deactivates the audio session; optionally deletes the file.
     private func releaseRecorder(deleteFile: Bool) {
         session += 1
+        activeDeadline = nil
+        activeSegmentDuration = nil
+        remainingWhenPaused = nil
         let snapshot = cleanupState.takeSnapshot()
         snapshot.clean(deleteFile: deleteFile)
         peaks = []
