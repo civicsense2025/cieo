@@ -117,6 +117,7 @@
 @import './styles/primitives/side-nav-section.css';
 @import './styles/primitives/side-nav.css';
 @import './styles/primitives/skeleton.css';
+@import './styles/primitives/sortable-list.css';
 @import './styles/primitives/spinner.css';
 @import './styles/primitives/stack.css';
 @import './styles/primitives/stackitem.css';

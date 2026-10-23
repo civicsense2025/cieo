@@ -1196,6 +1196,26 @@
       ],
       "sharedFiles": []
     },
+    "SortableList": {
+      "files": [
+        "SortableList/SortableList.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": []
+    },
+    "SortableListItem": {
+      "files": [
+        "SortableListItem/SortableListItem.tsx"
+      ],
+      "registryDependencies": [
+        "SortableList"
+      ],
+      "packageImports": [],
+      "sharedFiles": []
+    },
     "Spinner": {
       "files": [
         "Spinner/Spinner.tsx"
