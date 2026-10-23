@@ -1,6 +1,7 @@
 'use client';
-/* AuthInviteAccept (static). Org invite card: who invited whom to what, with accept and decline. */
+/* AuthInviteAccept. Org invite card with smooth, truthful pending and error feedback. */
 import type { CSSProperties } from 'react';
+import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthInviteAcceptProps {
   id: string;
@@ -21,10 +22,10 @@ export function AuthInviteAccept({ id, orgName, inviterName, role, pending, erro
       <p className="cieo-auth-invite-text">
         {inviterName} invited you to join {orgName} as {role}.
       </p>
-      {error ? <span className="cieo-auth-error" role="alert">{error}</span> : null}
+      <AuthMotionMessage className="cieo-auth-error" role="alert" value={error} />
       <div className="cieo-auth-invite-actions">
         <button type="button" className="cieo-auth-accept" disabled={pending} onClick={onAccept}>
-          {pending ? 'Accepting…' : `Accept invite to ${orgName}`}
+          <AuthSwapText value={pending ? 'Accepting…' : `Accept invite to ${orgName}`} />
         </button>
         <button type="button" className="cieo-auth-decline" disabled={pending} onClick={onDecline}>
           {`Decline invite to ${orgName}`}

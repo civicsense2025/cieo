@@ -1,7 +1,8 @@
 'use client';
-/* AuthOtpInput (static). Digit boxes for verification codes. Paste with spaces or dashes normalizes to digits; focus advances on entry and retreats on Backspace. */
+/* AuthOtpInput. Digit boxes acknowledge entry on snap; paste and keyboard behavior stay native and accessible. */
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthOtpInputProps {
   id: string;
@@ -46,8 +47,10 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
         {digits.map((d, i) => (
           <input
             key={i}
+            id={`${id}-${i}`}
             ref={el => { boxes.current[i] = el; }}
             className="cieo-auth-otp-box"
+            data-filled={d ? 'true' : undefined}
             inputMode="numeric"
             autoComplete={i === 0 ? 'one-time-code' : 'off'}
             maxLength={1}
@@ -75,7 +78,7 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
           />
         ))}
       </span>
-      {error ? <span id={`${id}-error`} className="cieo-auth-error" role="alert">{error}</span> : null}
+      <AuthMotionMessage id={`${id}-error`} className="cieo-auth-error" role="alert" value={error} />
     </span>
   );
 }

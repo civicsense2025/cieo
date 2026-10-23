@@ -13,6 +13,6 @@
     :where(.cieo) .cieo-auth-passkey-button .cieo-auth-submit { min-height: 44px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-passkey-button * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-passkey-button * { animation: none !important; transition: none !important; }
   }
 }

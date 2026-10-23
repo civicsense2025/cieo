@@ -214,7 +214,8 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 <script>
 window.CIEO_SOURCE_HINT="runtime.core.js";
 /* ================================================================ core */
-const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION_MEDIA = matchMedia('(prefers-reduced-motion: reduce)');
+const REDUCE = MOTION_MEDIA.matches;
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4;
@@ -224,6 +225,19 @@ const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
 const lerp = (a,b,p) => a + (b-a)*p;
 const px = v => v.toFixed(2) + 'px';
 const $ = (r,s) => r.querySelector(s), $$ = (r,s) => [...r.querySelectorAll(s)];
+function motionReduced(el){
+  const root = document.documentElement;
+  if (el?.closest?.('[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]')) return true;
+  if (root.dataset.motion === 'reduced' || root.dataset.reducedMotion === 'true') return true;
+  return root.dataset.motion !== 'full' && MOTION_MEDIA.matches;
+}
+function motionSettings(el){
+  let previous = motionReduced(el);
+  return {
+    reduced(){ previous = motionReduced(el); return previous; },
+    changedToReduced(){ const next = motionReduced(el), changed = next && !previous; previous = next; return changed; },
+  };
+}
 
 function resp(dt, x0, v0, cfg){
   if (dt <= 0) return x0;
@@ -263,6 +277,7 @@ function edges(a, b){
 class Swap {
   constructor(cur){ this.cur = cur; this.prev = null; this.t = -9; }
   to(k, t = now()){ if (k === this.cur) return false; this.prev = this.cur; this.cur = k; this.t = t; return true; }
+  jump(k){ this.cur = k; this.prev = null; this.t = -9; return this; }
   apply(el, k, t, amp = 4){
     let o = 0, b = 0, y = 0;
     if (k === this.cur){ const p = clamp(prog(t, this.t + EXIT)); o = p; b = (1-p)*BLUR; y = (1-p)*amp; }
@@ -27075,86 +27090,135 @@ atom({ id:'auth-magic-link', cat:'Auth', name:'Magic link', block:'auth, email, 
   api:'send: status.to(sent); count.set(30) guarded   resend disabled while count > 0',
   init(st){
     const em = $(st,'.em'), snd = $(st,'.snd'), rs = $(st,'.rs'), sm = $(st,'.sm');
-    const msw = new Swap(''); const M = { '':'', sent:'Check your inbox for the link.', bad:'Enter an email like you@studio.co.' };
+    const msw = new Swap(''), motion = motionSettings(st); const M = { '':'', sent:'Check your inbox for the link.', bad:'Enter an email like you@studio.co.' };
     const EL = Object.keys(M).map(k => { const e = document.createElement('span'); e.className = 'layer'; e.style.fontSize = '12.5px'; e.style.justifyContent = 'flex-start'; e.textContent = M[k]; if (k === 'bad') e.style.color = 'var(--danger)'; sm.appendChild(e); return e; });
-    let guard = 0, until = 0;
+    let guard = 0, until = 0, state = '';
     const left = () => Math.max(0, Math.ceil((until - now()) / 1));
     const send = () => {
       if (left() > 0) return;
       const ok = /^\S+@\S+\.\S+$/.test(em.value.trim());
-      msw.to(ok ? 'sent' : 'bad');
+      const next = ok ? 'sent' : 'bad'; state = next;
+      if (motion.reduced()) msw.jump(next); else msw.to(next);
       if (!ok) return;
       guard += 1; until = now() + 30;
     };
     snd.onclick = send;
     rs.onclick = () => { if (left() === 0) send(); };
-    return t => { EL.forEach((e,k) => msw.apply(e, Object.keys(M)[k], t));
+    return t => { if (motion.changedToReduced()) msw.jump(state);
+      EL.forEach((e,k) => msw.apply(e, Object.keys(M)[k], t));
       const n = left(); rs.disabled = n > 0; snd.disabled = n > 0; rs.textContent = n > 0 ? `Resend in ${n}s` : 'Resend'; rs.style.opacity = n > 0 ? '.5' : '1'; };
   }});
 
 atom({ id:'auth-mfa-challenge', cat:'Auth', name:'MFA challenge', block:'auth, otp, recovery code', fam:['M','S'], tall:true,
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Check your authenticator</b><div class="md-code col" style="gap:8px"><div class="bx" style="display:flex;gap:8px" role="group" aria-label="Six digit code"></div><input class="in" inputmode="numeric" autocomplete="one-time-code" aria-label="Six digit code" placeholder="••••••" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px;font-variant-numeric:tabular-nums"></div><div class="md-rec col" style="gap:8px" hidden><label class="small" style="font-weight:500" for="amf-rc">Recovery code</label><input id="amf-rc" class="ri" autocomplete="off" placeholder="apple-orange-4582" aria-label="Recovery code" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><button class="vf" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Use recovery code</button></div><p class="sm small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p><button class="tg" style="border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:4px 0;text-align:left">Use a recovery code instead</button></div><div class="hint">Wrong code clears itself; try a code with spaces</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Check your authenticator</b><div class="md-panes" style="position:relative;overflow:hidden"><div class="md-code col" style="position:absolute;inset:0 0 auto;gap:8px"><div class="bx" style="display:flex;gap:8px" role="group" aria-label="Six digit code"></div><input class="in" inputmode="numeric" autocomplete="one-time-code" aria-label="Six digit code" placeholder="••••••" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px;font-variant-numeric:tabular-nums"></div><div class="md-rec col" style="position:absolute;inset:0 0 auto;gap:8px"><label class="small" style="font-weight:500" for="amf-rc">Recovery code</label><input id="amf-rc" class="ri" autocomplete="off" placeholder="apple-orange-4582" aria-label="Recovery code" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><button class="vf" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Use recovery code</button></div></div><p class="sm small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p><button class="tg" style="position:relative;height:28px;border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:4px 0;text-align:left"></button></div><div class="hint">Wrong code clears itself; try a code with spaces</div>`,
   desc:'Six boxes mirror one input and a wrong code clears itself after a beat. The recovery toggle swaps the boxes for a single field that forgives spaces and dashes.',
   api:'code.length === 6 → ok | clear after 1.1s   recovery.normalize(s) === apple-orange-4582',
   init(st){
     const bx = $(st,'.bx'), inp = $(st,'.in'), ri = $(st,'.ri'), vf = $(st,'.vf'), sm = $(st,'.sm'), tg = $(st,'.tg');
-    const code = $(st,'.md-code'), rec = $(st,'.md-rec');
+    const panes = $(st,'.md-panes'), code = $(st,'.md-code'), rec = $(st,'.md-rec');
     const cells = [...Array(6)].map(() => { const d = document.createElement('span'); d.style.cssText = 'width:36px;height:44px;border-radius:9px;border:1.5px solid var(--muted);background:var(--card);display:grid;place-items:center;font:600 20px var(--sans);font-variant-numeric:tabular-nums'; bx.appendChild(d); return d; });
+    const psw = new Swap('code'), tsw = new Swap('code'), ph = new Track(0, S.soft), motion = motionSettings(st);
+    const TL = { code:'Use a recovery code instead', rec:'Use the authenticator instead' }, TE = {};
+    for (const k in TL){ const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = TL[k]; tg.appendChild(e); TE[k] = e; }
     let clearAt = 0, mode = 'code';
+    const setPanes = () => [[code, 'code'], [rec, 'rec']].forEach(([el, k]) => {
+      const active = k === mode;
+      el.inert = !active;
+      if (active) { el.removeAttribute('aria-hidden'); el.style.visibility = 'visible'; }
+      else el.setAttribute('aria-hidden', 'true');
+    });
+    const jumpToMode = () => { psw.jump(mode); tsw.jump(mode); ph.jump((mode === 'rec' ? rec : code).offsetHeight); };
+    setPanes();
     const say = (s, bad) => { sm.textContent = s; sm.style.color = bad ? 'var(--danger)' : 'var(--success)'; };
     const flip = () => { mode = mode === 'code' ? 'rec' : 'code'; const isRec = mode === 'rec';
-      code.hidden = isRec; rec.hidden = !isRec; tg.textContent = isRec ? 'Use the authenticator instead' : 'Use a recovery code instead'; sm.textContent = ''; };
+      setPanes();
+      if (motion.reduced()) jumpToMode();
+      else { psw.to(mode); tsw.to(mode); ph.set((isRec ? rec : code).offsetHeight, S.soft); }
+      sm.textContent = ''; (isRec ? ri : inp).focus({ preventScroll:true }); };
     inp.oninput = () => { inp.value = inp.value.replace(/\D/g,'').slice(0,6);
       cells.forEach((d,i) => d.textContent = inp.value[i] || '');
       if (inp.value.length === 6){ if (inp.value === '246810') say('Verified. Signing you in…'); else { say('That code didn’t match. Try again.', true); clearAt = now() + 1.1; } } };
     vf.onclick = () => { const v = ri.value.toLowerCase().replace(/[\s-]/g,'');
       if (v === 'appleorange4582') say('Recovery code accepted. Signing you in…'); else say('That code didn’t match. Try again.', true); };
     tg.onclick = flip;
-    return t => { if (clearAt && t >= clearAt){ clearAt = 0; inp.value = ''; cells.forEach(d => d.textContent = ''); } };
+    ph.jump(code.offsetHeight); panes.style.height = px(ph.at(now()));
+    return t => { if (clearAt && t >= clearAt){ clearAt = 0; inp.value = ''; cells.forEach(d => d.textContent = ''); }
+      if (motion.changedToReduced()) jumpToMode();
+      panes.style.height = px(Math.max(0, ph.at(t)));
+      psw.apply(code, 'code', t); if (mode === 'code') code.style.visibility = 'visible';
+      psw.apply(rec, 'rec', t); if (mode === 'rec') rec.style.visibility = 'visible';
+      for (const k in TE) tsw.apply(TE[k], k, t); };
   }});
 
 atom({ id:'auth-reset', cat:'Auth', name:'Password reset', block:'auth, password, recovery', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Reset your password</b><div class="st-req col" style="gap:8px"><label class="small" style="font-weight:500" for="ars-em">Email</label><input id="ars-em" class="em" type="email" autocomplete="email" placeholder="you@studio.co" aria-label="Email" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><button class="go1" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Send reset link</button></div><div class="st-cf col" style="gap:8px" hidden><label class="small" style="font-weight:500" for="ars-pw">New password</label><input id="ars-pw" class="pw" type="password" autocomplete="new-password" aria-label="New password" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><div class="mt" style="display:flex;gap:4px" role="meter" aria-label="Password strength" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><i></i><i></i><i></i><i></i></div><button class="go2" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Save new password</button></div><p class="sm small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p></div><div class="hint">Request, then save a 12 character password</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Reset your password</b><div class="st-panes" style="position:relative;overflow:hidden"><div class="st-req col" style="position:absolute;inset:0 0 auto;gap:8px"><label class="small" style="font-weight:500" for="ars-em">Email</label><input id="ars-em" class="em" type="email" autocomplete="email" placeholder="you@studio.co" aria-label="Email" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><button class="go1" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Send reset link</button></div><div class="st-cf col" style="position:absolute;inset:0 0 auto;gap:8px"><label class="small" style="font-weight:500" for="ars-pw">New password</label><input id="ars-pw" class="pw" type="password" autocomplete="new-password" aria-label="New password" style="height:38px;border-radius:9px;border:1.5px solid var(--muted);padding:0 10px;font-size:14px"><div class="mt" style="display:flex;gap:4px" role="meter" aria-label="Password strength" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><i></i><i></i><i></i><i></i></div><button class="go2" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Save new password</button></div></div><p class="sm small" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px"></p></div><div class="hint">Request, then save a 12 character password</div>`,
   desc:'Request swaps to a confirm step with a live strength meter. Short passwords stay on the step with a text error; a strong save lands a confirmation.',
   api:'step.to(request | confirm)   score(pw) 0-4   save requires score ≥ 3',
   init(st){
-    const req = $(st,'.st-req'), cf = $(st,'.st-cf'), em = $(st,'.em'), pw = $(st,'.pw');
+    const panes = $(st,'.st-panes'), req = $(st,'.st-req'), cf = $(st,'.st-cf'), em = $(st,'.em'), pw = $(st,'.pw');
     const sm = $(st,'.sm'), mt = $(st,'.mt'), segs = [...mt.querySelectorAll('i')];
+    const sw = new Swap('request'), h = new Track(0, S.soft), motion = motionSettings(st);
     segs.forEach(s => s.style.cssText = 'flex:1;height:4px;border-radius:2px;background:var(--raised)');
+    let step = 'request';
+    const setPanes = (active) => [[req, 'request'], [cf, 'confirm']].forEach(([el, k]) => {
+      const live = k === active;
+      el.inert = !live;
+      if (live) { el.removeAttribute('aria-hidden'); el.style.visibility = 'visible'; }
+      else el.setAttribute('aria-hidden', 'true');
+    });
+    const heightFor = (next) => next === 'request' ? req.offsetHeight : next === 'confirm' ? cf.offsetHeight : 0;
+    const jumpToStep = () => { sw.jump(step); h.jump(heightFor(step)); setPanes(step); };
+    const go = (next, focus) => {
+      step = next; setPanes(next);
+      if (motion.reduced()) { sw.jump(next); h.jump(heightFor(next)); }
+      else { sw.to(next); h.set(heightFor(next), S.soft); }
+      focus?.focus({ preventScroll:true });
+    };
+    setPanes(step);
     const say = (s, bad) => { sm.textContent = s; sm.style.color = bad ? 'var(--danger)' : 'var(--success)'; };
     const score = v => Math.min(4, (v.length >= 8 ? 1 : 0) + (v.length >= 12 ? 1 : 0) + (/[a-z]/.test(v) && /[A-Z]/.test(v) ? 1 : 0) + (/\d/.test(v) && /[^a-zA-Z0-9]/.test(v) ? 1 : 0));
     $(st,'.go1').onclick = () => { if (!/^\S+@\S+\.\S+$/.test(em.value.trim())){ say('Enter an email like you@studio.co.', true); return; }
-      req.hidden = true; cf.hidden = false; say('Link sent. Choose a new password.'); pw.focus(); };
+      go('confirm', pw); say('Link sent. Choose a new password.'); };
     const paint = () => { const s = score(pw.value); mt.setAttribute('aria-valuenow', s);
       segs.forEach((g,i) => g.style.background = i < s ? (s < 3 ? 'var(--warning)' : 'var(--success)') : 'var(--raised)'); return s; };
     pw.oninput = paint; paint();
     $(st,'.go2').onclick = () => { if (paint() < 3){ say('Use 12 or more characters with mixed case, a number, and a symbol.', true); return; }
       say('Password saved. Signing you in…'); };
-    return () => {};
+    h.jump(req.offsetHeight); panes.style.height = px(h.at(now()));
+    return t => { if (motion.changedToReduced()) jumpToStep();
+      panes.style.height = px(Math.max(0, h.at(t)));
+      sw.apply(req, 'request', t); if (step === 'request') req.style.visibility = 'visible';
+      sw.apply(cf, 'confirm', t); if (step === 'confirm') cf.style.visibility = 'visible'; };
   }});
 
 window.CIEO_SOURCE_HINT="blocks/559-auth-wave2.js";
 
 atom({ id:'auth-passkey', cat:'Auth', name:'Passkey sign in', block:'auth, passkey, webauthn', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Sign in with a passkey</b><p class="small" style="font-size:12.5px;line-height:1.5;margin:0;color:var(--muted)">No password to type. Your device checks it is really you.</p><button class="pk" style="height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px">Continue with a passkey</button><p class="nt small" style="font-size:12.5px;line-height:1.5;margin:0;color:var(--muted)" hidden>This device can’t use passkeys. Use your password or a code instead.</p><p class="sm small" role="status" aria-live="polite" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:var(--success)"></p><button class="tg" aria-pressed="false" style="border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:4px 0;text-align:left">Simulate an unavailable device</button></div><div class="hint">Press the button, then flip the unavailable toggle</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px"><b style="font-size:15px;font-weight:600">Sign in with a passkey</b><p class="small" style="font-size:12.5px;line-height:1.5;margin:0;color:var(--muted)">No password to type. Your device checks it is really you.</p><button class="pk" style="position:relative;height:44px;border-radius:9px;border:0;background:var(--ink);color:var(--card);font-weight:500;cursor:pointer;font-size:14px"></button><p class="nt small" style="overflow:hidden;height:0;opacity:0;font-size:12.5px;line-height:1.5;margin:0;color:var(--muted)">This device can’t use passkeys. Use your password or a code instead.</p><p class="sm small" role="status" aria-live="polite" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:var(--success)"></p><button class="tg" aria-pressed="false" style="position:relative;height:28px;border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:4px 0;text-align:left"></button></div><div class="hint">Press the button, then flip the unavailable toggle</div>`,
   desc:'The button busies with waiting text while the ceremony runs, then lands a signed-in status. Flipping the toggle reveals the fallback note and parks the button.',
   api:'press: label.swap(waiting) + aria-busy → status.to(signed in)   toggle: fallback.hidden.set(!unavailable)',
   init(st){
     const pk = $(st,'.pk'), nt = $(st,'.nt'), sm = $(st,'.sm'), tg = $(st,'.tg');
+    const psw = new Swap('idle'), tsw = new Swap('available'), nh = new Track(0, S.soft), no = new Track(0), motion = motionSettings(st);
+    const PL = { idle:'Continue with a passkey', wait:'Waiting for your passkey…' }, PE = {}, TL = { available:'Simulate an unavailable device', unavailable:'Simulate an available device' }, TE = {};
+    for (const k in PL){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = PL[k]; pk.appendChild(e); PE[k] = e; }
+    for (const k in TL){ const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = TL[k]; tg.appendChild(e); TE[k] = e; }
     let unavailable = false, doneAt = 0;
     pk.onclick = () => {
       if (unavailable || doneAt) return;
-      pk.disabled = true; pk.setAttribute('aria-busy', 'true'); pk.textContent = 'Waiting for your passkey…';
+      pk.disabled = true; pk.setAttribute('aria-busy', 'true'); pk.setAttribute('aria-label', PL.wait); if (motion.reduced()) psw.jump('wait'); else psw.to('wait');
       sm.textContent = ''; doneAt = now() + 1.2;
     };
     tg.onclick = () => {
       unavailable = !unavailable;
-      nt.hidden = !unavailable; pk.disabled = unavailable;
-      tg.textContent = unavailable ? 'Simulate an available device' : 'Simulate an unavailable device';
+      pk.disabled = unavailable; const next = unavailable ? 'unavailable' : 'available', height = unavailable ? nt.scrollHeight : 0, opacity = unavailable ? 1 : 0;
+      if (motion.reduced()){ tsw.jump(next); nh.jump(height); no.jump(opacity); } else { tsw.to(next); nh.set(height, S.soft); no.set(opacity); }
       tg.setAttribute('aria-pressed', String(unavailable));
       if (unavailable) sm.textContent = '';
     };
-    return t => { if (doneAt && t >= doneAt){ doneAt = 0; pk.disabled = false; pk.removeAttribute('aria-busy'); pk.textContent = 'Continue with a passkey'; sm.textContent = 'Signed in with your passkey.'; } };
+    return t => { if (motion.changedToReduced()) { psw.jump(doneAt ? 'wait' : 'idle'); const target = unavailable ? 'unavailable' : 'available'; tsw.jump(target); nh.jump(unavailable ? nt.scrollHeight : 0); no.jump(unavailable ? 1 : 0); }
+      if (doneAt && t >= doneAt){ doneAt = 0; pk.disabled = false; pk.removeAttribute('aria-busy'); pk.removeAttribute('aria-label'); if (motion.reduced()) psw.jump('idle'); else psw.to('idle'); sm.textContent = 'Signed in with your passkey.'; }
+      for (const k in PE) psw.apply(PE[k], k, t); for (const k in TE) tsw.apply(TE[k], k, t); nt.style.height = px(Math.max(0, nh.at(t))); nt.style.opacity = clamp(no.at(t)).toFixed(3); };
   }});
 
 atom({ id:'auth-sso', cat:'Auth', name:'Single sign-on', block:'auth, sso, oauth', fam:['M','S'],
@@ -27162,37 +27226,60 @@ atom({ id:'auth-sso', cat:'Auth', name:'Single sign-on', block:'auth, sso, oauth
   desc:'Each provider owns its accessible name. A press busies that button with connecting text; the first attempt lands an inline error and the retry signs in.',
   api:'press: label.swap(connecting) + aria-busy → error.to(alert, try 1) | status.to(signed in, try 2)',
   init(st){
-    const btns = [...st.querySelectorAll('[data-p]')], se = $(st,'.se'), sm = $(st,'.sm');
+    const btns = [...st.querySelectorAll('[data-p]')], se = $(st,'.se'), sm = $(st,'.sm'), motion = motionSettings(st);
     const label = b => b.getAttribute('data-label');
+    const labels = btns.map(b => { const sw = new Swap('idle'), idle = document.createElement('span'), wait = document.createElement('span'); idle.className = wait.className = 'layer'; idle.textContent = `Continue with ${label(b)}`; wait.textContent = `Connecting to ${label(b)}…`; b.textContent = ''; b.style.position = 'relative'; b.append(idle, wait); return { b, sw, idle, wait }; });
     let busy = null, doneAt = 0, tries = 0;
     btns.forEach(b => b.onclick = () => {
       if (busy) return;
       busy = b; tries += 1;
       btns.forEach(x => { x.disabled = true; });
-      b.setAttribute('aria-busy', 'true'); b.textContent = `Connecting to ${label(b)}…`;
+      b.setAttribute('aria-busy', 'true'); b.setAttribute('aria-label', `Connecting to ${label(b)}…`); const sw = labels.find(x => x.b === b).sw; if (motion.reduced()) sw.jump('wait'); else sw.to('wait');
       se.textContent = ''; sm.textContent = ''; doneAt = now() + 1.2;
     });
-    return t => { if (doneAt && t >= doneAt){ doneAt = 0; const b = busy; busy = null;
+    return t => { if (motion.changedToReduced()) labels.forEach(x => x.sw.jump(busy === x.b ? 'wait' : 'idle'));
+      if (doneAt && t >= doneAt){ doneAt = 0; const b = busy; busy = null;
       btns.forEach(x => { x.disabled = false; });
-      b.removeAttribute('aria-busy'); b.textContent = `Continue with ${label(b)}`;
+      b.removeAttribute('aria-busy'); b.removeAttribute('aria-label'); const sw = labels.find(x => x.b === b).sw; if (motion.reduced()) sw.jump('idle'); else sw.to('idle');
       if (tries % 2 === 1) se.textContent = `${label(b)} didn’t approve the sign-in. Try again.`;
-      else sm.textContent = `Signed in with ${label(b)}.`; } };
+      else sm.textContent = `Signed in with ${label(b)}.`; }
+      labels.forEach(x => { x.sw.apply(x.idle, 'idle', t); x.sw.apply(x.wait, 'wait', t); }); };
   }});
 
 window.CIEO_SOURCE_HINT="blocks/560-auth-wave3.js";
 
 atom({ id:'auth-invite', cat:'Auth', name:'Org invite', block:'auth, invite, team', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">You are invited</b><p style="font-size:13.5px;line-height:1.5;margin:0">Priya invited you to join Acme Studio as Editor.</p><div class="st-main col" style="gap:8px"><button class="ac" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Accept invite to Acme Studio</button><button class="dc" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Decline invite to Acme Studio</button></div><div class="st-cf col" style="gap:8px" hidden><p style="font-size:13.5px;line-height:1.5;margin:0">Decline the invite to Acme Studio?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm decline</button><button class="kp" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Keep my invite</button></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Accept lands, decline asks first</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">You are invited</b><p style="font-size:13.5px;line-height:1.5;margin:0">Priya invited you to join Acme Studio as Editor.</p><div class="st-panes" style="position:relative;overflow:hidden"><div class="st-main col" style="position:absolute;inset:0 0 auto;gap:8px"><button class="ac" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Accept invite to Acme Studio</button><button class="dc" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Decline invite to Acme Studio</button></div><div class="st-cf col" style="position:absolute;inset:0 0 auto;gap:8px"><p style="font-size:13.5px;line-height:1.5;margin:0">Decline the invite to Acme Studio?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm decline</button><button class="kp" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Keep my invite</button></div></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Accept lands, decline asks first</div>`,
   desc:'Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never colour alone.',
   api:'accept -> welcomed   decline -> confirm -> declined | kept',
   init(st){
-    const main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm');
-    const done = (s) => { main.hidden = true; cf.hidden = true; sm.textContent = s; };
+    const panes = $(st,'.st-panes'), main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm'), sw = new Swap('main'), h = new Track(0, S.soft), motion = motionSettings(st);
+    let step = 'main';
+    const setPanes = (active) => [[main, 'main'], [cf, 'confirm']].forEach(([el, k]) => {
+      const live = k === active;
+      el.inert = !live;
+      if (live) { el.removeAttribute('aria-hidden'); el.style.visibility = 'visible'; }
+      else el.setAttribute('aria-hidden', 'true');
+    });
+    const heightFor = (next) => next === 'main' ? main.offsetHeight : next === 'confirm' ? cf.offsetHeight : 0;
+    const jumpToStep = () => { sw.jump(step); h.jump(heightFor(step)); setPanes(step); };
+    const go = (next, focus) => {
+      step = next; setPanes(next);
+      if (motion.reduced()) { sw.jump(next); h.jump(heightFor(next)); }
+      else { sw.to(next); h.set(heightFor(next), S.soft); }
+      focus?.focus({ preventScroll:true });
+    };
+    setPanes(step);
+    const done = (s) => { go('done'); sm.textContent = s; };
     $(st,'.ac').onclick = () => done('You are in! Welcome to Acme Studio.');
-    $(st,'.dc').onclick = () => { main.hidden = true; cf.hidden = false; sm.textContent = ''; };
-    $(st,'.kp').onclick = () => { cf.hidden = true; main.hidden = false; };
+    $(st,'.dc').onclick = () => { go('confirm', $(st,'.cf')); sm.textContent = ''; };
+    $(st,'.kp').onclick = () => go('main', $(st,'.ac'));
     $(st,'.cf').onclick = () => done('Invite declined. Priya was notified.');
-    return () => {};
+    h.jump(main.offsetHeight); panes.style.height = px(h.at(now()));
+    return t => { if (motion.changedToReduced()) jumpToStep();
+      panes.style.height = px(Math.max(0, h.at(t)));
+      sw.apply(main, 'main', t); if (step === 'main') main.style.visibility = 'visible';
+      sw.apply(cf, 'confirm', t); if (step === 'confirm') cf.style.visibility = 'visible'; };
   }});
 
 atom({ id:'auth-sessions', cat:'Auth', name:'Sessions', block:'auth, sessions, devices', fam:['M','S'], tall:true,
@@ -27200,7 +27287,8 @@ atom({ id:'auth-sessions', cat:'Auth', name:'Sessions', block:'auth, sessions, d
   desc:'Each row names its device and city. The current row reads This device and carries no revoke button; revoking any other row removes it and says so in text.',
   api:'revoke(id) removes row + status   current has no revoke',
   init(st){
-    const rows = $(st,'.rows'), sm = $(st,'.sm');
+    const rows = $(st,'.rows'), sm = $(st,'.sm'), motion = motionSettings(st);
+    const items = [];
     const data = [
       { id:'mbp', device:'MacBook Pro', meta:'Portland · Active now', current:true },
       { id:'ip15', device:'iPhone 15', meta:'Portland · 2 hours ago', current:false },
@@ -27227,24 +27315,52 @@ atom({ id:'auth-sessions', cat:'Auth', name:'Sessions', block:'auth, sessions, d
         rv.style.cssText = 'align-self:flex-start;min-height:44px;border:0;border-radius:9px;background:none;color:#b3261e;font-weight:500;cursor:pointer;font-size:13.5px;padding:0 4px';
         rv.setAttribute('aria-label', `Revoke ${s.device} session`);
         rv.textContent = `Revoke ${s.device}`;
-        rv.onclick = () => { li.remove(); sm.textContent = `${s.device} session revoked.`; };
+        rv.onclick = () => { const before = new Map(items.filter(x => x.li.isConnected).map(x => [x, x.li.getBoundingClientRect().top])); li.remove();
+          items.filter(x => x.li.isConnected).forEach(x => {
+            const match = /translateY\((-?\d+(?:\.\d+)?)px\)/.exec(x.li.style.transform);
+            const liveY = match ? Number(match[1]) : 0;
+            const afterLayoutTop = x.li.getBoundingClientRect().top - liveY;
+            const dy = before.get(x) - afterLayoutTop;
+            if (motion.reduced()) x.y.jump(0); else x.y.jump(dy).set(0, S.base);
+          }); sm.textContent = `${s.device} session revoked.`; };
         li.append(rv);
       }
-      rows.append(li);
+      rows.append(li); items.push({ li, y:new Track(0) });
     }
-    return () => {};
+    return t => { if (motion.changedToReduced()) items.forEach(x => x.y.jump(0));
+      items.forEach(x => { if (x.li.isConnected) x.li.style.transform = `translateY(${px(x.y.at(t))})`; }); };
   }});
 
 atom({ id:'auth-account', cat:'Auth', name:'Account', block:'auth, account, sign out', fam:['M','S'],
-  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">Account</b><div class="row" style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:#171717;color:#fff;font-size:14px;font-weight:700">JW</span><span class="col" style="display:flex;flex-direction:column;gap:2px"><b style="font-size:13.5px">Jo Warren</b><span style="font-size:12.5px;color:#404040">jo@studio.co</span></span></div><div class="st-main col" style="gap:8px"><button class="so" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Sign out</button></div><div class="st-cf col" style="gap:8px" hidden><p style="font-size:13.5px;line-height:1.5;margin:0">Sign out of all devices?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm sign out</button><button class="cx" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Cancel</button></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Sign out asks before it signs out</div>`,
+  html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">Account</b><div class="row" style="display:flex;align-items:center;gap:10px"><span aria-hidden="true" style="width:44px;height:44px;flex:none;border-radius:50%;display:grid;place-items:center;background:#171717;color:#fff;font-size:14px;font-weight:700">JW</span><span class="col" style="display:flex;flex-direction:column;gap:2px"><b style="font-size:13.5px">Jo Warren</b><span style="font-size:12.5px;color:#404040">jo@studio.co</span></span></div><div class="st-panes" style="position:relative;overflow:hidden"><div class="st-main col" style="position:absolute;inset:0 0 auto;gap:8px"><button class="so" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Sign out</button></div><div class="st-cf col" style="position:absolute;inset:0 0 auto;gap:8px"><p style="font-size:13.5px;line-height:1.5;margin:0">Sign out of all devices?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm sign out</button><button class="cx" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Cancel</button></div></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Sign out asks before it signs out</div>`,
   desc:'Sign out opens an inline Sign out of all devices step with Confirm and Cancel. Confirm lands a signed-out line; Cancel returns to the profile untouched.',
   api:'sign out -> confirm? -> signed out | back',
   init(st){
-    const main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm');
-    $(st,'.so').onclick = () => { main.hidden = true; cf.hidden = false; sm.textContent = ''; };
-    $(st,'.cx').onclick = () => { cf.hidden = true; main.hidden = false; };
-    $(st,'.cf').onclick = () => { cf.hidden = true; sm.textContent = 'Signed out of all devices.'; };
-    return () => {};
+    const panes = $(st,'.st-panes'), main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm'), sw = new Swap('main'), h = new Track(0, S.soft), motion = motionSettings(st);
+    let step = 'main';
+    const setPanes = (active) => [[main, 'main'], [cf, 'confirm']].forEach(([el, k]) => {
+      const live = k === active;
+      el.inert = !live;
+      if (live) { el.removeAttribute('aria-hidden'); el.style.visibility = 'visible'; }
+      else el.setAttribute('aria-hidden', 'true');
+    });
+    const heightFor = (next) => next === 'main' ? main.offsetHeight : next === 'confirm' ? cf.offsetHeight : 0;
+    const jumpToStep = () => { sw.jump(step); h.jump(heightFor(step)); setPanes(step); };
+    const go = (next, focus) => {
+      step = next; setPanes(next);
+      if (motion.reduced()) { sw.jump(next); h.jump(heightFor(next)); }
+      else { sw.to(next); h.set(heightFor(next), S.soft); }
+      focus?.focus({ preventScroll:true });
+    };
+    setPanes(step);
+    $(st,'.so').onclick = () => { go('confirm', $(st,'.cf')); sm.textContent = ''; };
+    $(st,'.cx').onclick = () => go('main', $(st,'.so'));
+    $(st,'.cf').onclick = () => { go('done'); sm.textContent = 'Signed out of all devices.'; };
+    h.jump(main.offsetHeight); panes.style.height = px(h.at(now()));
+    return t => { if (motion.changedToReduced()) jumpToStep();
+      panes.style.height = px(Math.max(0, h.at(t)));
+      sw.apply(main, 'main', t); if (step === 'main') main.style.visibility = 'visible';
+      sw.apply(cf, 'confirm', t); if (step === 'confirm') cf.style.visibility = 'visible'; };
   }});
 
 window.CIEO_SOURCE_HINT="blocks/561-audio.js";

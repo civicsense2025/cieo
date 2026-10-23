@@ -1,6 +1,8 @@
 {
   "schemaVersion": 1,
   "shared": [
+    "AuthSignInCard/AuthMotion.tsx",
+    "VoiceRecorder/recorderVisual.ts",
     "motion.ts"
   ],
   "components": {
@@ -199,8 +201,12 @@
         "AuthAccountCard/AuthAccountCard.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthCredentialForm": {
       "files": [
@@ -210,24 +216,36 @@
         "AuthEmailField",
         "AuthPasswordInput"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthEmailField": {
       "files": [
         "AuthEmailField/AuthEmailField.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthInviteAccept": {
       "files": [
         "AuthInviteAccept/AuthInviteAccept.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthMfaChallenge": {
       "files": [
@@ -236,8 +254,12 @@
       "registryDependencies": [
         "AuthOtpInput"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthMfaFlow": {
       "files": [
@@ -247,32 +269,48 @@
         "AuthMfaChallenge",
         "AuthSignInCard"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthOtpInput": {
       "files": [
         "AuthOtpInput/AuthOtpInput.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthPasskeyButton": {
       "files": [
         "AuthPasskeyButton/AuthPasskeyButton.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthPasswordInput": {
       "files": [
         "AuthPasswordInput/AuthPasswordInput.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthResetFlow": {
       "files": [
@@ -293,16 +331,24 @@
         "AuthEmailField",
         "AuthPasswordInput"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthSessionList": {
       "files": [
         "AuthSessionList/AuthSessionList.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthSignInCard": {
       "files": [
@@ -311,8 +357,12 @@
       "registryDependencies": [
         "AuthCredentialForm"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "AuthSignUpCard": {
       "files": [
@@ -330,8 +380,12 @@
         "AuthSsoButtons/AuthSsoButtons.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "AuthSignInCard/AuthMotion.tsx"
+      ]
     },
     "Avatar": {
       "files": [
@@ -2013,8 +2067,12 @@
         "AudioWaveform",
         "IconButton"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "VoiceRecorder/recorderVisual.ts"
+      ]
     }
   }
 }

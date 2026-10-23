@@ -14,13 +14,14 @@ Records a voice clip from the microphone and gives the host a blob, its length a
 
 ## Anatomy
 
-Idle: a microphone button. Recording: a pulsing dot, the elapsed time, a live level meter, and Cancel, Pause and Stop buttons. A polite status line announces discrete events.
+Idle: a microphone button. Recording: a pulsing dot, the elapsed time, a bounded rolling live waveform, and Cancel, Pause and Stop buttons. A polite status line announces discrete events.
 
 ## Behavior
 
 - `voiceRecorderStep` is a pure machine: idle, requesting, recording, paused, done, and error with reason `denied`, `unsupported` or `failed`. Cancel from any active state returns to idle and cannot produce a clip.
 - The format is picked by `pickRecorderMimeType`: webm/opus, then mp4, then ogg/opus, then the browser default.
-- Peaks are sampled from an analyser every 50ms and shrunk to 64 values by default (maximum 128) by `downsamplePeaks`.
+- Peaks are sampled from one analyser every 50ms. The newest 24 readings move through a rolling live waveform with direct transform and opacity writes, smoothed by short interruptible compositor transitions, without a second analyser, timer or React render. Finished clips are shrunk to 64 values by default (maximum 128) by `downsamplePeaks`.
+- The live panel uses one interruptible presence spring. Its bars enter once in under 300ms, remain in place while paused, and leave with the panel after Stop or Cancel. Reduced motion and `data-motion="off"` skip the entrance and presence travel while retaining the final state and microphone feedback.
 - The last 10 seconds before `maxDuration` show the time left in the warning color. The take stops itself at the limit, by a timer armed for the time left at start and resume (so a throttled background tab still stops on time); the reported duration is the real recorded length, not clamped. Limits of 10 seconds or less do not warn.
 - Hold mode: pointer down starts, release finishes, sliding left past 80px shows "Release to cancel" and cancels (`holdGesture`).
 - Every media track and the audio context are released on stop, cancel, error and unmount. Unmounting never emits a clip and returns the recorder to idle, so a StrictMode remount starts cleanly. An encoder error (`MediaRecorder` `onerror`) fails the take and releases everything; a failure while starting also closes the audio context.
@@ -50,4 +51,4 @@ AudioLevelMeter, AudioTime, AudioPlayer.
 
 ## Evidence
 
-`test/primitives-audio-capture.test.mjs`.
+`test/primitives-audio-capture.test.mjs`, `test/voice-recorder-motion.test.mjs`, and the recorder checks in `test/browser/social.py`.

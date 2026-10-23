@@ -24,6 +24,6 @@
     :where(.cieo) .cieo-auth-revoke { min-height: 2.75rem; padding: 12px 4px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-session-list * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-session-list * { animation: none !important; transition: none !important; }
   }
 }

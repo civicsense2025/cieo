@@ -87,6 +87,58 @@ test('copies component and shared sources byte-identical, and syncs manifest dep
   assert.equal(readFileSync(join(tree, 'src/primitives/AlertDialog/manifest.json'), 'utf8'), manifest('AlertDialog', []));
 });
 
+test('ships auth and recorder companion modules as shared files without primitive dependency edges', () => {
+  const tree = mkdtempSync(join(tmpdir(), 'cieo-companion-registry-'));
+  try {
+    const prim = join(tree, 'src/primitives');
+    const files = {
+      'AuthAccountCard/AuthAccountCard.tsx': "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';\nexport const AuthAccountCard = AuthMotionMessage;\n",
+      'AuthSignInCard/AuthSignInCard.tsx': "import { AuthMotionMessage } from './AuthMotion.js';\nexport const AuthSignInCard = AuthMotionMessage;\n",
+      'AuthSignInCard/AuthMotion.tsx': "import { useState } from '../../react/index.js';\nexport const AuthMotionMessage = useState;\n",
+      'VoiceRecorder/VoiceRecorder.tsx': "import { recorderVisual } from './recorderVisual.js';\nexport const VoiceRecorder = recorderVisual;\n",
+      'VoiceRecorder/recorderVisual.ts': "export const recorderVisual = () => null;\n",
+    };
+    for (const [rel, source] of Object.entries(files)) {
+      const path = join(prim, rel);
+      mkdirSync(join(path, '..'), { recursive: true });
+      writeFileSync(path, source);
+    }
+    for (const name of ['AuthAccountCard', 'AuthSignInCard', 'VoiceRecorder']) {
+      writeFileSync(join(prim, name, 'manifest.json'), manifest(name, []));
+    }
+
+    const { index } = buildRegistry(tree);
+    assert.deepEqual(index.shared, ['AuthSignInCard/AuthMotion.tsx', 'VoiceRecorder/recorderVisual.ts']);
+    assert.deepEqual(index.components.AuthAccountCard.sharedFiles, ['AuthSignInCard/AuthMotion.tsx']);
+    assert.deepEqual(index.components.AuthAccountCard.registryDependencies, []);
+    assert.deepEqual(index.components.AuthAccountCard.packageImports, ['cieo/react']);
+    assert.deepEqual(index.components.AuthSignInCard.sharedFiles, ['AuthSignInCard/AuthMotion.tsx']);
+    assert.deepEqual(index.components.AuthSignInCard.packageImports, ['cieo/react']);
+    assert.deepEqual(index.components.VoiceRecorder.sharedFiles, ['VoiceRecorder/recorderVisual.ts']);
+    assert.equal(readFileSync(join(tree, 'registry/AuthSignInCard/AuthMotion.tsx'), 'utf8'), files['AuthSignInCard/AuthMotion.tsx']);
+    assert.equal(readFileSync(join(tree, 'registry/VoiceRecorder/recorderVisual.ts'), 'utf8'), files['VoiceRecorder/recorderVisual.ts']);
+  } finally {
+    rmSync(tree, { recursive: true, force: true });
+  }
+});
+
+test('fails closed on an unclassified import inside a shared companion', () => {
+  const tree = mkdtempSync(join(tmpdir(), 'cieo-nested-companion-import-'));
+  try {
+    const prim = join(tree, 'src/primitives');
+    mkdirSync(join(prim, 'AuthAccountCard'), { recursive: true });
+    mkdirSync(join(prim, 'AuthSignInCard'), { recursive: true });
+    writeFileSync(join(prim, 'AuthAccountCard/AuthAccountCard.tsx'), "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';\nexport const AuthAccountCard = AuthMotionMessage;\n");
+    writeFileSync(join(prim, 'AuthSignInCard/AuthMotion.tsx'), "import { helper } from '../../utils/thing.js';\nexport const AuthMotionMessage = helper;\n");
+    writeFileSync(join(prim, 'AuthAccountCard/manifest.json'), manifest('AuthAccountCard', []));
+    writeFileSync(join(prim, 'AuthSignInCard/manifest.json'), manifest('AuthSignInCard', []));
+
+    assert.throws(() => buildRegistry(tree), /Unclassified import '\.\.\/\.\.\/utils\/thing\.js'/);
+  } finally {
+    rmSync(tree, { recursive: true, force: true });
+  }
+});
+
 test('generation is deterministic across two runs', () => {
   const tree = makeTree();
   buildRegistry(tree);

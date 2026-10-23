@@ -1,7 +1,8 @@
 'use client';
-/* AuthMfaFlow (static). MFA card with challenge, resend, and status. */
+/* AuthMfaFlow. MFA card with challenge, smoothly swapping resend copy, and status. */
 import type { CSSProperties } from 'react';
 import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard.js';
+import { AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 import { AuthMfaChallenge } from '../AuthMfaChallenge/AuthMfaChallenge.js';
 
 export interface AuthMfaFlowProps {
@@ -23,7 +24,7 @@ export function AuthMfaFlow({ id, title = 'Check your authenticator', pending, e
       <AuthMfaChallenge id={`${id}-challenge`} pending={pending} error={error} onSubmit={onSubmit} onRecovery={onRecovery} />
       {onResend ? (
         <button type="button" className="cieo-auth-toggle" disabled={resendIn > 0} onClick={onResend}>
-          {resendIn > 0 ? `Resend code in ${resendIn}s` : 'Resend code'}
+          <AuthSwapText value={resendIn > 0 ? `Resend code in ${resendIn}s` : 'Resend code'} />
         </button>
       ) : null}
     </AuthCardShell>

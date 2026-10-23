@@ -952,7 +952,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/560-auth-wave3.js",
-          "sha256": "04f7d61d77ce84f59fcaae30238a2a6ec7a044bea01ca330167ddd9153762582",
+          "sha256": "8e8e8cb4f310be127db6daeb40148ca4aa5c79759a3f22b69eb3a2923c4fef5c",
           "artifactKind": "recipe"
         }
       ]
@@ -968,7 +968,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/560-auth-wave3.js",
-          "sha256": "04f7d61d77ce84f59fcaae30238a2a6ec7a044bea01ca330167ddd9153762582",
+          "sha256": "8e8e8cb4f310be127db6daeb40148ca4aa5c79759a3f22b69eb3a2923c4fef5c",
           "artifactKind": "recipe"
         }
       ]
@@ -984,7 +984,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/558-auth-wave1.js",
-          "sha256": "5a2e441ebaabad51b0f450a2295bba3ccb872c91bd5f9a2412523294f4457a93",
+          "sha256": "590dc83bc578d1a129d421c2d14e11ced07eea1ed7c20795a80a6ecc0e07c00e",
           "artifactKind": "recipe"
         }
       ]
@@ -1000,7 +1000,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/558-auth-wave1.js",
-          "sha256": "5a2e441ebaabad51b0f450a2295bba3ccb872c91bd5f9a2412523294f4457a93",
+          "sha256": "590dc83bc578d1a129d421c2d14e11ced07eea1ed7c20795a80a6ecc0e07c00e",
           "artifactKind": "recipe"
         }
       ]
@@ -1016,7 +1016,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/559-auth-wave2.js",
-          "sha256": "9497dfc2cf00404f516125c250b7de6e1c9b696ebfc4e73357f1f3a29ad710ae",
+          "sha256": "f125f96afc738f820433954b0f5fd814c6a821dbb8faa1ce890a527c08de17db",
           "artifactKind": "recipe"
         }
       ]
@@ -1032,7 +1032,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/558-auth-wave1.js",
-          "sha256": "5a2e441ebaabad51b0f450a2295bba3ccb872c91bd5f9a2412523294f4457a93",
+          "sha256": "590dc83bc578d1a129d421c2d14e11ced07eea1ed7c20795a80a6ecc0e07c00e",
           "artifactKind": "recipe"
         }
       ]
@@ -1048,7 +1048,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/560-auth-wave3.js",
-          "sha256": "04f7d61d77ce84f59fcaae30238a2a6ec7a044bea01ca330167ddd9153762582",
+          "sha256": "8e8e8cb4f310be127db6daeb40148ca4aa5c79759a3f22b69eb3a2923c4fef5c",
           "artifactKind": "recipe"
         }
       ]
@@ -1064,7 +1064,7 @@
           "symbol": null,
           "category": "Auth",
           "path": "atoms/web/blocks/559-auth-wave2.js",
-          "sha256": "9497dfc2cf00404f516125c250b7de6e1c9b696ebfc4e73357f1f3a29ad710ae",
+          "sha256": "f125f96afc738f820433954b0f5fd814c6a821dbb8faa1ce890a527c08de17db",
           "artifactKind": "recipe"
         }
       ]

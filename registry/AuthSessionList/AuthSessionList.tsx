@@ -1,6 +1,8 @@
 'use client';
-/* AuthSessionList (static). Device sessions; the current session is text-marked and never revocable. */
-import type { CSSProperties } from 'react';
+/* AuthSessionList. Removal is immediate; surviving device rows reflow on Cieo's base spring. */
+import { useRef, type CSSProperties, type RefObject } from 'react';
+import { useFlip } from '../../react/index.js';
+import { useAuthMotionDisabled } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthSession {
   id: string;
@@ -17,11 +19,19 @@ export interface AuthSessionListProps {
   onRevoke: (id: string) => void;
 }
 
+function SessionReflow({ list, order }: { list: RefObject<HTMLUListElement | null>; order: string }) {
+  useFlip(list, order, { stagger: 0.02 });
+  return null;
+}
+
 export function AuthSessionList({ id, sessions, style, onRevoke }: AuthSessionListProps) {
+  const list = useRef<HTMLUListElement>(null);
+  const motionDisabled = useAuthMotionDisabled(list);
+  const order = sessions.map((session) => session.id).join('\u0000');
   return (
     <section className="cieo cieo-auth-session-list" aria-labelledby={`${id}-title`} style={style}>
       <h2 className="cieo-auth-card-title" id={`${id}-title`}>Sessions</h2>
-      <ul className="cieo-auth-sessions" role="list">
+      <ul ref={list} className="cieo-auth-sessions" role="list">
         {sessions.map((s) => (
           <li key={s.id} className="cieo-auth-session" role="listitem">
             <span className="cieo-auth-session-device">{s.device}</span>
@@ -36,6 +46,7 @@ export function AuthSessionList({ id, sessions, style, onRevoke }: AuthSessionLi
           </li>
         ))}
       </ul>
+      {motionDisabled ? null : <SessionReflow list={list} order={order} />}
     </section>
   );
 }

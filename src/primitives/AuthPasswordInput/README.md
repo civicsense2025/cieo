@@ -14,3 +14,5 @@ Strength score 0-4: +1 for 8 or more characters, +1 for 12 or more, +1 for mixed
 | `autoComplete` | string | `"current-password"` | Use `"new-password"` on sign-up and reset forms. |
 
 The toggle keeps focus on the input after switching. The meter is `role="meter"` with `aria-valuenow` and `aria-valuetext`.
+
+The visibility label swaps on the base token and strength segments respond on snap. Reduced motion and `data-motion="off"` update instantly.

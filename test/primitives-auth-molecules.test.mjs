@@ -39,5 +39,5 @@ test('AuthMfaChallenge normalizes recovery codes and forwards pending and error'
   const src = readFileSync('src/primitives/AuthMfaChallenge/AuthMfaChallenge.tsx', 'utf8');
   assert.match(src, /replace\(\/\[/);
   assert.match(src, /disabled=\{pending\}/);
-  assert.match(src, /error=\{error\}/);
+  assert.match(src, /error=\{(?:error|live \? error : undefined)\}/);
 });

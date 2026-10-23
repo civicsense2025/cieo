@@ -5,11 +5,14 @@
   :where(.cieo) .cieo-voice-recorder-mic[data-active] { background: var(--cieo-color-danger-soft); border-color: var(--cieo-color-danger); color: var(--cieo-color-danger); }
   :where(.cieo).cieo-voice-recorder[data-hold='cancel'] .cieo-voice-recorder-mic { background: var(--cieo-color-danger); color: var(--cieo-color-on-accent); }
   :where(.cieo) .cieo-voice-recorder-live { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo) .cieo-voice-recorder-live[data-presence='exit'] { pointer-events: none; }
   :where(.cieo) .cieo-voice-recorder-dot { inline-size: var(--cieo-space-2); block-size: var(--cieo-space-2); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-danger); animation: cieo-voice-recorder-pulse calc(var(--motion-duration-lazy, 740ms) * 2) ease-in-out infinite; }
   :where(.cieo) .cieo-voice-recorder-dot[data-paused] { animation: none; opacity: 0.4; }
   :where(.cieo) .cieo-voice-recorder-time { font-variant-numeric: tabular-nums; color: var(--cieo-color-text); }
   :where(.cieo) .cieo-voice-recorder-time[data-warning] { color: var(--cieo-color-warning); font-weight: var(--cieo-weight-strong); }
   :where(.cieo) .cieo-voice-recorder-time .cieo-audio-time { color: inherit; }
+  :where(.cieo) .cieo-voice-recorder-waveform { display: inline-flex; align-items: center; gap: 2px; inline-size: clamp(5rem, 22vw, 8rem); block-size: var(--cieo-control-small); overflow: hidden; color: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-voice-recorder-waveform-bar { flex: 1 1 0; min-inline-size: 1px; block-size: 100%; border-radius: var(--cieo-radius-pill); background: currentColor; transform-origin: center; transition: transform var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), opacity var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); animation: cieo-voice-recorder-waveform-in var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) backwards; animation-delay: calc(var(--cieo-recorder-bar-index) * var(--motion-duration-snap, 200ms) / 100); }
   :where(.cieo) .cieo-voice-recorder-hint { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
   :where(.cieo).cieo-voice-recorder[data-hold='cancel'] .cieo-voice-recorder-hint { color: var(--cieo-color-danger); }
   :where(.cieo) .cieo-voice-recorder-actions { display: inline-flex; align-items: center; gap: var(--cieo-space-1); }
@@ -19,10 +22,15 @@
   :where(.cieo) .cieo-voice-recorder-retry { min-block-size: var(--cieo-touch-target); padding-inline: var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-raised); color: var(--cieo-color-text); font: inherit; font-size: var(--cieo-text-small); cursor: pointer; }
   :where(.cieo) .cieo-voice-recorder-mic:focus-visible, :where(.cieo) .cieo-voice-recorder-retry:focus-visible, :where(.cieo) .cieo-voice-recorder-actions .cieo-icon-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
   @keyframes cieo-voice-recorder-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes cieo-voice-recorder-waveform-in { from { transform: scaleY(0.1); opacity: 0.45; } }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo) .cieo-voice-recorder-dot { animation: none !important; }
-    :where(.cieo) .cieo-voice-recorder-mic { transition: none !important; }
+    :root:not([data-motion='full']) :where(.cieo) .cieo-voice-recorder-dot { animation: none !important; }
+    :root:not([data-motion='full']) :where(.cieo) .cieo-voice-recorder-waveform-bar { animation: none !important; transition: none !important; }
+    :root:not([data-motion='full']) :where(.cieo) .cieo-voice-recorder-live { opacity: 1 !important; transform: none !important; }
+    :root:not([data-motion='full']) :where(.cieo) .cieo-voice-recorder-mic { transition: none !important; }
   }
-  :where(.cieo)[data-motion='off'] .cieo-voice-recorder-dot, :where(.cieo).cieo-voice-recorder[data-motion='off'] .cieo-voice-recorder-dot { animation: none !important; }
-  :where(.cieo)[data-motion='off'] .cieo-voice-recorder-mic { transition: none !important; }
+  :is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) :where(.cieo) .cieo-voice-recorder-dot, :where(.cieo).cieo-voice-recorder:is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) .cieo-voice-recorder-dot { animation: none !important; }
+  :is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) :where(.cieo) .cieo-voice-recorder-waveform-bar, :where(.cieo).cieo-voice-recorder:is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) .cieo-voice-recorder-waveform-bar { animation: none !important; transition: none !important; }
+  :is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) :where(.cieo) .cieo-voice-recorder-live, :where(.cieo).cieo-voice-recorder:is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) .cieo-voice-recorder-live { opacity: 1 !important; transform: none !important; }
+  :is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) :where(.cieo) .cieo-voice-recorder-mic, :where(.cieo).cieo-voice-recorder:is([data-motion='off'], [data-motion='reduced'], [data-reduced-motion='true']) .cieo-voice-recorder-mic { transition: none !important; }
 }

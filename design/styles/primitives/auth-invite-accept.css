@@ -25,6 +25,6 @@
     :where(.cieo) .cieo-auth-accept, :where(.cieo) .cieo-auth-decline { min-height: 2.75rem; padding-block: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-invite-accept * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-invite-accept * { animation: none !important; transition: none !important; }
   }
 }

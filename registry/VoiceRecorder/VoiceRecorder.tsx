@@ -1,11 +1,13 @@
 // src/primitives/VoiceRecorder/VoiceRecorder.tsx
 'use client';
 /* VoiceRecorder. Records a voice clip from the microphone and hands it to the host as a blob with its length and waveform peaks. The host owns upload and storage. */
-import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { AudioLevelMeter, rmsLevel } from '../AudioLevelMeter/AudioLevelMeter.js';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from 'react';
+import { usePresence } from '../../react/index.js';
+import { rmsLevel } from '../AudioLevelMeter/AudioLevelMeter.js';
 import { MAX_WAVEFORM_BARS } from '../AudioWaveform/AudioWaveform.js';
 import { AudioTime, speakAudioTime } from '../AudioTime/AudioTime.js';
 import { IconButton } from '../IconButton/IconButton.js';
+import { RECORDER_LIVE_BAR_COUNT, createRecorderLiveHistory, pushRecorderLiveLevel, recorderLiveBarPresentation } from './recorderVisual.js';
 
 export type RecorderPhase = 'idle' | 'requesting' | 'recording' | 'paused' | 'done' | 'error';
 export type RecorderErrorReason = 'denied' | 'unsupported' | 'failed';
@@ -79,6 +81,18 @@ export function shouldEmitClip(prev: RecorderState, next: RecorderState): boolea
 
 const MIME_PREFERENCE = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg;codecs=opus'];
 const useRecorderEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+function useRecorderMotionDisabled(root: RefObject<HTMLElement | null>): boolean {
+  const [disabled, setDisabled] = useState(false);
+  useRecorderEffect(() => {
+    const sync = () => setDisabled(Boolean(root.current?.closest('[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]')));
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ['data-motion', 'data-reduced-motion'] });
+    return () => observer.disconnect();
+  }, [root]);
+  return disabled;
+}
 
 /** First recording format the browser supports, in order of preference, or '' to let the browser choose. */
 export function pickRecorderMimeType(isTypeSupported: (type: string) => boolean): string {
@@ -213,7 +227,6 @@ interface Take {
   since: number;
   mime: string;
   lastSecond: number;
-  lastLevel: number;
   released: boolean;
   failed: boolean;
   discarded: boolean;
@@ -282,9 +295,13 @@ const STOP = 'M5 12l5 5L20 7';
 export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoStart = false, label = 'Record a voice reply', mode = 'tap' }: VoiceRecorderProps) {
   const limit = Number.isFinite(maxDuration) ? Math.max(1, maxDuration) : 120;
   const [state, setState] = useState<RecorderState>(recorderIdle);
-  const [level, setLevel] = useState(0);
   const [message, setMessage] = useState('');
   const [hold, setHold] = useState<'record' | 'cancel'>('record');
+  const root = useRef<HTMLDivElement>(null);
+  const micButton = useRef<HTMLButtonElement>(null);
+  const liveWaveform = useRef<HTMLSpanElement>(null);
+  const liveHistory = useRef(createRecorderLiveHistory());
+  const restoreMicFocusOnExit = useRef(false);
   const stateRef = useRef(state);
   const take = useRef<Take | null>(null);
   const ownedTakes = useRef(new Set<Take>());
@@ -294,6 +311,29 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
   const holdFrom = useRef<number | null>(null);
   const live = useRef({ onRecorded, onCancel, limit });
   live.current = { onRecorded, onCancel, limit };
+
+  const focusIsInLivePanel = (): boolean => {
+    if (typeof document === 'undefined') return false;
+    const panel = root.current?.querySelector('.cieo-voice-recorder-live');
+    return Boolean(panel?.contains(document.activeElement));
+  };
+
+  const paintLiveWaveform = () => {
+    const el = liveWaveform.current;
+    if (!el) return;
+    const history = liveHistory.current;
+    for (let i = 0; i < el.children.length; i += 1) {
+      const bar = el.children[i] as HTMLElement;
+      const presentation = recorderLiveBarPresentation(history[i] ?? 0);
+      bar.style.transform = `scaleY(${presentation.scale.toFixed(3)})`;
+      bar.style.opacity = presentation.opacity.toFixed(3);
+    }
+  };
+
+  const resetLiveWaveform = () => {
+    liveHistory.current = createRecorderLiveHistory();
+    paintLiveWaveform();
+  };
 
   const send = (event: RecorderEvent): RecorderState => {
     const next = voiceRecorderStep(stateRef.current, event);
@@ -321,13 +361,12 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     }
     if (!isCurrent) return;
     currentAttempt.current = null;
-    setLevel(0);
     if (isRecorderActive(stateRef.current.phase) || stateRef.current.phase === 'done') send({ type: 'fail' });
     setMessage(recorderAnnouncement('failed'));
   };
 
   /** Cancels only the active request or recording; earlier pending stop events remain independently owned. */
-  const cancel = (notify = true) => {
+  const cancel = (options: { notify?: boolean; restoreFocus?: boolean } = {}) => {
     session.current += 1;
     currentAttempt.current = null;
     const t = take.current;
@@ -344,17 +383,18 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       release(t);
     }
     if (!isRecorderActive(stateRef.current.phase)) return;
-    setLevel(0);
+    if (options.restoreFocus && focusIsInLivePanel()) restoreMicFocusOnExit.current = true;
     setHold('record');
     holdFrom.current = null;
     send({ type: 'cancel' });
     setMessage(recorderAnnouncement('cancelled'));
-    if (notify) live.current.onCancel?.();
+    if (options.notify !== false) live.current.onCancel?.();
   };
 
-  const finish = (kind: 'stop' | 'limit') => {
+  const finish = (kind: 'stop' | 'limit', restoreFocus = false) => {
     const t = take.current;
     if (!t || t.failed || t.discarded || (stateRef.current.phase !== 'recording' && stateRef.current.phase !== 'paused')) return;
+    if (restoreFocus && focusIsInLivePanel()) restoreMicFocusOnExit.current = true;
     take.current = null;
     if (t.timer !== null) clearInterval(t.timer);
     t.timer = null;
@@ -373,7 +413,6 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       release(t);
       if (shouldDeliver) live.current.onRecorded({ blob: new Blob(t.chunks, { type: mimeType }), mimeType, duration, peaks: downsamplePeaks(t.peaks) });
     };
-    setLevel(0);
     setHold('record');
     holdFrom.current = null;
     send({ type: kind });
@@ -399,10 +438,8 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       t.peaks.push(l);
     }
     const q = Math.round(l * 50) / 50;
-    if (q !== t.lastLevel) {
-      t.lastLevel = q;
-      setLevel(q);
-    }
+    pushRecorderLiveLevel(liveHistory.current, q);
+    paintLiveWaveform();
     const whole = Math.floor(ms / 1000);
     if (whole !== t.lastSecond) {
       t.lastSecond = whole;
@@ -413,6 +450,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
 
   const begin = () => {
     if (isRecorderActive(stateRef.current.phase)) return;
+    resetLiveWaveform();
     const mine = ++session.current;
     currentAttempt.current = mine;
     send({ type: 'start' });
@@ -456,7 +494,6 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             since: 0,
             mime,
             lastSecond: 0,
-            lastLevel: 0,
             released: false,
             failed: false,
             discarded: false,
@@ -545,7 +582,6 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         if (t.limitTimer !== null) clearTimeout(t.limitTimer);
         t.limitTimer = null;
         t.recorder.pause();
-        setLevel(0);
         send({ type: 'pause' });
         setMessage(recorderAnnouncement('paused'));
       } else if (stateRef.current.phase === 'paused') {
@@ -565,6 +601,19 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
 
   const phase = state.phase;
   const active = isRecorderActive(phase);
+  const motionDisabled = useRecorderMotionDisabled(root);
+  const livePresence = usePresence<HTMLDivElement>(active, {
+    disabled: motionDisabled,
+    kind: 'feedback',
+    from: { x: -4, y: 0, scale: 0.985, opacity: 0.45 },
+  });
+  const lastLive = useRef({ phase: 'requesting' as RecorderPhase, elapsed: 0, near: false, holding: false, hold: 'record' as 'record' | 'cancel' });
+
+  useRecorderEffect(() => {
+    if (active || !restoreMicFocusOnExit.current) return;
+    restoreMicFocusOnExit.current = false;
+    micButton.current?.focus({ preventScroll: true });
+  }, [active]);
 
   useRecorderEffect(() => {
     mounted.current = true;
@@ -580,7 +629,6 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       holdFrom.current = null;
       stateRef.current = recorderIdle;
       setState(stateRef.current);
-      setLevel(0);
       owned.forEach((t) => {
         t.discarded = true;
         detachRecorder(t);
@@ -599,7 +647,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       e.preventDefault();
-      cancel();
+      cancel({ restoreFocus: true });
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
@@ -639,14 +687,20 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
   };
 
   const near = isNearLimit(state.elapsed, limit);
+  if (active) lastLive.current = { phase, elapsed: state.elapsed, near, holding: mode === 'hold' && holdFrom.current !== null, hold };
+  const shownLive = lastLive.current;
+  const shownPhase = shownLive.phase;
+  const shownNear = shownLive.near;
+  const shownHolding = shownLive.holding;
   const showMic = mode === 'hold' || !active;
   const holding = mode === 'hold' && active && holdFrom.current !== null;
   const errorText = state.reason ? recorderAnnouncement(state.reason) : '';
 
   return (
-    <div role="group" aria-label={label} className="cieo cieo-voice-recorder" data-phase={phase} data-mode={mode} data-warning={near && phase !== 'paused' ? '' : undefined} data-hold={holding ? hold : undefined}>
+    <div ref={root} role="group" aria-label={label} className="cieo cieo-voice-recorder" data-phase={phase} data-mode={mode} data-warning={near && phase !== 'paused' ? '' : undefined} data-hold={holding ? hold : undefined}>
       {showMic ? (
         <button
+          ref={micButton}
           type="button"
           className="cieo-voice-recorder-mic"
           aria-label={mode === 'hold' && (phase === 'recording' || phase === 'paused') ? 'Stop recording' : label}
@@ -660,35 +714,40 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
           <Glyph d={MIC} />
         </button>
       ) : null}
-      {active ? (
-        <div className="cieo-voice-recorder-live">
-          <span className="cieo-voice-recorder-dot" aria-hidden="true" data-paused={phase === 'paused' ? '' : undefined} />
-          {phase === 'requesting' ? (
+      {livePresence.mounted ? (
+        <div ref={livePresence.ref} className="cieo-voice-recorder-live" data-presence={active ? 'present' : 'exit'} aria-hidden={!active ? true : undefined} inert={!active || undefined}>
+          <span className="cieo-voice-recorder-dot" aria-hidden="true" data-paused={shownPhase === 'paused' ? '' : undefined} />
+          {shownPhase === 'requesting' ? (
             <span className="cieo-voice-recorder-hint">Waiting for the microphone</span>
           ) : (
             <>
-              <span className="cieo-voice-recorder-time" data-warning={near ? '' : undefined}>
-                {near ? <AudioTime current={state.elapsed} duration={limit} mode="remaining" /> : <AudioTime current={state.elapsed} />}
+              <span className="cieo-voice-recorder-time" data-warning={shownNear ? '' : undefined}>
+                {shownNear ? <AudioTime current={shownLive.elapsed} duration={limit} mode="remaining" /> : <AudioTime current={shownLive.elapsed} />}
               </span>
-              <AudioLevelMeter level={phase === 'recording' ? level : 0} />
+              <span ref={liveWaveform} role="img" aria-label="Microphone level" className="cieo-voice-recorder-waveform" data-paused={shownPhase === 'paused' ? '' : undefined}>
+                {Array.from({ length: RECORDER_LIVE_BAR_COUNT }, (_, i) => {
+                  const presentation = recorderLiveBarPresentation(liveHistory.current[i] ?? 0);
+                  return <span key={i} aria-hidden="true" className="cieo-voice-recorder-waveform-bar" style={{ '--cieo-recorder-bar-index': i, transform: `scaleY(${presentation.scale.toFixed(3)})`, opacity: presentation.opacity.toFixed(3) } as CSSProperties} />;
+                })}
+              </span>
             </>
           )}
-          {holding ? (
+          {shownHolding ? (
             <span className="cieo-voice-recorder-hint" aria-hidden="true">
-              {hold === 'cancel' ? 'Release to cancel' : 'Slide left to cancel'}
+              {shownLive.hold === 'cancel' ? 'Release to cancel' : 'Slide left to cancel'}
             </span>
           ) : null}
           <span className="cieo-voice-recorder-actions">
-            <IconButton label="Cancel recording" size="sm" onClick={() => cancel()}>
+            <IconButton label="Cancel recording" size="sm" onClick={() => cancel({ restoreFocus: true })}>
               <Glyph d={TRASH} />
             </IconButton>
-            {mode === 'tap' && phase !== 'requesting' ? (
-              <IconButton label={phase === 'paused' ? 'Resume recording' : 'Pause recording'} size="sm" onClick={togglePause}>
-                <Glyph d={phase === 'paused' ? RESUME : PAUSE} />
+            {mode === 'tap' && shownPhase !== 'requesting' ? (
+              <IconButton label={shownPhase === 'paused' ? 'Resume recording' : 'Pause recording'} size="sm" onClick={togglePause}>
+                <Glyph d={shownPhase === 'paused' ? RESUME : PAUSE} />
               </IconButton>
             ) : null}
-            {phase !== 'requesting' && mode === 'tap' ? (
-              <IconButton label="Stop recording" size="sm" className="cieo-voice-recorder-stop" onClick={() => finish('stop')}>
+            {shownPhase !== 'requesting' && mode === 'tap' ? (
+              <IconButton label="Stop recording" size="sm" className="cieo-voice-recorder-stop" onClick={() => finish('stop', true)}>
                 <Glyph d={STOP} />
               </IconButton>
             ) : null}

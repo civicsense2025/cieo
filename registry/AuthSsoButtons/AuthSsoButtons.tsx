@@ -1,6 +1,7 @@
 'use client';
-/* AuthSsoButtons (static). One button per identity provider; pending shows by text change plus aria-busy, never colour alone. */
+/* AuthSsoButtons. One button per identity provider; pending copy swaps in place alongside aria-busy. */
 import type { CSSProperties } from 'react';
+import { AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthSsoProvider {
   id: string;
@@ -32,7 +33,7 @@ export function AuthSsoButtons({ id, providers, pendingId, style, onPress }: Aut
             aria-busy={pending || undefined}
             onClick={() => { if (!busy) onPress?.(p.id); }}
           >
-            {pending ? `Connecting to ${p.label}…` : `Continue with ${p.label}`}
+            <AuthSwapText value={pending ? `Connecting to ${p.label}…` : `Continue with ${p.label}`} />
           </button>
         );
       })}

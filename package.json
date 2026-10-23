@@ -992,6 +992,7 @@
     "test:frames": "python3 test/browser/frame-reads.py",
     "test:composites": "python3 test/browser/composites.py",
     "test:social": "python3 test/browser/social.py",
+    "test:auth-motion": "python3 test/browser/auth-motion.py && python3 test/browser/auth-recipes-motion.py",
     "prepare": "node scripts/build-design.mjs",
     "prepack": "node scripts/build-design.mjs",
     "build:design": "node scripts/build-design.mjs",

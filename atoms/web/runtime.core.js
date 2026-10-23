@@ -1,5 +1,6 @@
 /* ================================================================ core */
-const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const MOTION_MEDIA = matchMedia('(prefers-reduced-motion: reduce)');
+const REDUCE = MOTION_MEDIA.matches;
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4;
@@ -9,6 +10,19 @@ const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
 const lerp = (a,b,p) => a + (b-a)*p;
 const px = v => v.toFixed(2) + 'px';
 const $ = (r,s) => r.querySelector(s), $$ = (r,s) => [...r.querySelectorAll(s)];
+function motionReduced(el){
+  const root = document.documentElement;
+  if (el?.closest?.('[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]')) return true;
+  if (root.dataset.motion === 'reduced' || root.dataset.reducedMotion === 'true') return true;
+  return root.dataset.motion !== 'full' && MOTION_MEDIA.matches;
+}
+function motionSettings(el){
+  let previous = motionReduced(el);
+  return {
+    reduced(){ previous = motionReduced(el); return previous; },
+    changedToReduced(){ const next = motionReduced(el), changed = next && !previous; previous = next; return changed; },
+  };
+}
 
 function resp(dt, x0, v0, cfg){
   if (dt <= 0) return x0;
@@ -48,6 +62,7 @@ function edges(a, b){
 class Swap {
   constructor(cur){ this.cur = cur; this.prev = null; this.t = -9; }
   to(k, t = now()){ if (k === this.cur) return false; this.prev = this.cur; this.cur = k; this.t = t; return true; }
+  jump(k){ this.cur = k; this.prev = null; this.t = -9; return this; }
   apply(el, k, t, amp = 4){
     let o = 0, b = 0, y = 0;
     if (k === this.cur){ const p = clamp(prog(t, this.t + EXIT)); o = p; b = (1-p)*BLUR; y = (1-p)*amp; }

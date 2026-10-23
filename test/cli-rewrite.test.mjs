@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertNoPackageTerritoryImports, rewriteImports } from '../cli/lib/rewrite.mjs';
-import { classifyImport, scanImportSpecifiers } from '../scripts/lib/registry.mjs';
+import { classifyImport, scanImportSpecifiers, scanRegistrySources } from '../scripts/lib/registry.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 
@@ -18,6 +18,24 @@ const REWRITES = [
     name: 'sibling keeps its folder shape and loses its extension',
     source: "import { Overlay } from '../Overlay/Overlay.js';\n",
     expected: "import { Overlay } from '../Overlay/Overlay';\n",
+  },
+  {
+    name: 'AuthMotion sibling helper keeps its path and loses its extension',
+    source: "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';\n",
+    fromFile: 'AuthAccountCard/AuthAccountCard.tsx',
+    expected: "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion';\n",
+  },
+  {
+    name: 'AuthMotion same-folder helper maps to the same registry file',
+    source: "import { AuthMotionMessage } from './AuthMotion.js';\n",
+    fromFile: 'AuthSignInCard/AuthSignInCard.tsx',
+    expected: "import { AuthMotionMessage } from './AuthMotion';\n",
+  },
+  {
+    name: 'VoiceRecorder same-folder helper is treated as shared',
+    source: "import { recorderVisual } from './recorderVisual.js';\n",
+    fromFile: 'VoiceRecorder/VoiceRecorder.tsx',
+    expected: "import { recorderVisual } from './recorderVisual';\n",
   },
   {
     name: 'type-only relative import loses its extension',
@@ -86,9 +104,9 @@ const REWRITES = [
   },
 ];
 
-for (const { name, source, expected } of REWRITES) {
+for (const { name, source, expected, fromFile = 'Test/Test.tsx' } of REWRITES) {
   test(`rewriteImports: ${name}`, () => {
-    assert.equal(rewriteImports(source, 'Test/Test.tsx'), expected);
+    assert.equal(rewriteImports(source, fromFile), expected);
   });
 }
 
@@ -181,7 +199,7 @@ test('every real primitive rewrites exactly as the classifier table says', () =>
     const output = rewriteImports(source, rel);
     let expected = source;
     for (const spec of scanImportSpecifiers(source)) {
-      const classified = classifyImport(spec);
+      const classified = classifyImport(spec, rel);
       const next =
         classified.kind === 'peer'
           ? spec
@@ -200,6 +218,20 @@ test('every real primitive rewrites exactly as the classifier table says', () =>
       `${rel} keeps a relative specifier ending in .js`,
     );
     assert.doesNotThrow(() => assertNoPackageTerritoryImports(output, rel));
+  }
+  const scan = scanRegistrySources(root);
+  const sharedFiles = [...new Set(Object.values(scan).flatMap((component) => component.sharedFiles))].sort();
+  assert.ok(sharedFiles.includes('AuthSignInCard/AuthMotion.tsx'));
+  assert.ok(sharedFiles.includes('VoiceRecorder/recorderVisual.ts'));
+  for (const rel of sharedFiles) {
+    const source = readFileSync(join(primDir, rel), 'utf8');
+    const output = rewriteImports(source, rel);
+    assert.doesNotThrow(() => assertNoPackageTerritoryImports(output, rel));
+    assert.equal(
+      scanImportSpecifiers(output).some((spec) => spec.startsWith('.') && spec.endsWith('.js')),
+      false,
+      `${rel} keeps a relative specifier ending in .js`,
+    );
   }
   assert.ok(seen.package > 0 && seen.sibling > 0 && seen.shared > 0, 'the sweep must exercise every territory');
 });

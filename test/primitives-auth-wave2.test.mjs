@@ -59,3 +59,13 @@ test('Wave 2 recipes use 1.5px muted edges, 44px buttons, inline text errors, an
   assert.match(src, /role="alert"|role="status"/);
   assert.match(src, /<div class="hint">[^<]*<\/div>/);
 });
+
+test('Wave 2 recipe labels and fallback content use the shared spring helpers', () => {
+  const src = readFileSync('atoms/web/blocks/559-auth-wave2.js', 'utf8');
+  assert.match(src, /new Swap/);
+  assert.match(src, /new Track/);
+  assert.doesNotMatch(src, /b\.textContent\s*=\s*`Connecting/);
+  assert.doesNotMatch(src, /nt\.hidden\s*=/);
+  assert.match(src, /motionSettings\(st\)/);
+  assert.match(src, /changedToReduced/);
+});

@@ -39,6 +39,6 @@
     :where(.cieo) .cieo-auth-signout, :where(.cieo) .cieo-auth-accept, :where(.cieo) .cieo-auth-decline { min-height: 2.75rem; padding-block: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-account-card * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-account-card * { animation: none !important; transition: none !important; }
   }
 }

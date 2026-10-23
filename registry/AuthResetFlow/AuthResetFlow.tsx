@@ -1,5 +1,5 @@
 'use client';
-/* AuthResetFlow (static). Reset card switching request and confirm steps. */
+/* AuthResetFlow. Reset card whose request and confirmation panes share the auth motion frame. */
 import type { CSSProperties } from 'react';
 import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard.js';
 import { AuthResetForm } from '../AuthResetForm/AuthResetForm.js';

@@ -79,7 +79,9 @@
     "layout": [],
     "content": [],
     "motion": [
-      "no-animation-in-rows"
+      "base-label-swap",
+      "base-error-presence",
+      "reduced-motion-respected"
     ]
   },
   "platforms": [
