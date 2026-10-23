@@ -1,0 +1,22 @@
+/* design/styles/primitives/speaker-tile.css */
+@layer cieo.components {
+  :where(.cieo).cieo-speaker-tile { --cieo-tile-face: calc(var(--cieo-control-height) * 1.5); display: inline-flex; flex-direction: column; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; max-inline-size: 100%; color: var(--cieo-color-text); }
+  :where(.cieo).cieo-speaker-tile[data-size='sm'] { --cieo-tile-face: var(--cieo-control-height); }
+  :where(.cieo).cieo-speaker-tile[data-size='lg'] { --cieo-tile-face: calc(var(--cieo-control-height) * 2); }
+  :where(.cieo) .cieo-speaker-tile-face { position: relative; display: grid; place-items: center; inline-size: var(--cieo-tile-face); block-size: var(--cieo-tile-face); }
+  :where(.cieo) .cieo-speaker-tile-avatar { position: relative; display: grid; place-items: center; }
+  :where(.cieo) .cieo-speaker-tile-ring { position: absolute; inset: calc(var(--cieo-space-1) * -1); border-radius: var(--cieo-radius-pill); border: calc(var(--cieo-border-width) * 3) solid var(--cieo-color-success); opacity: var(--cieo-ring-opacity, 0); transform: scale(var(--cieo-ring-scale, 1)); pointer-events: none; will-change: transform, opacity; }
+  :where(.cieo).cieo-speaker-tile[data-muted] .cieo-speaker-tile-ring { opacity: 0; }
+  :where(.cieo) .cieo-speaker-tile-badge { position: absolute; inset-block-end: 0; inset-inline-end: 0; display: grid; place-items: center; min-inline-size: var(--cieo-space-6); min-block-size: var(--cieo-space-6); border-radius: var(--cieo-radius-pill); border: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-raised); color: var(--cieo-color-text); font-size: var(--cieo-text-caption); line-height: 1; }
+  :where(.cieo) .cieo-speaker-tile-badge[data-badge='muted'] { color: var(--cieo-color-danger); }
+  :where(.cieo) .cieo-speaker-tile-badge[data-badge='hand'] { inset-block-start: 0; inset-block-end: auto; animation: cieo-speaker-tile-pop var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
+  :where(.cieo) .cieo-speaker-tile-badge[data-badge='muted'] + .cieo-speaker-tile-badge[data-badge='hand'] { inset-inline-end: 0; }
+  :where(.cieo) .cieo-speaker-tile-name { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo).cieo-speaker-tile[data-role='host'] .cieo-speaker-tile-name { color: var(--cieo-color-accent); }
+  @keyframes cieo-speaker-tile-pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) {
+    :where(.cieo) .cieo-speaker-tile-badge { animation: none !important; }
+    :where(.cieo) .cieo-speaker-tile-ring { will-change: auto; }
+  }
+  :where(.cieo)[data-motion='off'] .cieo-speaker-tile-badge, :where(.cieo).cieo-speaker-tile[data-motion='off'] .cieo-speaker-tile-badge { animation: none !important; }
+}

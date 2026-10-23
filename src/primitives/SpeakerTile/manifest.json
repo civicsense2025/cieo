@@ -1,0 +1,160 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.speaker-tile",
+  "componentVersion": "1.0.0",
+  "name": "SpeakerTile",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/SpeakerTile/SpeakerTile.tsx",
+    "symbol": "SpeakerTile"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "name",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "avatar",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode."
+    },
+    {
+      "id": "level",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "muted",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "role",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "host",
+          "speaker",
+          "listener"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "handRaised",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "size",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "md",
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "spring-ring",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "name",
+        "avatar",
+        "level",
+        "muted",
+        "role",
+        "handRaised",
+        "size"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One person in a live audio room: avatar, name, a ring that swells with their voice, and muted and raised-hand badges."
+  },
+  "extensions": {}
+}

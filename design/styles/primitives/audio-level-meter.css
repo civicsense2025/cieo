@@ -1,0 +1,5 @@
+/* design/styles/primitives/audio-level-meter.css */
+@layer cieo.components {
+  :where(.cieo).cieo-audio-level-meter { display: inline-flex; align-items: center; gap: var(--cieo-space-1); block-size: var(--cieo-control-small); color: var(--cieo-color-accent); }
+  :where(.cieo) .cieo-audio-level-meter-bar { inline-size: var(--cieo-space-1); block-size: 100%; border-radius: var(--cieo-radius-pill); background: currentColor; transform: scaleY(var(--cieo-bar, 0.1)); transform-origin: center; will-change: transform; }
+}
