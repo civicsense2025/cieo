@@ -9,6 +9,7 @@ protocol VoiceRecorderDevice: AnyObject {
     var averagePower: Float { get }
     var isMeteringEnabled: Bool { get set }
     var onEncodingError: (@MainActor () -> Void)? { get set }
+    var onFinished: (@MainActor (Bool) -> Void)? { get set }
     func prepareToRecord() -> Bool
     func record() -> Bool
     func pause()
@@ -22,6 +23,7 @@ typealias VoiceRecorderFactory = @MainActor (URL, [String: Any]) throws -> any V
 private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AVAudioRecorderDelegate {
     private let recorder: AVAudioRecorder
     var onEncodingError: (@MainActor () -> Void)?
+    var onFinished: (@MainActor (Bool) -> Void)?
 
     init(url: URL, settings: [String: Any]) throws {
         recorder = try AVAudioRecorder(url: url, settings: settings)
@@ -48,6 +50,14 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
         Task { @MainActor [weak self] in
             guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
             self.onEncodingError?()
+        }
+    }
+
+    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        let recorderID = ObjectIdentifier(recorder)
+        Task { @MainActor [weak self] in
+            guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
+            self.onFinished?(flag)
         }
     }
 }
@@ -162,6 +172,10 @@ public final class VoiceRecorderModel {
         self.permission = permission
         self.recorderFactory = recorderFactory
         audioSession = sessionManager
+    }
+
+    isolated deinit {
+        releaseRecorder(deleteFile: true)
     }
 
     // MARK: - Pure helpers
@@ -355,6 +369,16 @@ public final class VoiceRecorderModel {
             return
         }
         #endif
+        if let previousOwner = sessionOwner {
+            do {
+                try audioSession.deactivate(owner: previousOwner)
+                sessionOwner = nil
+            } catch {
+                send(.fail)
+                announce(.failed)
+                return
+            }
+        }
         do {
             let owner = UUID()
             try audioSession.activate(.recording, owner: owner)
@@ -375,6 +399,10 @@ public final class VoiceRecorderModel {
             recorder.isMeteringEnabled = true
             recorder.onEncodingError = { [weak self, weak recorder] in
                 guard let self, let recorder, self.recorder === recorder else { return }
+                self.fail()
+            }
+            recorder.onFinished = { [weak self, weak recorder] successfully in
+                guard !successfully, let self, let recorder, self.recorder === recorder else { return }
                 self.fail()
             }
             guard recorder.prepareToRecord(), recorder.record() else { throw CocoaError(.fileWriteUnknown) }
@@ -443,8 +471,11 @@ public final class VoiceRecorderModel {
         session += 1
         timer?.invalidate()
         timer = nil
-        recorder?.onEncodingError = nil
-        recorder?.stop()
+        if let recorder {
+            recorder.onEncodingError = nil
+            recorder.onFinished = nil
+            recorder.stop()
+        }
         recorder = nil
         if deleteFile, let url = fileURL { try? FileManager.default.removeItem(at: url) }
         fileURL = nil
@@ -454,8 +485,12 @@ public final class VoiceRecorderModel {
         interruption = nil
         #endif
         if let sessionOwner {
-            audioSession.deactivate(owner: sessionOwner)
-            self.sessionOwner = nil
+            do {
+                try audioSession.deactivate(owner: sessionOwner)
+                self.sessionOwner = nil
+            } catch {
+                // Keep ownership so teardown, another start, or deinit can retry release.
+            }
         }
     }
 

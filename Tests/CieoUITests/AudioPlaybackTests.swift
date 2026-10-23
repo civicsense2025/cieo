@@ -12,6 +12,7 @@ private final class FakeAudioSessionManager: AudioSessionManaging, @unchecked Se
     private let lock = NSLock()
     private var owner: UUID?
     private var deactivations = 0
+    private var activationFailuresRemaining = 0
 
     var activeOwner: UUID? {
         lock.lock(); defer { lock.unlock() }
@@ -23,8 +24,17 @@ private final class FakeAudioSessionManager: AudioSessionManaging, @unchecked Se
         return deactivations
     }
 
+    func failNextActivation() {
+        lock.lock(); defer { lock.unlock() }
+        activationFailuresRemaining += 1
+    }
+
     func activate(_ use: AudioSessionUse, owner: UUID) throws {
         lock.lock(); defer { lock.unlock() }
+        if activationFailuresRemaining > 0 {
+            activationFailuresRemaining -= 1
+            throw CocoaError(.fileReadUnknown)
+        }
         self.owner = owner
     }
 
@@ -33,6 +43,71 @@ private final class FakeAudioSessionManager: AudioSessionManaging, @unchecked Se
         guard self.owner == owner else { return }
         self.owner = nil
         deactivations += 1
+    }
+}
+
+private enum FakeAudioSessionFailure: Error { case category, activation, deactivation }
+
+private final class FakeSystemAudioSessionBackend: AudioSessionBackend, @unchecked Sendable {
+    private let lock = NSLock()
+    private var configuredCategories: [AudioSessionCategory] = []
+    private var activeChanges: [Bool] = []
+    private var currentActive = false
+    private var categoryFailuresRemaining = 0
+    private var activationFailuresRemaining = 0
+    private var deactivationFailuresRemaining = 0
+
+    var categories: [AudioSessionCategory] {
+        lock.lock(); defer { lock.unlock() }
+        return configuredCategories
+    }
+
+    var activeValues: [Bool] {
+        lock.lock(); defer { lock.unlock() }
+        return activeChanges
+    }
+
+    var isActive: Bool {
+        lock.lock(); defer { lock.unlock() }
+        return currentActive
+    }
+
+    func failNextActivation() {
+        lock.lock(); defer { lock.unlock() }
+        activationFailuresRemaining += 1
+    }
+
+    func failNextCategoryChange() {
+        lock.lock(); defer { lock.unlock() }
+        categoryFailuresRemaining += 1
+    }
+
+    func failNextDeactivation() {
+        lock.lock(); defer { lock.unlock() }
+        deactivationFailuresRemaining += 1
+    }
+
+    func setCategory(_ category: AudioSessionCategory) throws {
+        lock.lock(); defer { lock.unlock() }
+        if categoryFailuresRemaining > 0 {
+            categoryFailuresRemaining -= 1
+            throw FakeAudioSessionFailure.category
+        }
+        configuredCategories.append(category)
+    }
+
+    func setActive(_ active: Bool) throws {
+        lock.lock(); defer { lock.unlock() }
+        activeChanges.append(active)
+        if active, activationFailuresRemaining > 0 {
+            activationFailuresRemaining -= 1
+            throw FakeAudioSessionFailure.activation
+        }
+        if !active, deactivationFailuresRemaining > 0 {
+            deactivationFailuresRemaining -= 1
+            throw FakeAudioSessionFailure.deactivation
+        }
+        currentActive = active
     }
 }
 
@@ -332,6 +407,166 @@ final class AudioPlaybackTests: XCTestCase {
         model.teardown()
         XCTAssertNil(manager.activeOwner)
         XCTAssertEqual(manager.deactivationCount, 2)
+    }
+
+    func testPlaybackAndRecordingLeasesRestoreTheRemainingCategoryInEitherOrder() throws {
+        for recordingFirst in [false, true] {
+            let backend = FakeSystemAudioSessionBackend()
+            let manager = SystemAudioSessionManager(backend: backend)
+            let playbackOwner = UUID()
+            let recordingOwner = UUID()
+
+            if recordingFirst {
+                try manager.activate(.recording, owner: recordingOwner)
+                try manager.activate(.playback, owner: playbackOwner)
+                try manager.deactivate(owner: recordingOwner)
+                XCTAssertEqual(backend.categories, [.playAndRecord, .playback])
+            } else {
+                try manager.activate(.playback, owner: playbackOwner)
+                try manager.activate(.recording, owner: recordingOwner)
+                try manager.deactivate(owner: recordingOwner)
+                XCTAssertEqual(backend.categories, [.playback, .playAndRecord, .playback])
+            }
+
+            XCTAssertTrue(backend.isActive, "ending one use must not deactivate the other")
+            try manager.deactivate(owner: playbackOwner)
+            XCTAssertEqual(backend.activeValues, [true, false], "only the final lease deactivates the session")
+            XCTAssertFalse(backend.isActive)
+        }
+    }
+
+    func testPlaybackCanEndBeforeRecordingWithoutDeactivatingTheSession() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let playbackOwner = UUID()
+        let recordingOwner = UUID()
+        try manager.activate(.recording, owner: recordingOwner)
+        try manager.activate(.playback, owner: playbackOwner)
+
+        try manager.deactivate(owner: playbackOwner)
+
+        XCTAssertTrue(backend.isActive)
+        XCTAssertEqual(backend.categories, [.playAndRecord])
+        XCTAssertEqual(backend.activeValues, [true])
+        try manager.deactivate(owner: recordingOwner)
+        XCTAssertFalse(backend.isActive)
+        XCTAssertEqual(backend.activeValues, [true, false])
+    }
+
+    func testFailedRecordingCategoryChangeLeavesPlaybackLeaseActive() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let playbackOwner = UUID()
+        let recordingOwner = UUID()
+        try manager.activate(.playback, owner: playbackOwner)
+        backend.failNextCategoryChange()
+
+        XCTAssertThrowsError(try manager.activate(.recording, owner: recordingOwner))
+        XCTAssertEqual(backend.categories, [.playback])
+        XCTAssertEqual(backend.activeValues, [true])
+        XCTAssertTrue(backend.isActive)
+
+        try manager.activate(.recording, owner: recordingOwner)
+        try manager.deactivate(owner: recordingOwner)
+        try manager.deactivate(owner: playbackOwner)
+        XCTAssertFalse(backend.isActive)
+    }
+
+    func testConcurrentSessionOwnersStayActiveUntilTheLastLeaseEnds() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let owners = (0..<24).map { _ in UUID() }
+        let errorsLock = NSLock()
+        var failures = 0
+
+        DispatchQueue.concurrentPerform(iterations: owners.count) { index in
+            do { try manager.activate(.playback, owner: owners[index]) }
+            catch { errorsLock.lock(); failures += 1; errorsLock.unlock() }
+        }
+        XCTAssertEqual(failures, 0)
+        XCTAssertEqual(backend.activeValues, [true])
+
+        DispatchQueue.concurrentPerform(iterations: owners.count - 1) { index in
+            do { try manager.deactivate(owner: owners[index]) }
+            catch { errorsLock.lock(); failures += 1; errorsLock.unlock() }
+        }
+        XCTAssertEqual(failures, 0)
+        XCTAssertTrue(backend.isActive)
+        try manager.deactivate(owner: owners[owners.count - 1])
+        XCTAssertEqual(backend.activeValues, [true, false])
+        XCTAssertFalse(backend.isActive)
+    }
+
+    func testFailedSessionActivationIsNotRecordedAndCanBeRetried() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let owner = UUID()
+        backend.failNextActivation()
+
+        XCTAssertThrowsError(try manager.activate(.playback, owner: owner))
+        try manager.activate(.playback, owner: owner)
+
+        XCTAssertEqual(backend.categories, [.playback, .playback])
+        XCTAssertEqual(backend.activeValues, [true, true])
+        XCTAssertTrue(backend.isActive)
+        try manager.deactivate(owner: owner)
+        XCTAssertFalse(backend.isActive)
+    }
+
+    func testFailedDeactivationKeepsTheLeaseForATeardownRetry() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let owner = UUID()
+        try manager.activate(.recording, owner: owner)
+        backend.failNextDeactivation()
+
+        XCTAssertThrowsError(try manager.deactivate(owner: owner))
+        XCTAssertTrue(backend.isActive)
+        try manager.deactivate(owner: owner)
+
+        XCTAssertEqual(backend.activeValues, [true, false, false])
+        XCTAssertFalse(backend.isActive)
+    }
+
+    @MainActor
+    func testPlaybackTeardownRetriesADeactivationThatFailedOnPause() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let model = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"),
+                                       coordinator: AudioPlaybackCoordinator(), sessionManager: manager)
+        model.play()
+        XCTAssertEqual(model.state, .playing)
+        backend.failNextDeactivation()
+
+        model.pause()
+
+        XCTAssertEqual(model.state, .ready)
+        XCTAssertTrue(backend.isActive, "the manager keeps a failed lease alive")
+        model.teardown()
+        XCTAssertFalse(backend.isActive, "teardown retries deactivation for the same owner")
+        XCTAssertEqual(backend.activeValues, [true, false, false])
+    }
+
+    @MainActor
+    func testSessionActivationFailureDoesNotStartPlaybackAndCanBeRetried() {
+        let manager = FakeAudioSessionManager()
+        let model = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"),
+                                       coordinator: AudioPlaybackCoordinator(), sessionManager: manager)
+        var playCallbacks = 0
+        model.onPlay = { playCallbacks += 1 }
+        manager.failNextActivation()
+
+        model.play()
+
+        XCTAssertEqual(model.state, .error, "an activation failure is visible as the existing recoverable error state")
+        XCTAssertEqual(playCallbacks, 0, "the play callback must not fire when no audio session was acquired")
+        XCTAssertNil(manager.activeOwner)
+
+        model.retry()
+        model.play()
+        XCTAssertEqual(model.state, .playing)
+        XCTAssertEqual(playCallbacks, 1)
+        model.teardown()
     }
 
     // MARK: AudioTranscript

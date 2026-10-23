@@ -134,6 +134,10 @@ final class EngagementTests: XCTestCase {
         XCTAssertEqual(delays, delays.sorted())
     }
 
+    func testRatingPopDelaysTreatNegativeWindowAsZero() {
+        XCTAssertEqual(Rating.ratingPopDelays(from: 0, to: 10, window: -150), Array(repeating: 0, count: 10))
+    }
+
     // MARK: Reactions
 
     func testDefaultReactionsAreTheSixAgreedOnesInOrder() {

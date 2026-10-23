@@ -4,40 +4,99 @@ import Observation
 
 enum AudioSessionUse: Sendable { case playback, recording }
 
+enum AudioSessionCategory: Sendable, Equatable { case playback, playAndRecord }
+
+protocol AudioSessionBackend: Sendable {
+    func setCategory(_ category: AudioSessionCategory) throws
+    func setActive(_ active: Bool) throws
+}
+
+private struct SystemAudioSessionBackend: AudioSessionBackend {
+    func setCategory(_ category: AudioSessionCategory) throws {
+        #if os(iOS)
+        let session = AVAudioSession.sharedInstance()
+        switch category {
+        case .playback:
+            try session.setCategory(.playback)
+        case .playAndRecord:
+            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+        }
+        #endif
+    }
+
+    func setActive(_ active: Bool) throws {
+        #if os(iOS)
+        let session = AVAudioSession.sharedInstance()
+        if active {
+            try session.setActive(true)
+        } else {
+            try session.setActive(false, options: .notifyOthersOnDeactivation)
+        }
+        #endif
+    }
+}
+
 protocol AudioSessionManaging: Sendable {
     func activate(_ use: AudioSessionUse, owner: UUID) throws
-    func deactivate(owner: UUID)
+    func deactivate(owner: UUID) throws
 }
 
 final class SystemAudioSessionManager: AudioSessionManaging, @unchecked Sendable {
     static let shared = SystemAudioSessionManager()
 
     private let lock = NSLock()
-    private var activeOwner: UUID?
+    private let backend: AudioSessionBackend
+    private var leases: [UUID: AudioSessionUse] = [:]
+    private var activeCategory: AudioSessionCategory?
+    private var isActive = false
+
+    init() { backend = SystemAudioSessionBackend() }
+
+    init(backend: AudioSessionBackend) { self.backend = backend }
 
     func activate(_ use: AudioSessionUse, owner: UUID) throws {
-        #if os(iOS)
         lock.lock(); defer { lock.unlock() }
-        guard activeOwner != owner else { return }
-        let session = AVAudioSession.sharedInstance()
-        switch use {
-        case .playback:
-            try session.setCategory(.playback)
-        case .recording:
-            try session.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker, .allowBluetooth])
+        var nextLeases = leases
+        nextLeases[owner] = use
+        guard let nextCategory = Self.category(for: nextLeases) else { return }
+        let categoryChanged = activeCategory != nextCategory
+        if categoryChanged { try backend.setCategory(nextCategory) }
+        if !isActive {
+            do {
+                try backend.setActive(true)
+            } catch {
+                if categoryChanged, let activeCategory { try? backend.setCategory(activeCategory) }
+                throw error
+            }
         }
-        try session.setActive(true)
-        activeOwner = owner
-        #endif
+        leases = nextLeases
+        activeCategory = nextCategory
+        isActive = true
     }
 
-    func deactivate(owner: UUID) {
-        #if os(iOS)
+    func deactivate(owner: UUID) throws {
         lock.lock(); defer { lock.unlock() }
-        guard activeOwner == owner else { return }
-        try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-        activeOwner = nil
-        #endif
+        guard leases[owner] != nil else { return }
+        var nextLeases = leases
+        nextLeases[owner] = nil
+        guard let nextCategory = Self.category(for: nextLeases) else {
+            try backend.setActive(false)
+            leases = nextLeases
+            activeCategory = nil
+            isActive = false
+            return
+        }
+        if activeCategory != nextCategory { try backend.setCategory(nextCategory) }
+        leases = nextLeases
+        activeCategory = nextCategory
+    }
+
+    private static func category(for leases: [UUID: AudioSessionUse]) -> AudioSessionCategory? {
+        guard !leases.isEmpty else { return nil }
+        if leases.values.contains(where: { if case .recording = $0 { true } else { false } }) {
+            return .playAndRecord
+        }
+        return .playback
     }
 }
 
@@ -172,7 +231,11 @@ public final class AudioPlaybackModel: AudioPausable {
         if state == .ended { seek(to: 0) }
         coordinator.claim(self)
         if let engine {
-            engine.activateSession()
+            do { try engine.activateSession() }
+            catch {
+                finishFailure(owner: engineSessionOwner)
+                return
+            }
             engine.play(rate: rate)
         } else {
             startSimulation()
@@ -389,11 +452,11 @@ private final class Engine: @unchecked Sendable {
     }
 
     /// Configures the audio session for playback, on iOS and only when the reader presses play.
-    func activateSession() {
-        try? sessionManager.activate(.playback, owner: sessionOwner)
+    func activateSession() throws {
+        try sessionManager.activate(.playback, owner: sessionOwner)
     }
 
-    func deactivateSession() { sessionManager.deactivate(owner: sessionOwner) }
+    func deactivateSession() { try? sessionManager.deactivate(owner: sessionOwner) }
 
     func play(rate: Double) {
         player.defaultRate = Float(rate)
