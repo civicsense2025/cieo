@@ -1,0 +1,16 @@
+/* design/styles/primitives/sortable-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-sortable-list { position: relative; margin: 0; padding: 0; list-style: none; display: grid; gap: var(--cieo-space-1); }
+  :where(.cieo).cieo-sortable-list[data-orientation='horizontal'] { grid-auto-flow: column; grid-auto-columns: max-content; }
+  :where(.cieo).cieo-sortable-list[data-sorting='pointer'] { user-select: none; cursor: grabbing; }
+  :where(tbody.cieo).cieo-sortable-list { display: table-row-group; }
+  :where(.cieo).cieo-sortable-list-item { display: flex; align-items: center; gap: var(--cieo-space-2); padding: var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+  :where(tr.cieo).cieo-sortable-list-item { display: table-row; }
+  :where(.cieo).cieo-sortable-list-item[data-dragging], :where(.cieo).cieo-sortable-list-item[data-sortable-active='true'] { border-color: var(--cieo-color-border-strong); box-shadow: 0 0 0 2px var(--cieo-color-border-strong); position: relative; z-index: 1; }
+  :where(.cieo).cieo-sortable-list-item[data-disabled] { opacity: 0.6; }
+  :where(.cieo) .cieo-sortable-list-body { flex: 1; min-inline-size: 0; }
+  :where(.cieo) .cieo-sortable-list-handle { display: inline-flex; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-small); min-block-size: var(--cieo-control-small); padding: 0; border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: inherit; cursor: grab; touch-action: none; }
+  :where(.cieo) .cieo-sortable-list-handle:disabled { cursor: not-allowed; }
+  :where(.cieo) .cieo-sortable-list-handle[aria-pressed='true'] { background: var(--cieo-color-border); cursor: grabbing; }
+  :where(.cieo) .cieo-sortable-list-handle:focus-visible { outline: 2px solid var(--cieo-color-border-strong); outline-offset: 2px; }
+}

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { type MotionProps } from '../motion.js';
 export interface DropdownMenuSubMenuProps extends MotionProps {
     /** Accessible name for the nested menu (e.g. "Export as"). Required. */

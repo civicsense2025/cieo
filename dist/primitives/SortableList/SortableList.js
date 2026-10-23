@@ -1,0 +1,171 @@
+// src/primitives/SortableList/SortableList.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+/* SortableList. Controlled drag-and-drop reorder: pointer or keyboard lifts an item, the list previews the move, onReorder fires once on drop. */
+import { Children, cloneElement, createContext, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useFlip } from '../../react/index.js';
+/** Returns order with id moved to index (clamped). Returns the same array when nothing moves. */
+export function sortableMove(order, id, index) {
+    const from = order.indexOf(id);
+    if (from < 0)
+        return order;
+    const to = Math.max(0, Math.min(order.length - 1, index));
+    if (to === from)
+        return order;
+    const next = order.filter((x) => x !== id);
+    next.splice(to, 0, id);
+    return next;
+}
+/** Target index for the dragged item: how many of the other items' midpoints the pointer has passed. */
+export function sortableDropIndex(otherMidpoints, pointer) {
+    let index = 0;
+    for (const mid of otherMidpoints)
+        if (pointer > mid)
+            index += 1;
+    return index;
+}
+/** Screen-reader sentence for a reorder step; position is 1-based. */
+export function sortableAnnouncement(event, name, position, total) {
+    const at = `position ${position} of ${total}`;
+    if (event === 'lift')
+        return `Picked up ${name}, ${at}. Arrow keys move it, Space or Enter drops it, Escape cancels.`;
+    if (event === 'move')
+        return `${name} moved to ${at}.`;
+    if (event === 'drop')
+        return `${name} dropped at ${at}.`;
+    return `Reorder cancelled. ${name} is back at ${at}.`;
+}
+/** Keyboard key to action while an item is lifted; null for keys that do nothing. */
+export function sortableKeyAction(key) {
+    if (key === ' ' || key === 'Enter')
+        return { type: 'drop' };
+    if (key === 'Escape')
+        return { type: 'cancel' };
+    if (key === 'ArrowUp' || key === 'ArrowLeft')
+        return { type: 'moveBy', delta: -1 };
+    if (key === 'ArrowDown' || key === 'ArrowRight')
+        return { type: 'moveBy', delta: 1 };
+    if (key === 'Home')
+        return { type: 'moveTo', index: 0 };
+    if (key === 'End')
+        return { type: 'moveTo', index: Number.MAX_SAFE_INTEGER };
+    return null;
+}
+/** Pure reorder state machine. `original` is the host's order; the session holds the live preview. */
+export function sortableStep(session, action, original) {
+    const idle = { session, event: null, commit: null, id: session?.id ?? null, order: session?.order ?? original };
+    if (action.type === 'lift') {
+        if (session || !original.includes(action.id))
+            return idle;
+        const next = { id: action.id, via: action.via, order: [...original] };
+        return { session: next, event: 'lift', commit: null, id: action.id, order: next.order };
+    }
+    if (!session)
+        return idle;
+    if (action.type === 'moveTo' || action.type === 'moveBy') {
+        const index = action.type === 'moveTo' ? action.index : session.order.indexOf(session.id) + action.delta;
+        const order = sortableMove(session.order, session.id, index);
+        if (order === session.order)
+            return idle;
+        return { session: { ...session, order }, event: 'move', commit: null, id: session.id, order };
+    }
+    if (action.type === 'drop') {
+        const changed = session.order.some((x, i) => x !== original[i]);
+        return { session: null, event: 'drop', commit: changed ? session.order : null, id: session.id, order: session.order };
+    }
+    return { session: null, event: 'cancel', commit: null, id: session.id, order: original };
+}
+export const SortableListContext = createContext(null);
+export function SortableList({ label, order, onReorder, as = 'ul', orientation = 'vertical', motion, children }) {
+    const ref = useRef(null);
+    const [session, setSession] = useState(null);
+    const [message, setMessage] = useState('');
+    const region = useRef(null);
+    const live = useRef({ session, order, onReorder, orientation });
+    live.current = { session, order, onReorder, orientation };
+    const refocus = useRef(null);
+    const shown = session?.order ?? order;
+    useEffect(() => {
+        const el = document.createElement('div');
+        el.setAttribute('role', 'status');
+        el.setAttribute('aria-live', 'polite');
+        el.setAttribute('aria-atomic', 'true');
+        el.style.cssText = 'position:absolute;inline-size:1px;block-size:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap';
+        document.body.appendChild(el);
+        region.current = el;
+        return () => {
+            el.remove();
+            region.current = null;
+        };
+    }, []);
+    useEffect(() => {
+        if (region.current)
+            region.current.textContent = message;
+    }, [message]);
+    const items = Children.toArray(children).filter((c) => isValidElement(c) && typeof c.props.id === 'string');
+    const byId = new Map(items.map((c) => [c.props.id, c]));
+    const ordered = [...shown.filter((id) => byId.has(id)), ...items.map((c) => c.props.id).filter((id) => !shown.includes(id))].map((id) => cloneElement(byId.get(id), { key: id }));
+    useFlip(ref, motion === false ? 'static' : shown.join('\u0000'));
+    useLayoutEffect(() => {
+        const id = session?.via === 'keyboard' ? session.id : refocus.current;
+        if (!id || !ref.current)
+            return;
+        const handle = [...ref.current.querySelectorAll('[data-sortable-handle]')].find((el) => el.dataset.sortableHandle === id);
+        if (handle && document.activeElement !== handle)
+            handle.focus({ preventScroll: true });
+        if (!session)
+            refocus.current = null;
+    }, [session, shown]);
+    const dispatch = (action, name) => {
+        const cur = live.current;
+        const step = sortableStep(cur.session, action, cur.order);
+        if (step.event === null)
+            return;
+        if (step.event === 'drop' || step.event === 'cancel')
+            refocus.current = cur.session?.via === 'keyboard' ? cur.session.id : null;
+        live.current.session = step.session;
+        setSession(step.session);
+        if (step.id)
+            setMessage(sortableAnnouncement(step.event, name, step.order.indexOf(step.id) + 1, step.order.length));
+        if (step.commit)
+            cur.onReorder([...step.commit]);
+    };
+    const api = { as, session, order: shown, dispatch };
+    const apiRef = useRef(api);
+    apiRef.current = api;
+    const pointerId = session?.via === 'pointer' ? session.id : null;
+    useEffect(() => {
+        if (!pointerId)
+            return;
+        const nameOf = () => ref.current?.querySelector(`[data-sortable-active="true"]`)?.dataset.sortableName ?? pointerId;
+        const onMove = (e) => {
+            const kids = [...(ref.current?.children ?? [])];
+            const vertical = live.current.orientation === 'vertical';
+            const mids = kids.filter((el) => el.dataset.sortableId !== pointerId).map((el) => {
+                const r = el.getBoundingClientRect();
+                return vertical ? r.top + r.height / 2 : r.left + r.width / 2;
+            });
+            apiRef.current.dispatch({ type: 'moveTo', index: sortableDropIndex(mids, vertical ? e.clientY : e.clientX) }, nameOf());
+        };
+        const onUp = () => apiRef.current.dispatch({ type: 'drop' }, nameOf());
+        const onCancel = () => apiRef.current.dispatch({ type: 'cancel' }, nameOf());
+        const onKey = (e) => {
+            if (e.key !== 'Escape')
+                return;
+            e.preventDefault();
+            onCancel();
+        };
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('pointercancel', onCancel);
+        document.addEventListener('keydown', onKey);
+        return () => {
+            document.removeEventListener('pointermove', onMove);
+            document.removeEventListener('pointerup', onUp);
+            document.removeEventListener('pointercancel', onCancel);
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [pointerId]);
+    const Tag = as;
+    return (_jsx(SortableListContext.Provider, { value: api, children: _jsx(Tag, { ref: ref, "aria-label": label, "data-orientation": orientation, "data-sorting": session ? session.via : undefined, "data-motion": motion === false ? 'off' : undefined, className: "cieo cieo-sortable-list", children: ordered }) }));
+}

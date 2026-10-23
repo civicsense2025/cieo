@@ -19,7 +19,9 @@ export function CommandPaletteItem({ value, selected = false, onSelect, children
       role="option"
       aria-selected={selected}
       data-value={value}
+      tabIndex={-1}
       onClick={() => onSelect?.(value)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onSelect?.(value); } }}
       className="cieo cieo-p-command-palette-item"
     >
       {children}

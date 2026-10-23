@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 export interface TopNavMegaMenuProps {
     /** Trigger content (e.g. "Products"). Required. */
     trigger: ReactNode;

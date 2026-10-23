@@ -21,5 +21,5 @@ export function Tab({ value, children }) {
     if (tabs === null) {
         return (_jsx("button", { type: "button", className: "cieo cieo-tab", children: children }));
     }
-    return (_jsx("button", { ref: ref, type: "button", role: "tab", "aria-selected": selected, "data-selected": selected, onClick: () => tabs.onSelect?.(value), className: "cieo cieo-tab", children: children }));
+    return (_jsx("button", { ref: ref, type: "button", role: "tab", "aria-selected": selected, tabIndex: tabs.value === undefined || selected ? 0 : -1, "data-selected": selected, onClick: () => tabs.onSelect?.(value), className: "cieo cieo-tab", children: children }));
 }

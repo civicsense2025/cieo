@@ -55,6 +55,8 @@ createTheme({
 
 An accent seed can change when contrast requires it. The resolved accent is available in `theme.tokens['color-accent']`. An override changes the named token, not every dependent token: a custom color set must still satisfy the pair audit. Color overrides don't automatically recolor the old Motion Atoms catalogue or an application's existing components.
 
+Component stylesheets live one per primitive under `design/styles/primitives/` and read only these tokens; for example, the reorderable list's lifted row uses `border-strong` for its ring, so a theme change restyles it with everything else.
+
 ## Accessibility boundaries
 
 The color auditor checks 32 named pairs: text and accents against four neutral surfaces, control boundaries, focus, selection, filled and soft accents, and four feedback surfaces. Standard text targets 4.5:1; the high-contrast option targets 7:1. Boundaries and focus target 3:1. These are color-pair checks, not a WCAG conformance certificate.

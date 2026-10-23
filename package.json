@@ -611,6 +611,14 @@
       "types": "./dist/primitives/Slider/Slider.d.ts",
       "default": "./dist/primitives/Slider/Slider.js"
     },
+    "./SortableList": {
+      "types": "./dist/primitives/SortableList/SortableList.d.ts",
+      "default": "./dist/primitives/SortableList/SortableList.js"
+    },
+    "./SortableListItem": {
+      "types": "./dist/primitives/SortableListItem/SortableListItem.d.ts",
+      "default": "./dist/primitives/SortableListItem/SortableListItem.js"
+    },
     "./Spinner": {
       "types": "./dist/primitives/Spinner/Spinner.d.ts",
       "default": "./dist/primitives/Spinner/Spinner.js"

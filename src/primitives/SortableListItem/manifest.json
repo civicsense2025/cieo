@@ -1,0 +1,139 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.sortable-list-item",
+  "componentVersion": "1.0.0",
+  "name": "SortableListItem",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/SortableListItem/SortableListItem.tsx",
+    "symbol": "SortableListItem"
+  },
+  "dependencies": ["SortableList"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "id",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    {
+      "id": "handle",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is ReactNode; custom handle content."
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "default": false
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "content",
+        "component"
+      ],
+      "min": 1,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "handle",
+      "overrides": [
+        "background"
+      ],
+      "tokenRoles": [
+        "border-control"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "handle-plus-body"
+    ],
+    "content": [
+      "handle-is-labelled"
+    ],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "id",
+        "label",
+        "handle",
+        "disabled"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "handle"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "One reorderable row with its own drag and keyboard handle."
+  },
+  "extensions": {}
+}

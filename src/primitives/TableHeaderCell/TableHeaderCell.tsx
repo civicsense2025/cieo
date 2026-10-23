@@ -1,20 +1,19 @@
 'use client';
-/* TableHeaderCell. <th> with scope and an optional sort button. Host owns sorting; this renders the header control only. */
+/* TableHeaderCell. Column or row header. A header with onSort renders a button in every state, including unsorted. */
 import type { ReactNode } from 'react';
 
 export interface TableHeaderCellProps {
   /** Header scope. Defaults to col. */
   scope?: 'col' | 'row';
-  /** Sort state; none renders a plain th, asc/desc renders a sort button. Defaults to none. */
+  /** Current sort direction. Defaults to none. */
   sort?: 'none' | 'asc' | 'desc';
-  /** Called when the sort button is pressed. Host updates data order. */
+  /** Called when the sort button is pressed. Makes the header sortable. */
   onSort?: () => void;
-  /** Header content. Required. */
   children: ReactNode;
 }
 
 export function TableHeaderCell({ scope = 'col', sort = 'none', onSort, children }: TableHeaderCellProps) {
-  if (sort === 'none') {
+  if (sort === 'none' && !onSort) {
     return (
       <th scope={scope} className="cieo cieo-table-header-cell">
         {children}
@@ -24,7 +23,7 @@ export function TableHeaderCell({ scope = 'col', sort = 'none', onSort, children
   return (
     <th
       scope={scope}
-      aria-sort={sort === 'asc' ? 'ascending' : 'descending'}
+      aria-sort={sort === 'asc' ? 'ascending' : sort === 'desc' ? 'descending' : 'none'}
       data-sort={sort}
       className="cieo cieo-table-header-cell"
     >

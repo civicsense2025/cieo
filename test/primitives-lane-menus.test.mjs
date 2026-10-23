@@ -6,7 +6,7 @@ import { readFileSync, existsSync } from 'node:fs';
 const COMPONENTS = [
   { name: 'ToggleButton', id: 'core.toggle-button', level: 'atom', css: 'toggle-button.css', props: ['label', 'pressed', 'value', 'onPressedChange'], markers: ['aria-pressed={isPressed}', 'ToggleButtonGroupContext', 'cieo-toggle-button'] },
   { name: 'ToggleButtonGroup', id: 'core.toggle-button-group', level: 'molecule', css: 'toggle-button-group.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'ToggleButtonGroupContext.Provider', 'cieo-toggle-button-group'] },
-  { name: 'DropdownMenu', id: 'core.dropdown-menu', level: 'molecule', css: 'dropdown-menu.css', props: ['label', 'open', 'defaultOpen', 'onOpenChange'], markers: ['role="menu"', 'onOpenChange?.(true)', 'defaultOpen = false'] },
+  { name: 'DropdownMenu', id: 'core.dropdown-menu', level: 'molecule', css: 'dropdown-menu.css', props: ['label', 'open', 'defaultOpen', 'onOpenChange'], markers: ['role="menu"', 'onOpenChange?.(next)', 'defaultOpen = false'] },
   { name: 'DropdownMenuItem', id: 'core.dropdown-menu-item', level: 'atom', css: 'dropdown-menu-item.css', props: ['label', 'disabled', 'onSelect'], markers: ['role="menuitem"', 'onSelect?.()', 'disabled = false'] },
   { name: 'DropdownMenuGroup', id: 'core.dropdown-menu-group', level: 'atom', css: 'dropdown-menu-group.css', props: ['label'], markers: ['role="group"', 'cieo-dropdown-menu-group'] },
   { name: 'DropdownMenuCheckboxItem', id: 'core.dropdown-menu-checkbox-item', level: 'atom', css: 'dropdown-menu-checkbox-item.css', props: ['label', 'checked', 'onCheckedChange'], markers: ['role="menuitemcheckbox"', 'aria-checked={checked}', 'onCheckedChange'] },

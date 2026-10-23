@@ -30,7 +30,7 @@ export function Tab({ value, children }: TabProps) {
     );
   }
   return (
-    <button ref={ref} type="button" role="tab" aria-selected={selected} data-selected={selected} onClick={() => tabs.onSelect?.(value)} className="cieo cieo-tab">
+    <button ref={ref} type="button" role="tab" aria-selected={selected} tabIndex={tabs.value === undefined || selected ? 0 : -1} data-selected={selected} onClick={() => tabs.onSelect?.(value)} className="cieo cieo-tab">
       {children}
     </button>
   );

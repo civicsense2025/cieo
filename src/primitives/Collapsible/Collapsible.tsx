@@ -1,6 +1,6 @@
 'use client';
 /* Collapsible. Disclosure with internal open state and a controlled override. Host may coordinate several via CollapsibleGroup. */
-import { useState, type ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 
 export interface CollapsibleProps {
   /** Button label for the disclosure. Required. */
@@ -18,6 +18,7 @@ export interface CollapsibleProps {
 export function Collapsible({ title, open, defaultOpen = false, onOpenChange, children }: CollapsibleProps) {
   const [internal, setInternal] = useState(defaultOpen);
   const effective = open ?? internal;
+  const panelId = useId();
   const toggle = () => {
     const next = !effective;
     if (open === undefined) setInternal(next);
@@ -25,10 +26,10 @@ export function Collapsible({ title, open, defaultOpen = false, onOpenChange, ch
   };
   return (
     <div data-open={effective} className="cieo cieo-collapsible">
-      <button type="button" aria-expanded={effective} onClick={toggle}>
+      <button type="button" aria-expanded={effective} aria-controls={effective ? panelId : undefined} onClick={toggle}>
         {title}
       </button>
-      {effective ? <div role="region">{children}</div> : null}
+      {effective ? <div id={panelId} role="region" aria-label={title}>{children}</div> : null}
     </div>
   );
 }

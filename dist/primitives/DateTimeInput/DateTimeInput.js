@@ -1,5 +1,5 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function DateTimeInput({ label }) {
-    return (_jsxs("label", { className: "cieo", children: [_jsx("span", { className: "cieo-label", children: label }), _jsx("input", { type: "datetime-local", className: "cieo cieo-input" })] }));
+export function DateTimeInput({ label, name, value, defaultValue, onChange, min, max, disabled, required }) {
+    return (_jsxs("label", { className: "cieo", children: [_jsx("span", { className: "cieo-label", children: label }), _jsx("input", { type: "datetime-local", className: "cieo cieo-input", name: name, value: value, defaultValue: value === undefined ? defaultValue : undefined, min: min, max: max, disabled: disabled, required: required, onChange: (e) => onChange?.(e.currentTarget.value) })] }));
 }

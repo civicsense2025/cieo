@@ -35,6 +35,7 @@ export function Tokenizer({ label, values, onRemove, onAdd }: TokenizerProps) {
           value={draft}
           onChange={(e) => setDraft(e.currentTarget.value)}
           onKeyDown={(e) => {
+            if (e.key === 'Backspace' && draft === '' && values.length > 0) onRemove?.(values.length - 1);
             if (e.key === 'Enter' && draft.trim()) {
               e.preventDefault();
               onAdd?.(draft.trim());

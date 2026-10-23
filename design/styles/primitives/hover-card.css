@@ -6,4 +6,5 @@
   @media (prefers-reduced-motion: reduce) {
     :where(.cieo) .cieo-p-hover-card-card { transition: none; }
   }
+  :where(.cieo).cieo-p-hover-card[data-dismissed] .cieo-p-hover-card-card { opacity: 0; }
 }

@@ -18,7 +18,7 @@ test('Tooltip CSS reveals on hover and focus with reduced-motion guard', () => {
 test('Overlay is a presentational scrim', () => {
   const src = readFileSync('src/primitives/Overlay/Overlay.tsx', 'utf8');
   assert.match(src, /aria-hidden="true"/); assert.match(src, /cieo-p-overlay/);
-  assert.ok(!src.includes('onClick'), 'host owns dismissal');
+  assert.ok(!src.includes('useState') && src.includes('onPress'), 'host owns dismissal; the scrim only forwards the press');
 });
 test('Overlay CSS fixes the scrim to the viewport', () => {
   const css = readFileSync('design/styles/primitives/overlay.css', 'utf8');

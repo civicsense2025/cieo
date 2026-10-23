@@ -3,11 +3,13 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* HoverCard. Rich hover card on the Tooltip CSS-reveal pattern. Trigger keeps its own name; content is the card body. */
 import { cloneElement, isValidElement, useId } from 'react';
+import { useDismissibleHint } from '../../react/index.js';
 import { motionAttrs } from '../motion.js';
 export function HoverCard({ content, children, motion, entering = 'fade', exiting = 'fade' }) {
     const id = useId();
+    const { dismissed, handlers } = useDismissibleHint();
     const trigger = isValidElement(children)
         ? cloneElement(children, { 'aria-describedby': id })
         : _jsx("span", { "aria-describedby": id, className: "cieo-p-hover-card-trigger", children: children });
-    return (_jsxs("span", { className: "cieo cieo-p-hover-card", ...motionAttrs({ motion, entering, exiting }), children: [trigger, _jsx("span", { id: id, className: "cieo-p-hover-card-card", children: content })] }));
+    return (_jsxs("span", { className: "cieo cieo-p-hover-card", "data-dismissed": dismissed || undefined, ...handlers, ...motionAttrs({ motion, entering, exiting }), children: [trigger, _jsx("span", { id: id, className: "cieo-p-hover-card-card", children: content })] }));
 }

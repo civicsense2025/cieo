@@ -16,7 +16,7 @@ export function OverflowList({ max = 4, children }: OverflowListProps) {
   return (
     <span className="cieo cieo-p-overflow-list">
       {shown}
-      {rest > 0 ? <span className="cieo-p-overflow-list-more">+{rest}</span> : null}
+      {rest > 0 ? <span className="cieo-p-overflow-list-more" aria-label={`${rest} more`}>+{rest}</span> : null}
     </span>
   );
 }

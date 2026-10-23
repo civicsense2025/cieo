@@ -6,9 +6,11 @@ export interface LightboxProps extends MotionProps {
     alt: string;
     /** Whether the viewer is open. Plays exit before unmounting when closed. */
     open?: boolean;
-    /** Called on Escape or host close affordances. Optional. */
+    /** Called on Escape, scrim press or host close affordances. Optional. */
     onClose?: () => void;
+    /** Whether pressing the scrim calls onClose. Defaults to true. */
+    dismissOnOutsidePress?: boolean;
     /** Accessible name for the viewer dialog. Defaults to Image viewer. */
     label?: string;
 }
-export declare function Lightbox({ src, alt, open, onClose, label, motion, entering, exiting }: LightboxProps): import("react/jsx-runtime").JSX.Element | null;
+export declare function Lightbox({ src, alt, open, onClose, dismissOnOutsidePress, label, motion, entering, exiting }: LightboxProps): import("react/jsx-runtime").JSX.Element | null;

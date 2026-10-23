@@ -1,21 +1,88 @@
 // src/primitives/DropdownMenu/DropdownMenu.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/* DropdownMenu. Controlled menu shell. Host trigger opens it via onOpenChange; Escape and outside-click stay host-owned. */
-import { cloneElement, isValidElement, useState } from 'react';
+/* DropdownMenu. Menu shell. Trigger toggles it; Escape, outside press and choosing an item close it and return focus. Controlled `open` always wins. */
+import { cloneElement, createContext, isValidElement, useId, useLayoutEffect, useRef, useState } from 'react';
+import { enabledIn, roveIndex, useDismiss } from '../../react/index.js';
+export const DropdownMenuContext = createContext(null);
 export function DropdownMenu({ label, open, defaultOpen = false, onOpenChange, trigger, children }) {
     const [internal, setInternal] = useState(defaultOpen);
     const isOpen = open ?? internal;
-    function handleTriggerClick(event) {
-        if (isValidElement(trigger)) {
-            trigger.props.onClick?.(event);
-        }
+    const menuId = useId();
+    const rootRef = useRef(null);
+    const triggerRef = useRef(null);
+    const panelRef = useRef(null);
+    const pendingFocus = useRef(null);
+    function setOpen(next) {
         if (open === undefined)
-            setInternal(true);
-        onOpenChange?.(true);
+            setInternal(next);
+        onOpenChange?.(next);
     }
+    function menuItems() {
+        const panel = panelRef.current;
+        return enabledIn(panel, '[role^="menuitem"]').filter((el) => el.closest('[role="menu"]') === panel);
+    }
+    function close(restoreFocus = true) {
+        setOpen(false);
+        if (restoreFocus)
+            triggerRef.current?.firstElementChild?.focus();
+    }
+    useDismiss(isOpen, (reason) => close(reason === 'escape'), [rootRef]);
+    useLayoutEffect(() => {
+        if (!isOpen || !pendingFocus.current)
+            return;
+        const items = menuItems();
+        (pendingFocus.current === 'last' ? items[items.length - 1] : items[0])?.focus();
+        pendingFocus.current = null;
+    }, [isOpen]);
+    function handleTriggerClick(event) {
+        if (isValidElement(trigger))
+            trigger.props.onClick?.(event);
+        if (isOpen) {
+            close(false);
+            return;
+        }
+        pendingFocus.current = 'first';
+        setOpen(true);
+    }
+    function handleTriggerKeyDown(event) {
+        if (isValidElement(trigger))
+            trigger.props.onKeyDown?.(event);
+        if (event.defaultPrevented)
+            return;
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            pendingFocus.current = event.key === 'ArrowUp' ? 'last' : 'first';
+            if (isOpen) {
+                const items = menuItems();
+                (event.key === 'ArrowUp' ? items[items.length - 1] : items[0])?.focus();
+                pendingFocus.current = null;
+            }
+            else
+                setOpen(true);
+        }
+    }
+    function handlePanelKeyDown(event) {
+        if (event.key === 'Tab') {
+            close(false);
+            return;
+        }
+        const items = menuItems();
+        const active = items.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
+        const to = roveIndex(event.key, active, items.length, { orientation: 'vertical' });
+        if (to === null)
+            return;
+        event.preventDefault();
+        items[to]?.focus();
+    }
+    const aria = { 'aria-haspopup': 'menu', 'aria-expanded': isOpen, 'aria-controls': isOpen ? menuId : undefined };
     const triggerNode = isValidElement(trigger)
-        ? cloneElement(trigger, { onClick: handleTriggerClick })
-        : _jsx("span", { onClick: handleTriggerClick, className: "cieo-dropdown-menu-trigger-fallback", children: trigger });
-    return (_jsxs("div", { className: "cieo cieo-dropdown-menu", children: [_jsx("span", { className: "cieo-dropdown-menu-trigger", children: triggerNode }), isOpen ? (_jsx("div", { role: "menu", "aria-label": label, className: "cieo-dropdown-menu-panel", children: children })) : null] }));
+        ? cloneElement(trigger, { ...aria, onClick: handleTriggerClick, onKeyDown: handleTriggerKeyDown })
+        : _jsx("span", { role: "button", tabIndex: 0, ...aria, onClick: handleTriggerClick, onKeyDown: (e) => { if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleTriggerClick(e);
+            }
+            else
+                handleTriggerKeyDown(e); }, className: "cieo-dropdown-menu-trigger-fallback", children: trigger });
+    return (_jsxs("div", { ref: rootRef, className: "cieo cieo-dropdown-menu", children: [_jsx("span", { ref: triggerRef, className: "cieo-dropdown-menu-trigger", children: triggerNode }), isOpen ? (_jsx(DropdownMenuContext.Provider, { value: { close: () => close(true) }, children: _jsx("div", { ref: panelRef, id: menuId, role: "menu", "aria-label": label, onKeyDown: handlePanelKeyDown, className: "cieo-dropdown-menu-panel", children: children }) })) : null] }));
 }

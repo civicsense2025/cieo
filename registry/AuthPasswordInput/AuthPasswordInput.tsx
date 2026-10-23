@@ -48,7 +48,7 @@ export function AuthPasswordInput({ id, label = 'Password', value, defaultValue,
           type={shown ? 'text' : 'password'}
           autoComplete={autoComplete}
           value={value}
-          defaultValue={defaultValue}
+          defaultValue={value === undefined ? defaultValue : undefined}
           disabled={disabled}
           aria-invalid={error ? 'true' : undefined}
           aria-describedby={describedBy}

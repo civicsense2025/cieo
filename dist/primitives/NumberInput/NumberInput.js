@@ -1,5 +1,9 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function NumberInput({ label, min, max, step, defaultValue }) {
-    return (_jsxs("label", { className: "cieo", children: [_jsx("span", { className: "cieo-label", children: label }), _jsx("input", { type: "number", className: "cieo cieo-input", min: min, max: max, step: step, defaultValue: defaultValue })] }));
+export function NumberInput({ label, min, max, step, defaultValue, value, name, disabled, required, onChange }) {
+    const handle = (e) => {
+        const raw = e.currentTarget.value;
+        onChange?.(raw === '' || Number.isNaN(e.currentTarget.valueAsNumber) ? null : e.currentTarget.valueAsNumber);
+    };
+    return (_jsxs("label", { className: "cieo", children: [_jsx("span", { className: "cieo-label", children: label }), _jsx("input", { type: "number", className: "cieo cieo-input", name: name, min: min, max: max, step: step, value: value === undefined ? undefined : (value ?? ''), defaultValue: value === undefined ? defaultValue : undefined, disabled: disabled, required: required, onChange: handle })] }));
 }

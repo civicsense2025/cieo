@@ -1,7 +1,8 @@
 // src/primitives/DropdownMenuSubMenu/DropdownMenuSubMenu.tsx
 'use client';
-/* DropdownMenuSubMenu. Nested flyout inside a menu. CSS hover/focus-within reveals the panel; no JavaScript motion. */
-import type { ReactNode } from 'react';
+/* DropdownMenuSubMenu. Nested flyout inside a menu. CSS hover/focus-within reveals the panel; arrow keys move in and out. */
+import { useRef, type KeyboardEvent, type ReactNode } from 'react';
+import { enabledIn, roveIndex } from '../../react/index.js';
 import { motionAttrs, type MotionProps } from '../motion.js';
 
 export interface DropdownMenuSubMenuProps extends MotionProps {
@@ -11,12 +12,35 @@ export interface DropdownMenuSubMenuProps extends MotionProps {
 }
 
 export function DropdownMenuSubMenu({ label, children, motion, entering = 'fade', exiting = 'fade' }: DropdownMenuSubMenuProps) {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const items = () => enabledIn(panelRef.current, '[role^="menuitem"]').filter((el) => el.closest('[role="menu"]') === panelRef.current);
+  function onTriggerKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (event.key !== 'ArrowRight' && event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    event.stopPropagation();
+    items()[0]?.focus();
+  }
+  function onPanelKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    if (event.key === 'ArrowLeft' || event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      triggerRef.current?.focus();
+      return;
+    }
+    const list = items();
+    const to = roveIndex(event.key, list.findIndex((el) => el === document.activeElement), list.length);
+    if (to === null) return;
+    event.preventDefault();
+    event.stopPropagation();
+    list[to]?.focus();
+  }
   return (
     <div className="cieo cieo-dropdown-menu-submenu" {...motionAttrs({ motion, entering, exiting })}>
-      <button type="button" aria-label={label} className="cieo-dropdown-menu-submenu-trigger">
+      <button ref={triggerRef} type="button" role="menuitem" aria-haspopup="menu" aria-label={label} onKeyDown={onTriggerKeyDown} className="cieo-dropdown-menu-submenu-trigger">
         {label}
       </button>
-      <div role="menu" aria-label={label} className="cieo-dropdown-menu-submenu-panel">
+      <div ref={panelRef} role="menu" aria-label={label} onKeyDown={onPanelKeyDown} className="cieo-dropdown-menu-submenu-panel">
         {children}
       </div>
     </div>

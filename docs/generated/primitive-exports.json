@@ -136,6 +136,8 @@
     "SideNavSection",
     "Skeleton",
     "Slider",
+    "SortableList",
+    "SortableListItem",
     "Spinner",
     "Stack",
     "StackItem",
@@ -178,5 +180,5 @@
     "TypeaheadItem",
     "VStack"
   ],
-  "count": 177
+  "count": 179
 }

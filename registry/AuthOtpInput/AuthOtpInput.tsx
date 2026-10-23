@@ -18,6 +18,7 @@ export interface AuthOtpInputProps {
 
 export function AuthOtpInput({ id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }: AuthOtpInputProps) {
   const [digits, setDigits] = useState<string[]>(() => Array.from({ length }, () => ''));
+  if (digits.length !== length) setDigits(Array.from({ length }, (_, i) => digits[i] ?? ''));
   const boxes = useRef<Array<HTMLInputElement | null>>([]);
   const describedBy = error ? `${id}-error` : undefined;
 
@@ -67,6 +68,8 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
             }}
             onKeyDown={e => {
               if (e.key === 'Backspace' && !digits[i]) focusBox(i - 1);
+              else if (e.key === 'ArrowLeft') { e.preventDefault(); focusBox(i - 1); }
+              else if (e.key === 'ArrowRight') { e.preventDefault(); focusBox(i + 1); }
             }}
             onPaste={e => { e.preventDefault(); onPasteText(e.clipboardData.getData('text'), i); }}
           />

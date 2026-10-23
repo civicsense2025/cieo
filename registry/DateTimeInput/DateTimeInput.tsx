@@ -1,16 +1,28 @@
 'use client';
-// src/primitives/DateTimeInput/DateTimeInput.tsx
-/* DateTimeInput. Labelled date-and-time field: one native datetime-local input reusing the shared input style from styles/controls.css. No new CSS. */
+/* DateTimeInput. Local date and time field. Value, name and change events reach the host. */
+import type { ChangeEvent } from 'react';
+
 export interface DateTimeInputProps {
-  /** Visible label for the field (e.g. "Meeting time"). Required. */
   label: string;
+  /** Form field name. */
+  name?: string;
+  /** Controlled value (ISO string). */
+  value?: string;
+  /** Initial value when uncontrolled. */
+  defaultValue?: string;
+  /** Called with the new value string. */
+  onChange?: (value: string) => void;
+  min?: string;
+  max?: string;
+  disabled?: boolean;
+  required?: boolean;
 }
 
-export function DateTimeInput({ label }: DateTimeInputProps) {
+export function DateTimeInput({ label, name, value, defaultValue, onChange, min, max, disabled, required }: DateTimeInputProps) {
   return (
     <label className="cieo">
       <span className="cieo-label">{label}</span>
-      <input type="datetime-local" className="cieo cieo-input" />
+      <input type="datetime-local" className="cieo cieo-input" name={name} value={value} defaultValue={value === undefined ? defaultValue : undefined} min={min} max={max} disabled={disabled} required={required} onChange={(e: ChangeEvent<HTMLInputElement>) => onChange?.(e.currentTarget.value)} />
     </label>
   );
 }

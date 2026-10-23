@@ -1,7 +1,8 @@
 // src/primitives/MobileNav/MobileNav.tsx
 'use client';
-/* MobileNav. Drawer nav; renders null when closed. Host owns open state and dismissal. */
+/* MobileNav. Drawer nav; renders null when closed. Escape calls onClose; host owns open state. */
 import type { ReactNode } from 'react';
+import { useDismiss } from '../../react/index.js';
 
 export interface MobileNavProps {
   /** Accessible name for the drawer nav. Required. */
@@ -14,6 +15,7 @@ export interface MobileNavProps {
 }
 
 export function MobileNav({ label, open = false, onClose, children }: MobileNavProps) {
+  useDismiss(open, () => onClose?.(), [], { outside: false });
   if (!open) return null;
   return (
     <div className="cieo cieo-mobile-nav">

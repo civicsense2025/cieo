@@ -3,7 +3,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* ComplexSelector. Label plus a native select grouped into optgroups. Renders the design-system .cieo-input; this file owns the contract, not the paint. */
 import { useId } from 'react';
-export function ComplexSelector({ label, sections }) {
+export function ComplexSelector({ label, sections, value, defaultValue, onChange, name, disabled }) {
     const id = useId();
-    return (_jsxs("div", { className: "cieo cieo-p-complex-selector", children: [_jsx("label", { htmlFor: id, children: label }), _jsx("select", { id: id, className: "cieo-input", children: sections.map((s) => (_jsx("optgroup", { label: s.label, children: s.options.map((o) => (_jsx("option", { value: o.value, children: o.label ?? o.value }, o.value))) }, s.label))) })] }));
+    return (_jsxs("div", { className: "cieo cieo-p-complex-selector", children: [_jsx("label", { htmlFor: id, children: label }), _jsx("select", { id: id, name: name, disabled: disabled, value: value, defaultValue: value === undefined ? defaultValue : undefined, onChange: (e) => onChange?.(e.currentTarget.value), className: "cieo-input", children: sections.map((s) => (_jsx("optgroup", { label: s.label, children: s.options.map((o) => (_jsx("option", { value: o.value, children: o.label ?? o.value }, o.value))) }, s.label))) })] }));
 }
