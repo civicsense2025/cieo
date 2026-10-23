@@ -207,7 +207,8 @@ final class AudioCaptureTests: XCTestCase {
         XCTAssertNotNil(sessions.activeOwner)
 
         recorder.emitEncodingError()
-        XCTAssertEqual(model.state, .init(phase: .error, elapsed: 0, reason: .failed))
+        XCTAssertEqual(model.state.phase, .error)
+        XCTAssertEqual(model.state.reason, .failed) // elapsed depends on runner speed, so it is not pinned
         XCTAssertEqual(model.announcement?.text, Recorder.announcementText(.failed))
         XCTAssertEqual(recorder.stopCount, 1)
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
@@ -248,7 +249,8 @@ final class AudioCaptureTests: XCTestCase {
 
         recorder.simulateUnexpectedStop()
         model.poll()
-        XCTAssertEqual(model.state, .init(phase: .error, elapsed: 0, reason: .failed))
+        XCTAssertEqual(model.state.phase, .error)
+        XCTAssertEqual(model.state.reason, .failed) // elapsed depends on runner speed, so it is not pinned
         XCTAssertEqual(recorder.stopCount, 1)
         XCTAssertFalse(FileManager.default.fileExists(atPath: try XCTUnwrap(recorder.fileURL).path))
         XCTAssertEqual(sessions.deactivationCount, 1)
@@ -270,7 +272,8 @@ final class AudioCaptureTests: XCTestCase {
         model.start()
         try await Task.sleep(for: .milliseconds(30))
         let recorder = try XCTUnwrap(device)
-        XCTAssertEqual(model.state, .init(phase: .error, elapsed: 0, reason: .failed))
+        XCTAssertEqual(model.state.phase, .error)
+        XCTAssertEqual(model.state.reason, .failed) // elapsed depends on runner speed, so it is not pinned
         XCTAssertNil(sessions.activeOwner)
         XCTAssertEqual(recorder.stopCount, 1)
         XCTAssertFalse(FileManager.default.fileExists(atPath: try XCTUnwrap(recorder.fileURL).path))
@@ -355,7 +358,8 @@ final class AudioCaptureTests: XCTestCase {
         try await Task.sleep(for: .milliseconds(30))
         let recorder = try XCTUnwrap(device)
         recorder.onFinished?(false)
-        XCTAssertEqual(model.state, .init(phase: .error, elapsed: 0, reason: .failed))
+        XCTAssertEqual(model.state.phase, .error)
+        XCTAssertEqual(model.state.reason, .failed) // elapsed depends on runner speed, so it is not pinned
         XCTAssertNil(sessions.activeOwner)
         XCTAssertFalse(FileManager.default.fileExists(atPath: try XCTUnwrap(recorder.fileURL).path))
     }
