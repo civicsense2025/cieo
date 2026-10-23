@@ -3,7 +3,7 @@ import SwiftUI
 
 /// Local interactive fixtures are isolated from production components and auth.
 struct FoundationCatalog: View {
-    private enum Category: String, CaseIterable { case motion = "Motion", atoms = "Atoms", molecules = "Molecules", patterns = "Patterns" }
+    private enum Category: String, CaseIterable { case motion = "Motion", atoms = "Atoms", molecules = "Molecules", patterns = "Patterns", social = "Social" }
     @Environment(\.dynamicTypeSize) private var typeSize
     @State private var category = Category.motion
     @State private var settings = false
@@ -26,6 +26,7 @@ struct FoundationCatalog: View {
                     case .atoms: AtomExamples()
                     case .molecules: MoleculeExamples()
                     case .patterns: PatternExamples()
+                    case .social: SocialExamples()
                     }
                 }
                 .padding(16)
@@ -53,6 +54,17 @@ struct FoundationCatalog: View {
             }
         }
         .renderingPreferences(effectsEnabled: effects, motionDisabled: reduceMotion)
+    }
+}
+
+/// The social, audio and engagement pieces, grouped so the catalog body stays small to type-check.
+private struct SocialExamples: View {
+    var body: some View {
+        CommentsExamples()
+        EngagementExamples()
+        AudioPlaybackExamples()
+        AudioCaptureExamples()
+        MessagingFeedbackExamples()
     }
 }
 

@@ -13,6 +13,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Host configuration and semantic copy](#host-configuration-and-semantic-copy)
 - [Display type, colour blocks and cuts](#display-type-colour-blocks-and-cuts)
 - [Slots, not hard-coded styling](#slots-not-hard-coded-styling)
+- [Social, audio and engagement](#social-audio-and-engagement)
 - [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
 
@@ -142,6 +143,36 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - ProgressRing, SegmentedProgress, BigNumber, HighlightSurface and SymbolMark read every style from the slots.
 
 `scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`. CI runs it in the `swift` job, and also proves it still catches every line in `scripts/fixtures/hard-coded-styling.swift.fixture`.
+
+## Social, audio and engagement
+
+SwiftUI twins of the web social kit, with the same names, behaviour rules and pure helpers (ported with the web test cases), so an app gets the same threads, voice notes, reactions and messaging on both platforms. Every piece reads its styling from the slots above; hosts own data, uploads, permissions and moderation.
+
+| Area | Atoms | Molecules | Organisms |
+| --- | --- | --- | --- |
+| Audio | AudioTime, AudioPlayButton, AudioWaveform, PlaybackRateButton, AudioLevelMeter, SpeakerTile | AudioPlayer (with `AudioPlaybackModel`), AudioTranscript, VoiceRecorder (with `VoiceRecorderModel`) | AudioRoom |
+| Comments | ByLine, ReplyPreview, CharacterCountRing, VerifiedBadge, Mention, RichText, NewItemsPill | Comment, CommentComposer, LinkPreview | CommentThread |
+| Engagement | CompactCount, CountButton, FollowButton, NotifyToggle, ShareButton, Rating | ActionBar, ReactionPicker, ReactionSummary, Poll, ThumbsFeedback | |
+| Messaging | TypingIndicator, DeliveryStatus, UnreadDivider, GroupAvatar | SeenBy, ConversationListItem | ConversationList |
+| Review | AnnotationPin | FeedbackPopover, ActivityItem | AnnotationLayer |
+
+Voice replies use the same slots as text. Put a mic `IconButton` in the composer's `.tools { }`, swap in a recorder with `.recorder(isActive:) { VoiceRecorder(autoStart: true, onRecorded:) }` when it is pressed, show the clip with `.attachments { AudioPlayer(url:label:peaks:duration:variant: .compact) }` and pass `hasAttachments: true` so Post works without text. In the thread, the same `AudioPlayer` goes in a comment's `.attachments { }`. Only one player plays at a time (`AudioPlaybackCoordinator`).
+
+```swift
+CommentComposer(text: $draft, maxLength: 500, hasAttachments: clip != nil) { text in post(text, clip) }
+    .avatar { avatar }
+    .tools { IconButton(.microphone, label: "Record a voice reply") { recording = true } }
+    .recorder(isActive: recording) {
+        VoiceRecorder(autoStart: true, onRecorded: { clip = $0; recording = false }, onCancel: { recording = false })
+    }
+    .attachments { if let clip { AudioPlayer(url: clip.url, label: "Your voice reply", peaks: clip.peaks, duration: clip.duration, variant: .compact) } }
+```
+
+- Audio models own AVFoundation and tear down on disappear; the audio session is configured only when someone presses play or record, never on appear. Playback releases its owned session on pause, end, failure and teardown; a late callback cannot deactivate a newer player's session. `AudioWaveform.maximumBarCount` is 128 and also caps recorder downsampling. Recorder encoding errors and unexpected stops fail-close, stop the timer and recorder, remove the temporary file, and emit no clip. A completed clip is deleted when no callback receives it; a successful callback owns the file. A recording host needs `NSMicrophoneUsageDescription` (and the audio-input entitlement in a sandboxed Mac app). `autoStart` is for a recorder that appears because someone just asked to record.
+- Links in `RichText`, `Mention`, `ByLine` and `LinkPreview` open only http and https addresses, plus explicit same-app forms (`/path`, `./path`, `../path`, `#hash`, `?query`). Credential-bearing absolute URLs are rejected. Shortened URL text keeps the full parsed host, and a `LinkPreview` shows that host before optional site branding.
+- `CommentThread` preserves its default depth of 3 and caps configured depth at 32. Replies at the cap flatten once; those rows have no further reply branch.
+- Foundation additions are additive: 23 `ComponentIcon` cases (microphone, play, pause, bell, star, share, thumbs, verified, delivery ticks and others, each with an SF Symbol default), `Theme.success` and `Theme.warning`, `ComponentTypography.caption`, and `ComponentMetrics` `avatar`, `avatarSmall`, `rail`, `ring` and `thumbnail`.
+- The gallery's Social tab shows every piece with local fixtures. Tests: `AudioPlaybackTests`, `AudioCaptureTests`, `EngagementTests`, `CommentsTests` and `MessagingFeedbackTests` port the web cases and draw each piece at 390 points in light and dark. Real microphone capture, network playback, VoiceOver and Dynamic Type at accessibility sizes are consumer checks on a device.
 
 ## Consumer rollout boundary
 
