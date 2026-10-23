@@ -1,0 +1,5 @@
+/* design/styles/primitives/compact-count.css */
+@layer cieo.components {
+  :where(.cieo).cieo-compact-count { display: inline-flex; font-variant-numeric: tabular-nums; }
+  :where(.cieo).cieo-compact-count[data-empty] > [aria-hidden] { display: none; }
+}

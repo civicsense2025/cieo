@@ -1,0 +1,113 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.audio-time",
+  "componentVersion": "1.0.0",
+  "name": "AudioTime",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/AudioTime/AudioTime.tsx",
+    "symbol": "AudioTime"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "current",
+      "type": {
+        "kind": "number"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "duration",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "mode",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "elapsed",
+          "remaining",
+          "total"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "elapsed",
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "current",
+        "duration",
+        "mode"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Elapsed and total time for an audio clip (0:12 / 1:03), or the time left, in steady tabular digits with a spoken form."
+  },
+  "extensions": {}
+}

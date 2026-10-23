@@ -1,0 +1,131 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.compact-count",
+  "componentVersion": "1.0.0",
+  "name": "CompactCount",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/CompactCount/CompactCount.tsx",
+    "symbol": "CompactCount"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "value",
+      "type": {
+        "kind": "number"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "locale",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "en",
+      "constraints": {}
+    },
+    {
+      "id": "unit",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "hideZero",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": true,
+      "constraints": {}
+    },
+    {
+      "id": "motion",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": true,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "surface"
+      ],
+      "tokenRoles": [
+        "text"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "digit-roll",
+      "reduced-motion-respected"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "value",
+        "locale",
+        "unit",
+        "hideZero",
+        "motion"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "A count shortened for scanning (26.3K) whose digits roll in the direction of change, with the exact number kept for screen readers."
+  },
+  "extensions": {}
+}
