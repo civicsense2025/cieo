@@ -10,9 +10,10 @@
   :where(.cieo).cieo-link-preview[data-variant='compact'] .cieo-link-preview-media { aspect-ratio: 1; block-size: 100%; inline-size: 100%; }
   :where(.cieo) .cieo-link-preview-image { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
   :where(.cieo) .cieo-link-preview-body { display: grid; align-content: center; gap: var(--cieo-space-1); min-inline-size: 0; padding: var(--cieo-space-3); }
-  :where(.cieo) .cieo-link-preview-site { display: flex; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; color: var(--cieo-color-muted); font-size: var(--cieo-text-caption); }
+  :where(.cieo) .cieo-link-preview-site { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; color: var(--cieo-color-muted); font-size: var(--cieo-text-caption); }
   :where(.cieo) .cieo-link-preview-favicon { flex: none; inline-size: 1rem; block-size: 1rem; border-radius: var(--cieo-radius-small); }
-  :where(.cieo) .cieo-link-preview-domain { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  :where(.cieo) .cieo-link-preview-domain { min-inline-size: 0; overflow-wrap: anywhere; }
+  :where(.cieo) .cieo-link-preview-site-name { min-inline-size: 0; overflow-wrap: anywhere; }
   :where(.cieo) .cieo-link-preview-title { color: var(--cieo-color-text); font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-strong); text-decoration: none; line-height: 1.35; }
   :where(.cieo) .cieo-link-preview-title-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
   :where(.cieo) a.cieo-link-preview-title::after { content: ''; position: absolute; inset: 0; }

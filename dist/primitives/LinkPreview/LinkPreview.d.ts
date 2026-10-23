@@ -2,7 +2,7 @@ export type LinkPreviewVariant = 'large' | 'compact';
 /** Hostname without a leading www., or an empty string when the address does not parse as http(s). */
 export declare function displayDomain(url: string): string;
 export interface LinkPreviewImage {
-    /** Image address. Only absolute http and https addresses render. */
+    /** Image address. Same-origin paths and absolute http(s) addresses render. */
     src: string;
     /** Text alternative; use an empty string when the title already says it. */
     alt: string;
@@ -16,7 +16,7 @@ export interface LinkPreviewProps {
     url: string;
     /** Page title, clamped to two lines. */
     title: string;
-    /** Site name shown beside the favicon. Defaults to the domain. */
+    /** Optional branding shown beside the favicon. The parsed destination hostname stays visible. */
     siteName?: string;
     /** Short summary, shown on the large card only. */
     description?: string;

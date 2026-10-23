@@ -1,17 +1,18 @@
 // src/primitives/AudioPlayer/AudioPlayer.tsx
 'use client';
 /* AudioPlayer. One clip with play/pause, a scrubber, the clock and (in full) speed. It owns the audio element and keeps only one player in the document playing at a time. */
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { AudioPlayButton } from '../AudioPlayButton/AudioPlayButton.js';
 import { AudioTime } from '../AudioTime/AudioTime.js';
 import { AudioWaveform, audioSeekText, useScrub } from '../AudioWaveform/AudioWaveform.js';
-import { DEFAULT_PLAYBACK_RATES, PlaybackRateButton } from '../PlaybackRateButton/PlaybackRateButton.js';
+import { DEFAULT_PLAYBACK_RATES, normalizePlaybackRate, normalizePlaybackRates, PlaybackRateButton } from '../PlaybackRateButton/PlaybackRateButton.js';
 
 export type AudioPlayerState = 'loading' | 'ready' | 'playing' | 'ended' | 'error';
-export type AudioPlayerEvent = 'loadedmetadata' | 'play' | 'pause' | 'ended' | 'error' | 'retry';
+export type AudioPlayerEvent = 'loadedmetadata' | 'play' | 'pause' | 'ended' | 'error' | 'retry' | 'source';
 
 /** Pure state step driven by the audio element's events. Error is sticky until retry; ended returns to ready-to-play on the next play. */
 export function audioPlayerStep(state: AudioPlayerState, event: AudioPlayerEvent): AudioPlayerState {
+  if (event === 'source') return 'loading';
   if (event === 'retry') return state === 'error' ? 'loading' : state;
   if (state === 'error') return state;
   switch (event) {
@@ -93,10 +94,16 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
   const id = tokenRef.current;
   const root = useRef<HTMLDivElement>(null);
   const audio = useRef<HTMLAudioElement>(null);
+  const renderedSource = useRef(src);
+  renderedSource.current = src;
+  const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
   const [phase, dispatch] = useReducer(audioPlayerStep, 'loading');
   const [metaDuration, setMetaDuration] = useState<number | null>(null);
   const [seconds, setSeconds] = useState(0);
-  const [rate, setRate] = useState(rates[0] ?? 1);
+  const validRates = useMemo(() => normalizePlaybackRates(rates), [rates]);
+  const rateListKey = validRates.join('\u0000');
+  const [rate, setRate] = useState(validRates[0] ?? 1);
+  const appliedRate = useRef(normalizePlaybackRate(rate));
   const known = metaDuration ?? duration ?? 0;
   const live = useRef({ known, onPlay, onPause, onEnded, onTimeUpdate, seconds });
   live.current = { known, onPlay, onPause, onEnded, onTimeUpdate, seconds };
@@ -113,7 +120,34 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
   }, []);
 
   // The fill var is written only here (never through the style prop) so a re-render can't snap it back to a whole second.
-  useEffect(() => paint(audio.current?.currentTime ?? 0), [known, paint]);
+  useEffect(() => paint(audio.current?.currentTime ?? 0), [known, paint, src]);
+
+  useIsoLayoutEffect(() => {
+    dispatch('source');
+    setMetaDuration(null);
+    setSeconds(0);
+    live.current.seconds = 0;
+    root.current?.style.setProperty('--cieo-audio-progress', '0');
+  }, [src]);
+
+  useEffect(() => {
+    if (validRates.length === 0) return;
+    setRate((current) => validRates.includes(current) ? current : validRates[0]!);
+  }, [rateListKey, validRates]);
+
+  useEffect(() => {
+    const current = audio.current;
+    return () => {
+      if (!current) return;
+      try {
+        current.pause();
+        current.removeAttribute('src');
+        current.load();
+      } catch {
+        /* the media element may already be detached */
+      }
+    };
+  }, [src]);
 
   useEffect(() => registerAudioPlayer(id, () => audio.current?.pause()), [id]);
 
@@ -130,9 +164,33 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
 
   useEffect(() => {
     if (!audio.current) return;
-    audio.current.defaultPlaybackRate = rate;
-    audio.current.playbackRate = rate;
-  }, [rate, phase]);
+    const safeRate = normalizePlaybackRate(rate);
+    try {
+      audio.current.defaultPlaybackRate = safeRate;
+      audio.current.playbackRate = safeRate;
+      appliedRate.current = safeRate;
+    } catch {
+      /* keep the label aligned with the last rate the browser accepted */
+      if (rate !== appliedRate.current) setRate(appliedRate.current);
+    }
+  }, [rate, phase, src]);
+
+  const changeRate = (next: number) => {
+    const safe = normalizePlaybackRate(next);
+    const current = audio.current;
+    if (!current) {
+      setRate(safe);
+      return;
+    }
+    try {
+      current.defaultPlaybackRate = safe;
+      current.playbackRate = safe;
+      appliedRate.current = safe;
+      setRate(safe);
+    } catch {
+      setRate(appliedRate.current);
+    }
+  };
 
   const seek = (t: number) => {
     const a = audio.current;
@@ -150,6 +208,7 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
     }
     if (phase === 'ended') seek(0);
     a.play()?.catch((err: unknown) => {
+      if (a !== audio.current || renderedSource.current !== src) return;
       const name = (err as { name?: string } | null)?.name;
       if (name !== 'AbortError' && name !== 'NotAllowedError') dispatch('error');
     });
@@ -180,35 +239,45 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
   return (
     <div ref={root} className="cieo cieo-audio-player" role="group" aria-label={label} data-variant={variant} data-state={phase}>
       <audio
+        key={src}
         ref={audio}
         src={src}
         preload="metadata"
         onLoadedMetadata={(e) => {
+          if (e.currentTarget !== audio.current || renderedSource.current !== src) return;
           const d = e.currentTarget.duration;
           if (Number.isFinite(d) && d > 0) setMetaDuration(d);
           dispatch('loadedmetadata');
         }}
         onDurationChange={(e) => {
+          if (e.currentTarget !== audio.current || renderedSource.current !== src) return;
           const d = e.currentTarget.duration;
           if (Number.isFinite(d) && d > 0) setMetaDuration(d);
         }}
         onPlay={() => {
+          if (renderedSource.current !== src) return;
           claimAudioPlayback(id);
           dispatch('play');
           live.current.onPlay?.();
         }}
         onPause={(e) => {
+          if (e.currentTarget !== audio.current || renderedSource.current !== src) return;
           dispatch('pause');
           if (!e.currentTarget.ended) live.current.onPause?.();
         }}
         onEnded={() => {
+          if (audio.current === null || renderedSource.current !== src) return;
           if (audio.current) audio.current.currentTime = 0;
           paint(0);
           dispatch('ended');
           live.current.onEnded?.();
         }}
-        onError={() => dispatch('error')}
-        onTimeUpdate={(e) => live.current.onTimeUpdate?.(e.currentTarget.currentTime)}
+        onError={(e) => {
+          if (e.currentTarget === audio.current && renderedSource.current === src) dispatch('error');
+        }}
+        onTimeUpdate={(e) => {
+          if (e.currentTarget === audio.current && renderedSource.current === src) live.current.onTimeUpdate?.(e.currentTarget.currentTime);
+        }}
       />
       <AudioPlayButton playing={phase === 'playing'} loading={phase === 'loading'} label={label} onToggle={toggle} size={variant === 'full' ? 'lg' : 'md'} />
       <div className="cieo-audio-player-main">
@@ -225,7 +294,7 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
         )}
       </div>
       {variant === 'compact' ? <AudioTime current={seconds} duration={total} mode={resting ? 'total' : 'remaining'} /> : null}
-      {variant === 'full' && phase !== 'error' ? <PlaybackRateButton rate={rate} rates={rates} onRateChange={setRate} /> : null}
+      {variant === 'full' && phase !== 'error' ? <PlaybackRateButton rate={rate} rates={validRates} onRateChange={changeRate} /> : null}
     </div>
   );
 }

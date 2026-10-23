@@ -25,7 +25,7 @@ export function rmsLevel(samples) {
 }
 /** Bar heights (0.1..1) for a level: the middle bars rise the most, the outer ones follow at half height, and every bar keeps a visible stub. */
 export function levelBars(level, count) {
-    const n = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+    const n = Number.isFinite(count) ? Math.min(32, Math.max(0, Math.floor(count))) : 0;
     const l = clamp01(level);
     const mid = (n - 1) / 2;
     return Array.from({ length: n }, (_, i) => {
@@ -66,17 +66,31 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
         catch {
             return;
         }
-        let source;
+        let source = null;
         let analyser;
+        let tracks = [];
         try {
-            // Throws for a stream with no audio track; the meter then stays static.
+            tracks = stream.getAudioTracks();
+            if (tracks.length === 0 || tracks.every((track) => track.readyState === 'ended'))
+                throw new Error('stream has no live audio tracks');
             source = ctx.createMediaStreamSource(stream);
             analyser = ctx.createAnalyser();
             analyser.fftSize = 1024;
             source.connect(analyser);
         }
         catch {
-            void ctx.close().catch(() => { });
+            try {
+                source?.disconnect();
+            }
+            catch {
+                /* setup was incomplete */
+            }
+            try {
+                void ctx.close().catch(() => { });
+            }
+            catch {
+                /* context already closed */
+            }
             return;
         }
         void ctx.resume?.().catch(() => { });
@@ -84,7 +98,39 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
         let raf = 0;
         let lastAt = 0;
         let last = 0;
+        let stopped = false;
+        const stopSampling = () => {
+            if (stopped)
+                return;
+            stopped = true;
+            cancelAnimationFrame(raf);
+            tracks.forEach((track) => track.removeEventListener('ended', onTrackEnded));
+            try {
+                source?.disconnect();
+            }
+            catch {
+                /* already disconnected */
+            }
+            try {
+                void ctx.close().catch(() => { });
+            }
+            catch {
+                /* context already closed */
+            }
+            setHeard(0);
+        };
+        const onTrackEnded = () => {
+            if (tracks.every((track) => track.readyState === 'ended'))
+                stopSampling();
+        };
+        tracks.forEach((track) => track.addEventListener('ended', onTrackEnded));
+        if (tracks.every((track) => track.readyState === 'ended')) {
+            stopSampling();
+            return;
+        }
         const loop = (t) => {
+            if (stopped)
+                return;
             raf = requestAnimationFrame(loop);
             if (t - lastAt < 50)
                 return;
@@ -97,17 +143,7 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
             }
         };
         raf = requestAnimationFrame(loop);
-        return () => {
-            cancelAnimationFrame(raf);
-            try {
-                source.disconnect();
-            }
-            catch {
-                /* already disconnected */
-            }
-            void ctx.close().catch(() => { });
-            setHeard(0);
-        };
+        return stopSampling;
     }, [stream, controlled]);
     return (_jsx("span", { ref: root, role: "img", "aria-label": label, className: "cieo cieo-audio-level-meter", style: { '--cieo-level': target.toFixed(3) }, children: seed.map((h, i) => (_jsx("span", { "aria-hidden": "true", className: "cieo-audio-level-meter-bar", style: { '--cieo-bar': h.toFixed(3) } }, i))) }));
 }

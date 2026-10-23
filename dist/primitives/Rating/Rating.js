@@ -4,9 +4,19 @@ import { jsx as _jsx } from "react/jsx-runtime";
 /* Rating. Star rating: a radio group the viewer can set, or a read-only summary. The host owns the value. */
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../../react/index.js';
-/** Value a key moves to (1..max), or null when the key does nothing or the value would not change. No wrapping. */
+const MAX_RATING = 10;
+function ratingMax(max) {
+    const whole = Number.isFinite(max) ? Math.floor(max) : max > 0 ? MAX_RATING : 1;
+    return Math.min(MAX_RATING, Math.max(1, whole || 1));
+}
+function ratingCount(count) {
+    if (Number.isNaN(count))
+        return 0;
+    return Math.min(MAX_RATING, Math.max(0, Math.floor(count)));
+}
+/** Value a key moves to (1..max, clamped to 10), or null when the key does nothing or the value would not change. No wrapping. */
 export function ratingKeyStep(key, value, max) {
-    const top = Math.max(1, Math.floor(max) || 1);
+    const top = ratingMax(max);
     const now = Number.isFinite(value) ? Math.min(top, Math.max(0, Math.round(value))) : 0;
     let next = null;
     if (key === 'ArrowRight' || key === 'ArrowUp')
@@ -19,23 +29,24 @@ export function ratingKeyStep(key, value, max) {
         next = top;
     return next === null || next === now ? null : next;
 }
-/** Spoken summary: "4 out of 5". Value clamps to 0..max; halves keep one decimal. */
+/** Spoken summary: "4 out of 5". Value clamps to 0..max (max is capped at 10); halves keep one decimal. */
 export function ratingLabel(value, max) {
-    const top = Math.max(1, Math.floor(max) || 1);
+    const top = ratingMax(max);
     const v = Number.isFinite(value) ? Math.min(top, Math.max(0, value)) : 0;
     return `${Number.isInteger(v) ? v : v.toFixed(1)} out of ${top}`;
 }
-/** Start delays (ms) for stars from..to-1 popping in turn; the last starts by `window`, so the whole stagger fits in it. */
+/** Start delays (ms) for stars from..to-1 popping in turn, capped at 10 entries; the last starts by `window`. */
 export function ratingPopDelays(from, to, window = 150) {
-    const n = Math.max(0, Math.floor(to) - Math.max(0, Math.floor(from)));
+    const n = Math.max(0, ratingCount(to) - ratingCount(from));
     if (n === 0)
         return [];
-    const step = n === 1 ? 0 : Math.min(40, window / (n - 1));
+    const span = Number.isFinite(window) ? Math.max(0, window) : 150;
+    const step = n === 1 ? 0 : Math.min(40, span / (n - 1));
     return Array.from({ length: n }, (_, i) => Math.round(i * step));
 }
 const STAR = 'M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8Z';
 export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' }) {
-    const top = Math.max(1, Math.floor(max) || 1);
+    const top = ratingMax(max);
     const safe = Number.isFinite(value) ? Math.min(top, Math.max(0, value)) : 0;
     const rounded = Math.round(safe);
     const reduced = useReducedMotion();
@@ -67,6 +78,16 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
     }
     const focusStar = (n) => group.current?.querySelectorAll('[role="radio"]')[n - 1]?.focus();
     return (_jsx("div", { ref: group, role: "radiogroup", "aria-label": label, "data-size": size, className: "cieo cieo-rating", onMouseLeave: () => setHover(null), onKeyDown: (e) => {
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                const radio = e.target.closest('[role="radio"]');
+                const selected = Number(radio?.dataset.value);
+                if (!radio || !Number.isFinite(selected))
+                    return;
+                e.preventDefault();
+                onChange?.(selected);
+                radio.focus({ preventScroll: true });
+                return;
+            }
             const next = ratingKeyStep(e.key, rounded, top);
             if (next === null)
                 return;
@@ -75,6 +96,6 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
             focusStar(next);
         }, children: Array.from({ length: top }, (_, i) => {
             const n = i + 1;
-            return (_jsx("span", { role: "radio", "aria-checked": rounded === n, "aria-label": `${n} ${n === 1 ? 'star' : 'stars'}`, tabIndex: rounded === n || (rounded === 0 && n === 1) ? 0 : -1, className: "cieo-rating-radio", onClick: () => onChange?.(n), onMouseEnter: () => setHover(n), children: stars[i] }, n));
+            return (_jsx("span", { role: "radio", "data-value": n, "aria-checked": rounded === n, "aria-label": `${n} ${n === 1 ? 'star' : 'stars'}`, tabIndex: rounded === n || (rounded === 0 && n === 1) ? 0 : -1, className: "cieo-rating-radio", onClick: () => onChange?.(n), onMouseEnter: () => setHover(n), children: stars[i] }, n));
         }) }));
 }

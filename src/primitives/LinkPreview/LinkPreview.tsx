@@ -9,8 +9,10 @@ export type LinkPreviewVariant = 'large' | 'compact';
 
 /** Hostname without a leading www., or an empty string when the address does not parse as http(s). */
 export function displayDomain(url: string): string {
+  const safe = safeHref(url, { relative: false });
+  if (!safe) return '';
   try {
-    const parsed = new URL(String(url ?? '').trim());
+    const parsed = new URL(safe);
     if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return '';
     return parsed.hostname.replace(/^www\./i, '');
   } catch {
@@ -19,7 +21,7 @@ export function displayDomain(url: string): string {
 }
 
 export interface LinkPreviewImage {
-  /** Image address. Only absolute http and https addresses render. */
+  /** Image address. Same-origin paths and absolute http(s) addresses render. */
   src: string;
   /** Text alternative; use an empty string when the title already says it. */
   alt: string;
@@ -34,7 +36,7 @@ export interface LinkPreviewProps {
   url: string;
   /** Page title, clamped to two lines. */
   title: string;
-  /** Site name shown beside the favicon. Defaults to the domain. */
+  /** Optional branding shown beside the favicon. The parsed destination hostname stays visible. */
   siteName?: string;
   /** Short summary, shown on the large card only. */
   description?: string;
@@ -51,14 +53,16 @@ export interface LinkPreviewProps {
 function PreviewImage({ image, className }: { image: LinkPreviewImage; className: string }) {
   const ref = useRef<HTMLImageElement>(null);
   const [state, setState] = useState<'pending' | 'loaded' | 'failed'>('pending');
+  const src = safeHref(image.src);
   useEffect(() => {
+    setState('pending');
     const el = ref.current;
     if (el?.complete && el.naturalWidth > 0) setState('loaded');
-  }, []);
-  const src = safeHref(image.src, { relative: false });
+  }, [src]);
   if (!src || state === 'failed') return null;
   return (
     <img
+      key={src}
       ref={ref}
       className={className}
       data-state={state}
@@ -66,6 +70,7 @@ function PreviewImage({ image, className }: { image: LinkPreviewImage; className
       alt={image.alt}
       width={image.width}
       height={image.height}
+      referrerPolicy="no-referrer"
       loading="lazy"
       decoding="async"
       onLoad={() => setState('loaded')}
@@ -79,8 +84,10 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
   const domain = displayDomain(url);
   const kind: LinkPreviewVariant = variant === 'compact' ? 'compact' : 'large';
   const skeleton = usePresence<HTMLSpanElement>(loading, { from: { y: 0, scale: 1 } });
-  const iconSrc = favicon === undefined ? null : safeHref(favicon, { relative: false });
-  const site = siteName || domain;
+  const iconSrc = favicon === undefined ? null : safeHref(favicon);
+  const brand = typeof siteName === 'string' ? siteName.trim() : '';
+  const separateBrand = brand !== '' && brand !== domain;
+  const site = brand || domain;
   const label = <span className="cieo-link-preview-title-text">{title}</span>;
   return (
     <div className="cieo cieo-link-preview" data-variant={kind} data-loading={loading ? '' : undefined} data-linked={href ? '' : undefined} aria-busy={loading || undefined}>
@@ -100,16 +107,17 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
         </span>
       ) : (
         <div className="cieo-link-preview-content">
-          {image && safeHref(image.src, { relative: false }) ? (
+          {image && safeHref(image.src) ? (
             <span className="cieo-link-preview-media">
-              <PreviewImage image={image} className="cieo-link-preview-image" />
+              <PreviewImage key={safeHref(image.src) ?? image.src} image={image} className="cieo-link-preview-image" />
             </span>
           ) : null}
           <span className="cieo-link-preview-body">
-            {site || iconSrc ? (
+            {site || domain || iconSrc ? (
               <span className="cieo-link-preview-site">
-                {iconSrc ? <img className="cieo-link-preview-favicon" src={iconSrc} alt="" width={16} height={16} loading="lazy" decoding="async" /> : null}
-                {site ? <span className="cieo-link-preview-domain">{site}</span> : null}
+                {iconSrc ? <img className="cieo-link-preview-favicon" src={iconSrc} alt="" width={16} height={16} referrerPolicy="no-referrer" loading="lazy" decoding="async" /> : null}
+                {separateBrand ? <span className="cieo-link-preview-site-name">{brand}</span> : null}
+                {domain ? <span className="cieo-link-preview-domain">{domain}</span> : site ? <span className="cieo-link-preview-site-name">{site}</span> : null}
               </span>
             ) : null}
             {href ? (

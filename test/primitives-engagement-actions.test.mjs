@@ -126,6 +126,15 @@ test('only http and https URLs are shareable', () => {
   assert.equal(isShareableUrl('http://example.com'), true);
   for (const u of ['javascript:alert(1)', 'data:text/html,hi', 'ftp://x.com', '/relative', '', 'not a url']) assert.equal(isShareableUrl(u), false);
 });
+test('ShareButton rejects credential-bearing destinations before invoking the share provider', async () => {
+  const url = 'https://trusted.example@login.evil.test/reset';
+  assert.equal(isShareableUrl(url), false);
+  let calls = 0;
+  const outcome = await runShare({ share: async () => { calls += 1; } }, { url });
+  assert.equal(outcome, 'unavailable');
+  assert.equal(calls, 0);
+  has(render(h(ShareButton, { url })), /<button[^>]*disabled/);
+});
 test('runShare: native, copy, user cancel, native failure fallback, and failures', async () => {
   const url = 'https://example.com/p/1';
   let shared;
@@ -183,6 +192,17 @@ test('ratingPopDelays stagger fits in 150ms', () => {
   assert.equal(d[0], 0);
   assert.ok(Math.max(...d) <= 150);
   assert.ok(d.every((v, i) => i === 0 || v >= d[i - 1]));
+});
+test('Rating and its helpers cap resource use at ten stars', () => {
+  assert.equal(ratingKeyStep('End', 1, 1_000_000), 10);
+  assert.equal(ratingLabel(99, 1_000_000), '10 out of 10');
+  assert.equal(ratingPopDelays(0, 100_000).length, 10);
+  assert.equal(ratingPopDelays(0, Infinity).length, 10);
+  const interactive = render(h(Rating, { value: 0, label: 'Rate', max: 11 }));
+  assert.equal((interactive.match(/role="radio"/g) ?? []).length, 10);
+  const readOnly = render(h(Rating, { value: 9, label: 'Rating', max: 11, readOnly: true }));
+  assert.match(readOnly, /aria-label="9 out of 10"/);
+  assert.equal((readOnly.match(/data-star/g) ?? []).length, 10);
 });
 test('interactive Rating is a radiogroup with one tab stop and the right checked star', () => {
   const html = render(h(Rating, { value: 3, onChange() {}, label: 'Rate this reply' }));

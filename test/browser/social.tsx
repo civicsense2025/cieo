@@ -124,9 +124,24 @@ function silentWav(seconds: number): string {
 }
 const wavA = silentWav(6);
 const wavB = silentWav(6);
+function sourceWithoutMetadata(): string {
+  return URL.createObjectURL(new MediaSource());
+}
 
 function PlayersFixture() {
   return <Box id="players"><AudioPlayer src={wavA} label="Clip A" variant="compact" /><AudioPlayer src={wavB} label="Clip B" variant="compact" /></Box>;
+}
+
+function PlayerLifecycleFixture() {
+  const [src, setSrc] = useState(wavA);
+  const [rates, setRates] = useState([1, 1.5, 2]);
+  hooks.setPlayerSource = (kind: string) => setSrc(kind === 'loading' ? sourceWithoutMetadata() : silentWav(6));
+  hooks.setPlayerRates = (next: number[]) => setRates(next);
+  return <Box id="player-lifecycle"><AudioPlayer src={src} label="Lifecycle clip" variant="full" rates={rates}
+    onPlay={() => log('player-lifecycle', 'play')}
+    onPause={() => log('player-lifecycle', 'pause')}
+    onEnded={() => log('player-lifecycle', 'ended')}
+    onTimeUpdate={(seconds) => log('player-lifecycle', { time: seconds })} /></Box>;
 }
 
 const WORDS: TranscriptWord[] = ['Hello', 'there', 'this', 'is', 'a', 'test'].map((text, i) => ({ text, start: i * 1.5, end: i * 1.5 + 1.2 }));
@@ -173,6 +188,31 @@ hooks.unmountRoot = (id: string) => { extraRoots[id]?.unmount(); delete extraRoo
 
 function RecorderFixture() {
   return <Box id="recorder"><VoiceRecorder onRecorded={(c) => log('recorder', { size: c.blob.size, duration: c.duration, peaks: c.peaks.length, mime: c.mimeType })} onCancel={() => log('recorder', 'cancel')} /></Box>;
+}
+
+function MultiTakeRecorderFixture() {
+  const [generation, setGeneration] = useState(0);
+  const [mounted, setMounted] = useState(true);
+  hooks.resetMultiTakeRecorder = () => { setGeneration((value) => value + 1); setMounted(true); };
+  hooks.unmountMultiTakeRecorder = () => setMounted(false);
+  return <Box id="recorder-multitake">{mounted ? <VoiceRecorder key={generation}
+    onRecorded={async (clip) => log('recorder-multitake', { data: await clip.blob.text(), size: clip.blob.size })}
+    onCancel={() => log('recorder-multitake', 'cancel')} /> : null}</Box>;
+}
+
+function StrictRecorderLifecycleFixture() {
+  const [mounted, setMounted] = useState(false);
+  hooks.mountStrictRecorderLifecycle = () => setMounted(true);
+  return <Box id="recorder-strict-lifecycle">{mounted ? <React.StrictMode>
+    <VoiceRecorder autoStart onRecorded={async (clip) => log('recorder-strict-lifecycle', { data: await clip.blob.text(), size: clip.blob.size })} />
+  </React.StrictMode> : null}</Box>;
+}
+
+function MeterLifecycleFixture() {
+  const [stream, setStream] = useState<MediaStream>();
+  hooks.resetMeterLifecycle = () => setStream(undefined);
+  hooks.setMeterLifecycleStream = (next: MediaStream | undefined) => setStream(next);
+  return <Box id="meter-lifecycle"><AudioLevelMeter stream={stream} label="Lifecycle meter" /></Box>;
 }
 
 type Note = { author: string; text: string };
@@ -245,9 +285,15 @@ function LinkFixture() {
   </Box>;
 }
 
+function PreviewImageFixture() {
+  const [src, setSrc] = useState('https://example.com/preview-broken.png');
+  hooks.setPreviewImageSource = (next: string) => setSrc(next);
+  return <Box id="preview-image"><LinkPreview url="https://example.com/article" title="Image preview" image={{ src, alt: 'Preview' }} /></Box>;
+}
+
 createRoot(document.getElementById('root')!).render(<>
   <CountButtonFixture /><ActionBarFixture /><FollowFixture /><ReactionSummaryFixture /><PickerFixture /><PollFixture /><ThumbsFixture />
-  <RatingFixture /><ShareFixture /><PillFixture /><WaveformFixture /><PlayersFixture /><TranscriptFixture /><RecorderFixture />
-  <ThreadFixture /><ComposerFixture /><RichTextFixture /><ConversationFixture /><TypingFixture /><AnnotationFixture /><LinkFixture />
+  <RatingFixture /><ShareFixture /><PillFixture /><WaveformFixture /><PlayersFixture /><PlayerLifecycleFixture /><TranscriptFixture /><RecorderFixture /><MultiTakeRecorderFixture /><StrictRecorderLifecycleFixture /><MeterLifecycleFixture />
+  <ThreadFixture /><ComposerFixture /><RichTextFixture /><ConversationFixture /><TypingFixture /><AnnotationFixture /><LinkFixture /><PreviewImageFixture />
 </>);
 (window as any).ready = true;

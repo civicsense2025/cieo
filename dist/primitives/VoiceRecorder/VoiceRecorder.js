@@ -2,8 +2,9 @@
 'use client';
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 /* VoiceRecorder. Records a voice clip from the microphone and hands it to the host as a blob with its length and waveform peaks. The host owns upload and storage. */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { AudioLevelMeter, rmsLevel } from '../AudioLevelMeter/AudioLevelMeter.js';
+import { MAX_WAVEFORM_BARS } from '../AudioWaveform/AudioWaveform.js';
 import { AudioTime, speakAudioTime } from '../AudioTime/AudioTime.js';
 import { IconButton } from '../IconButton/IconButton.js';
 export const recorderIdle = { phase: 'idle', elapsed: 0, reason: null };
@@ -38,7 +39,7 @@ export function voiceRecorderStep(state, event) {
             return elapsed === state.elapsed ? state : { ...state, elapsed };
         }
         case 'fail':
-            return isRecorderActive(phase) ? to('error', { reason: 'failed' }) : state;
+            return isRecorderActive(phase) || phase === 'done' ? to('error', { reason: 'failed' }) : state;
         case 'cancel':
         case 'reset':
             return phase === 'idle' && state.elapsed === 0 ? state : recorderIdle;
@@ -49,6 +50,7 @@ export function shouldEmitClip(prev, next) {
     return isRecorderActive(prev.phase) && next.phase === 'done';
 }
 const MIME_PREFERENCE = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg;codecs=opus'];
+const useRecorderEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 /** First recording format the browser supports, in order of preference, or '' to let the browser choose. */
 export function pickRecorderMimeType(isTypeSupported) {
     for (const type of MIME_PREFERENCE) {
@@ -65,7 +67,7 @@ export function pickRecorderMimeType(isTypeSupported) {
 /** Shrinks samples (0..1 loudness readings) to `count` bars, each the loudest reading in its slice. Empty input gives []. */
 export function downsamplePeaks(samples, count = 64) {
     const n = samples.length;
-    const bars = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+    const bars = Number.isFinite(count) ? Math.min(MAX_WAVEFORM_BARS, Math.max(0, Math.floor(count))) : 0;
     if (!n || !bars)
         return [];
     return Array.from({ length: bars }, (_, i) => {
@@ -131,13 +133,53 @@ export function recorderAnnouncement(kind, seconds = 0) {
     }
 }
 const takeMs = (t) => t.banked + (t.since ? performance.now() - t.since : 0);
+function stopTracks(stream) {
+    stream.getTracks().forEach((track) => {
+        try {
+            track.stop();
+        }
+        catch {
+            /* continue releasing the rest of the stream */
+        }
+    });
+}
+function closeContext(ctx) {
+    if (!ctx)
+        return;
+    try {
+        void ctx.close().catch(() => { });
+    }
+    catch {
+        /* context already closed */
+    }
+}
 function release(t) {
-    clearInterval(t.timer);
+    if (t.released)
+        return;
+    t.released = true;
+    if (t.timer !== null)
+        clearInterval(t.timer);
+    t.timer = null;
     if (t.limitTimer !== null)
         clearTimeout(t.limitTimer);
     t.limitTimer = null;
-    t.stream.getTracks().forEach((track) => track.stop());
-    void t.ctx?.close().catch(() => { });
+    t.trackListeners.forEach(({ track, listener }) => {
+        try {
+            track.removeEventListener('ended', listener);
+        }
+        catch {
+            /* listener already detached */
+        }
+    });
+    t.trackListeners = [];
+    stopTracks(t.stream);
+    closeContext(t.ctx);
+    t.ctx = null;
+}
+function detachRecorder(t) {
+    t.recorder.ondataavailable = null;
+    t.recorder.onstop = null;
+    t.recorder.onerror = null;
 }
 const Glyph = ({ d }) => (_jsx("svg", { viewBox: "0 0 24 24", width: "18", height: "18", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", "aria-hidden": "true", focusable: "false", children: _jsx("path", { d: d }) }));
 const MIC = 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3';
@@ -153,6 +195,9 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     const [hold, setHold] = useState('record');
     const stateRef = useRef(state);
     const take = useRef(null);
+    const ownedTakes = useRef(new Set());
+    const currentAttempt = useRef(null);
+    const mounted = useRef(false);
     const session = useRef(0);
     const holdFrom = useRef(null);
     const live = useRef({ onRecorded, onCancel, limit });
@@ -163,13 +208,18 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         setState(next);
         return next;
     };
-    const fail = () => {
-        session.current += 1;
-        const t = take.current;
-        take.current = null;
+    const fail = (candidate) => {
+        const t = candidate ?? take.current;
+        const isCurrent = t ? currentAttempt.current === t.attempt : currentAttempt.current !== null;
         if (t) {
-            t.recorder.onstop = null;
-            t.recorder.onerror = null;
+            if (t.failed || t.discarded || t.finalized)
+                return;
+            t.failed = true;
+            t.discarded = true;
+            if (take.current === t)
+                take.current = null;
+            ownedTakes.current.delete(t);
+            detachRecorder(t);
             try {
                 if (t.recorder.state !== 'inactive')
                     t.recorder.stop();
@@ -179,19 +229,24 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             }
             release(t);
         }
+        if (!isCurrent)
+            return;
+        currentAttempt.current = null;
         setLevel(0);
-        send({ type: 'fail' });
+        if (isRecorderActive(stateRef.current.phase) || stateRef.current.phase === 'done')
+            send({ type: 'fail' });
         setMessage(recorderAnnouncement('failed'));
     };
-    /** Throws the take away without ever emitting a clip. */
+    /** Cancels only the active request or recording; earlier pending stop events remain independently owned. */
     const cancel = (notify = true) => {
         session.current += 1;
+        currentAttempt.current = null;
         const t = take.current;
         take.current = null;
         if (t) {
-            t.recorder.ondataavailable = null;
-            t.recorder.onstop = null;
-            t.recorder.onerror = null;
+            t.discarded = true;
+            ownedTakes.current.delete(t);
+            detachRecorder(t);
             try {
                 if (t.recorder.state !== 'inactive')
                     t.recorder.stop();
@@ -213,21 +268,31 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     };
     const finish = (kind) => {
         const t = take.current;
-        if (!t || (stateRef.current.phase !== 'recording' && stateRef.current.phase !== 'paused'))
+        if (!t || t.failed || t.discarded || (stateRef.current.phase !== 'recording' && stateRef.current.phase !== 'paused'))
             return;
         take.current = null;
-        clearInterval(t.timer);
+        if (t.timer !== null)
+            clearInterval(t.timer);
+        t.timer = null;
         if (t.limitTimer !== null)
             clearTimeout(t.limitTimer);
         t.limitTimer = null;
-        t.recorder.onerror = null;
         const duration = clipDuration(takeMs(t));
         const mimeType = t.recorder.mimeType || t.mime || 'audio/webm';
+        t.recorder.onerror = () => fail(t);
         t.recorder.onstop = () => {
+            if (t.finalized)
+                return;
+            t.finalized = true;
+            const shouldDeliver = mounted.current && ownedTakes.current.has(t) && !t.failed && !t.discarded;
+            ownedTakes.current.delete(t);
+            if (currentAttempt.current === t.attempt)
+                currentAttempt.current = null;
+            detachRecorder(t);
             release(t);
-            live.current.onRecorded({ blob: new Blob(t.chunks, { type: mimeType }), mimeType, duration, peaks: downsamplePeaks(t.peaks) });
+            if (shouldDeliver)
+                live.current.onRecorded({ blob: new Blob(t.chunks, { type: mimeType }), mimeType, duration, peaks: downsamplePeaks(t.peaks) });
         };
-        session.current += 1;
         setLevel(0);
         setHold('record');
         holdFrom.current = null;
@@ -240,11 +305,14 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
                 t.recorder.onstop?.(new Event('stop'));
         }
         catch {
-            release(t);
+            fail(t);
+            return;
         }
+        // Keep the recorder listeners until dataavailable then stop, but release the microphone and analyser now.
+        release(t);
     };
     const sample = (t) => {
-        if (!t.since)
+        if (!t.since || t.released || t.failed || t.discarded)
             return;
         const ms = takeMs(t);
         let l = 0;
@@ -270,88 +338,134 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         if (isRecorderActive(stateRef.current.phase))
             return;
         const mine = ++session.current;
+        currentAttempt.current = mine;
         send({ type: 'start' });
         setMessage('');
         const media = typeof navigator === 'undefined' ? undefined : navigator.mediaDevices;
         if (!media?.getUserMedia || typeof MediaRecorder === 'undefined') {
+            currentAttempt.current = null;
             send({ type: 'unsupported' });
             setMessage(recorderAnnouncement('unsupported'));
             return;
         }
-        media.getUserMedia({ audio: true }).then((stream) => {
-            if (mine !== session.current) {
-                stream.getTracks().forEach((track) => track.stop());
+        let request;
+        try {
+            request = media.getUserMedia({ audio: true });
+        }
+        catch {
+            fail();
+            return;
+        }
+        Promise.resolve(request).then((stream) => {
+            if (mine !== currentAttempt.current || !mounted.current) {
+                stopTracks(stream);
                 return;
             }
-            let t;
-            let ctx = null;
+            let t = null;
             try {
                 const mime = pickRecorderMimeType((type) => MediaRecorder.isTypeSupported?.(type) ?? false);
                 const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
-                const chunks = [];
-                recorder.ondataavailable = (e) => {
-                    if (e.data.size)
-                        chunks.push(e.data);
+                t = {
+                    attempt: mine,
+                    stream,
+                    recorder,
+                    ctx: null,
+                    analyser: null,
+                    buffer: new Float32Array(0),
+                    chunks: [],
+                    peaks: [],
+                    timer: null,
+                    limitTimer: null,
+                    banked: 0,
+                    since: 0,
+                    mime,
+                    lastSecond: 0,
+                    lastLevel: 0,
+                    released: false,
+                    failed: false,
+                    discarded: false,
+                    finalized: false,
+                    trackListeners: [],
                 };
-                let analyser = null;
+                recorder.ondataavailable = (e) => {
+                    if (!t.failed && !t.discarded && !t.finalized && e.data.size)
+                        t.chunks.push(e.data);
+                };
+                recorder.onerror = () => fail(t);
                 try {
                     const Ctor = window.AudioContext ?? window.webkitAudioContext;
                     if (Ctor) {
-                        ctx = new Ctor();
-                        analyser = ctx.createAnalyser();
-                        analyser.fftSize = 1024;
-                        ctx.createMediaStreamSource(stream).connect(analyser);
-                        void ctx.resume?.().catch(() => { });
+                        const ctx = new Ctor();
+                        t.ctx = ctx;
+                        try {
+                            const analyser = ctx.createAnalyser();
+                            analyser.fftSize = 1024;
+                            ctx.createMediaStreamSource(stream).connect(analyser);
+                            void ctx.resume?.().catch(() => { });
+                            t.analyser = analyser;
+                            t.buffer = new Float32Array(analyser.fftSize);
+                        }
+                        catch {
+                            closeContext(ctx);
+                            t.ctx = null;
+                            t.analyser = null;
+                            t.buffer = new Float32Array(0);
+                        }
                     }
                 }
                 catch {
-                    /* the clip still records; it just has no waveform */
-                    void ctx?.close().catch(() => { });
-                    ctx = null;
-                    analyser = null;
+                    /* the clip still records when a level analyser is unavailable */
                 }
-                t = { stream, recorder, ctx, analyser, buffer: new Float32Array(analyser?.fftSize ?? 0), chunks, peaks: [], timer: 0, limitTimer: null, banked: 0, since: 0, mime, lastSecond: 0, lastLevel: 0 };
+                take.current = t;
+                ownedTakes.current.add(t);
                 recorder.start();
+                if (t.failed || t.discarded || t.released)
+                    return;
                 t.since = performance.now();
                 t.timer = setInterval(() => sample(t), 50);
                 t.limitTimer = setTimeout(() => {
                     if (take.current === t)
                         finish('limit');
                 }, limitRemainingMs(0, live.current.limit));
+                stream.getAudioTracks().forEach((track) => {
+                    const listener = () => {
+                        if (ownedTakes.current.has(t) && !t.released)
+                            fail(t);
+                    };
+                    track.addEventListener('ended', listener);
+                    t.trackListeners.push({ track, listener });
+                    if (track.readyState === 'ended')
+                        listener();
+                });
+                if (t.failed || t.discarded || t.released)
+                    return;
+                send({ type: 'granted' });
+                setMessage(recorderAnnouncement('recording'));
             }
             catch {
-                void ctx?.close().catch(() => { });
-                stream.getTracks().forEach((track) => track.stop());
-                send({ type: 'fail' });
-                setMessage(recorderAnnouncement('failed'));
-                return;
+                if (t)
+                    fail(t);
+                else {
+                    stopTracks(stream);
+                    fail();
+                }
             }
-            take.current = t;
-            t.recorder.onerror = () => {
-                if (take.current === t)
-                    fail();
-            };
-            stream.getAudioTracks()[0]?.addEventListener('ended', () => {
-                if (take.current === t)
-                    fail();
-            });
-            send({ type: 'granted' });
-            setMessage(recorderAnnouncement('recording'));
         }, (err) => {
-            if (mine !== session.current)
+            if (mine !== currentAttempt.current)
                 return;
             const name = err?.name;
             if (name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError') {
+                currentAttempt.current = null;
                 send({ type: 'denied' });
                 setMessage(recorderAnnouncement('denied'));
             }
             else if (name === 'NotFoundError' || name === 'TypeError') {
+                currentAttempt.current = null;
                 send({ type: 'unsupported' });
                 setMessage(recorderAnnouncement('unsupported'));
             }
             else {
-                send({ type: 'fail' });
-                setMessage(recorderAnnouncement('failed'));
+                fail();
             }
         });
     };
@@ -389,22 +503,25 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     };
     const phase = state.phase;
     const active = isRecorderActive(phase);
-    useEffect(() => {
+    useRecorderEffect(() => {
+        mounted.current = true;
         if (autoStart)
             begin();
         return () => {
             /* Unmount: stop the microphone and drop the take. No clip, no onCancel. */
+            mounted.current = false;
             session.current += 1;
-            const t = take.current;
+            currentAttempt.current = null;
+            const owned = [...ownedTakes.current];
+            ownedTakes.current.clear();
             take.current = null;
             holdFrom.current = null;
-            stateRef.current = recorderAfterCleanup(stateRef.current);
+            stateRef.current = recorderIdle;
             setState(stateRef.current);
             setLevel(0);
-            if (t) {
-                t.recorder.ondataavailable = null;
-                t.recorder.onstop = null;
-                t.recorder.onerror = null;
+            owned.forEach((t) => {
+                t.discarded = true;
+                detachRecorder(t);
                 try {
                     if (t.recorder.state !== 'inactive')
                         t.recorder.stop();
@@ -413,7 +530,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
                     /* recorder already dead */
                 }
                 release(t);
-            }
+            });
         };
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     useEffect(() => {

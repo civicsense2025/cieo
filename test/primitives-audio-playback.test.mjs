@@ -5,6 +5,7 @@ import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { AudioPlayButton, audioPlayButtonName } from '../dist/primitives/AudioPlayButton/AudioPlayButton.js';
 import { AudioWaveform, waveformBars, seekFromPointer, waveformKeyStep, WAVEFORM_FLOOR } from '../dist/primitives/AudioWaveform/AudioWaveform.js';
+import * as waveformModule from '../dist/primitives/AudioWaveform/AudioWaveform.js';
 import { PlaybackRateButton, nextRate, playbackRateName } from '../dist/primitives/PlaybackRateButton/PlaybackRateButton.js';
 import { AudioPlayer, audioPlayerStep, registerAudioPlayer, claimAudioPlayback, AUDIO_PLAY_EVENT, createAudioPlayerToken } from '../dist/primitives/AudioPlayer/AudioPlayer.js';
 import { AudioTranscript, activeWordIndex, transcriptKeyStep, shouldAutoScroll, transcriptScrollTop } from '../dist/primitives/AudioTranscript/AudioTranscript.js';
@@ -48,6 +49,12 @@ test('waveformBars edges: empty, silent, fewer peaks than bars, bad values, zero
   assert.equal(waveformBars([0.3, 0.9], 6).length, 6);
   assert.ok(waveformBars([Number.NaN, 1, -1], 3).every((b) => Number.isFinite(b) && b > 0));
   assert.deepEqual(waveformBars([1], 0), []);
+});
+test('waveform and downsample output share the exported 128-bar cap', () => {
+  assert.equal(waveformModule.MAX_WAVEFORM_BARS, 128);
+  assert.equal(waveformBars([1, 0.5], 100_000).length, 128);
+  const markup = html(AudioWaveform, { peaks: [1, 0.5], duration: 10, current: 0, label: 'Bounded', bars: 100_000 });
+  assert.equal((markup.match(/class="cieo-audio-waveform-bar"/g) ?? []).length, 256, 'two rendered layers each contain at most 128 bars');
 });
 test('seekFromPointer maps x to seconds and clamps', () => {
   assert.equal(seekFromPointer(50, 100, 60), 30);
@@ -106,6 +113,15 @@ test('PlaybackRateButton shows the rate and names it in words', () => {
   assert.match(m, />1\.5×</);
   assert.equal(playbackRateName(2), 'Playback speed, 2 times');
 });
+test('PlaybackRateButton sanitizes invalid scalar rates and invalid rate lists', () => {
+  const m = html(PlaybackRateButton, { rate: Number.NaN, rates: [1, 1.5, 2], onRateChange() {} });
+  assert.match(m, /aria-label="Playback speed, 1 time"/);
+  assert.match(m, />1×</);
+  for (const rate of [Number.POSITIVE_INFINITY, 0, -1]) assert.equal(playbackRateName(rate), 'Playback speed, 1 time');
+  assert.equal(nextRate([1, 1.5, 2], Number.NaN), 1.5);
+  assert.equal(nextRate([1, 1.5, 2], 0), 1.5);
+  assert.equal(nextRate([Number.NaN, Number.POSITIVE_INFINITY, 0, -1], 1), 1);
+});
 
 // AudioPlayer state machine
 test('audioPlayerStep: every transition', () => {
@@ -121,6 +137,9 @@ test('audioPlayerStep: every transition', () => {
   assert.equal(audioPlayerStep('ended', 'play'), 'playing');
   assert.equal(audioPlayerStep('ended', 'pause'), 'ended');
   assert.equal(audioPlayerStep('ready', 'pause'), 'ready');
+});
+test('audioPlayerStep resets every prior source state to loading', () => {
+  for (const phase of ['loading', 'ready', 'playing', 'ended', 'error']) assert.equal(audioPlayerStep(phase, 'source'), 'loading');
 });
 test('audioPlayerStep: pause then ended (browser order) lands on ended; error is sticky until retry; retry only from error', () => {
   assert.equal(audioPlayerStep(audioPlayerStep('playing', 'pause'), 'ended'), 'ended');

@@ -1,6 +1,6 @@
 # VoiceRecorder
 
-Records a voice clip from the microphone and gives the host a blob, its length and 64 waveform peaks. The host owns upload and storage.
+Records a voice clip from the microphone and gives the host a blob, its length and 64 waveform peaks by default (up to 128 when requested). The host owns upload and storage.
 
 ## Use when
 
@@ -20,7 +20,7 @@ Idle: a microphone button. Recording: a pulsing dot, the elapsed time, a live le
 
 - `voiceRecorderStep` is a pure machine: idle, requesting, recording, paused, done, and error with reason `denied`, `unsupported` or `failed`. Cancel from any active state returns to idle and cannot produce a clip.
 - The format is picked by `pickRecorderMimeType`: webm/opus, then mp4, then ogg/opus, then the browser default.
-- Peaks are sampled from an analyser every 50ms and shrunk to 64 values by `downsamplePeaks`.
+- Peaks are sampled from an analyser every 50ms and shrunk to 64 values by default (maximum 128) by `downsamplePeaks`.
 - The last 10 seconds before `maxDuration` show the time left in the warning color. The take stops itself at the limit, by a timer armed for the time left at start and resume (so a throttled background tab still stops on time); the reported duration is the real recorded length, not clamped. Limits of 10 seconds or less do not warn.
 - Hold mode: pointer down starts, release finishes, sliding left past 80px shows "Release to cancel" and cancels (`holdGesture`).
 - Every media track and the audio context are released on stop, cancel, error and unmount. Unmounting never emits a clip and returns the recorder to idle, so a StrictMode remount starts cleanly. An encoder error (`MediaRecorder` `onerror`) fails the take and releases everything; a failure while starting also closes the audio context.

@@ -13,7 +13,7 @@ export declare function trimUrl(raw: string): {
 };
 /** Splits post text into text, url, mention, tag and break tokens. Pure; the same input always gives the same tokens, and joining every value rebuilds the text (breaks as newlines). */
 export declare function tokenizeRichText(text: string): RichTextToken[];
-/** Display form of an address: no scheme, no www., end ellipsized so the result is at most `max` characters. */
+/** Display form of an address: no scheme or www.; preserve the parsed host and shorten only its path. */
 export declare function shortenUrl(url: string, max?: number): string;
 export interface RichTextProps {
     /** Plain post text. Rendered as text nodes, never as HTML. */

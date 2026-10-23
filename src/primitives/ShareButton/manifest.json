@@ -15,7 +15,7 @@
     "path": "src/primitives/ShareButton/ShareButton.tsx",
     "symbol": "ShareButton"
   },
-  "dependencies": [],
+  "dependencies": ["Mention"],
   "nativePrimitives": [],
   "properties": [
     {

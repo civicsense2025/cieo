@@ -3,6 +3,7 @@
 /* ShareButton. Opens the device share sheet, or copies the link where there is none, and says what happened. The host owns the URL and any analytics. */
 import { useEffect, useRef, useState } from 'react';
 import { SwapText } from '../../react/index.js';
+import { safeHref } from '../Mention/Mention.js';
 
 export type ShareMethod = 'native' | 'copy' | 'none';
 export type ShareNavigator = { share?: unknown; clipboard?: { writeText?: unknown } };
@@ -17,12 +18,7 @@ export function shareMethod(nav: ShareNavigator | undefined): ShareMethod {
 
 /** True only for absolute http and https URLs; anything else (javascript:, data:, relative paths) is never shared. */
 export function isShareableUrl(url: string): boolean {
-  try {
-    const p = new URL(url).protocol;
-    return p === 'http:' || p === 'https:';
-  } catch {
-    return false;
-  }
+  return safeHref(url, { relative: false }) !== null;
 }
 
 /** Shares through the best method. A user cancelling the native sheet is `cancelled`, not an error; any other native failure falls back to copying. */

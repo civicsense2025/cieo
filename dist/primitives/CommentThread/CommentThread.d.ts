@@ -41,7 +41,7 @@ export interface CommentThreadProps<T = unknown> {
     items: CommentNode<T>[];
     /** Renders one comment. Return a Comment and give it `ctx.replies`, `ctx.depth` and `ctx.hasReplies`. Required. */
     renderItem: (node: CommentNode<T>, ctx: CommentRenderContext) => ReactNode;
-    /** Deepest nesting level. Replies below it show at this level, flattened in order. Defaults to 3. */
+    /** Deepest nesting level, capped at 32. Replies below it show at this level, flattened in order. Defaults to 3. */
     maxDepth?: number;
     /** Replies shown per branch before "view more". Defaults to 2. */
     initialReplies?: number;

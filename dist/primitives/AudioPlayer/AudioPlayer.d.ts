@@ -1,5 +1,5 @@
 export type AudioPlayerState = 'loading' | 'ready' | 'playing' | 'ended' | 'error';
-export type AudioPlayerEvent = 'loadedmetadata' | 'play' | 'pause' | 'ended' | 'error' | 'retry';
+export type AudioPlayerEvent = 'loadedmetadata' | 'play' | 'pause' | 'ended' | 'error' | 'retry' | 'source';
 /** Pure state step driven by the audio element's events. Error is sticky until retry; ended returns to ready-to-play on the next play. */
 export declare function audioPlayerStep(state: AudioPlayerState, event: AudioPlayerEvent): AudioPlayerState;
 /** Unique token for one player instance. Not useId, which repeats across separate React roots on one page. Also unique across separately bundled copies of this module. */

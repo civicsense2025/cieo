@@ -15,7 +15,7 @@
     "path": "src/primitives/VoiceRecorder/VoiceRecorder.tsx",
     "symbol": "VoiceRecorder"
   },
-  "dependencies": ["AudioLevelMeter", "AudioTime", "IconButton"],
+  "dependencies": ["AudioLevelMeter", "AudioTime", "AudioWaveform", "IconButton"],
   "nativePrimitives": [],
   "properties": [
     {

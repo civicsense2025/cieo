@@ -1513,7 +1513,9 @@
       "files": [
         "ShareButton/ShareButton.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Mention"
+      ],
       "packageImports": [
         "cieo/react"
       ],
@@ -2008,6 +2010,7 @@
       "registryDependencies": [
         "AudioLevelMeter",
         "AudioTime",
+        "AudioWaveform",
         "IconButton"
       ],
       "packageImports": [],
