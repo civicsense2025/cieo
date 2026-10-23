@@ -6,9 +6,27 @@ enum AudioSessionUse: Sendable { case playback, recording }
 
 enum AudioSessionCategory: Sendable, Equatable { case playback, playAndRecord }
 
+public enum AudioSessionReconciliationStatus: Sendable, Equatable {
+    case ready
+    case retrying(attempt: Int, maximumAttempts: Int, message: String)
+    case failed(attempts: Int, message: String)
+}
+
 protocol AudioSessionBackend: Sendable {
     func setCategory(_ category: AudioSessionCategory) throws
     func setActive(_ active: Bool) throws
+}
+
+protocol AudioSessionRetryScheduler: AnyObject, Sendable {
+    func schedule(after delay: TimeInterval, operation: @escaping @Sendable () -> Void)
+}
+
+private final class SystemAudioSessionRetryScheduler: AudioSessionRetryScheduler, @unchecked Sendable {
+    static let shared = SystemAudioSessionRetryScheduler()
+
+    func schedule(after delay: TimeInterval, operation: @escaping @Sendable () -> Void) {
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + delay, execute: operation)
+    }
 }
 
 private struct SystemAudioSessionBackend: AudioSessionBackend {
@@ -37,58 +55,175 @@ private struct SystemAudioSessionBackend: AudioSessionBackend {
 }
 
 protocol AudioSessionManaging: Sendable {
+    var reconciliationStatus: AudioSessionReconciliationStatus { get }
     func activate(_ use: AudioSessionUse, owner: UUID) throws
+    /// Removes the logical owner immediately; on backend failure, the manager retains bounded repair state.
     func deactivate(owner: UUID) throws
 }
 
 final class SystemAudioSessionManager: AudioSessionManaging, @unchecked Sendable {
     static let shared = SystemAudioSessionManager()
 
+    private struct RetryRequest {
+        let scheduler: AudioSessionRetryScheduler
+        let generation: UInt64
+        let attempt: Int
+        let delay: TimeInterval
+    }
+
+    private static let retryDelays: [TimeInterval] = [0.05, 0.1, 0.2]
+
     private let lock = NSLock()
     private let backend: AudioSessionBackend
+    private weak var retryScheduler: AudioSessionRetryScheduler?
+    /// Logical owners only. Ended owners leave immediately, even if the OS is still active.
     private var leases: [UUID: AudioSessionUse] = [:]
+    /// Last backend state confirmed by a successful call; may temporarily differ from `leases`.
     private var activeCategory: AudioSessionCategory?
     private var isActive = false
+    private var status: AudioSessionReconciliationStatus = .ready
+    private var retryGeneration: UInt64 = 0
+    private var retriesScheduled = 0
 
-    init() { backend = SystemAudioSessionBackend() }
+    init() {
+        backend = SystemAudioSessionBackend()
+        retryScheduler = SystemAudioSessionRetryScheduler.shared
+    }
 
-    init(backend: AudioSessionBackend) { self.backend = backend }
+    init(backend: AudioSessionBackend) {
+        self.backend = backend
+        retryScheduler = SystemAudioSessionRetryScheduler.shared
+    }
+
+    init(backend: AudioSessionBackend, retryScheduler: AudioSessionRetryScheduler) {
+        self.backend = backend
+        self.retryScheduler = retryScheduler
+    }
+
+    var reconciliationStatus: AudioSessionReconciliationStatus {
+        lock.lock(); defer { lock.unlock() }
+        return status
+    }
 
     func activate(_ use: AudioSessionUse, owner: UUID) throws {
-        lock.lock(); defer { lock.unlock() }
+        lock.lock()
         var nextLeases = leases
         nextLeases[owner] = use
-        guard let nextCategory = Self.category(for: nextLeases) else { return }
-        let categoryChanged = activeCategory != nextCategory
-        if categoryChanged { try backend.setCategory(nextCategory) }
-        if !isActive {
-            do {
-                try backend.setActive(true)
-            } catch {
-                if categoryChanged, let activeCategory { try? backend.setCategory(activeCategory) }
-                throw error
+        do {
+            try reconcileLocked(to: Self.category(for: nextLeases))
+            leases = nextLeases
+            cancelRetriesLocked()
+            lock.unlock()
+        } catch {
+            let activationError = error
+            var retryRequest: RetryRequest?
+            if case .retrying = status {
+                // A retry is already queued for the existing logical owners.
+            } else {
+                retryGeneration &+= 1
+                retriesScheduled = 0
+                status = .ready
+                do {
+                    try reconcileLocked(to: Self.category(for: leases))
+                } catch {
+                    retryRequest = scheduleRetryLocked(after: error)
+                }
             }
+            lock.unlock()
+            enqueue(retryRequest)
+            throw activationError
         }
-        leases = nextLeases
-        activeCategory = nextCategory
-        isActive = true
     }
 
     func deactivate(owner: UUID) throws {
-        lock.lock(); defer { lock.unlock() }
-        guard leases[owner] != nil else { return }
-        var nextLeases = leases
-        nextLeases[owner] = nil
-        guard let nextCategory = Self.category(for: nextLeases) else {
-            try backend.setActive(false)
-            leases = nextLeases
-            activeCategory = nil
-            isActive = false
+        lock.lock()
+        guard leases.removeValue(forKey: owner) != nil else {
+            lock.unlock()
             return
         }
-        if activeCategory != nextCategory { try backend.setCategory(nextCategory) }
-        leases = nextLeases
-        activeCategory = nextCategory
+        retryGeneration &+= 1
+        retriesScheduled = 0
+        status = .ready
+        do {
+            try reconcileLocked(to: Self.category(for: leases))
+            lock.unlock()
+        } catch {
+            let retryRequest = scheduleRetryLocked(after: error)
+            lock.unlock()
+            enqueue(retryRequest)
+            throw error
+        }
+    }
+
+    /// Applies the desired state while holding `lock`. Logical leases are not restored on failure.
+    private func reconcileLocked(to desiredCategory: AudioSessionCategory?) throws {
+        if let desiredCategory {
+            if activeCategory != desiredCategory {
+                try backend.setCategory(desiredCategory)
+                activeCategory = desiredCategory
+            }
+            if !isActive {
+                try backend.setActive(true)
+                isActive = true
+            }
+        } else if isActive {
+            try backend.setActive(false)
+            isActive = false
+        }
+    }
+
+    /// Queues at most three retries after the original operation fails.
+    private func scheduleRetryLocked(after error: Error) -> RetryRequest? {
+        let message = String(describing: error)
+        guard let retryScheduler else {
+            status = .failed(attempts: retriesScheduled + 1, message: "Retry scheduler unavailable: \(message)")
+            return nil
+        }
+        let attempt = retriesScheduled + 1
+        guard attempt <= Self.retryDelays.count else {
+            status = .failed(attempts: retriesScheduled + 1, message: message)
+            return nil
+        }
+        retriesScheduled = attempt
+        status = .retrying(attempt: attempt, maximumAttempts: Self.retryDelays.count, message: message)
+        return RetryRequest(scheduler: retryScheduler, generation: retryGeneration, attempt: attempt,
+                            delay: Self.retryDelays[attempt - 1])
+    }
+
+    private func enqueue(_ request: RetryRequest?) {
+        guard let request else { return }
+        // The scheduler owns one bounded ticket. The manager does not retain tickets, avoiding a cycle.
+        let generation = request.generation
+        let attempt = request.attempt
+        request.scheduler.schedule(after: request.delay) { [self] in
+            retryReconciliation(generation: generation, attempt: attempt)
+        }
+    }
+
+    private func retryReconciliation(generation: UInt64, attempt: Int) {
+        lock.lock()
+        guard retryGeneration == generation,
+              case .retrying(let currentAttempt, _, _) = status,
+              currentAttempt == attempt else {
+            lock.unlock()
+            return
+        }
+        var retryRequest: RetryRequest?
+        do {
+            try reconcileLocked(to: Self.category(for: leases))
+            status = .ready
+            retriesScheduled = 0
+        } catch {
+            retryRequest = scheduleRetryLocked(after: error)
+        }
+        lock.unlock()
+        enqueue(retryRequest)
+    }
+
+    private func cancelRetriesLocked() {
+        retryGeneration &+= 1
+        retriesScheduled = 0
+        status = .ready
     }
 
     private static func category(for leases: [UUID: AudioSessionUse]) -> AudioSessionCategory? {
@@ -97,6 +232,13 @@ final class SystemAudioSessionManager: AudioSessionManaging, @unchecked Sendable
             return .playAndRecord
         }
         return .playback
+    }
+}
+
+/// Read the process-wide audio-session repair state even after an audio model is gone.
+public enum AudioSessionStatusCenter {
+    public static var current: AudioSessionReconciliationStatus {
+        SystemAudioSessionManager.shared.reconciliationStatus
     }
 }
 
@@ -150,6 +292,8 @@ public enum AudioPlaybackEvent: Sendable, Equatable, CaseIterable {
 public final class AudioPlaybackModel: AudioPausable {
     /// Where the clip is in its life.
     public private(set) var state: AudioPlaybackState = .loading
+    /// Snapshot of the shared audio-session repair state. `.failed` means bounded retries were exhausted.
+    public var audioSessionStatus: AudioSessionReconciliationStatus { sessionManager.reconciliationStatus }
     /// Playhead in seconds.
     public private(set) var currentTime: TimeInterval = 0
     /// Clip length in seconds once known (or given up front).

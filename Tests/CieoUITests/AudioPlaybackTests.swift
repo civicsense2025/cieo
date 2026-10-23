@@ -14,6 +14,8 @@ private final class FakeAudioSessionManager: AudioSessionManaging, @unchecked Se
     private var deactivations = 0
     private var activationFailuresRemaining = 0
 
+    var reconciliationStatus: AudioSessionReconciliationStatus { .ready }
+
     var activeOwner: UUID? {
         lock.lock(); defer { lock.unlock() }
         return owner
@@ -67,6 +69,11 @@ private final class FakeSystemAudioSessionBackend: AudioSessionBackend, @uncheck
         return activeChanges
     }
 
+    var deactivationAttempts: Int {
+        lock.lock(); defer { lock.unlock() }
+        return activeChanges.filter { !$0 }.count
+    }
+
     var isActive: Bool {
         lock.lock(); defer { lock.unlock() }
         return currentActive
@@ -82,9 +89,19 @@ private final class FakeSystemAudioSessionBackend: AudioSessionBackend, @uncheck
         categoryFailuresRemaining += 1
     }
 
+    func failCategoryChanges(_ count: Int) {
+        lock.lock(); defer { lock.unlock() }
+        categoryFailuresRemaining += max(0, count)
+    }
+
     func failNextDeactivation() {
         lock.lock(); defer { lock.unlock() }
         deactivationFailuresRemaining += 1
+    }
+
+    func failDeactivations(_ count: Int) {
+        lock.lock(); defer { lock.unlock() }
+        deactivationFailuresRemaining += max(0, count)
     }
 
     func setCategory(_ category: AudioSessionCategory) throws {
@@ -109,6 +126,34 @@ private final class FakeSystemAudioSessionBackend: AudioSessionBackend, @uncheck
         }
         currentActive = active
     }
+}
+
+private final class ManualAudioSessionRetryScheduler: AudioSessionRetryScheduler, @unchecked Sendable {
+    private let lock = NSLock()
+    private var scheduled: [@Sendable () -> Void] = []
+
+    var pendingCount: Int {
+        lock.lock(); defer { lock.unlock() }
+        return scheduled.count
+    }
+
+    func schedule(after delay: TimeInterval, operation: @escaping @Sendable () -> Void) {
+        lock.lock(); defer { lock.unlock() }
+        scheduled.append(operation)
+    }
+
+    @discardableResult
+    func runNext() -> Bool {
+        lock.lock()
+        let operation = scheduled.isEmpty ? nil : scheduled.removeFirst()
+        lock.unlock()
+        operation?()
+        return operation != nil
+    }
+}
+
+private final class WeakAudioSessionManager {
+    weak var value: SystemAudioSessionManager?
 }
 
 final class AudioPlaybackTests: XCTestCase {
@@ -506,14 +551,14 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertThrowsError(try manager.activate(.playback, owner: owner))
         try manager.activate(.playback, owner: owner)
 
-        XCTAssertEqual(backend.categories, [.playback, .playback])
+        XCTAssertEqual(backend.categories, [.playback], "a failed activation still remembers the successful category configuration")
         XCTAssertEqual(backend.activeValues, [true, true])
         XCTAssertTrue(backend.isActive)
         try manager.deactivate(owner: owner)
         XCTAssertFalse(backend.isActive)
     }
 
-    func testFailedDeactivationKeepsTheLeaseForATeardownRetry() throws {
+    func testFailedDeactivationKeepsReconciliationAliveAfterLogicalLeaseEnds() async throws {
         let backend = FakeSystemAudioSessionBackend()
         let manager = SystemAudioSessionManager(backend: backend)
         let owner = UUID()
@@ -522,14 +567,134 @@ final class AudioPlaybackTests: XCTestCase {
 
         XCTAssertThrowsError(try manager.deactivate(owner: owner))
         XCTAssertTrue(backend.isActive)
-        try manager.deactivate(owner: owner)
+        XCTAssertEqual(manager.reconciliationStatus, .retrying(attempt: 1, maximumAttempts: 3, message: "deactivation"))
 
+        let deadline = Date().addingTimeInterval(1)
+        while backend.isActive && Date() < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+
+        XCTAssertEqual(backend.activeValues, [true, false, false])
+        XCTAssertFalse(backend.isActive)
+        XCTAssertEqual(manager.reconciliationStatus, .ready)
+    }
+
+    @MainActor
+    func testFinalPlaybackTeardownRetriesDeactivationAfterEngineIsGone() async throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let model = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"),
+                                       coordinator: AudioPlaybackCoordinator(), sessionManager: manager)
+        model.play()
+        backend.failDeactivations(2)
+
+        model.teardown()
+
+        let deadline = Date().addingTimeInterval(1)
+        while backend.isActive && Date() < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertFalse(backend.isActive, "manager-owned retries release audio after the player engine is gone")
+        XCTAssertEqual(backend.deactivationAttempts, 3, "initial attempt plus two bounded retries")
+    }
+
+    @MainActor
+    func testPlaybackActivationCancelsPendingFinalDeactivationAndRestoresPlaybackCategory() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let scheduler = ManualAudioSessionRetryScheduler()
+        let manager = SystemAudioSessionManager(backend: backend, retryScheduler: scheduler)
+        let recordingOwner = UUID()
+        let playbackOwner = UUID()
+        try manager.activate(.recording, owner: recordingOwner)
+        backend.failNextDeactivation()
+
+        XCTAssertThrowsError(try manager.deactivate(owner: recordingOwner))
+        XCTAssertTrue(backend.isActive)
+        XCTAssertEqual(scheduler.pendingCount, 1)
+
+        try manager.activate(.playback, owner: playbackOwner)
+
+        XCTAssertEqual(backend.categories.last, .playback, "an ended recording lease cannot pin playAndRecord")
+        XCTAssertTrue(backend.isActive)
+        XCTAssertEqual(backend.activeValues, [true, false])
+        XCTAssertTrue(scheduler.runNext())
+        XCTAssertTrue(backend.isActive, "a retry for the old inactive target is cancelled by the new lease")
+        XCTAssertEqual(backend.activeValues, [true, false])
+        try manager.deactivate(owner: playbackOwner)
         XCTAssertEqual(backend.activeValues, [true, false, false])
         XCTAssertFalse(backend.isActive)
     }
 
+    func testRecordingReleaseRetriesPlaybackCategoryWithoutDeactivatingRemainingPlayback() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let scheduler = ManualAudioSessionRetryScheduler()
+        let manager = SystemAudioSessionManager(backend: backend, retryScheduler: scheduler)
+        let playbackOwner = UUID()
+        let recordingOwner = UUID()
+        try manager.activate(.playback, owner: playbackOwner)
+        try manager.activate(.recording, owner: recordingOwner)
+        backend.failCategoryChanges(2)
+
+        XCTAssertThrowsError(try manager.deactivate(owner: recordingOwner))
+        XCTAssertEqual(manager.reconciliationStatus, .retrying(attempt: 1, maximumAttempts: 3, message: "category"))
+        XCTAssertTrue(backend.isActive)
+        XCTAssertTrue(scheduler.runNext())
+        XCTAssertTrue(scheduler.runNext())
+
+        XCTAssertEqual(backend.categories, [.playback, .playAndRecord, .playback])
+        XCTAssertEqual(backend.activeValues, [true], "removing the recording use must not deactivate playback")
+        XCTAssertEqual(manager.reconciliationStatus, .ready)
+        try manager.deactivate(owner: playbackOwner)
+        XCTAssertEqual(backend.activeValues, [true, false])
+        XCTAssertFalse(backend.isActive)
+    }
+
+    func testExhaustedDeactivationRetriesAreReportedAndEndedRecordingDoesNotPinCategory() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let scheduler = ManualAudioSessionRetryScheduler()
+        let manager = SystemAudioSessionManager(backend: backend, retryScheduler: scheduler)
+        let recordingOwner = UUID()
+        let playbackOwner = UUID()
+        try manager.activate(.recording, owner: recordingOwner)
+        backend.failDeactivations(4)
+
+        XCTAssertThrowsError(try manager.deactivate(owner: recordingOwner))
+        XCTAssertEqual(manager.reconciliationStatus, .retrying(attempt: 1, maximumAttempts: 3, message: "deactivation"))
+        for _ in 0..<3 { XCTAssertTrue(scheduler.runNext()) }
+
+        XCTAssertEqual(backend.deactivationAttempts, 4, "one attempt plus three bounded retries")
+        XCTAssertEqual(scheduler.pendingCount, 0, "exhausted failures stop scheduling")
+        XCTAssertEqual(manager.reconciliationStatus, .failed(attempts: 4, message: "deactivation"))
+        XCTAssertTrue(backend.isActive, "the failed system operation is reported, not represented as an active logical lease")
+
+        try manager.activate(.playback, owner: playbackOwner)
+        XCTAssertEqual(backend.categories.last, .playback, "an ended recording lease cannot pin playAndRecord after exhaustion")
+        XCTAssertEqual(manager.reconciliationStatus, .ready)
+        try manager.deactivate(owner: playbackOwner)
+        XCTAssertFalse(backend.isActive)
+    }
+
+    func testScheduledRetryRetainsManagerUntilCompletionThenReleasesIt() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let scheduler = ManualAudioSessionRetryScheduler()
+        var manager: SystemAudioSessionManager? = SystemAudioSessionManager(backend: backend, retryScheduler: scheduler)
+        let weakManager = WeakAudioSessionManager()
+        weakManager.value = manager
+        let owner = UUID()
+        try XCTUnwrap(manager).activate(.playback, owner: owner)
+        backend.failNextDeactivation()
+
+        XCTAssertThrowsError(try XCTUnwrap(manager).deactivate(owner: owner))
+        manager = nil
+        XCTAssertNotNil(weakManager.value, "queued work owns the manager until reconciliation finishes")
+
+        XCTAssertTrue(scheduler.runNext())
+        XCTAssertFalse(backend.isActive)
+        XCTAssertNil(weakManager.value, "the completed bounded ticket does not keep the manager alive")
+    }
+
     @MainActor
-    func testPlaybackTeardownRetriesADeactivationThatFailedOnPause() throws {
+    func testPlaybackTeardownLeavesManagerOwnedRetryAfterPauseReleaseFails() async throws {
         let backend = FakeSystemAudioSessionBackend()
         let manager = SystemAudioSessionManager(backend: backend)
         let model = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"),
@@ -543,7 +708,11 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertEqual(model.state, .ready)
         XCTAssertTrue(backend.isActive, "the manager keeps a failed lease alive")
         model.teardown()
-        XCTAssertFalse(backend.isActive, "teardown retries deactivation for the same owner")
+        let deadline = Date().addingTimeInterval(1)
+        while backend.isActive && Date() < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertFalse(backend.isActive, "the manager-owned retry releases the session after model teardown")
         XCTAssertEqual(backend.activeValues, [true, false, false])
     }
 

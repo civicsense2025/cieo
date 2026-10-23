@@ -1,4 +1,5 @@
 @testable import CieoUI
+import Foundation
 import SwiftUI
 import XCTest
 
@@ -50,8 +51,8 @@ private final class FakeCaptureSessionManager: AudioSessionManaging, @unchecked 
     private let lock = NSLock()
     private var owner: UUID?
     private var deactivations = 0
-    private var deactivationAttempts = 0
-    private var deactivationFailuresRemaining = 0
+
+    var reconciliationStatus: AudioSessionReconciliationStatus { .ready }
 
     var activeOwner: UUID? {
         lock.lock(); defer { lock.unlock() }
@@ -63,16 +64,6 @@ private final class FakeCaptureSessionManager: AudioSessionManaging, @unchecked 
         return deactivations
     }
 
-    var deactivationAttemptCount: Int {
-        lock.lock(); defer { lock.unlock() }
-        return deactivationAttempts
-    }
-
-    func failNextDeactivation() {
-        lock.lock(); defer { lock.unlock() }
-        deactivationFailuresRemaining += 1
-    }
-
     func activate(_ use: AudioSessionUse, owner: UUID) throws {
         lock.lock(); defer { lock.unlock() }
         self.owner = owner
@@ -81,19 +72,73 @@ private final class FakeCaptureSessionManager: AudioSessionManaging, @unchecked 
     func deactivate(owner: UUID) throws {
         lock.lock(); defer { lock.unlock() }
         guard self.owner == owner else { return }
-        deactivationAttempts += 1
-        if deactivationFailuresRemaining > 0 {
+        self.owner = nil
+        deactivations += 1
+    }
+}
+
+private final class FakeRecorderSessionBackend: AudioSessionBackend, @unchecked Sendable {
+    private let lock = NSLock()
+    private var active = false
+    private var deactivationFailuresRemaining = 0
+    private var activeChanges: [Bool] = []
+    private var configuredCategories: [AudioSessionCategory] = []
+
+    var isActive: Bool {
+        lock.lock(); defer { lock.unlock() }
+        return active
+    }
+
+    var deactivationAttempts: Int {
+        lock.lock(); defer { lock.unlock() }
+        return activeChanges.filter { !$0 }.count
+    }
+
+    var categories: [AudioSessionCategory] {
+        lock.lock(); defer { lock.unlock() }
+        return configuredCategories
+    }
+
+    func failDeactivations(_ count: Int) {
+        lock.lock(); defer { lock.unlock() }
+        deactivationFailuresRemaining += max(0, count)
+    }
+
+    func setCategory(_ category: AudioSessionCategory) throws {
+        lock.lock(); defer { lock.unlock() }
+        configuredCategories.append(category)
+    }
+
+    func setActive(_ active: Bool) throws {
+        lock.lock(); defer { lock.unlock() }
+        activeChanges.append(active)
+        if !active, deactivationFailuresRemaining > 0 {
             deactivationFailuresRemaining -= 1
             throw FakeCaptureSessionFailure.deactivation
         }
-        self.owner = nil
-        deactivations += 1
+        self.active = active
     }
 }
 
 @MainActor
 private final class WeakRecorderHolder {
     weak var value: Recorder?
+}
+
+private final class LockedRecorderReference: @unchecked Sendable {
+    private let lock = NSLock()
+    private var value: Recorder?
+
+    @MainActor
+    func hold(_ model: Recorder) {
+        lock.lock(); defer { lock.unlock() }
+        value = model
+    }
+
+    func release() {
+        lock.lock(); defer { lock.unlock() }
+        value = nil
+    }
 }
 
 final class AudioCaptureTests: XCTestCase {
@@ -284,9 +329,10 @@ final class AudioCaptureTests: XCTestCase {
     }
 
     @MainActor
-    func testTeardownRetriesRecorderSessionReleaseAfterStopFailure() async throws {
+    func testRecorderStopLeavesManagerOwnedRetryAfterReleaseFailure() async throws {
         var device: FakeVoiceRecorder?
-        let sessions = FakeCaptureSessionManager()
+        let backend = FakeRecorderSessionBackend()
+        let sessions = SystemAudioSessionManager(backend: backend)
         let model = Recorder(permission: { true }, recorderFactory: { url, _ in
             try Data("temporary voice data".utf8).write(to: url)
             let recorder = FakeVoiceRecorder()
@@ -297,15 +343,19 @@ final class AudioCaptureTests: XCTestCase {
         model.start()
         try await Task.sleep(for: .milliseconds(30))
         XCTAssertNotNil(device)
-        sessions.failNextDeactivation()
+        backend.failDeactivations(1)
 
         model.stop()
 
-        XCTAssertNotNil(sessions.activeOwner, "a failed release leaves its lease available for retry")
+        XCTAssertEqual(model.state.phase, .done)
+        XCTAssertEqual(model.audioSessionStatus, .retrying(attempt: 1, maximumAttempts: 3, message: "deactivation"))
+        let deadline = Date().addingTimeInterval(1)
+        while backend.isActive && Date() < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertFalse(backend.isActive, "the session manager owns the bounded repair after the recorder is released")
+        XCTAssertEqual(backend.deactivationAttempts, 2)
         model.teardown()
-        XCTAssertNil(sessions.activeOwner)
-        XCTAssertEqual(sessions.deactivationAttemptCount, 2)
-        XCTAssertEqual(sessions.deactivationCount, 1)
     }
 
     @MainActor
@@ -438,6 +488,10 @@ final class AudioCaptureTests: XCTestCase {
 
         model = nil
 
+        let deadline = Date().addingTimeInterval(1)
+        while recorder.stopCount == 0 && Date() < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
         XCTAssertNil(weakModel.value)
         XCTAssertEqual(recorder.stopCount, 1)
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
@@ -446,6 +500,51 @@ final class AudioCaptureTests: XCTestCase {
         let meterUpdatesAtRelease = recorder.meterUpdateCount
         try await Task.sleep(for: .milliseconds(120))
         XCTAssertEqual(recorder.meterUpdateCount, meterUpdatesAtRelease, "the timer must no longer poll after deinit")
+    }
+
+    @MainActor
+    func testRecorderDeinitRetriesFinalSessionReleaseAfterModelLeavesMainActor() async throws {
+        var device: FakeVoiceRecorder?
+        let backend = FakeRecorderSessionBackend()
+        let sessions = SystemAudioSessionManager(backend: backend)
+        let weakModel = WeakRecorderHolder()
+        let detachedReference = LockedRecorderReference()
+        var model: Recorder? = Recorder(permission: { true }, recorderFactory: { url, _ in
+            try Data("temporary voice data".utf8).write(to: url)
+            let recorder = FakeVoiceRecorder()
+            recorder.fileURL = url
+            device = recorder
+            return recorder
+        }, sessionManager: sessions)
+        weakModel.value = model
+        detachedReference.hold(try XCTUnwrap(model))
+        model?.start()
+        try await Task.sleep(for: .milliseconds(40))
+        let recorder = try XCTUnwrap(device)
+        let url = try XCTUnwrap(recorder.fileURL)
+        backend.failDeactivations(2)
+
+        model = nil
+        let releaseCompleted = DispatchSemaphore(value: 0)
+        DispatchQueue.global(qos: .utility).async {
+            detachedReference.release()
+            releaseCompleted.signal()
+        }
+        XCTAssertEqual(releaseCompleted.wait(timeout: .now() + .seconds(1)), .success)
+        XCTAssertNil(weakModel.value, "ordinary deinit must release the model without waiting for MainActor")
+
+        let deadline = Date().addingTimeInterval(1)
+        while backend.isActive && Date() < deadline {
+            try await Task.sleep(for: .milliseconds(10))
+        }
+        XCTAssertNil(weakModel.value, "deinit must not retain the model while cleanup is queued")
+        XCTAssertFalse(backend.isActive, "manager-owned retries outlive the recorder model")
+        XCTAssertEqual(backend.deactivationAttempts, 3)
+        XCTAssertEqual(recorder.stopCount, 1)
+        XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
+        let meterUpdatesAtRelease = recorder.meterUpdateCount
+        try await Task.sleep(for: .milliseconds(120))
+        XCTAssertEqual(recorder.meterUpdateCount, meterUpdatesAtRelease)
     }
 
     func testHoldCancelsOnlyPastEightyPointsToTheLeft() {
