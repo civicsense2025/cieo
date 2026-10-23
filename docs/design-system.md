@@ -124,3 +124,7 @@ The original spring engine, React API, DOM API, SwiftUI package, and recipe file
 Run `npm run test:design`, `npm run test:design:types`, and `npm run test:design:browser`. Native compilation tests skip unavailable compilers explicitly. The browser test renders the offline artifact without network access; it does not certify every browser or platform. The complete repository still needs `npm run check` and the macOS Swift package checks. See `review.md`, `improvements.json`, and the packaged verification report for exact scope and results.
 
 Current API changes follow the [documentation maintenance process](documentation-maintenance.md) and [source map](source-map.json).
+
+## Motion in sign-in and recording
+
+The sign-in card moves between steps with the same springs as the rest of the library: panes cross-fade, the outgoing pane is inert, labels, errors and status lines enter and leave smoothly, and the one-time-code and password-strength fields animate as they change. The voice recorder draws a 24-bar rolling waveform from its existing 50 ms level sampler, with no extra analyser or render loop. Both follow the reduced-motion preference by showing the end state at once.

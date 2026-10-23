@@ -76,3 +76,7 @@ read-only contents permission, disabled persisted checkout credentials, an
 immutable official checkout action and no installs/network/backend mutations.
 The checker validates local links, source ownership and changed-module docs;
 humans review semantic accuracy. Builds do not prove runtime or release acceptance.
+
+## Release 0.6.3
+
+Version 0.6.3 adds the sign-in transition and recorder waveform motion. The version appears in `package.json`, the lockfile and the install line in the README; a consumer upgrade is its own change, as described above.
