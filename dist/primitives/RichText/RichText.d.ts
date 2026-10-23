@@ -6,7 +6,7 @@ export interface RichTextToken {
     /** Full address for url tokens, always http or https. */
     href?: string;
 }
-/** Splits a matched address from the punctuation that ends the sentence around it. */
+/** Splits a matched address from the punctuation that ends the sentence around it. Parentheses are counted once, so the work is linear. */
 export declare function trimUrl(raw: string): {
     url: string;
     rest: string;

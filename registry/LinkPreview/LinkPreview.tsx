@@ -19,7 +19,7 @@ export function displayDomain(url: string): string {
 }
 
 export interface LinkPreviewImage {
-  /** Image address. Only http, https and same-site paths render. */
+  /** Image address. Only absolute http and https addresses render. */
   src: string;
   /** Text alternative; use an empty string when the title already says it. */
   alt: string;
@@ -55,7 +55,7 @@ function PreviewImage({ image, className }: { image: LinkPreviewImage; className
     const el = ref.current;
     if (el?.complete && el.naturalWidth > 0) setState('loaded');
   }, []);
-  const src = safeHref(image.src);
+  const src = safeHref(image.src, { relative: false });
   if (!src || state === 'failed') return null;
   return (
     <img
@@ -79,7 +79,7 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
   const domain = displayDomain(url);
   const kind: LinkPreviewVariant = variant === 'compact' ? 'compact' : 'large';
   const skeleton = usePresence<HTMLSpanElement>(loading, { from: { y: 0, scale: 1 } });
-  const iconSrc = favicon === undefined ? null : safeHref(favicon);
+  const iconSrc = favicon === undefined ? null : safeHref(favicon, { relative: false });
   const site = siteName || domain;
   const label = <span className="cieo-link-preview-title-text">{title}</span>;
   return (
@@ -100,7 +100,7 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
         </span>
       ) : (
         <div className="cieo-link-preview-content">
-          {image && safeHref(image.src) ? (
+          {image && safeHref(image.src, { relative: false }) ? (
             <span className="cieo-link-preview-media">
               <PreviewImage image={image} className="cieo-link-preview-image" />
             </span>

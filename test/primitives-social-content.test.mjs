@@ -243,3 +243,39 @@ test('NewItemsPill renders a named button only when there are items', () => {
   assert.match(renderToStaticMarkup(h(NewItemsPill, { count: 2, onShow() {} })), /data-placement="top"/);
   assert.match(some, /cieo-compact-count/);
 });
+
+test('trimUrl stays linear on a long run of closing parentheses', () => {
+  const input = 'https://a.com/' + ')'.repeat(50000);
+  const t0 = performance.now();
+  const tokens = tokenizeRichText(input);
+  assert.ok(performance.now() - t0 < 100, 'tokenizing 50k parens must be fast');
+  assert.equal(tokens.map((t) => t.value).join(''), input);
+});
+
+test('addresses with a name or password before the host stay plain text', () => {
+  for (const text of ['https://paypal.com@evil.example/', 'https://user:pw@example.com/x']) {
+    assert.equal(links(text).length, 0, text);
+    assert.equal(tokenizeRichText(text).map((t) => t.value).join(''), text);
+  }
+  assert.equal(links('https://example.com/@me').length, 1);
+});
+
+test('email addresses never become mentions', () => {
+  for (const email of ['jean-@example.com', 'a+b@x.com', "x'y@x.com", "!#$%&'*+/=?^_`{|}~-@x.com", '"q"@x.com']) {
+    assert.equal(tokenizeRichText(email).filter((t) => t.type === 'mention').length, 0, email);
+  }
+  assert.equal(tokenizeRichText('hi @bob.').filter((t) => t.type === 'mention').length, 1);
+});
+
+test('over-long or hyphenated handles are not cut into a shorter mention', () => {
+  assert.equal(tokenizeRichText('@' + 'a'.repeat(40)).filter((t) => t.type === 'mention').length, 0);
+  assert.equal(tokenizeRichText('@bob-smith').filter((t) => t.type === 'mention').length, 0);
+});
+
+test('LinkPreview draws only absolute http(s) images and favicons', () => {
+  const base = { url: 'https://example.com/a', title: 'T' };
+  const rel = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: '/account/x', alt: '' }, favicon: '/f.ico' }));
+  assert.doesNotMatch(rel, /<img/);
+  const abs = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'https://example.com/i.png', alt: '' }, favicon: 'https://example.com/f.ico' }));
+  assert.equal((abs.match(/<img/g) || []).length, 2);
+});

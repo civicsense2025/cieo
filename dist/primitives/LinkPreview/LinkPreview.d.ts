@@ -2,7 +2,7 @@ export type LinkPreviewVariant = 'large' | 'compact';
 /** Hostname without a leading www., or an empty string when the address does not parse as http(s). */
 export declare function displayDomain(url: string): string;
 export interface LinkPreviewImage {
-    /** Image address. Only http, https and same-site paths render. */
+    /** Image address. Only absolute http and https addresses render. */
     src: string;
     /** Text alternative; use an empty string when the title already says it. */
     alt: string;

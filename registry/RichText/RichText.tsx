@@ -17,14 +17,18 @@ export interface RichTextToken {
 const TRAILING = new Set(['.', ',', ';', ':', '!', '?', '"', "'", '’', '”', '…', ']', '}']);
 const count = (s: string, ch: string) => s.split(ch).length - 1;
 
-/** Splits a matched address from the punctuation that ends the sentence around it. */
+/** Splits a matched address from the punctuation that ends the sentence around it. Parentheses are counted once, so the work is linear. */
 export function trimUrl(raw: string): { url: string; rest: string } {
   let end = raw.length;
+  let open = count(raw, '(');
+  let close = count(raw, ')');
   while (end > 0) {
     const last = raw[end - 1]!;
-    const head = raw.slice(0, end);
-    if (TRAILING.has(last) || (last === ')' && count(head, ')') > count(head, '('))) end -= 1;
-    else break;
+    if (TRAILING.has(last)) end -= 1;
+    else if (last === ')' && close > open) {
+      close -= 1;
+      end -= 1;
+    } else break;
   }
   return { url: raw.slice(0, end), rest: raw.slice(end) };
 }
@@ -35,7 +39,10 @@ function toHref(url: string): string | null {
   const safe = safeHref(full, { relative: false });
   if (!safe) return null;
   try {
-    return new URL(safe).hostname.includes('.') || /^https?:\/\/localhost\b/i.test(safe) ? safe : null;
+    const parsed = new URL(safe);
+    // A name or password before the host can pass one site off as another in the link text.
+    if (parsed.username !== '' || parsed.password !== '') return null;
+    return parsed.hostname.includes('.') || /^https?:\/\/localhost\b/i.test(safe) ? safe : null;
   } catch {
     return null;
   }
@@ -45,7 +52,7 @@ const PATTERN = new RegExp(
   [
     '(?<break>\\r\\n|\\r|\\n)',
     '(?<url>https?:\\/\\/[^\\s<>]+|(?<![\\p{L}\\p{N}_@./:#%-])(?:www\\.)?(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z]{2,}\\/[^\\s<>]*)',
-    '(?<mention>(?<![\\p{L}\\p{N}_@./:#&])@[\\p{L}\\p{N}_](?:[\\p{L}\\p{N}_.]{0,28}[\\p{L}\\p{N}_])?)',
+    '(?<mention>(?<![\\p{L}\\p{N}!#$%&\'*+\\-/=?^_`{|}~@.:"])@[\\p{L}\\p{N}_](?:[\\p{L}\\p{N}_.]{0,28}[\\p{L}\\p{N}_])?(?![\\p{L}\\p{N}_-]))',
     '(?<tag>(?<![\\p{L}\\p{N}_&#/])#\\p{L}[\\p{L}\\p{N}_]*)',
   ].join('|'),
   'giu',
