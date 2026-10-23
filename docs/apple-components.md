@@ -14,6 +14,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Display type, colour blocks and cuts](#display-type-colour-blocks-and-cuts)
 - [Slots, not hard-coded styling](#slots-not-hard-coded-styling)
 - [Social, audio and engagement](#social-audio-and-engagement)
+- [Press and hold, and status chips](#press-and-hold-and-status-chips)
 - [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
 
@@ -173,6 +174,15 @@ CommentComposer(text: $draft, maxLength: 500, hasAttachments: clip != nil) { tex
 - `CommentThread` preserves its default depth of 3 and caps configured depth at 32. Replies at the cap flatten once; those rows have no further reply branch.
 - Foundation additions are additive: 23 `ComponentIcon` cases (microphone, play, pause, bell, star, share, thumbs, verified, delivery ticks and others, each with an SF Symbol default), `Theme.success` and `Theme.warning`, `ComponentTypography.caption`, and `ComponentMetrics` `avatar`, `avatarSmall`, `rail`, `ring` and `thumbnail`.
 - The gallery's Social tab shows every piece with local fixtures. Tests: `AudioPlaybackTests`, `AudioCaptureTests`, `EngagementTests`, `CommentsTests` and `MessagingFeedbackTests` port the web cases and draw each piece at 390 points in light and dark. Real microphone capture, network playback, VoiceOver and Dynamic Type at accessibility sizes are consumer checks on a device.
+
+## Press and hold, and status chips
+
+Two generic pieces for hosts that mark state:
+
+- [`.pressAndHold`](../Sources/CieoUI/Foundations/PressAndHold.swift) adds a hold to any view without taking over its tap: `view.pressAndHold(minimumDuration:isHolding:accessibilityActionName:heldScale:onHold:)`. A quick press still runs a Button's own action; holding for `minimumDuration` (default 0.5 s, kept between 0.2 and 5 s) runs `onHold` once while the finger is down. `isHolding` is true from that moment until release or a system cancel, so a host can drive `.sensoryFeedback(.impact, trigger:)` from it. `accessibilityActionName` is required: VoiceOver and Switch Control list it as a custom action that runs `onHold`. While held the view settles at `heldScale` (0.96) on the Snap spring; Reduce Motion and a restricted render policy keep its size. `HoldPolicy` holds the timing, the drift allowance and the slide-to-cancel distance, and `VoiceRecorder`'s hold mode reads the same slide-to-cancel rule. Some system versions may also deliver a Button's action when the finger lifts after a hold; confirm on a device and guard in the host if so.
+- [`StatusChip`](../Sources/CieoUI/Atoms/StatusChip.swift) is a small capsule that says where something stands: `StatusChip("In progress", tone: .active, symbol: .play)`. Tones `neutral`, `active`, `done`, `attention` and `danger` read `foreground`, `accent`, `success`, `warning` and `danger` from the theme on the `surface` fill (`tint` for `active`). `symbol` is a `ComponentIcon`, so a host's icon set draws it. The chip is as wide as its content, wraps at large text sizes, is not interactive, and VoiceOver reads only the title. Host-installed colours must give readable contrast on `surface`.
+
+[PressAndHoldStatusChipTests](../Tests/CieoUITests/PressAndHoldStatusChipTests.swift) pin the duration limits, the cancel distance, the held-state rule, the Reduce Motion size rule, the tone-to-role map, content-sized width, wrapping and host colours. A real hold, haptics, VoiceOver and Dynamic Type at accessibility sizes are consumer checks on a device. The gallery's Atoms tab shows both.
 
 ## Consumer rollout boundary
 
