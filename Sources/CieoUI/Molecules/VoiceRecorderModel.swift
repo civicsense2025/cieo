@@ -64,6 +64,97 @@ private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AV
     }
 }
 
+/// A one-shot transfer from a nonisolated deinitializer to MainActor.
+private struct VoiceRecorderCleanupSnapshot: @unchecked Sendable {
+    let recorder: (any VoiceRecorderDevice)?
+    let timer: Timer?
+    let fileURL: URL?
+    let sessionOwner: UUID?
+    let interruption: NSObjectProtocol?
+    let audioSession: AudioSessionManaging
+
+    var hasResources: Bool {
+        recorder != nil || timer != nil || fileURL != nil || sessionOwner != nil || interruption != nil
+    }
+
+    @MainActor
+    func clean(deleteFile: Bool) {
+        timer?.invalidate()
+        if let recorder {
+            recorder.onEncodingError = nil
+            recorder.onFinished = nil
+            recorder.stop()
+        }
+        if deleteFile, let fileURL { try? FileManager.default.removeItem(at: fileURL) }
+        #if os(iOS)
+        if let interruption { NotificationCenter.default.removeObserver(interruption) }
+        #endif
+        if let sessionOwner { try? audioSession.deactivate(owner: sessionOwner) }
+    }
+}
+
+/// Lock-backed resource ownership lets ordinary `deinit` transfer cleanup without touching MainActor state.
+private final class VoiceRecorderCleanupState: @unchecked Sendable {
+    private let lock = NSLock()
+    private let audioSession: AudioSessionManaging
+    private var storedRecorder: (any VoiceRecorderDevice)?
+    private var storedTimer: Timer?
+    private var storedFileURL: URL?
+    private var storedSessionOwner: UUID?
+    private var storedInterruption: NSObjectProtocol?
+
+    init(audioSession: AudioSessionManaging) { self.audioSession = audioSession }
+
+    @MainActor var recorder: (any VoiceRecorderDevice)? {
+        get { lock.lock(); defer { lock.unlock() }; return storedRecorder }
+        set { lock.lock(); defer { lock.unlock() }; storedRecorder = newValue }
+    }
+
+    @MainActor var timer: Timer? {
+        get { lock.lock(); defer { lock.unlock() }; return storedTimer }
+        set { lock.lock(); defer { lock.unlock() }; storedTimer = newValue }
+    }
+
+    @MainActor var fileURL: URL? {
+        get { lock.lock(); defer { lock.unlock() }; return storedFileURL }
+        set { lock.lock(); defer { lock.unlock() }; storedFileURL = newValue }
+    }
+
+    @MainActor var sessionOwner: UUID? {
+        get { lock.lock(); defer { lock.unlock() }; return storedSessionOwner }
+        set { lock.lock(); defer { lock.unlock() }; storedSessionOwner = newValue }
+    }
+
+    @MainActor var interruption: NSObjectProtocol? {
+        get { lock.lock(); defer { lock.unlock() }; return storedInterruption }
+        set { lock.lock(); defer { lock.unlock() }; storedInterruption = newValue }
+    }
+
+    func takeSnapshot() -> VoiceRecorderCleanupSnapshot {
+        lock.lock(); defer { lock.unlock() }
+        let snapshot = VoiceRecorderCleanupSnapshot(
+            recorder: storedRecorder,
+            timer: storedTimer,
+            fileURL: storedFileURL,
+            sessionOwner: storedSessionOwner,
+            interruption: storedInterruption,
+            audioSession: audioSession
+        )
+        storedRecorder = nil
+        storedTimer = nil
+        storedFileURL = nil
+        storedSessionOwner = nil
+        storedInterruption = nil
+        return snapshot
+    }
+
+    func scheduleCleanup() {
+        let snapshot = takeSnapshot()
+        guard snapshot.hasResources else { return }
+        Task { @MainActor in snapshot.clean(deleteFile: true) }
+    }
+}
+
 /// Records a voice clip from the microphone with `AVAudioRecorder` and hands it to the host as a file with
 /// its length and waveform peaks. The host owns what happens to the file; the model owns the microphone.
 ///
@@ -132,6 +223,8 @@ public final class VoiceRecorderModel {
 
     /// The recorder's state machine position.
     public private(set) var state = VoiceRecorderModel.idle
+    /// Snapshot of the shared audio-session repair state.
+    public var audioSessionStatus: AudioSessionReconciliationStatus { audioSession.reconciliationStatus }
     /// Live loudness from 0 to 1 while recording, 0 otherwise. Steps of 0.02 so views do not churn.
     public private(set) var level: Double = 0
     /// The latest discrete announcement, for the view to post to VoiceOver.
@@ -151,14 +244,31 @@ public final class VoiceRecorderModel {
     @ObservationIgnored private let permission: PermissionRequest
     @ObservationIgnored private let recorderFactory: VoiceRecorderFactory
     @ObservationIgnored private let audioSession: AudioSessionManaging
-    @ObservationIgnored private var recorder: (any VoiceRecorderDevice)?
-    @ObservationIgnored private var fileURL: URL?
-    @ObservationIgnored private var sessionOwner: UUID?
-    @ObservationIgnored private var timer: Timer?
+    @ObservationIgnored private let cleanupState: VoiceRecorderCleanupState
     @ObservationIgnored private var peaks: [Double] = []
     @ObservationIgnored private var session = 0
     @ObservationIgnored private var announced = 0
-    @ObservationIgnored private var interruption: NSObjectProtocol?
+
+    private var recorder: (any VoiceRecorderDevice)? {
+        get { cleanupState.recorder }
+        set { cleanupState.recorder = newValue }
+    }
+    private var fileURL: URL? {
+        get { cleanupState.fileURL }
+        set { cleanupState.fileURL = newValue }
+    }
+    private var sessionOwner: UUID? {
+        get { cleanupState.sessionOwner }
+        set { cleanupState.sessionOwner = newValue }
+    }
+    private var timer: Timer? {
+        get { cleanupState.timer }
+        set { cleanupState.timer = newValue }
+    }
+    private var interruption: NSObjectProtocol? {
+        get { cleanupState.interruption }
+        set { cleanupState.interruption = newValue }
+    }
 
     /// `maxDuration` is clamped to at least one second.
     public convenience init(maxDuration: TimeInterval = 120, // literal-ok: default take limit
@@ -174,6 +284,11 @@ public final class VoiceRecorderModel {
         self.permission = permission
         self.recorderFactory = recorderFactory
         audioSession = sessionManager
+        cleanupState = VoiceRecorderCleanupState(audioSession: sessionManager)
+    }
+
+    deinit {
+        cleanupState.scheduleCleanup()
     }
 
     // MARK: - Pure helpers
@@ -391,7 +506,7 @@ public final class VoiceRecorderModel {
             }
             recorder.onFinished = { [weak self, weak recorder] reachedEnd in
                 guard let self, let recorder, self.recorder === recorder else { return }
-                if reachedEnd { self.finish(.limit) } else if self.state.phase == .recording { self.fail() }
+                if reachedEnd { self.finish(.limit) } else { self.fail() }
             }
             guard recorder.prepareToRecord(), recorder.record(forDuration: maxDuration) else { throw CocoaError(.fileWriteUnknown) }
             peaks = []
@@ -463,23 +578,9 @@ public final class VoiceRecorderModel {
     /// Stops the timer and recorder and deactivates the audio session; optionally deletes the file.
     private func releaseRecorder(deleteFile: Bool) {
         session += 1
-        timer?.invalidate()
-        timer = nil
-        recorder?.onEncodingError = nil
-        recorder?.onFinished = nil
-        recorder?.stop()
-        recorder = nil
-        if deleteFile, let url = fileURL { try? FileManager.default.removeItem(at: url) }
-        fileURL = nil
+        let snapshot = cleanupState.takeSnapshot()
+        snapshot.clean(deleteFile: deleteFile)
         peaks = []
-        #if os(iOS)
-        if let interruption { NotificationCenter.default.removeObserver(interruption) }
-        interruption = nil
-        #endif
-        if let sessionOwner {
-            audioSession.deactivate(owner: sessionOwner)
-            self.sessionOwner = nil
-        }
     }
 
     #if os(iOS)

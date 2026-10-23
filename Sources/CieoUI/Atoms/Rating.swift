@@ -81,7 +81,7 @@ public struct Rating: View {
         let end = Swift.min(maximumStars, Swift.max(0, to))
         let n = Swift.max(0, end - start)
         guard n > 0 else { return [] }
-        let step = n == 1 ? 0 : Swift.min(40.0, Double(window) / Double(n - 1))
+        let step = n == 1 ? 0 : Swift.min(40.0, Double(Swift.max(0, window)) / Double(n - 1))
         return (0..<n).map { Int((Double($0) * step).rounded()) }
     }
 
