@@ -16,7 +16,7 @@ A native `button` holding an icon (two clipped halves that reshape) and a ring. 
 
 ## Behavior
 
-- The accessible name is `Play {label}` or `Pause {label}`; `audioPlayButtonName` builds it.
+- The accessible name is `Play {label}` or `Pause {label}`; `audioPlayButtonName` builds it. Pass `playLabel` and `pauseLabel` to read the verbs in the host's language.
 - `loading` shows the ring and sets `aria-busy`; the button stays pressable.
 - The icon morphs with a CSS transition on the spring ease; reduced motion swaps instantly.
 

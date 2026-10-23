@@ -21,6 +21,10 @@ test('AudioPlayButton names the action after the clip and flips with state', () 
   const on = html(AudioPlayButton, { playing: true, label: 'Note', onToggle() {}, size: 'lg' });
   assert.match(on, /aria-label="Pause Note"/);
   assert.match(on, /data-playing=""/);
+  // Hosts in other languages supply the verbs; the clip name still follows.
+  assert.equal(audioPlayButtonName(false, 'nota', { play: 'Reproducir' }), 'Reproducir nota');
+  const es = html(AudioPlayButton, { playing: true, label: 'nota', onToggle() {}, playLabel: 'Reproducir', pauseLabel: 'Pausar' });
+  assert.match(es, /aria-label="Pausar nota"/);
   assert.match(on, /data-size="lg"/);
 });
 test('AudioPlayButton loading is busy and keeps both morph halves in the markup', () => {

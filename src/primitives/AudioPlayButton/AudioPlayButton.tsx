@@ -2,9 +2,14 @@
 'use client';
 /* AudioPlayButton. Round play/pause toggle whose icon morphs between the two shapes. The host owns the playing state; this owns the name, the busy ring and the morph. */
 
-/** Accessible name for the button: "Play Voice note" or "Pause Voice note". */
-export function audioPlayButtonName(playing: boolean, label: string): string {
-  return `${playing ? 'Pause' : 'Play'} ${label}`;
+/** Accessible name for the button: "Play Voice note" or "Pause Voice note". Hosts in other languages
+ *  pass their own verbs; the clip's name always follows them. */
+export function audioPlayButtonName(
+  playing: boolean,
+  label: string,
+  verbs: { play?: string; pause?: string } = {},
+): string {
+  return `${playing ? (verbs.pause ?? 'Pause') : (verbs.play ?? 'Play')} ${label}`;
 }
 
 export interface AudioPlayButtonProps {
@@ -18,11 +23,15 @@ export interface AudioPlayButtonProps {
   onToggle: () => void;
   /** Button size. Defaults to md. */
   size?: 'sm' | 'md' | 'lg';
+  /** The verb read before `label` while paused, in the host's language. Defaults to "Play". */
+  playLabel?: string;
+  /** The verb read before `label` while playing, in the host's language. Defaults to "Pause". */
+  pauseLabel?: string;
 }
 
-export function AudioPlayButton({ playing, loading = false, label, onToggle, size = 'md' }: AudioPlayButtonProps) {
+export function AudioPlayButton({ playing, loading = false, label, onToggle, size = 'md', playLabel, pauseLabel }: AudioPlayButtonProps) {
   return (
-    <button type="button" className="cieo cieo-audio-play-button" aria-label={audioPlayButtonName(playing, label)} aria-busy={loading || undefined} data-playing={playing ? '' : undefined} data-loading={loading ? '' : undefined} data-size={size} onClick={onToggle}>
+    <button type="button" className="cieo cieo-audio-play-button" aria-label={audioPlayButtonName(playing, label, { play: playLabel, pause: pauseLabel })} aria-busy={loading || undefined} data-playing={playing ? '' : undefined} data-loading={loading ? '' : undefined} data-size={size} onClick={onToggle}>
       <span className="cieo-audio-play-button-icon" aria-hidden="true">
         <span className="cieo-audio-play-button-half" data-half="left" />
         <span className="cieo-audio-play-button-half" data-half="right" />

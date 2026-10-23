@@ -70,6 +70,26 @@
       "nullable": false,
       "default": "md",
       "constraints": {}
+    },
+    {
+      "id": "playLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Play",
+      "constraints": {}
+    },
+    {
+      "id": "pauseLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Pause",
+      "constraints": {}
     }
   ],
   "slots": [
