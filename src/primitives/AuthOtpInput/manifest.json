@@ -26,7 +26,7 @@
   "events": [{ "id": "onComplete", "payload": "string" }],
   "variants": ["error", "disabled"],
   "styleParts": [{ "id": "box", "overrides": ["border"], "tokenRoles": ["surface-control", "border-control"] }],
-  "constraints": { "layout": [], "content": ["label-visible"], "motion": ["no-animation-in-rows"] },
+  "constraints": { "layout": [], "content": ["label-visible"], "motion": ["snap-digit-feedback", "base-error-presence", "reduced-motion-respected"] },
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "length", "label", "error", "disabled"], "states": [], "events": ["onComplete"], "parts": ["box"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],

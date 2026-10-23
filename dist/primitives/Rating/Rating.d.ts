@@ -1,15 +1,15 @@
-/** Value a key moves to (1..max), or null when the key does nothing or the value would not change. No wrapping. */
+/** Value a key moves to (1..max, clamped to 10), or null when the key does nothing or the value would not change. No wrapping. */
 export declare function ratingKeyStep(key: string, value: number, max: number): number | null;
-/** Spoken summary: "4 out of 5". Value clamps to 0..max; halves keep one decimal. */
+/** Spoken summary: "4 out of 5". Value clamps to 0..max (max is capped at 10); halves keep one decimal. */
 export declare function ratingLabel(value: number, max: number): string;
-/** Start delays (ms) for stars from..to-1 popping in turn; the last starts by `window`, so the whole stagger fits in it. */
+/** Start delays (ms) for stars from..to-1 popping in turn, capped at 10 entries; the last starts by `window`. */
 export declare function ratingPopDelays(from: number, to: number, window?: number): number[];
 export interface RatingProps {
     /** Current rating, 0 for none. Fractions only display in read-only mode. */
     value: number;
     /** Called with the new rating when the viewer picks a star or uses the keyboard. */
     onChange?: (value: number) => void;
-    /** Number of stars. Defaults to 5. */
+    /** Number of stars, clamped to 1–10. Defaults to 5. */
     max?: number;
     /** What is being rated ("Rate this reply"). Required. */
     label: string;

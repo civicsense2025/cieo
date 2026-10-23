@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* ShareButton. Opens the device share sheet, or copies the link where there is none, and says what happened. The host owns the URL and any analytics. */
 import { useEffect, useRef, useState } from 'react';
 import { SwapText } from '../../react/index.js';
+import { safeHref } from '../Mention/Mention.js';
 /** How a link can be shared here: the native sheet first, then the clipboard, otherwise not at all. */
 export function shareMethod(nav) {
     if (nav && typeof nav.share === 'function')
@@ -14,13 +15,7 @@ export function shareMethod(nav) {
 }
 /** True only for absolute http and https URLs; anything else (javascript:, data:, relative paths) is never shared. */
 export function isShareableUrl(url) {
-    try {
-        const p = new URL(url).protocol;
-        return p === 'http:' || p === 'https:';
-    }
-    catch {
-        return false;
-    }
+    return safeHref(url, { relative: false }) !== null;
 }
 /** Shares through the best method. A user cancelling the native sheet is `cancelled`, not an error; any other native failure falls back to copying. */
 export async function runShare(nav, data) {

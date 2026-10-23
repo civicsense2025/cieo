@@ -8,10 +8,15 @@
     border: 1.5px solid var(--cieo-color-muted);
     background: var(--cieo-color-surface); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-variant-numeric: tabular-nums;
+    transform: translateY(0); transition: transform var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), border-color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), background-color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1));
   }
+  :where(.cieo) .cieo-auth-otp-box[data-filled='true'] { transform: translateY(-1px); border-color: var(--cieo-color-accent); }
   :where(.cieo) .cieo-auth-otp-box:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
   :where(.cieo) .cieo-auth-error { font-size: var(--cieo-text-small); color: var(--cieo-color-danger); }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-otp-input * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-otp-input * { animation: none !important; transition: none !important; }
   }
+  :where([data-motion='off']) :where(.cieo).cieo-auth-otp-input *, :where(.cieo).cieo-auth-otp-input[data-motion='off'] * { animation: none !important; transition: none !important; }
+  :where([data-motion='reduced']) :where(.cieo).cieo-auth-otp-input *, :where(.cieo).cieo-auth-otp-input[data-motion='reduced'] * { animation: none !important; transition: none !important; }
+  :where([data-reduced-motion='true']) :where(.cieo).cieo-auth-otp-input *, :where(.cieo).cieo-auth-otp-input[data-reduced-motion='true'] * { animation: none !important; transition: none !important; }
 }

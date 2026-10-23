@@ -8,11 +8,13 @@ import { speakAudioTime } from '../AudioTime/AudioTime.js';
 export const WAVEFORM_FLOOR = 0.08;
 /** Seconds one arrow key moves the playhead. */
 export const WAVEFORM_KEY_SECONDS = 5;
+/** Maximum bars rendered or produced by public waveform helpers. */
+export const MAX_WAVEFORM_BARS = 128;
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
 const finite = (n) => (Number.isFinite(n) ? n : 0);
 /** Reduces peaks to `count` bars: each bar is the loudest peak in its bucket, scaled so the loudest bar is 1, never below the floor. Empty or silent input gives all floor values. */
 export function waveformBars(peaks, count) {
-    const n = Math.max(0, Math.floor(finite(count)));
+    const n = Math.min(MAX_WAVEFORM_BARS, Math.max(0, Math.floor(finite(count))));
     if (n === 0)
         return [];
     const total = peaks.length;
@@ -100,7 +102,8 @@ export function useScrub(duration, current, onSeek) {
 /** Total entrance stagger across all bars, in ms. */
 const STAGGER_MS = 240;
 export function AudioWaveform({ peaks, duration, current, onSeek, label, bars = 48 }) {
-    const count = Math.max(1, Math.floor(bars));
+    const requested = Number.isFinite(bars) ? Math.floor(bars) : bars === Number.POSITIVE_INFINITY ? MAX_WAVEFORM_BARS : 1;
+    const count = Math.min(MAX_WAVEFORM_BARS, Math.max(1, requested));
     const heights = waveformBars(peaks, count);
     const d = Number.isFinite(duration) ? Math.max(0, duration) : 0;
     const c = clamp(finite(current), 0, d);

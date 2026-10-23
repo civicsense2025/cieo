@@ -15,4 +15,6 @@ Labelled email input with an inline error, for auth forms.
 
 Error wiring: the message carries `role="alert"` and the input points at it with `aria-describedby`. The input uses `autocomplete="email"`.
 
+Error presence and the border state use the base motion token. Reduced motion and `data-motion="off"` update them instantly.
+
 Tokens: `--cieo-color-surface`, `--cieo-color-text`, `--cieo-color-danger`, `--cieo-color-accent`. The 1.5px muted edge meets WCAG 1.4.11.

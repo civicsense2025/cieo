@@ -1,6 +1,7 @@
 // test/primitives-comments.test.mjs
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { performance } from 'node:perf_hooks';
 import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ByLine } from '../dist/primitives/ByLine/ByLine.js';
@@ -15,7 +16,7 @@ const html = (el) => renderToStaticMarkup(el);
 
 test('safeHref only lets http(s) and relative links through', () => {
   for (const ok of ['https://a.test/x', 'http://a.test', '/u/ava', './a', '../a', '#top', '?q=1']) assert.equal(safeHref(ok), ok);
-  for (const bad of ['javascript:alert(1)', ' JaVaScRiPt:alert(1)', 'java\tscript:alert(1)', 'data:text/html,hi', 'vbscript:x', 'mailto:a@b.c', '//evil.test', '', undefined, null, '/\\evil.test', '\\\\evil.test', 'u/ava']) assert.equal(safeHref(bad), null, String(bad));
+  for (const bad of ['javascript:alert(1)', ' JaVaScRiPt:alert(1)', 'java\tscript:alert(1)', 'data:text/html,hi', 'vbscript:x', 'mailto:a@b.c', 'https://user:pass@a.test/reset', '//evil.test', '', undefined, null, '/\\evil.test', '\\\\evil.test', 'u/ava']) assert.equal(safeHref(bad), null, String(bad));
 });
 
 test('ByLine: author, badge, crumb and time in order; time sits in a time element; unsafe links are plain text', () => {
@@ -124,16 +125,37 @@ test('commentDepth and commentHasRail', () => {
 });
 
 test('buildCommentTree keeps input order, makes orphans roots, drops duplicate ids and survives cycles', () => {
-  const flat = [{ id: 'a' }, { id: 'b', parentId: 'a' }, { id: 'c', parentId: 'a' }, { id: 'd', parentId: 'b' }, { id: 'x', parentId: 'missing' }, { id: 'e', parentId: null }, { id: 'a' }];
+  const flat = [{ id: 'a', text: 'first' }, { id: 'b', parentId: 'a' }, { id: 'c', parentId: 'a' }, { id: 'd', parentId: 'b' }, { id: 'x', parentId: 'missing' }, { id: 'e', parentId: null }, { id: 'a', text: 'duplicate' }];
   const tree = buildCommentTree(flat);
   assert.deepEqual(tree.map((n) => n.id), ['a', 'x', 'e']);
+  assert.equal(tree[0].text, 'first');
   assert.deepEqual(tree[0].children.map((n) => n.id), ['b', 'c']);
   assert.deepEqual(tree[0].children[0].children.map((n) => n.id), ['d']);
   assert.deepEqual(buildCommentTree([]), []);
   const loop = buildCommentTree([{ id: 'p', parentId: 'q' }, { id: 'q', parentId: 'p' }, { id: 's', parentId: 's' }]);
+  assert.deepEqual(loop.map((n) => n.id), ['q', 's']);
+  assert.deepEqual(loop[0].children.map((n) => n.id), ['p']);
   assert.equal(loop.length, 2);
   assert.equal(countDescendants(loop[0]) + countDescendants(loop[1]) + loop.length, 3);
   assert.equal(buildCommentTree([{ id: 'k', parentId: 'k' }]).length, 1);
+});
+
+test('buildCommentTree constructs a 20,000-comment root-first chain within a bounded time', () => {
+  const count = 20_000;
+  const flat = Array.from({ length: count }, (_, index) => ({ id: `node-${index}`, parentId: index === 0 ? undefined : `node-${index - 1}` }));
+  const startedAt = performance.now();
+  const [root] = buildCommentTree(flat);
+  const elapsed = performance.now() - startedAt;
+  assert.equal(root.id, 'node-0');
+  let node = root;
+  for (let index = 0; index < count; index += 1) {
+    assert.equal(node.id, `node-${index}`);
+    if (index < count - 1) {
+      assert.equal(node.children.length, 1);
+      node = node.children[0];
+    } else assert.deepEqual(node.children, []);
+  }
+  assert.ok(elapsed < 1_000, `20,000-comment chain took ${elapsed.toFixed(1)}ms`);
 });
 
 test('buildCommentTree carries host fields through', () => {
@@ -169,6 +191,19 @@ test('flattenReplies lists descendants depth-first without their children', () =
   const flat = flattenReplies([{ id: 'b', children: [{ id: 'c', children: [{ id: 'd' }] }] }, { id: 'e' }]);
   assert.deepEqual(flat.map((n) => n.id), ['b', 'c', 'd', 'e']);
   assert.ok(flat.every((n) => !n.children));
+});
+
+test('flattenReplies handles hostile depth without recursion and keeps depth-first order', () => {
+  const count = 100_000;
+  let child;
+  for (let index = count - 1; index >= 0; index -= 1) {
+    child = { id: `node-${index}`, children: child ? [child] : [] };
+  }
+  const flat = flattenReplies([child]);
+  assert.equal(flat.length, count);
+  assert.deepEqual(flat.slice(0, 3).map((node) => node.id), ['node-0', 'node-1', 'node-2']);
+  assert.equal(flat.at(-1).id, `node-${count - 1}`);
+  assert.ok(flat.every((node) => !node.children));
 });
 
 const people = buildCommentTree([
@@ -210,6 +245,32 @@ test('CommentThread: replies past maxDepth show at maxDepth, flattened, never ne
   assert.deepEqual(seen.find((s) => s[0] === 'r1a1a1'), ['r1a1a1', 2, false]);
   assert.equal(Math.max(...seen.map((s) => s[1])), 2);
   assert.match(out, /text-r1a1a2/);
+});
+
+test('CommentThread clamps pathological maxDepth before recursively rendering', () => {
+  const count = 80;
+  const root = { id: 'depth-0', children: [] };
+  let parent = root;
+  for (let index = 1; index < count; index += 1) {
+    const child = { id: `depth-${index}`, children: [] };
+    parent.children.push(child);
+    parent = child;
+  }
+  const seen = [];
+  const out = html(h(CommentThread, {
+    label: 'Comments',
+    items: [root],
+    maxDepth: Number.MAX_SAFE_INTEGER,
+    initialReplies: count,
+    renderItem: (node, context) => {
+      seen.push({ id: node.id, depth: context.depth, hasReplies: context.hasReplies });
+      return h('span', null, node.id, context.replies);
+    },
+  }));
+  assert.equal(seen.length, count);
+  assert.equal(Math.max(...seen.map((entry) => entry.depth)), 32);
+  assert.ok(seen.filter((entry) => entry.depth === 32).every((entry) => !entry.hasReplies));
+  assert.match(out, /depth-79/);
 });
 
 test('CommentThread: newIds mark rows for the rise-in; ctx reports hiddenCount and depth', () => {

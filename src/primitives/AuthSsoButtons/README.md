@@ -11,4 +11,6 @@ One button per identity provider.
 
 Pending shows by text change (`Connecting to {label}…`) plus `aria-busy`, never colour alone. All buttons disable while any redirect is in flight.
 
+Provider labels swap in place on the base motion token. Reduced motion and `data-motion="off"` update instantly.
+
 See the component props in `manifest.json`.

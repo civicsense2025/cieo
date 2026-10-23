@@ -23,7 +23,7 @@ export { audioPlayerStep, createAudioPlayerToken, registerAudioPlayer, claimAudi
 export { stageKey, AudioRoom, type AudioRoomSpeaker, type AudioRoomSelf, type AudioRoomProps } from './AudioRoom/AudioRoom.js';
 export { formatAudioTime, speakAudioTime, AudioTime, type AudioTimeProps } from './AudioTime/AudioTime.js';
 export { activeWordIndex, transcriptKeyStep, shouldAutoScroll, transcriptScrollTop, AudioTranscript, TRANSCRIPT_QUIET_MS, type TranscriptWord, type AudioTranscriptProps } from './AudioTranscript/AudioTranscript.js';
-export { waveformBars, seekFromPointer, waveformKeyStep, audioSeekText, useScrub, AudioWaveform, WAVEFORM_FLOOR, WAVEFORM_KEY_SECONDS, type AudioWaveformProps } from './AudioWaveform/AudioWaveform.js';
+export { waveformBars, seekFromPointer, waveformKeyStep, audioSeekText, useScrub, AudioWaveform, WAVEFORM_FLOOR, WAVEFORM_KEY_SECONDS, MAX_WAVEFORM_BARS, type AudioWaveformProps } from './AudioWaveform/AudioWaveform.js';
 export { AuthAccountCard, type AuthAccountCardProps } from './AuthAccountCard/AuthAccountCard.js';
 export { AuthCredentialForm, type AuthCredentialFormProps } from './AuthCredentialForm/AuthCredentialForm.js';
 export { AuthEmailField, type AuthEmailFieldProps } from './AuthEmailField/AuthEmailField.js';
@@ -148,7 +148,7 @@ export { Outline, type OutlineItem, type OutlineProps } from './Outline/Outline.
 export { OverflowList, type OverflowListProps } from './OverflowList/OverflowList.js';
 export { Overlay, type OverlayProps } from './Overlay/Overlay.js';
 export { Pagination, type PaginationProps } from './Pagination/Pagination.js';
-export { nextRate, playbackRateName, PlaybackRateButton, DEFAULT_PLAYBACK_RATES, type PlaybackRateButtonProps } from './PlaybackRateButton/PlaybackRateButton.js';
+export { normalizePlaybackRate, normalizePlaybackRates, nextRate, playbackRateName, PlaybackRateButton, DEFAULT_PLAYBACK_RATES, type PlaybackRateButtonProps } from './PlaybackRateButton/PlaybackRateButton.js';
 export { pollPercentages, pollAnnouncement, Poll, type PollOption, type PollProps } from './Poll/Poll.js';
 export { Popover, type PopoverProps } from './Popover/Popover.js';
 export { PowerSearch, type PowerSearchProps } from './PowerSearch/PowerSearch.js';

@@ -17,12 +17,12 @@ A `radiogroup` of `radio` stars, or a `role="img"` of stars when read-only.
 ## Behavior
 
 - Hovering previews the fill. Newly filled stars pop with a stagger of at most 150ms.
-- `ratingKeyStep(key, value, max)` maps keys to the next value.
+- `max` is clamped to 1–10 so rendering and animation work stay bounded. `ratingKeyStep(key, value, max)` maps keys to the next value.
 - Read-only reads "4 out of 5" through `ratingLabel`.
 
 ## Keyboard / accessibility
 
-Arrow keys move and select; Home selects 1; End selects the maximum. One tab stop: the selected star, or the first when empty. Reduced motion has no pop.
+Arrow keys move and select; Space selects the focused star; Home selects 1; End selects the maximum. One tab stop: the selected star, or the first when empty. Reduced motion has no pop.
 
 ## Do / don't
 

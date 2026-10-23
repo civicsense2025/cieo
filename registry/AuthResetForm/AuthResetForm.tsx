@@ -1,9 +1,10 @@
 'use client';
-/* AuthResetForm (static). Request step plus confirm step for password reset. */
+/* AuthResetForm. Request and confirmation steps swap inside a soft measured-height frame. */
 import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
 import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
+import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthResetFormProps {
   id: string;
@@ -22,23 +23,25 @@ export function AuthResetForm({ id, step, pending, error, style, onRequest, onCo
   const confirm = (e: FormEvent) => { e.preventDefault(); if (!pending) onConfirm(password); };
   return (
     <div className="cieo cieo-auth-reset-form" style={style}>
-      {step === 'request' ? (
+      <AuthMotionFrame value={step}>
+        {(shown, live) => shown === 'request' ? (
         <form onSubmit={request}>
           <AuthEmailField id={`${id}-email`} value={email} onChange={setEmail} />
-          {error ? <span className="cieo-auth-error" role="alert">{error}</span> : null}
-          <button type="submit" className="cieo-auth-submit" disabled={pending}>
-            {pending ? 'Sending…' : 'Send reset link'}
+          <AuthMotionMessage className="cieo-auth-error" role="alert" value={live ? error : undefined} />
+          <button type="submit" className="cieo-auth-submit" disabled={pending || !live}>
+            <AuthSwapText value={pending ? 'Sending…' : 'Send reset link'} />
           </button>
         </form>
       ) : (
         <form onSubmit={confirm}>
           <AuthPasswordInput id={`${id}-password`} value={password} onChange={setPassword} autoComplete="new-password" showStrength />
-          {error ? <span className="cieo-auth-error" role="alert">{error}</span> : null}
-          <button type="submit" className="cieo-auth-submit" disabled={pending}>
-            {pending ? 'Saving…' : 'Save new password'}
+          <AuthMotionMessage className="cieo-auth-error" role="alert" value={live ? error : undefined} />
+          <button type="submit" className="cieo-auth-submit" disabled={pending || !live}>
+            <AuthSwapText value={pending ? 'Saving…' : 'Save new password'} />
           </button>
         </form>
       )}
+      </AuthMotionFrame>
     </div>
   );
 }

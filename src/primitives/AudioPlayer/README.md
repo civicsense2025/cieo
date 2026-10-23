@@ -18,6 +18,8 @@ A `group` holding the hidden `audio` (`preload=metadata`), AudioPlayButton, Audi
 
 - States: loading, ready, playing, ended, error; `audioPlayerStep` is the pure transition table.
 - Ended returns to the start; play works again. Error shows "Couldn't play this clip" and a Retry that reloads.
+- Replacing `src` pauses and resets the previous clip, clears its metadata and playhead, and ignores its late media events. The chosen valid rate is reapplied while the new clip loads; changed rate lists fall back to a supported rate.
+- In the full variant, `rates={[]}` disables the playback-speed control. An all-invalid non-empty list falls back to 1×.
 - Starting a player pauses the others, keyed by a unique token per instance (not `useId`, which repeats across separate React roots) in a module registry plus a `cieo:audio-play` event on the document, so separate bundles cooperate).
 - Progress is written to a CSS variable each frame while playing; React state moves once per second. The loop stops on pause and unmount.
 

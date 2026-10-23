@@ -1,10 +1,13 @@
 // src/primitives/VoiceRecorder/VoiceRecorder.tsx
 'use client';
 /* VoiceRecorder. Records a voice clip from the microphone and hands it to the host as a blob with its length and waveform peaks. The host owns upload and storage. */
-import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
-import { AudioLevelMeter, rmsLevel } from '../AudioLevelMeter/AudioLevelMeter.js';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from 'react';
+import { usePresence } from '../../react/index.js';
+import { rmsLevel } from '../AudioLevelMeter/AudioLevelMeter.js';
+import { MAX_WAVEFORM_BARS } from '../AudioWaveform/AudioWaveform.js';
 import { AudioTime, speakAudioTime } from '../AudioTime/AudioTime.js';
 import { IconButton } from '../IconButton/IconButton.js';
+import { RECORDER_LIVE_BAR_COUNT, createRecorderLiveHistory, pushRecorderLiveLevel, recorderLiveBarPresentation } from './recorderVisual.js';
 
 export type RecorderPhase = 'idle' | 'requesting' | 'recording' | 'paused' | 'done' | 'error';
 export type RecorderErrorReason = 'denied' | 'unsupported' | 'failed';
@@ -64,7 +67,7 @@ export function voiceRecorderStep(state: RecorderState, event: RecorderEvent): R
       return elapsed === state.elapsed ? state : { ...state, elapsed };
     }
     case 'fail':
-      return isRecorderActive(phase) ? to('error', { reason: 'failed' }) : state;
+      return isRecorderActive(phase) || phase === 'done' ? to('error', { reason: 'failed' }) : state;
     case 'cancel':
     case 'reset':
       return phase === 'idle' && state.elapsed === 0 ? state : recorderIdle;
@@ -77,6 +80,19 @@ export function shouldEmitClip(prev: RecorderState, next: RecorderState): boolea
 }
 
 const MIME_PREFERENCE = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg;codecs=opus'];
+const useRecorderEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+function useRecorderMotionDisabled(root: RefObject<HTMLElement | null>): boolean {
+  const [disabled, setDisabled] = useState(false);
+  useRecorderEffect(() => {
+    const sync = () => setDisabled(Boolean(root.current?.closest('[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]')));
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ['data-motion', 'data-reduced-motion'] });
+    return () => observer.disconnect();
+  }, [root]);
+  return disabled;
+}
 
 /** First recording format the browser supports, in order of preference, or '' to let the browser choose. */
 export function pickRecorderMimeType(isTypeSupported: (type: string) => boolean): string {
@@ -93,7 +109,7 @@ export function pickRecorderMimeType(isTypeSupported: (type: string) => boolean)
 /** Shrinks samples (0..1 loudness readings) to `count` bars, each the loudest reading in its slice. Empty input gives []. */
 export function downsamplePeaks(samples: number[], count = 64): number[] {
   const n = samples.length;
-  const bars = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+  const bars = Number.isFinite(count) ? Math.min(MAX_WAVEFORM_BARS, Math.max(0, Math.floor(count))) : 0;
   if (!n || !bars) return [];
   return Array.from({ length: bars }, (_, i) => {
     const start = Math.floor((i * n) / bars);
@@ -194,6 +210,7 @@ export interface VoiceRecorderProps {
 }
 
 interface Take {
+  attempt: number;
   stream: MediaStream;
   recorder: MediaRecorder;
   ctx: AudioContext | null;
@@ -201,7 +218,7 @@ interface Take {
   buffer: Float32Array;
   chunks: Blob[];
   peaks: number[];
-  timer: ReturnType<typeof setInterval>;
+  timer: ReturnType<typeof setInterval> | null;
   /** Fires at the limit even when the interval is throttled (background tabs). */
   limitTimer: ReturnType<typeof setTimeout> | null;
   /** Milliseconds recorded before the current stretch. */
@@ -210,17 +227,58 @@ interface Take {
   since: number;
   mime: string;
   lastSecond: number;
-  lastLevel: number;
+  released: boolean;
+  failed: boolean;
+  discarded: boolean;
+  finalized: boolean;
+  trackListeners: Array<{ track: MediaStreamTrack; listener: () => void }>;
 }
 
 const takeMs = (t: Take): number => t.banked + (t.since ? performance.now() - t.since : 0);
 
+function stopTracks(stream: MediaStream): void {
+  stream.getTracks().forEach((track) => {
+    try {
+      track.stop();
+    } catch {
+      /* continue releasing the rest of the stream */
+    }
+  });
+}
+
+function closeContext(ctx: AudioContext | null): void {
+  if (!ctx) return;
+  try {
+    void ctx.close().catch(() => {});
+  } catch {
+    /* context already closed */
+  }
+}
+
 function release(t: Take): void {
-  clearInterval(t.timer);
+  if (t.released) return;
+  t.released = true;
+  if (t.timer !== null) clearInterval(t.timer);
+  t.timer = null;
   if (t.limitTimer !== null) clearTimeout(t.limitTimer);
   t.limitTimer = null;
-  t.stream.getTracks().forEach((track) => track.stop());
-  void t.ctx?.close().catch(() => {});
+  t.trackListeners.forEach(({ track, listener }) => {
+    try {
+      track.removeEventListener('ended', listener);
+    } catch {
+      /* listener already detached */
+    }
+  });
+  t.trackListeners = [];
+  stopTracks(t.stream);
+  closeContext(t.ctx);
+  t.ctx = null;
+}
+
+function detachRecorder(t: Take): void {
+  t.recorder.ondataavailable = null;
+  t.recorder.onstop = null;
+  t.recorder.onerror = null;
 }
 
 const Glyph = ({ d }: { d: string }) => (
@@ -237,15 +295,45 @@ const STOP = 'M5 12l5 5L20 7';
 export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoStart = false, label = 'Record a voice reply', mode = 'tap' }: VoiceRecorderProps) {
   const limit = Number.isFinite(maxDuration) ? Math.max(1, maxDuration) : 120;
   const [state, setState] = useState<RecorderState>(recorderIdle);
-  const [level, setLevel] = useState(0);
   const [message, setMessage] = useState('');
   const [hold, setHold] = useState<'record' | 'cancel'>('record');
+  const root = useRef<HTMLDivElement>(null);
+  const micButton = useRef<HTMLButtonElement>(null);
+  const liveWaveform = useRef<HTMLSpanElement>(null);
+  const liveHistory = useRef(createRecorderLiveHistory());
+  const restoreMicFocusOnExit = useRef(false);
   const stateRef = useRef(state);
   const take = useRef<Take | null>(null);
+  const ownedTakes = useRef(new Set<Take>());
+  const currentAttempt = useRef<number | null>(null);
+  const mounted = useRef(false);
   const session = useRef(0);
   const holdFrom = useRef<number | null>(null);
   const live = useRef({ onRecorded, onCancel, limit });
   live.current = { onRecorded, onCancel, limit };
+
+  const focusIsInLivePanel = (): boolean => {
+    if (typeof document === 'undefined') return false;
+    const panel = root.current?.querySelector('.cieo-voice-recorder-live');
+    return Boolean(panel?.contains(document.activeElement));
+  };
+
+  const paintLiveWaveform = () => {
+    const el = liveWaveform.current;
+    if (!el) return;
+    const history = liveHistory.current;
+    for (let i = 0; i < el.children.length; i += 1) {
+      const bar = el.children[i] as HTMLElement;
+      const presentation = recorderLiveBarPresentation(history[i] ?? 0);
+      bar.style.transform = `scaleY(${presentation.scale.toFixed(3)})`;
+      bar.style.opacity = presentation.opacity.toFixed(3);
+    }
+  };
+
+  const resetLiveWaveform = () => {
+    liveHistory.current = createRecorderLiveHistory();
+    paintLiveWaveform();
+  };
 
   const send = (event: RecorderEvent): RecorderState => {
     const next = voiceRecorderStep(stateRef.current, event);
@@ -254,13 +342,16 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     return next;
   };
 
-  const fail = () => {
-    session.current += 1;
-    const t = take.current;
-    take.current = null;
+  const fail = (candidate?: Take) => {
+    const t = candidate ?? take.current;
+    const isCurrent = t ? currentAttempt.current === t.attempt : currentAttempt.current !== null;
     if (t) {
-      t.recorder.onstop = null;
-      t.recorder.onerror = null;
+      if (t.failed || t.discarded || t.finalized) return;
+      t.failed = true;
+      t.discarded = true;
+      if (take.current === t) take.current = null;
+      ownedTakes.current.delete(t);
+      detachRecorder(t);
       try {
         if (t.recorder.state !== 'inactive') t.recorder.stop();
       } catch {
@@ -268,20 +359,22 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       }
       release(t);
     }
-    setLevel(0);
-    send({ type: 'fail' });
+    if (!isCurrent) return;
+    currentAttempt.current = null;
+    if (isRecorderActive(stateRef.current.phase) || stateRef.current.phase === 'done') send({ type: 'fail' });
     setMessage(recorderAnnouncement('failed'));
   };
 
-  /** Throws the take away without ever emitting a clip. */
-  const cancel = (notify = true) => {
+  /** Cancels only the active request or recording; earlier pending stop events remain independently owned. */
+  const cancel = (options: { notify?: boolean; restoreFocus?: boolean } = {}) => {
     session.current += 1;
+    currentAttempt.current = null;
     const t = take.current;
     take.current = null;
     if (t) {
-      t.recorder.ondataavailable = null;
-      t.recorder.onstop = null;
-      t.recorder.onerror = null;
+      t.discarded = true;
+      ownedTakes.current.delete(t);
+      detachRecorder(t);
       try {
         if (t.recorder.state !== 'inactive') t.recorder.stop();
       } catch {
@@ -290,30 +383,36 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       release(t);
     }
     if (!isRecorderActive(stateRef.current.phase)) return;
-    setLevel(0);
+    if (options.restoreFocus && focusIsInLivePanel()) restoreMicFocusOnExit.current = true;
     setHold('record');
     holdFrom.current = null;
     send({ type: 'cancel' });
     setMessage(recorderAnnouncement('cancelled'));
-    if (notify) live.current.onCancel?.();
+    if (options.notify !== false) live.current.onCancel?.();
   };
 
-  const finish = (kind: 'stop' | 'limit') => {
+  const finish = (kind: 'stop' | 'limit', restoreFocus = false) => {
     const t = take.current;
-    if (!t || (stateRef.current.phase !== 'recording' && stateRef.current.phase !== 'paused')) return;
+    if (!t || t.failed || t.discarded || (stateRef.current.phase !== 'recording' && stateRef.current.phase !== 'paused')) return;
+    if (restoreFocus && focusIsInLivePanel()) restoreMicFocusOnExit.current = true;
     take.current = null;
-    clearInterval(t.timer);
+    if (t.timer !== null) clearInterval(t.timer);
+    t.timer = null;
     if (t.limitTimer !== null) clearTimeout(t.limitTimer);
     t.limitTimer = null;
-    t.recorder.onerror = null;
     const duration = clipDuration(takeMs(t));
     const mimeType = t.recorder.mimeType || t.mime || 'audio/webm';
+    t.recorder.onerror = () => fail(t);
     t.recorder.onstop = () => {
+      if (t.finalized) return;
+      t.finalized = true;
+      const shouldDeliver = mounted.current && ownedTakes.current.has(t) && !t.failed && !t.discarded;
+      ownedTakes.current.delete(t);
+      if (currentAttempt.current === t.attempt) currentAttempt.current = null;
+      detachRecorder(t);
       release(t);
-      live.current.onRecorded({ blob: new Blob(t.chunks, { type: mimeType }), mimeType, duration, peaks: downsamplePeaks(t.peaks) });
+      if (shouldDeliver) live.current.onRecorded({ blob: new Blob(t.chunks, { type: mimeType }), mimeType, duration, peaks: downsamplePeaks(t.peaks) });
     };
-    session.current += 1;
-    setLevel(0);
     setHold('record');
     holdFrom.current = null;
     send({ type: kind });
@@ -322,12 +421,15 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       if (t.recorder.state !== 'inactive') t.recorder.stop();
       else t.recorder.onstop?.(new Event('stop'));
     } catch {
-      release(t);
+      fail(t);
+      return;
     }
+    // Keep the recorder listeners until dataavailable then stop, but release the microphone and analyser now.
+    release(t);
   };
 
   const sample = (t: Take) => {
-    if (!t.since) return;
+    if (!t.since || t.released || t.failed || t.discarded) return;
     const ms = takeMs(t);
     let l = 0;
     if (t.analyser) {
@@ -336,10 +438,8 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
       t.peaks.push(l);
     }
     const q = Math.round(l * 50) / 50;
-    if (q !== t.lastLevel) {
-      t.lastLevel = q;
-      setLevel(q);
-    }
+    pushRecorderLiveLevel(liveHistory.current, q);
+    paintLiveWaveform();
     const whole = Math.floor(ms / 1000);
     if (whole !== t.lastSecond) {
       t.lastSecond = whole;
@@ -350,82 +450,123 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
 
   const begin = () => {
     if (isRecorderActive(stateRef.current.phase)) return;
+    resetLiveWaveform();
     const mine = ++session.current;
+    currentAttempt.current = mine;
     send({ type: 'start' });
     setMessage('');
     const media = typeof navigator === 'undefined' ? undefined : navigator.mediaDevices;
     if (!media?.getUserMedia || typeof MediaRecorder === 'undefined') {
+      currentAttempt.current = null;
       send({ type: 'unsupported' });
       setMessage(recorderAnnouncement('unsupported'));
       return;
     }
-    media.getUserMedia({ audio: true }).then(
+    let request: Promise<MediaStream>;
+    try {
+      request = media.getUserMedia({ audio: true });
+    } catch {
+      fail();
+      return;
+    }
+    Promise.resolve(request).then(
       (stream) => {
-        if (mine !== session.current) {
-          stream.getTracks().forEach((track) => track.stop());
+        if (mine !== currentAttempt.current || !mounted.current) {
+          stopTracks(stream);
           return;
         }
-        let t: Take;
-        let ctx: AudioContext | null = null;
+        let t: Take | null = null;
         try {
           const mime = pickRecorderMimeType((type) => MediaRecorder.isTypeSupported?.(type) ?? false);
           const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
-          const chunks: Blob[] = [];
-          recorder.ondataavailable = (e) => {
-            if (e.data.size) chunks.push(e.data);
+          t = {
+            attempt: mine,
+            stream,
+            recorder,
+            ctx: null,
+            analyser: null,
+            buffer: new Float32Array(0),
+            chunks: [],
+            peaks: [],
+            timer: null,
+            limitTimer: null,
+            banked: 0,
+            since: 0,
+            mime,
+            lastSecond: 0,
+            released: false,
+            failed: false,
+            discarded: false,
+            finalized: false,
+            trackListeners: [],
           };
-          let analyser: AnalyserNode | null = null;
+          recorder.ondataavailable = (e) => {
+            if (!t!.failed && !t!.discarded && !t!.finalized && e.data.size) t!.chunks.push(e.data);
+          };
+          recorder.onerror = () => fail(t!);
           try {
             const Ctor = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
             if (Ctor) {
-              ctx = new Ctor();
-              analyser = ctx.createAnalyser();
-              analyser.fftSize = 1024;
-              ctx.createMediaStreamSource(stream).connect(analyser);
-              void ctx.resume?.().catch(() => {});
+              const ctx = new Ctor();
+              t.ctx = ctx;
+              try {
+                const analyser = ctx.createAnalyser();
+                analyser.fftSize = 1024;
+                ctx.createMediaStreamSource(stream).connect(analyser);
+                void ctx.resume?.().catch(() => {});
+                t.analyser = analyser;
+                t.buffer = new Float32Array(analyser.fftSize);
+              } catch {
+                closeContext(ctx);
+                t.ctx = null;
+                t.analyser = null;
+                t.buffer = new Float32Array(0);
+              }
             }
           } catch {
-            /* the clip still records; it just has no waveform */
-            void ctx?.close().catch(() => {});
-            ctx = null;
-            analyser = null;
+            /* the clip still records when a level analyser is unavailable */
           }
-          t = { stream, recorder, ctx, analyser, buffer: new Float32Array(analyser?.fftSize ?? 0), chunks, peaks: [], timer: 0 as never, limitTimer: null, banked: 0, since: 0, mime, lastSecond: 0, lastLevel: 0 };
+          take.current = t;
+          ownedTakes.current.add(t);
           recorder.start();
+          if (t.failed || t.discarded || t.released) return;
           t.since = performance.now();
-          t.timer = setInterval(() => sample(t), 50);
+          t.timer = setInterval(() => sample(t!), 50);
           t.limitTimer = setTimeout(() => {
             if (take.current === t) finish('limit');
           }, limitRemainingMs(0, live.current.limit));
+          stream.getAudioTracks().forEach((track) => {
+            const listener = () => {
+              if (ownedTakes.current.has(t!) && !t!.released) fail(t!);
+            };
+            track.addEventListener('ended', listener);
+            t!.trackListeners.push({ track, listener });
+            if (track.readyState === 'ended') listener();
+          });
+          if (t.failed || t.discarded || t.released) return;
+          send({ type: 'granted' });
+          setMessage(recorderAnnouncement('recording'));
         } catch {
-          void ctx?.close().catch(() => {});
-          stream.getTracks().forEach((track) => track.stop());
-          send({ type: 'fail' });
-          setMessage(recorderAnnouncement('failed'));
-          return;
+          if (t) fail(t);
+          else {
+            stopTracks(stream);
+            fail();
+          }
         }
-        take.current = t;
-        t.recorder.onerror = () => {
-          if (take.current === t) fail();
-        };
-        stream.getAudioTracks()[0]?.addEventListener('ended', () => {
-          if (take.current === t) fail();
-        });
-        send({ type: 'granted' });
-        setMessage(recorderAnnouncement('recording'));
       },
       (err: unknown) => {
-        if (mine !== session.current) return;
+        if (mine !== currentAttempt.current) return;
         const name = (err as { name?: string } | null)?.name;
         if (name === 'NotAllowedError' || name === 'SecurityError' || name === 'PermissionDeniedError') {
+          currentAttempt.current = null;
           send({ type: 'denied' });
           setMessage(recorderAnnouncement('denied'));
         } else if (name === 'NotFoundError' || name === 'TypeError') {
+          currentAttempt.current = null;
           send({ type: 'unsupported' });
           setMessage(recorderAnnouncement('unsupported'));
         } else {
-          send({ type: 'fail' });
-          setMessage(recorderAnnouncement('failed'));
+          fail();
         }
       },
     );
@@ -441,7 +582,6 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         if (t.limitTimer !== null) clearTimeout(t.limitTimer);
         t.limitTimer = null;
         t.recorder.pause();
-        setLevel(0);
         send({ type: 'pause' });
         setMessage(recorderAnnouncement('paused'));
       } else if (stateRef.current.phase === 'paused') {
@@ -461,29 +601,44 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
 
   const phase = state.phase;
   const active = isRecorderActive(phase);
+  const motionDisabled = useRecorderMotionDisabled(root);
+  const livePresence = usePresence<HTMLDivElement>(active, {
+    disabled: motionDisabled,
+    kind: 'feedback',
+    from: { x: -4, y: 0, scale: 0.985, opacity: 0.45 },
+  });
+  const lastLive = useRef({ phase: 'requesting' as RecorderPhase, elapsed: 0, near: false, holding: false, hold: 'record' as 'record' | 'cancel' });
 
-  useEffect(() => {
+  useRecorderEffect(() => {
+    if (active || !restoreMicFocusOnExit.current) return;
+    restoreMicFocusOnExit.current = false;
+    micButton.current?.focus({ preventScroll: true });
+  }, [active]);
+
+  useRecorderEffect(() => {
+    mounted.current = true;
     if (autoStart) begin();
     return () => {
       /* Unmount: stop the microphone and drop the take. No clip, no onCancel. */
+      mounted.current = false;
       session.current += 1;
-      const t = take.current;
+      currentAttempt.current = null;
+      const owned = [...ownedTakes.current];
+      ownedTakes.current.clear();
       take.current = null;
       holdFrom.current = null;
-      stateRef.current = recorderAfterCleanup(stateRef.current);
+      stateRef.current = recorderIdle;
       setState(stateRef.current);
-      setLevel(0);
-      if (t) {
-        t.recorder.ondataavailable = null;
-        t.recorder.onstop = null;
-      t.recorder.onerror = null;
+      owned.forEach((t) => {
+        t.discarded = true;
+        detachRecorder(t);
         try {
           if (t.recorder.state !== 'inactive') t.recorder.stop();
         } catch {
           /* recorder already dead */
         }
         release(t);
-      }
+      });
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -492,7 +647,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       e.preventDefault();
-      cancel();
+      cancel({ restoreFocus: true });
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
@@ -532,14 +687,20 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
   };
 
   const near = isNearLimit(state.elapsed, limit);
+  if (active) lastLive.current = { phase, elapsed: state.elapsed, near, holding: mode === 'hold' && holdFrom.current !== null, hold };
+  const shownLive = lastLive.current;
+  const shownPhase = shownLive.phase;
+  const shownNear = shownLive.near;
+  const shownHolding = shownLive.holding;
   const showMic = mode === 'hold' || !active;
   const holding = mode === 'hold' && active && holdFrom.current !== null;
   const errorText = state.reason ? recorderAnnouncement(state.reason) : '';
 
   return (
-    <div role="group" aria-label={label} className="cieo cieo-voice-recorder" data-phase={phase} data-mode={mode} data-warning={near && phase !== 'paused' ? '' : undefined} data-hold={holding ? hold : undefined}>
+    <div ref={root} role="group" aria-label={label} className="cieo cieo-voice-recorder" data-phase={phase} data-mode={mode} data-warning={near && phase !== 'paused' ? '' : undefined} data-hold={holding ? hold : undefined}>
       {showMic ? (
         <button
+          ref={micButton}
           type="button"
           className="cieo-voice-recorder-mic"
           aria-label={mode === 'hold' && (phase === 'recording' || phase === 'paused') ? 'Stop recording' : label}
@@ -553,35 +714,40 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
           <Glyph d={MIC} />
         </button>
       ) : null}
-      {active ? (
-        <div className="cieo-voice-recorder-live">
-          <span className="cieo-voice-recorder-dot" aria-hidden="true" data-paused={phase === 'paused' ? '' : undefined} />
-          {phase === 'requesting' ? (
+      {livePresence.mounted ? (
+        <div ref={livePresence.ref} className="cieo-voice-recorder-live" data-presence={active ? 'present' : 'exit'} aria-hidden={!active ? true : undefined} inert={!active || undefined}>
+          <span className="cieo-voice-recorder-dot" aria-hidden="true" data-paused={shownPhase === 'paused' ? '' : undefined} />
+          {shownPhase === 'requesting' ? (
             <span className="cieo-voice-recorder-hint">Waiting for the microphone</span>
           ) : (
             <>
-              <span className="cieo-voice-recorder-time" data-warning={near ? '' : undefined}>
-                {near ? <AudioTime current={state.elapsed} duration={limit} mode="remaining" /> : <AudioTime current={state.elapsed} />}
+              <span className="cieo-voice-recorder-time" data-warning={shownNear ? '' : undefined}>
+                {shownNear ? <AudioTime current={shownLive.elapsed} duration={limit} mode="remaining" /> : <AudioTime current={shownLive.elapsed} />}
               </span>
-              <AudioLevelMeter level={phase === 'recording' ? level : 0} />
+              <span ref={liveWaveform} role="img" aria-label="Microphone level" className="cieo-voice-recorder-waveform" data-paused={shownPhase === 'paused' ? '' : undefined}>
+                {Array.from({ length: RECORDER_LIVE_BAR_COUNT }, (_, i) => {
+                  const presentation = recorderLiveBarPresentation(liveHistory.current[i] ?? 0);
+                  return <span key={i} aria-hidden="true" className="cieo-voice-recorder-waveform-bar" style={{ '--cieo-recorder-bar-index': i, transform: `scaleY(${presentation.scale.toFixed(3)})`, opacity: presentation.opacity.toFixed(3) } as CSSProperties} />;
+                })}
+              </span>
             </>
           )}
-          {holding ? (
+          {shownHolding ? (
             <span className="cieo-voice-recorder-hint" aria-hidden="true">
-              {hold === 'cancel' ? 'Release to cancel' : 'Slide left to cancel'}
+              {shownLive.hold === 'cancel' ? 'Release to cancel' : 'Slide left to cancel'}
             </span>
           ) : null}
           <span className="cieo-voice-recorder-actions">
-            <IconButton label="Cancel recording" size="sm" onClick={() => cancel()}>
+            <IconButton label="Cancel recording" size="sm" onClick={() => cancel({ restoreFocus: true })}>
               <Glyph d={TRASH} />
             </IconButton>
-            {mode === 'tap' && phase !== 'requesting' ? (
-              <IconButton label={phase === 'paused' ? 'Resume recording' : 'Pause recording'} size="sm" onClick={togglePause}>
-                <Glyph d={phase === 'paused' ? RESUME : PAUSE} />
+            {mode === 'tap' && shownPhase !== 'requesting' ? (
+              <IconButton label={shownPhase === 'paused' ? 'Resume recording' : 'Pause recording'} size="sm" onClick={togglePause}>
+                <Glyph d={shownPhase === 'paused' ? RESUME : PAUSE} />
               </IconButton>
             ) : null}
-            {phase !== 'requesting' && mode === 'tap' ? (
-              <IconButton label="Stop recording" size="sm" className="cieo-voice-recorder-stop" onClick={() => finish('stop')}>
+            {shownPhase !== 'requesting' && mode === 'tap' ? (
+              <IconButton label="Stop recording" size="sm" className="cieo-voice-recorder-stop" onClick={() => finish('stop', true)}>
                 <Glyph d={STOP} />
               </IconButton>
             ) : null}

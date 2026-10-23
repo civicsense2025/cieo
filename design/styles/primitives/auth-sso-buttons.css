@@ -12,6 +12,6 @@
     :where(.cieo) .cieo-auth-sso-button { min-height: 44px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-sso-buttons * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-sso-buttons * { animation: none !important; transition: none !important; }
   }
 }

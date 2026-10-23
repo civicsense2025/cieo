@@ -19,7 +19,7 @@ A `section` holding nested `ul role="list"` branches. Each `li` holds whatever `
 
 - `buildCommentTree` keeps input order, turns orphans into roots and breaks cycles; `countDescendants`, `visibleReplies` and `flattenReplies` are pure.
 - Each branch shows `initialReplies` until its button is pressed; the revealed replies open on a height animation, neighbours slide (FLIP), and focus moves to the first new reply.
-- Past `maxDepth` descendants are listed in order at that level. Expanded ids are internal unless `expanded` and `onExpandedChange` are passed.
+- `maxDepth` is capped at 32. Past that depth, descendants are listed in order at the cap. Expanded ids are internal unless `expanded` and `onExpandedChange` are passed.
 
 ## Keyboard / accessibility
 

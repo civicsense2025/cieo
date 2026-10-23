@@ -28,6 +28,7 @@ test('AuthSessionList uses list roles and names each revoke button per device', 
   assert.match(src, /This device/);
   assert.match(src, /Revoke .*session/);
   assert.match(src, /onRevoke/);
+  assert.match(src, /useFlip/);
 });
 
 test('AuthSessionList manifest is a molecule with a sessions array', () => {
@@ -35,6 +36,7 @@ test('AuthSessionList manifest is a molecule with a sessions array', () => {
   assert.equal(m.id, 'core.auth-session-list');
   assert.equal(m.layer, 'molecule');
   assert.ok(m.properties.find((p) => p.id === 'sessions' && p.required));
+  assert.ok(m.constraints.motion.includes('surviving-row-reflow'));
 });
 
 test('AuthAccountCard gates sign out behind inline Confirm/Cancel', () => {
@@ -106,4 +108,14 @@ test('Wave 3 recipes exist with visible confirmation states and hints', () => {
   assert.match(src, /This device/);
   assert.match(src, /Sign out of all devices\?/);
   assert.match(src, /height:44px/);
+});
+
+test('Wave 3 recipe confirmations spring while surviving session rows reflow after instant removal', () => {
+  const src = readFileSync('atoms/web/blocks/560-auth-wave3.js', 'utf8');
+  assert.match(src, /new Swap/);
+  assert.match(src, /new Track/);
+  assert.doesNotMatch(src, /\.hidden\s*=/);
+  assert.match(src, /\.remove\(\)/);
+  assert.match(src, /motionSettings\(st\)/);
+  assert.match(src, /changedToReduced/);
 });

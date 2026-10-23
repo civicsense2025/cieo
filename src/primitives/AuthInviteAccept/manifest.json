@@ -27,7 +27,7 @@
   "events": [{ "id": "onAccept", "payload": "void" }, { "id": "onDecline", "payload": "void" }],
   "variants": ["error", "pending"],
   "styleParts": [],
-  "constraints": { "layout": [], "content": ["org-named-actions"], "motion": ["no-animation-in-rows"] },
+  "constraints": { "layout": [], "content": ["org-named-actions"], "motion": ["base-label-swap", "base-error-presence", "reduced-motion-respected"] },
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "orgName", "inviterName", "role", "pending", "error"], "states": [], "events": ["onAccept", "onDecline"], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],

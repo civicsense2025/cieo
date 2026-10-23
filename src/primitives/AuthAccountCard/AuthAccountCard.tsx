@@ -1,7 +1,8 @@
 'use client';
-/* AuthAccountCard (static). Profile row with sign out; an inline confirm step guards bulk sign-out. */
+/* AuthAccountCard. Profile row with a spring-sized inline confirmation step guarding bulk sign-out. */
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
+import { AuthMotionFrame, AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthAccountCardProps {
   id: string;
@@ -30,17 +31,19 @@ export function AuthAccountCard({ id, name, email, avatarInitials, signOutConfir
           <span className="cieo-auth-email">{email}</span>
         </span>
       </p>
-      {confirming ? (
+      <AuthMotionFrame value={confirming ? 'confirm' : 'signout'}>
+        {(shown, live) => shown === 'confirm' ? (
         <div className="cieo-auth-signout-confirm">
-          <p className="cieo-auth-status" role="status">Sign out of all devices?</p>
+          <AuthMotionMessage className="cieo-auth-status" role="status" value={live ? 'Sign out of all devices?' : undefined} />
           <div className="cieo-auth-invite-actions">
-            <button type="button" className="cieo-auth-accept" onClick={confirm}>Confirm sign out</button>
-            <button type="button" className="cieo-auth-decline" onClick={() => setConfirming(false)}>Cancel</button>
+            <button type="button" className="cieo-auth-accept" disabled={!live} onClick={confirm}>Confirm sign out</button>
+            <button type="button" className="cieo-auth-decline" disabled={!live} onClick={() => setConfirming(false)}>Cancel</button>
           </div>
         </div>
       ) : (
-        <button type="button" className="cieo-auth-signout" onClick={start}>Sign out</button>
+        <button type="button" className="cieo-auth-signout" disabled={!live} onClick={start}>Sign out</button>
       )}
+      </AuthMotionFrame>
     </section>
   );
 }

@@ -26,7 +26,7 @@
   "events": [{ "id": "onSignOut", "payload": "void" }],
   "variants": ["confirm"],
   "styleParts": [],
-  "constraints": { "layout": [], "content": [], "motion": ["no-animation-in-rows"] },
+  "constraints": { "layout": [], "content": [], "motion": ["base-pane-swap", "soft-height", "reduced-motion-respected"] },
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "name", "email", "avatarInitials", "signOutConfirm"], "states": [], "events": ["onSignOut"], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],

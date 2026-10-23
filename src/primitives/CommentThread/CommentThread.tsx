@@ -11,11 +11,38 @@ export interface FlatComment {
   parentId?: string | null;
 }
 
+const MAX_COMMENT_DEPTH = 32;
+
 /** Turns a flat list into a tree. Keeps input order, orphans (unknown parent) become roots, and cycles are broken so it always terminates. Duplicate ids keep the first. */
 export function buildCommentTree<T extends FlatComment>(flat: readonly T[]): CommentNode<T>[] {
   const nodes = new Map<string, CommentNode<T>>();
   for (const item of flat) if (!nodes.has(item.id)) nodes.set(item.id, { ...item, children: [] });
-  const parentOf = new Map<string, string>();
+  const componentParent = new Map<string, string>();
+  const componentSize = new Map<string, number>();
+  for (const id of nodes.keys()) {
+    componentParent.set(id, id);
+    componentSize.set(id, 1);
+  }
+  const find = (id: string): string => {
+    let root = id;
+    while (componentParent.get(root) !== root) root = componentParent.get(root)!;
+    let current = id;
+    while (current !== root) {
+      const next = componentParent.get(current)!;
+      componentParent.set(current, root);
+      current = next;
+    }
+    return root;
+  };
+  const join = (left: string, right: string): boolean => {
+    let leftRoot = find(left);
+    let rightRoot = find(right);
+    if (leftRoot === rightRoot) return false;
+    if (componentSize.get(leftRoot)! < componentSize.get(rightRoot)!) [leftRoot, rightRoot] = [rightRoot, leftRoot];
+    componentParent.set(rightRoot, leftRoot);
+    componentSize.set(leftRoot, componentSize.get(leftRoot)! + componentSize.get(rightRoot)!);
+    return true;
+  };
   const roots: CommentNode<T>[] = [];
   const seen = new Set<string>();
   for (const item of flat) {
@@ -24,15 +51,7 @@ export function buildCommentTree<T extends FlatComment>(flat: readonly T[]): Com
     const node = nodes.get(item.id) as CommentNode<T>;
     const pid = item.parentId;
     const parent = typeof pid === 'string' && pid !== item.id ? nodes.get(pid) : undefined;
-    let cyclic = false;
-    for (let at: string | undefined = parent?.id, hops = 0; at !== undefined && hops <= nodes.size; at = parentOf.get(at), hops += 1) {
-      if (at === item.id) {
-        cyclic = true;
-        break;
-      }
-    }
-    if (parent && !cyclic) {
-      parentOf.set(item.id, parent.id);
+    if (parent && join(item.id, parent.id)) {
       (parent.children as CommentNode<T>[]).push(node);
     } else roots.push(node);
   }
@@ -66,15 +85,18 @@ export function visibleReplies<N>(children: readonly N[] | undefined, expanded: 
 /** Depth-first list of every node below `children`, each stripped of its own children. Used past the depth cap. */
 export function flattenReplies<N extends { children?: N[] }>(children: readonly N[] | undefined): N[] {
   const out: N[] = [];
-  const walk = (list: readonly N[], guard: Set<N>) => {
-    for (const n of list) {
-      if (guard.has(n)) continue;
-      guard.add(n);
-      out.push({ ...n, children: undefined } as N);
-      if (n.children?.length) walk(n.children, guard);
-    }
-  };
-  walk(children ?? [], new Set());
+  const guard = new Set<N>();
+  const stack: N[] = [];
+  const initial = children ?? [];
+  for (let index = initial.length - 1; index >= 0; index -= 1) stack.push(initial[index]!);
+  while (stack.length) {
+    const node = stack.pop()!;
+    if (guard.has(node)) continue;
+    guard.add(node);
+    out.push({ ...node, children: undefined } as N);
+    const nested = node.children ?? [];
+    for (let index = nested.length - 1; index >= 0; index -= 1) stack.push(nested[index]!);
+  }
   return out;
 }
 
@@ -100,7 +122,7 @@ export interface CommentThreadProps<T = unknown> {
   items: CommentNode<T>[];
   /** Renders one comment. Return a Comment and give it `ctx.replies`, `ctx.depth` and `ctx.hasReplies`. Required. */
   renderItem: (node: CommentNode<T>, ctx: CommentRenderContext) => ReactNode;
-  /** Deepest nesting level. Replies below it show at this level, flattened in order. Defaults to 3. */
+  /** Deepest nesting level, capped at 32. Replies below it show at this level, flattened in order. Defaults to 3. */
   maxDepth?: number;
   /** Replies shown per branch before "view more". Defaults to 2. */
   initialReplies?: number;
@@ -207,7 +229,7 @@ export function CommentThread<T = unknown>({ label, items, renderItem, maxDepth 
   live.current = { open, onExpandedChange };
   const shared: Shared<T> = {
     renderItem,
-    maxDepth: Number.isFinite(maxDepth) ? Math.max(0, Math.floor(maxDepth)) : 3,
+    maxDepth: Number.isFinite(maxDepth) ? Math.min(MAX_COMMENT_DEPTH, Math.max(0, Math.floor(maxDepth))) : 3,
     initial: initialReplies,
     moreLabel,
     fresh: new Set(newIds ?? []),

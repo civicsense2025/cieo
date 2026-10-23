@@ -6,16 +6,31 @@ import { SwapText } from '../../react/index.js';
 /** Default speeds the button cycles through. */
 export const DEFAULT_PLAYBACK_RATES: number[] = [1, 1.5, 2];
 
+/** A playback rate the browser can apply; invalid values normalize to normal speed. */
+export function normalizePlaybackRate(rate: number): number {
+  return Number.isFinite(rate) && rate > 0 ? rate : 1;
+}
+
+/** Valid unique rates in the host's order. An empty list means the control is disabled; an all-invalid non-empty list falls back to 1×. */
+export function normalizePlaybackRates(rates: number[] | undefined): number[] {
+  if (Array.isArray(rates) && rates.length === 0) return [];
+  const valid = Array.isArray(rates) ? [...new Set(rates.filter((rate) => Number.isFinite(rate) && rate > 0))] : [];
+  return valid.length > 0 ? valid : [1];
+}
+
 /** The rate after `rate` in the cycle. A rate not in the list starts the cycle over at the first one; an empty list changes nothing. */
 export function nextRate(rates: number[], rate: number): number {
-  if (rates.length === 0) return rate;
-  const i = rates.indexOf(rate);
-  return i < 0 ? rates[0] : rates[(i + 1) % rates.length];
+  const valid = normalizePlaybackRates(rates);
+  const current = normalizePlaybackRate(rate);
+  if (valid.length === 0) return current;
+  const i = valid.indexOf(current);
+  return i < 0 ? valid[0]! : valid[(i + 1) % valid.length]!;
 }
 
 /** Accessible name: "Playback speed, 1.5 times". */
 export function playbackRateName(rate: number): string {
-  return `Playback speed, ${rate} ${rate === 1 ? 'time' : 'times'}`;
+  const safe = normalizePlaybackRate(rate);
+  return `Playback speed, ${safe} ${safe === 1 ? 'time' : 'times'}`;
 }
 
 export interface PlaybackRateButtonProps {
@@ -28,9 +43,11 @@ export interface PlaybackRateButtonProps {
 }
 
 export function PlaybackRateButton({ rate, rates = DEFAULT_PLAYBACK_RATES, onRateChange }: PlaybackRateButtonProps) {
+  const safeRate = normalizePlaybackRate(rate);
+  const safeRates = normalizePlaybackRates(rates);
   return (
-    <button type="button" className="cieo cieo-playback-rate-button" aria-label={playbackRateName(rate)} onClick={() => onRateChange(nextRate(rates, rate))}>
-      <SwapText value={`${rate}×`} />
+    <button type="button" className="cieo cieo-playback-rate-button" aria-label={playbackRateName(safeRate)} disabled={safeRates.length === 0} onClick={safeRates.length === 0 ? undefined : () => onRateChange(nextRate(safeRates, safeRate))}>
+      <SwapText value={`${safeRate}×`} />
     </button>
   );
 }

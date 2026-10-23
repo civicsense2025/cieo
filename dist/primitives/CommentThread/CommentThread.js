@@ -4,13 +4,42 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* CommentThread. Tree manager for comments: nested lists, depth cap, "view more replies" per branch. The host renders every comment; this owns structure, expansion and reveal motion. */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useFlip, useReducedMotion } from '../../react/index.js';
+const MAX_COMMENT_DEPTH = 32;
 /** Turns a flat list into a tree. Keeps input order, orphans (unknown parent) become roots, and cycles are broken so it always terminates. Duplicate ids keep the first. */
 export function buildCommentTree(flat) {
     const nodes = new Map();
     for (const item of flat)
         if (!nodes.has(item.id))
             nodes.set(item.id, { ...item, children: [] });
-    const parentOf = new Map();
+    const componentParent = new Map();
+    const componentSize = new Map();
+    for (const id of nodes.keys()) {
+        componentParent.set(id, id);
+        componentSize.set(id, 1);
+    }
+    const find = (id) => {
+        let root = id;
+        while (componentParent.get(root) !== root)
+            root = componentParent.get(root);
+        let current = id;
+        while (current !== root) {
+            const next = componentParent.get(current);
+            componentParent.set(current, root);
+            current = next;
+        }
+        return root;
+    };
+    const join = (left, right) => {
+        let leftRoot = find(left);
+        let rightRoot = find(right);
+        if (leftRoot === rightRoot)
+            return false;
+        if (componentSize.get(leftRoot) < componentSize.get(rightRoot))
+            [leftRoot, rightRoot] = [rightRoot, leftRoot];
+        componentParent.set(rightRoot, leftRoot);
+        componentSize.set(leftRoot, componentSize.get(leftRoot) + componentSize.get(rightRoot));
+        return true;
+    };
     const roots = [];
     const seen = new Set();
     for (const item of flat) {
@@ -20,15 +49,7 @@ export function buildCommentTree(flat) {
         const node = nodes.get(item.id);
         const pid = item.parentId;
         const parent = typeof pid === 'string' && pid !== item.id ? nodes.get(pid) : undefined;
-        let cyclic = false;
-        for (let at = parent?.id, hops = 0; at !== undefined && hops <= nodes.size; at = parentOf.get(at), hops += 1) {
-            if (at === item.id) {
-                cyclic = true;
-                break;
-            }
-        }
-        if (parent && !cyclic) {
-            parentOf.set(item.id, parent.id);
+        if (parent && join(item.id, parent.id)) {
             parent.children.push(node);
         }
         else
@@ -65,17 +86,21 @@ export function visibleReplies(children, expanded, initial) {
 /** Depth-first list of every node below `children`, each stripped of its own children. Used past the depth cap. */
 export function flattenReplies(children) {
     const out = [];
-    const walk = (list, guard) => {
-        for (const n of list) {
-            if (guard.has(n))
-                continue;
-            guard.add(n);
-            out.push({ ...n, children: undefined });
-            if (n.children?.length)
-                walk(n.children, guard);
-        }
-    };
-    walk(children ?? [], new Set());
+    const guard = new Set();
+    const stack = [];
+    const initial = children ?? [];
+    for (let index = initial.length - 1; index >= 0; index -= 1)
+        stack.push(initial[index]);
+    while (stack.length) {
+        const node = stack.pop();
+        if (guard.has(node))
+            continue;
+        guard.add(node);
+        out.push({ ...node, children: undefined });
+        const nested = node.children ?? [];
+        for (let index = nested.length - 1; index >= 0; index -= 1)
+            stack.push(nested[index]);
+    }
     return out;
 }
 /** Default label for the reveal button. */
@@ -148,7 +173,7 @@ export function CommentThread({ label, items, renderItem, maxDepth = 3, initialR
     live.current = { open, onExpandedChange };
     const shared = {
         renderItem,
-        maxDepth: Number.isFinite(maxDepth) ? Math.max(0, Math.floor(maxDepth)) : 3,
+        maxDepth: Number.isFinite(maxDepth) ? Math.min(MAX_COMMENT_DEPTH, Math.max(0, Math.floor(maxDepth))) : 3,
         initial: initialReplies,
         moreLabel,
         fresh: new Set(newIds ?? []),

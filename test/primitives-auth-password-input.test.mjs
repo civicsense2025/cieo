@@ -7,7 +7,7 @@ test('AuthPasswordInput toggles visibility and exposes the meter value', () => {
   const src = readFileSync('src/primitives/AuthPasswordInput/AuthPasswordInput.tsx', 'utf8');
   assert.match(src, /Show password/);
   assert.match(src, /Hide password/);
-  assert.match(src, /role="meter"|role=\{'meter'\}/);
+  assert.match(src, /role="meter"|role=\{'meter'\}|role=\{current \? 'meter'/);
   assert.match(src, /aria-valuenow/);
   assert.match(src, /aria-describedby/);
   assert.match(src, /current-password/);

@@ -3,6 +3,8 @@ import { type KeyboardEvent, type PointerEvent } from 'react';
 export declare const WAVEFORM_FLOOR = 0.08;
 /** Seconds one arrow key moves the playhead. */
 export declare const WAVEFORM_KEY_SECONDS = 5;
+/** Maximum bars rendered or produced by public waveform helpers. */
+export declare const MAX_WAVEFORM_BARS = 128;
 /** Reduces peaks to `count` bars: each bar is the loudest peak in its bucket, scaled so the loudest bar is 1, never below the floor. Empty or silent input gives all floor values. */
 export declare function waveformBars(peaks: number[], count: number): number[];
 /** Seconds under a pointer at x within a track of the given width. Clamped to 0..duration; a zero-width track or unknown duration gives 0. */

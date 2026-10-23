@@ -1,6 +1,7 @@
 'use client';
-/* AuthPasskeyButton (static). Button starting a passkey ceremony with a WebAuthn-unavailable fallback note. */
+/* AuthPasskeyButton. Passkey ceremony button with smooth pending copy and fallback presence. */
 import type { CSSProperties } from 'react';
+import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthPasskeyButtonProps {
   id: string;
@@ -27,13 +28,9 @@ export function AuthPasskeyButton({ id, label = 'Continue with a passkey', pendi
         aria-busy={pending || undefined}
         onClick={() => { if (!busy) onPress?.(); }}
       >
-        {pending ? 'Waiting for your passkey…' : label}
+        <AuthSwapText value={pending ? 'Waiting for your passkey…' : label} />
       </button>
-      {supported ? null : (
-        <span id={`${id}-fallback`} className="cieo-auth-note">
-          This device can’t use passkeys. Use your password or a code instead.
-        </span>
-      )}
+      <AuthMotionMessage id={`${id}-fallback`} className="cieo-auth-note" value={supported ? undefined : 'This device can’t use passkeys. Use your password or a code instead.'} />
     </span>
   );
 }

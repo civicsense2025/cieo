@@ -2,7 +2,7 @@
 Run: CIEO_ESBUILD=/existing/node_modules/esbuild python3 test/browser/social.py
 Runs every check twice, with reduced motion on and off; exits 1 when any check fails in either mode.
 """
-import functools, http.server, json, os, pathlib, re, shutil, subprocess, sys, tempfile, threading, time
+import base64, functools, http.server, json, os, pathlib, re, shutil, subprocess, sys, tempfile, threading, time
 from playwright.sync_api import sync_playwright
 
 root = pathlib.Path(__file__).resolve().parents[2]
@@ -18,6 +18,76 @@ def build(out: pathlib.Path):
     (out / 'index.html').write_text('<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="tokens/tokens.css"><link rel="stylesheet" href="design/themes.css"><link rel="stylesheet" href="design/primitives.css"><body><div id="root" style="padding:12px;max-width:640px"></div><script src="fixture.js"></script></body></html>')
 
 
+def install_audio_fakes(page, scenario='normal', hold_stop=False):
+    page.evaluate('''({ scenario, holdStop }) => {
+      const state = { scenario, holdStop, contexts: [], sources: [], recorders: [], tracks: [], streams: [], requests: 0, resolvePermissions: [], pendingStops: 0, order: [], reads: 0, errorHandlers: [] };
+      class Track {
+        constructor() { this.readyState = 'live'; this.stopCalls = 0; this.listeners = new Map(); }
+        addEventListener(type, fn) { const set = this.listeners.get(type) || new Set(); set.add(fn); this.listeners.set(type, set); }
+        removeEventListener(type, fn) { this.listeners.get(type)?.delete(fn); }
+        stop() { this.stopCalls++; this.readyState = 'ended'; }
+        end() { if (this.readyState === 'ended') return; this.readyState = 'ended'; for (const fn of this.listeners.get('ended') || []) fn(new Event('ended')); }
+      }
+      const makeStream = () => {
+        const track = new Track();
+        const stream = { getTracks: () => [track], getAudioTracks: () => [track], get active() { return track.readyState === 'live'; } };
+        state.tracks.push(track); state.streams.push(stream);
+        return stream;
+      };
+      state.stream = makeStream();
+      class FakeAudioContext {
+        constructor() { this.closeCalls = 0; this.state = 'running'; state.contexts.push(this); }
+        createAnalyser() {
+          if (scenario === 'meter-analyser-throws') throw new Error('analyser setup failed');
+          return { fftSize: 1024, getFloatTimeDomainData(buffer) { state.reads++; buffer.fill(0.05); } };
+        }
+        createMediaStreamSource() {
+          if (scenario === 'meter-source-throws') throw new Error('source setup failed');
+          const source = { disconnectCalls: 0, connect() {}, disconnect() { this.disconnectCalls++; } };
+          state.sources.push(source);
+          return source;
+        }
+        resume() { if (scenario === 'meter-resume-throws') throw new Error('resume failed'); return Promise.resolve(); }
+        close() { this.closeCalls++; this.state = 'closed'; return Promise.resolve(); }
+      }
+      class FakeMediaRecorder {
+        static isTypeSupported() { return true; }
+        constructor(_stream, options = {}) { this.id = state.recorders.length + 1; this.state = 'inactive'; this.mimeType = options.mimeType || 'audio/webm'; this.ondataavailable = null; this.onstop = null; this.onerror = null; this.stopCalls = 0; this.pendingStop = false; state.recorders.push(this); state.recorder = this; }
+        start() { if (scenario === 'recorder-start-throws') throw new Error('start failed'); this.state = 'recording'; }
+        pause() { this.state = 'paused'; }
+        resume() { this.state = 'recording'; }
+        queueFinalEvents() { if (!this.pendingStop) { this.pendingStop = true; state.pendingStops++; } }
+        stop() {
+          if (this.state === 'inactive') throw new DOMException('already inactive', 'InvalidStateError');
+          this.stopCalls++; this.state = 'inactive'; this.queueFinalEvents();
+          if (!holdStop) setTimeout(() => this.finish(), 0);
+        }
+        emitError() {
+          this.state = 'inactive'; this.queueFinalEvents();
+          state.errorHandlers.push(typeof this.onerror === 'function');
+          this.onerror?.({ error: new DOMException('recording failed', 'UnknownError') });
+          if (!holdStop) setTimeout(() => this.finish(), 0);
+        }
+        finish() {
+          if (this.pendingStop) { this.pendingStop = false; state.pendingStops--; }
+          const payload = scenario === 'out-of-order' || scenario === 'permission-sequence' ? `take-${this.id}` : 'clip-data';
+          state.order.push(`data:${this.id}`); this.ondataavailable?.({ data: new Blob([payload], { type: this.mimeType }) });
+          state.order.push(`stop:${this.id}`); this.onstop?.(new Event('stop'));
+        }
+      }
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', { configurable: true, value: () => {
+        const request = state.requests++;
+        const sequence = scenario === 'out-of-order' || scenario === 'permission-sequence';
+        const stream = sequence && request > 0 ? makeStream() : state.stream;
+        if (scenario === 'permission-sequence') return new Promise(resolve => { state.resolvePermissions[request] = () => resolve(stream); });
+        return Promise.resolve(stream);
+      } });
+      Object.defineProperty(window, 'MediaRecorder', { configurable: true, writable: true, value: FakeMediaRecorder });
+      Object.defineProperty(window, 'AudioContext', { configurable: true, writable: true, value: FakeAudioContext });
+      window.__audioFake = state;
+    }''', {'scenario': scenario, 'holdStop': hold_stop})
+
+
 # Chromium has Web Share on some platforms; the copy fallback is only reachable without it.
 INIT = "Object.defineProperty(Navigator.prototype, 'share', { value: undefined, configurable: true });"
 
@@ -30,10 +100,23 @@ def run_mode(browser, port, mode):
         context.grant_permissions(['clipboard-read', 'clipboard-write', 'microphone'], origin=origin)
     except Exception:
         context.grant_permissions(['clipboard-read', 'clipboard-write'], origin=origin)
+    context.add_cookies([{'name': 'cieo_test_session', 'value': 'synthetic-only', 'url': origin}])
     context.add_init_script(INIT)
     page = context.new_page()
     page.set_default_timeout(3000)
-    page.route('**/*', lambda route: route.continue_() if route.request.url.startswith((origin + '/', 'blob:', 'data:')) else route.abort())
+    same_origin_preview_assets = []
+    def route_request(route):
+        url = route.request.url
+        if url.startswith(origin + '/logout'):
+            same_origin_preview_assets.append({'url': url, 'cookie': route.request.headers.get('cookie', '')})
+            route.abort()
+        elif url.startswith((origin + '/', 'blob:', 'data:')):
+            route.continue_()
+        else:
+            route.abort()
+    page.route('**/*', route_request)
+    preview_png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/r7sAAAAASUVORK5CYII=')
+    page.route('https://example.com/preview-*.png', lambda route: route.fulfill(status=200, content_type='image/png', body=preview_png))
     page.on('pageerror', lambda e: errors.append('pageerror: ' + str(e)))
     page.on('console', lambda m: errors.append('console.error: ' + m.text) if m.type == 'error' else None)
     page.goto(origin + '/')
@@ -250,29 +333,85 @@ def run_mode(browser, port, mode):
 
     # VoiceRecorder
     def recorder():
+        stages = {}
         box = S('recorder')
         mic = box.get_by_role('button', name='Record a voice reply')
         mic.click()
-        ok = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
-        page.wait_for_timeout(1200)
+        stages['started'] = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
+        live = box.locator('.cieo-voice-recorder-live')
+        bars = box.locator('.cieo-voice-recorder-waveform-bar')
+        bar_count = bars.count()
+        stages['bounded-bars'] = bar_count == 24
+        page.wait_for_timeout(30)
+        entrance = bars.evaluate_all('''els => els.flatMap(el => el.getAnimations()).map(a => ({ name: a.animationName, start: a.startTime, end: a.effect?.getComputedTiming().endTime }))''')
+        stages['bounded-entrance'] = len(entrance) == 0 if mode == 'reduce' else 0 < len(entrance) <= bar_count and all((item.get('end') or 0) <= 300 for item in entrance)
+        page.evaluate('() => { window.__recorderMotionBar = document.querySelector("#recorder .cieo-voice-recorder-waveform-bar"); }')
+        first_start = entrance[0]['start'] if entrance else None
+        box.get_by_role('button', name='Pause recording').click()
+        stages['pause-during-entrance'] = until(lambda: box.locator('[data-phase=paused]').count() == 1)
+        box.get_by_role('button', name='Resume recording').click()
+        stages['resume-during-entrance'] = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        same_bar = page.evaluate('() => window.__recorderMotionBar === document.querySelector("#recorder .cieo-voice-recorder-waveform-bar")')
+        resumed = bars.evaluate_all('els => els.flatMap(el => el.getAnimations()).map(a => a.startTime)')
+        stages['entrance-not-restarted'] = same_bar and (len(resumed) == 0 if mode == 'reduce' else not resumed or first_start in resumed)
+        page.wait_for_timeout(280)
+        box.get_by_role('button', name='Pause recording').click()
+        stages['paused'] = until(lambda: box.locator('[data-phase=paused]').count() == 1)
+        page.wait_for_timeout(260)
+        visible_bars = lambda: bars.evaluate_all('''els => els.map(el => {
+          const style = getComputedStyle(el);
+          return { scale: new DOMMatrixReadOnly(style.transform).d, opacity: Number.parseFloat(style.opacity) };
+        })''')
+        paused_before = visible_bars()
+        page.wait_for_timeout(120)
+        paused_after = visible_bars()
+        stages['pause-retains-bars'] = len(paused_before) == 24 and len(paused_after) == 24 and all(
+            0.09 <= before['scale'] <= 1.01 and 0.44 <= before['opacity'] <= 1 and
+            abs(before['scale'] - after['scale']) < 0.002 and abs(before['opacity'] - after['opacity']) < 0.002
+            for before, after in zip(paused_before, paused_after)
+        )
+        box.get_by_role('button', name='Resume recording').click()
+        stages['resumed'] = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        page.wait_for_timeout(720)
         box.get_by_role('button', name='Stop recording').click()
-        ok = ok and until(lambda: len(ev('recorder')) == 1, 5.0)
+        if mode == 'reduce':
+            stages['stop-exit-start'] = True
+            stages['stop-exit-finish'] = until(lambda: live.count() == 0)
+        else:
+            stages['stop-exit-start'] = until(lambda: live.count() == 1 and live.get_attribute('data-presence') == 'exit' and live.get_attribute('aria-hidden') == 'true')
+            stages['stop-exit-finish'] = until(lambda: live.count() == 0)
+        stages['delivered'] = until(lambda: len(ev('recorder')) == 1, 5.0)
         clip = ev('recorder')[0] if ev('recorder') else {}
-        ok = ok and isinstance(clip, dict) and clip.get('size', 0) > 0 and 1.0 <= clip.get('duration', 0) <= 2.5 and clip.get('peaks') == 64
+        stages['clip'] = isinstance(clip, dict) and clip.get('size', 0) > 0 and 1.0 <= clip.get('duration', 0) <= 2.5 and clip.get('peaks') == 64
         notes['recorder-clip'] = json.dumps(clip)
         ended = lambda: page.evaluate('() => window.__streams.length > 0 && window.__streams.every(s => s.getTracks().every(t => t.readyState === "ended"))')
-        ok = ok and until(ended, 3.0)
+        stages['released-after-stop'] = until(ended, 3.0)
         mic.click()
-        ok = ok and until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
+        stages['second-start'] = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
         page.wait_for_timeout(500)
         page.keyboard.press('Escape')
-        ok = ok and until(lambda: ev('recorder')[-1:] == ['cancel']) and until(lambda: box.locator('[data-phase=idle]').count() == 1)
+        stages['cancelled'] = until(lambda: ev('recorder')[-1:] == ['cancel'])
+        stages['cancel-idle'] = until(lambda: box.locator('[data-phase=idle]').count() == 1)
+        if mode == 'reduce':
+            stages['cancel-exit-start'] = True
+            stages['cancel-exit-finish'] = until(lambda: live.count() == 0)
+        else:
+            stages['cancel-exit-start'] = until(lambda: live.count() == 1 and live.get_attribute('data-presence') == 'exit')
+            stages['cancel-exit-finish'] = until(lambda: live.count() == 0)
         page.wait_for_timeout(500)
         streams = page.evaluate('() => window.__streams.length')
-        return ok and len(ev('recorder')) == 2 and streams == 2 and until(ended, 3.0)
+        stages['callbacks'] = len(ev('recorder')) == 2
+        stages['streams'] = streams == 2
+        stages['released-after-cancel'] = until(ended, 3.0)
+        result = all(stages.values())
+        if not result:
+            notes['voice-recorder-motion-stages'] = json.dumps({'stages': stages, 'barCount': bar_count, 'entrance': entrance, 'resumed': resumed})
+        return result
     check('voice-recorder', recorder)
 
-    # VoiceRecorder under StrictMode: the effect cleanup/remount must not leave it waiting forever
+    # Keep the StrictMode lifecycle check on Chromium's fake media device. The
+    # scenario helpers below intentionally replace getUserMedia with their own
+    # ledgers, which cannot satisfy this check's window.__streams assertion.
     def strict_recorder():
         before = page.evaluate('() => window.__streams.length')
         page.evaluate('() => window.hooks.mountStrictRecorder()')
@@ -286,6 +425,296 @@ def run_mode(browser, port, mode):
         page.evaluate('() => window.hooks.unmountRoot("strict-recorder")')
         return ok
     check('voice-recorder-strict-mode', strict_recorder)
+
+    def recorder_motion_off():
+        box = S('recorder')
+        scope = box
+        scope.evaluate("el => el.setAttribute('data-motion', 'off')")
+        mic = box.get_by_role('button', name='Record a voice reply')
+        mic.click()
+        started = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
+        bars = box.locator('.cieo-voice-recorder-waveform-bar')
+        ancestor_final = started and bars.count() == 24 and bars.evaluate_all("els => els.every(el => el.getAnimations().length === 0 && getComputedStyle(el).transitionDuration === '0s' && Number.parseFloat(getComputedStyle(el).opacity) >= 0.45)")
+        box.get_by_role('button', name='Cancel recording').click()
+        ancestor_exit = until(lambda: box.locator('.cieo-voice-recorder-live').count() == 0)
+        scope.evaluate("el => el.removeAttribute('data-motion')")
+
+        root = box.locator('.cieo-voice-recorder')
+        root.evaluate("el => el.setAttribute('data-motion', 'off')")
+        mic.click()
+        started_root = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
+        bars = box.locator('.cieo-voice-recorder-waveform-bar')
+        root_final = started_root and bars.count() == 24 and bars.evaluate_all("els => els.every(el => el.getAnimations().length === 0 && getComputedStyle(el).transitionDuration === '0s' && Number.parseFloat(getComputedStyle(el).opacity) >= 0.45)")
+        box.get_by_role('button', name='Cancel recording').click()
+        root_exit = until(lambda: box.locator('.cieo-voice-recorder-live').count() == 0)
+        root.evaluate("el => el.removeAttribute('data-motion')")
+        return ancestor_final and ancestor_exit and root_final and root_exit
+    check('voice-recorder-motion-off', recorder_motion_off)
+
+    def recorder_motion_reduced():
+        if mode == 'reduce':
+            return True
+        for scope_name in ['ancestor', 'root']:
+            install_audio_fakes(page, 'out-of-order')
+            page.evaluate('() => window.hooks.resetMultiTakeRecorder()')
+            box = S('recorder-multitake')
+            scope = box if scope_name == 'ancestor' else box.locator('.cieo-voice-recorder')
+            scope.evaluate("el => el.setAttribute('data-motion', 'reduced')")
+            try:
+                box.get_by_role('button', name='Record a voice reply').click()
+                started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+                bars = box.locator('.cieo-voice-recorder-waveform-bar')
+                motion_stopped = started and bars.count() == 24 and bars.evaluate_all('''els => {
+                  const dot = document.querySelector('#recorder-multitake .cieo-voice-recorder-dot');
+                  const live = document.querySelector('#recorder-multitake .cieo-voice-recorder-live');
+                  const reduced = el => getComputedStyle(el).animationName === 'none' && getComputedStyle(el).transitionDuration === '0s' && el.getAnimations().length === 0;
+                  const liveStyle = getComputedStyle(live);
+                  return els.every(reduced) && reduced(dot) && liveStyle.transform === 'none' && liveStyle.opacity === '1';
+                }''')
+                live = box.locator('.cieo-voice-recorder-live')
+                cancel = box.get_by_role('button', name='Cancel recording')
+                cancel.focus()
+                page.keyboard.press('Enter')
+                exited_immediately = live.count() == 0
+                mic = box.get_by_role('button', name='Record a voice reply')
+                mic_focused = mic.evaluate('(el) => el === document.activeElement')
+                mic_transition_stopped = mic.evaluate("el => getComputedStyle(el).transitionDuration === '0s'")
+                if not (motion_stopped and exited_immediately and mic_focused and mic_transition_stopped):
+                    return False
+            finally:
+                scope.evaluate("el => el.removeAttribute('data-motion')")
+        return True
+    check('voice-recorder-motion-reduced', recorder_motion_reduced)
+
+    def recorder_motion_full_override():
+        if mode != 'reduce':
+            return True
+        install_audio_fakes(page, 'normal')
+        box = S('recorder')
+        recorder = box.locator('.cieo-voice-recorder')
+        page.evaluate("() => { document.documentElement.setAttribute('data-motion', 'full'); window.ev['recorder'] = []; }")
+        stages = {}
+        try:
+            box.get_by_role('button', name='Record a voice reply').click()
+            started = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
+            stages['system-reduced-full-override'] = started and page.evaluate('''() => {
+              const root = document.querySelector('#recorder .cieo-voice-recorder');
+              const live = root.querySelector('.cieo-voice-recorder-live');
+              const dot = root.querySelector('.cieo-voice-recorder-dot');
+              const bar = root.querySelector('.cieo-voice-recorder-waveform-bar');
+              return matchMedia('(prefers-reduced-motion: reduce)').matches &&
+                document.documentElement.dataset.motion === 'full' &&
+                getComputedStyle(dot).animationName === 'cieo-voice-recorder-pulse' &&
+                getComputedStyle(bar).animationName === 'cieo-voice-recorder-waveform-in' &&
+                getComputedStyle(bar).transitionDuration !== '0s' &&
+                (getComputedStyle(live).transform !== 'none' || Number.parseFloat(getComputedStyle(live).opacity) < 0.99);
+            }''')
+
+            page.wait_for_timeout(260)
+
+            def capture_intermediate():
+                return page.evaluate('''() => {
+                  const bars = [...document.querySelectorAll('#recorder .cieo-voice-recorder-waveform-bar')];
+                  const bar = bars.find(el => {
+                    const target = Number.parseFloat(el.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+                    const shown = new DOMMatrixReadOnly(getComputedStyle(el).transform).d;
+                    return getComputedStyle(el).transitionProperty.includes('transform') &&
+                      el.getAnimations().some(a => a.transitionProperty === 'transform') && Math.abs(target - shown) > 0.02;
+                  });
+                  if (!bar) return false;
+                  const target = Number.parseFloat(bar.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+                  window.__recorderFullMotionBar = bar;
+                  window.__recorderFullMotionFirst = { target, shown: new DOMMatrixReadOnly(getComputedStyle(bar).transform).d };
+                  return true;
+                }''')
+
+            stages['waveform-retargets-under-full-override'] = until(capture_intermediate, 2.0)
+            page.wait_for_timeout(30)
+            follow = page.evaluate('''() => {
+              const bar = window.__recorderFullMotionBar;
+              const first = window.__recorderFullMotionFirst;
+              if (!bar || !first) return null;
+              const target = Number.parseFloat(bar.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+              const shown = new DOMMatrixReadOnly(getComputedStyle(bar).transform).d;
+              return { sameTarget: target === first.target, moved: shown !== first.shown, closer: Math.abs(target - shown) < Math.abs(first.target - first.shown) };
+            }''')
+            stages['waveform-interpolates-under-full-override'] = follow == {'sameTarget': True, 'moved': True, 'closer': True}
+
+            def motion_disabled():
+                return recorder.evaluate('''root => {
+                  const live = root.querySelector('.cieo-voice-recorder-live');
+                  const dot = root.querySelector('.cieo-voice-recorder-dot');
+                  const bar = root.querySelector('.cieo-voice-recorder-waveform-bar');
+                  return getComputedStyle(dot).animationName === 'none' &&
+                    getComputedStyle(bar).animationName === 'none' && getComputedStyle(bar).transitionDuration === '0s' &&
+                    getComputedStyle(live).transform === 'none' && getComputedStyle(live).opacity === '1';
+                }''')
+
+            def motion_enabled():
+                return recorder.evaluate('''root => {
+                  const dot = root.querySelector('.cieo-voice-recorder-dot');
+                  const bar = root.querySelector('.cieo-voice-recorder-waveform-bar');
+                  return getComputedStyle(dot).animationName === 'cieo-voice-recorder-pulse' &&
+                    getComputedStyle(bar).animationName === 'cieo-voice-recorder-waveform-in' &&
+                    getComputedStyle(bar).transitionDuration !== '0s';
+                }''')
+
+            overrides = [
+                ('ancestor-off-wins', box, 'data-motion', 'off'),
+                ('ancestor-reduced-wins', box, 'data-motion', 'reduced'),
+                ('root-off-wins', recorder, 'data-motion', 'off'),
+                ('root-reduced-wins', recorder, 'data-motion', 'reduced'),
+                ('root-data-reduced-motion-wins', recorder, 'data-reduced-motion', 'true'),
+            ]
+            for name, scope, attribute, value in overrides:
+                scope.evaluate('(el, attr) => el.setAttribute(attr[0], attr[1])', [attribute, value])
+                page.wait_for_timeout(30)
+                stages[name] = motion_disabled()
+                if name != 'root-data-reduced-motion-wins':
+                    scope.evaluate('(el, attr) => el.removeAttribute(attr)', attribute)
+                    page.wait_for_timeout(30)
+                    stages[name + '-restores-full'] = motion_enabled()
+
+            box.get_by_role('button', name='Cancel recording').click()
+            live = box.locator('.cieo-voice-recorder-live')
+            stages['local-data-reduced-motion-exits-immediately'] = until(lambda: live.count() == 0, 0.5)
+            stages['cancelled'] = until(lambda: ev('recorder')[-1:] == ['cancel'])
+            recorder.evaluate("el => el.removeAttribute('data-reduced-motion')")
+            page.wait_for_timeout(30)
+            stages['mic-transition-under-full-override'] = recorder.locator('.cieo-voice-recorder-mic').evaluate("el => getComputedStyle(el).transitionDuration !== '0s'")
+
+            install_audio_fakes(page, 'normal')
+            mic = box.get_by_role('button', name='Record a voice reply')
+            mic.click()
+            stages['dynamic-reduced-started'] = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+            live = box.locator('.cieo-voice-recorder-live')
+            box.get_by_role('button', name='Cancel recording').click()
+            stages['dynamic-reduced-exit-started'] = until(
+                lambda: live.count() == 1 and live.get_attribute('data-presence') == 'exit',
+                0.1,
+            )
+            recorder.evaluate("el => el.setAttribute('data-reduced-motion', 'true')")
+            stages['dynamic-reduced-settles-exit'] = until(lambda: live.count() == 0, 0.1)
+            recorder.evaluate("el => el.removeAttribute('data-reduced-motion')")
+        finally:
+            cancel = box.get_by_role('button', name='Cancel recording')
+            if cancel.count():
+                cancel.click(timeout=500)
+            page.evaluate("() => document.documentElement.removeAttribute('data-motion')")
+            box.evaluate("el => el.removeAttribute('data-motion')")
+            recorder.evaluate("el => { el.removeAttribute('data-motion'); el.removeAttribute('data-reduced-motion'); }")
+
+        result = all(stages.values())
+        if not result:
+            notes['voice-recorder-motion-full-override'] = json.dumps(stages)
+        return result
+    check('voice-recorder-motion-full-override', recorder_motion_full_override)
+
+    def recorder_panel_control_focus_return():
+        install_audio_fakes(page, 'out-of-order')
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        box = S('recorder-multitake')
+        mic = box.get_by_role('button', name='Record a voice reply')
+        mic.click()
+        started_for_stop = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        stop = box.get_by_role('button', name='Stop recording')
+        stop.focus()
+        page.keyboard.press('Enter')
+        stop_result = page.evaluate('''() => ({
+          phase: document.querySelector('#recorder-multitake [data-phase]')?.getAttribute('data-phase'),
+          focused: document.activeElement === document.querySelector('#recorder-multitake .cieo-voice-recorder-mic')
+        })''')
+        delivered = until(lambda: len(ev('recorder-multitake')) == 1)
+
+        mic.click()
+        started_for_cancel = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        cancel = box.get_by_role('button', name='Cancel recording')
+        cancel.focus()
+        page.keyboard.press('Enter')
+        cancel_result = page.evaluate('''() => ({
+          phase: document.querySelector('#recorder-multitake [data-phase]')?.getAttribute('data-phase'),
+          focused: document.activeElement === document.querySelector('#recorder-multitake .cieo-voice-recorder-mic'),
+          callbacks: window.ev['recorder-multitake']
+        })''')
+
+        mic.click()
+        started_for_escape = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        escape_origin = box.get_by_role('button', name='Cancel recording')
+        escape_origin.focus()
+        page.keyboard.press('Escape')
+        escape_result = page.evaluate('''() => ({
+          phase: document.querySelector('#recorder-multitake [data-phase]')?.getAttribute('data-phase'),
+          focused: document.activeElement === document.querySelector('#recorder-multitake .cieo-voice-recorder-mic'),
+          callbacks: window.ev['recorder-multitake']
+        })''')
+
+        mic.click()
+        started_for_escape_outside = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        page.locator('body').evaluate("el => { el.setAttribute('tabindex', '-1'); el.focus(); }")
+        body_focused_before_escape = page.evaluate('() => document.activeElement === document.body')
+        page.keyboard.press('Escape')
+        outside_escape_result = page.evaluate('''() => ({
+          phase: document.querySelector('#recorder-multitake [data-phase]')?.getAttribute('data-phase'),
+          focused: document.activeElement === document.body,
+          callbacks: window.ev['recorder-multitake']
+        })''')
+
+        mic.click()
+        started_for_failure = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        body_focused = page.evaluate('() => document.activeElement === document.body')
+        page.evaluate('() => window.__audioFake.tracks[4].end()')
+        failed = until(lambda: box.locator('[data-phase=error]').count() == 1)
+        focus_not_stolen = page.evaluate('() => document.activeElement === document.body')
+        page.locator('body').evaluate("el => el.removeAttribute('tabindex')")
+        stages = {
+            'started-for-stop': started_for_stop,
+            'stop-result': stop_result,
+            'delivered': delivered,
+            'started-for-cancel': started_for_cancel,
+            'cancel-result': cancel_result,
+            'started-for-escape': started_for_escape,
+            'escape-result': escape_result,
+            'started-for-escape-outside': started_for_escape_outside,
+            'body-focused-before-escape': body_focused_before_escape,
+            'outside-escape-result': outside_escape_result,
+            'started-for-failure': started_for_failure,
+            'body-focused-before-failure': body_focused,
+            'failed': failed,
+            'focus-not-stolen': focus_not_stolen,
+        }
+        result = (
+            started_for_stop and stop_result == {'phase': 'done', 'focused': True} and delivered and
+            started_for_cancel and cancel_result == {'phase': 'idle', 'focused': True, 'callbacks': [
+                {'data': 'take-1', 'size': 6}, 'cancel'
+            ]} and started_for_escape and escape_result == {'phase': 'idle', 'focused': True, 'callbacks': [
+                {'data': 'take-1', 'size': 6}, 'cancel', 'cancel'
+            ]} and started_for_escape_outside and body_focused_before_escape and outside_escape_result == {
+                'phase': 'idle', 'focused': True, 'callbacks': [
+                    {'data': 'take-1', 'size': 6}, 'cancel', 'cancel', 'cancel'
+                ]
+            } and started_for_failure and body_focused and failed and focus_not_stolen
+        )
+        if not result:
+            notes['voice-recorder-panel-control-focus-return'] = json.dumps(stages)
+        return result
+    check('voice-recorder-panel-control-focus-return', recorder_panel_control_focus_return)
+
+    def strict_player():
+        page.evaluate('() => window.hooks.mountStrictPlayerLifecycle()')
+        box = S('strict-player')
+        audio = box.locator('audio')
+        source_ready = until(lambda: audio.count() == 1 and audio.get_attribute('src') is not None and audio.evaluate('(el) => el.readyState >= 1'), 5.0)
+        source_snapshot = audio.evaluate('(el) => ({ attribute: el.getAttribute("src"), currentSrc: el.currentSrc, readyState: el.readyState, paused: el.paused })') if audio.count() == 1 else None
+        if source_ready:
+            box.get_by_role('button', name='Play Strict lifecycle clip').click()
+        playing = source_ready and until(lambda: box.locator('[data-state=playing]').count() == 1, 3.0)
+        page.evaluate('() => { window.__strictPlayerAudio = document.querySelector("#strict-player audio"); window.hooks.unmountRoot("strict-player"); }')
+        released = page.evaluate('''() => window.__strictPlayerAudio !== null && window.__strictPlayerAudio.paused && !window.__strictPlayerAudio.hasAttribute('src') && window.__strictPlayerAudio.readyState === 0''')
+        result = source_ready and playing and released
+        if not result:
+            notes['audio-player-strict-mode-source-preserved'] = json.dumps({'sourceReady': source_ready, 'source': source_snapshot, 'playing': playing, 'released': released})
+        return result
+    check('audio-player-strict-mode-source-preserved', strict_player)
 
     # AudioLevelMeter with a stream that has no audio track: static meter, context closed, no throw
     def empty_meter():
@@ -448,6 +877,391 @@ def run_mode(browser, port, mode):
         ok = safe.locator('a').count() == 1 and safe.locator('a').get_attribute('href') == 'https://example.com/article'
         return ok and unsafe.locator('a').count() == 0 and 'Unsafe card' in unsafe.inner_text()
     check('link-preview', links)
+
+    def link_preview_asset_boundary():
+        box = S('preview-asset-boundary')
+        box.scroll_into_view_if_needed()
+        page.wait_for_timeout(200)
+        result = box.locator('img').count() == 0 and box.locator('a').get_attribute('href') == 'https://example.com/article' and same_origin_preview_assets == []
+        if not result:
+            notes['link-preview-rejects-relative-assets'] = json.dumps({'images': box.locator('img').count(), 'requests': same_origin_preview_assets})
+        return result
+    check('link-preview-rejects-relative-assets', link_preview_asset_boundary)
+
+    def rating_space():
+        box = S('rating')
+        group = box.get_by_role('radiogroup', name='Rate this reply')
+        fourth = group.get_by_role('radio', name='4 stars')
+        fourth.focus()
+        page.evaluate('() => window.scrollTo(0, 0)')
+        before = page.evaluate('() => window.scrollY')
+        page.keyboard.press('Space')
+        selected = until(lambda: S('rating-host').inner_text() == '4' and ev('rating')[-1:] == [4])
+        focused = fourth.evaluate('(el) => el === document.activeElement')
+        return selected and focused and page.evaluate('() => window.scrollY') == before
+    check('rating-space-selection', rating_space)
+
+    def preview_image_reset():
+        box = S('preview-image')
+        image = box.locator('img')
+        present = until(lambda: image.count() == 1)
+        image.dispatch_event('error')
+        failed = until(lambda: image.count() == 0)
+        page.evaluate("() => window.hooks.setPreviewImageSource('https://example.com/preview-good.png')")
+        restored = until(lambda: box.locator('img').count() == 1 and box.locator('img').get_attribute('src') == 'https://example.com/preview-good.png', 4.0)
+        return present and failed and restored
+    check('link-preview-image-source-reset', preview_image_reset)
+
+    def audio_player_rates():
+        box = S('player-lifecycle')
+        audio = box.locator('audio')
+        page.evaluate("() => window.hooks.setPlayerRates([NaN, Infinity, 0, -1, 1.5, 2])")
+        filtered = until(lambda: box.get_by_role('button', name='Playback speed, 1.5 times').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 1.5) < 0.01)
+        page.evaluate('() => window.hooks.setPlayerRates([2])')
+        one_rate = until(lambda: box.get_by_role('button', name='Playback speed, 2 times').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 2) < 0.01)
+        page.evaluate('() => window.hooks.setPlayerRates([NaN, Infinity, 0, -1])')
+        fallback = until(lambda: box.get_by_role('button', name='Playback speed, 1 time').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 1) < 0.01)
+        return filtered and one_rate and fallback
+    check('audio-player-dynamic-rates', audio_player_rates)
+
+    def audio_player_empty_rates():
+        box = S('player-lifecycle')
+        audio = box.locator('audio')
+        page.evaluate('() => window.hooks.setPlayerRates([])')
+        disabled = until(lambda: box.get_by_role('button', name='Playback speed, 1 time').count() == 1 and box.get_by_role('button', name='Playback speed, 1 time').is_disabled())
+        rate = audio.evaluate('(el) => el.playbackRate')
+        return disabled and abs(rate - 1) < 0.01
+    check('audio-player-empty-rates-disabled', audio_player_empty_rates)
+
+    def playback_rate_empty_list():
+        box = S('empty-rates-button')
+        button = box.get_by_role('button', name='Playback speed, 1 time')
+        disabled = button.is_disabled()
+        handler_wired = button.evaluate('''el => {
+          const key = Object.keys(el).find(name => name.startsWith('__reactProps$'));
+          return typeof (key && el[key].onClick) === 'function';
+        }''')
+        button.evaluate('(el) => el.click()')
+        return disabled and not handler_wired and ev('empty-rate-button') == []
+    check('playback-rate-button-empty-list-no-handler', playback_rate_empty_list)
+
+    def audio_player_rejected_rate():
+        box = S('player-lifecycle')
+        audio = box.locator('audio')
+        page.evaluate('() => window.hooks.setPlayerRates([1, 1.5, 2])')
+        normal = until(lambda: box.get_by_role('button', name='Playback speed, 1 time').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 1) < 0.01)
+        box.get_by_role('button', name='Playback speed, 1 time').click()
+        applied = until(lambda: box.get_by_role('button', name='Playback speed, 1.5 times').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 1.5) < 0.01)
+        audio.evaluate('''el => {
+          let owner = el;
+          let descriptor;
+          while (owner && !descriptor) {
+            descriptor = Object.getOwnPropertyDescriptor(owner, 'playbackRate');
+            owner = Object.getPrototypeOf(owner);
+          }
+          Object.defineProperty(el, 'playbackRate', {
+            configurable: true,
+            get() { return descriptor.get.call(this); },
+            set(value) { if (value === 2) throw new TypeError('rate rejected'); descriptor.set.call(this, value); },
+          });
+        }''')
+        box.get_by_role('button', name='Playback speed, 1.5 times').click()
+        retained = until(lambda: box.get_by_role('button', name='Playback speed, 1.5 times').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 1.5) < 0.01)
+        return normal and applied and retained
+    check('audio-player-rejected-rate-retains-applied', audio_player_rejected_rate)
+
+    def audio_player_source_reset():
+        box = S('player-lifecycle')
+        audio = box.locator('audio')
+        page.evaluate("() => { window.ev['player-lifecycle'] = []; window.hooks.setPlayerRates([1.5]); }")
+        rate_ready = until(lambda: box.get_by_role('button', name='Playback speed, 1.5 times').count() == 1 and audio.evaluate('(el) => el.readyState >= 1'))
+        play = box.get_by_role('button', name='Play Lifecycle clip')
+        play.click()
+        playing = until(lambda: box.locator('[data-state=playing]').count() == 1)
+        old_src = audio.get_attribute('src')
+        page.evaluate('() => { window.__oldPlayerAudio = document.querySelector("#player-lifecycle audio"); window.ev["player-lifecycle"] = []; window.hooks.setPlayerSource("loading"); }')
+        reset = until(lambda: box.locator('[data-state=loading]').count() == 1 and audio.get_attribute('src') != old_src and audio.evaluate('(el) => el.readyState === 0'), 5.0)
+        new_rate = abs(audio.evaluate('(el) => el.playbackRate') - 1.5) < 0.01
+        page.evaluate('''() => {
+          const old = window.__oldPlayerAudio;
+          for (const type of ['play', 'pause', 'loadedmetadata', 'timeupdate', 'ended', 'error']) old.dispatchEvent(new Event(type));
+        }''')
+        page.wait_for_timeout(80)
+        stale_ignored = ev('player-lifecycle') == [] and box.locator('[data-state=loading]').count() == 1
+        old_released = until(lambda: page.evaluate('''() => window.__oldPlayerAudio.paused && !window.__oldPlayerAudio.hasAttribute('src') && window.__oldPlayerAudio.readyState === 0'''))
+        return rate_ready and playing and reset and new_rate and stale_ignored and old_released
+    check('audio-player-source-reset', audio_player_source_reset)
+
+    def audio_player_stale_events_a_b_a():
+        box = S('player-lifecycle')
+        page.evaluate("() => { window.ev['player-lifecycle'] = []; window.hooks.setPlayerSource('A'); }")
+        audio = box.locator('audio')
+        player = box.locator('.cieo-audio-player')
+        initial_a = until(lambda: audio.count() == 1 and audio.get_attribute('src') is not None and audio.evaluate('(el) => el.readyState >= 1'), 5.0)
+        if not initial_a:
+            return False
+        old_src = audio.get_attribute('src')
+        page.evaluate('''() => {
+          const old = document.querySelector('#player-lifecycle audio');
+          const propsKey = Object.keys(old).find(key => key.startsWith('__reactProps$'));
+          const props = propsKey ? old[propsKey] : null;
+          window.__stalePlayerAudioA = old;
+          window.__stalePlayerHandlersA = { onPlay: props?.onPlay, onPause: props?.onPause, onEnded: props?.onEnded };
+          window.hooks.setPlayerSource('B');
+        }''')
+        switched_b = until(lambda: box.locator('audio').get_attribute('src') not in (None, old_src), 5.0)
+        page.evaluate("() => window.hooks.setPlayerSource('A')")
+        returned_a = until(lambda: box.locator('audio').get_attribute('src') == old_src and box.locator('audio').evaluate('(el) => el.readyState >= 1'), 5.0)
+        current_is_new = page.evaluate('() => window.__stalePlayerAudioA !== document.querySelector("#player-lifecycle audio")')
+        if returned_a:
+            page.evaluate('''() => {
+              const old = window.__stalePlayerAudioA;
+              const handlers = window.__stalePlayerHandlersA;
+              const event = { currentTarget: old, target: old };
+              handlers.onPlay?.(event);
+              handlers.onPause?.(event);
+              handlers.onEnded?.(event);
+            }''')
+        page.wait_for_timeout(80)
+        events = ev('player-lifecycle')
+        state = player.get_attribute('data-state')
+        handlers_captured = page.evaluate('() => Boolean(window.__stalePlayerHandlersA?.onPlay && window.__stalePlayerHandlersA?.onPause && window.__stalePlayerHandlersA?.onEnded)')
+        result = initial_a and switched_b and returned_a and current_is_new and handlers_captured and events == [] and state == 'ready'
+        if not result:
+            notes['audio-player-stale-events-a-b-a'] = json.dumps({'initialA': initial_a, 'switchedB': switched_b, 'returnedA': returned_a, 'currentIsNew': current_is_new, 'handlersCaptured': handlers_captured, 'events': events, 'state': state})
+        return result
+    check('audio-player-stale-events-a-b-a', audio_player_stale_events_a_b_a)
+
+    def meter_setup_failure():
+        results = []
+        for scenario in ['meter-source-throws', 'meter-analyser-throws']:
+            install_audio_fakes(page, scenario)
+            page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
+            closed = until(lambda: page.evaluate('() => window.__audioFake.contexts.length === 1 && window.__audioFake.contexts[0].closeCalls === 1'))
+            track_owned = page.evaluate('() => window.__audioFake.tracks[0].stopCalls === 0')
+            results.append(closed and track_owned)
+            page.evaluate('() => window.hooks.resetMeterLifecycle()')
+        return all(results)
+    check('audio-meter-setup-failure', meter_setup_failure)
+
+    def meter_resume_failure():
+        install_audio_fakes(page, 'meter-resume-throws')
+        page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
+        closed = until(lambda: page.evaluate('() => window.__audioFake.contexts[0]?.closeCalls === 1'))
+        resources = page.evaluate('() => ({ sourceDisconnects: window.__audioFake.sources[0]?.disconnectCalls ?? 0, trackStops: window.__audioFake.tracks[0].stopCalls })')
+        page.evaluate('() => window.hooks.resetMeterLifecycle()')
+        result = closed and resources == {'sourceDisconnects': 1, 'trackStops': 0}
+        if not result:
+            notes['audio-meter-resume-failure'] = json.dumps({'closed': closed, 'resources': resources})
+        return result
+    check('audio-meter-resume-failure', meter_resume_failure)
+
+    def meter_track_end():
+        install_audio_fakes(page, 'meter-track-end')
+        page.evaluate('() => { window.hooks.resetMeterLifecycle(); window.hooks.setMeterLifecycleStream(window.__audioFake.stream); }')
+        sampled = until(lambda: page.evaluate('() => window.__audioFake.reads > 0'))
+        # stop() changes readyState but intentionally does not dispatch `ended` per MDN.
+        page.evaluate('() => window.__audioFake.tracks[0].stop()')
+        host_stop_calls = page.evaluate('() => window.__audioFake.tracks[0].stopCalls')
+        closed = until(lambda: page.evaluate('() => window.__audioFake.contexts[0].closeCalls === 1'))
+        reads = page.evaluate('() => window.__audioFake.reads')
+        page.wait_for_timeout(100)
+        state = page.evaluate('(before) => ({ readsUnchanged: window.__audioFake.reads === before, trackStopCalls: window.__audioFake.tracks[0].stopCalls, sourceDisconnects: window.__audioFake.sources[0]?.disconnectCalls ?? 0 })', reads)
+        page.evaluate('() => window.hooks.resetMeterLifecycle()')
+        result = sampled and closed and state == {'readsUnchanged': True, 'trackStopCalls': host_stop_calls, 'sourceDisconnects': 1}
+        if not result:
+            notes['audio-meter-stops-after-track-end'] = json.dumps({'sampled': sampled, 'closed': closed, 'state': state})
+        return result
+    check('audio-meter-stops-after-track-end', meter_track_end)
+
+    def recorder_error_failclose():
+        install_audio_fakes(page, 'recorder-error')
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        page.evaluate('() => window.__audioFake.recorder.emitError()')
+        failed = until(lambda: box.locator('[data-phase=error]').count() == 1)
+        released = until(lambda: page.evaluate('() => window.__audioFake.tracks[0].stopCalls === 1 && window.__audioFake.contexts[0].closeCalls === 1'))
+        page.wait_for_timeout(80)
+        return started and failed and released and ev('recorder-multitake') == []
+    check('voice-recorder-error-fail-close', recorder_error_failclose)
+
+    def recorder_start_failure():
+        install_audio_fakes(page, 'recorder-start-throws')
+        page.evaluate('() => window.hooks.resetMultiTakeRecorder()')
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        failed = until(lambda: box.locator('[data-phase=error]').count() == 1)
+        released = until(lambda: page.evaluate('() => window.__audioFake.tracks[0].stopCalls === 1 && window.__audioFake.contexts[0].closeCalls === 1'))
+        return failed and released and ev('recorder-multitake') == []
+    check('voice-recorder-partial-setup-fail-close', recorder_start_failure)
+
+    def recorder_out_of_order_stops():
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        install_audio_fakes(page, 'out-of-order', hold_stop=True)
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        first_started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        box.get_by_role('button', name='Stop recording').click()
+        first_pending = until(lambda: page.evaluate('() => window.__audioFake.recorders.length === 1 && window.__audioFake.recorders[0].pendingStop'))
+        box.get_by_role('button', name='Record a voice reply').click()
+        second_started = until(lambda: box.locator('[data-phase=recording]').count() == 1 and page.evaluate('() => window.__audioFake.recorders.length === 2'))
+        box.get_by_role('button', name='Stop recording').click()
+        second_pending = until(lambda: page.evaluate('() => window.__audioFake.pendingStops === 2'))
+        resources = page.evaluate('() => ({ tracks: window.__audioFake.tracks.map(t => t.stopCalls), contexts: window.__audioFake.contexts.map(c => c.closeCalls) })')
+        page.evaluate('() => window.__audioFake.recorders[1].finish()')
+        second_delivered = until(lambda: len(ev('recorder-multitake')) == 1)
+        page.evaluate('() => window.__audioFake.recorders[0].finish()')
+        first_delivered = until(lambda: len(ev('recorder-multitake')) == 2)
+        order = page.evaluate('() => window.__audioFake.order.slice()')
+        page.evaluate('() => window.__audioFake.recorders.forEach(r => r.finish())')
+        page.wait_for_timeout(60)
+        callbacks = ev('recorder-multitake')
+        result = first_started and first_pending and second_started and second_pending and resources == {'tracks': [1, 1], 'contexts': [1, 1]} and second_delivered and first_delivered and order == ['data:2', 'stop:2', 'data:1', 'stop:1'] and callbacks == [{'data': 'take-2', 'size': 6}, {'data': 'take-1', 'size': 6}]
+        if not result:
+            notes['voice-recorder-out-of-order'] = json.dumps({'phases': [first_started, first_pending, second_started, second_pending], 'resources': resources, 'order': order, 'callbacks': callbacks})
+        return result
+    check('voice-recorder-out-of-order-stops', recorder_out_of_order_stops)
+
+    def recorder_cancel_preserves_pending():
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        install_audio_fakes(page, 'out-of-order', hold_stop=True)
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        first_started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        box.get_by_role('button', name='Stop recording').click()
+        first_pending = until(lambda: page.evaluate('() => window.__audioFake.recorders[0]?.pendingStop'))
+        box.get_by_role('button', name='Record a voice reply').click()
+        second_started = until(lambda: box.locator('[data-phase=recording]').count() == 1 and page.evaluate('() => window.__audioFake.recorders.length === 2'))
+        box.get_by_role('button', name='Cancel recording').click()
+        cancelled = until(lambda: box.locator('[data-phase=idle]').count() == 1)
+        page.evaluate('() => window.__audioFake.recorders[1].finish(); window.__audioFake.recorders[0].finish()')
+        delivered = until(lambda: len(ev('recorder-multitake')) == 2)
+        callbacks = ev('recorder-multitake')
+        result = first_started and first_pending and second_started and cancelled and delivered and callbacks == ['cancel', {'data': 'take-1', 'size': 6}]
+        if not result:
+            notes['voice-recorder-cancel-pending'] = json.dumps({'stages': [first_started, first_pending, second_started, cancelled, delivered], 'callbacks': callbacks})
+        return result
+    check('voice-recorder-cancel-preserves-older-pending', recorder_cancel_preserves_pending)
+
+    def recorder_late_old_error():
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        install_audio_fakes(page, 'permission-sequence', hold_stop=True)
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        first_requested = until(lambda: page.evaluate('() => window.__audioFake.requests === 1'))
+        page.evaluate('() => window.__audioFake.resolvePermissions[0]()')
+        first_started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        box.get_by_role('button', name='Stop recording').click()
+        first_pending = until(lambda: page.evaluate('() => window.__audioFake.recorders[0]?.pendingStop'))
+        first_pending_handlers = page.evaluate('() => ({ error: typeof window.__audioFake.recorders[0].onerror, stop: typeof window.__audioFake.recorders[0].onstop, order: window.__audioFake.order.slice() })')
+        box.get_by_role('button', name='Record a voice reply').click()
+        second_requested = until(lambda: box.locator('[data-phase=requesting]').count() == 1 and page.evaluate('() => window.__audioFake.requests === 2'))
+        second_requested_handlers = page.evaluate('() => ({ error: typeof window.__audioFake.recorders[0].onerror, stop: typeof window.__audioFake.recorders[0].onstop, order: window.__audioFake.order.slice() })')
+        page.evaluate('() => window.__audioFake.recorders[0].emitError()')
+        after_old_error = page.evaluate('() => ({ phase: document.querySelector("#recorder-multitake [data-phase]")?.getAttribute("data-phase"), trackStops: window.__audioFake.tracks[0].stopCalls, contextCloses: window.__audioFake.contexts[0].closeCalls, errorHandler: window.__audioFake.errorHandlers[0], handlers: { error: typeof window.__audioFake.recorders[0].onerror, stop: typeof window.__audioFake.recorders[0].onstop, data: typeof window.__audioFake.recorders[0].ondataavailable }, callbacks: window.ev["recorder-multitake"] })')
+        page.evaluate('() => window.__audioFake.recorders[0].finish()')
+        page.evaluate('() => window.__audioFake.resolvePermissions[1]()')
+        second_started = until(lambda: box.locator('[data-phase=recording]').count() == 1 and page.evaluate('() => window.__audioFake.recorders.length === 2'))
+        box.get_by_role('button', name='Stop recording').click()
+        second_pending = until(lambda: page.evaluate('() => window.__audioFake.recorders[1].pendingStop'))
+        page.evaluate('() => window.__audioFake.recorders[1].finish()')
+        delivered = until(lambda: len(ev('recorder-multitake')) == 1)
+        page.wait_for_timeout(80)
+        callbacks = ev('recorder-multitake')
+        result = first_requested and first_started and first_pending and second_requested and after_old_error['phase'] == 'requesting' and after_old_error['trackStops'] == 1 and after_old_error['contextCloses'] == 1 and after_old_error['errorHandler'] and after_old_error['handlers'] == {'error': 'object', 'stop': 'object', 'data': 'object'} and second_started and second_pending and delivered and callbacks == [{'data': 'take-2', 'size': 6}]
+        if not result:
+            notes['voice-recorder-late-old-error'] = json.dumps({'stages': [first_requested, first_started, first_pending, second_requested, second_started, second_pending, delivered], 'pendingHandlers': [first_pending_handlers, second_requested_handlers], 'afterOldError': after_old_error, 'order': page.evaluate('() => window.__audioFake.order.slice()'), 'callbacks': callbacks})
+        return result
+    check('voice-recorder-late-old-error-isolated', recorder_late_old_error)
+
+    def recorder_strictmode_autostart():
+        page.evaluate("() => { window.ev['recorder-strict-lifecycle'] = []; }")
+        install_audio_fakes(page, 'permission-sequence')
+        page.evaluate('() => window.hooks.mountStrictRecorderLifecycle()')
+        requested_twice = until(lambda: page.evaluate('() => window.__audioFake.requests === 2'))
+        if not requested_twice:
+            return False
+        page.evaluate('() => window.__audioFake.resolvePermissions[0]()')
+        stale_released = until(lambda: page.evaluate('() => window.__audioFake.tracks[0].stopCalls === 1'))
+        page.evaluate('() => window.__audioFake.resolvePermissions[1]()')
+        box = S('recorder-strict-lifecycle')
+        started = until(lambda: box.locator('[data-phase=recording]').count() == 1 and page.evaluate('() => window.__audioFake.recorders.length === 1'))
+        box.get_by_role('button', name='Stop recording').click()
+        completed = until(lambda: len(ev('recorder-strict-lifecycle')) == 1)
+        return requested_twice and stale_released and started and completed
+    check('voice-recorder-strictmode-autostart-replay', recorder_strictmode_autostart)
+
+    def recorder_unmount_pending():
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        install_audio_fakes(page, 'out-of-order', hold_stop=True)
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        box.get_by_role('button', name='Stop recording').click()
+        pending = until(lambda: page.evaluate('() => window.__audioFake.recorders[0]?.pendingStop'))
+        page.evaluate('() => window.hooks.unmountMultiTakeRecorder()')
+        unmounted = until(lambda: box.locator('[data-phase]').count() == 0)
+        page.evaluate('() => window.__audioFake.recorders[0].finish()')
+        page.wait_for_timeout(80)
+        state = page.evaluate('() => ({ callbacks: window.ev["recorder-multitake"], tracks: window.__audioFake.tracks.map(t => t.stopCalls), contexts: window.__audioFake.contexts.map(c => c.closeCalls) })')
+        result = started and pending and unmounted and state == {'callbacks': [], 'tracks': [1], 'contexts': [1]}
+        if not result:
+            notes['voice-recorder-unmount-pending'] = json.dumps({'started': started, 'pending': pending, 'unmounted': unmounted, 'state': state})
+        return result
+    check('voice-recorder-unmount-cancels-pending-work', recorder_unmount_pending)
+
+    def recorder_waveform_smoothing():
+        page.evaluate("() => { window.ev['recorder-multitake'] = []; window.hooks.resetMultiTakeRecorder(); }")
+        install_audio_fakes(page, 'normal')
+        box = S('recorder-multitake')
+        box.get_by_role('button', name='Record a voice reply').click()
+        started = until(lambda: box.locator('[data-phase=recording]').count() == 1)
+        bars = box.locator('.cieo-voice-recorder-waveform-bar')
+        bounded = bars.count() == 24
+        page.wait_for_timeout(280)
+        if mode == 'reduce':
+            final = bars.evaluate_all('''els => els.every(el => {
+              const target = Number.parseFloat(el.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+              const shown = new DOMMatrixReadOnly(getComputedStyle(el).transform).d;
+              return getComputedStyle(el).transitionDuration === '0s' && Math.abs(target - shown) < 0.01;
+            })''')
+            box.get_by_role('button', name='Cancel recording').click()
+            return started and bounded and final and until(lambda: box.locator('[data-phase=idle]').count() == 1)
+
+        def capture_intermediate():
+            return page.evaluate('''() => {
+              const bars = [...document.querySelectorAll('#recorder-multitake .cieo-voice-recorder-waveform-bar')];
+              const bar = bars.find(el => {
+                const target = Number.parseFloat(el.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+                const shown = new DOMMatrixReadOnly(getComputedStyle(el).transform).d;
+                return getComputedStyle(el).transitionProperty.includes('transform') && Math.abs(target - shown) > 0.02;
+              });
+              if (!bar) return false;
+              const target = Number.parseFloat(bar.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+              window.__recorderSmoothBar = bar;
+              window.__recorderSmoothFirst = { target, shown: new DOMMatrixReadOnly(getComputedStyle(bar).transform).d };
+              return true;
+            }''')
+
+        intermediate = until(capture_intermediate, 2.0)
+        page.wait_for_timeout(30)
+        follow = page.evaluate('''() => {
+          const bar = window.__recorderSmoothBar;
+          const first = window.__recorderSmoothFirst;
+          if (!bar || !first) return null;
+          const target = Number.parseFloat(bar.style.transform.match(/scaleY\\(([^)]+)\\)/)?.[1] || '0');
+          const shown = new DOMMatrixReadOnly(getComputedStyle(bar).transform).d;
+          return { sameTarget: target === first.target, moved: shown !== first.shown, closer: Math.abs(target - shown) < Math.abs(first.target - first.shown) };
+        }''')
+        box.get_by_role('button', name='Cancel recording').click()
+        cancelled = until(lambda: box.locator('[data-phase=idle]').count() == 1)
+        result = started and bounded and intermediate and follow == {'sameTarget': True, 'moved': True, 'closer': True} and cancelled
+        if not result:
+            notes['voice-recorder-waveform-smoothing'] = json.dumps({'started': started, 'bounded': bounded, 'intermediate': intermediate, 'follow': follow, 'cancelled': cancelled})
+        return result
+    check('voice-recorder-waveform-smoothing', recorder_waveform_smoothing)
 
     checks['no-page-errors'] = not errors
     context.close()

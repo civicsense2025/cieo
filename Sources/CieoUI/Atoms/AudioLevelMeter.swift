@@ -4,6 +4,7 @@ import SwiftUI
 /// (for example `VoiceRecorderModel.level`) and the bars follow it on a spring. VoiceOver reads the whole
 /// meter as one image and never gets per-frame updates.
 public struct AudioLevelMeter: View {
+    private static let maximumBarCount = 32 // literal-ok: matches the web meter's bounded bar count
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentMetrics) private var metrics
     @ScaledMetric private var height: CGFloat
@@ -17,7 +18,7 @@ public struct AudioLevelMeter: View {
     /// `bars` is clamped to 1...32 and defaults to 5; `level` is clamped to 0...1.
     public init(level: Double, bars: Int = 5, label: Text = Text("Microphone level"), height: CGFloat = 32) { // literal-ok: meter geometry; no step or role matches it
         self.level = Self.clamp01(level)
-        self.count = min(32, max(1, bars)) // literal-ok: the web bar-count bounds
+        self.count = min(Self.maximumBarCount, max(1, bars))
         self.label = label
         _height = ScaledMetric(wrappedValue: height, relativeTo: .body)
     }
@@ -67,9 +68,9 @@ public struct AudioLevelMeter: View {
     }
 
     /// Bar heights (0.1...1) for a level: the middle bars rise the most, the outer ones follow at half
-    /// height, and every bar keeps a visible stub.
+    /// height, and every bar keeps a visible stub. The requested count is bounded to 0...32.
     public static func levelBars(_ level: Double, count: Int) -> [Double] {
-        let n = max(0, count)
+        let n = min(Self.maximumBarCount, max(0, count))
         let l = clamp01(level)
         let mid = Double(n - 1) / 2
         return (0..<n).map { i in

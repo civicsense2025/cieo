@@ -1,7 +1,8 @@
 'use client';
-/* AuthSignInCard (static). Full sign-in card with heading, credentials, routes, and status. */
+/* AuthSignInCard. Full sign-in card with spring-led labels and status presence. */
 import type { CSSProperties, ReactNode } from 'react';
 import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';
+import { AuthMotionMessage } from './AuthMotion.js';
 
 export interface AuthSignInCardProps {
   id: string;
@@ -21,7 +22,7 @@ export function AuthCardShell({ id, title, status, style, children, footer }: { 
     <section className="cieo cieo-auth-card" aria-labelledby={`${id}-title`} style={style}>
       <h2 className="cieo-auth-card-title" id={`${id}-title`}>{title}</h2>
       {children}
-      {status ? <p className="cieo-auth-status" role="status">{status}</p> : null}
+      <AuthMotionMessage className="cieo-auth-status" role="status" value={status} />
       {footer ? <p className="cieo-auth-routes">{footer}</p> : null}
     </section>
   );

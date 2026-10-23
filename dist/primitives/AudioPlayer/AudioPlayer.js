@@ -2,13 +2,15 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 /* AudioPlayer. One clip with play/pause, a scrubber, the clock and (in full) speed. It owns the audio element and keeps only one player in the document playing at a time. */
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { AudioPlayButton } from '../AudioPlayButton/AudioPlayButton.js';
 import { AudioTime } from '../AudioTime/AudioTime.js';
 import { AudioWaveform, audioSeekText, useScrub } from '../AudioWaveform/AudioWaveform.js';
-import { DEFAULT_PLAYBACK_RATES, PlaybackRateButton } from '../PlaybackRateButton/PlaybackRateButton.js';
+import { DEFAULT_PLAYBACK_RATES, normalizePlaybackRate, normalizePlaybackRates, PlaybackRateButton } from '../PlaybackRateButton/PlaybackRateButton.js';
 /** Pure state step driven by the audio element's events. Error is sticky until retry; ended returns to ready-to-play on the next play. */
 export function audioPlayerStep(state, event) {
+    if (event === 'source')
+        return 'loading';
     if (event === 'retry')
         return state === 'error' ? 'loading' : state;
     if (state === 'error')
@@ -64,10 +66,16 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
     const id = tokenRef.current;
     const root = useRef(null);
     const audio = useRef(null);
+    const renderedSource = useRef(src);
+    renderedSource.current = src;
+    const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
     const [phase, dispatch] = useReducer(audioPlayerStep, 'loading');
     const [metaDuration, setMetaDuration] = useState(null);
     const [seconds, setSeconds] = useState(0);
-    const [rate, setRate] = useState(rates[0] ?? 1);
+    const validRates = useMemo(() => normalizePlaybackRates(rates), [rates]);
+    const rateListKey = validRates.join('\u0000');
+    const [rate, setRate] = useState(validRates[0] ?? 1);
+    const appliedRate = useRef(normalizePlaybackRate(rate));
     const known = metaDuration ?? duration ?? 0;
     const live = useRef({ known, onPlay, onPause, onEnded, onTimeUpdate, seconds });
     live.current = { known, onPlay, onPause, onEnded, onTimeUpdate, seconds };
@@ -82,7 +90,43 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
         }
     }, []);
     // The fill var is written only here (never through the style prop) so a re-render can't snap it back to a whole second.
-    useEffect(() => paint(audio.current?.currentTime ?? 0), [known, paint]);
+    useEffect(() => paint(audio.current?.currentTime ?? 0), [known, paint, src]);
+    useIsoLayoutEffect(() => {
+        dispatch('source');
+        setMetaDuration(null);
+        setSeconds(0);
+        live.current.seconds = 0;
+        root.current?.style.setProperty('--cieo-audio-progress', '0');
+    }, [src]);
+    useEffect(() => {
+        if (validRates.length === 0)
+            return;
+        setRate((current) => validRates.includes(current) ? current : validRates[0]);
+    }, [rateListKey, validRates]);
+    useEffect(() => {
+        const current = audio.current;
+        return () => {
+            if (!current)
+                return;
+            try {
+                current.pause();
+            }
+            catch {
+                /* the media element may already be detached */
+            }
+            queueMicrotask(() => {
+                if (audio.current === current)
+                    return;
+                try {
+                    current.removeAttribute('src');
+                    current.load();
+                }
+                catch {
+                    /* the media element may already be detached */
+                }
+            });
+        };
+    }, [src]);
     useEffect(() => registerAudioPlayer(id, () => audio.current?.pause()), [id]);
     useEffect(() => {
         if (phase !== 'playing')
@@ -99,9 +143,35 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
     useEffect(() => {
         if (!audio.current)
             return;
-        audio.current.defaultPlaybackRate = rate;
-        audio.current.playbackRate = rate;
-    }, [rate, phase]);
+        const safeRate = normalizePlaybackRate(rate);
+        try {
+            audio.current.defaultPlaybackRate = safeRate;
+            audio.current.playbackRate = safeRate;
+            appliedRate.current = safeRate;
+        }
+        catch {
+            /* keep the label aligned with the last rate the browser accepted */
+            if (rate !== appliedRate.current)
+                setRate(appliedRate.current);
+        }
+    }, [rate, phase, src]);
+    const changeRate = (next) => {
+        const safe = normalizePlaybackRate(next);
+        const current = audio.current;
+        if (!current) {
+            setRate(safe);
+            return;
+        }
+        try {
+            current.defaultPlaybackRate = safe;
+            current.playbackRate = safe;
+            appliedRate.current = safe;
+            setRate(safe);
+        }
+        catch {
+            setRate(appliedRate.current);
+        }
+    };
     const seek = (t) => {
         const a = audio.current;
         if (!a)
@@ -121,6 +191,8 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
         if (phase === 'ended')
             seek(0);
         a.play()?.catch((err) => {
+            if (a !== audio.current || renderedSource.current !== src)
+                return;
             const name = err?.name;
             if (name !== 'AbortError' && name !== 'NotAllowedError')
                 dispatch('error');
@@ -136,27 +208,43 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
     const status = (_jsxs("div", { className: "cieo-audio-player-error", children: [_jsx("span", { role: "alert", children: "Couldn't play this clip" }), _jsx("button", { type: "button", className: "cieo-audio-player-retry", onClick: retry, children: "Retry" })] }));
     const scrubber = phase === 'error' ? status : peaks && peaks.length > 0 ? (_jsx(AudioWaveform, { peaks: peaks, duration: known, current: seconds, onSeek: seek, label: `Seek in ${label}` })) : (_jsx("div", { className: "cieo-audio-player-track", ...track, role: "slider", tabIndex: 0, "aria-label": `Seek in ${label}`, "aria-valuemin": 0, "aria-valuemax": known, "aria-valuenow": Math.floor(seconds), "aria-valuetext": audioSeekText(seconds, known), "aria-orientation": "horizontal", children: _jsx("span", { className: "cieo-audio-player-fill", "aria-hidden": "true" }) }));
     return (_jsxs("div", { ref: root, className: "cieo cieo-audio-player", role: "group", "aria-label": label, "data-variant": variant, "data-state": phase, children: [_jsx("audio", { ref: audio, src: src, preload: "metadata", onLoadedMetadata: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
+                        return;
                     const d = e.currentTarget.duration;
                     if (Number.isFinite(d) && d > 0)
                         setMetaDuration(d);
                     dispatch('loadedmetadata');
                 }, onDurationChange: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
+                        return;
                     const d = e.currentTarget.duration;
                     if (Number.isFinite(d) && d > 0)
                         setMetaDuration(d);
-                }, onPlay: () => {
+                }, onPlay: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
+                        return;
                     claimAudioPlayback(id);
                     dispatch('play');
                     live.current.onPlay?.();
                 }, onPause: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
+                        return;
                     dispatch('pause');
                     if (!e.currentTarget.ended)
                         live.current.onPause?.();
-                }, onEnded: () => {
+                }, onEnded: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
+                        return;
                     if (audio.current)
                         audio.current.currentTime = 0;
                     paint(0);
                     dispatch('ended');
                     live.current.onEnded?.();
-                }, onError: () => dispatch('error'), onTimeUpdate: (e) => live.current.onTimeUpdate?.(e.currentTarget.currentTime) }), _jsx(AudioPlayButton, { playing: phase === 'playing', loading: phase === 'loading', label: label, onToggle: toggle, size: variant === 'full' ? 'lg' : 'md' }), _jsx("div", { className: "cieo-audio-player-main", children: variant === 'full' ? (_jsxs(_Fragment, { children: [scrubber, _jsxs("div", { className: "cieo-audio-player-times", children: [_jsx(AudioTime, { current: seconds }), _jsx(AudioTime, { current: seconds, duration: total, mode: total ? 'remaining' : 'elapsed' })] })] })) : (scrubber) }), variant === 'compact' ? _jsx(AudioTime, { current: seconds, duration: total, mode: resting ? 'total' : 'remaining' }) : null, variant === 'full' && phase !== 'error' ? _jsx(PlaybackRateButton, { rate: rate, rates: rates, onRateChange: setRate }) : null] }));
+                }, onError: (e) => {
+                    if (e.currentTarget === audio.current && renderedSource.current === src)
+                        dispatch('error');
+                }, onTimeUpdate: (e) => {
+                    if (e.currentTarget === audio.current && renderedSource.current === src)
+                        live.current.onTimeUpdate?.(e.currentTarget.currentTime);
+                } }, src), _jsx(AudioPlayButton, { playing: phase === 'playing', loading: phase === 'loading', label: label, onToggle: toggle, size: variant === 'full' ? 'lg' : 'md' }), _jsx("div", { className: "cieo-audio-player-main", children: variant === 'full' ? (_jsxs(_Fragment, { children: [scrubber, _jsxs("div", { className: "cieo-audio-player-times", children: [_jsx(AudioTime, { current: seconds }), _jsx(AudioTime, { current: seconds, duration: total, mode: total ? 'remaining' : 'elapsed' })] })] })) : (scrubber) }), variant === 'compact' ? _jsx(AudioTime, { current: seconds, duration: total, mode: resting ? 'total' : 'remaining' }) : null, variant === 'full' && phase !== 'error' ? _jsx(PlaybackRateButton, { rate: rate, rates: validRates, onRateChange: changeRate }) : null] }));
 }

@@ -16,7 +16,7 @@ A root (`role=slider` with `onSeek`, `role=img` without) holding two copies of t
 
 ## Behavior
 
-- `waveformBars(peaks, count)` buckets by max, scales to 0..1 and keeps a floor of 0.08 so silence shows a tick.
+- `waveformBars(peaks, count)` buckets by max, scales to 0..1 and keeps a floor of 0.08 so silence shows a tick. Rendered and helper output is capped at the exported `MAX_WAVEFORM_BARS` (128).
 - `seekFromPointer` and `waveformKeyStep` are pure and clamped.
 - Bars grow in with a calm stagger of at most 300 ms; reduced motion shows them at once.
 - Progress is a CSS variable, so a host can update it every frame without re-rendering the bars.

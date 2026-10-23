@@ -1,7 +1,8 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/* AuthAccountCard (static). Profile row with sign out; an inline confirm step guards bulk sign-out. */
+/* AuthAccountCard. Profile row with a spring-sized inline confirmation step guarding bulk sign-out. */
 import { useState } from 'react';
+import { AuthMotionFrame, AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
 export function AuthAccountCard({ id, name, email, avatarInitials, signOutConfirm, style, onSignOut }) {
     const [confirming, setConfirming] = useState(false);
     const start = () => {
@@ -11,5 +12,5 @@ export function AuthAccountCard({ id, name, email, avatarInitials, signOutConfir
             onSignOut();
     };
     const confirm = () => { setConfirming(false); onSignOut(); };
-    return (_jsxs("section", { className: "cieo cieo-auth-account-card", "aria-labelledby": `${id}-title`, style: style, children: [_jsx("h2", { className: "cieo-auth-card-title", id: `${id}-title`, children: "Account" }), _jsxs("p", { className: "cieo-auth-profile", children: [_jsx("span", { className: "cieo-auth-avatar", "aria-hidden": "true", children: avatarInitials }), _jsxs("span", { className: "cieo-auth-identity", children: [_jsx("span", { className: "cieo-auth-name", children: name }), _jsx("span", { className: "cieo-auth-email", children: email })] })] }), confirming ? (_jsxs("div", { className: "cieo-auth-signout-confirm", children: [_jsx("p", { className: "cieo-auth-status", role: "status", children: "Sign out of all devices?" }), _jsxs("div", { className: "cieo-auth-invite-actions", children: [_jsx("button", { type: "button", className: "cieo-auth-accept", onClick: confirm, children: "Confirm sign out" }), _jsx("button", { type: "button", className: "cieo-auth-decline", onClick: () => setConfirming(false), children: "Cancel" })] })] })) : (_jsx("button", { type: "button", className: "cieo-auth-signout", onClick: start, children: "Sign out" }))] }));
+    return (_jsxs("section", { className: "cieo cieo-auth-account-card", "aria-labelledby": `${id}-title`, style: style, children: [_jsx("h2", { className: "cieo-auth-card-title", id: `${id}-title`, children: "Account" }), _jsxs("p", { className: "cieo-auth-profile", children: [_jsx("span", { className: "cieo-auth-avatar", "aria-hidden": "true", children: avatarInitials }), _jsxs("span", { className: "cieo-auth-identity", children: [_jsx("span", { className: "cieo-auth-name", children: name }), _jsx("span", { className: "cieo-auth-email", children: email })] })] }), _jsx(AuthMotionFrame, { value: confirming ? 'confirm' : 'signout', children: (shown, live) => shown === 'confirm' ? (_jsxs("div", { className: "cieo-auth-signout-confirm", children: [_jsx(AuthMotionMessage, { className: "cieo-auth-status", role: "status", value: live ? 'Sign out of all devices?' : undefined }), _jsxs("div", { className: "cieo-auth-invite-actions", children: [_jsx("button", { type: "button", className: "cieo-auth-accept", disabled: !live, onClick: confirm, children: "Confirm sign out" }), _jsx("button", { type: "button", className: "cieo-auth-decline", disabled: !live, onClick: () => setConfirming(false), children: "Cancel" })] })] })) : (_jsx("button", { type: "button", className: "cieo-auth-signout", disabled: !live, onClick: start, children: "Sign out" })) })] }));
 }

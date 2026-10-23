@@ -82,7 +82,10 @@
     "layout": [],
     "content": [],
     "motion": [
-      "no-animation-in-rows"
+      "base-pane-swap",
+      "soft-height",
+      "synchronous-focus",
+      "reduced-motion-respected"
     ]
   },
   "platforms": [

@@ -65,7 +65,8 @@
       "label-visible"
     ],
     "motion": [
-      "no-animation-in-rows"
+      "base-label-swap",
+      "reduced-motion-respected"
     ]
   },
   "platforms": [

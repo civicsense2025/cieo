@@ -9,6 +9,6 @@
   :where(.cieo) .cieo-auth-submit:disabled { opacity: .6; cursor: default; }
   :where(.cieo) .cieo-auth-submit:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-mfa-challenge * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-mfa-challenge * { animation: none !important; transition: none !important; }
   }
 }

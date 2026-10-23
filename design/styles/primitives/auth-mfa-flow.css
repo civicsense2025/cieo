@@ -10,6 +10,6 @@
   :where(.cieo) .cieo-auth-routes { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--cieo-text-small); }
   :where(.cieo) .cieo-auth-routes a { color: var(--cieo-color-text); }
   @media (prefers-reduced-motion: reduce) {
-    :where(.cieo).cieo-auth-card * { animation: none; transition: none; }
+    :root:not([data-motion='full']) :where(.cieo).cieo-auth-card * { animation: none !important; transition: none !important; }
   }
 }

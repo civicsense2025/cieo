@@ -55,7 +55,10 @@
       "required": false,
       "nullable": false,
       "default": 3,
-      "constraints": {}
+      "constraints": {
+        "min": 0,
+        "max": 32
+      }
     },
     {
       "id": "initialReplies",

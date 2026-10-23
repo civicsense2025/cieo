@@ -45,7 +45,10 @@
       "required": false,
       "nullable": false,
       "default": 5,
-      "constraints": {}
+      "constraints": {
+        "min": 1,
+        "max": 32
+      }
     },
     {
       "id": "label",

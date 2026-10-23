@@ -16,7 +16,7 @@ A pill `button` whose text swaps with SwapText when the rate changes.
 
 ## Behavior
 
-- `nextRate(rates, rate)` returns the next speed, wraps at the end, and starts at the first for an unknown rate.
+- `nextRate(rates, rate)` skips invalid speeds, returns the next speed, wraps at the end, and normalizes invalid scalar rates to 1×. An explicit empty list disables the button; an all-invalid non-empty list falls back to 1×.
 - Name reads "Playback speed, 1.5 times" ("1 time" for 1).
 
 ## Keyboard / accessibility

@@ -15,7 +15,7 @@
     "path": "src/primitives/VoiceRecorder/VoiceRecorder.tsx",
     "symbol": "VoiceRecorder"
   },
-  "dependencies": ["AudioLevelMeter", "AudioTime", "IconButton"],
+  "dependencies": ["AudioLevelMeter", "AudioTime", "AudioWaveform", "IconButton"],
   "nativePrimitives": [],
   "properties": [
     {
@@ -104,6 +104,9 @@
     "content": [],
     "motion": [
       "pulsing-record-dot",
+      "bounded-rolling-waveform",
+      "interruptible-waveform-retargeting",
+      "interruptible-live-panel-presence",
       "reduced-motion-respected"
     ]
   },

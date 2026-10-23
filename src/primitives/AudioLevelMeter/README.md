@@ -19,9 +19,9 @@ A `role="img"` root named by `label`, holding `bars` hidden bar elements. Height
 ## Behavior
 
 - `rmsLevel(samples)` turns a block of samples into 0..1 on a dB scale: -60 dB or quieter is 0, 0 dB is 1, empty is 0.
-- `levelBars(level, count)` gives each bar a height of 0.1 to 1, tallest in the middle.
+- `levelBars(level, count)` gives each bar a height of 0.1 to 1, tallest in the middle; helper and component output are capped at 32 bars.
 - The level is smoothed by a spring that writes CSS variables through refs, so nothing re-renders per frame.
-- With `stream`, the meter opens its own AudioContext and analyser in an effect and closes it on cleanup. `level` wins when both are given. A stream with no audio track leaves the meter static: the context is closed and nothing throws.
+- With `stream`, the meter opens its own AudioContext and analyser in an effect and closes it on cleanup or when all input audio tracks end. It never stops host-owned tracks. `level` wins when both are given. A stream with no audio track leaves the meter static: the context is closed and nothing throws.
 - Reduced motion still shows the level, without easing.
 
 ## Keyboard / accessibility

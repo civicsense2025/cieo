@@ -10,7 +10,7 @@ export function normalizeHandle(raw: string): string {
   return bare;
 }
 
-/** The address when it is safe to put in an href, else null. User content is untrusted, so only http and https URLs with a host pass, plus same-site relative links (/path, ./path, ../path, #hash or ?query) unless `relative` is false. Protocol-relative (//host) and backslash tricks are refused because browsers resolve them to another site. */
+/** The address when it is safe to put in an href, else null. User content is untrusted, so only credential-free http and https URLs with a host pass, plus same-site relative links (/path, ./path, ../path, #hash or ?query) unless `relative` is false. Protocol-relative (//host) and backslash tricks are refused because browsers resolve them to another site. */
 export function safeHref(href: unknown, opts: { relative?: boolean } = {}): string | null {
   if (typeof href !== 'string') return null;
   const value = href.trim();
@@ -19,7 +19,7 @@ export function safeHref(href: unknown, opts: { relative?: boolean } = {}): stri
   if (/^[a-z][a-z0-9+.-]*:/i.test(value)) {
     try {
       const url = new URL(value);
-      return (url.protocol === 'http:' || url.protocol === 'https:') && url.hostname !== '' ? value : null;
+      return (url.protocol === 'http:' || url.protocol === 'https:') && url.hostname !== '' && url.username === '' && url.password === '' ? value : null;
     } catch {
       return null;
     }

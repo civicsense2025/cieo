@@ -9,6 +9,10 @@ const PACKAGE_AREAS = {
 };
 // Modules with their own package subpath, checked before the area they live in. Mirrored in scripts/lib/registry.mjs.
 const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
+const COMPANION_FILES = {
+  'AuthSignInCard/AuthSignInCard.tsx|./AuthMotion.js': true,
+  'VoiceRecorder/VoiceRecorder.tsx|./recorderVisual.js': true,
+};
 
 /* Deliberately shape-based, mirroring scanImportSpecifiers in scripts/lib/registry.mjs:
    the registry generator and this rewriter must treat the same text as import
@@ -25,11 +29,15 @@ function unclassifiedImport(spec, fromFile) {
 }
 
 function classifyRelative(spec, fromFile) {
-  if (spec.startsWith('./')) throw unclassifiedImport(spec, fromFile);
+  if (spec.startsWith('./')) {
+    if (COMPANION_FILES[`${fromFile}|${spec}`]) return { kind: 'shared' };
+    throw unclassifiedImport(spec, fromFile);
+  }
   const ups = (spec.match(/\.\.\//g) || []).length;
   const rest = spec.replace(/^(\.\.\/)+/, '');
   if (ups === 1) {
     if (rest === 'motion.js') return { kind: 'shared' };
+    if (['AuthSignInCard/AuthMotion.js', 'VoiceRecorder/recorderVisual.js'].includes(rest)) return { kind: 'shared' };
     const [first] = rest.split('/');
     if (/^[A-Z]/.test(first) && rest === `${first}/${first}.js`) return { kind: 'sibling' };
     throw unclassifiedImport(spec, fromFile);

@@ -33,6 +33,7 @@ test('levelBars: center taller, bounded, safe on junk', () => {
   assert.ok(levelBars(NaN, 3).every((v) => v === 0.1));
   assert.deepEqual(levelBars(0.5, 0), []);
   assert.equal(levelBars(1, 1)[0], 1);
+  assert.equal(levelBars(1, 100_000).length, 32, 'helper output stays capped');
 });
 
 test('AudioLevelMeter renders a labelled img with hidden bars and no valuenow', () => {
@@ -68,6 +69,11 @@ test('voiceRecorderStep: errors carry a reason and recover', () => {
   assert.equal(run(['start', 'denied', 'start']).phase, 'requesting', 'try again');
   assert.equal(run(['start', 'denied', 'reset']).phase, 'idle');
   assert.equal(run(['start', 'denied', 'start']).reason, null);
+});
+test('voiceRecorderStep: a recorder failure before pending delivery replaces done with error', () => {
+  const done = run(['start', 'granted', 'stop']);
+  assert.equal(done.phase, 'done');
+  assert.deepEqual(run(['fail'], done), { phase: 'error', elapsed: 0, reason: 'failed' });
 });
 
 test('voiceRecorderStep: cancel from every active state returns to idle and never reaches done', () => {
@@ -121,6 +127,7 @@ test('downsamplePeaks keeps the loudest reading per slice', () => {
   assert.deepEqual(downsamplePeaks([1, 2, NaN, -0.5], 4), [1, 1, 0, 0.5], 'clamps and cleans junk');
   assert.deepEqual(downsamplePeaks([0.5], 0), []);
   assert.equal(downsamplePeaks([0.3, 0.3], 64).length, 64, 'short clips still fill the waveform');
+  assert.equal(downsamplePeaks(Array.from({ length: 1_000 }, (_, i) => i / 1_000), 100_000).length, 128, 'hostile counts stay within the shared waveform bound');
 });
 
 test('holdGesture cancels only past 80px to the left', () => {

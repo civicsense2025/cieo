@@ -72,7 +72,10 @@
       "required": false,
       "nullable": false,
       "default": 48,
-      "constraints": {}
+      "constraints": {
+        "min": 1,
+        "max": 128
+      }
     }
   ],
   "slots": [

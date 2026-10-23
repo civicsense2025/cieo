@@ -1,8 +1,9 @@
 'use client';
-/* AuthCredentialForm (static). Email plus password plus submit for sign in and sign up. */
+/* AuthCredentialForm. Email plus password with motion-preserving pending and error states. */
 import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
+import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 
 export interface AuthCredentialFormProps {
@@ -29,9 +30,9 @@ export function AuthCredentialForm({ id, mode = 'signin', pending, error, style,
         showStrength={mode === 'signup'}
         autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
       />
-      {error ? <span className="cieo-auth-error" role="alert">{error}</span> : null}
+      <AuthMotionMessage className="cieo-auth-error" role="alert" value={error} />
       <button type="submit" className="cieo-auth-submit" disabled={pending}>
-        {pending ? (mode === 'signup' ? 'Creating account…' : 'Signing in…') : (mode === 'signup' ? 'Create account' : 'Sign in')}
+        <AuthSwapText value={pending ? (mode === 'signup' ? 'Creating account…' : 'Signing in…') : (mode === 'signup' ? 'Create account' : 'Sign in')} />
       </button>
     </form>
   );

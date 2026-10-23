@@ -1,5 +1,5 @@
 'use client';
-/* AuthSignUpCard (static). Full sign-up card with heading, credentials, routes, and status. */
+/* AuthSignUpCard. Full sign-up card with spring-led labels and status presence. */
 import type { CSSProperties } from 'react';
 import { AuthCardShell } from '../AuthSignInCard/AuthSignInCard.js';
 import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';

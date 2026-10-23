@@ -35,7 +35,7 @@ test('normalizeHandle strips one @, trims, rejects whitespace and empties', () =
 
 test('safeHref allows http(s) and same-site paths only', () => {
   for (const ok of ['https://x.com/a', 'http://x.com', '/u/joel', '#top', '?q=1']) assert.equal(safeHref(ok), ok);
-  for (const bad of ['javascript:alert(1)', ' JavaScript:alert(1)', 'java\tscript:alert(1)', 'data:text/html,hi', 'vbscript:x', '//evil.com', '/\\evil.com', 'ftp://x.com', 'mailto:a@b.com', '', 'x.com/a', null, 42])
+  for (const bad of ['javascript:alert(1)', ' JavaScript:alert(1)', 'java\tscript:alert(1)', 'data:text/html,hi', 'vbscript:x', '//evil.com', '/\\evil.com', 'ftp://x.com', 'mailto:a@b.com', 'https://user:pass@x.com/reset', 'https://firstnationalbank.example.com@login.evil.test/reset', '', 'x.com/a', null, 42])
     assert.equal(safeHref(bad), null, String(bad));
   assert.equal(safeHref('/u/joel', { relative: false }), null);
 });
@@ -115,17 +115,33 @@ test('tokenizeRichText is lossless: values rebuild the original text', () => {
   for (const s of samples) assert.equal(tokenizeRichText(s).map((t) => t.value).join(''), s);
 });
 
-test('shortenUrl drops scheme and www and ellipsizes the end', () => {
+test('shortenUrl drops scheme and www and ellipsizes the path', () => {
   assert.equal(shortenUrl('https://www.example.com/'), 'example.com');
   assert.equal(shortenUrl('http://x.com/joelw'), 'x.com/joelw');
   const long = shortenUrl('https://floridapolitics.com/archives/123456/long-story');
   assert.equal(long.length, 28);
   assert.ok(long.endsWith('…'));
   assert.ok(long.startsWith('floridapolitics.com/archive'));
-  assert.equal(shortenUrl('x.com/abcdefghij', 5), 'x.co…');
+  assert.equal(shortenUrl('x.com/abcdefghij', 5), 'x.com…');
   assert.equal(shortenUrl('abc', 0), '…');
   assert.equal(shortenUrl('', 10), '');
   assert.ok(Array.from(shortenUrl('https://a.com/🚀🚀🚀🚀', 9)).length <= 9);
+});
+
+test('shortenUrl preserves the parsed destination host and shortens the path', () => {
+  assert.equal(shortenUrl('https://firstnationalbank.example.com/secure/reset/password', 12), 'firstnationalbank.example.com…');
+  assert.equal(shortenUrl('https://news.example.co/élection/😀', 22), 'news.example.co/élect…');
+});
+
+test('shortenUrl keeps encoded display controls encoded while decoding ordinary Unicode', () => {
+  assert.equal(shortenUrl('https://example.com/a%0Ab', 100), 'example.com/a%0Ab');
+  assert.equal(shortenUrl('https://example.com/a%C2%85b', 100), 'example.com/a%C2%85b');
+  for (const encoded of ['%E2%80%AE', '%E2%81%A6', '%D8%9C']) {
+    assert.equal(shortenUrl(`https://example.com/a${encoded}b`, 100), `example.com/a${encoded}b`);
+  }
+  assert.equal(shortenUrl('https://example.com/a%E2%80%A8b', 100), 'example.com/a%E2%80%A8b');
+  assert.equal(shortenUrl('https://example.com/a%E2%80%A9b', 100), 'example.com/a%E2%80%A9b');
+  assert.equal(shortenUrl('https://example.com/%C3%A9lection', 100), 'example.com/élection');
 });
 
 test('RichText renders safe links, mentions through Mention, tags and breaks', () => {
@@ -145,7 +161,9 @@ test('RichText renders safe links, mentions through Mention, tags and breaks', (
   assert.doesNotMatch(evil, /javascript|href/);
   const cut = renderToStaticMarkup(h(RichText, { text: 'https://floridapolitics.com/archives/123456/long', maxUrlLength: 12 }));
   assert.match(cut, /title="https:\/\/floridapolitics\.com\/archives\/123456\/long"/);
-  assert.match(cut, />floridapoli…</);
+  assert.match(cut, />floridapolitics\.com…</);
+  const hostilePrefix = renderToStaticMarkup(h(RichText, { text: 'https://firstnationalbank.example.com/secure/reset/password', maxUrlLength: 12 }));
+  assert.match(hostilePrefix, /<a [^>]*>firstnationalbank\.example\.com…<\/a>/);
 });
 
 test('displayDomain returns the host without www and empty for invalid input', () => {
@@ -179,6 +197,7 @@ test('LinkPreview compact, site name, description only on large', () => {
   const compact = renderToStaticMarkup(h(LinkPreview, { ...base, variant: 'compact', siteName: 'Florida Politics', description: 'Summary' }));
   assert.match(compact, /data-variant="compact"/);
   assert.match(compact, />Florida Politics</);
+  assert.match(compact, /cieo-link-preview-domain">floridapolitics\.com</);
   assert.doesNotMatch(compact, /Summary/);
   assert.match(renderToStaticMarkup(h(LinkPreview, { ...base, description: 'Summary' })), />Summary</);
 });
@@ -272,10 +291,16 @@ test('over-long or hyphenated handles are not cut into a shorter mention', () =>
   assert.equal(tokenizeRichText('@bob-smith').filter((t) => t.type === 'mention').length, 0);
 });
 
-test('LinkPreview draws only absolute http(s) images and favicons', () => {
+test('LinkPreview rejects relative image and favicon paths but keeps absolute http(s) assets', () => {
   const base = { url: 'https://example.com/a', title: 'T' };
-  const rel = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: '/account/x', alt: '' }, favicon: '/f.ico' }));
-  assert.doesNotMatch(rel, /<img/);
+  const sameOrigin = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: '/logout', alt: '' }, favicon: '/logout?asset=favicon' }));
+  assert.doesNotMatch(sameOrigin, /<img/);
+  assert.match(sameOrigin, /href="https:\/\/example\.com\/a"/, 'the destination remains an absolute safe link');
   const abs = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'https://example.com/i.png', alt: '' }, favicon: 'https://example.com/f.ico' }));
   assert.equal((abs.match(/<img/g) || []).length, 2);
+  assert.equal((abs.match(/referrerPolicy="no-referrer"/g) || []).length, 2);
+  const invalid = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'data:image/png;base64,AA==', alt: '' }, favicon: 'javascript:alert(1)' }));
+  assert.doesNotMatch(invalid, /<img/);
+  const credentials = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'https://user:secret@example.com/i.png', alt: '' }, favicon: 'https://user:secret@example.com/f.ico' }));
+  assert.doesNotMatch(credentials, /<img/);
 });

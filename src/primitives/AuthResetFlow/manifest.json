@@ -100,7 +100,10 @@
     "layout": [],
     "content": [],
     "motion": [
-      "no-animation-in-rows"
+      "base-pane-swap",
+      "soft-height",
+      "base-status-presence",
+      "reduced-motion-respected"
     ]
   },
   "platforms": [

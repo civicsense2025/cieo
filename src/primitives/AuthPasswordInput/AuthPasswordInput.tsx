@@ -1,7 +1,8 @@
 'use client';
-/* AuthPasswordInput (static). Password input with a strength meter and a show/hide toggle that keeps focus on the input. */
+/* AuthPasswordInput. Password input with snap strength feedback and a focus-preserving show/hide swap. */
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
 
 export interface AuthPasswordInputProps {
   id: string;
@@ -63,17 +64,17 @@ export function AuthPasswordInput({ id, label = 'Password', value, defaultValue,
           disabled={disabled}
           onClick={() => { setShown(s => !s); inputRef.current?.focus(); }}
         >
-          {shown ? 'Hide' : 'Show'}
+          <AuthSwapText value={shown ? 'Hide' : 'Show'} />
         </button>
       </span>
-      {showStrength && current ? (
-        <span className="cieo-auth-meter" role="meter" aria-label="Password strength" aria-valuemin={0} aria-valuemax={4} aria-valuenow={score} aria-valuetext={STRENGTH_LABELS[score]} data-score={score}>
+      {showStrength ? (
+        <span className="cieo-auth-meter" role={current ? 'meter' : undefined} aria-hidden={current ? undefined : 'true'} aria-label={current ? 'Password strength' : undefined} aria-valuemin={current ? 0 : undefined} aria-valuemax={current ? 4 : undefined} aria-valuenow={current ? score : undefined} aria-valuetext={current ? STRENGTH_LABELS[score] : undefined} data-score={score} data-open={current ? '' : undefined}>
           {[0, 1, 2, 3].map(i => (
             <i key={i} data-filled={i < score ? 'true' : undefined} />
           ))}
         </span>
       ) : null}
-      {error ? <span id={`${id}-error`} className="cieo-auth-error" role="alert">{error}</span> : null}
+      <AuthMotionMessage id={`${id}-error`} className="cieo-auth-error" role="alert" value={error} />
     </span>
   );
 }
