@@ -291,15 +291,16 @@ test('over-long or hyphenated handles are not cut into a shorter mention', () =>
   assert.equal(tokenizeRichText('@bob-smith').filter((t) => t.type === 'mention').length, 0);
 });
 
-test('LinkPreview draws only absolute http(s) images and favicons', () => {
+test('LinkPreview rejects relative image and favicon paths but keeps absolute http(s) assets', () => {
   const base = { url: 'https://example.com/a', title: 'T' };
-  const sameOrigin = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: '/account/x', alt: '' }, favicon: '/f.ico' }));
-  assert.match(sameOrigin, /<img [^>]*src="\/account\/x"/);
-  assert.match(sameOrigin, /<img [^>]*src="\/f\.ico"/);
-  assert.match(sameOrigin, /referrerPolicy="no-referrer"/);
+  const sameOrigin = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: '/logout', alt: '' }, favicon: '/logout?asset=favicon' }));
+  assert.doesNotMatch(sameOrigin, /<img/);
+  assert.match(sameOrigin, /href="https:\/\/example\.com\/a"/, 'the destination remains an absolute safe link');
   const abs = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'https://example.com/i.png', alt: '' }, favicon: 'https://example.com/f.ico' }));
   assert.equal((abs.match(/<img/g) || []).length, 2);
   assert.equal((abs.match(/referrerPolicy="no-referrer"/g) || []).length, 2);
   const invalid = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'data:image/png;base64,AA==', alt: '' }, favicon: 'javascript:alert(1)' }));
   assert.doesNotMatch(invalid, /<img/);
+  const credentials = renderToStaticMarkup(h(LinkPreview, { ...base, image: { src: 'https://user:secret@example.com/i.png', alt: '' }, favicon: 'https://user:secret@example.com/f.ico' }));
+  assert.doesNotMatch(credentials, /<img/);
 });

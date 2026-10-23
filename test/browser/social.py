@@ -100,10 +100,21 @@ def run_mode(browser, port, mode):
         context.grant_permissions(['clipboard-read', 'clipboard-write', 'microphone'], origin=origin)
     except Exception:
         context.grant_permissions(['clipboard-read', 'clipboard-write'], origin=origin)
+    context.add_cookies([{'name': 'cieo_test_session', 'value': 'synthetic-only', 'url': origin}])
     context.add_init_script(INIT)
     page = context.new_page()
     page.set_default_timeout(3000)
-    page.route('**/*', lambda route: route.continue_() if route.request.url.startswith((origin + '/', 'blob:', 'data:')) else route.abort())
+    same_origin_preview_assets = []
+    def route_request(route):
+        url = route.request.url
+        if url.startswith(origin + '/logout'):
+            same_origin_preview_assets.append({'url': url, 'cookie': route.request.headers.get('cookie', '')})
+            route.abort()
+        elif url.startswith((origin + '/', 'blob:', 'data:')):
+            route.continue_()
+        else:
+            route.abort()
+    page.route('**/*', route_request)
     preview_png = base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/r7sAAAAASUVORK5CYII=')
     page.route('https://example.com/preview-*.png', lambda route: route.fulfill(status=200, content_type='image/png', body=preview_png))
     page.on('pageerror', lambda e: errors.append('pageerror: ' + str(e)))
@@ -359,6 +370,23 @@ def run_mode(browser, port, mode):
         return ok
     check('voice-recorder-strict-mode', strict_recorder)
 
+    def strict_player():
+        page.evaluate('() => window.hooks.mountStrictPlayerLifecycle()')
+        box = S('strict-player')
+        audio = box.locator('audio')
+        source_ready = until(lambda: audio.count() == 1 and audio.get_attribute('src') is not None and audio.evaluate('(el) => el.readyState >= 1'), 5.0)
+        source_snapshot = audio.evaluate('(el) => ({ attribute: el.getAttribute("src"), currentSrc: el.currentSrc, readyState: el.readyState, paused: el.paused })') if audio.count() == 1 else None
+        if source_ready:
+            box.get_by_role('button', name='Play Strict lifecycle clip').click()
+        playing = source_ready and until(lambda: box.locator('[data-state=playing]').count() == 1, 3.0)
+        page.evaluate('() => { window.__strictPlayerAudio = document.querySelector("#strict-player audio"); window.hooks.unmountRoot("strict-player"); }')
+        released = page.evaluate('''() => window.__strictPlayerAudio !== null && window.__strictPlayerAudio.paused && !window.__strictPlayerAudio.hasAttribute('src') && window.__strictPlayerAudio.readyState === 0''')
+        result = source_ready and playing and released
+        if not result:
+            notes['audio-player-strict-mode-source-preserved'] = json.dumps({'sourceReady': source_ready, 'source': source_snapshot, 'playing': playing, 'released': released})
+        return result
+    check('audio-player-strict-mode-source-preserved', strict_player)
+
     # AudioLevelMeter with a stream that has no audio track: static meter, context closed, no throw
     def empty_meter():
         before = page.evaluate('() => window.__ctxs.length')
@@ -521,6 +549,16 @@ def run_mode(browser, port, mode):
         return ok and unsafe.locator('a').count() == 0 and 'Unsafe card' in unsafe.inner_text()
     check('link-preview', links)
 
+    def link_preview_asset_boundary():
+        box = S('preview-asset-boundary')
+        box.scroll_into_view_if_needed()
+        page.wait_for_timeout(200)
+        result = box.locator('img').count() == 0 and box.locator('a').get_attribute('href') == 'https://example.com/article' and same_origin_preview_assets == []
+        if not result:
+            notes['link-preview-rejects-relative-assets'] = json.dumps({'images': box.locator('img').count(), 'requests': same_origin_preview_assets})
+        return result
+    check('link-preview-rejects-relative-assets', link_preview_asset_boundary)
+
     def rating_space():
         box = S('rating')
         group = box.get_by_role('radiogroup', name='Rate this reply')
@@ -556,6 +594,27 @@ def run_mode(browser, port, mode):
         fallback = until(lambda: box.get_by_role('button', name='Playback speed, 1 time').count() == 1 and abs(audio.evaluate('(el) => el.playbackRate') - 1) < 0.01)
         return filtered and one_rate and fallback
     check('audio-player-dynamic-rates', audio_player_rates)
+
+    def audio_player_empty_rates():
+        box = S('player-lifecycle')
+        audio = box.locator('audio')
+        page.evaluate('() => window.hooks.setPlayerRates([])')
+        disabled = until(lambda: box.get_by_role('button', name='Playback speed, 1 time').count() == 1 and box.get_by_role('button', name='Playback speed, 1 time').is_disabled())
+        rate = audio.evaluate('(el) => el.playbackRate')
+        return disabled and abs(rate - 1) < 0.01
+    check('audio-player-empty-rates-disabled', audio_player_empty_rates)
+
+    def playback_rate_empty_list():
+        box = S('empty-rates-button')
+        button = box.get_by_role('button', name='Playback speed, 1 time')
+        disabled = button.is_disabled()
+        handler_wired = button.evaluate('''el => {
+          const key = Object.keys(el).find(name => name.startsWith('__reactProps$'));
+          return typeof (key && el[key].onClick) === 'function';
+        }''')
+        button.evaluate('(el) => el.click()')
+        return disabled and not handler_wired and ev('empty-rate-button') == []
+    check('playback-rate-button-empty-list-no-handler', playback_rate_empty_list)
 
     def audio_player_rejected_rate():
         box = S('player-lifecycle')
@@ -600,8 +659,49 @@ def run_mode(browser, port, mode):
         }''')
         page.wait_for_timeout(80)
         stale_ignored = ev('player-lifecycle') == [] and box.locator('[data-state=loading]').count() == 1
-        return rate_ready and playing and reset and new_rate and stale_ignored
+        old_released = until(lambda: page.evaluate('''() => window.__oldPlayerAudio.paused && !window.__oldPlayerAudio.hasAttribute('src') && window.__oldPlayerAudio.readyState === 0'''))
+        return rate_ready and playing and reset and new_rate and stale_ignored and old_released
     check('audio-player-source-reset', audio_player_source_reset)
+
+    def audio_player_stale_events_a_b_a():
+        box = S('player-lifecycle')
+        page.evaluate("() => { window.ev['player-lifecycle'] = []; window.hooks.setPlayerSource('A'); }")
+        audio = box.locator('audio')
+        player = box.locator('.cieo-audio-player')
+        initial_a = until(lambda: audio.count() == 1 and audio.get_attribute('src') is not None and audio.evaluate('(el) => el.readyState >= 1'), 5.0)
+        if not initial_a:
+            return False
+        old_src = audio.get_attribute('src')
+        page.evaluate('''() => {
+          const old = document.querySelector('#player-lifecycle audio');
+          const propsKey = Object.keys(old).find(key => key.startsWith('__reactProps$'));
+          const props = propsKey ? old[propsKey] : null;
+          window.__stalePlayerAudioA = old;
+          window.__stalePlayerHandlersA = { onPlay: props?.onPlay, onPause: props?.onPause, onEnded: props?.onEnded };
+          window.hooks.setPlayerSource('B');
+        }''')
+        switched_b = until(lambda: box.locator('audio').get_attribute('src') not in (None, old_src), 5.0)
+        page.evaluate("() => window.hooks.setPlayerSource('A')")
+        returned_a = until(lambda: box.locator('audio').get_attribute('src') == old_src and box.locator('audio').evaluate('(el) => el.readyState >= 1'), 5.0)
+        current_is_new = page.evaluate('() => window.__stalePlayerAudioA !== document.querySelector("#player-lifecycle audio")')
+        if returned_a:
+            page.evaluate('''() => {
+              const old = window.__stalePlayerAudioA;
+              const handlers = window.__stalePlayerHandlersA;
+              const event = { currentTarget: old, target: old };
+              handlers.onPlay?.(event);
+              handlers.onPause?.(event);
+              handlers.onEnded?.(event);
+            }''')
+        page.wait_for_timeout(80)
+        events = ev('player-lifecycle')
+        state = player.get_attribute('data-state')
+        handlers_captured = page.evaluate('() => Boolean(window.__stalePlayerHandlersA?.onPlay && window.__stalePlayerHandlersA?.onPause && window.__stalePlayerHandlersA?.onEnded)')
+        result = initial_a and switched_b and returned_a and current_is_new and handlers_captured and events == [] and state == 'ready'
+        if not result:
+            notes['audio-player-stale-events-a-b-a'] = json.dumps({'initialA': initial_a, 'switchedB': switched_b, 'returnedA': returned_a, 'currentIsNew': current_is_new, 'handlersCaptured': handlers_captured, 'events': events, 'state': state})
+        return result
+    check('audio-player-stale-events-a-b-a', audio_player_stale_events_a_b_a)
 
     def meter_setup_failure():
         results = []

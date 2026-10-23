@@ -13,6 +13,7 @@ import { ShareButton } from '../../src/primitives/ShareButton/ShareButton';
 import { NewItemsPill } from '../../src/primitives/NewItemsPill/NewItemsPill';
 import { AudioWaveform } from '../../src/primitives/AudioWaveform/AudioWaveform';
 import { AudioPlayer } from '../../src/primitives/AudioPlayer/AudioPlayer';
+import { PlaybackRateButton } from '../../src/primitives/PlaybackRateButton/PlaybackRateButton';
 import { AudioTranscript, type TranscriptWord } from '../../src/primitives/AudioTranscript/AudioTranscript';
 import { AudioLevelMeter } from '../../src/primitives/AudioLevelMeter/AudioLevelMeter';
 import { VoiceRecorder } from '../../src/primitives/VoiceRecorder/VoiceRecorder';
@@ -135,13 +136,24 @@ function PlayersFixture() {
 function PlayerLifecycleFixture() {
   const [src, setSrc] = useState(wavA);
   const [rates, setRates] = useState([1, 1.5, 2]);
-  hooks.setPlayerSource = (kind: string) => setSrc(kind === 'loading' ? sourceWithoutMetadata() : silentWav(6));
+  hooks.setPlayerSource = (kind: string) => setSrc(kind === 'A' ? wavA : kind === 'B' ? wavB : kind === 'loading' ? sourceWithoutMetadata() : silentWav(6));
   hooks.setPlayerRates = (next: number[]) => setRates(next);
   return <Box id="player-lifecycle"><AudioPlayer src={src} label="Lifecycle clip" variant="full" rates={rates}
     onPlay={() => log('player-lifecycle', 'play')}
     onPause={() => log('player-lifecycle', 'pause')}
     onEnded={() => log('player-lifecycle', 'ended')}
     onTimeUpdate={(seconds) => log('player-lifecycle', { time: seconds })} /></Box>;
+}
+
+function StrictPlayerFixture() {
+  hooks.mountStrictPlayerLifecycle = () => mountRoot('strict-player', <React.StrictMode>
+    <AudioPlayer src={wavA} label="Strict lifecycle clip" variant="compact" />
+  </React.StrictMode>);
+  return null;
+}
+
+function EmptyRatesButtonFixture() {
+  return <Box id="empty-rates-button"><PlaybackRateButton rate={1} rates={[]} onRateChange={() => log('empty-rate-button', 'changed')} /></Box>;
 }
 
 const WORDS: TranscriptWord[] = ['Hello', 'there', 'this', 'is', 'a', 'test'].map((text, i) => ({ text, start: i * 1.5, end: i * 1.5 + 1.2 }));
@@ -291,9 +303,18 @@ function PreviewImageFixture() {
   return <Box id="preview-image"><LinkPreview url="https://example.com/article" title="Image preview" image={{ src, alt: 'Preview' }} /></Box>;
 }
 
+function PreviewAssetBoundaryFixture() {
+  return <Box id="preview-asset-boundary"><LinkPreview
+    url="https://example.com/article"
+    title="Asset boundary"
+    image={{ src: '/logout?asset=image', alt: 'Preview' }}
+    favicon="/logout?asset=favicon"
+  /></Box>;
+}
+
 createRoot(document.getElementById('root')!).render(<>
   <CountButtonFixture /><ActionBarFixture /><FollowFixture /><ReactionSummaryFixture /><PickerFixture /><PollFixture /><ThumbsFixture />
-  <RatingFixture /><ShareFixture /><PillFixture /><WaveformFixture /><PlayersFixture /><PlayerLifecycleFixture /><TranscriptFixture /><RecorderFixture /><MultiTakeRecorderFixture /><StrictRecorderLifecycleFixture /><MeterLifecycleFixture />
-  <ThreadFixture /><ComposerFixture /><RichTextFixture /><ConversationFixture /><TypingFixture /><AnnotationFixture /><LinkFixture /><PreviewImageFixture />
+  <RatingFixture /><ShareFixture /><PillFixture /><WaveformFixture /><PlayersFixture /><PlayerLifecycleFixture /><StrictPlayerFixture /><EmptyRatesButtonFixture /><TranscriptFixture /><RecorderFixture /><MultiTakeRecorderFixture /><StrictRecorderLifecycleFixture /><MeterLifecycleFixture />
+  <ThreadFixture /><ComposerFixture /><RichTextFixture /><ConversationFixture /><TypingFixture /><AnnotationFixture /><LinkFixture /><PreviewImageFixture /><PreviewAssetBoundaryFixture />
 </>);
 (window as any).ready = true;

@@ -110,12 +110,21 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
                 return;
             try {
                 current.pause();
-                current.removeAttribute('src');
-                current.load();
             }
             catch {
                 /* the media element may already be detached */
             }
+            queueMicrotask(() => {
+                if (audio.current === current)
+                    return;
+                try {
+                    current.removeAttribute('src');
+                    current.load();
+                }
+                catch {
+                    /* the media element may already be detached */
+                }
+            });
         };
     }, [src]);
     useEffect(() => registerAudioPlayer(id, () => audio.current?.pause()), [id]);
@@ -211,8 +220,8 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
                     const d = e.currentTarget.duration;
                     if (Number.isFinite(d) && d > 0)
                         setMetaDuration(d);
-                }, onPlay: () => {
-                    if (renderedSource.current !== src)
+                }, onPlay: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
                         return;
                     claimAudioPlayback(id);
                     dispatch('play');
@@ -223,8 +232,8 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
                     dispatch('pause');
                     if (!e.currentTarget.ended)
                         live.current.onPause?.();
-                }, onEnded: () => {
-                    if (audio.current === null || renderedSource.current !== src)
+                }, onEnded: (e) => {
+                    if (e.currentTarget !== audio.current || renderedSource.current !== src)
                         return;
                     if (audio.current)
                         audio.current.currentTime = 0;

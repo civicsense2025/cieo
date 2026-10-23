@@ -2,7 +2,7 @@ export type LinkPreviewVariant = 'large' | 'compact';
 /** Hostname without a leading www., or an empty string when the address does not parse as http(s). */
 export declare function displayDomain(url: string): string;
 export interface LinkPreviewImage {
-    /** Image address. Same-origin paths and absolute http(s) addresses render. */
+    /** Image address. Must be an absolute credential-free http(s) URL. */
     src: string;
     /** Text alternative; use an empty string when the title already says it. */
     alt: string;
@@ -12,7 +12,7 @@ export interface LinkPreviewImage {
     height?: number;
 }
 export interface LinkPreviewProps {
-    /** Address the card opens. Anything but http or https renders a card that is not a link. */
+    /** Address the card opens. Only credential-free absolute http(s) URLs render as links. */
     url: string;
     /** Page title, clamped to two lines. */
     title: string;

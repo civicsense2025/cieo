@@ -20,8 +20,13 @@ export function displayDomain(url: string): string {
   }
 }
 
+/** Preview assets are untrusted metadata, so only absolute credential-free http(s) URLs may trigger a browser request. */
+function safeAssetHref(value: unknown): string | null {
+  return safeHref(value, { relative: false });
+}
+
 export interface LinkPreviewImage {
-  /** Image address. Same-origin paths and absolute http(s) addresses render. */
+  /** Image address. Must be an absolute credential-free http(s) URL. */
   src: string;
   /** Text alternative; use an empty string when the title already says it. */
   alt: string;
@@ -32,7 +37,7 @@ export interface LinkPreviewImage {
 }
 
 export interface LinkPreviewProps {
-  /** Address the card opens. Anything but http or https renders a card that is not a link. */
+  /** Address the card opens. Only credential-free absolute http(s) URLs render as links. */
   url: string;
   /** Page title, clamped to two lines. */
   title: string;
@@ -50,10 +55,9 @@ export interface LinkPreviewProps {
   loading?: boolean;
 }
 
-function PreviewImage({ image, className }: { image: LinkPreviewImage; className: string }) {
+function PreviewImage({ image, src, className }: { image: LinkPreviewImage; src: string; className: string }) {
   const ref = useRef<HTMLImageElement>(null);
   const [state, setState] = useState<'pending' | 'loaded' | 'failed'>('pending');
-  const src = safeHref(image.src);
   useEffect(() => {
     setState('pending');
     const el = ref.current;
@@ -84,7 +88,8 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
   const domain = displayDomain(url);
   const kind: LinkPreviewVariant = variant === 'compact' ? 'compact' : 'large';
   const skeleton = usePresence<HTMLSpanElement>(loading, { from: { y: 0, scale: 1 } });
-  const iconSrc = favicon === undefined ? null : safeHref(favicon);
+  const imageSrc = image === undefined ? null : safeAssetHref(image.src);
+  const iconSrc = favicon === undefined ? null : safeAssetHref(favicon);
   const brand = typeof siteName === 'string' ? siteName.trim() : '';
   const separateBrand = brand !== '' && brand !== domain;
   const site = brand || domain;
@@ -107,9 +112,9 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
         </span>
       ) : (
         <div className="cieo-link-preview-content">
-          {image && safeHref(image.src) ? (
+          {image && imageSrc ? (
             <span className="cieo-link-preview-media">
-              <PreviewImage key={safeHref(image.src) ?? image.src} image={image} className="cieo-link-preview-image" />
+              <PreviewImage key={imageSrc} image={image} src={imageSrc} className="cieo-link-preview-image" />
             </span>
           ) : null}
           <span className="cieo-link-preview-body">

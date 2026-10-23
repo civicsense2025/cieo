@@ -108,7 +108,7 @@ const [clip, setClip] = useState<Clip | null>(null);
 - Every gesture has a keyboard path: scrubbing (arrow keys), reordering, hold-to-record (tap instead), pin placement (reticle and Enter).
 - Clocks and level meters never sit in live regions; only discrete events are announced (recording started, vote counted, link copied).
 - User text is untrusted. `RichText`, `Mention`, `LinkPreview` and `ByLine` only link http and https addresses.
-- `LinkPreview` assets allow same-origin paths and http(s) URLs. Remote assets disclose a visitor's IP address and network metadata to the asset host, even with `referrerPolicy="no-referrer"`; production hosts should proxy/cache them or use approved same-origin assets. Passing a remote URL is explicit host opt-in. Invalid schemes and credential-bearing URLs stay blocked.
+- `LinkPreview` images and favicons require absolute credential-free http(s) URLs; relative paths are rejected to avoid implicit same-origin asset requests. An absolute same-origin asset can still receive same-origin cookies, so supplying one is an explicit host trust decision. `referrerPolicy="no-referrer"` limits referrer disclosure but does not prevent a request. External assets still disclose visitor IP and network metadata; production hosts should proxy/cache them or use an approved host. Invalid schemes and credential-bearing URLs stay blocked.
 
 ## Checking it
 

@@ -113,6 +113,10 @@ test('PlaybackRateButton shows the rate and names it in words', () => {
   assert.match(m, />1\.5×</);
   assert.equal(playbackRateName(2), 'Playback speed, 2 times');
 });
+test('PlaybackRateButton is disabled when the host supplies an empty rate list', () => {
+  const m = html(PlaybackRateButton, { rate: 1, rates: [], onRateChange() {} });
+  assert.match(m, /<button(?=[^>]*aria-label="Playback speed, 1 time")(?=[^>]*disabled="")/);
+});
 test('PlaybackRateButton sanitizes invalid scalar rates and invalid rate lists', () => {
   const m = html(PlaybackRateButton, { rate: Number.NaN, rates: [1, 1.5, 2], onRateChange() {} });
   assert.match(m, /aria-label="Playback speed, 1 time"/);

@@ -33,5 +33,5 @@ export function playbackRateName(rate) {
 export function PlaybackRateButton({ rate, rates = DEFAULT_PLAYBACK_RATES, onRateChange }) {
     const safeRate = normalizePlaybackRate(rate);
     const safeRates = normalizePlaybackRates(rates);
-    return (_jsx("button", { type: "button", className: "cieo cieo-playback-rate-button", "aria-label": playbackRateName(safeRate), onClick: () => onRateChange(nextRate(safeRates, safeRate)), children: _jsx(SwapText, { value: `${safeRate}×` }) }));
+    return (_jsx("button", { type: "button", className: "cieo cieo-playback-rate-button", "aria-label": playbackRateName(safeRate), disabled: safeRates.length === 0, onClick: safeRates.length === 0 ? undefined : () => onRateChange(nextRate(safeRates, safeRate)), children: _jsx(SwapText, { value: `${safeRate}×` }) }));
 }

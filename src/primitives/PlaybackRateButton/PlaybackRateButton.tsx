@@ -46,7 +46,7 @@ export function PlaybackRateButton({ rate, rates = DEFAULT_PLAYBACK_RATES, onRat
   const safeRate = normalizePlaybackRate(rate);
   const safeRates = normalizePlaybackRates(rates);
   return (
-    <button type="button" className="cieo cieo-playback-rate-button" aria-label={playbackRateName(safeRate)} onClick={() => onRateChange(nextRate(safeRates, safeRate))}>
+    <button type="button" className="cieo cieo-playback-rate-button" aria-label={playbackRateName(safeRate)} disabled={safeRates.length === 0} onClick={safeRates.length === 0 ? undefined : () => onRateChange(nextRate(safeRates, safeRate))}>
       <SwapText value={`${safeRate}×`} />
     </button>
   );
