@@ -2,7 +2,7 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
 /* AudioPlayer. One clip with play/pause, a scrubber, the clock and (in full) speed. It owns the audio element and keeps only one player in the document playing at a time. */
-import { useCallback, useEffect, useId, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { AudioPlayButton } from '../AudioPlayButton/AudioPlayButton.js';
 import { AudioTime } from '../AudioTime/AudioTime.js';
 import { AudioWaveform, audioSeekText, useScrub } from '../AudioWaveform/AudioWaveform.js';
@@ -26,19 +26,27 @@ export function audioPlayerStep(state, event) {
             return 'ended';
     }
 }
-/** Event other copies of the player listen for on the document. detail.id is the player that started. */
+let tokenCount = 0;
+/** Unique token for one player instance. Not useId, which repeats across separate React roots on one page. Also unique across separately bundled copies of this module. */
+export function createAudioPlayerToken() {
+    tokenCount += 1;
+    return `cieo-audio-${tokenCount}-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
+}
+/** Event other copies of the player listen for on the document. detail.id is the token of the player that started. */
 export const AUDIO_PLAY_EVENT = 'cieo:audio-play';
 const players = new Map();
 /** Registers a player so a later one can pause it. Also listens for the document event, so separately bundled copies cooperate. Returns the cleanup. */
 export function registerAudioPlayer(id, pause, target = typeof document === 'undefined' ? null : document) {
-    players.set(id, { pause });
+    const entry = { pause };
+    players.set(id, entry);
     const onOther = (e) => {
         if (e.detail?.id !== id)
             pause();
     };
     target?.addEventListener(AUDIO_PLAY_EVENT, onOther);
     return () => {
-        players.delete(id);
+        if (players.get(id) === entry)
+            players.delete(id);
         target?.removeEventListener(AUDIO_PLAY_EVENT, onOther);
     };
 }
@@ -50,7 +58,10 @@ export function claimAudioPlayback(id, target = typeof document === 'undefined' 
     target?.dispatchEvent(new CustomEvent(AUDIO_PLAY_EVENT, { detail: { id } }));
 }
 export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', rates = DEFAULT_PLAYBACK_RATES, onPlay, onPause, onEnded, onTimeUpdate }) {
-    const id = useId();
+    const tokenRef = useRef(null);
+    if (tokenRef.current === null)
+        tokenRef.current = createAudioPlayerToken();
+    const id = tokenRef.current;
     const root = useRef(null);
     const audio = useRef(null);
     const [phase, dispatch] = useReducer(audioPlayerStep, 'loading');

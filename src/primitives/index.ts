@@ -19,7 +19,7 @@ export { ApprovalRequest, APPROVAL_STATUS_WORDS, type ApprovalRequestProps } fro
 export { AspectRatio, type AspectRatioProps } from './AspectRatio/AspectRatio.js';
 export { rmsLevel, levelBars, AudioLevelMeter, type AudioLevelMeterProps } from './AudioLevelMeter/AudioLevelMeter.js';
 export { audioPlayButtonName, AudioPlayButton, type AudioPlayButtonProps } from './AudioPlayButton/AudioPlayButton.js';
-export { audioPlayerStep, registerAudioPlayer, claimAudioPlayback, AudioPlayer, AUDIO_PLAY_EVENT, type AudioPlayerProps, type AudioPlayerState, type AudioPlayerEvent } from './AudioPlayer/AudioPlayer.js';
+export { audioPlayerStep, createAudioPlayerToken, registerAudioPlayer, claimAudioPlayback, AudioPlayer, AUDIO_PLAY_EVENT, type AudioPlayerProps, type AudioPlayerState, type AudioPlayerEvent } from './AudioPlayer/AudioPlayer.js';
 export { stageKey, AudioRoom, type AudioRoomSpeaker, type AudioRoomSelf, type AudioRoomProps } from './AudioRoom/AudioRoom.js';
 export { formatAudioTime, speakAudioTime, AudioTime, type AudioTimeProps } from './AudioTime/AudioTime.js';
 export { activeWordIndex, transcriptKeyStep, shouldAutoScroll, transcriptScrollTop, AudioTranscript, TRANSCRIPT_QUIET_MS, type TranscriptWord, type AudioTranscriptProps } from './AudioTranscript/AudioTranscript.js';
@@ -226,4 +226,4 @@ export { typingLabel, typingSetKey, TypingIndicator, type TypingIndicatorProps }
 export { unreadDividerLabel, UnreadDivider, type UnreadDividerProps } from './UnreadDivider/UnreadDivider.js';
 export { VStack, type VStackProps } from './VStack/VStack.js';
 export { verifiedBadgeSize, VerifiedBadge, type VerifiedBadgeProps, type VerifiedBadgeSize } from './VerifiedBadge/VerifiedBadge.js';
-export { isRecorderActive, voiceRecorderStep, shouldEmitClip, pickRecorderMimeType, downsamplePeaks, holdGesture, remainingSeconds, isNearLimit, recorderAnnouncement, VoiceRecorder, recorderIdle, HOLD_CANCEL_DISTANCE, type RecorderState, type VoiceClip, type VoiceRecorderProps, type RecorderPhase, type RecorderErrorReason, type RecorderEvent, type RecorderAnnouncement } from './VoiceRecorder/VoiceRecorder.js';
+export { isRecorderActive, voiceRecorderStep, shouldEmitClip, pickRecorderMimeType, downsamplePeaks, holdGesture, limitRemainingMs, clipDuration, recorderAfterCleanup, remainingSeconds, isNearLimit, recorderAnnouncement, VoiceRecorder, recorderIdle, HOLD_CANCEL_DISTANCE, type RecorderState, type VoiceClip, type VoiceRecorderProps, type RecorderPhase, type RecorderErrorReason, type RecorderEvent, type RecorderAnnouncement } from './VoiceRecorder/VoiceRecorder.js';

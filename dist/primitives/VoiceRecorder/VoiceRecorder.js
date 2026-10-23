@@ -86,6 +86,19 @@ export const HOLD_CANCEL_DISTANCE = 80;
 export function holdGesture(dx) {
     return Number.isFinite(dx) && dx < -HOLD_CANCEL_DISTANCE ? 'cancel' : 'record';
 }
+/** Milliseconds a take may still run before it hits the limit, never below 0. Used to arm the limit timer at start and resume. */
+export function limitRemainingMs(bankedMs, limitSeconds) {
+    const banked = Number.isFinite(bankedMs) ? Math.max(0, bankedMs) : 0;
+    return Math.max(0, Math.round(limitSeconds * 1000 - banked));
+}
+/** Real recorded length in seconds to one decimal, from milliseconds. Never clamped to the limit. */
+export function clipDuration(ms) {
+    return Number.isFinite(ms) ? Math.max(0, Math.round(ms / 100) / 10) : 0;
+}
+/** State a recorder returns to when its effect is cleaned up (unmount or a StrictMode remount), so the next mount can start a fresh take. */
+export function recorderAfterCleanup(state) {
+    return voiceRecorderStep(state, { type: 'cancel' });
+}
 /** Seconds left before the limit, never below 0. */
 export function remainingSeconds(elapsed, maxDuration) {
     return Math.max(0, Math.ceil(maxDuration - elapsed));
@@ -120,6 +133,9 @@ export function recorderAnnouncement(kind, seconds = 0) {
 const takeMs = (t) => t.banked + (t.since ? performance.now() - t.since : 0);
 function release(t) {
     clearInterval(t.timer);
+    if (t.limitTimer !== null)
+        clearTimeout(t.limitTimer);
+    t.limitTimer = null;
     t.stream.getTracks().forEach((track) => track.stop());
     void t.ctx?.close().catch(() => { });
 }
@@ -153,6 +169,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         take.current = null;
         if (t) {
             t.recorder.onstop = null;
+            t.recorder.onerror = null;
             try {
                 if (t.recorder.state !== 'inactive')
                     t.recorder.stop();
@@ -174,6 +191,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         if (t) {
             t.recorder.ondataavailable = null;
             t.recorder.onstop = null;
+            t.recorder.onerror = null;
             try {
                 if (t.recorder.state !== 'inactive')
                     t.recorder.stop();
@@ -199,7 +217,11 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             return;
         take.current = null;
         clearInterval(t.timer);
-        const duration = Math.min(live.current.limit, Math.round(takeMs(t) / 100) / 10);
+        if (t.limitTimer !== null)
+            clearTimeout(t.limitTimer);
+        t.limitTimer = null;
+        t.recorder.onerror = null;
+        const duration = clipDuration(takeMs(t));
         const mimeType = t.recorder.mimeType || t.mime || 'audio/webm';
         t.recorder.onstop = () => {
             release(t);
@@ -262,6 +284,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
                 return;
             }
             let t;
+            let ctx = null;
             try {
                 const mime = pickRecorderMimeType((type) => MediaRecorder.isTypeSupported?.(type) ?? false);
                 const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
@@ -270,7 +293,6 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
                     if (e.data.size)
                         chunks.push(e.data);
                 };
-                let ctx = null;
                 let analyser = null;
                 try {
                     const Ctor = window.AudioContext ?? window.webkitAudioContext;
@@ -284,19 +306,31 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
                 }
                 catch {
                     /* the clip still records; it just has no waveform */
+                    void ctx?.close().catch(() => { });
+                    ctx = null;
+                    analyser = null;
                 }
-                t = { stream, recorder, ctx, analyser, buffer: new Float32Array(analyser?.fftSize ?? 0), chunks, peaks: [], timer: 0, banked: 0, since: 0, mime, lastSecond: 0, lastLevel: 0 };
+                t = { stream, recorder, ctx, analyser, buffer: new Float32Array(analyser?.fftSize ?? 0), chunks, peaks: [], timer: 0, limitTimer: null, banked: 0, since: 0, mime, lastSecond: 0, lastLevel: 0 };
                 recorder.start();
                 t.since = performance.now();
                 t.timer = setInterval(() => sample(t), 50);
+                t.limitTimer = setTimeout(() => {
+                    if (take.current === t)
+                        finish('limit');
+                }, limitRemainingMs(0, live.current.limit));
             }
             catch {
+                void ctx?.close().catch(() => { });
                 stream.getTracks().forEach((track) => track.stop());
                 send({ type: 'fail' });
                 setMessage(recorderAnnouncement('failed'));
                 return;
             }
             take.current = t;
+            t.recorder.onerror = () => {
+                if (take.current === t)
+                    fail();
+            };
             stream.getAudioTracks()[0]?.addEventListener('ended', () => {
                 if (take.current === t)
                     fail();
@@ -329,6 +363,9 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             if (stateRef.current.phase === 'recording') {
                 t.banked = takeMs(t);
                 t.since = 0;
+                if (t.limitTimer !== null)
+                    clearTimeout(t.limitTimer);
+                t.limitTimer = null;
                 t.recorder.pause();
                 setLevel(0);
                 send({ type: 'pause' });
@@ -337,6 +374,11 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             else if (stateRef.current.phase === 'paused') {
                 t.recorder.resume();
                 t.since = performance.now();
+                const resumed = t;
+                resumed.limitTimer = setTimeout(() => {
+                    if (take.current === resumed)
+                        finish('limit');
+                }, limitRemainingMs(resumed.banked, live.current.limit));
                 send({ type: 'resume' });
                 setMessage(recorderAnnouncement('recording'));
             }
@@ -355,9 +397,14 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             session.current += 1;
             const t = take.current;
             take.current = null;
+            holdFrom.current = null;
+            stateRef.current = recorderAfterCleanup(stateRef.current);
+            setState(stateRef.current);
+            setLevel(0);
             if (t) {
                 t.recorder.ondataavailable = null;
                 t.recorder.onstop = null;
+                t.recorder.onerror = null;
                 try {
                     if (t.recorder.state !== 'inactive')
                         t.recorder.stop();

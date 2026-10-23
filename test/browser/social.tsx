@@ -1,5 +1,6 @@
 import React, { useState, type ReactNode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import { CountButton } from '../../src/primitives/CountButton/CountButton';
 import { ActionBar } from '../../src/primitives/ActionBar/ActionBar';
 import { FollowButton } from '../../src/primitives/FollowButton/FollowButton';
@@ -13,6 +14,7 @@ import { NewItemsPill } from '../../src/primitives/NewItemsPill/NewItemsPill';
 import { AudioWaveform } from '../../src/primitives/AudioWaveform/AudioWaveform';
 import { AudioPlayer } from '../../src/primitives/AudioPlayer/AudioPlayer';
 import { AudioTranscript, type TranscriptWord } from '../../src/primitives/AudioTranscript/AudioTranscript';
+import { AudioLevelMeter } from '../../src/primitives/AudioLevelMeter/AudioLevelMeter';
 import { VoiceRecorder } from '../../src/primitives/VoiceRecorder/VoiceRecorder';
 import { CommentThread, type CommentNode } from '../../src/primitives/CommentThread/CommentThread';
 import { Comment } from '../../src/primitives/Comment/Comment';
@@ -138,6 +140,36 @@ function TranscriptFixture() {
 const realGetUserMedia = navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
 (window as any).__streams = [] as MediaStream[];
 if (realGetUserMedia) navigator.mediaDevices.getUserMedia = async (c) => { const s = await realGetUserMedia(c); (window as any).__streams.push(s); return s; };
+
+/** Records every AudioContext the page opens so the gate can prove none is left running. */
+const NativeAudioContext = window.AudioContext;
+(window as any).__ctxs = [] as AudioContext[];
+if (NativeAudioContext) (window as any).AudioContext = class extends NativeAudioContext { constructor(...a: ConstructorParameters<typeof AudioContext>) { super(...a); (window as any).__ctxs.push(this); } };
+
+// Separate React roots on one page: their useId values collide, which the one-player rule must survive.
+const extraRoots: Record<string, { unmount: () => void }> = {};
+/** Server-renders then hydrates, the case where useId is derived from tree position and repeats in every root. */
+function hydrateInRoot(id: string, node: ReactNode) {
+  let host = document.getElementById(id);
+  if (!host) { host = document.createElement('div'); host.id = id; document.body.appendChild(host); }
+  extraRoots[id]?.unmount();
+  host.innerHTML = renderToString(node as any);
+  extraRoots[id] = hydrateRoot(host, node as any);
+}
+function mountRoot(id: string, node: ReactNode) {
+  let host = document.getElementById(id);
+  if (!host) { host = document.createElement('div'); host.id = id; document.body.appendChild(host); }
+  extraRoots[id]?.unmount();
+  extraRoots[id] = createRoot(host);
+  extraRoots[id].render(node);
+}
+hooks.mountStrictRecorder = () => mountRoot('strict-recorder', <React.StrictMode><VoiceRecorder autoStart onRecorded={(c) => log('strict-recorder', { size: c.blob.size })} /></React.StrictMode>);
+hooks.mountEmptyMeter = () => mountRoot('empty-meter', <AudioLevelMeter stream={new MediaStream()} label="Empty stream meter" />);
+hooks.mountRootPlayers = () => {
+  hydrateInRoot('root-player-a', <AudioPlayer src={wavA} label="Root clip A" variant="compact" />);
+  hydrateInRoot('root-player-b', <AudioPlayer src={wavB} label="Root clip B" variant="compact" />);
+};
+hooks.unmountRoot = (id: string) => { extraRoots[id]?.unmount(); delete extraRoots[id]; };
 
 function RecorderFixture() {
   return <Box id="recorder"><VoiceRecorder onRecorded={(c) => log('recorder', { size: c.blob.size, duration: c.duration, peaks: c.peaks.length, mime: c.mimeType })} onCancel={() => log('recorder', 'cancel')} /></Box>;

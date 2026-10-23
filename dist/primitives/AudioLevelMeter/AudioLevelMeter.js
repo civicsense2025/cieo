@@ -66,10 +66,19 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
         catch {
             return;
         }
-        const source = ctx.createMediaStreamSource(stream);
-        const analyser = ctx.createAnalyser();
-        analyser.fftSize = 1024;
-        source.connect(analyser);
+        let source;
+        let analyser;
+        try {
+            // Throws for a stream with no audio track; the meter then stays static.
+            source = ctx.createMediaStreamSource(stream);
+            analyser = ctx.createAnalyser();
+            analyser.fftSize = 1024;
+            source.connect(analyser);
+        }
+        catch {
+            void ctx.close().catch(() => { });
+            return;
+        }
         void ctx.resume?.().catch(() => { });
         const buffer = new Float32Array(analyser.fftSize);
         let raf = 0;

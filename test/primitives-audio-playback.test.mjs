@@ -6,7 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { AudioPlayButton, audioPlayButtonName } from '../dist/primitives/AudioPlayButton/AudioPlayButton.js';
 import { AudioWaveform, waveformBars, seekFromPointer, waveformKeyStep, WAVEFORM_FLOOR } from '../dist/primitives/AudioWaveform/AudioWaveform.js';
 import { PlaybackRateButton, nextRate, playbackRateName } from '../dist/primitives/PlaybackRateButton/PlaybackRateButton.js';
-import { AudioPlayer, audioPlayerStep, registerAudioPlayer, claimAudioPlayback, AUDIO_PLAY_EVENT } from '../dist/primitives/AudioPlayer/AudioPlayer.js';
+import { AudioPlayer, audioPlayerStep, registerAudioPlayer, claimAudioPlayback, AUDIO_PLAY_EVENT, createAudioPlayerToken } from '../dist/primitives/AudioPlayer/AudioPlayer.js';
 import { AudioTranscript, activeWordIndex, transcriptKeyStep, shouldAutoScroll, transcriptScrollTop } from '../dist/primitives/AudioTranscript/AudioTranscript.js';
 
 const html = (c, p) => renderToStaticMarkup(h(c, p));
@@ -232,4 +232,25 @@ test('AudioTranscript read-only marks the active word; seekable is one tab stop 
   assert.equal((rw.match(/role="option"/g) ?? []).length, 3);
   assert.match(rw, /aria-selected="true"[^>]*>there,</);
   assert.doesNotMatch(html(AudioTranscript, { words: W, current: 0, label: 'T' }), /data-active/);
+});
+
+test('each player instance gets its own token, so ids that collide across roots cannot share a registry slot', () => {
+  const tokens = new Set(Array.from({ length: 1000 }, () => createAudioPlayerToken()));
+  assert.equal(tokens.size, 1000);
+  const doc = new EventTarget();
+  const paused = [];
+  const a = createAudioPlayerToken();
+  const b = createAudioPlayerToken();
+  const offA = registerAudioPlayer(a, () => paused.push('a'), doc);
+  const offB = registerAudioPlayer(b, () => paused.push('b'), doc);
+  claimAudioPlayback(b, doc);
+  assert.ok(paused.includes('a') && !paused.includes('b'), 'A pauses, B keeps playing');
+  offA();
+  paused.length = 0;
+  const c = createAudioPlayerToken();
+  const offC = registerAudioPlayer(c, () => paused.push('c'), doc);
+  claimAudioPlayback(c, doc);
+  assert.ok(paused.includes('b'), 'unmounting A must not remove B from the registry');
+  offB();
+  offC();
 });

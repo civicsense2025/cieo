@@ -48,6 +48,12 @@ export declare function downsamplePeaks(samples: number[], count?: number): numb
 export declare const HOLD_CANCEL_DISTANCE = 80;
 /** Hold-to-record gesture: sliding left past 80px means cancel, anything else keeps recording. */
 export declare function holdGesture(dx: number): 'record' | 'cancel';
+/** Milliseconds a take may still run before it hits the limit, never below 0. Used to arm the limit timer at start and resume. */
+export declare function limitRemainingMs(bankedMs: number, limitSeconds: number): number;
+/** Real recorded length in seconds to one decimal, from milliseconds. Never clamped to the limit. */
+export declare function clipDuration(ms: number): number;
+/** State a recorder returns to when its effect is cleaned up (unmount or a StrictMode remount), so the next mount can start a fresh take. */
+export declare function recorderAfterCleanup(state: RecorderState): RecorderState;
 /** Seconds left before the limit, never below 0. */
 export declare function remainingSeconds(elapsed: number, maxDuration: number): number;
 /** True in the last 10 seconds of a take, when the clock switches to a countdown. Short limits (10s or less) never warn. */

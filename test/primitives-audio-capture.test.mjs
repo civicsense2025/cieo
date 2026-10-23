@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { rmsLevel, levelBars, AudioLevelMeter } from '../dist/primitives/AudioLevelMeter/AudioLevelMeter.js';
-import { voiceRecorderStep, recorderIdle, shouldEmitClip, isRecorderActive, pickRecorderMimeType, downsamplePeaks, holdGesture, isNearLimit, remainingSeconds, recorderAnnouncement, VoiceRecorder } from '../dist/primitives/VoiceRecorder/VoiceRecorder.js';
+import { voiceRecorderStep, recorderIdle, shouldEmitClip, isRecorderActive, pickRecorderMimeType, downsamplePeaks, holdGesture, isNearLimit, remainingSeconds, recorderAnnouncement, limitRemainingMs, clipDuration, recorderAfterCleanup, VoiceRecorder } from '../dist/primitives/VoiceRecorder/VoiceRecorder.js';
 import { speakingStep, speakerLabel, SpeakerTile } from '../dist/primitives/SpeakerTile/SpeakerTile.js';
 import { AudioRoom, stageKey } from '../dist/primitives/AudioRoom/AudioRoom.js';
 
@@ -226,4 +226,25 @@ test('stageKey changes when people join, leave or reorder', () => {
   assert.notEqual(stageKey([{ id: 'a' }]), stageKey([{ id: 'a' }, { id: 'b' }]));
   assert.equal(stageKey([{ id: 'a' }, { id: 'b' }]), stageKey([{ id: 'a' }, { id: 'b' }]));
   assert.notEqual(stageKey([{ id: 'ab' }, { id: 'c' }]), stageKey([{ id: 'a' }, { id: 'bc' }]));
+});
+
+test('a cleaned-up recorder can start again (StrictMode remount must not wait forever)', () => {
+  for (const phase of ['requesting', 'recording', 'paused']) {
+    const stuck = { phase, elapsed: 3, reason: null };
+    assert.equal(voiceRecorderStep(stuck, { type: 'start' }).phase, phase, 'a live state ignores start');
+    const after = recorderAfterCleanup(stuck);
+    assert.equal(after.phase, 'idle');
+    assert.equal(voiceRecorderStep(after, { type: 'start' }).phase, 'requesting');
+  }
+});
+
+test('limit timer is armed for the time left and the clip reports real length', () => {
+  assert.equal(limitRemainingMs(0, 120), 120000);
+  assert.equal(limitRemainingMs(30500, 120), 89500);
+  assert.equal(limitRemainingMs(999999, 120), 0);
+  assert.equal(limitRemainingMs(NaN, 10), 10000);
+  assert.equal(clipDuration(120349), 120.3, 'not clamped to the limit');
+  assert.equal(clipDuration(125000), 125);
+  assert.equal(clipDuration(-5), 0);
+  assert.equal(clipDuration(NaN), 0);
 });

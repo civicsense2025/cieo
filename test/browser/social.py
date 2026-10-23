@@ -272,6 +272,48 @@ def run_mode(browser, port, mode):
         return ok and len(ev('recorder')) == 2 and streams == 2 and until(ended, 3.0)
     check('voice-recorder', recorder)
 
+    # VoiceRecorder under StrictMode: the effect cleanup/remount must not leave it waiting forever
+    def strict_recorder():
+        before = page.evaluate('() => window.__streams.length')
+        page.evaluate('() => window.hooks.mountStrictRecorder()')
+        box = S('strict-recorder')
+        ok = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
+        page.wait_for_timeout(500)
+        box.get_by_role('button', name='Stop recording').click()
+        ok = ok and until(lambda: len(ev('strict-recorder')) == 1, 5.0)
+        ended = lambda: page.evaluate('(n) => window.__streams.length > n && window.__streams.every(s => s.getTracks().every(t => t.readyState === "ended"))', before)
+        ok = ok and until(ended, 3.0)
+        page.evaluate('() => window.hooks.unmountRoot("strict-recorder")')
+        return ok
+    check('voice-recorder-strict-mode', strict_recorder)
+
+    # AudioLevelMeter with a stream that has no audio track: static meter, context closed, no throw
+    def empty_meter():
+        before = page.evaluate('() => window.__ctxs.length')
+        page.evaluate('() => window.hooks.mountEmptyMeter()')
+        meter = S('empty-meter').get_by_role('img', name='Empty stream meter')
+        ok = until(lambda: meter.count() == 1)
+        closed = lambda: page.evaluate('(n) => window.__ctxs.slice(n).every(c => c.state === "closed")', before)
+        ok = ok and until(closed, 3.0)
+        page.evaluate('() => window.hooks.unmountRoot("empty-meter")')
+        return ok
+    check('audio-level-meter-empty-stream', empty_meter)
+
+    # AudioPlayer: two players in separate React roots still pause each other
+    def root_players():
+        page.evaluate('() => window.hooks.mountRootPlayers()')
+        a = S('root-player-a').get_by_role('button', name=re.compile('^(Play|Pause) Root clip A$'))
+        b = S('root-player-b').get_by_role('button', name=re.compile('^(Play|Pause) Root clip B$'))
+        a.click()
+        ok = until(lambda: a.get_attribute('aria-label') == 'Pause Root clip A')
+        b.click()
+        ok = ok and until(lambda: b.get_attribute('aria-label') == 'Pause Root clip B') and until(lambda: a.get_attribute('aria-label') == 'Play Root clip A')
+        b.click()
+        ok = ok and until(lambda: b.get_attribute('aria-label') == 'Play Root clip B')
+        page.evaluate('() => { window.hooks.unmountRoot("root-player-a"); window.hooks.unmountRoot("root-player-b") }')
+        return ok
+    check('audio-player-separate-roots', root_players)
+
     # CommentThread + Comment
     def thread():
         box = S('thread')

@@ -19,7 +19,7 @@ export { ApprovalRequest, APPROVAL_STATUS_WORDS } from './ApprovalRequest/Approv
 export { AspectRatio } from './AspectRatio/AspectRatio.js';
 export { rmsLevel, levelBars, AudioLevelMeter } from './AudioLevelMeter/AudioLevelMeter.js';
 export { audioPlayButtonName, AudioPlayButton } from './AudioPlayButton/AudioPlayButton.js';
-export { audioPlayerStep, registerAudioPlayer, claimAudioPlayback, AudioPlayer, AUDIO_PLAY_EVENT } from './AudioPlayer/AudioPlayer.js';
+export { audioPlayerStep, createAudioPlayerToken, registerAudioPlayer, claimAudioPlayback, AudioPlayer, AUDIO_PLAY_EVENT } from './AudioPlayer/AudioPlayer.js';
 export { stageKey, AudioRoom } from './AudioRoom/AudioRoom.js';
 export { formatAudioTime, speakAudioTime, AudioTime } from './AudioTime/AudioTime.js';
 export { activeWordIndex, transcriptKeyStep, shouldAutoScroll, transcriptScrollTop, AudioTranscript, TRANSCRIPT_QUIET_MS } from './AudioTranscript/AudioTranscript.js';
@@ -226,4 +226,4 @@ export { typingLabel, typingSetKey, TypingIndicator } from './TypingIndicator/Ty
 export { unreadDividerLabel, UnreadDivider } from './UnreadDivider/UnreadDivider.js';
 export { VStack } from './VStack/VStack.js';
 export { verifiedBadgeSize, VerifiedBadge } from './VerifiedBadge/VerifiedBadge.js';
-export { isRecorderActive, voiceRecorderStep, shouldEmitClip, pickRecorderMimeType, downsamplePeaks, holdGesture, remainingSeconds, isNearLimit, recorderAnnouncement, VoiceRecorder, recorderIdle, HOLD_CANCEL_DISTANCE } from './VoiceRecorder/VoiceRecorder.js';
+export { isRecorderActive, voiceRecorderStep, shouldEmitClip, pickRecorderMimeType, downsamplePeaks, holdGesture, limitRemainingMs, clipDuration, recorderAfterCleanup, remainingSeconds, isNearLimit, recorderAnnouncement, VoiceRecorder, recorderIdle, HOLD_CANCEL_DISTANCE } from './VoiceRecorder/VoiceRecorder.js';
