@@ -21,6 +21,9 @@ public struct ComponentTypography {
     public var detail: Font
     /// A short bold caption, such as the label beside a big number.
     public var strongDetail: Font
+    /// Running text people read at length, such as an article or lesson body. A host can size it
+    /// differently by width (smaller on a phone than on a tablet) and scale it with Dynamic Type.
+    public var reading: Font
     /// A glyph that sits beside text, such as a disclosure chevron or pager arrow.
     public var glyph: Font
     /// A standalone glyph that is the control, such as the info button.
@@ -38,7 +41,7 @@ public struct ComponentTypography {
                 title: Font = .title2.bold(), subtitle: Font = .title3.bold(),
                 heading: Font = .headline, strongHeading: Font = .headline.weight(.heavy),
                 body: Font = .body, strongBody: Font = .body.weight(.semibold),
-                detail: Font = .subheadline, strongDetail: Font = .subheadline.weight(.bold),
+                detail: Font = .subheadline, strongDetail: Font = .subheadline.weight(.bold), reading: Font = .subheadline,
                 glyph: Font = .footnote.weight(.semibold), prominentGlyph: Font = .title3,
                 value: Font = .headline.monospacedDigit(), marker: Font = .headline.weight(.black),
                 caption: Font = .caption2.weight(.semibold)) {
@@ -48,6 +51,7 @@ public struct ComponentTypography {
         self.heading = heading; self.strongHeading = strongHeading
         self.body = body; self.strongBody = strongBody
         self.detail = detail; self.strongDetail = strongDetail
+        self.reading = reading
         self.glyph = glyph; self.prominentGlyph = prominentGlyph
         self.value = value; self.marker = marker
         self.caption = caption
