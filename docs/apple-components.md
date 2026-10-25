@@ -122,7 +122,7 @@ Components choose a role and never a value. A host changes one value at the root
 | Slot | Where | Roles |
 | --- | --- | --- |
 | Colour | `componentTheme` | accent, onAccent, tint, surface, foreground, secondary, subtle, border, track, block, onBlock, onBlockSecondary, danger |
-| Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, glyph, prominentGlyph, value, marker, plus the control roles action, selection, field, fieldLabel |
+| Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, reading, glyph, prominentGlyph, value, marker, plus the control roles action, selection, field, fieldLabel |
 | Spacing and strokes | `componentMetrics` | tight 4, compact 8, medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
 | Glyphs | `componentIcons` | disclosure, info, check, previous, next, search, clear, error, selected, unselected (the host closure runs on the main actor, so a glyph may hold `@ScaledMetric` state) |
 | Display type | `displayTypography` | display, title, subtitle and three numeral sizes |

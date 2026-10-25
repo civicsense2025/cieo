@@ -108,6 +108,13 @@ final class SlotsAtomValuesTests: XCTestCase {
         XCTAssertGreaterThan(roomy.height, plain.height + 30)
     }
 
+    func testReadingRoleDefaultsToDetailSizeAndTakesAHostFont() {
+        XCTAssertEqual(ComponentTypography().reading, ComponentTypography().detail)
+        let host = ComponentTypography(reading: .system(size: 14))
+        XCTAssertEqual(host.reading, .system(size: 14))
+        XCTAssertEqual(host.detail, ComponentTypography().detail, "a host reading size leaves the supporting-text role alone")
+    }
+
     @MainActor
     func testBigNumberCaptionReadsTheHostStrongDetailRole() throws {
         let plain = try bitmap(BigNumber("64", label: "days", layout: .stacked))
