@@ -120,14 +120,14 @@
 .cieo-select-trigger {
   appearance: none; -webkit-appearance: none;
   box-sizing: border-box; display: flex; align-items: center; width: 100%;
-  height: var(--_h-md); margin: 0; padding: 0 36px 0 12px;
+  height: var(--_h-md); margin: 0; padding-block: 0; padding-inline: 12px 36px;
   border: 1px solid var(--_border); border-radius: var(--_radius);
   background: var(--_bg); color: var(--_fg);
-  font: inherit; font-size: 0.9375rem; line-height: 1.2; text-align: left; cursor: pointer;
+  font: inherit; font-size: 0.9375rem; line-height: 1.2; text-align: start; cursor: pointer;
   transition: border-color var(--_base) var(--_ease), scale var(--_snap) var(--_ease);
 }
 .cieo-select--sm .cieo-select-native,
-.cieo-select--sm .cieo-select-trigger { height: var(--_h-sm); font-size: 0.8125rem; padding-left: 10px; }
+.cieo-select--sm .cieo-select-trigger { height: var(--_h-sm); font-size: 0.8125rem; padding-inline-start: 10px; }
 .cieo-select-native:hover,
 .cieo-select-trigger:hover { border-color: var(--_border-strong); }
 .cieo-select-native:focus-visible,
@@ -135,7 +135,7 @@
 .cieo-select-native:disabled,
 .cieo-select-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
 .cieo-select-trigger:active:not(:disabled) { scale: 0.99; }
-.cieo-select-box .cieo-chevron { position: absolute; right: 12px; top: 50%; translate: 0 -50%; pointer-events: none; color: var(--_muted); transition: rotate var(--_snap) var(--_ease); }
+.cieo-select-box .cieo-chevron { position: absolute; inset-inline-end: 12px; top: 50%; translate: 0 -50%; pointer-events: none; color: var(--_muted); transition: rotate var(--_snap) var(--_ease); }
 .cieo-select[data-open] .cieo-chevron { rotate: 180deg; }
 .cieo-select-value { display: block; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* Enhanced: the native select stays in the form but leaves sight and the accessibility tree.
@@ -156,11 +156,12 @@
 }
 .cieo-select-plate { position: absolute; left: 4px; right: 4px; top: 0; height: 0; opacity: 0; border-radius: calc(var(--_radius) - 2px); background: var(--_raised); pointer-events: none; }
 .cieo-select-option {
-  position: relative; display: flex; align-items: center; gap: 8px;
-  min-height: 36px; padding: 6px 12px 6px 8px; box-sizing: border-box;
+  position: relative; display: flex; align-items: flex-start; gap: 8px;
+  min-height: 36px; padding-block: 6px; padding-inline: 8px 12px; box-sizing: border-box;
   border-radius: calc(var(--_radius) - 2px);
-  font-size: 0.9375rem; white-space: nowrap; cursor: pointer; user-select: none;
+  font-size: 0.9375rem; white-space: normal; cursor: pointer; user-select: none;
 }
+.cieo-select-option-label { min-inline-size: 0; overflow-wrap: anywhere; }
 .cieo-select-option[aria-selected="true"] { font-weight: 500; }
 .cieo-select-option[aria-disabled] { opacity: 0.45; cursor: default; }
 .cieo-select-mark { display: inline-grid; place-items: center; width: 16px; flex: none; color: var(--_fg); }

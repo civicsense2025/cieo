@@ -210,7 +210,7 @@ export function Select(props: SelectProps) {
     let lastVis = '';
     let lastOClear = false;
     let lastTClear = false;
-    let lastFClear = true;
+    let lastFClear: boolean | null = null;
     let popW = -1;
     const lastQ = new Map<HTMLElement, number>();
     const paint = (t: number) => {
@@ -224,7 +224,8 @@ export function Select(props: SelectProps) {
       if (vMoved) {
         const oClear = v > 0.999;
         if (oClear !== lastOClear || vMoved) {
-          el.style.opacity = oClear ? '' : v.toFixed(3);
+          /* The closed stylesheet is opacity: 0; clearing here would hide an open popup. */
+          el.style.opacity = oClear ? '1' : v.toFixed(3);
           lastOClear = oClear;
         }
         const tClear = v > 0.999;
@@ -259,6 +260,8 @@ export function Select(props: SelectProps) {
     if (!allowed('feedback', trigger.current)) {
       p.stop?.();
       p.o.jump(open ? 1 : 0);
+      /* A motion-free open must settle option staggering as well as the popup. */
+      p.t0 = -9;
       paint(now());
       return;
     }

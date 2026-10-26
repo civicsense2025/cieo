@@ -80,3 +80,7 @@ humans review semantic accuracy. Builds do not prove runtime or release acceptan
 ## Release 0.6.3
 
 Version 0.6.3 adds the sign-in transition and recorder waveform motion. The version appears in `package.json`, the lockfile and the install line in the README; a consumer upgrade is its own change, as described above.
+
+## Release 0.6.4
+
+Version 0.6.4 keeps Select choices readable in right-to-left text and with reduced motion. The version appears in `package.json`, the lockfile and the install line in the README.
