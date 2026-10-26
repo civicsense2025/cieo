@@ -59,15 +59,19 @@ public struct ByLine<Badge: View, Context: View>: View {
             Text(verbatim: "@" + handle).font(typography.detail).foregroundStyle(theme.secondary).lineLimit(1)
         }
         if hasContext {
-            Text(verbatim: Self.separatorBefore).font(typography.detail).foregroundStyle(theme.secondary)
-                .accessibilityHidden(true)
+            if !typeSize.isAccessibilitySize {
+                Text(verbatim: Self.separatorBefore).font(typography.detail).foregroundStyle(theme.secondary)
+                    .accessibilityHidden(true)
+            }
             linked(context.font(typography.detail).foregroundStyle(theme.secondary), href: contextHref)
                 .lineLimit(1)
                 .layoutPriority(1)
         }
         if let time, !time.isEmpty {
-            Text(verbatim: Self.separatorTime).font(typography.detail).foregroundStyle(theme.secondary)
-                .accessibilityHidden(true)
+            if !typeSize.isAccessibilitySize {
+                Text(verbatim: Self.separatorTime).font(typography.detail).foregroundStyle(theme.secondary)
+                    .accessibilityHidden(true)
+            }
             Text(time).font(typography.detail).foregroundStyle(theme.secondary)
                 .fixedSize(horizontal: !typeSize.isAccessibilitySize, vertical: true).layoutPriority(2)
                 .accessibilityLabel(date.map { Text($0, format: .dateTime.month().day().year()) } ?? Text(time))
