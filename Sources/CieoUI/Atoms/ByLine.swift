@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// A one-line author header: name, badge, handle, a "›" context crumb and a relative time. The host owns
-/// the text; this owns truncation order (the name gives way first, the time never) and safe links.
+/// An author header: name, badge, handle, a "›" context crumb and a relative time. The host owns
+/// the text; this owns truncation order and safe links. Standard text keeps time on one line;
+/// accessibility sizes stack the pieces and let a long timestamp wrap within the comment column.
 public struct ByLine<Badge: View, Context: View>: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
@@ -68,7 +69,7 @@ public struct ByLine<Badge: View, Context: View>: View {
             Text(verbatim: Self.separatorTime).font(typography.detail).foregroundStyle(theme.secondary)
                 .accessibilityHidden(true)
             Text(time).font(typography.detail).foregroundStyle(theme.secondary)
-                .fixedSize().layoutPriority(2)
+                .fixedSize(horizontal: !typeSize.isAccessibilitySize, vertical: true).layoutPriority(2)
                 .accessibilityLabel(date.map { Text($0, format: .dateTime.month().day().year()) } ?? Text(time))
         }
     }
