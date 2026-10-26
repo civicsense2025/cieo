@@ -104,6 +104,12 @@ import 'cieo/controls.css';
 | `RadioGroup`, `Radio` | group: `label` (legend), `name`, `value` or `defaultValue`, `onValueChange`, `orientation`; radio: `value`, `label` |
 | `Range` | `label` (required), `min`, `max`, `step`, `showValue`, `formatValue` |
 
+Select reserves its indicator at inline-end in both LTR and RTL. Open option labels
+wrap within the list at enlarged text sizes; long words break without horizontal
+scrolling. The closed trigger retains its single-line value and the native form
+control remains the value source. Popup visibility is owned by the control; hosts
+only need the documented token and control stylesheets.
+
 Text inputs and textareas retain native `value`/`defaultValue`, forwarded refs,
 form names and browser validity. In the current local source, `TextField` and
 `TextArea` call the host's `onChange` once before internal validation in the

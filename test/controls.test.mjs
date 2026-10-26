@@ -234,3 +234,13 @@ test('module boundaries: components are client modules, class helpers are not', 
   }
   assert.match(await read('controls.css'), /prefers-reduced-motion/, 'the stylesheet ships in dist');
 });
+
+
+test('Select: server fallback keeps complete choices, disabled state and native form semantics', () => {
+  const label = 'A complete privacy choice that must remain available even without client scripts';
+  const html = renderToString(h(Select, { label: 'Privacy', name: 'privacy', form: 'owner', required: true, disabled: true, defaultValue: 'shared', options: [{ value: 'private', label, disabled: true }, { value: 'shared', label: 'Shared choice' }] }));
+  assert.match(html, /<select[^>]*name="privacy"[^>]*form="owner"[^>]*disabled=""[^>]*required=""/);
+  assert.ok(html.includes(`<option value="private" disabled="">${label}</option>`));
+  assert.match(html, /<option value="shared" selected="">Shared choice<\/option>/);
+  assert.ok(!html.includes('role="combobox"'), 'no inaccessible custom trigger before hydration');
+});
