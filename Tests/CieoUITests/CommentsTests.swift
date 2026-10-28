@@ -52,6 +52,36 @@ final class CommentsTests: XCTestCase {
         XCTAssertNil(ByLine<EmptyView, EmptyView>.safeURL("mailto:a@b.com"))
     }
 
+    @MainActor
+    func testByLineWrapsLongTimestampWithinNarrowAccessibilityColumns() throws {
+        let wide = try byLineSize(width: 360, typeSize: .accessibility5)
+        for width: CGFloat in [120, 180] {
+            let narrow = try byLineSize(width: width, typeSize: .accessibility5)
+            XCTAssertLessThanOrEqual(narrow.width, width * 2, "A long timestamp must not widen the comment column")
+            if wide.width > width * 2 {
+                XCTAssertGreaterThan(narrow.height, wide.height, "The complete timestamp wraps instead of clipping")
+            }
+        }
+    }
+
+    @MainActor
+    func testByLineKeepsItsSingleLineTimestampAtStandardTextSize() throws {
+        let narrow = try byLineSize(width: 180, typeSize: .large)
+        let wide = try byLineSize(width: 360, typeSize: .large)
+        XCTAssertEqual(narrow.height, wide.height)
+    }
+
+    @MainActor
+    private func byLineSize(width: CGFloat, typeSize: DynamicTypeSize) throws -> CGSize {
+        let view = ByLine(author: "Priya", time: "30 minutes ago in this review")
+            .environment(\.dynamicTypeSize, typeSize)
+        let renderer = ImageRenderer(content: view)
+        renderer.proposedSize = ProposedViewSize(width: width, height: nil)
+        renderer.scale = 2
+        let image = try XCTUnwrap(renderer.cgImage)
+        return CGSize(width: image.width, height: image.height)
+    }
+
     func testVerifiedBadgeSizeFallsBackToMedium() {
         XCTAssertEqual(VerifiedBadge.size("sm"), .sm)
         XCTAssertEqual(VerifiedBadge.size("huge"), .md)
