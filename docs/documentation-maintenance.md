@@ -34,6 +34,9 @@ The checker covers Swift sources/tests and reusable web control/design sources,
 not every catalogue recipe or generated site. Existing catalogue checks retain
 that responsibility. No product build is performed by the docs checker.
 
+Node is pinned in `.nvmrc` and in each workflow's `setup-node` step (currently 24.22.1). Change
+all of them together, so a local run and CI use the same release.
+
 The `swift` CI job also runs `scripts/check-swift-literals.sh`, which fails when a
 SwiftUI component hard-codes styling, and proves on its fixture that it still
 catches each kind of hard-coded line.
