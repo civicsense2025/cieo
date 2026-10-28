@@ -163,7 +163,7 @@ test('the post-copy guard passes a rewritten Dialog and fails the registry origi
     () => assertNoPackageTerritoryImports(original, 'Dialog/Dialog.tsx'),
     (error) =>
       error instanceof Error &&
-      error.message.includes('../../react/index.js') &&
+      error.message.includes('../parts.js') &&
       error.message.includes('Dialog/Dialog.tsx'),
   );
 });

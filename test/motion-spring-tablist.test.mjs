@@ -5,8 +5,10 @@ import { Track, setMotionState } from '../dist/core/spring.js';
 
 test('indicator tracks selection through context registration', () => {
   const src = readFileSync('src/primitives/TabList/TabList.tsx', 'utf8');
-  assert.match(src, /useEdges\(indicatorRef, current/);
+  assert.match(src, /useEdges\(indicatorRef, `\$\{current/);
   assert.match(src, /registerTab/);
+  assert.match(src, /style\.left.*style\.width/);
+  assert.match(src, /new ResizeObserver/);
   const tab = readFileSync('src/primitives/Tab/Tab.tsx', 'utf8');
   assert.match(tab, /registerTab\(value, el\)/);
 });

@@ -1,5 +1,7 @@
 // src/primitives/ApprovalRequest/ApprovalRequest.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ApprovalRequest. Asks a person to approve or deny what an agent wants to do. It is never optimistic: while the
    host says pending, the text says it is waiting even after a click; the decision shows only once the host reports
    it. A busy request disables both buttons and spins the one that was pressed. */
@@ -16,6 +18,9 @@ export const APPROVAL_STATUS_WORDS: Readonly<Record<ApprovalStatus, string>> = {
 };
 
 export interface ApprovalRequestProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** The approval as the host reported it. */
   approval: ApprovalView;
   /** Sends the approve command to the host. The view changes only when the host resolves it. */
@@ -34,7 +39,7 @@ export interface ApprovalRequestProps {
   headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
 
-export function ApprovalRequest({
+export function ApprovalRequest({ className, slotProps,
   approval,
   onApprove,
   onDeny,
@@ -49,7 +54,7 @@ export function ApprovalRequest({
   const pending = approval.status === 'pending';
   const locked = busy !== null;
   return (
-    <section className="cieo cieo-p-approval-request" aria-labelledby={titleId} data-status={approval.status} aria-busy={pending && locked ? true : undefined}>
+    <section className="cieo cieo-p-approval-request" aria-labelledby={titleId} data-status={approval.status} aria-busy={pending && locked ? true : undefined} {...customizePart(slotProps?.root, "cieo cieo-p-approval-request", undefined, className)}>
       <Heading id={titleId}>{approval.title ?? fallbackTitle}</Heading>
       {approval.detail ? <p data-detail>{approval.detail}</p> : null}
       <p data-status-text>{APPROVAL_STATUS_WORDS[approval.status]}</p>

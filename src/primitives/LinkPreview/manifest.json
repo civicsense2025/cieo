@@ -96,7 +96,9 @@
       "nullable": false,
       "default": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: titleText, root, media, body, content, site, favicon, siteName, domain, title, description."}
   ],
   "slots": [],
   "state": [],
@@ -136,7 +138,9 @@
         "image",
         "favicon",
         "variant",
-        "loading"
+        "loading",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -162,5 +166,5 @@
     "path": "README.md",
     "purpose": "A link card with image, favicon, domain and a two-line title that is one tab stop, with a skeleton that cross-fades to content."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["titleText","root","media","body","content","site","favicon","siteName","domain","title","description"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

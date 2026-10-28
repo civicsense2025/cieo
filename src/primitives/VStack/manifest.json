@@ -27,5 +27,5 @@
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Vertical stack under the HStack/VStack naming." },
-  "extensions": { "wraps": "src/primitives/Stack/Stack.tsx" }
+  "extensions": { "wraps": "src/primitives/Stack/Stack.tsx", "customization": {"status":"delegated","target":"Stack","reason":"Alias of Stack; preserves its native/owning component props instead of creating a second control contract."} }
 }

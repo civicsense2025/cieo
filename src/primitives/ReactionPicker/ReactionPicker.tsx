@@ -1,5 +1,7 @@
 // src/primitives/ReactionPicker/ReactionPicker.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ReactionPicker. A row of emoji buttons that reports one pick. The host owns where it sits (inline or inside a Popover) and what a pick means. */
 import { useState } from 'react';
 import { roveFocus } from '../../react/index.js';
@@ -24,6 +26,9 @@ export const DEFAULT_REACTIONS: readonly Reaction[] = [
 ];
 
 export interface ReactionPickerProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; item?: PrimitivePartProps; emoji?: PrimitivePartProps };
+
   /** Called with the id of the reaction the person picked. */
   onPick(id: string): void;
   /** Reactions to offer. Defaults to DEFAULT_REACTIONS. */
@@ -40,7 +45,7 @@ export function pickerStartIndex(reactions: readonly Reaction[], selected: reado
   return at < 0 ? 0 : at;
 }
 
-export function ReactionPicker({ onPick, reactions = DEFAULT_REACTIONS, label = 'Add a reaction', selected = [] }: ReactionPickerProps) {
+export function ReactionPicker({ className, slotProps, onPick, reactions = DEFAULT_REACTIONS, label = 'Add a reaction', selected = [] }: ReactionPickerProps) {
   const [active, setActive] = useState(() => pickerStartIndex(reactions, selected));
   const tab = Math.min(active, Math.max(0, reactions.length - 1));
   return (
@@ -51,7 +56,7 @@ export function ReactionPicker({ onPick, reactions = DEFAULT_REACTIONS, label = 
       aria-orientation="horizontal"
       onKeyDown={(e) => {
         roveFocus(e, e.currentTarget, 'button', { orientation: 'horizontal' });
-      }}
+      }} {...customizePart(slotProps?.root, "cieo cieo-reaction-picker", undefined, className)}
     >
       {reactions.map((r, i) => (
         <button
@@ -64,9 +69,9 @@ export function ReactionPicker({ onPick, reactions = DEFAULT_REACTIONS, label = 
           tabIndex={i === tab ? 0 : -1}
           style={{ ['--cieo-i' as string]: i }}
           onFocus={() => setActive(i)}
-          onClick={() => onPick(r.id)}
+          onClick={() => onPick(r.id)} {...customizePart(slotProps?.item, "cieo-reaction-picker-item", { ['--cieo-i' as string]: i })}
         >
-          <span aria-hidden="true" className="cieo-reaction-picker-emoji">{r.emoji}</span>
+          <span aria-hidden="true" className="cieo-reaction-picker-emoji" {...customizePart(slotProps?.emoji, "cieo-reaction-picker-emoji")}>{r.emoji}</span>
         </button>
       ))}
     </div>

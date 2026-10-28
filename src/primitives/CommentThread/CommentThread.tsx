@@ -1,6 +1,8 @@
 // src/primitives/CommentThread/CommentThread.tsx
 'use client';
 /* CommentThread. Tree manager for comments: nested lists, depth cap, "view more replies" per branch. The host renders every comment; this owns structure, expansion and reveal motion. */
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useFlip, useReducedMotion } from '../../react/index.js';
 
@@ -116,6 +118,8 @@ export interface CommentRenderContext {
 }
 
 export interface CommentThreadProps<T = unknown> {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; branch?: PrimitivePartProps; list?: PrimitivePartProps; item?: PrimitivePartProps; more?: PrimitivePartProps };
   /** Accessible name for the whole thread (e.g. "Comments"). Required. */
   label: string;
   /** Top-level comments, each with optional children. Required. */
@@ -139,6 +143,7 @@ export interface CommentThreadProps<T = unknown> {
 }
 
 interface Shared<T> {
+  slotProps?: CommentThreadProps<T>['slotProps'];
   renderItem: CommentThreadProps<T>['renderItem'];
   maxDepth: number;
   initial: number;
@@ -196,13 +201,13 @@ function Branch<T>({ shared, parent, entries, depth }: { shared: Shared<T>; pare
     shared.open(parent.id);
   };
   return (
-    <div ref={box} className="cieo-comment-thread-branch" data-depth={depth}>
-      <ul ref={list} role="list" className="cieo-comment-thread-list" aria-label={parent && shared.branchLabel ? shared.branchLabel(parent) : undefined}>
+    <div ref={box} className="cieo-comment-thread-branch" data-depth={depth} {...customizePart(shared.slotProps?.branch, 'cieo-comment-thread-branch')}>
+      <ul ref={list} role="list" className="cieo-comment-thread-list" aria-label={parent && shared.branchLabel ? shared.branchLabel(parent) : undefined} {...customizePart(shared.slotProps?.list, 'cieo-comment-thread-list')}>
         {visible.map((node) => {
           const kids = levelEntries(node.children, depth + 1, shared.maxDepth);
           const own = visibleReplies(kids, shared.isOpen(node.id), shared.initial);
           return (
-            <li key={node.id} tabIndex={-1} className="cieo-comment-thread-item" data-new={shared.fresh.has(node.id) ? '' : undefined}>
+            <li key={node.id} tabIndex={-1} className="cieo-comment-thread-item" data-new={shared.fresh.has(node.id) ? '' : undefined} {...customizePart(shared.slotProps?.item, 'cieo-comment-thread-item')}>
               {shared.renderItem(node, {
                 depth,
                 hasReplies: kids.length > 0,
@@ -214,7 +219,7 @@ function Branch<T>({ shared, parent, entries, depth }: { shared: Shared<T>; pare
         })}
       </ul>
       {hidden > 0 ? (
-        <button type="button" className="cieo-comment-thread-more" onClick={reveal}>
+        <button type="button" className="cieo-comment-thread-more" onClick={reveal} {...customizePart(shared.slotProps?.more, 'cieo-comment-thread-more')}>
           {shared.moreLabel(hidden)}
         </button>
       ) : null}
@@ -222,12 +227,13 @@ function Branch<T>({ shared, parent, entries, depth }: { shared: Shared<T>; pare
   );
 }
 
-export function CommentThread<T = unknown>({ label, items, renderItem, maxDepth = 3, initialReplies = 2, moreLabel = moreRepliesLabel, newIds, branchLabel, expanded, onExpandedChange }: CommentThreadProps<T>) {
+export function CommentThread<T = unknown>({ label, items, renderItem, maxDepth = 3, initialReplies = 2, moreLabel = moreRepliesLabel, newIds, branchLabel, expanded, onExpandedChange, className, slotProps }: CommentThreadProps<T>) {
   const [inner, setInner] = useState<string[]>([]);
   const open = expanded ?? inner;
   const live = useRef({ open, onExpandedChange });
   live.current = { open, onExpandedChange };
   const shared: Shared<T> = {
+    slotProps,
     renderItem,
     maxDepth: Number.isFinite(maxDepth) ? Math.min(MAX_COMMENT_DEPTH, Math.max(0, Math.floor(maxDepth))) : 3,
     initial: initialReplies,
@@ -245,7 +251,7 @@ export function CommentThread<T = unknown>({ label, items, renderItem, maxDepth 
   };
   const roots = levelEntries(items, 0, shared.maxDepth);
   return (
-    <section aria-label={label} className="cieo cieo-comment-thread">
+    <section aria-label={label} className="cieo cieo-comment-thread" {...customizePart(slotProps?.root, "cieo cieo-comment-thread", undefined, className)}>
       <Branch shared={shared} entries={roots} depth={0} />
     </section>
   );

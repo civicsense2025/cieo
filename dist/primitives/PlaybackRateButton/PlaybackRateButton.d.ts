@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 /** Default speeds the button cycles through. */
 export declare const DEFAULT_PLAYBACK_RATES: number[];
 /** A playback rate the browser can apply; invalid values normalize to normal speed. */
@@ -9,6 +10,10 @@ export declare function nextRate(rates: number[], rate: number): number;
 /** Accessible name: "Playback speed, 1.5 times". */
 export declare function playbackRateName(rate: number): string;
 export interface PlaybackRateButtonProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Current speed, where 1 is normal. */
     rate: number;
     /** Speeds to cycle through, in order. Defaults to [1, 1.5, 2]. */
@@ -16,4 +21,4 @@ export interface PlaybackRateButtonProps {
     /** Called with the next speed when pressed. */
     onRateChange: (next: number) => void;
 }
-export declare function PlaybackRateButton({ rate, rates, onRateChange }: PlaybackRateButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function PlaybackRateButton({ className, slotProps, rate, rates, onRateChange }: PlaybackRateButtonProps): import("react/jsx-runtime").JSX.Element;

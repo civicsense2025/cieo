@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface TranscriptWord {
     /** The word as written, with its punctuation. */
     text: string;
@@ -20,6 +21,11 @@ export declare function shouldAutoScroll(now: number, lastUserScroll: number | n
 /** New scrollTop that brings a word into view (centred), or null when it is already fully visible. */
 export declare function transcriptScrollTop(wordTop: number, wordHeight: number, viewHeight: number, scrollTop: number): number | null;
 export interface AudioTranscriptProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        word?: PrimitivePartProps;
+    };
     /** Words with their start and end seconds, in order. */
     words: TranscriptWord[];
     /** Playhead in seconds. */
@@ -29,4 +35,4 @@ export interface AudioTranscriptProps {
     /** What the transcript is (e.g. "Transcript of Voice note from Ana"). Required. */
     label: string;
 }
-export declare function AudioTranscript({ words, current, onSeek, label }: AudioTranscriptProps): import("react/jsx-runtime").JSX.Element;
+export declare function AudioTranscript({ className, slotProps, words, current, onSeek, label }: AudioTranscriptProps): import("react/jsx-runtime").JSX.Element;

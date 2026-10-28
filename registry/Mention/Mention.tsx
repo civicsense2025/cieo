@@ -1,5 +1,7 @@
 // src/primitives/Mention/Mention.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* Mention. An @handle inside post text: a link when the host gives a safe address, plain text otherwise. */
 
 /** Handle without a leading @ and surrounding space. Empty when the input is blank or contains whitespace. */
@@ -30,6 +32,9 @@ export function safeHref(href: unknown, opts: { relative?: boolean } = {}): stri
 }
 
 export interface MentionProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Account handle, with or without the leading @. */
   handle: string;
   /** Profile address. Only http, https and same-site paths become a link; anything else renders as text. */
@@ -38,17 +43,17 @@ export interface MentionProps {
   name?: string;
 }
 
-export function Mention({ handle, href, name }: MentionProps) {
+export function Mention({ className, slotProps, handle, href, name }: MentionProps) {
   const clean = normalizeHandle(handle);
   if (clean === '') return null;
   const safe = href === undefined ? null : safeHref(href);
   const text = `@${clean}`;
   return safe ? (
-    <a className="cieo cieo-mention" href={safe} title={name}>
+    <a className="cieo cieo-mention" href={safe} title={name} {...customizePart(slotProps?.root, "cieo cieo-mention", undefined, className)}>
       {text}
     </a>
   ) : (
-    <span className="cieo cieo-mention" title={name}>
+    <span className="cieo cieo-mention" title={name} {...customizePart(slotProps?.root, "cieo cieo-mention", undefined, className)}>
       {text}
     </span>
   );

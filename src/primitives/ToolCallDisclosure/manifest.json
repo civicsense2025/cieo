@@ -28,7 +28,9 @@
       "nullable": false,
       "constraints": {},
       "note": "ToolCallView from cieo/agent."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [
     {
@@ -81,7 +83,9 @@
       "minimumOS": {},
       "implementation": "implemented",
       "properties": [
-        "call"
+        "call",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -108,5 +112,5 @@
     "path": "README.md",
     "purpose": "One tool call as a native disclosure: name and phase, then summary and error."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

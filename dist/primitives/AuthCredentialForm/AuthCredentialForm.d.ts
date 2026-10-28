@@ -1,5 +1,11 @@
+import type { PrimitivePartProps } from '../parts.js';
 import type { CSSProperties } from 'react';
 export interface AuthCredentialFormProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        submit?: PrimitivePartProps;
+    };
     id: string;
     /** Sign-in hides the strength meter; sign-up shows it. Defaults to "signin". */
     mode?: 'signin' | 'signup';
@@ -11,4 +17,4 @@ export interface AuthCredentialFormProps {
         password: string;
     }) => void;
 }
-export declare function AuthCredentialForm({ id, mode, pending, error, style, onSubmit }: AuthCredentialFormProps): import("react/jsx-runtime").JSX.Element;
+export declare function AuthCredentialForm({ className, slotProps, id, mode, pending, error, style, onSubmit }: AuthCredentialFormProps): import("react/jsx-runtime").JSX.Element;

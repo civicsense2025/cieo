@@ -42,7 +42,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, icon, glyph, text, time. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -84,7 +86,9 @@
       "implementation": "implemented",
       "properties": [
         "status",
-        "time"
+        "time",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -110,5 +114,5 @@
     "path": "README.md",
     "purpose": "Where one sent message is on its way: an icon that changes shape from clock to check to double check, with a spoken status."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","icon","glyph","text","time"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

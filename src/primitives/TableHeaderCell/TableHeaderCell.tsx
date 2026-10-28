@@ -1,8 +1,13 @@
 'use client';
 /* TableHeaderCell. Column or row header. A header with onSort renders a button in every state, including unsorted. */
 import type { ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface TableHeaderCellProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; sortButton?: PrimitivePartProps };
+
   /** Header scope. Defaults to col. */
   scope?: 'col' | 'row';
   /** Current sort direction. Defaults to none. */
@@ -12,10 +17,10 @@ export interface TableHeaderCellProps {
   children: ReactNode;
 }
 
-export function TableHeaderCell({ scope = 'col', sort = 'none', onSort, children }: TableHeaderCellProps) {
+export function TableHeaderCell({ className, slotProps, scope = 'col', sort = 'none', onSort, children }: TableHeaderCellProps) {
   if (sort === 'none' && !onSort) {
     return (
-      <th scope={scope} className="cieo cieo-table-header-cell">
+      <th scope={scope} className="cieo cieo-table-header-cell" {...customizePart(slotProps?.root, "cieo cieo-table-header-cell", undefined, className)}>
         {children}
       </th>
     );
@@ -25,12 +30,13 @@ export function TableHeaderCell({ scope = 'col', sort = 'none', onSort, children
       scope={scope}
       aria-sort={sort === 'asc' ? 'ascending' : sort === 'desc' ? 'descending' : 'none'}
       data-sort={sort}
-      className="cieo cieo-table-header-cell"
+      className="cieo cieo-table-header-cell" {...customizePart(slotProps?.root, "cieo cieo-table-header-cell", undefined, className)}
     >
       <button
         type="button"
         onClick={onSort}
         aria-label={typeof children === 'string' ? `Sort by ${children}` : undefined}
+        {...customizePart(slotProps?.sortButton)}
       >
         {children}
       </button>

@@ -1,5 +1,7 @@
 // src/primitives/AudioPlayer/AudioPlayer.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AudioPlayer. One clip with play/pause, a scrubber, the clock and (in full) speed. It owns the audio element and keeps only one player in the document playing at a time. */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { AudioPlayButton } from '../AudioPlayButton/AudioPlayButton.js';
@@ -66,6 +68,9 @@ export function claimAudioPlayback(id: string, target: EventTarget | null = type
 }
 
 export interface AudioPlayerProps {
+  className?: string;
+  slotProps?: { error?: PrimitivePartProps; retry?: PrimitivePartProps; track?: PrimitivePartProps; root?: PrimitivePartProps; main?: PrimitivePartProps; times?: PrimitivePartProps };
+
   /** URL of the audio file. */
   src: string;
   /** What the clip is (e.g. "Voice note from Ana"). Names the player and its buttons. Required. */
@@ -88,7 +93,7 @@ export interface AudioPlayerProps {
   onTimeUpdate?: (seconds: number) => void;
 }
 
-export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', rates = DEFAULT_PLAYBACK_RATES, onPlay, onPause, onEnded, onTimeUpdate }: AudioPlayerProps) {
+export function AudioPlayer({ className, slotProps, src, label, peaks, duration, variant = 'compact', rates = DEFAULT_PLAYBACK_RATES, onPlay, onPause, onEnded, onTimeUpdate }: AudioPlayerProps) {
   const tokenRef = useRef<string | null>(null);
   if (tokenRef.current === null) tokenRef.current = createAudioPlayerToken();
   const id = tokenRef.current;
@@ -229,22 +234,22 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
   const track = useScrub(known, seconds, seek);
   const resting = seconds === 0 && phase !== 'playing';
   const status = (
-    <div className="cieo-audio-player-error">
+    <div className="cieo-audio-player-error" {...customizePart(slotProps?.error, "cieo-audio-player-error")}>
       <span role="alert">Couldn&apos;t play this clip</span>
-      <button type="button" className="cieo-audio-player-retry" onClick={retry}>Retry</button>
+      <button type="button" className="cieo-audio-player-retry" onClick={retry} {...customizePart(slotProps?.retry, "cieo-audio-player-retry")}>Retry</button>
     </div>
   );
   const scrubber =
     phase === 'error' ? status : peaks && peaks.length > 0 ? (
       <AudioWaveform peaks={peaks} duration={known} current={seconds} onSeek={seek} label={`Seek in ${label}`} />
     ) : (
-      <div className="cieo-audio-player-track" {...track} role="slider" tabIndex={0} aria-label={`Seek in ${label}`} aria-valuemin={0} aria-valuemax={known} aria-valuenow={Math.floor(seconds)} aria-valuetext={audioSeekText(seconds, known)} aria-orientation="horizontal">
+      <div className="cieo-audio-player-track" {...track} role="slider" tabIndex={0} aria-label={`Seek in ${label}`} aria-valuemin={0} aria-valuemax={known} aria-valuenow={Math.floor(seconds)} aria-valuetext={audioSeekText(seconds, known)} aria-orientation="horizontal" {...customizePart(slotProps?.track, "cieo-audio-player-track")}>
         <span className="cieo-audio-player-fill" aria-hidden="true" />
       </div>
     );
 
   return (
-    <div ref={root} className="cieo cieo-audio-player" role="group" aria-label={label} data-variant={variant} data-state={phase}>
+    <div ref={root} className="cieo cieo-audio-player" role="group" aria-label={label} data-variant={variant} data-state={phase} {...customizePart(slotProps?.root, "cieo cieo-audio-player", undefined, className)}>
       <audio
         key={src}
         ref={audio}
@@ -287,11 +292,11 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
         }}
       />
       <AudioPlayButton playing={phase === 'playing'} loading={phase === 'loading'} label={label} onToggle={toggle} size={variant === 'full' ? 'lg' : 'md'} />
-      <div className="cieo-audio-player-main">
+      <div className="cieo-audio-player-main" {...customizePart(slotProps?.main, "cieo-audio-player-main")}>
         {variant === 'full' ? (
           <>
             {scrubber}
-            <div className="cieo-audio-player-times">
+            <div className="cieo-audio-player-times" {...customizePart(slotProps?.times, "cieo-audio-player-times")}>
               <AudioTime current={seconds} />
               <AudioTime current={seconds} duration={total} mode={total ? 'remaining' : 'elapsed'} />
             </div>

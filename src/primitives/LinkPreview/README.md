@@ -49,3 +49,7 @@ Border, surface and text colors from tokens; the thumbnail width is the only fix
 ## Evidence
 
 Covered by `test/primitives-social-content.test.mjs` (single link, lazy images, untrusted input, loading footprint).
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `titleText`, `root`, `media`, `body`, `content`, `site`, `favicon`, `siteName`, `domain`, `title`, `description`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

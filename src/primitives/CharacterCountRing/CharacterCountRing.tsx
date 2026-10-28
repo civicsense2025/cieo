@@ -3,8 +3,13 @@
 /* CharacterCountRing. Ring that fills as a text limit is used. Host owns the text and the limit; this owns the math, the countdown and the tone. */
 import { useRef } from 'react';
 import { useSpring } from '../../react/index.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface CharacterCountRingProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; track?: PrimitivePartProps; arc?: PrimitivePartProps; number?: PrimitivePartProps };
+
   /** Characters used so far. Required. */
   length: number;
   /** The limit. Required. */
@@ -49,7 +54,7 @@ const RADIUS = 10;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const DISPLAY_FLOOR = -99;
 
-export function CharacterCountRing({ length, max, warnAt = 20 }: CharacterCountRingProps) {
+export function CharacterCountRing({ className, slotProps, length, max, warnAt = 20 }: CharacterCountRingProps) {
   const s = ringState(length, max, warnAt);
   const arc = useRef<SVGCircleElement>(null);
   /* The first value is frozen so React never rewrites the offset the spring is driving. */
@@ -62,9 +67,9 @@ export function CharacterCountRing({ length, max, warnAt = 20 }: CharacterCountR
     { preset: 'soft' },
   );
   return (
-    <span className="cieo cieo-character-count-ring" data-tone={s.tone} data-grown={s.showNumber ? '' : undefined}>
+    <span className="cieo cieo-character-count-ring" data-tone={s.tone} data-grown={s.showNumber ? '' : undefined} {...customizePart(slotProps?.root, "cieo cieo-character-count-ring", undefined, className)}>
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <circle className="cieo-character-count-ring-track" cx="12" cy="12" r={RADIUS} fill="none" strokeWidth="2" />
+        <circle className="cieo-character-count-ring-track" cx="12" cy="12" r={RADIUS} fill="none" strokeWidth="2" {...customizePart(slotProps?.track, "cieo-character-count-ring-track", undefined)} />
         <circle
           ref={arc}
           className="cieo-character-count-ring-arc"
@@ -76,11 +81,11 @@ export function CharacterCountRing({ length, max, warnAt = 20 }: CharacterCountR
           strokeLinecap="round"
           strokeDasharray={CIRCUMFERENCE}
           style={{ strokeDashoffset: first.current }}
-          transform="rotate(-90 12 12)"
+          transform="rotate(-90 12 12)" {...customizePart(slotProps?.arc, "cieo-character-count-ring-arc", { strokeDashoffset: first.current })}
         />
       </svg>
       {s.showNumber ? (
-        <span className="cieo-character-count-ring-number" aria-hidden="true">
+        <span className="cieo-character-count-ring-number" aria-hidden="true" {...customizePart(slotProps?.number, "cieo-character-count-ring-number", undefined)}>
           {Math.max(DISPLAY_FLOOR, s.remaining)}
         </span>
       ) : null}

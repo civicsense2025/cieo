@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type ShareMethod = 'native' | 'copy' | 'none';
 export type ShareNavigator = {
     share?: unknown;
@@ -19,6 +20,12 @@ export declare function runShare(nav: ShareNavigator | undefined, data: {
 /** How long "Link copied" stays before the label returns, in milliseconds. */
 export declare const SHARE_COPIED_MS = 2000;
 export interface ShareButtonProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        button?: PrimitivePartProps;
+        icon?: PrimitivePartProps;
+    };
     /** Absolute http(s) URL to share. Other schemes disable the button. */
     url: string;
     /** Title passed to the native share sheet. */
@@ -30,4 +37,4 @@ export interface ShareButtonProps {
     /** Called after a share succeeds, with how it happened. Not called on cancel or failure. */
     onShared?: (method: 'native' | 'copy') => void;
 }
-export declare function ShareButton({ url, title, text, label, onShared }: ShareButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function ShareButton({ className, slotProps, url, title, text, label, onShared }: ShareButtonProps): import("react/jsx-runtime").JSX.Element;

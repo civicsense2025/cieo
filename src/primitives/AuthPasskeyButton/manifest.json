@@ -66,7 +66,9 @@
       "nullable": false,
       "default": true,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, button. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -104,7 +106,9 @@
         "label",
         "pending",
         "disabled",
-        "supported"
+        "supported",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [
@@ -129,5 +133,5 @@
     "path": "README.md",
     "purpose": "Button starting a passkey ceremony with a WebAuthn-unavailable fallback note."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","button"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

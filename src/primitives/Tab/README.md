@@ -47,3 +47,7 @@ TabList (molecule), TabMenu (molecule), SegmentedControlItem (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-menus.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` customizes the root. `slotProps.root` accepts className, style, title, and data attributes without replacing owned selection, roles, or keyboard behavior. `id` and `controls` connect the tab to its host-owned tabpanel.

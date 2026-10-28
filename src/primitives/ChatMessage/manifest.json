@@ -15,7 +15,9 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "author", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 128 } },
-    { "id": "time", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 64 } }
+    { "id": "time", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 64 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, author, time."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 4, "order": "document" }],
   "state": [],
@@ -24,9 +26,9 @@
   "variants": [],
   "styleParts": [{ "id": "message", "overrides": ["surface"], "tokenRoles": ["text"] }],
   "constraints": { "layout": ["stacked-message"], "content": ["message-has-body"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["author", "time"], "states": [], "events": [], "parts": ["message"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["author", "time", "className", "slotProps"], "states": [], "events": [], "parts": ["message"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "One transcript entry with optional author and time." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","author","time"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

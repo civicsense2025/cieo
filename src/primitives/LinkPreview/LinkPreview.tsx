@@ -1,5 +1,7 @@
 // src/primitives/LinkPreview/LinkPreview.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* LinkPreview. A link card (image, site, title) that is one tab stop. The host fetches the metadata; this draws it, safely, and fades content in over its own skeleton. */
 import { useEffect, useRef, useState } from 'react';
 import { usePresence } from '../../react/index.js';
@@ -37,6 +39,9 @@ export interface LinkPreviewImage {
 }
 
 export interface LinkPreviewProps {
+  className?: string;
+  slotProps?: { titleText?: PrimitivePartProps; root?: PrimitivePartProps; media?: PrimitivePartProps; body?: PrimitivePartProps; content?: PrimitivePartProps; site?: PrimitivePartProps; favicon?: PrimitivePartProps; siteName?: PrimitivePartProps; domain?: PrimitivePartProps; title?: PrimitivePartProps; description?: PrimitivePartProps };
+
   /** Address the card opens. Only credential-free absolute http(s) URLs render as links. */
   url: string;
   /** Page title, clamped to two lines. */
@@ -83,7 +88,7 @@ function PreviewImage({ image, src, className }: { image: LinkPreviewImage; src:
   );
 }
 
-export function LinkPreview({ url, title, siteName, description, image, favicon, variant = 'large', loading = false }: LinkPreviewProps) {
+export function LinkPreview({ className, slotProps, url, title, siteName, description, image, favicon, variant = 'large', loading = false }: LinkPreviewProps) {
   const href = safeHref(url, { relative: false });
   const domain = displayDomain(url);
   const kind: LinkPreviewVariant = variant === 'compact' ? 'compact' : 'large';
@@ -93,13 +98,13 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
   const brand = typeof siteName === 'string' ? siteName.trim() : '';
   const separateBrand = brand !== '' && brand !== domain;
   const site = brand || domain;
-  const label = <span className="cieo-link-preview-title-text">{title}</span>;
+  const label = <span className="cieo-link-preview-title-text" {...customizePart(slotProps?.titleText, "cieo-link-preview-title-text")}>{title}</span>;
   return (
-    <div className="cieo cieo-link-preview" data-variant={kind} data-loading={loading ? '' : undefined} data-linked={href ? '' : undefined} aria-busy={loading || undefined}>
+    <div className="cieo cieo-link-preview" data-variant={kind} data-loading={loading ? '' : undefined} data-linked={href ? '' : undefined} aria-busy={loading || undefined} {...customizePart(slotProps?.root, "cieo cieo-link-preview", undefined, className)}>
       {skeleton.mounted ? (
         <span ref={skeleton.ref} className="cieo-link-preview-skeleton" aria-hidden="true">
-          <span className="cieo-link-preview-media cieo-link-preview-bone" />
-          <span className="cieo-link-preview-body">
+          <span className="cieo-link-preview-media cieo-link-preview-bone" {...customizePart(slotProps?.media, "cieo-link-preview-media cieo-link-preview-bone")} />
+          <span className="cieo-link-preview-body" {...customizePart(slotProps?.body, "cieo-link-preview-body")}>
             <span className="cieo-link-preview-bone cieo-link-preview-bone-site" />
             <span className="cieo-link-preview-bone cieo-link-preview-bone-title" />
             <span className="cieo-link-preview-bone cieo-link-preview-bone-title cieo-link-preview-bone-short" />
@@ -111,28 +116,28 @@ export function LinkPreview({ url, title, siteName, description, image, favicon,
           Loading link preview
         </span>
       ) : (
-        <div className="cieo-link-preview-content">
+        <div className="cieo-link-preview-content" {...customizePart(slotProps?.content, "cieo-link-preview-content")}>
           {image && imageSrc ? (
-            <span className="cieo-link-preview-media">
+            <span className="cieo-link-preview-media" {...customizePart(slotProps?.media, "cieo-link-preview-media")}>
               <PreviewImage key={imageSrc} image={image} src={imageSrc} className="cieo-link-preview-image" />
             </span>
           ) : null}
-          <span className="cieo-link-preview-body">
+          <span className="cieo-link-preview-body" {...customizePart(slotProps?.body, "cieo-link-preview-body")}>
             {site || domain || iconSrc ? (
-              <span className="cieo-link-preview-site">
-                {iconSrc ? <img className="cieo-link-preview-favicon" src={iconSrc} alt="" width={16} height={16} referrerPolicy="no-referrer" loading="lazy" decoding="async" /> : null}
-                {separateBrand ? <span className="cieo-link-preview-site-name">{brand}</span> : null}
-                {domain ? <span className="cieo-link-preview-domain">{domain}</span> : site ? <span className="cieo-link-preview-site-name">{site}</span> : null}
+              <span className="cieo-link-preview-site" {...customizePart(slotProps?.site, "cieo-link-preview-site")}>
+                {iconSrc ? <img className="cieo-link-preview-favicon" src={iconSrc} alt="" width={16} height={16} referrerPolicy="no-referrer" loading="lazy" decoding="async" {...customizePart(slotProps?.favicon, "cieo-link-preview-favicon")} /> : null}
+                {separateBrand ? <span className="cieo-link-preview-site-name" {...customizePart(slotProps?.siteName, "cieo-link-preview-site-name")}>{brand}</span> : null}
+                {domain ? <span className="cieo-link-preview-domain" {...customizePart(slotProps?.domain, "cieo-link-preview-domain")}>{domain}</span> : site ? <span className="cieo-link-preview-site-name" {...customizePart(slotProps?.siteName, "cieo-link-preview-site-name")}>{site}</span> : null}
               </span>
             ) : null}
             {href ? (
-              <a className="cieo-link-preview-title" href={href} target="_blank" rel="noopener noreferrer ugc nofollow">
+              <a className="cieo-link-preview-title" href={href} target="_blank" rel="noopener noreferrer ugc nofollow" {...customizePart(slotProps?.title, "cieo-link-preview-title")}>
                 {label}
               </a>
             ) : (
-              <span className="cieo-link-preview-title">{label}</span>
+              <span className="cieo-link-preview-title" {...customizePart(slotProps?.title, "cieo-link-preview-title")}>{label}</span>
             )}
-            {description && kind === 'large' ? <span className="cieo-link-preview-description">{description}</span> : null}
+            {description && kind === 'large' ? <span className="cieo-link-preview-description" {...customizePart(slotProps?.description, "cieo-link-preview-description")}>{description}</span> : null}
           </span>
         </div>
       )}

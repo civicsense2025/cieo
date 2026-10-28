@@ -44,7 +44,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, ssoButton."}
   ],
   "slots": [],
   "state": [],
@@ -77,7 +79,9 @@
       "properties": [
         "id",
         "providers",
-        "pendingId"
+        "pendingId",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [
@@ -102,5 +106,5 @@
     "path": "README.md",
     "purpose": "One button per identity provider with pending shown by text plus aria-busy."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","ssoButton"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

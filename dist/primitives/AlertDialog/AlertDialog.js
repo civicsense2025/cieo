@@ -1,7 +1,8 @@
 // src/primitives/AlertDialog/AlertDialog.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 import { Dialog } from '../Dialog/Dialog.js';
-export function AlertDialog({ label, open, onClose, children }) {
-    return (_jsx(Dialog, { label: label, role: "alertdialog", open: open, onClose: onClose, dismissOnOutsidePress: false, children: _jsx("div", { className: "cieo cieo-alert-dialog", children: children }) }));
+export function AlertDialog({ label, open, onClose, children, className, slotProps }) {
+    return (_jsx(Dialog, { label: label, role: "alertdialog", open: open, onClose: onClose, dismissOnOutsidePress: false, className: className, slotProps: { root: slotProps?.root }, children: _jsx("div", { className: "cieo cieo-alert-dialog", ...customizePart(slotProps?.content, "cieo cieo-alert-dialog"), children: children }) }));
 }

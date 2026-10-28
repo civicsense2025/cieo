@@ -1,9 +1,16 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type AnnotationPinState = 'draft' | 'open' | 'resolved';
 /** Accessible name: "Comment 3, open" or "Comment 3 by Ava, resolved". Index is clamped to a whole number of at least 1. */
 export declare function annotationPinLabel(index: number, state?: AnnotationPinState, author?: string): string;
 /** Clamps a layer coordinate to 0..1; NaN becomes 0. */
 export declare function clampUnit(value: number): number;
 export interface AnnotationPinProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        body?: PrimitivePartProps;
+        text?: PrimitivePartProps;
+    };
     /** 1-based number drawn on the pin and spoken in its name. */
     index: number;
     /** Horizontal position as a 0..1 fraction of the layer. The tip lands here. */
@@ -21,4 +28,4 @@ export interface AnnotationPinProps {
     /** Called when the pin is pressed with a pointer, Enter or Space. */
     onSelect?: () => void;
 }
-export declare function AnnotationPin({ index, x, y, state, selected, label, initials, onSelect }: AnnotationPinProps): import("react/jsx-runtime").JSX.Element;
+export declare function AnnotationPin({ className, slotProps, index, x, y, state, selected, label, initials, onSelect }: AnnotationPinProps): import("react/jsx-runtime").JSX.Element;

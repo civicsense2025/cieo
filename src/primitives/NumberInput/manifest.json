@@ -18,7 +18,9 @@
     { "id": "min", "type": { "kind": "number" }, "required": false, "nullable": false, "constraints": {} },
     { "id": "max", "type": { "kind": "number" }, "required": false, "nullable": false, "constraints": {} },
     { "id": "step", "type": { "kind": "number" }, "required": false, "nullable": false, "constraints": {} },
-    { "id": "defaultValue", "type": { "kind": "number" }, "required": false, "nullable": false, "constraints": {} }
+    { "id": "defaultValue", "type": { "kind": "number" }, "required": false, "nullable": false, "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, label, input. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -27,9 +29,9 @@
   "variants": [],
   "styleParts": [{ "id": "input", "overrides": [], "tokenRoles": ["text", "border-control"] }],
   "constraints": { "layout": ["native-number-input"], "content": ["label-wraps-input"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "min", "max", "step", "defaultValue"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "min", "max", "step", "defaultValue", "className", "slotProps"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Labelled native number field." },
-  "extensions": { "styleDependency": "design/styles/controls.css" }
+  "extensions": { "styleDependency": "design/styles/controls.css", "customization": {"presentationParts":["root","label","input"],"ownedSemantics":true,"existingContentSlotsPreserved":true} }
 }

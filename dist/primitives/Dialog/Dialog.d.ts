@@ -1,6 +1,11 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 import { type MotionProps } from '../motion.js';
 export interface DialogProps extends MotionProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the dialog (e.g. "Rename file"). Required. */
     label: string;
     /** Whether the dialog is open. Plays exit before unmounting when closed. */
@@ -13,4 +18,4 @@ export interface DialogProps extends MotionProps {
     role?: 'dialog' | 'alertdialog';
     children: ReactNode;
 }
-export declare function Dialog({ label, open, onClose, dismissOnOutsidePress, role, children, motion, entering, exiting }: DialogProps): import("react/jsx-runtime").JSX.Element | null;
+export declare function Dialog({ label, open, onClose, dismissOnOutsidePress, role, children, motion, entering, exiting, className, slotProps }: DialogProps): import("react/jsx-runtime").JSX.Element | null;

@@ -29,7 +29,7 @@ export { AuthPasswordInput, type AuthPasswordInputProps } from './AuthPasswordIn
 export { AuthResetFlow, type AuthResetFlowProps } from './AuthResetFlow/AuthResetFlow.js';
 export { AuthResetForm, type AuthResetFormProps } from './AuthResetForm/AuthResetForm.js';
 export { AuthSessionList, type AuthSession, type AuthSessionListProps } from './AuthSessionList/AuthSessionList.js';
-export { AuthCardShell, AuthSignInCard, type AuthSignInCardProps } from './AuthSignInCard/AuthSignInCard.js';
+export { AuthCardShell, AuthSignInCard, type AuthCardSlotProps, type AuthCardSlots, type AuthSignInCardProps } from './AuthSignInCard/AuthSignInCard.js';
 export { AuthSignUpCard, type AuthSignUpCardProps } from './AuthSignUpCard/AuthSignUpCard.js';
 export { AuthSsoButtons, type AuthSsoProvider, type AuthSsoButtonsProps } from './AuthSsoButtons/AuthSsoButtons.js';
 export { Avatar, type AvatarProps } from './Avatar/Avatar.js';
@@ -91,7 +91,7 @@ export { DialogHeader, type DialogHeaderProps } from './DialogHeader/DialogHeade
 export { Divider, type DividerProps } from './Divider/Divider.js';
 export { DropdownMenu, DropdownMenuContext, type DropdownMenuContextValue, type DropdownMenuProps } from './DropdownMenu/DropdownMenu.js';
 export { DropdownMenuCheckboxItem, type DropdownMenuCheckboxItemProps } from './DropdownMenuCheckboxItem/DropdownMenuCheckboxItem.js';
-export { DropdownMenuDivider } from './DropdownMenuDivider/DropdownMenuDivider.js';
+export { DropdownMenuDivider, type DropdownMenuDividerProps } from './DropdownMenuDivider/DropdownMenuDivider.js';
 export { DropdownMenuGroup, type DropdownMenuGroupProps } from './DropdownMenuGroup/DropdownMenuGroup.js';
 export { DropdownMenuItem, type DropdownMenuItemProps } from './DropdownMenuItem/DropdownMenuItem.js';
 export { DropdownMenuRadioGroup, DropdownMenuRadioGroupContext, type DropdownMenuRadioGroupContextValue, type DropdownMenuRadioGroupProps } from './DropdownMenuRadioGroup/DropdownMenuRadioGroup.js';

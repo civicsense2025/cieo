@@ -67,7 +67,9 @@
       "nullable": false,
       "default": "Thanks for the feedback.",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: thumbsButtons, thumbsThumb, thumbsView, thumbsQuestion, thumbsHead, thumbsReasons, thumbsReason, thumbsCommentLabel, thumbsComment, thumbsActions, thumbsSubmit, thumbsSkip, thumbsThanks, root, thumbsPanel, thumbsInner, thumbsLeaving, thumbsEntering."}
   ],
   "slots": [],
   "state": [],
@@ -104,7 +106,9 @@
         "onRate",
         "reasons",
         "onSubmit",
-        "thanks"
+        "thanks",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -130,5 +134,5 @@
     "path": "README.md",
     "purpose": "A \"Was this helpful?\" prompt that can open a short detail step with reasons and a comment, then thanks the person."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["thumbsButtons","thumbsThumb","thumbsView","thumbsQuestion","thumbsHead","thumbsReasons","thumbsReason","thumbsCommentLabel","thumbsComment","thumbsActions","thumbsSubmit","thumbsSkip","thumbsThanks","root","thumbsPanel","thumbsInner","thumbsLeaving","thumbsEntering"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -1,5 +1,14 @@
 import type { ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export interface ByLineProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        badge?: PrimitivePartProps;
+        handle?: PrimitivePartProps;
+        separator?: PrimitivePartProps;
+        time?: PrimitivePartProps;
+    };
     /** Display name of the author. Truncates before the time does. Required. */
     author: string;
     /** Profile link. Only http(s) and relative links become anchors; anything else renders as plain text. */
@@ -19,4 +28,4 @@ export interface ByLineProps {
     /** Id placed on the root so a parent can label itself by this line. */
     id?: string;
 }
-export declare function ByLine({ author, href, badge, context, contextHref, time, dateTime, handle, id }: ByLineProps): import("react/jsx-runtime").JSX.Element;
+export declare function ByLine({ className, slotProps, author, href, badge, context, contextHref, time, dateTime, handle, id }: ByLineProps): import("react/jsx-runtime").JSX.Element;

@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* FollowButton. Filled "Follow" that becomes an outlined "Following"; hovering or focusing "Following" previews "Unfollow". The host owns the follow state. */
 import { useLayoutEffect, useRef, useState } from 'react';
 import { SwapText, useSpring } from '../../react/index.js';
+import { customizePart } from '../customization.js';
 /** Visible label for the button. `previewing` only matters while following: it shows the action a press would take. */
 export function followLabel(following, previewing) {
     if (!following)
@@ -16,7 +17,7 @@ function WidthSpring({ target, element }) {
         element.current.style.width = `${v}px`; }, { preset: 'base' });
     return null;
 }
-export function FollowButton({ following, onToggle, name, size = 'md' }) {
+export function FollowButton({ className, slotProps, following, onToggle, name, size = 'md' }) {
     const ref = useRef(null);
     const measure = useRef(null);
     const [hover, setHover] = useState(false);
@@ -39,5 +40,5 @@ export function FollowButton({ following, onToggle, name, size = 'md' }) {
     return (_jsxs("button", { ref: ref, type: "button", className: "cieo cieo-follow-button", "aria-label": `${text}${name ? ` ${name}` : ''}`, "data-following": following ? '' : undefined, "data-previewing": previewing ? '' : undefined, "data-size": size, onClick: () => {
             setSettled(true);
             onToggle();
-        }, onMouseEnter: () => setHover(true), onMouseLeave: () => { setHover(false); setSettled(false); }, onFocus: () => setFocus(true), onBlur: () => { setFocus(false); setSettled(false); }, children: [_jsx(SwapText, { value: text }), _jsx("span", { ref: measure, className: "cieo-follow-button-measure", "aria-hidden": "true", children: text }), width !== null ? _jsx(WidthSpring, { target: width, element: ref }) : null] }));
+        }, onMouseEnter: () => setHover(true), onMouseLeave: () => { setHover(false); setSettled(false); }, onFocus: () => setFocus(true), onBlur: () => { setFocus(false); setSettled(false); }, ...customizePart(slotProps?.root, "cieo cieo-follow-button", undefined, className), children: [_jsx(SwapText, { value: text }), _jsx("span", { ref: measure, className: "cieo-follow-button-measure", "aria-hidden": "true", children: text }), width !== null ? _jsx(WidthSpring, { target: width, element: ref }) : null] }));
 }

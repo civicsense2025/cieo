@@ -119,7 +119,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is (ids: string[]) => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [
     {
@@ -170,7 +172,9 @@
         "newIds",
         "branchLabel",
         "expanded",
-        "onExpandedChange"
+        "onExpandedChange",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -196,5 +200,5 @@
     "path": "README.md",
     "purpose": "Tree manager for comments: nested lists, a depth cap, per-branch \"view more replies\" with a reveal animation, rendering every comment through the host."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","branch","list","item","more"],"semanticOverrides":false}}
 }

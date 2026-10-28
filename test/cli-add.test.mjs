@@ -24,7 +24,7 @@ const bin = join(root, 'bin', 'cieo.mjs');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 
 const CONFIG = { version: 1, target: 'vite', componentsDir: 'src/components/cieo', theme: {} };
-const FILES = ['Dialog/Dialog.tsx', 'Overlay/Overlay.tsx', 'motion.ts'];
+const FILES = ['Overlay/Overlay.tsx', 'Dialog/Dialog.tsx', 'customization.ts', 'parts.ts', 'motion.ts'];
 
 function makeProject(config = CONFIG) {
   const dir = mkdtempSync(join(tmpdir(), 'cieo-add-'));
@@ -150,9 +150,14 @@ test('add dialog copies the transitive set, rewritten, with banners preserved', 
     assert.match(result.stdout, /Dialog\/Dialog\.tsx/);
     assert.match(result.stdout, /Overlay\/Overlay\.tsx/);
     assert.match(result.stdout, /motion\.ts/);
-    assert.match(result.stdout, /3 copied, 0 unchanged, 0 skipped/);
+    assert.match(result.stdout, /customization\.ts/);
+    assert.match(result.stdout, /parts\.ts/);
+    assert.match(result.stdout, /5 copied, 0 unchanged, 0 skipped/);
     for (const rel of FILES) {
       assert.ok(existsSync(componentPath(dir, rel)), `${rel} must be copied`);
+      const installed = readFileSync(componentPath(dir, rel), 'utf8');
+      assert.equal(installed, registryContent(rel));
+      assertNoPackageTerritoryImports(installed, rel);
     }
 
     const dialog = readFileSync(componentPath(dir, 'Dialog/Dialog.tsx'), 'utf8');
@@ -218,7 +223,7 @@ test('a second add is a byte-for-byte no-op that leaves mtimes untouched', () =>
 
     const second = runAdd(['dialog'], dir);
     assert.equal(second.status, 0, second.stderr);
-    assert.match(second.stdout, /0 copied, 3 unchanged, 0 skipped/);
+    assert.match(second.stdout, /0 copied, 5 unchanged, 0 skipped/);
     assert.doesNotMatch(second.stderr, /differs/);
     for (const rel of FILES) {
       assert.equal(readFileSync(componentPath(dir, rel), 'utf8'), before.get(rel));
@@ -237,13 +242,13 @@ test('a user-edited file is skipped with the notice, then --overwrite replaces i
 
     const skipped = runAdd(['dialog'], dir);
     assert.equal(skipped.status, 0);
-    assert.match(skipped.stdout, /0 copied, 2 unchanged, 1 skipped/);
+    assert.match(skipped.stdout, /0 copied, 4 unchanged, 1 skipped/);
     assert.match(skipped.stderr, /skipped Dialog\/Dialog\.tsx \(differs — re-run with --overwrite\)/);
     assert.equal(readFileSync(file, 'utf8'), edited);
 
     const overwritten = runAdd(['dialog', '--overwrite'], dir);
     assert.equal(overwritten.status, 0);
-    assert.match(overwritten.stdout, /1 copied, 2 unchanged, 0 skipped/);
+    assert.match(overwritten.stdout, /1 copied, 4 unchanged, 0 skipped/);
     assert.equal(readFileSync(file, 'utf8'), registryContent('Dialog/Dialog.tsx'));
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -256,7 +261,7 @@ test('--dry-run reports the full plan and writes nothing at all', () => {
     const result = runAdd(['dialog', '--dry-run'], dir);
     assert.equal(result.status, 0, result.stderr);
     assert.match(result.stdout, /Dry run/);
-    assert.match(result.stdout, /3 copied, 0 unchanged, 0 skipped/);
+    assert.match(result.stdout, /5 copied, 0 unchanged, 0 skipped/);
     assert.deepEqual(readdirSync(dir), ['cieo.json']);
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -271,13 +276,13 @@ test('--dry-run reports conflicts without touching the edited file', () => {
 
     const result = runAdd(['dialog', '--dry-run'], dir);
     assert.equal(result.status, 0);
-    assert.match(result.stdout, /0 copied, 2 unchanged, 1 skipped/);
+    assert.match(result.stdout, /0 copied, 4 unchanged, 1 skipped/);
     assert.match(result.stderr, /skipped Dialog\/Dialog\.tsx/);
     assert.equal(readFileSync(file, 'utf8'), edited);
 
     const wouldOverwrite = runAdd(['dialog', '--dry-run', '--overwrite'], dir);
     assert.equal(wouldOverwrite.status, 0);
-    assert.match(wouldOverwrite.stdout, /1 copied, 2 unchanged, 0 skipped/);
+    assert.match(wouldOverwrite.stdout, /1 copied, 4 unchanged, 0 skipped/);
     assert.equal(readFileSync(file, 'utf8'), edited);
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -337,7 +342,7 @@ test('copyPlan asks a TTY prompt for each conflict and honors skip', async () =>
   const dir = makeProject();
   try {
     const seed = await copyPlan({ root: dir, config: CONFIG, id: 'dialog' });
-    assert.equal(seed.copied.length, 3);
+    assert.deepEqual(seed.copied, FILES);
     const { file, edited } = editDialog(dir);
 
     const { calls, prompt } = stubPrompt(['skip']);
@@ -346,7 +351,7 @@ test('copyPlan asks a TTY prompt for each conflict and honors skip', async () =>
     );
     assert.equal(result.skipped.length, 1);
     assert.deepEqual(result.conflicts, ['Dialog/Dialog.tsx']);
-    assert.equal(result.unchanged.length, 2);
+    assert.deepEqual(result.unchanged, FILES.filter((file) => file !== 'Dialog/Dialog.tsx'));
     assert.equal(calls.length, 1);
     assert.match(calls[0].question, /Overwrite Dialog\/Dialog\.tsx\?/);
     assert.deepEqual(calls[0].options, ['overwrite', 'skip', 'diff']);

@@ -4,6 +4,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePresence } from '../../react/index.js';
 import { CompactCount } from '../CompactCount/CompactCount.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export type NewItemsPlacement = 'top' | 'bottom';
 
@@ -32,6 +34,9 @@ export function splitNewItemsLabel(text: string, n: number): { rolls: boolean; r
 }
 
 export interface NewItemsPillProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; button?: PrimitivePartProps; count?: PrimitivePartProps; text?: PrimitivePartProps };
+
   /** How many items are waiting. The pill shows while this is above zero. */
   count: number;
   /** Called when the pill is pressed; the host scrolls to or reveals the new items. */
@@ -42,7 +47,7 @@ export interface NewItemsPillProps {
   placement?: NewItemsPlacement;
 }
 
-export function NewItemsPill({ count, onShow, label = newItemsLabel, placement = 'top' }: NewItemsPillProps) {
+export function NewItemsPill({ className, slotProps, count, onShow, label = newItemsLabel, placement = 'top' }: NewItemsPillProps) {
   const n = clampNewItems(count);
   const edge: NewItemsPlacement = placement === 'bottom' ? 'bottom' : 'top';
   const last = useRef(n);
@@ -60,13 +65,13 @@ export function NewItemsPill({ count, onShow, label = newItemsLabel, placement =
   const shown = n > 0 ? n : last.current;
   const split = splitNewItemsLabel(label(shown), shown);
   return (
-    <div className="cieo cieo-new-items-pill" data-placement={edge}>
+    <div className="cieo cieo-new-items-pill" data-placement={edge} {...customizePart(slotProps?.root, "cieo cieo-new-items-pill", undefined, className)}>
       {mounted ? (
-        <button ref={ref} type="button" className="cieo-new-items-pill-button" aria-label={label(shown)} onClick={onShow}>
-          <span aria-hidden="true" className="cieo-new-items-pill-count">
+        <button ref={ref} type="button" className="cieo-new-items-pill-button" aria-label={label(shown)} onClick={onShow} {...customizePart(slotProps?.button, "cieo-new-items-pill-button", undefined)}>
+          <span aria-hidden="true" className="cieo-new-items-pill-count" {...customizePart(slotProps?.count, "cieo-new-items-pill-count", undefined)}>
             {split.rolls ? <CompactCount value={shown} hideZero={false} /> : null}
           </span>
-          <span aria-hidden="true" className="cieo-new-items-pill-text">
+          <span aria-hidden="true" className="cieo-new-items-pill-text" {...customizePart(slotProps?.text, "cieo-new-items-pill-text", undefined)}>
             {split.rest}
           </span>
         </button>

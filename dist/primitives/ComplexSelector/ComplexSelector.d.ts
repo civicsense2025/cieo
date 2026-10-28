@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface ComplexSelectorSection {
     label: string;
     options: Array<{
@@ -6,6 +7,11 @@ export interface ComplexSelectorSection {
     }>;
 }
 export interface ComplexSelectorProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        input?: PrimitivePartProps;
+    };
     /** Visible label naming the field. Required. */
     label: string;
     /** Grouped sections rendered as optgroups. Required. */
@@ -20,4 +26,4 @@ export interface ComplexSelectorProps {
     name?: string;
     disabled?: boolean;
 }
-export declare function ComplexSelector({ label, sections, value, defaultValue, onChange, name, disabled }: ComplexSelectorProps): import("react/jsx-runtime").JSX.Element;
+export declare function ComplexSelector({ className, slotProps, label, sections, value, defaultValue, onChange, name, disabled }: ComplexSelectorProps): import("react/jsx-runtime").JSX.Element;

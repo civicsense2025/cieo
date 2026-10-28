@@ -1,6 +1,7 @@
 // src/primitives/ReactionPicker/ReactionPicker.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* ReactionPicker. A row of emoji buttons that reports one pick. The host owns where it sits (inline or inside a Popover) and what a pick means. */
 import { useState } from 'react';
 import { roveFocus } from '../../react/index.js';
@@ -18,10 +19,10 @@ export function pickerStartIndex(reactions, selected = []) {
     const at = reactions.findIndex((r) => selected.includes(r.id));
     return at < 0 ? 0 : at;
 }
-export function ReactionPicker({ onPick, reactions = DEFAULT_REACTIONS, label = 'Add a reaction', selected = [] }) {
+export function ReactionPicker({ className, slotProps, onPick, reactions = DEFAULT_REACTIONS, label = 'Add a reaction', selected = [] }) {
     const [active, setActive] = useState(() => pickerStartIndex(reactions, selected));
     const tab = Math.min(active, Math.max(0, reactions.length - 1));
     return (_jsx("div", { className: "cieo cieo-reaction-picker", role: "toolbar", "aria-label": label, "aria-orientation": "horizontal", onKeyDown: (e) => {
             roveFocus(e, e.currentTarget, 'button', { orientation: 'horizontal' });
-        }, children: reactions.map((r, i) => (_jsx("button", { type: "button", className: "cieo-reaction-picker-item", "aria-label": r.label, "aria-pressed": selected.includes(r.id), title: r.label, tabIndex: i === tab ? 0 : -1, style: { ['--cieo-i']: i }, onFocus: () => setActive(i), onClick: () => onPick(r.id), children: _jsx("span", { "aria-hidden": "true", className: "cieo-reaction-picker-emoji", children: r.emoji }) }, r.id))) }));
+        }, ...customizePart(slotProps?.root, "cieo cieo-reaction-picker", undefined, className), children: reactions.map((r, i) => (_jsx("button", { type: "button", className: "cieo-reaction-picker-item", "aria-label": r.label, "aria-pressed": selected.includes(r.id), title: r.label, tabIndex: i === tab ? 0 : -1, style: { ['--cieo-i']: i }, onFocus: () => setActive(i), onClick: () => onPick(r.id), ...customizePart(slotProps?.item, "cieo-reaction-picker-item", { ['--cieo-i']: i }), children: _jsx("span", { "aria-hidden": "true", className: "cieo-reaction-picker-emoji", ...customizePart(slotProps?.emoji, "cieo-reaction-picker-emoji"), children: r.emoji }) }, r.id))) }));
 }

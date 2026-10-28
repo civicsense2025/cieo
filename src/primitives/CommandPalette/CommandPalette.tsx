@@ -1,5 +1,7 @@
 // src/primitives/CommandPalette/CommandPalette.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* CommandPalette. Command-menu shell. Host filters items from the query; this owns dialog structure, Escape and arrow-key movement. */
 import { createContext, useRef, type KeyboardEvent, type ReactNode } from 'react';
 import { roveFocus } from '../../react/index.js';
@@ -11,6 +13,9 @@ export interface CommandPaletteContextValue {
 export const CommandPaletteContext = createContext<CommandPaletteContextValue | null>(null);
 
 export interface CommandPaletteProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Accessible name for the palette (e.g. "Site commands"). Required. */
   label: string;
   /** Current filter text, owned by the host. Optional. */
@@ -26,7 +31,7 @@ export interface CommandPaletteProps {
   children: ReactNode;
 }
 
-export function CommandPalette({ label, query, onQueryChange, onClose, onNavigate, onActivate, children }: CommandPaletteProps) {
+export function CommandPalette({ className, slotProps, label, query, onQueryChange, onClose, onNavigate, onActivate, children }: CommandPaletteProps) {
   const ref = useRef<HTMLDivElement>(null);
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Escape') { e.preventDefault(); onClose?.(); return; }
@@ -39,7 +44,7 @@ export function CommandPalette({ label, query, onQueryChange, onClose, onNavigat
   };
   return (
     <CommandPaletteContext.Provider value={{ query, onQueryChange }}>
-      <div ref={ref} role="dialog" aria-label={label} data-query={query} onKeyDown={onKeyDown} className="cieo cieo-p-command-palette">
+      <div ref={ref} role="dialog" aria-label={label} data-query={query} onKeyDown={onKeyDown} className="cieo cieo-p-command-palette" {...customizePart(slotProps?.root, "cieo cieo-p-command-palette", undefined, className)}>
         {children}
       </div>
     </CommandPaletteContext.Provider>

@@ -1,10 +1,11 @@
 // src/primitives/TopNavMegaMenu/TopNavMegaMenu.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* TopNavMegaMenu. Disclosure panel below a trigger. Escape and outside press close it; panel stacks below, no flip. */
 import { useId, useRef, useState } from 'react';
 import { useDismiss } from '../../react/index.js';
-export function TopNavMegaMenu({ trigger, open, defaultOpen = false, onOpenChange, children }) {
+export function TopNavMegaMenu({ className, slotProps, trigger, open, defaultOpen = false, onOpenChange, children }) {
     const [inner, setInner] = useState(defaultOpen);
     const isOpen = open ?? inner;
     const panelId = useId();
@@ -20,5 +21,5 @@ export function TopNavMegaMenu({ trigger, open, defaultOpen = false, onOpenChang
         if (reason === 'escape')
             buttonRef.current?.focus();
     }, [rootRef]);
-    return (_jsxs("div", { ref: rootRef, "data-open": isOpen, className: "cieo cieo-top-nav-mega-menu", children: [_jsx("button", { ref: buttonRef, type: "button", "aria-expanded": isOpen, "aria-controls": isOpen ? panelId : undefined, onClick: () => set(!isOpen), children: trigger }), isOpen ? _jsx("div", { id: panelId, className: "cieo-top-nav-mega-menu-panel", children: children }) : null] }));
+    return (_jsxs("div", { ref: rootRef, "data-open": isOpen, className: "cieo cieo-top-nav-mega-menu", ...customizePart(slotProps?.root, "cieo cieo-top-nav-mega-menu", undefined, className), children: [_jsx("button", { ref: buttonRef, type: "button", "aria-expanded": isOpen, "aria-controls": isOpen ? panelId : undefined, onClick: () => set(!isOpen), children: trigger }), isOpen ? _jsx("div", { id: panelId, className: "cieo-top-nav-mega-menu-panel", ...customizePart(slotProps?.panel, "cieo-top-nav-mega-menu-panel"), children: children }) : null] }));
 }

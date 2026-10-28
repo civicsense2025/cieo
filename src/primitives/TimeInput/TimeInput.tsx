@@ -1,8 +1,13 @@
 'use client';
 /* TimeInput. Time-of-day field. Value, name and change events reach the host. */
 import type { ChangeEvent } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface TimeInputProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; label?: PrimitivePartProps; input?: PrimitivePartProps };
+
   label: string;
   /** Form field name. */
   name?: string;
@@ -18,11 +23,11 @@ export interface TimeInputProps {
   required?: boolean;
 }
 
-export function TimeInput({ label, name, value, defaultValue, onChange, min, max, disabled, required }: TimeInputProps) {
+export function TimeInput({ className, slotProps, label, name, value, defaultValue, onChange, min, max, disabled, required }: TimeInputProps) {
   return (
-    <label className="cieo">
-      <span className="cieo-label">{label}</span>
-      <input type="time" className="cieo cieo-input" name={name} value={value} defaultValue={value === undefined ? defaultValue : undefined} min={min} max={max} disabled={disabled} required={required} onChange={(e: ChangeEvent<HTMLInputElement>) => onChange?.(e.currentTarget.value)} />
+    <label className="cieo" {...customizePart(slotProps?.root, "cieo", undefined, className)}>
+      <span className="cieo-label" {...customizePart(slotProps?.label, "cieo-label", undefined)}>{label}</span>
+      <input type="time" className="cieo cieo-input" name={name} value={value} defaultValue={value === undefined ? defaultValue : undefined} min={min} max={max} disabled={disabled} required={required} onChange={(e: ChangeEvent<HTMLInputElement>) => onChange?.(e.currentTarget.value)} {...customizePart(slotProps?.input, "cieo cieo-input", undefined)} />
     </label>
   );
 }

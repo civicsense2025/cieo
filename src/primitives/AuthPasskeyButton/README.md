@@ -14,3 +14,7 @@ Button starting a passkey ceremony.
 Pending shows by text change plus `aria-busy`, never colour alone. The fallback note is plain text naming the alternatives (password or code).
 
 The pending label swaps and the fallback note reveals on the base token. Reduced motion and `data-motion="off"` show the same states instantly.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `button`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

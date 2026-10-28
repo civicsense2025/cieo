@@ -81,7 +81,9 @@
       "nullable": false,
       "default": "tap",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, mic, live, hint, time, waveform, actions, error, retry."}
   ],
   "slots": [],
   "state": [],
@@ -121,7 +123,9 @@
         "maxDuration",
         "autoStart",
         "label",
-        "mode"
+        "mode",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -147,5 +151,5 @@
     "path": "README.md",
     "purpose": "Records a voice clip from the microphone and hands the host a blob with its length and waveform peaks."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","mic","live","hint","time","waveform","actions","error","retry"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -1,9 +1,10 @@
 // src/primitives/StatusDot/StatusDot.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function StatusDot({ status = 'default', label }) {
+import { customizePart } from '../customization.js';
+export function StatusDot({ className, slotProps, status = 'default', label }) {
     if (label) {
-        return _jsx("span", { role: "img", "aria-label": label, "data-status": status, className: "cieo cieo-p-status-dot" });
+        return _jsx("span", { role: "img", "aria-label": label, "data-status": status, className: "cieo cieo-p-status-dot", ...customizePart(slotProps?.root, "cieo cieo-p-status-dot", undefined, className) });
     }
-    return _jsx("span", { "aria-hidden": "true", "data-status": status, className: "cieo cieo-p-status-dot" });
+    return _jsx("span", { "aria-hidden": "true", "data-status": status, className: "cieo cieo-p-status-dot", ...customizePart(slotProps?.root, "cieo cieo-p-status-dot", undefined, className) });
 }

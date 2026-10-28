@@ -1,48 +1,25 @@
 # Popover
 
-Controlled disclosure shell with a simple absolute panel below the trigger.
+A nonmodal, named panel anchored to a native button or link. Escape and outside press dismiss it; Escape restores trigger focus. The trigger's own click handler runs first and can prevent opening.
 
-## Use when
+## Slots and props
 
-- A button reveals a small panel of actions or info.
-- Open state already lives in the host (or starts closed and stays local).
+`trigger` supplies one interactive element; `children` supplies content. Optional `slots.header`, `slots.content`, and `slots.footer` compose the panel. `slots.content` replaces `children` when supplied.
 
-## Avoid when
+`slotProps.root`, `slotProps.trigger` (the wrapper), and `slotProps.content` accept `className`, `style`, `title`, and data attributes. `className` and `style` also customize the root. Slots cannot replace owned IDs, roles, focus refs, expanded state, or dismissal behavior. Pass trigger behavior and accessible naming directly to the trigger element.
 
-- Content must flip around the viewport edge; this panel never flips.
-- The panel is modal; use a dialog, not a popover.
+`open` / `onOpenChange` control state; `defaultOpen` initializes uncontrolled state. `label` names the dialog; a plain-text trigger label is the fallback. Supply `label` for icon or composed triggers.
 
-## Anatomy
+`side` chooses top, bottom, left, or right (default bottom); `align` chooses logical start, center, or end (default start). `offset` defaults to 8 CSS px; `collisionPadding` defaults to 12. The panel flips when the opposite side has more room and clamps to the visible viewport. Oversized content remains reachable through bounded overflow. Resize, scrolling, and visual viewport changes update positioning.
 
-Trigger slot plus content children; open panel renders as an absolute block below the trigger.
+`portal` defaults to true to escape clipping and transformed ancestors. Set false only when the host guarantees an unclipped fixed-position containing block; host theme tokens must reach the panel either way.
 
-## Behavior
+`motion={false}` disables enter/exit animation. Otherwise the shared Cieo presence spring animates scale, opacity, and drift; reduced motion settles immediately. Exiting content is inert and hidden from assistive technology.
 
-No motion. `open` controls, `defaultOpen` seeds, `onOpenChange` reports. Uncontrolled when `open` is unset.
+## Styling
 
-## Keyboard / accessibility
+Import `cieo/popover.css` or the full primitive stylesheet. Supported tokens: `--cieo-popover-border`, `--cieo-popover-radius`, `--cieo-popover-background`, `--cieo-popover-color`, `--cieo-popover-padding`, `--cieo-popover-shadow`, and `--cieo-popover-z`. Host classes applied through slots can set width, typography, spacing, and paint. Position and viewport limits remain library-owned.
 
-- Trigger keeps its own name and focus; Escape-to-close is host-owned.
-- Panel content must be reachable by Tab in document order.
+## Limits and verification
 
-## Do / don't
-
-- Do: `<Popover trigger={<button>Share</button>}>` with link children.
-- Don't: rely on edge flipping; the panel sits below, always (see Limitations).
-
-## Customization
-
-Panel paint only. Border, radius, and shadow come from Cieo tokens.
-
-## Limitations
-
-- No flip, no collision handling; the host positions around edges.
-- No outside-click or persistence; the host owns dismissal.
-
-## Related
-
-HoverCard (molecule), CommandPalette (molecule), Tooltip (molecule).
-
-## Evidence
-
-Storybook-free: covered by `test/primitives-lane-command.test.mjs` + docs preview. No device acceptance in this plan.
+This is not a modal or an ARIA menu. Content follows normal Tab navigation; use a dialog for modal focus containment. Detached or offscreen anchors are clamped, not automatically dismissed. Position tests cover edge flips, RTL alignment, oversized content, and visual viewport offsets. Consumer browser checks must cover focus, rapid reopening, clipping ancestors, and motion preferences.

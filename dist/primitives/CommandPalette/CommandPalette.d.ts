@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface CommandPaletteContextValue {
     query?: string;
@@ -5,6 +6,10 @@ export interface CommandPaletteContextValue {
 }
 export declare const CommandPaletteContext: import("react").Context<CommandPaletteContextValue | null>;
 export interface CommandPaletteProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the palette (e.g. "Site commands"). Required. */
     label: string;
     /** Current filter text, owned by the host. Optional. */
@@ -19,4 +24,4 @@ export interface CommandPaletteProps {
     onActivate?: () => void;
     children: ReactNode;
 }
-export declare function CommandPalette({ label, query, onQueryChange, onClose, onNavigate, onActivate, children }: CommandPaletteProps): import("react/jsx-runtime").JSX.Element;
+export declare function CommandPalette({ className, slotProps, label, query, onQueryChange, onClose, onNavigate, onActivate, children }: CommandPaletteProps): import("react/jsx-runtime").JSX.Element;

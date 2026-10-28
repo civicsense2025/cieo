@@ -3,6 +3,8 @@
 /* SpeakerTile. One person in a live audio room: avatar, name, a ring that swells with their voice, and badges for muted and raised hand. The host owns the audio and passes the level. */
 import { useRef, type CSSProperties, type ReactNode } from 'react';
 import { useSpring } from '../../react/index.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export type SpeakerRole = 'host' | 'speaker' | 'listener';
 
@@ -21,6 +23,9 @@ export function speakerLabel(o: { name: string; role?: SpeakerRole; muted?: bool
 }
 
 export interface SpeakerTileProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; face?: PrimitivePartProps; ring?: PrimitivePartProps; avatar?: PrimitivePartProps; badge?: PrimitivePartProps; name?: PrimitivePartProps };
+
   /** Display name, shown under the avatar and read aloud. */
   name: string;
   /** Avatar node (usually an Avatar). Hidden from assistive tech; the tile's own text names the person. */
@@ -37,7 +42,7 @@ export interface SpeakerTileProps {
   size?: 'sm' | 'md' | 'lg';
 }
 
-export function SpeakerTile({ name, avatar, level = 0, muted = false, role, handRaised = false, size = 'md' }: SpeakerTileProps) {
+export function SpeakerTile({ className, slotProps, name, avatar, level = 0, muted = false, role, handRaised = false, size = 'md' }: SpeakerTileProps) {
   const heard = muted ? 0 : clamp01(level);
   const was = useRef(false);
   const speaking = speakingStep(was.current, heard);
@@ -52,25 +57,25 @@ export function SpeakerTile({ name, avatar, level = 0, muted = false, role, hand
     el.style.setProperty('--cieo-ring-opacity', Math.min(1, v * 2.5).toFixed(3));
   });
   return (
-    <div className="cieo cieo-speaker-tile" data-size={size} data-role={role} data-speaking={speaking ? '' : undefined} data-muted={muted ? '' : undefined} data-hand-raised={handRaised ? '' : undefined}>
+    <div className="cieo cieo-speaker-tile" data-size={size} data-role={role} data-speaking={speaking ? '' : undefined} data-muted={muted ? '' : undefined} data-hand-raised={handRaised ? '' : undefined} {...customizePart(slotProps?.root, "cieo cieo-speaker-tile", undefined, className)}>
       <span className="cieo-sr-only">{speakerLabel({ name, role, muted, speaking, handRaised })}</span>
-      <span className="cieo-speaker-tile-face" aria-hidden="true">
-        <span ref={ring} className="cieo-speaker-tile-ring" style={seed.current} />
-        <span className="cieo-speaker-tile-avatar">{avatar}</span>
+      <span className="cieo-speaker-tile-face" aria-hidden="true" {...customizePart(slotProps?.face, "cieo-speaker-tile-face", undefined)}>
+        <span ref={ring} className="cieo-speaker-tile-ring" style={seed.current} {...customizePart(slotProps?.ring, "cieo-speaker-tile-ring", seed.current)} />
+        <span className="cieo-speaker-tile-avatar" {...customizePart(slotProps?.avatar, "cieo-speaker-tile-avatar", undefined)}>{avatar}</span>
         {muted ? (
-          <span className="cieo-speaker-tile-badge" data-badge="muted">
+          <span className="cieo-speaker-tile-badge" data-badge="muted" {...customizePart(slotProps?.badge, "cieo-speaker-tile-badge", undefined)}>
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 9v3a3 3 0 0 0 5.1 2.1M15 9.3V5a3 3 0 0 0-5.9-.8M5 11a7 7 0 0 0 11.2 5.6M19 11a7 7 0 0 1-.6 2.8M12 18v3M3 3l18 18" />
             </svg>
           </span>
         ) : null}
         {handRaised ? (
-          <span className="cieo-speaker-tile-badge" data-badge="hand">
+          <span className="cieo-speaker-tile-badge" data-badge="hand" {...customizePart(slotProps?.badge, "cieo-speaker-tile-badge", undefined)}>
             {'✋'}
           </span>
         ) : null}
       </span>
-      <span className="cieo-speaker-tile-name" aria-hidden="true">
+      <span className="cieo-speaker-tile-name" aria-hidden="true" {...customizePart(slotProps?.name, "cieo-speaker-tile-name", undefined)}>
         {name}
       </span>
     </div>

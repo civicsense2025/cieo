@@ -32,7 +32,7 @@ No motion. Unlinked form is static text; linked form follows native anchor behav
 
 ## Customization
 
-URL only. Italic quote styling comes from Cieo tokens; do not restyle per instance.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ Blockquote (atom), Text (atom), Markdown (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-content.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `content`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

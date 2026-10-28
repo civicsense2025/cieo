@@ -1,8 +1,13 @@
 // src/primitives/ReplyPreview/ReplyPreview.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ReplyPreview. Quoted reply with an accent bar. Host owns the excerpt text and what dismiss or jump do. */
 
 export interface ReplyPreviewProps {
+  className?: string;
+  slotProps?: { bar?: PrimitivePartProps; text?: PrimitivePartProps; author?: PrimitivePartProps; excerpt?: PrimitivePartProps; root?: PrimitivePartProps; dismiss?: PrimitivePartProps };
+
   /** Name of the person being replied to. Required. */
   author: string;
   /** Short excerpt of the original text. Clamped to two lines (one in the composer). Required. */
@@ -25,22 +30,22 @@ export function replyJumpLabel(author: string): string {
   return `Go to the message from ${author}`;
 }
 
-export function ReplyPreview({ author, excerpt, variant = 'quote', onDismiss, onJump }: ReplyPreviewProps) {
+export function ReplyPreview({ className, slotProps, author, excerpt, variant = 'quote', onDismiss, onJump }: ReplyPreviewProps) {
   const body = (
     <>
-      <span className="cieo-reply-preview-bar" aria-hidden="true" />
-      <span className="cieo-reply-preview-text">
-        <span className="cieo-reply-preview-author">{author}</span>
-        <span className="cieo-reply-preview-excerpt">{excerpt}</span>
+      <span className="cieo-reply-preview-bar" aria-hidden="true" {...customizePart(slotProps?.bar, "cieo-reply-preview-bar", undefined)} />
+      <span className="cieo-reply-preview-text" {...customizePart(slotProps?.text, "cieo-reply-preview-text", undefined)}>
+        <span className="cieo-reply-preview-author" {...customizePart(slotProps?.author, "cieo-reply-preview-author", undefined)}>{author}</span>
+        <span className="cieo-reply-preview-excerpt" {...customizePart(slotProps?.excerpt, "cieo-reply-preview-excerpt", undefined)}>{excerpt}</span>
       </span>
     </>
   );
   if (variant === 'composer') {
     return (
-      <div className="cieo cieo-reply-preview" data-variant="composer">
+      <div className="cieo cieo-reply-preview" data-variant="composer" {...customizePart(slotProps?.root, "cieo cieo-reply-preview", undefined, className)}>
         {body}
         {onDismiss ? (
-          <button type="button" className="cieo-reply-preview-dismiss" aria-label={replyDismissLabel(author)} onClick={onDismiss}>
+          <button type="button" className="cieo-reply-preview-dismiss" aria-label={replyDismissLabel(author)} onClick={onDismiss} {...customizePart(slotProps?.dismiss, "cieo-reply-preview-dismiss", undefined)}>
             <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false">
               <path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
             </svg>
@@ -51,13 +56,13 @@ export function ReplyPreview({ author, excerpt, variant = 'quote', onDismiss, on
   }
   if (onJump) {
     return (
-      <button type="button" className="cieo cieo-reply-preview" data-variant="quote" data-interactive="" aria-label={replyJumpLabel(author)} onClick={onJump}>
+      <button type="button" className="cieo cieo-reply-preview" data-variant="quote" data-interactive="" aria-label={replyJumpLabel(author)} onClick={onJump} {...customizePart(slotProps?.root, "cieo cieo-reply-preview", undefined, className)}>
         {body}
       </button>
     );
   }
   return (
-    <div className="cieo cieo-reply-preview" data-variant="quote">
+    <div className="cieo cieo-reply-preview" data-variant="quote" {...customizePart(slotProps?.root, "cieo cieo-reply-preview", undefined, className)}>
       {body}
     </div>
   );

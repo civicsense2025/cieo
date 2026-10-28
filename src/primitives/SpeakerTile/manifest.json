@@ -92,7 +92,9 @@
       "nullable": false,
       "default": "md",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, face, ring, avatar, badge, name. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -130,7 +132,9 @@
         "muted",
         "role",
         "handRaised",
-        "size"
+        "size",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -156,5 +160,5 @@
     "path": "README.md",
     "purpose": "One person in a live audio room: avatar, name, a ring that swells with their voice, and muted and raised-hand badges."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","face","ring","avatar","badge","name"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

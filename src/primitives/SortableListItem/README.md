@@ -29,7 +29,7 @@ Space or Enter lifts; arrows move; Space or Enter drops; Escape cancels. The han
 
 ## Customization
 
-`handle` replaces the grip; `disabled` removes the item from reordering.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -42,3 +42,7 @@ SortableList (molecule).
 ## Evidence
 
 `test/primitives-sortable-list.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `handle`, `handleCell`, `body`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

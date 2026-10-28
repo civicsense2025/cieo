@@ -3,7 +3,8 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AuthOtpInput. Digit boxes acknowledge entry on snap; paste and keyboard behavior stay native and accessible. */
 import { useRef, useState } from 'react';
 import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
-export function AuthOtpInput({ id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }) {
+import { customizePart } from '../customization.js';
+export function AuthOtpInput({ className, slotProps, id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }) {
     const [digits, setDigits] = useState(() => Array.from({ length }, () => ''));
     if (digits.length !== length)
         setDigits(Array.from({ length }, (_, i) => digits[i] ?? ''));
@@ -27,7 +28,7 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
         commit(next);
         focusBox(start + clean.length);
     };
-    return (_jsxs("span", { className: "cieo cieo-auth-otp-input", "data-invalid": error ? 'true' : undefined, style: style, role: "group", "aria-labelledby": `${id}-label`, children: [_jsx("span", { className: "cieo-auth-label", id: `${id}-label`, children: label }), _jsx("span", { className: "cieo-auth-otp-boxes", children: digits.map((d, i) => (_jsx("input", { id: `${id}-${i}`, ref: el => { boxes.current[i] = el; }, className: "cieo-auth-otp-box", "data-filled": d ? 'true' : undefined, inputMode: "numeric", autoComplete: i === 0 ? 'one-time-code' : 'off', maxLength: 1, value: d, disabled: disabled, "aria-label": `Digit ${i + 1} of ${length}`, "aria-invalid": error ? 'true' : undefined, "aria-describedby": describedBy, onChange: e => {
+    return (_jsxs("span", { className: "cieo cieo-auth-otp-input", "data-invalid": error ? 'true' : undefined, style: style, role: "group", "aria-labelledby": `${id}-label`, ...customizePart(slotProps?.root, "cieo cieo-auth-otp-input", style, className), children: [_jsx("span", { className: "cieo-auth-label", id: `${id}-label`, ...customizePart(slotProps?.label, "cieo-auth-label", undefined), children: label }), _jsx("span", { className: "cieo-auth-otp-boxes", ...customizePart(slotProps?.boxes, "cieo-auth-otp-boxes", undefined), children: digits.map((d, i) => (_jsx("input", { id: `${id}-${i}`, ref: el => { boxes.current[i] = el; }, className: "cieo-auth-otp-box", "data-filled": d ? 'true' : undefined, inputMode: "numeric", autoComplete: i === 0 ? 'one-time-code' : 'off', maxLength: 1, value: d, disabled: disabled, "aria-label": `Digit ${i + 1} of ${length}`, "aria-invalid": error ? 'true' : undefined, "aria-describedby": describedBy, onChange: e => {
                         const raw = e.target.value.replace(/\D/g, '');
                         if (raw.length > 1) {
                             onPasteText(raw, i);
@@ -52,5 +53,5 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
                             e.preventDefault();
                             focusBox(i + 1);
                         }
-                    }, onPaste: e => { e.preventDefault(); onPasteText(e.clipboardData.getData('text'), i); } }, i))) }), _jsx(AuthMotionMessage, { id: `${id}-error`, className: "cieo-auth-error", role: "alert", value: error })] }));
+                    }, onPaste: e => { e.preventDefault(); onPasteText(e.clipboardData.getData('text'), i); }, ...customizePart(slotProps?.input, "cieo-auth-otp-box", undefined) }, i))) }), _jsx(AuthMotionMessage, { id: `${id}-error`, className: "cieo-auth-error", role: "alert", value: error })] }));
 }

@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type LinkPreviewVariant = 'large' | 'compact';
 /** Hostname without a leading www., or an empty string when the address does not parse as http(s). */
 export declare function displayDomain(url: string): string;
@@ -12,6 +13,20 @@ export interface LinkPreviewImage {
     height?: number;
 }
 export interface LinkPreviewProps {
+    className?: string;
+    slotProps?: {
+        titleText?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+        media?: PrimitivePartProps;
+        body?: PrimitivePartProps;
+        content?: PrimitivePartProps;
+        site?: PrimitivePartProps;
+        favicon?: PrimitivePartProps;
+        siteName?: PrimitivePartProps;
+        domain?: PrimitivePartProps;
+        title?: PrimitivePartProps;
+        description?: PrimitivePartProps;
+    };
     /** Address the card opens. Only credential-free absolute http(s) URLs render as links. */
     url: string;
     /** Page title, clamped to two lines. */
@@ -29,4 +44,4 @@ export interface LinkPreviewProps {
     /** True shows a skeleton with the same footprint, then cross-fades to the content when it turns false. */
     loading?: boolean;
 }
-export declare function LinkPreview({ url, title, siteName, description, image, favicon, variant, loading }: LinkPreviewProps): import("react/jsx-runtime").JSX.Element;
+export declare function LinkPreview({ className, slotProps, url, title, siteName, description, image, favicon, variant, loading }: LinkPreviewProps): import("react/jsx-runtime").JSX.Element;

@@ -1,8 +1,23 @@
+import type { PrimitivePartProps } from '../parts.js';
 import type { ReactNode } from 'react';
 export type ActivityTone = 'neutral' | 'accent' | 'danger' | 'success';
 /** Which element carries the row's main action: a link, a button, or nothing when the row is informational. */
 export declare function activityMainTag(href: string | undefined, onSelect: (() => void) | undefined): 'a' | 'button' | 'div';
 export interface ActivityItemProps {
+    className?: string;
+    slotProps?: {
+        line?: PrimitivePartProps;
+        actor?: PrimitivePartProps;
+        what?: PrimitivePartProps;
+        preview?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+        lead?: PrimitivePartProps;
+        avatar?: PrimitivePartProps;
+        badge?: PrimitivePartProps;
+        main?: PrimitivePartProps;
+        dot?: PrimitivePartProps;
+        actions?: PrimitivePartProps;
+    };
     /** Who did it: name in bold plus an avatar node (e.g. an Avatar). */
     actor: {
         name: string;
@@ -29,4 +44,4 @@ export interface ActivityItemProps {
     /** Controls such as Follow back. They stay separately focusable above the stretched row action. */
     actions?: ReactNode;
 }
-export declare function ActivityItem({ actor, icon, tone, children, preview, time, dateTime, unread, href, onSelect, actions }: ActivityItemProps): import("react/jsx-runtime").JSX.Element;
+export declare function ActivityItem({ className, slotProps, actor, icon, tone, children, preview, time, dateTime, unread, href, onSelect, actions }: ActivityItemProps): import("react/jsx-runtime").JSX.Element;

@@ -4,6 +4,8 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { useReducedMotion, useSpring } from '../../react/index.js';
 import { CompactCount, formatExactCount } from '../CompactCount/CompactCount.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export type CountButtonTone = 'neutral' | 'accent' | 'danger' | 'success';
 
@@ -17,6 +19,9 @@ export function countButtonLabel(label: string, count?: number, unit?: string): 
 export const COUNT_BUTTON_DIP = 0.8;
 
 export interface CountButtonProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; icon?: PrimitivePartProps; glyph?: PrimitivePartProps; count?: PrimitivePartProps };
+
   /** Icon shown when the action is off (or always, for plain actions). Decorative; the label names the button. */
   icon: ReactNode;
   /** Icon that fades in over `icon` while pressed (e.g. a filled heart). Optional. */
@@ -39,7 +44,7 @@ export interface CountButtonProps {
   disabled?: boolean;
 }
 
-export function CountButton({ icon, activeIcon, label, count, countUnit, pressed, onPress, tone = 'neutral', size = 'md', disabled }: CountButtonProps) {
+export function CountButton({ className, slotProps, icon, activeIcon, label, count, countUnit, pressed, onPress, tone = 'neutral', size = 'md', disabled }: CountButtonProps) {
   const reduced = useReducedMotion();
   const iconRef = useRef<HTMLSpanElement>(null);
   const [dip, setDip] = useState(false);
@@ -62,14 +67,14 @@ export function CountButton({ icon, activeIcon, label, count, countUnit, pressed
       onClick={() => {
         if (!reduced) setDip(true);
         onPress?.();
-      }}
+      }} {...customizePart(slotProps?.root, "cieo cieo-count-button", undefined, className)}
     >
-      <span className="cieo-count-button-icon" ref={iconRef} aria-hidden="true">
-        <span className="cieo-count-button-glyph" data-glyph="base">{icon}</span>
-        {activeIcon !== undefined ? <span className="cieo-count-button-glyph" data-glyph="active">{activeIcon}</span> : null}
+      <span className="cieo-count-button-icon" ref={iconRef} aria-hidden="true" {...customizePart(slotProps?.icon, "cieo-count-button-icon", undefined)}>
+        <span className="cieo-count-button-glyph" data-glyph="base" {...customizePart(slotProps?.glyph, "cieo-count-button-glyph", undefined)}>{icon}</span>
+        {activeIcon !== undefined ? <span className="cieo-count-button-glyph" data-glyph="active" {...customizePart(slotProps?.glyph, "cieo-count-button-glyph", undefined)}>{activeIcon}</span> : null}
       </span>
       {count !== undefined ? (
-        <span className="cieo-count-button-count" aria-hidden="true">
+        <span className="cieo-count-button-count" aria-hidden="true" {...customizePart(slotProps?.count, "cieo-count-button-count", undefined)}>
           <CompactCount value={count ?? 0} unit={countUnit} />
         </span>
       ) : null}

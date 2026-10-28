@@ -108,7 +108,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is () => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: line, actor, what, preview, root, lead, avatar, badge, main, dot, actions."}
   ],
   "slots": [
     {
@@ -165,7 +167,9 @@
         "dateTime",
         "unread",
         "href",
-        "onSelect"
+        "onSelect",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -191,5 +195,5 @@
     "path": "README.md",
     "purpose": "One notification or activity row: who did what, a quoted snippet and when, with an unread dot and optional actions."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["line","actor","what","preview","root","lead","avatar","badge","main","dot","actions"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -5,6 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useRef, useState } from 'react';
 import { SwapText } from '../../react/index.js';
 import { safeHref } from '../Mention/Mention.js';
+import { customizePart } from '../customization.js';
 /** How a link can be shared here: the native sheet first, then the clipboard, otherwise not at all. */
 export function shareMethod(nav) {
     if (nav && typeof nav.share === 'function')
@@ -46,7 +47,7 @@ export async function runShare(nav, data) {
 }
 /** How long "Link copied" stays before the label returns, in milliseconds. */
 export const SHARE_COPIED_MS = 2000;
-export function ShareButton({ url, title, text, label = 'Share', onShared }) {
+export function ShareButton({ className, slotProps, url, title, text, label = 'Share', onShared }) {
     const [available, setAvailable] = useState(true);
     const [copied, setCopied] = useState(false);
     const [message, setMessage] = useState('');
@@ -72,5 +73,5 @@ export function ShareButton({ url, title, text, label = 'Share', onShared }) {
         else if (outcome === 'failed' || outcome === 'unavailable')
             setMessage('Could not share the link');
     }
-    return (_jsxs("span", { className: "cieo cieo-share-button-wrap", children: [_jsxs("button", { type: "button", className: "cieo cieo-share-button", "data-copied": copied ? '' : undefined, disabled: !valid || !available, onClick: press, children: [_jsx("svg", { className: "cieo-share-button-icon", "aria-hidden": "true", viewBox: "0 0 24 24", width: "1.25em", height: "1.25em", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", children: _jsx("path", { d: "M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" }) }), _jsx(SwapText, { value: copied ? 'Link copied' : label })] }), _jsx("span", { className: "cieo-sr-only", role: "status", "aria-live": "polite", children: message })] }));
+    return (_jsxs("span", { className: "cieo cieo-share-button-wrap", ...customizePart(slotProps?.root, "cieo cieo-share-button-wrap", undefined, className), children: [_jsxs("button", { type: "button", className: "cieo cieo-share-button", "data-copied": copied ? '' : undefined, disabled: !valid || !available, onClick: press, ...customizePart(slotProps?.button, "cieo cieo-share-button", undefined), children: [_jsx("svg", { className: "cieo-share-button-icon", "aria-hidden": "true", viewBox: "0 0 24 24", width: "1.25em", height: "1.25em", fill: "none", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", ...customizePart(slotProps?.icon, "cieo-share-button-icon", undefined), children: _jsx("path", { d: "M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" }) }), _jsx(SwapText, { value: copied ? 'Link copied' : label })] }), _jsx("span", { className: "cieo-sr-only", role: "status", "aria-live": "polite", children: message })] }));
 }

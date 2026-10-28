@@ -1,5 +1,7 @@
 // src/primitives/AudioPlayButton/AudioPlayButton.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AudioPlayButton. Round play/pause toggle whose icon morphs between the two shapes. The host owns the playing state; this owns the name, the busy ring and the morph. */
 
 /** Accessible name for the button: "Play Voice note" or "Pause Voice note". Hosts in other languages
@@ -13,6 +15,9 @@ export function audioPlayButtonName(
 }
 
 export interface AudioPlayButtonProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; icon?: PrimitivePartProps; pauseHalf?: PrimitivePartProps; ring?: PrimitivePartProps };
+
   /** True while the clip plays; the button then offers Pause. */
   playing: boolean;
   /** True while the clip is loading; shows a ring and sets aria-busy. */
@@ -29,14 +34,14 @@ export interface AudioPlayButtonProps {
   pauseLabel?: string;
 }
 
-export function AudioPlayButton({ playing, loading = false, label, onToggle, size = 'md', playLabel, pauseLabel }: AudioPlayButtonProps) {
+export function AudioPlayButton({ className, slotProps, playing, loading = false, label, onToggle, size = 'md', playLabel, pauseLabel }: AudioPlayButtonProps) {
   return (
-    <button type="button" className="cieo cieo-audio-play-button" aria-label={audioPlayButtonName(playing, label, { play: playLabel, pause: pauseLabel })} aria-busy={loading || undefined} data-playing={playing ? '' : undefined} data-loading={loading ? '' : undefined} data-size={size} onClick={onToggle}>
-      <span className="cieo-audio-play-button-icon" aria-hidden="true">
-        <span className="cieo-audio-play-button-half" data-half="left" />
-        <span className="cieo-audio-play-button-half" data-half="right" />
+    <button type="button" className="cieo cieo-audio-play-button" aria-label={audioPlayButtonName(playing, label, { play: playLabel, pause: pauseLabel })} aria-busy={loading || undefined} data-playing={playing ? '' : undefined} data-loading={loading ? '' : undefined} data-size={size} onClick={onToggle} {...customizePart(slotProps?.root, "cieo cieo-audio-play-button", undefined, className)}>
+      <span className="cieo-audio-play-button-icon" aria-hidden="true" {...customizePart(slotProps?.icon, "cieo-audio-play-button-icon", undefined)}>
+        <span className="cieo-audio-play-button-half" data-half="left" {...customizePart(slotProps?.pauseHalf, "cieo-audio-play-button-half", undefined)} />
+        <span className="cieo-audio-play-button-half" data-half="right" {...customizePart(slotProps?.pauseHalf, "cieo-audio-play-button-half", undefined)} />
       </span>
-      <span className="cieo-audio-play-button-ring" aria-hidden="true" />
+      <span className="cieo-audio-play-button-ring" aria-hidden="true" {...customizePart(slotProps?.ring, "cieo-audio-play-button-ring", undefined)} />
     </button>
   );
 }

@@ -36,7 +36,9 @@ for (const entry of LANE) {
     assert.equal(m.id, entry.id);
     assert.equal(m.packId, 'core');
     assert.equal(m.status, 'experimental');
-    assert.equal(m.properties.length, entry.props);
+    const customization = m.properties.filter((p) => ['className', 'slotProps', 'slots'].includes(p.id));
+    assert.equal(m.properties.length - customization.length, entry.props);
+    for (const property of customization) assert.equal(property.type.kind, property.id === 'className' ? 'string' : 'record');
   });
 
   test(`${entry.name} doc page exists with h1 and prop rows`, () => {

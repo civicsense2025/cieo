@@ -14,7 +14,9 @@
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "selectedCount", "type": { "kind": "integer" }, "required": true, "nullable": false, "constraints": { "min": 0 } }
+    { "id": "selectedCount", "type": { "kind": "integer" }, "required": true, "nullable": false, "constraints": { "min": 0 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
   "state": [],
@@ -23,9 +25,9 @@
   "variants": [],
   "styleParts": [{ "id": "bar", "overrides": ["border"], "tokenRoles": ["border-subtle"] }],
   "constraints": { "layout": ["above-or-below-table"], "content": ["count-matches-selection"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["selectedCount"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["selectedCount", "className", "slotProps"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Selected-count bar with bulk table actions." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

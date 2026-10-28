@@ -1,10 +1,11 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';
 import { AuthMotionMessage } from './AuthMotion.js';
-export function AuthCardShell({ id, title, status, style, children, footer }) {
-    return (_jsxs("section", { className: "cieo cieo-auth-card", "aria-labelledby": `${id}-title`, style: style, children: [_jsx("h2", { className: "cieo-auth-card-title", id: `${id}-title`, children: title }), children, _jsx(AuthMotionMessage, { className: "cieo-auth-status", role: "status", value: status }), footer ? _jsx("p", { className: "cieo-auth-routes", children: footer }) : null] }));
+export function AuthCardShell({ id, title, status, style, children, footer, className, slotProps, slots }) {
+    return (_jsxs("section", { className: "cieo cieo-auth-card", "aria-labelledby": `${id}-title`, style: style, ...customizePart(slotProps?.root, 'cieo cieo-auth-card', style, className), children: [_jsx("h2", { className: "cieo-auth-card-title", id: `${id}-title`, ...customizePart(slotProps?.title, 'cieo-auth-card-title'), children: title }), slots?.beforeForm, children, slots?.afterForm, _jsx(AuthMotionMessage, { className: "cieo-auth-status", role: "status", value: status }), slots?.footer !== undefined ? (slots.footer === null ? null : _jsx("div", { className: "cieo-auth-routes", ...customizePart(slotProps?.footer, 'cieo-auth-routes'), children: slots.footer })) : (footer ? _jsx("p", { className: "cieo-auth-routes", ...customizePart(slotProps?.footer, 'cieo-auth-routes'), children: footer }) : null)] }));
 }
-export function AuthSignInCard({ id, title = 'Sign in', pending, error, status, magicLinkHref, resetHref, signupHref, style, onSubmit }) {
-    return (_jsx(AuthCardShell, { id: id, title: title, status: status, style: style, footer: _jsxs(_Fragment, { children: [magicLinkHref ? _jsx("a", { href: magicLinkHref, children: "Email me a link instead" }) : null, resetHref ? _jsx("a", { href: resetHref, children: "Forgot password?" }) : null, signupHref ? _jsx("a", { href: signupHref, children: "Create an account" }) : null] }), children: _jsx(AuthCredentialForm, { id: `${id}-form`, mode: "signin", pending: pending, error: error, onSubmit: onSubmit }) }));
+export function AuthSignInCard({ id, title = 'Sign in', pending, error, status, magicLinkHref, resetHref, signupHref, style, onSubmit, className, slotProps, slots }) {
+    return (_jsx(AuthCardShell, { className: className, slotProps: slotProps, slots: slots, id: id, title: title, status: status, style: style, footer: _jsxs(_Fragment, { children: [magicLinkHref ? _jsx("a", { href: magicLinkHref, children: "Email me a link instead" }) : null, resetHref ? _jsx("a", { href: resetHref, children: "Forgot password?" }) : null, signupHref ? _jsx("a", { href: signupHref, children: "Create an account" }) : null] }), children: _jsx(AuthCredentialForm, { id: `${id}-form`, mode: "signin", pending: pending, error: error, onSubmit: onSubmit }) }));
 }

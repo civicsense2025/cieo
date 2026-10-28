@@ -17,7 +17,9 @@
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
     { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} },
     { "id": "entering", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "fade", "constraints": {} },
-    { "id": "exiting", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "fade", "constraints": {} }
+    { "id": "exiting", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "fade", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, dropdownMenuSubmenuTrigger, dropdownMenuSubmenuPanel."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
   "state": [],
@@ -26,9 +28,9 @@
   "variants": [],
   "styleParts": [{ "id": "panel", "overrides": ["background"], "tokenRoles": ["surface-elevated"] }],
   "constraints": { "layout": ["flyout-panel"], "content": ["submenu-has-label"], "motion": ["opacity-only", "reduced-motion-guard", "fade-on-snap", "honor-render-policy"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "motion", "entering", "exiting"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "motion", "entering", "exiting", "className", "slotProps"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Nested flyout menu revealed on hover or focus." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","dropdownMenuSubmenuTrigger","dropdownMenuSubmenuPanel"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

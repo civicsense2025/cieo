@@ -32,7 +32,7 @@ No motion. Plain text; never focusable, never submitted, never announced as a se
 
 ## Customization
 
-None per instance. Addon face and joined borders come from Cieo tokens in the shared input-group stylesheet.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ InputGroup (molecule), Field (molecule), FieldStatus (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

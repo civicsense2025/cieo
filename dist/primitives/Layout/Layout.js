@@ -1,6 +1,7 @@
 // src/primitives/Layout/Layout.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Layout({ children }) {
-    return (_jsx("div", { className: "cieo cieo-layout", children: children }));
+import { customizePart } from '../customization.js';
+export function Layout({ className, slotProps, children }) {
+    return (_jsx("div", { className: "cieo cieo-layout", ...customizePart(slotProps?.root, "cieo cieo-layout", undefined, className), children: children }));
 }

@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* TypingIndicator. Three waving dots plus a spoken sentence about who is typing. The host owns the names; this owns the wording, the wave and the enter/leave. */
 import { useState } from 'react';
 import { usePresence } from '../../react/index.js';
+import { customizePart } from '../customization.js';
 /** Sentence for who is typing: "" for nobody, "Ava is typing", "Ava and Ben are typing", "Ava, Ben and Cy are typing", "Ava and 3 others are typing". Blank names are ignored. */
 export function typingLabel(names) {
     const list = names.map((n) => n.trim()).filter(Boolean);
@@ -21,7 +22,7 @@ export function typingLabel(names) {
 export function typingSetKey(names) {
     return [...new Set(names.map((n) => n.trim()).filter(Boolean))].sort().join('\u0000');
 }
-export function TypingIndicator({ names, variant = 'bubble' }) {
+export function TypingIndicator({ className, slotProps, names, variant = 'bubble' }) {
     const open = typingSetKey(names) !== '';
     const key = typingSetKey(names);
     /* The held names keep the sentence stable while the indicator leaves, and keep it from changing when only the order changes. */
@@ -30,5 +31,5 @@ export function TypingIndicator({ names, variant = 'bubble' }) {
         setHeld({ key, names });
     const { mounted, ref } = usePresence(open);
     const label = typingLabel(held.names);
-    return (_jsx("span", { role: "status", "data-variant": variant, "data-empty": mounted ? undefined : '', className: "cieo cieo-typing-indicator", children: mounted ? (_jsxs("span", { ref: ref, className: "cieo-typing-indicator-body", children: [_jsxs("span", { "aria-hidden": "true", className: "cieo-typing-indicator-dots", children: [_jsx("span", { className: "cieo-typing-indicator-dot" }), _jsx("span", { className: "cieo-typing-indicator-dot" }), _jsx("span", { className: "cieo-typing-indicator-dot" })] }), _jsx("span", { className: variant === 'inline' ? 'cieo-typing-indicator-text' : 'cieo-sr-only', children: label })] })) : null }));
+    return (_jsx("span", { role: "status", "data-variant": variant, "data-empty": mounted ? undefined : '', className: "cieo cieo-typing-indicator", ...customizePart(slotProps?.root, "cieo cieo-typing-indicator", undefined, className), children: mounted ? (_jsxs("span", { ref: ref, className: "cieo-typing-indicator-body", ...customizePart(slotProps?.body, "cieo-typing-indicator-body", undefined), children: [_jsxs("span", { "aria-hidden": "true", className: "cieo-typing-indicator-dots", ...customizePart(slotProps?.dots, "cieo-typing-indicator-dots", undefined), children: [_jsx("span", { className: "cieo-typing-indicator-dot", ...customizePart(slotProps?.dot, "cieo-typing-indicator-dot", undefined) }), _jsx("span", { className: "cieo-typing-indicator-dot", ...customizePart(slotProps?.dot, "cieo-typing-indicator-dot", undefined) }), _jsx("span", { className: "cieo-typing-indicator-dot", ...customizePart(slotProps?.dot, "cieo-typing-indicator-dot", undefined) })] }), _jsx("span", { className: variant === 'inline' ? 'cieo-typing-indicator-text' : 'cieo-sr-only', ...customizePart(slotProps?.text, variant === 'inline' ? 'cieo-typing-indicator-text' : 'cieo-sr-only', undefined), children: label })] })) : null }));
 }

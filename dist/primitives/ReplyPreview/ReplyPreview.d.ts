@@ -1,4 +1,14 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface ReplyPreviewProps {
+    className?: string;
+    slotProps?: {
+        bar?: PrimitivePartProps;
+        text?: PrimitivePartProps;
+        author?: PrimitivePartProps;
+        excerpt?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+        dismiss?: PrimitivePartProps;
+    };
     /** Name of the person being replied to. Required. */
     author: string;
     /** Short excerpt of the original text. Clamped to two lines (one in the composer). Required. */
@@ -14,4 +24,4 @@ export interface ReplyPreviewProps {
 export declare function replyDismissLabel(author: string): string;
 /** Accessible name of the quote jump button. */
 export declare function replyJumpLabel(author: string): string;
-export declare function ReplyPreview({ author, excerpt, variant, onDismiss, onJump }: ReplyPreviewProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReplyPreview({ className, slotProps, author, excerpt, variant, onDismiss, onJump }: ReplyPreviewProps): import("react/jsx-runtime").JSX.Element;

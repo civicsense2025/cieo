@@ -60,7 +60,9 @@
       "nullable": false,
       "default": "md",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, icon, bell, badge. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -104,7 +106,9 @@
         "on",
         "onToggle",
         "label",
-        "size"
+        "size",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -130,5 +134,5 @@
     "path": "README.md",
     "purpose": "A bell toggle for new-reply notifications that rings once and pops a check when turned on."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","icon","bell","badge"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

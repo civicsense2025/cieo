@@ -1,5 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Overlay({ onPress } = {}) {
-    return (_jsx("div", { "aria-hidden": "true", onClick: onPress, className: "cieo cieo-p-overlay" }));
+import { customizePart } from '../customization.js';
+export function Overlay({ className, slotProps, onPress } = {}) {
+    return (_jsx("div", { "aria-hidden": "true", onClick: onPress, className: "cieo cieo-p-overlay", ...customizePart(slotProps?.root, "cieo cieo-p-overlay", undefined, className) }));
 }

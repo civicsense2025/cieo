@@ -2,6 +2,7 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { StatusDot } from '../StatusDot/StatusDot.js';
+import { customizePart } from '../customization.js';
 /** Dot tone for each reported status. Settled failures read as danger; a plain stop is neutral. */
 export const AGENT_STATUS_TONES = {
     starting: 'info',
@@ -24,7 +25,7 @@ export const AGENT_STATUS_WORDS = {
     interrupted: 'Interrupted',
     disconnected: 'Disconnected',
 };
-export function AgentStatus({ status, label, name }) {
+export function AgentStatus({ className, slotProps, status, label, name }) {
     const tone = AGENT_STATUS_TONES[status] ?? 'default';
-    return (_jsxs("span", { className: "cieo cieo-p-agent-status", "data-status": status, "data-tone": tone, children: [_jsx(StatusDot, { status: tone }), name ? _jsx("span", { "data-name": true, children: name }) : null, _jsx("span", { "data-label": true, children: label || AGENT_STATUS_WORDS[status] || status })] }));
+    return (_jsxs("span", { className: "cieo cieo-p-agent-status", "data-status": status, "data-tone": tone, ...customizePart(slotProps?.root, "cieo cieo-p-agent-status", undefined, className), children: [_jsx(StatusDot, { status: tone }), name ? _jsx("span", { "data-name": true, children: name }) : null, _jsx("span", { "data-label": true, children: label || AGENT_STATUS_WORDS[status] || status })] }));
 }

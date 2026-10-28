@@ -14,7 +14,9 @@
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Messages", "constraints": { "minLength": 1, "maxLength": 256 } }
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Messages", "constraints": { "minLength": 1, "maxLength": 256 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 0, "max": 256, "order": "document" }],
   "state": [],
@@ -23,9 +25,9 @@
   "variants": [],
   "styleParts": [{ "id": "transcript", "overrides": ["surface"], "tokenRoles": ["surface"] }],
   "constraints": { "layout": ["scroll-container"], "content": ["list-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label"], "states": [], "events": [], "parts": ["transcript"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "className", "slotProps"], "states": [], "events": [], "parts": ["transcript"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Scrollable transcript region that announces new messages politely." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root"],"semanticOverrides":false}}
 }

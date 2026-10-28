@@ -1,5 +1,7 @@
 // src/primitives/VoiceRecorder/VoiceRecorder.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* VoiceRecorder. Records a voice clip from the microphone and hands it to the host as a blob with its length and waveform peaks. The host owns upload and storage. */
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type RefObject } from 'react';
 import { usePresence } from '../../react/index.js';
@@ -195,6 +197,9 @@ export interface VoiceClip {
 }
 
 export interface VoiceRecorderProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; mic?: PrimitivePartProps; live?: PrimitivePartProps; hint?: PrimitivePartProps; time?: PrimitivePartProps; waveform?: PrimitivePartProps; actions?: PrimitivePartProps; error?: PrimitivePartProps; retry?: PrimitivePartProps };
+
   /** Called once with the finished clip when the person stops, or the time limit is reached. Never called after a cancel. */
   onRecorded: (clip: VoiceClip) => void;
   /** Called when the person cancels an active take (button, Escape, or sliding away in hold mode). */
@@ -292,7 +297,7 @@ const PAUSE = 'M8 5v14M16 5v14';
 const RESUME = 'M7 4l13 8-13 8z';
 const STOP = 'M5 12l5 5L20 7';
 
-export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoStart = false, label = 'Record a voice reply', mode = 'tap' }: VoiceRecorderProps) {
+export function VoiceRecorder({ className, slotProps, onRecorded, onCancel, maxDuration = 120, autoStart = false, label = 'Record a voice reply', mode = 'tap' }: VoiceRecorderProps) {
   const limit = Number.isFinite(maxDuration) ? Math.max(1, maxDuration) : 120;
   const [state, setState] = useState<RecorderState>(recorderIdle);
   const [message, setMessage] = useState('');
@@ -697,7 +702,7 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
   const errorText = state.reason ? recorderAnnouncement(state.reason) : '';
 
   return (
-    <div ref={root} role="group" aria-label={label} className="cieo cieo-voice-recorder" data-phase={phase} data-mode={mode} data-warning={near && phase !== 'paused' ? '' : undefined} data-hold={holding ? hold : undefined}>
+    <div ref={root} role="group" aria-label={label} className="cieo cieo-voice-recorder" data-phase={phase} data-mode={mode} data-warning={near && phase !== 'paused' ? '' : undefined} data-hold={holding ? hold : undefined} {...customizePart(slotProps?.root, "cieo cieo-voice-recorder", undefined, className)}>
       {showMic ? (
         <button
           ref={micButton}
@@ -709,22 +714,22 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
           onPointerDown={onHoldDown}
           onPointerMove={onHoldMove}
           onPointerUp={onHoldUp}
-          onPointerCancel={() => cancel()}
+          onPointerCancel={() => cancel()} {...customizePart(slotProps?.mic, "cieo-voice-recorder-mic")}
         >
           <Glyph d={MIC} />
         </button>
       ) : null}
       {livePresence.mounted ? (
-        <div ref={livePresence.ref} className="cieo-voice-recorder-live" data-presence={active ? 'present' : 'exit'} aria-hidden={!active ? true : undefined} inert={!active || undefined}>
+        <div ref={livePresence.ref} className="cieo-voice-recorder-live" data-presence={active ? 'present' : 'exit'} aria-hidden={!active ? true : undefined} inert={!active || undefined} {...customizePart(slotProps?.live, "cieo-voice-recorder-live")}>
           <span className="cieo-voice-recorder-dot" aria-hidden="true" data-paused={shownPhase === 'paused' ? '' : undefined} />
           {shownPhase === 'requesting' ? (
-            <span className="cieo-voice-recorder-hint">Waiting for the microphone</span>
+            <span className="cieo-voice-recorder-hint" {...customizePart(slotProps?.hint, "cieo-voice-recorder-hint")}>Waiting for the microphone</span>
           ) : (
             <>
-              <span className="cieo-voice-recorder-time" data-warning={shownNear ? '' : undefined}>
+              <span className="cieo-voice-recorder-time" data-warning={shownNear ? '' : undefined} {...customizePart(slotProps?.time, "cieo-voice-recorder-time")}>
                 {shownNear ? <AudioTime current={shownLive.elapsed} duration={limit} mode="remaining" /> : <AudioTime current={shownLive.elapsed} />}
               </span>
-              <span ref={liveWaveform} role="img" aria-label="Microphone level" className="cieo-voice-recorder-waveform" data-paused={shownPhase === 'paused' ? '' : undefined}>
+              <span ref={liveWaveform} role="img" aria-label="Microphone level" className="cieo-voice-recorder-waveform" data-paused={shownPhase === 'paused' ? '' : undefined} {...customizePart(slotProps?.waveform, "cieo-voice-recorder-waveform")}>
                 {Array.from({ length: RECORDER_LIVE_BAR_COUNT }, (_, i) => {
                   const presentation = recorderLiveBarPresentation(liveHistory.current[i] ?? 0);
                   return <span key={i} aria-hidden="true" className="cieo-voice-recorder-waveform-bar" style={{ '--cieo-recorder-bar-index': i, transform: `scaleY(${presentation.scale.toFixed(3)})`, opacity: presentation.opacity.toFixed(3) } as CSSProperties} />;
@@ -733,11 +738,11 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
             </>
           )}
           {shownHolding ? (
-            <span className="cieo-voice-recorder-hint" aria-hidden="true">
+            <span className="cieo-voice-recorder-hint" aria-hidden="true" {...customizePart(slotProps?.hint, "cieo-voice-recorder-hint")}>
               {shownLive.hold === 'cancel' ? 'Release to cancel' : 'Slide left to cancel'}
             </span>
           ) : null}
-          <span className="cieo-voice-recorder-actions">
+          <span className="cieo-voice-recorder-actions" {...customizePart(slotProps?.actions, "cieo-voice-recorder-actions")}>
             <IconButton label="Cancel recording" size="sm" onClick={() => cancel({ restoreFocus: true })}>
               <Glyph d={TRASH} />
             </IconButton>
@@ -755,10 +760,10 @@ export function VoiceRecorder({ onRecorded, onCancel, maxDuration = 120, autoSta
         </div>
       ) : null}
       {phase === 'error' ? (
-        <span className="cieo-voice-recorder-error">
+        <span className="cieo-voice-recorder-error" {...customizePart(slotProps?.error, "cieo-voice-recorder-error")}>
           <span>{errorText}</span>
           {state.reason !== 'unsupported' ? (
-            <button type="button" className="cieo-voice-recorder-retry" onClick={() => begin()}>
+            <button type="button" className="cieo-voice-recorder-retry" onClick={() => begin()} {...customizePart(slotProps?.retry, "cieo-voice-recorder-retry")}>
               Try again
             </button>
           ) : null}

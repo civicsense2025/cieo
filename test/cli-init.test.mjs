@@ -148,7 +148,7 @@ test('init --yes --skip-install --with dialog sets up a working vite project', (
     assert.ok(main.includes(MARKER_BLOCK), 'the whole marker block must be wired');
     assert.match(main, /^import \{ createRoot \} from 'react-dom\/client';$/m);
 
-    for (const rel of ['Dialog/Dialog.tsx', 'Overlay/Overlay.tsx', 'motion.ts']) {
+    for (const rel of ['Dialog/Dialog.tsx', 'Overlay/Overlay.tsx', 'customization.ts', 'parts.ts', 'motion.ts']) {
       const file = join(dir, 'components', 'cieo', rel);
       assert.ok(existsSync(file), `${rel} must be copied`);
       const copied = readFileSync(file, 'utf8');

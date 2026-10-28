@@ -3,8 +3,13 @@
 /* ByLine. One-line author header: name, badge, context crumb and relative time. The host owns the text; this owns truncation order and safe links. */
 import type { ReactNode } from 'react';
 import { safeHref } from '../Mention/Mention.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface ByLineProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; badge?: PrimitivePartProps; handle?: PrimitivePartProps; separator?: PrimitivePartProps; time?: PrimitivePartProps };
+
   /** Display name of the author. Truncates before the time does. Required. */
   author: string;
   /** Profile link. Only http(s) and relative links become anchors; anything else renders as plain text. */
@@ -36,18 +41,18 @@ function Linked({ href, className, children }: { href?: string; className: strin
   );
 }
 
-export function ByLine({ author, href, badge, context, contextHref, time, dateTime, handle, id }: ByLineProps) {
+export function ByLine({ className, slotProps, author, href, badge, context, contextHref, time, dateTime, handle, id }: ByLineProps) {
   const hasContext = context !== undefined && context !== null && context !== false;
   return (
-    <span id={id} className="cieo cieo-by-line">
+    <span id={id} className="cieo cieo-by-line" {...customizePart(slotProps?.root, "cieo cieo-by-line", undefined, className)}>
       <Linked href={href} className="cieo-by-line-author">
         {author}
       </Linked>
-      {badge ? <span className="cieo-by-line-badge">{badge}</span> : null}
-      {handle ? <span className="cieo-by-line-handle">@{handle}</span> : null}
+      {badge ? <span className="cieo-by-line-badge" {...customizePart(slotProps?.badge, "cieo-by-line-badge", undefined)}>{badge}</span> : null}
+      {handle ? <span className="cieo-by-line-handle" {...customizePart(slotProps?.handle, "cieo-by-line-handle", undefined)}>@{handle}</span> : null}
       {hasContext ? (
         <>
-          <span className="cieo-by-line-sep" aria-hidden="true">
+          <span className="cieo-by-line-sep" aria-hidden="true" {...customizePart(slotProps?.separator, "cieo-by-line-sep", undefined)}>
             ›
           </span>
           <Linked href={contextHref} className="cieo-by-line-context">
@@ -57,10 +62,10 @@ export function ByLine({ author, href, badge, context, contextHref, time, dateTi
       ) : null}
       {time ? (
         <>
-          <span className="cieo-by-line-sep" aria-hidden="true">
+          <span className="cieo-by-line-sep" aria-hidden="true" {...customizePart(slotProps?.separator, "cieo-by-line-sep", undefined)}>
             ·
           </span>
-          <time className="cieo-by-line-time" dateTime={dateTime}>
+          <time className="cieo-by-line-time" dateTime={dateTime} {...customizePart(slotProps?.time, "cieo-by-line-time", undefined)}>
             {time}
           </time>
         </>

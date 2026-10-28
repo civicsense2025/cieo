@@ -16,7 +16,9 @@
   "properties": [
     { "id": "title", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
     { "id": "onClose", "type": { "kind": "function" }, "required": false, "nullable": false, "constraints": {} },
-    { "id": "closeLabel", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Close", "constraints": { "minLength": 1, "maxLength": 64 } }
+    { "id": "closeLabel", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Close", "constraints": { "minLength": 1, "maxLength": 64 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [],
   "state": [],
@@ -25,9 +27,9 @@
   "variants": [],
   "styleParts": [{ "id": "header", "overrides": ["surface"], "tokenRoles": ["text"] }],
   "constraints": { "layout": ["title-row"], "content": ["header-has-title"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "onClose", "closeLabel"], "states": [], "events": [], "parts": ["header"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "onClose", "closeLabel", "className", "slotProps"], "states": [], "events": [], "parts": ["header"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Title row for a dialog with an optional close button." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

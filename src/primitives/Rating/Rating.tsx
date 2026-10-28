@@ -3,6 +3,8 @@
 /* Rating. Star rating: a radio group the viewer can set, or a read-only summary. The host owns the value. */
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../../react/index.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 const MAX_RATING = 10;
 
@@ -45,6 +47,9 @@ export function ratingPopDelays(from: number, to: number, window = 150): number[
 }
 
 export interface RatingProps {
+  className?: string;
+  slotProps?: { star?: PrimitivePartProps; root?: PrimitivePartProps; radio?: PrimitivePartProps };
+
   /** Current rating, 0 for none. Fractions only display in read-only mode. */
   value: number;
   /** Called with the new rating when the viewer picks a star or uses the keyboard. */
@@ -61,7 +66,7 @@ export interface RatingProps {
 
 const STAR = 'M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8Z';
 
-export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' }: RatingProps) {
+export function Rating({ className, slotProps, value, onChange, max = 5, label, readOnly, size = 'md' }: RatingProps) {
   const top = ratingMax(max);
   const safe = Number.isFinite(value) ? Math.min(top, Math.max(0, value)) : 0;
   const rounded = Math.round(safe);
@@ -87,13 +92,13 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
   const stars = Array.from({ length: top }, (_, i) => {
     const filled = shown >= i + 1 - 0.0001;
     return (
-      <svg key={i} viewBox="0 0 24 24" aria-hidden="true" data-star="" data-filled={filled ? '' : undefined} className="cieo-rating-star" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"><path d={STAR} /></svg>
+      <svg key={i} viewBox="0 0 24 24" aria-hidden="true" data-star="" data-filled={filled ? '' : undefined} className="cieo-rating-star" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" {...customizePart(slotProps?.star, "cieo-rating-star", undefined)}><path d={STAR} /></svg>
     );
   });
 
   if (readOnly) {
     return (
-      <span ref={group} role="img" aria-label={ratingLabel(safe, top)} {...({ 'aria-description': label } as object)} data-size={size} data-readonly="" className="cieo cieo-rating">
+      <span ref={group} role="img" aria-label={ratingLabel(safe, top)} {...({ 'aria-description': label } as object)} data-size={size} data-readonly="" className="cieo cieo-rating" {...customizePart(slotProps?.root, "cieo cieo-rating", undefined, className)}>
         {stars}
       </span>
     );
@@ -123,7 +128,7 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
         e.preventDefault();
         onChange?.(next);
         focusStar(next);
-      }}
+      }} {...customizePart(slotProps?.root, "cieo cieo-rating", undefined, className)}
     >
       {Array.from({ length: top }, (_, i) => {
         const n = i + 1;
@@ -137,7 +142,7 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
             tabIndex={rounded === n || (rounded === 0 && n === 1) ? 0 : -1}
             className="cieo-rating-radio"
             onClick={() => onChange?.(n)}
-            onMouseEnter={() => setHover(n)}
+            onMouseEnter={() => setHover(n)} {...customizePart(slotProps?.radio, "cieo-rating-radio", undefined)}
           >
             {stars[i]}
           </span>

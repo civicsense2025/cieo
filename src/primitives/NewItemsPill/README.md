@@ -32,7 +32,7 @@ A real button with an `aria-label` of the full label. A polite live region annou
 
 ## Customization
 
-Colors from the accent tokens; offset from the edge is `--cieo-space-3`.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -45,3 +45,7 @@ Colors from the accent tokens; offset from the edge is `--cieo-space-3`.
 ## Evidence
 
 Covered by `test/primitives-social-content.test.mjs` (label, announcement rule, markup contract).
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `button`, `count`, `text`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

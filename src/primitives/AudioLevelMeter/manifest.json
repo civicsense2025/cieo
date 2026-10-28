@@ -59,7 +59,9 @@
       "nullable": false,
       "default": "Microphone level",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, bar. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -94,7 +96,9 @@
         "level",
         "stream",
         "bars",
-        "label"
+        "label",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -120,5 +124,5 @@
     "path": "README.md",
     "purpose": "Bars that rise and fall with how loud the microphone is, driven by a level you pass or a stream the meter listens to itself."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","bar"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

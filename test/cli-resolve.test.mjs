@@ -91,7 +91,7 @@ test('packageImportsFor unions the transitive imports, sorted and deduped', () =
   assert.deepEqual(packageImportsFor(STUB, 'Overlay'), []);
 });
 
-test('the bundled registry loads, resolves Dialog, and plans it with Overlay and motion.ts exactly once', () => {
+test('the bundled registry loads, resolves Dialog, and plans Overlay plus each customization and motion helper exactly once', () => {
   const registry = loadRegistry();
   assert.equal(registry.schemaVersion, 1);
   assert.ok(Object.keys(registry.components).length > 150, 'the full primitive inventory is present');
@@ -99,7 +99,7 @@ test('the bundled registry loads, resolves Dialog, and plans it with Overlay and
   const planned = plan(registry, 'Dialog');
   assert.equal(planned.id, 'Dialog');
   assert.deepEqual(planned.files, ['Overlay/Overlay.tsx', 'Dialog/Dialog.tsx']);
-  assert.deepEqual(planned.sharedFiles, ['motion.ts']);
+  assert.deepEqual(planned.sharedFiles, ['customization.ts', 'parts.ts', 'motion.ts']);
   assert.equal(new Set(planned.files).size, planned.files.length);
   assert.equal(new Set(planned.sharedFiles).size, planned.sharedFiles.length);
   assert.ok(packageImportsFor(registry, 'Dialog').includes('cieo/react'));

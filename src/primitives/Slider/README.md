@@ -32,7 +32,7 @@ Equals Range exactly: server-rendered fill at the initial value, exact follow on
 
 ## Customization
 
-None here. Props mirror Range (`label`, `hideLabel`, `showValue`, `formatValue` plus native input attrs); tokens and styling live with the Range control.
+This alias retains the owning control’s customization API; see Host customization below.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ Range (control, the implementation), Field (molecule, for the label/help row aro
 ## Evidence
 
 Storybook-free: covered by `test/primitives-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+Alias of Range; preserves its native/owning component props instead of creating a second control contract. Use the underlying component’s supported `className`, style/native props, and content slots. This alias intentionally does not fork behavior or introduce a competing `slotProps` shape.

@@ -14,7 +14,9 @@
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "maxWidth", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "60rem", "constraints": {} }
+    { "id": "maxWidth", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "60rem", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
   "state": [],
@@ -23,9 +25,9 @@
   "variants": [],
   "styleParts": [{ "id": "column", "overrides": ["max-width"], "tokenRoles": ["spacing"] }],
   "constraints": { "layout": ["centered-column"], "content": ["single-flow"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["maxWidth"], "states": [], "events": [], "parts": ["column"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["maxWidth", "className", "slotProps"], "states": [], "events": [], "parts": ["column"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Centered content column with a max width." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

@@ -1,6 +1,7 @@
 // src/primitives/GroupAvatar/GroupAvatar.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /** Names as a short phrase: "Ava", "Ava and Ben", "Ava, Ben and Cy", "Ava, Ben and 3 others". Blank names are ignored. */
 export function listNames(names) {
     const list = names.map((n) => n.trim()).filter(Boolean);
@@ -24,10 +25,10 @@ export function groupAvatarLayout(people) {
         return { faces: [...people], more: 0 };
     return { faces: people.slice(0, 3), more: people.length - 3 };
 }
-export function GroupAvatar({ people, size = 'md' }) {
+export function GroupAvatar({ className, slotProps, people, size = 'md' }) {
     if (people.length === 0)
         return null;
     const { faces, more } = groupAvatarLayout(people);
     const slots = faces.length + (more > 0 ? 1 : 0);
-    return (_jsxs("span", { role: "img", "aria-label": groupAvatarLabel(people.map((p) => p.name)), "data-size": size, "data-count": slots, className: "cieo cieo-group-avatar", children: [faces.map((p, i) => (_jsx("span", { "aria-hidden": "true", className: "cieo-group-avatar-face", children: p.src ? _jsx("img", { src: p.src, alt: "", loading: "lazy" }) : _jsx("span", { className: "cieo-group-avatar-initials", children: p.initials }) }, `${p.name}-${i}`))), more > 0 ? (_jsxs("span", { "aria-hidden": "true", className: "cieo-group-avatar-face cieo-group-avatar-more", children: ["+", more] })) : null] }));
+    return (_jsxs("span", { role: "img", "aria-label": groupAvatarLabel(people.map((p) => p.name)), "data-size": size, "data-count": slots, className: "cieo cieo-group-avatar", ...customizePart(slotProps?.root, "cieo cieo-group-avatar", undefined, className), children: [faces.map((p, i) => (_jsx("span", { "aria-hidden": "true", className: "cieo-group-avatar-face", ...customizePart(slotProps?.face, "cieo-group-avatar-face", undefined), children: p.src ? _jsx("img", { src: p.src, alt: "", loading: "lazy" }) : _jsx("span", { className: "cieo-group-avatar-initials", ...customizePart(slotProps?.initials, "cieo-group-avatar-initials", undefined), children: p.initials }) }, `${p.name}-${i}`))), more > 0 ? (_jsxs("span", { "aria-hidden": "true", className: "cieo-group-avatar-face cieo-group-avatar-more", ...customizePart(slotProps?.face, "cieo-group-avatar-face cieo-group-avatar-more", undefined), children: ["+", more] })) : null] }));
 }

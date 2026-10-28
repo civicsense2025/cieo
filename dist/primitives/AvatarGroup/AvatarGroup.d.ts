@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import type { CSSProperties } from 'react';
 export interface AvatarPerson {
     /** Full name, used by the row label (not rendered as text here). */
@@ -8,6 +9,14 @@ export interface AvatarPerson {
     src?: string;
 }
 export interface AvatarGroupProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        avatarStack?: PrimitivePartProps;
+        avatar?: PrimitivePartProps;
+        avatarInitials?: PrimitivePartProps;
+        label?: PrimitivePartProps;
+    };
     people: AvatarPerson[];
     /** Max faces before collapsing into +N. Defaults to 4. */
     max?: number;
@@ -16,4 +25,4 @@ export interface AvatarGroupProps {
     label?: string;
     style?: CSSProperties;
 }
-export declare function AvatarGroup({ people, max, size, label, style }: AvatarGroupProps): import("react/jsx-runtime").JSX.Element;
+export declare function AvatarGroup({ className, slotProps, people, max, size, label, style }: AvatarGroupProps): import("react/jsx-runtime").JSX.Element;

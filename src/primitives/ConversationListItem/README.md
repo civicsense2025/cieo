@@ -45,3 +45,7 @@ ConversationList, GroupAvatar, TypingIndicator, CompactCount.
 ## Evidence
 
 `test/primitives-messaging.test.mjs`.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `avatar`, `main`, `top`, `title`, `time`, `bottom`, `line`, `preview`, `draft`, `typing`, `flags`, `icon`, `badge`, `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

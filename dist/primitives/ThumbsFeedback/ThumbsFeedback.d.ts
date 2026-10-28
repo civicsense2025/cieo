@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type ThumbValue = 'up' | 'down';
 export type ThumbsStep = 'ask' | 'detail' | 'done';
 export interface ThumbsState {
@@ -22,6 +23,27 @@ export interface ThumbsResult {
     comment: string;
 }
 export interface ThumbsFeedbackProps {
+    className?: string;
+    slotProps?: {
+        thumbsButtons?: PrimitivePartProps;
+        thumbsThumb?: PrimitivePartProps;
+        thumbsView?: PrimitivePartProps;
+        thumbsQuestion?: PrimitivePartProps;
+        thumbsHead?: PrimitivePartProps;
+        thumbsReasons?: PrimitivePartProps;
+        thumbsReason?: PrimitivePartProps;
+        thumbsCommentLabel?: PrimitivePartProps;
+        thumbsComment?: PrimitivePartProps;
+        thumbsActions?: PrimitivePartProps;
+        thumbsSubmit?: PrimitivePartProps;
+        thumbsSkip?: PrimitivePartProps;
+        thumbsThanks?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+        thumbsPanel?: PrimitivePartProps;
+        thumbsInner?: PrimitivePartProps;
+        thumbsLeaving?: PrimitivePartProps;
+        thumbsEntering?: PrimitivePartProps;
+    };
     /** The question. Defaults to "Was this helpful?". */
     question?: string;
     /** Called as soon as a thumb is pressed, before any detail. */
@@ -36,4 +58,4 @@ export interface ThumbsFeedbackProps {
     /** Thank-you text. Defaults to "Thanks for the feedback." */
     thanks?: string;
 }
-export declare function ThumbsFeedback({ question, onRate, reasons, onSubmit, thanks }: ThumbsFeedbackProps): import("react/jsx-runtime").JSX.Element;
+export declare function ThumbsFeedback({ className, slotProps, question, onRate, reasons, onSubmit, thanks }: ThumbsFeedbackProps): import("react/jsx-runtime").JSX.Element;

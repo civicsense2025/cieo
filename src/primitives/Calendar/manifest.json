@@ -17,7 +17,9 @@
     { "id": "year", "type": { "kind": "number" }, "required": true, "nullable": false, "constraints": {} },
     { "id": "month", "type": { "kind": "number" }, "required": true, "nullable": false, "constraints": { "minimum": 1, "maximum": 12 } },
     { "id": "selected", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "ISO date (YYYY-MM-DD)." },
-    { "id": "onSelect", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (iso: string) => void; no function kind exists in the manifest precedent." }
+    { "id": "onSelect", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (iso: string) => void; no function kind exists in the manifest precedent." },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, weekday, blank, day."}
   ],
   "slots": [],
   "state": [],
@@ -26,9 +28,9 @@
   "variants": [],
   "styleParts": [{ "id": "month", "overrides": ["gap"], "tokenRoles": ["spacing", "text"] }],
   "constraints": { "layout": ["seven-column-month"], "content": ["no-grid-roles", "pressed-days"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["year", "month", "selected", "onSelect"], "states": [], "events": [], "parts": ["month"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["year", "month", "selected", "onSelect", "className", "slotProps"], "states": [], "events": [], "parts": ["month"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Month grid for picking one ISO date." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","weekday","blank","day"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -64,7 +64,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is (method: 'native' | 'copy') => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, button, icon. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -109,7 +111,9 @@
         "title",
         "text",
         "label",
-        "onShared"
+        "onShared",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -135,5 +139,5 @@
     "path": "README.md",
     "purpose": "Opens the device share sheet or copies the link, then confirms with Link copied."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","button","icon"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

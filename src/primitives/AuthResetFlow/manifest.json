@@ -76,7 +76,10 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slots","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [],
   "state": [],
@@ -117,7 +120,10 @@
         "step",
         "pending",
         "error",
-        "status"
+        "status",
+        "className",
+        "slotProps",
+        "slots"
       ],
       "states": [],
       "events": [
@@ -143,5 +149,5 @@
     "path": "README.md",
     "purpose": "Reset card switching request and confirm steps."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","title","footer"],"semanticOverrides":false}}
 }

@@ -52,3 +52,7 @@ AudioLevelMeter, AudioTime, AudioPlayer.
 ## Evidence
 
 `test/primitives-audio-capture.test.mjs`, `test/voice-recorder-motion.test.mjs`, and the recorder checks in `test/browser/social.py`.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `mic`, `live`, `hint`, `time`, `waveform`, `actions`, `error`, `retry`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

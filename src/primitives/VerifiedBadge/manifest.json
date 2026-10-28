@@ -41,7 +41,9 @@
       "nullable": false,
       "default": "md",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, seal, check. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -73,7 +75,9 @@
       "implementation": "implemented",
       "properties": [
         "label",
-        "size"
+        "size",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -99,5 +103,5 @@
     "path": "README.md",
     "purpose": "A small seal with a check that marks an account as verified, named for screen readers and tinted by the accent color."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","seal","check"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

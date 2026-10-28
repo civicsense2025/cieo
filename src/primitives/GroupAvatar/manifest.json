@@ -42,7 +42,9 @@
       "nullable": false,
       "default": "md",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, face, initials. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -83,7 +85,9 @@
       "implementation": "implemented",
       "properties": [
         "people",
-        "size"
+        "size",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -109,5 +113,5 @@
     "path": "README.md",
     "purpose": "One circle that stands for a whole conversation: one to four faces packed inside it, or three plus a +n tile."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","face","initials"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

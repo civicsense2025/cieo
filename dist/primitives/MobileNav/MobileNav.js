@@ -1,10 +1,11 @@
 // src/primitives/MobileNav/MobileNav.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 import { useDismiss } from '../../react/index.js';
-export function MobileNav({ label, open = false, onClose, children }) {
+export function MobileNav({ label, open = false, onClose, children, className, slotProps }) {
     useDismiss(open, () => onClose?.(), [], { outside: false });
     if (!open)
         return null;
-    return (_jsxs("div", { className: "cieo cieo-mobile-nav", children: [_jsx("nav", { "aria-label": label, children: children }), onClose ? (_jsx("button", { type: "button", "aria-label": "Close navigation", onClick: onClose, children: "Close" })) : null] }));
+    return (_jsxs("div", { className: "cieo cieo-mobile-nav", ...customizePart(slotProps?.root, "cieo cieo-mobile-nav", undefined, className), children: [_jsx("nav", { "aria-label": label, ...customizePart(slotProps?.navigation, undefined, undefined), children: children }), onClose ? (_jsx("button", { type: "button", "aria-label": "Close navigation", onClick: onClose, ...customizePart(slotProps?.close, undefined, undefined), children: "Close" })) : null] }));
 }

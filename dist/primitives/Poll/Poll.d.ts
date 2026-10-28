@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface PollOption {
     /** Stable id the host stores. */
@@ -12,6 +13,15 @@ export declare function pollPercentages(votes: readonly number[]): number[];
 /** Sentence for the live region after a vote: "Vote counted. Option A leads with 54%." Ties and empty polls are named honestly. */
 export declare function pollAnnouncement(options: readonly PollOption[]): string;
 export interface PollProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        question?: PrimitivePartProps;
+        options?: PrimitivePartProps;
+        total?: PrimitivePartProps;
+        closed?: PrimitivePartProps;
+        footnote?: PrimitivePartProps;
+    };
     /** The question, shown above the options and used as the group name. */
     question: string;
     /** The options, in display order. */
@@ -25,4 +35,4 @@ export interface PollProps {
     /** Extra line under the total, such as who can see the votes or when it closes. */
     footnote?: ReactNode;
 }
-export declare function Poll({ question, options, voted, onVote, closed, footnote }: PollProps): import("react/jsx-runtime").JSX.Element;
+export declare function Poll({ className, slotProps, question, options, voted, onVote, closed, footnote }: PollProps): import("react/jsx-runtime").JSX.Element;

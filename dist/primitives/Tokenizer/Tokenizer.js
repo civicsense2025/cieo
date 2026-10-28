@@ -1,12 +1,13 @@
 // src/primitives/Tokenizer/Tokenizer.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* Tokenizer. Token chips plus an add input. Chips are own spans (not the Token primitive); host owns the value list. */
 import { useId, useState } from 'react';
-export function Tokenizer({ label, values, onRemove, onAdd }) {
+export function Tokenizer({ className, slotProps, label, values, onRemove, onAdd }) {
     const id = useId();
     const [draft, setDraft] = useState('');
-    return (_jsxs("div", { className: "cieo cieo-p-tokenizer", children: [_jsx("label", { htmlFor: id, children: label }), _jsxs("div", { className: "cieo-p-tokenizer-chips", children: [values.map((v, i) => (_jsxs("span", { className: "cieo-p-tokenizer-chip", children: [v, _jsx("button", { type: "button", "aria-label": `Remove ${v}`, onClick: () => onRemove?.(i), children: "\u00D7" })] }, `${v}-${i}`))), _jsx("input", { id: id, type: "text", value: draft, onChange: (e) => setDraft(e.currentTarget.value), onKeyDown: (e) => {
+    return (_jsxs("div", { className: "cieo cieo-p-tokenizer", ...customizePart(slotProps?.root, "cieo cieo-p-tokenizer", undefined, className), children: [_jsx("label", { htmlFor: id, children: label }), _jsxs("div", { className: "cieo-p-tokenizer-chips", ...customizePart(slotProps?.chips, "cieo-p-tokenizer-chips"), children: [values.map((v, i) => (_jsxs("span", { className: "cieo-p-tokenizer-chip", ...customizePart(slotProps?.chip, "cieo-p-tokenizer-chip"), children: [v, _jsx("button", { type: "button", "aria-label": `Remove ${v}`, onClick: () => onRemove?.(i), children: "\u00D7" })] }, `${v}-${i}`))), _jsx("input", { id: id, type: "text", value: draft, onChange: (e) => setDraft(e.currentTarget.value), onKeyDown: (e) => {
                             if (e.key === 'Backspace' && draft === '' && values.length > 0)
                                 onRemove?.(values.length - 1);
                             if (e.key === 'Enter' && draft.trim()) {
@@ -14,5 +15,5 @@ export function Tokenizer({ label, values, onRemove, onAdd }) {
                                 onAdd?.(draft.trim());
                                 setDraft('');
                             }
-                        }, className: "cieo-p-tokenizer-input" })] })] }));
+                        }, className: "cieo-p-tokenizer-input", ...customizePart(slotProps?.input, "cieo-p-tokenizer-input") })] })] }));
 }

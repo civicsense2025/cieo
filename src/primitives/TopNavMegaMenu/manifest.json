@@ -16,7 +16,9 @@
   "properties": [
     { "id": "open", "type": { "kind": "boolean" }, "required": false, "nullable": false, "constraints": {} },
     { "id": "defaultOpen", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} },
-    { "id": "onOpenChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (open: boolean) => void; no function kind exists in the manifest precedent, see src/controls/Range.tsx." }
+    { "id": "onOpenChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (open: boolean) => void; no function kind exists in the manifest precedent, see src/controls/Range.tsx." },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, panel."}
   ],
   "slots": [
     { "id": "trigger", "allowed": ["content"], "min": 1, "max": 1, "order": "document" },
@@ -28,9 +30,9 @@
   "variants": [],
   "styleParts": [{ "id": "panel", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
   "constraints": { "layout": ["panel-below-trigger", "no-flip"], "content": ["trigger-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["open", "defaultOpen", "onOpenChange"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["open", "defaultOpen", "onOpenChange", "className", "slotProps"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Controlled disclosure panel below a trigger; no flip." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","panel"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

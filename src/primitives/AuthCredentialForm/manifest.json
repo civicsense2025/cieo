@@ -59,7 +59,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, submit."}
   ],
   "slots": [],
   "state": [],
@@ -93,7 +95,9 @@
         "id",
         "mode",
         "pending",
-        "error"
+        "error",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [
@@ -118,5 +122,5 @@
     "path": "README.md",
     "purpose": "Email plus password plus submit for sign in and sign up."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","submit"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

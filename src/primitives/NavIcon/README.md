@@ -32,7 +32,7 @@ No motion, no styles. `size` defaults to md and passes through as `data-size`.
 
 ## Customization
 
-`size` only (sm, md, lg). All visuals come from the icon itself.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ SideNavItem (atom), TopNavItem (atom), SideNavCollapseButton (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-nav.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

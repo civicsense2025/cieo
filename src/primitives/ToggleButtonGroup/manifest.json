@@ -17,7 +17,9 @@
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
     { "id": "value", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Selected button value when controlled." },
     { "id": "defaultValue", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Initial selected value when uncontrolled." },
-    { "id": "onValueChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (value: string) => void; no function kind exists in the manifest precedent." }
+    { "id": "onValueChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (value: string) => void; no function kind exists in the manifest precedent." },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 16, "order": "document" }],
   "state": [],
@@ -26,9 +28,9 @@
   "variants": [],
   "styleParts": [{ "id": "group", "overrides": ["border"], "tokenRoles": ["border-control"] }],
   "constraints": { "layout": ["connected-children"], "content": ["group-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "value", "defaultValue", "onValueChange"], "states": [], "events": [], "parts": ["group"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "value", "defaultValue", "onValueChange", "className", "slotProps"], "states": [], "events": [], "parts": ["group"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Single-select group of toggle buttons." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

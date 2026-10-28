@@ -1,6 +1,7 @@
 // src/primitives/SideNav/SideNav.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function SideNav({ label = 'Sections', collapsed = false, children }) {
-    return (_jsx("nav", { "aria-label": label, "data-collapsed": collapsed, className: "cieo cieo-side-nav", children: children }));
+import { customizePart } from '../customization.js';
+export function SideNav({ label = 'Sections', collapsed = false, children, className, slotProps }) {
+    return (_jsx("nav", { "aria-label": label, "data-collapsed": collapsed, className: "cieo cieo-side-nav", ...customizePart(slotProps?.root, "cieo cieo-side-nav", undefined, className), children: children }));
 }

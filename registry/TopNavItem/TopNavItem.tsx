@@ -2,8 +2,13 @@
 'use client';
 /* TopNavItem. Single link in the top nav; marks the current page. */
 import type { ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface TopNavItemProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Link target. Required. */
   href: string;
   /** Current page state; renders aria-current=page. Defaults to false. */
@@ -11,9 +16,9 @@ export interface TopNavItemProps {
   children: ReactNode;
 }
 
-export function TopNavItem({ href, current = false, children }: TopNavItemProps) {
+export function TopNavItem({ className, slotProps, href, current = false, children }: TopNavItemProps) {
   return (
-    <a href={href} aria-current={current ? 'page' : undefined} className="cieo cieo-top-nav-item">
+    <a href={href} aria-current={current ? 'page' : undefined} className="cieo cieo-top-nav-item" {...customizePart(slotProps?.root, "cieo cieo-top-nav-item", undefined, className)}>
       {children}
     </a>
   );

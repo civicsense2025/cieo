@@ -30,5 +30,5 @@
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Thin contract over the Checkbox control." },
-  "extensions": { "wraps": "src/controls/Toggles.tsx" }
+  "extensions": { "wraps": "src/controls/Toggles.tsx", "customization": {"status":"delegated","target":"Checkbox","reason":"Alias of Checkbox; preserves its native/owning component props instead of creating a second control contract."} }
 }

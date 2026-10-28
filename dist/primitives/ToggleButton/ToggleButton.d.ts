@@ -1,5 +1,10 @@
 import { type ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export interface ToggleButtonProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the button; must match the visible text. Required. */
     label: string;
     /** Pressed state when used standalone. Defaults to false; inside a group the group value wins. */
@@ -12,4 +17,4 @@ export interface ToggleButtonProps {
     onPressedChange?: (pressed: boolean) => void;
     children: ReactNode;
 }
-export declare function ToggleButton({ label, pressed, defaultPressed, value, onPressedChange, children }: ToggleButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function ToggleButton({ className, slotProps, label, pressed, defaultPressed, value, onPressedChange, children }: ToggleButtonProps): import("react/jsx-runtime").JSX.Element;

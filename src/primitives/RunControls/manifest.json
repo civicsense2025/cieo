@@ -82,7 +82,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [],
   "state": [],
@@ -120,7 +122,9 @@
         "busy",
         "stopLabel",
         "label",
-        "statusLabel"
+        "statusLabel",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -146,5 +150,5 @@
     "path": "README.md",
     "purpose": "A run's reported status and a Stop command while it is live."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

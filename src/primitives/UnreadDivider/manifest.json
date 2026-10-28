@@ -36,7 +36,9 @@
       "nullable": false,
       "default": "New messages",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, rule, label. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -78,7 +80,9 @@
       "implementation": "implemented",
       "properties": [
         "count",
-        "label"
+        "label",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -104,5 +108,5 @@
     "path": "README.md",
     "purpose": "A rule with a centered accent label that marks where unread messages begin."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","rule","label"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

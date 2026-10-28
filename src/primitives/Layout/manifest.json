@@ -13,7 +13,7 @@
   "source": { "target": "web", "path": "src/primitives/Layout/Layout.tsx", "symbol": "Layout" },
   "dependencies": [],
   "nativePrimitives": [],
-  "properties": [],
+  "properties": [ {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."}, {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
   "state": [],
   "transitions": [],
@@ -21,9 +21,9 @@
   "variants": [],
   "styleParts": [{ "id": "frame", "overrides": [], "tokenRoles": ["spacing"] }],
   "constraints": { "layout": ["header-content-footer"], "content": ["landmark-children"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [], "states": [], "events": [], "parts": ["frame"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [ "className", "slotProps"], "states": [], "events": [], "parts": ["frame"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "App frame composing header, content, and footer." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

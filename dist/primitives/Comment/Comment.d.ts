@@ -1,6 +1,22 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export type CommentState = 'default' | 'pending' | 'failed' | 'deleted' | 'highlighted';
 export interface CommentProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        avatar?: PrimitivePartProps;
+        line?: PrimitivePartProps;
+        main?: PrimitivePartProps;
+        deleted?: PrimitivePartProps;
+        head?: PrimitivePartProps;
+        menu?: PrimitivePartProps;
+        body?: PrimitivePartProps;
+        attachments?: PrimitivePartProps;
+        actions?: PrimitivePartProps;
+        status?: PrimitivePartProps;
+        replies?: PrimitivePartProps;
+    };
     /** Display name of the author. Labels the article. Required. */
     author: string;
     /** Avatar element (an Avatar, an image). Sized by the comment: smaller from depth 1. Required. */
@@ -42,4 +58,4 @@ export interface CommentProps {
 export declare function commentDepth(depth: number | undefined): number;
 /** True when the rail should run below the avatar. */
 export declare function commentHasRail(railed: boolean | undefined, hasReplies: boolean): boolean;
-export declare function Comment({ author, avatar, authorHref, badge, context, time, dateTime, menu, children, attachments, actions, replies, state, status, depth, railed, id, entering }: CommentProps): import("react/jsx-runtime").JSX.Element;
+export declare function Comment({ className, slotProps, author, avatar, authorHref, badge, context, time, dateTime, menu, children, attachments, actions, replies, state, status, depth, railed, id, entering }: CommentProps): import("react/jsx-runtime").JSX.Element;

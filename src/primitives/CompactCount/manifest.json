@@ -65,7 +65,9 @@
       "nullable": false,
       "default": true,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -101,7 +103,9 @@
         "locale",
         "unit",
         "hideZero",
-        "motion"
+        "motion",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -127,5 +131,5 @@
     "path": "README.md",
     "purpose": "A count shortened for scanning (26.3K) whose digits roll in the direction of change, with the exact number kept for screen readers."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

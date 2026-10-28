@@ -1,5 +1,5 @@
-/* design/styles/primitives/popover.css */
 @layer cieo.components {
   :where(.cieo).cieo-p-popover { position: relative; display: inline-flex; }
-  :where(.cieo) .cieo-p-popover-panel { position: absolute; inset-block-start: 100%; inset-inline-start: 0; margin-block-start: var(--cieo-space-1); border: 1px solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); padding: var(--cieo-space-2); z-index: var(--cieo-popover-z, 50); }
+  .cieo-p-popover-position { box-sizing: border-box; }
+  :where(.cieo).cieo-p-popover-panel { box-sizing: border-box; border: var(--cieo-popover-border, 1px solid var(--cieo-color-border-strong)); border-radius: var(--cieo-popover-radius, var(--cieo-radius-control)); background: var(--cieo-popover-background, var(--cieo-color-surface)); color: var(--cieo-popover-color, inherit); padding: var(--cieo-popover-padding, var(--cieo-space-2)); box-shadow: var(--cieo-popover-shadow, none); }
 }

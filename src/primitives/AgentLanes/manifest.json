@@ -62,7 +62,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [],
   "state": [],
@@ -99,7 +101,9 @@
         "agents",
         "renderLane",
         "label",
-        "statusLabel"
+        "statusLabel",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -125,5 +129,5 @@
     "path": "README.md",
     "purpose": "One lane per agent, headed by name and status, with child agents nested."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","lane","header","name","body","children"],"semanticOverrides":false}}
 }

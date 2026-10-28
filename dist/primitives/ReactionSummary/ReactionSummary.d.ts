@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type Reaction } from '../ReactionPicker/ReactionPicker.js';
 export interface ReactionTally extends Reaction {
     /** How many people used this reaction. */
@@ -10,6 +11,16 @@ export declare function toggleReaction(list: readonly ReactionTally[], id: strin
 /** Accessible name of a chip: "Love, 3 people including you". */
 export declare function reactionName(r: ReactionTally): string;
 export interface ReactionSummaryProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        list?: PrimitivePartProps;
+        slot?: PrimitivePartProps;
+        chip?: PrimitivePartProps;
+        emoji?: PrimitivePartProps;
+        count?: PrimitivePartProps;
+        add?: PrimitivePartProps;
+    };
     /** The chips to show, in display order. */
     reactions: readonly ReactionTally[];
     /** Called with a chip's id when the person presses it. */
@@ -27,4 +38,4 @@ export declare function reactionDiff(prev: readonly ReactionTally[], next: reado
         chip: ReactionTally;
     }[];
 };
-export declare function ReactionSummary({ reactions, onToggle, onAdd, available }: ReactionSummaryProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReactionSummary({ className, slotProps, reactions, onToggle, onAdd, available }: ReactionSummaryProps): import("react/jsx-runtime").JSX.Element;

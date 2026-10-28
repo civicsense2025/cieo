@@ -22,7 +22,9 @@
     { "id": "max", "type": { "kind": "integer" }, "required": false, "nullable": false, "default": 4, "constraints": { "min": 1, "max": 12 } },
     { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Optional text after the faces, e.g. 3k love for review counts." },
     { "id": "size", "type": { "kind": "enum", "values": ["sm", "md"] }, "required": false, "nullable": false, "default": "md", "constraints": {} },
-    { "id": "style", "type": { "kind": "record", "fields": [] }, "required": false, "nullable": false, "constraints": {}, "note": "React CSSProperties passthrough to the root span; Cieo tokens only, no motion." }
+    { "id": "style", "type": { "kind": "record", "fields": [] }, "required": false, "nullable": false, "constraints": {}, "note": "React CSSProperties passthrough to the root span; Cieo tokens only, no motion." },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, avatarStack, avatar, avatarInitials, label."}
   ],
   "slots": [],
   "state": [],
@@ -31,9 +33,9 @@
   "variants": [],
   "styleParts": [{ "id": "avatar", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
   "constraints": { "layout": ["max-4-plus-overflow"], "content": ["initials-when-no-photo", "stack-is-decorative"], "motion": ["no-animation-in-rows", "honor-render-policy"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["people", "max", "size"], "states": [], "events": [], "parts": ["avatar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["people", "max", "label", "size", "style", "className", "slotProps"], "states": [], "events": [], "parts": ["avatar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Static decorative face stack for rows; the row owns names." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","avatarStack","avatar","avatarInitials","label"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

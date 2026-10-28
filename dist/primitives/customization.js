@@ -1,0 +1,20 @@
+const ownedData = new Set('phase-text body summary error agent-name lane-body conversation-row dragging label language list-item name sortable-id sortable-name author detail actions status-text text truncated active agent-id align auth-motion-frame auth-motion-pane auth-motion-phase badge checked chosen closed collapsed columns complete conversation-id copied count depth disabled dismissed empty entering filled focused following gap glyph grow grown half hand-raised has-active-icon hidden hold icon interactive invalid leader leaving level linked loading mine mode motion muted new on open orientation pane paused phase picked pin-id pinned placed placement playing presence pressed previewing query railed readonly reduced-motion results role score seekable selected seq shown side size sort sortable-active sortable-handle sorting span speaking star state status step swap tone type unread value variant view visible warning'.split(' ').map((key) => `data-${key}`));
+export function customizePart(part, defaultClass, ownedStyle, rootClassName) {
+    if (!part && !rootClassName)
+        return {};
+    const result = {};
+    if (part) {
+        for (const [key, value] of Object.entries(part)) {
+            if (/^data-[a-z][a-z0-9-]*$/.test(key) && !ownedData.has(key) && ['string', 'number', 'boolean'].includes(typeof value))
+                result[key] = value;
+        }
+        if (typeof part.title === 'string')
+            result.title = part.title;
+        if (part.style && typeof part.style === 'object')
+            result.style = { ...part.style, ...ownedStyle };
+    }
+    const classes = [defaultClass, rootClassName, part?.className].filter((value) => typeof value === 'string' && value.length > 0);
+    if (classes.length)
+        result.className = classes.join(' ');
+    return result;
+}

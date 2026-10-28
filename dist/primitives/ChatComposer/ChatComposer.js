@@ -1,10 +1,11 @@
 // src/primitives/ChatComposer/ChatComposer.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function ChatComposer({ label = 'Send a message', onSubmit, children }) {
+import { customizePart } from '../customization.js';
+export function ChatComposer({ className, slotProps, label = 'Send a message', onSubmit, children }) {
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit?.();
     };
-    return (_jsx("form", { "aria-label": label, onSubmit: handleSubmit, className: "cieo cieo-chat-composer", children: children }));
+    return (_jsx("form", { "aria-label": label, onSubmit: handleSubmit, className: "cieo cieo-chat-composer", ...customizePart(slotProps?.root, "cieo cieo-chat-composer", undefined, className), children: children }));
 }

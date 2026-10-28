@@ -97,7 +97,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is () => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, body, text. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -136,7 +138,9 @@
         "selected",
         "label",
         "initials",
-        "onSelect"
+        "onSelect",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -162,5 +166,5 @@
     "path": "README.md",
     "purpose": "A numbered teardrop marker whose tip sits on a point of a layer, for pin-and-comment review."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","body","text"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

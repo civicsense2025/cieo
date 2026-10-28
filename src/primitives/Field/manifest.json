@@ -17,7 +17,9 @@
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 512 } },
     { "id": "htmlFor", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {} },
     { "id": "description", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {} },
-    { "id": "error", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {} }
+    { "id": "error", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, label, help."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 1, "order": "document" }],
   "state": [],
@@ -26,9 +28,9 @@
   "variants": [],
   "styleParts": [{ "id": "field", "overrides": ["gap"], "tokenRoles": ["space", "text", "color"] }],
   "constraints": { "layout": ["label-control-help-stack"], "content": ["error-wins-over-description"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "htmlFor", "description", "error"], "states": [], "events": [], "parts": ["field"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "htmlFor", "description", "error", "className", "slotProps"], "states": [], "events": [], "parts": ["field"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Label plus control plus help or error row." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","label","help"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

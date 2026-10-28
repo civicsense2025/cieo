@@ -45,7 +45,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [
     {
@@ -88,7 +90,9 @@
       "properties": [
         "label",
         "order",
-        "selectedId"
+        "selectedId",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -114,5 +118,5 @@
     "path": "README.md",
     "purpose": "The inbox: rows with one tab stop, arrow-key movement, and rows that glide to their new places when the order changes."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root"],"semanticOverrides":false}}
 }

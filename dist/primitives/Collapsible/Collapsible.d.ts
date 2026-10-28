@@ -1,5 +1,10 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface CollapsibleProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Button label for the disclosure. Required. */
     title: string;
     /** Controlled open state; omit for internal state. */
@@ -11,4 +16,4 @@ export interface CollapsibleProps {
     /** Revealed content. Required. */
     children: ReactNode;
 }
-export declare function Collapsible({ title, open, defaultOpen, onOpenChange, children }: CollapsibleProps): import("react/jsx-runtime").JSX.Element;
+export declare function Collapsible({ className, slotProps, title, open, defaultOpen, onOpenChange, children }: CollapsibleProps): import("react/jsx-runtime").JSX.Element;

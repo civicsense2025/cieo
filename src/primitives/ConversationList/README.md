@@ -44,3 +44,7 @@ ConversationListItem, SortableList.
 ## Evidence
 
 `test/primitives-messaging.test.mjs`.
+
+## Host customization
+
+`className` adds a class to the root without replacing the Cieo class. `slotProps` accepts named presentation parts: `root`. Each part accepts `className`, `style`, `title`, and nonreserved `data-*` attributes. Roles, ARIA, refs, handlers, state attributes, and owned geometry remain component-owned. Existing content props and children remain the content slots.

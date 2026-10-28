@@ -1,5 +1,7 @@
 // src/primitives/DropdownMenu/DropdownMenu.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* DropdownMenu. Menu shell. Trigger toggles it; Escape, outside press and choosing an item close it and return focus. Controlled `open` always wins. */
 import { cloneElement, createContext, isValidElement, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { enabledIn, roveIndex, useDismiss } from '../../react/index.js';
@@ -11,6 +13,9 @@ export interface DropdownMenuContextValue {
 export const DropdownMenuContext = createContext<DropdownMenuContextValue | null>(null);
 
 export interface DropdownMenuProps {
+  className?: string;
+  slotProps?: { triggerFallback?: PrimitivePartProps; root?: PrimitivePartProps; trigger?: PrimitivePartProps; panel?: PrimitivePartProps };
+
   /** Accessible name for the menu (e.g. "File actions"). Required. */
   label: string;
   /** Open state when controlled. */
@@ -26,7 +31,7 @@ export interface DropdownMenuProps {
 
 type TriggerProps = { onClick?: (event: MouseEvent) => void; onKeyDown?: (event: KeyboardEvent) => void };
 
-export function DropdownMenu({ label, open, defaultOpen = false, onOpenChange, trigger, children }: DropdownMenuProps) {
+export function DropdownMenu({ className, slotProps, label, open, defaultOpen = false, onOpenChange, trigger, children }: DropdownMenuProps) {
   const [internal, setInternal] = useState(defaultOpen);
   const isOpen = open ?? internal;
   const menuId = useId();
@@ -85,13 +90,13 @@ export function DropdownMenu({ label, open, defaultOpen = false, onOpenChange, t
   const aria = { 'aria-haspopup': 'menu' as const, 'aria-expanded': isOpen, 'aria-controls': isOpen ? menuId : undefined };
   const triggerNode = isValidElement<TriggerProps>(trigger)
     ? cloneElement(trigger, { ...aria, onClick: handleTriggerClick, onKeyDown: handleTriggerKeyDown } as TriggerProps)
-    : <span role="button" tabIndex={0} {...aria} onClick={handleTriggerClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTriggerClick(e as unknown as MouseEvent); } else handleTriggerKeyDown(e); }} className="cieo-dropdown-menu-trigger-fallback">{trigger}</span>;
+    : <span role="button" tabIndex={0} {...aria} onClick={handleTriggerClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTriggerClick(e as unknown as MouseEvent); } else handleTriggerKeyDown(e); }} className="cieo-dropdown-menu-trigger-fallback" {...customizePart(slotProps?.triggerFallback, "cieo-dropdown-menu-trigger-fallback")}>{trigger}</span>;
   return (
-    <div ref={rootRef} className="cieo cieo-dropdown-menu">
-      <span ref={triggerRef} className="cieo-dropdown-menu-trigger">{triggerNode}</span>
+    <div ref={rootRef} className="cieo cieo-dropdown-menu" {...customizePart(slotProps?.root, "cieo cieo-dropdown-menu", undefined, className)}>
+      <span ref={triggerRef} className="cieo-dropdown-menu-trigger" {...customizePart(slotProps?.trigger, "cieo-dropdown-menu-trigger")}>{triggerNode}</span>
       {isOpen ? (
         <DropdownMenuContext.Provider value={{ close: () => close(true) }}>
-          <div ref={panelRef} id={menuId} role="menu" aria-label={label} onKeyDown={handlePanelKeyDown} className="cieo-dropdown-menu-panel">{children}</div>
+          <div ref={panelRef} id={menuId} role="menu" aria-label={label} onKeyDown={handlePanelKeyDown} className="cieo-dropdown-menu-panel" {...customizePart(slotProps?.panel, "cieo-dropdown-menu-panel")}>{children}</div>
         </DropdownMenuContext.Provider>
       ) : null}
     </div>

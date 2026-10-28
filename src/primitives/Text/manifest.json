@@ -15,7 +15,9 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "as", "type": { "kind": "enum", "values": ["p", "span", "div"] }, "required": false, "nullable": false, "default": "p", "constraints": {} },
-    { "id": "size", "type": { "kind": "enum", "values": ["default", "small"] }, "required": false, "nullable": false, "default": "default", "constraints": {} }
+    { "id": "size", "type": { "kind": "enum", "values": ["default", "small"] }, "required": false, "nullable": false, "default": "default", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
   "state": [],
@@ -24,9 +26,9 @@
   "variants": [],
   "styleParts": [{ "id": "text", "overrides": ["font-size"], "tokenRoles": ["text-body"] }],
   "constraints": { "layout": ["inline-flow"], "content": ["body-copy-only"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["as", "size"], "states": [], "events": [], "parts": ["text"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["as", "size", "className", "slotProps"], "states": [], "events": [], "parts": ["text"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Body copy with size control." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

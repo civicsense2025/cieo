@@ -45,7 +45,9 @@
       "nullable": false,
       "default": 20,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, track, arc, number. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -79,7 +81,9 @@
       "properties": [
         "length",
         "max",
-        "warnAt"
+        "warnAt",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -105,5 +109,5 @@
     "path": "README.md",
     "purpose": "A ring that fills as a text limit is used, grows and counts down near the limit, and turns danger past it."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","track","arc","number"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

@@ -64,7 +64,9 @@
       "nullable": false,
       "default": "start",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [
     {
@@ -107,7 +109,9 @@
         "label",
         "children",
         "size",
-        "align"
+        "align",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -133,5 +137,5 @@
     "path": "README.md",
     "purpose": "A toolbar for the row of actions under a post: one tab stop, arrow keys move between the buttons."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

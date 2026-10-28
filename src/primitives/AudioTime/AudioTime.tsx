@@ -1,5 +1,7 @@
 // src/primitives/AudioTime/AudioTime.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AudioTime. Elapsed and total time for a clip (0:12 / 1:03), or the time left (-0:51). Tabular digits keep the width steady while it ticks. */
 
 /** m:ss under an hour, h:mm:ss above. Negative and non-finite input reads as 0:00. */
@@ -23,6 +25,9 @@ export function speakAudioTime(seconds: number): string {
 }
 
 export interface AudioTimeProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Seconds played so far. */
   current: number;
   /** Clip length in seconds. Omit while it is still unknown. */
@@ -31,7 +36,7 @@ export interface AudioTimeProps {
   mode?: 'elapsed' | 'remaining' | 'total';
 }
 
-export function AudioTime({ current, duration, mode = 'elapsed' }: AudioTimeProps) {
+export function AudioTime({ className, slotProps, current, duration, mode = 'elapsed' }: AudioTimeProps) {
   const known = duration !== undefined && Number.isFinite(duration);
   let text: string;
   let spoken: string;
@@ -47,7 +52,7 @@ export function AudioTime({ current, duration, mode = 'elapsed' }: AudioTimeProp
     spoken = known ? `${speakAudioTime(current)} of ${speakAudioTime(duration)}` : speakAudioTime(current);
   }
   return (
-    <span className="cieo cieo-audio-time" data-mode={mode}>
+    <span className="cieo cieo-audio-time" data-mode={mode} {...customizePart(slotProps?.root, "cieo cieo-audio-time", undefined, className)}>
       <span aria-hidden="true">{text}</span>
       <span className="cieo-sr-only">{spoken}</span>
     </span>

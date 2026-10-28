@@ -3,8 +3,12 @@
 /* SortableListItem. One reorderable row inside SortableList. Its handle is the only drag and keyboard target; children are the row content. */
 import { useContext, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react';
 import { SortableListContext, sortableKeyAction } from '../SortableList/SortableList.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface SortableListItemProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; handle?: PrimitivePartProps; handleCell?: PrimitivePartProps; body?: PrimitivePartProps };
   /** Stable id matching an entry in the list's order. Required. */
   id: string;
   /** Name used in screen-reader announcements and the handle label. Defaults to the id. */
@@ -17,7 +21,7 @@ export interface SortableListItemProps {
   children: ReactNode;
 }
 
-export function SortableListItem({ id, label, handle, disabled = false, children }: SortableListItemProps) {
+export function SortableListItem({ className, slotProps, id, label, handle, disabled = false, children }: SortableListItemProps) {
   const list = useContext(SortableListContext);
   const name = label ?? id;
   const active = list?.session?.id === id;
@@ -57,14 +61,15 @@ export function SortableListItem({ id, label, handle, disabled = false, children
       onKeyDown={onKeyDown}
       onBlur={onBlur}
       className="cieo-sortable-list-handle"
+      {...customizePart(slotProps?.handle, 'cieo-sortable-list-handle')}
     >
       {handle ?? <span aria-hidden="true">⠿</span>}
     </button>
   );
-  const attrs = { 'data-sortable-id': id, 'data-sortable-name': name, 'data-sortable-active': active ? 'true' : undefined, 'data-dragging': active ? list?.session?.via : undefined, 'data-disabled': disabled || undefined, className: 'cieo cieo-sortable-list-item' };
+  const attrs = { 'data-sortable-id': id, 'data-sortable-name': name, 'data-sortable-active': active ? 'true' : undefined, 'data-dragging': active ? list?.session?.via : undefined, 'data-disabled': disabled || undefined, className: 'cieo cieo-sortable-list-item', ...customizePart(slotProps?.root, 'cieo cieo-sortable-list-item', undefined, className) };
   if (list?.as === 'tbody') {
-    return (<tr {...attrs}><td className="cieo-sortable-list-handle-cell">{grip}</td>{children}</tr>);
+    return (<tr {...attrs}><td className="cieo-sortable-list-handle-cell" {...customizePart(slotProps?.handleCell, 'cieo-sortable-list-handle-cell')}>{grip}</td>{children}</tr>);
   }
   const Tag = list?.as === 'div' ? 'div' : 'li';
-  return (<Tag {...attrs}>{grip}<div className="cieo-sortable-list-body">{children}</div></Tag>);
+  return (<Tag {...attrs}>{grip}<div className="cieo-sortable-list-body" {...customizePart(slotProps?.body, 'cieo-sortable-list-body')}>{children}</div></Tag>);
 }

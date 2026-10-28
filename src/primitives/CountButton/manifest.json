@@ -122,7 +122,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, icon, glyph, count. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -172,7 +174,9 @@
         "onPress",
         "tone",
         "size",
-        "disabled"
+        "disabled",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -198,5 +202,5 @@
     "path": "README.md",
     "purpose": "A ghost icon button with a rolling count: a toggle (like, repost) when pressed is given, a plain action (reply) otherwise."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","icon","glyph","count"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

@@ -1,6 +1,7 @@
 // src/primitives/Markdown/Markdown.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Markdown({ html }) {
-    return _jsx("div", { dangerouslySetInnerHTML: { __html: html }, className: "cieo cieo-p-markdown" });
+import { customizePart } from '../customization.js';
+export function Markdown({ className, slotProps, html }) {
+    return _jsx("div", { dangerouslySetInnerHTML: { __html: html }, className: "cieo cieo-p-markdown", ...customizePart(slotProps?.root, "cieo cieo-p-markdown", undefined, className) });
 }

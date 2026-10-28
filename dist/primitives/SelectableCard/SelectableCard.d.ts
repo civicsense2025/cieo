@@ -1,5 +1,10 @@
+import type { PrimitivePartProps } from '../parts.js';
 import type { ReactNode } from 'react';
 export interface SelectableCardProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the option (e.g. "Monthly billing"). Required. */
     label: string;
     /** Whether the card is selected. Defaults to false. */
@@ -8,4 +13,4 @@ export interface SelectableCardProps {
     onSelect?: () => void;
     children: ReactNode;
 }
-export declare function SelectableCard({ label, selected, onSelect, children }: SelectableCardProps): import("react/jsx-runtime").JSX.Element;
+export declare function SelectableCard({ label, selected, onSelect, children, className, slotProps }: SelectableCardProps): import("react/jsx-runtime").JSX.Element;

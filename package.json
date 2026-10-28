@@ -962,13 +962,18 @@
     "./design.tokens.json": "./design/generated/default.tokens.json",
     "./design.portable.json": "./design/generated/default.portable.json",
     "./theme.schema.json": "./design/theme.schema.json",
-    "./themes/*": "./design/generated/themes/*"
+    "./themes/*": "./design/generated/themes/*",
+    "./popover.css": "./design/styles/primitives/popover.css"
   },
   "peerDependencies": {
-    "react": ">=18"
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "peerDependenciesMeta": {
     "react": {
+      "optional": true
+    },
+    "react-dom": {
       "optional": true
     }
   },

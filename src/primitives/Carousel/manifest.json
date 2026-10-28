@@ -15,7 +15,9 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
-    { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} }
+    { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 32, "order": "document" }],
   "state": [],
@@ -24,9 +26,9 @@
   "variants": [],
   "styleParts": [{ "id": "track", "overrides": ["surface"], "tokenRoles": ["surface"] }],
   "constraints": { "layout": ["scroll-snap-row"], "content": ["carousel-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "motion"], "states": [], "events": [], "parts": ["track"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "motion", "className", "slotProps"], "states": [], "events": [], "parts": ["track"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Scroll-snap row of cards with previous and next buttons." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","track","previous","next"],"semanticOverrides":false}}
 }

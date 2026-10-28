@@ -15,7 +15,9 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "title", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
-    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } }
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, title."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "order": "document" }],
   "state": [],
@@ -24,9 +26,9 @@
   "variants": [],
   "styleParts": [{ "id": "section", "overrides": ["gap"], "tokenRoles": ["spacing"] }],
   "constraints": { "layout": ["stacked-children"], "content": ["label-names-region"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "label"], "states": [], "events": [], "parts": ["section"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "label", "className", "slotProps"], "states": [], "events": [], "parts": ["section"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Page subdivision with an optional title heading." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","title"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

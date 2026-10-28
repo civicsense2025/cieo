@@ -2,8 +2,12 @@
   "schemaVersion": 1,
   "shared": [
     "AuthSignInCard/AuthMotion.tsx",
+    "Popover/position.ts",
+    "Popover/usePopoverPosition.ts",
     "VoiceRecorder/recorderVisual.ts",
-    "motion.ts"
+    "customization.ts",
+    "motion.ts",
+    "parts.ts"
   ],
   "components": {
     "ActionBar": {
@@ -14,7 +18,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ActivityItem": {
       "files": [
@@ -22,7 +29,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AgentActivity": {
       "files": [
@@ -32,7 +42,10 @@
       "packageImports": [
         "cieo/agent"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AgentIcon": {
       "files": [
@@ -42,7 +55,10 @@
       "packageImports": [
         "cieo/agent-icons"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AgentLanes": {
       "files": [
@@ -54,7 +70,10 @@
       "packageImports": [
         "cieo/agent"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AgentStatus": {
       "files": [
@@ -66,7 +85,10 @@
       "packageImports": [
         "cieo/agent"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AlertDialog": {
       "files": [
@@ -76,7 +98,10 @@
         "Dialog"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AnnotationLayer": {
       "files": [
@@ -87,7 +112,10 @@
         "FeedbackPopover"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AnnotationPin": {
       "files": [
@@ -95,7 +123,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AppShell": {
       "files": [
@@ -103,7 +134,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ApprovalRequest": {
       "files": [
@@ -114,7 +148,10 @@
         "cieo/agent",
         "cieo/controls"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AspectRatio": {
       "files": [
@@ -122,7 +159,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioLevelMeter": {
       "files": [
@@ -132,7 +172,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioPlayButton": {
       "files": [
@@ -140,7 +183,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioPlayer": {
       "files": [
@@ -153,7 +199,10 @@
         "PlaybackRateButton"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioRoom": {
       "files": [
@@ -166,7 +215,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioTime": {
       "files": [
@@ -174,7 +226,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioTranscript": {
       "files": [
@@ -184,7 +239,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AudioWaveform": {
       "files": [
@@ -194,7 +252,10 @@
         "AudioTime"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AuthAccountCard": {
       "files": [
@@ -205,7 +266,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthCredentialForm": {
@@ -220,7 +283,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthEmailField": {
@@ -232,7 +297,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthInviteAccept": {
@@ -244,7 +311,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthMfaChallenge": {
@@ -258,7 +327,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthMfaFlow": {
@@ -285,7 +356,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthPasskeyButton": {
@@ -297,7 +370,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthPasswordInput": {
@@ -309,7 +384,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthResetFlow": {
@@ -335,7 +412,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthSessionList": {
@@ -347,7 +426,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthSignInCard": {
@@ -361,7 +442,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthSignUpCard": {
@@ -384,7 +467,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "AuthSignInCard/AuthMotion.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "Avatar": {
@@ -393,7 +478,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AvatarGroup": {
       "files": [
@@ -401,7 +489,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AvatarGroupOverflow": {
       "files": [
@@ -409,7 +500,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AvatarStatusDot": {
       "files": [
@@ -417,7 +511,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Badge": {
       "files": [
@@ -427,7 +524,10 @@
       "packageImports": [
         "cieo/controls"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Banner": {
       "files": [
@@ -435,7 +535,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Blockquote": {
       "files": [
@@ -443,7 +546,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "BottomSheet": {
       "files": [
@@ -456,7 +562,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "motion.ts"
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
       ]
     },
     "BottomSheetSwitcher": {
@@ -465,7 +573,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "BreadcrumbItem": {
       "files": [
@@ -473,7 +584,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Breadcrumbs": {
       "files": [
@@ -481,7 +595,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ButtonGroup": {
       "files": [
@@ -489,7 +606,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ByLine": {
       "files": [
@@ -499,7 +619,10 @@
         "Mention"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Calendar": {
       "files": [
@@ -507,7 +630,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Card": {
       "files": [
@@ -515,7 +641,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Carousel": {
       "files": [
@@ -525,7 +654,10 @@
       "packageImports": [
         "cieo/dom"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Center": {
       "files": [
@@ -533,7 +665,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CharacterCountRing": {
       "files": [
@@ -543,7 +678,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatComposer": {
       "files": [
@@ -551,7 +689,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatComposerInput": {
       "files": [
@@ -559,7 +700,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatLayout": {
       "files": [
@@ -567,7 +711,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatMessage": {
       "files": [
@@ -575,7 +722,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatMessageBubble": {
       "files": [
@@ -583,7 +733,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatMessageList": {
       "files": [
@@ -591,7 +744,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatMessageMetadata": {
       "files": [
@@ -599,7 +755,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ChatSystemMessage": {
       "files": [
@@ -607,7 +766,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CheckboxInput": {
       "files": [
@@ -625,7 +787,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CheckboxListItem": {
       "files": [
@@ -643,7 +808,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ClickableCard": {
       "files": [
@@ -651,7 +819,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Code": {
       "files": [
@@ -659,7 +830,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CodeBlock": {
       "files": [
@@ -667,7 +841,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Collapsible": {
       "files": [
@@ -675,7 +852,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CollapsibleGroup": {
       "files": [
@@ -683,7 +863,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPalette": {
       "files": [
@@ -693,7 +876,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPaletteEmpty": {
       "files": [
@@ -701,7 +887,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPaletteFooter": {
       "files": [
@@ -709,7 +898,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPaletteGroup": {
       "files": [
@@ -717,7 +909,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPaletteInput": {
       "files": [
@@ -727,7 +922,10 @@
         "CommandPalette"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPaletteItem": {
       "files": [
@@ -735,7 +933,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommandPaletteList": {
       "files": [
@@ -743,7 +944,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Comment": {
       "files": [
@@ -753,7 +957,10 @@
         "ByLine"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommentComposer": {
       "files": [
@@ -766,7 +973,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CommentThread": {
       "files": [
@@ -776,7 +986,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CompactCount": {
       "files": [
@@ -786,7 +999,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ComplexSelector": {
       "files": [
@@ -794,7 +1010,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ConversationList": {
       "files": [
@@ -804,7 +1023,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ConversationListItem": {
       "files": [
@@ -817,7 +1039,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "CountButton": {
       "files": [
@@ -829,7 +1054,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DateInput": {
       "files": [
@@ -837,7 +1065,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DateRangeInput": {
       "files": [
@@ -845,7 +1076,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DateTimeInput": {
       "files": [
@@ -853,7 +1087,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DeliveryStatus": {
       "files": [
@@ -861,7 +1098,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Dialog": {
       "files": [
@@ -874,7 +1114,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "motion.ts"
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
       ]
     },
     "DialogHeader": {
@@ -883,7 +1125,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Divider": {
       "files": [
@@ -891,7 +1136,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenu": {
       "files": [
@@ -901,7 +1149,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuCheckboxItem": {
       "files": [
@@ -909,7 +1160,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuDivider": {
       "files": [
@@ -917,7 +1171,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuGroup": {
       "files": [
@@ -925,7 +1182,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuItem": {
       "files": [
@@ -935,7 +1195,10 @@
         "DropdownMenu"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuRadioGroup": {
       "files": [
@@ -943,7 +1206,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuRadioItem": {
       "files": [
@@ -953,7 +1219,10 @@
         "DropdownMenuRadioGroup"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "DropdownMenuSubMenu": {
       "files": [
@@ -964,7 +1233,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "motion.ts"
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
       ]
     },
     "EmptyState": {
@@ -973,7 +1244,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "FeedbackPopover": {
       "files": [
@@ -983,7 +1257,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Field": {
       "files": [
@@ -991,7 +1268,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "FieldStatus": {
       "files": [
@@ -999,7 +1279,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "FileInput": {
       "files": [
@@ -1007,7 +1290,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "FollowButton": {
       "files": [
@@ -1017,7 +1303,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "FormLayout": {
       "files": [
@@ -1025,7 +1314,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Grid": {
       "files": [
@@ -1033,7 +1325,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "GridSpan": {
       "files": [
@@ -1041,7 +1336,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "GroupAvatar": {
       "files": [
@@ -1049,7 +1347,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "HStack": {
       "files": [
@@ -1057,7 +1358,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Heading": {
       "files": [
@@ -1065,7 +1369,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "HoverCard": {
       "files": [
@@ -1076,7 +1383,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "motion.ts"
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
       ]
     },
     "Icon": {
@@ -1085,7 +1394,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "IconButton": {
       "files": [
@@ -1093,7 +1405,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "InputGroup": {
       "files": [
@@ -1101,7 +1416,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "InputGroupText": {
       "files": [
@@ -1109,7 +1427,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Kbd": {
       "files": [
@@ -1117,7 +1438,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Layout": {
       "files": [
@@ -1125,7 +1449,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "LayoutContent": {
       "files": [
@@ -1133,7 +1460,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "LayoutFooter": {
       "files": [
@@ -1141,7 +1471,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "LayoutHeader": {
       "files": [
@@ -1149,7 +1482,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "LayoutPanel": {
       "files": [
@@ -1157,7 +1493,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Lightbox": {
       "files": [
@@ -1170,7 +1509,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "motion.ts"
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
       ]
     },
     "LinkPreview": {
@@ -1183,7 +1524,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "List": {
       "files": [
@@ -1191,7 +1535,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ListItem": {
       "files": [
@@ -1199,7 +1546,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Markdown": {
       "files": [
@@ -1207,7 +1557,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Mention": {
       "files": [
@@ -1215,7 +1568,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "MetadataList": {
       "files": [
@@ -1223,7 +1579,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "MetadataListItem": {
       "files": [
@@ -1231,7 +1590,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "MobileNav": {
       "files": [
@@ -1241,7 +1603,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "MobileNavToggle": {
       "files": [
@@ -1249,7 +1614,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "MoreMenu": {
       "files": [
@@ -1268,7 +1636,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "NavHeadingMenu": {
       "files": [
@@ -1276,7 +1647,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "NavIcon": {
       "files": [
@@ -1284,7 +1658,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "NewItemsPill": {
       "files": [
@@ -1296,7 +1673,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "NotifyToggle": {
       "files": [
@@ -1306,7 +1686,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "NumberInput": {
       "files": [
@@ -1314,7 +1697,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Outline": {
       "files": [
@@ -1322,7 +1708,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "OverflowList": {
       "files": [
@@ -1330,7 +1719,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Overlay": {
       "files": [
@@ -1338,7 +1730,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Pagination": {
       "files": [
@@ -1348,7 +1743,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "PlaybackRateButton": {
       "files": [
@@ -1358,7 +1756,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Poll": {
       "files": [
@@ -1370,7 +1771,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Popover": {
       "files": [
@@ -1380,7 +1784,12 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "Popover/position.ts",
+        "Popover/usePopoverPosition.ts",
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "PowerSearch": {
       "files": [
@@ -1398,7 +1807,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "RadioList": {
       "files": [
@@ -1406,7 +1818,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "RadioListItem": {
       "files": [
@@ -1426,7 +1841,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ReactionPicker": {
       "files": [
@@ -1436,7 +1854,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ReactionSummary": {
       "files": [
@@ -1450,7 +1871,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ReplyPreview": {
       "files": [
@@ -1458,7 +1882,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ResizeHandle": {
       "files": [
@@ -1466,7 +1893,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "RichText": {
       "files": [
@@ -1476,7 +1906,10 @@
         "Mention"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "RunControls": {
       "files": [
@@ -1489,7 +1922,10 @@
         "cieo/agent",
         "cieo/controls"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ScrollableArea": {
       "files": [
@@ -1497,7 +1933,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Section": {
       "files": [
@@ -1505,7 +1944,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SeenBy": {
       "files": [
@@ -1517,7 +1959,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SegmentedControl": {
       "files": [
@@ -1525,7 +1970,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SegmentedControlItem": {
       "files": [
@@ -1535,7 +1983,10 @@
         "SegmentedControl"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SelectableCard": {
       "files": [
@@ -1543,7 +1994,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Selector": {
       "files": [
@@ -1561,7 +2015,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ShareButton": {
       "files": [
@@ -1573,7 +2030,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SideNav": {
       "files": [
@@ -1581,7 +2041,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SideNavCollapseButton": {
       "files": [
@@ -1589,7 +2052,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SideNavHeading": {
       "files": [
@@ -1597,7 +2063,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SideNavItem": {
       "files": [
@@ -1605,7 +2074,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SideNavSection": {
       "files": [
@@ -1613,7 +2085,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Skeleton": {
       "files": [
@@ -1621,7 +2096,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Slider": {
       "files": [
@@ -1641,7 +2119,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SortableListItem": {
       "files": [
@@ -1651,7 +2132,10 @@
         "SortableList"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SpeakerTile": {
       "files": [
@@ -1661,7 +2145,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Spinner": {
       "files": [
@@ -1669,7 +2156,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Stack": {
       "files": [
@@ -1677,7 +2167,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "StackItem": {
       "files": [
@@ -1685,7 +2178,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "StatusDot": {
       "files": [
@@ -1693,7 +2189,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Step": {
       "files": [
@@ -1701,7 +2200,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Stepper": {
       "files": [
@@ -1709,7 +2211,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "StreamingMessage": {
       "files": [
@@ -1721,7 +2226,10 @@
       "packageImports": [
         "cieo/agent"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Tab": {
       "files": [
@@ -1731,7 +2239,10 @@
         "TabList"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TabList": {
       "files": [
@@ -1741,7 +2252,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TabMenu": {
       "files": [
@@ -1753,7 +2267,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Table": {
       "files": [
@@ -1761,7 +2278,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableBody": {
       "files": [
@@ -1769,7 +2289,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableCell": {
       "files": [
@@ -1777,7 +2300,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableFooter": {
       "files": [
@@ -1785,7 +2311,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableHeader": {
       "files": [
@@ -1793,7 +2322,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableHeaderCell": {
       "files": [
@@ -1801,7 +2333,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableRow": {
       "files": [
@@ -1809,7 +2344,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TableSelectionToolbar": {
       "files": [
@@ -1817,7 +2355,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Text": {
       "files": [
@@ -1825,7 +2366,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Thumbnail": {
       "files": [
@@ -1833,7 +2377,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ThumbsFeedback": {
       "files": [
@@ -1843,7 +2390,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TimeInput": {
       "files": [
@@ -1851,7 +2401,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Timer": {
       "files": [
@@ -1859,7 +2412,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Timestamp": {
       "files": [
@@ -1867,7 +2423,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ToggleButton": {
       "files": [
@@ -1877,7 +2436,10 @@
         "ToggleButtonGroup"
       ],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ToggleButtonGroup": {
       "files": [
@@ -1885,7 +2447,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Token": {
       "files": [
@@ -1893,7 +2458,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Tokenizer": {
       "files": [
@@ -1901,7 +2469,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "ToolCallDisclosure": {
       "files": [
@@ -1913,7 +2484,10 @@
       "packageImports": [
         "cieo/agent"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Toolbar": {
       "files": [
@@ -1923,7 +2497,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Tooltip": {
       "files": [
@@ -1934,7 +2511,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "motion.ts"
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
       ]
     },
     "TopNav": {
@@ -1943,7 +2522,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TopNavHeading": {
       "files": [
@@ -1951,7 +2533,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TopNavItem": {
       "files": [
@@ -1959,7 +2544,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TopNavMegaMenu": {
       "files": [
@@ -1969,7 +2557,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TopNavMegaMenuFeaturedCard": {
       "files": [
@@ -1977,7 +2568,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TopNavMegaMenuItem": {
       "files": [
@@ -1985,7 +2579,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TopNavMenu": {
       "files": [
@@ -1993,7 +2590,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TreeList": {
       "files": [
@@ -2001,7 +2601,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "Typeahead": {
       "files": [
@@ -2011,7 +2614,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TypeaheadItem": {
       "files": [
@@ -2019,7 +2625,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "TypingIndicator": {
       "files": [
@@ -2029,7 +2638,10 @@
       "packageImports": [
         "cieo/react"
       ],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "UnreadDivider": {
       "files": [
@@ -2037,7 +2649,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "VStack": {
       "files": [
@@ -2055,7 +2670,10 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
-      "sharedFiles": []
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "VoiceRecorder": {
       "files": [
@@ -2071,7 +2689,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "VoiceRecorder/recorderVisual.ts"
+        "VoiceRecorder/recorderVisual.ts",
+        "customization.ts",
+        "parts.ts"
       ]
     }
   }

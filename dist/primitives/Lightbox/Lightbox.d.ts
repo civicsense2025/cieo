@@ -1,5 +1,12 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type MotionProps } from '../motion.js';
 export interface LightboxProps extends MotionProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        image?: PrimitivePartProps;
+        close?: PrimitivePartProps;
+    };
     /** Image source. Required. */
     src: string;
     /** Image alternative text. Required. */
@@ -13,4 +20,4 @@ export interface LightboxProps extends MotionProps {
     /** Accessible name for the viewer dialog. Defaults to Image viewer. */
     label?: string;
 }
-export declare function Lightbox({ src, alt, open, onClose, dismissOnOutsidePress, label, motion, entering, exiting }: LightboxProps): import("react/jsx-runtime").JSX.Element | null;
+export declare function Lightbox({ src, alt, open, onClose, dismissOnOutsidePress, label, motion, entering, exiting, className, slotProps }: LightboxProps): import("react/jsx-runtime").JSX.Element | null;

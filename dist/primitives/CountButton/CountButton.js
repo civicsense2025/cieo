@@ -5,6 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useRef, useState } from 'react';
 import { useReducedMotion, useSpring } from '../../react/index.js';
 import { CompactCount, formatExactCount } from '../CompactCount/CompactCount.js';
+import { customizePart } from '../customization.js';
 /** Accessible name that carries the exact count: "Like, 164 likes". A zero, missing or invalid count gives just the label. */
 export function countButtonLabel(label, count, unit) {
     if (typeof count !== 'number' || !Number.isFinite(count) || Math.floor(count) <= 0)
@@ -13,7 +14,7 @@ export function countButtonLabel(label, count, unit) {
 }
 /** Scale the icon dips to on press before settling back to 1. */
 export const COUNT_BUTTON_DIP = 0.8;
-export function CountButton({ icon, activeIcon, label, count, countUnit, pressed, onPress, tone = 'neutral', size = 'md', disabled }) {
+export function CountButton({ className, slotProps, icon, activeIcon, label, count, countUnit, pressed, onPress, tone = 'neutral', size = 'md', disabled }) {
     const reduced = useReducedMotion();
     const iconRef = useRef(null);
     const [dip, setDip] = useState(false);
@@ -28,5 +29,5 @@ export function CountButton({ icon, activeIcon, label, count, countUnit, pressed
             if (!reduced)
                 setDip(true);
             onPress?.();
-        }, children: [_jsxs("span", { className: "cieo-count-button-icon", ref: iconRef, "aria-hidden": "true", children: [_jsx("span", { className: "cieo-count-button-glyph", "data-glyph": "base", children: icon }), activeIcon !== undefined ? _jsx("span", { className: "cieo-count-button-glyph", "data-glyph": "active", children: activeIcon }) : null] }), count !== undefined ? (_jsx("span", { className: "cieo-count-button-count", "aria-hidden": "true", children: _jsx(CompactCount, { value: count ?? 0, unit: countUnit }) })) : null] }));
+        }, ...customizePart(slotProps?.root, "cieo cieo-count-button", undefined, className), children: [_jsxs("span", { className: "cieo-count-button-icon", ref: iconRef, "aria-hidden": "true", ...customizePart(slotProps?.icon, "cieo-count-button-icon", undefined), children: [_jsx("span", { className: "cieo-count-button-glyph", "data-glyph": "base", ...customizePart(slotProps?.glyph, "cieo-count-button-glyph", undefined), children: icon }), activeIcon !== undefined ? _jsx("span", { className: "cieo-count-button-glyph", "data-glyph": "active", ...customizePart(slotProps?.glyph, "cieo-count-button-glyph", undefined), children: activeIcon }) : null] }), count !== undefined ? (_jsx("span", { className: "cieo-count-button-count", "aria-hidden": "true", ...customizePart(slotProps?.count, "cieo-count-button-count", undefined), children: _jsx(CompactCount, { value: count ?? 0, unit: countUnit }) })) : null] }));
 }

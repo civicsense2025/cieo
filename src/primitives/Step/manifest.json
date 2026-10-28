@@ -14,7 +14,9 @@
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "state", "type": { "kind": "enum", "values": ["done", "current", "todo"] }, "required": false, "nullable": false, "default": "todo", "constraints": {} }
+    { "id": "state", "type": { "kind": "enum", "values": ["done", "current", "todo"] }, "required": false, "nullable": false, "default": "todo", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 1, "order": "document" }],
   "state": [],
@@ -23,9 +25,9 @@
   "variants": [],
   "styleParts": [{ "id": "item", "overrides": ["color"], "tokenRoles": ["text-progress"] }],
   "constraints": { "layout": ["item-in-stepper"], "content": ["item-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["state"], "states": [], "events": [], "parts": ["item"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["state", "className", "slotProps"], "states": [], "events": [], "parts": ["item"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Custom step item for hand-built steppers." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

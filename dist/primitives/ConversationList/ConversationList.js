@@ -1,7 +1,7 @@
 // src/primitives/ConversationList/ConversationList.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-/* ConversationList. The inbox: a list of ConversationListItem rows with one tab stop, arrow-key movement, and rows that glide to their new places when the order changes. The host owns the conversations and their order. */
+import { customizePart } from '../customization.js';
 import { Children, cloneElement, createContext, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { roveFocus, roveIndex, useFlip } from '../../react/index.js';
 /** Ids of the rows in `children`, in the order the host wrote them. Anything without a string id is ignored. */
@@ -31,7 +31,7 @@ export function conversationRove(key, current, count) {
 }
 export const ConversationListContext = createContext(null);
 const ROW = '[data-conversation-row]';
-export function ConversationList({ label, children, order, selectedId }) {
+export function ConversationList({ label, children, order, selectedId, className, slotProps }) {
     const ref = useRef(null);
     const [activeId, setActiveId] = useState(null);
     const held = useRef(null);
@@ -79,5 +79,5 @@ export function ConversationList({ label, children, order, selectedId }) {
         roveFocus(e, ref.current, ROW, { orientation: 'vertical', loop: false });
     };
     const context = { tabbableId: conversationTabbable(shown, activeId, selectedId), selectedId };
-    return (_jsx(ConversationListContext.Provider, { value: context, children: _jsx("div", { ref: ref, role: "list", "aria-label": label, onFocusCapture: onFocus, onBlurCapture: onBlur, onKeyDown: onKeyDown, className: "cieo cieo-conversation-list", children: rows }) }));
+    return (_jsx(ConversationListContext.Provider, { value: context, children: _jsx("div", { ref: ref, role: "list", "aria-label": label, onFocusCapture: onFocus, onBlurCapture: onBlur, onKeyDown: onKeyDown, className: "cieo cieo-conversation-list", ...customizePart(slotProps?.root, "cieo cieo-conversation-list", undefined, className), children: rows }) }));
 }

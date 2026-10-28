@@ -18,7 +18,9 @@
     { "id": "name", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": {} },
     { "id": "email", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": {} },
     { "id": "avatarInitials", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": {} },
-    { "id": "signOutConfirm", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} }
+    { "id": "signOutConfirm", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [],
   "state": [],
@@ -27,9 +29,9 @@
   "variants": ["confirm"],
   "styleParts": [],
   "constraints": { "layout": [], "content": [], "motion": ["base-pane-swap", "soft-height", "reduced-motion-respected"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "name", "email", "avatarInitials", "signOutConfirm"], "states": [], "events": ["onSignOut"], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "name", "email", "avatarInitials", "signOutConfirm", "className", "slotProps"], "states": [], "events": ["onSignOut"], "parts": [], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Profile row with sign out guarded by an inline confirm step." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","title","profile","avatar","identity","name","email","confirmation","actions","confirm","cancel","signOut"],"semanticOverrides":false}}
 }

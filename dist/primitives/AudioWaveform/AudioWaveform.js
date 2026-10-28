@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AudioWaveform. Bars drawn from a clip's peaks; the played part fills continuously and, when the host passes onSeek, the whole thing is a scrubber. The host owns time. */
 import { useRef } from 'react';
 import { speakAudioTime } from '../AudioTime/AudioTime.js';
+import { customizePart } from '../customization.js';
 /** Shortest a bar can be, as a fraction of full height, so silence still shows a tick. */
 export const WAVEFORM_FLOOR = 0.08;
 /** Seconds one arrow key moves the playhead. */
@@ -101,7 +102,7 @@ export function useScrub(duration, current, onSeek) {
 }
 /** Total entrance stagger across all bars, in ms. */
 const STAGGER_MS = 240;
-export function AudioWaveform({ peaks, duration, current, onSeek, label, bars = 48 }) {
+export function AudioWaveform({ className, slotProps, peaks, duration, current, onSeek, label, bars = 48 }) {
     const requested = Number.isFinite(bars) ? Math.floor(bars) : bars === Number.POSITIVE_INFINITY ? MAX_WAVEFORM_BARS : 1;
     const count = Math.min(MAX_WAVEFORM_BARS, Math.max(1, requested));
     const heights = waveformBars(peaks, count);
@@ -110,8 +111,8 @@ export function AudioWaveform({ peaks, duration, current, onSeek, label, bars = 
     const progress = d > 0 ? c / d : 0;
     const scrub = useScrub(d, c, onSeek);
     const style = { '--progress': progress, '--step': `${(STAGGER_MS / count).toFixed(2)}ms` };
-    const draw = (hidden) => (_jsx("span", { className: hidden ? 'cieo-audio-waveform-bars cieo-audio-waveform-played' : 'cieo-audio-waveform-bars', "aria-hidden": "true", children: heights.map((h, i) => (_jsx("span", { className: "cieo-audio-waveform-bar", style: { '--h': h, '--i': i } }, i))) }));
-    const common = { className: 'cieo cieo-audio-waveform', style, 'data-seekable': onSeek ? '' : undefined, 'aria-label': label };
+    const draw = (hidden) => (_jsx("span", { className: hidden ? 'cieo-audio-waveform-bars cieo-audio-waveform-played' : 'cieo-audio-waveform-bars', "aria-hidden": "true", ...customizePart(slotProps?.bars, hidden ? 'cieo-audio-waveform-bars cieo-audio-waveform-played' : 'cieo-audio-waveform-bars'), children: heights.map((h, i) => (_jsx("span", { className: "cieo-audio-waveform-bar", style: { '--h': h, '--i': i }, ...customizePart(slotProps?.bar, 'cieo-audio-waveform-bar', { '--h': h, '--i': i }) }, i))) }));
+    const common = { className: 'cieo cieo-audio-waveform', style, ...customizePart(slotProps?.root, 'cieo cieo-audio-waveform', style, className), 'data-seekable': onSeek ? '' : undefined, 'aria-label': label };
     if (!onSeek) {
         return (_jsxs("div", { ...common, role: "img", children: [draw(false), draw(true)] }));
     }

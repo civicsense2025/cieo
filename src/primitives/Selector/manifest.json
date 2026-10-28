@@ -41,5 +41,5 @@
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Thin contract over the Select control; reuses select styling." },
-  "extensions": { "wraps": "src/controls/Select.tsx" }
+  "extensions": { "wraps": "src/controls/Select.tsx", "customization": {"status":"delegated","target":"Select","reason":"Alias of Select; preserves its native/owning component props instead of creating a second control contract."} }
 }

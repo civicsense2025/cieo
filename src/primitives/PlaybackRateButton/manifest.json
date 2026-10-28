@@ -46,7 +46,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is (next: number) => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -89,7 +91,9 @@
       "properties": [
         "rate",
         "rates",
-        "onRateChange"
+        "onRateChange",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -115,5 +119,5 @@
     "path": "README.md",
     "purpose": "One button that cycles the playback speed and shows it as 1.5×."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

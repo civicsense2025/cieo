@@ -100,7 +100,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, badge, handle, separator, time. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -139,7 +141,9 @@
         "time",
         "dateTime",
         "handle",
-        "id"
+        "id",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -165,5 +169,5 @@
     "path": "README.md",
     "purpose": "One-line author header: name, badge, context crumb and relative time, with the name giving way before the time does."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","badge","handle","separator","time"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

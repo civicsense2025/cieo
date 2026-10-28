@@ -30,7 +30,7 @@ Not focusable. Screen readers read the label ("Verified") after the name.
 
 ## Customization
 
-Sized in `em`, so it scales with the surrounding text. Color comes from `--cieo-color-accent`.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -43,3 +43,7 @@ Sized in `em`, so it scales with the surrounding text. Color comes from `--cieo-
 ## Evidence
 
 Covered by `test/primitives-social-content.test.mjs` (role, label, size fallback).
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `seal`, `check`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

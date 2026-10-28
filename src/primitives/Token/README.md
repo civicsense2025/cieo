@@ -32,7 +32,7 @@ No motion. Tone defaults to `default`; `accent` lifts emphasis. Static text only
 
 ## Customization
 
-Tone only. Pill radius, fill, and type come from Cieo tokens; do not restyle per instance.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ Badge (atom), Text (atom), Kbd (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-content.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

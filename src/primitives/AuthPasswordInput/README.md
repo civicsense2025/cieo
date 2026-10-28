@@ -16,3 +16,7 @@ Strength score 0-4: +1 for 8 or more characters, +1 for 12 or more, +1 for mixed
 The toggle keeps focus on the input after switching. The meter is `role="meter"` with `aria-valuenow` and `aria-valuetext`.
 
 The visibility label swaps on the base token and strength segments respond on snap. Reduced motion and `data-motion="off"` update instantly.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `label`, `control`, `input`, `toggle`, `strength`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

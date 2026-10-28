@@ -172,7 +172,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, reply, row, avatar, main, panes, pane, input, attachments, bar, tools, submit."}
   ],
   "slots": [
     {
@@ -252,7 +254,9 @@
         "maxLength",
         "submitLabel",
         "pending",
-        "disabled"
+        "disabled",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -278,5 +282,5 @@
     "path": "README.md",
     "purpose": "Input row for a thread: autosizing text, slots for tools, attachments and a recorder, reply context and a character ring."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","reply","row","avatar","main","panes","pane","input","attachments","bar","tools","submit"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

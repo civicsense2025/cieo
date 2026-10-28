@@ -1,5 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function ListItem({ children }) {
-    return (_jsx("li", { className: "cieo-p-list-item", children: children }));
+import { customizePart } from '../customization.js';
+export function ListItem({ className, slotProps, children }) {
+    return (_jsx("li", { className: "cieo-p-list-item", ...customizePart(slotProps?.root, "cieo-p-list-item", undefined, className), children: children }));
 }

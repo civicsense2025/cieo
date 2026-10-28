@@ -18,7 +18,7 @@ Tab row that owns the selected value while the host owns the panels.
 
 ## Behavior
 
-No motion. Controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue` with internal state). Selecting a tab reports its `value`; host swaps panels and owns persistence.
+Controlled (`value` + `onValueChange`) or uncontrolled (`defaultValue` with internal state). Selecting a tab reports its `value`; host swaps panels and owns persistence.
 
 ## Motion
 
@@ -41,7 +41,7 @@ Selected-tab marker only. Row, type, and spacing come from Cieo tokens.
 
 ## Limitations
 
-- Max 16 children. No arrow-key roaming; tabs tab in document order and the host may add roving tabindex.
+- Arrow keys, Home, and End move and activate tabs; the host owns the associated panels.
 - Host persists the value; the row never writes storage.
 
 ## Related
@@ -51,3 +51,7 @@ Tab (atom), TabMenu (molecule), SegmentedControl (molecule).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-menus.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` customizes the root. `slotProps.root` accepts className, style, title, and data attributes without replacing owned selection, roles, or keyboard behavior. `slotProps.indicator` customizes marker paint; position and width stay library-owned.

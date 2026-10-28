@@ -1,5 +1,12 @@
 import type { CSSProperties } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export interface AuthEmailFieldProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        label?: PrimitivePartProps;
+        input?: PrimitivePartProps;
+    };
     /** Input id, also used to bind the label and the error message. */
     id: string;
     /** Visible label text. Defaults to "Email". */
@@ -16,4 +23,4 @@ export interface AuthEmailFieldProps {
     onChange?: (value: string) => void;
     onBlur?: () => void;
 }
-export declare function AuthEmailField({ id, label, value, defaultValue, error, disabled, style, onChange, onBlur }: AuthEmailFieldProps): import("react/jsx-runtime").JSX.Element;
+export declare function AuthEmailField({ className, slotProps, id, label, value, defaultValue, error, disabled, style, onChange, onBlur }: AuthEmailFieldProps): import("react/jsx-runtime").JSX.Element;

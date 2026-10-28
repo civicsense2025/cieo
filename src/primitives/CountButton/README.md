@@ -34,7 +34,7 @@ A real button. `aria-pressed` only when `pressed` is defined. Visible focus ring
 
 ## Customization
 
-Tone and size props; colors come from tokens.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -47,3 +47,7 @@ ActionBar, CompactCount, IconButton, ToggleButton.
 ## Evidence
 
 `test/primitives-engagement-actions.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `icon`, `glyph`, `count`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

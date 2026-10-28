@@ -10,6 +10,10 @@ const PACKAGE_AREAS = {
 // Modules with their own package subpath, checked before the area they live in. Mirrored in scripts/lib/registry.mjs.
 const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
 const COMPANION_FILES = {
+  'customization.ts|./parts.js': true,
+  'Popover/Popover.tsx|./position.js': true,
+  'Popover/Popover.tsx|./usePopoverPosition.js': true,
+  'Popover/usePopoverPosition.ts|./position.js': true,
   'AuthSignInCard/AuthSignInCard.tsx|./AuthMotion.js': true,
   'VoiceRecorder/VoiceRecorder.tsx|./recorderVisual.js': true,
 };
@@ -36,6 +40,8 @@ function classifyRelative(spec, fromFile) {
   const ups = (spec.match(/\.\.\//g) || []).length;
   const rest = spec.replace(/^(\.\.\/)+/, '');
   if (ups === 1) {
+    if (rest === 'customization.js') return { kind: 'shared' };
+    if (rest === 'parts.js') return { kind: 'shared' };
     if (rest === 'motion.js') return { kind: 'shared' };
     if (['AuthSignInCard/AuthMotion.js', 'VoiceRecorder/recorderVisual.js'].includes(rest)) return { kind: 'shared' };
     const [first] = rest.split('/');

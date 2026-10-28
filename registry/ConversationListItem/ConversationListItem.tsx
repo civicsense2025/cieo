@@ -1,5 +1,7 @@
 // src/primitives/ConversationListItem/ConversationListItem.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ConversationListItem. One row of the inbox: avatar, title and time, preview and unread badge. The host owns the content and what a click does; the row owns the layout, the badge motion and the spoken summary. */
 import { Children, isValidElement, useContext, type ReactNode } from 'react';
 import { Digits, S, usePresence } from '../../react/index.js';
@@ -47,6 +49,9 @@ export function conversationLabel(s: ConversationSummary): string {
 }
 
 export interface ConversationListItemProps {
+  className?: string;
+  slotProps?: { avatar?: PrimitivePartProps; main?: PrimitivePartProps; top?: PrimitivePartProps; title?: PrimitivePartProps; time?: PrimitivePartProps; bottom?: PrimitivePartProps; line?: PrimitivePartProps; preview?: PrimitivePartProps; draft?: PrimitivePartProps; typing?: PrimitivePartProps; flags?: PrimitivePartProps; icon?: PrimitivePartProps; badge?: PrimitivePartProps; root?: PrimitivePartProps };
+
   /** Stable id of the conversation. Required; the list orders and focuses rows by it. */
   id: string;
   /** Conversation name. Required. */
@@ -89,7 +94,7 @@ const pin = (
   </svg>
 );
 
-export function ConversationListItem({ id, title, avatar, preview, time, dateTime, unread = 0, muted, pinned, draft, typing = [], selected, href, onSelect }: ConversationListItemProps) {
+export function ConversationListItem({ className, slotProps, id, title, avatar, preview, time, dateTime, unread = 0, muted, pinned, draft, typing = [], selected, href, onSelect }: ConversationListItemProps) {
   const list = useContext(ConversationListContext);
   const count = Number.isFinite(unread) ? Math.max(0, Math.floor(unread)) : 0;
   const isSelected = selected ?? (list?.selectedId !== undefined && list.selectedId === id);
@@ -108,33 +113,33 @@ export function ConversationListItem({ id, title, avatar, preview, time, dateTim
   };
   const body = (
     <>
-      <span aria-hidden="true" className="cieo-conversation-list-item-avatar">
+      <span aria-hidden="true" className="cieo-conversation-list-item-avatar" {...customizePart(slotProps?.avatar, "cieo-conversation-list-item-avatar")}>
         {avatar}
       </span>
-      <span className="cieo-conversation-list-item-main">
-        <span className="cieo-conversation-list-item-top">
-          <span className="cieo-conversation-list-item-title">{title}</span>
+      <span className="cieo-conversation-list-item-main" {...customizePart(slotProps?.main, "cieo-conversation-list-item-main")}>
+        <span className="cieo-conversation-list-item-top" {...customizePart(slotProps?.top, "cieo-conversation-list-item-top")}>
+          <span className="cieo-conversation-list-item-title" {...customizePart(slotProps?.title, "cieo-conversation-list-item-title")}>{title}</span>
           {time ? (
-            <time dateTime={dateTime} className="cieo-conversation-list-item-time">
+            <time dateTime={dateTime} className="cieo-conversation-list-item-time" {...customizePart(slotProps?.time, "cieo-conversation-list-item-time")}>
               {time}
             </time>
           ) : null}
         </span>
-        <span className="cieo-conversation-list-item-bottom">
-          <span className="cieo-conversation-list-item-line">
-            <span className="cieo-conversation-list-item-preview" data-hidden={isTyping ? '' : undefined}>
-              {draft ? <span className="cieo-conversation-list-item-draft">Draft: </span> : null}
+        <span className="cieo-conversation-list-item-bottom" {...customizePart(slotProps?.bottom, "cieo-conversation-list-item-bottom")}>
+          <span className="cieo-conversation-list-item-line" {...customizePart(slotProps?.line, "cieo-conversation-list-item-line")}>
+            <span className="cieo-conversation-list-item-preview" data-hidden={isTyping ? '' : undefined} {...customizePart(slotProps?.preview, "cieo-conversation-list-item-preview")}>
+              {draft ? <span className="cieo-conversation-list-item-draft" {...customizePart(slotProps?.draft, "cieo-conversation-list-item-draft")}>Draft: </span> : null}
               {preview}
             </span>
-            <span className="cieo-conversation-list-item-typing" data-shown={isTyping ? '' : undefined}>
+            <span className="cieo-conversation-list-item-typing" data-shown={isTyping ? '' : undefined} {...customizePart(slotProps?.typing, "cieo-conversation-list-item-typing")}>
               <TypingIndicator names={typing} variant="inline" />
             </span>
           </span>
-          <span className="cieo-conversation-list-item-flags">
-            {muted ? <span className="cieo-conversation-list-item-icon">{bell}</span> : null}
-            {pinned && count === 0 ? <span className="cieo-conversation-list-item-icon">{pin}</span> : null}
+          <span className="cieo-conversation-list-item-flags" {...customizePart(slotProps?.flags, "cieo-conversation-list-item-flags")}>
+            {muted ? <span className="cieo-conversation-list-item-icon" {...customizePart(slotProps?.icon, "cieo-conversation-list-item-icon")}>{bell}</span> : null}
+            {pinned && count === 0 ? <span className="cieo-conversation-list-item-icon" {...customizePart(slotProps?.icon, "cieo-conversation-list-item-icon")}>{pin}</span> : null}
             {badge.mounted ? (
-              <span ref={badge.ref} className="cieo-conversation-list-item-badge">
+              <span ref={badge.ref} className="cieo-conversation-list-item-badge" {...customizePart(slotProps?.badge, "cieo-conversation-list-item-badge")}>
                 <Digits value={unreadBadgeText(count)} />
               </span>
             ) : null}
@@ -150,7 +155,7 @@ export function ConversationListItem({ id, title, avatar, preview, time, dateTim
       data-unread={count > 0 ? '' : undefined}
       data-muted={muted ? '' : undefined}
       data-pinned={pinned ? '' : undefined}
-      className="cieo cieo-conversation-list-item"
+      className="cieo cieo-conversation-list-item" {...customizePart(slotProps?.root, "cieo cieo-conversation-list-item", undefined, className)}
     >
       {href ? (
         <a href={href} {...common}>

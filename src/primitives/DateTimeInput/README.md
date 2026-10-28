@@ -32,7 +32,7 @@ No motion. Native picker and native form value (local, no zone offset).
 
 ## Customization
 
-Label only. Colors, radius, and spacing come from Cieo tokens via the shared input style.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ DateInput (atom), TimeInput (atom), FieldStatus (atom, for the help/error line).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `label`, `input`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

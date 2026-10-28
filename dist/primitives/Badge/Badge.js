@@ -1,6 +1,7 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { cx } from '../../controls/classes.js';
-export function Badge({ status = 'default', children }) {
-    return (_jsx("span", { "data-status": status, className: cx('cieo', 'cieo-badge'), children: children }));
+import { customizePart } from '../customization.js';
+export function Badge({ className, slotProps, status = 'default', children }) {
+    return (_jsx("span", { "data-status": status, className: cx('cieo', 'cieo-badge'), ...customizePart(slotProps?.root, cx('cieo', 'cieo-badge'), undefined, className), children: children }));
 }

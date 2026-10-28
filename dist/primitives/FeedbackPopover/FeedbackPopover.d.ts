@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export type PopoverSide = 'right' | 'left' | 'below' | 'above';
 export interface PopoverPlacement {
@@ -25,6 +26,15 @@ export declare function isSubmitShortcut(e: {
 /** Text to hand to onSubmit, or null when there is nothing but whitespace. */
 export declare function commentText(raw: string): string | null;
 export interface FeedbackPopoverProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        title?: PrimitivePartProps;
+        thread?: PrimitivePartProps;
+        field?: PrimitivePartProps;
+        actions?: PrimitivePartProps;
+        submit?: PrimitivePartProps;
+    };
     /** Controlled open state. */
     open: boolean;
     /** Called with false on Escape, outside press, and after a successful submit. */
@@ -54,4 +64,4 @@ export interface FeedbackPopoverProps {
     /** Distance from the anchor in px. Defaults to 8. */
     gap?: number;
 }
-export declare function FeedbackPopover({ open, onOpenChange, onSubmit, placeholder, submitLabel, title, children, secondaryActions, anchor, container, gap }: FeedbackPopoverProps): import("react/jsx-runtime").JSX.Element | null;
+export declare function FeedbackPopover({ className, slotProps, open, onOpenChange, onSubmit, placeholder, submitLabel, title, children, secondaryActions, anchor, container, gap }: FeedbackPopoverProps): import("react/jsx-runtime").JSX.Element | null;

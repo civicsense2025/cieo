@@ -77,11 +77,12 @@ test('CommandPalette shell is a controlled dialog host filters', () => {
   assert.match(src, /query/);
 });
 
-test('Popover panel is absolute with no flip', () => {
+test('Popover owns fixed viewport positioning and exposes surface tokens', () => {
+  const source = readFileSync('src/primitives/Popover/Popover.tsx', 'utf8');
+  assert.match(source, /usePopoverPosition/);
+  assert.match(source, /createPortal/);
   const css = readFileSync('design/styles/primitives/popover.css', 'utf8');
-  assert.match(css, /position:\s*absolute/);
-  const src = readFileSync('src/primitives/Popover/Popover.tsx', 'utf8');
-  assert.ok(!src.includes('flip'), 'host owns positioning-flip');
+  assert.match(css, /--cieo-popover-border/);
 });
 
 test('HoverCard CSS reveals on hover and focus with reduced-motion guard', () => {

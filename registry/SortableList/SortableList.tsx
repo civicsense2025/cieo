@@ -1,5 +1,7 @@
 // src/primitives/SortableList/SortableList.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* SortableList. Controlled drag-and-drop reorder: pointer or keyboard lifts an item, the list previews the move, onReorder fires once on drop. */
 import { Children, cloneElement, createContext, isValidElement, useEffect, useLayoutEffect, useRef, useState, type ReactElement, type ReactNode } from 'react';
 import { useFlip } from '../../react/index.js';
@@ -102,6 +104,9 @@ export interface SortableListContextValue {
 export const SortableListContext = createContext<SortableListContextValue | null>(null);
 
 export interface SortableListProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Accessible name for the list (e.g. "Pipeline stages"). Required. */
   label: string;
   /** Item ids in display order. The list never reorders itself; it asks through onReorder. */
@@ -120,7 +125,7 @@ export interface SortableListProps {
 
 type ItemElement = ReactElement<{ id: string }>;
 
-export function SortableList({ label, order, onReorder, as = 'ul', orientation = 'vertical', motion, children }: SortableListProps) {
+export function SortableList({ className, slotProps, label, order, onReorder, as = 'ul', orientation = 'vertical', motion, children }: SortableListProps) {
   const ref = useRef<HTMLElement>(null);
   const [session, setSession] = useState<SortableSession | null>(null);
   const [message, setMessage] = useState('');
@@ -210,7 +215,7 @@ export function SortableList({ label, order, onReorder, as = 'ul', orientation =
   const Tag = as as 'ul';
   return (
     <SortableListContext.Provider value={api}>
-      <Tag ref={ref as never} aria-label={label} data-orientation={orientation} data-sorting={session ? session.via : undefined} data-motion={motion === false ? 'off' : undefined} className="cieo cieo-sortable-list">
+      <Tag ref={ref as never} aria-label={label} data-orientation={orientation} data-sorting={session ? session.via : undefined} data-motion={motion === false ? 'off' : undefined} className="cieo cieo-sortable-list" {...customizePart(slotProps?.root, "cieo cieo-sortable-list", undefined, className)}>
         {ordered}
       </Tag>
     </SortableListContext.Provider>

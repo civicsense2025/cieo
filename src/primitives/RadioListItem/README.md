@@ -32,7 +32,7 @@ Equals Radio exactly: native form participation, dot grows on the snap token. Th
 
 ## Customization
 
-None here. Props mirror Radio (`label`, `value`, `hideLabel`, `description` plus native input attrs); tokens and styling live with the Radio control.
+This alias retains the owning control’s customization API; see Host customization below.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ RadioList (molecule), Radio (control, the implementation), CheckboxListItem (ato
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+Alias of Radio; preserves its native/owning component props instead of creating a second control contract. Use the underlying component’s supported `className`, style/native props, and content slots. This alias intentionally does not fork behavior or introduce a competing `slotProps` shape.

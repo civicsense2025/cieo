@@ -3,19 +3,24 @@
 /* DropdownMenuRadioItem. One pick inside DropdownMenuRadioGroup. Checked when the group value equals its own value. */
 import { useContext } from 'react';
 import { DropdownMenuRadioGroupContext } from '../DropdownMenuRadioGroup/DropdownMenuRadioGroup.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface DropdownMenuRadioItemProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Accessible name for the option (e.g. "Newest first"). Required. */
   label: string;
   /** Option key matched against the group value. Required. */
   value: string;
 }
 
-export function DropdownMenuRadioItem({ label, value }: DropdownMenuRadioItemProps) {
+export function DropdownMenuRadioItem({ className, slotProps, label, value }: DropdownMenuRadioItemProps) {
   const group = useContext(DropdownMenuRadioGroupContext);
   const checked = group?.value === value;
   return (
-    <button type="button" role="menuitemradio" aria-checked={checked} aria-label={label} data-checked={checked} onClick={() => group?.onSelect?.(value)} className="cieo cieo-dropdown-menu-radio-item">
+    <button type="button" role="menuitemradio" aria-checked={checked} aria-label={label} data-checked={checked} onClick={() => group?.onSelect?.(value)} className="cieo cieo-dropdown-menu-radio-item" {...customizePart(slotProps?.root, "cieo cieo-dropdown-menu-radio-item", undefined, className)}>
       {label}
     </button>
   );

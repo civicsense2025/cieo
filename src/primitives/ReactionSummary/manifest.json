@@ -57,7 +57,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is { id: string; emoji: string; label: string }[]."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, list, slot, chip, emoji, count, add."}
   ],
   "slots": [],
   "state": [],
@@ -94,7 +96,9 @@
         "reactions",
         "onToggle",
         "onAdd",
-        "available"
+        "available",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -120,5 +124,5 @@
     "path": "README.md",
     "purpose": "Chips under a message or comment showing which reactions it has, how many people used each, and whether you are one of them."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","list","slot","chip","emoji","count","add"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

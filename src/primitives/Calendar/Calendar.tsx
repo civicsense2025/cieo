@@ -1,9 +1,14 @@
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 // src/primitives/Calendar/Calendar.tsx
 /* Calendar. Month grid for picking one ISO date. Flat group semantics (role=group, no grid roles); day buttons report selection via aria-pressed. */
 const WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
 export interface CalendarProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; weekday?: PrimitivePartProps; blank?: PrimitivePartProps; day?: PrimitivePartProps };
+
   /** Full year (e.g. 2026). Required. */
   year: number;
   /** Month of year, 1-12. Required. */
@@ -18,7 +23,7 @@ function pad(n: number) {
   return String(n).padStart(2, '0');
 }
 
-export function Calendar({ year, month, selected, onSelect }: CalendarProps) {
+export function Calendar({ className, slotProps, year, month, selected, onSelect }: CalendarProps) {
   const daysInMonth = new Date(year, month, 0).getDate();
   const leadBlanks = new Date(year, month - 1, 1).getDay();
   const days: Array<string | null> = [
@@ -26,17 +31,17 @@ export function Calendar({ year, month, selected, onSelect }: CalendarProps) {
     ...Array.from({ length: daysInMonth }, (_, i) => `${year}-${pad(month)}-${pad(i + 1)}`),
   ];
   return (
-    <div role="group" aria-label={`${year}-${month}`} className="cieo cieo-p-calendar">
+    <div role="group" aria-label={`${year}-${month}`} className="cieo cieo-p-calendar" {...customizePart(slotProps?.root, "cieo cieo-p-calendar", undefined, className)}>
       {WEEKDAYS.map((d) => (
-        <span key={d} className="cieo-p-calendar-weekday" aria-hidden="true">
+        <span key={d} className="cieo-p-calendar-weekday" aria-hidden="true" {...customizePart(slotProps?.weekday, "cieo-p-calendar-weekday")}>
           {d}
         </span>
       ))}
       {days.map((iso, i) =>
         iso === null ? (
-          <span key={`blank-${i}`} className="cieo-p-calendar-blank" aria-hidden="true" />
+          <span key={`blank-${i}`} className="cieo-p-calendar-blank" aria-hidden="true" {...customizePart(slotProps?.blank, "cieo-p-calendar-blank")} />
         ) : (
-          <button key={iso} type="button" className="cieo-p-calendar-day" aria-pressed={selected === iso} aria-label={iso} onClick={() => onSelect?.(iso)}>
+          <button key={iso} type="button" className="cieo-p-calendar-day" aria-pressed={selected === iso} aria-label={iso} onClick={() => onSelect?.(iso)} {...customizePart(slotProps?.day, "cieo-p-calendar-day")}>
             {Number(iso.slice(8))}
           </button>
         ),

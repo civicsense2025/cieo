@@ -1,6 +1,7 @@
 // src/primitives/ChatMessageBubble/ChatMessageBubble.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function ChatMessageBubble({ variant = 'incoming', children }) {
-    return (_jsx("div", { "data-variant": variant, className: "cieo cieo-chat-message-bubble", children: children }));
+import { customizePart } from '../customization.js';
+export function ChatMessageBubble({ className, slotProps, variant = 'incoming', children }) {
+    return (_jsx("div", { "data-variant": variant, className: "cieo cieo-chat-message-bubble", ...customizePart(slotProps?.root, "cieo cieo-chat-message-bubble", undefined, className), children: children }));
 }

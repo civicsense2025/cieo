@@ -4,6 +4,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { SwapText } from '../../react/index.js';
 import { safeHref } from '../Mention/Mention.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export type ShareMethod = 'native' | 'copy' | 'none';
 export type ShareNavigator = { share?: unknown; clipboard?: { writeText?: unknown } };
@@ -47,6 +49,9 @@ export async function runShare(nav: ShareNavigator | undefined, data: { url: str
 export const SHARE_COPIED_MS = 2000;
 
 export interface ShareButtonProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; button?: PrimitivePartProps; icon?: PrimitivePartProps };
+
   /** Absolute http(s) URL to share. Other schemes disable the button. */
   url: string;
   /** Title passed to the native share sheet. */
@@ -59,7 +64,7 @@ export interface ShareButtonProps {
   onShared?: (method: 'native' | 'copy') => void;
 }
 
-export function ShareButton({ url, title, text, label = 'Share', onShared }: ShareButtonProps) {
+export function ShareButton({ className, slotProps, url, title, text, label = 'Share', onShared }: ShareButtonProps) {
   const [available, setAvailable] = useState(true);
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState('');
@@ -81,9 +86,9 @@ export function ShareButton({ url, title, text, label = 'Share', onShared }: Sha
     } else if (outcome === 'failed' || outcome === 'unavailable') setMessage('Could not share the link');
   }
   return (
-    <span className="cieo cieo-share-button-wrap">
-      <button type="button" className="cieo cieo-share-button" data-copied={copied ? '' : undefined} disabled={!valid || !available} onClick={press}>
-        <svg className="cieo-share-button-icon" aria-hidden="true" viewBox="0 0 24 24" width="1.25em" height="1.25em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" /></svg>
+    <span className="cieo cieo-share-button-wrap" {...customizePart(slotProps?.root, "cieo cieo-share-button-wrap", undefined, className)}>
+      <button type="button" className="cieo cieo-share-button" data-copied={copied ? '' : undefined} disabled={!valid || !available} onClick={press} {...customizePart(slotProps?.button, "cieo cieo-share-button", undefined)}>
+        <svg className="cieo-share-button-icon" aria-hidden="true" viewBox="0 0 24 24" width="1.25em" height="1.25em" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...customizePart(slotProps?.icon, "cieo-share-button-icon", undefined)}><path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5" /></svg>
         <SwapText value={copied ? 'Link copied' : label} />
       </button>
       <span className="cieo-sr-only" role="status" aria-live="polite">{message}</span>

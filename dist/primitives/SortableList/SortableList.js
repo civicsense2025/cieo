@@ -1,6 +1,7 @@
 // src/primitives/SortableList/SortableList.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* SortableList. Controlled drag-and-drop reorder: pointer or keyboard lifts an item, the list previews the move, onReorder fires once on drop. */
 import { Children, cloneElement, createContext, isValidElement, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useFlip } from '../../react/index.js';
@@ -76,7 +77,7 @@ export function sortableStep(session, action, original) {
     return { session: null, event: 'cancel', commit: null, id: session.id, order: original };
 }
 export const SortableListContext = createContext(null);
-export function SortableList({ label, order, onReorder, as = 'ul', orientation = 'vertical', motion, children }) {
+export function SortableList({ className, slotProps, label, order, onReorder, as = 'ul', orientation = 'vertical', motion, children }) {
     const ref = useRef(null);
     const [session, setSession] = useState(null);
     const [message, setMessage] = useState('');
@@ -167,5 +168,5 @@ export function SortableList({ label, order, onReorder, as = 'ul', orientation =
         };
     }, [pointerId]);
     const Tag = as;
-    return (_jsx(SortableListContext.Provider, { value: api, children: _jsx(Tag, { ref: ref, "aria-label": label, "data-orientation": orientation, "data-sorting": session ? session.via : undefined, "data-motion": motion === false ? 'off' : undefined, className: "cieo cieo-sortable-list", children: ordered }) }));
+    return (_jsx(SortableListContext.Provider, { value: api, children: _jsx(Tag, { ref: ref, "aria-label": label, "data-orientation": orientation, "data-sorting": session ? session.via : undefined, "data-motion": motion === false ? 'off' : undefined, className: "cieo cieo-sortable-list", ...customizePart(slotProps?.root, "cieo cieo-sortable-list", undefined, className), children: ordered }) }));
 }

@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 /** Total length of the ring, in milliseconds. */
 export declare const BELL_WIGGLE_MS = 420;
 /** Largest swing of the ring, in degrees. */
@@ -7,6 +8,13 @@ export declare function bellWiggleAngle(t: number): number;
 /** Keyframe angles sampled from the damped swing, first and last at rest. */
 export declare function bellWiggleFrames(steps?: number): number[];
 export interface NotifyToggleProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        icon?: PrimitivePartProps;
+        bell?: PrimitivePartProps;
+        badge?: PrimitivePartProps;
+    };
     /** Whether notifications are on. */
     on: boolean;
     /** Called on every press; the host flips `on`. */
@@ -16,4 +24,4 @@ export interface NotifyToggleProps {
     /** Control height. Defaults to md. */
     size?: 'sm' | 'md';
 }
-export declare function NotifyToggle({ on, onToggle, label, size }: NotifyToggleProps): import("react/jsx-runtime").JSX.Element;
+export declare function NotifyToggle({ className, slotProps, on, onToggle, label, size }: NotifyToggleProps): import("react/jsx-runtime").JSX.Element;

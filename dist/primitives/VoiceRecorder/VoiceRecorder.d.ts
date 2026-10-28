@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type RecorderPhase = 'idle' | 'requesting' | 'recording' | 'paused' | 'done' | 'error';
 export type RecorderErrorReason = 'denied' | 'unsupported' | 'failed';
 export interface RecorderState {
@@ -72,6 +73,18 @@ export interface VoiceClip {
     peaks: number[];
 }
 export interface VoiceRecorderProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        mic?: PrimitivePartProps;
+        live?: PrimitivePartProps;
+        hint?: PrimitivePartProps;
+        time?: PrimitivePartProps;
+        waveform?: PrimitivePartProps;
+        actions?: PrimitivePartProps;
+        error?: PrimitivePartProps;
+        retry?: PrimitivePartProps;
+    };
     /** Called once with the finished clip when the person stops, or the time limit is reached. Never called after a cancel. */
     onRecorded: (clip: VoiceClip) => void;
     /** Called when the person cancels an active take (button, Escape, or sliding away in hold mode). */
@@ -85,4 +98,4 @@ export interface VoiceRecorderProps {
     /** tap: press to start, press to stop. hold: record while the button is held, slide left to cancel. Defaults to tap. */
     mode?: 'tap' | 'hold';
 }
-export declare function VoiceRecorder({ onRecorded, onCancel, maxDuration, autoStart, label, mode }: VoiceRecorderProps): import("react/jsx-runtime").JSX.Element;
+export declare function VoiceRecorder({ className, slotProps, onRecorded, onCancel, maxDuration, autoStart, label, mode }: VoiceRecorderProps): import("react/jsx-runtime").JSX.Element;

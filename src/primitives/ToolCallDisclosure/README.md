@@ -44,3 +44,7 @@ AgentActivity, Collapsible, `cieo/agent`.
 ## Evidence
 
 `test/primitives-agent.test.mjs` (phase words, error only when failed). No device acceptance yet.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

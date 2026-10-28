@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface Reaction {
     /** Stable id the host stores (never the emoji itself). */
     id: string;
@@ -9,6 +10,12 @@ export interface Reaction {
 /** The default set, in the order people reach for them. */
 export declare const DEFAULT_REACTIONS: readonly Reaction[];
 export interface ReactionPickerProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        item?: PrimitivePartProps;
+        emoji?: PrimitivePartProps;
+    };
     /** Called with the id of the reaction the person picked. */
     onPick(id: string): void;
     /** Reactions to offer. Defaults to DEFAULT_REACTIONS. */
@@ -20,4 +27,4 @@ export interface ReactionPickerProps {
 }
 /** Index that holds the roving tab stop: the first selected reaction, else the first. */
 export declare function pickerStartIndex(reactions: readonly Reaction[], selected?: readonly string[]): number;
-export declare function ReactionPicker({ onPick, reactions, label, selected }: ReactionPickerProps): import("react/jsx-runtime").JSX.Element;
+export declare function ReactionPicker({ className, slotProps, onPick, reactions, label, selected }: ReactionPickerProps): import("react/jsx-runtime").JSX.Element;

@@ -1,5 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function InputGroupText({ children }) {
-    return _jsx("span", { className: "cieo cieo-p-input-group-text", children: children });
+import { customizePart } from '../customization.js';
+export function InputGroupText({ className, slotProps, children }) {
+    return _jsx("span", { className: "cieo cieo-p-input-group-text", ...customizePart(slotProps?.root, "cieo cieo-p-input-group-text", undefined, className), children: children });
 }

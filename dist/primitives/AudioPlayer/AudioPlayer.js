@@ -1,6 +1,7 @@
 // src/primitives/AudioPlayer/AudioPlayer.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* AudioPlayer. One clip with play/pause, a scrubber, the clock and (in full) speed. It owns the audio element and keeps only one player in the document playing at a time. */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { AudioPlayButton } from '../AudioPlayButton/AudioPlayButton.js';
@@ -59,7 +60,7 @@ export function claimAudioPlayback(id, target = typeof document === 'undefined' 
             p.pause();
     target?.dispatchEvent(new CustomEvent(AUDIO_PLAY_EVENT, { detail: { id } }));
 }
-export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', rates = DEFAULT_PLAYBACK_RATES, onPlay, onPause, onEnded, onTimeUpdate }) {
+export function AudioPlayer({ className, slotProps, src, label, peaks, duration, variant = 'compact', rates = DEFAULT_PLAYBACK_RATES, onPlay, onPause, onEnded, onTimeUpdate }) {
     const tokenRef = useRef(null);
     if (tokenRef.current === null)
         tokenRef.current = createAudioPlayerToken();
@@ -205,9 +206,9 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
     const total = known > 0 ? known : undefined;
     const track = useScrub(known, seconds, seek);
     const resting = seconds === 0 && phase !== 'playing';
-    const status = (_jsxs("div", { className: "cieo-audio-player-error", children: [_jsx("span", { role: "alert", children: "Couldn't play this clip" }), _jsx("button", { type: "button", className: "cieo-audio-player-retry", onClick: retry, children: "Retry" })] }));
-    const scrubber = phase === 'error' ? status : peaks && peaks.length > 0 ? (_jsx(AudioWaveform, { peaks: peaks, duration: known, current: seconds, onSeek: seek, label: `Seek in ${label}` })) : (_jsx("div", { className: "cieo-audio-player-track", ...track, role: "slider", tabIndex: 0, "aria-label": `Seek in ${label}`, "aria-valuemin": 0, "aria-valuemax": known, "aria-valuenow": Math.floor(seconds), "aria-valuetext": audioSeekText(seconds, known), "aria-orientation": "horizontal", children: _jsx("span", { className: "cieo-audio-player-fill", "aria-hidden": "true" }) }));
-    return (_jsxs("div", { ref: root, className: "cieo cieo-audio-player", role: "group", "aria-label": label, "data-variant": variant, "data-state": phase, children: [_jsx("audio", { ref: audio, src: src, preload: "metadata", onLoadedMetadata: (e) => {
+    const status = (_jsxs("div", { className: "cieo-audio-player-error", ...customizePart(slotProps?.error, "cieo-audio-player-error"), children: [_jsx("span", { role: "alert", children: "Couldn't play this clip" }), _jsx("button", { type: "button", className: "cieo-audio-player-retry", onClick: retry, ...customizePart(slotProps?.retry, "cieo-audio-player-retry"), children: "Retry" })] }));
+    const scrubber = phase === 'error' ? status : peaks && peaks.length > 0 ? (_jsx(AudioWaveform, { peaks: peaks, duration: known, current: seconds, onSeek: seek, label: `Seek in ${label}` })) : (_jsx("div", { className: "cieo-audio-player-track", ...track, role: "slider", tabIndex: 0, "aria-label": `Seek in ${label}`, "aria-valuemin": 0, "aria-valuemax": known, "aria-valuenow": Math.floor(seconds), "aria-valuetext": audioSeekText(seconds, known), "aria-orientation": "horizontal", ...customizePart(slotProps?.track, "cieo-audio-player-track"), children: _jsx("span", { className: "cieo-audio-player-fill", "aria-hidden": "true" }) }));
+    return (_jsxs("div", { ref: root, className: "cieo cieo-audio-player", role: "group", "aria-label": label, "data-variant": variant, "data-state": phase, ...customizePart(slotProps?.root, "cieo cieo-audio-player", undefined, className), children: [_jsx("audio", { ref: audio, src: src, preload: "metadata", onLoadedMetadata: (e) => {
                     if (e.currentTarget !== audio.current || renderedSource.current !== src)
                         return;
                     const d = e.currentTarget.duration;
@@ -246,5 +247,5 @@ export function AudioPlayer({ src, label, peaks, duration, variant = 'compact', 
                 }, onTimeUpdate: (e) => {
                     if (e.currentTarget === audio.current && renderedSource.current === src)
                         live.current.onTimeUpdate?.(e.currentTarget.currentTime);
-                } }, src), _jsx(AudioPlayButton, { playing: phase === 'playing', loading: phase === 'loading', label: label, onToggle: toggle, size: variant === 'full' ? 'lg' : 'md' }), _jsx("div", { className: "cieo-audio-player-main", children: variant === 'full' ? (_jsxs(_Fragment, { children: [scrubber, _jsxs("div", { className: "cieo-audio-player-times", children: [_jsx(AudioTime, { current: seconds }), _jsx(AudioTime, { current: seconds, duration: total, mode: total ? 'remaining' : 'elapsed' })] })] })) : (scrubber) }), variant === 'compact' ? _jsx(AudioTime, { current: seconds, duration: total, mode: resting ? 'total' : 'remaining' }) : null, variant === 'full' && phase !== 'error' ? _jsx(PlaybackRateButton, { rate: rate, rates: validRates, onRateChange: changeRate }) : null] }));
+                } }, src), _jsx(AudioPlayButton, { playing: phase === 'playing', loading: phase === 'loading', label: label, onToggle: toggle, size: variant === 'full' ? 'lg' : 'md' }), _jsx("div", { className: "cieo-audio-player-main", ...customizePart(slotProps?.main, "cieo-audio-player-main"), children: variant === 'full' ? (_jsxs(_Fragment, { children: [scrubber, _jsxs("div", { className: "cieo-audio-player-times", ...customizePart(slotProps?.times, "cieo-audio-player-times"), children: [_jsx(AudioTime, { current: seconds }), _jsx(AudioTime, { current: seconds, duration: total, mode: total ? 'remaining' : 'elapsed' })] })] })) : (scrubber) }), variant === 'compact' ? _jsx(AudioTime, { current: seconds, duration: total, mode: resting ? 'total' : 'remaining' }) : null, variant === 'full' && phase !== 'error' ? _jsx(PlaybackRateButton, { rate: rate, rates: validRates, onRateChange: changeRate }) : null] }));
 }
