@@ -48,3 +48,7 @@ ReactionSummary, Popover, CountButton.
 ## Evidence
 
 `test/primitives-engagement-reactions.test.mjs`.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `item`, `emoji`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

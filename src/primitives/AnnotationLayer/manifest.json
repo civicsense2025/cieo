@@ -102,7 +102,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [
     {
@@ -152,7 +154,9 @@
         "selectedId",
         "onSelect",
         "renderPopover",
-        "draft"
+        "draft",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -178,5 +182,5 @@
     "path": "README.md",
     "purpose": "Wraps any content for pin-and-comment review: comment mode captures clicks or keyboard placement, pins are numbered, and the thread opens beside its pin."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["popover","root","content","placement","reticle","pins","pin"],"semanticOverrides":false}}
 }

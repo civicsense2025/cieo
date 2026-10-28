@@ -32,7 +32,7 @@ No motion. Tones: starting and running are info; waiting is warning; completed i
 
 ## Customization
 
-`label` replaces the words (for localization). Colours come from Cieo tokens. `AGENT_STATUS_TONES` and `AGENT_STATUS_WORDS` are exported for reuse.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ StatusDot, AgentLanes, RunControls, `cieo/agent`.
 ## Evidence
 
 `test/primitives-agent.test.mjs` (server render, tone and words for all eight statuses). No device acceptance yet.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

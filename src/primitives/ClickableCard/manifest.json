@@ -13,7 +13,7 @@
   "source": { "target": "web", "path": "src/primitives/ClickableCard/ClickableCard.tsx", "symbol": "ClickableCard" },
   "dependencies": [],
   "nativePrimitives": [],
-  "properties": [],
+  "properties": [ {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}, {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
   "state": [],
   "transitions": [],
@@ -21,9 +21,9 @@
   "variants": [],
   "styleParts": [{ "id": "card", "overrides": ["surface"], "tokenRoles": ["surface", "border-control"] }],
   "constraints": { "layout": ["stretched-link"], "content": ["card-contains-link"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [], "states": [], "events": [], "parts": ["card"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [ "className", "slotProps"], "states": [], "events": [], "parts": ["card"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Article card where one stretched link makes the whole card navigate." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root"],"semanticOverrides":false}}
 }

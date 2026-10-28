@@ -76,7 +76,9 @@
         "min": 1,
         "max": 128
       }
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, bars, bar. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -123,7 +125,9 @@
         "current",
         "onSeek",
         "label",
-        "bars"
+        "bars",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -149,5 +153,5 @@
     "path": "README.md",
     "purpose": "Bars drawn from a clip's peaks with a continuously filling played portion; a scrubber when onSeek is given."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","bars","bar"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

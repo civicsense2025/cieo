@@ -2,8 +2,13 @@
 /* AuthEmailField. Labelled email input with a motion-preserving inline alert bound through aria-describedby. */
 import type { CSSProperties } from 'react';
 import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface AuthEmailFieldProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; label?: PrimitivePartProps; input?: PrimitivePartProps };
+
   /** Input id, also used to bind the label and the error message. */
   id: string;
   /** Visible label text. Defaults to "Email". */
@@ -21,11 +26,11 @@ export interface AuthEmailFieldProps {
   onBlur?: () => void;
 }
 
-export function AuthEmailField({ id, label = 'Email', value, defaultValue, error, disabled, style, onChange, onBlur }: AuthEmailFieldProps) {
+export function AuthEmailField({ className, slotProps, id, label = 'Email', value, defaultValue, error, disabled, style, onChange, onBlur }: AuthEmailFieldProps) {
   const describedBy = error ? `${id}-error` : undefined;
   return (
-    <span className="cieo cieo-auth-email-field" data-invalid={error ? 'true' : undefined} style={style}>
-      <label className="cieo-auth-label" htmlFor={id}>{label}</label>
+    <span className="cieo cieo-auth-email-field" data-invalid={error ? 'true' : undefined} style={style} {...customizePart(slotProps?.root, "cieo cieo-auth-email-field", style, className)}>
+      <label className="cieo-auth-label" htmlFor={id} {...customizePart(slotProps?.label, "cieo-auth-label", undefined)}>{label}</label>
       <input
         id={id}
         className="cieo-auth-input"
@@ -38,7 +43,7 @@ export function AuthEmailField({ id, label = 'Email', value, defaultValue, error
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={describedBy}
         onChange={e => onChange?.(e.target.value)}
-        onBlur={onBlur}
+        onBlur={onBlur} {...customizePart(slotProps?.input, "cieo-auth-input", undefined)}
       />
       <AuthMotionMessage id={`${id}-error`} className="cieo-auth-error" role="alert" value={error} />
     </span>

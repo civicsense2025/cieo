@@ -1,5 +1,7 @@
 // src/primitives/ActionBar/ActionBar.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ActionBar. A toolbar for a row of action buttons under a post: one tab stop, arrow keys move between buttons. The host owns the buttons. */
 import { useEffect, useRef, type ReactNode } from 'react';
 import { enabledIn, roveFocus, roveIndex } from '../../react/index.js';
@@ -12,6 +14,9 @@ export function actionBarIndex(key: string, current: number, count: number): num
 }
 
 export interface ActionBarProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Accessible name for the toolbar ("Post actions"). Required. */
   label: string;
   /** The buttons, in order. */
@@ -22,7 +27,7 @@ export interface ActionBarProps {
   align?: 'start' | 'between';
 }
 
-export function ActionBar({ label, children, size = 'md', align = 'start' }: ActionBarProps) {
+export function ActionBar({ className, slotProps, label, children, size = 'md', align = 'start' }: ActionBarProps) {
   const ref = useRef<HTMLDivElement>(null);
   const active = useRef(0);
   const sync = () => {
@@ -51,7 +56,7 @@ export function ActionBar({ label, children, size = 'md', align = 'start' }: Act
       onKeyDown={(e) => {
         if (e.defaultPrevented) return;
         roveFocus(e, ref.current, ITEMS, { orientation: 'horizontal', loop: true });
-      }}
+      }} {...customizePart(slotProps?.root, "cieo cieo-action-bar", undefined, className)}
     >
       {children}
     </div>

@@ -1,6 +1,7 @@
 // src/primitives/BottomSheetSwitcher/BottomSheetSwitcher.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function BottomSheetSwitcher({ label, children }) {
-    return (_jsx("div", { role: "listbox", "aria-label": label, className: "cieo cieo-bottom-sheet-switcher", children: children }));
+import { customizePart } from '../customization.js';
+export function BottomSheetSwitcher({ className, slotProps, label, children }) {
+    return (_jsx("div", { role: "listbox", "aria-label": label, className: "cieo cieo-bottom-sheet-switcher", ...customizePart(slotProps?.root, "cieo cieo-bottom-sheet-switcher", undefined, className), children: children }));
 }

@@ -1,6 +1,8 @@
 // src/primitives/AnnotationLayer/AnnotationLayer.tsx
 'use client';
 /* AnnotationLayer. Wraps content for pin-and-comment review: comment mode captures clicks or keyboard placement, the host owns pins, drafts and threads. */
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode } from 'react';
 import { AnnotationPin, clampUnit } from '../AnnotationPin/AnnotationPin.js';
 import { placePopover } from '../FeedbackPopover/FeedbackPopover.js';
@@ -52,6 +54,8 @@ export const COMMENT_MODE_ON = 'Comment mode on. Click or press Enter to place a
 export const COMMENT_MODE_OFF = 'Comment mode off.';
 
 export interface AnnotationLayerProps {
+  className?: string;
+  slotProps?: { popover?: PrimitivePartProps; root?: PrimitivePartProps; content?: PrimitivePartProps; placement?: PrimitivePartProps; reticle?: PrimitivePartProps; pins?: PrimitivePartProps; pin?: PrimitivePartProps };
   /** Accessible name for the reviewed area, e.g. "Landing page". */
   label: string;
   /** The content being reviewed. */
@@ -77,7 +81,7 @@ export interface AnnotationLayerProps {
 const PIN_HALF = 14;
 const PIN_RISE = 17;
 
-export function AnnotationLayer({ label, children, pins, active, onActiveChange, onPlace, selectedId = null, onSelect, renderPopover, draft = null }: AnnotationLayerProps) {
+export function AnnotationLayer({ label, children, pins, active, onActiveChange, onPlace, selectedId = null, onSelect, renderPopover, draft = null, className, slotProps }: AnnotationLayerProps) {
   const root = useRef<HTMLDivElement>(null);
   const pop = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
@@ -148,15 +152,15 @@ export function AnnotationLayer({ label, children, pins, active, onActiveChange,
     const placed = placePopover(anchor, popSize, box, PIN_HALF + 8);
     const style = { left: placed.left, top: placed.top, '--cieo-feedback-origin': `${anchor.x - placed.left}px ${anchor.y - placed.top}px` } as CSSProperties;
     popover = (
-      <div ref={pop} data-side={placed.side} style={style} className="cieo-annotation-layer-popover">
+      <div ref={pop} data-side={placed.side} style={style} className="cieo-annotation-layer-popover" {...customizePart(slotProps?.popover, "cieo-annotation-layer-popover", style)}>
         {renderPopover(target)}
       </div>
     );
   }
 
   return (
-    <div ref={root} role="group" aria-label={label} data-active={active ? 'true' : undefined} className="cieo cieo-annotation-layer">
-      <div ref={content} className="cieo-annotation-layer-content">{children}</div>
+    <div ref={root} role="group" aria-label={label} data-active={active ? 'true' : undefined} className="cieo cieo-annotation-layer" {...customizePart(slotProps?.root, "cieo cieo-annotation-layer", undefined, className)}>
+      <div ref={content} className="cieo-annotation-layer-content" {...customizePart(slotProps?.content, "cieo-annotation-layer-content", undefined)}>{children}</div>
       {active ? (
         <div
           role="button"
@@ -170,13 +174,13 @@ export function AnnotationLayer({ label, children, pins, active, onActiveChange,
           onFocus={() => setReticle((r) => r ?? { x: 0.5, y: 0.5 })}
           onBlur={() => setReticle(null)}
           className="cieo-annotation-layer-overlay"
-        >
-          {reticle ? <span aria-hidden="true" className="cieo-annotation-layer-reticle" style={{ left: `${reticle.x * 100}%`, top: `${reticle.y * 100}%` }} /> : null}
+         {...customizePart(slotProps?.placement, "cieo-annotation-layer-overlay", undefined)}>
+          {reticle ? <span aria-hidden="true" className="cieo-annotation-layer-reticle" style={{ left: `${reticle.x * 100}%`, top: `${reticle.y * 100}%` }}  {...customizePart(slotProps?.reticle, "cieo-annotation-layer-reticle", { left: `${reticle.x * 100}%`, top: `${reticle.y * 100}%` })}/> : null}
         </div>
       ) : null}
-      <div className="cieo-annotation-layer-pins" onPointerDownCapture={(e) => { pressed.current = (e.target as HTMLElement).closest<HTMLElement>('[data-pin-id]')?.dataset.pinId === selectedId ? selectedId : null; }}>
+      <div className="cieo-annotation-layer-pins" onPointerDownCapture={(e) => { pressed.current = (e.target as HTMLElement).closest<HTMLElement>('[data-pin-id]')?.dataset.pinId === selectedId ? selectedId : null; }} {...customizePart(slotProps?.pins, "cieo-annotation-layer-pins", undefined)}>
         {pins.map((pin, i) => (
-          <span key={pin.id} data-pin-id={pin.id} className="cieo-annotation-layer-pin">
+          <span key={pin.id} data-pin-id={pin.id} className="cieo-annotation-layer-pin" {...customizePart(slotProps?.pin, "cieo-annotation-layer-pin", undefined)}>
             <AnnotationPin
               index={i + 1}
               x={pin.x}

@@ -13,7 +13,7 @@
   "source": { "target": "web", "path": "src/primitives/CommandPaletteEmpty/CommandPaletteEmpty.tsx", "symbol": "CommandPaletteEmpty" },
   "dependencies": [],
   "nativePrimitives": [],
-  "properties": [],
+  "properties": [ {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."}, {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}],
   "slots": [{ "id": "default", "allowed": ["content"], "min": 0, "max": 1, "order": "document" }],
   "state": [],
   "transitions": [],
@@ -21,9 +21,9 @@
   "variants": [],
   "styleParts": [{ "id": "text", "overrides": ["color"], "tokenRoles": ["text"] }],
   "constraints": { "layout": ["centered-quiet"], "content": ["defaults-to-no-results"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [], "states": [], "events": [], "parts": ["text"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [ "className", "slotProps"], "states": [], "events": [], "parts": ["text"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Quiet empty text when the host filter matches nothing." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

@@ -32,7 +32,7 @@ A real button; the live region announces the copy and failures politely. Disable
 
 ## Customization
 
-Label text and the native sheet fields.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -45,3 +45,7 @@ ActionBar, CountButton.
 ## Evidence
 
 `test/primitives-engagement-actions.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `button`, `icon`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

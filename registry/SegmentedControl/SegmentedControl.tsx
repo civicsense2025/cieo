@@ -1,5 +1,7 @@
 // src/primitives/SegmentedControl/SegmentedControl.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* SegmentedControl. Single-select pill of segments. Owns the picked value (controlled or not); segments follow it by their value key. */
 import { createContext, useState, type ReactNode } from 'react';
 
@@ -11,6 +13,9 @@ export interface SegmentedControlContextValue {
 export const SegmentedControlContext = createContext<SegmentedControlContextValue | null>(null);
 
 export interface SegmentedControlProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Accessible name for the control (e.g. "View density"). Required. */
   label: string;
   /** Picked segment value when controlled. */
@@ -22,7 +27,7 @@ export interface SegmentedControlProps {
   children: ReactNode;
 }
 
-export function SegmentedControl({ label, value, defaultValue, onValueChange, children }: SegmentedControlProps) {
+export function SegmentedControl({ className, slotProps, label, value, defaultValue, onValueChange, children }: SegmentedControlProps) {
   const [internal, setInternal] = useState(defaultValue);
   const current = value ?? internal;
   function handleSelect(next: string) {
@@ -30,7 +35,7 @@ export function SegmentedControl({ label, value, defaultValue, onValueChange, ch
     onValueChange?.(next);
   }
   return (
-    <div role="group" aria-label={label} className="cieo cieo-segmented-control">
+    <div role="group" aria-label={label} className="cieo cieo-segmented-control" {...customizePart(slotProps?.root, "cieo cieo-segmented-control", undefined, className)}>
       <SegmentedControlContext.Provider value={{ value: current, onSelect: handleSelect }}>
         {children}
       </SegmentedControlContext.Provider>

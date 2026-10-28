@@ -1,8 +1,9 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function FieldStatus({ message, tone = 'description' }) {
+import { customizePart } from '../customization.js';
+export function FieldStatus({ className, slotProps, message, tone = 'description' }) {
     if (tone === 'error') {
-        return (_jsx("p", { role: "alert", className: "cieo cieo-p-field-status", "data-tone": "error", children: message }));
+        return (_jsx("p", { role: "alert", className: "cieo cieo-p-field-status", "data-tone": "error", ...customizePart(slotProps?.root, "cieo cieo-p-field-status", undefined, className), children: message }));
     }
-    return (_jsx("p", { className: "cieo cieo-p-field-status", "data-tone": "description", children: message }));
+    return (_jsx("p", { className: "cieo cieo-p-field-status", "data-tone": "description", ...customizePart(slotProps?.root, "cieo cieo-p-field-status", undefined, className), children: message }));
 }

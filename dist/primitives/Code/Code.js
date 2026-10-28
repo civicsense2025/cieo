@@ -1,6 +1,7 @@
 // src/primitives/Code/Code.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Code({ children }) {
-    return _jsx("code", { className: "cieo cieo-p-code", children: children });
+import { customizePart } from '../customization.js';
+export function Code({ className, slotProps, children }) {
+    return _jsx("code", { className: "cieo cieo-p-code", ...customizePart(slotProps?.root, "cieo cieo-p-code", undefined, className), children: children });
 }

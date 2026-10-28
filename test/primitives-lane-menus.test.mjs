@@ -17,8 +17,8 @@ const COMPONENTS = [
   { name: 'MoreMenu', id: 'core.more-menu', level: 'molecule', css: null, props: ['label'], markers: ['IconButton', 'DropdownMenu', "label = 'More actions'"] },
   { name: 'SegmentedControl', id: 'core.segmented-control', level: 'molecule', css: 'segmented-control.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'SegmentedControlContext.Provider', 'cieo-segmented-control'] },
   { name: 'SegmentedControlItem', id: 'core.segmented-control-item', level: 'atom', css: 'segmented-control-item.css', props: ['value'], markers: ['aria-pressed={picked}', 'SegmentedControlContext'] },
-  { name: 'Tab', id: 'core.tab', level: 'atom', css: 'tab.css', props: ['value'], markers: ['role="tab"', 'TabContext', 'tabs === null'] },
-  { name: 'TabList', id: 'core.tab-list', level: 'molecule', css: 'tab-list.css', props: ['label', 'value', 'defaultValue', 'onValueChange', 'motion'], markers: ['role="tablist"', 'export const TabContext', 'cieo-tab-list'] },
+  { name: 'Tab', id: 'core.tab', level: 'atom', css: 'tab.css', props: ['value', 'className', 'slotProps', 'id', 'controls'], markers: ['role="tab"', 'TabContext', 'tabs === null'] },
+  { name: 'TabList', id: 'core.tab-list', level: 'molecule', css: 'tab-list.css', props: ['label', 'value', 'defaultValue', 'onValueChange', 'motion', 'className', 'slotProps'], markers: ['role="tablist"', 'export const TabContext', 'cieo-tab-list'] },
   { name: 'TabMenu', id: 'core.tab-menu', level: 'molecule', css: 'tab-menu.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="tablist"', 'data-variant="menu"', 'TabContext.Provider'] },
 ];
 
@@ -36,7 +36,9 @@ for (const c of COMPONENTS) {
     assert.equal(m.packId, 'core');
     assert.equal(m.status, 'experimental');
     assert.equal(m.owner, 'library-maintainer');
-    assert.deepEqual(m.properties.map((p) => p.id), c.props);
+    const customization = new Set(['className', 'slotProps', 'slots']);
+    assert.deepEqual(m.properties.map((p) => p.id).filter((id) => !customization.has(id)), c.props.filter((id) => !customization.has(id)));
+    assert.equal(m.properties.find((p) => p.id === 'slotProps')?.type.kind, 'record');
   });
 
   test(`${c.name} CSS uses tokens or is honestly style-free`, () => {
@@ -57,8 +59,9 @@ for (const c of COMPONENTS) {
     assert.ok(html.includes('data-do') && html.includes('data-dont'), 'missing do/dont');
     const tbody = html.match(/<tbody>([\s\S]*)<\/tbody>/);
     assert.ok(tbody, 'missing tbody');
-    const rows = (tbody[1].match(/<tr>/g) || []).length;
-    assert.equal(rows, c.props.length, `expected ${c.props.length} prop rows, found ${rows}`);
+    const rows = (tbody[1].match(/<tr(?:\s[^>]*)?>/g) || []).length;
+    const manifest = JSON.parse(readFileSync(`src/primitives/${c.name}/manifest.json`, 'utf8'));
+    assert.equal(rows, manifest.properties.length, `expected ${manifest.properties.length} prop rows, found ${rows}`);
   });
 }
 

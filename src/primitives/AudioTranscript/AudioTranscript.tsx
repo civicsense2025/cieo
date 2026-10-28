@@ -1,5 +1,7 @@
 // src/primitives/AudioTranscript/AudioTranscript.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AudioTranscript. Word-by-word follow-along text for a clip: the spoken word is highlighted, and with onSeek a word can be clicked or chosen by keyboard to jump there. The host owns time. */
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react';
 import { useReducedMotion } from '../../react/index.js';
@@ -56,6 +58,9 @@ export function transcriptScrollTop(wordTop: number, wordHeight: number, viewHei
 }
 
 export interface AudioTranscriptProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; word?: PrimitivePartProps };
+
   /** Words with their start and end seconds, in order. */
   words: TranscriptWord[];
   /** Playhead in seconds. */
@@ -66,7 +71,7 @@ export interface AudioTranscriptProps {
   label: string;
 }
 
-export function AudioTranscript({ words, current, onSeek, label }: AudioTranscriptProps) {
+export function AudioTranscript({ className, slotProps, words, current, onSeek, label }: AudioTranscriptProps) {
   const uid = useId();
   const box = useRef<HTMLDivElement>(null);
   const glow = useRef<HTMLSpanElement>(null);
@@ -147,7 +152,7 @@ export function AudioTranscript({ words, current, onSeek, label }: AudioTranscri
       data-seekable={seekable ? '' : undefined}
       {...(seekable ? { role: 'listbox', tabIndex: 0, 'aria-activedescendant': words.length ? wordId(focused) : undefined, onKeyDown, onFocus: () => setFocus((f) => f ?? Math.max(0, active)), onBlur: () => setFocus(null) } : { role: 'group' })}
       onWheel={markScrolled}
-      onTouchMove={markScrolled}
+      onTouchMove={markScrolled} {...customizePart(slotProps?.root, "cieo cieo-audio-transcript", undefined, className)}
     >
       <span ref={glow} className="cieo-audio-transcript-highlight" aria-hidden="true" data-visible="false" style={{ '--x': '0px', '--y': '0px', '--w': '0px', '--h': '0px' } as CSSProperties} />
       {words.map((w, i) => (
@@ -157,7 +162,7 @@ export function AudioTranscript({ words, current, onSeek, label }: AudioTranscri
             className="cieo-audio-transcript-word"
             data-active={i === active ? '' : undefined}
             data-focused={seekable && focus !== null && i === focused ? '' : undefined}
-            {...(seekable ? { role: 'option', 'aria-selected': i === active, onClick: () => choose(i) } : {})}
+            {...(seekable ? { role: 'option', 'aria-selected': i === active, onClick: () => choose(i) } : {})} {...customizePart(slotProps?.word, "cieo-audio-transcript-word")}
           >
             {w.text}
           </span>

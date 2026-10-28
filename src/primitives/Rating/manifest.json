@@ -81,7 +81,9 @@
       "nullable": false,
       "default": "md",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: star, root, radio. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -127,7 +129,9 @@
         "max",
         "label",
         "readOnly",
-        "size"
+        "size",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -153,5 +157,5 @@
     "path": "README.md",
     "purpose": "A star rating: a radio group the viewer can set, or a read-only summary."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["star","root","radio"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

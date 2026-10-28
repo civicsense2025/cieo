@@ -1,6 +1,7 @@
 // src/primitives/DropdownMenuGroup/DropdownMenuGroup.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function DropdownMenuGroup({ label, children }) {
-    return (_jsxs("div", { role: "group", "aria-label": label, className: "cieo cieo-dropdown-menu-group", children: [label ? _jsx("span", { className: "cieo-dropdown-menu-group-label", children: label }) : null, children] }));
+import { customizePart } from '../customization.js';
+export function DropdownMenuGroup({ className, slotProps, label, children }) {
+    return (_jsxs("div", { role: "group", "aria-label": label, className: "cieo cieo-dropdown-menu-group", ...customizePart(slotProps?.root, "cieo cieo-dropdown-menu-group", undefined, className), children: [label ? _jsx("span", { className: "cieo-dropdown-menu-group-label", ...customizePart(slotProps?.label, "cieo-dropdown-menu-group-label", undefined), children: label }) : null, children] }));
 }

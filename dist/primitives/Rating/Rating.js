@@ -4,6 +4,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 /* Rating. Star rating: a radio group the viewer can set, or a read-only summary. The host owns the value. */
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../../react/index.js';
+import { customizePart } from '../customization.js';
 const MAX_RATING = 10;
 function ratingMax(max) {
     const whole = Number.isFinite(max) ? Math.floor(max) : max > 0 ? MAX_RATING : 1;
@@ -45,7 +46,7 @@ export function ratingPopDelays(from, to, window = 150) {
     return Array.from({ length: n }, (_, i) => Math.round(i * step));
 }
 const STAR = 'M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8Z';
-export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' }) {
+export function Rating({ className, slotProps, value, onChange, max = 5, label, readOnly, size = 'md' }) {
     const top = ratingMax(max);
     const safe = Number.isFinite(value) ? Math.min(top, Math.max(0, value)) : 0;
     const rounded = Math.round(safe);
@@ -71,10 +72,10 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
     const shown = hover ?? safe;
     const stars = Array.from({ length: top }, (_, i) => {
         const filled = shown >= i + 1 - 0.0001;
-        return (_jsx("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", "data-star": "", "data-filled": filled ? '' : undefined, className: "cieo-rating-star", fill: filled ? 'currentColor' : 'none', stroke: "currentColor", strokeWidth: "1.6", strokeLinejoin: "round", children: _jsx("path", { d: STAR }) }, i));
+        return (_jsx("svg", { viewBox: "0 0 24 24", "aria-hidden": "true", "data-star": "", "data-filled": filled ? '' : undefined, className: "cieo-rating-star", fill: filled ? 'currentColor' : 'none', stroke: "currentColor", strokeWidth: "1.6", strokeLinejoin: "round", ...customizePart(slotProps?.star, "cieo-rating-star", undefined), children: _jsx("path", { d: STAR }) }, i));
     });
     if (readOnly) {
-        return (_jsx("span", { ref: group, role: "img", "aria-label": ratingLabel(safe, top), ...{ 'aria-description': label }, "data-size": size, "data-readonly": "", className: "cieo cieo-rating", children: stars }));
+        return (_jsx("span", { ref: group, role: "img", "aria-label": ratingLabel(safe, top), ...{ 'aria-description': label }, "data-size": size, "data-readonly": "", className: "cieo cieo-rating", ...customizePart(slotProps?.root, "cieo cieo-rating", undefined, className), children: stars }));
     }
     const focusStar = (n) => group.current?.querySelectorAll('[role="radio"]')[n - 1]?.focus();
     return (_jsx("div", { ref: group, role: "radiogroup", "aria-label": label, "data-size": size, className: "cieo cieo-rating", onMouseLeave: () => setHover(null), onKeyDown: (e) => {
@@ -94,8 +95,8 @@ export function Rating({ value, onChange, max = 5, label, readOnly, size = 'md' 
             e.preventDefault();
             onChange?.(next);
             focusStar(next);
-        }, children: Array.from({ length: top }, (_, i) => {
+        }, ...customizePart(slotProps?.root, "cieo cieo-rating", undefined, className), children: Array.from({ length: top }, (_, i) => {
             const n = i + 1;
-            return (_jsx("span", { role: "radio", "data-value": n, "aria-checked": rounded === n, "aria-label": `${n} ${n === 1 ? 'star' : 'stars'}`, tabIndex: rounded === n || (rounded === 0 && n === 1) ? 0 : -1, className: "cieo-rating-radio", onClick: () => onChange?.(n), onMouseEnter: () => setHover(n), children: stars[i] }, n));
+            return (_jsx("span", { role: "radio", "data-value": n, "aria-checked": rounded === n, "aria-label": `${n} ${n === 1 ? 'star' : 'stars'}`, tabIndex: rounded === n || (rounded === 0 && n === 1) ? 0 : -1, className: "cieo-rating-radio", onClick: () => onChange?.(n), onMouseEnter: () => setHover(n), ...customizePart(slotProps?.radio, "cieo-rating-radio", undefined), children: stars[i] }, n));
         }) }));
 }

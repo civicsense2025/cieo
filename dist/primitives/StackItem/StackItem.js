@@ -1,6 +1,7 @@
 // src/primitives/StackItem/StackItem.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function StackItem({ grow = false, children }) {
-    return (_jsx("div", { "data-grow": grow, className: "cieo cieo-stack-item", children: children }));
+import { customizePart } from '../customization.js';
+export function StackItem({ className, slotProps, grow = false, children }) {
+    return (_jsx("div", { "data-grow": grow, className: "cieo cieo-stack-item", ...customizePart(slotProps?.root, "cieo cieo-stack-item", undefined, className), children: children }));
 }

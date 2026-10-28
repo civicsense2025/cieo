@@ -32,7 +32,7 @@ No motion. `tone` defaults to description. Error replaces help; the two never st
 
 ## Customization
 
-Tone only. Type size and tone colors come from Cieo tokens; error tone is `danger`.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ Field (molecule, which owns this row for wrapped controls), InputGroup (molecule
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

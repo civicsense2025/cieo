@@ -16,7 +16,9 @@
   "properties": [
     { "id": "title", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
     { "id": "description", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 512 } },
-    { "id": "href", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 1024 } }
+    { "id": "href", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 1024 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: title, description, root."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 0, "max": 4, "order": "document" }],
   "state": [],
@@ -25,9 +27,9 @@
   "variants": [],
   "styleParts": [{ "id": "card", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
   "constraints": { "layout": ["card-in-panel"], "content": ["card-has-title"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "description", "href"], "states": [], "events": [], "parts": ["card"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["title", "description", "href", "className", "slotProps"], "states": [], "events": [], "parts": ["card"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Featured article card with optional media and link." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["title","description","root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface GroupAvatarPerson {
     /** Full name, used for the spoken label. */
     name: string;
@@ -16,9 +17,15 @@ export declare function groupAvatarLayout<T>(people: readonly T[]): {
     more: number;
 };
 export interface GroupAvatarProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        face?: PrimitivePartProps;
+        initials?: PrimitivePartProps;
+    };
     /** The people in the conversation, most relevant first. */
     people: GroupAvatarPerson[];
     /** Footprint of the circle. Defaults to md. */
     size?: 'sm' | 'md' | 'lg';
 }
-export declare function GroupAvatar({ people, size }: GroupAvatarProps): import("react/jsx-runtime").JSX.Element | null;
+export declare function GroupAvatar({ className, slotProps, people, size }: GroupAvatarProps): import("react/jsx-runtime").JSX.Element | null;

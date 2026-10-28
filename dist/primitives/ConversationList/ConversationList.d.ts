@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 /** Ids of the rows in `children`, in the order the host wrote them. Anything without a string id is ignored. */
 export declare function conversationIds(children: ReactNode): string[];
@@ -15,6 +16,10 @@ export interface ConversationListContextValue {
 }
 export declare const ConversationListContext: import("react").Context<ConversationListContextValue | null>;
 export interface ConversationListProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the list (for example "Conversations"). Required. */
     label: string;
     /** ConversationListItem elements, in any order; their ids and `order` decide where they appear. */
@@ -24,4 +29,4 @@ export interface ConversationListProps {
     /** Id of the open conversation. Marks that row as current and makes it the first tab stop. */
     selectedId?: string;
 }
-export declare function ConversationList({ label, children, order, selectedId }: ConversationListProps): import("react/jsx-runtime").JSX.Element;
+export declare function ConversationList({ label, children, order, selectedId, className, slotProps }: ConversationListProps): import("react/jsx-runtime").JSX.Element;

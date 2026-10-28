@@ -14,7 +14,9 @@
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Primary", "constraints": { "minLength": 1, "maxLength": 256 } }
+    { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Primary", "constraints": { "minLength": 1, "maxLength": 256 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 16, "order": "document" }],
   "state": [],
@@ -23,9 +25,9 @@
   "variants": [],
   "styleParts": [{ "id": "bar", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
   "constraints": { "layout": ["sticky-header"], "content": ["nav-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "className", "slotProps"], "states": [], "events": [], "parts": ["bar"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Sticky site header with a labelled primary nav." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","navigation"],"semanticOverrides":false}}
 }

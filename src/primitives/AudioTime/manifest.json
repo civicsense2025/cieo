@@ -50,7 +50,9 @@
       "nullable": false,
       "default": "elapsed",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -83,7 +85,9 @@
       "properties": [
         "current",
         "duration",
-        "mode"
+        "mode",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -109,5 +113,5 @@
     "path": "README.md",
     "purpose": "Elapsed and total time for an audio clip (0:12 / 1:03), or the time left, in steady tabular digits with a spoken form."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

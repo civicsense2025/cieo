@@ -32,7 +32,7 @@ Spoken text is built by `speakerLabel`: "Ava, host, speaking" or "Ben, muted, ha
 
 ## Customization
 
-Ring uses `--cieo-color-success`. Sizes sm, md, lg scale the face.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -45,3 +45,7 @@ AudioRoom, Avatar, AudioLevelMeter.
 ## Evidence
 
 `test/primitives-audio-capture.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `face`, `ring`, `avatar`, `badge`, `name`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

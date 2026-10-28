@@ -46,7 +46,9 @@
       "nullable": false,
       "default": 28,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: link, tag, root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -79,7 +81,9 @@
       "properties": [
         "text",
         "hrefFor",
-        "maxUrlLength"
+        "maxUrlLength",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -105,5 +109,5 @@
     "path": "README.md",
     "purpose": "Turns plain post text into safe inline links, @mentions, #tags and line breaks without ever injecting HTML."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["link","tag","root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

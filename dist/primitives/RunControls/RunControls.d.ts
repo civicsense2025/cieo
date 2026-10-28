@@ -1,5 +1,10 @@
+import type { PrimitivePartProps } from '../parts.js';
 import type { RunView } from '../../agent/reduce.js';
 export interface RunControlsProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** The run as the host reported it. */
     run: RunView;
     /** Sends the stop command to the host. Without it no Stop button renders. */
@@ -13,4 +18,4 @@ export interface RunControlsProps {
     /** Words for the run's status, e.g. a translation. Defaults to the English words. */
     statusLabel?: (status: RunView['status']) => string;
 }
-export declare function RunControls({ run, onStop, busy, stopLabel, label, statusLabel }: RunControlsProps): import("react/jsx-runtime").JSX.Element;
+export declare function RunControls({ className, slotProps, run, onStop, busy, stopLabel, label, statusLabel }: RunControlsProps): import("react/jsx-runtime").JSX.Element;

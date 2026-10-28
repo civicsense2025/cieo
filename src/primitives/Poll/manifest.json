@@ -75,7 +75,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is ReactNode."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, question, options, total, closed, footnote."}
   ],
   "slots": [],
   "state": [],
@@ -114,7 +116,9 @@
         "voted",
         "onVote",
         "closed",
-        "footnote"
+        "footnote",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -140,5 +144,5 @@
     "path": "README.md",
     "purpose": "A question with options that become result bars in place once the person votes or the poll closes."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","question","options","total","closed","footnote"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -117,7 +117,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is (seconds: number) => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: error, retry, track, root, main, times."}
   ],
   "slots": [
     {
@@ -168,7 +170,9 @@
         "onPlay",
         "onPause",
         "onEnded",
-        "onTimeUpdate"
+        "onTimeUpdate",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -194,5 +198,5 @@
     "path": "README.md",
     "purpose": "One audio clip with play/pause, a waveform or progress scrubber, a clock and speed; only one plays at a time per page."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["error","retry","track","root","main","times"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

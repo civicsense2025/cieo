@@ -1,6 +1,11 @@
+import type { PrimitivePartProps } from '../parts.js';
 /** Visible label for the button. `previewing` only matters while following: it shows the action a press would take. */
 export declare function followLabel(following: boolean, previewing: boolean): 'Follow' | 'Following' | 'Unfollow';
 export interface FollowButtonProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Whether the viewer follows the person right now. */
     following: boolean;
     /** Called on every press; the host flips `following`. */
@@ -10,4 +15,4 @@ export interface FollowButtonProps {
     /** Control height. Defaults to md. */
     size?: 'sm' | 'md';
 }
-export declare function FollowButton({ following, onToggle, name, size }: FollowButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function FollowButton({ className, slotProps, following, onToggle, name, size }: FollowButtonProps): import("react/jsx-runtime").JSX.Element;

@@ -3,6 +3,8 @@
 /* AudioWaveform. Bars drawn from a clip's peaks; the played part fills continuously and, when the host passes onSeek, the whole thing is a scrubber. The host owns time. */
 import { useRef, type CSSProperties, type KeyboardEvent, type PointerEvent } from 'react';
 import { speakAudioTime } from '../AudioTime/AudioTime.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 /** Shortest a bar can be, as a fraction of full height, so silence still shows a tick. */
 export const WAVEFORM_FLOOR = 0.08;
@@ -92,6 +94,8 @@ export function useScrub(duration: number, current: number, onSeek: ((seconds: n
 }
 
 export interface AudioWaveformProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; bars?: PrimitivePartProps; bar?: PrimitivePartProps };
   /** Loudness samples for the clip, any length, any scale (0..1 typical). Empty draws a row of ticks. */
   peaks: number[];
   /** Clip length in seconds. */
@@ -109,7 +113,7 @@ export interface AudioWaveformProps {
 /** Total entrance stagger across all bars, in ms. */
 const STAGGER_MS = 240;
 
-export function AudioWaveform({ peaks, duration, current, onSeek, label, bars = 48 }: AudioWaveformProps) {
+export function AudioWaveform({ className, slotProps, peaks, duration, current, onSeek, label, bars = 48 }: AudioWaveformProps) {
   const requested = Number.isFinite(bars) ? Math.floor(bars) : bars === Number.POSITIVE_INFINITY ? MAX_WAVEFORM_BARS : 1;
   const count = Math.min(MAX_WAVEFORM_BARS, Math.max(1, requested));
   const heights = waveformBars(peaks, count);
@@ -119,13 +123,13 @@ export function AudioWaveform({ peaks, duration, current, onSeek, label, bars = 
   const scrub = useScrub(d, c, onSeek);
   const style = { '--progress': progress, '--step': `${(STAGGER_MS / count).toFixed(2)}ms` } as CSSProperties;
   const draw = (hidden: boolean) => (
-    <span className={hidden ? 'cieo-audio-waveform-bars cieo-audio-waveform-played' : 'cieo-audio-waveform-bars'} aria-hidden="true">
+    <span className={hidden ? 'cieo-audio-waveform-bars cieo-audio-waveform-played' : 'cieo-audio-waveform-bars'} aria-hidden="true" {...customizePart(slotProps?.bars, hidden ? 'cieo-audio-waveform-bars cieo-audio-waveform-played' : 'cieo-audio-waveform-bars')}>
       {heights.map((h, i) => (
-        <span key={i} className="cieo-audio-waveform-bar" style={{ '--h': h, '--i': i } as CSSProperties} />
+        <span key={i} className="cieo-audio-waveform-bar" style={{ '--h': h, '--i': i } as CSSProperties} {...customizePart(slotProps?.bar, 'cieo-audio-waveform-bar', { '--h': h, '--i': i } as CSSProperties)} />
       ))}
     </span>
   );
-  const common = { className: 'cieo cieo-audio-waveform', style, 'data-seekable': onSeek ? '' : undefined, 'aria-label': label } as const;
+  const common = { className: 'cieo cieo-audio-waveform', style, ...customizePart(slotProps?.root, 'cieo cieo-audio-waveform', style, className), 'data-seekable': onSeek ? '' : undefined, 'aria-label': label } as const;
   if (!onSeek) {
     return (
       <div {...common} role="img">

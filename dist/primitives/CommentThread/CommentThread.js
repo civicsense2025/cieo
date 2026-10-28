@@ -1,7 +1,7 @@
 // src/primitives/CommentThread/CommentThread.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-/* CommentThread. Tree manager for comments: nested lists, depth cap, "view more replies" per branch. The host renders every comment; this owns structure, expansion and reveal motion. */
+import { customizePart } from '../customization.js';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useFlip, useReducedMotion } from '../../react/index.js';
 const MAX_COMMENT_DEPTH = 32;
@@ -155,23 +155,24 @@ function Branch({ shared, parent, entries, depth }) {
         revealed.current = true;
         shared.open(parent.id);
     };
-    return (_jsxs("div", { ref: box, className: "cieo-comment-thread-branch", "data-depth": depth, children: [_jsx("ul", { ref: list, role: "list", className: "cieo-comment-thread-list", "aria-label": parent && shared.branchLabel ? shared.branchLabel(parent) : undefined, children: visible.map((node) => {
+    return (_jsxs("div", { ref: box, className: "cieo-comment-thread-branch", "data-depth": depth, ...customizePart(shared.slotProps?.branch, 'cieo-comment-thread-branch'), children: [_jsx("ul", { ref: list, role: "list", className: "cieo-comment-thread-list", "aria-label": parent && shared.branchLabel ? shared.branchLabel(parent) : undefined, ...customizePart(shared.slotProps?.list, 'cieo-comment-thread-list'), children: visible.map((node) => {
                     const kids = levelEntries(node.children, depth + 1, shared.maxDepth);
                     const own = visibleReplies(kids, shared.isOpen(node.id), shared.initial);
-                    return (_jsx("li", { tabIndex: -1, className: "cieo-comment-thread-item", "data-new": shared.fresh.has(node.id) ? '' : undefined, children: shared.renderItem(node, {
+                    return (_jsx("li", { tabIndex: -1, className: "cieo-comment-thread-item", "data-new": shared.fresh.has(node.id) ? '' : undefined, ...customizePart(shared.slotProps?.item, 'cieo-comment-thread-item'), children: shared.renderItem(node, {
                             depth,
                             hasReplies: kids.length > 0,
                             hiddenCount: own.hidden,
                             replies: kids.length > 0 ? _jsx(Branch, { shared: shared, parent: node, entries: kids, depth: depth + 1 }) : null,
                         }) }, node.id));
-                }) }), hidden > 0 ? (_jsx("button", { type: "button", className: "cieo-comment-thread-more", onClick: reveal, children: shared.moreLabel(hidden) })) : null] }));
+                }) }), hidden > 0 ? (_jsx("button", { type: "button", className: "cieo-comment-thread-more", onClick: reveal, ...customizePart(shared.slotProps?.more, 'cieo-comment-thread-more'), children: shared.moreLabel(hidden) })) : null] }));
 }
-export function CommentThread({ label, items, renderItem, maxDepth = 3, initialReplies = 2, moreLabel = moreRepliesLabel, newIds, branchLabel, expanded, onExpandedChange }) {
+export function CommentThread({ label, items, renderItem, maxDepth = 3, initialReplies = 2, moreLabel = moreRepliesLabel, newIds, branchLabel, expanded, onExpandedChange, className, slotProps }) {
     const [inner, setInner] = useState([]);
     const open = expanded ?? inner;
     const live = useRef({ open, onExpandedChange });
     live.current = { open, onExpandedChange };
     const shared = {
+        slotProps,
         renderItem,
         maxDepth: Number.isFinite(maxDepth) ? Math.min(MAX_COMMENT_DEPTH, Math.max(0, Math.floor(maxDepth))) : 3,
         initial: initialReplies,
@@ -191,5 +192,5 @@ export function CommentThread({ label, items, renderItem, maxDepth = 3, initialR
         },
     };
     const roots = levelEntries(items, 0, shared.maxDepth);
-    return (_jsx("section", { "aria-label": label, className: "cieo cieo-comment-thread", children: _jsx(Branch, { shared: shared, entries: roots, depth: 0 }) }));
+    return (_jsx("section", { "aria-label": label, className: "cieo cieo-comment-thread", ...customizePart(slotProps?.root, "cieo cieo-comment-thread", undefined, className), children: _jsx(Branch, { shared: shared, entries: roots, depth: 0 }) }));
 }

@@ -45,7 +45,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, recovery, label, input, submit, toggle."}
   ],
   "slots": [],
   "state": [],
@@ -83,7 +85,9 @@
       "properties": [
         "id",
         "pending",
-        "error"
+        "error",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [
@@ -109,5 +113,5 @@
     "path": "README.md",
     "purpose": "OTP plus verify with a recovery-code fallback toggle."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","recovery","label","input","submit","toggle"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

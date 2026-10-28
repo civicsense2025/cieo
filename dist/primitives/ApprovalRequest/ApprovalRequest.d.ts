@@ -1,7 +1,12 @@
+import type { PrimitivePartProps } from '../parts.js';
 import type { ApprovalStatus, ApprovalView } from '../../agent/reduce.js';
 /** Status text for each approval state. */
 export declare const APPROVAL_STATUS_WORDS: Readonly<Record<ApprovalStatus, string>>;
 export interface ApprovalRequestProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** The approval as the host reported it. */
     approval: ApprovalView;
     /** Sends the approve command to the host. The view changes only when the host resolves it. */
@@ -19,4 +24,4 @@ export interface ApprovalRequestProps {
     /** Heading level for the title, 2 to 6. Defaults to 3. */
     headingLevel?: 2 | 3 | 4 | 5 | 6;
 }
-export declare function ApprovalRequest({ approval, onApprove, onDeny, busy, approveLabel, denyLabel, fallbackTitle, headingLevel, }: ApprovalRequestProps): import("react/jsx-runtime").JSX.Element;
+export declare function ApprovalRequest({ className, slotProps, approval, onApprove, onDeny, busy, approveLabel, denyLabel, fallbackTitle, headingLevel, }: ApprovalRequestProps): import("react/jsx-runtime").JSX.Element;

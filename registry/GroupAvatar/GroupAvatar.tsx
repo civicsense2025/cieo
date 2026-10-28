@@ -1,5 +1,7 @@
 // src/primitives/GroupAvatar/GroupAvatar.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* GroupAvatar. One circle that stands for a whole conversation: one to four faces packed inside it, or three plus a "+n" tile. The host owns the people; photos appear only when given. */
 
 export interface GroupAvatarPerson {
@@ -33,25 +35,28 @@ export function groupAvatarLayout<T>(people: readonly T[]): { faces: T[]; more: 
 }
 
 export interface GroupAvatarProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; face?: PrimitivePartProps; initials?: PrimitivePartProps };
+
   /** The people in the conversation, most relevant first. */
   people: GroupAvatarPerson[];
   /** Footprint of the circle. Defaults to md. */
   size?: 'sm' | 'md' | 'lg';
 }
 
-export function GroupAvatar({ people, size = 'md' }: GroupAvatarProps) {
+export function GroupAvatar({ className, slotProps, people, size = 'md' }: GroupAvatarProps) {
   if (people.length === 0) return null;
   const { faces, more } = groupAvatarLayout(people);
   const slots = faces.length + (more > 0 ? 1 : 0);
   return (
-    <span role="img" aria-label={groupAvatarLabel(people.map((p) => p.name))} data-size={size} data-count={slots} className="cieo cieo-group-avatar">
+    <span role="img" aria-label={groupAvatarLabel(people.map((p) => p.name))} data-size={size} data-count={slots} className="cieo cieo-group-avatar" {...customizePart(slotProps?.root, "cieo cieo-group-avatar", undefined, className)}>
       {faces.map((p, i) => (
-        <span key={`${p.name}-${i}`} aria-hidden="true" className="cieo-group-avatar-face">
-          {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-group-avatar-initials">{p.initials}</span>}
+        <span key={`${p.name}-${i}`} aria-hidden="true" className="cieo-group-avatar-face" {...customizePart(slotProps?.face, "cieo-group-avatar-face", undefined)}>
+          {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-group-avatar-initials" {...customizePart(slotProps?.initials, "cieo-group-avatar-initials", undefined)}>{p.initials}</span>}
         </span>
       ))}
       {more > 0 ? (
-        <span aria-hidden="true" className="cieo-group-avatar-face cieo-group-avatar-more">
+        <span aria-hidden="true" className="cieo-group-avatar-face cieo-group-avatar-more" {...customizePart(slotProps?.face, "cieo-group-avatar-face cieo-group-avatar-more", undefined)}>
           +{more}
         </span>
       ) : null}

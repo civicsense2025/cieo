@@ -50,3 +50,7 @@ Tooltip (molecule), Popover (molecule), CommandPalette (molecule).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-command.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `trigger`, `root`, `card`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

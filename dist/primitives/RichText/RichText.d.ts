@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type RichTextTokenType = 'text' | 'url' | 'mention' | 'tag' | 'break';
 export interface RichTextToken {
     type: RichTextTokenType;
@@ -16,6 +17,12 @@ export declare function tokenizeRichText(text: string): RichTextToken[];
 /** Display form of an address: no scheme or www.; preserve the parsed host and shorten only its path. */
 export declare function shortenUrl(url: string, max?: number): string;
 export interface RichTextProps {
+    className?: string;
+    slotProps?: {
+        link?: PrimitivePartProps;
+        tag?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+    };
     /** Plain post text. Rendered as text nodes, never as HTML. */
     text: string;
     /** Address builders for @mentions and #tags. Without them mentions are plain text and tags are not links. */
@@ -26,4 +33,4 @@ export interface RichTextProps {
     /** Longest visible link text before it is ellipsized. Defaults to 28. */
     maxUrlLength?: number;
 }
-export declare function RichText({ text, hrefFor, maxUrlLength }: RichTextProps): import("react/jsx-runtime").JSX.Element;
+export declare function RichText({ className, slotProps, text, hrefFor, maxUrlLength }: RichTextProps): import("react/jsx-runtime").JSX.Element;

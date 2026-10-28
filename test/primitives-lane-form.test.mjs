@@ -49,7 +49,7 @@ for (const c of COMPONENTS) {
     assert.ok(html.includes('<table data-props>'), 'missing props table');
     const m = JSON.parse(readFileSync(`src/primitives/${c.name}/manifest.json`, 'utf8'));
     const tbody = html.split('<tbody>')[1]?.split('</tbody>')[0] ?? '';
-    const rows = (tbody.match(/<tr>/g) ?? []).length;
+    const rows = (tbody.match(/<tr(?:\s[^>]*)?>/g) ?? []).length;
     if (m.properties.length > 0) assert.ok(rows >= m.properties.length, `expected >=${m.properties.length} prop rows, got ${rows}`);
   });
 }

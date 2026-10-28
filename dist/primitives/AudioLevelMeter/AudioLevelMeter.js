@@ -4,6 +4,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 /* AudioLevelMeter. A few bars that rise and fall with how loud the microphone is. The host passes a level, or a stream and the meter listens itself. */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSpring } from '../../react/index.js';
+import { customizePart } from '../customization.js';
 const clamp01 = (n) => (Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0);
 /** Floor of the meter in decibels: anything quieter reads as silence. */
 const FLOOR_DB = 60;
@@ -33,7 +34,7 @@ export function levelBars(level, count) {
         return Math.min(1, Math.max(0.1, 0.1 + 0.9 * l * (1 - 0.5 * dist)));
     });
 }
-export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone level' }) {
+export function AudioLevelMeter({ className, slotProps, level, stream, bars = 5, label = 'Microphone level' }) {
     const count = Number.isFinite(bars) ? Math.min(32, Math.max(1, Math.floor(bars))) : 5;
     const [heard, setHeard] = useState(0);
     const controlled = level !== undefined;
@@ -147,5 +148,5 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
         raf = requestAnimationFrame(loop);
         return stopSampling;
     }, [stream, controlled]);
-    return (_jsx("span", { ref: root, role: "img", "aria-label": label, className: "cieo cieo-audio-level-meter", style: { '--cieo-level': target.toFixed(3) }, children: seed.map((h, i) => (_jsx("span", { "aria-hidden": "true", className: "cieo-audio-level-meter-bar", style: { '--cieo-bar': h.toFixed(3) } }, i))) }));
+    return (_jsx("span", { ref: root, role: "img", "aria-label": label, className: "cieo cieo-audio-level-meter", style: { '--cieo-level': target.toFixed(3) }, ...customizePart(slotProps?.root, "cieo cieo-audio-level-meter", { '--cieo-level': target.toFixed(3) }, className), children: seed.map((h, i) => (_jsx("span", { "aria-hidden": "true", className: "cieo-audio-level-meter-bar", style: { '--cieo-bar': h.toFixed(3) }, ...customizePart(slotProps?.bar, "cieo-audio-level-meter-bar", { '--cieo-bar': h.toFixed(3) }) }, i))) }));
 }

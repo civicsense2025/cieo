@@ -14,7 +14,9 @@
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "variant", "type": { "kind": "enum", "values": ["incoming", "outgoing"] }, "required": false, "nullable": false, "default": "incoming", "constraints": {} }
+    { "id": "variant", "type": { "kind": "enum", "values": ["incoming", "outgoing"] }, "required": false, "nullable": false, "default": "incoming", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [{ "id": "default", "allowed": ["content"], "min": 1, "max": 4, "order": "document" }],
   "state": [],
@@ -23,9 +25,9 @@
   "variants": [],
   "styleParts": [{ "id": "bubble", "overrides": ["surface"], "tokenRoles": ["surface", "accent"] }],
   "constraints": { "layout": ["bubble-side"], "content": ["bubble-has-body"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["variant"], "states": [], "events": [], "parts": ["bubble"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["variant", "className", "slotProps"], "states": [], "events": [], "parts": ["bubble"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Variant bubble for one message body, incoming or outgoing." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

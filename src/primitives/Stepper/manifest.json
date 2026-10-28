@@ -18,7 +18,9 @@
     { "id": "steps", "type": { "kind": "array", "items": { "kind": "record", "fields": [
       { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false },
       { "id": "state", "type": { "kind": "enum", "values": ["done", "current", "todo"] }, "required": true, "nullable": false }
-    ] } }, "required": true, "nullable": false, "constraints": { "minItems": 2, "maxItems": 8 } }
+    ] } }, "required": true, "nullable": false, "constraints": { "minItems": 2, "maxItems": 8 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [],
   "state": [],
@@ -27,9 +29,9 @@
   "variants": [],
   "styleParts": [{ "id": "list", "overrides": ["color"], "tokenRoles": ["text-progress"] }],
   "constraints": { "layout": ["ordered-steps"], "content": ["one-current-step"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "steps"], "states": [], "events": [], "parts": ["list"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "steps", "className", "slotProps"], "states": [], "events": [], "parts": ["list"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Progress steps rendered from an array; pure render." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

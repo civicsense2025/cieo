@@ -1,6 +1,7 @@
 // src/primitives/AudioTime/AudioTime.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* AudioTime. Elapsed and total time for a clip (0:12 / 1:03), or the time left (-0:51). Tabular digits keep the width steady while it ticks. */
 /** m:ss under an hour, h:mm:ss above. Negative and non-finite input reads as 0:00. */
 export function formatAudioTime(seconds) {
@@ -20,7 +21,7 @@ export function speakAudioTime(seconds) {
     const parts = [h ? part(h, 'hour') : '', m ? part(m, 'minute') : '', r || (!h && !m) ? part(r, 'second') : ''].filter(Boolean);
     return parts.join(' ');
 }
-export function AudioTime({ current, duration, mode = 'elapsed' }) {
+export function AudioTime({ className, slotProps, current, duration, mode = 'elapsed' }) {
     const known = duration !== undefined && Number.isFinite(duration);
     let text;
     let spoken;
@@ -37,5 +38,5 @@ export function AudioTime({ current, duration, mode = 'elapsed' }) {
         text = known ? `${formatAudioTime(current)} / ${formatAudioTime(duration)}` : formatAudioTime(current);
         spoken = known ? `${speakAudioTime(current)} of ${speakAudioTime(duration)}` : speakAudioTime(current);
     }
-    return (_jsxs("span", { className: "cieo cieo-audio-time", "data-mode": mode, children: [_jsx("span", { "aria-hidden": "true", children: text }), _jsx("span", { className: "cieo-sr-only", children: spoken })] }));
+    return (_jsxs("span", { className: "cieo cieo-audio-time", "data-mode": mode, ...customizePart(slotProps?.root, "cieo cieo-audio-time", undefined, className), children: [_jsx("span", { "aria-hidden": "true", children: text }), _jsx("span", { className: "cieo-sr-only", children: spoken })] }));
 }

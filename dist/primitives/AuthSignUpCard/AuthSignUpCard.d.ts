@@ -1,5 +1,9 @@
 import type { CSSProperties } from 'react';
+import { type AuthCardSlotProps, type AuthCardSlots } from '../AuthSignInCard/AuthSignInCard.js';
 export interface AuthSignUpCardProps {
+    className?: string;
+    slotProps?: AuthCardSlotProps;
+    slots?: AuthCardSlots;
     id: string;
     title?: string;
     pending?: boolean;
@@ -12,4 +16,4 @@ export interface AuthSignUpCardProps {
         password: string;
     }) => void;
 }
-export declare function AuthSignUpCard({ id, title, pending, error, status, signinHref, style, onSubmit }: AuthSignUpCardProps): import("react/jsx-runtime").JSX.Element;
+export declare function AuthSignUpCard({ id, title, pending, error, status, signinHref, style, onSubmit, className, slotProps, slots }: AuthSignUpCardProps): import("react/jsx-runtime").JSX.Element;

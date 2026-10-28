@@ -13,7 +13,7 @@
   "source": { "target": "web", "path": "src/primitives/TableFooter/TableFooter.tsx", "symbol": "TableFooter" },
   "dependencies": [],
   "nativePrimitives": [],
-  "properties": [],
+  "properties": [ {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."}, {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 16, "order": "document" }],
   "state": [],
   "transitions": [],
@@ -21,9 +21,9 @@
   "variants": [],
   "styleParts": [{ "id": "footer", "overrides": ["border"], "tokenRoles": ["border-control"] }],
   "constraints": { "layout": ["inside-table"], "content": ["footer-has-row"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [], "states": [], "events": [], "parts": ["footer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [ "className", "slotProps"], "states": [], "events": [], "parts": ["footer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Table foot grouping for summary rows." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

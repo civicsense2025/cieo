@@ -1,5 +1,7 @@
 // src/primitives/AnnotationPin/AnnotationPin.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AnnotationPin. Numbered teardrop marker whose tip sits on a point of a layer; the host owns the thread it opens. */
 
 export type AnnotationPinState = 'draft' | 'open' | 'resolved';
@@ -18,6 +20,9 @@ export function clampUnit(value: number): number {
 }
 
 export interface AnnotationPinProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; body?: PrimitivePartProps; text?: PrimitivePartProps };
+
   /** 1-based number drawn on the pin and spoken in its name. */
   index: number;
   /** Horizontal position as a 0..1 fraction of the layer. The tip lands here. */
@@ -36,7 +41,7 @@ export interface AnnotationPinProps {
   onSelect?: () => void;
 }
 
-export function AnnotationPin({ index, x, y, state = 'open', selected = false, label, initials, onSelect }: AnnotationPinProps) {
+export function AnnotationPin({ className, slotProps, index, x, y, state = 'open', selected = false, label, initials, onSelect }: AnnotationPinProps) {
   const n = Number.isFinite(index) ? Math.max(1, Math.floor(index)) : 1;
   return (
     <button
@@ -47,10 +52,10 @@ export function AnnotationPin({ index, x, y, state = 'open', selected = false, l
       data-selected={selected ? 'true' : undefined}
       onClick={onSelect}
       style={{ left: `${clampUnit(x) * 100}%`, top: `${clampUnit(y) * 100}%` }}
-      className="cieo cieo-annotation-pin"
+      className="cieo cieo-annotation-pin" {...customizePart(slotProps?.root, "cieo cieo-annotation-pin", { left: `${clampUnit(x) * 100}%`, top: `${clampUnit(y) * 100}%` }, className)}
     >
-      <span aria-hidden="true" className="cieo-annotation-pin-body">
-        <span className="cieo-annotation-pin-text">{initials && initials.trim() ? initials.trim().slice(0, 3) : n}</span>
+      <span aria-hidden="true" className="cieo-annotation-pin-body" {...customizePart(slotProps?.body, "cieo-annotation-pin-body", undefined)}>
+        <span className="cieo-annotation-pin-text" {...customizePart(slotProps?.text, "cieo-annotation-pin-text", undefined)}>{initials && initials.trim() ? initials.trim().slice(0, 3) : n}</span>
       </span>
     </button>
   );

@@ -4,6 +4,7 @@ import { jsx as _jsx } from "react/jsx-runtime";
 /* RichText. Turns plain post text into safe inline nodes: links, @mentions, #tags and line breaks. Never injects HTML; only http(s) becomes a link. */
 import { Fragment } from 'react';
 import { Mention, safeHref } from '../Mention/Mention.js';
+import { customizePart } from '../customization.js';
 const TRAILING = new Set(['.', ',', ';', ':', '!', '?', '"', "'", '’', '”', '…', ']', '}']);
 const count = (s, ch) => s.split(ch).length - 1;
 /** Splits a matched address from the punctuation that ends the sentence around it. Parentheses are counted once, so the work is linear. */
@@ -134,12 +135,12 @@ export function shortenUrl(url, max = 28) {
         return ellipsize(bare);
     }
 }
-export function RichText({ text, hrefFor, maxUrlLength = 28 }) {
+export function RichText({ className, slotProps, text, hrefFor, maxUrlLength = 28 }) {
     const nodes = tokenizeRichText(text).map((t, i) => {
         if (t.type === 'break')
             return _jsx("br", {}, i);
         if (t.type === 'url' && t.href)
-            return (_jsx("a", { className: "cieo-rich-text-link", href: t.href, title: t.href, target: "_blank", rel: "noopener noreferrer ugc nofollow", children: shortenUrl(t.value, maxUrlLength) }, i));
+            return (_jsx("a", { className: "cieo-rich-text-link", href: t.href, title: t.href, target: "_blank", rel: "noopener noreferrer ugc nofollow", ...customizePart(slotProps?.link, "cieo-rich-text-link", undefined), children: shortenUrl(t.value, maxUrlLength) }, i));
         if (t.type === 'mention') {
             const handle = t.value.slice(1);
             return _jsx(Mention, { handle: handle, href: hrefFor?.mention?.(handle) }, i);
@@ -147,9 +148,9 @@ export function RichText({ text, hrefFor, maxUrlLength = 28 }) {
         if (t.type === 'tag') {
             const tag = t.value.slice(1);
             const href = safeHref(hrefFor?.tag?.(tag));
-            return href ? (_jsx("a", { className: "cieo-rich-text-tag", href: href, children: t.value }, i)) : (_jsx("span", { className: "cieo-rich-text-tag", children: t.value }, i));
+            return href ? (_jsx("a", { className: "cieo-rich-text-tag", href: href, ...customizePart(slotProps?.tag, "cieo-rich-text-tag", undefined), children: t.value }, i)) : (_jsx("span", { className: "cieo-rich-text-tag", ...customizePart(slotProps?.tag, "cieo-rich-text-tag", undefined), children: t.value }, i));
         }
         return _jsx(Fragment, { children: t.value }, i);
     });
-    return _jsx("span", { className: "cieo cieo-rich-text", children: nodes });
+    return _jsx("span", { className: "cieo cieo-rich-text", ...customizePart(slotProps?.root, "cieo cieo-rich-text", undefined, className), children: nodes });
 }

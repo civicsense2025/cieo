@@ -1,5 +1,7 @@
 // src/primitives/FeedbackPopover/FeedbackPopover.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* FeedbackPopover. Small non-modal comment box with an optional thread above it; the host owns text, threads and submit. */
 import { useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { useDismiss, usePresence } from '../../react/index.js';
@@ -49,6 +51,9 @@ export function commentText(raw: string): string | null {
 }
 
 export interface FeedbackPopoverProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; title?: PrimitivePartProps; thread?: PrimitivePartProps; field?: PrimitivePartProps; actions?: PrimitivePartProps; submit?: PrimitivePartProps };
+
   /** Controlled open state. */
   open: boolean;
   /** Called with false on Escape, outside press, and after a successful submit. */
@@ -75,7 +80,7 @@ export interface FeedbackPopoverProps {
 
 const FALLBACK_SIZE = { width: 280, height: 160 };
 
-export function FeedbackPopover({ open, onOpenChange, onSubmit, placeholder = 'Add a comment', submitLabel = 'Comment', title, children, secondaryActions, anchor, container, gap = 8 }: FeedbackPopoverProps) {
+export function FeedbackPopover({ className, slotProps, open, onOpenChange, onSubmit, placeholder = 'Add a comment', submitLabel = 'Comment', title, children, secondaryActions, anchor, container, gap = 8 }: FeedbackPopoverProps) {
   const titleId = useId();
   const [text, setText] = useState('');
   const [size, setSize] = useState(FALLBACK_SIZE);
@@ -122,10 +127,10 @@ export function FeedbackPopover({ open, onOpenChange, onSubmit, placeholder = 'A
       data-side={placed?.side}
       data-placed={placed ? 'true' : undefined}
       style={placed ? { left: placed.left, top: placed.top, transformOrigin: origin } : undefined}
-      className="cieo cieo-feedback-popover"
+      className="cieo cieo-feedback-popover" {...customizePart(slotProps?.root, "cieo cieo-feedback-popover", placed ? { left: placed.left, top: placed.top, transformOrigin: origin } : undefined, className)}
     >
-      {title ? <h2 id={titleId} className="cieo-feedback-popover-title">{title}</h2> : null}
-      {children ? <div className="cieo-feedback-popover-thread">{children}</div> : null}
+      {title ? <h2 id={titleId} className="cieo-feedback-popover-title" {...customizePart(slotProps?.title, "cieo-feedback-popover-title")}>{title}</h2> : null}
+      {children ? <div className="cieo-feedback-popover-thread" {...customizePart(slotProps?.thread, "cieo-feedback-popover-thread")}>{children}</div> : null}
       <textarea
         ref={field}
         value={text}
@@ -139,11 +144,11 @@ export function FeedbackPopover({ open, onOpenChange, onSubmit, placeholder = 'A
             submit();
           }
         }}
-        className="cieo-feedback-popover-field"
+        className="cieo-feedback-popover-field" {...customizePart(slotProps?.field, "cieo-feedback-popover-field")}
       />
-      <div className="cieo-feedback-popover-actions">
+      <div className="cieo-feedback-popover-actions" {...customizePart(slotProps?.actions, "cieo-feedback-popover-actions")}>
         {secondaryActions}
-        <button type="button" disabled={empty} onClick={submit} className="cieo-feedback-popover-submit">{submitLabel}</button>
+        <button type="button" disabled={empty} onClick={submit} className="cieo-feedback-popover-submit" {...customizePart(slotProps?.submit, "cieo-feedback-popover-submit")}>{submitLabel}</button>
       </div>
     </div>
   );

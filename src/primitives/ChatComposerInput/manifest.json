@@ -18,7 +18,9 @@
     { "id": "value", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "maxLength": 4096 } },
     { "id": "onChange", "type": { "kind": "function" }, "required": false, "nullable": false, "constraints": {} },
     { "id": "rows", "type": { "kind": "number" }, "required": false, "nullable": false, "default": 1, "constraints": {} },
-    { "id": "placeholder", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "maxLength": 256 } }
+    { "id": "placeholder", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "maxLength": 256 } },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -27,9 +29,9 @@
   "variants": [],
   "styleParts": [{ "id": "input", "overrides": ["surface"], "tokenRoles": ["surface", "border-control"] }],
   "constraints": { "layout": ["growing-input"], "content": ["input-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "value", "onChange", "rows", "placeholder"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "value", "onChange", "rows", "placeholder", "className", "slotProps"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Controlled textarea for composing a message inside a composer." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

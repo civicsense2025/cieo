@@ -1,5 +1,7 @@
 // src/primitives/ReactionSummary/ReactionSummary.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ReactionSummary. Chips under a message or comment showing who reacted with what. The host owns the list; toggleReaction computes the next one. */
 import { useEffect, useRef, useState } from 'react';
 import { useFlip } from '../../react/index.js';
@@ -36,6 +38,9 @@ export function reactionName(r: ReactionTally): string {
 }
 
 export interface ReactionSummaryProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; list?: PrimitivePartProps; slot?: PrimitivePartProps; chip?: PrimitivePartProps; emoji?: PrimitivePartProps; count?: PrimitivePartProps; add?: PrimitivePartProps };
+
   /** The chips to show, in display order. */
   reactions: readonly ReactionTally[];
   /** Called with a chip's id when the person presses it. */
@@ -58,7 +63,7 @@ export function reactionDiff(prev: readonly ReactionTally[], next: readonly Reac
   };
 }
 
-export function ReactionSummary({ reactions, onToggle, onAdd, available = DEFAULT_REACTIONS }: ReactionSummaryProps) {
+export function ReactionSummary({ className, slotProps, reactions, onToggle, onAdd, available = DEFAULT_REACTIONS }: ReactionSummaryProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const prev = useRef(reactions);
@@ -82,14 +87,14 @@ export function ReactionSummary({ reactions, onToggle, onAdd, available = DEFAUL
   useFlip(listRef, shown.map((s) => s.chip.id).join('|'));
   const mine = reactions.filter((r) => r.mine).map((r) => r.id);
   return (
-    <div ref={rootRef} className="cieo cieo-reaction-summary" role="group" aria-label="Reactions">
-      <ul ref={listRef} className="cieo-reaction-summary-list">
+    <div ref={rootRef} className="cieo cieo-reaction-summary" role="group" aria-label="Reactions" {...customizePart(slotProps?.root, "cieo cieo-reaction-summary", undefined, className)}>
+      <ul ref={listRef} className="cieo-reaction-summary-list" {...customizePart(slotProps?.list, "cieo-reaction-summary-list")}>
         {shown.map(({ chip, gone }) => (
           <li
             key={chip.id}
             className="cieo-reaction-summary-slot"
             data-entering={entering.includes(chip.id) ? '' : undefined}
-            data-leaving={gone ? '' : undefined}
+            data-leaving={gone ? '' : undefined} {...customizePart(slotProps?.slot, "cieo-reaction-summary-slot")}
           >
             <button
               type="button"
@@ -99,22 +104,22 @@ export function ReactionSummary({ reactions, onToggle, onAdd, available = DEFAUL
               data-mine={chip.mine ? '' : undefined}
               disabled={gone}
               tabIndex={gone ? -1 : undefined}
-              onClick={() => onToggle(chip.id)}
+              onClick={() => onToggle(chip.id)} {...customizePart(slotProps?.chip, "cieo-reaction-summary-chip")}
             >
-              <span aria-hidden="true" className="cieo-reaction-summary-emoji">{chip.emoji}</span>
-              <span aria-hidden="true" className="cieo-reaction-summary-count">
+              <span aria-hidden="true" className="cieo-reaction-summary-emoji" {...customizePart(slotProps?.emoji, "cieo-reaction-summary-emoji")}>{chip.emoji}</span>
+              <span aria-hidden="true" className="cieo-reaction-summary-count" {...customizePart(slotProps?.count, "cieo-reaction-summary-count")}>
                 <CompactCount value={chip.count} hideZero={false} />
               </span>
             </button>
           </li>
         ))}
         {onAdd ? (
-          <li className="cieo-reaction-summary-slot">
+          <li className="cieo-reaction-summary-slot" {...customizePart(slotProps?.slot, "cieo-reaction-summary-slot")}>
             <Popover
               open={open}
               onOpenChange={setOpen}
               trigger={
-                <button type="button" className="cieo-reaction-summary-add" aria-label="Add a reaction">
+                <button type="button" className="cieo-reaction-summary-add" aria-label="Add a reaction" {...customizePart(slotProps?.add, "cieo-reaction-summary-add")}>
                   <span aria-hidden="true">+</span>
                 </button>
               }

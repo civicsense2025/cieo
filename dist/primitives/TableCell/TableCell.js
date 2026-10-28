@@ -1,5 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function TableCell({ children }) {
-    return (_jsx("td", { className: "cieo cieo-table-cell", children: children }));
+import { customizePart } from '../customization.js';
+export function TableCell({ className, slotProps, children }) {
+    return (_jsx("td", { className: "cieo cieo-table-cell", ...customizePart(slotProps?.root, "cieo cieo-table-cell", undefined, className), children: children }));
 }

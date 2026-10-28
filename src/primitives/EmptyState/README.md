@@ -46,3 +46,9 @@ Skeleton (atom), Banner (molecule), Button (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-content.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `title`, `description`, `action`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.
+
+`slots.icon`, `slots.title`, `slots.description`, and `slots.action` supply custom React content inside the owned heading, description, and action structure.

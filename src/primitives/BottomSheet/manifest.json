@@ -19,7 +19,9 @@
     { "id": "onClose", "type": { "kind": "function" }, "required": false, "nullable": false, "constraints": {} },
     { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} },
     { "id": "entering", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "rise", "constraints": {} },
-    { "id": "exiting", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "rise", "constraints": {} }
+    { "id": "exiting", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "rise", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 1, "order": "document" }],
   "state": [],
@@ -28,9 +30,9 @@
   "variants": [],
   "styleParts": [{ "id": "sheet", "overrides": ["surface"], "tokenRoles": ["surface", "border-control"] }],
   "constraints": { "layout": ["bottom-anchored"], "content": ["sheet-has-label"], "motion": ["rise-on-base", "honor-render-policy"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "open", "onClose", "motion", "entering", "exiting"], "states": [], "events": [], "parts": ["sheet"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "open", "onClose", "motion", "entering", "exiting", "className", "slotProps"], "states": [], "events": [], "parts": ["sheet"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Bottom-anchored dialog sheet for short choices on narrow screens." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root"],"semanticOverrides":false}}
 }

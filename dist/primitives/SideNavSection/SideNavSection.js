@@ -1,6 +1,7 @@
 // src/primitives/SideNavSection/SideNavSection.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function SideNavSection({ label, children }) {
-    return (_jsx("div", { role: "group", "aria-label": label, className: "cieo cieo-side-nav-section", children: children }));
+import { customizePart } from '../customization.js';
+export function SideNavSection({ className, slotProps, label, children }) {
+    return (_jsx("div", { role: "group", "aria-label": label, className: "cieo cieo-side-nav-section", ...customizePart(slotProps?.root, "cieo cieo-side-nav-section", undefined, className), children: children }));
 }

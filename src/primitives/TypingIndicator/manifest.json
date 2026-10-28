@@ -41,7 +41,9 @@
       "nullable": false,
       "default": "bubble",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, body, dots, dot, text. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -84,7 +86,9 @@
       "implementation": "implemented",
       "properties": [
         "names",
-        "variant"
+        "variant",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -110,5 +114,5 @@
     "path": "README.md",
     "purpose": "Three waving dots and a spoken sentence about who is typing, entering and leaving with a short fade."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","body","dots","dot","text"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

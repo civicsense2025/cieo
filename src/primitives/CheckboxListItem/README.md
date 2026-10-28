@@ -32,7 +32,7 @@ Equals Checkbox exactly: native form participation, Space toggles, indeterminate
 
 ## Customization
 
-None here. Props mirror Checkbox (`label`, `hideLabel`, `description`, `indeterminate` plus native input attrs); tokens and styling live with the Checkbox control.
+This alias retains the owning control’s customization API; see Host customization below.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ CheckboxList (molecule), CheckboxInput (atom, the standalone peer), RadioListIte
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+Alias of Checkbox; preserves its native/owning component props instead of creating a second control contract. Use the underlying component’s supported `className`, style/native props, and content slots. This alias intentionally does not fork behavior or introduce a competing `slotProps` shape.

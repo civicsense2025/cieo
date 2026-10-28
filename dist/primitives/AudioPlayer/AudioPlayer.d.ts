@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type AudioPlayerState = 'loading' | 'ready' | 'playing' | 'ended' | 'error';
 export type AudioPlayerEvent = 'loadedmetadata' | 'play' | 'pause' | 'ended' | 'error' | 'retry' | 'source';
 /** Pure state step driven by the audio element's events. Error is sticky until retry; ended returns to ready-to-play on the next play. */
@@ -11,6 +12,15 @@ export declare function registerAudioPlayer(id: string, pause: () => void, targe
 /** Called when player `id` starts: pauses every other registered player and announces it for other copies of this module. */
 export declare function claimAudioPlayback(id: string, target?: EventTarget | null): void;
 export interface AudioPlayerProps {
+    className?: string;
+    slotProps?: {
+        error?: PrimitivePartProps;
+        retry?: PrimitivePartProps;
+        track?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+        main?: PrimitivePartProps;
+        times?: PrimitivePartProps;
+    };
     /** URL of the audio file. */
     src: string;
     /** What the clip is (e.g. "Voice note from Ana"). Names the player and its buttons. Required. */
@@ -32,4 +42,4 @@ export interface AudioPlayerProps {
     /** Fires about four times a second while playing, and after a seek, with the playhead in seconds. */
     onTimeUpdate?: (seconds: number) => void;
 }
-export declare function AudioPlayer({ src, label, peaks, duration, variant, rates, onPlay, onPause, onEnded, onTimeUpdate }: AudioPlayerProps): import("react/jsx-runtime").JSX.Element;
+export declare function AudioPlayer({ className, slotProps, src, label, peaks, duration, variant, rates, onPlay, onPause, onEnded, onTimeUpdate }: AudioPlayerProps): import("react/jsx-runtime").JSX.Element;

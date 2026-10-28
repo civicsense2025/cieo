@@ -41,10 +41,11 @@ for (const c of COMPONENTS) {
     assert.equal(m.schemaVersion, '1.0.0');
   });
 
-  test(`${c.name} README has ${c.headings ?? 10} doc headings`, () => {
+  test(`${c.name} README retains its sections and documents host customization`, () => {
     const readme = readFileSync(`src/primitives/${c.dir}/README.md`, 'utf8');
     const headings = readme.match(/^## /gm) || [];
-    assert.equal(headings.length, c.headings ?? 10);
+    assert.equal(headings.length, (c.headings ?? 10) + 1);
+    assert.match(readme, /^## Host customization$/m);
   });
 
   test(`${c.name} doc page exists with h1 and prop rows`, () => {
@@ -54,7 +55,7 @@ for (const c of COMPONENTS) {
     assert.ok(html.includes(`<h1>${c.name}</h1>`), 'missing h1');
     assert.match(html, /data-props/);
     const m = JSON.parse(readFileSync(`src/primitives/${c.dir}/manifest.json`, 'utf8'));
-    if (m.properties.length > 0) assert.match(html, /<tr><td>/);
+    if (m.properties.length > 0) assert.match(html, /<tr(?:\s[^>]*)?><td>/);
   });
 }
 

@@ -60,7 +60,9 @@
       "nullable": false,
       "default": "top",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, button, count, text. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -96,7 +98,9 @@
         "count",
         "onShow",
         "label",
-        "placement"
+        "placement",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -122,5 +126,5 @@
     "path": "README.md",
     "purpose": "A pill that drops in from a feed edge when new items arrive, rolls its count as more come, and leaves when there are none."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","button","count","text"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

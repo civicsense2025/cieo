@@ -197,7 +197,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, avatar, line, main, deleted, head, menu, body, attachments, actions, status, replies."}
   ],
   "slots": [
     {
@@ -296,7 +298,9 @@
         "depth",
         "railed",
         "id",
-        "entering"
+        "entering",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -322,5 +326,5 @@
     "path": "README.md",
     "purpose": "One post in a thread: avatar, byline, body and slots for attachments, actions and nested replies, with a rail that curves into each reply."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","avatar","line","main","deleted","head","menu","body","attachments","actions","status","replies"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -7,6 +7,7 @@
 // Idempotent: re-running without source changes rewrites nothing.
 // Run: node scripts/build-component-pages.mjs [--check]
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { syncPropertyRows } from './lib/component-props.mjs';
 import { scanPrimitives, importStatement } from './lib/primitives.mjs';
 
 const root = new URL('..', import.meta.url).pathname.replace(/\/$/, '');
@@ -42,7 +43,8 @@ for (const { dir, values } of entries) {
   const summary = between(html, `</h1><p>`, `</p>`);
   const preview = stripTrailingDiv(between(html, '<div data-preview>', '<div role="tablist"'));
   const code = between(html, '<code data-code>', '</code>');
-  const props = between(html, '<tbody>', '</tbody>');
+  const manifest = JSON.parse(readFileSync(`${root}/src/primitives/${dir}/manifest.json`, 'utf8'));
+  const props = syncPropertyRows(between(html, '<tbody>', '</tbody>'), manifest.properties);
   const doing = stripTrailingDiv(between(html, '<div data-do>', '<div data-dont>'));
   const dont = stripTrailingDiv(between(html, '<div data-dont>', '</section>'));
   const prev = between(html, '<a data-prev', '</a>');

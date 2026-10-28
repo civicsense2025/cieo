@@ -4,6 +4,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* NotifyToggle. Bell toggle for "tell me about new replies": rings once and pops a check badge when turned on. The host owns the state. */
 import { useEffect, useRef } from 'react';
 import { useReducedMotion } from '../../react/index.js';
+import { customizePart } from '../customization.js';
 /** Total length of the ring, in milliseconds. */
 export const BELL_WIGGLE_MS = 420;
 /** Largest swing of the ring, in degrees. */
@@ -18,7 +19,7 @@ export function bellWiggleFrames(steps = 10) {
     const n = Math.max(2, Math.floor(steps));
     return Array.from({ length: n + 1 }, (_, i) => (i === 0 || i === n ? 0 : bellWiggleAngle(i / n)));
 }
-export function NotifyToggle({ on, onToggle, label = 'Notify me about new replies', size = 'md' }) {
+export function NotifyToggle({ className, slotProps, on, onToggle, label = 'Notify me about new replies', size = 'md' }) {
     const reduced = useReducedMotion();
     const bell = useRef(null);
     const before = useRef(on);
@@ -32,5 +33,5 @@ export function NotifyToggle({ on, onToggle, label = 'Notify me about new replie
         const run = el.animate(frames.map((deg, i) => ({ transform: `rotate(${deg}deg)`, offset: i / (frames.length - 1) })), { duration: BELL_WIGGLE_MS, easing: 'ease-out' });
         return () => run.cancel();
     }, [on, reduced]);
-    return (_jsx("button", { type: "button", className: "cieo cieo-notify-toggle", "aria-pressed": on, "aria-label": label, "data-on": on ? '' : undefined, "data-size": size, onClick: onToggle, children: _jsxs("span", { className: "cieo-notify-toggle-icon", "aria-hidden": "true", children: [_jsxs("svg", { ref: bell, className: "cieo-notify-toggle-bell", viewBox: "0 0 24 24", width: "1.25em", height: "1.25em", fill: on ? 'currentColor' : 'none', stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", style: { transformOrigin: '50% 8%' }, children: [_jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9Z" }), _jsx("path", { d: "M10 20a2 2 0 0 0 4 0" })] }), _jsx("span", { className: "cieo-notify-toggle-badge", children: _jsx("svg", { viewBox: "0 0 12 12", width: "100%", height: "100%", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: _jsx("path", { d: "m2.5 6.2 2.4 2.3 4.6-4.8" }) }) })] }) }));
+    return (_jsx("button", { type: "button", className: "cieo cieo-notify-toggle", "aria-pressed": on, "aria-label": label, "data-on": on ? '' : undefined, "data-size": size, onClick: onToggle, ...customizePart(slotProps?.root, "cieo cieo-notify-toggle", undefined, className), children: _jsxs("span", { className: "cieo-notify-toggle-icon", "aria-hidden": "true", ...customizePart(slotProps?.icon, "cieo-notify-toggle-icon", undefined), children: [_jsxs("svg", { ref: bell, className: "cieo-notify-toggle-bell", viewBox: "0 0 24 24", width: "1.25em", height: "1.25em", fill: on ? 'currentColor' : 'none', stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", style: { transformOrigin: '50% 8%' }, ...customizePart(slotProps?.bell, "cieo-notify-toggle-bell", { transformOrigin: '50% 8%' }), children: [_jsx("path", { d: "M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9Z" }), _jsx("path", { d: "M10 20a2 2 0 0 0 4 0" })] }), _jsx("span", { className: "cieo-notify-toggle-badge", ...customizePart(slotProps?.badge, "cieo-notify-toggle-badge", undefined), children: _jsx("svg", { viewBox: "0 0 12 12", width: "100%", height: "100%", fill: "none", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round", children: _jsx("path", { d: "m2.5 6.2 2.4 2.3 4.6-4.8" }) }) })] }) }));
 }

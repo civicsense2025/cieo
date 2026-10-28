@@ -47,3 +47,7 @@ DropdownMenuItem (atom), MoreMenu (molecule), Overlay (primitive).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-menus.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `triggerFallback`, `root`, `trigger`, `panel`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

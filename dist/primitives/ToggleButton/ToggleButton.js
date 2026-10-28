@@ -4,7 +4,8 @@ import { jsx as _jsx } from "react/jsx-runtime";
 /* ToggleButton. Two-state press button. Standalone it reports pressed via prop; inside ToggleButtonGroup it follows the group value by its value key. */
 import { useContext, useState } from 'react';
 import { ToggleButtonGroupContext } from '../ToggleButtonGroup/ToggleButtonGroup.js';
-export function ToggleButton({ label, pressed, defaultPressed = false, value, onPressedChange, children }) {
+import { customizePart } from '../customization.js';
+export function ToggleButton({ className, slotProps, label, pressed, defaultPressed = false, value, onPressedChange, children }) {
     const group = useContext(ToggleButtonGroupContext);
     const [internal, setInternal] = useState(defaultPressed);
     const own = pressed ?? internal;
@@ -19,5 +20,5 @@ export function ToggleButton({ label, pressed, defaultPressed = false, value, on
             setInternal(!own);
         onPressedChange?.(!own);
     }
-    return (_jsx("button", { type: "button", "aria-pressed": isPressed, "aria-label": label, "data-pressed": isPressed, onClick: handleClick, className: "cieo cieo-toggle-button", children: children }));
+    return (_jsx("button", { type: "button", "aria-pressed": isPressed, "aria-label": label, "data-pressed": isPressed, onClick: handleClick, className: "cieo cieo-toggle-button", ...customizePart(slotProps?.root, "cieo cieo-toggle-button", undefined, className), children: children }));
 }

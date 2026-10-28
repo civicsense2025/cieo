@@ -1,4 +1,12 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface CharacterCountRingProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        track?: PrimitivePartProps;
+        arc?: PrimitivePartProps;
+        number?: PrimitivePartProps;
+    };
     /** Characters used so far. Required. */
     length: number;
     /** The limit. Required. */
@@ -19,4 +27,4 @@ export interface RingState {
 export declare function ringState(length: number, max: number, warnAt?: number): RingState;
 /** Screen-reader sentence for the current count. */
 export declare function ringAnnouncement(remaining: number): string;
-export declare function CharacterCountRing({ length, max, warnAt }: CharacterCountRingProps): import("react/jsx-runtime").JSX.Element;
+export declare function CharacterCountRing({ className, slotProps, length, max, warnAt }: CharacterCountRingProps): import("react/jsx-runtime").JSX.Element;

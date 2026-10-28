@@ -1,8 +1,9 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* Collapsible. Disclosure with internal open state and a controlled override. Host may coordinate several via CollapsibleGroup. */
 import { useId, useState } from 'react';
-export function Collapsible({ title, open, defaultOpen = false, onOpenChange, children }) {
+export function Collapsible({ className, slotProps, title, open, defaultOpen = false, onOpenChange, children }) {
     const [internal, setInternal] = useState(defaultOpen);
     const effective = open ?? internal;
     const panelId = useId();
@@ -12,5 +13,5 @@ export function Collapsible({ title, open, defaultOpen = false, onOpenChange, ch
             setInternal(next);
         onOpenChange?.(next);
     };
-    return (_jsxs("div", { "data-open": effective, className: "cieo cieo-collapsible", children: [_jsx("button", { type: "button", "aria-expanded": effective, "aria-controls": effective ? panelId : undefined, onClick: toggle, children: title }), effective ? _jsx("div", { id: panelId, role: "region", "aria-label": title, children: children }) : null] }));
+    return (_jsxs("div", { "data-open": effective, className: "cieo cieo-collapsible", ...customizePart(slotProps?.root, "cieo cieo-collapsible", undefined, className), children: [_jsx("button", { type: "button", "aria-expanded": effective, "aria-controls": effective ? panelId : undefined, onClick: toggle, children: title }), effective ? _jsx("div", { id: panelId, role: "region", "aria-label": title, children: children }) : null] }));
 }

@@ -30,7 +30,7 @@ A link is one tab stop with a visible focus ring. The text is the handle itself,
 
 ## Customization
 
-Accent color and medium weight through tokens.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -43,3 +43,7 @@ Accent color and medium weight through tokens.
 ## Evidence
 
 Covered by `test/primitives-social-content.test.mjs` (handle normalization, address safety, markup).
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

@@ -1,6 +1,7 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function List({ ordered = false, label, children }) {
+import { customizePart } from '../customization.js';
+export function List({ className, slotProps, ordered = false, label, children }) {
     const Tag = ordered ? 'ol' : 'ul';
-    return (_jsx(Tag, { "aria-label": label, className: "cieo cieo-p-list", children: children }));
+    return (_jsx(Tag, { "aria-label": label, className: "cieo cieo-p-list", ...customizePart(slotProps?.root, "cieo cieo-p-list", undefined, className), children: children }));
 }

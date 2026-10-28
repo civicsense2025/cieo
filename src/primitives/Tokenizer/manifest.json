@@ -17,7 +17,9 @@
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
     { "id": "values", "type": { "kind": "array", "items": { "kind": "string" } }, "required": true, "nullable": false, "constraints": {} },
     { "id": "onRemove", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (index: number) => void; no function kind exists in the manifest precedent." },
-    { "id": "onAdd", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (text: string) => void; no function kind exists in the manifest precedent." }
+    { "id": "onAdd", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (text: string) => void; no function kind exists in the manifest precedent." },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, chips, chip, input."}
   ],
   "slots": [],
   "state": [],
@@ -26,9 +28,9 @@
   "variants": [],
   "styleParts": [{ "id": "chip", "overrides": ["background", "border"], "tokenRoles": ["surface-control", "border-control"] }],
   "constraints": { "layout": ["chips-plus-input"], "content": ["own-spans-not-token"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "values", "onRemove", "onAdd"], "states": [], "events": [], "parts": ["chip"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "values", "onRemove", "onAdd", "className", "slotProps"], "states": [], "events": [], "parts": ["chip"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Token chips plus an add input; host owns the value list." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","chips","chip","input"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

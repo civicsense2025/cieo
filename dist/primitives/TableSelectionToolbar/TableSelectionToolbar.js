@@ -1,5 +1,6 @@
 'use client';
 import { jsxs as _jsxs } from "react/jsx-runtime";
-export function TableSelectionToolbar({ selectedCount, children }) {
-    return (_jsxs("div", { role: "toolbar", "aria-label": `${selectedCount} selected`, className: "cieo cieo-table-selection-toolbar", children: [_jsxs("span", { children: [selectedCount, " selected"] }), children] }));
+import { customizePart } from '../customization.js';
+export function TableSelectionToolbar({ className, slotProps, selectedCount, children }) {
+    return (_jsxs("div", { role: "toolbar", "aria-label": `${selectedCount} selected`, className: "cieo cieo-table-selection-toolbar", ...customizePart(slotProps?.root, "cieo cieo-table-selection-toolbar", undefined, className), children: [_jsxs("span", { children: [selectedCount, " selected"] }), children] }));
 }

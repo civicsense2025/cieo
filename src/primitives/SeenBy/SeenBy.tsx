@@ -1,5 +1,7 @@
 // src/primitives/SeenBy/SeenBy.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* SeenBy. Tiny overlapping faces of the people who have read a message, with a "+n" for the rest. The host owns who has read; a new reader slides in. */
 import { useRef } from 'react';
 import { useFlip } from '../../react/index.js';
@@ -12,13 +14,16 @@ export function seenByLabel(names: readonly string[]): string {
 }
 
 export interface SeenByProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; stack?: PrimitivePartProps; face?: PrimitivePartProps; initials?: PrimitivePartProps };
+
   /** People who have read, oldest reader first. Nothing renders when empty. */
   people: GroupAvatarPerson[];
   /** Faces shown before the rest collapse into "+n". Defaults to 3. */
   max?: number;
 }
 
-export function SeenBy({ people, max = 3 }: SeenByProps) {
+export function SeenBy({ className, slotProps, people, max = 3 }: SeenByProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const limit = Math.max(1, Number.isFinite(max) ? Math.floor(max) : 3);
   const shown = people.slice(0, limit);
@@ -27,15 +32,15 @@ export function SeenBy({ people, max = 3 }: SeenByProps) {
   if (people.length === 0) return null;
   const label = seenByLabel(people.map((p) => p.name));
   return (
-    <span title={label} className="cieo cieo-seen-by">
-      <span ref={ref} aria-hidden="true" className="cieo-seen-by-stack">
+    <span title={label} className="cieo cieo-seen-by" {...customizePart(slotProps?.root, "cieo cieo-seen-by", undefined, className)}>
+      <span ref={ref} aria-hidden="true" className="cieo-seen-by-stack" {...customizePart(slotProps?.stack, "cieo-seen-by-stack")}>
         {shown.map((p) => (
-          <span key={p.name} className="cieo-seen-by-face">
-            {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-seen-by-initials">{p.initials}</span>}
+          <span key={p.name} className="cieo-seen-by-face" {...customizePart(slotProps?.face, "cieo-seen-by-face")}>
+            {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-seen-by-initials" {...customizePart(slotProps?.initials, "cieo-seen-by-initials")}>{p.initials}</span>}
           </span>
         ))}
         {rest > 0 ? (
-          <span key="more" className="cieo-seen-by-face cieo-seen-by-more">
+          <span key="more" className="cieo-seen-by-face cieo-seen-by-more" {...customizePart(slotProps?.face, "cieo-seen-by-face cieo-seen-by-more")}>
             +{rest}
           </span>
         ) : null}

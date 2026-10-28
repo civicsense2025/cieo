@@ -46,3 +46,7 @@ Comment, CharacterCountRing, ReplyPreview, ChatComposer.
 ## Evidence
 
 `test/primitives-comments.test.mjs`.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `reply`, `row`, `avatar`, `main`, `panes`, `pane`, `input`, `attachments`, `bar`, `tools`, `submit`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

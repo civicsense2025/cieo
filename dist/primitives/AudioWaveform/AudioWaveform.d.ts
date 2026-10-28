@@ -1,4 +1,5 @@
 import { type KeyboardEvent, type PointerEvent } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 /** Shortest a bar can be, as a fraction of full height, so silence still shows a tick. */
 export declare const WAVEFORM_FLOOR = 0.08;
 /** Seconds one arrow key moves the playhead. */
@@ -22,6 +23,12 @@ export declare function useScrub(duration: number, current: number, onSeek: ((se
     onKeyDown(e: KeyboardEvent<HTMLElement>): void;
 };
 export interface AudioWaveformProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        bars?: PrimitivePartProps;
+        bar?: PrimitivePartProps;
+    };
     /** Loudness samples for the clip, any length, any scale (0..1 typical). Empty draws a row of ticks. */
     peaks: number[];
     /** Clip length in seconds. */
@@ -35,4 +42,4 @@ export interface AudioWaveformProps {
     /** How many bars to draw. Defaults to 48. */
     bars?: number;
 }
-export declare function AudioWaveform({ peaks, duration, current, onSeek, label, bars }: AudioWaveformProps): import("react/jsx-runtime").JSX.Element;
+export declare function AudioWaveform({ className, slotProps, peaks, duration, current, onSeek, label, bars }: AudioWaveformProps): import("react/jsx-runtime").JSX.Element;

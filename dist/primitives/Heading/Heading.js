@@ -1,7 +1,8 @@
 // src/primitives/Heading/Heading.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Heading({ level = 2, children }) {
+import { customizePart } from '../customization.js';
+export function Heading({ className, slotProps, level = 2, children }) {
     const Tag = `h${level}`;
-    return (_jsx(Tag, { "data-level": level, className: "cieo cieo-p-heading", children: children }));
+    return (_jsx(Tag, { "data-level": level, className: "cieo cieo-p-heading", ...customizePart(slotProps?.root, "cieo cieo-p-heading", undefined, className), children: children }));
 }

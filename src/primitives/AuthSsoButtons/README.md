@@ -14,3 +14,7 @@ Pending shows by text change (`Connecting to {label}…`) plus `aria-busy`, neve
 Provider labels swap in place on the base motion token. Reduced motion and `data-motion="off"` update instantly.
 
 See the component props in `manifest.json`.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `ssoButton`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

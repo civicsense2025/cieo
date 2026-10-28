@@ -37,7 +37,9 @@
       "nullable": false,
       "default": 3,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, stack, face, initials."}
   ],
   "slots": [
     {
@@ -79,7 +81,9 @@
       "implementation": "implemented",
       "properties": [
         "people",
-        "max"
+        "max",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -105,5 +109,5 @@
     "path": "README.md",
     "purpose": "Tiny overlapping faces of the people who have read a message, with a +n for the rest; a new reader slides in."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","stack","face","initials"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

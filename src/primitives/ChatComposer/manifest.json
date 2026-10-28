@@ -15,7 +15,9 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Send a message", "constraints": { "minLength": 1, "maxLength": 256 } },
-    { "id": "onSubmit", "type": { "kind": "function" }, "required": false, "nullable": false, "constraints": {} }
+    { "id": "onSubmit", "type": { "kind": "function" }, "required": false, "nullable": false, "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 4, "order": "document" }],
   "state": [],
@@ -24,9 +26,9 @@
   "variants": [],
   "styleParts": [{ "id": "composer", "overrides": ["surface"], "tokenRoles": ["surface", "border-control"] }],
   "constraints": { "layout": ["input-row"], "content": ["composer-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "onSubmit"], "states": [], "events": [], "parts": ["composer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "onSubmit", "className", "slotProps"], "states": [], "events": [], "parts": ["composer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Controlled form shell for composing and sending a message." },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

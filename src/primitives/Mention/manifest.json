@@ -44,7 +44,9 @@
       "required": false,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -77,7 +79,9 @@
       "properties": [
         "handle",
         "href",
-        "name"
+        "name",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -103,5 +107,5 @@
     "path": "README.md",
     "purpose": "An @handle inside post text: a link when the host supplies a safe address, plain text otherwise."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

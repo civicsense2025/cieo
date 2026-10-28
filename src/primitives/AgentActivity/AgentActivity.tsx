@@ -1,11 +1,16 @@
 // src/primitives/AgentActivity/AgentActivity.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AgentActivity. The ordered log of what an agent run did, one row per confirmed event. Rows appear only when the
    host's log contains them, so the list never runs ahead of the server. No motion. */
 import type { ReactNode } from 'react';
 import type { ActivityEntry } from '../../agent/reduce.js';
 
 export interface AgentActivityProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
+
   /** Activity entries in log order, e.g. from selectActivity. */
   entries: readonly ActivityEntry[];
   /** Turns one entry into the row's content. Keep it short and plain. */
@@ -16,9 +21,9 @@ export interface AgentActivityProps {
   emptyText?: string;
 }
 
-export function AgentActivity({ entries, describe, label = 'Agent activity', emptyText }: AgentActivityProps) {
+export function AgentActivity({ className, slotProps, entries, describe, label = 'Agent activity', emptyText }: AgentActivityProps) {
   return (
-    <ol className="cieo cieo-p-agent-activity" role="log" aria-label={label}>
+    <ol className="cieo cieo-p-agent-activity" role="log" aria-label={label} {...customizePart(slotProps?.root, "cieo cieo-p-agent-activity", undefined, className)}>
       {entries.length === 0 && emptyText ? <li data-empty>{emptyText}</li> : null}
       {entries.map((entry) => (
         <li key={entry.seq} data-type={entry.type} data-seq={entry.seq}>

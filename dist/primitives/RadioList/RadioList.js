@@ -1,5 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function RadioList({ label, children }) {
-    return (_jsx("div", { role: "radiogroup", "aria-label": label, className: "cieo cieo-p-radio-list", children: children }));
+import { customizePart } from '../customization.js';
+export function RadioList({ className, slotProps, label, children }) {
+    return (_jsx("div", { role: "radiogroup", "aria-label": label, className: "cieo cieo-p-radio-list", ...customizePart(slotProps?.root, "cieo cieo-p-radio-list", undefined, className), children: children }));
 }

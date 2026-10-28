@@ -21,7 +21,9 @@
     { "id": "label", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "Image viewer", "constraints": { "minLength": 1, "maxLength": 256 } },
     { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {} },
     { "id": "entering", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "fade", "constraints": {} },
-    { "id": "exiting", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "fade", "constraints": {} }
+    { "id": "exiting", "type": { "kind": "enum", "values": ["none", "fade", "rise", "scale"] }, "required": false, "nullable": false, "default": "fade", "constraints": {} },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [],
   "state": [],
@@ -30,9 +32,9 @@
   "variants": [],
   "styleParts": [{ "id": "viewer", "overrides": ["surface"], "tokenRoles": ["surface"] }],
   "constraints": { "layout": ["centered-panel"], "content": ["image-has-alt"], "motion": ["fade-on-snap", "honor-render-policy"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["src", "alt", "open", "onClose", "label", "motion", "entering", "exiting"], "states": [], "events": [], "parts": ["viewer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["src", "alt", "open", "onClose", "label", "motion", "entering", "exiting", "className", "slotProps"], "states": [], "events": [], "parts": ["viewer"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Image viewer dialog for inspecting one picture at full size." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","image","close"],"semanticOverrides":false}}
 }

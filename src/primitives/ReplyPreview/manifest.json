@@ -69,7 +69,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is () => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: bar, text, author, excerpt, root, dismiss. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -104,7 +106,9 @@
         "excerpt",
         "variant",
         "onDismiss",
-        "onJump"
+        "onJump",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -130,5 +134,5 @@
     "path": "README.md",
     "purpose": "A quoted reply with an accent bar and a clamped excerpt, dismissible above a composer or tappable inside a message."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["bar","text","author","excerpt","root","dismiss"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

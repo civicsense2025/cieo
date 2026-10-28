@@ -1,4 +1,6 @@
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* AvatarGroup (static). Decorative overlapping face stack for rows: up to `max` faces plus a +N disc. No hover fan-out here; the animated demo lives separately. The parent row owns the accessible name. */
 import type { CSSProperties } from 'react';
 
@@ -12,6 +14,9 @@ export interface AvatarPerson {
 }
 
 export interface AvatarGroupProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; avatarStack?: PrimitivePartProps; avatar?: PrimitivePartProps; avatarInitials?: PrimitivePartProps; label?: PrimitivePartProps };
+
   people: AvatarPerson[];
   /** Max faces before collapsing into +N. Defaults to 4. */
   max?: number;
@@ -21,20 +26,20 @@ export interface AvatarGroupProps {
   style?: CSSProperties;
 }
 
-export function AvatarGroup({ people, max = 4, size = 'md', label, style }: AvatarGroupProps) {
+export function AvatarGroup({ className, slotProps, people, max = 4, size = 'md', label, style }: AvatarGroupProps) {
   const shown = people.slice(0, max);
   const rest = people.length - shown.length;
   return (
-    <span data-size={size} className="cieo cieo-avatar-group" style={style}>
-      <span aria-hidden="true" className="cieo-avatar-stack">
+    <span data-size={size} className="cieo cieo-avatar-group" style={style} {...customizePart(slotProps?.root, "cieo cieo-avatar-group", style, className)}>
+      <span aria-hidden="true" className="cieo-avatar-stack" {...customizePart(slotProps?.avatarStack, "cieo-avatar-stack")}>
         {shown.map((p, i) => (
-          <span key={`${p.name}-${i}`} className="cieo-avatar">
-            {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-avatar-initials">{p.initials}</span>}
+          <span key={`${p.name}-${i}`} className="cieo-avatar" {...customizePart(slotProps?.avatar, "cieo-avatar")}>
+            {p.src ? <img src={p.src} alt="" loading="lazy" /> : <span className="cieo-avatar-initials" {...customizePart(slotProps?.avatarInitials, "cieo-avatar-initials")}>{p.initials}</span>}
           </span>
         ))}
-        {rest > 0 ? <span className="cieo-avatar cieo-avatar-overflow">+{rest}</span> : null}
+        {rest > 0 ? <span className="cieo-avatar cieo-avatar-overflow" {...customizePart(slotProps?.avatar, "cieo-avatar cieo-avatar-overflow")}>+{rest}</span> : null}
       </span>
-      {label ? <span className="cieo-avatar-group-label">{label}</span> : null}
+      {label ? <span className="cieo-avatar-group-label" {...customizePart(slotProps?.label, "cieo-avatar-group-label")}>{label}</span> : null}
     </span>
   );
 }

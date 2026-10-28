@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export type CommentNode<T = unknown> = T & {
     id: string;
@@ -35,6 +36,14 @@ export interface CommentRenderContext {
     hiddenCount: number;
 }
 export interface CommentThreadProps<T = unknown> {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        branch?: PrimitivePartProps;
+        list?: PrimitivePartProps;
+        item?: PrimitivePartProps;
+        more?: PrimitivePartProps;
+    };
     /** Accessible name for the whole thread (e.g. "Comments"). Required. */
     label: string;
     /** Top-level comments, each with optional children. Required. */
@@ -56,4 +65,4 @@ export interface CommentThreadProps<T = unknown> {
     /** Called with the next list of opened branch ids. */
     onExpandedChange?: (expanded: string[]) => void;
 }
-export declare function CommentThread<T = unknown>({ label, items, renderItem, maxDepth, initialReplies, moreLabel, newIds, branchLabel, expanded, onExpandedChange }: CommentThreadProps<T>): import("react/jsx-runtime").JSX.Element;
+export declare function CommentThread<T = unknown>({ label, items, renderItem, maxDepth, initialReplies, moreLabel, newIds, branchLabel, expanded, onExpandedChange, className, slotProps }: CommentThreadProps<T>): import("react/jsx-runtime").JSX.Element;

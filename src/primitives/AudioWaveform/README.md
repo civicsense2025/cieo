@@ -32,7 +32,7 @@ Slider: `aria-valuemin/max/now` and `aria-valuetext` ("12 seconds of 1 minute 3 
 
 ## Customization
 
-Bar count via `bars`; colors from border-strong and accent tokens.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ AudioPlayer, AudioTime, VoiceRecorder..
 ## Evidence
 
 `test/primitives-audio-playback.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `bars`, `bar`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

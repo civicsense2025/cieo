@@ -117,6 +117,8 @@ The CLI sends only the artifact to standard output and errors to standard error.
 
 ## Building, packaging and review
 
+The [primitive customization contract](primitive-customization.md) exposes named presentation slots while retaining library-owned semantics, state and geometry. [Popover](../src/primitives/Popover/README.md) additionally owns viewport placement, optional portaling and keyboard focus order; hosts customize its named content parts and surface tokens.
+
 `npm run build:design` regenerates the standalone schema, default styles, 24 named palette stylesheets, two typed JSON artifacts, and six native outputs. Generated language/palette files live under `design/generated/`, stay out of source control, and enter npm tarballs through `prepare`/`prepack`. The handoff ZIP includes them too. `design/themes.css` and `design/theme.schema.json` remain tracked and receive drift checks. The generator has no third-party dependencies.
 
 The original spring engine, React API, DOM API, SwiftUI package, and recipe files remain unchanged. Existing import paths still resolve. The package is MIT licensed (see `LICENSE`). The dependency versions don't change. The lockfile only gains the command-line entry metadata.

@@ -2,12 +2,16 @@
 'use client';
 /* AgentLanes. One lane per agent, headed by its name and reported status. A child agent nests inside its
    parent's lane; an agent whose parent is not in the list starts its own top-level lane. */
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 import { useId, type ReactNode } from 'react';
 import type { AgentStatus as AgentStatusValue } from '../../agent/event.js';
 import type { AgentView } from '../../agent/reduce.js';
 import { AgentStatus } from '../AgentStatus/AgentStatus.js';
 
 export interface AgentLanesProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; lane?: PrimitivePartProps; header?: PrimitivePartProps; name?: PrimitivePartProps; body?: PrimitivePartProps; children?: PrimitivePartProps };
   /** Agents to show, e.g. from selectRunAgents. Order is kept within each level. */
   agents: readonly AgentView[];
   /** The body of one lane, e.g. its streaming message and tool calls. */
@@ -19,6 +23,7 @@ export interface AgentLanesProps {
 }
 
 interface LaneProps {
+  slotProps?: AgentLanesProps['slotProps'];
   agent: AgentView;
   depth: number;
   tree: ReadonlyMap<string | null, readonly AgentView[]>;
@@ -27,22 +32,22 @@ interface LaneProps {
   statusLabel?: (status: AgentStatusValue) => string;
 }
 
-function Lane({ agent, depth, tree, seen, renderLane, statusLabel }: LaneProps) {
+function Lane({ agent, depth, tree, seen, renderLane, statusLabel, slotProps }: LaneProps) {
   const nameId = useId();
   const path = new Set(seen).add(agent.id);
   // A malformed host log could make an agent its own ancestor; the path guard stops that from recursing forever.
   const kids = (tree.get(agent.id) ?? []).filter((k) => !path.has(k.id));
   return (
-    <li data-agent-id={agent.id} data-depth={depth} data-status={agent.status}>
+    <li data-agent-id={agent.id} data-depth={depth} data-status={agent.status} {...customizePart(slotProps?.lane)}>
       <section aria-labelledby={nameId}>
-        <header>
-          <span id={nameId} data-agent-name>{agent.name ?? agent.id}</span>
+        <header {...customizePart(slotProps?.header)}>
+          <span id={nameId} {...customizePart(slotProps?.name)} data-agent-name>{agent.name ?? agent.id}</span>
           <AgentStatus status={agent.status} label={statusLabel?.(agent.status)} />
         </header>
-        <div data-lane-body>{renderLane(agent)}</div>
+        <div {...customizePart(slotProps?.body)} data-lane-body>{renderLane(agent)}</div>
         {kids.length ? (
-          <ul>
-            {kids.map((k) => <Lane key={k.id} agent={k} depth={depth + 1} tree={tree} seen={path} renderLane={renderLane} statusLabel={statusLabel} />)}
+          <ul {...customizePart(slotProps?.children)}>
+            {kids.map((k) => <Lane key={k.id} agent={k} depth={depth + 1} tree={tree} seen={path} renderLane={renderLane} statusLabel={statusLabel} slotProps={slotProps} />)}
           </ul>
         ) : null}
       </section>
@@ -50,7 +55,7 @@ function Lane({ agent, depth, tree, seen, renderLane, statusLabel }: LaneProps) 
   );
 }
 
-export function AgentLanes({ agents, renderLane, label = 'Agents', statusLabel }: AgentLanesProps) {
+export function AgentLanes({ agents, renderLane, label = 'Agents', statusLabel, className, slotProps }: AgentLanesProps) {
   const ids = new Set(agents.map((a) => a.id));
   const tree = new Map<string | null, AgentView[]>();
   for (const agent of agents) {
@@ -60,8 +65,8 @@ export function AgentLanes({ agents, renderLane, label = 'Agents', statusLabel }
     else tree.set(parent, [agent]);
   }
   return (
-    <ul className="cieo cieo-p-agent-lanes" aria-label={label}>
-      {(tree.get(null) ?? []).map((a) => <Lane key={a.id} agent={a} depth={0} tree={tree} seen={new Set()} renderLane={renderLane} statusLabel={statusLabel} />)}
+    <ul className="cieo cieo-p-agent-lanes" aria-label={label} {...customizePart(slotProps?.root, "cieo cieo-p-agent-lanes", undefined, className)}>
+      {(tree.get(null) ?? []).map((a) => <Lane key={a.id} agent={a} depth={0} tree={tree} seen={new Set()} renderLane={renderLane} statusLabel={statusLabel} slotProps={slotProps} />)}
     </ul>
   );
 }

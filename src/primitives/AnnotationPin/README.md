@@ -36,7 +36,7 @@ A zero-size button placed with `left` and `top` percentages, holding a rotated t
 
 ## Customization
 
-Own the colors through the accent, canvas, sunken and muted tokens. Size comes from `--pin-size` on the root.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -50,3 +50,7 @@ Own the colors through the accent, canvas, sunken and muted tokens. Size comes f
 ## Evidence
 
 Covered by `test/primitives-feedback.test.mjs` (name contract, clamping, coordinates, state attributes).
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `body`, `text`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

@@ -1,11 +1,12 @@
 // src/primitives/DropdownMenu/DropdownMenu.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* DropdownMenu. Menu shell. Trigger toggles it; Escape, outside press and choosing an item close it and return focus. Controlled `open` always wins. */
 import { cloneElement, createContext, isValidElement, useId, useLayoutEffect, useRef, useState } from 'react';
 import { enabledIn, roveIndex, useDismiss } from '../../react/index.js';
 export const DropdownMenuContext = createContext(null);
-export function DropdownMenu({ label, open, defaultOpen = false, onOpenChange, trigger, children }) {
+export function DropdownMenu({ className, slotProps, label, open, defaultOpen = false, onOpenChange, trigger, children }) {
     const [internal, setInternal] = useState(defaultOpen);
     const isOpen = open ?? internal;
     const menuId = useId();
@@ -83,6 +84,6 @@ export function DropdownMenu({ label, open, defaultOpen = false, onOpenChange, t
                 handleTriggerClick(e);
             }
             else
-                handleTriggerKeyDown(e); }, className: "cieo-dropdown-menu-trigger-fallback", children: trigger });
-    return (_jsxs("div", { ref: rootRef, className: "cieo cieo-dropdown-menu", children: [_jsx("span", { ref: triggerRef, className: "cieo-dropdown-menu-trigger", children: triggerNode }), isOpen ? (_jsx(DropdownMenuContext.Provider, { value: { close: () => close(true) }, children: _jsx("div", { ref: panelRef, id: menuId, role: "menu", "aria-label": label, onKeyDown: handlePanelKeyDown, className: "cieo-dropdown-menu-panel", children: children }) })) : null] }));
+                handleTriggerKeyDown(e); }, className: "cieo-dropdown-menu-trigger-fallback", ...customizePart(slotProps?.triggerFallback, "cieo-dropdown-menu-trigger-fallback"), children: trigger });
+    return (_jsxs("div", { ref: rootRef, className: "cieo cieo-dropdown-menu", ...customizePart(slotProps?.root, "cieo cieo-dropdown-menu", undefined, className), children: [_jsx("span", { ref: triggerRef, className: "cieo-dropdown-menu-trigger", ...customizePart(slotProps?.trigger, "cieo-dropdown-menu-trigger"), children: triggerNode }), isOpen ? (_jsx(DropdownMenuContext.Provider, { value: { close: () => close(true) }, children: _jsx("div", { ref: panelRef, id: menuId, role: "menu", "aria-label": label, onKeyDown: handlePanelKeyDown, className: "cieo-dropdown-menu-panel", ...customizePart(slotProps?.panel, "cieo-dropdown-menu-panel"), children: children }) })) : null] }));
 }

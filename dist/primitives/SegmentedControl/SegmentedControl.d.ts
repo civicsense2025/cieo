@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface SegmentedControlContextValue {
     value?: string;
@@ -5,6 +6,10 @@ export interface SegmentedControlContextValue {
 }
 export declare const SegmentedControlContext: import("react").Context<SegmentedControlContextValue | null>;
 export interface SegmentedControlProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the control (e.g. "View density"). Required. */
     label: string;
     /** Picked segment value when controlled. */
@@ -15,4 +20,4 @@ export interface SegmentedControlProps {
     onValueChange?: (value: string) => void;
     children: ReactNode;
 }
-export declare function SegmentedControl({ label, value, defaultValue, onValueChange, children }: SegmentedControlProps): import("react/jsx-runtime").JSX.Element;
+export declare function SegmentedControl({ className, slotProps, label, value, defaultValue, onValueChange, children }: SegmentedControlProps): import("react/jsx-runtime").JSX.Element;

@@ -1,7 +1,8 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
-export function AuthEmailField({ id, label = 'Email', value, defaultValue, error, disabled, style, onChange, onBlur }) {
+import { customizePart } from '../customization.js';
+export function AuthEmailField({ className, slotProps, id, label = 'Email', value, defaultValue, error, disabled, style, onChange, onBlur }) {
     const describedBy = error ? `${id}-error` : undefined;
-    return (_jsxs("span", { className: "cieo cieo-auth-email-field", "data-invalid": error ? 'true' : undefined, style: style, children: [_jsx("label", { className: "cieo-auth-label", htmlFor: id, children: label }), _jsx("input", { id: id, className: "cieo-auth-input", type: "email", autoComplete: "email", inputMode: "email", value: value, defaultValue: value === undefined ? defaultValue : undefined, disabled: disabled, "aria-invalid": error ? 'true' : undefined, "aria-describedby": describedBy, onChange: e => onChange?.(e.target.value), onBlur: onBlur }), _jsx(AuthMotionMessage, { id: `${id}-error`, className: "cieo-auth-error", role: "alert", value: error })] }));
+    return (_jsxs("span", { className: "cieo cieo-auth-email-field", "data-invalid": error ? 'true' : undefined, style: style, ...customizePart(slotProps?.root, "cieo cieo-auth-email-field", style, className), children: [_jsx("label", { className: "cieo-auth-label", htmlFor: id, ...customizePart(slotProps?.label, "cieo-auth-label", undefined), children: label }), _jsx("input", { id: id, className: "cieo-auth-input", type: "email", autoComplete: "email", inputMode: "email", value: value, defaultValue: value === undefined ? defaultValue : undefined, disabled: disabled, "aria-invalid": error ? 'true' : undefined, "aria-describedby": describedBy, onChange: e => onChange?.(e.target.value), onBlur: onBlur, ...customizePart(slotProps?.input, "cieo-auth-input", undefined) }), _jsx(AuthMotionMessage, { id: `${id}-error`, className: "cieo-auth-error", role: "alert", value: error })] }));
 }

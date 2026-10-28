@@ -1,6 +1,7 @@
 // src/primitives/ActionBar/ActionBar.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* ActionBar. A toolbar for a row of action buttons under a post: one tab stop, arrow keys move between buttons. The host owns the buttons. */
 import { useEffect, useRef } from 'react';
 import { enabledIn, roveFocus, roveIndex } from '../../react/index.js';
@@ -9,7 +10,7 @@ const ITEMS = 'button';
 export function actionBarIndex(key, current, count) {
     return roveIndex(key, current, count, { orientation: 'horizontal', loop: true });
 }
-export function ActionBar({ label, children, size = 'md', align = 'start' }) {
+export function ActionBar({ className, slotProps, label, children, size = 'md', align = 'start' }) {
     const ref = useRef(null);
     const active = useRef(0);
     const sync = () => {
@@ -29,5 +30,5 @@ export function ActionBar({ label, children, size = 'md', align = 'start' }) {
             if (e.defaultPrevented)
                 return;
             roveFocus(e, ref.current, ITEMS, { orientation: 'horizontal', loop: true });
-        }, children: children }));
+        }, ...customizePart(slotProps?.root, "cieo cieo-action-bar", undefined, className), children: children }));
 }

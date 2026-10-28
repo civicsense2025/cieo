@@ -1,4 +1,11 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface DateInputProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        label?: PrimitivePartProps;
+        input?: PrimitivePartProps;
+    };
     label: string;
     /** Form field name. */
     name?: string;
@@ -13,4 +20,4 @@ export interface DateInputProps {
     disabled?: boolean;
     required?: boolean;
 }
-export declare function DateInput({ label, name, value, defaultValue, onChange, min, max, disabled, required }: DateInputProps): import("react/jsx-runtime").JSX.Element;
+export declare function DateInput({ className, slotProps, label, name, value, defaultValue, onChange, min, max, disabled, required }: DateInputProps): import("react/jsx-runtime").JSX.Element;

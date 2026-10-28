@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 export type NewItemsPlacement = 'top' | 'bottom';
 /** Default label: "1 new reply", "3 new replies". Bad counts read as zero. */
 export declare function newItemsLabel(n: number): string;
@@ -11,6 +12,13 @@ export declare function splitNewItemsLabel(text: string, n: number): {
     rest: string;
 };
 export interface NewItemsPillProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        button?: PrimitivePartProps;
+        count?: PrimitivePartProps;
+        text?: PrimitivePartProps;
+    };
     /** How many items are waiting. The pill shows while this is above zero. */
     count: number;
     /** Called when the pill is pressed; the host scrolls to or reveals the new items. */
@@ -20,4 +28,4 @@ export interface NewItemsPillProps {
     /** Which edge the pill drops in from. Defaults to top. */
     placement?: NewItemsPlacement;
 }
-export declare function NewItemsPill({ count, onShow, label, placement }: NewItemsPillProps): import("react/jsx-runtime").JSX.Element;
+export declare function NewItemsPill({ className, slotProps, count, onShow, label, placement }: NewItemsPillProps): import("react/jsx-runtime").JSX.Element;

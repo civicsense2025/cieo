@@ -13,7 +13,7 @@
   "source": { "target": "web", "path": "src/primitives/TableCell/TableCell.tsx", "symbol": "TableCell" },
   "dependencies": [],
   "nativePrimitives": [],
-  "properties": [],
+  "properties": [ {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."}, {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
   "state": [],
   "transitions": [],
@@ -21,9 +21,9 @@
   "variants": [],
   "styleParts": [{ "id": "cell", "overrides": ["padding"], "tokenRoles": ["space"] }],
   "constraints": { "layout": ["inside-row"], "content": ["cell-has-content"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [], "states": [], "events": [], "parts": ["cell"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": [ "className", "slotProps"], "states": [], "events": [], "parts": ["cell"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Table data cell with standard padding." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

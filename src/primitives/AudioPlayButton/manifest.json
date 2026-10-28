@@ -90,7 +90,9 @@
       "nullable": false,
       "default": "Pause",
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, icon, pauseHalf, ring. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [
     {
@@ -135,7 +137,9 @@
         "loading",
         "label",
         "onToggle",
-        "size"
+        "size",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -161,5 +165,5 @@
     "path": "README.md",
     "purpose": "Round play/pause button whose icon morphs between the two shapes, with a ring while the clip loads."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","icon","pauseHalf","ring"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

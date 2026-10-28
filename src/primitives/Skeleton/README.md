@@ -32,7 +32,7 @@ Bars pulse via keyframes; `prefers-reduced-motion` stops the pulse and holds a s
 
 ## Customization
 
-Line count and label only. Bar fill, radius, and pulse come from Cieo tokens; motion stops under reduced motion.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -50,3 +50,7 @@ EmptyState (molecule), Spinner (atom), Text (atom).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-content.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `lines`, `line`, `label`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

@@ -1,6 +1,7 @@
 // src/primitives/Blockquote/Blockquote.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function Blockquote({ cite, children }) {
-    return (_jsxs("blockquote", { className: "cieo cieo-p-blockquote", children: [children, cite ? (_jsx("footer", { children: _jsx("cite", { children: cite }) })) : null] }));
+import { customizePart } from '../customization.js';
+export function Blockquote({ className, slotProps, cite, children }) {
+    return (_jsxs("blockquote", { className: "cieo cieo-p-blockquote", ...customizePart(slotProps?.root, "cieo cieo-p-blockquote", undefined, className), children: [children, cite ? (_jsx("footer", { ...customizePart(slotProps?.attribution), children: _jsx("cite", { ...customizePart(slotProps?.source), children: cite }) })) : null] }));
 }

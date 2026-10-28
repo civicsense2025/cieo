@@ -105,7 +105,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is ReactNode."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}
   ],
   "slots": [
     {
@@ -162,7 +164,9 @@
         "onToggleMute",
         "onToggleHand",
         "onLeave",
-        "reactions"
+        "reactions",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -188,5 +192,5 @@
     "path": "README.md",
     "purpose": "The shell of a live audio room: title and listener count, a stage of speakers that glide into place, and the controls for the person using it."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationSlots":["root","header","title","listeners","count","stage","speaker","controls","control","reactions"],"semanticOverrides":false}}
 }

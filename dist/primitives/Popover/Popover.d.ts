@@ -1,13 +1,30 @@
-import { type ReactNode } from 'react';
+import { type CSSProperties, type ReactNode } from 'react';
+import type { PopoverAlign, PopoverSide } from './position.js';
+import type { PrimitivePartProps as PartProps } from '../parts.js';
 export interface PopoverProps {
-    /** Trigger element that toggles the panel. Required slot. */
     trigger: ReactNode;
-    /** Controlled open state. Optional. */
     open?: boolean;
-    /** Uncontrolled initial state. Defaults to false. */
     defaultOpen?: boolean;
-    /** Host open hook. Optional. */
     onOpenChange?: (open: boolean) => void;
-    children: ReactNode;
+    children?: ReactNode;
+    label?: string;
+    side?: PopoverSide;
+    align?: PopoverAlign;
+    offset?: number;
+    collisionPadding?: number;
+    portal?: boolean;
+    motion?: boolean;
+    className?: string;
+    style?: CSSProperties;
+    slots?: {
+        header?: ReactNode;
+        content?: ReactNode;
+        footer?: ReactNode;
+    };
+    slotProps?: {
+        root?: PartProps;
+        trigger?: PartProps;
+        content?: PartProps;
+    };
 }
-export declare function Popover({ trigger, open, defaultOpen, onOpenChange, children }: PopoverProps): import("react/jsx-runtime").JSX.Element;
+export declare function Popover({ trigger, open, defaultOpen, onOpenChange, children, label, side, align, offset, collisionPadding, portal, motion, className, style, slots, slotProps }: PopoverProps): import("react/jsx-runtime").JSX.Element;

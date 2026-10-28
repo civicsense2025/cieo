@@ -10,9 +10,12 @@ const COMPANION_FILES = {
 };
 
 export function classifyImport(spec, fromFile = '') {
-  if (spec === 'react' || spec.startsWith('react/')) return { kind: 'peer' };
+  if (spec === 'react' || spec.startsWith('react/') || spec === 'react-dom') return { kind: 'peer' };
   if (!spec.startsWith('.')) throw new Error(`Unclassified bare import '${spec}' — registry generation refuses to guess`);
   if (spec.startsWith('./')) {
+    if (fromFile === 'customization.ts' && spec === './parts.js') return { kind: 'shared', file: 'parts.ts' };
+    const popoverFiles = { 'Popover/Popover.tsx|./focus.js': 'Popover/focus.ts', 'Popover/Popover.tsx|./position.js': 'Popover/position.ts', 'Popover/Popover.tsx|./usePopoverPosition.js': 'Popover/usePopoverPosition.ts', 'Popover/usePopoverPosition.ts|./position.js': 'Popover/position.ts' };
+    if (popoverFiles[`${fromFile}|${spec}`]) return { kind: 'shared', file: popoverFiles[`${fromFile}|${spec}`] };
     const companion = fromFile === 'AuthSignInCard/AuthSignInCard.tsx' && spec === './AuthMotion.js'
       ? 'AuthSignInCard/AuthMotion.tsx'
       : fromFile === 'VoiceRecorder/VoiceRecorder.tsx' && spec === './recorderVisual.js'
@@ -24,6 +27,8 @@ export function classifyImport(spec, fromFile = '') {
   const ups = (spec.match(/\.\.\//g) || []).length;
   const rest = spec.replace(/^(\.\.\/)+/, '');
   if (ups === 1) {
+    if (rest === 'customization.js') return { kind: 'shared', file: 'customization.ts' };
+    if (rest === 'parts.js') return { kind: 'shared', file: 'parts.ts' };
     if (rest === 'motion.js') return { kind: 'shared', file: 'motion.ts' };
     if (COMPANION_FILES[rest]) return { kind: 'shared', file: COMPANION_FILES[rest] };
     const [first] = rest.split('/');

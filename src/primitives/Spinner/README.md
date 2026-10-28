@@ -36,7 +36,7 @@ Rotation period is token-driven (`--motion-duration-lazy`, ~740ms). Pass `motion
 
 ## Customization
 
-Label and size (`sm|md`) only. Ring colors, width, and timing come from Cieo tokens; do not restyle per instance.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -50,3 +50,7 @@ ProgressBar (atom), Button (atom), AvatarGroup (molecule).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-feedback.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `ring`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

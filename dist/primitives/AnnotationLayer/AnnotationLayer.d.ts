@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface LayerPoint {
     x: number;
@@ -37,6 +38,16 @@ export declare function escapeAction(hasOpenTarget: boolean): 'close-target' | '
 export declare const COMMENT_MODE_ON = "Comment mode on. Click or press Enter to place a comment.";
 export declare const COMMENT_MODE_OFF = "Comment mode off.";
 export interface AnnotationLayerProps {
+    className?: string;
+    slotProps?: {
+        popover?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+        content?: PrimitivePartProps;
+        placement?: PrimitivePartProps;
+        reticle?: PrimitivePartProps;
+        pins?: PrimitivePartProps;
+        pin?: PrimitivePartProps;
+    };
     /** Accessible name for the reviewed area, e.g. "Landing page". */
     label: string;
     /** The content being reviewed. */
@@ -58,4 +69,4 @@ export interface AnnotationLayerProps {
     /** The unsent pin the host created after onPlace. */
     draft?: LayerPoint | null;
 }
-export declare function AnnotationLayer({ label, children, pins, active, onActiveChange, onPlace, selectedId, onSelect, renderPopover, draft }: AnnotationLayerProps): import("react/jsx-runtime").JSX.Element;
+export declare function AnnotationLayer({ label, children, pins, active, onActiveChange, onPlace, selectedId, onSelect, renderPopover, draft, className, slotProps }: AnnotationLayerProps): import("react/jsx-runtime").JSX.Element;

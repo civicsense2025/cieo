@@ -3,6 +3,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* CompactCount. A count shortened for scanning (26.3K) whose digits roll in the direction of change. The exact number stays in the accessible text. */
 import { Digits } from '../../react/index.js';
+import { customizePart } from '../customization.js';
 /** Short, locale-aware form of a count: 164, 1.2K, 26.3K, 4M. Negative, fractional and non-finite input is clamped to a whole count of at least 0. */
 export function formatCompactCount(n, locale = 'en') {
     const whole = Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
@@ -13,9 +14,9 @@ export function formatExactCount(n, locale = 'en') {
     const whole = Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
     return new Intl.NumberFormat(locale).format(whole);
 }
-export function CompactCount({ value, locale = 'en', unit, hideZero = true, motion = true }) {
+export function CompactCount({ className, slotProps, value, locale = 'en', unit, hideZero = true, motion = true }) {
     const short = formatCompactCount(value, locale);
     const exact = `${formatExactCount(value, locale)}${unit ? ` ${unit}` : ''}`;
     const empty = hideZero && short === formatCompactCount(0, locale);
-    return (_jsxs("span", { className: "cieo cieo-compact-count", "data-empty": empty ? '' : undefined, title: exact, children: [_jsx("span", { "aria-hidden": "true", children: empty ? null : motion ? _jsx(Digits, { value: short }) : short }), _jsx("span", { className: "cieo-sr-only", children: exact })] }));
+    return (_jsxs("span", { className: "cieo cieo-compact-count", "data-empty": empty ? '' : undefined, title: exact, ...customizePart(slotProps?.root, "cieo cieo-compact-count", undefined, className), children: [_jsx("span", { "aria-hidden": "true", children: empty ? null : motion ? _jsx(Digits, { value: short }) : short }), _jsx("span", { className: "cieo-sr-only", children: exact })] }));
 }

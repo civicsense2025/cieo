@@ -1,5 +1,10 @@
 import { type ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export interface DropdownMenuItemProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name when children carry no readable text. */
     label?: string;
     /** Removes the item from selection. Defaults to false. */
@@ -8,4 +13,4 @@ export interface DropdownMenuItemProps {
     onSelect?: () => void;
     children?: ReactNode;
 }
-export declare function DropdownMenuItem({ label, disabled, onSelect, children }: DropdownMenuItemProps): import("react/jsx-runtime").JSX.Element;
+export declare function DropdownMenuItem({ className, slotProps, label, disabled, onSelect, children }: DropdownMenuItemProps): import("react/jsx-runtime").JSX.Element;

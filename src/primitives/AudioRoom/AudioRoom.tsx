@@ -1,6 +1,8 @@
 // src/primitives/AudioRoom/AudioRoom.tsx
 'use client';
 /* AudioRoom. The shell of a live audio room: title and listener count, a stage of speakers that glide into place, and the person's own controls. The host owns the audio connection. */
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 import { useId, useRef, type ReactNode } from 'react';
 import { useFlip } from '../../react/index.js';
 import { CompactCount } from '../CompactCount/CompactCount.js';
@@ -38,6 +40,8 @@ export function stageKey(speakers: readonly { id: string }[]): string {
 }
 
 export interface AudioRoomProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; header?: PrimitivePartProps; title?: PrimitivePartProps; listeners?: PrimitivePartProps; count?: PrimitivePartProps; stage?: PrimitivePartProps; speaker?: PrimitivePartProps; controls?: PrimitivePartProps; control?: PrimitivePartProps; reactions?: PrimitivePartProps };
   /** Room title; also the accessible name of the region. */
   title: string;
   /** People on stage, in display order. */
@@ -67,44 +71,44 @@ const MIC = 'M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0
 const MIC_OFF = 'M9 9v3a3 3 0 0 0 5.1 2.1M15 9.3V5a3 3 0 0 0-5.9-.8M5 11a7 7 0 0 0 11.2 5.6M19 11a7 7 0 0 1-.6 2.8M12 18v3M3 3l18 18';
 const LEAVE = 'M10 4H5v16h5M15 8l4 4-4 4M19 12H9';
 
-export function AudioRoom({ title, speakers, listenerCount, listeners, self, onToggleMute, onToggleHand, onLeave, reactions }: AudioRoomProps) {
+export function AudioRoom({ title, speakers, listenerCount, listeners, self, onToggleMute, onToggleHand, onLeave, reactions, className, slotProps }: AudioRoomProps) {
   const headingId = useId();
   const stage = useRef<HTMLUListElement>(null);
   useFlip(stage, stageKey(speakers));
   return (
-    <section aria-labelledby={headingId} className="cieo cieo-audio-room">
-      <header className="cieo-audio-room-header">
-        <h2 id={headingId} className="cieo-audio-room-title">
+    <section aria-labelledby={headingId} className="cieo cieo-audio-room" {...customizePart(slotProps?.root, "cieo cieo-audio-room", undefined, className)}>
+      <header className="cieo-audio-room-header" {...customizePart(slotProps?.header, "cieo-audio-room-header", undefined)}>
+        <h2 id={headingId} className="cieo-audio-room-title" {...customizePart(slotProps?.title, "cieo-audio-room-title", undefined)}>
           {title}
         </h2>
-        <span className="cieo-audio-room-listeners">
+        <span className="cieo-audio-room-listeners" {...customizePart(slotProps?.listeners, "cieo-audio-room-listeners", undefined)}>
           {listeners}
-          <span className="cieo-audio-room-count">
+          <span className="cieo-audio-room-count" {...customizePart(slotProps?.count, "cieo-audio-room-count", undefined)}>
             <CompactCount value={listenerCount} unit="listening" hideZero={false} />
             <span aria-hidden="true"> listening</span>
           </span>
         </span>
       </header>
-      <ul ref={stage} aria-label="Speakers" className="cieo-audio-room-stage">
+      <ul ref={stage} aria-label="Speakers" className="cieo-audio-room-stage" {...customizePart(slotProps?.stage, "cieo-audio-room-stage", undefined)}>
         {speakers.map((s) => (
-          <li key={s.id} className="cieo-audio-room-seat">
+          <li key={s.id} className="cieo-audio-room-seat" {...customizePart(slotProps?.speaker, "cieo-audio-room-seat", undefined)}>
             <SpeakerTile name={s.name} avatar={s.avatar} level={s.level} muted={s.muted} role={s.role} handRaised={s.handRaised} size="lg" />
           </li>
         ))}
       </ul>
-      <div role="group" aria-label="Your controls" className="cieo-audio-room-controls">
+      <div role="group" aria-label="Your controls" className="cieo-audio-room-controls" {...customizePart(slotProps?.controls, "cieo-audio-room-controls", undefined)}>
         {self.canSpeak ? (
-          <button type="button" className="cieo-audio-room-button" aria-pressed={self.muted} onClick={onToggleMute}>
+          <button type="button" className="cieo-audio-room-button" aria-pressed={self.muted} onClick={onToggleMute} {...customizePart(slotProps?.control, "cieo-audio-room-button", undefined)}>
             <Glyph d={self.muted ? MIC_OFF : MIC} />
             <span>Mute</span>
           </button>
         ) : null}
-        <button type="button" className="cieo-audio-room-button" aria-pressed={self.handRaised} onClick={onToggleHand}>
+        <button type="button" className="cieo-audio-room-button" aria-pressed={self.handRaised} onClick={onToggleHand} {...customizePart(slotProps?.control, "cieo-audio-room-button", undefined)}>
           <span aria-hidden="true">{'✋'}</span>
           <span>Raise hand</span>
         </button>
-        {reactions ? <span className="cieo-audio-room-reactions">{reactions}</span> : null}
-        <button type="button" className="cieo-audio-room-button" data-tone="danger" onClick={onLeave}>
+        {reactions ? <span className="cieo-audio-room-reactions" {...customizePart(slotProps?.reactions, "cieo-audio-room-reactions", undefined)}>{reactions}</span> : null}
+        <button type="button" className="cieo-audio-room-button" data-tone="danger" onClick={onLeave} {...customizePart(slotProps?.control, "cieo-audio-room-button", undefined)}>
           <Glyph d={LEAVE} />
           <span>Leave</span>
         </button>

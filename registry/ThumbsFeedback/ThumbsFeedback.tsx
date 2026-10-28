@@ -1,5 +1,7 @@
 // src/primitives/ThumbsFeedback/ThumbsFeedback.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* ThumbsFeedback. "Was this helpful?" as a short ask, an optional detail step with reasons and a comment, then a thank-you. The host owns what happens to the result. */
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { SwapText, roveFocus, useSpring, useSwap } from '../../react/index.js';
@@ -37,6 +39,9 @@ export interface ThumbsResult {
 }
 
 export interface ThumbsFeedbackProps {
+  className?: string;
+  slotProps?: { thumbsButtons?: PrimitivePartProps; thumbsThumb?: PrimitivePartProps; thumbsView?: PrimitivePartProps; thumbsQuestion?: PrimitivePartProps; thumbsHead?: PrimitivePartProps; thumbsReasons?: PrimitivePartProps; thumbsReason?: PrimitivePartProps; thumbsCommentLabel?: PrimitivePartProps; thumbsComment?: PrimitivePartProps; thumbsActions?: PrimitivePartProps; thumbsSubmit?: PrimitivePartProps; thumbsSkip?: PrimitivePartProps; thumbsThanks?: PrimitivePartProps; root?: PrimitivePartProps; thumbsPanel?: PrimitivePartProps; thumbsInner?: PrimitivePartProps; thumbsLeaving?: PrimitivePartProps; thumbsEntering?: PrimitivePartProps };
+
   /** The question. Defaults to "Was this helpful?". */
   question?: string;
   /** Called as soon as a thumb is pressed, before any detail. */
@@ -62,7 +67,7 @@ function HeightDriver({ target, outer }: { target: number; outer: React.RefObjec
   return null;
 }
 
-export function ThumbsFeedback({ question = 'Was this helpful?', onRate, reasons, onSubmit, thanks = 'Thanks for the feedback.' }: ThumbsFeedbackProps) {
+export function ThumbsFeedback({ className, slotProps, question = 'Was this helpful?', onRate, reasons, onSubmit, thanks = 'Thanks for the feedback.' }: ThumbsFeedbackProps) {
   const [state, setState] = useState<ThumbsState>(THUMBS_INITIAL);
   const [picked, setPicked] = useState<string[]>([]);
   const [comment, setComment] = useState('');
@@ -109,9 +114,9 @@ export function ThumbsFeedback({ question = 'Was this helpful?', onRate, reasons
   };
 
   const thumbs = (pressedValue: ThumbValue | null, locked: boolean) => (
-    <div className="cieo-thumbs-buttons" role="group" aria-label={question}>
+    <div className="cieo-thumbs-buttons" role="group" aria-label={question} {...customizePart(slotProps?.thumbsButtons, "cieo-thumbs-buttons")}>
       {(['up', 'down'] as const).map((v) => (
-        <button key={v} type="button" className="cieo-thumbs-thumb" aria-label={v === 'up' ? 'Yes, helpful' : 'No, not helpful'} aria-pressed={pressedValue === v} disabled={locked} onClick={() => rate(v)}>
+        <button key={v} type="button" className="cieo-thumbs-thumb" aria-label={v === 'up' ? 'Yes, helpful' : 'No, not helpful'} aria-pressed={pressedValue === v} disabled={locked} onClick={() => rate(v)} {...customizePart(slotProps?.thumbsThumb, "cieo-thumbs-thumb")}>
           <Thumb dir={v} />
         </button>
       ))}
@@ -121,8 +126,8 @@ export function ThumbsFeedback({ question = 'Was this helpful?', onRate, reasons
   const view = (step: ThumbsStep, live: boolean) => {
     if (step === 'ask') {
       return (
-        <div className="cieo-thumbs-view" data-view="ask">
-          <p className="cieo-thumbs-question">{question}</p>
+        <div className="cieo-thumbs-view" data-view="ask" {...customizePart(slotProps?.thumbsView, "cieo-thumbs-view")}>
+          <p className="cieo-thumbs-question" {...customizePart(slotProps?.thumbsQuestion, "cieo-thumbs-question")}>{question}</p>
           {thumbs(null, !live)}
         </div>
       );
@@ -130,30 +135,30 @@ export function ThumbsFeedback({ question = 'Was this helpful?', onRate, reasons
     if (step === 'detail') {
       const chips = list(state.value);
       return (
-        <div className="cieo-thumbs-view" data-view="detail">
-          <div className="cieo-thumbs-head">
-            <p className="cieo-thumbs-question">{question}</p>
+        <div className="cieo-thumbs-view" data-view="detail" {...customizePart(slotProps?.thumbsView, "cieo-thumbs-view")}>
+          <div className="cieo-thumbs-head" {...customizePart(slotProps?.thumbsHead, "cieo-thumbs-head")}>
+            <p className="cieo-thumbs-question" {...customizePart(slotProps?.thumbsQuestion, "cieo-thumbs-question")}>{question}</p>
             {thumbs(state.value, !live)}
           </div>
-          <div className="cieo-thumbs-reasons" role="group" aria-label="Reasons" onKeyDown={(e) => { roveFocus(e, e.currentTarget, 'button', { orientation: 'horizontal' }); }}>
+          <div className="cieo-thumbs-reasons" role="group" aria-label="Reasons" onKeyDown={(e) => { roveFocus(e, e.currentTarget, 'button', { orientation: 'horizontal' }); }} {...customizePart(slotProps?.thumbsReasons, "cieo-thumbs-reasons")}>
             {chips.map((r) => (
-              <button key={r} type="button" className="cieo-thumbs-reason" aria-pressed={picked.includes(r)} disabled={!live} onClick={() => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]))}>
+              <button key={r} type="button" className="cieo-thumbs-reason" aria-pressed={picked.includes(r)} disabled={!live} onClick={() => setPicked((p) => (p.includes(r) ? p.filter((x) => x !== r) : [...p, r]))} {...customizePart(slotProps?.thumbsReason, "cieo-thumbs-reason")}>
                 {r}
               </button>
             ))}
           </div>
-          <label className="cieo-thumbs-comment-label" htmlFor={`${commentId}-${live ? 'live' : 'old'}`}>Anything to add? (optional)</label>
-          <textarea id={`${commentId}-${live ? 'live' : 'old'}`} className="cieo-thumbs-comment" rows={2} value={comment} disabled={!live} onChange={(e) => setComment(e.target.value)} />
-          <div className="cieo-thumbs-actions">
-            <button type="button" className="cieo-thumbs-submit" disabled={!live} onClick={() => finish(true)}>Submit</button>
-            <button type="button" className="cieo-thumbs-skip" disabled={!live} onClick={() => finish(false)}>Skip</button>
+          <label className="cieo-thumbs-comment-label" htmlFor={`${commentId}-${live ? 'live' : 'old'}`} {...customizePart(slotProps?.thumbsCommentLabel, "cieo-thumbs-comment-label")}>Anything to add? (optional)</label>
+          <textarea id={`${commentId}-${live ? 'live' : 'old'}`} className="cieo-thumbs-comment" rows={2} value={comment} disabled={!live} onChange={(e) => setComment(e.target.value)} {...customizePart(slotProps?.thumbsComment, "cieo-thumbs-comment")} />
+          <div className="cieo-thumbs-actions" {...customizePart(slotProps?.thumbsActions, "cieo-thumbs-actions")}>
+            <button type="button" className="cieo-thumbs-submit" disabled={!live} onClick={() => finish(true)} {...customizePart(slotProps?.thumbsSubmit, "cieo-thumbs-submit")}>Submit</button>
+            <button type="button" className="cieo-thumbs-skip" disabled={!live} onClick={() => finish(false)} {...customizePart(slotProps?.thumbsSkip, "cieo-thumbs-skip")}>Skip</button>
           </div>
         </div>
       );
     }
     return (
-      <div className="cieo-thumbs-view" data-view="done">
-        <p ref={live ? thanksRef : undefined} className="cieo-thumbs-thanks" tabIndex={live ? -1 : undefined} role={live ? 'status' : undefined}>
+      <div className="cieo-thumbs-view" data-view="done" {...customizePart(slotProps?.thumbsView, "cieo-thumbs-view")}>
+        <p ref={live ? thanksRef : undefined} className="cieo-thumbs-thanks" tabIndex={live ? -1 : undefined} role={live ? 'status' : undefined} {...customizePart(slotProps?.thumbsThanks, "cieo-thumbs-thanks")}>
           <SwapText value={thanks} />
         </p>
       </div>
@@ -161,16 +166,16 @@ export function ThumbsFeedback({ question = 'Was this helpful?', onRate, reasons
   };
 
   return (
-    <div className="cieo cieo-thumbs-feedback" data-step={state.step} data-value={state.value ?? undefined}>
-      <div ref={outerRef} className="cieo-thumbs-panel">
+    <div className="cieo cieo-thumbs-feedback" data-step={state.step} data-value={state.value ?? undefined} {...customizePart(slotProps?.root, "cieo cieo-thumbs-feedback", undefined, className)}>
+      <div ref={outerRef} className="cieo-thumbs-panel" {...customizePart(slotProps?.thumbsPanel, "cieo-thumbs-panel")}>
         {height !== null ? <HeightDriver target={height} outer={outerRef} /> : null}
-        <div ref={innerRef} className="cieo-thumbs-inner">
+        <div ref={innerRef} className="cieo-thumbs-inner" {...customizePart(slotProps?.thumbsInner, "cieo-thumbs-inner")}>
           {swap.leaving !== null ? (
-            <div key={`o${swap.key}`} className="cieo-thumbs-leaving" aria-hidden="true" inert onAnimationEnd={(e) => { if (e.target === e.currentTarget) swap.done(swap.key); }}>
+            <div key={`o${swap.key}`} className="cieo-thumbs-leaving" aria-hidden="true" inert onAnimationEnd={(e) => { if (e.target === e.currentTarget) swap.done(swap.key); }} {...customizePart(slotProps?.thumbsLeaving, "cieo-thumbs-leaving")}>
               {view(swap.leaving, false)}
             </div>
           ) : null}
-          <div key={`i${swap.key}`} className="cieo-thumbs-entering" data-swap={swap.leaving !== null ? '' : undefined}>
+          <div key={`i${swap.key}`} className="cieo-thumbs-entering" data-swap={swap.leaving !== null ? '' : undefined} {...customizePart(slotProps?.thumbsEntering, "cieo-thumbs-entering")}>
             {view(swap.shown, true)}
           </div>
         </div>

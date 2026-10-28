@@ -1,6 +1,7 @@
 // src/primitives/ButtonGroup/ButtonGroup.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function ButtonGroup({ label, orientation = 'horizontal', children }) {
-    return (_jsx("div", { role: "group", "aria-label": label, "data-orientation": orientation, className: "cieo cieo-button-group", children: children }));
+import { customizePart } from '../customization.js';
+export function ButtonGroup({ className, slotProps, label, orientation = 'horizontal', children }) {
+    return (_jsx("div", { role: "group", "aria-label": label, "data-orientation": orientation, className: "cieo cieo-button-group", ...customizePart(slotProps?.root, "cieo cieo-button-group", undefined, className), children: children }));
 }

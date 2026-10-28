@@ -1,5 +1,11 @@
 import type { ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export interface TableHeaderCellProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        sortButton?: PrimitivePartProps;
+    };
     /** Header scope. Defaults to col. */
     scope?: 'col' | 'row';
     /** Current sort direction. Defaults to none. */
@@ -8,4 +14,4 @@ export interface TableHeaderCellProps {
     onSort?: () => void;
     children: ReactNode;
 }
-export declare function TableHeaderCell({ scope, sort, onSort, children }: TableHeaderCellProps): import("react/jsx-runtime").JSX.Element;
+export declare function TableHeaderCell({ className, slotProps, scope, sort, onSort, children }: TableHeaderCellProps): import("react/jsx-runtime").JSX.Element;

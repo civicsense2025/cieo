@@ -30,7 +30,7 @@ The separator carries `aria-label` with the same text as the visible label.
 
 ## Customization
 
-Colors use the accent token; the label can be replaced for other languages.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -43,3 +43,7 @@ ChatMessageBubble, ConversationListItem.
 ## Evidence
 
 `test/primitives-messaging.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `rule`, `label`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

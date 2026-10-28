@@ -112,7 +112,9 @@
         "min": 2,
         "max": 6
       }
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],
   "slots": [],
   "state": [],
@@ -162,7 +164,9 @@
         "approveLabel",
         "denyLabel",
         "fallbackTitle",
-        "headingLevel"
+        "headingLevel",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -189,5 +193,5 @@
     "path": "README.md",
     "purpose": "Asks a person to approve or deny an agent action, never optimistically."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

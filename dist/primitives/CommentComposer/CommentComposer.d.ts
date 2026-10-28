@@ -1,5 +1,21 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface CommentComposerProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        reply?: PrimitivePartProps;
+        row?: PrimitivePartProps;
+        avatar?: PrimitivePartProps;
+        main?: PrimitivePartProps;
+        panes?: PrimitivePartProps;
+        pane?: PrimitivePartProps;
+        input?: PrimitivePartProps;
+        attachments?: PrimitivePartProps;
+        bar?: PrimitivePartProps;
+        tools?: PrimitivePartProps;
+        submit?: PrimitivePartProps;
+    };
     /** Current text. Host-controlled. Required. */
     value: string;
     /** Called with the next text on every edit. Required. */
@@ -56,4 +72,4 @@ export declare function composerKeyAction(e: {
     ctrlKey?: boolean;
     isComposing?: boolean;
 }, replying: boolean): 'submit' | 'cancel-reply' | null;
-export declare function CommentComposer({ value, onValueChange, onSubmit, placeholder, label, avatar, tools, attachments, hasAttachments, recorder, replyingTo, onCancelReply, maxLength, submitLabel, pending, disabled }: CommentComposerProps): import("react/jsx-runtime").JSX.Element;
+export declare function CommentComposer({ className, slotProps, value, onValueChange, onSubmit, placeholder, label, avatar, tools, attachments, hasAttachments, recorder, replyingTo, onCancelReply, maxLength, submitLabel, pending, disabled }: CommentComposerProps): import("react/jsx-runtime").JSX.Element;

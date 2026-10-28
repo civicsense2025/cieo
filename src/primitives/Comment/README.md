@@ -45,3 +45,7 @@ CommentThread, CommentComposer, ByLine, Avatar.
 ## Evidence
 
 `test/primitives-comments.test.mjs`.
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `avatar`, `line`, `main`, `deleted`, `head`, `menu`, `body`, `attachments`, `actions`, `status`, `replies`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

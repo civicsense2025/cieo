@@ -1,5 +1,7 @@
 // src/primitives/CommentComposer/CommentComposer.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* CommentComposer. Input row for a thread: autosizing text, tool and attachment slots, a recorder slot, reply context and a character ring. Host owns the value, the media and what submit does. */
 import { useEffect, useLayoutEffect, useRef, type FormEvent, type KeyboardEvent, type ReactNode } from 'react';
 import { SwapText, useSwap } from '../../react/index.js';
@@ -7,6 +9,9 @@ import { CharacterCountRing } from '../CharacterCountRing/CharacterCountRing.js'
 import { ReplyPreview } from '../ReplyPreview/ReplyPreview.js';
 
 export interface CommentComposerProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; reply?: PrimitivePartProps; row?: PrimitivePartProps; avatar?: PrimitivePartProps; main?: PrimitivePartProps; panes?: PrimitivePartProps; pane?: PrimitivePartProps; input?: PrimitivePartProps; attachments?: PrimitivePartProps; bar?: PrimitivePartProps; tools?: PrimitivePartProps; submit?: PrimitivePartProps };
+
   /** Current text. Host-controlled. Required. */
   value: string;
   /** Called with the next text on every edit. Required. */
@@ -80,7 +85,7 @@ type Pane = 'text' | 'recorder';
 const useIso = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 const FOCUSABLE = 'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
-export function CommentComposer({ value, onValueChange, onSubmit, placeholder = 'Add to thread…', label = 'Add to thread', avatar, tools, attachments, hasAttachments, recorder, replyingTo, onCancelReply, maxLength, submitLabel = 'Post', pending, disabled }: CommentComposerProps) {
+export function CommentComposer({ className, slotProps, value, onValueChange, onSubmit, placeholder = 'Add to thread…', label = 'Add to thread', avatar, tools, attachments, hasAttachments, recorder, replyingTo, onCancelReply, maxLength, submitLabel = 'Post', pending, disabled }: CommentComposerProps) {
   const input = useRef<HTMLTextAreaElement>(null);
   const recorderPane = useRef<HTMLDivElement>(null);
   const lastRecorder = useRef<ReactNode>(null);
@@ -136,38 +141,38 @@ export function CommentComposer({ value, onValueChange, onSubmit, placeholder = 
   const phase = (pane: Pane) => (leaving === pane ? 'leave' : shown === pane && leaving !== null ? 'enter' : 'rest');
 
   return (
-    <form aria-label={label} onSubmit={onForm} className="cieo cieo-comment-composer" data-disabled={disabled ? '' : undefined}>
+    <form aria-label={label} onSubmit={onForm} className="cieo cieo-comment-composer" data-disabled={disabled ? '' : undefined} {...customizePart(slotProps?.root, "cieo cieo-comment-composer", undefined, className)}>
       {replyingTo ? (
-        <div className="cieo-comment-composer-reply">
+        <div className="cieo-comment-composer-reply" {...customizePart(slotProps?.reply, "cieo-comment-composer-reply")}>
           <ReplyPreview variant="composer" author={replyingTo.author} excerpt={replyingTo.excerpt} onDismiss={onCancelReply} />
         </div>
       ) : null}
-      <div className="cieo-comment-composer-row">
-        {avatar ? <div className="cieo-comment-composer-avatar">{avatar}</div> : null}
-        <div className="cieo-comment-composer-main">
-          <div className="cieo-comment-composer-panes">
+      <div className="cieo-comment-composer-row" {...customizePart(slotProps?.row, "cieo-comment-composer-row")}>
+        {avatar ? <div className="cieo-comment-composer-avatar" {...customizePart(slotProps?.avatar, "cieo-comment-composer-avatar")}>{avatar}</div> : null}
+        <div className="cieo-comment-composer-main" {...customizePart(slotProps?.main, "cieo-comment-composer-main")}>
+          <div className="cieo-comment-composer-panes" {...customizePart(slotProps?.panes, "cieo-comment-composer-panes")}>
             {textVisible ? (
-              <div className="cieo-comment-composer-pane" data-pane="text" data-phase={phase('text')} inert={leaving === 'text' || undefined} onAnimationEnd={leaving === 'text' ? onPaneEnd : undefined}>
-                <textarea ref={input} rows={1} value={value} aria-label={label} placeholder={placeholder} disabled={disabled} onChange={(e) => onValueChange(e.target.value)} onKeyDown={onKeyDown} className="cieo-comment-composer-input" />
+              <div className="cieo-comment-composer-pane" data-pane="text" data-phase={phase('text')} inert={leaving === 'text' || undefined} onAnimationEnd={leaving === 'text' ? onPaneEnd : undefined} {...customizePart(slotProps?.pane, "cieo-comment-composer-pane")}>
+                <textarea ref={input} rows={1} value={value} aria-label={label} placeholder={placeholder} disabled={disabled} onChange={(e) => onValueChange(e.target.value)} onKeyDown={onKeyDown} className="cieo-comment-composer-input" {...customizePart(slotProps?.input, "cieo-comment-composer-input")} />
               </div>
             ) : null}
             {recorderVisible ? (
-              <div ref={recorderPane} tabIndex={-1} className="cieo-comment-composer-pane" data-pane="recorder" data-phase={phase('recorder')} inert={leaving === 'recorder' || undefined} onAnimationEnd={leaving === 'recorder' ? onPaneEnd : undefined}>
+              <div ref={recorderPane} tabIndex={-1} className="cieo-comment-composer-pane" data-pane="recorder" data-phase={phase('recorder')} inert={leaving === 'recorder' || undefined} onAnimationEnd={leaving === 'recorder' ? onPaneEnd : undefined} {...customizePart(slotProps?.pane, "cieo-comment-composer-pane")}>
                 {recorder ?? lastRecorder.current}
               </div>
             ) : null}
           </div>
-          {attachments ? <div className="cieo-comment-composer-attachments">{attachments}</div> : null}
-          <div className="cieo-comment-composer-bar">
+          {attachments ? <div className="cieo-comment-composer-attachments" {...customizePart(slotProps?.attachments, "cieo-comment-composer-attachments")}>{attachments}</div> : null}
+          <div className="cieo-comment-composer-bar" {...customizePart(slotProps?.bar, "cieo-comment-composer-bar")}>
             {tools ? (
-              <div className="cieo-comment-composer-tools" role="group" aria-label="Add to your post">
+              <div className="cieo-comment-composer-tools" role="group" aria-label="Add to your post" {...customizePart(slotProps?.tools, "cieo-comment-composer-tools")}>
                 {tools}
               </div>
             ) : (
               <span />
             )}
             {composerShowsCount(length, maxLength) ? <CharacterCountRing length={length} max={maxLength as number} /> : null}
-            <button type="submit" className="cieo-comment-composer-submit" disabled={!can} aria-busy={pending ? true : undefined}>
+            <button type="submit" className="cieo-comment-composer-submit" disabled={!can} aria-busy={pending ? true : undefined} {...customizePart(slotProps?.submit, "cieo-comment-composer-submit")}>
               <SwapText value={pending ? 'Posting…' : submitLabel} />
             </button>
           </div>

@@ -1,10 +1,11 @@
 // src/primitives/ToggleButtonGroup/ToggleButtonGroup.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* ToggleButtonGroup. Single-select group of ToggleButtons. Owns the selected value (controlled or not); buttons follow it by their value key. */
 import { createContext, useState } from 'react';
 export const ToggleButtonGroupContext = createContext(null);
-export function ToggleButtonGroup({ label, value, defaultValue, onValueChange, children }) {
+export function ToggleButtonGroup({ className, slotProps, label, value, defaultValue, onValueChange, children }) {
     const [internal, setInternal] = useState(defaultValue);
     const current = value ?? internal;
     function handleSelect(next) {
@@ -12,5 +13,5 @@ export function ToggleButtonGroup({ label, value, defaultValue, onValueChange, c
             setInternal(next);
         onValueChange?.(next);
     }
-    return (_jsx("div", { role: "group", "aria-label": label, className: "cieo cieo-toggle-button-group", children: _jsx(ToggleButtonGroupContext.Provider, { value: { value: current, onSelect: handleSelect }, children: children }) }));
+    return (_jsx("div", { role: "group", "aria-label": label, className: "cieo cieo-toggle-button-group", ...customizePart(slotProps?.root, "cieo cieo-toggle-button-group", undefined, className), children: _jsx(ToggleButtonGroupContext.Provider, { value: { value: current, onSelect: handleSelect }, children: children }) }));
 }

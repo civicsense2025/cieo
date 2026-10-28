@@ -33,7 +33,7 @@ No motion, no state, no focus. Purely decorative structure; screen readers annou
 
 ## Customization
 
-None. Color and thickness come from Cieo tokens; do not restyle per menu.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -47,3 +47,7 @@ DropdownMenuGroup (atom), DropdownMenuItem (atom), Divider (primitive).
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-menus.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

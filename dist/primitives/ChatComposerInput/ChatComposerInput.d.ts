@@ -1,4 +1,9 @@
+import type { PrimitivePartProps } from '../parts.js';
 export interface ChatComposerInputProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the input (e.g. "Message support"). Required. */
     label: string;
     /** Current text. Host-controlled. Optional. */
@@ -10,4 +15,4 @@ export interface ChatComposerInputProps {
     /** Placeholder hint. Optional. */
     placeholder?: string;
 }
-export declare function ChatComposerInput({ label, value, onChange, rows, placeholder }: ChatComposerInputProps): import("react/jsx-runtime").JSX.Element;
+export declare function ChatComposerInput({ className, slotProps, label, value, onChange, rows, placeholder }: ChatComposerInputProps): import("react/jsx-runtime").JSX.Element;

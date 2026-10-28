@@ -30,7 +30,7 @@ Static. `size` picks one of three glyph details (20px and below, up to 24px, lar
 
 ## Customization
 
-`size`, `label`, `outline`. Raw data, lookups and stroke helpers are in `cieo/agent-icons`.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -44,3 +44,7 @@ AgentStatus, Icon, `cieo/agent-icons`.
 ## Evidence
 
 `test/primitives-agent.test.mjs` (every icon renders, labelled and decorative forms, no globals in the data module). No device acceptance yet.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

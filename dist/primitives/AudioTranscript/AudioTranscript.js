@@ -1,6 +1,7 @@
 // src/primitives/AudioTranscript/AudioTranscript.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* AudioTranscript. Word-by-word follow-along text for a clip: the spoken word is highlighted, and with onSeek a word can be clicked or chosen by keyboard to jump there. The host owns time. */
 import { Fragment, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../../react/index.js';
@@ -50,7 +51,7 @@ export function transcriptScrollTop(wordTop, wordHeight, viewHeight, scrollTop) 
         return null;
     return Math.max(0, wordTop + wordHeight / 2 - viewHeight / 2);
 }
-export function AudioTranscript({ words, current, onSeek, label }) {
+export function AudioTranscript({ className, slotProps, words, current, onSeek, label }) {
     const uid = useId();
     const box = useRef(null);
     const glow = useRef(null);
@@ -127,5 +128,5 @@ export function AudioTranscript({ words, current, onSeek, label }) {
         document.getElementById(wordId(next))?.scrollIntoView({ block: 'nearest' });
     };
     const focused = focus === null ? Math.max(0, active) : Math.min(focus, words.length - 1);
-    return (_jsxs("div", { ref: box, className: "cieo cieo-audio-transcript", "aria-label": label, "data-seekable": seekable ? '' : undefined, ...(seekable ? { role: 'listbox', tabIndex: 0, 'aria-activedescendant': words.length ? wordId(focused) : undefined, onKeyDown, onFocus: () => setFocus((f) => f ?? Math.max(0, active)), onBlur: () => setFocus(null) } : { role: 'group' }), onWheel: markScrolled, onTouchMove: markScrolled, children: [_jsx("span", { ref: glow, className: "cieo-audio-transcript-highlight", "aria-hidden": "true", "data-visible": "false", style: { '--x': '0px', '--y': '0px', '--w': '0px', '--h': '0px' } }), words.map((w, i) => (_jsxs(Fragment, { children: [_jsx("span", { id: wordId(i), className: "cieo-audio-transcript-word", "data-active": i === active ? '' : undefined, "data-focused": seekable && focus !== null && i === focused ? '' : undefined, ...(seekable ? { role: 'option', 'aria-selected': i === active, onClick: () => choose(i) } : {}), children: w.text }), i < words.length - 1 ? ' ' : null] }, i)))] }));
+    return (_jsxs("div", { ref: box, className: "cieo cieo-audio-transcript", "aria-label": label, "data-seekable": seekable ? '' : undefined, ...(seekable ? { role: 'listbox', tabIndex: 0, 'aria-activedescendant': words.length ? wordId(focused) : undefined, onKeyDown, onFocus: () => setFocus((f) => f ?? Math.max(0, active)), onBlur: () => setFocus(null) } : { role: 'group' }), onWheel: markScrolled, onTouchMove: markScrolled, ...customizePart(slotProps?.root, "cieo cieo-audio-transcript", undefined, className), children: [_jsx("span", { ref: glow, className: "cieo-audio-transcript-highlight", "aria-hidden": "true", "data-visible": "false", style: { '--x': '0px', '--y': '0px', '--w': '0px', '--h': '0px' } }), words.map((w, i) => (_jsxs(Fragment, { children: [_jsx("span", { id: wordId(i), className: "cieo-audio-transcript-word", "data-active": i === active ? '' : undefined, "data-focused": seekable && focus !== null && i === focused ? '' : undefined, ...(seekable ? { role: 'option', 'aria-selected': i === active, onClick: () => choose(i) } : {}), ...customizePart(slotProps?.word, "cieo-audio-transcript-word"), children: w.text }), i < words.length - 1 ? ' ' : null] }, i)))] }));
 }

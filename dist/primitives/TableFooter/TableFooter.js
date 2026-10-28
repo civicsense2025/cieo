@@ -1,5 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function TableFooter({ children }) {
-    return (_jsx("tfoot", { className: "cieo cieo-table-footer", children: children }));
+import { customizePart } from '../customization.js';
+export function TableFooter({ className, slotProps, children }) {
+    return (_jsx("tfoot", { className: "cieo cieo-table-footer", ...customizePart(slotProps?.root, "cieo cieo-table-footer", undefined, className), children: children }));
 }

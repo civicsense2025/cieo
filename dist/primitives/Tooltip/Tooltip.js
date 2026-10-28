@@ -1,14 +1,15 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* Tooltip. Hover/focus hint for icon-only controls. CSS reveal only; the trigger keeps its own accessible name. */
 import { cloneElement, isValidElement, useId } from 'react';
 import { useDismissibleHint } from '../../react/index.js';
 import { motionAttrs } from '../motion.js';
-export function Tooltip({ text, children, motion, entering = 'fade', exiting = 'fade' }) {
+export function Tooltip({ className, slotProps, text, children, motion, entering = 'fade', exiting = 'fade' }) {
     const id = useId();
     const { dismissed, handlers } = useDismissibleHint();
     const trigger = isValidElement(children)
         ? cloneElement(children, { 'aria-describedby': id })
-        : _jsx("span", { "aria-describedby": id, className: "cieo-p-tooltip-trigger", children: children });
-    return (_jsxs("span", { className: "cieo cieo-p-tooltip", "data-dismissed": dismissed || undefined, ...handlers, ...motionAttrs({ motion, entering, exiting }), children: [trigger, _jsx("span", { id: id, role: "tooltip", className: "cieo-p-tooltip-bubble", children: text })] }));
+        : _jsx("span", { "aria-describedby": id, className: "cieo-p-tooltip-trigger", ...customizePart(slotProps?.trigger, "cieo-p-tooltip-trigger"), children: children });
+    return (_jsxs("span", { className: "cieo cieo-p-tooltip", "data-dismissed": dismissed || undefined, ...handlers, ...motionAttrs({ motion, entering, exiting }), ...customizePart(slotProps?.root, "cieo cieo-p-tooltip", undefined, className), children: [trigger, _jsx("span", { id: id, role: "tooltip", className: "cieo-p-tooltip-bubble", ...customizePart(slotProps?.bubble, "cieo-p-tooltip-bubble"), children: text })] }));
 }

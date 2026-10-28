@@ -3,6 +3,8 @@
 /* RichText. Turns plain post text into safe inline nodes: links, @mentions, #tags and line breaks. Never injects HTML; only http(s) becomes a link. */
 import { Fragment, type ReactNode } from 'react';
 import { Mention, safeHref } from '../Mention/Mention.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export type RichTextTokenType = 'text' | 'url' | 'mention' | 'tag' | 'break';
 
@@ -130,6 +132,9 @@ export function shortenUrl(url: string, max = 28): string {
 }
 
 export interface RichTextProps {
+  className?: string;
+  slotProps?: { link?: PrimitivePartProps; tag?: PrimitivePartProps; root?: PrimitivePartProps };
+
   /** Plain post text. Rendered as text nodes, never as HTML. */
   text: string;
   /** Address builders for @mentions and #tags. Without them mentions are plain text and tags are not links. */
@@ -141,12 +146,12 @@ export interface RichTextProps {
   maxUrlLength?: number;
 }
 
-export function RichText({ text, hrefFor, maxUrlLength = 28 }: RichTextProps) {
+export function RichText({ className, slotProps, text, hrefFor, maxUrlLength = 28 }: RichTextProps) {
   const nodes: ReactNode[] = tokenizeRichText(text).map((t, i): ReactNode => {
     if (t.type === 'break') return <br key={i} />;
     if (t.type === 'url' && t.href)
       return (
-        <a key={i} className="cieo-rich-text-link" href={t.href} title={t.href} target="_blank" rel="noopener noreferrer ugc nofollow">
+        <a key={i} className="cieo-rich-text-link" href={t.href} title={t.href} target="_blank" rel="noopener noreferrer ugc nofollow" {...customizePart(slotProps?.link, "cieo-rich-text-link", undefined)}>
           {shortenUrl(t.value, maxUrlLength)}
         </a>
       );
@@ -158,16 +163,16 @@ export function RichText({ text, hrefFor, maxUrlLength = 28 }: RichTextProps) {
       const tag = t.value.slice(1);
       const href = safeHref(hrefFor?.tag?.(tag));
       return href ? (
-        <a key={i} className="cieo-rich-text-tag" href={href}>
+        <a key={i} className="cieo-rich-text-tag" href={href} {...customizePart(slotProps?.tag, "cieo-rich-text-tag", undefined)}>
           {t.value}
         </a>
       ) : (
-        <span key={i} className="cieo-rich-text-tag">
+        <span key={i} className="cieo-rich-text-tag" {...customizePart(slotProps?.tag, "cieo-rich-text-tag", undefined)}>
           {t.value}
         </span>
       );
     }
     return <Fragment key={i}>{t.value}</Fragment>;
   });
-  return <span className="cieo cieo-rich-text">{nodes}</span>;
+  return <span className="cieo cieo-rich-text" {...customizePart(slotProps?.root, "cieo cieo-rich-text", undefined, className)}>{nodes}</span>;
 }

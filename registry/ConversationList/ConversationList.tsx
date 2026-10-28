@@ -1,6 +1,8 @@
 // src/primitives/ConversationList/ConversationList.tsx
 'use client';
 /* ConversationList. The inbox: a list of ConversationListItem rows with one tab stop, arrow-key movement, and rows that glide to their new places when the order changes. The host owns the conversations and their order. */
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 import { Children, cloneElement, createContext, isValidElement, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactElement, type ReactNode } from 'react';
 import { roveFocus, roveIndex, useFlip } from '../../react/index.js';
 
@@ -44,6 +46,8 @@ export const ConversationListContext = createContext<ConversationListContextValu
 const ROW = '[data-conversation-row]';
 
 export interface ConversationListProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps };
   /** Accessible name for the list (for example "Conversations"). Required. */
   label: string;
   /** ConversationListItem elements, in any order; their ids and `order` decide where they appear. */
@@ -54,7 +58,7 @@ export interface ConversationListProps {
   selectedId?: string;
 }
 
-export function ConversationList({ label, children, order, selectedId }: ConversationListProps) {
+export function ConversationList({ label, children, order, selectedId, className, slotProps }: ConversationListProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const held = useRef<string | null>(null);
@@ -108,7 +112,7 @@ export function ConversationList({ label, children, order, selectedId }: Convers
   const context: ConversationListContextValue = { tabbableId: conversationTabbable(shown, activeId, selectedId), selectedId };
   return (
     <ConversationListContext.Provider value={context}>
-      <div ref={ref} role="list" aria-label={label} onFocusCapture={onFocus} onBlurCapture={onBlur} onKeyDown={onKeyDown} className="cieo cieo-conversation-list">
+      <div ref={ref} role="list" aria-label={label} onFocusCapture={onFocus} onBlurCapture={onBlur} onKeyDown={onKeyDown} className="cieo cieo-conversation-list" {...customizePart(slotProps?.root, "cieo cieo-conversation-list", undefined, className)}>
         {rows}
       </div>
     </ConversationListContext.Provider>

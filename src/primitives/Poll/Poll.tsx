@@ -1,5 +1,7 @@
 // src/primitives/Poll/Poll.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* Poll. One question, several options. Before a vote each option is a button; after a vote (or when closed) the same rows become result bars. The host owns the counts. */
 import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 import { Digits, roveFocus, useSpring } from '../../react/index.js';
@@ -42,6 +44,9 @@ export function pollAnnouncement(options: readonly PollOption[]): string {
 }
 
 export interface PollProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; question?: PrimitivePartProps; options?: PrimitivePartProps; total?: PrimitivePartProps; closed?: PrimitivePartProps; footnote?: PrimitivePartProps };
+
   /** The question, shown above the options and used as the group name. */
   question: string;
   /** The options, in display order. */
@@ -102,7 +107,7 @@ function PollRow({ option, pct, index, results, chosen, leader, onVote, tabbable
   );
 }
 
-export function Poll({ question, options, voted = null, onVote, closed = false, footnote }: PollProps) {
+export function Poll({ className, slotProps, question, options, voted = null, onVote, closed = false, footnote }: PollProps) {
   const titleId = useId();
   const groupRef = useRef<HTMLDivElement>(null);
   const results = closed || voted != null;
@@ -118,14 +123,14 @@ export function Poll({ question, options, voted = null, onVote, closed = false, 
     hadVote.current = has;
   }, [voted]); // eslint-disable-line react-hooks/exhaustive-deps -- announce once per vote, not on every count change
   return (
-    <div className="cieo cieo-poll" data-closed={closed ? '' : undefined} data-results={results ? '' : undefined}>
-      <p id={titleId} className="cieo-poll-question">{question}</p>
+    <div className="cieo cieo-poll" data-closed={closed ? '' : undefined} data-results={results ? '' : undefined} {...customizePart(slotProps?.root, "cieo cieo-poll", undefined, className)}>
+      <p id={titleId} className="cieo-poll-question" {...customizePart(slotProps?.question, "cieo-poll-question")}>{question}</p>
       <div
         ref={groupRef}
         className="cieo-poll-options"
         role={results ? 'list' : 'radiogroup'}
         aria-labelledby={titleId}
-        onKeyDown={results ? undefined : (e) => { roveFocus(e, groupRef.current, '[role="radio"]', { orientation: 'vertical' }); }}
+        onKeyDown={results ? undefined : (e) => { roveFocus(e, groupRef.current, '[role="radio"]', { orientation: 'vertical' }); }} {...customizePart(slotProps?.options, "cieo-poll-options")}
       >
         {options.map((o, i) => (
           <PollRow
@@ -141,12 +146,12 @@ export function Poll({ question, options, voted = null, onVote, closed = false, 
           />
         ))}
       </div>
-      <p className="cieo-poll-total">
+      <p className="cieo-poll-total" {...customizePart(slotProps?.total, "cieo-poll-total")}>
         <CompactCount value={total} unit={total === 1 ? 'vote' : 'votes'} hideZero={false} />
         <span aria-hidden="true"> {total === 1 ? 'vote' : 'votes'}</span>
-        {closed ? <span className="cieo-poll-closed"> · Closed</span> : null}
+        {closed ? <span className="cieo-poll-closed" {...customizePart(slotProps?.closed, "cieo-poll-closed")}> · Closed</span> : null}
       </p>
-      {footnote ? <p className="cieo-poll-footnote">{footnote}</p> : null}
+      {footnote ? <p className="cieo-poll-footnote" {...customizePart(slotProps?.footnote, "cieo-poll-footnote")}>{footnote}</p> : null}
       <span className="cieo-sr-only" role="status" aria-live="polite">{announce}</span>
     </div>
   );

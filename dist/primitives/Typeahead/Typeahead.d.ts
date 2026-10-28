@@ -1,5 +1,12 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface TypeaheadProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        input?: PrimitivePartProps;
+        list?: PrimitivePartProps;
+    };
     /** Visible label naming the field. Required. */
     label: string;
     /** Current text. Optional. */
@@ -12,4 +19,4 @@ export interface TypeaheadProps {
     onOpenChange?: (open: boolean) => void;
     children: ReactNode;
 }
-export declare function Typeahead({ label, value, onChange, open, onOpenChange, children }: TypeaheadProps): import("react/jsx-runtime").JSX.Element;
+export declare function Typeahead({ className, slotProps, label, value, onChange, open, onOpenChange, children }: TypeaheadProps): import("react/jsx-runtime").JSX.Element;

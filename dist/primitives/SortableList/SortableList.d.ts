@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export type SortableListTag = 'ul' | 'ol' | 'div' | 'tbody';
 /** Returns order with id moved to index (clamped). Returns the same array when nothing moves. */
@@ -50,6 +51,10 @@ export interface SortableListContextValue {
 }
 export declare const SortableListContext: import("react").Context<SortableListContextValue | null>;
 export interface SortableListProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the list (e.g. "Pipeline stages"). Required. */
     label: string;
     /** Item ids in display order. The list never reorders itself; it asks through onReorder. */
@@ -65,4 +70,4 @@ export interface SortableListProps {
     /** SortableListItem children, in any order; their ids and `order` decide where they appear. */
     children: ReactNode;
 }
-export declare function SortableList({ label, order, onReorder, as, orientation, motion, children }: SortableListProps): import("react/jsx-runtime").JSX.Element;
+export declare function SortableList({ className, slotProps, label, order, onReorder, as, orientation, motion, children }: SortableListProps): import("react/jsx-runtime").JSX.Element;

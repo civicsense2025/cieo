@@ -54,7 +54,9 @@
       "required": true,
       "nullable": false,
       "constraints": {}
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, word."}
   ],
   "slots": [
     {
@@ -98,7 +100,9 @@
         "words",
         "current",
         "onSeek",
-        "label"
+        "label",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -124,5 +128,5 @@
     "path": "README.md",
     "purpose": "Word-by-word follow-along transcript: the spoken word glides a highlight along, and words can seek the clip."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["root","word"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

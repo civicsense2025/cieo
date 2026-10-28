@@ -5,6 +5,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useEffect, useRef, useState } from 'react';
 import { usePresence } from '../../react/index.js';
 import { CompactCount } from '../CompactCount/CompactCount.js';
+import { customizePart } from '../customization.js';
 /** Default label: "1 new reply", "3 new replies". Bad counts read as zero. */
 export function newItemsLabel(n) {
     const whole = Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0;
@@ -27,7 +28,7 @@ export function splitNewItemsLabel(text, n) {
     const exact = new Intl.NumberFormat('en').format(clampNewItems(n));
     return text.startsWith(exact) ? { rolls: true, rest: text.slice(exact.length) } : { rolls: false, rest: text };
 }
-export function NewItemsPill({ count, onShow, label = newItemsLabel, placement = 'top' }) {
+export function NewItemsPill({ className, slotProps, count, onShow, label = newItemsLabel, placement = 'top' }) {
     const n = clampNewItems(count);
     const edge = placement === 'bottom' ? 'bottom' : 'top';
     const last = useRef(n);
@@ -46,5 +47,5 @@ export function NewItemsPill({ count, onShow, label = newItemsLabel, placement =
     }, [n]);
     const shown = n > 0 ? n : last.current;
     const split = splitNewItemsLabel(label(shown), shown);
-    return (_jsxs("div", { className: "cieo cieo-new-items-pill", "data-placement": edge, children: [mounted ? (_jsxs("button", { ref: ref, type: "button", className: "cieo-new-items-pill-button", "aria-label": label(shown), onClick: onShow, children: [_jsx("span", { "aria-hidden": "true", className: "cieo-new-items-pill-count", children: split.rolls ? _jsx(CompactCount, { value: shown, hideZero: false }) : null }), _jsx("span", { "aria-hidden": "true", className: "cieo-new-items-pill-text", children: split.rest })] })) : null, _jsx("span", { className: "cieo-sr-only", role: "status", "aria-live": "polite", "aria-atomic": "true", children: message })] }));
+    return (_jsxs("div", { className: "cieo cieo-new-items-pill", "data-placement": edge, ...customizePart(slotProps?.root, "cieo cieo-new-items-pill", undefined, className), children: [mounted ? (_jsxs("button", { ref: ref, type: "button", className: "cieo-new-items-pill-button", "aria-label": label(shown), onClick: onShow, ...customizePart(slotProps?.button, "cieo-new-items-pill-button", undefined), children: [_jsx("span", { "aria-hidden": "true", className: "cieo-new-items-pill-count", ...customizePart(slotProps?.count, "cieo-new-items-pill-count", undefined), children: split.rolls ? _jsx(CompactCount, { value: shown, hideZero: false }) : null }), _jsx("span", { "aria-hidden": "true", className: "cieo-new-items-pill-text", ...customizePart(slotProps?.text, "cieo-new-items-pill-text", undefined), children: split.rest })] })) : null, _jsx("span", { className: "cieo-sr-only", role: "status", "aria-live": "polite", "aria-atomic": "true", children: message })] }));
 }

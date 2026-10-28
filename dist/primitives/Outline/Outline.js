@@ -1,6 +1,7 @@
 // src/primitives/Outline/Outline.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Outline({ label = 'On this page', items }) {
-    return (_jsx("nav", { "aria-label": label, className: "cieo cieo-outline", children: _jsx("ul", { children: items.map((item) => (_jsx("li", { children: _jsx("a", { href: '#' + item.id, children: item.label }) }, item.id))) }) }));
+import { customizePart } from '../customization.js';
+export function Outline({ className, slotProps, label = 'On this page', items }) {
+    return (_jsx("nav", { "aria-label": label, className: "cieo cieo-outline", ...customizePart(slotProps?.root, "cieo cieo-outline", undefined, className), children: _jsx("ul", { children: items.map((item) => (_jsx("li", { children: _jsx("a", { href: '#' + item.id, children: item.label }) }, item.id))) }) }));
 }

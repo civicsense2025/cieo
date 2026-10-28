@@ -60,7 +60,9 @@
         "minLength": 1,
         "maxLength": 128
       }
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [],
   "state": [],
@@ -102,7 +104,9 @@
       "properties": [
         "status",
         "label",
-        "name"
+        "name",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -129,5 +133,5 @@
     "path": "README.md",
     "purpose": "A dot plus words that name an agent's or run's reported state."
   },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 /** Plain text of a React node: strings and numbers are kept, elements contribute their children, everything else is dropped. Used to read a preview aloud. */
 export declare function nodeText(node: ReactNode): string;
@@ -17,6 +18,23 @@ export interface ConversationSummary {
 /** Spoken name of a row: "Design team, 3 unread, Ava: see you at 3, 9:41 AM". Typing replaces the preview; a draft says so. */
 export declare function conversationLabel(s: ConversationSummary): string;
 export interface ConversationListItemProps {
+    className?: string;
+    slotProps?: {
+        avatar?: PrimitivePartProps;
+        main?: PrimitivePartProps;
+        top?: PrimitivePartProps;
+        title?: PrimitivePartProps;
+        time?: PrimitivePartProps;
+        bottom?: PrimitivePartProps;
+        line?: PrimitivePartProps;
+        preview?: PrimitivePartProps;
+        draft?: PrimitivePartProps;
+        typing?: PrimitivePartProps;
+        flags?: PrimitivePartProps;
+        icon?: PrimitivePartProps;
+        badge?: PrimitivePartProps;
+        root?: PrimitivePartProps;
+    };
     /** Stable id of the conversation. Required; the list orders and focuses rows by it. */
     id: string;
     /** Conversation name. Required. */
@@ -46,4 +64,4 @@ export interface ConversationListItemProps {
     /** Called with the id when the row is activated. */
     onSelect?: (id: string) => void;
 }
-export declare function ConversationListItem({ id, title, avatar, preview, time, dateTime, unread, muted, pinned, draft, typing, selected, href, onSelect }: ConversationListItemProps): import("react/jsx-runtime").JSX.Element;
+export declare function ConversationListItem({ className, slotProps, id, title, avatar, preview, time, dateTime, unread, muted, pinned, draft, typing, selected, href, onSelect }: ConversationListItemProps): import("react/jsx-runtime").JSX.Element;

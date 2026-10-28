@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export type SpeakerRole = 'host' | 'speaker' | 'listener';
 /** Speaking threshold with hysteresis so the ring does not flicker: on above 0.12, off below 0.06, otherwise unchanged. */
 export declare function speakingStep(prev: boolean, level: number): boolean;
@@ -11,6 +12,15 @@ export declare function speakerLabel(o: {
     handRaised?: boolean;
 }): string;
 export interface SpeakerTileProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        face?: PrimitivePartProps;
+        ring?: PrimitivePartProps;
+        avatar?: PrimitivePartProps;
+        badge?: PrimitivePartProps;
+        name?: PrimitivePartProps;
+    };
     /** Display name, shown under the avatar and read aloud. */
     name: string;
     /** Avatar node (usually an Avatar). Hidden from assistive tech; the tile's own text names the person. */
@@ -26,4 +36,4 @@ export interface SpeakerTileProps {
     /** Tile size. Defaults to md. */
     size?: 'sm' | 'md' | 'lg';
 }
-export declare function SpeakerTile({ name, avatar, level, muted, role, handRaised, size }: SpeakerTileProps): import("react/jsx-runtime").JSX.Element;
+export declare function SpeakerTile({ className, slotProps, name, avatar, level, muted, role, handRaised, size }: SpeakerTileProps): import("react/jsx-runtime").JSX.Element;

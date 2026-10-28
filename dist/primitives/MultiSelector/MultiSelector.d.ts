@@ -1,5 +1,11 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface MultiSelectorProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        input?: PrimitivePartProps;
+    };
     /** Visible label naming the set. Required. */
     label: string;
     /** Controlled selected values. Optional. */
@@ -8,4 +14,4 @@ export interface MultiSelectorProps {
     onChange?: (values: string[]) => void;
     children: ReactNode;
 }
-export declare function MultiSelector({ label, values, onChange, children }: MultiSelectorProps): import("react/jsx-runtime").JSX.Element;
+export declare function MultiSelector({ className, slotProps, label, values, onChange, children }: MultiSelectorProps): import("react/jsx-runtime").JSX.Element;

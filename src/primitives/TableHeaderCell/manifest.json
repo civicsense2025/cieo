@@ -16,7 +16,9 @@
   "properties": [
     { "id": "scope", "type": { "kind": "enum", "values": ["col", "row"] }, "required": false, "nullable": false, "default": "col", "constraints": {} },
     { "id": "sort", "type": { "kind": "enum", "values": ["none", "asc", "desc"] }, "required": false, "nullable": false, "default": "none", "constraints": {} },
-    { "id": "onSort", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is () => void; no function kind exists in the manifest precedent." }
+    { "id": "onSort", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is () => void; no function kind exists in the manifest precedent." },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, sortButton. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
   "state": [],
@@ -25,9 +27,9 @@
   "variants": [],
   "styleParts": [{ "id": "header-cell", "overrides": ["padding"], "tokenRoles": ["space"] }],
   "constraints": { "layout": ["inside-header-row"], "content": ["header-has-label"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["scope", "sort", "onSort"], "states": [], "events": [], "parts": ["header-cell"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["scope", "sort", "onSort", "className", "slotProps"], "states": [], "events": [], "parts": ["header-cell"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Table header cell with scope and optional sort button." },
-  "extensions": {}
+  "extensions": { "customization": {"presentationParts":["root","sortButton"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

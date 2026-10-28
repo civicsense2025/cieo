@@ -30,5 +30,5 @@
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Thin contract over the Range control." },
-  "extensions": { "wraps": "src/controls/Range.tsx" }
+  "extensions": { "wraps": "src/controls/Range.tsx", "customization": {"status":"delegated","target":"Range","reason":"Alias of Range; preserves its native/owning component props instead of creating a second control contract."} }
 }

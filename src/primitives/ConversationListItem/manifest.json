@@ -147,7 +147,9 @@
       "nullable": false,
       "constraints": {},
       "note": "Source type is (id: string) => void."
-    }
+    },
+    {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: avatar, main, top, title, time, bottom, line, preview, draft, typing, flags, icon, badge, root."}
   ],
   "slots": [
     {
@@ -203,7 +205,9 @@
         "typing",
         "selected",
         "href",
-        "onSelect"
+        "onSelect",
+        "className",
+        "slotProps"
       ],
       "states": [],
       "events": [],
@@ -229,5 +233,5 @@
     "path": "README.md",
     "purpose": "One row of the inbox: avatar, title and time, preview and unread badge, with typing, draft, muted and pinned states."
   },
-  "extensions": {}
+  "extensions": { "customization": {"parts":["avatar","main","top","title","time","bottom","line","preview","draft","typing","flags","icon","badge","root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

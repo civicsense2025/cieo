@@ -18,3 +18,7 @@ Error wiring: the message carries `role="alert"` and the input points at it with
 Error presence and the border state use the base motion token. Reduced motion and `data-motion="off"` update them instantly.
 
 Tokens: `--cieo-color-surface`, `--cieo-color-text`, `--cieo-color-danger`, `--cieo-color-accent`. The 1.5px muted edge meets WCAG 1.4.11.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `label`, `input`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

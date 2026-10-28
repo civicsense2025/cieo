@@ -1,6 +1,7 @@
 // src/primitives/Center/Center.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function Center({ maxWidth = '60rem', children }) {
-    return (_jsx("div", { style: { maxWidth }, className: "cieo cieo-center", children: children }));
+import { customizePart } from '../customization.js';
+export function Center({ className, slotProps, maxWidth = '60rem', children }) {
+    return (_jsx("div", { style: { maxWidth }, className: "cieo cieo-center", ...customizePart(slotProps?.root, "cieo cieo-center", { maxWidth }, className), children: children }));
 }

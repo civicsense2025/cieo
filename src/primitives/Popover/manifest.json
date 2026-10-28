@@ -10,27 +10,302 @@
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],
-  "source": { "target": "web", "path": "src/primitives/Popover/Popover.tsx", "symbol": "Popover" },
+  "source": {
+    "target": "web",
+    "path": "src/primitives/Popover/Popover.tsx",
+    "symbol": "Popover"
+  },
   "dependencies": [],
   "nativePrimitives": [],
   "properties": [
-    { "id": "open", "type": { "kind": "boolean" }, "required": false, "nullable": false, "constraints": {} },
-    { "id": "defaultOpen", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} },
-    { "id": "onOpenChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (open: boolean) => void; no function kind exists in the manifest precedent." }
+    {
+      "id": "open",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "defaultOpen",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "onOpenChange",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (open: boolean) => void; no function kind exists in the manifest precedent."
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "style",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "slots",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "side",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "top",
+          "bottom",
+          "left",
+          "right"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "align",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "start",
+          "center",
+          "end"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "offset",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "collisionPadding",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "portal",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    },
+    {
+      "id": "motion",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "See TypeScript declaration for the authoritative customization type."
+    }
   ],
   "slots": [
-    { "id": "trigger", "allowed": ["component"], "min": 1, "max": 1, "order": "document" },
-    { "id": "default", "allowed": ["component"], "min": 1, "max": 1, "order": "document" }
+    {
+      "id": "trigger",
+      "allowed": [
+        "component"
+      ],
+      "min": 1,
+      "max": 1,
+      "order": "document"
+    },
+    {
+      "id": "default",
+      "allowed": [
+        "component"
+      ],
+      "min": 1,
+      "max": 1,
+      "order": "document"
+    },
+    {
+      "id": "header",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "max": 1,
+      "order": "document"
+    },
+    {
+      "id": "content",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "max": 1,
+      "order": "document"
+    },
+    {
+      "id": "footer",
+      "allowed": [
+        "component"
+      ],
+      "min": 0,
+      "max": 1,
+      "order": "document"
+    }
   ],
   "state": [],
   "transitions": [],
   "events": [],
   "variants": [],
-  "styleParts": [{ "id": "panel", "overrides": ["background"], "tokenRoles": ["surface-control"] }],
-  "constraints": { "layout": ["absolute-panel-below-trigger", "no-flip"], "content": ["panel-is-content"], "motion": ["no-motion"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["open", "defaultOpen", "onOpenChange"], "states": [], "events": [], "parts": ["panel"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
-  "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "className",
+        "style"
+      ],
+      "tokenRoles": []
+    },
+    {
+      "id": "trigger",
+      "overrides": [
+        "className",
+        "style"
+      ],
+      "tokenRoles": []
+    },
+    {
+      "id": "content",
+      "overrides": [
+        "className",
+        "style"
+      ],
+      "tokenRoles": []
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "fixed-panel",
+      "viewport-flip-and-clamp",
+      "optional-portal"
+    ],
+    "content": [
+      "panel-is-content"
+    ],
+    "motion": [
+      "honor-render-policy"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "open",
+        "defaultOpen",
+        "onOpenChange",
+        "className",
+        "slotProps",
+        "style",
+        "slots",
+        "label",
+        "side",
+        "align",
+        "offset",
+        "collisionPadding",
+        "portal",
+        "motion"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "panel"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Controlled disclosure shell with a simple absolute panel below the trigger." },
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Controlled disclosure shell with a simple absolute panel below the trigger."
+  },
   "extensions": {}
 }

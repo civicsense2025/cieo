@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 import { type SpeakerRole } from '../SpeakerTile/SpeakerTile.js';
 export interface AudioRoomSpeaker {
@@ -29,6 +30,19 @@ export declare function stageKey(speakers: readonly {
     id: string;
 }[]): string;
 export interface AudioRoomProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+        header?: PrimitivePartProps;
+        title?: PrimitivePartProps;
+        listeners?: PrimitivePartProps;
+        count?: PrimitivePartProps;
+        stage?: PrimitivePartProps;
+        speaker?: PrimitivePartProps;
+        controls?: PrimitivePartProps;
+        control?: PrimitivePartProps;
+        reactions?: PrimitivePartProps;
+    };
     /** Room title; also the accessible name of the region. */
     title: string;
     /** People on stage, in display order. */
@@ -48,4 +62,4 @@ export interface AudioRoomProps {
     /** Slot for a reaction picker or buttons, placed in the control bar. */
     reactions?: ReactNode;
 }
-export declare function AudioRoom({ title, speakers, listenerCount, listeners, self, onToggleMute, onToggleHand, onLeave, reactions }: AudioRoomProps): import("react/jsx-runtime").JSX.Element;
+export declare function AudioRoom({ title, speakers, listenerCount, listeners, self, onToggleMute, onToggleHand, onLeave, reactions, className, slotProps }: AudioRoomProps): import("react/jsx-runtime").JSX.Element;

@@ -3,6 +3,8 @@
 /* NotifyToggle. Bell toggle for "tell me about new replies": rings once and pops a check badge when turned on. The host owns the state. */
 import { useEffect, useRef } from 'react';
 import { useReducedMotion } from '../../react/index.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 /** Total length of the ring, in milliseconds. */
 export const BELL_WIGGLE_MS = 420;
@@ -22,6 +24,9 @@ export function bellWiggleFrames(steps = 10): number[] {
 }
 
 export interface NotifyToggleProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; icon?: PrimitivePartProps; bell?: PrimitivePartProps; badge?: PrimitivePartProps };
+
   /** Whether notifications are on. */
   on: boolean;
   /** Called on every press; the host flips `on`. */
@@ -32,7 +37,7 @@ export interface NotifyToggleProps {
   size?: 'sm' | 'md';
 }
 
-export function NotifyToggle({ on, onToggle, label = 'Notify me about new replies', size = 'md' }: NotifyToggleProps) {
+export function NotifyToggle({ className, slotProps, on, onToggle, label = 'Notify me about new replies', size = 'md' }: NotifyToggleProps) {
   const reduced = useReducedMotion();
   const bell = useRef<SVGSVGElement>(null);
   const before = useRef(on);
@@ -46,13 +51,13 @@ export function NotifyToggle({ on, onToggle, label = 'Notify me about new replie
     return () => run.cancel();
   }, [on, reduced]);
   return (
-    <button type="button" className="cieo cieo-notify-toggle" aria-pressed={on} aria-label={label} data-on={on ? '' : undefined} data-size={size} onClick={onToggle}>
-      <span className="cieo-notify-toggle-icon" aria-hidden="true">
-        <svg ref={bell} className="cieo-notify-toggle-bell" viewBox="0 0 24 24" width="1.25em" height="1.25em" fill={on ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transformOrigin: '50% 8%' }}>
+    <button type="button" className="cieo cieo-notify-toggle" aria-pressed={on} aria-label={label} data-on={on ? '' : undefined} data-size={size} onClick={onToggle} {...customizePart(slotProps?.root, "cieo cieo-notify-toggle", undefined, className)}>
+      <span className="cieo-notify-toggle-icon" aria-hidden="true" {...customizePart(slotProps?.icon, "cieo-notify-toggle-icon", undefined)}>
+        <svg ref={bell} className="cieo-notify-toggle-bell" viewBox="0 0 24 24" width="1.25em" height="1.25em" fill={on ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" style={{ transformOrigin: '50% 8%' }} {...customizePart(slotProps?.bell, "cieo-notify-toggle-bell", { transformOrigin: '50% 8%' })}>
           <path d="M6 9a6 6 0 0 1 12 0c0 6 2 7.5 2 7.5H4S6 15 6 9Z" />
           <path d="M10 20a2 2 0 0 0 4 0" />
         </svg>
-        <span className="cieo-notify-toggle-badge">
+        <span className="cieo-notify-toggle-badge" {...customizePart(slotProps?.badge, "cieo-notify-toggle-badge", undefined)}>
           <svg viewBox="0 0 12 12" width="100%" height="100%" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2.5 6.2 2.4 2.3 4.6-4.8" /></svg>
         </span>
       </span>

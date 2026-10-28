@@ -33,7 +33,7 @@ The status is a polite live region. Dots are hidden from assistive tech; the sen
 
 ## Customization
 
-Inherits color and font size. The bubble background uses the sunken surface token.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ ChatMessageBubble, ConversationListItem, DeliveryStatus.
 ## Evidence
 
 `test/primitives-messaging.test.mjs`.
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `body`, `dots`, `dot`, `text`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

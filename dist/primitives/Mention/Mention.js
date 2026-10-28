@@ -1,6 +1,7 @@
 // src/primitives/Mention/Mention.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* Mention. An @handle inside post text: a link when the host gives a safe address, plain text otherwise. */
 /** Handle without a leading @ and surrounding space. Empty when the input is blank or contains whitespace. */
 export function normalizeHandle(raw) {
@@ -32,11 +33,11 @@ export function safeHref(href, opts = {}) {
     // Explicit same-site forms only; a bare "x.com/a" is almost always a mistyped outside address.
     return /^(?:\/(?![/\\])|#|\?|\.{1,2}\/)/.test(value) ? value : null;
 }
-export function Mention({ handle, href, name }) {
+export function Mention({ className, slotProps, handle, href, name }) {
     const clean = normalizeHandle(handle);
     if (clean === '')
         return null;
     const safe = href === undefined ? null : safeHref(href);
     const text = `@${clean}`;
-    return safe ? (_jsx("a", { className: "cieo cieo-mention", href: safe, title: name, children: text })) : (_jsx("span", { className: "cieo cieo-mention", title: name, children: text }));
+    return safe ? (_jsx("a", { className: "cieo cieo-mention", href: safe, title: name, ...customizePart(slotProps?.root, "cieo cieo-mention", undefined, className), children: text })) : (_jsx("span", { className: "cieo cieo-mention", title: name, ...customizePart(slotProps?.root, "cieo cieo-mention", undefined, className), children: text }));
 }

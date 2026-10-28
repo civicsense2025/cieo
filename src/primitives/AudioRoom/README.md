@@ -47,3 +47,7 @@ SpeakerTile, CompactCount, AvatarGroup, ReactionPicker.
 ## Evidence
 
 `test/primitives-audio-capture.test.mjs`.
+
+## Host customization
+
+`className` adds a class to the root without replacing the Cieo class. `slotProps` accepts named presentation parts: `root`, `header`, `title`, `listeners`, `count`, `stage`, `speaker`, `controls`, `control`, `reactions`. Each part accepts `className`, `style`, `title`, and nonreserved `data-*` attributes. Roles, ARIA, refs, handlers, state attributes, and owned geometry remain component-owned. Existing content props and children remain the content slots.

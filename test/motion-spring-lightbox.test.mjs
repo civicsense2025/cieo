@@ -8,7 +8,7 @@ test('viewer stays mounted through exit', () => {
   assert.match(src, /const \{ mounted, ref \} = usePresence(<HTMLDivElement>)?\(open \?\? false, \{ disabled: motion === false/);
   assert.match(src, /if \(!mounted\) return null/);
   assert.match(src, /ref=\{ref\}/);
-  assert.match(src, /<img src=\{src\} alt=\{alt\} \/>/);
+  assert.match(src, /<img\b[^>]*src=\{src\}[^>]*alt=\{alt\}/);
 });
 
 test('rapid toggle settles exactly once', () => {

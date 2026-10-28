@@ -46,3 +46,7 @@ SearchField (control, the implementation), Field (molecule, for the label/help r
 ## Evidence
 
 Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. No device acceptance in this plan.
+
+## Host customization
+
+This alias preserves the production `SearchFieldProps` contract, including native input props and className. Its control owns its internal label, search affordance, and clear action. It does not copy or fork that control to add a second slot contract.

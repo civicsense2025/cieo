@@ -1,10 +1,15 @@
 // src/primitives/TopNavMegaMenu/TopNavMegaMenu.tsx
 'use client';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 /* TopNavMegaMenu. Disclosure panel below a trigger. Escape and outside press close it; panel stacks below, no flip. */
 import { useId, useRef, useState, type ReactNode } from 'react';
 import { useDismiss } from '../../react/index.js';
 
 export interface TopNavMegaMenuProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; panel?: PrimitivePartProps };
+
   /** Trigger content (e.g. "Products"). Required. */
   trigger: ReactNode;
   /** Controlled open state. */
@@ -16,7 +21,7 @@ export interface TopNavMegaMenuProps {
   children: ReactNode;
 }
 
-export function TopNavMegaMenu({ trigger, open, defaultOpen = false, onOpenChange, children }: TopNavMegaMenuProps) {
+export function TopNavMegaMenu({ className, slotProps, trigger, open, defaultOpen = false, onOpenChange, children }: TopNavMegaMenuProps) {
   const [inner, setInner] = useState(defaultOpen);
   const isOpen = open ?? inner;
   const panelId = useId();
@@ -31,11 +36,11 @@ export function TopNavMegaMenu({ trigger, open, defaultOpen = false, onOpenChang
     if (reason === 'escape') buttonRef.current?.focus();
   }, [rootRef]);
   return (
-    <div ref={rootRef} data-open={isOpen} className="cieo cieo-top-nav-mega-menu">
+    <div ref={rootRef} data-open={isOpen} className="cieo cieo-top-nav-mega-menu" {...customizePart(slotProps?.root, "cieo cieo-top-nav-mega-menu", undefined, className)}>
       <button ref={buttonRef} type="button" aria-expanded={isOpen} aria-controls={isOpen ? panelId : undefined} onClick={() => set(!isOpen)}>
         {trigger}
       </button>
-      {isOpen ? <div id={panelId} className="cieo-top-nav-mega-menu-panel">{children}</div> : null}
+      {isOpen ? <div id={panelId} className="cieo-top-nav-mega-menu-panel" {...customizePart(slotProps?.panel, "cieo-top-nav-mega-menu-panel")}>{children}</div> : null}
     </div>
   );
 }

@@ -1,11 +1,12 @@
 // src/primitives/DropdownMenuSubMenu/DropdownMenuSubMenu.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
 /* DropdownMenuSubMenu. Nested flyout inside a menu. CSS hover/focus-within reveals the panel; arrow keys move in and out. */
 import { useRef } from 'react';
 import { enabledIn, roveIndex } from '../../react/index.js';
 import { motionAttrs } from '../motion.js';
-export function DropdownMenuSubMenu({ label, children, motion, entering = 'fade', exiting = 'fade' }) {
+export function DropdownMenuSubMenu({ className, slotProps, label, children, motion, entering = 'fade', exiting = 'fade' }) {
     const triggerRef = useRef(null);
     const panelRef = useRef(null);
     const items = () => enabledIn(panelRef.current, '[role^="menuitem"]').filter((el) => el.closest('[role="menu"]') === panelRef.current);
@@ -31,5 +32,5 @@ export function DropdownMenuSubMenu({ label, children, motion, entering = 'fade'
         event.stopPropagation();
         list[to]?.focus();
     }
-    return (_jsxs("div", { className: "cieo cieo-dropdown-menu-submenu", ...motionAttrs({ motion, entering, exiting }), children: [_jsx("button", { ref: triggerRef, type: "button", role: "menuitem", "aria-haspopup": "menu", "aria-label": label, onKeyDown: onTriggerKeyDown, className: "cieo-dropdown-menu-submenu-trigger", children: label }), _jsx("div", { ref: panelRef, role: "menu", "aria-label": label, onKeyDown: onPanelKeyDown, className: "cieo-dropdown-menu-submenu-panel", children: children })] }));
+    return (_jsxs("div", { className: "cieo cieo-dropdown-menu-submenu", ...motionAttrs({ motion, entering, exiting }), ...customizePart(slotProps?.root, "cieo cieo-dropdown-menu-submenu", undefined, className), children: [_jsx("button", { ref: triggerRef, type: "button", role: "menuitem", "aria-haspopup": "menu", "aria-label": label, onKeyDown: onTriggerKeyDown, className: "cieo-dropdown-menu-submenu-trigger", ...customizePart(slotProps?.dropdownMenuSubmenuTrigger, "cieo-dropdown-menu-submenu-trigger"), children: label }), _jsx("div", { ref: panelRef, role: "menu", "aria-label": label, onKeyDown: onPanelKeyDown, className: "cieo-dropdown-menu-submenu-panel", ...customizePart(slotProps?.dropdownMenuSubmenuPanel, "cieo-dropdown-menu-submenu-panel"), children: children })] }));
 }

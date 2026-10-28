@@ -51,3 +51,7 @@ Badge colors come from the soft and strong semantic tokens. The preview clamps t
 ## Evidence
 
 Covered by `test/primitives-feedback.test.mjs` (link, button and plain rows, unread markup, actions outside the main action).
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `line`, `actor`, `what`, `preview`, `root`, `lead`, `avatar`, `badge`, `main`, `dot`, `actions`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.

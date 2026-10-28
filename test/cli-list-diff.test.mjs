@@ -180,7 +180,7 @@ test('diff reports every missing file in plan order and exits 1 without writing'
     assert.equal(result.status, 1);
     assert.equal(
       result.stdout,
-      'Overlay/Overlay.tsx: missing\nDialog/Dialog.tsx: missing\nmotion.ts: missing\n',
+      'Overlay/Overlay.tsx: missing\nDialog/Dialog.tsx: missing\ncustomization.ts: missing\nparts.ts: missing\nmotion.ts: missing\n',
     );
     assert.deepEqual(readdirSync(dir), ['cieo.json']);
   } finally {

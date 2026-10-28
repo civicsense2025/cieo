@@ -3,8 +3,13 @@
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export interface AuthOtpInputProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; label?: PrimitivePartProps; boxes?: PrimitivePartProps; input?: PrimitivePartProps };
+
   id: string;
   /** Number of boxes, 4-8. Defaults to 6. */
   length?: number;
@@ -17,7 +22,7 @@ export interface AuthOtpInputProps {
   onChange?: (code: string) => void;
 }
 
-export function AuthOtpInput({ id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }: AuthOtpInputProps) {
+export function AuthOtpInput({ className, slotProps, id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }: AuthOtpInputProps) {
   const [digits, setDigits] = useState<string[]>(() => Array.from({ length }, () => ''));
   if (digits.length !== length) setDigits(Array.from({ length }, (_, i) => digits[i] ?? ''));
   const boxes = useRef<Array<HTMLInputElement | null>>([]);
@@ -41,9 +46,9 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
   };
 
   return (
-    <span className="cieo cieo-auth-otp-input" data-invalid={error ? 'true' : undefined} style={style} role="group" aria-labelledby={`${id}-label`}>
-      <span className="cieo-auth-label" id={`${id}-label`}>{label}</span>
-      <span className="cieo-auth-otp-boxes">
+    <span className="cieo cieo-auth-otp-input" data-invalid={error ? 'true' : undefined} style={style} role="group" aria-labelledby={`${id}-label`} {...customizePart(slotProps?.root, "cieo cieo-auth-otp-input", style, className)}>
+      <span className="cieo-auth-label" id={`${id}-label`} {...customizePart(slotProps?.label, "cieo-auth-label", undefined)}>{label}</span>
+      <span className="cieo-auth-otp-boxes" {...customizePart(slotProps?.boxes, "cieo-auth-otp-boxes", undefined)}>
         {digits.map((d, i) => (
           <input
             key={i}
@@ -74,7 +79,7 @@ export function AuthOtpInput({ id, length = 6, label = 'Verification code', erro
               else if (e.key === 'ArrowLeft') { e.preventDefault(); focusBox(i - 1); }
               else if (e.key === 'ArrowRight') { e.preventDefault(); focusBox(i + 1); }
             }}
-            onPaste={e => { e.preventDefault(); onPasteText(e.clipboardData.getData('text'), i); }}
+            onPaste={e => { e.preventDefault(); onPasteText(e.clipboardData.getData('text'), i); }} {...customizePart(slotProps?.input, "cieo-auth-otp-box", undefined)}
           />
         ))}
       </span>

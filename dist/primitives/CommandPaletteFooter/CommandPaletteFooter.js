@@ -1,6 +1,7 @@
 // src/primitives/CommandPaletteFooter/CommandPaletteFooter.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-export function CommandPaletteFooter({ children }) {
-    return _jsx("div", { className: "cieo cieo-p-command-palette-footer", children: children });
+import { customizePart } from '../customization.js';
+export function CommandPaletteFooter({ className, slotProps, children }) {
+    return _jsx("div", { className: "cieo cieo-p-command-palette-footer", ...customizePart(slotProps?.root, "cieo cieo-p-command-palette-footer", undefined, className), children: children });
 }

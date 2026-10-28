@@ -1,3 +1,4 @@
+import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
 export interface ToggleButtonGroupContextValue {
     value?: string;
@@ -5,6 +6,10 @@ export interface ToggleButtonGroupContextValue {
 }
 export declare const ToggleButtonGroupContext: import("react").Context<ToggleButtonGroupContextValue | null>;
 export interface ToggleButtonGroupProps {
+    className?: string;
+    slotProps?: {
+        root?: PrimitivePartProps;
+    };
     /** Accessible name for the group (e.g. "Text style"). Required. */
     label: string;
     /** Selected button value when controlled. */
@@ -15,4 +20,4 @@ export interface ToggleButtonGroupProps {
     onValueChange?: (value: string) => void;
     children: ReactNode;
 }
-export declare function ToggleButtonGroup({ label, value, defaultValue, onValueChange, children }: ToggleButtonGroupProps): import("react/jsx-runtime").JSX.Element;
+export declare function ToggleButtonGroup({ className, slotProps, label, value, defaultValue, onValueChange, children }: ToggleButtonGroupProps): import("react/jsx-runtime").JSX.Element;

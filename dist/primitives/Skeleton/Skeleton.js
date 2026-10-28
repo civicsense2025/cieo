@@ -1,8 +1,9 @@
 // src/primitives/Skeleton/Skeleton.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function Skeleton({ lines = 3, label = 'Loading', motion }) {
-    return (_jsxs("span", { className: "cieo cieo-p-skeleton", "data-motion": motion === false ? 'off' : undefined, children: [_jsx("span", { "aria-hidden": "true", className: "cieo-p-skeleton-lines", children: Array(lines)
+import { customizePart } from '../customization.js';
+export function Skeleton({ className, slotProps, lines = 3, label = 'Loading', motion }) {
+    return (_jsxs("span", { className: "cieo cieo-p-skeleton", "data-motion": motion === false ? 'off' : undefined, ...customizePart(slotProps?.root, "cieo cieo-p-skeleton", undefined, className), children: [_jsx("span", { "aria-hidden": "true", className: "cieo-p-skeleton-lines", ...customizePart(slotProps?.lines, "cieo-p-skeleton-lines", undefined), children: Array(lines)
                     .fill(null)
-                    .map((_, i) => (_jsx("span", { className: "cieo-p-skeleton-line" }, i))) }), _jsx("span", { className: "cieo-p-skeleton-label", children: label })] }));
+                    .map((_, i) => (_jsx("span", { className: "cieo-p-skeleton-line", ...customizePart(slotProps?.line, "cieo-p-skeleton-line", undefined) }, i))) }), _jsx("span", { className: "cieo-p-skeleton-label", ...customizePart(slotProps?.label, "cieo-p-skeleton-label", undefined), children: label })] }));
 }

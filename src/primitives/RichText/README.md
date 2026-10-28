@@ -33,7 +33,7 @@ Each link is a normal tab stop. Line breaks are real `br` elements, so reading o
 
 ## Customization
 
-Link and tag colors come from `--cieo-color-accent`. `maxUrlLength` sets the visible link length.
+Use the typed presentation parts listed under Host customization. Defaults still use Cieo tokens; component behavior and accessibility remain owned by Cieo.
 
 ## Limitations
 
@@ -46,3 +46,7 @@ Link and tag colors come from `--cieo-color-accent`. `maxUrlLength` sets the vis
 ## Evidence
 
 Covered by `test/primitives-social-content.test.mjs` (adversarial schemes, punctuation, parentheses, emoji, newlines, emails).
+
+## Host customization
+
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `link`, `tag`, `root`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

@@ -1,6 +1,7 @@
 // src/primitives/Section/Section.tsx
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-export function Section({ title, label, children }) {
-    return (_jsxs("section", { "aria-label": label, className: "cieo cieo-section", children: [title ? _jsx("h2", { className: "cieo-section-title", children: title }) : null, children] }));
+import { customizePart } from '../customization.js';
+export function Section({ className, slotProps, title, label, children }) {
+    return (_jsxs("section", { "aria-label": label, className: "cieo cieo-section", ...customizePart(slotProps?.root, "cieo cieo-section", undefined, className), children: [title ? _jsx("h2", { className: "cieo-section-title", ...customizePart(slotProps?.title, "cieo-section-title"), children: title }) : null, children] }));
 }

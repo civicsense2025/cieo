@@ -3,6 +3,8 @@
 /* AudioLevelMeter. A few bars that rise and fall with how loud the microphone is. The host passes a level, or a stream and the meter listens itself. */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { useSpring } from '../../react/index.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 const clamp01 = (n: number): number => (Number.isFinite(n) ? Math.min(1, Math.max(0, n)) : 0);
 
@@ -35,6 +37,9 @@ export function levelBars(level: number, count: number): number[] {
 }
 
 export interface AudioLevelMeterProps {
+  className?: string;
+  slotProps?: { root?: PrimitivePartProps; bar?: PrimitivePartProps };
+
   /** Controlled loudness, 0 to 1. When set it wins over the stream. */
   level?: number;
   /** Live microphone stream. The meter makes its own analyser in an effect and closes it on cleanup. */
@@ -47,7 +52,7 @@ export interface AudioLevelMeterProps {
 
 type AudioContextCtor = typeof AudioContext;
 
-export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone level' }: AudioLevelMeterProps) {
+export function AudioLevelMeter({ className, slotProps, level, stream, bars = 5, label = 'Microphone level' }: AudioLevelMeterProps) {
   const count = Number.isFinite(bars) ? Math.min(32, Math.max(1, Math.floor(bars))) : 5;
   const [heard, setHeard] = useState(0);
   const controlled = level !== undefined;
@@ -151,9 +156,9 @@ export function AudioLevelMeter({ level, stream, bars = 5, label = 'Microphone l
   }, [stream, controlled]);
 
   return (
-    <span ref={root} role="img" aria-label={label} className="cieo cieo-audio-level-meter" style={{ '--cieo-level': target.toFixed(3) } as CSSProperties}>
+    <span ref={root} role="img" aria-label={label} className="cieo cieo-audio-level-meter" style={{ '--cieo-level': target.toFixed(3) } as CSSProperties} {...customizePart(slotProps?.root, "cieo cieo-audio-level-meter", { '--cieo-level': target.toFixed(3) } as CSSProperties, className)}>
       {seed.map((h, i) => (
-        <span key={i} aria-hidden="true" className="cieo-audio-level-meter-bar" style={{ '--cieo-bar': h.toFixed(3) } as CSSProperties} />
+        <span key={i} aria-hidden="true" className="cieo-audio-level-meter-bar" style={{ '--cieo-bar': h.toFixed(3) } as CSSProperties} {...customizePart(slotProps?.bar, "cieo-audio-level-meter-bar", { '--cieo-bar': h.toFixed(3) } as CSSProperties)} />
       ))}
     </span>
   );

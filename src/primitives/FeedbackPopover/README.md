@@ -51,3 +51,7 @@ Width follows `min(17.5rem, 100%)`. Style through the raised, border and accent 
 ## Evidence
 
 Covered by `test/primitives-feedback.test.mjs` (all four placement sides, clamping, shortcut, dialog markup).
+
+## Host customization
+
+`className` appends a root class. `slotProps` exposes `root`, `title`, `thread`, `field`, `actions`, `submit`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Existing content props and children remain the composition slots. Library classes are retained; computed inline geometry, state attributes, handlers, refs, roles, and accessibility attributes remain owned by Cieo.
