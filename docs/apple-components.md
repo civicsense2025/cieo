@@ -195,7 +195,7 @@ Two generic pieces for hosts that mark state:
 
 - `.reorderList(frames:)` on the container measures every row.
 - `.reorderRow(id:index:drag:)` on each row follows the finger and slides neighbours aside on the snap spring, immediately under Reduce Motion or a restricted render policy.
-- `.reorderHandle(drag:id:order:frames:spacing:onDrop:)` on the grip drives the drag. Lift, each neighbour crossed and the drop play their haptic. `onDrop` gets the first and final index, equal when nothing moved.
+- `.reorderHandle(drag:id:order:frames:spacing:onDrop:)` on the grip drives the drag. Lift, each neighbour crossed and the drop play their haptic. `onDrop` gets the first and final index, equal when nothing moved. If the system cancels a drag (a scroll takes over, a sheet appears), `onDrop` is not called and the rows return to their places.
 
 A reorder must also work without dragging: give the host list move-earlier and move-later actions for VoiceOver, Switch Control and keyboards.
 
