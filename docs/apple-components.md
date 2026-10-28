@@ -15,6 +15,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Slots, not hard-coded styling](#slots-not-hard-coded-styling)
 - [Social, audio and engagement](#social-audio-and-engagement)
 - [Press and hold, and status chips](#press-and-hold-and-status-chips)
+- [Haptics and drag to reorder](#haptics-and-drag-to-reorder)
 - [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
 
@@ -185,6 +186,18 @@ Two generic pieces for hosts that mark state:
 - [`StatusChip`](../Sources/CieoUI/Atoms/StatusChip.swift) is a small capsule that says where something stands: `StatusChip("In progress", tone: .active, symbol: .play)`. Tones `neutral`, `active`, `done`, `attention` and `danger` read `foreground`, `accent`, `success`, `warning` and `danger` from the theme on the `surface` fill (`tint` for `active`). `symbol` is a `ComponentIcon`, so a host's icon set draws it. The chip is as wide as its content, wraps at large text sizes, is not interactive, and VoiceOver reads only the title. Host-installed colours must give readable contrast on `surface`.
 
 [PressAndHoldStatusChipTests](../Tests/CieoUITests/PressAndHoldStatusChipTests.swift) pin the duration limits, the cancel distance, the held-state rule, the Reduce Motion size rule, the tone-to-role map, content-sized width, wrapping and host colours. A real hold, haptics, VoiceOver and Dynamic Type at accessibility sizes are consumer checks on a device. The gallery's Atoms tab shows both.
+
+## Haptics and drag to reorder
+
+`MotionHaptic` names the six touch responses (`selection`, `lift`, `drop`, `success`, `warning`, `error`). `.motionHaptic(_:trigger:)` plays one when a value changes, and `.motionHaptic(trigger:_:)` picks one per change, for an answer that can be right or wrong. The system owns playback, so the Haptics setting and devices without a Taptic Engine silence them. Reduce Motion does not, because a haptic is not movement.
+
+`ReorderDrag` is the pure model of one vertical drag: where the row would land (`over`) and how far each neighbour slides (`shift(forRowAt:)`). Three modifiers wire it to a list and need no other state:
+
+- `.reorderList(frames:)` on the container measures every row.
+- `.reorderRow(id:index:drag:)` on each row follows the finger and slides neighbours aside on the snap spring, immediately under Reduce Motion or a restricted render policy.
+- `.reorderHandle(drag:id:order:frames:spacing:onDrop:)` on the grip drives the drag. Lift, each neighbour crossed and the drop play their haptic. `onDrop` gets the first and final index, equal when nothing moved.
+
+A reorder must also work without dragging: give the host list move-earlier and move-later actions for VoiceOver, Switch Control and keyboards.
 
 ## Consumer rollout boundary
 
