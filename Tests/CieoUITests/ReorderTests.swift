@@ -68,4 +68,21 @@ final class ReorderTests: XCTestCase {
         for haptic in MotionHaptic.allCases { _ = haptic.feedback }
         XCTAssertEqual(MotionHaptic.allCases.count, 6)
     }
+
+    /// Rows of different heights: a drag that puts the row over a target's place lands in that place, even
+    /// when the row stops a hair short of the target's centre.
+    func testDroppingARowOnATargetLandsInTheTargetsPlace() {
+        let centers: [Double] = [40, 150, 250, 340, 440, 530]
+        func over(_ from: Int, _ center: Double) -> Int {
+            ReorderDrag.dropIndex(centers: centers, from: from, draggedCenter: center, draggedHeight: 80)
+        }
+        XCTAssertEqual(over(0, 250), 2, "onto the third row")
+        XCTAssertEqual(over(0, 247), 2, "a hair short still lands there")
+        XCTAssertEqual(over(0, 40), 0, "not moved")
+        XCTAssertEqual(over(0, 60), 0, "a small drag swaps nothing")
+        XCTAssertEqual(over(5, 250), 2, "upward onto the third row")
+        XCTAssertEqual(over(5, 530), 5)
+        XCTAssertEqual(ReorderDrag.dropIndex(centers: [20, 80, 140, 200], from: 1, draggedCenter: 500), 3, "past the end lands last")
+        XCTAssertEqual(ReorderDrag.dropIndex(centers: [20, 80], from: 9, draggedCenter: 0), 0, "an unknown row lands first")
+    }
 }
