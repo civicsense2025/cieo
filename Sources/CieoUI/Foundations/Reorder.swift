@@ -129,6 +129,7 @@ private struct ReorderListModifier: ViewModifier {
 
 private struct ReorderHandleModifier: ViewModifier {
     @Binding var drag: ReorderDrag?
+    @GestureState private var isTracking = false
     let id: String
     let order: [String]
     let frames: [String: CGRect]
@@ -141,6 +142,7 @@ private struct ReorderHandleModifier: ViewModifier {
         content
             .gesture(
                 DragGesture(minimumDistance: 2, coordinateSpace: .named(coordinateSpace))
+                    .updating($isTracking) { _, tracking, _ in tracking = true }
                     .onChanged { value in
                         if drag == nil { begin() }
                         drag?.update(translation: Double(value.translation.height))
@@ -151,6 +153,11 @@ private struct ReorderHandleModifier: ViewModifier {
                         onDrop(finished.from, finished.over)
                     }
             )
+            // The system can cancel a drag (a scroll takes over, a sheet appears) without calling onEnded;
+            // the gesture state still resets, and a drag left open would strand its rows out of place.
+            .onChange(of: isTracking) { _, tracking in
+                if !tracking, drag != nil { drag = nil }
+            }
             .motionHaptic(trigger: ReorderPhase(drag)) { ReorderPhase.haptic(from: $0, to: $1) }
     }
 
