@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "shared": [
     "AuthSignInCard/AuthMotion.tsx",
+    "Popover/focus.ts",
     "Popover/position.ts",
     "Popover/usePopoverPosition.ts",
     "VoiceRecorder/recorderVisual.ts",
@@ -1785,6 +1786,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
+        "Popover/focus.ts",
         "Popover/position.ts",
         "Popover/usePopoverPosition.ts",
         "customization.ts",

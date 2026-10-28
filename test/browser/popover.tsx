@@ -11,7 +11,7 @@ function Fixture() {
     <div style={{ position:'fixed', right:8, bottom:8, width:64, height:44, overflow:'hidden', transform:'translateZ(0)' }}>
       <Popover label="Edge panel" trigger={<button>Edge</button>} slotProps={{content:{className:'custom-panel',style:{width:280,padding:20,background:'white'}}}}
         slots={{header:<h2>Actions</h2>,footer:<button>Last action</button>}}>
-        <button>First action</button><p>Content from the host.</p>
+        <fieldset disabled><button>Disabled by fieldset</button></fieldset><button disabled tabIndex={0}>Explicitly disabled</button><button>First action</button><p>Content from the host.</p>
       </Popover>
     </div>
     <Popover label="Prevented" trigger={<button onClick={(event) => event.preventDefault()}>Prevent open</button>}>Must stay closed</Popover>

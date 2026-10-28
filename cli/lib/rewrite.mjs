@@ -11,6 +11,7 @@ const PACKAGE_AREAS = {
 const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
 const COMPANION_FILES = {
   'customization.ts|./parts.js': true,
+  'Popover/Popover.tsx|./focus.js': true,
   'Popover/Popover.tsx|./position.js': true,
   'Popover/Popover.tsx|./usePopoverPosition.js': true,
   'Popover/usePopoverPosition.ts|./position.js': true,

@@ -22,4 +22,4 @@ Import `cieo/popover.css` or the full primitive stylesheet. Supported tokens: `-
 
 ## Limits and verification
 
-This is not a modal or an ARIA menu. Content follows normal Tab navigation; use a dialog for modal focus containment. Detached or offscreen anchors are clamped, not automatically dismissed. Position tests cover edge flips, RTL alignment, oversized content, and visual viewport offsets. Consumer browser checks must cover focus, rapid reopening, clipping ancestors, and motion preferences.
+This is not a modal or an ARIA menu. Keyboard opening focuses the first control in a portaled panel. Tab from its last control continues after the trigger; Shift+Tab from its first returns to the trigger. Both close the panel. Pointer opening preserves trigger focus and its next Tab enters the panel. Inline panels retain document order. Use a dialog for modal focus containment. Detached or offscreen anchors are clamped, not automatically dismissed. Position tests cover edge flips, RTL alignment, oversized content, and visual viewport offsets. Consumer browser checks must cover focus, rapid reopening, clipping ancestors, and motion preferences.

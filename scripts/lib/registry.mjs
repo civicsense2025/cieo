@@ -14,7 +14,7 @@ export function classifyImport(spec, fromFile = '') {
   if (!spec.startsWith('.')) throw new Error(`Unclassified bare import '${spec}' — registry generation refuses to guess`);
   if (spec.startsWith('./')) {
     if (fromFile === 'customization.ts' && spec === './parts.js') return { kind: 'shared', file: 'parts.ts' };
-    const popoverFiles = { 'Popover/Popover.tsx|./position.js': 'Popover/position.ts', 'Popover/Popover.tsx|./usePopoverPosition.js': 'Popover/usePopoverPosition.ts', 'Popover/usePopoverPosition.ts|./position.js': 'Popover/position.ts' };
+    const popoverFiles = { 'Popover/Popover.tsx|./focus.js': 'Popover/focus.ts', 'Popover/Popover.tsx|./position.js': 'Popover/position.ts', 'Popover/Popover.tsx|./usePopoverPosition.js': 'Popover/usePopoverPosition.ts', 'Popover/usePopoverPosition.ts|./position.js': 'Popover/position.ts' };
     if (popoverFiles[`${fromFile}|${spec}`]) return { kind: 'shared', file: popoverFiles[`${fromFile}|${spec}`] };
     const companion = fromFile === 'AuthSignInCard/AuthSignInCard.tsx' && spec === './AuthMotion.js'
       ? 'AuthSignInCard/AuthMotion.tsx'
