@@ -1105,10 +1105,11 @@ final class AudioCaptureTests: XCTestCase {
         let url = try XCTUnwrap(recorder.fileURL)
         model.togglePause()
         XCTAssertEqual(model.state.phase, .paused)
+        let pausedElapsed = model.state.elapsed
 
         recorder.emitFinished(successfully: false)
 
-        XCTAssertEqual(model.state, .init(phase: .error, elapsed: 0, reason: .failed))
+        XCTAssertEqual(model.state, .init(phase: .error, elapsed: pausedElapsed, reason: .failed))
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
         XCTAssertEqual(recorder.stopCount, 1)
         XCTAssertNil(sessions.activeOwner)

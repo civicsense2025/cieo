@@ -3,11 +3,11 @@ import { useEffect, useLayoutEffect, useState, type RefObject } from 'react';
 import { popoverPosition, type PopoverPositionOptions } from './position.js';
 const useIso = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
-export function usePopoverPosition(open: boolean, anchor: RefObject<HTMLElement | null>, panel: RefObject<HTMLElement | null>, options: PopoverPositionOptions) {
+export function usePopoverPosition(open: boolean, anchor: RefObject<HTMLElement | null>, panel: HTMLElement | null, options: PopoverPositionOptions) {
   const [position, setPosition] = useState<ReturnType<typeof popoverPosition> | null>(null);
   useIso(() => {
     if (!open) { setPosition(null); return; }
-    const trigger = anchor.current, content = panel.current;
+    const trigger = anchor.current, content = panel;
     if (!trigger || !content) return;
     let frame = 0;
     const measure = () => {

@@ -19,6 +19,8 @@ Recipes remain examples; source coverage does not mark them production ready.
 
 ## Same PR checks
 
+Catalogue customization is tracked by `scripts/check-primitive-customization.mjs`. The component-page generator synchronizes new property rows from manifests while preserving authored descriptions. Registry and CLI copy plans must include shared customization types and helpers, not just component entry files. Popover also requires the existing React DOM peer for its portal and exports `cieo/popover.css`; consumer packages should pin the reviewed source or release.
+
 Update the mapped owner in the same PR as a source change, including unchanged
 public behavior for internal repairs. Add source/symbol links and keep current
 TOCs valid. Preserve dated reports. Run the local standard-library checker:

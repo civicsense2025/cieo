@@ -4,6 +4,33 @@ import { TabList } from '../../src/primitives/TabList/TabList';
 import { Tab } from '../../src/primitives/Tab/Tab';
 import { useState } from 'react';
 
+function InitialFixture() {
+  const params = new URLSearchParams(location.search);
+  const [open, setOpen] = useState(true);
+  return <div style={{position:'fixed',right:8,top:80}}>
+    <Popover label="Initial panel" trigger={<button>Initial</button>} motion={params.get('motion') !== 'off'}
+      {...(params.get('initial') === 'controlled' ? {open,onOpenChange:setOpen} : {defaultOpen:true})}
+      slotProps={{content:{style:{width:280,padding:20,background:'white'}}}}>
+      <button>Initial action</button>
+    </Popover>
+  </div>;
+}
+
+function RadioFixture() {
+  const mode = new URLSearchParams(location.search).get('radio');
+  const named = mode !== 'unnamed';
+  return <>
+    <form id="first-form" /><form id="second-form" />
+    <Popover label="Radio panel" trigger={<button>Radio options</button>}>
+      <button>Before radios</button>
+      <input aria-label="First radio" type="radio" name={named ? 'choice' : undefined} form="first-form" defaultChecked={mode !== 'none'} disabled={mode === 'disabled'} />
+      <input aria-label="Second radio" type="radio" name={named ? mode === 'names' ? 'another choice' : 'choice' : undefined} form={mode === 'forms' ? 'second-form' : 'first-form'} />
+      {mode === 'disabled' && <input aria-label="Disabled last radio" type="radio" name="choice" form="first-form" disabled />}
+    </Popover>
+    <button>After radios</button>
+  </>;
+}
+
 function Fixture() {
   const [tab, setTab] = useState('first');
   const [showTabs, setShowTabs] = useState(false);
@@ -28,4 +55,4 @@ function Fixture() {
     <div role="tabpanel" id="second-panel" aria-labelledby="second-tab" hidden={tab !== 'second'}>Second panel</div>
   </>;
 }
-createRoot(document.getElementById('root')!).render(<Fixture />);
+createRoot(document.getElementById('root')!).render(location.search.includes('initial=') ? <InitialFixture /> : location.search.includes('radio=') ? <RadioFixture /> : <Fixture />);

@@ -221,3 +221,5 @@ rendering observations; producer tests alone do not establish consumer acceptanc
 ## Documentation ownership
 
 [Maintenance process](documentation-maintenance.md) records same-PR and after-merge checks. [Source map](source-map.json) assigns current API documentation ownership.
+
+A failed recorder completion preserves the last observed elapsed time, including while paused, while discarding its temporary clip and releasing the capture session. The paused-completion regression compares against the captured paused state rather than assuming a timer has never fired.

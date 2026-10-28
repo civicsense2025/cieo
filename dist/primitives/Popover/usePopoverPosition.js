@@ -9,7 +9,7 @@ export function usePopoverPosition(open, anchor, panel, options) {
             setPosition(null);
             return;
         }
-        const trigger = anchor.current, content = panel.current;
+        const trigger = anchor.current, content = panel;
         if (!trigger || !content)
             return;
         let frame = 0;

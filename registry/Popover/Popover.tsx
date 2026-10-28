@@ -1,6 +1,6 @@
 'use client';
 import { customizePart } from '../customization.js';
-import { cloneElement, isValidElement, useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
+import { cloneElement, isValidElement, useCallback, useEffect, useId, useRef, useState, type CSSProperties, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { useDismiss, usePresence } from '../../react/index.js';
 import { focusPopover, leavePopover, popoverStops } from './focus.js';
@@ -38,9 +38,11 @@ export function Popover({ trigger, open, defaultOpen = false, onOpenChange, chil
   const keyboardOpen = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const [panel, setPanel] = useState<HTMLDivElement | null>(null);
+  const attachPanel = useCallback((element: HTMLDivElement | null) => { panelRef.current = element; setPanel(element); }, []);
   const presence = usePresence<HTMLDivElement>(visible, { disabled: !motion, kind: 'entrance', from: { y: -4, scale: .98, opacity: .7 } });
-  const position = usePopoverPosition(presence.mounted, triggerRef, panelRef, { side, align, offset, padding: collisionPadding });
+  const position = usePopoverPosition(presence.mounted, triggerRef, panel, { side, align, offset, padding: collisionPadding });
   const set = (next: boolean) => { if (open === undefined) setInner(next); onOpenChange?.(next); };
   const triggerElement = () => triggerRef.current?.querySelector<HTMLElement>('button,a[href],[tabindex]') ?? null;
   const restoreFocus = () => triggerElement()?.focus();
@@ -70,7 +72,7 @@ export function Popover({ trigger, open, defaultOpen = false, onOpenChange, chil
       if (!event.defaultPrevented && !trigger.props.disabled && trigger.props['aria-disabled'] !== true && trigger.props['aria-disabled'] !== 'true') toggle(event);
     },
   }) : <button type="button" aria-haspopup="dialog" aria-expanded={visible} aria-controls={visible ? panelId : undefined} onClick={toggle} onKeyDown={triggerKey}>{trigger}</button>;
-  const content = presence.mounted ? <div ref={panelRef} className="cieo-p-popover-position" data-side={position?.side ?? side}
+  const content = presence.mounted ? <div ref={attachPanel} className="cieo-p-popover-position" data-side={position?.side ?? side}
     style={{ position: 'fixed', left: position?.x ?? 0, top: position?.y ?? 0, maxWidth: position?.maxWidth,
       maxHeight: position?.maxHeight, pointerEvents: visible ? undefined : 'none', visibility: client && !position ? 'hidden' : undefined, zIndex: 'var(--cieo-popover-z, 50)' }}>
     <div {...customizePart(slotProps?.content)} ref={presence.ref} id={panelId} role="dialog" tabIndex={-1} onKeyDown={panelKey} aria-label={label ?? (isValidElement<{children?: ReactNode}>(trigger) && typeof trigger.props.children === 'string' ? trigger.props.children : 'Popover')}
