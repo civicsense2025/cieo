@@ -8,6 +8,7 @@ struct MoleculeExamples: View {
     @State private var saved = false
     @State private var expanded = false
     @State private var notifications = true
+    @State private var filter = "All"
     private let names = ["Button", "Progress ring", "Selection chip", "Disclosure"]
 
     var body: some View {
@@ -19,6 +20,14 @@ struct MoleculeExamples: View {
                     saved = !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 }
                 if saved { Notice("Saved locally", detail: "This example stays on this screen.", symbol: "checkmark.circle.fill") }
+            }
+            Specimen(title: "Single-select filters") {
+                SegmentedControl("Filter activity", selection: $filter, options: [
+                    .init(verbatim: "All", value: "All"), .init(verbatim: "Bills", value: "Bills", count: 12),
+                    .init(verbatim: "Votes", value: "Votes", count: 3), .init(verbatim: "Committee hearings", value: "Hearings"),
+                    .init(verbatim: "Nominations", value: "Nominations", count: 1),
+                ])
+                Text("Showing: \(filter)")
             }
             Specimen(title: "Search & preferences") {
                 SearchField("Search components", text: $query)
