@@ -143,7 +143,7 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - `FlowStack(spacing:)` fills rows and starts a new one when the next item doesn't fit, so a group of chips stacks at large text sizes instead of breaking words.
 - SelectionChip, BlockPanel, CutSurface, ShareBar and ActionButton read every style from the slots. A share bar's seam is the `hairline` width.
 - IndexRow, NumberedSteps, InfoButton and SectionHeader read every style from the slots.
-- ActionRow, PreferenceRow, Notice, ExpandablePanel, LabeledField and SearchField read every style from the slots. Setting rows and notices label their control, so their headings pass `isHeader: false`.
+- ActionRow, PreferenceRow, Notice, ExpandablePanel, LabeledField and SearchField read every style from the slots. Setting rows and notices label their control, so their headings pass `isHeader: false`. A Notice can carry one action (`actionTitle:action:`, such as "Try again" or "Undo") under its text, in the `strongBody` type and accent with a full touch target; VoiceOver then reads the text as one element and the action as its own button. Notices without an action are unchanged.
 - ContentSection, StatePanel, TaskPanel, Pathway and ContentRail read every style from the slots.
 - ProgressRing, SegmentedProgress, BigNumber, HighlightSurface and SymbolMark read every style from the slots.
 

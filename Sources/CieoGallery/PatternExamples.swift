@@ -31,7 +31,10 @@ struct PatternExamples: View {
             Specimen(title: "Reusable section & row") {
                 ContentSection("Reading list", detail: "A composition slot for your own content.") {
                     ActionRow("Sample article", detail: "Five minutes", actionTitle: saved ? "Unsave" : "Save") { saved.toggle() }
-                    if saved { Notice("Saved locally", detail: "Tap Unsave to restore the original state.", symbol: "bookmark.fill") }
+                    if saved {
+                        Notice("Saved locally", detail: "Undo restores the original state.", symbol: "bookmark.fill",
+                               actionTitle: "Undo") { saved = false }
+                    }
                 }
             }
         }
