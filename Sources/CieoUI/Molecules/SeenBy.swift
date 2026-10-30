@@ -22,8 +22,7 @@ public struct SeenBy: View {
             let split = Self.layout(count: people.count, max: maxFaces)
             HStack(spacing: -face / 6) { // literal-ok: overlap is a share of the face
                 ForEach(people.prefix(split.shown)) { person in
-                    PersonFace(person: person)
-                        .frame(width: face, height: face)
+                    Avatar(person, size: .points(face))
                         .overlay(Circle().strokeBorder(theme.track, lineWidth: metrics.hairline))
                         .transition(.scale.combined(with: .opacity))
                 }
@@ -32,7 +31,7 @@ public struct SeenBy: View {
                         .font(typography.glyph)
                         .foregroundStyle(theme.foreground)
                         .lineLimit(1)
-                        .minimumScaleFactor(PersonFace.shrinkLimit)
+                        .minimumScaleFactor(Avatar.shrinkLimit)
                         .frame(width: face, height: face)
                         .background(theme.track, in: Circle())
                 }

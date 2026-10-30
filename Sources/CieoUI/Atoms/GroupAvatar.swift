@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// One person in a group avatar or a reader list. The host owns the people; a photo appears only when a
-/// URL is given, otherwise the initials draw.
+/// One person in an avatar, a group avatar or a reader list. The host owns the people; a photo appears
+/// only when a URL is given, otherwise the initials draw.
 public struct GroupAvatarPerson: Identifiable, Equatable, Sendable {
     /// Stable identity. Defaults to the name; give namesakes distinct ids so moves animate correctly.
     public let id: String
@@ -18,40 +18,6 @@ public struct GroupAvatarPerson: Identifiable, Equatable, Sendable {
         self.initials = initials
         self.imageURL = imageURL
     }
-}
-
-/// One round face: a photo when there is one, otherwise initials in the accent on a tint. Shared by
-/// GroupAvatar and SeenBy; it fills the frame it is given.
-struct PersonFace: View {
-    @Environment(\.componentTheme) private var theme
-    @Environment(\.componentTypography) private var typography
-    let person: GroupAvatarPerson
-
-    var body: some View {
-        ZStack {
-            Circle().fill(theme.tint)
-            if let url = person.imageURL {
-                AsyncImage(url: url) { phase in
-                    if let image = phase.image { image.resizable().scaledToFill() } else { initials }
-                }
-            } else {
-                initials
-            }
-        }
-        .clipShape(Circle())
-    }
-
-    private var initials: some View {
-        Text(person.initials)
-            .font(typography.glyph)
-            .foregroundStyle(theme.accent)
-            .lineLimit(1)
-            .minimumScaleFactor(Self.shrinkLimit)
-            .padding(.horizontal, 1) // literal-ok: keeps ink off the circle's edge at the smallest size
-    }
-
-    /// Smallest share initials may shrink to before they clip.
-    static let shrinkLimit: CGFloat = 0.4 // literal-ok: text-fit limit, not a style
 }
 
 /// One circle that stands for a whole conversation: one to four faces packed inside it, or three faces
@@ -80,8 +46,7 @@ public struct GroupAvatar: View {
             ZStack(alignment: .topLeading) {
                 Circle().fill(theme.surface)
                 ForEach(Array(layout.faces.enumerated()), id: \.offset) { index, person in
-                    PersonFace(person: person)
-                        .frame(width: slots[index].width * diameter, height: slots[index].height * diameter)
+                    Avatar(person, size: .points(slots[index].width * diameter))
                         .offset(x: slots[index].minX * diameter, y: slots[index].minY * diameter)
                 }
                 if layout.more > 0, let tile = slots.last {
@@ -89,7 +54,7 @@ public struct GroupAvatar: View {
                         .font(typography.glyph)
                         .foregroundStyle(theme.foreground)
                         .lineLimit(1)
-                        .minimumScaleFactor(PersonFace.shrinkLimit)
+                        .minimumScaleFactor(Avatar.shrinkLimit)
                         .frame(width: tile.width * diameter, height: tile.height * diameter)
                         .background(theme.track, in: Circle())
                         .offset(x: tile.minX * diameter, y: tile.minY * diameter)
