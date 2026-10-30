@@ -72,6 +72,36 @@ final class SlotsOrganismsTests: XCTestCase {
         XCTAssertFalse(ComponentIconTests.containsRed(try render(symbol)), "an SF Symbol name still draws the symbol")
     }
 
+    @MainActor
+    func testStatePanelDescriptionMarkAndActionsAreEachOptional() throws {
+        let full = try render(StatePanel("Nothing yet", detail: "Try again later", icon: .search) { Text("Retry") }).height
+        let titleOnly = try render(StatePanel("Nothing yet")).height
+        XCTAssertGreaterThan(titleOnly, 0, "a title alone draws")
+        XCTAssertLessThan(titleOnly, try render(StatePanel("Nothing yet", detail: "Try again later")).height,
+                          "a description adds a line")
+        XCTAssertLessThan(titleOnly, try render(StatePanel("Nothing yet", icon: .search)).height, "a mark adds a row")
+        XCTAssertLessThan(titleOnly, try render(StatePanel("Nothing yet") { Text("Retry") }).height, "actions add a row")
+        XCTAssertLessThan(titleOnly, full)
+    }
+
+    @MainActor
+    func testStatePanelWithoutAMarkDrawsNoGlyph() throws {
+        let markless = StatePanel("Nothing yet", detail: "Try again later") { Text("Retry") }
+            .environment(\.componentIcons, SlotsOrganismsTests.redGlyphs)
+        XCTAssertFalse(ComponentIconTests.containsRed(try render(markless)))
+        let iconOnly = StatePanel("Nothing yet", icon: .search).environment(\.componentIcons, SlotsOrganismsTests.redGlyphs)
+        XCTAssertTrue(ComponentIconTests.containsRed(try render(iconOnly)), "a mark without a description still draws")
+    }
+
+    /// `swift test` has no accessibility tree, so the spoken contract is pinned in the source: the title is
+    /// always a header (with or without a description) and a host glyph mark stays decorative.
+    func testStatePanelTitleStaysAHeaderAndTheMarkStaysHidden() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let source = try String(contentsOf: root.appendingPathComponent("Sources/CieoUI/Organisms/StatePanel.swift"), encoding: .utf8)
+        XCTAssertTrue(source.contains("Heading(title, detail: detail, level: .title)\n"))
+        XCTAssertTrue(source.contains("InlineGlyph { icons(icon) }.font(typography.prominentGlyph).accessibilityHidden(true)"))
+    }
+
     // MARK: TaskPanel
 
     @MainActor

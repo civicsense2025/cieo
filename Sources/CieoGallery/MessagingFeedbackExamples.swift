@@ -39,6 +39,14 @@ struct MessagingFeedbackExamples: View {
                 Button("Add reader") { readers = readers % people.count + 1 }
                 UnreadDivider(count: 3)
             }
+            Specimen(title: "Avatars") {
+                HStack {
+                    Avatar(name: "Earl Warren", size: .sm)
+                    Avatar(name: "Earl Warren")
+                    Avatar(name: "Ruth Bader Ginsburg", size: .points(56))
+                    Avatar(people[0], size: .points(56))
+                }
+            }
             Specimen(title: "Group avatars") {
                 HStack { ForEach([1, 2, 3, 4, 6], id: \.self) { GroupAvatar(people: Array(people.prefix($0)), size: .lg) } }
             }

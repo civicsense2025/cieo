@@ -1,4 +1,4 @@
-import CieoUI
+@testable import CieoUI
 import SwiftUI
 import XCTest
 
@@ -89,6 +89,44 @@ final class EngagementTests: XCTestCase {
         for url in ["javascript:alert(1)", "data:text/html,hi", "ftp://x.com", "/relative", "", "not a url"] {
             XCTAssertFalse(ShareButton.isShareableURL(url), url)
         }
+    }
+
+    func testIconOnlyShareKeepsTheLinkGuard() {
+        XCTAssertEqual(ShareButton(urlString: "https://example.com/p/1", display: .iconOnly).url?.absoluteString,
+                       "https://example.com/p/1")
+        for url in ["javascript:alert(1)", "data:text/html,hi", "ftp://x.com", "/relative", ""] {
+            XCTAssertNil(ShareButton(urlString: url, display: .iconOnly).url, url)
+        }
+        XCTAssertNil(ShareButton(nil, display: .iconOnly).url)
+        XCTAssertEqual(ShareButton(urlString: "https://example.com").display, .labeled, "labelled stays the default")
+    }
+
+    @MainActor
+    func testIconOnlyShareHasAFullTouchTargetFromTheHost() throws {
+        for link in ["https://example.com", "javascript:alert(1)"] {
+            let image = try XCTUnwrap(ImageRenderer(content: ShareButton(urlString: link, display: .iconOnly)
+                .environment(\.componentMetrics, ComponentMetrics(touchTarget: 90)).fixedSize()).cgImage)
+            XCTAssertGreaterThanOrEqual(image.height, 90, link)
+            XCTAssertGreaterThanOrEqual(image.width, 90, link)
+        }
+    }
+
+    @MainActor
+    func testIconOnlyShareDrawsOnlyTheGlyphNotTheWord() throws {
+        func width(_ display: ShareButton.Display) throws -> Int {
+            try XCTUnwrap(ImageRenderer(content: ShareButton(urlString: "https://example.com", label: "Share this story",
+                                                             display: display).fixedSize()).cgImage).width
+        }
+        XCTAssertLessThan(try width(.iconOnly), try width(.labeled))
+    }
+
+    /// `swift test` has no accessibility tree, so the spoken contract is pinned in the source: the glyph is
+    /// hidden and the icon-only control speaks the label.
+    func testIconOnlyShareSpeaksItsLabel() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let source = try String(contentsOf: root.appendingPathComponent("Sources/CieoUI/Atoms/ShareButton.swift"), encoding: .utf8)
+        XCTAssertTrue(source.contains("InlineGlyph { icons(.share) }.accessibilityHidden(true)"))
+        XCTAssertTrue(source.contains("control.buttonStyle(.plain)\n                .accessibilityLabel(Text(label))"))
     }
 
     // MARK: Rating

@@ -78,7 +78,7 @@ public struct AnnotationPin: View {
                 .font(typography.glyph)
                 .foregroundStyle(textColor)
                 .lineLimit(1)
-                .minimumScaleFactor(PersonFace.shrinkLimit)
+                .minimumScaleFactor(Avatar.shrinkLimit)
                 .frame(width: size.width, height: size.width)
         }
         .frame(width: size.width, height: size.height)

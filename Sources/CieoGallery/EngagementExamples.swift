@@ -30,6 +30,7 @@ struct EngagementExamples: View {
                     CountButton("Reply", count: 12, unit: "replies") { Image(systemName: "bubble.left") }
                     NotifyToggle(isOn: $notify)
                     ShareButton(urlString: "https://example.com/post/1", subject: "A post")
+                    ShareButton(urlString: "https://example.com/post/1", subject: "A post", display: .iconOnly)
                 }
             }
             Specimen(title: "Follow and rate") {

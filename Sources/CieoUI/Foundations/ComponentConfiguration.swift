@@ -35,6 +35,8 @@ public struct ComponentTypography {
     // MARK: - Social and audio
     /// The smallest readable text, such as a count inside a ring.
     public var caption: Font
+    /// A glyph beside the smallest text, such as a count badge's mark or a caption's icon.
+    public var smallGlyph: Font
 
     public init(action: Font = .body.weight(.semibold), selection: Font = .body,
                 field: Font = .body, fieldLabel: Font = .headline,
@@ -44,7 +46,7 @@ public struct ComponentTypography {
                 detail: Font = .subheadline, strongDetail: Font = .subheadline.weight(.bold), reading: Font = .subheadline,
                 glyph: Font = .footnote.weight(.semibold), prominentGlyph: Font = .title3,
                 value: Font = .headline.monospacedDigit(), marker: Font = .headline.weight(.black),
-                caption: Font = .caption2.weight(.semibold)) {
+                caption: Font = .caption2.weight(.semibold), smallGlyph: Font = .caption2.weight(.semibold)) {
         self.action = action; self.selection = selection
         self.field = field; self.fieldLabel = fieldLabel
         self.title = title; self.subtitle = subtitle
@@ -55,15 +57,18 @@ public struct ComponentTypography {
         self.glyph = glyph; self.prominentGlyph = prominentGlyph
         self.value = value; self.marker = marker
         self.caption = caption
+        self.smallGlyph = smallGlyph
     }
 }
 
 /// Validated host geometry; controls retain a 44-point target floor.
-/// Spacing is a scale (`tight` 4, `compact` 8, `medium` 12, `standard` 16, `loose` 20, `section` 24) so
+/// Spacing is a scale (`tight` 4, `compact` 8, `snug` 10, `medium` 12, `standard` 16, `loose` 20, `section` 24) so
 /// components choose a step, never a number.
 public struct ComponentMetrics {
     public let tight: CGFloat
     public let compact: CGFloat
+    /// The step between compact and medium: the inside of a pill or chip, or a tight list's row gap.
+    public let snug: CGFloat
     public let medium: CGFloat
     public let standard: CGFloat
     public let loose: CGFloat
@@ -91,13 +96,14 @@ public struct ComponentMetrics {
     /// A link card's square thumbnail.
     public let thumbnail: CGFloat
 
-    public init(tight: CGFloat = 4, compact: CGFloat = 8, medium: CGFloat = 12, standard: CGFloat = 16,
+    public init(tight: CGFloat = 4, compact: CGFloat = 8, snug: CGFloat = 10, medium: CGFloat = 12, standard: CGFloat = 16,
                 loose: CGFloat = 20, section: CGFloat = 24, corner: CGFloat = 12, touchTarget: CGFloat = 44,
                 bar: CGFloat = 8, thinBar: CGFloat = 6, hairline: CGFloat = 1, glyphScale: CGFloat = 0.8,
                 avatar: CGFloat = 36, avatarSmall: CGFloat = 24, rail: CGFloat = 2, ring: CGFloat = 24,
                 thumbnail: CGFloat = 88) {
         self.tight = Self.dimension(tight, fallback: 4)
         self.compact = Self.dimension(compact, fallback: 8)
+        self.snug = Self.dimension(snug, fallback: 10)
         self.medium = Self.dimension(medium, fallback: 12)
         self.standard = Self.dimension(standard, fallback: 16)
         self.loose = Self.dimension(loose, fallback: 20)

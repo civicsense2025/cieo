@@ -8,6 +8,7 @@ struct MoleculeExamples: View {
     @State private var saved = false
     @State private var expanded = false
     @State private var notifications = true
+    @State private var filter = "All"
     private let names = ["Button", "Progress ring", "Selection chip", "Disclosure"]
 
     var body: some View {
@@ -20,12 +21,30 @@ struct MoleculeExamples: View {
                 }
                 if saved { Notice("Saved locally", detail: "This example stays on this screen.", symbol: "checkmark.circle.fill") }
             }
+            Specimen(title: "Section headers") {
+                SectionHeader("Top stories", action: {})
+                SectionHeader("Bills", value: Text(verbatim: "12"))
+                SectionHeader("Sources") { Link("Open all", destination: URL(string: "https://example.com")!) }
+            }
+            Specimen(title: "Single-select filters") {
+                SegmentedControl("Filter activity", selection: $filter, options: [
+                    .init(verbatim: "All", value: "All"), .init(verbatim: "Bills", value: "Bills", count: 12),
+                    .init(verbatim: "Votes", value: "Votes", count: 3), .init(verbatim: "Committee hearings", value: "Hearings"),
+                    .init(verbatim: "Nominations", value: "Nominations", count: 1),
+                ])
+                Text("Showing: \(filter)")
+            }
             Specimen(title: "Search & preferences") {
                 SearchField("Search components", text: $query)
                 ForEach(names.filter { query.isEmpty || $0.localizedCaseInsensitiveContains(query) }, id: \.self) { Text($0) }
                 PreferenceRow("Notifications", detail: "A local toggle. No permission request.", isOn: $notifications)
                 ExpandablePanel("How this disclosure works", isExpanded: $expanded) {
                     Text("This content expands with a Cieo spring.")
+                }
+                ExpandablePanel(Text(verbatim: "Committee hearings")) {
+                    Text("This panel keeps its own open state and shows a count on its title row.")
+                } accessory: {
+                    Text(verbatim: "3")
                 }
             }
         }
