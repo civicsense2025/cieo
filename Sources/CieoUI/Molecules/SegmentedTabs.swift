@@ -64,6 +64,7 @@ public struct SegmentedTabs<Value: Hashable>: View {
             row
             ScrollView(.horizontal, showsIndicators: false) { row }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
         .overlay(alignment: .bottom) {
             Rectangle().fill(theme.border).frame(height: metrics.hairline)
         }
