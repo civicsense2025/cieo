@@ -101,6 +101,50 @@ final class SlotsMoleculeRowsTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(try height(panel), 90)
     }
 
+    @MainActor
+    func testExpandablePanelCanOwnItsOpenState() throws {
+        let closed = try height(ExpandablePanel("How this works") { Text("Body").frame(height: 120) })
+        let open = try height(ExpandablePanel("How this works", initiallyExpanded: true) { Text("Body").frame(height: 120) })
+        XCTAssertGreaterThan(open, closed, "an owned panel starts open when asked")
+        let bound = try height(ExpandablePanel("How this works", isExpanded: .constant(true)) { Text("Body").frame(height: 120) })
+        XCTAssertEqual(open, bound, "owned and bound panels draw the same open state")
+    }
+
+    @MainActor
+    func testExpandablePanelTakesVerbatimAndTextTitles() throws {
+        let fromDatabase: String = "Senate votes, 2024"
+        let verbatim = try height(ExpandablePanel(fromDatabase, isExpanded: .constant(false)) { Text("Body") })
+        let text = try height(ExpandablePanel(Text(verbatim: fromDatabase)) { Text("Body") })
+        let key = try height(ExpandablePanel("Senate votes, 2024", isExpanded: .constant(false)) { Text("Body") })
+        XCTAssertEqual(verbatim, key)
+        XCTAssertEqual(text, key)
+    }
+
+    @MainActor
+    func testExpandablePanelAccessoryDrawsInTheHostDetailType() throws {
+        func panel(_ typography: ComponentTypography) -> some View {
+            ExpandablePanel(Text(verbatim: "Votes")) { Text("Body") } accessory: { Text(verbatim: "12") }
+                .environment(\.componentTypography, typography)
+                .environment(\.componentMetrics, ComponentMetrics(touchTarget: 20))
+        }
+        XCTAssertGreaterThan(try height(panel(ComponentTypography(detail: .system(size: 90)))),
+                             try height(panel(ComponentTypography())))
+        let red = ExpandablePanel(Text(verbatim: "Votes"), isExpanded: .constant(false)) { Text("Body") } accessory: {
+            Self.red.frame(width: 20, height: 20)
+        }
+        XCTAssertTrue(ComponentIconTests.containsRed(try image(red)), "the accessory draws on the title row")
+    }
+
+    /// `swift test` has no accessibility tree, so the spoken contract is pinned in the source: a string title
+    /// is never a localization key, and the title row (title plus accessory) reads as one element.
+    func testExpandablePanelTitleIsVerbatimAndTheRowReadsAsOne() throws {
+        let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        let source = try String(contentsOf: root.appendingPathComponent("Sources/CieoUI/Molecules/ExpandablePanel.swift"), encoding: .utf8)
+        XCTAssertTrue(source.contains("Text(verbatim: String(title))"))
+        XCTAssertFalse(source.contains("LocalizedStringKey(title"), "a string is never promoted to a key")
+        XCTAssertTrue(source.contains(".frame(minHeight: metrics.touchTarget)\n        .accessibilityElement(children: .combine)"))
+    }
+
     // MARK: LabeledField
 
     @MainActor

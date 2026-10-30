@@ -41,6 +41,11 @@ struct MoleculeExamples: View {
                 ExpandablePanel("How this disclosure works", isExpanded: $expanded) {
                     Text("This content expands with a Cieo spring.")
                 }
+                ExpandablePanel(Text(verbatim: "Committee hearings")) {
+                    Text("This panel keeps its own open state and shows a count on its title row.")
+                } accessory: {
+                    Text(verbatim: "3")
+                }
             }
         }
         .onChange(of: title) { saved = false }
