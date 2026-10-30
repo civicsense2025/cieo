@@ -102,4 +102,10 @@ final class AtomTests: XCTestCase {
         CGImageDestinationAddImage(destination, image, nil)
         XCTAssertTrue(CGImageDestinationFinalize(destination))
     }
+
+    func testSegmentedTabsNeverShowNothingChosen() {
+        XCTAssertEqual(SegmentedTabs<String>.selected(in: ["a", "b"], matching: "b"), "b")
+        XCTAssertEqual(SegmentedTabs<String>.selected(in: ["a", "b"], matching: "z"), "a", "a stale selection falls back to the first tab")
+        XCTAssertNil(SegmentedTabs<String>.selected(in: [], matching: "a"))
+    }
 }
