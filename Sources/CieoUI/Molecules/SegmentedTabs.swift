@@ -37,29 +37,32 @@ public struct SegmentedTabs<Value: Hashable>: View {
 
     public var body: some View {
         let current = Self.selected(in: tabs.map(\.value), matching: selection)
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: metrics.compact) {
-                ForEach(tabs) { tab in
-                    let isSelected = tab.value == current
-                    Button { selection = tab.value } label: {
-                        tab.title
-                            .font(typography.selection)
-                            .foregroundStyle(isSelected ? theme.accent : theme.secondary)
-                            .padding(.horizontal, metrics.standard)
-                            .frame(minHeight: metrics.touchTarget)
-                            .overlay(alignment: .bottom) {
-                                Rectangle().fill(theme.accent)
-                                    .frame(height: metrics.compact / 2)
-                                    .opacity(isSelected ? 1 : 0)
-                            }
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .motionAnimation(.snap, value: isSelected)
-                    .accessibilityValue(tab.accessibilityValue ?? Text(verbatim: ""))
-                    .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+        let row = HStack(spacing: metrics.compact) {
+            ForEach(tabs) { tab in
+                let isSelected = tab.value == current
+                Button { selection = tab.value } label: {
+                    tab.title
+                        .font(typography.selection)
+                        .foregroundStyle(isSelected ? theme.accent : theme.secondary)
+                        .padding(.horizontal, metrics.standard)
+                        .frame(minHeight: metrics.touchTarget)
+                        .overlay(alignment: .bottom) {
+                            Rectangle().fill(theme.accent)
+                                .frame(height: metrics.compact / 2)
+                                .opacity(isSelected ? 1 : 0)
+                        }
+                        .contentShape(Rectangle())
                 }
+                .buttonStyle(.plain)
+                .motionAnimation(.snap, value: isSelected)
+                .accessibilityValue(tab.accessibilityValue ?? Text(verbatim: ""))
+                .accessibilityAddTraits(isSelected ? [.isSelected] : [])
             }
+        }
+        // The row sits still when it fits and scrolls sideways only when it does not.
+        ViewThatFits(in: .horizontal) {
+            row
+            ScrollView(.horizontal, showsIndicators: false) { row }
         }
         .overlay(alignment: .bottom) {
             Rectangle().fill(theme.border).frame(height: metrics.hairline)
