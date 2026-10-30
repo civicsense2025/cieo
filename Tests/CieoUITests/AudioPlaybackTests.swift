@@ -582,6 +582,75 @@ final class AudioPlaybackTests: XCTestCase {
         }
     }
 
+    func testConcurrentSessionOwnersStayActiveUntilTheLastLeaseEnds() throws {
+        let backend = FakeSystemAudioSessionBackend()
+        let manager = SystemAudioSessionManager(backend: backend)
+        let owners = (0..<512).map { _ in UUID() }
+        let failuresLock = NSLock()
+        var failures = 0
+
+        DispatchQueue.concurrentPerform(iterations: owners.count) { index in
+            do { try manager.activate(.playback, owner: owners[index]) }
+            catch { failuresLock.lock(); failures += 1; failuresLock.unlock() }
+        }
+        XCTAssertEqual(failures, 0)
+        XCTAssertEqual(backend.activeValues, [true], "simultaneous owners share one activation")
+
+        DispatchQueue.concurrentPerform(iterations: owners.count - 1) { index in
+            do { try manager.deactivate(owner: owners[index]) }
+            catch { failuresLock.lock(); failures += 1; failuresLock.unlock() }
+        }
+        XCTAssertEqual(failures, 0)
+        XCTAssertTrue(backend.isActive, "one remaining owner keeps the session active")
+        try manager.deactivate(owner: owners[owners.count - 1])
+        XCTAssertEqual(backend.activeValues, [true, false])
+        XCTAssertFalse(backend.isActive)
+    }
+
+    @MainActor
+    func testPauseReleaseFailureIsRepairedByTheManagerAfterPlayerTeardown() {
+        let backend = FakeSystemAudioSessionBackend()
+        let scheduler = ManualAudioSessionRetryScheduler()
+        let manager = SystemAudioSessionManager(backend: backend, retryScheduler: scheduler)
+        let model = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"),
+                                       coordinator: AudioPlaybackCoordinator(), sessionManager: manager)
+        model.play()
+        XCTAssertEqual(model.state, .playing)
+        backend.failNextDeactivation()
+
+        model.pause()
+        XCTAssertEqual(model.state, .ready, "a failed release does not trap the player in playing")
+        XCTAssertTrue(backend.isActive)
+        model.teardown()
+
+        XCTAssertEqual(scheduler.pendingCount, 1, "tearing down the player keeps the manager's repair")
+        XCTAssertTrue(scheduler.runNext())
+        XCTAssertFalse(backend.isActive)
+        XCTAssertEqual(backend.activeValues, [true, false, false])
+        XCTAssertEqual(manager.reconciliationStatus, .ready)
+    }
+
+    @MainActor
+    func testFinalTeardownReleaseFailureIsRepairedAfterThePlayerIsGone() {
+        let backend = FakeSystemAudioSessionBackend()
+        let scheduler = ManualAudioSessionRetryScheduler()
+        let manager = SystemAudioSessionManager(backend: backend, retryScheduler: scheduler)
+        var model: AudioPlaybackModel? = AudioPlaybackModel(url: URL(fileURLWithPath: "/dev/null"),
+                                                            coordinator: AudioPlaybackCoordinator(), sessionManager: manager)
+        model?.play()
+        backend.failDeactivations(2)
+
+        model?.teardown()
+        model = nil
+
+        XCTAssertTrue(scheduler.runNext())
+        XCTAssertTrue(scheduler.runNext())
+        XCTAssertFalse(backend.isActive, "the manager releases audio after the player is gone")
+        XCTAssertEqual(backend.deactivationAttempts, 3, "the original attempt plus two bounded retries")
+        XCTAssertEqual(manager.reconciliationStatus, .ready)
+        XCTAssertEqual(scheduler.pendingCount, 0)
+    }
+
     func testPlaybackCanEndBeforeRecordingWithoutDeactivatingTheSession() throws {
         let backend = FakeSystemAudioSessionBackend()
         let manager = SystemAudioSessionManager(backend: backend)
@@ -685,6 +754,7 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertEqual(backend.categories, [.playback, .playAndRecord, .playback])
         XCTAssertEqual(manager.reconciliationStatus, .ready)
         XCTAssertEqual(scheduler.pendingCount, 0)
+        XCTAssertEqual(backend.activeValues, [true], "repairing the category for remaining playback never deactivates it")
         try manager.deactivate(owner: playbackOwner)
     }
 
