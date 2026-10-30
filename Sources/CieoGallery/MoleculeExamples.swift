@@ -21,6 +21,11 @@ struct MoleculeExamples: View {
                 }
                 if saved { Notice("Saved locally", detail: "This example stays on this screen.", symbol: "checkmark.circle.fill") }
             }
+            Specimen(title: "Section headers") {
+                SectionHeader("Top stories", action: {})
+                SectionHeader("Bills", value: Text(verbatim: "12"))
+                SectionHeader("Sources") { Link("Open all", destination: URL(string: "https://example.com")!) }
+            }
             Specimen(title: "Single-select filters") {
                 SegmentedControl("Filter activity", selection: $filter, options: [
                     .init(verbatim: "All", value: "All"), .init(verbatim: "Bills", value: "Bills", count: 12),
