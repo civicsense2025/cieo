@@ -1253,6 +1253,9 @@ final class AudioCaptureTests: XCTestCase {
         XCTAssertEqual(backend.deactivationAttempts, 3)
         XCTAssertEqual(recorder.stopCount, 1)
         XCTAssertFalse(FileManager.default.fileExists(atPath: url.path))
+        let meterUpdatesAtRelease = recorder.meterUpdateCount
+        try await Task.sleep(for: .milliseconds(120))
+        XCTAssertEqual(recorder.meterUpdateCount, meterUpdatesAtRelease, "the level timer stops with the released model")
     }
 
     @MainActor
