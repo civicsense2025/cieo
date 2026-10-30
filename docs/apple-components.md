@@ -124,9 +124,11 @@ Components choose a role and never a value. A host changes one value at the root
 
 | Slot | Where | Roles |
 | --- | --- | --- |
-| Colour | `componentTheme` | accent, onAccent, tint, surface, foreground, secondary, subtle, border, track, block, onBlock, onBlockSecondary, danger |
-| Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, reading, glyph, prominentGlyph, value, marker, plus the control roles action, selection, field, fieldLabel |
-| Spacing and strokes | `componentMetrics` | tight 4, compact 8, medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
+| Colour | `componentTheme` | accent, onAccent, tint, surface, foreground, secondary, subtle, border, track, block, onBlock, onBlockSecondary, danger, success, warning; background (the page) and quietBackground (a grouped ground), both defaulting to the platform's system colours |
+| Elevation | `componentTheme.floatingShadow` | one `ComponentShadow` (colour, radius, x, y) cast by `.floatingShadow()` under anything that floats; `ComponentShadow.none` keeps a host flat |
+| Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, reading, glyph, prominentGlyph, value, marker, caption, smallGlyph (a glyph beside the smallest text), plus the control roles action, selection, field, fieldLabel |
+| Spacing and strokes | `componentMetrics` | tight 4, compact 8, snug 10 (the inside of a pill or chip), medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
+| Press feedback | `controlAppearance` | pressedOpacity and disabledOpacity for controls that take no `appearance:` of their own, such as SegmentedControl |
 | Glyphs | `componentIcons` | disclosure, info, check, previous, next, search, clear, error, selected, unselected (the host closure runs on the main actor, so a glyph may hold `@ScaledMetric` state) |
 | Display type | `displayTypography` | display, title, subtitle and three numeral sizes |
 
