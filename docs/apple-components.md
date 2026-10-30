@@ -70,6 +70,8 @@ platform keyboard/content configuration.
 
 [ActionButton](../Sources/CieoUI/Atoms/ActionButton.swift) accepts emphasis,
 appearance, readyAccessibilityValue and busyAccessibilityValue.
+[SegmentedTabs](../Sources/CieoUI/Molecules/SegmentedTabs.swift) switches between views of one screen: an accent underline marks the chosen tab over a single hairline, the row scrolls sideways instead of cutting a title, and a bound value that is not one of the tabs shows the first. Each tab can carry a spoken value such as a count.
+
 [SelectionChip](../Sources/CieoUI/Atoms/SelectionChip.swift) accepts selected and
 unselected accessibility values; [SearchField](../Sources/CieoUI/Molecules/SearchField.swift)
 accepts clearAccessibilityLabel. These `LocalizedStringKey` defaults remain
