@@ -146,6 +146,7 @@ Content goes in through `@ViewBuilder` slots or `Text`, never through styling fl
 - IndexRow, NumberedSteps, InfoButton and SectionHeader read every style from the slots.
 - ActionRow, PreferenceRow, Notice, ExpandablePanel, LabeledField and SearchField read every style from the slots. Setting rows and notices label their control, so their headings pass `isHeader: false`. A Notice can carry one action (`actionTitle:action:`, such as "Try again" or "Undo") under its text, in the `strongBody` type and accent with a full touch target; VoiceOver then reads the text as one element and the action as its own button. Notices without an action are unchanged.
 - ContentSection, StatePanel, TaskPanel, Pathway and ContentRail read every style from the slots.
+- `StatePanel(title, detail:, symbol:/icon:) { actions }` takes its description, mark and actions as optional parts, so `StatePanel("No saved stories yet")` is a whole empty state. Without a mark the title leads; the title is always read as a header.
 - ProgressRing, SegmentedProgress, BigNumber, HighlightSurface and SymbolMark read every style from the slots.
 
 `scripts/check-swift-literals.sh` fails on a font, glyph, colour, spacing step, stroke width or opacity written inside a component. Foundations hold the defaults and are exempt. A line that truly needs a literal says why with `// literal-ok: <reason>`. CI runs it in the `swift` job, and also proves it still catches every line in `scripts/fixtures/hard-coded-styling.swift.fixture`.

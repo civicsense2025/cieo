@@ -28,6 +28,9 @@ struct PatternExamples: View {
                     state = .ready
                 }
             }
+            Specimen(title: "A quiet empty state") {
+                StatePanel("No saved stories yet")
+            }
             Specimen(title: "Reusable section & row") {
                 ContentSection("Reading list", detail: "A composition slot for your own content.") {
                     ActionRow("Sample article", detail: "Five minutes", actionTitle: saved ? "Unsave" : "Save") { saved.toggle() }
