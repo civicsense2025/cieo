@@ -8,11 +8,11 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
     const rows = N.map((n,i) => { const r = document.createElement('button'); r.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-radius:10px;background:var(--card);padding:11px 13px;cursor:pointer;overflow:hidden';
       r.innerHTML = `<i class="fl" style="position:absolute;left:0;top:0;bottom:0;background:var(--raised);width:0"></i><i class="tint" style="position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in oklab,var(--accent-tint) 70%, transparent)"></i><span style="position:relative;flex:1;font-size:14px;line-height:1.5">${n}</span><b class="tt" style="position:relative;font-size:13px;font-variant-numeric:tabular-nums"></b><span class="mk" style="position:relative;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;padding:0;font-size:12px;color:var(--success)"></span>`;
       r.setAttribute('aria-pressed', 'false'); box.appendChild(r);
-      r.onclick = () => { if (mine === i) mine = -1; else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
+      r.onclick = () => { if (mine === i){ votes[i]--; mine = -1; } else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
       return { r, tt:$(r,'.tt'), fl:$(r,'.fl'), tint:$(r,'.tint'), mk:$(r,'.mk'), bar:new Track(0), lead:new Track(0), dg:new Digits($(r,'.tt'), 2) }; });
     rows.forEach(x => { const a = document.createElement('span'); a.className = 'layer'; a.textContent = ''; x.mk.appendChild(a); });
-    function sync(inst){ const tot = votes.reduce((a,b) => a+b, 0), mx = Math.max(...votes), li = votes.indexOf(mx), t0 = now();
-      rows.forEach((x,i) => { const p = votes[i]/Math.max(1, tot);
+    function sync(inst){ const { shares, leader: li } = pollTally(votes), t0 = now();
+      rows.forEach((x,i) => { const p = shares[i]/100;
         if (inst || REDUCE){ x.bar.jump(p); x.lead.jump(i === li ? 1 : 0); x.dg.set(String(votes[i]).padStart(2,' '), true); }
         else { x.bar.set(p, S.soft, t0 + staggerAt(i, .05)); x.lead.set(i === li ? 1 : 0, S.soft, t0); x.dg.set(String(votes[i]).padStart(2,' ')); }
         x.mk.firstChild.textContent = mine === i ? '✓' : ''; x.mk.style.borderColor = mine === i ? 'var(--success)' : 'var(--line)';

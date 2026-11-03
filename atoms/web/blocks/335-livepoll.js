@@ -14,8 +14,8 @@ atom({ id:'livepoll', cat:'Forms', name:'Live poll', block:'poll, vote', fam:['M
     let voted = -1, total = 0;
     const paint = () => cap.textContent = voted < 0 ? `Tap to vote · ${total} of 128 in` : `Vote counted · ${total} of 128 in · settled`;
     rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0 && !ch.checked) return;
-      voted = i; total++; const t0 = now();
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 2 : 0);
+      if (voted < 0) total++; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 2 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j];
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
         else { x.v.set(pc, S.base, t0 + staggerAt(j, .06)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .06)); x.c.set(j === i ? 1 : 0, S.base, t0); }
         x.b.style.cursor = ch.checked ? 'pointer' : 'default'; });

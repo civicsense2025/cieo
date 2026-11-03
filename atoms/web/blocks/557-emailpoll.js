@@ -15,8 +15,8 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
       box.appendChild(d);
       return { d, bar: d.querySelector('.bar'), ck: d.querySelector('.ck'), pc: d.querySelector('.pc'), w: new Track(0), f: new Track(0) };
     });
-    const paint = (t, instant) => { const sum = opts.reduce((a, o) => a + o[1], 0);
-      rows.forEach((r, i) => { const p = opts[i][1] / sum;
+    const paint = (t, instant) => { const { shares } = pollTally(opts.map(o => o[1]));
+      rows.forEach((r, i) => { const p = shares[i] / 100;
         r.w.set(p*100, S.base, t + staggerAt(i, .06)); r.f.set(1, S.lazy, t + .15 + staggerAt(i, .06));
         if (instant){ r.w.jump(p*100); r.f.jump(1); }
         r.ck.textContent = i === mine ? '✓' : '';
@@ -28,7 +28,7 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
       if (mine === i) return;
       if (mine >= 0 && !chg.checked) return;
       if (mine >= 0) opts[mine][1]--;
-      opts[i][1]++; mine = i; total++;
+      if (mine < 0) total++; opts[i][1]++; mine = i;
       tot.set(String(total)); paint(t); });
     paint(now() + .15);
     return t => { rows.forEach(r => { r.bar.style.width = Math.max(0, r.w.at(t)).toFixed(2) + '%';

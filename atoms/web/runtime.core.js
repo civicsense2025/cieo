@@ -6,6 +6,27 @@ const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
 // Per-item delay: the gap between items, capped so a whole group lands within STAGGER_MAX; none under reduced motion.
 const staggerAt = (i, gap = .04) => REDUCE ? 0 : Math.min(i*gap, STAGGER_MAX);
+// Segmented controls: one pressed state and one keyboard model for every recipe. Marks the current button
+// aria-pressed, and moves with Arrow keys, Home and End (wrapping), calling pick(i) like a click would.
+function segmented(btns, pick){
+  const mark = cur => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === cur)));
+  btns.forEach((b, i) => b.addEventListener('keydown', e => {
+    const n = btns.length, to = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? (i + 1) % n : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? (i - 1 + n) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+    if (to < 0) return; e.preventDefault(); btns[to].focus(); pick(to);
+  }));
+  return { mark };
+}
+// Poll tally, shared by every poll recipe: whole-number shares that always sum to 100 (largest remainder,
+// ties to the earlier option), the total, and the leader (null on a tie or before any vote).
+function pollTally(counts){
+  const total = counts.reduce((a, b) => a + b, 0);
+  if (!total) return { total, shares: counts.map(() => 0), leader: null };
+  const raw = counts.map(c => c*100/total), shares = raw.map(Math.floor);
+  const left = 100 - shares.reduce((a, b) => a + b, 0);
+  raw.map((r, i) => [r - shares[i], i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).slice(0, left).forEach(([, i]) => shares[i]++);
+  const max = Math.max(...counts);
+  return { total, shares, leader: counts.filter(c => c === max).length === 1 ? counts.indexOf(max) : null };
+}
 const clock = { t:0, scale:1, last:performance.now() };
 const now = () => clock.t;
 const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));

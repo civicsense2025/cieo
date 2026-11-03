@@ -19,7 +19,8 @@ atom({ id:'segswitch', cat:'Views', name:'Segmented view switch', block:'segment
     const place = i => { const b = btns[i]; return [b.offsetLeft + 2, b.offsetLeft + b.offsetWidth - 2]; };
     const go = i => { if (i === cur){ swH.cur = -1; swH.to(i); swR.cur = -1; swR.to(i, now() + .05); return; } cur = i; const [a, b] = place(i); e.go(a, b);
       swH.to(i); swR.to(i, now() + .05); h.set(V[i].H); if (rc.checked) dg.set(V[i].c); else dg.set(V[i].c, true); paint(); };
-    const paint = () => btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; });
+    const seg = segmented(btns, i => go(i));
+    const paint = () => { seg.mark(cur); btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; }); };
     btns.forEach((b, i) => b.onclick = () => go(i));
     requestAnimationFrame(() => { const [a, b] = place(0); e.jump(a, b); paint(); });
     dg.set('12', true); paint();

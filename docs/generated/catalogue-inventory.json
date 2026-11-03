@@ -122,7 +122,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/416-addressform.js",
-          "sha256": "bf04a9230967d12700e98e1b2a968ddaf10841bcb86d10decc5bba781bf2cf49",
+          "sha256": "d0c9eacd50f50649804d2bd1f15f722ae4bab5c0b439c2538899666406ab9e90",
           "artifactKind": "recipe"
         }
       ]
@@ -1964,7 +1964,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/275-chatpoll.js",
-          "sha256": "7a6ccf0cfbe9049341b9ecb878636d5fd7c2c089ff3537247e5dc0bebe1e7be7",
+          "sha256": "d53be84f79f0797c4e00dc16e48bae1b3013d8ac8d602afb6cdfb5778c8562a3",
           "artifactKind": "recipe"
         }
       ]
@@ -3653,7 +3653,7 @@
           "symbol": null,
           "category": "Email",
           "path": "atoms/web/blocks/557-emailpoll.js",
-          "sha256": "c48eddcdf1d2389a1463f5b6bdaaf1f97599f112358daa673f28d3b3fc45ed4d",
+          "sha256": "59c93d30a8b96b39a87b60099497acfb857ae812c97a7330dfa623c08ad043b9",
           "artifactKind": "recipe"
         }
       ]
@@ -5535,7 +5535,7 @@
           "symbol": null,
           "category": "Scheduling",
           "path": "atoms/web/blocks/292-grouppoll.js",
-          "sha256": "2a6ff9231a088d28334f808a1ec28428b55a2502ae1386b075704293d762d62b",
+          "sha256": "a6ef227e78952a9c9ef356bfd46450e1f2155d06b7e8d469496ea4d9157b57af",
           "artifactKind": "recipe"
         }
       ]
@@ -6785,7 +6785,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/335-livepoll.js",
-          "sha256": "0723a25e906d95cd685c13b24477a14e8a7e6fd12f9f7e9774a30d0c3b03c428",
+          "sha256": "d58ded8c710612ad239cb858ba9238b62e8617fcaca8371196f38f43d34472bd",
           "artifactKind": "recipe"
         }
       ]
@@ -8299,7 +8299,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/090-phone.js",
-          "sha256": "d581d08f65f4198949f3bd8d60eead8eb13ac76c95dccf87f31404871408f602",
+          "sha256": "7639b7858d68d5dc0eab4b7a7544654b681dd2e68dee4442cf1908cc2c51714b",
           "artifactKind": "recipe"
         }
       ]
@@ -8499,7 +8499,7 @@
           "symbol": null,
           "category": "Interactive",
           "path": "atoms/web/blocks/026-poll.js",
-          "sha256": "0befc975460fcfb1ef41ddf0cfd618c2039ad283db8021a93070a4c10093dd5b",
+          "sha256": "37a13ff1bb0ccdf8940209489d5d59af1f4c0db3ccbba5236a0eac29a971f38f",
           "artifactKind": "recipe"
         }
       ]
@@ -8524,7 +8524,7 @@
           "symbol": null,
           "category": "Newsletter",
           "path": "atoms/web/blocks/473-pollblock.js",
-          "sha256": "690279d0ad4fe363929b5791cd9d6bc98c2c000d1c3826b31f3d3117de5441e4",
+          "sha256": "b8578806c934ffc273c6eaae29a7a8a13705317d63ab6cbcd1322c9b12df2f15",
           "artifactKind": "recipe"
         }
       ]
@@ -10124,7 +10124,7 @@
           "symbol": null,
           "category": "Views",
           "path": "atoms/web/blocks/387-segswitch.js",
-          "sha256": "94a269740e4eb9aab083bd1f87a6ca7eb4d382ba42196dc65ddf505f0b6cce18",
+          "sha256": "12aa0c96d2ad3d6d1653222a6b54aa88e7f79b102e3eb7f14ea9ff044defbf86",
           "artifactKind": "recipe"
         }
       ]
@@ -10424,7 +10424,7 @@
           "symbol": null,
           "category": "Admin",
           "path": "atoms/web/blocks/041-sheet.js",
-          "sha256": "98e362667d101e02eb42e3e64304d7245df1b6a1cd67878b3c7db6380c5643ff",
+          "sha256": "2980aeb9d8983e8ddcab3792b3f9950a8b1ba743f50d0ed51a42b847b5443aa5",
           "artifactKind": "recipe"
         }
       ]
@@ -10781,7 +10781,7 @@
           "symbol": null,
           "category": "Newsletter",
           "path": "atoms/web/blocks/099-signupform.js",
-          "sha256": "825edc29837402612b96032bc2da5cce91d2bb01958aa30abaf628674beb1a66",
+          "sha256": "a25445626ad095f57eac4976033d77b4a90b32c80dc5609e867f9aabc146785c",
           "artifactKind": "recipe"
         }
       ]
@@ -12506,7 +12506,7 @@
           "symbol": null,
           "category": "Admin",
           "path": "atoms/web/blocks/039-toast.js",
-          "sha256": "42914de42af4618dbbf4a35071acb2747200b0263c5b09eaadb40b45f8967922",
+          "sha256": "7c7a3cea9121f7dee0afdff90525f3d80a3046f7044c03f79c059e92004e33be",
           "artifactKind": "recipe"
         }
       ]
@@ -12856,7 +12856,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/317-trippoll.js",
-          "sha256": "3d9528f22c41d8772fa4fecbeaa34072e9406712a7ca9d7370c36d0b0c3c3928",
+          "sha256": "6e2ff738804e91e96db8f5f1310cb9ea47a67df3244a7a95fb57b947ca0671ff",
           "artifactKind": "recipe"
         }
       ]
@@ -13806,7 +13806,7 @@
           "symbol": null,
           "category": "Email",
           "path": "atoms/web/blocks/116-undosend.js",
-          "sha256": "9416fca19f44dba3bc1d186218cf0370fb672617360a98a691dc76cee5366bc8",
+          "sha256": "29c231169d7b74824f5caa65e1e9c5ed322e19887cc92070d3776e7db1926569",
           "artifactKind": "recipe"
         }
       ]
@@ -13831,7 +13831,7 @@
           "symbol": null,
           "category": "Guidance",
           "path": "atoms/web/blocks/374-undotoast.js",
-          "sha256": "5d3f81cbd6c91a3088fe27e7ff63f29936ed1cae14fa9951da4663aa0ceb60e2",
+          "sha256": "51a0db99d59b1d0dfe98e51e162b23b45fee609b03803c19b9eb7aec1f0fa442",
           "artifactKind": "recipe"
         }
       ]

@@ -388,6 +388,27 @@ const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
 // Per-item delay: the gap between items, capped so a whole group lands within STAGGER_MAX; none under reduced motion.
 const staggerAt = (i, gap = .04) => REDUCE ? 0 : Math.min(i*gap, STAGGER_MAX);
+// Segmented controls: one pressed state and one keyboard model for every recipe. Marks the current button
+// aria-pressed, and moves with Arrow keys, Home and End (wrapping), calling pick(i) like a click would.
+function segmented(btns, pick){
+  const mark = cur => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === cur)));
+  btns.forEach((b, i) => b.addEventListener('keydown', e => {
+    const n = btns.length, to = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? (i + 1) % n : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? (i - 1 + n) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+    if (to < 0) return; e.preventDefault(); btns[to].focus(); pick(to);
+  }));
+  return { mark };
+}
+// Poll tally, shared by every poll recipe: whole-number shares that always sum to 100 (largest remainder,
+// ties to the earlier option), the total, and the leader (null on a tie or before any vote).
+function pollTally(counts){
+  const total = counts.reduce((a, b) => a + b, 0);
+  if (!total) return { total, shares: counts.map(() => 0), leader: null };
+  const raw = counts.map(c => c*100/total), shares = raw.map(Math.floor);
+  const left = 100 - shares.reduce((a, b) => a + b, 0);
+  raw.map((r, i) => [r - shares[i], i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).slice(0, left).forEach(([, i]) => shares[i]++);
+  const max = Math.max(...counts);
+  return { total, shares, leader: counts.filter(c => c === max).length === 1 ? counts.indexOf(max) : null };
+}
 const clock = { t:0, scale:1, last:performance.now() };
 const now = () => clock.t;
 const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
@@ -1116,8 +1137,8 @@ atom({ id:'poll', cat:'Interactive', name:'Poll', block:'poll', fam:['M','S'], t
       b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;background:var(--raised)"></i><span style="position:relative;display:flex;gap:8px;align-items:center"><svg class="ck" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg><span></span></span><span class="num small" style="position:relative"></span>`;
       $$(b,'span')[1].textContent = n; pl.appendChild(b); return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[2], v:new Track(0), o:new Track(0), c:new Track(0) }; });
     let voted = -1;
-    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now();
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 1 : 0); x.v.set(pc, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); x.b.style.cursor = 'default'; }); });
+    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 1 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j]; x.v.set(pc, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); x.b.style.cursor = 'default'; }); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0); x.o.set(0, S.snap); x.c.set(0); x.b.style.cursor = 'pointer'; }); };
     return t => rows.forEach(r => { const v = r.v.at(t), c = clamp(r.c.at(t)); r.fill.style.width = clamp(v/100)*100 + '%';
       r.pct.textContent = Math.round(v) + '%'; fade(r.pct, r.o.at(t), 0);
@@ -1452,7 +1473,7 @@ globalThis.__cieoRecipeFile="blocks/039-toast.js";
 
 
 atom({ id:'toast', cat:'Admin', name:'Toast stack', block:'Toast primitive', fam:['X','D'], tall:true,
-  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
+  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
   desc:'Success, warning and error toasts carry their status color on the icon and the action. New toasts push older ones back in depth. Drag one sideways 1:1; a long or fast swipe flings it out from release velocity, a short one springs home.',
   api:'x.release(x, vx, |x| > 100 || |vx| > 600 ? ±420 : 0)',
   init(st){
@@ -1536,13 +1557,15 @@ globalThis.__cieoRecipeFile="blocks/041-sheet.js";
 
 
 atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet primitive on phones. the admin uses the side sheet; see Admin kit', fam:['X','D'], tall:true,
-  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b>Pages</b><span class="small muted">Home · About · Journal · Contact</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px">Page settings</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh" style="position:absolute;left:0;right:0;bottom:0;height:200px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;cursor:grab"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col small" style="padding:0 16px;gap:10px"><b style="font-size:15px">Page settings</b><div class="row" style="justify-content:space-between"><span>Show in navigation</span><span class="muted">On</span></div><div class="row" style="justify-content:space-between"><span>Search indexing</span><span class="muted">Allowed</span></div><div class="row" style="justify-content:space-between"><span>Slug</span><span class="muted">/about</span></div></div></div></div><div class="hint">Drag the sheet down to close</div>`,
+  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b>Pages</b><span class="small muted">Home · About · Journal · Contact</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px">Page settings</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh" role="dialog" aria-label="Sheet" style="position:absolute;left:0;right:0;bottom:0;height:200px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;cursor:grab"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col small" style="padding:0 16px;gap:10px"><b style="font-size:15px">Page settings</b><div class="row" style="justify-content:space-between"><span>Show in navigation</span><span class="muted">On</span></div><div class="row" style="justify-content:space-between"><span>Search indexing</span><span class="muted">Allowed</span></div><div class="row" style="justify-content:space-between"><span>Slug</span><span class="muted">/about</span></div></div></div></div><div class="hint">Drag the sheet down to close</div>`,
   desc:'For phone layouts only: on wider screens Studio’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.',
   api:'y.release(y, vy, y > 0.3H || vy > 500 ? H : 0)',
   init(st){
     const ph = $(st,'.ph'), sh = $(st,'.sh'), sr = $(st,'.sr'), H = 200, y = new Track(H + 10); let held = false, hy = 0, sy = 0;
-    $(st,'.op').onclick = () => y.set(0);
-    sr.onclick = () => y.set(H + 10);
+    const op = $(st,'.op'), open = v => { y.set(v ? 0 : H + 10); op.setAttribute('aria-expanded', String(v)); };
+    op.setAttribute('aria-expanded', 'false'); op.onclick = () => open(true);
+    sr.onclick = () => open(false);
+    st.addEventListener('keydown', e => { if (e.key === 'Escape' && y.target < H){ e.preventDefault(); open(false); op.focus(); } });
     drag(sh, { down:p => { held = true; sy = y.at() - p.cy; hy = y.at(); }, move:p => { const v = sy + p.cy; hy = v < 0 ? rb(v, 30) : v; },
       up:(p, v) => { held = false; y.release(hy, v.vy, hy > H*.3 || v.vy > 500 ? H + 10 : 0); } });
     return t => { const v = held ? hy : y.at(t); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
@@ -2603,7 +2626,14 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const sw = new Swap(0), ok = new Track(0); let k = 0;
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
     inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); };
-    inp.onfocus = () => pw.style.borderColor = 'var(--ink)'; inp.onblur = () => pw.style.borderColor = 'var(--muted)'; fmt();
+    // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
+    const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
+    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');
+    const missing = () => { const len = C[k][2].reduce((a,b) => a + b, 0), n = inp.value.replace(/\D/g,'').length; return n && n < len ? len - n : 0; };
+    const check = () => { const m = missing(); inp.toggleAttribute('aria-invalid', !!m); if (m) inp.setAttribute('aria-invalid', 'true');
+      msg.textContent = m ? `${m} more digit${m === 1 ? '' : 's'} for a ${C[k][0]} number.` : ''; pw.style.borderColor = m ? 'var(--danger)' : 'var(--muted)'; };
+    inp.onfocus = () => { pw.style.borderColor = 'var(--ink)'; }; inp.onblur = check;
+    inp.addEventListener('input', () => { if (msg.textContent && !missing()) check(); }); fmt();
     return t => { L.forEach((e,i) => sw.apply(e,i,t)); const p = clamp(ok.at(t)); okEl.style.opacity = p.toFixed(3); okEl.style.transform = `scale(${(.6+.4*p).toFixed(3)})`; };
   }});
 
@@ -2810,7 +2840,7 @@ globalThis.__cieoRecipeFile="blocks/099-signupform.js";
 
 
 atom({ id:'signupform', cat:'Newsletter', name:'Popup, slide-in and bar', block:'newsletter, announcement', fam:['X','E'], wide:true, tall:true,
-  html:`<div class="col" style="width:min(560px,94%);gap:10px;align-items:flex-start"><div class="seg sm" style="display:flex"><div class="ind"></div><button>Popup</button><button>Slide-in</button><button>Top bar</button></div><div class="site card" style="position:relative;width:100%;height:240px;overflow:hidden"><div class="small muted" style="padding:16px;line-height:1.7"><b style="color:var(--ink);font-size:16px">Field Notes</b><br>A weekly letter about rivers, routes and slow mornings. The sign-up form appears after 1.2 seconds, the way it would for a visitor.</div><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="fm card" style="position:absolute;padding:16px;visibility:hidden"><button class="x" aria-label="Close" style="position:absolute;top:8px;right:8px;border:0;background:none;cursor:pointer;color:var(--muted)">${ic(I.x,14)}</button><div class="v0"><b class="tt" style="display:block">Get the Sunday letter</b><span class="small muted ds">One email a week. Unsubscribe any time.</span><div class="row in" style="margin-top:10px;gap:6px"><input id="sf-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:8px;padding:7px 9px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn ink jn">Join</button></div></div><div class="v1 layer" style="font-weight:500;color:var(--success);gap:8px"><span class="tk" style="display:flex">${ic(I.check,16,2.5)}</span><span>You’re on the list</span></div></div></div><button class="btn rp">Replay</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer"><input type="checkbox" class="ck" checked> Check + tint confirmation</label></div>`,
+  html:`<div class="col" style="width:min(560px,94%);gap:10px;align-items:flex-start"><div class="seg sm" style="display:flex"><div class="ind"></div><button>Popup</button><button>Slide-in</button><button>Top bar</button></div><div class="site card" style="position:relative;width:100%;height:240px;overflow:hidden"><div class="small muted" style="padding:16px;line-height:1.7"><b style="color:var(--ink);font-size:16px">Field Notes</b><br>A weekly letter about rivers, routes and slow mornings. The sign-up form appears after 1.2 seconds, the way it would for a visitor.</div><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="fm card" style="position:absolute;padding:16px;visibility:hidden"><button class="x" aria-label="Close" style="position:absolute;top:8px;right:8px;border:0;background:none;cursor:pointer;color:var(--muted)">${ic(I.x,14)}</button><div class="v0"><b class="tt" style="display:block">Get the Sunday letter</b><span class="small muted ds" id="sf-email-hint" aria-live="polite">One email a week. Unsubscribe any time.</span><div class="row in" style="margin-top:10px;gap:6px"><input id="sf-email" type="email" value="reader@example.com" placeholder="you@example.com" aria-label="Email" aria-describedby="sf-email-hint" required style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:8px;padding:7px 9px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn ink jn">Join</button></div></div><div class="v1 layer" style="font-weight:500;color:var(--success);gap:8px"><span class="tk" style="display:flex">${ic(I.check,16,2.5)}</span><span>You’re on the list</span></div></div></div><button class="btn rp">Replay</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer"><input type="checkbox" class="ck" checked> Check + tint confirmation</label></div>`,
   desc:'Three ways to show one sign-up form. A popup scales up over a scrim, a slide-in rises from the corner, and a bar drops from the top without blocking. Each waits 1.2 seconds, and closing is quicker than opening.',
   api:'show at t0 + 1.2   popup: scale .96→1 + scrim · slide-in: y 24→0 · bar: y −100%→0',
   init(st){
@@ -2819,7 +2849,14 @@ atom({ id:'signupform', cat:'Newsletter', name:'Popup, slide-in and bar', block:
     v1.style.pointerEvents = 'none';
     const e = edges(0,0), o = new Track(0), csw = new Swap(0), dn = new Track(0); let mode = 0, at = 0;
     const tint = on => { tk.style.display = ck.checked ? '' : 'none'; return on && ck.checked ? 1 : 0; };
-    const join = () => { if (csw.cur === 1) return; const t0 = now(), g = tint(true);
+    // Validation: an empty or malformed address keeps the form open, says what to fix, and marks the field.
+    const em = $(fm,'#sf-email'), ds = $(fm,'.ds'), HINT = ds.textContent;
+    const invalid = msg => { em.setAttribute('aria-invalid', 'true'); em.style.borderColor = 'var(--danger)'; ds.textContent = msg; ds.style.color = 'var(--danger)'; em.focus(); };
+    em.addEventListener('input', () => { if (em.getAttribute('aria-invalid')){ em.removeAttribute('aria-invalid'); em.style.borderColor = ''; ds.textContent = HINT; ds.style.color = ''; } });
+    const join = () => { if (csw.cur === 1) return;
+      if (!em.value.trim()) return invalid('Enter your email to join.');
+      if (!em.checkValidity()) return invalid('That address looks incomplete. Try name@example.com.');
+      const t0 = now(), g = tint(true);
       if (REDUCE){ csw.cur = 1; csw.prev = 0; csw.t = t0; dn.jump(g); } else { csw.to(1); dn.set(g, S.base, t0 + EXIT); } };
     const resetOk = () => { if (REDUCE){ csw.cur = 0; csw.prev = null; csw.t = -9; dn.jump(0); } else { csw.to(0); dn.set(0, S.snap); } };
     jn.onclick = join;
@@ -3180,7 +3217,7 @@ globalThis.__cieoRecipeFile="blocks/116-undosend.js";
 
 
 atom({ id:'undosend', cat:'Email', name:'Undo send', block:'form (submit), Toast', fam:['M','T','S'], tall:true,
-  html:`<div class="cm card col" style="position:absolute;left:50%;top:50%;width:min(300px,86%);padding:14px;gap:8px;transform-origin:50% 100%"><span class="small muted">To: maya@studio.co</span><b class="small">Re: Spring launch</b><p class="small" style="margin:0">Looks great. Ship it Thursday.</p><button class="btn ink sd" style="align-self:flex-end">Send</button></div><div class="ts card row" style="position:absolute;left:50%;bottom:16px;padding:10px 12px;gap:10px;visibility:hidden;white-space:nowrap"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--raised)" stroke-width="3"/><circle class="rg" cx="12" cy="12" r="9" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 12 12)"/></svg><span class="lb small" style="position:relative;width:150px;height:20px"></span><button class="btn un" style="padding:4px 10px">Undo</button></div>`,
+  html:`<div class="cm card col" style="position:absolute;left:50%;top:50%;width:min(300px,86%);padding:14px;gap:8px;transform-origin:50% 100%"><span class="small muted">To: maya@studio.co</span><b class="small">Re: Spring launch</b><p class="small" style="margin:0">Looks great. Ship it Thursday.</p><button class="btn ink sd" style="align-self:flex-end">Send</button></div><div class="ts card row" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:16px;padding:10px 12px;gap:10px;visibility:hidden;white-space:nowrap"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--raised)" stroke-width="3"/><circle class="rg" cx="12" cy="12" r="9" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 12 12)"/></svg><span class="lb small" style="position:relative;width:150px;height:20px"></span><button class="btn un" style="padding:4px 10px">Undo</button></div>`,
   desc:'Send shrinks the draft away and a toast takes over with a ring that empties over 5 seconds. Undo brings the draft back exactly. When the ring runs out, the toast swaps to a success “Sent”.',
   api:'ring = 1 − (t − tSend)/5   undo: draft.o.set(1)   at 5s: label.to("sent")',
   init(st){
@@ -22385,7 +22422,8 @@ atom({ id:'chatpoll', cat:'Forms', name:'In-chat poll', block:'chat, poll', fam:
     let voted = -1;
     rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t = now();
       C[1].textContent = `You picked ${O[i][0]} · 128 votes`;
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 1 : 0);
+      const { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 1 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j];
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); x.dg.set(String(pc), true); }
         else { const d = an.checked ? staggerAt(j, .06) : 0; x.v.set(pc, S.base, t + d); x.o.set(1, S.base, t + EXIT + d); x.c.set(j === i ? 1 : 0); x.dg.set(String(pc)); }
         x.b.style.cursor = 'default'; });
@@ -22791,11 +22829,10 @@ atom({ id:'grouppoll', cat:'Scheduling', name:'Group-poll tally', block:'group p
     box.appendChild(foot);
     const vc = $$(foot,'.vc')[0];
     let voted = false;
-    const tally = () => { const tot = rows.reduce((a,r) => a + r.votes, 0) || 1, t0 = now();
-      const lead = rows.indexOf(rows.reduce((a,b) => b.votes >= a.votes ? b : a));
-      rows.forEach((r,i) => { r.v.set(r.votes/tot*100, S.base, t0 + staggerAt(i, .05)); r.dg.set(String(r.votes));
+    const tally = () => { const { total: tot, shares, leader: lead } = pollTally(rows.map(r => r.votes)), t0 = now();
+      rows.forEach((r,i) => { r.v.set(shares[i], S.base, t0 + staggerAt(i, .05)); r.dg.set(String(r.votes));
         r.lk.set(i === lead ? 1 : 0, S.base, t0 + EXIT + staggerAt(i, .05)); });
-      vc.textContent = tot + (tot === 1 ? ' vote' : ' votes') + ' · ' + O[lead][0] + ' leads'; };
+      vc.textContent = tot + (tot === 1 ? ' vote' : ' votes') + ' · ' + (lead === null ? 'tied at the top' : O[lead][0] + ' leads'); };
     rows.forEach((r,i) => r.b.onclick = () => { if (voted) return; voted = true;
       r.votes++; r.ckT.set(1); r.b.style.cursor = 'default'; tally(); });
     $$(foot,'.rs')[0].onclick = () => { voted = false;
@@ -23325,11 +23362,11 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
     const rows = N.map((n,i) => { const r = document.createElement('button'); r.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-radius:10px;background:var(--card);padding:11px 13px;cursor:pointer;overflow:hidden';
       r.innerHTML = `<i class="fl" style="position:absolute;left:0;top:0;bottom:0;background:var(--raised);width:0"></i><i class="tint" style="position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in oklab,var(--accent-tint) 70%, transparent)"></i><span style="position:relative;flex:1;font-size:14px;line-height:1.5">${n}</span><b class="tt" style="position:relative;font-size:13px;font-variant-numeric:tabular-nums"></b><span class="mk" style="position:relative;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;padding:0;font-size:12px;color:var(--success)"></span>`;
       r.setAttribute('aria-pressed', 'false'); box.appendChild(r);
-      r.onclick = () => { if (mine === i) mine = -1; else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
+      r.onclick = () => { if (mine === i){ votes[i]--; mine = -1; } else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
       return { r, tt:$(r,'.tt'), fl:$(r,'.fl'), tint:$(r,'.tint'), mk:$(r,'.mk'), bar:new Track(0), lead:new Track(0), dg:new Digits($(r,'.tt'), 2) }; });
     rows.forEach(x => { const a = document.createElement('span'); a.className = 'layer'; a.textContent = ''; x.mk.appendChild(a); });
-    function sync(inst){ const tot = votes.reduce((a,b) => a+b, 0), mx = Math.max(...votes), li = votes.indexOf(mx), t0 = now();
-      rows.forEach((x,i) => { const p = votes[i]/Math.max(1, tot);
+    function sync(inst){ const { shares, leader: li } = pollTally(votes), t0 = now();
+      rows.forEach((x,i) => { const p = shares[i]/100;
         if (inst || REDUCE){ x.bar.jump(p); x.lead.jump(i === li ? 1 : 0); x.dg.set(String(votes[i]).padStart(2,' '), true); }
         else { x.bar.set(p, S.soft, t0 + staggerAt(i, .05)); x.lead.set(i === li ? 1 : 0, S.soft, t0); x.dg.set(String(votes[i]).padStart(2,' ')); }
         x.mk.firstChild.textContent = mine === i ? '✓' : ''; x.mk.style.borderColor = mine === i ? 'var(--success)' : 'var(--line)';
@@ -23612,8 +23649,8 @@ atom({ id:'livepoll', cat:'Forms', name:'Live poll', block:'poll, vote', fam:['M
     let voted = -1, total = 0;
     const paint = () => cap.textContent = voted < 0 ? `Tap to vote · ${total} of 128 in` : `Vote counted · ${total} of 128 in · settled`;
     rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0 && !ch.checked) return;
-      voted = i; total++; const t0 = now();
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 2 : 0);
+      if (voted < 0) total++; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 2 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j];
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
         else { x.v.set(pc, S.base, t0 + staggerAt(j, .06)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .06)); x.c.set(j === i ? 1 : 0, S.base, t0); }
         x.b.style.cursor = ch.checked ? 'pointer' : 'default'; });
@@ -24312,7 +24349,7 @@ globalThis.__cieoRecipeFile="blocks/374-undotoast.js";
 
 
 atom({ id:'undotoast', cat:'Guidance', name:'Undo toast', block:'undo, archive', fam:['X','S','T'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px;min-height:210px;overflow:hidden"><b style="font-size:15px;font-weight:600;line-height:1.5">Roadmap</b><div class="small muted" style="line-height:1.5">Archive a step — it waits behind the toast.</div><div class="itwrap" style="overflow:hidden;margin-top:8px"><div class="it row" style="gap:10px;padding:8px 0;min-height:32px"><span style="display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent-tint);padding:0;flex:none;font-size:13px;font-weight:600;color:var(--accent)"><span style="transform:translateY(-.5px)">Q3</span></span><span class="col" style="gap:0;flex:1"><b style="font-size:14px;line-height:1.5">Launch checklist</b><span class="cap" style="font-size:12px;color:var(--muted);line-height:1.5">4 of 4 · ships Friday</span></span><span class="ck" style="position:relative;display:inline-block;width:18px;height:14px"><span class="layer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span></span><button class="btn ar" style="min-height:32px;padding:6px 12px">Archive</button></div></div><div class="ts" style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--ink);color:var(--card);border-radius:10px;padding:10px 12px;visibility:hidden"><div class="row" style="gap:10px"><span style="position:relative;width:20px;height:20px;flex:none;display:grid;place-items:center;padding:0"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/><circle class="ring" cx="10" cy="10" r="8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 10 10)"/></svg></span><span style="font-size:13px;line-height:1.5;flex:1">Step archived</span><button class="btn un" style="min-height:32px;padding:6px 12px;background:transparent;color:var(--card);border-color:rgba(255,255,255,.4)">Undo</button></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Demo:</span></div></div><div class="hint">Archive parks the step · the ring drains in 6s</div>`,
+  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px;min-height:210px;overflow:hidden"><b style="font-size:15px;font-weight:600;line-height:1.5">Roadmap</b><div class="small muted" style="line-height:1.5">Archive a step — it waits behind the toast.</div><div class="itwrap" style="overflow:hidden;margin-top:8px"><div class="it row" style="gap:10px;padding:8px 0;min-height:32px"><span style="display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent-tint);padding:0;flex:none;font-size:13px;font-weight:600;color:var(--accent)"><span style="transform:translateY(-.5px)">Q3</span></span><span class="col" style="gap:0;flex:1"><b style="font-size:14px;line-height:1.5">Launch checklist</b><span class="cap" style="font-size:12px;color:var(--muted);line-height:1.5">4 of 4 · ships Friday</span></span><span class="ck" style="position:relative;display:inline-block;width:18px;height:14px"><span class="layer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span></span><button class="btn ar" style="min-height:32px;padding:6px 12px">Archive</button></div></div><div class="ts" role="status" aria-live="polite" style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--ink);color:var(--card);border-radius:10px;padding:10px 12px;visibility:hidden"><div class="row" style="gap:10px"><span style="position:relative;width:20px;height:20px;flex:none;display:grid;place-items:center;padding:0"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/><circle class="ring" cx="10" cy="10" r="8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 10 10)"/></svg></span><span style="font-size:13px;line-height:1.5;flex:1">Step archived</span><button class="btn un" style="min-height:32px;padding:6px 12px;background:transparent;color:var(--card);border-color:rgba(255,255,255,.4)">Undo</button></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Demo:</span></div></div><div class="hint">Archive parks the step · the ring drains in 6s</div>`,
   desc:'Archiving collapses the step on a height spring while the toast rises; its ring drains over six seconds. Undo restores the height and swaps a check in. Expiry or Undo both land in a quiet terminal.',
   api:'item.h.set(0) parks behind   toast.o.set(1, base) + ring 6s   undo: h.set(full), check.to(1) · REDUCE: jump',
   init(st){
@@ -24477,7 +24514,8 @@ atom({ id:'segswitch', cat:'Views', name:'Segmented view switch', block:'segment
     const place = i => { const b = btns[i]; return [b.offsetLeft + 2, b.offsetLeft + b.offsetWidth - 2]; };
     const go = i => { if (i === cur){ swH.cur = -1; swH.to(i); swR.cur = -1; swR.to(i, now() + .05); return; } cur = i; const [a, b] = place(i); e.go(a, b);
       swH.to(i); swR.to(i, now() + .05); h.set(V[i].H); if (rc.checked) dg.set(V[i].c); else dg.set(V[i].c, true); paint(); };
-    const paint = () => btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; });
+    const seg = segmented(btns, i => go(i));
+    const paint = () => { seg.mark(cur); btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; }); };
     btns.forEach((b, i) => b.onclick = () => go(i));
     requestAnimationFrame(() => { const [a, b] = place(0); e.jump(a, b); paint(); });
     dg.set('12', true); paint();
@@ -25062,7 +25100,7 @@ atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, count
     uk.innerHTML = `<div class="row" style="gap:8px"><input aria-label="Postcode" class="zp2" placeholder="Postcode" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"><input aria-label="County" placeholder="County" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"></div><span class="cy2 small" style="font-size:12px;color:var(--muted);line-height:1.5">Try SW1A 1AA.</span>`;
     set.appendChild(uk);
     const e = edges(0, 0), sw = new Swap(0), h = new Track(76), csw = new Swap(0);
-    const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'Unknown ZIP — keep typing'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
+    const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'No city for that ZIP. Check the digits or type the city.'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
     let mode = 0;
     const H = [76, 76];
     const pick = (i, inst) => { mode = i; btns.forEach((b, j) => { b.setAttribute('aria-pressed', j === i); if (!inst) b.style.color = ''; });
@@ -25878,8 +25916,8 @@ atom({ id:'pollblock', cat:'Newsletter', name:'Reader poll', block:'newsletter, 
       $$(b,'span')[2].textContent = n; pl.appendChild(b);
       return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[3], v:new Track(0, S.lazy), o:new Track(0), c:new Track(0) }; });
     let voted = -1;
-    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now();
-      rows.forEach((x,j) => { const p = O[j][1] + (j === i ? 2 : -1);
+    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 2 : 0)));
+      rows.forEach((x,j) => { const p = shares[j];
         if (REDUCE){ x.v.jump(p); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
         else { x.v.set(p, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); }
         x.b.style.cursor = 'default'; }); });
@@ -27636,8 +27674,8 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
       box.appendChild(d);
       return { d, bar: d.querySelector('.bar'), ck: d.querySelector('.ck'), pc: d.querySelector('.pc'), w: new Track(0), f: new Track(0) };
     });
-    const paint = (t, instant) => { const sum = opts.reduce((a, o) => a + o[1], 0);
-      rows.forEach((r, i) => { const p = opts[i][1] / sum;
+    const paint = (t, instant) => { const { shares } = pollTally(opts.map(o => o[1]));
+      rows.forEach((r, i) => { const p = shares[i] / 100;
         r.w.set(p*100, S.base, t + staggerAt(i, .06)); r.f.set(1, S.lazy, t + .15 + staggerAt(i, .06));
         if (instant){ r.w.jump(p*100); r.f.jump(1); }
         r.ck.textContent = i === mine ? '✓' : '';
@@ -27649,7 +27687,7 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
       if (mine === i) return;
       if (mine >= 0 && !chg.checked) return;
       if (mine >= 0) opts[mine][1]--;
-      opts[i][1]++; mine = i; total++;
+      if (mine < 0) total++; opts[i][1]++; mine = i;
       tot.set(String(total)); paint(t); });
     paint(now() + .15);
     return t => { rows.forEach(r => { r.bar.style.width = Math.max(0, r.w.at(t)).toFixed(2) + '%';
