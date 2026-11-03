@@ -583,7 +583,7 @@ const EDITS = [
   { k:'sub', kind:'Text edit', sel:'p.hero-sub', ops:[['=', 'Fieldnote'], ['=', 'helps'], ['=', 'teams'], ['-', 'to'], ['=', 'collaborate'], ['=', 'on'], ['=', 'notes'], ['=', 'more'], ['-', 'easier.'], ['+', 'easily.']], note:'Fixes two grammar slips: “to collaborate” and “more easier”.' },
   { k:'cta', kind:'Style edit', sel:'button.cta-primary', code:true, ops:[['L', '.cta-primary {'], ['=', '  background:'], ['-', '#989B6F;'], ['+', 'var(--accent);'], ['L', '}']], note:'Contrast rises from 2.9:1 to 7.0:1, which passes WCAG AA.' } ];
 
-atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
+atom({ id:'suggestededit', cat:'Agent activity', name:'Agent suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
   html:`<style>${css('sge')}
 .sge-tf{position:absolute;left:0;top:0;border:1.5px solid var(--ink);border-radius:8px;pointer-events:none!important;z-index:2;visibility:hidden}
 .sge-ck{position:absolute;left:0;top:0;z-index:30;visibility:hidden;transform-origin:0 0;padding:12px}

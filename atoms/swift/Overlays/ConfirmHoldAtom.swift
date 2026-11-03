@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct ConfirmHoldAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "confirmhold", category: "Overlays", name: "Hold to confirm",
+    public static let info = MotionAtomInfo(id: "confirmhold", category: "Overlays", name: "Hold to confirm a deletion",
         summary: "The danger confirm slides in on base after the dialog. Hold-to-confirm runs a digits countdown, then the row collapses only after exit.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var asking = false

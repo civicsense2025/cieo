@@ -442,7 +442,7 @@ atom({
 
 atom({ id:'tooltip', cat:'Content', name:'Tooltip', block:'tooltip', fam:['X'],
   html:`<p style="max-width:300px;text-align:center;margin:0;line-height:1.7">Prices update on the <span class="tt" tabindex="0" style="position:relative;border-bottom:1.5px dotted var(--faint);cursor:help">billing anchor<span class="tip" role="tooltip" style="position:absolute;z-index:30;left:50%;bottom:calc(100% + 8px);width:190px;margin-left:-95px;background:var(--ink);color:var(--card);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:8px;pointer-events:none;transform-origin:50% 100%">The day of the month your first payment went through.</span></span> of each plan.</p><div class="hint">Hover or focus the dotted words</div>`,
-  desc:'Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Studio’s current Tooltip has no enter or exit motion; this is the proposed behavior.',
+  desc:'Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers.',
   api:'o.set(open ? 1 : 0, open ? S.base : S.snap)',
   init(st){
     const w = $(st,'.tt'), tip = $(st,'.tip'), o = new Track(0);
@@ -1508,7 +1508,7 @@ atom({ id:'paywall', cat:'Newsletter', name:'Paywall unlock', block:'paywall', f
       const a = (m*130).toFixed(1); const mm = `linear-gradient(#000 ${a - 30}%, transparent ${a}%)`; rest.style.maskImage = rest.style.webkitMaskImage = m > .99 ? 'none' : mm; };
   }});
 
-atom({ id:'payment', cat:'Documents', name:'Pay button', block:'payment-methods, checkout', fam:['M','S'],
+atom({ id:'payment', cat:'Commerce', name:'Pay button', block:'payment-methods, checkout', fam:['M','S'],
   html:`<div class="card col" style="width:min(300px,88%);padding:16px;gap:10px"><div class="row" style="justify-content:space-between"><span class="muted small">Invoice INV-0042</span><b class="num tot"></b></div><button class="pay" aria-label="Pay invoice" style="position:relative;height:44px;border:0;border-radius:11px;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="pm small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" id="pay-decline" class="dc"> Simulate a declined card</label></div>`,
   desc:'Processing keeps the button in place with a spinner. Success fills it with the success color; a decline fills it with danger and opens a fix-it message. Both settle back to a retryable state. On success the invoice total counts up on a soft spring while the receipt swaps in.',
   api:'plan(processing → paid | declined)   fill = mix(success | danger, ink)   total.set(64.80, S.soft, t0 + .25)',
@@ -4791,7 +4791,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-c">Show grid</span><div class="sg sm" role="group" aria-labelledby="sg-c"><div class="sg-i"></div><button type="button">Off</button><button type="button">On</button></div></div>
 <div class="sg-ro" aria-hidden="true"></div></div>`,
-  desc:'A measured two-edge indicator, same rules as Studio’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
+  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
   api:'left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? "fwd" : "back"   lead.set(v); trail.set(v, t + LAG)',
   init(st){
     const kit = (el, start) => {
@@ -13631,7 +13631,7 @@ const EDITS = [
   { k:'sub', kind:'Text edit', sel:'p.hero-sub', ops:[['=', 'Fieldnote'], ['=', 'helps'], ['=', 'teams'], ['-', 'to'], ['=', 'collaborate'], ['=', 'on'], ['=', 'notes'], ['=', 'more'], ['-', 'easier.'], ['+', 'easily.']], note:'Fixes two grammar slips: “to collaborate” and “more easier”.' },
   { k:'cta', kind:'Style edit', sel:'button.cta-primary', code:true, ops:[['L', '.cta-primary {'], ['=', '  background:'], ['-', '#989B6F;'], ['+', 'var(--accent);'], ['L', '}']], note:'Contrast rises from 2.9:1 to 7.0:1, which passes WCAG AA.' } ];
 
-atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
+atom({ id:'suggestededit', cat:'Agent activity', name:'Agent suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
   html:`<style>${css('sge')}
 .sge-tf{position:absolute;left:0;top:0;border:1.5px solid var(--ink);border-radius:8px;pointer-events:none!important;z-index:2;visibility:hidden}
 .sge-ck{position:absolute;left:0;top:0;z-index:30;visibility:hidden;transform-origin:0 0;padding:12px}
@@ -21656,7 +21656,7 @@ atom({ id:'heatmap', cat:'Scheduling', name:'Availability heatmap', block:'avail
       c.b.style.background = tint(v); c.b.style.borderColor = mix(s,'var(--ink)','var(--line)');
       c.sw.apply(c.ct, 1, t); fade(c.dot, c.sw.cur === 1 ? 0 : 1, 0, false); });
   }});
-atom({ id:'holdconfirm', cat:'Scheduling', name:'Hold to confirm', block:'booking, confirm', fam:['M','S'],
+atom({ id:'holdconfirm', cat:'Scheduling', name:'Hold to confirm a booking', block:'booking, confirm', fam:['M','S'],
   html:`<div class="col" style="width:min(320px,90%);margin:0 auto;gap:8px;line-height:1.5;align-items:center"><b style="font-size:15px;font-weight:600">Confirm your slot</b><div class="card" style="width:100%;padding:16px;display:flex;flex-direction:column;gap:10px;align-items:center"><p style="font-size:13px;margin:0">Tue 9:00 AM · 30 min · Room B</p><div class="pad" style="position:relative;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;padding:0;cursor:pointer;touch-action:none" role="button" tabindex="0" aria-label="Press and hold to confirm"><i class="core" style="position:absolute;inset:8px;border-radius:50%;background:var(--card);display:grid;place-items:center"></i></div><div class="lb" style="position:relative;height:22px;font-size:13px;overflow:hidden"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;width:100%;justify-content:center"><span style="font-size:12px">Hold</span><button class="h0" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 10px;cursor:pointer;font-size:12px">0.6s</button><button class="h1" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 10px;cursor:pointer;font-size:12px">0.9s</button><button class="h2" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 10px;cursor:pointer;font-size:12px">1.2s</button></div></div></div><div class="hint">Press and hold the ring · release early to cancel</div>`,
   desc:'Holding fills the ring at a steady pace. Letting go early springs the fill back to zero. A full hold swaps the arrow for a check and the card holds its success tint as the terminal.',
   api:'hold: pv += dt/dur   release: bk.release(pv,0,0) springs back   full: sw.to(1), sv.set(1) hold',
@@ -25810,7 +25810,7 @@ atom({ id:'dialogform', cat:'Overlays', name:'Dialog form steps', block:'Pinned 
       dl.style.opacity = p.toFixed(3); dl.style.visibility = p < .01 ? 'hidden' : 'visible'; dl.style.transform = `translate(-50%,calc(-50% + ${px((1-p)*8)})) scale(${(.96+.04*p).toFixed(4)})`; dl.style.pointerEvents = p > .5 ? 'auto' : 'none';
       layers.forEach((e,k) => sw.apply(e,k,t)); };
   }});
-atom({ id:'confirmhold', cat:'Overlays', name:'Hold to confirm', block:'Danger slides in, hold + countdown', fam:['X','T'], tall:true,
+atom({ id:'confirmhold', cat:'Overlays', name:'Hold to confirm a deletion', block:'Danger slides in, hold + countdown', fam:['X','T'], tall:true,
   html:`<div class="card col" style="width:min(270px,86%);padding:8px"><div class="rw" style="overflow:hidden"><div class="row fr" style="justify-content:space-between;padding:8px 10px"><span class="small" style="font-weight:500;font-size:13.5px;line-height:1.5">About page</span><button class="btn del" style="color:var(--danger);min-height:36px;padding:4px 10px">Delete</button></div></div></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="alertdialog" aria-label="Confirm delete" style="position:absolute;left:50%;top:50%;width:min(250px,84%);padding:18px 20px;visibility:hidden;border-radius:15px"><b style="display:block;font-size:15px;font-weight:600;line-height:1.5">Delete \u201cAbout\u201d?</b><p class="small muted" style="margin:6px 0 12px;font-size:13px;line-height:1.55">Hold the button 3s to confirm.</p><button class="btn hd" style="width:100%;min-height:40px;background:var(--danger);border-color:var(--danger);color:#fff;position:relative;overflow:hidden"><span class="fl" style="position:absolute;inset:0;background:#ffffff2e;width:0"></span><span class="lb" style="position:relative">Hold to delete \u00b7 <b class="cd"></b></span></button><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn cs" style="min-height:36px">Cancel</button></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="ct" checked> 3s countdown</label><div class="hint">Danger slides after dialog \u00b7 row collapses</div>`,
   desc:'The danger confirm slides in on base after the dialog. Hold-to-confirm runs a digits countdown, then the row collapses only after exit.',
   api:'dlg base; hold 3s Digits; row.h base after exit',

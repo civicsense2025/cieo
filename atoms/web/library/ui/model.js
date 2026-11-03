@@ -12,12 +12,12 @@
   ];
   L.categoryGroups = {
     'Basics':['Foundations','Content','Layout','Interactive','Dynamic','Media'],
-    'Forms & input':['Forms','Inputs','Newsletter','Scheduling','Guidance'],
+    'Forms & input':['Forms','Inputs','Newsletter','Scheduling','Guidance','Auth'],
     'Navigation & overlays':['Overlays','Navigation','Mega menus','Headers','Footers','Chrome'],
     'Data & admin':['Data','Admin','Admin kit','Status and records','Views'],
     'Creating & editing':['Workflow','Editor','Documents','Writing','Design tools','Files and browsing'],
     'Sites & commerce':['Commerce','Storefront','Landing','Workspace','Maps'],
-    'Connected work':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Video calls'],
+    'Connected work':['Email','SEO','Social','AI chat','MCP and agents','Agent activity','Agent identity','Video calls'],
     'Audio & conversation':['Audio','Comments','Messaging','Feedback'],
     'Photos & transitions':['Photo effects','Image transitions','Carousels','Galleries','Scroll stories'],
   };

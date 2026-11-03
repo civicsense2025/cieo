@@ -128,7 +128,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-c">Show grid</span><div class="sg sm" role="group" aria-labelledby="sg-c"><div class="sg-i"></div><button type="button">Off</button><button type="button">On</button></div></div>
 <div class="sg-ro" aria-hidden="true"></div></div>`,
-  desc:'A measured two-edge indicator, same rules as Studio’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
+  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
   api:'left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? "fwd" : "back"   lead.set(v); trail.set(v, t + LAG)',
   init(st){
     const kit = (el, start) => {
