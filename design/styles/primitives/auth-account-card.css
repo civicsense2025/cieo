@@ -18,7 +18,7 @@
   :where(.cieo) .cieo-auth-email { font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-signout {
     min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
-    background: var(--cieo-color-surface-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
+    background: var(--cieo-color-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
   }
   :where(.cieo) .cieo-auth-signout-confirm { display: flex; flex-direction: column; gap: 8px; }
@@ -31,7 +31,7 @@
   }
   :where(.cieo) .cieo-auth-decline {
     min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
-    background: var(--cieo-color-surface-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
+    background: var(--cieo-color-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
   }
   :where(.cieo) .cieo-auth-signout:focus-visible, :where(.cieo) .cieo-auth-accept:focus-visible, :where(.cieo) .cieo-auth-decline:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }

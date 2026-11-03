@@ -148,6 +148,15 @@ export function state() {
     };
     return override ? { ...base, ...override() } : base;
 }
+/** Every attribute that turns motion down for a subtree below <html>: the component prop (motion={false} →
+    data-motion="off"), a host-level reduced preference, and the legacy flag. JS springs honour all three; the
+    page-level form on <html> is read by state(), so setMotionState() can still override it. */
+export const REDUCED_SUBTREE = '[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]';
+/** True when el sits inside a subtree whose motion is off or reduced. A descendant cannot opt back in. */
+export function subtreeReduced(el) {
+    const hit = !!el && typeof el.closest === 'function' ? el.closest(REDUCED_SUBTREE) : null;
+    return hit !== null && (typeof document === 'undefined' || hit !== document.documentElement);
+}
 export function onscreen(el) {
     if (!el || typeof innerHeight === 'undefined')
         return true;
@@ -172,7 +181,7 @@ function allowedWith(s, kind, el) {
     if (!el)
         return true;
     // A host can reduce motion for one subtree (a dialog with its own preference); a descendant cannot opt back in.
-    if (typeof el.closest === 'function' && el.closest('[data-reduced-motion="true"]'))
+    if (subtreeReduced(el))
         return false;
     return onscreen(el);
 }

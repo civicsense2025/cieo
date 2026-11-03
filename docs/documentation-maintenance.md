@@ -43,6 +43,13 @@ The `swift` CI job also runs `scripts/check-swift-literals.sh`, which fails when
 SwiftUI component hard-codes styling, and proves on its fixture that it still
 catches each kind of hard-coded line.
 
+`npm run check` also runs three token gates: `scripts/check-css-vars.mjs` (every
+`var(--cieo-*)` resolves to a declared token or a listed override hook),
+`test/token-parity.test.mjs` (`tokens/tokens.json` matches `tokens.css`, the
+TypeScript engine and the Swift engine), and `scripts/check-motion-tokens.mjs`
+(no raw durations in primitives, controls or the React layer; `0s` is allowed
+for reduced motion). It also runs the catalogue inventory and component index checks.
+
 New primitives change `package.json` only through the deep `./<Name>` exports that
 `scripts/wire-primitives.mjs` regenerates; hand edits there are overwritten.
 

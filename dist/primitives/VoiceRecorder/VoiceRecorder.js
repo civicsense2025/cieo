@@ -4,7 +4,7 @@ import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-run
 import { customizePart } from '../customization.js';
 /* VoiceRecorder. Records a voice clip from the microphone and hands it to the host as a blob with its length and waveform peaks. The host owns upload and storage. */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { usePresence } from '../../react/index.js';
+import { subtreeReduced, usePresence } from '../../react/index.js';
 import { rmsLevel } from '../AudioLevelMeter/AudioLevelMeter.js';
 import { MAX_WAVEFORM_BARS } from '../AudioWaveform/AudioWaveform.js';
 import { AudioTime, speakAudioTime } from '../AudioTime/AudioTime.js';
@@ -57,7 +57,7 @@ const useRecorderEffect = typeof window === 'undefined' ? useEffect : useLayoutE
 function useRecorderMotionDisabled(root) {
     const [disabled, setDisabled] = useState(false);
     useRecorderEffect(() => {
-        const sync = () => setDisabled(Boolean(root.current?.closest('[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]')));
+        const sync = () => setDisabled(subtreeReduced(root.current));
         sync();
         const observer = new MutationObserver(sync);
         observer.observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ['data-motion', 'data-reduced-motion'] });

@@ -44,7 +44,7 @@ Controllers own one element each. A second controller on the same element throws
 
 Six starting points cover olive, iris, lagoon, ember, rose, and monochrome. Each separates the brand accent from success, warning, danger, and information. Three densities, three corner profiles, three local font stacks, two resolved appearances, and two resolved contrast levels produce 648 supported combinations. These combinations are test cases, not separately counted improvements.
 
-The 73 tokens cover neutral surfaces; primary, muted, and subtle content; accent and status pairs; spacing; radii; control dimensions; focus; typography; reading measures; elevation; and layer order. Explicit token overrides offer a lower-level escape hatch. `createTheme()` rejects unknown keys, invalid types, non-finite numbers, unsafe CSS values, and failing audited color pairs.
+The 74 tokens cover neutral surfaces; primary, muted, and subtle content; accent and status pairs; spacing; radii; control dimensions; focus; typography; reading measures; elevation; and layer order (`layer-base` 0, `layer-sticky` 10, `layer-popover` 20 for nonmodal floating UI, `layer-toast` 30, `layer-modal` 40 for dialogs, sheets and lightboxes). `npm run check:css-vars` fails when any `var(--cieo-*)` names a token that does not exist; consumer override hooks (such as `--cieo-control-*` and `--cieo-popover-z`) are listed by name in `scripts/check-css-vars.mjs`; most fall back to a theme token, and the rest to a fixed default. Explicit token overrides offer a lower-level escape hatch. `createTheme()` rejects unknown keys, invalid types, non-finite numbers, unsafe CSS values, and failing audited color pairs.
 
 ```js
 createTheme({

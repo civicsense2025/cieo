@@ -310,4 +310,4 @@ export function usePresence(open, opts = {}) {
     return { mounted, ref };
 }
 export { roveIndex, enabledIn, roveFocus, useDismiss, useModalFocus, useDismissibleHint } from './interaction.js';
-export { S, EXIT, LAG, ARRIVE, Track, allowed, now, resp, prog, setMotionState } from '../core/spring.js';
+export { S, EXIT, LAG, ARRIVE, Track, allowed, now, resp, prog, setMotionState, subtreeReduced, REDUCED_SUBTREE } from '../core/spring.js';

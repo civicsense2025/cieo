@@ -1,6 +1,6 @@
 'use client';
 import { useLayoutEffect, useRef, useState, type AnimationEvent, type ReactNode, type RefObject } from 'react';
-import { useReducedMotion, useSpring, useSwap } from '../../react/index.js';
+import { useReducedMotion, useSpring, useSwap, subtreeReduced } from '../../react/index.js';
 
 const FOCUSABLE = 'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
@@ -21,7 +21,7 @@ function HeightJump({ target, element }: { target: number; element: RefObject<HT
 export function useAuthMotionDisabled(element: RefObject<HTMLElement | null>): boolean {
   const [disabled, setDisabled] = useState(false);
   useLayoutEffect(() => {
-    const sync = () => setDisabled(Boolean(element.current?.closest('[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]')));
+    const sync = () => setDisabled(subtreeReduced(element.current));
     sync();
     if (typeof MutationObserver === 'undefined') return;
     const observer = new MutationObserver(sync);

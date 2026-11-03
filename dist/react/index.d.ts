@@ -53,5 +53,5 @@ export declare function usePresence<T extends HTMLElement>(open: boolean, opts?:
     ref: RefObject<T | null>;
 };
 export { roveIndex, enabledIn, roveFocus, useDismiss, useModalFocus, useDismissibleHint, type RoveKey } from './interaction.js';
-export { S, EXIT, LAG, ARRIVE, Track, allowed, now, resp, prog, setMotionState } from '../core/spring.js';
+export { S, EXIT, LAG, ARRIVE, Track, allowed, now, resp, prog, setMotionState, subtreeReduced, REDUCED_SUBTREE } from '../core/spring.js';
 export type { Preset, SpringConfig, MotionKind } from '../core/spring.js';
