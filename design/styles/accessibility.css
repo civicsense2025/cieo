@@ -3,7 +3,7 @@
   :where(.cieo) .cieo-skip { position: fixed; inset-block-start: -10rem; inset-inline-start: 1rem; z-index: 100; padding: 1rem; background: var(--cieo-color-surface); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-skip:focus { inset-block-start: 1rem; }
   @media (pointer: coarse) {
-    :where(.cieo) :where(.cieo-button, .cieo-input, .cieo-check, .cieo-disclosure summary) { min-block-size: max(44px, var(--cieo-touch-target)); }
+    :where(.cieo) :where(.cieo-button, .cieo-input, .cieo-check:not(.cieo-ctl), .cieo-disclosure summary) { min-block-size: max(44px, var(--cieo-touch-target)); }
     :where(.cieo) .cieo-button { min-inline-size: max(44px, var(--cieo-touch-target)); }
   }
   @media (prefers-reduced-motion: reduce) {

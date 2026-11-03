@@ -170,9 +170,10 @@ Theme with these variables (all optional). Each one falls back first to the matc
 | `--cieo-control-height-sm`, `--cieo-control-height-md`, `--cieo-field-height` | [`control-small`, `control-height`] 32px, 40px; 52px | control heights |
 | `--cieo-focus-ring`, `--cieo-focus-offset` | [`focus-width`, `color-focus`, `focus-offset`] 2px solid accent, 2px | focus outline |
 | `--cieo-control-font` | [`font-sans`] inherit | font family |
+| `--cieo-disabled-opacity` | 0.55 | every disabled control, option and toggle |
 | `--cieo-search-width`, `--cieo-search-radius` | 100% (16rem collapsible), pill | search field |
 
-On touch screens (`pointer: coarse`) every control has at least a 44px hit area. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
+On touch screens (`pointer: coarse`) every control has at least a 44px hit area. Hover styles apply only on devices that can hover, touch selects use 16px text so iOS Safari does not zoom, and in forced-colors mode the primary button, switch and field borders switch to system colours. The `cieo/design.css` field and check rules skip `.cieo-ctl` elements, so loading both stylesheets does not restyle these controls. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
 
 ## Agents
 
