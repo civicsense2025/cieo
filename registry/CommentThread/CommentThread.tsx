@@ -4,7 +4,7 @@
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
-import { useFlip, useReducedMotion } from '../../react/index.js';
+import { subtreeReduced, useFlip, useReducedMotion } from '../../react/index.js';
 
 export type CommentNode<T = unknown> = T & { id: string; children?: CommentNode<T>[] };
 
@@ -177,7 +177,7 @@ function Branch<T>({ shared, parent, entries, depth }: { shared: Shared<T>; pare
     from.current = null;
     if (!el || startedAt === null) return;
     const to = el.scrollHeight;
-    const off = typeof el.closest === 'function' && el.closest("[data-motion='off']");
+    const off = subtreeReduced(el);
     if (reduced || off || typeof el.animate !== 'function' || to === startedAt) return;
     el.style.overflow = 'hidden';
     const run = el.animate([{ blockSize: `${startedAt}px` }, { blockSize: `${to}px` }], { duration: 300, easing: 'cubic-bezier(.2,.15,.2,1)' });

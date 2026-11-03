@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { S, Track, resp, vel, prog, settleTime, allowed, run, setMotionState } from '../dist/core/spring.js';
+import { S, Track, resp, vel, prog, settleTime, allowed, run, setMotionState, subtreeReduced } from '../dist/core/spring.js';
 
 test('critically damped: monotonic, never overshoots, settles', () => {
   for (const cfg of Object.values(S)) {
@@ -81,9 +81,19 @@ test('state() honours data-motion="full" over reduced-motion media', async () =>
   if (!prev.matchMedia) delete globalThis.matchMedia;
 });
 
-test('motion is disallowed inside a subtree that reduces motion, and allowed beside it', () => {
-  const inside = { closest: (q) => (q === '[data-reduced-motion="true"]' ? {} : null) };
-  const beside = { closest: () => null };
-  assert.equal(allowed('feedback', inside), false);
-  assert.equal(allowed('feedback', beside), true);
+test('motion is disallowed inside any subtree that turns motion off or down, and allowed beside it', () => {
+  // A fake element whose ancestor carries `attrs`; closest() matches a selector list against them.
+  const within = (attrs) => ({
+    closest: (list) => (list.split(',').some((sel) => {
+      const m = sel.trim().match(/^\[([\w-]+)="([^"]+)"\]$/);
+      return m && attrs[m[1]] === m[2];
+    }) ? {} : null),
+  });
+  for (const attrs of [{ 'data-reduced-motion': 'true' }, { 'data-motion': 'reduced' }, { 'data-motion': 'off' }]) {
+    assert.equal(allowed('feedback', within(attrs)), false, JSON.stringify(attrs));
+    assert.equal(subtreeReduced(within(attrs)), true, JSON.stringify(attrs));
+  }
+  assert.equal(allowed('feedback', within({ 'data-motion': 'on' })), true);
+  assert.equal(allowed('feedback', within({})), true);
+  assert.equal(subtreeReduced(null), false);
 });

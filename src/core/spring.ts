@@ -185,6 +185,15 @@ export function state(): MotionState {
   return override ? { ...base, ...override() } : base;
 }
 
+/** Every attribute that turns motion down for a subtree: the component prop (motion={false} → data-motion="off"),
+    a host-level reduced preference, and the legacy flag. The one selector CSS and JS both honour. */
+export const REDUCED_SUBTREE = '[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]';
+
+/** True when el sits inside a subtree whose motion is off or reduced. A descendant cannot opt back in. */
+export function subtreeReduced(el?: Element | null): boolean {
+  return !!el && typeof el.closest === 'function' && el.closest(REDUCED_SUBTREE) !== null;
+}
+
 export function onscreen(el?: Element | null): boolean {
   if (!el || typeof innerHeight === 'undefined') return true;
   const r = el.getBoundingClientRect();
@@ -205,7 +214,7 @@ function allowedWith(s: MotionState, kind: MotionKind, el?: Element | null): boo
   if (s.paused && kind !== 'feedback') return false;
   if (!el) return true;
   // A host can reduce motion for one subtree (a dialog with its own preference); a descendant cannot opt back in.
-  if (typeof el.closest === 'function' && el.closest('[data-reduced-motion="true"]')) return false;
+  if (subtreeReduced(el)) return false;
   return onscreen(el);
 }
 

@@ -3,7 +3,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useFlip, useReducedMotion } from '../../react/index.js';
+import { subtreeReduced, useFlip, useReducedMotion } from '../../react/index.js';
 const MAX_COMMENT_DEPTH = 32;
 /** Turns a flat list into a tree. Keeps input order, orphans (unknown parent) become roots, and cycles are broken so it always terminates. Duplicate ids keep the first. */
 export function buildCommentTree(flat) {
@@ -130,7 +130,7 @@ function Branch({ shared, parent, entries, depth }) {
         if (!el || startedAt === null)
             return;
         const to = el.scrollHeight;
-        const off = typeof el.closest === 'function' && el.closest("[data-motion='off']");
+        const off = subtreeReduced(el);
         if (reduced || off || typeof el.animate !== 'function' || to === startedAt)
             return;
         el.style.overflow = 'hidden';
