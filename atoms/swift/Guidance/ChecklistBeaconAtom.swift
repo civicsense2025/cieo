@@ -45,7 +45,7 @@ public struct ChecklistBeaconAtom: MotionAtomView {
                                 .frame(height: 6)
                         }
                     }.padding(.top, 10)
-                    .animation(reduce ? nil : .motion(.base).delay(0.06), value: n)
+                    .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: n)
                     if open {
                         VStack(spacing: 0) {
                             ForEach(items.indices, id: \.self) { i in

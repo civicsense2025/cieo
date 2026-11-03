@@ -94,7 +94,7 @@ private struct CheckDraw: View {
     var body: some View {
         CheckShape().trim(from: 0, to: drawn || reduce ? 1 : 0)
             .stroke(style: StrokeStyle(lineWidth: 2.25, lineCap: .round, lineJoin: .round)).frame(width: 22, height: 22)
-            .onAppear { withAnimation(reduce ? nil : .motion(.soft).delay(0.08)) { drawn = true } }
+            .onAppear { withAnimation(reduce ? nil : .motion(.soft).delay(Motion.lag + Motion.lag / 3)) { drawn = true } }
     }
 }
 

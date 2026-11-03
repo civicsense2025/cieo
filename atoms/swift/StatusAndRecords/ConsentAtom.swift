@@ -36,7 +36,7 @@ public struct ConsentAtom: MotionAtomView {
         VStack(alignment: .leading, spacing: 8) {
             if tab {
                 Label("Privacy choices", systemImage: "shield").font(.caption.weight(.medium))
-                    .transition(.opacity.animation(reduce ? nil : .motion(.base).delay(0.15)))
+                    .transition(.opacity.animation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.lag)))
             } else {
                 SwapText(custom ? "Choose what we may use" : "We use cookies").font(.callout.weight(.semibold))
                 AgReveal(open: !custom) { Text("Optional ones help us improve the site. They start off.").font(.caption).foregroundStyle(.secondary) }

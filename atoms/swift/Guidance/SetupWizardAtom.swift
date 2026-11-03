@@ -21,7 +21,7 @@ public struct SetupWizardAtom: MotionAtomView {
                                 .fill(i <= min(step, 3) ? Color.accentColor : Color.primary.opacity(0.1))
                                 .frame(height: 6)
                         }
-                    }.animation(reduce ? nil : .motion(.base).delay(0.06), value: step)
+                    }.animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: step)
                     ZStack(alignment: .topLeading) {
                         switch step {
                         case 0:

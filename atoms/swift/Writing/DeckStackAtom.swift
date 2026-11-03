@@ -62,7 +62,7 @@ public struct DeckStackAtom: MotionAtomView {
         guard !reduce else { cards = next; return }
         withAnimation(.motion(.soft)) { cards = next }
         let diff = Set(zip(before, next.map(\.id)).filter { $0.0 != $0.1 }.flatMap { [$0.0, $0.1] })
-        withAnimation(.motion(.soft).delay(0.06)) { moved = diff }
+        withAnimation(.motion(.soft).delay(Motion.lag)) { moved = diff }
         Task { try? await Task.sleep(for: .milliseconds(700)); withAnimation(.motion(.soft)) { moved = [] } }
     }
 }

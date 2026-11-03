@@ -42,7 +42,7 @@ public struct RsvpAtom: MotionAtomView {
                                 }
                                 .frame(maxWidth: .infinity, minHeight: 52)
                                 .contentTransition(.numericText())
-                                .animation(.spring, value: count(i))
+                                .animation(reduce ? nil : .motion(.base), value: count(i))
                             }
                             .buttonStyle(.plain)
                             .foregroundStyle(i == 2 && pick == 2 ? Color(red: 0.58, green: 0.25, blue: 0.02) : .primary)

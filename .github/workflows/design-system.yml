@@ -30,4 +30,9 @@ jobs:
           scripts/check-swift-literals.sh
           caught=$(scripts/check-swift-literals.sh scripts/fixtures/hard-coded-styling.swift.fixture | grep -c 'fixture:' || true)
           test "$caught" -eq 5 || { echo "The styling check missed hard-coded lines in its fixture ($caught of 5)"; exit 1; }
+      - name: Swift motion uses the Cieo spring presets
+        run: |
+          scripts/check-swift-motion.sh
+          caught=$(scripts/check-swift-motion.sh scripts/fixtures/raw-motion.swift.fixture | grep -c 'fixture:' || true)
+          test "$caught" -eq 4 || { echo "The motion check missed raw motion in its fixture ($caught of 4)"; exit 1; }
       - run: swift build && swift test

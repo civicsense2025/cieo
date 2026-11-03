@@ -79,7 +79,7 @@ public struct OneQuestionAtATimeAtom: MotionAtomView {
                         Circle().strokeBorder(Color.green, lineWidth: 2.25)
                         Check().trim(from: 0, to: drawn ? 1 : 0).stroke(Color.green, style: StrokeStyle(lineWidth: 2.25, lineCap: .round, lineJoin: .round))
                     }
-                    .frame(width: 34, height: 34).animation(reduce ? nil : .motion(.soft).delay(0.2), value: drawn)
+                    .frame(width: 34, height: 34).animation(reduce ? nil : .motion(.soft).delay(Motion.exit * 2), value: drawn)
                     Text("Thanks, \(name.split(separator: " ").first.map(String.init) ?? "")."
                         ).font(.title2.weight(.semibold))
                 }

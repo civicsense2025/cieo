@@ -36,7 +36,7 @@ public struct HintBubbleAtom: MotionAtomView {
                                 .background(Color.primary, in: RoundedRectangle(cornerRadius: 10))
                                 .offset(x: 90, y: f == 0 ? -64 : 22)
                                 .id(f).motionTransition(.swap())
-                                .animation(reduce ? nil : .motion(.base).delay(0.06), value: field)
+                                .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: field)
                         }
                     }
                 }

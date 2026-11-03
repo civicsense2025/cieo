@@ -28,15 +28,15 @@ public struct OnboardingChecklistAtom: MotionAtomView {
                     VStack(alignment: .leading, spacing: 0) {
                         HStack { Text("Setup").font(.footnote.weight(.semibold)); Spacer(); Text("\(count) of 4").font(.caption).foregroundStyle(.secondary)
                             Circle().trim(from: 0, to: Double(count) / 4).stroke(Color.accentColor, style: StrokeStyle(lineWidth: 3, lineCap: .round)).rotationEffect(.degrees(-90)).frame(width: 20, height: 20)
-                                .background(Circle().stroke(.quaternary, lineWidth: 3)).animation(reduce ? nil : .motion(.base).delay(0.12), value: count) }.padding(.bottom, 8)
+                                .background(Circle().stroke(.quaternary, lineWidth: 3)).animation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.lag / 3), value: count) }.padding(.bottom, 8)
                         Toggle("Details", isOn: $details).font(.caption).foregroundStyle(.secondary)
                         ForEach(tasks.indices, id: \.self) { i in task(i) }
                     }.motionTransition(.swap())
                 case .done:
                     VStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle.fill").font(.system(size: 40)).foregroundStyle(.green).scaleEffect(finished ? 1 : 0.5).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.1), value: finished)
-                        Text("You’re all set").font(.headline).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.25), value: finished)
-                        PreviewAction("Continue").buttonStyle(.borderedProminent).controlSize(.small).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(0.35), value: finished)
+                        Image(systemName: "checkmark.circle.fill").font(.system(size: 40)).foregroundStyle(.green).scaleEffect(finished ? 1 : 0.5).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(Motion.exit), value: finished)
+                        Text("You’re all set").font(.headline).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.staggerMax / 2), value: finished)
+                        PreviewAction("Continue").buttonStyle(.borderedProminent).controlSize(.small).opacity(finished ? 1 : 0).animation(reduce ? nil : .motion(.base).delay(MotionTokens.durationBase), value: finished)
                     }.motionTransition(.swap())
                 }
             }
@@ -50,9 +50,9 @@ public struct OnboardingChecklistAtom: MotionAtomView {
             Button { withMotion(.base, reduceMotion: reduce) { open = open == i ? nil : i } } label: {
                 HStack(spacing: 8) {
                     ZStack { Circle().strokeBorder(.quaternary, lineWidth: 2); Circle().fill(Color.green).opacity(d ? 1 : 0)
-                        Image(systemName: "checkmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white).opacity(d ? 1 : 0).offset(x: 0.5, y: -0.5).animation(reduce ? nil : .motion(.base).delay(0.04), value: d) }.frame(width: 18, height: 18)
+                        Image(systemName: "checkmark").font(.system(size: 9, weight: .bold)).foregroundStyle(.white).opacity(d ? 1 : 0).offset(x: 0.5, y: -0.5).animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: d) }.frame(width: 18, height: 18)
                     Text(tasks[i]).font(.footnote).foregroundStyle(d ? .secondary : .primary)
-                        .overlay(alignment: .leading) { GeometryReader { g in Rectangle().fill(.secondary).frame(width: d ? g.size.width : 0, height: 1).offset(y: g.size.height / 2) }.animation(reduce ? nil : .motion(.base).delay(0.08), value: d) }
+                        .overlay(alignment: .leading) { GeometryReader { g in Rectangle().fill(.secondary).frame(width: d ? g.size.width : 0, height: 1).offset(y: g.size.height / 2) }.animation(reduce ? nil : .motion(.base).delay(Motion.lag + Motion.lag / 3), value: d) }
                     Spacer()
                 }
             }.buttonStyle(.plain).padding(.vertical, 6)

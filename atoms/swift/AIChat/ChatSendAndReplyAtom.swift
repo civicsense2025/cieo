@@ -42,7 +42,7 @@ public struct ChatSendAndReplyAtom: MotionAtomView {
         ZStack {
             if let text = m.text {
                 Text(text).font(.subheadline).fixedSize(horizontal: false, vertical: true)
-                    .transition(reduce ? .identity : .opacity.animation(.motion(.base).delay(0.12)))
+                    .transition(reduce ? .identity : .opacity.animation(.motion(.base).delay(Motion.exit + Motion.lag / 3)))
             } else { Dots() }
         }
         .padding(.horizontal, 12).padding(.vertical, 8).frame(maxWidth: 240, alignment: m.mine ? .trailing : .leading)

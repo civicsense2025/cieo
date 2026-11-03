@@ -27,7 +27,7 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 4. Organisms compose state panels and content sections, leaving data and actions with the host.
 5. A portable runtime snapshot mirrors the exact core/UI sources into the Apple starter, with revision and content hashes checked before builds.
 
-Keep iOS 17/macOS 14 support, system text scaling, native keyboard/focus behavior and stable identities. Building CieoUI requires Xcode 16 or later for the back-deployed `@Entry` macro; verification uses Xcode 27. Reduce Motion disables movement. Background, Low Power Mode, increased contrast and reduced transparency constrain optional graphics. Production controls own no display links, perpetual animation, full-screen blur, forced rasterization or authentication. Selected reference recipes can demonstrate ongoing motion; metadata rows never create those views and inactive detail views unmount their content.
+Keep iOS 17/macOS 14 support, system text scaling, native keyboard/focus behavior and stable identities. Building CieoUI requires Xcode 16 or later for the back-deployed `@Entry` macro; verification uses Xcode 27. Reduce Motion disables movement: every component and recipe animates through `.motion(preset)`, `withMotion(_:reduceMotion:)` or `.motionAnimation(_:value:)`, never a SwiftUI default spring (those overshoot), and single delays read `Motion.lag` and `Motion.exit`. `scripts/check-swift-motion.sh` enforces this in the `swift` CI job; staggered per-item delays are not yet tokenized. Background, Low Power Mode, increased contrast and reduced transparency constrain optional graphics. Production controls own no display links, perpetual animation, full-screen blur, forced rasterization or authentication. Selected reference recipes can demonstrate ongoing motion; metadata rows never create those views and inactive detail views unmount their content.
 
 ## Rendering and acceptance
 
@@ -133,7 +133,7 @@ Components choose a role and never a value. A host changes one value at the root
 | Spacing and strokes | `componentMetrics` | tight 4, compact 8, snug 10 (the inside of a pill or chip), medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
 | Press feedback | `controlAppearance` | pressedOpacity and disabledOpacity for controls that take no `appearance:` of their own, such as SegmentedControl |
 | Glyphs | `componentIcons` | disclosure, info, check, previous, next, search, clear, error, selected, unselected (the host closure runs on the main actor, so a glyph may hold `@ScaledMetric` state) |
-| Display type | `displayTypography` | display, title, subtitle and three numeral sizes |
+| Display type | `displayTypography` | display, title, headline and three numeral sizes |
 
 Content goes in through `@ViewBuilder` slots or `Text`, never through styling flags. Molecules and organisms are built from atoms, never from raw `Text` and `Image` with their own fonts:
 

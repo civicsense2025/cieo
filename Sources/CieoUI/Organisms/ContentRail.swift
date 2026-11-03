@@ -1,3 +1,4 @@
+import Cieo
 import SwiftUI
 
 /// A row of items the reader swipes sideways, snapping to each item. Touch devices swipe; on the Mac,
@@ -5,6 +6,8 @@ import SwiftUI
 public struct ContentRail<Item: Identifiable, Card: View>: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var position: Item.ID?
     private let items: [Item]
     private let itemWidth: CGFloat
@@ -75,7 +78,7 @@ public struct ContentRail<Item: Identifiable, Card: View>: View {
         let atEnd = target == (index ?? 0)
         return IconButton(icon, label: name + Text(", ") + label) {
             guard let target else { return }
-            withAnimation(.snappy) { position = items[target].id }
+            withMotion(.soft, reduceMotion: reduceMotion || !policy.allowsMotion) { position = items[target].id }
         }
         .background(Circle().fill(theme.surface))
         .disabled(atEnd)

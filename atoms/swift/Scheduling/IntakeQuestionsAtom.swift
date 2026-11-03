@@ -70,7 +70,7 @@ public struct IntakeQuestionsAtom: MotionAtomView {
                         }
                     }
                     .frame(minHeight: 190)
-                    .animation(.spring, value: step)
+                    .animation(reduce ? nil : .motion(.base), value: step)
                     HStack {
                         Button("Back") { back() }.font(.system(size: 12)).foregroundStyle(.secondary)
                             .frame(minHeight: 32)

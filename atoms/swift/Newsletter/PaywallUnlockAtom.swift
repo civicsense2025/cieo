@@ -53,7 +53,7 @@ public struct PaywallUnlockAtom: MotionAtomView {
         .background(.background, in: RoundedRectangle(cornerRadius: 12))
         .padding(10)
         .opacity(unlocked ? 0 : 1).offset(y: unlocked ? 12 : 0)
-        .animation(reduce ? nil : .motion(.snap).delay(0.25), value: unlocked)
+        .animation(reduce ? nil : .motion(.snap).delay(Motion.exit + Motion.staggerMax / 2), value: unlocked)
         .allowsHitTesting(!unlocked)
     }
 

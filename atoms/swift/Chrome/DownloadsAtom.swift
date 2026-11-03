@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Downloads shelf: pushes up, rows stagger 40ms, ring fills, success terminal.
 public struct DownloadsAtom: MotionAtomView {
@@ -53,7 +54,7 @@ public struct DownloadsAtom: MotionAtomView {
                             if i < files.count - 1 { Divider() }
                         }
                     }
-                    .animation(reduce ? nil : .spring(response: 0.3).delay(0.04), value: progress)
+                    .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: progress)
                     Text(done ? "3 of 3 complete ✓" : "\(Int(progress * 100))% downloading…")
                         .font(.system(size: 12)).foregroundStyle(.secondary).monospacedDigit()
                         .frame(maxWidth: .infinity, alignment: .leading)

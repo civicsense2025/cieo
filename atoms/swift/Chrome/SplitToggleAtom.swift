@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Split-view toggle: 1:1 drag, spring release, pill trails edges.
 public struct SplitToggleAtom: MotionAtomView {
@@ -43,7 +44,7 @@ public struct SplitToggleAtom: MotionAtomView {
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
                 .frame(height: 120)
-                .animation(reduce ? nil : .spring(response: 0.3), value: split)
+                .animation(reduce ? nil : .motion(.base), value: split)
                 Text(preset).font(.system(size: 12)).foregroundStyle(.secondary).monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .leading)
             }

@@ -55,7 +55,7 @@ public struct NotifyToggle: View {
                     .phaseAnimator(Array(Self.samples.indices), trigger: rings) { bell, step in
                         bell.rotationEffect(.degrees(Self.samples[step]), anchor: UnitPoint(x: 0.5, y: 0.1)) // literal-ok: the clapper hangs from the bell's top
                     } animation: { _ in
-                        .easeInOut(duration: Self.sampleSeconds)
+                        .easeInOut(duration: Self.sampleSeconds)  // motion-ok: steps between pre-sampled spring positions
                     }
                 if isOn {
                     InlineGlyph(font: typography.glyph) { icons(.check) }

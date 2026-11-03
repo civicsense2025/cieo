@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Command palette: drops on soft spring, rows spring to slots, highlight edges trail.
 public struct CmdPaletteAtom: MotionAtomView {
@@ -42,7 +43,7 @@ public struct CmdPaletteAtom: MotionAtomView {
                             if i < matches.count - 1 { Divider() }
                         }
                     }
-                    .animation(reduce ? nil : .spring(response: 0.28), value: matches.count)
+                    .animation(reduce ? nil : .motion(.base), value: matches.count)
                     Text(ran.map { "Ran “\($0)” ✓" } ?? "\(matches.count) of \(cmds.count) commands")
                         .font(.system(size: 12)).foregroundStyle(.secondary).monospacedDigit()
                         .frame(maxWidth: .infinity, alignment: .leading)

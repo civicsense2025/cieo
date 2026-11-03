@@ -78,12 +78,12 @@ public struct ConfirmDialogAtom: MotionAtomView {
 
     private func confirm() {
         ask(false)
-        withAnimation(reduce ? nil : .motion(.snap).delay(0.12)) { rowShown = false }
+        withAnimation(reduce ? nil : .motion(.snap).delay(Motion.exit + Motion.lag / 3)) { rowShown = false }
         withAnimation(reduce ? nil : .motion(.base).delay(0.12 + Motion.exit)) { rowOpen = false }
     }
 
     private func reset() {
         withAnimation(reduce ? nil : .motion(.base)) { rowOpen = true }
-        withAnimation(reduce ? nil : .motion(.base).delay(0.12)) { rowShown = true }
+        withAnimation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.lag / 3)) { rowShown = true }
     }
 }

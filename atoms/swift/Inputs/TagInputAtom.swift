@@ -85,7 +85,7 @@ public struct TagInputAtom: MotionAtomView {
                 guard !tag.instant else { return }
                 if reduce { w = 1; o = 1; return }
                 withAnimation(.motion(.base)) { w = 1 }
-                withAnimation(.motion(.base).delay(0.06)) { o = 1 }
+                withAnimation(.motion(.base).delay(Motion.lag)) { o = 1 }
             }
             .onChange(of: tag.removing) { _, gone in
                 guard gone else { return }

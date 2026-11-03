@@ -78,7 +78,7 @@ struct AgReveal<Content: View>: View {
             .background(GeometryReader { Color.clear.preference(key: AgHeightKey.self, value: $0.size.height) })
             .onPreferenceChange(AgHeightKey.self) { height = $0 }
             .opacity(open ? 1 : 0)
-            .animation(reduce ? nil : (open ? .motion(.base).delay(0.07) : .motionExit), value: open)
+            .animation(reduce ? nil : (open ? .motion(.base).delay(Motion.lag) : .motionExit), value: open)
             .frame(height: open ? height : 0, alignment: .top)
             .clipped()
             .animation(reduce ? nil : .motion(.base).delay(open ? 0 : Motion.exit), value: open)
