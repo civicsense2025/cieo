@@ -1360,7 +1360,7 @@ atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet 
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && y.target < H){ e.preventDefault(); open(false); op.focus(); } });
     drag(sh, { down:p => { held = true; sy = y.at() - p.cy; hy = y.at(); }, move:p => { const v = sy + p.cy; hy = v < 0 ? rb(v, 30) : v; },
       up:(p, v) => { held = false; const to = hy > H*.3 || v.vy > 500 ? H + 10 : 0; y.release(hy, v.vy, to); op.setAttribute('aria-expanded', String(to === 0)); } });
-    return t => { const v = held ? hy : y.at(t), shut = !held && y.target > H; sh.inert = shut; sh.toggleAttribute('aria-hidden', shut); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
+    return t => { const v = held ? hy : y.at(t), shut = !held && y.target > H; if (sh.inert !== shut){ sh.inert = shut; sh.setAttribute('aria-hidden', String(shut)); } sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
   }});
 window.CIEO_SOURCE_HINT="blocks/042-palette.js";
 
@@ -2088,18 +2088,18 @@ window.CIEO_SOURCE_HINT="blocks/078-otp.js";
 
 
 atom({ id:'otp', cat:'Inputs', name:'One-time code', block:'form, account, Input OTP', fam:['S','E','M'],
-  html:`<div class="col" style="align-items:center;gap:10px"><div class="ob" style="position:relative;display:flex;gap:8px"><i class="ring" style="position:absolute;top:-3px;height:54px;border-radius:12px;border:2px solid var(--ink);pointer-events:none"></i><input id="otp-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Six digit code" style="position:absolute;inset:0;opacity:0;font-size:16px;cursor:text"></div><div class="om small" role="status" aria-live="polite" style="position:relative;height:36px;width:min(300px,100%);text-align:center"></div></div><div class="hint">The code is 246810</div>`,
+  html:`<div class="col" style="align-items:center;gap:10px"><div class="ob" style="position:relative;display:flex;gap:8px"><i class="ring" style="position:absolute;top:-3px;height:54px;border-radius:12px;border:2px solid var(--ink);pointer-events:none"></i><input id="otp-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Six digit code" style="position:absolute;inset:0;opacity:0;font-size:16px;cursor:text"></div><div class="om small" aria-hidden="true" style="position:relative;height:36px;width:min(300px,100%);text-align:center"></div><div class="say" role="status" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap"></div></div><div class="hint">The code is 246810</div>`,
   desc:'Each digit rolls into its box and a focus ring slides to the next box with lagging edges. A full code turns every box success or danger; a wrong code clears itself after a beat and the message says what to do next, announced to screen readers.',
   api:'box[i].to(digit)   ring.go(x[i])   status → success | danger',
   init(st){
-    const ob = $(st,'.ob'), inp = $(st,'input'), ring = $(st,'.ring'), om = $(st,'.om');
+    const ob = $(st,'.ob'), inp = $(st,'input'), ring = $(st,'.ring'), om = $(st,'.om'), say = $(st,'.say');
     const boxes = [...Array(6)].map(() => { const b = document.createElement('span'); b.style.cssText = 'position:relative;width:40px;height:48px;border-radius:10px;border:1.5px solid var(--muted);background:var(--card);font:600 22px var(--sans);display:block'; ob.insertBefore(b, inp); return { b, sw:new Swap(''), L:{} }; });
-    const M = { '':'', ok:'Verified. Signing you in…', bad:'That code didn’t match. Check the newest message and try again.', last:'Three codes didn’t match. We sent a new one; the old code no longer works.' }, ml = {}; let misses = 0;
+    const M = { '':'', ok:'Verified. Signing you in…', bad:'That code didn’t match. Check the newest message and try again.', last:'Three codes didn’t match. Request a new code to keep trying.' }, ml = {}; let misses = 0;
     for (const k in M){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = M[k]; e.style.color = k === 'ok' ? 'var(--success)' : 'var(--danger)'; om.appendChild(e); ml[k] = e; }
     const e = edges(0,40), ok = new Track(0), bad = new Track(0), fo = new Track(0), msw = new Swap(''); let clearAt = 0;
     const show = () => { const v = inp.value; boxes.forEach((x,i) => { const c = v[i] || ''; if (!(c in x.L)){ const s = document.createElement('span'); s.className = 'layer'; s.textContent = c; x.b.appendChild(s); x.L[c] = s; } x.sw.to(c); });
       const i = Math.min(v.length, 5), b = boxes[i].b; e.go(b.offsetLeft - 3, b.offsetLeft + b.offsetWidth + 3);
-      if (v.length === 6){ const good = v === '246810'; (good ? ok : bad).set(1); misses = good ? 0 : misses + 1; msw.to(good ? 'ok' : misses >= 3 ? 'last' : 'bad'); if (misses >= 3) misses = 0; if (!good) clearAt = now() + 1.6; } else { ok.set(0); bad.set(0); if (v.length) msw.to(''); } };
+      if (v.length === 6){ const good = v === '246810'; (good ? ok : bad).set(1); misses = good ? 0 : misses + 1; const k = good ? 'ok' : misses >= 3 ? 'last' : 'bad'; msw.to(k); say.textContent = M[k]; if (misses >= 3) misses = 0; if (!good) clearAt = now() + 1.6; } else { ok.set(0); bad.set(0); if (v.length){ msw.to(''); say.textContent = ''; } } };
     inp.oninput = () => { inp.value = inp.value.replace(/\D/g,'').slice(0,6); show(); };
     inp.onfocus = () => fo.set(1); inp.onblur = () => fo.set(0);
     show(); const b0 = boxes[0].b; e.jump(b0.offsetLeft - 3, b0.offsetLeft + b0.offsetWidth + 3);
@@ -2358,6 +2358,7 @@ atom({ id:'numstep', cat:'Forms', name:'Number stepper', block:'form (number), l
 window.CIEO_SOURCE_HINT="blocks/090-phone.js";
 
 
+let phoneSeq = 0;
 atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:['S','M'],
   html:`<div class="col" style="width:min(300px,88%);gap:6px"><label class="small" for="ph" style="font-weight:500">Mobile number</label><div class="pw row" style="height:42px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);gap:0;overflow:hidden"><button class="cc" aria-label="Change country" style="position:relative;width:70px;height:100%;border:0;border-right:1px solid var(--line-soft);background:none;cursor:pointer;font:500 13px var(--sans)"></button><input id="ph" inputmode="tel" autocomplete="tel" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 10px;font-variant-numeric:tabular-nums"><span class="ok" style="padding-right:10px;color:var(--success)">${ic(I.check,16,2.5)}</span></div><span class="small muted">Click the country code to switch</span></div>`,
   desc:'Digits format as you type for the chosen country. Switching country swaps the code with a blur and reformats the number. A complete number earns a success check.',
@@ -2370,10 +2371,10 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
     inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); if (msg.textContent) check(); };
     // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
-    const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
-    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');
+    const msg = document.createElement('span'); msg.id = 'ph-msg-' + (++phoneSeq); msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
+    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', msg.id);
     const missing = () => { const len = C[k][2].reduce((a,b) => a + b, 0), n = inp.value.replace(/\D/g,'').length; return n && n < len ? len - n : 0; };
-    const check = () => { const m = missing(); inp.toggleAttribute('aria-invalid', !!m); if (m) inp.setAttribute('aria-invalid', 'true');
+    const check = () => { const m = missing(); if (m) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
       msg.textContent = m ? `${m} more digit${m === 1 ? '' : 's'} for a ${C[k][0]} number.` : ''; pw.style.borderColor = m ? 'var(--danger)' : 'var(--muted)'; };
     inp.onfocus = () => { pw.style.borderColor = 'var(--ink)'; }; inp.onblur = check;
     inp.addEventListener('input', () => { if (msg.textContent && !missing()) check(); }); fmt();

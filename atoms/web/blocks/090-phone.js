@@ -1,5 +1,6 @@
 
 
+let phoneSeq = 0;
 atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:['S','M'],
   html:`<div class="col" style="width:min(300px,88%);gap:6px"><label class="small" for="ph" style="font-weight:500">Mobile number</label><div class="pw row" style="height:42px;border:1.5px solid var(--muted);border-radius:10px;background:var(--card);gap:0;overflow:hidden"><button class="cc" aria-label="Change country" style="position:relative;width:70px;height:100%;border:0;border-right:1px solid var(--line-soft);background:none;cursor:pointer;font:500 13px var(--sans)"></button><input id="ph" inputmode="tel" autocomplete="tel" style="flex:1;min-width:0;border:0;background:none;color:var(--ink);font:15px var(--sans);outline:none;padding:0 10px;font-variant-numeric:tabular-nums"><span class="ok" style="padding-right:10px;color:var(--success)">${ic(I.check,16,2.5)}</span></div><span class="small muted">Click the country code to switch</span></div>`,
   desc:'Digits format as you type for the chosen country. Switching country swaps the code with a blur and reformats the number. A complete number earns a success check.',
@@ -12,10 +13,10 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
     inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); if (msg.textContent) check(); };
     // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
-    const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
-    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');
+    const msg = document.createElement('span'); msg.id = 'ph-msg-' + (++phoneSeq); msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
+    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', msg.id);
     const missing = () => { const len = C[k][2].reduce((a,b) => a + b, 0), n = inp.value.replace(/\D/g,'').length; return n && n < len ? len - n : 0; };
-    const check = () => { const m = missing(); inp.toggleAttribute('aria-invalid', !!m); if (m) inp.setAttribute('aria-invalid', 'true');
+    const check = () => { const m = missing(); if (m) inp.setAttribute('aria-invalid', 'true'); else inp.removeAttribute('aria-invalid');
       msg.textContent = m ? `${m} more digit${m === 1 ? '' : 's'} for a ${C[k][0]} number.` : ''; pw.style.borderColor = m ? 'var(--danger)' : 'var(--muted)'; };
     inp.onfocus = () => { pw.style.borderColor = 'var(--ink)'; }; inp.onblur = check;
     inp.addEventListener('input', () => { if (msg.textContent && !missing()) check(); }); fmt();
