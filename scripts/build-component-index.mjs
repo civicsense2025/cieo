@@ -24,24 +24,27 @@ items.sort((a, b) => (a.dir < b.dir ? -1 : 1));
 const groups = { atom: [], molecule: [], organism: [] };
 for (const item of items) (groups[item.layer] ?? groups.atom).push(item);
 
-const section = (title, list) =>
-  `<section><h2>${title} (${list.length})</h2><ul>${list
+const section = (id, title, list) =>
+  `<section id="${id}" aria-labelledby="${id}-h"><h2 id="${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul>${list
     .map((i) => `<li><a href="./${i.dir}.html">${i.name}</a></li>`)
     .join('')}</ul></section>`;
 
 const index = `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Components · Cieo</title><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"></head>
-<body class="cieo">
-<header><p><a href="../">Cieo</a></p><h1>Components (${items.length})</h1><p>Every primitive, with a live example and contract on its own page.</p></header>
-<main>
-${section('Atoms', groups.atom)}
-${section('Molecules', groups.molecule)}
-${section('Organisms', groups.organism)}
-</main>
-<aside aria-label="On this page"><a href="#usage">Atoms</a><a href="#usage">Molecules</a><a href="#usage">Organisms</a></aside>
-</body></html>
+<title>Components · Cieo</title><link rel="stylesheet" href="../../design/themes.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"></head>
+<body class="cieo cieo-docsite"><div class="doc-shell">
+<nav class="doc-rail" aria-label="On this page"><span class="doc-label">On this page</span><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a><a href="#elsewhere">Elsewhere</a></nav>
+<div class="doc-main">
+<header class="doc-head"><p class="doc-crumbs"><span>Cieo</span><span aria-hidden="true">/</span><span>Components</span></p><h1>Components <span class="doc-count">${items.length}</span></h1><p>Every primitive on its own page: the import, a preview, properties, the guide from its README, and the tokens it reads.</p></header>
+<div class="doc-register">
+${section('atoms', 'Atoms', groups.atom)}
+${section('molecules', 'Molecules', groups.molecule)}
+${section('organisms', 'Organisms', groups.organism)}
+<section id="elsewhere" aria-labelledby="elsewhere-h"><h2 id="elsewhere-h">Elsewhere</h2><ul><li><a href="../../docs/controls.html">Form controls (cieo/controls)</a></li><li><a href="../../docs/catalogue.html">Recipe catalogue</a></li><li><a href="../../docs/studio/index.html">Design studio</a></li><li><a href="../composites/index.html">Composites</a></li></ul></section>
+</div>
+</div>
+</div></body></html>
 `;
 
 const writes = [[`${root}/site/components/index.html`, index]];

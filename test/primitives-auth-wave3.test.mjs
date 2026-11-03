@@ -84,8 +84,8 @@ test('Wave 3 doc pages carry the catalogue markers and a prev/next chain', () =>
     assert.match(html, new RegExp(`<title>${name} · Cieo</title>`));
     assert.match(html, /<span data-level>(molecule|organism)<\/span>/);
     assert.match(html, new RegExp(`<h1>${name}<\/h1>`));
-    assert.match(html, /<div data-preview>/);
-    assert.match(html, /<div role="tablist"/);
+    assert.match(html, /<div [^>]*\bdata-preview\b/);
+    assert.match(html, /<div [^>]*role="tablist"/);
     assert.match(html, /<code data-code>/);
     assert.match(html, /<tbody>.*<\/tbody>/s);
     assert.match(html, /<div data-do>/);
