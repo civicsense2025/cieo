@@ -10,7 +10,7 @@
   :where(.cieo).cieo-annotation-pin[data-state='resolved'] .cieo-annotation-pin-body { background: var(--cieo-color-sunken); color: var(--cieo-color-muted); border-color: var(--cieo-color-border); }
   :where(.cieo).cieo-annotation-pin[data-selected='true'] .cieo-annotation-pin-body { box-shadow: 0 0 0 2px var(--cieo-color-focus); }
   :where(.cieo).cieo-annotation-pin:focus-visible { outline: none; }
-  :where(.cieo).cieo-annotation-pin:focus-visible .cieo-annotation-pin-body { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo).cieo-annotation-pin:focus-visible .cieo-annotation-pin-body { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @keyframes cieo-annotation-pin-pop { from { transform: scale(0.45); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   @media (prefers-reduced-motion: reduce) { :where(.cieo).cieo-annotation-pin { animation: none; } }
   :where([data-motion='off']) :where(.cieo).cieo-annotation-pin, :where(.cieo)[data-motion='off'].cieo-annotation-pin { animation: none; }

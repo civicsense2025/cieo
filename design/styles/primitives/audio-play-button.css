@@ -5,7 +5,7 @@
   :where(.cieo).cieo-audio-play-button[data-size='lg'] { --size: var(--cieo-control-large); }
   @media (pointer: coarse) { :where(.cieo).cieo-audio-play-button { min-inline-size: var(--cieo-touch-target); min-block-size: var(--cieo-touch-target); } }
   :where(.cieo).cieo-audio-play-button:active { transform: scale(0.94); }
-  :where(.cieo).cieo-audio-play-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo).cieo-audio-play-button:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo) .cieo-audio-play-button-icon { display: flex; inline-size: 40%; block-size: 40%; }
   :where(.cieo) .cieo-audio-play-button-half { flex: 1; background: currentColor; transition: clip-path var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
   :where(.cieo) .cieo-audio-play-button-half[data-half='left'] { clip-path: polygon(0 0, 100% 25%, 100% 75%, 0 100%); }

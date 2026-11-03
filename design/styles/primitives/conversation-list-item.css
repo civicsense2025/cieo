@@ -2,8 +2,8 @@
 @layer cieo.components {
   :where(.cieo).cieo-conversation-list-item { display: block; }
   :where(.cieo) .cieo-conversation-list-item-row { display: flex; align-items: center; gap: var(--cieo-space-3); inline-size: 100%; box-sizing: border-box; min-block-size: var(--cieo-touch-target); padding: var(--cieo-space-2) var(--cieo-space-3); border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: var(--cieo-color-text); font: inherit; text-align: start; text-decoration: none; cursor: pointer; transition: background-color var(--motion-duration-exit, 100ms) ease-out; }
-  :where(.cieo) .cieo-conversation-list-item-row:hover { background: var(--cieo-color-sunken); }
-  :where(.cieo) .cieo-conversation-list-item-row:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (hover: hover) { :where(.cieo) .cieo-conversation-list-item-row:hover { background: var(--cieo-color-sunken); } }
+  :where(.cieo) .cieo-conversation-list-item-row:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo).cieo-conversation-list-item[data-selected] .cieo-conversation-list-item-row { background: var(--cieo-color-accent-soft); }
   :where(.cieo) .cieo-conversation-list-item-avatar { display: inline-flex; flex: none; }
   :where(.cieo) .cieo-conversation-list-item-main { flex: 1; min-inline-size: 0; display: grid; gap: var(--cieo-space-1); }

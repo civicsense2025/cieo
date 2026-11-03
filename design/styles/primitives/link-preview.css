@@ -1,8 +1,8 @@
 /* design/styles/primitives/link-preview.css */
 @layer cieo.components {
   :where(.cieo).cieo-link-preview { position: relative; display: grid; overflow: hidden; border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
-  :where(.cieo).cieo-link-preview[data-linked]:hover { border-color: var(--cieo-color-border-strong); }
-  :where(.cieo).cieo-link-preview:has(.cieo-link-preview-title:focus-visible) { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (hover: hover) { :where(.cieo).cieo-link-preview[data-linked]:hover { border-color: var(--cieo-color-border-strong); } }
+  :where(.cieo).cieo-link-preview:has(.cieo-link-preview-title:focus-visible) { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo) .cieo-link-preview-content, :where(.cieo) .cieo-link-preview-skeleton { grid-area: 1 / 1; display: grid; min-inline-size: 0; }
   :where(.cieo) .cieo-link-preview-content { animation: cieo-link-preview-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit, 100ms) both; }
   :where(.cieo).cieo-link-preview[data-variant='compact'] :is(.cieo-link-preview-content, .cieo-link-preview-skeleton) { grid-template-columns: 5.5rem minmax(0, 1fr); align-items: stretch; }

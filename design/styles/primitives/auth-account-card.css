@@ -34,7 +34,7 @@
     background: var(--cieo-color-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
   }
-  :where(.cieo) .cieo-auth-signout:focus-visible, :where(.cieo) .cieo-auth-accept:focus-visible, :where(.cieo) .cieo-auth-decline:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  :where(.cieo) .cieo-auth-signout:focus-visible, :where(.cieo) .cieo-auth-accept:focus-visible, :where(.cieo) .cieo-auth-decline:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (max-width: 30rem), (pointer: coarse) {
     :where(.cieo) .cieo-auth-signout, :where(.cieo) .cieo-auth-accept, :where(.cieo) .cieo-auth-decline { min-height: 2.75rem; padding-block: 12px; }
   }

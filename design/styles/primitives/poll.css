@@ -5,8 +5,8 @@
   :where(.cieo) .cieo-poll-options { display: grid; gap: var(--cieo-space-2); }
   :where(.cieo) .cieo-poll-row { position: relative; display: flex; align-items: center; gap: var(--cieo-space-2); inline-size: 100%; min-block-size: var(--cieo-control-height); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: inherit; font: inherit; text-align: start; overflow: hidden; isolation: isolate; }
   :where(.cieo) button.cieo-poll-row { cursor: pointer; transition: background-color var(--motion-duration-snap, 150ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
-  :where(.cieo) button.cieo-poll-row:hover { background: var(--cieo-color-sunken); }
-  :where(.cieo) button.cieo-poll-row:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (hover: hover) { :where(.cieo) button.cieo-poll-row:hover { background: var(--cieo-color-sunken); } }
+  :where(.cieo) button.cieo-poll-row:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo) .cieo-poll-fill { position: absolute; inset: 0 auto 0 0; z-index: -1; inline-size: var(--cieo-poll-fill, 0%); background: var(--cieo-color-sunken); border-radius: inherit; }
   :where(.cieo) .cieo-poll-option[data-leader] .cieo-poll-fill { background: var(--cieo-color-accent-soft); }
   :where(.cieo) .cieo-poll-option[data-leader] .cieo-poll-row { border-color: var(--cieo-color-accent); }

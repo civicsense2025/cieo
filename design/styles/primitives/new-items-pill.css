@@ -7,9 +7,9 @@
   :where(.cieo).cieo-new-items-pill[data-placement='top'] .cieo-new-items-pill-button { inset-block-start: 0; }
   :where(.cieo).cieo-new-items-pill[data-placement='bottom'] .cieo-new-items-pill-button { inset-block-end: 0; }
   :where(.cieo) .cieo-new-items-pill-button[hidden] { display: none; }
-  :where(.cieo) .cieo-new-items-pill-button:hover { filter: brightness(1.08); }
+  @media (hover: hover) { :where(.cieo) .cieo-new-items-pill-button:hover { filter: brightness(1.08); } }
   :where(.cieo) .cieo-new-items-pill-button:active { transform: scale(0.97); }
-  :where(.cieo) .cieo-new-items-pill-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-new-items-pill-button:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (pointer: coarse) { :where(.cieo) .cieo-new-items-pill-button { min-block-size: var(--cieo-touch-target); } }
   :where(.cieo) .cieo-new-items-pill-count { display: inline-flex; }
   :where(.cieo) .cieo-new-items-pill-count:empty { display: none; }

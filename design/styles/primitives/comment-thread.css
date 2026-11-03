@@ -6,8 +6,8 @@
   :where(.cieo) .cieo-comment-thread-item { margin: 0; padding: 0; outline: none; }
   :where(.cieo) .cieo-comment-thread-item[data-new] > .cieo-comment { animation: cieo-comment-rise var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
   :where(.cieo) .cieo-comment-thread-more { display: inline-flex; align-items: center; min-block-size: var(--cieo-control-small); margin-block: var(--cieo-space-1); padding: 0 var(--cieo-space-2); border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: var(--cieo-color-muted); font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); cursor: pointer; }
-  :where(.cieo) .cieo-comment-thread-more:hover { color: var(--cieo-color-text); background: var(--cieo-color-sunken); }
-  :where(.cieo) .cieo-comment-thread-more:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  @media (hover: hover) { :where(.cieo) .cieo-comment-thread-more:hover { color: var(--cieo-color-text); background: var(--cieo-color-sunken); } }
+  :where(.cieo) .cieo-comment-thread-more:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (pointer: coarse) { :where(.cieo) .cieo-comment-thread-more { min-block-size: var(--cieo-touch-target); } }
   @media (prefers-reduced-motion: reduce) {
     :where(.cieo) .cieo-comment-thread-item[data-new] > .cieo-comment { animation: none; }

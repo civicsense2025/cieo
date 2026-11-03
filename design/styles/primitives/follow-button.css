@@ -7,7 +7,7 @@
   }
   :where(.cieo).cieo-follow-button[data-following] { background: transparent; border-color: var(--cieo-color-border-strong); color: var(--cieo-color-text); }
   :where(.cieo).cieo-follow-button[data-following][data-previewing] { background: var(--cieo-color-danger-soft); border-color: var(--cieo-color-danger); color: var(--cieo-color-danger); }
-  :where(.cieo).cieo-follow-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo).cieo-follow-button:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo) .cieo-follow-button-measure { position: absolute; visibility: hidden; pointer-events: none; white-space: nowrap; }
   @media (prefers-reduced-motion: reduce) {
     :where(.cieo).cieo-follow-button { transition: none; }

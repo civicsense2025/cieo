@@ -56,11 +56,11 @@ test('AuthAccountCard manifest is an organism with signOutConfirm default false'
   assert.ok(flag && flag.default === false);
 });
 
-test('Wave 3 CSS uses flat surfaces, 2px accent focus, and reduced motion', () => {
+test('Wave 3 CSS uses flat surfaces, token focus ring, and reduced motion', () => {
   for (const f of ['auth-invite-accept', 'auth-session-list', 'auth-account-card']) {
     const css = readFileSync(`design/styles/primitives/${f}.css`, 'utf8');
     assert.match(css, /:focus-visible/);
-    assert.match(css, /2px solid/);
+    assert.match(css, /var\(--cieo-focus-width\) solid var\(--cieo-color-focus\)/);
     assert.match(css, /prefers-reduced-motion/);
     assert.match(css, /pointer:\s*coarse|min-height:\s*2\.75rem/);
   }

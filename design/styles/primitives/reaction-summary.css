@@ -8,12 +8,12 @@
   :where(.cieo) .cieo-reaction-summary-slot[data-leaving] { pointer-events: none; animation: cieo-chip-close var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
   :where(.cieo) .cieo-reaction-summary-chip, :where(.cieo) .cieo-reaction-summary-add { display: inline-flex; align-items: center; gap: var(--cieo-space-1); min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: inherit; font-size: var(--cieo-text-small); cursor: pointer; white-space: nowrap; transition: background-color var(--motion-duration-snap, 150ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
   :where(.cieo) .cieo-reaction-summary-chip[data-mine] { background: var(--cieo-color-accent-soft); border-color: var(--cieo-color-accent); }
-  :where(.cieo) .cieo-reaction-summary-chip:hover, :where(.cieo) .cieo-reaction-summary-add:hover { background: var(--cieo-color-sunken); }
-  :where(.cieo) .cieo-reaction-summary-chip[data-mine]:hover { background: var(--cieo-color-accent-soft); }
+  @media (hover: hover) { :where(.cieo) .cieo-reaction-summary-chip:hover, :where(.cieo) .cieo-reaction-summary-add:hover { background: var(--cieo-color-sunken); } }
+  @media (hover: hover) { :where(.cieo) .cieo-reaction-summary-chip[data-mine]:hover { background: var(--cieo-color-accent-soft); } }
   :where(.cieo) .cieo-reaction-summary-emoji { line-height: 1; }
   :where(.cieo) .cieo-reaction-summary-count { color: var(--cieo-color-muted); font-variant-numeric: tabular-nums; }
   :where(.cieo) .cieo-reaction-summary-chip[data-mine] .cieo-reaction-summary-count { color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
-  :where(.cieo) .cieo-reaction-summary-chip:focus-visible, :where(.cieo) .cieo-reaction-summary-add:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-reaction-summary-chip:focus-visible, :where(.cieo) .cieo-reaction-summary-add:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (pointer: coarse) { :where(.cieo) .cieo-reaction-summary-chip, :where(.cieo) .cieo-reaction-summary-add { min-block-size: var(--cieo-touch-target); } }
   @keyframes cieo-chip-open { from { grid-template-columns: 0fr; opacity: 0.45; } to { grid-template-columns: 1fr; opacity: 1; } }
   @keyframes cieo-chip-close { from { grid-template-columns: 1fr; opacity: 1; } to { grid-template-columns: 0fr; opacity: 0; } }

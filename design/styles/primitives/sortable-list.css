@@ -12,5 +12,5 @@
   :where(.cieo) .cieo-sortable-list-handle { display: inline-flex; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-small); min-block-size: var(--cieo-control-small); padding: 0; border: 0; border-radius: var(--cieo-radius-control); background: transparent; color: inherit; cursor: grab; touch-action: none; }
   :where(.cieo) .cieo-sortable-list-handle:disabled { cursor: not-allowed; }
   :where(.cieo) .cieo-sortable-list-handle[aria-pressed='true'] { background: var(--cieo-color-border); cursor: grabbing; }
-  :where(.cieo) .cieo-sortable-list-handle:focus-visible { outline: 2px solid var(--cieo-color-border-strong); outline-offset: 2px; }
+  :where(.cieo) .cieo-sortable-list-handle:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
 }

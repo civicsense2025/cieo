@@ -63,6 +63,8 @@ The [social, audio and engagement kit](social-kit.md) (comments and nested repli
 
 The color auditor checks 32 named pairs: text and accents against four neutral surfaces, control boundaries, focus, selection, filled and soft accents, and four feedback surfaces. Standard text targets 4.5:1; the high-contrast option targets 7:1. Boundaries and focus target 3:1. These are color-pair checks, not a WCAG conformance certificate.
 
+Every primitive shares one interaction baseline, enforced by `test/primitive-states.test.mjs`: focus rings read `--cieo-focus-width`, `--cieo-color-focus` and `--cieo-focus-offset`; disabled states read `--cieo-disabled-opacity`; and hover-only styles sit inside `@media (hover: hover)` so they never stick after a tap. Disclosure that also opens on focus (tooltips, hover cards, submenus) is the one exception.
+
 Coarse-pointer controls have a 44 CSS-pixel floor in the primitive stylesheet, even with compact density. That design target is deliberately larger than the WCAG 2.2 AA minimum of 24 CSS pixels, which also has exceptions. The stylesheet preserves native keyboard focus, gives errors a dashed boundary, uses visible feedback labels, handles forced colors, and removes primitive transitions under reduced motion. The motion token stylesheet now clears stagger and drift as well as durations.
 
 An application can still introduce inaccessible text, missing labels, clipped controls, poor focus order, unsafe overrides outside the auditor's color scope, or modal behavior that these styles don't implement. Disabled-control opacity is not a promise of active-text contrast. Test the rendered application, assistive technologies, and real devices.
