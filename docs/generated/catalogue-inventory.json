@@ -5960,7 +5960,7 @@
           "symbol": null,
           "category": "Dynamic",
           "path": "atoms/web/blocks/333-heartbeat.js",
-          "sha256": "883165ca84907767851afd0518b612968365c7a6c9418efa2c3eb4185b65d505",
+          "sha256": "1399ff23ac0c3d69bd19ae9365e6f538f8640c008b8b5ad6849da35c3431457d",
           "artifactKind": "recipe"
         }
       ]
@@ -7974,7 +7974,7 @@
           "symbol": null,
           "category": "Inputs",
           "path": "atoms/web/blocks/078-otp.js",
-          "sha256": "2a293492a0173a11943d037cb9e9a2c25af53552272369ca2f4667095250996b",
+          "sha256": "851deb4f31d7950bf6b951207594ccba0b62f84b2743e5a3fe77d04972877989",
           "artifactKind": "recipe"
         }
       ]

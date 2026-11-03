@@ -634,7 +634,7 @@
   "id": "otp",
   "category": "Inputs",
   "name": "One-time code",
-  "summary": "Each digit rolls into its box and a focus ring slides to the next box with lagging edges. A full code turns every box success or danger; a wrong code clears itself after a beat.",
+  "summary": "Each digit rolls into its box and a focus ring slides to the next box with lagging edges. A full code turns every box success or danger; a wrong code clears itself after a beat and the message says what to do next, announced to screen readers.",
   "file": "blocks/078-otp.js",
   "api": "box[i].to(digit)   ring.go(x[i])   status → success | danger",
   "layer": "atom"
@@ -3868,7 +3868,7 @@
   "id": "heartbeat",
   "category": "Dynamic",
   "name": "Heartbeat status",
-  "summary": "The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. The pass ends settled on live.",
+  "summary": "The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. When reports stop, the status goes stale: the dot turns grey and stops breathing, so a silent feed never reads as live. The pass ends settled on live.",
   "file": "blocks/333-heartbeat.js",
   "api": "health.set(0|1|2, S.soft) every 2.2s   breathe: 1 ± .06·sin(2πt/2.4)",
   "layer": "molecule"
