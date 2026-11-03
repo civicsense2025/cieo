@@ -5960,7 +5960,7 @@
           "symbol": null,
           "category": "Dynamic",
           "path": "atoms/web/blocks/333-heartbeat.js",
-          "sha256": "1399ff23ac0c3d69bd19ae9365e6f538f8640c008b8b5ad6849da35c3431457d",
+          "sha256": "971710e5315cddcc742bad83b6963d38bd466edbb3886828c5996f9d62665cfb",
           "artifactKind": "recipe"
         }
       ]
@@ -8299,7 +8299,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/090-phone.js",
-          "sha256": "7639b7858d68d5dc0eab4b7a7544654b681dd2e68dee4442cf1908cc2c51714b",
+          "sha256": "9007391ae8536468a83d1827b87ccd32729eaa8053cd9a8fccf815bd008eddaa",
           "artifactKind": "recipe"
         }
       ]
@@ -10424,7 +10424,7 @@
           "symbol": null,
           "category": "Admin",
           "path": "atoms/web/blocks/041-sheet.js",
-          "sha256": "2980aeb9d8983e8ddcab3792b3f9950a8b1ba743f50d0ed51a42b847b5443aa5",
+          "sha256": "b2fa4f19e965d77f48710a2b86024db99b5cb6b4318c095eb74e55892daa285c",
           "artifactKind": "recipe"
         }
       ]

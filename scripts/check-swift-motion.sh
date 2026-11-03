@@ -12,11 +12,18 @@ if [ "$#" -gt 0 ]; then files=("$@"); else
   while IFS= read -r f; do files+=("$f"); done < <(find Sources/CieoUI Sources/CieoGallery atoms/swift -name '*.swift' | sort)
 fi
 
-pattern='\.(spring|snappy|bouncy|smooth|interactiveSpring)\b'
-pattern+='|\.(easeInOut|easeIn|easeOut|linear)\(duration: *[0-9.]'
-pattern+='|\.delay\(0?\.[0-9]+\)'   # single literal delays; staggers (+ Double(i) * …) are tracked separately
+pattern='\.(spring|snappy|bouncy|smooth|interactiveSpring)\b|(animation|withAnimation)\(\.default\b'
+pattern+='|\.(easeInOut|easeIn|easeOut|linear)\b'          # with or without a duration
+pattern+='|\.(interpolatingSpring|timingCurve)\('            # hand-tuned springs and curves
+pattern+='|\.delay\([0-9]*\.?[0-9]+\)'                       # single literal delays; staggers (+ Double(i) * …) are tracked separately
 
-if hits=$(grep -HnE "$pattern" "${files[@]}" | grep -v 'motion-ok' | grep -vE '^\S+:[0-9]+:\s*//'); then
+# grep exits 1 for "no match" and 2 for an error; only 1 means clean.
+set +e
+raw=$(grep -HnE "$pattern" "${files[@]}"); status=$?
+hits=$(printf '%s\n' "$raw" | grep -v 'motion-ok' | grep -vE '^\S+:[0-9]+:\s*//' | grep -v '^$')
+set -e
+if [ "$status" -gt 1 ]; then echo "check-swift-motion: grep failed (status $status)"; exit 2; fi
+if [ -n "$hits" ]; then
   echo "Raw SwiftUI motion (use the Cieo spring presets instead):"
   echo "$hits"
   exit 1

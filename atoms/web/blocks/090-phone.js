@@ -10,7 +10,7 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const L = C.map(([c,p]) => { const e = document.createElement('span'); e.className = 'layer'; e.innerHTML = `<b>${c}</b><span class="muted">${p}</span>`; e.style.gap = '4px'; cc.appendChild(e); return e; });
     const sw = new Swap(0), ok = new Track(0); let k = 0;
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
-    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); };
+    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); if (msg.textContent) check(); };
     // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
     const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
     msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');

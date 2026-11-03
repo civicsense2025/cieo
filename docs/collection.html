@@ -219,10 +219,11 @@ const REDUCE = MOTION_MEDIA.matches;
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
-// Per-item delay: the gap between items, capped so a whole group lands within STAGGER_MAX; none under reduced motion.
-const staggerAt = (i, gap = .04) => REDUCE ? 0 : Math.min(i*gap, STAGGER_MAX);
-// Segmented controls: one pressed state and one keyboard model for every recipe. Marks the current button
-// aria-pressed, and moves with Arrow keys, Home and End (wrapping), calling pick(i) like a click would.
+// Per-item delay: i * gap, or 0 under reduced motion (read live, so data-motion overrides apply). Given the group
+// size n, the gap shrinks so the whole group lands within STAGGER_MAX, the same rule as Swift's Motion.stagger.
+const staggerAt = (i, gap = .04, n = 0) => motionReduced() ? 0 : i*(n > 1 ? Math.min(gap, STAGGER_MAX/(n - 1)) : gap);
+// Segmented controls: the shared pressed-state and keyboard model. Marks the current button aria-pressed and moves
+// with Arrow keys, Home and End (wrapping), calling pick(i) like a click would. New and reworked .seg recipes use it.
 function segmented(btns, pick){
   const mark = cur => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === cur)));
   btns.forEach((b, i) => b.addEventListener('keydown', e => {
@@ -1358,8 +1359,8 @@ atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet 
     sr.onclick = () => open(false);
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && y.target < H){ e.preventDefault(); open(false); op.focus(); } });
     drag(sh, { down:p => { held = true; sy = y.at() - p.cy; hy = y.at(); }, move:p => { const v = sy + p.cy; hy = v < 0 ? rb(v, 30) : v; },
-      up:(p, v) => { held = false; y.release(hy, v.vy, hy > H*.3 || v.vy > 500 ? H + 10 : 0); } });
-    return t => { const v = held ? hy : y.at(t); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
+      up:(p, v) => { held = false; const to = hy > H*.3 || v.vy > 500 ? H + 10 : 0; y.release(hy, v.vy, to); op.setAttribute('aria-expanded', String(to === 0)); } });
+    return t => { const v = held ? hy : y.at(t), shut = !held && y.target > H; sh.inert = shut; sh.toggleAttribute('aria-hidden', shut); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
   }});
 window.CIEO_SOURCE_HINT="blocks/042-palette.js";
 
@@ -2367,7 +2368,7 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const L = C.map(([c,p]) => { const e = document.createElement('span'); e.className = 'layer'; e.innerHTML = `<b>${c}</b><span class="muted">${p}</span>`; e.style.gap = '4px'; cc.appendChild(e); return e; });
     const sw = new Swap(0), ok = new Track(0); let k = 0;
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
-    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); };
+    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); if (msg.textContent) check(); };
     // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
     const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
     msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');
@@ -23131,20 +23132,22 @@ atom({ id:'heartbeat', cat:'Dynamic', name:'Heartbeat status', block:'status, he
   init(st){
     const lb = $(st,'.lb'), cp = $(st,'.cp'), dot = $(st,'.dot'), lp = $(st,'.lp');
     const S3 = [['Live','All systems normal · settled'],['Degraded','p99 up 2× · watching'],['Outage','Failing over · on it'],['Stale','No update for 2 min · retrying']];
-    const lsw = new Swap(0), csw = new Swap(0), h = new Track(0);
+    const lsw = new Swap(0), csw = new Swap(0), h = new Track(0), stale = new Track(0);
     S3.forEach(([a,b]) => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = a; lb.appendChild(e);
       const c = document.createElement('span'); c.className = 'layer'; c.textContent = b; cp.appendChild(c); });
     let k = 0, next = 1.4, done = false;
-    $(st,'.rp').onclick = () => { const t = now(); k = 0; done = false; next = t + .3; lsw.to(0); csw.to(0); h.set(0, S.soft, t); };
-    const col = v => v < 1 ? mix(v,'var(--warning)','var(--success)') : v < 2 ? mix(v - 1,'var(--danger)','var(--warning)') : mix(v - 2,'var(--muted)','var(--danger)');
+    $(st,'.rp').onclick = () => { const t = now(); k = 0; done = false; next = t + .3; lsw.to(0); csw.to(0); h.set(0, S.soft, t); stale.set(0, S.snap, t); };
+    const col = v => v < 1 ? mix(v,'var(--warning)','var(--success)') : mix(v - 1,'var(--danger)','var(--warning)');
     return t => { if (lp.checked) done = false;
       if (!done && t >= next){ k++;
         if (k >= S3.length){ k = 0; done = !lp.checked; }
         lsw.to(k); csw.to(k);
-        if (REDUCE) h.jump(k); else h.set(k, S.soft, t);
+        const hk = k === 3 ? 2 : k, gs = k === 3 ? 1 : 0;
+        if (k === 0 && stale.target) h.jump(0); else if (REDUCE) h.jump(hk); else h.set(hk, S.soft, t);
+        if (REDUCE) stale.jump(gs); else stale.set(gs, S.soft, t);
         next = t + 2.2; }
       const quiet = k === 3, ph = REDUCE || quiet ? 1 : .5 + .5*Math.sin(t*2*Math.PI/2.4), br = REDUCE || quiet ? 1 : 1 + .06*Math.sin(t*2*Math.PI/2.4);
-      dot.style.background = col(clamp(h.at(t), 0, 3));
+      dot.style.background = mix(clamp(stale.at(t)), 'var(--muted)', col(clamp(h.at(t), 0, 2)));
       dot.style.opacity = (.72 + .28*ph).toFixed(3);
       dot.style.transform = `scale(${br.toFixed(3)}) translateY(.5px)`;
       [...lb.children].forEach((e,j) => lsw.apply(e,j,t)); [...cp.children].forEach((e,j) => csw.apply(e,j,t)); };

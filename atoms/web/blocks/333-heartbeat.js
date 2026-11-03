@@ -6,20 +6,22 @@ atom({ id:'heartbeat', cat:'Dynamic', name:'Heartbeat status', block:'status, he
   init(st){
     const lb = $(st,'.lb'), cp = $(st,'.cp'), dot = $(st,'.dot'), lp = $(st,'.lp');
     const S3 = [['Live','All systems normal · settled'],['Degraded','p99 up 2× · watching'],['Outage','Failing over · on it'],['Stale','No update for 2 min · retrying']];
-    const lsw = new Swap(0), csw = new Swap(0), h = new Track(0);
+    const lsw = new Swap(0), csw = new Swap(0), h = new Track(0), stale = new Track(0);
     S3.forEach(([a,b]) => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = a; lb.appendChild(e);
       const c = document.createElement('span'); c.className = 'layer'; c.textContent = b; cp.appendChild(c); });
     let k = 0, next = 1.4, done = false;
-    $(st,'.rp').onclick = () => { const t = now(); k = 0; done = false; next = t + .3; lsw.to(0); csw.to(0); h.set(0, S.soft, t); };
-    const col = v => v < 1 ? mix(v,'var(--warning)','var(--success)') : v < 2 ? mix(v - 1,'var(--danger)','var(--warning)') : mix(v - 2,'var(--muted)','var(--danger)');
+    $(st,'.rp').onclick = () => { const t = now(); k = 0; done = false; next = t + .3; lsw.to(0); csw.to(0); h.set(0, S.soft, t); stale.set(0, S.snap, t); };
+    const col = v => v < 1 ? mix(v,'var(--warning)','var(--success)') : mix(v - 1,'var(--danger)','var(--warning)');
     return t => { if (lp.checked) done = false;
       if (!done && t >= next){ k++;
         if (k >= S3.length){ k = 0; done = !lp.checked; }
         lsw.to(k); csw.to(k);
-        if (REDUCE) h.jump(k); else h.set(k, S.soft, t);
+        const hk = k === 3 ? 2 : k, gs = k === 3 ? 1 : 0;
+        if (k === 0 && stale.target) h.jump(0); else if (REDUCE) h.jump(hk); else h.set(hk, S.soft, t);
+        if (REDUCE) stale.jump(gs); else stale.set(gs, S.soft, t);
         next = t + 2.2; }
       const quiet = k === 3, ph = REDUCE || quiet ? 1 : .5 + .5*Math.sin(t*2*Math.PI/2.4), br = REDUCE || quiet ? 1 : 1 + .06*Math.sin(t*2*Math.PI/2.4);
-      dot.style.background = col(clamp(h.at(t), 0, 3));
+      dot.style.background = mix(clamp(stale.at(t)), 'var(--muted)', col(clamp(h.at(t), 0, 2)));
       dot.style.opacity = (.72 + .28*ph).toFixed(3);
       dot.style.transform = `scale(${br.toFixed(3)}) translateY(.5px)`;
       [...lb.children].forEach((e,j) => lsw.apply(e,j,t)); [...cp.children].forEach((e,j) => csw.apply(e,j,t)); };

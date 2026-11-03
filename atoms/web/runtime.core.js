@@ -4,10 +4,11 @@ const REDUCE = MOTION_MEDIA.matches;
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
 const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
-// Per-item delay: the gap between items, capped so a whole group lands within STAGGER_MAX; none under reduced motion.
-const staggerAt = (i, gap = .04) => REDUCE ? 0 : Math.min(i*gap, STAGGER_MAX);
-// Segmented controls: one pressed state and one keyboard model for every recipe. Marks the current button
-// aria-pressed, and moves with Arrow keys, Home and End (wrapping), calling pick(i) like a click would.
+// Per-item delay: i * gap, or 0 under reduced motion (read live, so data-motion overrides apply). Given the group
+// size n, the gap shrinks so the whole group lands within STAGGER_MAX, the same rule as Swift's Motion.stagger.
+const staggerAt = (i, gap = .04, n = 0) => motionReduced() ? 0 : i*(n > 1 ? Math.min(gap, STAGGER_MAX/(n - 1)) : gap);
+// Segmented controls: the shared pressed-state and keyboard model. Marks the current button aria-pressed and moves
+// with Arrow keys, Home and End (wrapping), calling pick(i) like a click would. New and reworked .seg recipes use it.
 function segmented(btns, pick){
   const mark = cur => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === cur)));
   btns.forEach((b, i) => b.addEventListener('keydown', e => {

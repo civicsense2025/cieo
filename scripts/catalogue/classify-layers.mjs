@@ -20,8 +20,9 @@ const stub = new Proxy(function () {}, { get: (t, k) => (k === Symbol.toPrimitiv
 const scope = new Proxy({ atom: (o) => found.set(o.id, o), String, Math, JSON, Array, Object, Number, Symbol, Map, Set, Date },
   { has: () => true, get: (t, k) => (k in t ? t[k] : k === Symbol.unscopables ? undefined : stub), set: () => true });
 const ctx = vm.createContext({ scope });
-for (const f of readdirSync(`${root}atoms/web/blocks`).filter((f) => f.endsWith('.js')).sort()) {
-  const src = readFileSync(`${root}atoms/web/blocks/${f}`, 'utf8');
+const sources = ['blocks', 'identity'].flatMap((d) => readdirSync(`${root}atoms/web/${d}`).filter((f) => f.endsWith('.js')).sort().map((f) => `${root}atoms/web/${d}/${f}`));
+for (const file of sources) {
+  const src = readFileSync(file, 'utf8');
   // Top-level code only registers recipes and defines helpers; stubs absorb any runtime reference.
   try { vm.runInContext(`with (scope) { ${src} }`, ctx, { timeout: 500 }); } catch { /* registrations before the throw still count */ }
 }

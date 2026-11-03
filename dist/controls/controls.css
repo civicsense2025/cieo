@@ -170,7 +170,7 @@
 }
 @media (pointer: coarse) {
   /* 16px keeps iOS Safari from zooming the page when the native select takes focus. */
-  .cieo-select-native, .cieo-select-trigger { min-height: 44px; font-size: 1rem; }
+  .cieo-select-native, .cieo-select-trigger, .cieo-select--sm .cieo-select-native, .cieo-select--sm .cieo-select-trigger { min-height: 44px; font-size: 1rem; }
   .cieo-select-option { min-height: 44px; }
 }
 
@@ -382,6 +382,7 @@
   .cieo-btn { border-color: ButtonText; }
   .cieo-btn--primary { background: Highlight; color: HighlightText; forced-color-adjust: none; }
   .cieo-btn:disabled, .cieo-btn[aria-disabled="true"] { color: GrayText; border-color: GrayText; opacity: 1; }
+  .cieo-btn--primary:is(:disabled, [aria-disabled="true"]) { background: Canvas; forced-color-adjust: auto; }
   .cieo-switch-track { border: 1px solid CanvasText; }
   .cieo-switch-knob { background: CanvasText; forced-color-adjust: none; }
   .cieo-toggle-input:checked + .cieo-switch-track { background: Highlight; forced-color-adjust: none; }

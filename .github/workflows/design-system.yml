@@ -34,5 +34,5 @@ jobs:
         run: |
           scripts/check-swift-motion.sh
           caught=$(scripts/check-swift-motion.sh scripts/fixtures/raw-motion.swift.fixture | grep -c 'fixture:' || true)
-          test "$caught" -eq 4 || { echo "The motion check missed raw motion in its fixture ($caught of 4)"; exit 1; }
+          test "$caught" -eq 9 || { echo "The motion check missed raw motion in its fixture ($caught of 9)"; exit 1; }
       - run: swift build && swift test
