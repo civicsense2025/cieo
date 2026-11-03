@@ -59,8 +59,9 @@ export declare function setMotionState(fn: (() => Partial<MotionState>) | null):
 /** One cached media query list instead of a matchMedia call per job per frame. */
 export declare function reducedQuery(): MediaQueryList | null;
 export declare function state(): MotionState;
-/** Every attribute that turns motion down for a subtree: the component prop (motion={false} → data-motion="off"),
-    a host-level reduced preference, and the legacy flag. The one selector CSS and JS both honour. */
+/** Every attribute that turns motion down for a subtree below <html>: the component prop (motion={false} →
+    data-motion="off"), a host-level reduced preference, and the legacy flag. JS springs honour all three; the
+    page-level form on <html> is read by state(), so setMotionState() can still override it. */
 export declare const REDUCED_SUBTREE = "[data-motion=\"off\"], [data-motion=\"reduced\"], [data-reduced-motion=\"true\"]";
 /** True when el sits inside a subtree whose motion is off or reduced. A descendant cannot opt back in. */
 export declare function subtreeReduced(el?: Element | null): boolean;

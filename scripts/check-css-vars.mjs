@@ -3,8 +3,8 @@
 // Declarations count from any scanned file: `--cieo-x:` in CSS, or a '--cieo-x' key in TS/JS style objects.
 import { readdirSync, readFileSync } from 'node:fs';
 const root = new URL('..', import.meta.url).pathname.replace(/\/$/, '');
-const roots = ['design', 'src', 'tokens'];
-const exts = ['.css', '.ts', '.tsx', '.js', '.mjs'];
+const roots = ['design', 'src', 'tokens', 'site'];
+const exts = ['.css', '.ts', '.tsx', '.js', '.mjs', '.html'];
 const files = [];
 function walk(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -26,8 +26,8 @@ for (const p of files) {
 for (const m of readFileSync(`${root}/design/foundations.js`, 'utf8').matchAll(/put\(`?'?([\w-]+)/g)) defined.add(`--cieo-${m[1]}`);
 // Documented consumer override hooks: intentionally never declared by Cieo, always used with a fallback
 // that reads a theme token. Keep this list short; a new hook needs a fallback and a line here.
-const HOOKS = [/^--cieo-control-/, /^--cieo-popover-(border|radius|background|color|padding|shadow)$/,
-  /^--cieo-search-(width|radius)$/, /^--cieo-(radius|field-height|focus-ring)$/, /^--cieo-i$/];
+const HOOKS = [/^--cieo-control-(bg|fg|muted|border|border-strong|raised|accent|accent-fg|danger|success|success-fg|popover-bg|shadow|knob|height-sm|height-md|font)$/,
+  /^--cieo-popover-(z|border|radius|background|color|padding|shadow)$/, /^--cieo-search-(width|radius)$/, /^--cieo-(radius|field-height|focus-ring)$/, /^--cieo-i$/];
 let failures = 0;
 for (const [p, line, name] of uses) {
   if (defined.has(name) || HOOKS.some((h) => h.test(name))) continue;
