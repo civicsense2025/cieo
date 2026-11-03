@@ -23,7 +23,7 @@ Cieo keeps the existing spring engine and adds an optional visual layer. The sam
 </main>
 ```
 
-The `.cieo` boundary scopes the primitive styles. Custom properties alone do not restyle an application. The stylesheet uses cascade layers so normal, unlayered application styles can override it without an `!important` contest. The controls still need real labels, correct HTML elements, and application behavior.
+The `.cieo` boundary scopes the primitive styles. The design kit's `.cieo-field` and `.cieo-check` rules skip `cieo/controls` elements (`.cieo-ctl`), so both stylesheets can load on one page. Custom properties alone do not restyle an application. The stylesheet uses cascade layers so normal, unlayered application styles can override it without an `!important` contest. The controls still need real labels, correct HTML elements, and application behavior.
 
 ```js
 import { createTheme, applyTheme } from 'cieo/design';
