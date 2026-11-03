@@ -16,8 +16,8 @@
       if(show)count++;else L.visible.delete(a);
     }
     const c=L.state.collection;
-    document.getElementById('lib-title').textContent=c==='explore'?'Good things, in motion.':c==='all'?'Every little detail.':c==='saved'?'A few favorites.':c;
-    document.getElementById('lib-description').textContent=c==='explore'?'A collection of small interactions that make a big difference.':c==='saved'?'The atoms saved in this browser. Ready when inspiration strikes.':`Live ${c==='all'?'components':c.toLowerCase()+' components'}. Click, type, drag, and make them your own.`;
+    document.getElementById('lib-title').textContent=c==='explore'?'Motion recipes':c==='all'?'All recipes':c==='saved'?'Saved':c;
+    document.getElementById('lib-description').textContent=c==='explore'?'Interactions on critically damped springs: nothing overshoots, and every motion can be interrupted.':c==='saved'?'The recipes saved in this browser.':`Live ${c==='all'?'components':c.toLowerCase()+' components'}. Click, type, drag, and make them your own.`;
     document.getElementById('lib-collections').hidden=c!=='explore';
     document.getElementById('lib-result-count').textContent=`${count} ${count===1?'atom':'atoms'}`;
     document.getElementById('lib-empty').hidden=count>0;

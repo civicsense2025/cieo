@@ -6,7 +6,7 @@ atom({ id:'reactions', cat:'Video calls', name:'Reactions burst', block:'video c
     const E = ['❤','👏','🎉'];
     const sky = $(st,'.sky'), pile = $(st,'.pile'), nc = $(st,'.nc'), bg = $(st,'.bg');
     const F = ['', 'Burst complete'].map((s,k) => { const e = document.createElement('span'); e.className = 'layer';
-      e.innerHTML = k ? `<span class="small" style="background:color-mix(in oklab, var(--success) 12%, transparent);color:var(--success);font-weight:600;padding:4px 10px;border-radius:999px;font-size:12.5px">🎉 ${s}</span>` : s;
+      e.innerHTML = k ? `<span class="small" style="background:color-mix(in oklab, var(--success) 12%, transparent);color:var(--success);font-weight:600;padding:4px 10px;border-radius:999px;font-size:12.5px">${s}</span>` : s;
       $(st,'.fin').appendChild(e); return e; });
     const fsw = new Swap(0), ok = new Track(0);
     let floats = [], items = [], n = 0;

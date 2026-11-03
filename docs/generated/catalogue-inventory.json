@@ -722,7 +722,7 @@
           "symbol": null,
           "category": "Documents",
           "path": "atoms/web/blocks/219-annot-thread.js",
-          "sha256": "f0f16f107906cb6577a57147caf756de9d80750a1fa2abd8291e97ceed68e8b6",
+          "sha256": "4dec4af5e528be2ef31d97e66d890a3ad94a2538c8449902cb70ee0150d7017b",
           "artifactKind": "recipe"
         }
       ]
@@ -863,7 +863,7 @@
           "symbol": null,
           "category": "Audio",
           "path": "atoms/web/blocks/561-audio.js",
-          "sha256": "c9047ddb4796d819a9ca2764a4e59905a653e47690e9cdbf956db9242bd9dc81",
+          "sha256": "f5950cb872880171d466e36050957406fd1fba69e33635dc160016f645c5561b",
           "artifactKind": "recipe"
         }
       ]
@@ -879,7 +879,7 @@
           "symbol": null,
           "category": "Audio",
           "path": "atoms/web/blocks/561-audio.js",
-          "sha256": "c9047ddb4796d819a9ca2764a4e59905a653e47690e9cdbf956db9242bd9dc81",
+          "sha256": "f5950cb872880171d466e36050957406fd1fba69e33635dc160016f645c5561b",
           "artifactKind": "recipe"
         }
       ]
@@ -895,7 +895,7 @@
           "symbol": null,
           "category": "Audio",
           "path": "atoms/web/blocks/561-audio.js",
-          "sha256": "c9047ddb4796d819a9ca2764a4e59905a653e47690e9cdbf956db9242bd9dc81",
+          "sha256": "f5950cb872880171d466e36050957406fd1fba69e33635dc160016f645c5561b",
           "artifactKind": "recipe"
         }
       ]
@@ -911,7 +911,7 @@
           "symbol": null,
           "category": "Audio",
           "path": "atoms/web/blocks/561-audio.js",
-          "sha256": "c9047ddb4796d819a9ca2764a4e59905a653e47690e9cdbf956db9242bd9dc81",
+          "sha256": "f5950cb872880171d466e36050957406fd1fba69e33635dc160016f645c5561b",
           "artifactKind": "recipe"
         }
       ]
@@ -1189,7 +1189,7 @@
           "symbol": null,
           "category": "Content",
           "path": "atoms/web/blocks/084-avatars.js",
-          "sha256": "13f995e645339c98f2b8cc5e6094ee4fc085aa58ed97f737a0d2c0be16ffaaf5",
+          "sha256": "2b719b2ed72fe0b52539a299034e2fc86e421cbe780baeb0acf0a2c391bba2e0",
           "artifactKind": "recipe"
         }
       ]
@@ -3828,7 +3828,7 @@
           "symbol": null,
           "category": "Documents",
           "path": "atoms/web/blocks/226-exhibit.js",
-          "sha256": "67798bf3145125388bec834f6210be7aa38467ab5b629489abaf53c0e13b207f",
+          "sha256": "820872e410972bb7a687b7285b9c0a6a01a014347b5c80f272bbc44ea47a166a",
           "artifactKind": "recipe"
         }
       ]
@@ -4044,7 +4044,7 @@
           "symbol": null,
           "category": "Feedback",
           "path": "atoms/web/blocks/564-feedback.js",
-          "sha256": "d0860a1308eb69590588fb17a20a44ccf7fa9a98060ae9c8816bcec00c6e17e0",
+          "sha256": "4f48ac3ea20930f2afe72785d0f38c0a7daf60f4c180c51f68f4c6ba621a0f0f",
           "artifactKind": "recipe"
         }
       ]
@@ -4060,7 +4060,7 @@
           "symbol": null,
           "category": "Feedback",
           "path": "atoms/web/blocks/564-feedback.js",
-          "sha256": "d0860a1308eb69590588fb17a20a44ccf7fa9a98060ae9c8816bcec00c6e17e0",
+          "sha256": "4f48ac3ea20930f2afe72785d0f38c0a7daf60f4c180c51f68f4c6ba621a0f0f",
           "artifactKind": "recipe"
         }
       ]
@@ -9374,7 +9374,7 @@
           "symbol": null,
           "category": "Video calls",
           "path": "atoms/web/blocks/233-reactions.js",
-          "sha256": "9cd5525b3cb0b74612c6a38d1721273ec1687eddaefa800567d3a5a6641c1f3e",
+          "sha256": "5865c40c294ee0444716ffb0667743009d978200789b687ffc97f7c36c2205a8",
           "artifactKind": "recipe"
         }
       ]
@@ -9724,7 +9724,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/417-reviewform.js",
-          "sha256": "6f4e4f96c2d7e12be292cf4f075222f21060941e4cfc44e04bda98d56db3ec61",
+          "sha256": "d786210d648bace9f4d10402ff84c24838d264352ac0c1c693b4fd57e21af507",
           "artifactKind": "recipe"
         }
       ]

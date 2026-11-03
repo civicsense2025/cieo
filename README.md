@@ -47,7 +47,7 @@ npm run test:design:types      # Public TypeScript consumer contract
 import { createTheme, applyTheme, toDTCG, toNative } from 'cieo/design';
 import 'cieo/design.css';
 import 'cieo/primitives.css';
-const theme = createTheme({ brand: 'iris', scheme: 'dark', radius: 'soft' });
+const theme = createTheme({ brand: 'studio', scheme: 'dark', radius: 'soft' });
 const controller = applyTheme(document.documentElement, theme);
 // Dispose at the host framework's unmount boundary.
 controller.destroy();

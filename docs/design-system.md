@@ -30,7 +30,7 @@ import { createTheme, applyTheme } from 'cieo/design';
 import 'cieo/design.css';
 import 'cieo/primitives.css';
 const controller = applyTheme(document.querySelector('.workspace'), createTheme({
-  brand: 'iris', scheme: 'dark', density: 'comfortable', radius: 'soft',
+  brand: 'studio', scheme: 'dark', density: 'comfortable', radius: 'soft',
 }));
 // On a user preference change:
 controller.update(createTheme({ brand: 'lagoon', scheme: 'dark' }));
