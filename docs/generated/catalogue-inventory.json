@@ -4326,7 +4326,7 @@
           "symbol": "FocusRingAtom",
           "category": "Foundations",
           "path": "atoms/swift/Foundations/FocusRingAtom.swift",
-          "sha256": "89664a7f941f8f77cd63902f9ff76717489a29f04dd98ab0d2f784f924368c96",
+          "sha256": "ba23b39a6173ba39b6b408e32628624e8524ccc28710884212ffdbbb91a06cc8",
           "artifactKind": "recipe"
         },
         {
@@ -4626,7 +4626,7 @@
           "symbol": "FrameMeterAtom",
           "category": "Foundations",
           "path": "atoms/swift/Foundations/FrameMeterAtom.swift",
-          "sha256": "c3bee6ab6b644e5a4ad11e92804d3b4e7acdcd145755bfde6186f332b3c094f3",
+          "sha256": "0063fb94df0e5f18d4f0b004215b3201f4a4646fd4cf726f9e07ea02ab509d44",
           "artifactKind": "recipe"
         },
         {
@@ -7974,7 +7974,7 @@
           "symbol": null,
           "category": "Inputs",
           "path": "atoms/web/blocks/078-otp.js",
-          "sha256": "851deb4f31d7950bf6b951207594ccba0b62f84b2743e5a3fe77d04972877989",
+          "sha256": "6017ce8e21a53053beba3d062b94e63ee85e85015e6377ca942920984ea0ebb4",
           "artifactKind": "recipe"
         }
       ]
@@ -8299,7 +8299,7 @@
           "symbol": null,
           "category": "Forms",
           "path": "atoms/web/blocks/090-phone.js",
-          "sha256": "9007391ae8536468a83d1827b87ccd32729eaa8053cd9a8fccf815bd008eddaa",
+          "sha256": "2865985650647267f2e835c8c3b5054dd2034fa6c6645da8c83a7e539c678d96",
           "artifactKind": "recipe"
         }
       ]
@@ -8765,7 +8765,7 @@
           "symbol": "PresenceAtom",
           "category": "Dynamic",
           "path": "atoms/swift/Dynamic/PresenceAtom.swift",
-          "sha256": "d6e5bdd7c441f9b7991b2dc232243a6f16c7996d5f08e7b2bac377e26042caf8",
+          "sha256": "879ec68bfe92a65dda17d98463461cd2acd9274fa040e71079e13a83e6bafd9d",
           "artifactKind": "recipe"
         },
         {
@@ -10424,7 +10424,7 @@
           "symbol": null,
           "category": "Admin",
           "path": "atoms/web/blocks/041-sheet.js",
-          "sha256": "b2fa4f19e965d77f48710a2b86024db99b5cb6b4318c095eb74e55892daa285c",
+          "sha256": "3d0c94424c6dbc13be3b50ccd38a3eb1984de23227deebb3b7d023163b48696c",
           "artifactKind": "recipe"
         }
       ]

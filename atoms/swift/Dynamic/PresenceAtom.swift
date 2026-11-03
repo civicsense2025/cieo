@@ -46,6 +46,7 @@ public struct PresenceAtom: MotionAtomView {
                         withAnimation(reduce ? nil : .motion(.snap)) {
                             if let i = order.firstIndex(where: { $0 != 0 }) { order.remove(at: i) }
                             else { order.removeLast() }
+                            return ()
                         }
                     }
                     .buttonStyle(.bordered).controlSize(.regular).disabled(order.count <= 1)

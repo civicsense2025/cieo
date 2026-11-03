@@ -12,5 +12,5 @@ atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet 
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && y.target < H){ e.preventDefault(); open(false); op.focus(); } });
     drag(sh, { down:p => { held = true; sy = y.at() - p.cy; hy = y.at(); }, move:p => { const v = sy + p.cy; hy = v < 0 ? rb(v, 30) : v; },
       up:(p, v) => { held = false; const to = hy > H*.3 || v.vy > 500 ? H + 10 : 0; y.release(hy, v.vy, to); op.setAttribute('aria-expanded', String(to === 0)); } });
-    return t => { const v = held ? hy : y.at(t), shut = !held && y.target > H; sh.inert = shut; sh.toggleAttribute('aria-hidden', shut); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
+    return t => { const v = held ? hy : y.at(t), shut = !held && y.target > H; if (sh.inert !== shut){ sh.inert = shut; sh.setAttribute('aria-hidden', String(shut)); } sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
   }});

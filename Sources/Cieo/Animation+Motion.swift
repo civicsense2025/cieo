@@ -11,6 +11,7 @@ public extension Animation {
 }
 
 /// Runs `body` with a motion spring, or without animation when Reduce Motion is on.
+@discardableResult
 public func withMotion<Result>(_ preset: SpringPreset = .base, reduceMotion: Bool, _ body: () throws -> Result) rethrows -> Result {
     try withAnimation(reduceMotion ? nil : .motion(preset), body)
 }
