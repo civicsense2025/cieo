@@ -14,7 +14,7 @@ atom({ id:'ptrarm', cat:'Views', name:'Pull-to-refresh arm', block:'pull to refr
         pull.jump(dy < TH ? dy : TH + rb(dy - TH, K())); sw.to(pull.target > TH ? 1 : 0); },
       up:() => { if (loading) return; const v = pull.target;
         if (v > TH){ loading = true; spinT0 = now(); pull.set(54, S.base);
-          setTimeout(() => { open.forEach((o, i) => { o.jump(0); o.set(1, S.soft, now() + i * .07); });
+          setTimeout(() => { open.forEach((o, i) => { o.jump(0); o.set(1, S.soft, now() + staggerAt(i, .07)); });
             pull.set(0, S.base); sw.to(2); loading = false; }, REDUCE ? 60 : 900); }
         else pull.set(0, S.base); } });
     lbl.textContent = 'Pull to refresh';

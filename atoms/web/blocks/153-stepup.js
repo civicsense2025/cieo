@@ -174,10 +174,10 @@ atom({ id:'conflict', cat:'Workflow', name:'Conflict recovery', block:'ConflictR
     const chip = (k, t) => { csw.to(k, t); warn.set(k === 'conflict' ? 1 : 0, S.base, t); done.set(k === 'saved' ? 1 : 0, S.base, t); };
     const showBanner = tt => { bt.innerHTML = '<b>A newer version was saved by Theo</b> <span class="muted">2 min ago</span>'; shown = true; bh.set(1, S.base, tt); bo.set(1, S.base, tt + .07); chip('conflict', tt); };
     const setView = v => { if (!shown || v === view) return; view = v; const t0 = now(); bsw.to(v, t0); asw.to(v === 'cmp' ? 'cmp' : 'idle', t0);
-      if (v === 'cmp') hl.forEach((h,k) => h.set(1, S.base, t0 + .25 + k*.07)); else q.after(.15, () => hl.forEach(h => h.jump(0)));
+      if (v === 'cmp') hl.forEach((h,k) => h.set(1, S.base, t0 + .25 + staggerAt(k, .07))); else q.after(.15, () => hl.forEach(h => h.jump(0)));
       setTimeout(() => (v === 'cmp' ? G.cmp : G.idle).querySelector('button').focus({ preventScroll:true }), 0); };
     const resolve = w => { if (!shown) return; const t0 = now(); view = 'edit'; bsw.to('edit', t0); asw.to('idle', t0);
-      if (w === 'theirs') lsw.forEach((s,i) => s.to('t', t0 + EXIT + .1 + i*.07));
+      if (w === 'theirs') lsw.forEach((s,i) => s.to('t', t0 + EXIT + .1 + staggerAt(i, .07)));
       q.after(.15, () => hl.forEach(h => h.jump(0)));
       shown = false; bo.set(0, S.snap, t0 + .3); bh.set(0, S.base, t0 + .3 + EXIT); chip('saved', t0 + .3); bd.focus({ preventScroll:true }); };
     rs.onclick = () => { q.clear(); view = 'edit'; shown = false; lsw.forEach(s => wfReset(s, 'm')); wfReset(bsw, 'edit'); wfReset(asw, 'idle'); wfReset(csw, 'editing');
@@ -285,7 +285,7 @@ atom({ id:'fielddiff', cat:'Workflow', name:'Field diff rows', block:'WorkflowFi
       else if (d === 'r'){ x.sn.set(1, S.base, t); x.so.set(0, S.base, t); x.pn.set(0, S.base, t); x.po.set(1, S.base, t + LAG); }
       else { [x.so, x.sn, x.po, x.pn].forEach(tr => tr.set(0, S.base, t)); } };
     rows.forEach(x => { x.o.onclick = () => { decide(x, x.d === 'r' ? 'p' : 'r', now()); sync(); }; x.n.onclick = () => { decide(x, x.d === 'a' ? 'p' : 'a', now()); sync(); }; });
-    const all = d => { const t0 = now(), tgt = rows.every(x => x.d === d) ? 'p' : d; rows.forEach((x,i) => decide(x, tgt, t0 + i*.07)); sync(); };
+    const all = d => { const t0 = now(), tgt = rows.every(x => x.d === d) ? 'p' : d; rows.forEach((x,i) => decide(x, tgt, t0 + staggerAt(i, .07))); sync(); };
     bA.onclick = () => all('a'); bR.onclick = () => all('r');
     dg.set('0', true); dg.n = 0; sync();
     return t => { dg.render(t);

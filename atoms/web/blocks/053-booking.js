@@ -31,7 +31,7 @@ atom({ id:'booking', cat:'Interactive', name:'Date and time picker', block:'book
     const x = new Track(0), y = new Track(0), o = new Track(0); let day = 0;
     const pick = (d, inst) => { day = d; sel = -1; cfBtn.disabled = true; $(cf,'.lb').textContent = `Oct ${d} · pick a time`; const b = days[d-1], k = inst ? 'jump' : 'set'; x[k](b.offsetLeft); y[k](b.offsetTop); o.set(1); const t0 = now();
       days.forEach((x2,j) => x2.style.color = x2.disabled ? 'var(--faint)' : j === d-1 ? 'var(--card)' : 'var(--ink)');
-      slots.forEach((s,i) => { s.on.set(0); const v = slotsFor(d)[i]; if (!s.L[v]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = v; s.b.appendChild(e); s.L[v] = e; } s.sw.to(v, t0 + i*.04); }); };
+      slots.forEach((s,i) => { s.on.set(0); const v = slotsFor(d)[i]; if (!s.L[v]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = v; s.b.appendChild(e); s.L[v] = e; } s.sw.to(v, t0 + staggerAt(i, .04)); }); };
     days.forEach((b,i) => b.onclick = () => pick(i+1));
     slots.forEach((S2,i) => { const prev = S2.b.onclick; S2.b.onclick = () => { prev(); $(cf,'.lb').textContent = `Oct ${day} · ${slotsFor(day)[i]}`; }; });
     const init = () => pick(day || 7, true); document.fonts.ready.then(init); requestAnimationFrame(init);

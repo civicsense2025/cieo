@@ -22,7 +22,7 @@ atom({ id:'factcheck', cat:'Writing', name:'Source fact-check chips', block:'ric
       const fw = measureW(c.b, c.txt[v ? 'v' : 'u']);
       if (REDUCE){ c.sw.cur = v ? 'v' : 'u'; c.sw.prev = null; c.w.jump(fw); c.tint.jump(v ? 1 : 0); }
       else { c.sw.to(v ? 'v' : 'u', t); c.w.set(fw, S.base, t); c.tint.set(v ? 1 : 0, S.base, t); } };
-    $(st,'.va').onclick = () => { const t0 = now(); chips.forEach((c,i) => go(c, true, t0 + (REDUCE ? 0 : i*.09))); };
+    $(st,'.va').onclick = () => { const t0 = now(); chips.forEach((c,i) => go(c, true, t0 + (REDUCE ? 0 : staggerAt(i, .09)))); };
     return t => { for (const c of chips){ const g = clamp(c.tint.at(t));
       c.b.style.width = px(c.w.at(t));
       c.b.style.background = mix(g, 'var(--success-tint)', 'var(--card)');

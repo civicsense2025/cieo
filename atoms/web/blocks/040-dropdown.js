@@ -45,7 +45,7 @@ atom({
     return t=>{
       const p=clamp(o.at(t));mn.style.opacity=p.toFixed(3);mn.style.visibility=p<.01&&!o.target?'hidden':'visible';
       mn.style.transform=`translateY(${px((1-p)*-4)}) scale(${(.97+.03*p).toFixed(4)})`;mn.style.filter=p<.98?`blur(${((1-p)*BLUR).toFixed(2)}px)`:'none';
-      items.forEach((b,i)=>b.style.opacity=(o.target?clamp(prog(t,openedAt+.04+i*.03)):p).toFixed(3));
+      items.forEach((b,i)=>b.style.opacity=(o.target?clamp(prog(t,openedAt+.04+staggerAt(i, .03))):p).toFixed(3));
       labels.forEach((e,k)=>{sw.apply(e,k,t);e.setAttribute('aria-hidden',String(k!==sw.cur));});
     };
   },

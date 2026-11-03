@@ -18,6 +18,6 @@ atom({ id:'taxest', cat:'Commerce', name:'Tax estimator', block:'checkout, tax, 
     $(st,'.rt').onchange = () => { if (t0 > 0){ const r = rate(), x = 68*r; tx.set(x); tt.set(68 + x); } };
     return t => { const p = clamp(open.at(t)); fd.style.maxHeight = (p*300).toFixed(0) + 'px'; fd.style.opacity = p.toFixed(3);
       const vals = [sub.at(t), tx.at(t), tt.at(t)];
-      R.forEach((el,i) => { const q = t0 < 0 ? 0 : clamp(prog(t, t0 + i*.05)); el.parentElement.style.opacity = q.toFixed(3);
+      R.forEach((el,i) => { const q = t0 < 0 ? 0 : clamp(prog(t, t0 + staggerAt(i, .05))); el.parentElement.style.opacity = q.toFixed(3);
         el.parentElement.style.transform = `translateY(${((1-q)*8).toFixed(1)}px)`; el.textContent = money(Math.max(0, vals[i])); }); };
   }});

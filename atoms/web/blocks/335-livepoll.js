@@ -17,7 +17,7 @@ atom({ id:'livepoll', cat:'Forms', name:'Live poll', block:'poll, vote', fam:['M
       voted = i; total++; const t0 = now();
       rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 2 : 0);
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
-        else { x.v.set(pc, S.base, t0 + j*.06); x.o.set(1, S.base, t0 + EXIT + j*.06); x.c.set(j === i ? 1 : 0, S.base, t0); }
+        else { x.v.set(pc, S.base, t0 + staggerAt(j, .06)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .06)); x.c.set(j === i ? 1 : 0, S.base, t0); }
         x.b.style.cursor = ch.checked ? 'pointer' : 'default'; });
       paint(); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0, S.snap); x.o.set(0, S.snap); x.c.set(0, S.snap); x.b.style.cursor = 'pointer'; }); paint(); };

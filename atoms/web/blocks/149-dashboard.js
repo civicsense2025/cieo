@@ -115,13 +115,13 @@ ${SRCSS}
       const t0 = now(), tS = t0, tC = t0 + .08, tT = t0 + .16, s = series(ri, si), total = s.reduce((a,b) => a + b, 0), f = FIG[ri][si];
       const tv = [total, f[0], f[1]], dl = [f[2], f[3], f[4]];
       // 1. stat tiles
-      stats.forEach((x,j) => { const tj = tS + j*.03, up = dl[j] >= 0, nx = 1 - x.sw.cur;
+      stats.forEach((x,j) => { const tj = tS + staggerAt(j, .03), up = dl[j] >= 0, nx = 1 - x.sw.cur;
         x.L[nx].innerHTML = ic(up ? '<path d="M12 19V5M6 11l6-6 6 6"/>' : '<path d="M12 5v14M6 13l6 6 6-6"/>', 12, 2.5) + '<span>' + dsign(dl[j]) + '</span>';
         if (inst){ x.v.jump(tv[j]); x.sw.cur = nx; x.sw.prev = null; x.sw.t = -9; x.k.jump(up ? 1 : 0); }
         else { x.v.set(tv[j], S.soft, tj); x.sw.to(nx, tj + .05); x.k.set(up ? 1 : 0, S.base, tj + .05); } });
       // 2. chart: every point retargets, 6ms apart; the scale and its labels follow
       const pts = chartPts(ri, si), step = STEPS.find(v => v*3 >= Math.max(...pts)*1.06) || 3000, nxL = 1 - lab.cur;
-      pts.forEach((v,i) => inst ? P[i].jump(v) : P[i].set(v, S.base, tC + i*.006));
+      pts.forEach((v,i) => inst ? P[i].jump(v) : P[i].set(v, S.base, tC + staggerAt(i, .006)));
       inst ? Y.jump(step*3) : Y.set(step*3, S.base, tC);
       fillLabels(LG[nxL], step, ri);
       if (inst){ lab.cur = nxL; lab.prev = null; lab.t = -9; } else lab.to(nxL, tC);
@@ -238,7 +238,7 @@ ${SRCSS}
     outside(st, [bell, panel], () => { if (o.target) setOpen(false); });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && o.target){ setOpen(false); bell.focus(); } });
     ma.onclick = () => { const t0 = now(), un = order().filter(r => r.unread && !r.gone); if (!un.length) return;
-      un.forEach((r,i) => { r.unread = false; r.un.hidden = true; r.k.set(0, S.base, t0 + i*.04); });
+      un.forEach((r,i) => { r.unread = false; r.un.hidden = true; r.k.set(0, S.base, t0 + staggerAt(i, .04)); });
       q.push([t0 + (un.length - 1)*.04 + .12, () => { dg.dir = -1; setBadge(0); }]); sync(); };
     return t => {
       if (t >= nextAt){ arrive(t); nextAt = t - nextAt > 5 ? t + 5 : nextAt + 5; }

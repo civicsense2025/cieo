@@ -14,7 +14,7 @@ atom({ id:'ranks', cat:'SEO', name:'Keyword ranks', block:'table, metric', fam:[
     const chip = (x, v) => { if (!x.L[v]){ const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-end'; const up = +v > 0; e.innerHTML = +v === 0 ? '<span class="muted">–</span>' : `<span style="color:${up ? 'var(--success)' : 'var(--danger)'};font-weight:600">${up ? '▲' : '▼'} ${Math.abs(v)}</span>`; x.dl.appendChild(e); x.L[v] = e; } x.sw.to(String(v)); };
     rows.forEach(x => chip(x, '0'));
     $(st,'.rf').onclick = () => { const np = pos.map(p => clamp(p + Math.round((Math.random() - .55)*8), 1, 40)); const ord = np.map((p,i) => [p,i]).sort((a,b) => a[0] - b[0]); const t0 = now();
-      ord.forEach(([,i],k) => rows[i].y.set(k*36, S.base, t0 + k*.02)); rows.forEach((x,i) => { x.d.dir = np[i] < pos[i] ? -1 : 1; x.d.set(String(np[i])); chip(x, String(pos[i] - np[i])); }); pos = np; bottom = ord[ord.length - 1][1]; paint(); };
+      ord.forEach(([,i],k) => rows[i].y.set(k*36, S.base, t0 + staggerAt(k, .02))); rows.forEach((x,i) => { x.d.dir = np[i] < pos[i] ? -1 : 1; x.d.set(String(np[i])); chip(x, String(pos[i] - np[i])); }); pos = np; bottom = ord[ord.length - 1][1]; paint(); };
     const paint = () => rows.forEach((x,i) => { x.r.style.borderBottom = (!dv.checked || i === bottom) ? 'none' : '1px solid var(--line-soft)'; });
     dv.onchange = paint; paint();
     return t => rows.forEach(x => { x.r.style.transform = `translateY(${px(x.y.at(t))})`; x.d.render(t); for (const k in x.L) x.sw.apply(x.L[k], k, t); });

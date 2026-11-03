@@ -12,5 +12,5 @@ atom({ id:'drawer', cat:'Navigation', name:'Navigation drawer', block:'nav-menu,
     $(st,'.hb').onclick = () => set(true); scr.onclick = () => set(false);
     drag(dw, { down:p => { held = true; sx = x.at() - p.cx; hx = x.at(); }, move:p => { const v = sx + p.cx; hx = v > 0 ? rb(v, 30) : v; }, up:(p, v) => { held = false; x.release(hx, v.vx, hx < -W/2 || v.vx < -500 ? -W : 0); } });
     return t => { const v = held ? hx : x.at(t), p = clamp(1 + v/W); dw.inert=x.target!==0&&!held;dw.style.transform = `translateX(${px(v)})`; scr.style.opacity = (p*.3).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
-      links.forEach((a,i) => { const q = x.target === 0 ? clamp(prog(t, tOpen + .06 + i*.035)) : 1; a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-10)})`; }); };
+      links.forEach((a,i) => { const q = x.target === 0 ? clamp(prog(t, tOpen + .06 + staggerAt(i, .035))) : 1; a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-10)})`; }); };
   }});

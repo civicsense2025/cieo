@@ -55,3 +55,11 @@ test('durations are the 99% settle time of each spring (6.64 / w), to the neares
     assert.ok(Math.abs(sec(duration) - 6.64 / w) <= 0.01, `${p}: ${duration} vs ${(6.64 / w).toFixed(3)}s`);
   }
 });
+
+test('recipe runtime (atoms/web/runtime.core.js) matches tokens.json', () => {
+  const rt = read('atoms/web/runtime.core.js');
+  for (const p of presets) assert.equal(num(rt, new RegExp(`\\b${p}:\\s*\\{\\s*w:\\s*([\\d.]+)`), `runtime ${p}`), T.spring[p].w, p);
+  assert.equal(num(rt, /\bEXIT = ([\d.]+)/, 'EXIT'), sec(T.exit));
+  assert.equal(num(rt, /\bLAG = ([\d.]+)/, 'LAG'), sec(T.lag));
+  assert.equal(num(rt, /\bSTAGGER_MAX = ([\d.]+)/, 'STAGGER_MAX'), sec(T.staggerMax));
+});

@@ -19,7 +19,7 @@ atom({ id:'cartdrawer', cat:'Commerce', name:'Cart drawer', block:'cart, drawer,
     return t => { const p = clamp(open.at(t)); dw.style.transform = `translateX(${((1-p)*232).toFixed(1)}px)`;
       dw.style.visibility = p < .01 ? 'hidden' : 'visible'; dw.setAttribute('aria-hidden', String(p < .01));
       scr.style.opacity = (p*.35).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
-      R.forEach((r,i) => { const q = open.target === 1 ? clamp(prog(t, t0 + i*.04)) : 1; r.style.opacity = q.toFixed(3); r.style.transform = `translateX(${((1-q)*16).toFixed(1)}px)`; });
+      R.forEach((r,i) => { const q = open.target === 1 ? clamp(prog(t, t0 + staggerAt(i, .04))) : 1; r.style.opacity = q.toFixed(3); r.style.transform = `translateX(${((1-q)*16).toFixed(1)}px)`; });
       bar.style.width = (clamp(fill.at(t))*100).toFixed(1) + '%'; L.forEach((e,k) => sv.apply(e,k,t));
       $(st,'.st').textContent = money(sub.at(t)); $(st,'.tt').textContent = money(tot.at(t)); };
   }});

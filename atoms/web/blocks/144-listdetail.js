@@ -185,7 +185,7 @@ atom({ id:'pagetransition', cat:'Views', name:'Page transitions', block:'site-he
     function go(i){
       if (i === cur) return; const t = now(), d = i > cur ? 1 : -1, pg = pages[i];
       ex.set(cur, { t0:t, dir:d }); ex.delete(i); pg.dir = d;                            // outgoing page exits on the Swap clock
-      pg.T.forEach((tr, k) => { tr.jump(0); tr.set(1, S.base, t + EXIT + k*.05); });     // heading, paragraph, image: 50ms apart, after the exit
+      pg.T.forEach((tr, k) => { tr.jump(0); tr.set(1, S.base, t + EXIT + staggerAt(k, .05)); });     // heading, paragraph, image: 50ms apart, after the exit
       lc[cur].set(0); lc[i].set(1); const [l, r] = geo(i); ue.go(l, r); cur = i; mark();
     }
     const pickMode = (i, inst) => { mode = i; sbtn.forEach((b, j) => b.setAttribute('aria-pressed', i === j)); const b = sbtn[i]; inst ? se.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : se.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); };

@@ -33,14 +33,14 @@ atom({ id:'issuelist', cat:'SEO', name:'Issue severity list', block:'seo audit, 
     requestAnimationFrame(() => { const t0 = now(); rows.forEach((r,i) => {
         r.fx.style.height = 'auto'; const full = r.b.offsetHeight; r.fx.style.height = '0px'; r.base = r.b.offsetHeight; r.H = full;
         r.h.jump(0);
-        if (REDUCE) r.o.jump(1); else r.o.set(1, S.base, t0 + i*.06); });
+        if (REDUCE) r.o.jump(1); else r.o.set(1, S.base, t0 + staggerAt(i, .06)); });
       rows.forEach(r => r.h.jump(0));
       requestAnimationFrame(() => rows.forEach(r => { if (!r.done && !r.open) r.h.jump(r.base); }));
       paint(); });
     dv.onchange = paint;
     $(st,'.rs').onclick = () => { dg.dir = 1; if (REDUCE) dg.set('3', true); else dg.set('3'); fin.to(0);
       rows.forEach((r,i) => { r.done = false; r.open = false; r.rv.disabled = false; r.tg.setAttribute('aria-expanded', 'false');
-        if (REDUCE){ r.o.jump(1); r.h.jump(r.base); } else { r.o.set(1, S.base, now() + i*.06); r.h.set(r.base); } }); paint(); };
+        if (REDUCE){ r.o.jump(1); r.h.jump(r.base); } else { r.o.set(1, S.base, now() + staggerAt(i, .06)); r.h.set(r.base); } }); paint(); };
     return t => { rows.forEach(r => { r.w.style.height = px(Math.max(0, r.h.at(t))); r.w.style.visibility = r.done && clamp(r.o.at(t)) < .02 ? 'hidden' : 'visible';
         fade(r.b, clamp(r.o.at(t)), (1-clamp(r.o.at(t)))*6); r.fx.style.height = px(Math.max(0, r.h.at(t) - r.base)); });
       dg.render(t); L.forEach((el,k) => fin.apply(el,k,t)); };

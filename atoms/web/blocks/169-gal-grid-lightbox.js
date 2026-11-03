@@ -59,12 +59,12 @@ class Reflow {
   go(rects, t){
     const L = [], St = [], E = [];
     this.it.forEach((m, i) => { const r = rects[i]; if (r && m.on) St.push(i); else if (r) E.push(i); else if (m.on) L.push(i); });
-    L.forEach((i, k) => { const m = this.it[i]; m.on = false; m.s.set(0, S.snap, t + k*.02); });
+    L.forEach((i, k) => { const m = this.it[i]; m.on = false; m.s.set(0, S.snap, t + staggerAt(k, .02)); });
     const lag = L.length ? .08 : 0, lag2 = St.length || L.length ? .2 : 0;
-    St.forEach((i, k) => { const m = this.it[i], r = rects[i]; for (const a of 'xywh') m[a].set(r[a], S.soft, t + lag + k*.03); });
+    St.forEach((i, k) => { const m = this.it[i], r = rects[i]; for (const a of 'xywh') m[a].set(r[a], S.soft, t + lag + staggerAt(k, .03)); });
     E.forEach((i, k) => { const m = this.it[i], r = rects[i]; m.on = true;
       if (m.s.at(t) < .03){ for (const a of 'xywh') m[a].jump(r[a]); m.s.jump(0); } else for (const a of 'xywh') m[a].set(r[a], S.soft, t);
-      m.s.set(1, S.base, t + lag2 + k*.035); });
+      m.s.set(1, S.base, t + lag2 + staggerAt(k, .035)); });
   }
   render(t){
     for (const m of this.it){

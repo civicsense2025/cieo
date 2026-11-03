@@ -74,7 +74,7 @@ atom({ id:'audio-recorder', cat:'Audio', name:'Voice recorder', block:'audio, re
     rcStop.onclick = () => { const t = now(), el = t - t0; clipLen = Math.max(1, Math.round(el));
       const src = samples.length ? samples : [.4], out = [...Array(NC)].map((_,i) => { const a = Math.floor(i/NC*src.length), b = Math.max(a + 1, Math.floor((i + 1)/NC*src.length)); return Math.max(...src.slice(a, b)); });
       const top = Math.max(...out) || 1;
-      cb.forEach((_,i) => { const from = 4 + hist[Math.min(NL - 1, Math.floor(i/NC*NL))]*32, to = 4 + clamp(out[i]/top, .12, 1)*32; ch[i].jump(from); if (REDUCE) ch[i].jump(to); else ch[i].set(to, S.soft, t + i*.012); });
+      cb.forEach((_,i) => { const from = 4 + hist[Math.min(NL - 1, Math.floor(i/NC*NL))]*32, to = 4 + clamp(out[i]/top, .12, 1)*32; ch[i].jump(from); if (REDUCE) ch[i].jump(to); else ch[i].set(to, S.soft, t + staggerAt(i, .012)); });
       len.textContent = AU_FMT(clipLen); pp = 0; playing = false; icon.jump(0); go('clip', target(), t); say(`Clip saved, ${AU_FMT(clipLen)}`); rcPlay.focus({ preventScroll:true }); };
     rcPlay.onclick = () => { const t = now(); if (!playing){ if (pp >= 1) pp = 0; pt0 = t - pp*clipLen; playing = true; } else { pp = clamp((t - pt0)/clipLen); playing = false; } if (REDUCE) icon.jump(playing ? 1 : 0); else icon.set(playing ? 1 : 0); rcPlay.setAttribute('aria-label', playing ? 'Pause clip' : 'Play clip'); };
     rcDel.onclick = () => { playing = false; pp = 0; icon.jump(0); go('idle', 56, now()); say('Clip deleted'); rcMic.focus({ preventScroll:true }); };

@@ -21,5 +21,5 @@ atom({ id:'citepop', cat:'AI chat', name:'Citation popover', block:'chat, citati
       panel.style.opacity = v.toFixed(3); panel.style.visibility = v < .01 ? 'hidden' : 'visible';
       panel.style.transform = `translateY(${((1-v)*8).toFixed(2)}px) scale(${(.97 + .03*v).toFixed(4)})`;
       if (popEl) popEl.style.transform = `scale(${(1 + .3*s).toFixed(3)})`;
-      rows.forEach((r,i) => { const e = (sg.checked && !REDUCE) ? clamp(prog(t, t0 + EXIT + i*.03, S.base)) : 1; fade(r, open < 0 ? v : e*v, (1-e)*8); }); };
+      rows.forEach((r,i) => { const e = (sg.checked && !REDUCE) ? clamp(prog(t, t0 + EXIT + staggerAt(i, .03), S.base)) : 1; fade(r, open < 0 ? v : e*v, (1-e)*8); }); };
   }});

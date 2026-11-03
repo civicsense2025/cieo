@@ -18,7 +18,7 @@ atom({ id:'masonry', cat:'Layout', name:'Masonry settle', block:'gallery, board,
         c.c.style.width = px(CW);
         if (dead){ c.x.jump(x); c.y.jump(y); if (fresh === c){ c.o.jump(1); } }
         else if (fresh === c){ c.x.jump(x); c.y.jump(y + 12); c.o.jump(.45); c.x.set(x, S.base); c.y.set(y, S.base); c.o.set(1); }
-        else { c.x.set(x, S.base, t0+i*.03); c.y.set(y, S.base, t0+i*.03); } });
+        else { c.x.set(x, S.base, t0+staggerAt(i, .03)); c.y.set(y, S.base, t0+staggerAt(i, .03)); } });
       const h = Math.max(...colH, 0) - G;
       if (dead) wall.jump(Math.max(0, h)); else wall.set(Math.max(0, h), S.lazy, t0);
       cnt.textContent = n + (n === 1 ? ' card' : ' cards');

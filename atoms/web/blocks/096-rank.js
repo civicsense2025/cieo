@@ -10,7 +10,7 @@ atom({ id:'rank', cat:'Forms', name:'Click to rank', block:'form (ranking)', fam
       b.innerHTML = `<span class="bg" style="width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--card);font:600 12px var(--sans);display:grid;place-items:center"><span class="d"></span></span><span class="small" style="font-weight:500">${n}</span>`; rk.appendChild(b);
       const x = { b, bg:$(b,'.bg'), d:new Digits($(b,'.d'), 1), y:new Track(i*R), o:new Track(0), rank:0 }; x.d.set('1', true); return x; });
     let ranked = [];
-    const lay = () => { const rest = it.filter(x => !ranked.includes(x)); [...ranked, ...rest].forEach((x,i) => x.y.set(i*R, S.base, now() + i*.02)); it.forEach(x => { const r = ranked.indexOf(x); x.o.set(r >= 0 ? 1 : 0); if (r >= 0) x.d.set(String(r + 1)); x.b.setAttribute('aria-label', `${x.b.textContent.trim()}${r >= 0 ? ', ranked ' + (r + 1) : ', not ranked'}`); }); };
+    const lay = () => { const rest = it.filter(x => !ranked.includes(x)); [...ranked, ...rest].forEach((x,i) => x.y.set(i*R, S.base, now() + staggerAt(i, .02))); it.forEach(x => { const r = ranked.indexOf(x); x.o.set(r >= 0 ? 1 : 0); if (r >= 0) x.d.set(String(r + 1)); x.b.setAttribute('aria-label', `${x.b.textContent.trim()}${r >= 0 ? ', ranked ' + (r + 1) : ', not ranked'}`); }); };
     it.forEach(x => x.b.onclick = () => { ranked.includes(x) ? ranked.splice(ranked.indexOf(x), 1) : ranked.push(x); lay(); });
     $(st,'.rs').onclick = () => { ranked = []; lay(); };
     return t => it.forEach(x => { x.b.style.transform = `translateY(${px(x.y.at(t))})`; const o = clamp(x.o.at(t)); x.bg.style.transform = `scale(${o.toFixed(3)})`; x.bg.style.width = x.bg.style.height = px(22); x.bg.style.marginRight = px(-32*(1-o)); x.d.render(t); });

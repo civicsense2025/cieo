@@ -10,7 +10,7 @@ atom({ id:'mobilemenu', cat:'Chrome', name:'Mobile menu', block:'nav-menu, site-
     const L = ['Work','Services','Journal','About','Contact'].map(n => { const a = document.createElement('a'); a.href = '#'; a.textContent = n; a.style.cssText = 'font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--ink);text-decoration:none;padding:4px 0'; col.appendChild(a); return { a, o:new Track(0) }; });
     const op = new Track(0); let open = false;
     hb.onclick = () => { open = !open; hb.setAttribute('aria-expanded', open); const t0 = now(); op.set(open ? 1 : 0);
-      L.forEach((x,i) => open ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); };
+      L.forEach((x,i) => open ? x.o.set(1, S.base, t0 + .08 + staggerAt(i, .04)) : x.o.set(0, S.snap, t0)); };
     L.forEach(x => x.a.onclick = e => e.preventDefault());
     return t => { const p = clamp(op.at(t));
       lines[0].style.transform = `translateY(${px(11 + 6*p)}) rotate(${(45*p).toFixed(2)}deg)`; lines[1].style.transform = 'translateY(17px)'; lines[1].style.opacity = (1-p).toFixed(3);

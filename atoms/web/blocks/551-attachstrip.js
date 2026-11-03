@@ -15,7 +15,7 @@ atom({ id:'attachstrip', cat:'Email', name:'Attachment strip', block:'email, att
     const names = files.map(f => f[0] + ' · ' + f[1]).map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.style.fontSize = '13px'; e.textContent = s; pn.appendChild(e); return e; });
     const en = th.map(() => new Track(0)), sw = new Swap(0), rad = new Track(10), ovd = new Digits(ov, 1);
     let left = 2; ovd.set('2', true); sw.to(0, now());
-    const t0 = now() + .2; th.forEach((b, i) => en[i].set(1, S.base, t0 + i*.03));
+    const t0 = now() + .2; th.forEach((b, i) => en[i].set(1, S.base, t0 + staggerAt(i, .03)));
     const sel = i => { const t = now(); sw.to(i, t); rad.set(10 + i*4, S.base, t); pic.textContent = files[i][1]; };
     th.forEach((b, i) => b.onclick = () => sel(i));
     sel(0);

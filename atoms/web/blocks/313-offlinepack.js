@@ -15,7 +15,7 @@ atom({ id:'offlinepack', cat:'Maps', name:'Offline pack', block:'download maps',
       v.jump(0); cells.forEach(c => c.o.jump(0)); drop.jump(14); dn.style.opacity = 0; sw.to(0);
       if (REDUCE){ v.jump(100); drop.jump(0); sw.cur = 1; sw.prev = null; sw.t = -9; pc.set('100%', true); cells.forEach(c => c.o.jump(1)); dn.style.opacity = 1; busy = false; return; }
       v.set(100, S.base, t0 + .1); sw.to(1, t0 + 1.6);
-      cells.forEach((c,i) => c.o.set(1, S.base, t0 + .5 + i*.08)); drop.set(0, S.soft, t0 + 1.5);
+      cells.forEach((c,i) => c.o.set(1, S.base, t0 + .5 + staggerAt(i, .08))); drop.set(0, S.soft, t0 + 1.5);
       setTimeout(() => busy = false, 2400); };
     return t => { const x = clamp(v.at(t)/100), d = drop.at(t);
       rg.style.background = `conic-gradient(var(--ink) ${x*360}deg, var(--raised) 0deg)`;

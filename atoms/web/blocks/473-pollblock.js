@@ -16,7 +16,7 @@ atom({ id:'pollblock', cat:'Newsletter', name:'Reader poll', block:'newsletter, 
     rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now();
       rows.forEach((x,j) => { const p = O[j][1] + (j === i ? 2 : -1);
         if (REDUCE){ x.v.jump(p); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
-        else { x.v.set(p, S.base, t0 + j*.05); x.o.set(1, S.base, t0 + EXIT + j*.05); x.c.set(j === i ? 1 : 0); }
+        else { x.v.set(p, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); }
         x.b.style.cursor = 'default'; }); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0); x.o.set(0, S.snap); x.c.set(0); x.b.style.cursor = 'pointer'; }); };
     return t => rows.forEach(r => { const v = r.v.at(t), c = clamp(r.c.at(t));

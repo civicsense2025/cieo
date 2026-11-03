@@ -10,7 +10,7 @@ atom({ id:'snoozesheet', cat:'Email', name:'Snooze sheet', block:'email, snooze,
     const chips = times.map(s => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText = 'min-height:32px;margin:0 6px 6px 0;font-size:13px'; b.textContent = s; sheet.appendChild(b); return b; });
     const sh = new Track(0), ce = chips.map(() => new Track(0)), rh = new Track(58), sw = new Swap(0);
     let open = false;
-    const show = v => { open = v; const t = now(); sh.set(v ? 1 : 0, v ? S.base : S.snap, t); if (v) chips.forEach((c, i) => { ce[i].jump(0); ce[i].set(1, S.base, t + .08 + i*.04); }); };
+    const show = v => { open = v; const t = now(); sh.set(v ? 1 : 0, v ? S.base : S.snap, t); if (v) chips.forEach((c, i) => { ce[i].jump(0); ce[i].set(1, S.base, t + .08 + staggerAt(i, .04)); }); };
     btn.onclick = () => show(!open);
     chips.forEach((c, i) => c.onclick = () => { const t = now(); show(false); rh.set(0, S.base, t); rh.set(58, S.soft, t + .22); sw.to(1, t + .22); btn.textContent = 'Snoozed'; btn.disabled = true; });
     return t => { const p = clamp(sh.at(t));

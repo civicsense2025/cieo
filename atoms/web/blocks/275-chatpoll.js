@@ -21,7 +21,7 @@ atom({ id:'chatpoll', cat:'Forms', name:'In-chat poll', block:'chat, poll', fam:
       C[1].textContent = `You picked ${O[i][0]} · 128 votes`;
       rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 1 : 0);
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); x.dg.set(String(pc), true); }
-        else { const d = an.checked ? j*.06 : 0; x.v.set(pc, S.base, t + d); x.o.set(1, S.base, t + EXIT + d); x.c.set(j === i ? 1 : 0); x.dg.set(String(pc)); }
+        else { const d = an.checked ? staggerAt(j, .06) : 0; x.v.set(pc, S.base, t + d); x.o.set(1, S.base, t + EXIT + d); x.c.set(j === i ? 1 : 0); x.dg.set(String(pc)); }
         x.b.style.cursor = 'default'; });
       if (REDUCE){ csw.cur = 1; csw.prev = 0; csw.t = t; } else csw.to(1); });
     $(st,'.rs').onclick = () => { voted = -1; C[1].textContent = 'You picked Booking calendar · 128 votes';

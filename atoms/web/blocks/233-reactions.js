@@ -23,7 +23,7 @@ atom({ id:'reactions', cat:'Video calls', name:'Reactions burst', block:'video c
       p.style.cssText = 'display:grid;place-items:center;padding:0;width:30px;height:30px;border-radius:50%;background:var(--raised);font-size:15px';
       p.textContent = e; pile.appendChild(p);
       const it = { p, y:new Track(REDUCE ? 0 : 8), o:new Track(REDUCE ? 1 : 0) };
-      if (!REDUCE){ const k = Math.min(items.length, 5); it.y.set(0, S.base, t0 + k*.05); it.o.set(1, S.base, t0 + k*.05); }
+      if (!REDUCE){ const k = Math.min(items.length, 5); it.y.set(0, S.base, t0 + staggerAt(k, .05)); it.o.set(1, S.base, t0 + staggerAt(k, .05)); }
       items.push(it);
       while (items.length > 6){ const old = items.shift(); old.p.remove(); }
       nc.textContent = n === 1 ? '1 reaction' : n + ' reactions';

@@ -404,7 +404,7 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
       msgs.forEach(m => {
         fade(m.el, clamp(m.e.at(t)), (1 - clamp(m.e.at(t))) * 6, false);
         if (m.dots.length){ const ty = clamp(m.ty.at(t)); m.dt.style.opacity = ty.toFixed(3); m.dots.forEach((d, i) => { d.style.opacity = (.25 + .75 * (.5 + .5 * Math.sin(Math.PI * 2 * (t * 1.1 - i * .18)))).toFixed(3); }); }
-        m.words.forEach((w, i) => { const q = clamp(prog(t, m.ts + i * .05, S.snap)); w.style.opacity = q.toFixed(3); w.style.transform = `translateY(${px((1 - q) * 3)})`; });
+        m.words.forEach((w, i) => { const q = clamp(prog(t, m.ts + staggerAt(i, .05), S.snap)); w.style.opacity = q.toFixed(3); w.style.transform = `translateY(${px((1 - q) * 3)})`; });
       });
       layers(stw, stEls, t, 3);
     };
@@ -660,7 +660,7 @@ atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'A
         const a = site.rect(c.ed.k), h = size(c.el).h, s = c.el.style;
         s.left = px(clamp(a.x + c.ox, 8, Math.max(8, W - CW - 8))); s.top = px(clamp(a.y + c.oy, 8, Math.max(8, H - h - 8))); pop(c.el, o, 6); s.transformOrigin = '0 0';
         // diff words reveal in order, then the strikes draw
-        c.ws.forEach((w, i) => { const q = clamp(prog(t, c.t0 + .1 + i * .035, S.snap)); w.style.opacity = q.toFixed(3); if (w.classList.contains('sge-d')) w.style.setProperty('--s', clamp(prog(t, c.t0 + .45 + i * .035, S.base)).toFixed(3)); });
+        c.ws.forEach((w, i) => { const q = clamp(prog(t, c.t0 + .1 + staggerAt(i, .035), S.snap)); w.style.opacity = q.toFixed(3); if (w.classList.contains('sge-d')) w.style.setProperty('--s', clamp(prog(t, c.t0 + .45 + staggerAt(i, .035), S.base)).toFixed(3)); });
         // accept / reject: one row, one morph
         const aa = clamp(c.a.at(t)), rr = clamp(c.r.at(t)), BW = size(c.br).cw, g = 8 * (1 - aa) * (1 - rr), rw = (92 + (BW - 92) * rr) * (1 - aa), aw = BW - rw - g;
         c.rj.style.left = '0'; c.rj.style.width = px(rw); c.rj.style.opacity = clamp(1 - aa * 1.6).toFixed(3); c.rj.style.pointerEvents = aa > .5 ? 'none' : 'auto';
@@ -763,7 +763,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
     }
     fb.forEach((b, i) => b.onclick = () => {
       const k = SEVS[i]; if (k === '*') sel.clear(); else sel.has(k) ? sel.delete(k) : sel.add(k); if (sel.size === 3) sel.clear();
-      paint(); rows.forEach((r, j) => r.vis.set(match(r) ? 1 : 0, S.base, now() + (match(r) ? .06 : 0) + j * .012)); if (openR && !match(openR)) toggle(openR); dShow.set(String(rows.filter(r => r.en.target === 1 && match(r)).length));
+      paint(); rows.forEach((r, j) => r.vis.set(match(r) ? 1 : 0, S.base, now() + (match(r) ? .06 : 0) + staggerAt(j, .012))); if (openR && !match(openR)) toggle(openR); dShow.set(String(rows.filter(r => r.en.target === 1 && match(r)).length));
     });
     rp.onclick = start;
     const layout = () => { pn.dataset.n = size(st).cw < 560 ? 1 : 0; r0.dataset.w = size(r0).w; rw0 = size(r0).w + 18; rw1 = size(r1).w + 18; lastKey = size(st).cw; };
@@ -869,7 +869,7 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
     function start(){
       clear(); pins.forEach(p => p.wrap.remove()); pins = []; open = false; cur = -1; count = 0; dismissed = false; mT.jump(0); sT.jump(0); box.o.jump(0); lastBox = null; site.cover = 0; site.sc.jump(0); dSn.set('0', true); stw.cur = 0; stw.prev = null; stw.t = -9; layout();
       at(.5, () => { sT.set(1); });
-      QUEUE.forEach((q, i) => at(1.0 + i * .09, () => { const p = new Pin('agq', ov, q, sb); p.btn.onclick = () => openSheet(i); p.label(false); pins.push(p); count++; dSn.set(String(count)); }));
+      QUEUE.forEach((q, i) => at(1.0 + staggerAt(i, .09), () => { const p = new Pin('agq', ov, q, sb); p.btn.onclick = () => openSheet(i); p.label(false); pins.push(p); count++; dSn.set(String(count)); }));
       at(1.6, () => { stw.to(0); });
     }
     rp.onclick = start;
@@ -1011,7 +1011,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
         os.forEach((b, i) => { const r = clamp(rds[i].at(t)); b.firstElementChild.firstElementChild.style.opacity = r.toFixed(3); b.firstElementChild.style.borderColor = mix(r, 'var(--ink)', 'var(--muted)'); });
         plate(pl, plateE.A.at(t), plateE.B.at(t)); pl.style.opacity = clamp(po.at(t)).toFixed(3); sd.style.opacity = (.45 + .55 * clamp(sT.at(t))).toFixed(3);
         sc.draw(t); rls.forEach((l, i) => runSw.apply(l, i, t, 3)); rdot.style.opacity = (.35 + .65 * (.5 + .5 * Math.sin(Math.PI * 2 * t * .9))).toFixed(3);
-        words.forEach((w2, i) => { const p = clamp(prog(t, ts + i * .05, S.snap)); if (!ts) return; w2.style.opacity = p.toFixed(3); w2.style.transform = `translateY(${px((1 - p) * 3)})`; });
+        words.forEach((w2, i) => { const p = clamp(prog(t, ts + staggerAt(i, .05), S.snap)); if (!ts) return; w2.style.opacity = p.toFixed(3); w2.style.transform = `translateY(${px((1 - p) * 3)})`; });
       } else ck.style.visibility = 'hidden';
     };
   }});

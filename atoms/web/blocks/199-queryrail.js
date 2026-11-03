@@ -12,7 +12,7 @@ atom({ id:'queryrail', cat:'Writing', name:'Query rail', block:'search rail', fa
       d.innerHTML = `<span class="c layer">${Q[k]}</span><span class="r layer" style="color:var(--success)">Resolved ✓</span>`;
       chips.appendChild(d);
       const it = { d, c:d.querySelector('.c'), r:d.querySelector('.r'), sw:new Swap(0), w:new Track(0), h:new Track(0), gone:false };
-      const t0 = now() + k * .04;
+      const t0 = now() + staggerAt(k, .04);
       it.w.set(1, S.base, t0); it.h.set(1, S.base, t0); it.sw.to(0, t0);
       d.style.width = ''; items.push(it);
       d.onclick = () => { if (it.gone) return; it.gone = true; const t1 = now();

@@ -182,7 +182,7 @@ function kit(st, o = {}){
     const side = typeof o.menuSide === 'function' ? o.menuSide(btn) : o.menuSide; let x = r.x + r.w - W, y = r.y + r.h + 8; if (side){ x = r.x + r.w + 8; y = r.y + r.h - H; }
     mn.style.left = px(clamp(x, 8, Math.max(8, FW - W - 8))); mn.style.top = px(clamp(y, 8, Math.max(8, FH - H - 8))); mn.style.transformOrigin = side ? '0 100%' : '100% 0'; };
   function closeMenu(focus){ if (!K.menuOpen) return; K.menuOpen = false; mo.set(0, S.snap); avs.forEach(a => a.setAttribute('aria-expanded', 'false')); mis.forEach(m => m.o.set(0, S.snap)); if (focus && mBtn) mBtn.focus(); mBtn = null; }
-  const openMenu = btn => { if (K.menuOpen && mBtn === btn) return closeMenu(true); mBtn = btn; K.menuOpen = true; placeMenu(btn); mn.style.visibility = 'visible'; mo.set(1); const t0 = now(); avs.forEach(a => a.setAttribute('aria-expanded', a === btn)); mis.forEach((m,i) => m.o.set(1, S.base, t0 + .04 + i*.03)); setTimeout(() => mis[0].el.focus(), 0); };
+  const openMenu = btn => { if (K.menuOpen && mBtn === btn) return closeMenu(true); mBtn = btn; K.menuOpen = true; placeMenu(btn); mn.style.visibility = 'visible'; mo.set(1); const t0 = now(); avs.forEach(a => a.setAttribute('aria-expanded', a === btn)); mis.forEach((m,i) => m.o.set(1, S.base, t0 + .04 + staggerAt(i, .03))); setTimeout(() => mis[0].el.focus(), 0); };
   K.bindAvatar = btn => { avs.push(btn); btn.addEventListener('click', () => openMenu(btn)); btn.addEventListener('keydown', e => { if (e.key === 'ArrowDown'){ e.preventDefault(); if (!K.menuOpen || mBtn !== btn) openMenu(btn); } }); };
   mn.addEventListener('keydown', e => { const i = mis.findIndex(m => m.el === document.activeElement);
     if (e.key === 'ArrowDown'){ e.preventDefault(); mis[(i + 1) % mis.length].el.focus(); } else if (e.key === 'ArrowUp'){ e.preventDefault(); mis[(i - 1 + mis.length) % mis.length].el.focus(); }
@@ -203,11 +203,11 @@ function kit(st, o = {}){
       host.appendChild(g); const gb = $(g,'button'), gs = $(g,'.hx-gs'), gi = $(g,'.hx-gi'), subs = $$(gi,'a').map(el => ({ el, o:new Track(0) }));
       const grp = { gb, gs, gi, subs, h:new Track(0), r:new Track(0), open:false, chev:$(gb,'i') };
       gb.onclick = () => { grp.open = !grp.open; gb.setAttribute('aria-expanded', grp.open); grp.h.set(grp.open ? 1 : 0); grp.r.set(grp.open ? 1 : 0); const t0 = now();
-        subs.forEach((s,j) => grp.open ? s.o.set(1, S.base, t0 + .06 + j*.04) : s.o.set(0, S.snap, t0)); };
+        subs.forEach((s,j) => grp.open ? s.o.set(1, S.base, t0 + .06 + staggerAt(j, .04)) : s.o.set(0, S.snap, t0)); };
       groups.push(grp); items.push({ el:g, o:new Track(0) });
     });
     return { items, groups, host,
-      show(v, inst){ const t0 = now(); items.forEach((x,i) => inst ? x.o.jump(v ? 1 : 0) : v ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (!v) groups.forEach(g => { g.open = false; g.gb.setAttribute('aria-expanded','false'); g.h.set(0, S.snap); g.r.set(0, S.snap); g.subs.forEach(s => s.o.set(0, S.snap)); }); },
+      show(v, inst){ const t0 = now(); items.forEach((x,i) => inst ? x.o.jump(v ? 1 : 0) : v ? x.o.set(1, S.base, t0 + .08 + staggerAt(i, .04)) : x.o.set(0, S.snap, t0)); if (!v) groups.forEach(g => { g.open = false; g.gb.setAttribute('aria-expanded','false'); g.h.set(0, S.snap); g.r.set(0, S.snap); g.subs.forEach(s => s.o.set(0, S.snap)); }); },
       draw(t){ items.forEach(x => { const p = clamp(x.o.at(t)); fade(x.el, p, (1 - p)*8); });
         groups.forEach(g => { g.gs.style.height = px(clamp(g.h.at(t))*size(g.gi).h); g.chev.style.transform = `rotate(${(180*clamp(g.r.at(t))).toFixed(1)}deg)`; g.subs.forEach(s => { const p = clamp(s.o.at(t)); fade(s.el, p, (1 - p)*4); }); }); } };
   };
@@ -578,7 +578,7 @@ atom({ id:'header-rail', cat:'Headers', name:'Header: side rail', block:'site-he
     const apply = inst => { const ex = pinned || hov, t0 = now();
       if (K.narrow) return;
       if (inst){ w.jump(ex ? 232 : 64); lbs.forEach(l => l.o.jump(ex ? 1 : 0)); clw.o.jump(ex ? 1 : 0); return; }
-      if (ex){ w.set(232, S.base, t0); lbs.forEach((l,i) => l.o.set(1, S.base, t0 + .06 + i*.02)); clw.o.set(1, S.base, t0 + .06); }
+      if (ex){ w.set(232, S.base, t0); lbs.forEach((l,i) => l.o.set(1, S.base, t0 + .06 + staggerAt(i, .02))); clw.o.set(1, S.base, t0 + .06); }
       else { lbs.forEach(l => l.o.set(0, S.snap, t0)); clw.o.set(0, S.snap, t0); w.set(64, S.base, t0 + .05); } };
     const setPin = v => { pinned = v; pad.set(v ? 232 : 64); apply(); };
     rl.addEventListener('pointerenter', () => { if (K.narrow) return; hov = true; apply(); }); rl.addEventListener('pointerleave', () => { if (K.narrow) return; hov = false; if (!K.menuOpen) apply(); });
@@ -740,7 +740,7 @@ atom({ id:'header-minimal', cat:'Headers', name:'Header: minimal with fullscreen
     const mo = new Track(0), msw = new Swap('Menu'); let open = false;
     const set = (v, inst, focus) => { if (v === open) return; open = v; K.closeMenu(); mb.setAttribute('aria-expanded', v); mb.setAttribute('aria-label', v ? 'Close menu' : 'Open menu'); msw.to(v ? 'Close' : 'Menu'); const t0 = now();
       ov.style.visibility = 'visible'; if (inst){ mo.jump(v ? 1 : 0); links.concat(cts).forEach(x => x.o.jump(v ? 1 : 0)); return; }
-      v ? mo.set(1, S.soft) : mo.set(0, S.base, t0 + .08); links.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .14 + i*.06) : x.o.set(0, S.snap, t0)); cts.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .3 + i*.05) : x.o.set(0, S.snap, t0));
+      v ? mo.set(1, S.soft) : mo.set(0, S.base, t0 + .08); links.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .14 + staggerAt(i, .06)) : x.o.set(0, S.snap, t0)); cts.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .3 + staggerAt(i, .05)) : x.o.set(0, S.snap, t0));
       if (v) setTimeout(() => links[0].a.focus(), 60); else if (focus) mb.focus(); };
     mb.onclick = () => set(!open, false, true); links.forEach(l => { l.a.onclick = e => { e.preventDefault(); set(false, false, true); }; });
     ls.addEventListener('pointerover', e => { const a = e.target.closest('.hd12-lk'); links.forEach(l => l.dim.set(a && l.a !== a ? 1 : 0)); }); ls.addEventListener('pointerleave', () => links.forEach(l => l.dim.set(0)));

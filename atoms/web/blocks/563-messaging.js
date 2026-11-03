@@ -52,7 +52,7 @@ atom({ id:'msg-delivery', cat:'Messaging', name:'Delivery ticks', block:'messagi
     reset(0.3);
     return t => { const dt0 = t - t0;
       for (let n = step + 1; n < SCHED.length; n++) if (dt0 >= SCHED[n]) go(n, t);
-      if (!seenOn && dt0 >= SEEN){ seenOn = true; lo.set(1, S.snap, t); seen.forEach((s,i) => { if (REDUCE){ s.x.jump(0); s.o.jump(1); } else { s.x.set(0, S.base, t + i*.06); s.o.set(1, S.base, t + i*.06); } }); mkSend.disabled = false; mkSend.style.opacity = '1'; }
+      if (!seenOn && dt0 >= SEEN){ seenOn = true; lo.set(1, S.snap, t); seen.forEach((s,i) => { if (REDUCE){ s.x.jump(0); s.o.jump(1); } else { s.x.set(0, S.base, t + staggerAt(i, .06)); s.o.set(1, S.base, t + staggerAt(i, .06)); } }); mkSend.disabled = false; mkSend.style.opacity = '1'; }
       layers.forEach((e,i) => sw.apply(e, i, t));
       tk.style.stroke = 'currentColor'; tk.style.color = mix(clamp(rd.at(t)), 'var(--accent)', 'var(--muted)');
       clock.style.opacity = clamp(kc.at(t)).toFixed(3); hand.style.transformOrigin = '7px 7px'; hand.style.transform = `rotate(${REDUCE ? 0 : ((t*180) % 360).toFixed(1)}deg)`;

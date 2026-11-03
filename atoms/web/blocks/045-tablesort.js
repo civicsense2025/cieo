@@ -18,7 +18,7 @@ atom({ id:'tablesort', cat:'Data', name:'Sortable table', block:'table', fam:['M
     hs.forEach(h => h.b.onclick = () => { asc = key === h.k ? !asc : h.k === 'name'; key = h.k; const t0 = now();
       hs.forEach(x => { x.o.set(x === h ? 1 : 0); }); h.rot.set(asc ? 0 : 180);
       const s = rows.slice().sort((a,b) => (typeof a[key] === 'string' ? a[key].localeCompare(b[key]) : a[key] - b[key])*(asc ? 1 : -1));
-      s.forEach((r,i) => { r.rank = i; r.y.set(i*36, S.base, t0 + i*.02); }); });
+      s.forEach((r,i) => { r.rank = i; r.y.set(i*36, S.base, t0 + staggerAt(i, .02)); }); });
     return t => { const last = rows.length - 1, show = dv.checked;
       rows.forEach(r => { r.r.style.transform = `translateY(${px(r.y.at(t))})`;
         r.r.style.borderBottomColor = (!show || r.rank === last) ? 'transparent' : 'var(--line-soft)'; });

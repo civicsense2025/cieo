@@ -425,7 +425,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
     const to = (k, t = now(), inst) => {
       state = k; sw.to(k, t); ST(k).forEach((v, i) => inst ? T[i].jump(v) : T[i].set(v, S.base, t)); ho.set(k === 'form' ? 0 : 1, S.snap, t);
       L.btn.setAttribute('aria-expanded', k === 'menu');
-      if (k === 'menu') me.forEach((tr, i) => { tr.jump(0); tr.set(1, S.base, t + .1 + i*.035); });
+      if (k === 'menu') me.forEach((tr, i) => { tr.jump(0); tr.set(1, S.base, t + .1 + staggerAt(i, .035)); });
     };
     const mkRow = (kd, title, status, inst) => {
       const el = document.createElement('div'), tone = status === 'Draft' ? 'warning' : 'success'; el.className = 'qc-r';

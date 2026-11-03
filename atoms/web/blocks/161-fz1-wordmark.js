@@ -294,7 +294,7 @@ ${faux('fz3-', { brand:'Northgate Cloud', nav:['Platform', 'Pricing', 'Docs'], k
       const toks = inp.value.toLowerCase().split(/\s+/).filter(Boolean), t0 = now(); let n = 0;
       items.forEach((it, k) => {
         it.hit = toks.every(tk => it.txt.includes(tk)); if (it.hit) n++;
-        it.o.set(it.hit ? 1 : .16, S.base, t0 + k * .005); it.m.set(toks.length && it.hit ? 1 : 0, S.soft, t0 + k * .005); lk.wake(it.a);
+        it.o.set(it.hit ? 1 : .16, S.base, t0 + staggerAt(k, .005)); it.m.set(toks.length && it.hit ? 1 : 0, S.soft, t0 + staggerAt(k, .005)); lk.wake(it.a);
       });
       heads.forEach(c => c.o.set(c.items.some(it => it.hit) ? 1 : .35));
       dg.set(String(n)); vh.textContent = `${n} of 42 pages`;
@@ -522,7 +522,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
       lk(t); q.run(t); csw.apply(cl[0], 0, t, 4); csw.apply(cl[1], 1, t, 4);
       const H = size(pg).ch, v = pg.scrollTop + H - topIn(app, pg) > 120 ? 1 : 0; if (v !== qv){ qv = v; qp.set(v); }
       const p = qp.at(t); if (Math.abs(p - lastQ) > .002){ lastQ = p; for (let i = 0; i < rects.length; i++) rects[i].style.opacity = clamp(p * 2 - cells[i]).toFixed(2); }
-      const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + i * .06)); }
+      const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + staggerAt(i, .06))); }
       bds.forEach((b, i) => { const r = clamp(bt[i].at(t)), h = clamp(hv[i].h.at(t)); fade(b, r, (1 - r) * 10);
         b.style.boxShadow = `0 0 0 1.5px color-mix(in oklab, var(--ink) ${(h * 100).toFixed(1)}%, transparent), var(--shadow)`; pop(tps[i], tt[i].at(t), 4); tps[i].style.left = px(Math.max(0, Math.min(frameLayout(b.parentNode).ol, frameLayout(tr).cw - frameLayout(tps[i]).w))); });
       sbs.forEach(({ a, h }) => { const x = clamp(h.h.at(t)), d = clamp(h.d.at(t)); a.style.borderRadius = px(lerp(12, 20, x)); a.style.background = mix(x, '#2A2F36', '#0C1016'); a.style.transform = `scale(${(1 - .03 * d).toFixed(4)})`; });
@@ -876,7 +876,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
     const rv = items.map(() => new Track(0, S.soft)), wt = $(st, '.fz8-wt'), wm = $(st, '.fz8-wm'), L8 = $$(wt, 'span'), wl = L8.map(() => new Track(0, S.soft));
     const up = $(st, '.fz8-up'); up.innerHTML = Array.from({ length:30 }, (_, i) => `<i${i === 11 || i === 22 ? ' class="w"' : ''}></i>`).join(''); const bars = $$(up, 'i'), bt = bars.map(() => new Track(0, S.soft));
     const ib = items.indexOf($(st, '.fz8-ss')); let armed = true, fitW = 0;
-    const start = t => { const n = items.length; rv.forEach((x, i) => x.set(1, S.soft, t + i * .055)); wl.forEach((x, i) => x.set(1, S.soft, t + n * .055 + i * .04)); bt.forEach((x, i) => x.set(1, S.soft, t + ib * .055 + .15 + i * .012)); };
+    const start = t => { const n = items.length; rv.forEach((x, i) => x.set(1, S.soft, t + staggerAt(i, .055))); wl.forEach((x, i) => x.set(1, S.soft, t + n * .055 + staggerAt(i, .04))); bt.forEach((x, i) => x.set(1, S.soft, t + ib * .055 + .15 + staggerAt(i, .012))); };
     const reset = () => { rv.forEach(x => x.jump(0)); wl.forEach(x => x.jump(0)); bt.forEach(x => x.jump(0)); };
     $(st, '.fz8-rp').onclick = () => { sm.to(0); reset(); armed = false; q.at(now() + .25, () => start(now())); };
     const fit = () => { const W = wm.clientWidth; if (!W) return; wt.style.fontSize = '100px'; const w100 = wt.offsetWidth; wt.style.fontSize = (W * 100 / w100).toFixed(2) + 'px'; fitW = wm.clientWidth; };

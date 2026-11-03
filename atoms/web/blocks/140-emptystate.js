@@ -8,8 +8,8 @@ atom({ id:'emptystate', cat:'Guidance', name:'Empty state', block:'entry-list, c
     const ls = $(st,'.ls'), es = $(st,'.es'), M = ['Maya · Draft is ready','Theo · Pricing table','Billing · INV-0042 paid','Ada · New subscriber','Jonas · Thursday works'];
     const rows = M.map(m => { const r = document.createElement('div'); r.style.cssText = 'padding:12px 14px;border-bottom:1px solid var(--line-soft)'; r.innerHTML = `<span class="small">${m}</span>`; ls.appendChild(r); return { r, o:new Track(1) }; });
     const eo = new Track(0);
-    $(st,'.ca').onclick = () => { const t0 = now(); rows.forEach((x,i) => x.o.set(0, S.snap, t0 + i*.04)); eo.set(1, S.base, t0 + rows.length*.04 + .1); };
-    $(st,'.sm').onclick = () => { const t0 = now(); eo.set(0, S.snap); rows.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + i*.04)); };
+    $(st,'.ca').onclick = () => { const t0 = now(); rows.forEach((x,i) => x.o.set(0, S.snap, t0 + staggerAt(i, .04))); eo.set(1, S.base, t0 + rows.length*.04 + .1); };
+    $(st,'.sm').onclick = () => { const t0 = now(); eo.set(0, S.snap); rows.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + staggerAt(i, .04))); };
     const cust = document.createElement('div'); cust.className = 'row small muted'; cust.style.cssText += 'gap:6px;align-items:center;margin-top:8px'; cust.innerHTML = `<span>Rows:</span>`; st.appendChild(cust);
     rows.forEach((x,i) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'padding:2px 8px'; b.textContent = i + 1; b.onclick = () => { const t0 = now(); const vis = clamp(x.o.at(t0)) > .5; x.o.set(vis ? 0 : 1, vis ? S.snap : S.base, t0); const any = rows.some((y,j) => j === i ? !vis : clamp(y.o.at(t0)) > .5); eo.set(any ? 0 : 1, any ? S.snap : S.base, t0 + (vis ? 0 : .12)); }; cust.appendChild(b); });
     const load = document.createElement('button'); load.className = 'btn'; load.style.cssText += 'padding:2px 8px'; load.textContent = 'Replay end-state'; load.onclick = () => $(st,'.ca').onclick(); cust.appendChild(load);

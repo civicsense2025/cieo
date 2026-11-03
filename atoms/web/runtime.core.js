@@ -3,7 +3,9 @@ const MOTION_MEDIA = matchMedia('(prefers-reduced-motion: reduce)');
 const REDUCE = MOTION_MEDIA.matches;
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
-const EXIT = .1, LAG = .06, BLUR = 4;
+const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
+// Per-item delay: the gap between items, capped so a whole group lands within STAGGER_MAX; none under reduced motion.
+const staggerAt = (i, gap = .04) => REDUCE ? 0 : Math.min(i*gap, STAGGER_MAX);
 const clock = { t:0, scale:1, last:performance.now() };
 const now = () => clock.t;
 const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));

@@ -12,7 +12,7 @@ atom({ id:'presencelive', cat:'Dynamic', name:'Presence avatars', block:'avatars
       e.textContent = N[id % 6]; stage.appendChild(e);
       return { id, e, x:new Track(0), sc:new Track(1), o:new Track(1) }; };
     for (let i = 0; i < 3; i++){ const a = mk(nextId++); a.x.jump(i*24); order.push(a); }
-    const layout = (t, keep) => order.forEach((a,i) => { if (a !== keep) a.x.set(i*24, S.base, t + i*.05); a.e.style.zIndex = 10 - i; });
+    const layout = (t, keep) => order.forEach((a,i) => { if (a !== keep) a.x.set(i*24, S.base, t + staggerAt(i, .05)); a.e.style.zIndex = 10 - i; });
     layout(-9); order.forEach((a,i) => a.e.style.zIndex = 10 - i);
     $(st,'button.jn').onclick = () => { if (order.length >= 6) return; const t = now(), a = mk(nextId++);
       a.x.jump(order.length*24 + 20); a.sc.jump(REDUCE ? 1 : .6); a.o.jump(0);

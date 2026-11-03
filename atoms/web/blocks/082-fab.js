@@ -19,7 +19,7 @@ atom({ id:'fab', cat:'Navigation', name:'Extended action button', block:'cta-but
     fb.setAttribute('aria-label','Compose'); fb.setAttribute('aria-expanded','false');
     // speed dial: Compose fans out three actions above it, last in first out
     const fa = $(st,'.fa'), fai = $$(fa,'.fa-i'), ft = fai.map(() => new Track(0)); let menu = false, tmr = 0;
-    const setMenu = v => { if (v === menu) return; menu = v; const t0 = now(); fai.forEach((b,i) => { ft[i].set(v ? 1 : 0, S.base, v ? t0 + i*.035 : t0 + (fai.length - 1 - i)*.03); b.tabIndex = v ? 0 : -1; }); fb.setAttribute('aria-expanded', String(v)); };
+    const setMenu = v => { if (v === menu) return; menu = v; const t0 = now(); fai.forEach((b,i) => { ft[i].set(v ? 1 : 0, S.base, v ? t0 + staggerAt(i, .035) : t0 + (fai.length - 1 - i)*.03); b.tabIndex = v ? 0 : -1; }); fb.setAttribute('aria-expanded', String(v)); };
     fb.onclick = () => setMenu(!menu);
     fai.forEach(b => { b.tabIndex = -1; b.onclick = () => { setMenu(false); const name = b.querySelector('span').textContent; lb.textContent = name; clearTimeout(tmr); tmr = setTimeout(() => { lb.textContent = 'Compose'; }, 1600); }; });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && menu){ e.stopPropagation(); setMenu(false); fb.focus(); } });

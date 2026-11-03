@@ -234,7 +234,7 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
       if (n > 0){ if (!barOpen){ barOpen = true; bh.set(1, S.base, t); bo.set(1, S.base, t + .05); cnt.dir = 1; cnt.set(String(n), true); }
         else if (n !== shown){ cnt.dir = n > shown ? 1 : -1; cnt.set(String(n)); } shown = n; label(n); }
       else if (barOpen){ closeBar(t); shown = 0; label(0); } };
-    hdr.el.onclick = () => { if (busy) return; const L = live(), all = L.length > 0 && sel().length === L.length; const t = now(); L.forEach((r, k) => setSel(r, !all, t + k*.03)); hdrSync(); barSync(); };
+    hdr.el.onclick = () => { if (busy) return; const L = live(), all = L.length > 0 && sel().length === L.length; const t = now(); L.forEach((r, k) => setSel(r, !all, t + staggerAt(k, .03))); hdrSync(); barSync(); };
     const run = kind => { const list = sel(); if (!list.length || busy) return; busy = true; const t0 = now(), gap = kind === 'delete' ? .1 : .06; let n = list.length;
       [bAr, bDl, bCl].forEach(b => b.disabled = true);
       list.forEach((r, k) => { const ts = t0 + k*gap;
@@ -247,7 +247,7 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
     bAr.onclick = () => run('archive'); bDl.onclick = () => run('delete'); bCl.onclick = () => run('clear');
     bRs.onclick = () => { if (busy) return; const t0 = now(); let k = 0;
       rows.forEach(r => { const was = r.dead; r.selected = false; r.s.set(0); r.box.set('off'); if (r.archived){ r.archived = false; r.a.set(0); r.csw.to(0); }
-        if (was){ r.dead = false; r.h.set(1, S.base, t0 + k*.05); r.o.set(1, S.base, t0 + k*.05 + .06); k++; } });
+        if (was){ r.dead = false; r.h.set(1, S.base, t0 + staggerAt(k, .05)); r.o.set(1, S.base, t0 + staggerAt(k, .05) + .06); k++; } });
       ET.set(0, S.snap); hdrSync(); if (barOpen){ closeBar(); shown = 0; label(0); } };
     hdrSync();
     return t => {

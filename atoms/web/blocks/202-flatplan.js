@@ -25,7 +25,7 @@ atom({ id:'flatplan', cat:'Writing', name:'Flatplan paginator', block:'page-edit
         o.lift.set(0); held = null; setTimeout(() => o.r.style.zIndex = '', 300); mark(o); } }));
     $(st,'.sh').onclick = () => { const t0 = now();
       order = order.map(o => [Math.random(), o]).sort((a,b) => a[0]-b[0]).map(x => x[1]);
-      order.forEach((o,i) => { if (REDUCE) o.x.jump(i*W); else o.x.set(i*W, S.base, t0 + i*.03); o.num.textContent = i+1; });
+      order.forEach((o,i) => { if (REDUCE) o.x.jump(i*W); else o.x.set(i*W, S.base, t0 + staggerAt(i, .03)); o.num.textContent = i+1; });
       mark(last); };
     dg.set('1', true);
     return t => { rows.forEach(o => { const l = clamp(o.lift.at(t));

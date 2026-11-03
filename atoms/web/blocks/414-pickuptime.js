@@ -24,7 +24,7 @@ atom({ id:'pickuptime', cat:'Storefront', name:'Pickup time picker', block:'pick
     const layers = D.map(d => { const e2 = document.createElement('span'); return e2; });
     db.forEach((b, i) => b.onclick = () => { if (i === day) return; day = i; slot = -1; const t0 = now();
       if (REDUCE){ de.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth); draw(true); pe.jump(0, 0); pop.jump(0); }
-      else { de.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); dop.set(1); q = SL[day].map((_, k) => [t0 + k * .06, () => draw(k === SL[day].length - 1)]); }
+      else { de.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); dop.set(1); q = SL[day].map((_, k) => [t0 + staggerAt(k, .06), () => draw(k === SL[day].length - 1)]); }
       db.forEach((x, j) => { x.setAttribute('aria-pressed', j === day); x.style.color = mix(j === day ? 1 : 0, 'var(--card)', 'var(--ink)'); });
       cf.textContent = 'Pick a time ' + D[day].toLowerCase() + '.'; });
     we.onchange = () => { db[2].style.display = we.checked ? '' : 'none'; if (!we.checked && day === 2) db[0].click(); };

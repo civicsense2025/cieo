@@ -17,7 +17,7 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
     });
     const paint = (t, instant) => { const sum = opts.reduce((a, o) => a + o[1], 0);
       rows.forEach((r, i) => { const p = opts[i][1] / sum;
-        r.w.set(p*100, S.base, t + i*.06); r.f.set(1, S.lazy, t + .15 + i*.06);
+        r.w.set(p*100, S.base, t + staggerAt(i, .06)); r.f.set(1, S.lazy, t + .15 + staggerAt(i, .06));
         if (instant){ r.w.jump(p*100); r.f.jump(1); }
         r.ck.textContent = i === mine ? '✓' : '';
         r.ck.style.background = i === mine ? 'var(--ink)' : 'var(--card)';

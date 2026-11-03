@@ -12,7 +12,7 @@ atom({ id:'referralprog', cat:'Newsletter', name:'Referral progress', block:'new
     let n = 0;
     $(st,'.adv').onclick = () => { if (n >= 5) return; n++; const t0 = now();
       if (REDUCE){ fillT.jump(n/5); dots.forEach((d,i) => d.v.jump(i < n ? 1 : 0)); dg.set(String(n), true); rsw.cur = n >= 5 ? 1 : 0; }
-      else { fillT.set(n/5); dots.forEach((d,i) => { if (i === n-1) d.v.set(1, S.base, t0 + i*.06); }); dg.set(String(n)); rsw.to(n >= 5 ? 1 : 0); } };
+      else { fillT.set(n/5); dots.forEach((d,i) => { if (i === n-1) d.v.set(1, S.base, t0 + staggerAt(i, .06)); }); dg.set(String(n)); rsw.to(n >= 5 ? 1 : 0); } };
     return t => { fill.style.width = (clamp(fillT.at(t))*100).toFixed(2) + '%'; dg.render(t);
       dots.forEach(d => { const k = clamp(d.v.at(t)); d.s.style.background = mix(k,'var(--ink)','transparent'); d.s.style.color = mix(k,'var(--card)','var(--muted)'); d.s.style.borderColor = mix(k,'var(--ink)','var(--line)'); });
       R.forEach((x,i) => rsw.apply(x,i,t));

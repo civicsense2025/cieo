@@ -10,7 +10,7 @@ atom({ id:'streak', cat:'Writing', name:'Streak ring', block:'streak ring, habit
     const ring = new Track(0, S.soft), dk = dots.map(() => new Track(0)), cap = new Swap(0);
     const D = [[1,1,1,1,1,0,0,'12'],[1,1,1,1,1,1,0,'18']], SH = [.71,.6]; let m = 0;
     const go = k => { m = k; const t0 = now(); ring.set(SH[k], S.soft); dg.set(D[k][7]); cap.to(k);
-      D[k].slice(0,7).forEach((v,i) => dk[i].set(v, S.base, t0 + i*.04)); };
+      D[k].slice(0,7).forEach((v,i) => dk[i].set(v, S.base, t0 + staggerAt(i, .04))); };
     $(st,'.wk').onclick = () => go(0); $(st,'.mo').onclick = () => go(1);
     dg.set('12', true); go(0);
     return t => { arc.style.strokeDashoffset = (C*(1-clamp(ring.at(t)))).toFixed(1);

@@ -562,7 +562,7 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
       lt.render(t); const lw = lb.offsetWidth; lb.style.transform = `translate(${px(clamp(ax - 2, 2, Math.max(2, W - lw - 2)))},${px(Math.max(2, ay - 26))})`; lb.style.opacity = o.toFixed(3);
       const txt = `${Math.max(0, Math.round(bx - ax - 6))} × ${Math.max(0, Math.round(bb - ay - 6))}`; if (txt !== lastSz){ lastSz = txt; sz.textContent = txt; }
       const zw = sz.offsetWidth, zt = bb + 6 + 20 > H ? bb - 26 : bb + 6; sz.style.transform = `translate(${px(clamp(bx - zw, 2, Math.max(2, W - zw - 2)))},${px(zt)})`; sz.style.opacity = o.toFixed(3);
-      L.forEach((l, i) => { lsw.apply(l.el, i, t, 4); if (i === idx) l.rows.forEach((r, j) => { const p = clamp(prog(t, tSel + EXIT + j*.045, S.base)); r.style.opacity = p.toFixed(3); r.style.transform = `translateY(${px((1 - p)*6)})`; }); });
+      L.forEach((l, i) => { lsw.apply(l.el, i, t, 4); if (i === idx) l.rows.forEach((r, j) => { const p = clamp(prog(t, tSel + EXIT + staggerAt(j, .045), S.base)); r.style.opacity = p.toFixed(3); r.style.transform = `translateY(${px((1 - p)*6)})`; }); });
       byEl.forEach((e, i) => bySw.apply(e, i, t, 3));
       for (const d of AI_EL){ const m = mkt[d.k], p = clamp(m.o.at(t)), r = R[d.k]; if (!r) continue; m.el.style.opacity = p.toFixed(3); m.el.style.transform = `translate(${px(r.r - 12)},${px(r.t - 6 - (1 - p)*6)}) scale(${(.9 + .1*p).toFixed(3)})`; }
       n1.render(t); n2.render(t); c.forEach(x => x.render(t)); sw.render(t);

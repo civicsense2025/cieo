@@ -396,7 +396,7 @@ atom({ id:'footer-region-theme', cat:CAT, name:'Footer with language picker and 
     const T = $$(st, '[data-k]').map((el, i) => ({ el, k:el.dataset.k, at:0, pend:null, inn:null }));
     let cur = LOC[0].d; T.forEach(x => x.el.textContent = cur[x.k]);
     const choose = i => { sel = i; opts.forEach((x, j) => { x.t.set(j === i ? 1 : 0); x.b.setAttribute('aria-selected', String(j === i)); }); cur = LOC[i].d; const t0 = now();
-      T.forEach((x, j) => { if (cur[x.k] !== (x.pend ?? x.el.textContent)){ x.pend = cur[x.k]; x.at = Math.max(t0 + j*.012, 0); } });
+      T.forEach((x, j) => { if (cur[x.k] !== (x.pend ?? x.el.textContent)){ x.pend = cur[x.k]; x.at = Math.max(t0 + staggerAt(j, .012), 0); } });
       if (k.max() - k.sc.scrollTop < 8) k.pin(1.2); w.setAttribute('lang', ['en-US', 'en-GB', 'es-MX', 'fr-FR', 'de-DE', 'pt-BR'][i]); setOpen(false, true); };
     const move = j => setHi((j + opts.length) % opts.length);
     tr.addEventListener('click', () => setOpen(!open));
@@ -496,7 +496,7 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
     const setS = kk => { if (kk === cur) return; const s = ST[kk], t0 = now(); cur = kk; if (k.max() - k.sc.scrollTop < 8) k.pin(1.4);
       btns.forEach(b => { const on = b.dataset.s === kk; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('ink', on); });
       g.set(s.i); lab.put(s.label); lw.set(LW[kk]); if (kk !== 'ok') isw.to(kk); iO.set(kk === 'ok' ? 0 : 1, kk === 'ok' ? S.snap : S.base, kk === 'ok' ? t0 : t0 + .08);
-      rows.forEach((r, i) => { const v = s.c[i]; if (v === r.v) return; r.v = v; const at = t0 + .1 + i*.045; r.c.set(v, S.base, at); q.push([at, () => r.tx.put(WORD[v])]); }); q.sort((a, b) => a[0] - b[0]); };
+      rows.forEach((r, i) => { const v = s.c[i]; if (v === r.v) return; r.v = v; const at = t0 + .1 + staggerAt(i, .045); r.c.set(v, S.base, at); q.push([at, () => r.tx.put(WORD[v])]); }); q.sort((a, b) => a[0] - b[0]); };
     // Pressing the state already showing opens the per-service list, so every press has a visible result.
     btns.forEach(b => { b.addEventListener('click', () => { if (b.dataset.s === cur){ if (!open) pill.click(); } else setS(b.dataset.s); }); }); btns[0].classList.add('ink');
     isw.cur = 'deg'; isw.prev = null; isw.t = -9;

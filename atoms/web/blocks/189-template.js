@@ -10,7 +10,7 @@ atom({ id:'template', cat:'Writing', name:'Template inserter', block:'template p
     const sw = new Swap(-1), h = new Track(0); h.jump(0);
     const bodies = TP.map((p,i) => { const l = document.createElement('div'); l.className = 'layer'; l.style.cssText = 'padding:10px 0;font-size:14px'; l.innerHTML = '<b>' + p.n + '</b><div class="small muted">' + p.b + '</div>'; blk.appendChild(l); return l; });
     const tiles = TP.map((p,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = p.n; b.style.opacity = '0'; grid.appendChild(b);
-      const o = new Track(0), y = new Track(10); const t0 = now() + i*.06; if (REDUCE){ o.jump(1); y.jump(0); } else { o.set(1, S.base, t0); y.set(0, S.base, t0); }
+      const o = new Track(0), y = new Track(10); const t0 = now() + staggerAt(i, .06); if (REDUCE){ o.jump(1); y.jump(0); } else { o.set(1, S.base, t0); y.set(0, S.base, t0); }
       b.onclick = () => { ph.style.display = 'none'; if (REDUCE){ sw.cur = i; sw.prev = null; sw.t = -9; h.jump(p.h); } else { sw.to(i); h.set(p.h, S.base); } }; return { b, o, y }; });
     const tt = $(st,'.twk'); tt.onchange = () => bodies.forEach(l => { l.firstElementChild.style.display = tt.checked ? '' : 'none'; });
     return t => { tiles.forEach(r => { r.b.style.opacity = clamp(r.o.at(t)).toFixed(3); r.b.style.transform = `translateY(${r.y.at(t).toFixed(2)}px)`; });

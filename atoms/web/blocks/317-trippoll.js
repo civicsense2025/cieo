@@ -14,7 +14,7 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
     function sync(inst){ const tot = votes.reduce((a,b) => a+b, 0), mx = Math.max(...votes), li = votes.indexOf(mx), t0 = now();
       rows.forEach((x,i) => { const p = votes[i]/Math.max(1, tot);
         if (inst || REDUCE){ x.bar.jump(p); x.lead.jump(i === li ? 1 : 0); x.dg.set(String(votes[i]).padStart(2,' '), true); }
-        else { x.bar.set(p, S.soft, t0 + i*.05); x.lead.set(i === li ? 1 : 0, S.soft, t0); x.dg.set(String(votes[i]).padStart(2,' ')); }
+        else { x.bar.set(p, S.soft, t0 + staggerAt(i, .05)); x.lead.set(i === li ? 1 : 0, S.soft, t0); x.dg.set(String(votes[i]).padStart(2,' ')); }
         x.mk.firstChild.textContent = mine === i ? '✓' : ''; x.mk.style.borderColor = mine === i ? 'var(--success)' : 'var(--line)';
         x.r.setAttribute('aria-pressed', mine === i); x.tt.style.display = show ? '' : 'none'; }); }
     $(st,'.pg-tg').onclick = e2 => { show = !show; const b = e2.currentTarget; b.textContent = show ? 'Totals on' : 'Totals off'; b.setAttribute('aria-pressed', show); sync(true); };
