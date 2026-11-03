@@ -15,7 +15,7 @@ atom({ id:'expresspay', cat:'Commerce', name:'Express pay sheet', block:'checkou
     // A wallet press opens the order sheet; a press with the sheet already open confirms, so every press responds.
     cf.onclick = pay; WB.forEach(b => b.onclick = () => { if (sheet.target === 1) pay(); else sheet.set(1); });
     sh.onclick = e => { if (e.target === sh) sheet.set(0); };
-    return t => { WB.forEach((b,i) => { const q = clamp(prog(t, t0 + i*.06)); b.style.opacity = q.toFixed(3); b.style.transform = `translateY(${((1-q)*10).toFixed(1)}px)`; });
+    return t => { WB.forEach((b,i) => { const q = clamp(prog(t, t0 + staggerAt(i, .06))); b.style.opacity = q.toFixed(3); b.style.transform = `translateY(${((1-q)*10).toFixed(1)}px)`; });
       const p = clamp(sheet.at(t)); sh.style.transform = `translateY(${((1-p)*220).toFixed(1)}px)`;
       L.forEach((r,i) => { const q = clamp(prog(t, now() - 9 + 0)); r.style.opacity = p.toFixed(3); });
       const g = clamp(ok.at(t)); cf.style.background = mix(g,'var(--success)','var(--ink)'); };

@@ -20,7 +20,7 @@ atom({ id:'streaming', cat:'AI chat', name:'Streaming answer', block:'richtext, 
     const start = () => { ans.innerHTML = ''; ws = TXT.split(' ').map(w => { const s = document.createElement('span'); s.textContent = w + ' '; s.style.opacity = 0; ans.appendChild(s); return s; }); ans.appendChild(caret); t0 = now(); stopAt = 0; running = true; sw.to(1); fsw.to('hide'); cp.textContent = 'Copy'; };
     go.onclick = () => { if (running){ running = false; stopAt = now(); sw.to(0); settle(); } else start(); };
     fu.onchange = () => { if (!fu.checked) fsw.to('hide'); else if (!running && ws.length) settle(); };
-    return t => { const tt = stopAt || t; ws.forEach((w,i) => { const ti = t0 + i*.045; if (tt < ti){ w.style.opacity = 0; return; } const p = clamp(prog(t, ti, S.snap)); w.style.opacity = p.toFixed(3); w.style.filter = p < .98 ? `blur(${((1 - p)*3).toFixed(2)}px)` : 'none'; });
-      const shown = ws.filter((w,i) => tt >= t0 + i*.045).length; if (running && shown >= ws.length){ running = false; sw.to(0); settle(); }
+    return t => { const tt = stopAt || t; ws.forEach((w,i) => { const ti = t0 + staggerAt(i, .045); if (tt < ti){ w.style.opacity = 0; return; } const p = clamp(prog(t, ti, S.snap)); w.style.opacity = p.toFixed(3); w.style.filter = p < .98 ? `blur(${((1 - p)*3).toFixed(2)}px)` : 'none'; });
+      const shown = ws.filter((w,i) => tt >= t0 + staggerAt(i, .045)).length; if (running && shown >= ws.length){ running = false; sw.to(0); settle(); }
       caret.style.opacity = running ? (.55 + .35*Math.cos(t*6)).toFixed(3) : Math.max(0, parseFloat(caret.style.opacity || 0) - .08).toFixed(3); L.forEach((e,k) => sw.apply(e,k,t)); fsw.apply(show, 'show', t); fsw.apply(hide, 'hide', t); };
   }});

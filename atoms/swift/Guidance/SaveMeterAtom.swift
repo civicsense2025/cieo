@@ -33,7 +33,7 @@ public struct SaveMeterAtom: MotionAtomView {
                     GeometryReader { geo in
                         RoundedRectangle(cornerRadius: 3).fill(n == items.count ? .green : Color.accentColor)
                             .frame(width: geo.size.width * CGFloat(n) / CGFloat(items.count), height: 6)
-                            .animation(reduce ? nil : .motion(.base).delay(0.06), value: n)
+                            .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: n)
                     }.frame(height: 6).padding(.top, 10)
                     VStack(spacing: 0) {
                         ForEach(items.indices, id: \.self) { i in

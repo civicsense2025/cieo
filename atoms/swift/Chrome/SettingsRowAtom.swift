@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Settings form row: knob edges, helper crossfade, danger/success terminals.
 public struct SettingsRowAtom: MotionAtomView {
@@ -42,8 +43,8 @@ public struct SettingsRowAtom: MotionAtomView {
             .padding(15)
             .frame(maxWidth: 440)
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
-            .animation(reduce ? nil : .spring(response: 0.3), value: state)
-            .animation(reduce ? nil : .spring(response: 0.3), value: enabled)
+            .animation(reduce ? nil : .motion(.base), value: state)
+            .animation(reduce ? nil : .motion(.base), value: enabled)
         }
         .focusable(true)
         .escapeKey { email = ""; saved = false }

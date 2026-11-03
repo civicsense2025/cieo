@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Profile switcher: ring inks, identity crossfades, width springs.
 public struct ProfileSwitchAtom: MotionAtomView {
@@ -61,8 +62,8 @@ public struct ProfileSwitchAtom: MotionAtomView {
             .padding(15)
             .frame(maxWidth: 400)
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
-            .animation(reduce ? nil : .spring(response: 0.3), value: current)
-            .animation(reduce ? nil : .spring(response: 0.3), value: open)
+            .animation(reduce ? nil : .motion(.base), value: current)
+            .animation(reduce ? nil : .motion(.base), value: open)
         }
         .focusable(true)
         .escapeKey { open = false }

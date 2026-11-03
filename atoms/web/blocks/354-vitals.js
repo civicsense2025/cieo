@@ -20,7 +20,7 @@ atom({ id:'vitals', cat:'SEO', name:'Core vitals bars', block:'seo vitals, metri
       rows.forEach((r,i) => { const good = Math.random() < .7;
         r.val = good ? r.m.lo + Math.random()*(r.m.lim[0]-r.m.lo) : r.m.lim[0] + Math.random()*(r.m.hi-r.m.lim[0]);
         const p = clamp((r.val - r.m.lo)/(r.m.hi - r.m.lo));
-        if (REDUCE){ r.v.jump(p); r.dg.set(r.m.fmt(r.val), true); } else { r.v.set(p, S.base, t0 + i*.04); r.dg.set(r.m.fmt(r.val)); } });
+        if (REDUCE){ r.v.jump(p); r.dg.set(r.m.fmt(r.val), true); } else { r.v.set(p, S.base, t0 + staggerAt(i, .04)); r.dg.set(r.m.fmt(r.val)); } });
       const pass = rows.every(r => r.val <= r.m.lim[0]);
       setTimeout(() => sw.to(pass ? 1 : 0), REDUCE ? 0 : 700); };
     $(st,'.ms').onclick = go; go();

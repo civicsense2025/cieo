@@ -40,7 +40,7 @@ public struct SlotGridAtom: MotionAtomView {
                                 .background(.background, in: RoundedRectangle(cornerRadius: 8))
                                 .overlay(RoundedRectangle(cornerRadius: 8).fill(pick == i ? Color.primary : Color.secondary.opacity(0.25)).opacity(0.10).allowsHitTesting(false))
                                 .transition(.opacity.combined(with: .move(edge: .bottom)))
-                                .animation(.spring.delay(Double(i) * 0.04), value: day)
+                                .animation(reduce ? nil : .motion(.base).delay(Motion.stagger(i, of: slots[day].count)), value: day)
                                 .onTapGesture { pick = i }
                                 .accessibilityLabel("\(slots[day][i]) on \(days[day])")
                         }

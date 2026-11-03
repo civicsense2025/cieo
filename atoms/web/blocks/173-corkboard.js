@@ -16,7 +16,7 @@ atom({ id:'corkboard', cat:'Writing', name:'Corkboard cards', block:'writing, bo
       drag(c, { down: p => { const t = now(); dx = p.x - cx.at(t) - 4; dy = p.y - cy.at(t) - 8; c.style.zIndex = 5; go(i); },
         move: p => { cx.jump(p.x - dx - 4); cy.jump(p.y - dy - 8); },
         up: (p, v) => { c.style.zIndex = ''; const t = now();
-          cards.forEach((k,j) => { const T = R ? t : t + j*.04;
+          cards.forEach((k,j) => { const T = R ? t : t + staggerAt(j, .04);
             if (R){ k.cx.jump(j*W); k.cy.jump(0); } else { k.cx.release(k.cx.at(t), v.vx, j*W, S.base, T); k.cy.release(k.cy.at(t), v.vy, 0, S.base, T); } }); } });
       return { cx, cy };
     });

@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct PayButtonAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "payment", category: "Documents", name: "Pay button",
+    public static let info = MotionAtomInfo(id: "payment", category: "Commerce", name: "Pay button",
         summary: "Processing keeps the button in place with a spinner. Success fills it with the success color; a decline fills it with danger and opens a fix-it message. Both settle back to a retryable state.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private enum Phase { case idle, busy, paid, declined }

@@ -134,7 +134,7 @@ public struct FileDropZoneAtom: MotionAtomView {
                     return
                 }
                 withAnimation(.motion(.base)) { open = true }
-                withAnimation(.motion(.lazy).delay(0.15)) { load = bad ? 0.4 : 1 }
+                withAnimation(.motion(.lazy).delay(Motion.exit + Motion.lag)) { load = bad ? 0.4 : 1 }
                 Task {
                     try? await Task.sleep(for: .seconds(bad ? 0.9 : 1.6))
                     end = true

@@ -32,6 +32,6 @@ atom({ id:'chatcsat', cat:'Forms', name:'CSAT in chat', block:'chat, CSAT', fam:
       bf.style.transform = `scale(${(1 + .12*clamp(pop.at(t))).toFixed(4)})`;
       const ey = (26 - 2*m).toFixed(2); e1.setAttribute('cy', ey); e2.setAttribute('cy', ey);
       const e = REDUCE ? 1 : clamp(en.at(t));
-      btns.forEach((b,i) => { const p = REDUCE ? 1 : clamp(prog(t, t0 + i*.05, S.soft)); fade(b, Math.min(e, p), (1-p)*10); });
+      btns.forEach((b,i) => { const p = REDUCE ? 1 : clamp(prog(t, t0 + staggerAt(i, .05), S.soft)); fade(b, Math.min(e, p), (1-p)*10); });
       L.forEach((el,k) => sw.apply(el,k,t)); Y.forEach((el,k) => tsw.apply(el,k,t)); };
   }});

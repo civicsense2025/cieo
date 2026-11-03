@@ -14,7 +14,7 @@ atom({ id:'formflow', cat:'Layout', name:'Multi-column flow', block:'form, check
     const flip = fn => { const a = flds.map(f => f.el.offsetTop); fn();
       const b = flds.map(f => f.el.offsetTop), t0 = now(), dead = REDUCE;
       flds.forEach((f, i) => { const d = a[i] - b[i]; if (!d){ f.dy.jump(0); return; }
-        if (dead) f.dy.jump(0); else { f.dy.jump(d); f.dy.set(0, S.base, t0 + i*.02); } }); };
+        if (dead) f.dy.jump(0); else { f.dy.jump(d); f.dy.set(0, S.base, t0 + staggerAt(i, .02)); } }); };
     const showErr = on => { flip(() => { if (REDUCE || !$(st,'.lv').checked){ eh.jump(on ? 20 : 0); } else eh.set(on ? 20 : 0, S.base); });
       sw.to(on ? 1 : sv.at() > .5 ? 2 : 0); };
     $(st,'.bW').onclick = () => { one = !one; flip(() => { grid.style.gridTemplateColumns = one ? '1fr' : '1fr 1fr'; }); };

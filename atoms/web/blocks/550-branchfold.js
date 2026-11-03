@@ -20,7 +20,7 @@ atom({ id:'branchfold', cat:'Email', name:'Branch fold', block:'email, thread, q
     let full = 0; requestAnimationFrame(() => { full = box.scrollHeight; });
     let open = true;
     qbtn.onclick = () => { open = !open; const t = now(); if (!full) full = box.scrollHeight;
-      fold.set(open ? 1 : 0, S.base, t); sw.to(open ? 0 : 1, t); cn.forEach((c, i) => c.set(open ? 1 : 0, S.lazy, t + i*.03)); };
+      fold.set(open ? 1 : 0, S.base, t); sw.to(open ? 0 : 1, t); cn.forEach((c, i) => c.set(open ? 1 : 0, S.lazy, t + staggerAt(i, .03))); };
     return t => { const p = clamp(fold.at(t));
       if (full) box.style.height = px(p*full); box.style.opacity = (.45 + .55*p).toFixed(3);
       box.style.visibility = p < .02 ? 'hidden' : 'visible';

@@ -22,7 +22,7 @@ atom({ id:'sugchips', cat:'AI chat', name:'Suggestion chips', block:'chat, promp
       else { sib.set(1); hh.set(row.scrollHeight || 46, S.base); uh.set(0, S.base); uo.set(0, S.snap); rh.set(0, S.base); ro.set(0, S.snap); } };
     return t => { while (q.length && q[0][0] <= t) q.shift()[1]();
       const s = clamp(sib.at(t));
-      chips.forEach((b,i) => { const e = (stg.checked && !REDUCE) ? clamp(prog(t, t0 + i*.04, S.base)) : 1; fade(b, e*s, (1-e)*6); b.style.pointerEvents = picked >= 0 ? 'none' : 'auto'; });
+      chips.forEach((b,i) => { const e = (stg.checked && !REDUCE) ? clamp(prog(t, t0 + staggerAt(i, .04), S.base)) : 1; fade(b, e*s, (1-e)*6); b.style.pointerEvents = picked >= 0 ? 'none' : 'auto'; });
       row.style.height = px(Math.max(0, hh.at(t))); row.style.opacity = s.toFixed(3);
       ub.style.height = px(Math.max(0, uh.at(t))); ub.style.opacity = clamp(uo.at(t)).toFixed(3); ub.style.visibility = uo.at(t) > .02 ? 'visible' : 'hidden';
       L.forEach((e,k) => sw.apply(e,k,t));

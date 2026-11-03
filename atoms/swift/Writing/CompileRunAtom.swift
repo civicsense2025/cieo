@@ -56,7 +56,7 @@ public struct CompileRunAtom: MotionAtomView {
     private func run() {
         guard !running else { return }
         running = true; done = false; ticks = 0
-        withAnimation(reduce ? nil : .linear(duration: 2.2)) { progress = 0.9 }
+        withAnimation(reduce ? nil : .linear(duration: 2.2)) { progress = 0.9 } // motion-ok: simulated work, not a UI transition
         for i in 1...5 {
             DispatchQueue.main.asyncAfter(deadline: .now() + (reduce ? 0 : 0.4 + Double(i) * 0.06)) {
                 withMotion(.base, reduceMotion: reduce) { ticks = i }

@@ -78,7 +78,7 @@ public struct MultiSelectAtom: MotionAtomView {
         var body: some View {
             Text(title).font(.caption.weight(.medium)).padding(.horizontal, 10).fixedSize()
                 .opacity(on ? 1 : 0)
-                .animation(reduce ? nil : (on ? .motion(.base).delay(0.06) : .motion(.snap)), value: on)
+                .animation(reduce ? nil : (on ? .motion(.base).delay(Motion.lag) : .motion(.snap)), value: on)
                 .background(GeometryReader { g in Color.clear.onAppear { natural = g.size.width } })
                 .frame(width: on ? natural : 0, alignment: .leading).clipped()
                 .frame(height: 26)

@@ -372,14 +372,14 @@ atom({ id:'txc-deck', cat:'Carousels', name:'Swipe deck', block:'card stack (tri
       const im = photo(q, n, 1.15); el.firstChild.appendChild(im); $(el,'b').textContent = CAP[n]; deck.appendChild(el); return { el, im, n, cf:$(el,'.txc-dk-cf'), kp:$(el,'.txc-dk-k'), sk:$(el,'.txc-dk-x'), x:new Track(0, SET), y:new Track(0, SET), d:new Track(i, S.base), fate:0, sg:1 }; });
     let W = 0, H = 0, cw = 300, ch = 380, L = 0, top = 0, held = null, hx = 0, hy = 0, hist = []; const dn = new Track(0);
     const pend = () => C.filter(c => !c.fate), topc = () => pend()[0];
-    const restack = (t0 = now()) => pend().forEach((c, k) => { c.d.set(k, S.base, t0 + k*.045); c.el.style.zIndex = 50 - k; hide(c.el, k > 0); });
+    const restack = (t0 = now()) => pend().forEach((c, k) => { c.d.set(k, S.base, t0 + staggerAt(k, .045)); c.el.style.zIndex = 50 - k; hide(c.el, k > 0); });
     const ui = () => { const p = pend(), kept = C.filter(c => c.fate > 0).length, sk = C.filter(c => c.fate < 0).length; tl.textContent = `${kept} kept · ${sk} skipped`; dis(xb, !p.length); dis(kb, !p.length); dis(ub, !hist.length);
       dn.set(p.length ? 0 : 1, p.length ? S.snap : S.base, now() + (p.length ? 0 : .18)); sum.textContent = `Kept ${kept} for the cover shortlist.`; done.style.pointerEvents = p.length ? 'none' : 'auto'; };
     const decide = (c, dir, vx = 0, vy = 0, x0 = c.x.at(), y0 = c.y.at()) => { if (!c) return; c.fate = dir; hist.push(c); c.el.style.zIndex = 60; hide(c.el, true);
       const off = dir*(W/2 + cw*.9 + 60); c.x.release(x0, dir*Math.max(dir*vx, 700), off); c.y.release(y0, vy, clamp(y0 + vy*.12, -H*.4, H*.4));
       restack(); ui(); const n = pend().length; say(sr, `${dir > 0 ? 'Kept' : 'Skipped'} ${CAP[c.n]}. ${n ? n + ' left.' : 'All sorted.'}`); };
     const undo = () => { const c = hist.pop(); if (!c) return; c.fate = 0; c.x.set(0); c.y.set(0); restack(); ui(); say(sr, `Back: ${CAP[c.n]}`); };
-    const all = () => { const t0 = now(); hist.slice().reverse().forEach((c, k) => { c.fate = 0; c.x.set(0, SET, t0 + k*.05); c.y.set(0, SET, t0 + k*.05); }); hist = []; restack(t0); ui(); deck.focus(); };
+    const all = () => { const t0 = now(); hist.slice().reverse().forEach((c, k) => { c.fate = 0; c.x.set(0, SET, t0 + staggerAt(k, .05)); c.y.set(0, SET, t0 + staggerAt(k, .05)); }); hist = []; restack(t0); ui(); deck.focus(); };
     onSize(st, (w, h) => { W = w; H = h; root.style.setProperty('--p', (W < 560 ? 16 : 24) + 'px'); cw = Math.min(300, W - 64); ch = Math.round(Math.min(H - 196, cw*1.32)); L = (W - cw)/2; const area = H - 72 - 80; top = Math.max(0, (area - ch - 42)/2);
       deck.style.top = '72px'; deck.style.height = area + 'px'; done.style.top = '72px'; done.style.height = area + 'px'; C.forEach(c => { c.el.style.width = cw + 'px'; c.el.style.height = ch + 'px'; need(c.im, cw); }); });
     grab(deck, { th:3, skip:e => { const c = topc(); return !c || e.target.closest('.txc-dk-c') !== c.el; },

@@ -19,7 +19,7 @@
     background: none; color: var(--cieo-color-danger);
     font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 4px;
   }
-  :where(.cieo) .cieo-auth-revoke:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  :where(.cieo) .cieo-auth-revoke:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (max-width: 30rem), (pointer: coarse) {
     :where(.cieo) .cieo-auth-revoke { min-height: 2.75rem; padding: 12px 4px; }
   }

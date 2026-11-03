@@ -11,7 +11,7 @@ atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, count
     uk.innerHTML = `<div class="row" style="gap:8px"><input aria-label="Postcode" class="zp2" placeholder="Postcode" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"><input aria-label="County" placeholder="County" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"></div><span class="cy2 small" style="font-size:12px;color:var(--muted);line-height:1.5">Try SW1A 1AA.</span>`;
     set.appendChild(uk);
     const e = edges(0, 0), sw = new Swap(0), h = new Track(76), csw = new Swap(0);
-    const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'Unknown ZIP — keep typing'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
+    const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'No city for that ZIP. Check the digits or type the city.'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
     let mode = 0;
     const H = [76, 76];
     const pick = (i, inst) => { mode = i; btns.forEach((b, j) => { b.setAttribute('aria-pressed', j === i); if (!inst) b.style.color = ''; });

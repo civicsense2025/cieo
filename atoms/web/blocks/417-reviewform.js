@@ -12,9 +12,9 @@ atom({ id:'reviewform', cat:'Forms', name:'Review form', block:'review form, pho
       b.onclick = () => { const o = !b._on; b._on = o; b.setAttribute('aria-pressed', o); tiles[i].h.set(o ? 1 : 0, S.base);
         if (o) setTimeout(() => tiles[i].sh.set(1, S.soft), REDUCE ? 0 : 180); else tiles[i].sh.jump(0);
         b.innerHTML = o ? `<span style="width:100%;height:100%;background:linear-gradient(135deg,var(--line-soft),var(--raised));display:grid;place-items:center;font-size:18px">◍</span>` : b.innerHTML; }; }
-    const M = ['😞', '🙁', '😐', '🙂', '😍'], MN = ['Tap a face', 'Rough', 'Okay', 'Fine', 'Good', 'Loved it'];
+    const M = [-4, -2, 0, 2, 4].map(c => ic(`<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01"/><path d="M8 ${15.5 - c/4} Q12 ${15.5 + c/2} 16 ${15.5 - c/4}"/>`, 26, 1.6)), MN = ['Tap a face', 'Rough', 'Okay', 'Fine', 'Good', 'Loved it'];
     const L = MN.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; ml.appendChild(e); return e; });
-    const faces = M.map((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-label', MN[i + 1]); b.textContent = m;
+    const faces = M.map((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-label', MN[i + 1]); b.innerHTML = m;
       b.style.cssText = 'width:36px;height:36px;padding:0;border:0;background:none;font-size:20px;cursor:pointer;display:grid;place-items:center;filter:grayscale(1);opacity:.55'; md.appendChild(b); return b; });
     const mood = new Track(2), msw = new Swap(0), psw = new Swap(0);
     const PL = ['Post review', '✓ Thanks — posted'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; snd.appendChild(e); return e; });

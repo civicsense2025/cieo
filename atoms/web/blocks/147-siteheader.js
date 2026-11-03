@@ -80,7 +80,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
     inp.onblur = () => { if (!inp.value && searchOn) setSearch(false); };
     const setMenu = (on, inst) => { menuOn = on; mb.setAttribute('aria-expanded', on); mb.setAttribute('aria-label', on ? 'Close menu' : 'Open menu'); const t0 = now();
       if (inst){ mo.jump(on ? 1 : 0); mitems.forEach(x => x.o.jump(on ? 1 : 0)); return; }
-      mo.set(on ? 1 : 0); mitems.forEach((x,i) => on ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (on) setTimeout(() => mlinks[0].a.focus(), 0); };
+      mo.set(on ? 1 : 0); mitems.forEach((x,i) => on ? x.o.set(1, S.base, t0 + .08 + staggerAt(i, .04)) : x.o.set(0, S.snap, t0)); if (on) setTimeout(() => mlinks[0].a.focus(), 0); };
     mb.onclick = () => setMenu(!menuOn);
     mitems.forEach(x => x.a.onclick = e => { e.preventDefault(); if (x.a === mcta) startFree(); if (menuOn) setMenu(false); });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOn){ setMenu(false); mb.focus(); } });

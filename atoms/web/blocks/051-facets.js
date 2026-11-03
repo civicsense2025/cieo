@@ -17,7 +17,7 @@ atom({ id:'facets', cat:'Dynamic', name:'Filtered collection', block:'collection
       const h = Math.ceil(n/cols)*88 - 10; inst ? H.jump(h) : H.set(h); };
     const sel = (i, inst) => { const same = !inst && f === btns[i].textContent; f = btns[i].textContent; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); lay(inst);
       // re-picking the active filter replays the entrance so the press is visible
-      if (same) { const t0 = now(); cards.forEach((c, k) => { if (c.o.target === 1){ c.o.jump(0); c.o.set(1, S.base, t0 + k*.03); } }); } };
+      if (same) { const t0 = now(); cards.forEach((c, k) => { if (c.o.target === 1){ c.o.jump(0); c.o.set(1, S.base, t0 + staggerAt(k, .03)); } }); } };
     btns.forEach((b,i) => b.onclick = () => sel(i)); const init = () => sel(btns.findIndex(b => b.textContent === f), true); document.fonts.ready.then(init); requestAnimationFrame(init); addEventListener('resize', () => lay(true));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       cg.style.height = px(H.at(t)); cards.forEach(c => { c.c.style.left = px(c.x.at(t)); c.c.style.top = px(c.y.at(t)); fade(c.c, c.o.at(t), null); c.c.style.visibility = c.o.at(t) < .01 ? 'hidden' : 'visible'; }); };

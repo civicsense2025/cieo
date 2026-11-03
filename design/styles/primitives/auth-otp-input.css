@@ -11,7 +11,7 @@
     transform: translateY(0); transition: transform var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), border-color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), background-color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1));
   }
   :where(.cieo) .cieo-auth-otp-box[data-filled='true'] { transform: translateY(-1px); border-color: var(--cieo-color-accent); }
-  :where(.cieo) .cieo-auth-otp-box:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  :where(.cieo) .cieo-auth-otp-box:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo) .cieo-auth-error { font-size: var(--cieo-text-small); color: var(--cieo-color-danger); }
   @media (prefers-reduced-motion: reduce) {
     :root:not([data-motion='full']) :where(.cieo).cieo-auth-otp-input * { animation: none !important; transition: none !important; }

@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Tab hover cards: rest-then-rise, glide tab-to-tab, preview crossfades.
 public struct TabCardsAtom: MotionAtomView {
@@ -44,8 +45,8 @@ public struct TabCardsAtom: MotionAtomView {
                     }
                 }
                 .frame(height: 132, alignment: .top)
-                .animation(reduce ? nil : .spring(response: 0.3), value: current)
-                .animation(reduce ? nil : .spring(response: 0.3), value: shown)
+                .animation(reduce ? nil : .motion(.base), value: current)
+                .animation(reduce ? nil : .motion(.base), value: shown)
                 Button(pinned ? "Unpin" : "Pin card") { pinned.toggle(); shown = true }
                     .frame(minHeight: 32)
             }

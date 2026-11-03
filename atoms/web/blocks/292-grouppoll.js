@@ -26,11 +26,10 @@ atom({ id:'grouppoll', cat:'Scheduling', name:'Group-poll tally', block:'group p
     box.appendChild(foot);
     const vc = $$(foot,'.vc')[0];
     let voted = false;
-    const tally = () => { const tot = rows.reduce((a,r) => a + r.votes, 0) || 1, t0 = now();
-      const lead = rows.indexOf(rows.reduce((a,b) => b.votes >= a.votes ? b : a));
-      rows.forEach((r,i) => { r.v.set(r.votes/tot*100, S.base, t0 + i*.05); r.dg.set(String(r.votes));
-        r.lk.set(i === lead ? 1 : 0, S.base, t0 + EXIT + i*.05); });
-      vc.textContent = tot + (tot === 1 ? ' vote' : ' votes') + ' · ' + O[lead][0] + ' leads'; };
+    const tally = () => { const { total: tot, shares, leader: lead } = pollTally(rows.map(r => r.votes)), t0 = now();
+      rows.forEach((r,i) => { r.v.set(shares[i], S.base, t0 + staggerAt(i, .05)); r.dg.set(String(r.votes));
+        r.lk.set(i === lead ? 1 : 0, S.base, t0 + EXIT + staggerAt(i, .05)); });
+      vc.textContent = tot + (tot === 1 ? ' vote' : ' votes') + ' · ' + (lead === null ? 'tied at the top' : O[lead][0] + ' leads'); };
     rows.forEach((r,i) => r.b.onclick = () => { if (voted) return; voted = true;
       r.votes++; r.ckT.set(1); r.b.style.cursor = 'default'; tally(); });
     $$(foot,'.rs')[0].onclick = () => { voted = false;

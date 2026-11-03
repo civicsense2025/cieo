@@ -1,0 +1,103 @@
+/* site/doc.css: the component and index pages. Built only on Cieo tokens (design/themes.css), so the docs
+   restyle with the theme they document. Editorial, technical: a reading column, mono spec labels, a measured
+   stage for the live preview, hairline rules. No gradients, glass or decorative shadows. */
+:root { color-scheme: light dark; }
+body.cieo-docsite {
+  margin: 0; background: var(--cieo-color-canvas); color: var(--cieo-color-text);
+  font: var(--cieo-text-body)/var(--cieo-leading-body) var(--cieo-font-sans);
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+.cieo-docsite a { color: inherit; text-decoration-color: color-mix(in oklab, currentColor 35%, transparent); text-underline-offset: .2em; }
+@media (hover: hover) { .cieo-docsite a:hover { text-decoration-color: currentColor; } }
+.cieo-docsite :focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+.cieo-docsite code, .cieo-docsite pre, .doc-label { font-family: var(--cieo-font-mono); }
+
+/* Layout: a sticky rail of section links beside one reading column. */
+.doc-shell { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cieo-space-8); max-inline-size: 72rem; margin-inline: auto; padding: var(--cieo-space-6) var(--cieo-space-4) var(--cieo-space-16); }
+@media (min-width: 60rem) { .doc-shell { grid-template-columns: 12rem minmax(0, 1fr); padding-inline: var(--cieo-space-8); } }
+.doc-rail { display: none; }
+@media (min-width: 60rem) {
+  .doc-rail { display: grid; align-content: start; gap: var(--cieo-space-1); position: sticky; inset-block-start: var(--cieo-space-6); font-size: var(--cieo-text-small); }
+  .doc-rail a { padding: var(--cieo-space-1) 0 var(--cieo-space-1) var(--cieo-space-3); border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); text-decoration: none; color: var(--cieo-color-muted); }
+  @media (hover: hover) { .doc-rail a:hover { color: var(--cieo-color-text); border-color: var(--cieo-color-border-strong); } }
+}
+.doc-label { display: block; font-size: var(--cieo-text-caption); letter-spacing: .02em; color: var(--cieo-color-subtle); }
+
+/* Masthead */
+.doc-head { display: grid; gap: var(--cieo-space-3); padding-block-end: var(--cieo-space-6); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+.doc-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-2); margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+.doc-level { padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); font: var(--cieo-text-caption)/1.6 var(--cieo-font-mono); color: var(--cieo-color-text); }
+.doc-head h1 { margin: 0; font-size: clamp(var(--cieo-text-heading), 6vw, var(--cieo-text-display)); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-strong); letter-spacing: -.025em; }
+.doc-head > p { margin: 0; max-inline-size: var(--cieo-measure); font-size: var(--cieo-text-lead); color: var(--cieo-color-muted); }
+
+/* Sections */
+.doc-main { display: grid; gap: var(--cieo-space-12); min-inline-size: 0; }
+.doc-main > section { display: grid; gap: var(--cieo-space-4); min-inline-size: 0; scroll-margin-block-start: var(--cieo-space-6); }
+.doc-main h2 { margin: 0; font-size: var(--cieo-text-title); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-strong); letter-spacing: -.01em; }
+.doc-main h3 { margin: 0; font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-strong); }
+.doc-main p, .doc-main li { max-inline-size: var(--cieo-measure); }
+.doc-main ul { margin: 0; padding-inline-start: var(--cieo-space-4); }
+.doc-main li + li { margin-block-start: var(--cieo-space-1); }
+.doc-main p { margin: 0; }
+.doc-main :not(pre) > code { padding: 0 .3em; border-radius: var(--cieo-radius-small); background: var(--cieo-color-sunken); font-size: .9em; }
+
+/* Import line: the one thing to copy. */
+.cieo-import-banner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--cieo-space-2) var(--cieo-space-4); padding: var(--cieo-space-3) var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); }
+.cieo-import-banner p { grid-column: 1 / -1; margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+.cieo-import-banner pre { margin: 0; overflow-x: auto; }
+.doc-button { min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
+@media (hover: hover) { .doc-button:hover { background: var(--cieo-color-sunken); } }
+@media (pointer: coarse) { .doc-button { min-block-size: var(--cieo-touch-target); } }
+
+/* Example: a measured stage (a quiet 8px grid) and a code view, switched by real tabs. */
+.doc-example { border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); overflow: hidden; }
+.doc-tabs { display: flex; gap: var(--cieo-space-4); padding-inline: var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+.doc-tabs [role="tab"] { padding: var(--cieo-space-3) 0; border: 0; border-block-end: 2px solid transparent; margin-block-end: -1px; background: none; color: var(--cieo-color-muted); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
+.doc-tabs [role="tab"][aria-selected="true"] { color: var(--cieo-color-text); border-block-end-color: var(--cieo-color-text); }
+.doc-stage { display: grid; place-items: center; min-block-size: 14rem; padding: var(--cieo-space-8) var(--cieo-space-4); background-color: var(--cieo-color-canvas); background-image: radial-gradient(circle at 1px 1px, var(--cieo-color-border) 1px, transparent 0); background-size: var(--cieo-space-2) var(--cieo-space-2); }
+.doc-stage > * { max-inline-size: 100%; }
+.doc-code { margin: 0; padding: var(--cieo-space-4); overflow-x: auto; background: var(--cieo-color-text); color: var(--cieo-color-surface); font-size: var(--cieo-text-small); line-height: 1.7; }
+[role="tabpanel"][hidden] { display: none; }
+
+/* Spec tables (properties, tokens) */
+.doc-table-wrap { overflow-x: auto; border-block-start: var(--cieo-border-width) solid var(--cieo-color-text); }
+.doc-main table { inline-size: 100%; border-collapse: collapse; font-size: var(--cieo-text-small); }
+.doc-main th { padding: var(--cieo-space-2) var(--cieo-space-3) var(--cieo-space-2) 0; text-align: start; font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-subtle); font-weight: var(--cieo-weight-normal); }
+.doc-main td { padding: var(--cieo-space-2) var(--cieo-space-3) var(--cieo-space-2) 0; border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); vertical-align: top; }
+.doc-main td:first-child, .doc-main td:nth-child(2) { font-family: var(--cieo-font-mono); white-space: nowrap; }
+
+/* Guide: README sections as a two-column spec sheet on wide screens. */
+.doc-guide { display: grid; gap: var(--cieo-space-6); }
+.doc-guide > section { display: grid; gap: var(--cieo-space-2); padding-block-start: var(--cieo-space-4); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); }
+@media (min-width: 48rem) { .doc-guide > section { grid-template-columns: 11rem minmax(0, 1fr); gap: var(--cieo-space-6); } .doc-guide > section > h3 { font: var(--cieo-text-small)/1.6 var(--cieo-font-mono); color: var(--cieo-color-muted); font-weight: var(--cieo-weight-normal); } .doc-guide > section > :not(h3) { grid-column: 2; } }
+
+/* Do / don't: two verdicts, marked by a rule and a word, never by colour alone. */
+.doc-verdicts { display: grid; gap: var(--cieo-space-4); }
+@media (min-width: 48rem) { .doc-verdicts { grid-template-columns: 1fr 1fr; } }
+.doc-verdicts > div { padding-block-start: var(--cieo-space-3); border-block-start: 3px solid var(--cieo-color-success); }
+.doc-verdicts > div[data-dont] { border-block-start-color: var(--cieo-color-danger); }
+.doc-verdicts > div::before { content: "Do"; display: block; margin-block-end: var(--cieo-space-2); font: var(--cieo-weight-strong) var(--cieo-text-small) var(--cieo-font-sans); color: var(--cieo-color-success); }
+.doc-verdicts > div[data-dont]::before { content: "Don't"; color: var(--cieo-color-danger); }
+
+/* Tokens */
+.doc-main .doc-tokens { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); margin: 0; padding: 0; list-style: none; }
+.doc-main .doc-tokens li { margin: 0; padding: var(--cieo-space-1) var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-small); font: var(--cieo-text-caption) var(--cieo-font-mono); }
+
+/* Footer */
+.doc-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--cieo-space-4); padding-block-start: var(--cieo-space-6); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+.doc-foot nav { display: flex; gap: var(--cieo-space-4); }
+
+/* Index: a dense, scannable register rather than a card grid. */
+.doc-register { display: grid; gap: var(--cieo-space-12); }
+.doc-register ul { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 0 var(--cieo-space-6); margin: 0; padding: 0; list-style: none; border-block-start: var(--cieo-border-width) solid var(--cieo-color-text); }
+.doc-register li { border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+.doc-register li a { display: block; padding: var(--cieo-space-2) 0; text-decoration: none; }
+@media (hover: hover) { .doc-register li a:hover { color: var(--cieo-color-accent); } }
+.doc-count { font: var(--cieo-text-small) var(--cieo-font-mono); color: var(--cieo-color-subtle); font-weight: var(--cieo-weight-normal); }
+
+@media (prefers-reduced-motion: reduce) { .cieo-docsite * { scroll-behavior: auto; } }
+@media (forced-colors: active) { .doc-verdicts > div { border-block-start-color: CanvasText; } .doc-tabs [role="tab"][aria-selected="true"] { border-block-end-color: Highlight; } }
+@media (max-width: 30rem) { .cieo-import-banner { grid-template-columns: minmax(0, 1fr); } .cieo-import-banner .doc-button { justify-self: start; } }
+.doc-register > section { display: grid; gap: var(--cieo-space-3); scroll-margin-block-start: var(--cieo-space-6); }
+.doc-main .doc-register li + li { margin-block-start: 0; }
+.doc-main .doc-register h2 { display: flex; align-items: baseline; gap: var(--cieo-space-2); }

@@ -65,7 +65,7 @@ public struct BrowserTabsAtom: MotionAtomView {
         active = tab.id
         DispatchQueue.main.async {
             withMotion(.base, reduceMotion: reduce) { set(tab.id) { $0.width = 1 } }
-            withAnimation(reduce ? nil : .motion(.base).delay(0.06)) { set(tab.id) { $0.label = 1 } }
+            withAnimation(reduce ? nil : .motion(.base).delay(Motion.lag)) { set(tab.id) { $0.label = 1 } }
         }
     }
 

@@ -10,7 +10,14 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const L = C.map(([c,p]) => { const e = document.createElement('span'); e.className = 'layer'; e.innerHTML = `<b>${c}</b><span class="muted">${p}</span>`; e.style.gap = '4px'; cc.appendChild(e); return e; });
     const sw = new Swap(0), ok = new Track(0); let k = 0;
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
-    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); };
-    inp.onfocus = () => pw.style.borderColor = 'var(--ink)'; inp.onblur = () => pw.style.borderColor = 'var(--muted)'; fmt();
+    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); if (msg.textContent) check(); };
+    // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
+    const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
+    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');
+    const missing = () => { const len = C[k][2].reduce((a,b) => a + b, 0), n = inp.value.replace(/\D/g,'').length; return n && n < len ? len - n : 0; };
+    const check = () => { const m = missing(); inp.toggleAttribute('aria-invalid', !!m); if (m) inp.setAttribute('aria-invalid', 'true');
+      msg.textContent = m ? `${m} more digit${m === 1 ? '' : 's'} for a ${C[k][0]} number.` : ''; pw.style.borderColor = m ? 'var(--danger)' : 'var(--muted)'; };
+    inp.onfocus = () => { pw.style.borderColor = 'var(--ink)'; }; inp.onblur = check;
+    inp.addEventListener('input', () => { if (msg.textContent && !missing()) check(); }); fmt();
     return t => { L.forEach((e,i) => sw.apply(e,i,t)); const p = clamp(ok.at(t)); okEl.style.opacity = p.toFixed(3); okEl.style.transform = `scale(${(.6+.4*p).toFixed(3)})`; };
   }});

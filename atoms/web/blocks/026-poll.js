@@ -11,8 +11,8 @@ atom({ id:'poll', cat:'Interactive', name:'Poll', block:'poll', fam:['M','S'], t
       b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;background:var(--raised)"></i><span style="position:relative;display:flex;gap:8px;align-items:center"><svg class="ck" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg><span></span></span><span class="num small" style="position:relative"></span>`;
       $$(b,'span')[1].textContent = n; pl.appendChild(b); return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[2], v:new Track(0), o:new Track(0), c:new Track(0) }; });
     let voted = -1;
-    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now();
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 1 : 0); x.v.set(pc, S.base, t0 + j*.05); x.o.set(1, S.base, t0 + EXIT + j*.05); x.c.set(j === i ? 1 : 0); x.b.style.cursor = 'default'; }); });
+    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 1 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j]; x.v.set(pc, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); x.b.style.cursor = 'default'; }); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0); x.o.set(0, S.snap); x.c.set(0); x.b.style.cursor = 'pointer'; }); };
     return t => rows.forEach(r => { const v = r.v.at(t), c = clamp(r.c.at(t)); r.fill.style.width = clamp(v/100)*100 + '%';
       r.pct.textContent = Math.round(v) + '%'; fade(r.pct, r.o.at(t), 0);

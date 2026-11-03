@@ -61,7 +61,7 @@ public struct PageLoadBarAtom: MotionAtomView {
             var t = Transaction(); t.disablesAnimations = true
             withTransaction(t) { finalWidth = loading.map { creep($0, Date()) } ?? 0; loading = nil }
             withMotion(.snap, reduceMotion: reduce) { finalWidth = 1 }
-            withAnimation(reduce ? nil : .motion(.base).delay(0.2)) { barOpacity = 0 }
+            withAnimation(reduce ? nil : .motion(.base).delay(Motion.exit * 2)) { barOpacity = 0 }
             withMotion(.base, reduceMotion: reduce) { page = i }
         }
     }

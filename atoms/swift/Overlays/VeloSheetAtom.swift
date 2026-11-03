@@ -37,7 +37,7 @@ public struct VeloSheetAtom: MotionAtomView {
         }
         .padding(.vertical, 16).padding(.horizontal, 10).frame(width: 200, alignment: .leading)
         .background(RoundedRectangle(cornerRadius: 14).fill(.background).shadow(radius: 12))
-        .animation(reduce ? nil : .motion(.base).delay(0.06), value: open)
+        .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: open)
     }
     private func show(_ on: Bool) { withMotion(on ? .base : .snap, reduceMotion: reduce) { open = on; settled = on } }
 }

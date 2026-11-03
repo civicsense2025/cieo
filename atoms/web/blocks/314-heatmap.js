@@ -8,7 +8,7 @@ atom({ id:'crowdheat', cat:'Maps', name:'Crowd heat overlay', block:'density, ov
     const cells = D.map(d => { const c = document.createElement('i'); c.style.cssText = 'border-radius:9px;background:var(--accent)'; heat.appendChild(c); return { c, d, o:new Track(0), p:new Track(0) }; });
     const dots = [[.2,.3],[.5,.6],[.75,.35]].map(([x,y]) => { const p = document.createElement('i'); p.style.cssText = `position:absolute;left:${x*100}%;top:${y*100}%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--ink);border:2px solid var(--card)`; pins.appendChild(p); return { p, o:new Track(1) }; });
     let on = true, fired = false;
-    const show = t0 => { cells.forEach((c,i) => { if (REDUCE){ c.o.jump(on ? 1 : 0); c.p.jump(0); } else { c.o.set(on ? 1 : 0, S.lazy, t0 + i*.04); if (on && c.d > .8){ c.p.jump(0); c.p.set(1, S.snap, t0 + .3 + i*.04); } } });
+    const show = t0 => { cells.forEach((c,i) => { if (REDUCE){ c.o.jump(on ? 1 : 0); c.p.jump(0); } else { c.o.set(on ? 1 : 0, S.lazy, t0 + staggerAt(i, .04)); if (on && c.d > .8){ c.p.jump(0); c.p.set(1, S.snap, t0 + .3 + staggerAt(i, .04)); } } });
       dots.forEach(d => REDUCE ? d.o.jump(on ? 0 : 1) : d.o.set(on ? 0 : 1, S.base, t0 + .1)); };
     tg.onclick = () => { on = !on; tg.textContent = on ? 'Heat on' : 'Heat off'; tg.setAttribute('aria-pressed', on); show(now()); };
     show(now());

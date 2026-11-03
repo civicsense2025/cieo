@@ -6,7 +6,7 @@ atom({ id:'reactions', cat:'Video calls', name:'Reactions burst', block:'video c
     const E = ['❤','👏','🎉'];
     const sky = $(st,'.sky'), pile = $(st,'.pile'), nc = $(st,'.nc'), bg = $(st,'.bg');
     const F = ['', 'Burst complete'].map((s,k) => { const e = document.createElement('span'); e.className = 'layer';
-      e.innerHTML = k ? `<span class="small" style="background:color-mix(in oklab, var(--success) 12%, transparent);color:var(--success);font-weight:600;padding:4px 10px;border-radius:999px;font-size:12.5px">🎉 ${s}</span>` : s;
+      e.innerHTML = k ? `<span class="small" style="background:color-mix(in oklab, var(--success) 12%, transparent);color:var(--success);font-weight:600;padding:4px 10px;border-radius:999px;font-size:12.5px">${s}</span>` : s;
       $(st,'.fin').appendChild(e); return e; });
     const fsw = new Swap(0), ok = new Track(0);
     let floats = [], items = [], n = 0;
@@ -23,7 +23,7 @@ atom({ id:'reactions', cat:'Video calls', name:'Reactions burst', block:'video c
       p.style.cssText = 'display:grid;place-items:center;padding:0;width:30px;height:30px;border-radius:50%;background:var(--raised);font-size:15px';
       p.textContent = e; pile.appendChild(p);
       const it = { p, y:new Track(REDUCE ? 0 : 8), o:new Track(REDUCE ? 1 : 0) };
-      if (!REDUCE){ const k = Math.min(items.length, 5); it.y.set(0, S.base, t0 + k*.05); it.o.set(1, S.base, t0 + k*.05); }
+      if (!REDUCE){ const k = Math.min(items.length, 5); it.y.set(0, S.base, t0 + staggerAt(k, .05)); it.o.set(1, S.base, t0 + staggerAt(k, .05)); }
       items.push(it);
       while (items.length > 6){ const old = items.shift(); old.p.remove(); }
       nc.textContent = n === 1 ? '1 reaction' : n + ' reactions';

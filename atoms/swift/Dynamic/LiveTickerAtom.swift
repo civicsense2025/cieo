@@ -52,7 +52,7 @@ public struct LiveTickerAtom: MotionAtomView {
             value = min(9999, max(1000, value + delta))
             heat = Double(dir)
             if !reduce {
-                withAnimation(.motion(.lazy).delay(0.7)) { heat = 0 }
+                withAnimation(.motion(.lazy).delay(MotionTokens.durationLazy)) { heat = 0 }
             } else { heat = 0 }
         }
     }

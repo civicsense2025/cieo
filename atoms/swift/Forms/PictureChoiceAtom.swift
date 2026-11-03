@@ -39,7 +39,7 @@ public struct PictureChoiceAtom: MotionAtomView {
                             Image(systemName: "checkmark").font(.system(size: 11, weight: .heavy)).foregroundStyle(.background)
                                 .frame(width: 22, height: 22).background(Circle().fill(.primary))
                                 .scaleEffect(on ? 1 : 0.5).opacity(on ? 1 : 0).offset(x: 8, y: -8)
-                                .animation(reduce ? nil : (on ? .motion(.base).delay(0.05) : .motion(.snap)), value: on)
+                                .animation(reduce ? nil : (on ? .motion(.base).delay(Motion.lag) : .motion(.snap)), value: on)
                         }
                         .scaleEffect(pressed == i ? 0.97 : 1)
                         .animation(reduce ? nil : .motion(.snap), value: pressed)

@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct HoldConfirmAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "holdconfirm", category: "Scheduling", name: "Hold to confirm",
+    public static let info = MotionAtomInfo(id: "holdconfirm", category: "Scheduling", name: "Hold to confirm a booking",
         summary: "Holding fills the ring steadily. An early release springs the fill back; a full hold swaps in a check that holds.")
 
     @Environment(\.accessibilityReduceMotion) private var reduce

@@ -29,7 +29,7 @@ public struct MinimizeToBarAtom: MotionAtomView {
                             Text("Can we review the yearly toggle today?")
                         }
                         .font(.caption).padding(.horizontal, 12).padding(.vertical, 10).frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(mini ? 0 : 1).animation(reduce ? nil : (mini ? .motion(.snap) : .motion(.base).delay(0.15)), value: mini)
+                        .opacity(mini ? 0 : 1).animation(reduce ? nil : (mini ? .motion(.snap) : .motion(.base).delay(Motion.exit + Motion.lag)), value: mini)
                         Spacer(minLength: 0)
                     }
                     .frame(width: rect.width, height: rect.height, alignment: .top)

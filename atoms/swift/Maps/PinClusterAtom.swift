@@ -35,7 +35,7 @@ public struct PinClusterAtom: MotionAtomView {
                     .buttonStyle(.plain).accessibilityLabel("\(places.count) places, open cluster")
                     .position(x: center.x * g.size.width, y: center.y * g.size.height)
                     .scaleEffect(open ? 0.7 : 1).opacity(open ? 0 : 1).allowsHitTesting(!open)
-                    .animation(reduce ? nil : open ? .motion(.snap) : .motion(.base).delay(0.25), value: open)
+                    .animation(reduce ? nil : open ? .motion(.snap) : .motion(.base).delay(Motion.exit + Motion.staggerMax / 2), value: open)
                 }
             }
             .frame(width: 380, height: 220).clipShape(RoundedRectangle(cornerRadius: 14))
@@ -45,5 +45,5 @@ public struct PinClusterAtom: MotionAtomView {
         }
     }
 
-    private func set(_ v: Bool) { if reduce { open = v } else { withAnimation(v ? .motion(.snap) : .motion(.base).delay(0.25)) { open = v } } }
+    private func set(_ v: Bool) { if reduce { open = v } else { withAnimation(v ? .motion(.snap) : .motion(.base).delay(Motion.exit + Motion.staggerMax / 2)) { open = v } } }
 }

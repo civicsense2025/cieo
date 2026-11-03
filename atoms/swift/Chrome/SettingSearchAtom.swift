@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Settings search: filters in place, heights spring, arrows highlight.
 public struct SettingSearchAtom: MotionAtomView {
@@ -53,7 +54,7 @@ public struct SettingSearchAtom: MotionAtomView {
             .padding(15)
             .frame(maxWidth: 440)
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
-            .animation(reduce ? nil : .spring(response: 0.3), value: matches.count)
+            .animation(reduce ? nil : .motion(.base), value: matches.count)
         }
         .focusable(true)
         .escapeKey { query = ""; jumped = nil }

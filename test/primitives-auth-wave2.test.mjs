@@ -39,12 +39,12 @@ test('Wave 2 manifests carry the passkey atom and SSO molecule ids', () => {
   assert.ok(pendingId, 'sso manifest documents pendingId');
 });
 
-test('Wave 2 CSS keeps 44px targets with a 2px accent focus and a reduced-motion block', () => {
+test('Wave 2 CSS keeps 44px targets with the token focus ring and a reduced-motion block', () => {
   for (const f of ['design/styles/primitives/auth-passkey-button.css', 'design/styles/primitives/auth-sso-buttons.css']) {
     const css = readFileSync(f, 'utf8');
     assert.match(css, /44px|2\.75rem/);
     assert.match(css, /:focus-visible/);
-    assert.match(css, /2px solid/);
+    assert.match(css, /var\(--cieo-focus-width\) solid var\(--cieo-color-focus\)/);
     assert.match(css, /prefers-reduced-motion/);
     assert.match(css, /pointer:\s*coarse/);
   }

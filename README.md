@@ -47,7 +47,7 @@ npm run test:design:types      # Public TypeScript consumer contract
 import { createTheme, applyTheme, toDTCG, toNative } from 'cieo/design';
 import 'cieo/design.css';
 import 'cieo/primitives.css';
-const theme = createTheme({ brand: 'iris', scheme: 'dark', radius: 'soft' });
+const theme = createTheme({ brand: 'studio', scheme: 'dark', radius: 'soft' });
 const controller = applyTheme(document.documentElement, theme);
 // Dispose at the host framework's unmount boundary.
 controller.destroy();
@@ -170,9 +170,10 @@ Theme with these variables (all optional). Each one falls back first to the matc
 | `--cieo-control-height-sm`, `--cieo-control-height-md`, `--cieo-field-height` | [`control-small`, `control-height`] 32px, 40px; 52px | control heights |
 | `--cieo-focus-ring`, `--cieo-focus-offset` | [`focus-width`, `color-focus`, `focus-offset`] 2px solid accent, 2px | focus outline |
 | `--cieo-control-font` | inherit | font family |
+| `--cieo-disabled-opacity` | 0.55 | every disabled control, option and toggle |
 | `--cieo-search-width`, `--cieo-search-radius` | 100% (16rem collapsible), pill | search field |
 
-On touch screens (`pointer: coarse`) every control has at least a 44px hit area. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
+On touch screens (`pointer: coarse`) every control has at least a 44px hit area. Hover styles apply only on devices that can hover, touch selects (both sizes) use 16px text so iOS Safari does not zoom, and in forced-colors mode the primary button, switch and field borders switch to system colours; a disabled primary button drops its fill. The `cieo/design.css` field and check rules skip `.cieo-ctl` elements, so loading both stylesheets does not restyle these controls. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
 
 ## Agents
 

@@ -28,13 +28,13 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
       cells.forEach((c,i) => { c.L.forEach((l,d) => l.textContent = T[d][i] || '');
         c.vT.set(T[0][i] ? 1 : 0); c.b.style.pointerEvents = T[0][i] ? 'auto' : 'none'; }); };
     const goDay = i => { day = i; const t0 = now();
-      cells.forEach((c,k) => c.sw.to(i, t0 + k*.04)); cells.forEach(c => c.sT.set(0));
+      cells.forEach((c,k) => c.sw.to(i, t0 + staggerAt(k, .04))); cells.forEach(c => c.sT.set(0));
       pl.go(tabs[i].offsetLeft, tabs[i].offsetLeft + tabs[i].offsetWidth);
       tabs.forEach((x,j) => x.style.fontWeight = j === i ? '600' : '400'); };
     tabs.forEach((b,i) => b.onclick = () => goDay(i));
     const d0 = $(st,'.d0'), d1 = $(st,'.d1');
     const goDur = d => { dur = d; paint(); const t0 = now();
-      cells.forEach((c,k) => c.sw.to(day, t0 + k*.03));
+      cells.forEach((c,k) => c.sw.to(day, t0 + staggerAt(k, .03)));
       d0.style.boxShadow = d === 30 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d0.setAttribute('aria-pressed', d === 30); d0.style.fontWeight = d === 30 ? '600' : '400';
       d1.style.boxShadow = d === 60 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d1.setAttribute('aria-pressed', d === 60); d1.style.fontWeight = d === 60 ? '600' : '400'; };
     d0.onclick = () => goDur(30); d1.onclick = () => goDur(60);

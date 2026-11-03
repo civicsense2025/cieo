@@ -149,7 +149,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
       return r;
     };
     const fill = enter => { rows.slice().forEach(r => r.li.remove()); rows.length = 0; q.length = 0;
-      SEED.forEach((d, i) => make(d, d.s, enter, i*.06)); count(); };
+      SEED.forEach((d, i) => make(d, d.s, enter, staggerAt(i, .06))); count(); };
     fill(false);
     addB.onclick = () => { const d = Object.assign({}, CAT[ci++ % CAT.length]); const r = make(d, 1, true); start(r); pin = now() + 1; say(d.n + ' added'); };
     reB.onclick = () => { CAT.forEach(c => { if (c.n === 'Stripe') c.once = 'No response to initialize after 30 seconds. The server may be down.'; }); fill(true); pin = now() + .9; };
@@ -258,14 +258,14 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
       if (k === 1){ gD.set(0, S.base, t); gap.set(0, S.base, t); gY.set(1, S.base, t); cY.set(1, S.base, t + .05); ysw.put('Connected'); lnW.set(1, S.base, t + .1); mk.set(1, S.base, t + .35); dg.set(0);
         let n = 0; rows.forEach((r, i) => { if (!r.on){ r.sl.open(false, t + .25 + n*.04); n++; } else { r.cw.set(1, S.base, t + .25); } }); }
       else { gY.set(0, S.base, t); gap.set(0, S.base, t); gD.set(1, S.base, t); cD.set(1, S.base, t + .05); nsw.put('Request denied'); lnW.set(.3, S.base, t + .1); mx.set(1, S.base, t + .35); dg.set(1);
-        rows.forEach((r, i) => r.sl.open(false, t + .25 + i*.04)); }
+        rows.forEach((r, i) => r.sl.open(false, t + .25 + staggerAt(i, .04))); }
       cs.open(false, t);
       const on = nOn(); sl.textContent = k === 1 ? `${on} ${on === 1 ? 'permission' : 'permissions'} granted to the assistant.` : 'No permissions were shared with the assistant.'; undo.textContent = k === 1 ? 'Revoke access' : 'Ask again';
       sumS.open(true, t, .45); mPush(q, t + .6, () => undo.focus({ preventScroll:true }));
     };
     const reset = () => { const t = now(); state = 0; tsw.to(0); tf.to(ttl[0]); yes.disabled = no.disabled = false;
       gD.set(1, S.base, t); gap.set(8, S.base, t); gY.set(1.6, S.base, t); cY.set(0, S.snap, t); cD.set(0, S.snap, t); lnW.set(0, S.base, t); mk.set(0, S.snap, t); mx.set(0, S.snap, t); sumS.open(false, t);
-      rows.forEach((r, i) => { r.cw.set(0, S.snap, t); r.sl.open(true, t, .12 + i*.04); r.sw.el.tabIndex = 0; });
+      rows.forEach((r, i) => { r.cw.set(0, S.snap, t); r.sl.open(true, t, .12 + staggerAt(i, .04)); r.sw.el.tabIndex = 0; });
       cs.open(true, t, .3); mPush(q, t + .1, () => { ysw.put('Allow access'); nsw.put('Deny'); }); mPush(q, t + .5, () => yes.focus({ preventScroll:true })); };
     yes.onclick = () => { if (!state) settle(1); }; no.onclick = () => { if (!state) settle(2); }; undo.onclick = reset;
     return t => {
@@ -553,7 +553,7 @@ atom({ id:'toolpermissions', cat:'MCP and agents', name:'Server tool permissions
     const toggle = (i, v, lag = 0) => { const r = rows[i]; r.on = v; r.sw.set(v, false, now() + lag); r.w.set(v && r.s.warn ? 1 : 0, v ? S.base : S.snap, now() + lag); sync(); };
     n2.set(String(T.length), true); rows.forEach(r => r.sw.set(r.on, true)); sync(true);
     document.fonts.ready.then(() => { lastLbl = null; sync(true); });
-    bulk.onclick = () => { const todo = readOff(); if (!todo.length) return; todo.forEach((r, j) => toggle(rows.indexOf(r), true, j*.06)); say(`${todo.length} read-only tools enabled`); };
+    bulk.onclick = () => { const todo = readOff(); if (!todo.length) return; todo.forEach((r, j) => toggle(rows.indexOf(r), true, staggerAt(j, .06))); say(`${todo.length} read-only tools enabled`); };
     off.onclick = () => { rows.forEach((r, i) => { if (r.on) toggle(i, false); }); say('All tools disabled'); };
     const e = edges(0, 0), ey = edges(0, 0); let filt = 'all';
     const pick = (f, inst) => { filt = f; const b = fb.find(x => x.dataset.f === f); fb.forEach(x => x.setAttribute('aria-pressed', x === b)); const fn = inst ? 'jump' : 'go';

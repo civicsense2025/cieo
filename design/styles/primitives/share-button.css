@@ -5,10 +5,10 @@
   @media (pointer: coarse) {
     :where(.cieo).cieo-share-button { min-block-size: var(--cieo-touch-target); }
   }
-  :where(.cieo).cieo-share-button:hover:not(:disabled) { background: var(--cieo-color-sunken); color: var(--cieo-color-text); }
+  @media (hover: hover) { :where(.cieo).cieo-share-button:hover:not(:disabled) { background: var(--cieo-color-sunken); color: var(--cieo-color-text); } }
   :where(.cieo).cieo-share-button[data-copied] { color: var(--cieo-color-success); }
-  :where(.cieo).cieo-share-button:disabled { opacity: 0.5; cursor: not-allowed; }
-  :where(.cieo).cieo-share-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo).cieo-share-button:disabled { opacity: var(--cieo-disabled-opacity); cursor: not-allowed; }
+  :where(.cieo).cieo-share-button:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (prefers-reduced-motion: reduce) {
     :where(.cieo).cieo-share-button { transition: none; }
   }

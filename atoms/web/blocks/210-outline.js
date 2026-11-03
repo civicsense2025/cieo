@@ -12,7 +12,7 @@ atom({ id:'outline', cat:'Writing', name:'Outline zoom', block:'outline, documen
       kidT = list.map(() => new Track(0));
       list.forEach((k,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = k; b.style.textAlign = 'left';
         b.onclick = () => { if (!path.length && tree.c[k]){ path = [k]; ft.textContent = k; sw.to(1); sc.release(.97, 0, 1, S.base); so.set(0); draw(); } };
-        kids.appendChild(b); kidT[i].set(1, S.base, t0 + i*.03); });
+        kids.appendChild(b); kidT[i].set(1, S.base, t0 + staggerAt(i, .03)); });
       if (!path.length) so.set(1);
     };
     const back = () => { if (!path.length) return; path = []; ft.textContent = tree.t; sw.to(0); sc.release(.97, 0, 1, S.base); draw(); };

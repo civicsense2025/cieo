@@ -29,7 +29,7 @@ atom({ id:'voicenote', cat:'Writing', name:'Audio-note insert', block:'richtext 
     let inserted = false, playing = false, drew = false;
     const slotP = () => ({ x:(stage.clientWidth - TW)/2, y:122 });
     const draw = t => { if (drew) return; drew = true;
-      hi.forEach((h,k) => REDUCE ? h.jump(H[k]) : h.set(H[k], S.soft, t + k*.03)); };
+      hi.forEach((h,k) => REDUCE ? h.jump(H[k]) : h.set(H[k], S.soft, t + staggerAt(k, .03))); };
     const snapBack = t => { if (REDUCE){ x.jump(X0); y.jump(Y0); } else { x.set(X0, S.soft, t); y.set(Y0, S.soft, t); } };
     const insert = t => { inserted = true; const p = slotP(); draw(t);
       if (REDUCE){ x.jump(p.x); y.jump(p.y); hs.jump(64); so.jump(1); isw.cur = 'in'; isw.prev = null; }

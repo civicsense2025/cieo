@@ -20,7 +20,7 @@ atom({ id:'holygrail', cat:'Layout', name:'Holy-grail reorder', block:'page-edit
       const s = narrow ? [[0, 136, W, 64], [0, 0, W, 128], [0, 208, W, 64]] : [[0, 0, 120, 200], [128, 0, W-240, 200], [W-104, 0, 104, 200]];
       panes.forEach((c, i) => { c.d.style.width = px(s[i][2]); c.d.style.height = px(s[i][3]);
         if (dead){ c.x.jump(s[i][0]); c.y.jump(s[i][1]); c.o.jump(1); }
-        else { c.x.set(s[i][0], S.base, t0+i*.03); c.y.set(s[i][1], S.base, t0+i*.03); c.o.jump(.45); c.o.set(1, S.base, t0+i*.03); } });
+        else { c.x.set(s[i][0], S.base, t0+staggerAt(i, .03)); c.y.set(s[i][1], S.base, t0+staggerAt(i, .03)); c.o.jump(.45); c.o.set(1, S.base, t0+staggerAt(i, .03)); } });
       const h = narrow ? 272 : 200;
       if (dead) wall.jump(h); else wall.set(h, S.base, t0);
       sw.to(narrow ? 1 : 0);

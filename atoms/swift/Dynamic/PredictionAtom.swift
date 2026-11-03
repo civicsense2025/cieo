@@ -30,7 +30,7 @@ public struct PredictionAtom: MotionAtomView {
                         .background(
                             RoundedRectangle(cornerRadius: 10).fill(Color.accentColor.opacity(locked == i ? 0.22 : 0))
                                 .scaleEffect(x: locked == i ? 1 : 0, anchor: .leading)
-                                .animation(reduce ? nil : .motion(.base).delay(0.09), value: locked),
+                                .animation(reduce ? nil : .motion(.base).delay(Motion.lag * 1.5), value: locked),
                             alignment: .leading
                         )
                         .overlay(RoundedRectangle(cornerRadius: 10).fill(locked == i ? .primary : .quaternary).opacity(0.10).allowsHitTesting(false))
@@ -46,7 +46,7 @@ public struct PredictionAtom: MotionAtomView {
                                 Capsule().fill(Color.primary.opacity(0.12))
                                 Capsule().fill(Color.accentColor)
                                     .frame(width: g.size.width * (locked < 0 ? 0.5 : locked == 0 ? 0.68 : 0.32))
-                                    .animation(reduce ? nil : .motion(.base).delay(0.09), value: locked)
+                                    .animation(reduce ? nil : .motion(.base).delay(Motion.lag * 1.5), value: locked)
                             }
                         }
                         .frame(height: 8)

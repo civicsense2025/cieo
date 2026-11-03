@@ -24,7 +24,7 @@ public struct ExpressPayAtom: MotionAtomView {
                         PreviewAction("G Pay").frame(height: 38).frame(maxWidth: .infinity)
                             .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
-                            .animation(reduce ? nil : .motion(.base).delay(0.06), value: ready)
+                            .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: ready)
                     }
                     Button("More options") { withMotion(.base, reduceMotion: reduce) { sheet = true } }
                         .frame(height: 38).frame(maxWidth: .infinity).buttonStyle(.bordered)

@@ -1,7 +1,7 @@
 
 
 atom({ id:'toast', cat:'Admin', name:'Toast stack', block:'Toast primitive', fam:['X','D'], tall:true,
-  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
+  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
   desc:'Success, warning and error toasts carry their status color on the icon and the action. New toasts push older ones back in depth. Drag one sideways 1:1; a long or fast swipe flings it out from release velocity, a short one springs home.',
   api:'x.release(x, vx, |x| > 100 || |vx| > 600 ? ±420 : 0)',
   init(st){

@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Extension popover: grows from icon, snaps shut faster, danger tinted.
 public struct ExtPopoverAtom: MotionAtomView {
@@ -32,7 +33,7 @@ public struct ExtPopoverAtom: MotionAtomView {
             .padding(15)
             .frame(maxWidth: 360)
             .background(.background, in: RoundedRectangle(cornerRadius: 12))
-            .animation(reduce ? nil : .spring(response: 0.3), value: open)
+            .animation(reduce ? nil : .motion(.base), value: open)
         }
         .focusable(true)
         .escapeKey { open = false }
@@ -48,6 +49,6 @@ public struct ExtPopoverAtom: MotionAtomView {
         .foregroundStyle(danger ? .red : .primary)
         .background(danger ? Color.red.opacity(0.12) : .clear, in: RoundedRectangle(cornerRadius: 8))
         .transition(.opacity)
-        .animation(reduce ? nil : .easeOut(duration: 0.12).delay(delay), value: open)
+        .animation(reduce ? nil : .motion(.snap).delay(delay), value: open)
     }
 }

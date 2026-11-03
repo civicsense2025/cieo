@@ -18,6 +18,6 @@ atom({ id:'sidebar', cat:'Layout', name:'Collapsible sidebar', block:'section, S
     ng.forEach((b,i) => b.onclick = () => pickNg(i === 0)); pickNg(true);
     const w = new Track(200); let open = true;
     tg.onclick = () => { open = !open; const t0 = now(); tg.setAttribute('aria-expanded', open); tg.setAttribute('aria-label', open ? 'Collapse sidebar' : 'Expand sidebar');
-      if (open){ w.set(200); it.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + i*.03)); } else { it.forEach(x => x.o.set(0, S.snap)); w.set(56, S.base, t0 + EXIT); } };
+      if (open){ w.set(200); it.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + staggerAt(i, .03))); } else { it.forEach(x => x.o.set(0, S.snap)); w.set(56, S.base, t0 + EXIT); } };
     return t => { sb.style.width = px(w.at(t)); it.forEach(x => fade(x.lb, x.o.at(t), null)); };
   }});

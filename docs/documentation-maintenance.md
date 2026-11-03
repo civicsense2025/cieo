@@ -43,6 +43,13 @@ The `swift` CI job also runs `scripts/check-swift-literals.sh`, which fails when
 SwiftUI component hard-codes styling, and proves on its fixture that it still
 catches each kind of hard-coded line.
 
+The same job runs `scripts/check-swift-motion.sh` over `Sources/CieoUI`,
+`Sources/CieoGallery` and `atoms/swift`: it fails on SwiftUI default springs
+(and `.default`), bare or timed curves, hand-tuned `interpolatingSpring` and
+`timingCurve`, and single literal delays (mark a deliberate exception with
+`// motion-ok: <reason>`). It exits 2 if grep itself fails, and proves on
+`scripts/fixtures/raw-motion.swift.fixture` that it catches all nine cases.
+
 `npm run check` also runs three token gates: `scripts/check-css-vars.mjs` (every
 `var(--cieo-*)` resolves to a declared token or a listed override hook),
 `test/token-parity.test.mjs` (`tokens/tokens.json` matches `tokens.css`, the

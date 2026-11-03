@@ -8,5 +8,5 @@ atom({ id:'statement', cat:'Content', name:'Statement reveal', block:'statement,
     const p = $(st,'.stm'), W = 'Make each page do one thing, and do it well.'.split(' ');
     p.innerHTML = W.map(w => `<span style="display:inline-block">${w}</span>`).join(' '); const ws = $$(p,'span'); let t0 = 0;
     const go = () => t0 = now(); $(st,'.btn').onclick = go; go();
-    return t => ws.forEach((w,i) => fade(w, prog(t, t0 + i*.05), (1 - clamp(prog(t, t0 + i*.05)))*8));
+    return t => ws.forEach((w,i) => fade(w, prog(t, t0 + staggerAt(i, .05)), (1 - clamp(prog(t, t0 + staggerAt(i, .05))))*8));
   }});

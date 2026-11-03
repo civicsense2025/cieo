@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Omnibox: list height springs to count, matches spring in, plate trails edges.
 public struct OmniboxAtom: MotionAtomView {
@@ -41,7 +42,7 @@ public struct OmniboxAtom: MotionAtomView {
                         if i < matches.count - 1 { Divider() }
                     }
                 }
-                .animation(reduce ? nil : .spring(response: 0.28), value: matches.count)
+                .animation(reduce ? nil : .motion(.base), value: matches.count)
                 Text(opened.map { "Opened “\($0)” ✓" } ?? "\(matches.count) of \(urls.count) matches")
                     .font(.system(size: 12)).foregroundStyle(.secondary).monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .leading)

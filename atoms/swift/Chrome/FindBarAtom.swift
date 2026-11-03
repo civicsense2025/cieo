@@ -1,4 +1,5 @@
 import SwiftUI
+import Cieo
 
 /// Find-in-page bar: drops on snap, digits roll by direction, plate trails.
 public struct FindBarAtom: MotionAtomView {
@@ -27,7 +28,7 @@ public struct FindBarAtom: MotionAtomView {
                         Button("↓") { index = (index + 1) % total }.frame(minWidth: 32, minHeight: 32)
                     }
                 }
-                .animation(reduce ? nil : .spring(response: 0.18), value: open)
+                .animation(reduce ? nil : .motion(.snap), value: open)
                 Text("A spring settles fast. A spring with damping settles calm.")
                     .font(.system(size: 13.5)).lineSpacing(8)
                     .padding(.horizontal, 16).padding(.vertical, 14)

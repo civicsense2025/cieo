@@ -24,7 +24,7 @@ atom({ id:'compilerun', cat:'Writing', name:'Compile run', block:'manuscript exp
       let p = 0;
       if (live){
         const creep = Math.min(.9, (t - t0)/2.2*.9);
-        tk.forEach((o,i) => { const ft = t0 + .4 + i*.06; if (t >= ft && !o.on){ o.on = true; o.f = t; } });
+        tk.forEach((o,i) => { const ft = t0 + .4 + staggerAt(i, .06); if (t >= ft && !o.on){ o.on = true; o.f = t; } });
         if (creep >= .9 && done < 0){ done = t; fin.set(1, S.base, t); sw.to(2); live = 'done'; }
         if (done < 0) p = creep; else { p = .9 + .1*clamp(prog(t, done, S.base)); if (p > .999){ live = false; run.style.opacity = '1'; } }
       } else if (done >= 0) p = 1;

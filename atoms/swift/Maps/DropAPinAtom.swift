@@ -52,7 +52,7 @@ private struct PinView: View {
         }
         .onAppear {
             withMotion(.base, reduceMotion: reduce) { landed = true }
-            if !reduce && showRing { withAnimation(.motion(.soft).delay(0.15)) { ring = true } }
+            if !reduce && showRing { withAnimation(.motion(.soft).delay(Motion.exit + Motion.lag)) { ring = true } }
         }
         .accessibilityHidden(true)
     }

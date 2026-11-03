@@ -30,8 +30,8 @@
   :where(.cieo) .cieo-button[data-icon] { padding: var(--cieo-space-2); aspect-ratio: 1; }
   :where(.cieo) .cieo-button:active:not(:disabled, [aria-disabled='true']) { transform: translateY(1px); }
   :where(.cieo) :where(.cieo-button:disabled, .cieo-button[aria-disabled='true']) { opacity: var(--cieo-disabled-opacity); cursor: not-allowed; }
-  :where(.cieo) .cieo-field { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; }
-  :where(.cieo) .cieo-field > label { font-weight: var(--cieo-weight-medium); font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-field:where(:not(.cieo-ctl)) { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; }
+  :where(.cieo) .cieo-field:where(:not(.cieo-ctl)) > label { font-weight: var(--cieo-weight-medium); font-size: var(--cieo-text-small); }
   :where(.cieo) .cieo-input {
     inline-size: 100%;
     min-inline-size: 0;
@@ -47,8 +47,8 @@
   :where(.cieo) .cieo-input:disabled { opacity: var(--cieo-disabled-opacity); cursor: not-allowed; }
   :where(.cieo) textarea.cieo-input { resize: vertical; min-block-size: 7rem; }
   :where(.cieo) .cieo-help { color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
-  :where(.cieo) .cieo-check { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-control-height); cursor: pointer; }
-  :where(.cieo) .cieo-check input { inline-size: 1.125rem; block-size: 1.125rem; margin: 0; flex: none; }
+  :where(.cieo) .cieo-check:where(:not(.cieo-ctl)) { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-control-height); cursor: pointer; }
+  :where(.cieo) .cieo-check:where(:not(.cieo-ctl)) input { inline-size: 1.125rem; block-size: 1.125rem; margin: 0; flex: none; }
   :where(.cieo) .cieo-badge { display: inline-flex; align-items: center; gap: var(--cieo-space-1); padding: .25rem .625rem; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent-soft); color: var(--cieo-color-on-accent-soft); font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); }
   :where(.cieo) .cieo-badge[data-status='success'] { color: var(--cieo-color-success); background: var(--cieo-color-success-soft); }
   :where(.cieo) .cieo-badge[data-status='warning'] { color: var(--cieo-color-warning); background: var(--cieo-color-warning-soft); }

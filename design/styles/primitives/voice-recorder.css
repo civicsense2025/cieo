@@ -20,7 +20,7 @@
   :where(.cieo) .cieo-voice-recorder-stop { color: var(--cieo-color-accent); }
   :where(.cieo) .cieo-voice-recorder-error { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-2); font-size: var(--cieo-text-small); color: var(--cieo-color-danger); }
   :where(.cieo) .cieo-voice-recorder-retry { min-block-size: var(--cieo-touch-target); padding-inline: var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-raised); color: var(--cieo-color-text); font: inherit; font-size: var(--cieo-text-small); cursor: pointer; }
-  :where(.cieo) .cieo-voice-recorder-mic:focus-visible, :where(.cieo) .cieo-voice-recorder-retry:focus-visible, :where(.cieo) .cieo-voice-recorder-actions .cieo-icon-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-voice-recorder-mic:focus-visible, :where(.cieo) .cieo-voice-recorder-retry:focus-visible, :where(.cieo) .cieo-voice-recorder-actions .cieo-icon-button:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @keyframes cieo-voice-recorder-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
   @keyframes cieo-voice-recorder-waveform-in { from { transform: scaleY(0.1); opacity: 0.45; } }
   @media (prefers-reduced-motion: reduce) {

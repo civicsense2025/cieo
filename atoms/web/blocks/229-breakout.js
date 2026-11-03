@@ -32,7 +32,7 @@ atom({ id:'breakout', cat:'Video calls', name:'Breakout shuffle', block:'video c
       if (inst){ tl.x.jump(p.x); tl.y.jump(p.y); } else { tl.x.set(p.x); tl.y.set(p.y); } });
     lay(true);
     const shuffle = () => { const t0 = now(); started = true; done = false; tStart = t0; last = '';
-      tiles.forEach((tl,i) => { const p = slot(i); tl.x.set(p.x, S.base, t0 + i*.05); tl.y.set(p.y, S.base, t0 + i*.05); });
+      tiles.forEach((tl,i) => { const p = slot(i); tl.x.set(p.x, S.base, t0 + staggerAt(i, .05)); tl.y.set(p.y, S.base, t0 + staggerAt(i, .05)); });
       tags.forEach(g => g.sw.to(1, t0)); fsw.to(0, t0); ok.set(0, S.snap, t0);
       sh.textContent = 'Shuffle again'; };
     sh.onclick = shuffle;

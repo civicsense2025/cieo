@@ -72,6 +72,6 @@ public struct ExtendedActionButtonAtom: MotionAtomView {
 
     private func expand() {
         withAnimation(reduce ? nil : .motion(.base)) { wide = true }
-        withAnimation(reduce ? nil : .motion(.base).delay(0.12)) { labelOn = true }
+        withAnimation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.lag / 3)) { labelOn = true }
     }
 }

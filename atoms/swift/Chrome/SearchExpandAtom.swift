@@ -58,7 +58,7 @@ public struct SearchExpandAtom: MotionAtomView {
         .background(.background, in: RoundedRectangle(cornerRadius: 14))
         .background(RoundedRectangle(cornerRadius: 14).fill(Color.primary.opacity(0.05)))
         .animation(reduce ? nil : .motion(.base), value: open)
-        .animation(reduce ? nil : .motion(.base).delay(0.12), value: showInput)
+        .animation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.lag / 3), value: showInput)
     }
 
     private var results: some View {

@@ -29,7 +29,7 @@ public struct TrackingTimelineAtom: MotionAtomView {
                                     Circle().strokeBorder(i <= cur ? .primary : .quaternary, lineWidth: 2).frame(width: 20, height: 20)
                                     Circle().fill(.primary).frame(width: 10, height: 10)
                                         .scaleEffect(i <= cur ? 1 : 0)
-                                        .animation(reduce ? nil : .motion(.base).delay(0.06), value: cur)
+                                        .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: cur)
                                 }
                                 Text(stops[i]).font(.system(size: 13)).lineSpacing(6.5)
                                 if i == 3 && cur >= 3 {

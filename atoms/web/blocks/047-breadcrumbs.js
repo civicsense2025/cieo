@@ -12,7 +12,7 @@ atom({ id:'breadcrumbs', cat:'Content', name:'Breadcrumbs', block:'breadcrumbs',
     // starts collapsed: the middle crumbs are hidden behind the ellipsis, which expands them
     const eo = new Track(1); let ew = 0, col = true;
     const measure = () => { parts.forEach(p => { p.w.style.width = 'auto'; p.full = p.w.offsetWidth; }); el.style.width = 'auto'; ew = el.offsetWidth; };
-    const set = c => { col = c; const t0 = now(); [1,2,3].forEach((i,k) => parts[i].tr.set(c ? 0 : 1, S.base, t0 + k*.03)); eo.set(c ? 1 : 0, S.base, c ? t0 + .1 : t0); const b = $(st,'.cl'); b.textContent = c ? 'Expand' : 'Collapse'; b.setAttribute('aria-expanded', String(!c)); };
+    const set = c => { col = c; const t0 = now(); [1,2,3].forEach((i,k) => parts[i].tr.set(c ? 0 : 1, S.base, t0 + staggerAt(k, .03))); eo.set(c ? 1 : 0, S.base, c ? t0 + .1 : t0); const b = $(st,'.cl'); b.textContent = c ? 'Expand' : 'Collapse'; b.setAttribute('aria-expanded', String(!c)); };
     [1,2,3].forEach(i => parts[i].tr.jump(0)); $(st,'.cl').setAttribute('aria-expanded','false'); $(st,'.cl').textContent = 'Expand';
     $(st,'.cl').onclick = () => set(!col); $(el,'button').onclick = () => set(false);
     el.querySelector('button').setAttribute('aria-expanded','false');

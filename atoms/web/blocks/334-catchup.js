@@ -14,7 +14,7 @@ atom({ id:'catchup', cat:'Dynamic', name:'Catch-up burst', block:'metric, sync',
     let live = true, wave = [];
     $(st,'.dp').onclick = () => { live = false; wave = []; pl.textContent = 'Offline · 5 waiting'; cap.textContent = 'Dropped · holding until reconnect'; };
     $(st,'.rc').onclick = () => { if (live) return; const t = now(), n = 5;
-      wave = Array.from({ length:n }, (_,i) => ({ at: wv.checked && !REDUCE ? t + i*.06 : t, i }));
+      wave = Array.from({ length:n }, (_,i) => ({ at: wv.checked && !REDUCE ? t + staggerAt(i, .06) : t, i }));
       pl.textContent = 'Syncing…'; cap.textContent = 'Applying the backlog…'; };
     return t => { while (wave.length && t >= wave[0].at){ const { i } = wave.shift();
         R.forEach(x => { const step = 3 + ((i*7 + x.v) % 23); x.v += step; x.d.dir = 1; x.d.set(String(x.v), REDUCE);

@@ -44,6 +44,6 @@ public struct DismissibleAlertAtom: MotionAtomView {
 
     private func restore() {
         withAnimation(reduce ? nil : .motion(.base)) { open = true }
-        withAnimation(reduce ? nil : .motion(.base).delay(0.12)) { shown = true }
+        withAnimation(reduce ? nil : .motion(.base).delay(Motion.exit + Motion.lag / 3)) { shown = true }
     }
 }

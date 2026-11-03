@@ -21,7 +21,7 @@ atom({ id:'prefcenter', cat:'Newsletter', name:'Preference center', block:'newsl
       if (inst){ pm.jump(mode === 0 ? 1 : 0); } else { pm.set(mode === 0 ? 1 : 0); }
       P.mode = mode; };
     P.b.onclick = () => { const t0 = now(); const to = P.mode === 0 ? 0 : 1;
-      C.forEach((c,i) => { if (REDUCE) c.v.jump(to); else c.v.set(to, S.base, t0 + i*.05); c.b.setAttribute('aria-pressed', !!to); });
+      C.forEach((c,i) => { if (REDUCE) c.v.jump(to); else c.v.set(to, S.base, t0 + staggerAt(i, .05)); c.b.setAttribute('aria-pressed', !!to); });
       syncParent(); nsw.to(wk.checked && to ? 1 : 0); };
     C.forEach(c => c.b.onclick = () => { c.v.set(c.v.target ? 0 : 1); c.b.setAttribute('aria-pressed', !!c.v.target); syncParent(); });
     wk.onchange = () => nsw.to(wk.checked && P.mode !== -1 ? 1 : 0);

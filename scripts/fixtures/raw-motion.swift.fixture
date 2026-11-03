@@ -1,0 +1,14 @@
+// Each line below must be caught by scripts/check-swift-motion.sh (9 lines).
+withAnimation(.spring(response: 0.3)) { open = true }
+.animation(.snappy, value: open)
+.animation(.easeOut(duration: 0.12), value: open)
+.animation(.motion(.base).delay(0.06), value: open)
+// These pass: .motion(.base).delay(Motion.lag), and a line marked motion-ok.
+.animation(.motion(.base).delay(Motion.lag), value: open)
+.animation(.linear(duration: 2), value: p) // motion-ok: simulated work
+// Also caught (5 more): bare curves, default, hand-tuned springs and curves, whole-second delays.
+.animation(.easeInOut, value: open)
+withAnimation(.default) { open = true }
+.animation(.interpolatingSpring(stiffness: 120, damping: 8), value: open)
+.animation(.timingCurve(0.2, 0.8, 0.2, 1, duration: 0.4), value: open)
+.animation(.motion(.base).delay(1), value: open)

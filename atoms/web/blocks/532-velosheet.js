@@ -14,6 +14,6 @@ atom({ id:'velosheet', cat:'Overlays', name:'Velocity drawer', block:'Drag 1:1, 
     st.addEventListener('keydown', ev => { if (ev.key === 'Escape' && x.target === 0){ x.set(-W, S.snap); last?.focus?.(); } });
     return t => { const v = held ? hx : x.at(t), p = clamp(1+v/W); dw.style.transform = `translateX(${px(v)})`; sr.style.opacity = (p*.3).toFixed(3); sr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       const settled = !held && Math.abs(v) < 1;
-      links.forEach((a,i) => { const q = settled && $(st,'.st2').checked ? clamp(prog(t, tOpen+.06+i*.045)) : (x.target === 0 ? 1 : 0);
+      links.forEach((a,i) => { const q = settled && $(st,'.st2').checked ? clamp(prog(t, tOpen+.06+staggerAt(i, .045))) : (x.target === 0 ? 1 : 0);
         a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-12)})`; }); };
   }});

@@ -22,7 +22,7 @@ atom({ id:'backlink', cat:'Writing', name:'Backlink popover', block:'richtext ed
       const t0 = now(), inst2 = inst || REDUCE;
       if (inst2){ sw.cur = k; sw.prev = null; sw.t = -9; } else sw.to(k);
       rowss.forEach((rs,li) => rs.forEach((r,i) => {
-        if (li === k) inst2 ? r.o.jump(1) : r.o.set(1, S.base, t0 + EXIT + i*.03);
+        if (li === k) inst2 ? r.o.jump(1) : r.o.set(1, S.base, t0 + EXIT + staggerAt(i, .03));
         else inst2 ? r.o.jump(0) : r.o.set(0, S.snap); }));
       const f = rowss[k][0].d, top = f.offsetTop, Hh = f.offsetHeight;
       inst2 ? ie.jump(top, top + Hh) : ie.go(top, top + Hh);

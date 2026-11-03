@@ -158,7 +158,31 @@ const MOTION_MEDIA = matchMedia('(prefers-reduced-motion: reduce)');
 const REDUCE = MOTION_MEDIA.matches;
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
-const EXIT = .1, LAG = .06, BLUR = 4;
+const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
+// Per-item delay: i * gap, or 0 under reduced motion (read live, so data-motion overrides apply). Given the group
+// size n, the gap shrinks so the whole group lands within STAGGER_MAX, the same rule as Swift's Motion.stagger.
+const staggerAt = (i, gap = .04, n = 0) => motionReduced() ? 0 : i*(n > 1 ? Math.min(gap, STAGGER_MAX/(n - 1)) : gap);
+// Segmented controls: the shared pressed-state and keyboard model. Marks the current button aria-pressed and moves
+// with Arrow keys, Home and End (wrapping), calling pick(i) like a click would. New and reworked .seg recipes use it.
+function segmented(btns, pick){
+  const mark = cur => btns.forEach((b, k) => b.setAttribute('aria-pressed', String(k === cur)));
+  btns.forEach((b, i) => b.addEventListener('keydown', e => {
+    const n = btns.length, to = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? (i + 1) % n : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? (i - 1 + n) % n : e.key === 'Home' ? 0 : e.key === 'End' ? n - 1 : -1;
+    if (to < 0) return; e.preventDefault(); btns[to].focus(); pick(to);
+  }));
+  return { mark };
+}
+// Poll tally, shared by every poll recipe: whole-number shares that always sum to 100 (largest remainder,
+// ties to the earlier option), the total, and the leader (null on a tie or before any vote).
+function pollTally(counts){
+  const total = counts.reduce((a, b) => a + b, 0);
+  if (!total) return { total, shares: counts.map(() => 0), leader: null };
+  const raw = counts.map(c => c*100/total), shares = raw.map(Math.floor);
+  const left = 100 - shares.reduce((a, b) => a + b, 0);
+  raw.map((r, i) => [r - shares[i], i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).slice(0, left).forEach(([, i]) => shares[i]++);
+  const max = Math.max(...counts);
+  return { total, shares, leader: counts.filter(c => c === max).length === 1 ? counts.indexOf(max) : null };
+}
 const clock = { t:0, scale:1, last:performance.now() };
 const now = () => clock.t;
 const clamp = (v,a=0,b=1) => Math.min(b, Math.max(a, v));
@@ -340,7 +364,7 @@ atom({ id:'stagger', cat:'Foundations', name:'Stagger', block:'progress, chart, 
     const bars = $$(st,'.row div'), sets = [[.3,.55,.8,.45,.95,.6,.7],[.85,.4,.25,.7,.35,.9,.5]]; let k = 0;
     const tr = sets[0].map(v => new Track(v));
     st.setAttribute('role', 'button'); st.tabIndex = 0; st.setAttribute('aria-label', 'Reshuffle bars');
-    const go = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + i*.04)); };
+    const go = () => { k ^= 1; const t0 = now(); tr.forEach((x,i) => x.set(sets[k][i], S.base, t0 + staggerAt(i, .04))); };
     st.onclick = go;
     st.onkeydown = e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); go(); } };
     return t => tr.forEach((x,i) => bars[i].style.height = px(x.at(t)*140));
@@ -440,7 +464,7 @@ atom({
 
 atom({ id:'tooltip', cat:'Content', name:'Tooltip', block:'tooltip', fam:['X'],
   html:`<p style="max-width:300px;text-align:center;margin:0;line-height:1.7">Prices update on the <span class="tt" tabindex="0" style="position:relative;border-bottom:1.5px dotted var(--faint);cursor:help">billing anchor<span class="tip" role="tooltip" style="position:absolute;z-index:30;left:50%;bottom:calc(100% + 8px);width:190px;margin-left:-95px;background:var(--ink);color:var(--card);font-size:12.5px;line-height:1.4;padding:7px 10px;border-radius:8px;pointer-events:none;transform-origin:50% 100%">The day of the month your first payment went through.</span></span> of each plan.</p><div class="hint">Hover or focus the dotted words</div>`,
-  desc:'Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers. Studio’s current Tooltip has no enter or exit motion; this is the proposed behavior.',
+  desc:'Enters on the base spring from 97% scale and 4px below. Exits faster on the snap spring so it never lingers.',
   api:'o.set(open ? 1 : 0, open ? S.base : S.snap)',
   init(st){
     const w = $(st,'.tt'), tip = $(st,'.tip'), o = new Track(0);
@@ -570,7 +594,7 @@ atom({ id:'progress', cat:'Data', name:'Progress bars', block:'progress, poll', 
     const rows = N.map(name => { const r = document.createElement('div'); r.className = 'col'; r.style.gap = '6px';
       r.innerHTML = `<div class="row small" style="justify-content:space-between"><span></span><span class="row" style="gap:4px"><span class="ck" style="display:inline-flex;color:var(--success);opacity:0">${ic(I.check,13,3)}</span><span class="num muted pc"></span></span></div><div style="height:8px;border-radius:4px;background:var(--raised);overflow:hidden"><div class="fl" style="height:100%;border-radius:4px;background:var(--ink)"></div></div>`;
       r.querySelector('span').textContent = name; box.appendChild(r); return { pct:$(r,'.pc'), fill:$(r,'.fl'), ck:$(r,'.ck'), v:new Track(0), done:new Track(0) }; });
-    const setTargets = vals => { const t0 = now(); rows.forEach((r,i) => { r.v.set(vals[i], S.base, t0 + i*.04); r.done.set(vals[i] >= 100 ? 1 : 0, S.base, t0 + i*.04); }); };
+    const setTargets = vals => { const t0 = now(); rows.forEach((r,i) => { r.v.set(vals[i], S.base, t0 + staggerAt(i, .04)); r.done.set(vals[i] >= 100 ? 1 : 0, S.base, t0 + staggerAt(i, .04)); }); };
     const go = () => setTargets(N.map(() => Math.round(15 + Math.random()*85)));
     $(st,'.sf').onclick = go; $(st,'.full').onclick = () => setTargets(N.map(() => 100)); go();
     return t => rows.forEach(r => { const v = r.v.at(t), dn = tn.checked ? clamp(r.done.at(t)) : 0;
@@ -616,7 +640,7 @@ atom({ id:'bars', cat:'Data', name:'Bar chart', block:'chart', fam:['M','T','E']
     // opens on 2026 so that 2025 has something to switch from; re-clicking the active year replays its bars from zero
     const sel = (i, inst) => { const again = !inst && i === k; k = i; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth);
       btns.forEach((x,j) => x.setAttribute('aria-pressed', String(j === i)));
-      const t0 = now(); tr.forEach((x,j) => { if (again) x.jump(0); x.set(DS[i][j], S.base, t0 + j*.03); }); };
+      const t0 = now(); tr.forEach((x,j) => { if (again) x.jump(0); x.set(DS[i][j], S.base, t0 + staggerAt(j, .03)); }); };
     btns.forEach((b,i) => b.onclick = () => sel(i)); requestAnimationFrame(() => sel(1, true)); document.fonts.ready.then(() => e.jump(btns[k].offsetLeft, btns[k].offsetLeft + btns[k].offsetWidth));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       rects.forEach((r,i) => { const h = Math.max(0, tr[i].at(t))/100*H; r.setAttribute('y', (Y0 - h).toFixed(2)); r.setAttribute('height', h.toFixed(2)); }); };
@@ -806,8 +830,8 @@ atom({ id:'poll', cat:'Interactive', name:'Poll', block:'poll', fam:['M','S'], t
       b.innerHTML = `<i style="position:absolute;left:0;top:0;bottom:0;background:var(--raised)"></i><span style="position:relative;display:flex;gap:8px;align-items:center"><svg class="ck" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg><span></span></span><span class="num small" style="position:relative"></span>`;
       $$(b,'span')[1].textContent = n; pl.appendChild(b); return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[2], v:new Track(0), o:new Track(0), c:new Track(0) }; });
     let voted = -1;
-    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now();
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 1 : 0); x.v.set(pc, S.base, t0 + j*.05); x.o.set(1, S.base, t0 + EXIT + j*.05); x.c.set(j === i ? 1 : 0); x.b.style.cursor = 'default'; }); });
+    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 1 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j]; x.v.set(pc, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); x.b.style.cursor = 'default'; }); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0); x.o.set(0, S.snap); x.c.set(0); x.b.style.cursor = 'pointer'; }); };
     return t => rows.forEach(r => { const v = r.v.at(t), c = clamp(r.c.at(t)); r.fill.style.width = clamp(v/100)*100 + '%';
       r.pct.textContent = Math.round(v) + '%'; fade(r.pct, r.o.at(t), 0);
@@ -986,7 +1010,7 @@ atom({ id:'mobilemenu', cat:'Chrome', name:'Mobile menu', block:'nav-menu, site-
     const L = ['Work','Services','Journal','About','Contact'].map(n => { const a = document.createElement('a'); a.href = '#'; a.textContent = n; a.style.cssText = 'font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--ink);text-decoration:none;padding:4px 0'; col.appendChild(a); return { a, o:new Track(0) }; });
     const op = new Track(0); let open = false;
     hb.onclick = () => { open = !open; hb.setAttribute('aria-expanded', open); const t0 = now(); op.set(open ? 1 : 0);
-      L.forEach((x,i) => open ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); };
+      L.forEach((x,i) => open ? x.o.set(1, S.base, t0 + .08 + staggerAt(i, .04)) : x.o.set(0, S.snap, t0)); };
     L.forEach(x => x.a.onclick = e => e.preventDefault());
     return t => { const p = clamp(op.at(t));
       lines[0].style.transform = `translateY(${px(11 + 6*p)}) rotate(${(45*p).toFixed(2)}deg)`; lines[1].style.transform = 'translateY(17px)'; lines[1].style.opacity = (1-p).toFixed(3);
@@ -1103,7 +1127,7 @@ atom({
 
 
 atom({ id:'toast', cat:'Admin', name:'Toast stack', block:'Toast primitive', fam:['X','D'], tall:true,
-  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
+  html:`<button class="btn ink add" style="position:absolute;top:56px;left:50%;transform:translateX(-50%)">Show toast</button><div class="ts" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:64px;width:min(300px,86%);transform:translateX(-50%)"></div><div class="hint" style="bottom:auto;top:112px">Swipe a toast sideways to dismiss</div>`,
   desc:'Success, warning and error toasts carry their status color on the icon and the action. New toasts push older ones back in depth. Drag one sideways 1:1; a long or fast swipe flings it out from release velocity, a short one springs home.',
   api:'x.release(x, vx, |x| > 100 || |vx| > 600 ? ±420 : 0)',
   init(st){
@@ -1173,7 +1197,7 @@ atom({
     return t=>{
       const p=clamp(o.at(t));mn.style.opacity=p.toFixed(3);mn.style.visibility=p<.01&&!o.target?'hidden':'visible';
       mn.style.transform=`translateY(${px((1-p)*-4)}) scale(${(.97+.03*p).toFixed(4)})`;mn.style.filter=p<.98?`blur(${((1-p)*BLUR).toFixed(2)}px)`:'none';
-      items.forEach((b,i)=>b.style.opacity=(o.target?clamp(prog(t,openedAt+.04+i*.03)):p).toFixed(3));
+      items.forEach((b,i)=>b.style.opacity=(o.target?clamp(prog(t,openedAt+.04+staggerAt(i, .03))):p).toFixed(3));
       labels.forEach((e,k)=>{sw.apply(e,k,t);e.setAttribute('aria-hidden',String(k!==sw.cur));});
     };
   },
@@ -1181,16 +1205,18 @@ atom({
 
 
 atom({ id:'sheet', cat:'Admin', name:'Bottom sheet (mobile only)', block:'Sheet primitive on phones. the admin uses the side sheet; see Admin kit', fam:['X','D'], tall:true,
-  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b>Pages</b><span class="small muted">Home · About · Journal · Contact</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px">Page settings</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh" style="position:absolute;left:0;right:0;bottom:0;height:200px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;cursor:grab"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col small" style="padding:0 16px;gap:10px"><b style="font-size:15px">Page settings</b><div class="row" style="justify-content:space-between"><span>Show in navigation</span><span class="muted">On</span></div><div class="row" style="justify-content:space-between"><span>Search indexing</span><span class="muted">Allowed</span></div><div class="row" style="justify-content:space-between"><span>Slug</span><span class="muted">/about</span></div></div></div></div><div class="hint">Drag the sheet down to close</div>`,
+  html:`<div class="ph card" style="position:relative;width:min(250px,80%);height:300px;overflow:hidden"><div class="col" style="padding:16px;gap:8px"><b>Pages</b><span class="small muted">Home · About · Journal · Contact</span><button class="btn ink op" style="align-self:flex-start;margin-top:8px">Page settings</button></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="sh" role="dialog" aria-label="Sheet" style="position:absolute;left:0;right:0;bottom:0;height:200px;background:var(--card);border-radius:16px 16px 0 0;box-shadow:var(--shadow);touch-action:none"><div class="gr" style="height:26px;display:grid;place-items:center;cursor:grab"><i style="width:36px;height:4px;border-radius:2px;background:var(--line)"></i></div><div class="col small" style="padding:0 16px;gap:10px"><b style="font-size:15px">Page settings</b><div class="row" style="justify-content:space-between"><span>Show in navigation</span><span class="muted">On</span></div><div class="row" style="justify-content:space-between"><span>Search indexing</span><span class="muted">Allowed</span></div><div class="row" style="justify-content:space-between"><span>Slug</span><span class="muted">/about</span></div></div></div></div><div class="hint">Drag the sheet down to close</div>`,
   desc:'For phone layouts only: on wider screens Studio’s admin slides sheets in from the side (see Side detail sheet). Opens on the base spring. Dragging the grabber follows the finger; pulling up rubber-bands. Release past 30% or with a fast flick closes it from that velocity.',
   api:'y.release(y, vy, y > 0.3H || vy > 500 ? H : 0)',
   init(st){
     const ph = $(st,'.ph'), sh = $(st,'.sh'), sr = $(st,'.sr'), H = 200, y = new Track(H + 10); let held = false, hy = 0, sy = 0;
-    $(st,'.op').onclick = () => y.set(0);
-    sr.onclick = () => y.set(H + 10);
+    const op = $(st,'.op'), open = v => { y.set(v ? 0 : H + 10); op.setAttribute('aria-expanded', String(v)); };
+    op.setAttribute('aria-expanded', 'false'); op.onclick = () => open(true);
+    sr.onclick = () => open(false);
+    st.addEventListener('keydown', e => { if (e.key === 'Escape' && y.target < H){ e.preventDefault(); open(false); op.focus(); } });
     drag(sh, { down:p => { held = true; sy = y.at() - p.cy; hy = y.at(); }, move:p => { const v = sy + p.cy; hy = v < 0 ? rb(v, 30) : v; },
-      up:(p, v) => { held = false; y.release(hy, v.vy, hy > H*.3 || v.vy > 500 ? H + 10 : 0); } });
-    return t => { const v = held ? hy : y.at(t); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
+      up:(p, v) => { held = false; const to = hy > H*.3 || v.vy > 500 ? H + 10 : 0; y.release(hy, v.vy, to); op.setAttribute('aria-expanded', String(to === 0)); } });
+    return t => { const v = held ? hy : y.at(t), shut = !held && y.target > H; sh.inert = shut; sh.toggleAttribute('aria-hidden', shut); sh.style.transform = `translateY(${px(v)})`; const o = clamp(1 - v/H); sr.style.opacity = (o*.35).toFixed(3); sr.style.pointerEvents = o > .5 ? 'auto' : 'none'; };
   }});
 
 atom({ id:'palette', cat:'Admin', name:'Command palette', block:'AdminCommandPalette', fam:['M','E','S','X'], tall:true,
@@ -1298,7 +1324,7 @@ atom({ id:'tablesort', cat:'Data', name:'Sortable table', block:'table', fam:['M
     hs.forEach(h => h.b.onclick = () => { asc = key === h.k ? !asc : h.k === 'name'; key = h.k; const t0 = now();
       hs.forEach(x => { x.o.set(x === h ? 1 : 0); }); h.rot.set(asc ? 0 : 180);
       const s = rows.slice().sort((a,b) => (typeof a[key] === 'string' ? a[key].localeCompare(b[key]) : a[key] - b[key])*(asc ? 1 : -1));
-      s.forEach((r,i) => { r.rank = i; r.y.set(i*36, S.base, t0 + i*.02); }); });
+      s.forEach((r,i) => { r.rank = i; r.y.set(i*36, S.base, t0 + staggerAt(i, .02)); }); });
     return t => { const last = rows.length - 1, show = dv.checked;
       rows.forEach(r => { r.r.style.transform = `translateY(${px(r.y.at(t))})`;
         r.r.style.borderBottomColor = (!show || r.rank === last) ? 'transparent' : 'var(--line-soft)'; });
@@ -1335,7 +1361,7 @@ atom({ id:'breadcrumbs', cat:'Content', name:'Breadcrumbs', block:'breadcrumbs',
     // starts collapsed: the middle crumbs are hidden behind the ellipsis, which expands them
     const eo = new Track(1); let ew = 0, col = true;
     const measure = () => { parts.forEach(p => { p.w.style.width = 'auto'; p.full = p.w.offsetWidth; }); el.style.width = 'auto'; ew = el.offsetWidth; };
-    const set = c => { col = c; const t0 = now(); [1,2,3].forEach((i,k) => parts[i].tr.set(c ? 0 : 1, S.base, t0 + k*.03)); eo.set(c ? 1 : 0, S.base, c ? t0 + .1 : t0); const b = $(st,'.cl'); b.textContent = c ? 'Expand' : 'Collapse'; b.setAttribute('aria-expanded', String(!c)); };
+    const set = c => { col = c; const t0 = now(); [1,2,3].forEach((i,k) => parts[i].tr.set(c ? 0 : 1, S.base, t0 + staggerAt(k, .03))); eo.set(c ? 1 : 0, S.base, c ? t0 + .1 : t0); const b = $(st,'.cl'); b.textContent = c ? 'Expand' : 'Collapse'; b.setAttribute('aria-expanded', String(!c)); };
     [1,2,3].forEach(i => parts[i].tr.jump(0)); $(st,'.cl').setAttribute('aria-expanded','false'); $(st,'.cl').textContent = 'Expand';
     $(st,'.cl').onclick = () => set(!col); $(el,'button').onclick = () => set(false);
     el.querySelector('button').setAttribute('aria-expanded','false');
@@ -1378,7 +1404,7 @@ atom({ id:'skeleton', cat:'Dynamic', name:'Skeleton to content', block:'entry-li
       c.innerHTML = `<div class="layer s" style="justify-content:flex-start;padding:0 14px;gap:12px"><i style="width:36px;height:36px;border-radius:8px;background:var(--raised)"></i><span class="col" style="gap:7px;flex:1"><i style="height:10px;width:78%;border-radius:5px;background:var(--raised)"></i><i style="height:8px;width:42%;border-radius:4px;background:var(--raised)"></i></span></div><div class="layer d" style="justify-content:flex-start;padding:0 14px;gap:12px"><i style="width:36px;height:36px;border-radius:8px;background:var(--ink);flex:none"></i><span class="col" style="gap:1px;min-width:0"><b class="small" style="overflow:hidden;text-overflow:ellipsis">${h}</b><span class="small muted">${m}</span></span></div>`;
       sk.appendChild(c); return { s:$(c,'.s'), d:$(c,'.d'), sw:new Swap('s') }; });
     let q = [];
-    const load = () => { const t0 = now(); rows.forEach(r => r.sw.to('s', t0)); q = rows.map((r,i) => [t0 + 1.4 + i*.05, () => r.sw.to('d')]); };
+    const load = () => { const t0 = now(); rows.forEach(r => r.sw.to('s', t0)); q = rows.map((r,i) => [t0 + 1.4 + staggerAt(i, .05), () => r.sw.to('d')]); };
     $(st,'.btn').onclick = load; load();
     return t => { while (q.length && q[0][0] <= t) q.shift()[1](); const pulse = REDUCE ? .7 : .55 + .25*Math.cos(2*Math.PI*t/1.2);
       rows.forEach(r => { r.sw.apply(r.s,'s',t,0); r.sw.apply(r.d,'d',t,4); if (r.sw.cur === 's') r.s.style.opacity = (parseFloat(r.s.style.opacity)*pulse/.8).toFixed(3); }); };
@@ -1412,7 +1438,7 @@ atom({ id:'facets', cat:'Dynamic', name:'Filtered collection', block:'collection
       const h = Math.ceil(n/cols)*88 - 10; inst ? H.jump(h) : H.set(h); };
     const sel = (i, inst) => { const same = !inst && f === btns[i].textContent; f = btns[i].textContent; const b = btns[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); lay(inst);
       // re-picking the active filter replays the entrance so the press is visible
-      if (same) { const t0 = now(); cards.forEach((c, k) => { if (c.o.target === 1){ c.o.jump(0); c.o.set(1, S.base, t0 + k*.03); } }); } };
+      if (same) { const t0 = now(); cards.forEach((c, k) => { if (c.o.target === 1){ c.o.jump(0); c.o.set(1, S.base, t0 + staggerAt(k, .03)); } }); } };
     btns.forEach((b,i) => b.onclick = () => sel(i)); const init = () => sel(btns.findIndex(b => b.textContent === f), true); document.fonts.ready.then(init); requestAnimationFrame(init); addEventListener('resize', () => lay(true));
     return t => { const a = e.A.at(t), b = e.B.at(t); Object.assign(ind.style,{transform:`translate(${px(a)},3px)`,width:px(b-a),height:'calc(100% - 6px)'});
       cg.style.height = px(H.at(t)); cards.forEach(c => { c.c.style.left = px(c.x.at(t)); c.c.style.top = px(c.y.at(t)); fade(c.c, c.o.at(t), null); c.c.style.visibility = c.o.at(t) < .01 ? 'hidden' : 'visible'; }); };
@@ -1483,7 +1509,7 @@ atom({ id:'booking', cat:'Interactive', name:'Date and time picker', block:'book
     const x = new Track(0), y = new Track(0), o = new Track(0); let day = 0;
     const pick = (d, inst) => { day = d; sel = -1; cfBtn.disabled = true; $(cf,'.lb').textContent = `Oct ${d} · pick a time`; const b = days[d-1], k = inst ? 'jump' : 'set'; x[k](b.offsetLeft); y[k](b.offsetTop); o.set(1); const t0 = now();
       days.forEach((x2,j) => x2.style.color = x2.disabled ? 'var(--faint)' : j === d-1 ? 'var(--card)' : 'var(--ink)');
-      slots.forEach((s,i) => { s.on.set(0); const v = slotsFor(d)[i]; if (!s.L[v]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = v; s.b.appendChild(e); s.L[v] = e; } s.sw.to(v, t0 + i*.04); }); };
+      slots.forEach((s,i) => { s.on.set(0); const v = slotsFor(d)[i]; if (!s.L[v]){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = v; s.b.appendChild(e); s.L[v] = e; } s.sw.to(v, t0 + staggerAt(i, .04)); }); };
     days.forEach((b,i) => b.onclick = () => pick(i+1));
     slots.forEach((S2,i) => { const prev = S2.b.onclick; S2.b.onclick = () => { prev(); $(cf,'.lb').textContent = `Oct ${day} · ${slotsFor(day)[i]}`; }; });
     const init = () => pick(day || 7, true); document.fonts.ready.then(init); requestAnimationFrame(init);
@@ -1506,7 +1532,7 @@ atom({ id:'paywall', cat:'Newsletter', name:'Paywall unlock', block:'paywall', f
       const a = (m*130).toFixed(1); const mm = `linear-gradient(#000 ${a - 30}%, transparent ${a}%)`; rest.style.maskImage = rest.style.webkitMaskImage = m > .99 ? 'none' : mm; };
   }});
 
-atom({ id:'payment', cat:'Documents', name:'Pay button', block:'payment-methods, checkout', fam:['M','S'],
+atom({ id:'payment', cat:'Commerce', name:'Pay button', block:'payment-methods, checkout', fam:['M','S'],
   html:`<div class="card col" style="width:min(300px,88%);padding:16px;gap:10px"><div class="row" style="justify-content:space-between"><span class="muted small">Invoice INV-0042</span><b class="num tot"></b></div><button class="pay" aria-label="Pay invoice" style="position:relative;height:44px;border:0;border-radius:11px;color:#fff;font-weight:500;cursor:pointer;overflow:hidden"></button><div class="pm small" style="position:relative;height:20px"></div><label class="row small muted" style="gap:6px;cursor:pointer"><input type="checkbox" id="pay-decline" class="dc"> Simulate a declined card</label></div>`,
   desc:'Processing keeps the button in place with a spinner. Success fills it with the success color; a decline fills it with danger and opens a fix-it message. Both settle back to a retryable state. On success the invoice total counts up on a soft spring while the receipt swaps in.',
   api:'plan(processing → paid | declined)   fill = mix(success | danger, ink)   total.set(64.80, S.soft, t0 + .25)',
@@ -1550,7 +1576,7 @@ atom({ id:'statement', cat:'Content', name:'Statement reveal', block:'statement,
     const p = $(st,'.stm'), W = 'Make each page do one thing, and do it well.'.split(' ');
     p.innerHTML = W.map(w => `<span style="display:inline-block">${w}</span>`).join(' '); const ws = $$(p,'span'); let t0 = 0;
     const go = () => t0 = now(); $(st,'.btn').onclick = go; go();
-    return t => ws.forEach((w,i) => fade(w, prog(t, t0 + i*.05), (1 - clamp(prog(t, t0 + i*.05)))*8));
+    return t => ws.forEach((w,i) => fade(w, prog(t, t0 + staggerAt(i, .05)), (1 - clamp(prog(t, t0 + staggerAt(i, .05))))*8));
   }});
 
 atom({ id:'multistep', cat:'Interactive', name:'Multi-step form', block:'form', fam:['S','M'], tall:true,
@@ -1579,7 +1605,7 @@ atom({ id:'multistep', cat:'Interactive', name:'Multi-step form', block:'form', 
 
 /* ---------- From Material 3 / Radix / shadcn component sets ---------- */
 const ic = (d, s = 16, w = 2) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-const I = { check:'<path d="M5 12.5 10 17.5 19 7"/>', chev:'<path d="m6 9 6 6 6-6"/>', x:'<path d="M6 6l12 12M18 6 6 18"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>', home:'<path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>', search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', lib:'<path d="M4 4h4v16H4zM10 4h4v16h-4zM16 5l4 1-3 14-4-1z"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', file:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>', pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/>', grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>', up:'<path d="M12 19V5M6 11l6-6 6 6"/>', link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>', alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/>', alL:'<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>', alC:'<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>', alR:'<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>', side:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>' };
+const I = { comment:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/>', thumbUp:'<path d="M7 11v9H4v-9zM7 11l4-7a2 2 0 0 1 3 2l-1 4h5.5a2 2 0 0 1 2 2.4l-1.3 6A2 2 0 0 1 17.2 20H7"/>', thumbDown:'<path d="M17 13V4h3v9zM17 13l-4 7a2 2 0 0 1-3-2l1-4H5.5a2 2 0 0 1-2-2.4l1.3-6A2 2 0 0 1 6.8 4H17"/>', hand:'<path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11V4a1.5 1.5 0 0 1 3 0v7M14 11V5.5a1.5 1.5 0 0 1 3 0V13M17 9.5a1.5 1.5 0 0 1 3 0V15a7 7 0 0 1-7 7h-1a6 6 0 0 1-5-2.7L4.3 16a1.6 1.6 0 0 1 2.6-1.9L8 15.5"/>', check:'<path d="M5 12.5 10 17.5 19 7"/>', chev:'<path d="m6 9 6 6 6-6"/>', x:'<path d="M6 6l12 12M18 6 6 18"/>', menu:'<path d="M4 7h16M4 12h16M4 17h16"/>', home:'<path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>', search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>', lib:'<path d="M4 4h4v16H4zM10 4h4v16h-4zM16 5l4 1-3 14-4-1z"/>', user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>', file:'<path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/>', pen:'<path d="M4 20h4L19 9l-4-4L4 16z"/>', grip:'<circle cx="9" cy="6" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="18" r="1"/>', up:'<path d="M12 19V5M6 11l6-6 6 6"/>', link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>', copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/>', alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/>', alL:'<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>', alC:'<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>', alR:'<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>', side:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/>' };
 // popover enter/exit: 97% scale, 4px offset, blur
 const pop = (el, p, dy = -4) => { p = clamp(p); el.style.zIndex = 30; el.style.opacity = p.toFixed(3); el.style.visibility = p < .01 ? 'hidden' : 'visible';
   el.style.transform = `translateY(${px((1-p)*dy)}) scale(${(.97+.03*p).toFixed(4)})`; el.style.filter = p < .98 ? `blur(${((1-p)*BLUR).toFixed(2)}px)` : 'none'; el.style.pointerEvents = p > .5 ? 'auto' : 'none'; };
@@ -1683,7 +1709,7 @@ atom({ id:'contextmenu', cat:'Overlays', name:'Context menu', block:'Context men
     st.addEventListener('contextmenu', ev => { ev.preventDefault(); set(true, ...at(ev)); });
     let lp = 0; st.addEventListener('pointerdown', ev => { if (!cm.contains(ev.target)) set(false); if (ev.pointerType === 'touch'){ const p = at(ev); lp = setTimeout(() => set(true, ...p), 450); } });
     st.addEventListener('pointerup', () => clearTimeout(lp)); st.addEventListener('pointermove', () => clearTimeout(lp)); st.addEventListener('keydown', ev => { if (ev.key === 'Escape'){ if (co.target) setConfirm(false); else set(false); } });
-    return t => { const p = clamp(o.at(t)); pop(cm, p, 0); items.forEach((x,i) => x.el.style.opacity = (o.target ? clamp(prog(t, tOpen + .03 + i*.025)) : p).toFixed(3)); ml.forEach((e,k) => sw.apply(e,k,t));
+    return t => { const p = clamp(o.at(t)); pop(cm, p, 0); items.forEach((x,i) => x.el.style.opacity = (o.target ? clamp(prog(t, tOpen + .03 + staggerAt(i, .025))) : p).toFixed(3)); ml.forEach((e,k) => sw.apply(e,k,t));
       frw.style.height = px(Math.max(0, clamp(fh.at(t)) * size(fr).h)); fade(fr, fo.at(t), null);
       const cp = clamp(co.at(t)); df.style.opacity = cp.toFixed(3); df.style.visibility = cp < .01 && !co.target ? 'hidden' : 'visible';
       df.style.transform = `translate(-50%, calc(-50% + ${px((1-cp)*8)})) scale(${(.96+.04*cp).toFixed(4)})`; df.style.pointerEvents = cp > .5 ? 'auto' : 'none';
@@ -1732,7 +1758,7 @@ atom({ id:'drawer', cat:'Navigation', name:'Navigation drawer', block:'nav-menu,
     $(st,'.hb').onclick = () => set(true); scr.onclick = () => set(false);
     drag(dw, { down:p => { held = true; sx = x.at() - p.cx; hx = x.at(); }, move:p => { const v = sx + p.cx; hx = v > 0 ? rb(v, 30) : v; }, up:(p, v) => { held = false; x.release(hx, v.vx, hx < -W/2 || v.vx < -500 ? -W : 0); } });
     return t => { const v = held ? hx : x.at(t), p = clamp(1 + v/W); dw.inert=x.target!==0&&!held;dw.style.transform = `translateX(${px(v)})`; scr.style.opacity = (p*.3).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
-      links.forEach((a,i) => { const q = x.target === 0 ? clamp(prog(t, tOpen + .06 + i*.035)) : 1; a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-10)})`; }); };
+      links.forEach((a,i) => { const q = x.target === 0 ? clamp(prog(t, tOpen + .06 + staggerAt(i, .035))) : 1; a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-10)})`; }); };
   }});
 
 atom({ id:'navmenu', cat:'Navigation', name:'Navigation menu', block:'nav-menu, site-header', fam:['M','S','X'], wide:true, tall:true,
@@ -1844,22 +1870,22 @@ atom({ id:'togglegroup', cat:'Inputs', name:'Toggle group', block:'richtext tool
   }});
 
 atom({ id:'otp', cat:'Inputs', name:'One-time code', block:'form, account, Input OTP', fam:['S','E','M'],
-  html:`<div class="col" style="align-items:center;gap:10px"><div class="ob" style="position:relative;display:flex;gap:8px"><i class="ring" style="position:absolute;top:-3px;height:54px;border-radius:12px;border:2px solid var(--ink);pointer-events:none"></i><input id="otp-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Six digit code" style="position:absolute;inset:0;opacity:0;font-size:16px;cursor:text"></div><div class="om small" style="position:relative;height:20px;width:260px"></div></div><div class="hint">The code is 246810</div>`,
-  desc:'Each digit rolls into its box and a focus ring slides to the next box with lagging edges. A full code turns every box success or danger; a wrong code clears itself after a beat.',
+  html:`<div class="col" style="align-items:center;gap:10px"><div class="ob" style="position:relative;display:flex;gap:8px"><i class="ring" style="position:absolute;top:-3px;height:54px;border-radius:12px;border:2px solid var(--ink);pointer-events:none"></i><input id="otp-in" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Six digit code" style="position:absolute;inset:0;opacity:0;font-size:16px;cursor:text"></div><div class="om small" role="status" aria-live="polite" style="position:relative;height:36px;width:min(300px,100%);text-align:center"></div></div><div class="hint">The code is 246810</div>`,
+  desc:'Each digit rolls into its box and a focus ring slides to the next box with lagging edges. A full code turns every box success or danger; a wrong code clears itself after a beat and the message says what to do next, announced to screen readers.',
   api:'box[i].to(digit)   ring.go(x[i])   status → success | danger',
   init(st){
     const ob = $(st,'.ob'), inp = $(st,'input'), ring = $(st,'.ring'), om = $(st,'.om');
     const boxes = [...Array(6)].map(() => { const b = document.createElement('span'); b.style.cssText = 'position:relative;width:40px;height:48px;border-radius:10px;border:1.5px solid var(--muted);background:var(--card);font:600 22px var(--sans);display:block'; ob.insertBefore(b, inp); return { b, sw:new Swap(''), L:{} }; });
-    const M = { '':'', ok:'Verified. Signing you in…', bad:'That code didn’t match. Try again.' }, ml = {};
+    const M = { '':'', ok:'Verified. Signing you in…', bad:'That code didn’t match. Check the newest message and try again.', last:'Three codes didn’t match. We sent a new one; the old code no longer works.' }, ml = {}; let misses = 0;
     for (const k in M){ const e = document.createElement('span'); e.className = 'layer'; e.textContent = M[k]; e.style.color = k === 'ok' ? 'var(--success)' : 'var(--danger)'; om.appendChild(e); ml[k] = e; }
     const e = edges(0,40), ok = new Track(0), bad = new Track(0), fo = new Track(0), msw = new Swap(''); let clearAt = 0;
     const show = () => { const v = inp.value; boxes.forEach((x,i) => { const c = v[i] || ''; if (!(c in x.L)){ const s = document.createElement('span'); s.className = 'layer'; s.textContent = c; x.b.appendChild(s); x.L[c] = s; } x.sw.to(c); });
       const i = Math.min(v.length, 5), b = boxes[i].b; e.go(b.offsetLeft - 3, b.offsetLeft + b.offsetWidth + 3);
-      if (v.length === 6){ const good = v === '246810'; (good ? ok : bad).set(1); msw.to(good ? 'ok' : 'bad'); if (!good) clearAt = now() + 1.1; } else { ok.set(0); bad.set(0); if (v.length) msw.to(''); } };
+      if (v.length === 6){ const good = v === '246810'; (good ? ok : bad).set(1); misses = good ? 0 : misses + 1; msw.to(good ? 'ok' : misses >= 3 ? 'last' : 'bad'); if (misses >= 3) misses = 0; if (!good) clearAt = now() + 1.6; } else { ok.set(0); bad.set(0); if (v.length) msw.to(''); } };
     inp.oninput = () => { inp.value = inp.value.replace(/\D/g,'').slice(0,6); show(); };
     inp.onfocus = () => fo.set(1); inp.onblur = () => fo.set(0);
     show(); const b0 = boxes[0].b; e.jump(b0.offsetLeft - 3, b0.offsetLeft + b0.offsetWidth + 3);
-    return t => { if (clearAt && t >= clearAt){ clearAt = 0; inp.value = ''; show(); }
+    return t => { if (clearAt && t >= clearAt){ clearAt = 0; const keep = msw.cur ?? ''; inp.value = ''; show(); if (keep !== '') msw.to(keep); }
       const g = clamp(ok.at(t)), k = clamp(bad.at(t)), a = e.A.at(t), b = e.B.at(t);
       ring.style.left = px(a); ring.style.width = px(b - a); ring.style.opacity = (clamp(fo.at(t))*(1 - Math.max(g,k))).toFixed(3);
       const bc = `color-mix(in oklab, var(--danger) ${(k*100).toFixed(1)}%, ${mix(g,'var(--success)','var(--muted)')})`;
@@ -1952,7 +1978,7 @@ atom({ id:'fab', cat:'Navigation', name:'Extended action button', block:'cta-but
     fb.setAttribute('aria-label','Compose'); fb.setAttribute('aria-expanded','false');
     // speed dial: Compose fans out three actions above it, last in first out
     const fa = $(st,'.fa'), fai = $$(fa,'.fa-i'), ft = fai.map(() => new Track(0)); let menu = false, tmr = 0;
-    const setMenu = v => { if (v === menu) return; menu = v; const t0 = now(); fai.forEach((b,i) => { ft[i].set(v ? 1 : 0, S.base, v ? t0 + i*.035 : t0 + (fai.length - 1 - i)*.03); b.tabIndex = v ? 0 : -1; }); fb.setAttribute('aria-expanded', String(v)); };
+    const setMenu = v => { if (v === menu) return; menu = v; const t0 = now(); fai.forEach((b,i) => { ft[i].set(v ? 1 : 0, S.base, v ? t0 + staggerAt(i, .035) : t0 + (fai.length - 1 - i)*.03); b.tabIndex = v ? 0 : -1; }); fb.setAttribute('aria-expanded', String(v)); };
     fb.onclick = () => setMenu(!menu);
     fai.forEach(b => { b.tabIndex = -1; b.onclick = () => { setMenu(false); const name = b.querySelector('span').textContent; lb.textContent = name; clearTimeout(tmr); tmr = setTimeout(() => { lb.textContent = 'Compose'; }, 1600); }; });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && menu){ e.stopPropagation(); setMenu(false); fb.focus(); } });
@@ -1989,22 +2015,22 @@ atom({ id:'avatars', cat:'Content', name:'Avatar group', block:'profile-header, 
   desc:'Hovering the stack fans the avatars apart with a 30ms stagger. Hovering one face shows its name above it with the popover rule. Thumbnails swap initials for photo thumbs; dense tightens the pitch.',
   api:'avatar[i].x.set(open ? i·pitch.open : i·pitch.shut, S.base, t + i·0.03)   thumbs.o.set(1)   size.set(dense ? 32 : 40)',
   init(st){
-    const ag = $(st,'.ag'), P = [['MC','Maya Chen','var(--accent)','linear-gradient(135deg,#7aa2ff,#3b5bdb)'],['TP','Theo Park','var(--ink)','linear-gradient(135deg,#69db7c,#2b8a3e)'],['AK','Ada Kim','var(--muted)','linear-gradient(135deg,#ffa8a8,#e64980)'],['JW','Jonas Weber','var(--faint)','linear-gradient(135deg,#ffec99,#f08c00)'],['+3','3 more','var(--raised)','linear-gradient(135deg,#e7f5ff,#74c0fc)']];
+    const ag = $(st,'.ag'), P = [['MC','Maya Chen','var(--accent)',null],['TP','Theo Park','var(--ink)',null],['AK','Ada Kim','var(--muted)',null],['JW','Jonas Weber','var(--faint)',null],['+3','3 more','var(--raised)',null]];
     let thumbs = false, dense = false;
     const pitch = () => dense ? [16,32] : [24,44];
     const tho = new Track(0), sz = new Track(40);
     const av = P.map(([s,n,c,g],i) => { const d = document.createElement('div'); d.style.cssText = `position:absolute;left:0;top:0;width:40px;height:40px;border-radius:50%;background:${c};color:${i === 4 ? 'var(--ink)' : 'var(--card)'};border:2px solid var(--tile);display:grid;place-items:center;font:600 12px var(--sans);z-index:${10 - i}`;
-      d.innerHTML = `<span class="ini">${s}</span><span class="th" style="position:absolute;inset:0;border-radius:50%;background:${g};opacity:0"></span><span class="tp" style="position:absolute;z-index:30;bottom:calc(100% + 8px);left:50%;transform-origin:50% 100%;white-space:nowrap;background:var(--ink);color:var(--card);font:500 12px var(--sans);padding:4px 8px;border-radius:6px;visibility:hidden"></span>`; $(d,'.tp').textContent = n;
+      d.innerHTML = `<span class="ini">${s}</span><span class="th" style="position:absolute;inset:0;border-radius:50%;background:${g ?? (i === 4 ? 'var(--raised)' : `center/cover url(${PhotoKit.url('portrait', 96, 96, { tod: [0, .85, .35, .6][i] })})`)};opacity:0"></span><span class="tp" style="position:absolute;z-index:30;bottom:calc(100% + 8px);left:50%;transform-origin:50% 100%;white-space:nowrap;background:var(--ink);color:var(--card);font:500 12px var(--sans);padding:4px 8px;border-radius:6px;visibility:hidden"></span>`; $(d,'.tp').textContent = n;
       ag.appendChild(d); const a = { d, ini:$(d,'.ini'), th:$(d,'.th'), tp:$(d,'.tp'), x:new Track(i*24), o:new Track(0) }; d.onpointerenter = () => a.o.set(1); d.onpointerleave = () => a.o.set(0, S.snap); return a; });
     let spread = false;
-    const set = open => { spread = open; const t0 = now(), [shut, opn] = pitch(); av.forEach((a,i) => { const v = i*(open ? opn : shut); if (REDUCE) a.x.jump(v); else a.x.set(v, S.base, t0 + i*.03); }); };
+    const set = open => { spread = open; const t0 = now(), [shut, opn] = pitch(); av.forEach((a,i) => { const v = i*(open ? opn : shut); if (REDUCE) a.x.jump(v); else a.x.set(v, S.base, t0 + staggerAt(i, .03)); }); };
     const seg = (ons, offs, get, set2) => { const bs = [$(st,ons), $(st,offs)];
       const pick = v => { set2(v); bs.forEach((b,i) => { const on = (i === 0) === v; b.setAttribute('aria-pressed', on); b.classList.toggle('ink', on); }); };
       bs.forEach((b,i) => b.onclick = () => pick(i === 0)); pick(get()); return pick; };
     seg('.th-on','.th-off', () => thumbs, v => { thumbs = v; if (REDUCE) tho.jump(v ? 1 : 0); else tho.set(v ? 1 : 0); });
     seg('.dn-cf','.dn-dn', () => !dense, v => { dense = !v; const t0 = now(), [shut, opn] = pitch();
       if (REDUCE){ sz.jump(dense ? 32 : 40); av.forEach((a,i) => a.x.jump(i*(spread ? opn : shut))); }
-      else { sz.set(dense ? 32 : 40); av.forEach((a,i) => a.x.set(i*(spread ? opn : shut), S.base, t0 + i*.03)); } });
+      else { sz.set(dense ? 32 : 40); av.forEach((a,i) => a.x.set(i*(spread ? opn : shut), S.base, t0 + staggerAt(i, .03))); } });
     ag.onpointerenter = () => set(true); ag.onpointerleave = () => set(false);
     return t => { const p = clamp(tho.at(t)), s = sz.at(t); av.forEach(a => { a.d.style.transform = `translateX(${px(a.x.at(t))})`; a.d.style.width = a.d.style.height = px(s); a.d.style.top = px((40-s)/2); a.d.style.fontSize = px(s*0.3); a.th.style.opacity = p.toFixed(3); a.ini.style.opacity = (1-p).toFixed(3);
       const q = clamp(a.o.at(t)); a.tp.style.opacity = q.toFixed(3); a.tp.style.visibility = q < .01 ? 'hidden' : 'visible'; a.tp.style.transform = `translate(-50%, ${px((1-q)*4)}) scale(${(.97+.03*q).toFixed(4)})`; }); };
@@ -2062,7 +2088,7 @@ atom({ id:'sidebar', cat:'Layout', name:'Collapsible sidebar', block:'section, S
     ng.forEach((b,i) => b.onclick = () => pickNg(i === 0)); pickNg(true);
     const w = new Track(200); let open = true;
     tg.onclick = () => { open = !open; const t0 = now(); tg.setAttribute('aria-expanded', open); tg.setAttribute('aria-label', open ? 'Collapse sidebar' : 'Expand sidebar');
-      if (open){ w.set(200); it.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + i*.03)); } else { it.forEach(x => x.o.set(0, S.snap)); w.set(56, S.base, t0 + EXIT); } };
+      if (open){ w.set(200); it.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + staggerAt(i, .03))); } else { it.forEach(x => x.o.set(0, S.snap)); w.set(56, S.base, t0 + EXIT); } };
     return t => { sb.style.width = px(w.at(t)); it.forEach(x => fade(x.lb, x.o.at(t), null)); };
   }});
 
@@ -2100,8 +2126,15 @@ atom({ id:'phone', cat:'Forms', name:'Phone number', block:'form (phone)', fam:[
     const L = C.map(([c,p]) => { const e = document.createElement('span'); e.className = 'layer'; e.innerHTML = `<b>${c}</b><span class="muted">${p}</span>`; e.style.gap = '4px'; cc.appendChild(e); return e; });
     const sw = new Swap(0), ok = new Track(0); let k = 0;
     const fmt = () => { const len = C[k][2].reduce((a,b) => a + b, 0), d = inp.value.replace(/\D/g,'').slice(0, len); inp.value = d ? C[k][3](d) : ''; inp.placeholder = C[k][3]('5'.repeat(len)).replace(/5/g,'0'); ok.set(d.length === len ? 1 : 0); };
-    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); };
-    inp.onfocus = () => pw.style.borderColor = 'var(--ink)'; inp.onblur = () => pw.style.borderColor = 'var(--muted)'; fmt();
+    inp.oninput = fmt; cc.onclick = () => { k = (k + 1) % C.length; sw.to(k); fmt(); if (msg.textContent) check(); };
+    // A partial number is flagged when the field is left, with how many digits are missing; typing clears it.
+    const msg = document.createElement('span'); msg.id = 'ph-msg'; msg.className = 'small'; msg.setAttribute('aria-live', 'polite');
+    msg.style.cssText = 'min-height:1.5em;color:var(--danger)'; pw.after(msg); inp.setAttribute('aria-describedby', 'ph-msg');
+    const missing = () => { const len = C[k][2].reduce((a,b) => a + b, 0), n = inp.value.replace(/\D/g,'').length; return n && n < len ? len - n : 0; };
+    const check = () => { const m = missing(); inp.toggleAttribute('aria-invalid', !!m); if (m) inp.setAttribute('aria-invalid', 'true');
+      msg.textContent = m ? `${m} more digit${m === 1 ? '' : 's'} for a ${C[k][0]} number.` : ''; pw.style.borderColor = m ? 'var(--danger)' : 'var(--muted)'; };
+    inp.onfocus = () => { pw.style.borderColor = 'var(--ink)'; }; inp.onblur = check;
+    inp.addEventListener('input', () => { if (msg.textContent && !missing()) check(); }); fmt();
     return t => { L.forEach((e,i) => sw.apply(e,i,t)); const p = clamp(ok.at(t)); okEl.style.opacity = p.toFixed(3); okEl.style.transform = `scale(${(.6+.4*p).toFixed(3)})`; };
   }});
 
@@ -2227,7 +2260,7 @@ atom({ id:'rank', cat:'Forms', name:'Click to rank', block:'form (ranking)', fam
       b.innerHTML = `<span class="bg" style="width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--card);font:600 12px var(--sans);display:grid;place-items:center"><span class="d"></span></span><span class="small" style="font-weight:500">${n}</span>`; rk.appendChild(b);
       const x = { b, bg:$(b,'.bg'), d:new Digits($(b,'.d'), 1), y:new Track(i*R), o:new Track(0), rank:0 }; x.d.set('1', true); return x; });
     let ranked = [];
-    const lay = () => { const rest = it.filter(x => !ranked.includes(x)); [...ranked, ...rest].forEach((x,i) => x.y.set(i*R, S.base, now() + i*.02)); it.forEach(x => { const r = ranked.indexOf(x); x.o.set(r >= 0 ? 1 : 0); if (r >= 0) x.d.set(String(r + 1)); x.b.setAttribute('aria-label', `${x.b.textContent.trim()}${r >= 0 ? ', ranked ' + (r + 1) : ', not ranked'}`); }); };
+    const lay = () => { const rest = it.filter(x => !ranked.includes(x)); [...ranked, ...rest].forEach((x,i) => x.y.set(i*R, S.base, now() + staggerAt(i, .02))); it.forEach(x => { const r = ranked.indexOf(x); x.o.set(r >= 0 ? 1 : 0); if (r >= 0) x.d.set(String(r + 1)); x.b.setAttribute('aria-label', `${x.b.textContent.trim()}${r >= 0 ? ', ranked ' + (r + 1) : ', not ranked'}`); }); };
     it.forEach(x => x.b.onclick = () => { ranked.includes(x) ? ranked.splice(ranked.indexOf(x), 1) : ranked.push(x); lay(); });
     $(st,'.rs').onclick = () => { ranked = []; lay(); };
     return t => it.forEach(x => { x.b.style.transform = `translateY(${px(x.y.at(t))})`; const o = clamp(x.o.at(t)); x.bg.style.transform = `scale(${o.toFixed(3)})`; x.bg.style.width = x.bg.style.height = px(22); x.bg.style.marginRight = px(-32*(1-o)); x.d.render(t); });
@@ -2281,7 +2314,7 @@ atom({ id:'conversational', cat:'Forms', name:'One question at a time', block:'f
   }});
 
 atom({ id:'signupform', cat:'Newsletter', name:'Popup, slide-in and bar', block:'newsletter, announcement', fam:['X','E'], wide:true, tall:true,
-  html:`<div class="col" style="width:min(560px,94%);gap:10px;align-items:flex-start"><div class="seg sm" style="display:flex"><div class="ind"></div><button>Popup</button><button>Slide-in</button><button>Top bar</button></div><div class="site card" style="position:relative;width:100%;height:240px;overflow:hidden"><div class="small muted" style="padding:16px;line-height:1.7"><b style="color:var(--ink);font-size:16px">Field Notes</b><br>A weekly letter about rivers, routes and slow mornings. The sign-up form appears after 1.2 seconds, the way it would for a visitor.</div><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="fm card" style="position:absolute;padding:16px;visibility:hidden"><button class="x" aria-label="Close" style="position:absolute;top:8px;right:8px;border:0;background:none;cursor:pointer;color:var(--muted)">${ic(I.x,14)}</button><div class="v0"><b class="tt" style="display:block">Get the Sunday letter</b><span class="small muted ds">One email a week. Unsubscribe any time.</span><div class="row in" style="margin-top:10px;gap:6px"><input id="sf-email" type="email" placeholder="you@example.com" aria-label="Email" style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:8px;padding:7px 9px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn ink jn">Join</button></div></div><div class="v1 layer" style="font-weight:500;color:var(--success);gap:8px"><span class="tk" style="display:flex">${ic(I.check,16,2.5)}</span><span>You’re on the list</span></div></div></div><button class="btn rp">Replay</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer"><input type="checkbox" class="ck" checked> Check + tint confirmation</label></div>`,
+  html:`<div class="col" style="width:min(560px,94%);gap:10px;align-items:flex-start"><div class="seg sm" style="display:flex"><div class="ind"></div><button>Popup</button><button>Slide-in</button><button>Top bar</button></div><div class="site card" style="position:relative;width:100%;height:240px;overflow:hidden"><div class="small muted" style="padding:16px;line-height:1.7"><b style="color:var(--ink);font-size:16px">Field Notes</b><br>A weekly letter about rivers, routes and slow mornings. The sign-up form appears after 1.2 seconds, the way it would for a visitor.</div><div class="scr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="fm card" style="position:absolute;padding:16px;visibility:hidden"><button class="x" aria-label="Close" style="position:absolute;top:8px;right:8px;border:0;background:none;cursor:pointer;color:var(--muted)">${ic(I.x,14)}</button><div class="v0"><b class="tt" style="display:block">Get the Sunday letter</b><span class="small muted ds" id="sf-email-hint" aria-live="polite">One email a week. Unsubscribe any time.</span><div class="row in" style="margin-top:10px;gap:6px"><input id="sf-email" type="email" value="reader@example.com" placeholder="you@example.com" aria-label="Email" aria-describedby="sf-email-hint" required style="flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:8px;padding:7px 9px;background:var(--bg);color:var(--ink);font:13px var(--sans)"><button class="btn ink jn">Join</button></div></div><div class="v1 layer" style="font-weight:500;color:var(--success);gap:8px"><span class="tk" style="display:flex">${ic(I.check,16,2.5)}</span><span>You’re on the list</span></div></div></div><button class="btn rp">Replay</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer"><input type="checkbox" class="ck" checked> Check + tint confirmation</label></div>`,
   desc:'Three ways to show one sign-up form. A popup scales up over a scrim, a slide-in rises from the corner, and a bar drops from the top without blocking. Each waits 1.2 seconds, and closing is quicker than opening.',
   api:'show at t0 + 1.2   popup: scale .96→1 + scrim · slide-in: y 24→0 · bar: y −100%→0',
   init(st){
@@ -2290,7 +2323,14 @@ atom({ id:'signupform', cat:'Newsletter', name:'Popup, slide-in and bar', block:
     v1.style.pointerEvents = 'none';
     const e = edges(0,0), o = new Track(0), csw = new Swap(0), dn = new Track(0); let mode = 0, at = 0;
     const tint = on => { tk.style.display = ck.checked ? '' : 'none'; return on && ck.checked ? 1 : 0; };
-    const join = () => { if (csw.cur === 1) return; const t0 = now(), g = tint(true);
+    // Validation: an empty or malformed address keeps the form open, says what to fix, and marks the field.
+    const em = $(fm,'#sf-email'), ds = $(fm,'.ds'), HINT = ds.textContent;
+    const invalid = msg => { em.setAttribute('aria-invalid', 'true'); em.style.borderColor = 'var(--danger)'; ds.textContent = msg; ds.style.color = 'var(--danger)'; em.focus(); };
+    em.addEventListener('input', () => { if (em.getAttribute('aria-invalid')){ em.removeAttribute('aria-invalid'); em.style.borderColor = ''; ds.textContent = HINT; ds.style.color = ''; } });
+    const join = () => { if (csw.cur === 1) return;
+      if (!em.value.trim()) return invalid('Enter your email to join.');
+      if (!em.checkValidity()) return invalid('That address looks incomplete. Try name@example.com.');
+      const t0 = now(), g = tint(true);
       if (REDUCE){ csw.cur = 1; csw.prev = 0; csw.t = t0; dn.jump(g); } else { csw.to(1); dn.set(g, S.base, t0 + EXIT); } };
     const resetOk = () => { if (REDUCE){ csw.cur = 0; csw.prev = null; csw.t = -9; dn.jump(0); } else { csw.to(0); dn.set(0, S.snap); } };
     jn.onclick = join;
@@ -2334,7 +2374,7 @@ atom({ id:'password', cat:'Forms', name:'Password with strength', block:'form, a
     const reqs = R.map(([n,f]) => { const r = document.createElement('div'); r.className = 'row'; r.style.gap = '8px'; r.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9" stroke="var(--line)" stroke-width="2"/><path d="M8 12.5 11 15.5 16.5 9.5" pathLength="1" stroke-dasharray="1"/></svg><span>${n}</span>`; rq.appendChild(r); return { f, p:$(r,'path'), tx:$(r,'span'), c:new Track(0) }; });
     const LV = ['','Weak','Fair','Good','Strong'], L = LV.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-end'; e.textContent = s; lv.appendChild(e); return e; });
     const sw = new Swap(0), col = new Track(0), hide = new Track(1);
-    pw.oninput = () => { const v = pw.value, sc = v ? R.filter(([,f]) => f(v)).length : 0, t0 = now(); segs.forEach((s,i) => s.v.set(i < sc ? 1 : 0, S.base, t0 + i*.04)); reqs.forEach(r => r.c.set(r.f(v) ? 1 : 0)); sw.to(sc); col.set(sc); };
+    pw.oninput = () => { const v = pw.value, sc = v ? R.filter(([,f]) => f(v)).length : 0, t0 = now(); segs.forEach((s,i) => s.v.set(i < sc ? 1 : 0, S.base, t0 + staggerAt(i, .04))); reqs.forEach(r => r.c.set(r.f(v) ? 1 : 0)); sw.to(sc); col.set(sc); };
     ey.onclick = () => { const show = pw.type === 'password'; pw.type = show ? 'text' : 'password'; hide.set(show ? 0 : 1); ey.setAttribute('aria-pressed', show); ey.setAttribute('aria-label', show ? 'Hide password' : 'Show password'); };
     return t => { const c = col.at(t), cc = c <= 2 ? mix(clamp(c - 1),'var(--warning)','var(--danger)') : mix(clamp(c - 3),'var(--success)','var(--warning)');
       segs.forEach(s => { s.f.style.width = (clamp(s.v.at(t))*100).toFixed(1) + '%'; s.f.style.background = cc; }); lv.style.color = cc; L.forEach((e,k) => sw.apply(e,k,t));
@@ -2600,7 +2640,7 @@ atom({ id:'swiperow', cat:'Email', name:'Swipe actions', block:'entry-list, inbo
   }});
 
 atom({ id:'undosend', cat:'Email', name:'Undo send', block:'form (submit), Toast', fam:['M','T','S'], tall:true,
-  html:`<div class="cm card col" style="position:absolute;left:50%;top:50%;width:min(300px,86%);padding:14px;gap:8px;transform-origin:50% 100%"><span class="small muted">To: maya@studio.co</span><b class="small">Re: Spring launch</b><p class="small" style="margin:0">Looks great. Ship it Thursday.</p><button class="btn ink sd" style="align-self:flex-end">Send</button></div><div class="ts card row" style="position:absolute;left:50%;bottom:16px;padding:10px 12px;gap:10px;visibility:hidden;white-space:nowrap"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--raised)" stroke-width="3"/><circle class="rg" cx="12" cy="12" r="9" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 12 12)"/></svg><span class="lb small" style="position:relative;width:150px;height:20px"></span><button class="btn un" style="padding:4px 10px">Undo</button></div>`,
+  html:`<div class="cm card col" style="position:absolute;left:50%;top:50%;width:min(300px,86%);padding:14px;gap:8px;transform-origin:50% 100%"><span class="small muted">To: maya@studio.co</span><b class="small">Re: Spring launch</b><p class="small" style="margin:0">Looks great. Ship it Thursday.</p><button class="btn ink sd" style="align-self:flex-end">Send</button></div><div class="ts card row" role="status" aria-live="polite" style="position:absolute;left:50%;bottom:16px;padding:10px 12px;gap:10px;visibility:hidden;white-space:nowrap"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="var(--raised)" stroke-width="3"/><circle class="rg" cx="12" cy="12" r="9" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 12 12)"/></svg><span class="lb small" style="position:relative;width:150px;height:20px"></span><button class="btn un" style="padding:4px 10px">Undo</button></div>`,
   desc:'Send shrinks the draft away and a toast takes over with a ring that empties over 5 seconds. Undo brings the draft back exactly. When the ring runs out, the toast swaps to a success “Sent”.',
   api:'ring = 1 − (t − tSend)/5   undo: draft.o.set(1)   at 5s: label.to("sent")',
   init(st){
@@ -2628,7 +2668,7 @@ atom({ id:'threadstack', cat:'Email', name:'Collapsed thread', block:'entry-list
     th.appendChild(stack);
     const msgs = M.map(([a,b],i) => { const d = document.createElement('div'); d.style.overflow = 'hidden'; d.innerHTML = `<div class="card" style="padding:10px 12px"><b class="small">${a}</b><div class="small">${b}</div></div>`; th.appendChild(d); return { d, h:new Track(i === 3 ? 1 : 0) }; });
     const so = new Track(1); let open = false;
-    stack.onclick = () => { open = !open; stack.setAttribute('aria-expanded', open); const t0 = now(); msgs.slice(0,3).forEach((m,i) => m.h.set(open ? 1 : 0, S.base, t0 + (open ? i*.05 : (2 - i)*.03))); so.set(open ? 0 : 1, S.snap); };
+    stack.onclick = () => { open = !open; stack.setAttribute('aria-expanded', open); const t0 = now(); msgs.slice(0,3).forEach((m,i) => m.h.set(open ? 1 : 0, S.base, t0 + (open ? staggerAt(i, .05) : (2 - i)*.03))); so.set(open ? 0 : 1, S.snap); };
     const less = document.createElement('button'); less.className = 'btn'; less.textContent = 'Collapse earlier'; less.style.alignSelf = 'center'; th.appendChild(less); less.onclick = () => stack.onclick();
     return t => { const s = clamp(so.at(t)); stack.style.height = px(28*s + (1 - s)*0); stack.style.opacity = s.toFixed(3); stack.style.pointerEvents = s > .5 ? 'auto' : 'none'; less.style.opacity = (1 - s).toFixed(3); less.style.pointerEvents = s < .5 ? 'auto' : 'none';
       msgs.forEach(m => { const h = clamp(m.h.at(t)); m.d.style.height = px(h*size(m.d.firstChild).h); m.d.style.marginBottom = px(-6*(1 - h)); m.d.firstChild.style.opacity = h.toFixed(3); }); };
@@ -2691,7 +2731,7 @@ atom({ id:'ranks', cat:'SEO', name:'Keyword ranks', block:'table, metric', fam:[
     const chip = (x, v) => { if (!x.L[v]){ const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-end'; const up = +v > 0; e.innerHTML = +v === 0 ? '<span class="muted">–</span>' : `<span style="color:${up ? 'var(--success)' : 'var(--danger)'};font-weight:600">${up ? '▲' : '▼'} ${Math.abs(v)}</span>`; x.dl.appendChild(e); x.L[v] = e; } x.sw.to(String(v)); };
     rows.forEach(x => chip(x, '0'));
     $(st,'.rf').onclick = () => { const np = pos.map(p => clamp(p + Math.round((Math.random() - .55)*8), 1, 40)); const ord = np.map((p,i) => [p,i]).sort((a,b) => a[0] - b[0]); const t0 = now();
-      ord.forEach(([,i],k) => rows[i].y.set(k*36, S.base, t0 + k*.02)); rows.forEach((x,i) => { x.d.dir = np[i] < pos[i] ? -1 : 1; x.d.set(String(np[i])); chip(x, String(pos[i] - np[i])); }); pos = np; bottom = ord[ord.length - 1][1]; paint(); };
+      ord.forEach(([,i],k) => rows[i].y.set(k*36, S.base, t0 + staggerAt(k, .02))); rows.forEach((x,i) => { x.d.dir = np[i] < pos[i] ? -1 : 1; x.d.set(String(np[i])); chip(x, String(pos[i] - np[i])); }); pos = np; bottom = ord[ord.length - 1][1]; paint(); };
     const paint = () => rows.forEach((x,i) => { x.r.style.borderBottom = (!dv.checked || i === bottom) ? 'none' : '1px solid var(--line-soft)'; });
     dv.onchange = paint; paint();
     return t => rows.forEach(x => { x.r.style.transform = `translateY(${px(x.y.at(t))})`; x.d.render(t); for (const k in x.L) x.sw.apply(x.L[k], k, t); });
@@ -2763,7 +2803,7 @@ atom({ id:'newposts', cat:'Social', name:'New posts pill', block:'postlist, entr
     const row = (txt, open) => { const r = document.createElement('div'); r.style.overflow = 'hidden'; r.innerHTML = `<div style="padding:12px 14px;border-bottom:1px solid var(--line-soft)"><b class="small" style="display:block">${txt}</b><span class="small muted">just now</span></div>`; ls.prepend(r); const it = { r, h:new Track(open ? 1 : 0) }; items.unshift(it); if (items.length > 8) items.pop().r.remove(); return it; };
     ['A smaller homepage','On member pricing','Notes from the river path','Three CSS habits'].reverse().forEach(s => row(s, true));
     d.set('1', true);
-    pl.onclick = () => { const t0 = now(); pending.forEach((s,i) => row(s, false).h.set(1, S.base, t0 + .1 + i*.05)); pending = []; o.set(0, S.snap); ls.parentNode.scrollTop = 0; };
+    pl.onclick = () => { const t0 = now(); pending.forEach((s,i) => row(s, false).h.set(1, S.base, t0 + .1 + staggerAt(i, .05))); pending = []; o.set(0, S.snap); ls.parentNode.scrollTop = 0; };
     return t => { if (t >= next){ next = t + 3.5; pending.push(P[k++ % P.length]); d.set(String(Math.min(99, pending.length))); o.set(1); }
       const p = clamp(o.at(t)); pl.style.opacity = p.toFixed(3); pl.style.visibility = p < .01 ? 'hidden' : 'visible'; pl.style.transform = `translate(-50%, ${px((1 - p)*-16)})`; pl.style.pointerEvents = p > .5 ? 'auto' : 'none'; d.render(t);
       items.forEach(it => { const h = clamp(it.h.at(t)); it.r.style.height = px(h*size(it.r.firstChild).h); it.r.firstChild.style.opacity = h.toFixed(3); }); };
@@ -2882,8 +2922,8 @@ atom({ id:'streaming', cat:'AI chat', name:'Streaming answer', block:'richtext, 
     const start = () => { ans.innerHTML = ''; ws = TXT.split(' ').map(w => { const s = document.createElement('span'); s.textContent = w + ' '; s.style.opacity = 0; ans.appendChild(s); return s; }); ans.appendChild(caret); t0 = now(); stopAt = 0; running = true; sw.to(1); fsw.to('hide'); cp.textContent = 'Copy'; };
     go.onclick = () => { if (running){ running = false; stopAt = now(); sw.to(0); settle(); } else start(); };
     fu.onchange = () => { if (!fu.checked) fsw.to('hide'); else if (!running && ws.length) settle(); };
-    return t => { const tt = stopAt || t; ws.forEach((w,i) => { const ti = t0 + i*.045; if (tt < ti){ w.style.opacity = 0; return; } const p = clamp(prog(t, ti, S.snap)); w.style.opacity = p.toFixed(3); w.style.filter = p < .98 ? `blur(${((1 - p)*3).toFixed(2)}px)` : 'none'; });
-      const shown = ws.filter((w,i) => tt >= t0 + i*.045).length; if (running && shown >= ws.length){ running = false; sw.to(0); settle(); }
+    return t => { const tt = stopAt || t; ws.forEach((w,i) => { const ti = t0 + staggerAt(i, .045); if (tt < ti){ w.style.opacity = 0; return; } const p = clamp(prog(t, ti, S.snap)); w.style.opacity = p.toFixed(3); w.style.filter = p < .98 ? `blur(${((1 - p)*3).toFixed(2)}px)` : 'none'; });
+      const shown = ws.filter((w,i) => tt >= t0 + staggerAt(i, .045)).length; if (running && shown >= ws.length){ running = false; sw.to(0); settle(); }
       caret.style.opacity = running ? (.55 + .35*Math.cos(t*6)).toFixed(3) : Math.max(0, parseFloat(caret.style.opacity || 0) - .08).toFixed(3); L.forEach((e,k) => sw.apply(e,k,t)); fsw.apply(show, 'show', t); fsw.apply(hide, 'hide', t); };
   }});
 
@@ -3020,8 +3060,8 @@ atom({ id:'emptystate', cat:'Guidance', name:'Empty state', block:'entry-list, c
     const ls = $(st,'.ls'), es = $(st,'.es'), M = ['Maya · Draft is ready','Theo · Pricing table','Billing · INV-0042 paid','Ada · New subscriber','Jonas · Thursday works'];
     const rows = M.map(m => { const r = document.createElement('div'); r.style.cssText = 'padding:12px 14px;border-bottom:1px solid var(--line-soft)'; r.innerHTML = `<span class="small">${m}</span>`; ls.appendChild(r); return { r, o:new Track(1) }; });
     const eo = new Track(0);
-    $(st,'.ca').onclick = () => { const t0 = now(); rows.forEach((x,i) => x.o.set(0, S.snap, t0 + i*.04)); eo.set(1, S.base, t0 + rows.length*.04 + .1); };
-    $(st,'.sm').onclick = () => { const t0 = now(); eo.set(0, S.snap); rows.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + i*.04)); };
+    $(st,'.ca').onclick = () => { const t0 = now(); rows.forEach((x,i) => x.o.set(0, S.snap, t0 + staggerAt(i, .04))); eo.set(1, S.base, t0 + rows.length*.04 + .1); };
+    $(st,'.sm').onclick = () => { const t0 = now(); eo.set(0, S.snap); rows.forEach((x,i) => x.o.set(1, S.base, t0 + .12 + staggerAt(i, .04))); };
     const cust = document.createElement('div'); cust.className = 'row small muted'; cust.style.cssText += 'gap:6px;align-items:center;margin-top:8px'; cust.innerHTML = `<span>Rows:</span>`; st.appendChild(cust);
     rows.forEach((x,i) => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText += 'padding:2px 8px'; b.textContent = i + 1; b.onclick = () => { const t0 = now(); const vis = clamp(x.o.at(t0)) > .5; x.o.set(vis ? 0 : 1, vis ? S.snap : S.base, t0); const any = rows.some((y,j) => j === i ? !vis : clamp(y.o.at(t0)) > .5); eo.set(any ? 0 : 1, any ? S.snap : S.base, t0 + (vis ? 0 : .12)); }; cust.appendChild(b); });
     const load = document.createElement('button'); load.className = 'btn'; load.style.cssText += 'padding:2px 8px'; load.textContent = 'Replay end-state'; load.onclick = () => $(st,'.ca').onclick(); cust.appendChild(load);
@@ -3257,7 +3297,7 @@ atom({ id:'pagetransition', cat:'Views', name:'Page transitions', block:'site-he
     function go(i){
       if (i === cur) return; const t = now(), d = i > cur ? 1 : -1, pg = pages[i];
       ex.set(cur, { t0:t, dir:d }); ex.delete(i); pg.dir = d;                            // outgoing page exits on the Swap clock
-      pg.T.forEach((tr, k) => { tr.jump(0); tr.set(1, S.base, t + EXIT + k*.05); });     // heading, paragraph, image: 50ms apart, after the exit
+      pg.T.forEach((tr, k) => { tr.jump(0); tr.set(1, S.base, t + EXIT + staggerAt(k, .05)); });     // heading, paragraph, image: 50ms apart, after the exit
       lc[cur].set(0); lc[i].set(1); const [l, r] = geo(i); ue.go(l, r); cur = i; mark();
     }
     const pickMode = (i, inst) => { mode = i; sbtn.forEach((b, j) => b.setAttribute('aria-pressed', i === j)); const b = sbtn[i]; inst ? se.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : se.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); };
@@ -3583,7 +3623,7 @@ atom({ id:'siteheader', cat:'Editor', name:'Site header', block:'site-header, na
     inp.onblur = () => { if (!inp.value && searchOn) setSearch(false); };
     const setMenu = (on, inst) => { menuOn = on; mb.setAttribute('aria-expanded', on); mb.setAttribute('aria-label', on ? 'Close menu' : 'Open menu'); const t0 = now();
       if (inst){ mo.jump(on ? 1 : 0); mitems.forEach(x => x.o.jump(on ? 1 : 0)); return; }
-      mo.set(on ? 1 : 0); mitems.forEach((x,i) => on ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (on) setTimeout(() => mlinks[0].a.focus(), 0); };
+      mo.set(on ? 1 : 0); mitems.forEach((x,i) => on ? x.o.set(1, S.base, t0 + .08 + staggerAt(i, .04)) : x.o.set(0, S.snap, t0)); if (on) setTimeout(() => mlinks[0].a.focus(), 0); };
     mb.onclick = () => setMenu(!menuOn);
     mitems.forEach(x => x.a.onclick = e => { e.preventDefault(); if (x.a === mcta) startFree(); if (menuOn) setMenu(false); });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOn){ setMenu(false); mb.focus(); } });
@@ -4160,13 +4200,13 @@ ${SRCSS}
       const t0 = now(), tS = t0, tC = t0 + .08, tT = t0 + .16, s = series(ri, si), total = s.reduce((a,b) => a + b, 0), f = FIG[ri][si];
       const tv = [total, f[0], f[1]], dl = [f[2], f[3], f[4]];
       // 1. stat tiles
-      stats.forEach((x,j) => { const tj = tS + j*.03, up = dl[j] >= 0, nx = 1 - x.sw.cur;
+      stats.forEach((x,j) => { const tj = tS + staggerAt(j, .03), up = dl[j] >= 0, nx = 1 - x.sw.cur;
         x.L[nx].innerHTML = ic(up ? '<path d="M12 19V5M6 11l6-6 6 6"/>' : '<path d="M12 5v14M6 13l6 6 6-6"/>', 12, 2.5) + '<span>' + dsign(dl[j]) + '</span>';
         if (inst){ x.v.jump(tv[j]); x.sw.cur = nx; x.sw.prev = null; x.sw.t = -9; x.k.jump(up ? 1 : 0); }
         else { x.v.set(tv[j], S.soft, tj); x.sw.to(nx, tj + .05); x.k.set(up ? 1 : 0, S.base, tj + .05); } });
       // 2. chart: every point retargets, 6ms apart; the scale and its labels follow
       const pts = chartPts(ri, si), step = STEPS.find(v => v*3 >= Math.max(...pts)*1.06) || 3000, nxL = 1 - lab.cur;
-      pts.forEach((v,i) => inst ? P[i].jump(v) : P[i].set(v, S.base, tC + i*.006));
+      pts.forEach((v,i) => inst ? P[i].jump(v) : P[i].set(v, S.base, tC + staggerAt(i, .006)));
       inst ? Y.jump(step*3) : Y.set(step*3, S.base, tC);
       fillLabels(LG[nxL], step, ri);
       if (inst){ lab.cur = nxL; lab.prev = null; lab.t = -9; } else lab.to(nxL, tC);
@@ -4283,7 +4323,7 @@ ${SRCSS}
     outside(st, [bell, panel], () => { if (o.target) setOpen(false); });
     st.addEventListener('keydown', e => { if (e.key === 'Escape' && o.target){ setOpen(false); bell.focus(); } });
     ma.onclick = () => { const t0 = now(), un = order().filter(r => r.unread && !r.gone); if (!un.length) return;
-      un.forEach((r,i) => { r.unread = false; r.un.hidden = true; r.k.set(0, S.base, t0 + i*.04); });
+      un.forEach((r,i) => { r.unread = false; r.un.hidden = true; r.k.set(0, S.base, t0 + staggerAt(i, .04)); });
       q.push([t0 + (un.length - 1)*.04 + .12, () => { dg.dir = -1; setBadge(0); }]); sync(); };
     return t => {
       if (t >= nextAt){ arrive(t); nextAt = t - nextAt > 5 ? t + 5 : nextAt + 5; }
@@ -4789,7 +4829,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-c">Show grid</span><div class="sg sm" role="group" aria-labelledby="sg-c"><div class="sg-i"></div><button type="button">Off</button><button type="button">On</button></div></div>
 <div class="sg-ro" aria-hidden="true"></div></div>`,
-  desc:'A measured two-edge indicator, same rules as Studio’s useEdgeIndicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
+  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
   api:'left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? "fwd" : "back"   lead.set(v); trail.set(v, t + LAG)',
   init(st){
     const kit = (el, start) => {
@@ -5702,7 +5742,7 @@ atom({ id:'quickcreate', cat:'Editor', name:'Quick create', block:'QuickCreate',
     const to = (k, t = now(), inst) => {
       state = k; sw.to(k, t); ST(k).forEach((v, i) => inst ? T[i].jump(v) : T[i].set(v, S.base, t)); ho.set(k === 'form' ? 0 : 1, S.snap, t);
       L.btn.setAttribute('aria-expanded', k === 'menu');
-      if (k === 'menu') me.forEach((tr, i) => { tr.jump(0); tr.set(1, S.base, t + .1 + i*.035); });
+      if (k === 'menu') me.forEach((tr, i) => { tr.jump(0); tr.set(1, S.base, t + .1 + staggerAt(i, .035)); });
     };
     const mkRow = (kd, title, status, inst) => {
       const el = document.createElement('div'), tone = status === 'Draft' ? 'warning' : 'success'; el.className = 'qc-r';
@@ -6043,10 +6083,10 @@ atom({ id:'conflict', cat:'Workflow', name:'Conflict recovery', block:'ConflictR
     const chip = (k, t) => { csw.to(k, t); warn.set(k === 'conflict' ? 1 : 0, S.base, t); done.set(k === 'saved' ? 1 : 0, S.base, t); };
     const showBanner = tt => { bt.innerHTML = '<b>A newer version was saved by Theo</b> <span class="muted">2 min ago</span>'; shown = true; bh.set(1, S.base, tt); bo.set(1, S.base, tt + .07); chip('conflict', tt); };
     const setView = v => { if (!shown || v === view) return; view = v; const t0 = now(); bsw.to(v, t0); asw.to(v === 'cmp' ? 'cmp' : 'idle', t0);
-      if (v === 'cmp') hl.forEach((h,k) => h.set(1, S.base, t0 + .25 + k*.07)); else q.after(.15, () => hl.forEach(h => h.jump(0)));
+      if (v === 'cmp') hl.forEach((h,k) => h.set(1, S.base, t0 + .25 + staggerAt(k, .07))); else q.after(.15, () => hl.forEach(h => h.jump(0)));
       setTimeout(() => (v === 'cmp' ? G.cmp : G.idle).querySelector('button').focus({ preventScroll:true }), 0); };
     const resolve = w => { if (!shown) return; const t0 = now(); view = 'edit'; bsw.to('edit', t0); asw.to('idle', t0);
-      if (w === 'theirs') lsw.forEach((s,i) => s.to('t', t0 + EXIT + .1 + i*.07));
+      if (w === 'theirs') lsw.forEach((s,i) => s.to('t', t0 + EXIT + .1 + staggerAt(i, .07)));
       q.after(.15, () => hl.forEach(h => h.jump(0)));
       shown = false; bo.set(0, S.snap, t0 + .3); bh.set(0, S.base, t0 + .3 + EXIT); chip('saved', t0 + .3); bd.focus({ preventScroll:true }); };
     rs.onclick = () => { q.clear(); view = 'edit'; shown = false; lsw.forEach(s => wfReset(s, 'm')); wfReset(bsw, 'edit'); wfReset(asw, 'idle'); wfReset(csw, 'editing');
@@ -6154,7 +6194,7 @@ atom({ id:'fielddiff', cat:'Workflow', name:'Field diff rows', block:'WorkflowFi
       else if (d === 'r'){ x.sn.set(1, S.base, t); x.so.set(0, S.base, t); x.pn.set(0, S.base, t); x.po.set(1, S.base, t + LAG); }
       else { [x.so, x.sn, x.po, x.pn].forEach(tr => tr.set(0, S.base, t)); } };
     rows.forEach(x => { x.o.onclick = () => { decide(x, x.d === 'r' ? 'p' : 'r', now()); sync(); }; x.n.onclick = () => { decide(x, x.d === 'a' ? 'p' : 'a', now()); sync(); }; });
-    const all = d => { const t0 = now(), tgt = rows.every(x => x.d === d) ? 'p' : d; rows.forEach((x,i) => decide(x, tgt, t0 + i*.07)); sync(); };
+    const all = d => { const t0 = now(), tgt = rows.every(x => x.d === d) ? 'p' : d; rows.forEach((x,i) => decide(x, tgt, t0 + staggerAt(i, .07))); sync(); };
     bA.onclick = () => all('a'); bR.onclick = () => all('r');
     dg.set('0', true); dg.n = 0; sync();
     return t => { dg.render(t);
@@ -6574,7 +6614,7 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
       if (n > 0){ if (!barOpen){ barOpen = true; bh.set(1, S.base, t); bo.set(1, S.base, t + .05); cnt.dir = 1; cnt.set(String(n), true); }
         else if (n !== shown){ cnt.dir = n > shown ? 1 : -1; cnt.set(String(n)); } shown = n; label(n); }
       else if (barOpen){ closeBar(t); shown = 0; label(0); } };
-    hdr.el.onclick = () => { if (busy) return; const L = live(), all = L.length > 0 && sel().length === L.length; const t = now(); L.forEach((r, k) => setSel(r, !all, t + k*.03)); hdrSync(); barSync(); };
+    hdr.el.onclick = () => { if (busy) return; const L = live(), all = L.length > 0 && sel().length === L.length; const t = now(); L.forEach((r, k) => setSel(r, !all, t + staggerAt(k, .03))); hdrSync(); barSync(); };
     const run = kind => { const list = sel(); if (!list.length || busy) return; busy = true; const t0 = now(), gap = kind === 'delete' ? .1 : .06; let n = list.length;
       [bAr, bDl, bCl].forEach(b => b.disabled = true);
       list.forEach((r, k) => { const ts = t0 + k*gap;
@@ -6587,7 +6627,7 @@ atom({ id:'bulkbar', cat:'Status and records', name:'Bulk selection bar', block:
     bAr.onclick = () => run('archive'); bDl.onclick = () => run('delete'); bCl.onclick = () => run('clear');
     bRs.onclick = () => { if (busy) return; const t0 = now(); let k = 0;
       rows.forEach(r => { const was = r.dead; r.selected = false; r.s.set(0); r.box.set('off'); if (r.archived){ r.archived = false; r.a.set(0); r.csw.to(0); }
-        if (was){ r.dead = false; r.h.set(1, S.base, t0 + k*.05); r.o.set(1, S.base, t0 + k*.05 + .06); k++; } });
+        if (was){ r.dead = false; r.h.set(1, S.base, t0 + staggerAt(k, .05)); r.o.set(1, S.base, t0 + staggerAt(k, .05) + .06); k++; } });
       ET.set(0, S.snap); hdrSync(); if (barOpen){ closeBar(); shown = 0; label(0); } };
     hdrSync();
     return t => {
@@ -7781,7 +7821,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
       return r;
     };
     const fill = enter => { rows.slice().forEach(r => r.li.remove()); rows.length = 0; q.length = 0;
-      SEED.forEach((d, i) => make(d, d.s, enter, i*.06)); count(); };
+      SEED.forEach((d, i) => make(d, d.s, enter, staggerAt(i, .06))); count(); };
     fill(false);
     addB.onclick = () => { const d = Object.assign({}, CAT[ci++ % CAT.length]); const r = make(d, 1, true); start(r); pin = now() + 1; say(d.n + ' added'); };
     reB.onclick = () => { CAT.forEach(c => { if (c.n === 'Stripe') c.once = 'No response to initialize after 30 seconds. The server may be down.'; }); fill(true); pin = now() + .9; };
@@ -7890,14 +7930,14 @@ atom({ id:'oauthgrant', cat:'MCP and agents', name:'OAuth consent screen', block
       if (k === 1){ gD.set(0, S.base, t); gap.set(0, S.base, t); gY.set(1, S.base, t); cY.set(1, S.base, t + .05); ysw.put('Connected'); lnW.set(1, S.base, t + .1); mk.set(1, S.base, t + .35); dg.set(0);
         let n = 0; rows.forEach((r, i) => { if (!r.on){ r.sl.open(false, t + .25 + n*.04); n++; } else { r.cw.set(1, S.base, t + .25); } }); }
       else { gY.set(0, S.base, t); gap.set(0, S.base, t); gD.set(1, S.base, t); cD.set(1, S.base, t + .05); nsw.put('Request denied'); lnW.set(.3, S.base, t + .1); mx.set(1, S.base, t + .35); dg.set(1);
-        rows.forEach((r, i) => r.sl.open(false, t + .25 + i*.04)); }
+        rows.forEach((r, i) => r.sl.open(false, t + .25 + staggerAt(i, .04))); }
       cs.open(false, t);
       const on = nOn(); sl.textContent = k === 1 ? `${on} ${on === 1 ? 'permission' : 'permissions'} granted to the assistant.` : 'No permissions were shared with the assistant.'; undo.textContent = k === 1 ? 'Revoke access' : 'Ask again';
       sumS.open(true, t, .45); mPush(q, t + .6, () => undo.focus({ preventScroll:true }));
     };
     const reset = () => { const t = now(); state = 0; tsw.to(0); tf.to(ttl[0]); yes.disabled = no.disabled = false;
       gD.set(1, S.base, t); gap.set(8, S.base, t); gY.set(1.6, S.base, t); cY.set(0, S.snap, t); cD.set(0, S.snap, t); lnW.set(0, S.base, t); mk.set(0, S.snap, t); mx.set(0, S.snap, t); sumS.open(false, t);
-      rows.forEach((r, i) => { r.cw.set(0, S.snap, t); r.sl.open(true, t, .12 + i*.04); r.sw.el.tabIndex = 0; });
+      rows.forEach((r, i) => { r.cw.set(0, S.snap, t); r.sl.open(true, t, .12 + staggerAt(i, .04)); r.sw.el.tabIndex = 0; });
       cs.open(true, t, .3); mPush(q, t + .1, () => { ysw.put('Allow access'); nsw.put('Deny'); }); mPush(q, t + .5, () => yes.focus({ preventScroll:true })); };
     yes.onclick = () => { if (!state) settle(1); }; no.onclick = () => { if (!state) settle(2); }; undo.onclick = reset;
     return t => {
@@ -8185,7 +8225,7 @@ atom({ id:'toolpermissions', cat:'MCP and agents', name:'Server tool permissions
     const toggle = (i, v, lag = 0) => { const r = rows[i]; r.on = v; r.sw.set(v, false, now() + lag); r.w.set(v && r.s.warn ? 1 : 0, v ? S.base : S.snap, now() + lag); sync(); };
     n2.set(String(T.length), true); rows.forEach(r => r.sw.set(r.on, true)); sync(true);
     document.fonts.ready.then(() => { lastLbl = null; sync(true); });
-    bulk.onclick = () => { const todo = readOff(); if (!todo.length) return; todo.forEach((r, j) => toggle(rows.indexOf(r), true, j*.06)); say(`${todo.length} read-only tools enabled`); };
+    bulk.onclick = () => { const todo = readOff(); if (!todo.length) return; todo.forEach((r, j) => toggle(rows.indexOf(r), true, staggerAt(j, .06))); say(`${todo.length} read-only tools enabled`); };
     off.onclick = () => { rows.forEach((r, i) => { if (r.on) toggle(i, false); }); say('All tools disabled'); };
     const e = edges(0, 0), ey = edges(0, 0); let filt = 'all';
     const pick = (f, inst) => { filt = f; const b = fb.find(x => x.dataset.f === f); fb.forEach(x => x.setAttribute('aria-pressed', x === b)); const fn = inst ? 'jump' : 'go';
@@ -10005,7 +10045,7 @@ function kit(st, o = {}){
     const side = typeof o.menuSide === 'function' ? o.menuSide(btn) : o.menuSide; let x = r.x + r.w - W, y = r.y + r.h + 8; if (side){ x = r.x + r.w + 8; y = r.y + r.h - H; }
     mn.style.left = px(clamp(x, 8, Math.max(8, FW - W - 8))); mn.style.top = px(clamp(y, 8, Math.max(8, FH - H - 8))); mn.style.transformOrigin = side ? '0 100%' : '100% 0'; };
   function closeMenu(focus){ if (!K.menuOpen) return; K.menuOpen = false; mo.set(0, S.snap); avs.forEach(a => a.setAttribute('aria-expanded', 'false')); mis.forEach(m => m.o.set(0, S.snap)); if (focus && mBtn) mBtn.focus(); mBtn = null; }
-  const openMenu = btn => { if (K.menuOpen && mBtn === btn) return closeMenu(true); mBtn = btn; K.menuOpen = true; placeMenu(btn); mn.style.visibility = 'visible'; mo.set(1); const t0 = now(); avs.forEach(a => a.setAttribute('aria-expanded', a === btn)); mis.forEach((m,i) => m.o.set(1, S.base, t0 + .04 + i*.03)); setTimeout(() => mis[0].el.focus(), 0); };
+  const openMenu = btn => { if (K.menuOpen && mBtn === btn) return closeMenu(true); mBtn = btn; K.menuOpen = true; placeMenu(btn); mn.style.visibility = 'visible'; mo.set(1); const t0 = now(); avs.forEach(a => a.setAttribute('aria-expanded', a === btn)); mis.forEach((m,i) => m.o.set(1, S.base, t0 + .04 + staggerAt(i, .03))); setTimeout(() => mis[0].el.focus(), 0); };
   K.bindAvatar = btn => { avs.push(btn); btn.addEventListener('click', () => openMenu(btn)); btn.addEventListener('keydown', e => { if (e.key === 'ArrowDown'){ e.preventDefault(); if (!K.menuOpen || mBtn !== btn) openMenu(btn); } }); };
   mn.addEventListener('keydown', e => { const i = mis.findIndex(m => m.el === document.activeElement);
     if (e.key === 'ArrowDown'){ e.preventDefault(); mis[(i + 1) % mis.length].el.focus(); } else if (e.key === 'ArrowUp'){ e.preventDefault(); mis[(i - 1 + mis.length) % mis.length].el.focus(); }
@@ -10026,11 +10066,11 @@ function kit(st, o = {}){
       host.appendChild(g); const gb = $(g,'button'), gs = $(g,'.hx-gs'), gi = $(g,'.hx-gi'), subs = $$(gi,'a').map(el => ({ el, o:new Track(0) }));
       const grp = { gb, gs, gi, subs, h:new Track(0), r:new Track(0), open:false, chev:$(gb,'i') };
       gb.onclick = () => { grp.open = !grp.open; gb.setAttribute('aria-expanded', grp.open); grp.h.set(grp.open ? 1 : 0); grp.r.set(grp.open ? 1 : 0); const t0 = now();
-        subs.forEach((s,j) => grp.open ? s.o.set(1, S.base, t0 + .06 + j*.04) : s.o.set(0, S.snap, t0)); };
+        subs.forEach((s,j) => grp.open ? s.o.set(1, S.base, t0 + .06 + staggerAt(j, .04)) : s.o.set(0, S.snap, t0)); };
       groups.push(grp); items.push({ el:g, o:new Track(0) });
     });
     return { items, groups, host,
-      show(v, inst){ const t0 = now(); items.forEach((x,i) => inst ? x.o.jump(v ? 1 : 0) : v ? x.o.set(1, S.base, t0 + .08 + i*.04) : x.o.set(0, S.snap, t0)); if (!v) groups.forEach(g => { g.open = false; g.gb.setAttribute('aria-expanded','false'); g.h.set(0, S.snap); g.r.set(0, S.snap); g.subs.forEach(s => s.o.set(0, S.snap)); }); },
+      show(v, inst){ const t0 = now(); items.forEach((x,i) => inst ? x.o.jump(v ? 1 : 0) : v ? x.o.set(1, S.base, t0 + .08 + staggerAt(i, .04)) : x.o.set(0, S.snap, t0)); if (!v) groups.forEach(g => { g.open = false; g.gb.setAttribute('aria-expanded','false'); g.h.set(0, S.snap); g.r.set(0, S.snap); g.subs.forEach(s => s.o.set(0, S.snap)); }); },
       draw(t){ items.forEach(x => { const p = clamp(x.o.at(t)); fade(x.el, p, (1 - p)*8); });
         groups.forEach(g => { g.gs.style.height = px(clamp(g.h.at(t))*size(g.gi).h); g.chev.style.transform = `rotate(${(180*clamp(g.r.at(t))).toFixed(1)}deg)`; g.subs.forEach(s => { const p = clamp(s.o.at(t)); fade(s.el, p, (1 - p)*4); }); }); } };
   };
@@ -10401,7 +10441,7 @@ atom({ id:'header-rail', cat:'Headers', name:'Header: side rail', block:'site-he
     const apply = inst => { const ex = pinned || hov, t0 = now();
       if (K.narrow) return;
       if (inst){ w.jump(ex ? 232 : 64); lbs.forEach(l => l.o.jump(ex ? 1 : 0)); clw.o.jump(ex ? 1 : 0); return; }
-      if (ex){ w.set(232, S.base, t0); lbs.forEach((l,i) => l.o.set(1, S.base, t0 + .06 + i*.02)); clw.o.set(1, S.base, t0 + .06); }
+      if (ex){ w.set(232, S.base, t0); lbs.forEach((l,i) => l.o.set(1, S.base, t0 + .06 + staggerAt(i, .02))); clw.o.set(1, S.base, t0 + .06); }
       else { lbs.forEach(l => l.o.set(0, S.snap, t0)); clw.o.set(0, S.snap, t0); w.set(64, S.base, t0 + .05); } };
     const setPin = v => { pinned = v; pad.set(v ? 232 : 64); apply(); };
     rl.addEventListener('pointerenter', () => { if (K.narrow) return; hov = true; apply(); }); rl.addEventListener('pointerleave', () => { if (K.narrow) return; hov = false; if (!K.menuOpen) apply(); });
@@ -10563,7 +10603,7 @@ atom({ id:'header-minimal', cat:'Headers', name:'Header: minimal with fullscreen
     const mo = new Track(0), msw = new Swap('Menu'); let open = false;
     const set = (v, inst, focus) => { if (v === open) return; open = v; K.closeMenu(); mb.setAttribute('aria-expanded', v); mb.setAttribute('aria-label', v ? 'Close menu' : 'Open menu'); msw.to(v ? 'Close' : 'Menu'); const t0 = now();
       ov.style.visibility = 'visible'; if (inst){ mo.jump(v ? 1 : 0); links.concat(cts).forEach(x => x.o.jump(v ? 1 : 0)); return; }
-      v ? mo.set(1, S.soft) : mo.set(0, S.base, t0 + .08); links.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .14 + i*.06) : x.o.set(0, S.snap, t0)); cts.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .3 + i*.05) : x.o.set(0, S.snap, t0));
+      v ? mo.set(1, S.soft) : mo.set(0, S.base, t0 + .08); links.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .14 + staggerAt(i, .06)) : x.o.set(0, S.snap, t0)); cts.forEach((x,i) => v ? x.o.set(1, S.base, t0 + .3 + staggerAt(i, .05)) : x.o.set(0, S.snap, t0));
       if (v) setTimeout(() => links[0].a.focus(), 60); else if (focus) mb.focus(); };
     mb.onclick = () => set(!open, false, true); links.forEach(l => { l.a.onclick = e => { e.preventDefault(); set(false, false, true); }; });
     ls.addEventListener('pointerover', e => { const a = e.target.closest('.hd12-lk'); links.forEach(l => l.dim.set(a && l.a !== a ? 1 : 0)); }); ls.addEventListener('pointerleave', () => links.forEach(l => l.dim.set(0)));
@@ -10977,7 +11017,7 @@ atom({ id:'footer-region-theme', cat:CAT, name:'Footer with language picker and 
     const T = $$(st, '[data-k]').map((el, i) => ({ el, k:el.dataset.k, at:0, pend:null, inn:null }));
     let cur = LOC[0].d; T.forEach(x => x.el.textContent = cur[x.k]);
     const choose = i => { sel = i; opts.forEach((x, j) => { x.t.set(j === i ? 1 : 0); x.b.setAttribute('aria-selected', String(j === i)); }); cur = LOC[i].d; const t0 = now();
-      T.forEach((x, j) => { if (cur[x.k] !== (x.pend ?? x.el.textContent)){ x.pend = cur[x.k]; x.at = Math.max(t0 + j*.012, 0); } });
+      T.forEach((x, j) => { if (cur[x.k] !== (x.pend ?? x.el.textContent)){ x.pend = cur[x.k]; x.at = Math.max(t0 + staggerAt(j, .012), 0); } });
       if (k.max() - k.sc.scrollTop < 8) k.pin(1.2); w.setAttribute('lang', ['en-US', 'en-GB', 'es-MX', 'fr-FR', 'de-DE', 'pt-BR'][i]); setOpen(false, true); };
     const move = j => setHi((j + opts.length) % opts.length);
     tr.addEventListener('click', () => setOpen(!open));
@@ -11077,7 +11117,7 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
     const setS = kk => { if (kk === cur) return; const s = ST[kk], t0 = now(); cur = kk; if (k.max() - k.sc.scrollTop < 8) k.pin(1.4);
       btns.forEach(b => { const on = b.dataset.s === kk; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('ink', on); });
       g.set(s.i); lab.put(s.label); lw.set(LW[kk]); if (kk !== 'ok') isw.to(kk); iO.set(kk === 'ok' ? 0 : 1, kk === 'ok' ? S.snap : S.base, kk === 'ok' ? t0 : t0 + .08);
-      rows.forEach((r, i) => { const v = s.c[i]; if (v === r.v) return; r.v = v; const at = t0 + .1 + i*.045; r.c.set(v, S.base, at); q.push([at, () => r.tx.put(WORD[v])]); }); q.sort((a, b) => a[0] - b[0]); };
+      rows.forEach((r, i) => { const v = s.c[i]; if (v === r.v) return; r.v = v; const at = t0 + .1 + staggerAt(i, .045); r.c.set(v, S.base, at); q.push([at, () => r.tx.put(WORD[v])]); }); q.sort((a, b) => a[0] - b[0]); };
     // Pressing the state already showing opens the per-service list, so every press has a visible result.
     btns.forEach(b => { b.addEventListener('click', () => { if (b.dataset.s === cur){ if (!open) pill.click(); } else setS(b.dataset.s); }); }); btns[0].classList.add('ink');
     isw.cur = 'deg'; isw.prev = null; isw.t = -9;
@@ -11430,7 +11470,7 @@ ${faux('fz3-', { brand:'Northgate Cloud', nav:['Platform', 'Pricing', 'Docs'], k
       const toks = inp.value.toLowerCase().split(/\s+/).filter(Boolean), t0 = now(); let n = 0;
       items.forEach((it, k) => {
         it.hit = toks.every(tk => it.txt.includes(tk)); if (it.hit) n++;
-        it.o.set(it.hit ? 1 : .16, S.base, t0 + k * .005); it.m.set(toks.length && it.hit ? 1 : 0, S.soft, t0 + k * .005); lk.wake(it.a);
+        it.o.set(it.hit ? 1 : .16, S.base, t0 + staggerAt(k, .005)); it.m.set(toks.length && it.hit ? 1 : 0, S.soft, t0 + staggerAt(k, .005)); lk.wake(it.a);
       });
       heads.forEach(c => c.o.set(c.items.some(it => it.hit) ? 1 : .35));
       dg.set(String(n)); vh.textContent = `${n} of 42 pages`;
@@ -11658,7 +11698,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
       lk(t); q.run(t); csw.apply(cl[0], 0, t, 4); csw.apply(cl[1], 1, t, 4);
       const H = size(pg).ch, v = pg.scrollTop + H - topIn(app, pg) > 120 ? 1 : 0; if (v !== qv){ qv = v; qp.set(v); }
       const p = qp.at(t); if (Math.abs(p - lastQ) > .002){ lastQ = p; for (let i = 0; i < rects.length; i++) rects[i].style.opacity = clamp(p * 2 - cells[i]).toFixed(2); }
-      const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + i * .06)); }
+      const bvv = pg.scrollTop + H - topIn(tr, pg) > 40 ? 1 : 0; if (bvv !== bv){ bv = bvv; bt.forEach((x, i) => x.set(bvv, S.soft, t + staggerAt(i, .06))); }
       bds.forEach((b, i) => { const r = clamp(bt[i].at(t)), h = clamp(hv[i].h.at(t)); fade(b, r, (1 - r) * 10);
         b.style.boxShadow = `0 0 0 1.5px color-mix(in oklab, var(--ink) ${(h * 100).toFixed(1)}%, transparent), var(--shadow)`; pop(tps[i], tt[i].at(t), 4); tps[i].style.left = px(Math.max(0, Math.min(frameLayout(b.parentNode).ol, frameLayout(tr).cw - frameLayout(tps[i]).w))); });
       sbs.forEach(({ a, h }) => { const x = clamp(h.h.at(t)), d = clamp(h.d.at(t)); a.style.borderRadius = px(lerp(12, 20, x)); a.style.background = mix(x, '#2A2F36', '#0C1016'); a.style.transform = `scale(${(1 - .03 * d).toFixed(4)})`; });
@@ -12012,7 +12052,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
     const rv = items.map(() => new Track(0, S.soft)), wt = $(st, '.fz8-wt'), wm = $(st, '.fz8-wm'), L8 = $$(wt, 'span'), wl = L8.map(() => new Track(0, S.soft));
     const up = $(st, '.fz8-up'); up.innerHTML = Array.from({ length:30 }, (_, i) => `<i${i === 11 || i === 22 ? ' class="w"' : ''}></i>`).join(''); const bars = $$(up, 'i'), bt = bars.map(() => new Track(0, S.soft));
     const ib = items.indexOf($(st, '.fz8-ss')); let armed = true, fitW = 0;
-    const start = t => { const n = items.length; rv.forEach((x, i) => x.set(1, S.soft, t + i * .055)); wl.forEach((x, i) => x.set(1, S.soft, t + n * .055 + i * .04)); bt.forEach((x, i) => x.set(1, S.soft, t + ib * .055 + .15 + i * .012)); };
+    const start = t => { const n = items.length; rv.forEach((x, i) => x.set(1, S.soft, t + staggerAt(i, .055))); wl.forEach((x, i) => x.set(1, S.soft, t + n * .055 + staggerAt(i, .04))); bt.forEach((x, i) => x.set(1, S.soft, t + ib * .055 + .15 + staggerAt(i, .012))); };
     const reset = () => { rv.forEach(x => x.jump(0)); wl.forEach(x => x.jump(0)); bt.forEach(x => x.jump(0)); };
     $(st, '.fz8-rp').onclick = () => { sm.to(0); reset(); armed = false; q.at(now() + .25, () => start(now())); };
     const fit = () => { const W = wm.clientWidth; if (!W) return; wt.style.fontSize = '100px'; const w100 = wt.offsetWidth; wt.style.fontSize = (W * 100 / w100).toFixed(2) + 'px'; fitW = wm.clientWidth; };
@@ -12612,7 +12652,7 @@ atom({ id:'agentinspect', cat:'Agent activity', name:'Agent inspect element', bl
       lt.render(t); const lw = lb.offsetWidth; lb.style.transform = `translate(${px(clamp(ax - 2, 2, Math.max(2, W - lw - 2)))},${px(Math.max(2, ay - 26))})`; lb.style.opacity = o.toFixed(3);
       const txt = `${Math.max(0, Math.round(bx - ax - 6))} × ${Math.max(0, Math.round(bb - ay - 6))}`; if (txt !== lastSz){ lastSz = txt; sz.textContent = txt; }
       const zw = sz.offsetWidth, zt = bb + 6 + 20 > H ? bb - 26 : bb + 6; sz.style.transform = `translate(${px(clamp(bx - zw, 2, Math.max(2, W - zw - 2)))},${px(zt)})`; sz.style.opacity = o.toFixed(3);
-      L.forEach((l, i) => { lsw.apply(l.el, i, t, 4); if (i === idx) l.rows.forEach((r, j) => { const p = clamp(prog(t, tSel + EXIT + j*.045, S.base)); r.style.opacity = p.toFixed(3); r.style.transform = `translateY(${px((1 - p)*6)})`; }); });
+      L.forEach((l, i) => { lsw.apply(l.el, i, t, 4); if (i === idx) l.rows.forEach((r, j) => { const p = clamp(prog(t, tSel + EXIT + staggerAt(j, .045), S.base)); r.style.opacity = p.toFixed(3); r.style.transform = `translateY(${px((1 - p)*6)})`; }); });
       byEl.forEach((e, i) => bySw.apply(e, i, t, 3));
       for (const d of AI_EL){ const m = mkt[d.k], p = clamp(m.o.at(t)), r = R[d.k]; if (!r) continue; m.el.style.opacity = p.toFixed(3); m.el.style.transform = `translate(${px(r.r - 12)},${px(r.t - 6 - (1 - p)*6)}) scale(${(.9 + .1*p).toFixed(3)})`; }
       n1.render(t); n2.render(t); c.forEach(x => x.render(t)); sw.render(t);
@@ -13450,7 +13490,7 @@ atom({ id:'agentthread', cat:'Agent activity', name:'Agent and human thread', bl
       msgs.forEach(m => {
         fade(m.el, clamp(m.e.at(t)), (1 - clamp(m.e.at(t))) * 6, false);
         if (m.dots.length){ const ty = clamp(m.ty.at(t)); m.dt.style.opacity = ty.toFixed(3); m.dots.forEach((d, i) => { d.style.opacity = (.25 + .75 * (.5 + .5 * Math.sin(Math.PI * 2 * (t * 1.1 - i * .18)))).toFixed(3); }); }
-        m.words.forEach((w, i) => { const q = clamp(prog(t, m.ts + i * .05, S.snap)); w.style.opacity = q.toFixed(3); w.style.transform = `translateY(${px((1 - q) * 3)})`; });
+        m.words.forEach((w, i) => { const q = clamp(prog(t, m.ts + staggerAt(i, .05), S.snap)); w.style.opacity = q.toFixed(3); w.style.transform = `translateY(${px((1 - q) * 3)})`; });
       });
       layers(stw, stEls, t, 3);
     };
@@ -13629,7 +13669,7 @@ const EDITS = [
   { k:'sub', kind:'Text edit', sel:'p.hero-sub', ops:[['=', 'Fieldnote'], ['=', 'helps'], ['=', 'teams'], ['-', 'to'], ['=', 'collaborate'], ['=', 'on'], ['=', 'notes'], ['=', 'more'], ['-', 'easier.'], ['+', 'easily.']], note:'Fixes two grammar slips: “to collaborate” and “more easier”.' },
   { k:'cta', kind:'Style edit', sel:'button.cta-primary', code:true, ops:[['L', '.cta-primary {'], ['=', '  background:'], ['-', '#989B6F;'], ['+', 'var(--accent);'], ['L', '}']], note:'Contrast rises from 2.9:1 to 7.0:1, which passes WCAG AA.' } ];
 
-atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
+atom({ id:'suggestededit', cat:'Agent activity', name:'Agent suggested edit', block:'Agent suggestion on a pin (proposed; sits on the the review tool pin discussion)', fam:['M','E','X','S'], wide:true, tall:true,
   html:`<style>${css('sge')}
 .sge-tf{position:absolute;left:0;top:0;border:1.5px solid var(--ink);border-radius:8px;pointer-events:none!important;z-index:2;visibility:hidden}
 .sge-ck{position:absolute;left:0;top:0;z-index:30;visibility:hidden;transform-origin:0 0;padding:12px}
@@ -13706,7 +13746,7 @@ atom({ id:'suggestededit', cat:'Agent activity', name:'Suggested edit', block:'A
         const a = site.rect(c.ed.k), h = size(c.el).h, s = c.el.style;
         s.left = px(clamp(a.x + c.ox, 8, Math.max(8, W - CW - 8))); s.top = px(clamp(a.y + c.oy, 8, Math.max(8, H - h - 8))); pop(c.el, o, 6); s.transformOrigin = '0 0';
         // diff words reveal in order, then the strikes draw
-        c.ws.forEach((w, i) => { const q = clamp(prog(t, c.t0 + .1 + i * .035, S.snap)); w.style.opacity = q.toFixed(3); if (w.classList.contains('sge-d')) w.style.setProperty('--s', clamp(prog(t, c.t0 + .45 + i * .035, S.base)).toFixed(3)); });
+        c.ws.forEach((w, i) => { const q = clamp(prog(t, c.t0 + .1 + staggerAt(i, .035), S.snap)); w.style.opacity = q.toFixed(3); if (w.classList.contains('sge-d')) w.style.setProperty('--s', clamp(prog(t, c.t0 + .45 + staggerAt(i, .035), S.base)).toFixed(3)); });
         // accept / reject: one row, one morph
         const aa = clamp(c.a.at(t)), rr = clamp(c.r.at(t)), BW = size(c.br).cw, g = 8 * (1 - aa) * (1 - rr), rw = (92 + (BW - 92) * rr) * (1 - aa), aw = BW - rw - g;
         c.rj.style.left = '0'; c.rj.style.width = px(rw); c.rj.style.opacity = clamp(1 - aa * 1.6).toFixed(3); c.rj.style.pointerEvents = aa > .5 ? 'none' : 'auto';
@@ -13809,7 +13849,7 @@ atom({ id:'reviewsummary', cat:'Agent activity', name:'Review summary', block:'A
     }
     fb.forEach((b, i) => b.onclick = () => {
       const k = SEVS[i]; if (k === '*') sel.clear(); else sel.has(k) ? sel.delete(k) : sel.add(k); if (sel.size === 3) sel.clear();
-      paint(); rows.forEach((r, j) => r.vis.set(match(r) ? 1 : 0, S.base, now() + (match(r) ? .06 : 0) + j * .012)); if (openR && !match(openR)) toggle(openR); dShow.set(String(rows.filter(r => r.en.target === 1 && match(r)).length));
+      paint(); rows.forEach((r, j) => r.vis.set(match(r) ? 1 : 0, S.base, now() + (match(r) ? .06 : 0) + staggerAt(j, .012))); if (openR && !match(openR)) toggle(openR); dShow.set(String(rows.filter(r => r.en.target === 1 && match(r)).length));
     });
     rp.onclick = start;
     const layout = () => { pn.dataset.n = size(st).cw < 560 ? 1 : 0; r0.dataset.w = size(r0).w; rw0 = size(r0).w + 18; rw1 = size(r1).w + 18; lastKey = size(st).cw; };
@@ -13915,7 +13955,7 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
     function start(){
       clear(); pins.forEach(p => p.wrap.remove()); pins = []; open = false; cur = -1; count = 0; dismissed = false; mT.jump(0); sT.jump(0); box.o.jump(0); lastBox = null; site.cover = 0; site.sc.jump(0); dSn.set('0', true); stw.cur = 0; stw.prev = null; stw.t = -9; layout();
       at(.5, () => { sT.set(1); });
-      QUEUE.forEach((q, i) => at(1.0 + i * .09, () => { const p = new Pin('agq', ov, q, sb); p.btn.onclick = () => openSheet(i); p.label(false); pins.push(p); count++; dSn.set(String(count)); }));
+      QUEUE.forEach((q, i) => at(1.0 + staggerAt(i, .09), () => { const p = new Pin('agq', ov, q, sb); p.btn.onclick = () => openSheet(i); p.label(false); pins.push(p); count++; dSn.set(String(count)); }));
       at(1.6, () => { stw.to(0); });
     }
     rp.onclick = start;
@@ -14057,7 +14097,7 @@ atom({ id:'handoff', cat:'Agent activity', name:'Needs a human decision', block:
         os.forEach((b, i) => { const r = clamp(rds[i].at(t)); b.firstElementChild.firstElementChild.style.opacity = r.toFixed(3); b.firstElementChild.style.borderColor = mix(r, 'var(--ink)', 'var(--muted)'); });
         plate(pl, plateE.A.at(t), plateE.B.at(t)); pl.style.opacity = clamp(po.at(t)).toFixed(3); sd.style.opacity = (.45 + .55 * clamp(sT.at(t))).toFixed(3);
         sc.draw(t); rls.forEach((l, i) => runSw.apply(l, i, t, 3)); rdot.style.opacity = (.35 + .65 * (.5 + .5 * Math.sin(Math.PI * 2 * t * .9))).toFixed(3);
-        words.forEach((w2, i) => { const p = clamp(prog(t, ts + i * .05, S.snap)); if (!ts) return; w2.style.opacity = p.toFixed(3); w2.style.transform = `translateY(${px((1 - p) * 3)})`; });
+        words.forEach((w2, i) => { const p = clamp(prog(t, ts + staggerAt(i, .05), S.snap)); if (!ts) return; w2.style.opacity = p.toFixed(3); w2.style.transform = `translateY(${px((1 - p) * 3)})`; });
       } else ck.style.visibility = 'hidden';
     };
   }});
@@ -15166,7 +15206,7 @@ function draw(name, w, h, tod){
     if (k === 'harbor'){ for (let i = 0; i < 6; i++){ const bx = w*(.1 + r()*.8), by = wl + h*(.05 + r()*.2), bs = w*.03*(1 + r()); x.fillStyle = css(land[2]); x.fillRect(bx, by, bs*1.6, bs*.35); x.fillRect(bx + bs*.7, by - bs*1.6, 2, bs*1.6); } }
     if (k === 'coast') layer(land[1], h*.9, h*.1, 2);
   }
-  else if (k === 'dunes' || k === 'field' || k === 'meadow'){ layer(mixC(land[0], sky[1], .5), h*.58, h*.12, 2); for (let i = 0; i < 4; i++) layer(mixC(land[i % 3], land[(i + 1) % 3], r()), h*(.64 + i*.09), h*.08, 1.5);
+  else if (k === 'dunes' || k === 'field' || k === 'meadow'){ layer(mixC(land[0], sky[1], .5), h*.58, h*.12, 2); for (let i = 0; i < 4; i++) layer(mixC(land[i % 3], land[(i + 1) % 3], r()), h*(.64 + staggerAt(i, .09)), h*.08, 1.5);
     if (k !== 'dunes') for (let i = 0; i < 260; i++){ const yy = h*(.7 + r()*.3), xx = r()*w; x.strokeStyle = `rgba(${land[2]},${.25 + r()*.4})`; x.beginPath(); x.moveTo(xx, yy); x.lineTo(xx + (r() - .5)*4, yy - 4 - r()*10*(yy/h)); x.stroke(); } }
   else if (k === 'city'){ layer(mixC(land[0], sky[1], .4), h*.62, h*.1, 1); let bx = 0; while (bx < w){ const bw = w*(.04 + r()*.07), bh = h*(.12 + r()*.4); x.fillStyle = css(mixC(land[1], land[2], r())); x.fillRect(bx, h*.78 - bh, bw - 2, bh + h); for (let j = 0; j < 12; j++){ if (r() < .45){ x.fillStyle = `rgba(${sun},${.15 + .6*tod})`; x.fillRect(bx + 3 + r()*(bw - 10), h*.78 - bh + 6 + r()*(bh - 10), 3, 4); } } bx += bw; } x.fillStyle = css(land[2]); x.fillRect(0, h*.78, w, h); }
   else if (k === 'forest'){ layer(mixC(land[0], sky[1], .5), h*.55, h*.15, 3); for (let row = 0; row < 3; row++){ const base = h*(.62 + row*.12), col = land[row]; for (let i = 0; i < 26 + row*10; i++){ const tx = r()*w, th = h*(.12 + r()*.16)*(1 + row*.3), tw = th*.32; x.fillStyle = css(col); x.beginPath(); x.moveTo(tx, base - th); x.lineTo(tx - tw, base + 4); x.lineTo(tx + tw, base + 4); x.fill(); } x.fillRect(0, base, w, h); } }
@@ -16261,14 +16301,14 @@ atom({ id:'txc-deck', cat:'Carousels', name:'Swipe deck', block:'card stack (tri
       const im = photo(q, n, 1.15); el.firstChild.appendChild(im); $(el,'b').textContent = CAP[n]; deck.appendChild(el); return { el, im, n, cf:$(el,'.txc-dk-cf'), kp:$(el,'.txc-dk-k'), sk:$(el,'.txc-dk-x'), x:new Track(0, SET), y:new Track(0, SET), d:new Track(i, S.base), fate:0, sg:1 }; });
     let W = 0, H = 0, cw = 300, ch = 380, L = 0, top = 0, held = null, hx = 0, hy = 0, hist = []; const dn = new Track(0);
     const pend = () => C.filter(c => !c.fate), topc = () => pend()[0];
-    const restack = (t0 = now()) => pend().forEach((c, k) => { c.d.set(k, S.base, t0 + k*.045); c.el.style.zIndex = 50 - k; hide(c.el, k > 0); });
+    const restack = (t0 = now()) => pend().forEach((c, k) => { c.d.set(k, S.base, t0 + staggerAt(k, .045)); c.el.style.zIndex = 50 - k; hide(c.el, k > 0); });
     const ui = () => { const p = pend(), kept = C.filter(c => c.fate > 0).length, sk = C.filter(c => c.fate < 0).length; tl.textContent = `${kept} kept · ${sk} skipped`; dis(xb, !p.length); dis(kb, !p.length); dis(ub, !hist.length);
       dn.set(p.length ? 0 : 1, p.length ? S.snap : S.base, now() + (p.length ? 0 : .18)); sum.textContent = `Kept ${kept} for the cover shortlist.`; done.style.pointerEvents = p.length ? 'none' : 'auto'; };
     const decide = (c, dir, vx = 0, vy = 0, x0 = c.x.at(), y0 = c.y.at()) => { if (!c) return; c.fate = dir; hist.push(c); c.el.style.zIndex = 60; hide(c.el, true);
       const off = dir*(W/2 + cw*.9 + 60); c.x.release(x0, dir*Math.max(dir*vx, 700), off); c.y.release(y0, vy, clamp(y0 + vy*.12, -H*.4, H*.4));
       restack(); ui(); const n = pend().length; say(sr, `${dir > 0 ? 'Kept' : 'Skipped'} ${CAP[c.n]}. ${n ? n + ' left.' : 'All sorted.'}`); };
     const undo = () => { const c = hist.pop(); if (!c) return; c.fate = 0; c.x.set(0); c.y.set(0); restack(); ui(); say(sr, `Back: ${CAP[c.n]}`); };
-    const all = () => { const t0 = now(); hist.slice().reverse().forEach((c, k) => { c.fate = 0; c.x.set(0, SET, t0 + k*.05); c.y.set(0, SET, t0 + k*.05); }); hist = []; restack(t0); ui(); deck.focus(); };
+    const all = () => { const t0 = now(); hist.slice().reverse().forEach((c, k) => { c.fate = 0; c.x.set(0, SET, t0 + staggerAt(k, .05)); c.y.set(0, SET, t0 + staggerAt(k, .05)); }); hist = []; restack(t0); ui(); deck.focus(); };
     onSize(st, (w, h) => { W = w; H = h; root.style.setProperty('--p', (W < 560 ? 16 : 24) + 'px'); cw = Math.min(300, W - 64); ch = Math.round(Math.min(H - 196, cw*1.32)); L = (W - cw)/2; const area = H - 72 - 80; top = Math.max(0, (area - ch - 42)/2);
       deck.style.top = '72px'; deck.style.height = area + 'px'; done.style.top = '72px'; done.style.height = area + 'px'; C.forEach(c => { c.el.style.width = cw + 'px'; c.el.style.height = ch + 'px'; need(c.im, cw); }); });
     grab(deck, { th:3, skip:e => { const c = topc(); return !c || e.target.closest('.txc-dk-c') !== c.el; },
@@ -16644,12 +16684,12 @@ class Reflow {
   go(rects, t){
     const L = [], St = [], E = [];
     this.it.forEach((m, i) => { const r = rects[i]; if (r && m.on) St.push(i); else if (r) E.push(i); else if (m.on) L.push(i); });
-    L.forEach((i, k) => { const m = this.it[i]; m.on = false; m.s.set(0, S.snap, t + k*.02); });
+    L.forEach((i, k) => { const m = this.it[i]; m.on = false; m.s.set(0, S.snap, t + staggerAt(k, .02)); });
     const lag = L.length ? .08 : 0, lag2 = St.length || L.length ? .2 : 0;
-    St.forEach((i, k) => { const m = this.it[i], r = rects[i]; for (const a of 'xywh') m[a].set(r[a], S.soft, t + lag + k*.03); });
+    St.forEach((i, k) => { const m = this.it[i], r = rects[i]; for (const a of 'xywh') m[a].set(r[a], S.soft, t + lag + staggerAt(k, .03)); });
     E.forEach((i, k) => { const m = this.it[i], r = rects[i]; m.on = true;
       if (m.s.at(t) < .03){ for (const a of 'xywh') m[a].jump(r[a]); m.s.jump(0); } else for (const a of 'xywh') m[a].set(r[a], S.soft, t);
-      m.s.set(1, S.base, t + lag2 + k*.035); });
+      m.s.set(1, S.base, t + lag2 + staggerAt(k, .035)); });
   }
   render(t){
     for (const m of this.it){
@@ -18845,7 +18885,7 @@ atom({ id:'corkboard', cat:'Writing', name:'Corkboard cards', block:'writing, bo
       drag(c, { down: p => { const t = now(); dx = p.x - cx.at(t) - 4; dy = p.y - cy.at(t) - 8; c.style.zIndex = 5; go(i); },
         move: p => { cx.jump(p.x - dx - 4); cy.jump(p.y - dy - 8); },
         up: (p, v) => { c.style.zIndex = ''; const t = now();
-          cards.forEach((k,j) => { const T = R ? t : t + j*.04;
+          cards.forEach((k,j) => { const T = R ? t : t + staggerAt(j, .04);
             if (R){ k.cx.jump(j*W); k.cy.jump(0); } else { k.cx.release(k.cx.at(t), v.vx, j*W, S.base, T); k.cy.release(k.cy.at(t), v.vy, 0, S.base, T); } }); } });
       return { cx, cy };
     });
@@ -19008,7 +19048,7 @@ atom({ id:'compilerun', cat:'Writing', name:'Compile run', block:'manuscript exp
       let p = 0;
       if (live){
         const creep = Math.min(.9, (t - t0)/2.2*.9);
-        tk.forEach((o,i) => { const ft = t0 + .4 + i*.06; if (t >= ft && !o.on){ o.on = true; o.f = t; } });
+        tk.forEach((o,i) => { const ft = t0 + .4 + staggerAt(i, .06); if (t >= ft && !o.on){ o.on = true; o.f = t; } });
         if (creep >= .9 && done < 0){ done = t; fin.set(1, S.base, t); sw.to(2); live = 'done'; }
         if (done < 0) p = creep; else { p = .9 + .1*clamp(prog(t, done, S.base)); if (p > .999){ live = false; run.style.opacity = '1'; } }
       } else if (done >= 0) p = 1;
@@ -19152,7 +19192,7 @@ atom({ id:'factcheck', cat:'Writing', name:'Source fact-check chips', block:'ric
       const fw = measureW(c.b, c.txt[v ? 'v' : 'u']);
       if (REDUCE){ c.sw.cur = v ? 'v' : 'u'; c.sw.prev = null; c.w.jump(fw); c.tint.jump(v ? 1 : 0); }
       else { c.sw.to(v ? 'v' : 'u', t); c.w.set(fw, S.base, t); c.tint.set(v ? 1 : 0, S.base, t); } };
-    $(st,'.va').onclick = () => { const t0 = now(); chips.forEach((c,i) => go(c, true, t0 + (REDUCE ? 0 : i*.09))); };
+    $(st,'.va').onclick = () => { const t0 = now(); chips.forEach((c,i) => go(c, true, t0 + (REDUCE ? 0 : staggerAt(i, .09)))); };
     return t => { for (const c of chips){ const g = clamp(c.tint.at(t));
       c.b.style.width = px(c.w.at(t));
       c.b.style.background = mix(g, 'var(--success-tint)', 'var(--card)');
@@ -19251,7 +19291,7 @@ atom({ id:'voicenote', cat:'Writing', name:'Audio-note insert', block:'richtext 
     let inserted = false, playing = false, drew = false;
     const slotP = () => ({ x:(stage.clientWidth - TW)/2, y:122 });
     const draw = t => { if (drew) return; drew = true;
-      hi.forEach((h,k) => REDUCE ? h.jump(H[k]) : h.set(H[k], S.soft, t + k*.03)); };
+      hi.forEach((h,k) => REDUCE ? h.jump(H[k]) : h.set(H[k], S.soft, t + staggerAt(k, .03))); };
     const snapBack = t => { if (REDUCE){ x.jump(X0); y.jump(Y0); } else { x.set(X0, S.soft, t); y.set(Y0, S.soft, t); } };
     const insert = t => { inserted = true; const p = slotP(); draw(t);
       if (REDUCE){ x.jump(p.x); y.jump(p.y); hs.jump(64); so.jump(1); isw.cur = 'in'; isw.prev = null; }
@@ -19293,7 +19333,7 @@ atom({ id:'wirefeed', cat:'Writing', name:'Wire-feed ticker', block:'wire feed, 
     d.set(0, true);
     const add = () => { n++; d.set(n, REDUCE); const el = document.createElement('div'); el.className = 'card small'; el.style.cssText += ';padding:8px 10px;overflow:hidden'; el.innerHTML = '<b>Wire ' + n + '</b> <span class="muted">filed just now</span>'; feed.prepend(el);
       const r = { d:el, y:new Track(-46), o:new Track(0) }; r.y.jump(-46); r.o.jump(0); rows.unshift(r); if (rows.length > 4) rows.pop().d.remove();
-      const t0 = now(); rows.forEach((x,i) => { if (REDUCE){ x.y.jump(0); x.o.jump(1); } else { x.y.set(0, S.base, t0 + i*.06); x.o.set(1, S.base, t0 + i*.06); } }); };
+      const t0 = now(); rows.forEach((x,i) => { if (REDUCE){ x.y.jump(0); x.o.jump(1); } else { x.y.set(0, S.base, t0 + staggerAt(i, .06)); x.o.set(1, S.base, t0 + staggerAt(i, .06)); } }); };
     $(st,'.nw').onclick = add; const ps = $(st,'.ps'); ps.onclick = () => { paused = !paused; ps.textContent = paused ? 'Resume' : 'Pause'; };
     const timer = setInterval(() => { if (!paused && document.body.contains(st)) add(); }, 2600); add(); add();
     return t => { rows.forEach(r => { r.d.style.transform = `translateY(${r.y.at(t).toFixed(2)}px)`; r.d.style.opacity = clamp(r.o.at(t)).toFixed(3); }); d.render(t); };
@@ -19330,7 +19370,7 @@ atom({ id:'template', cat:'Writing', name:'Template inserter', block:'template p
     const sw = new Swap(-1), h = new Track(0); h.jump(0);
     const bodies = TP.map((p,i) => { const l = document.createElement('div'); l.className = 'layer'; l.style.cssText = 'padding:10px 0;font-size:14px'; l.innerHTML = '<b>' + p.n + '</b><div class="small muted">' + p.b + '</div>'; blk.appendChild(l); return l; });
     const tiles = TP.map((p,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = p.n; b.style.opacity = '0'; grid.appendChild(b);
-      const o = new Track(0), y = new Track(10); const t0 = now() + i*.06; if (REDUCE){ o.jump(1); y.jump(0); } else { o.set(1, S.base, t0); y.set(0, S.base, t0); }
+      const o = new Track(0), y = new Track(10); const t0 = now() + staggerAt(i, .06); if (REDUCE){ o.jump(1); y.jump(0); } else { o.set(1, S.base, t0); y.set(0, S.base, t0); }
       b.onclick = () => { ph.style.display = 'none'; if (REDUCE){ sw.cur = i; sw.prev = null; sw.t = -9; h.jump(p.h); } else { sw.to(i); h.set(p.h, S.base); } }; return { b, o, y }; });
     const tt = $(st,'.twk'); tt.onchange = () => bodies.forEach(l => { l.firstElementChild.style.display = tt.checked ? '' : 'none'; });
     return t => { tiles.forEach(r => { r.b.style.opacity = clamp(r.o.at(t)).toFixed(3); r.b.style.transform = `translateY(${r.y.at(t).toFixed(2)}px)`; });
@@ -19694,7 +19734,7 @@ atom({ id:'queryrail', cat:'Writing', name:'Query rail', block:'search rail', fa
       d.innerHTML = `<span class="c layer">${Q[k]}</span><span class="r layer" style="color:var(--success)">Resolved ✓</span>`;
       chips.appendChild(d);
       const it = { d, c:d.querySelector('.c'), r:d.querySelector('.r'), sw:new Swap(0), w:new Track(0), h:new Track(0), gone:false };
-      const t0 = now() + k * .04;
+      const t0 = now() + staggerAt(k, .04);
       it.w.set(1, S.base, t0); it.h.set(1, S.base, t0); it.sw.to(0, t0);
       d.style.width = ''; items.push(it);
       d.onclick = () => { if (it.gone) return; it.gone = true; const t1 = now();
@@ -19793,7 +19833,7 @@ atom({ id:'flatplan', cat:'Writing', name:'Flatplan paginator', block:'page-edit
         o.lift.set(0); held = null; setTimeout(() => o.r.style.zIndex = '', 300); mark(o); } }));
     $(st,'.sh').onclick = () => { const t0 = now();
       order = order.map(o => [Math.random(), o]).sort((a,b) => a[0]-b[0]).map(x => x[1]);
-      order.forEach((o,i) => { if (REDUCE) o.x.jump(i*W); else o.x.set(i*W, S.base, t0 + i*.03); o.num.textContent = i+1; });
+      order.forEach((o,i) => { if (REDUCE) o.x.jump(i*W); else o.x.set(i*W, S.base, t0 + staggerAt(i, .03)); o.num.textContent = i+1; });
       mark(last); };
     dg.set('1', true);
     return t => { rows.forEach(o => { const l = clamp(o.lift.at(t));
@@ -19895,7 +19935,7 @@ atom({ id:'backlink', cat:'Writing', name:'Backlink popover', block:'richtext ed
       const t0 = now(), inst2 = inst || REDUCE;
       if (inst2){ sw.cur = k; sw.prev = null; sw.t = -9; } else sw.to(k);
       rowss.forEach((rs,li) => rs.forEach((r,i) => {
-        if (li === k) inst2 ? r.o.jump(1) : r.o.set(1, S.base, t0 + EXIT + i*.03);
+        if (li === k) inst2 ? r.o.jump(1) : r.o.set(1, S.base, t0 + EXIT + staggerAt(i, .03));
         else inst2 ? r.o.jump(0) : r.o.set(0, S.snap); }));
       const f = rowss[k][0].d, top = f.offsetTop, Hh = f.offsetHeight;
       inst2 ? ie.jump(top, top + Hh) : ie.go(top, top + Hh);
@@ -19977,7 +20017,7 @@ atom({ id:'streak', cat:'Writing', name:'Streak ring', block:'streak ring, habit
     const ring = new Track(0, S.soft), dk = dots.map(() => new Track(0)), cap = new Swap(0);
     const D = [[1,1,1,1,1,0,0,'12'],[1,1,1,1,1,1,0,'18']], SH = [.71,.6]; let m = 0;
     const go = k => { m = k; const t0 = now(); ring.set(SH[k], S.soft); dg.set(D[k][7]); cap.to(k);
-      D[k].slice(0,7).forEach((v,i) => dk[i].set(v, S.base, t0 + i*.04)); };
+      D[k].slice(0,7).forEach((v,i) => dk[i].set(v, S.base, t0 + staggerAt(i, .04))); };
     $(st,'.wk').onclick = () => go(0); $(st,'.mo').onclick = () => go(1);
     dg.set('12', true); go(0);
     return t => { arc.style.strokeDashoffset = (C*(1-clamp(ring.at(t)))).toFixed(1);
@@ -20041,7 +20081,7 @@ atom({ id:'outline', cat:'Writing', name:'Outline zoom', block:'outline, documen
       kidT = list.map(() => new Track(0));
       list.forEach((k,i) => { const b = document.createElement('button'); b.className = 'btn'; b.textContent = k; b.style.textAlign = 'left';
         b.onclick = () => { if (!path.length && tree.c[k]){ path = [k]; ft.textContent = k; sw.to(1); sc.release(.97, 0, 1, S.base); so.set(0); draw(); } };
-        kids.appendChild(b); kidT[i].set(1, S.base, t0 + i*.03); });
+        kids.appendChild(b); kidT[i].set(1, S.base, t0 + staggerAt(i, .03)); });
       if (!path.length) so.set(1);
     };
     const back = () => { if (!path.length) return; path = []; ft.textContent = tree.t; sw.to(0); sc.release(.97, 0, 1, S.base); draw(); };
@@ -20241,7 +20281,7 @@ atom({ id:'exportflow', cat:'Documents', name:'Export flow', block:'export, prog
       fill.style.background = mix(clamp(p / 100), 'var(--success)', 'var(--accent)'); M[2].style.color = 'var(--success)'; };
   }});
 atom({ id:'annotthread', cat:'Documents', name:'Annotation thread', block:'comments, resolve, review', fam:['M'],
-  html:`<div class="col" style="width:min(360px,92%);gap:8px"><div class="card col th" style="padding:14px 16px;gap:0;overflow:hidden"><div class="row" style="gap:10px;align-items:center"><span style="display:grid;place-items:center;width:36px;height:36px;padding:0;border-radius:50%;background:var(--wash);font-size:15px;transform:translateY(1px)">💬</span><div><b style="font-size:15px">Mara on §2</b><div class="small muted" style="font-size:12px">“The bell image carries the whole opening.”</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0 0"><div class="reps col" style="gap:8px"><div class="small" style="font-size:13px;line-height:1.5;padding-top:8px"><b>Theo:</b> Agreed — keep it.</div><div class="small" style="font-size:13px;line-height:1.5"><b>June:</b> Trim the second clause.</div></div><div class="row" style="gap:8px;align-items:center;padding-top:12px"><button class="btn res" style="min-height:32px;border-radius:8px">Resolve</button><button class="btn ro" style="min-height:32px;border-radius:8px">Reopen</button><svg class="ck" width="20" height="20" viewBox="0 0 20 20"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="st small muted" style="font-size:12.5px">open</span></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="nt" checked> notify author on resolve</label></div><div class="hint">Resolve collapses it — Reopen reverses</div>`,
+  html:`<div class="col" style="width:min(360px,92%);gap:8px"><div class="card col th" style="padding:14px 16px;gap:0;overflow:hidden"><div class="row" style="gap:10px;align-items:center"><span style="display:grid;place-items:center;width:36px;height:36px;padding:0;border-radius:50%;background:var(--wash);color:var(--muted)">${ic(I.comment,18,1.75)}</span><div><b style="font-size:15px">Mara on §2</b><div class="small muted" style="font-size:12px">“The bell image carries the whole opening.”</div></div></div><hr style="border:0;border-top:1px solid var(--line);margin:12px 0 0"><div class="reps col" style="gap:8px"><div class="small" style="font-size:13px;line-height:1.5;padding-top:8px"><b>Theo:</b> Agreed — keep it.</div><div class="small" style="font-size:13px;line-height:1.5"><b>June:</b> Trim the second clause.</div></div><div class="row" style="gap:8px;align-items:center;padding-top:12px"><button class="btn res" style="min-height:32px;border-radius:8px">Resolve</button><button class="btn ro" style="min-height:32px;border-radius:8px">Reopen</button><svg class="ck" width="20" height="20" viewBox="0 0 20 20"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg><span class="st small muted" style="font-size:12.5px">open</span></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="nt" checked> notify author on resolve</label></div><div class="hint">Resolve collapses it — Reopen reverses</div>`,
   desc:'Resolving inks the check first and only then collapses the thread height on a base spring, landing on a quiet resolved terminal. Reopening plays the same motion in reverse.',
   api:'res: ck.set(1) then h.set(0, base)   open: h.set(full, base), ck.set(0)',
   init(st){
@@ -20391,7 +20431,7 @@ atom({ id:'jurisdiction', cat:'Forms', name:'Jurisdiction pick', block:'form, dr
       M.forEach((el,k) => sw.apply(el,k,t)); M[1].style.color = 'var(--success)'; };
   }});
 atom({ id:'exhibit', cat:'Documents', name:'Exhibit upload', block:'upload, attachments, files', fam:['M'],
-  html:`<div class="col" style="width:min(360px,92%);gap:8px;align-items:center"><div class="card col" style="width:100%;padding:14px 16px;gap:10px"><b style="font-size:15px">Exhibits · 1 of 3</b><button class="btn add" style="min-height:32px;border-radius:8px">Attach Exhibit B</button><div class="slot" style="overflow:hidden;height:0"><div class="row" style="gap:10px;align-items:center;padding:4px 0"><span style="display:grid;place-items:center;width:36px;height:36px;padding:0;border-radius:10px;background:var(--wash);font-size:16px;transform:translateY(1px)">📄</span><div class="col" style="flex:1;gap:6px"><div class="row" style="gap:8px;align-items:center"><span style="font-size:13.5px">Exhibit-B.pdf</span><span class="st small muted" style="font-size:12px">uploading…</span></div><div style="height:6px;border-radius:3px;background:var(--wash);overflow:hidden"><div class="fill" style="height:100%;width:0;border-radius:3px;background:var(--accent)"></div></div></div><svg class="ck" width="20" height="20" viewBox="0 0 20 20"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg><button class="btn retry" style="min-height:32px;border-radius:8px">Retry</button></div></div><div class="msg small" style="position:relative;height:22px;font-size:12.5px"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="fail"> simulate failed upload</label></div><div class="hint">Attach it — toggle failure to feel retry</div>`,
+  html:`<div class="col" style="width:min(360px,92%);gap:8px;align-items:center"><div class="card col" style="width:100%;padding:14px 16px;gap:10px"><b style="font-size:15px">Exhibits · 1 of 3</b><button class="btn add" style="min-height:32px;border-radius:8px">Attach Exhibit B</button><div class="slot" style="overflow:hidden;height:0"><div class="row" style="gap:10px;align-items:center;padding:4px 0"><span style="display:grid;place-items:center;width:36px;height:36px;padding:0;border-radius:10px;background:var(--wash);color:var(--muted)">${ic(I.file,18,1.75)}</span><div class="col" style="flex:1;gap:6px"><div class="row" style="gap:8px;align-items:center"><span style="font-size:13.5px">Exhibit-B.pdf</span><span class="st small muted" style="font-size:12px">uploading…</span></div><div style="height:6px;border-radius:3px;background:var(--wash);overflow:hidden"><div class="fill" style="height:100%;width:0;border-radius:3px;background:var(--accent)"></div></div></div><svg class="ck" width="20" height="20" viewBox="0 0 20 20"><path d="M4 10l4 4 8-9" fill="none" stroke="var(--success)" stroke-width="2.5" stroke-linecap="round"/></svg><button class="btn retry" style="min-height:32px;border-radius:8px">Retry</button></div></div><div class="msg small" style="position:relative;height:22px;font-size:12.5px"></div></div><label class="row small muted" style="gap:6px;font-size:12px"><input type="checkbox" class="fail"> simulate failed upload</label></div><div class="hint">Attach it — toggle failure to feel retry</div>`,
   desc:'The row opens its height first, the bar fills, and only then does the success check ink — or the row rings danger with a retry. Success holds an attached terminal; retry replays the fill.',
   api:'row.h.set(full, base) opens   bar.set(100, soft) fills   ok: ck.set(1) / err: retry Swap',
   init(st){
@@ -20531,7 +20571,7 @@ atom({ id:'breakout', cat:'Video calls', name:'Breakout shuffle', block:'video c
       if (inst){ tl.x.jump(p.x); tl.y.jump(p.y); } else { tl.x.set(p.x); tl.y.set(p.y); } });
     lay(true);
     const shuffle = () => { const t0 = now(); started = true; done = false; tStart = t0; last = '';
-      tiles.forEach((tl,i) => { const p = slot(i); tl.x.set(p.x, S.base, t0 + i*.05); tl.y.set(p.y, S.base, t0 + i*.05); });
+      tiles.forEach((tl,i) => { const p = slot(i); tl.x.set(p.x, S.base, t0 + staggerAt(i, .05)); tl.y.set(p.y, S.base, t0 + staggerAt(i, .05)); });
       tags.forEach(g => g.sw.to(1, t0)); fsw.to(0, t0); ok.set(0, S.snap, t0);
       sh.textContent = 'Shuffle again'; };
     sh.onclick = shuffle;
@@ -20674,7 +20714,7 @@ atom({ id:'reactions', cat:'Video calls', name:'Reactions burst', block:'video c
     const E = ['❤','👏','🎉'];
     const sky = $(st,'.sky'), pile = $(st,'.pile'), nc = $(st,'.nc'), bg = $(st,'.bg');
     const F = ['', 'Burst complete'].map((s,k) => { const e = document.createElement('span'); e.className = 'layer';
-      e.innerHTML = k ? `<span class="small" style="background:color-mix(in oklab, var(--success) 12%, transparent);color:var(--success);font-weight:600;padding:4px 10px;border-radius:999px;font-size:12.5px">🎉 ${s}</span>` : s;
+      e.innerHTML = k ? `<span class="small" style="background:color-mix(in oklab, var(--success) 12%, transparent);color:var(--success);font-weight:600;padding:4px 10px;border-radius:999px;font-size:12.5px">${s}</span>` : s;
       $(st,'.fin').appendChild(e); return e; });
     const fsw = new Swap(0), ok = new Track(0);
     let floats = [], items = [], n = 0;
@@ -20691,7 +20731,7 @@ atom({ id:'reactions', cat:'Video calls', name:'Reactions burst', block:'video c
       p.style.cssText = 'display:grid;place-items:center;padding:0;width:30px;height:30px;border-radius:50%;background:var(--raised);font-size:15px';
       p.textContent = e; pile.appendChild(p);
       const it = { p, y:new Track(REDUCE ? 0 : 8), o:new Track(REDUCE ? 1 : 0) };
-      if (!REDUCE){ const k = Math.min(items.length, 5); it.y.set(0, S.base, t0 + k*.05); it.o.set(1, S.base, t0 + k*.05); }
+      if (!REDUCE){ const k = Math.min(items.length, 5); it.y.set(0, S.base, t0 + staggerAt(k, .05)); it.o.set(1, S.base, t0 + staggerAt(k, .05)); }
       items.push(it);
       while (items.length > 6){ const old = items.shift(); old.p.remove(); }
       nc.textContent = n === 1 ? '1 reaction' : n + ' reactions';
@@ -20975,7 +21015,7 @@ atom({ id:'masonry', cat:'Layout', name:'Masonry settle', block:'gallery, board,
         c.c.style.width = px(CW);
         if (dead){ c.x.jump(x); c.y.jump(y); if (fresh === c){ c.o.jump(1); } }
         else if (fresh === c){ c.x.jump(x); c.y.jump(y + 12); c.o.jump(.45); c.x.set(x, S.base); c.y.set(y, S.base); c.o.set(1); }
-        else { c.x.set(x, S.base, t0+i*.03); c.y.set(y, S.base, t0+i*.03); } });
+        else { c.x.set(x, S.base, t0+staggerAt(i, .03)); c.y.set(y, S.base, t0+staggerAt(i, .03)); } });
       const h = Math.max(...colH, 0) - G;
       if (dead) wall.jump(Math.max(0, h)); else wall.set(Math.max(0, h), S.lazy, t0);
       cnt.textContent = n + (n === 1 ? ' card' : ' cards');
@@ -21046,7 +21086,7 @@ atom({ id:'holygrail', cat:'Layout', name:'Holy-grail reorder', block:'page-edit
       const s = narrow ? [[0, 136, W, 64], [0, 0, W, 128], [0, 208, W, 64]] : [[0, 0, 120, 200], [128, 0, W-240, 200], [W-104, 0, 104, 200]];
       panes.forEach((c, i) => { c.d.style.width = px(s[i][2]); c.d.style.height = px(s[i][3]);
         if (dead){ c.x.jump(s[i][0]); c.y.jump(s[i][1]); c.o.jump(1); }
-        else { c.x.set(s[i][0], S.base, t0+i*.03); c.y.set(s[i][1], S.base, t0+i*.03); c.o.jump(.45); c.o.set(1, S.base, t0+i*.03); } });
+        else { c.x.set(s[i][0], S.base, t0+staggerAt(i, .03)); c.y.set(s[i][1], S.base, t0+staggerAt(i, .03)); c.o.jump(.45); c.o.set(1, S.base, t0+staggerAt(i, .03)); } });
       const h = narrow ? 272 : 200;
       if (dead) wall.jump(h); else wall.set(h, S.base, t0);
       sw.to(narrow ? 1 : 0);
@@ -21095,7 +21135,7 @@ atom({ id:'formflow', cat:'Layout', name:'Multi-column flow', block:'form, check
     const flip = fn => { const a = flds.map(f => f.el.offsetTop); fn();
       const b = flds.map(f => f.el.offsetTop), t0 = now(), dead = REDUCE;
       flds.forEach((f, i) => { const d = a[i] - b[i]; if (!d){ f.dy.jump(0); return; }
-        if (dead) f.dy.jump(0); else { f.dy.jump(d); f.dy.set(0, S.base, t0 + i*.02); } }); };
+        if (dead) f.dy.jump(0); else { f.dy.jump(d); f.dy.set(0, S.base, t0 + staggerAt(i, .02)); } }); };
     const showErr = on => { flip(() => { if (REDUCE || !$(st,'.lv').checked){ eh.jump(on ? 20 : 0); } else eh.set(on ? 20 : 0, S.base); });
       sw.to(on ? 1 : sv.at() > .5 ? 2 : 0); };
     $(st,'.bW').onclick = () => { one = !one; flip(() => { grid.style.gridTemplateColumns = one ? '1fr' : '1fr 1fr'; }); };
@@ -21162,7 +21202,7 @@ atom({ id:'sugchips', cat:'AI chat', name:'Suggestion chips', block:'chat, promp
       else { sib.set(1); hh.set(row.scrollHeight || 46, S.base); uh.set(0, S.base); uo.set(0, S.snap); rh.set(0, S.base); ro.set(0, S.snap); } };
     return t => { while (q.length && q[0][0] <= t) q.shift()[1]();
       const s = clamp(sib.at(t));
-      chips.forEach((b,i) => { const e = (stg.checked && !REDUCE) ? clamp(prog(t, t0 + i*.04, S.base)) : 1; fade(b, e*s, (1-e)*6); b.style.pointerEvents = picked >= 0 ? 'none' : 'auto'; });
+      chips.forEach((b,i) => { const e = (stg.checked && !REDUCE) ? clamp(prog(t, t0 + staggerAt(i, .04), S.base)) : 1; fade(b, e*s, (1-e)*6); b.style.pointerEvents = picked >= 0 ? 'none' : 'auto'; });
       row.style.height = px(Math.max(0, hh.at(t))); row.style.opacity = s.toFixed(3);
       ub.style.height = px(Math.max(0, uh.at(t))); ub.style.opacity = clamp(uo.at(t)).toFixed(3); ub.style.visibility = uo.at(t) > .02 ? 'visible' : 'hidden';
       L.forEach((e,k) => sw.apply(e,k,t));
@@ -21339,7 +21379,7 @@ atom({ id:'citepop', cat:'AI chat', name:'Citation popover', block:'chat, citati
       panel.style.opacity = v.toFixed(3); panel.style.visibility = v < .01 ? 'hidden' : 'visible';
       panel.style.transform = `translateY(${((1-v)*8).toFixed(2)}px) scale(${(.97 + .03*v).toFixed(4)})`;
       if (popEl) popEl.style.transform = `scale(${(1 + .3*s).toFixed(3)})`;
-      rows.forEach((r,i) => { const e = (sg.checked && !REDUCE) ? clamp(prog(t, t0 + EXIT + i*.03, S.base)) : 1; fade(r, open < 0 ? v : e*v, (1-e)*8); }); };
+      rows.forEach((r,i) => { const e = (sg.checked && !REDUCE) ? clamp(prog(t, t0 + EXIT + staggerAt(i, .03), S.base)) : 1; fade(r, open < 0 ? v : e*v, (1-e)*8); }); };
   }});
 
 atom({ id:'memtoggle', cat:'AI chat', name:'Memory toggle', block:'chat, memory', fam:['E','M','S'],
@@ -21388,9 +21428,10 @@ atom({ id:'chatpoll', cat:'Forms', name:'In-chat poll', block:'chat, poll', fam:
     let voted = -1;
     rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t = now();
       C[1].textContent = `You picked ${O[i][0]} · 128 votes`;
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 1 : 0);
+      const { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 1 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j];
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); x.dg.set(String(pc), true); }
-        else { const d = an.checked ? j*.06 : 0; x.v.set(pc, S.base, t + d); x.o.set(1, S.base, t + EXIT + d); x.c.set(j === i ? 1 : 0); x.dg.set(String(pc)); }
+        else { const d = an.checked ? staggerAt(j, .06) : 0; x.v.set(pc, S.base, t + d); x.o.set(1, S.base, t + EXIT + d); x.c.set(j === i ? 1 : 0); x.dg.set(String(pc)); }
         x.b.style.cursor = 'default'; });
       if (REDUCE){ csw.cur = 1; csw.prev = 0; csw.t = t; } else csw.to(1); });
     $(st,'.rs').onclick = () => { voted = -1; C[1].textContent = 'You picked Booking calendar · 128 votes';
@@ -21466,7 +21507,7 @@ atom({ id:'chatcsat', cat:'Forms', name:'CSAT in chat', block:'chat, CSAT', fam:
       bf.style.transform = `scale(${(1 + .12*clamp(pop.at(t))).toFixed(4)})`;
       const ey = (26 - 2*m).toFixed(2); e1.setAttribute('cy', ey); e2.setAttribute('cy', ey);
       const e = REDUCE ? 1 : clamp(en.at(t));
-      btns.forEach((b,i) => { const p = REDUCE ? 1 : clamp(prog(t, t0 + i*.05, S.soft)); fade(b, Math.min(e, p), (1-p)*10); });
+      btns.forEach((b,i) => { const p = REDUCE ? 1 : clamp(prog(t, t0 + staggerAt(i, .05), S.soft)); fade(b, Math.min(e, p), (1-p)*10); });
       L.forEach((el,k) => sw.apply(el,k,t)); Y.forEach((el,k) => tsw.apply(el,k,t)); };
   }});
 
@@ -21543,13 +21584,13 @@ atom({ id:'slotgrid', cat:'Scheduling', name:'Slot picker', block:'booking, slot
       cells.forEach((c,i) => { c.L.forEach((l,d) => l.textContent = T[d][i] || '');
         c.vT.set(T[0][i] ? 1 : 0); c.b.style.pointerEvents = T[0][i] ? 'auto' : 'none'; }); };
     const goDay = i => { day = i; const t0 = now();
-      cells.forEach((c,k) => c.sw.to(i, t0 + k*.04)); cells.forEach(c => c.sT.set(0));
+      cells.forEach((c,k) => c.sw.to(i, t0 + staggerAt(k, .04))); cells.forEach(c => c.sT.set(0));
       pl.go(tabs[i].offsetLeft, tabs[i].offsetLeft + tabs[i].offsetWidth);
       tabs.forEach((x,j) => x.style.fontWeight = j === i ? '600' : '400'); };
     tabs.forEach((b,i) => b.onclick = () => goDay(i));
     const d0 = $(st,'.d0'), d1 = $(st,'.d1');
     const goDur = d => { dur = d; paint(); const t0 = now();
-      cells.forEach((c,k) => c.sw.to(day, t0 + k*.03));
+      cells.forEach((c,k) => c.sw.to(day, t0 + staggerAt(k, .03)));
       d0.style.boxShadow = d === 30 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d0.setAttribute('aria-pressed', d === 30); d0.style.fontWeight = d === 30 ? '600' : '400';
       d1.style.boxShadow = d === 60 ? 'inset 0 -2px 0 var(--ink)' : 'none'; d1.setAttribute('aria-pressed', d === 60); d1.style.fontWeight = d === 60 ? '600' : '400'; };
     d0.onclick = () => goDur(30); d1.onclick = () => goDur(60);
@@ -21654,7 +21695,7 @@ atom({ id:'heatmap', cat:'Scheduling', name:'Availability heatmap', block:'avail
       c.b.style.background = tint(v); c.b.style.borderColor = mix(s,'var(--ink)','var(--line)');
       c.sw.apply(c.ct, 1, t); fade(c.dot, c.sw.cur === 1 ? 0 : 1, 0, false); });
   }});
-atom({ id:'holdconfirm', cat:'Scheduling', name:'Hold to confirm', block:'booking, confirm', fam:['M','S'],
+atom({ id:'holdconfirm', cat:'Scheduling', name:'Hold to confirm a booking', block:'booking, confirm', fam:['M','S'],
   html:`<div class="col" style="width:min(320px,90%);margin:0 auto;gap:8px;line-height:1.5;align-items:center"><b style="font-size:15px;font-weight:600">Confirm your slot</b><div class="card" style="width:100%;padding:16px;display:flex;flex-direction:column;gap:10px;align-items:center"><p style="font-size:13px;margin:0">Tue 9:00 AM · 30 min · Room B</p><div class="pad" style="position:relative;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;padding:0;cursor:pointer;touch-action:none" role="button" tabindex="0" aria-label="Press and hold to confirm"><i class="core" style="position:absolute;inset:8px;border-radius:50%;background:var(--card);display:grid;place-items:center"></i></div><div class="lb" style="position:relative;height:22px;font-size:13px;overflow:hidden"></div><div class="row small muted" style="gap:6px;align-items:center;border-top:1px solid var(--line);padding-top:10px;width:100%;justify-content:center"><span style="font-size:12px">Hold</span><button class="h0" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 10px;cursor:pointer;font-size:12px">0.6s</button><button class="h1" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 10px;cursor:pointer;font-size:12px">0.9s</button><button class="h2" style="min-height:32px;border-radius:8px;border:0;background:var(--raised);padding:0 10px;cursor:pointer;font-size:12px">1.2s</button></div></div></div><div class="hint">Press and hold the ring · release early to cancel</div>`,
   desc:'Holding fills the ring at a steady pace. Letting go early springs the fill back to zero. A full hold swaps the arrow for a check and the card holds its success tint as the terminal.',
   api:'hold: pv += dt/dur   release: bk.release(pv,0,0) springs back   full: sw.to(1), sv.set(1) hold',
@@ -21767,11 +21808,10 @@ atom({ id:'grouppoll', cat:'Scheduling', name:'Group-poll tally', block:'group p
     box.appendChild(foot);
     const vc = $$(foot,'.vc')[0];
     let voted = false;
-    const tally = () => { const tot = rows.reduce((a,r) => a + r.votes, 0) || 1, t0 = now();
-      const lead = rows.indexOf(rows.reduce((a,b) => b.votes >= a.votes ? b : a));
-      rows.forEach((r,i) => { r.v.set(r.votes/tot*100, S.base, t0 + i*.05); r.dg.set(String(r.votes));
-        r.lk.set(i === lead ? 1 : 0, S.base, t0 + EXIT + i*.05); });
-      vc.textContent = tot + (tot === 1 ? ' vote' : ' votes') + ' · ' + O[lead][0] + ' leads'; };
+    const tally = () => { const { total: tot, shares, leader: lead } = pollTally(rows.map(r => r.votes)), t0 = now();
+      rows.forEach((r,i) => { r.v.set(shares[i], S.base, t0 + staggerAt(i, .05)); r.dg.set(String(r.votes));
+        r.lk.set(i === lead ? 1 : 0, S.base, t0 + EXIT + staggerAt(i, .05)); });
+      vc.textContent = tot + (tot === 1 ? ' vote' : ' votes') + ' · ' + (lead === null ? 'tied at the top' : O[lead][0] + ' leads'); };
     rows.forEach((r,i) => r.b.onclick = () => { if (voted) return; voted = true;
       r.votes++; r.ckT.set(1); r.b.style.cursor = 'default'; tally(); });
     $$(foot,'.rs')[0].onclick = () => { voted = false;
@@ -22175,7 +22215,7 @@ atom({ id:'offlinepack', cat:'Maps', name:'Offline pack', block:'download maps',
       v.jump(0); cells.forEach(c => c.o.jump(0)); drop.jump(14); dn.style.opacity = 0; sw.to(0);
       if (REDUCE){ v.jump(100); drop.jump(0); sw.cur = 1; sw.prev = null; sw.t = -9; pc.set('100%', true); cells.forEach(c => c.o.jump(1)); dn.style.opacity = 1; busy = false; return; }
       v.set(100, S.base, t0 + .1); sw.to(1, t0 + 1.6);
-      cells.forEach((c,i) => c.o.set(1, S.base, t0 + .5 + i*.08)); drop.set(0, S.soft, t0 + 1.5);
+      cells.forEach((c,i) => c.o.set(1, S.base, t0 + .5 + staggerAt(i, .08))); drop.set(0, S.soft, t0 + 1.5);
       setTimeout(() => busy = false, 2400); };
     return t => { const x = clamp(v.at(t)/100), d = drop.at(t);
       rg.style.background = `conic-gradient(var(--ink) ${x*360}deg, var(--raised) 0deg)`;
@@ -22195,7 +22235,7 @@ atom({ id:'crowdheat', cat:'Maps', name:'Crowd heat overlay', block:'density, ov
     const cells = D.map(d => { const c = document.createElement('i'); c.style.cssText = 'border-radius:9px;background:var(--accent)'; heat.appendChild(c); return { c, d, o:new Track(0), p:new Track(0) }; });
     const dots = [[.2,.3],[.5,.6],[.75,.35]].map(([x,y]) => { const p = document.createElement('i'); p.style.cssText = `position:absolute;left:${x*100}%;top:${y*100}%;width:12px;height:12px;margin:-6px;border-radius:50%;background:var(--ink);border:2px solid var(--card)`; pins.appendChild(p); return { p, o:new Track(1) }; });
     let on = true, fired = false;
-    const show = t0 => { cells.forEach((c,i) => { if (REDUCE){ c.o.jump(on ? 1 : 0); c.p.jump(0); } else { c.o.set(on ? 1 : 0, S.lazy, t0 + i*.04); if (on && c.d > .8){ c.p.jump(0); c.p.set(1, S.snap, t0 + .3 + i*.04); } } });
+    const show = t0 => { cells.forEach((c,i) => { if (REDUCE){ c.o.jump(on ? 1 : 0); c.p.jump(0); } else { c.o.set(on ? 1 : 0, S.lazy, t0 + staggerAt(i, .04)); if (on && c.d > .8){ c.p.jump(0); c.p.set(1, S.snap, t0 + .3 + staggerAt(i, .04)); } } });
       dots.forEach(d => REDUCE ? d.o.jump(on ? 0 : 1) : d.o.set(on ? 0 : 1, S.base, t0 + .1)); };
     tg.onclick = () => { on = !on; tg.textContent = on ? 'Heat on' : 'Heat off'; tg.setAttribute('aria-pressed', on); show(now()); };
     show(now());
@@ -22256,13 +22296,13 @@ atom({ id:'trippoll', cat:'Forms', name:'Trip polls', block:'vote, poll', fam:['
     const rows = N.map((n,i) => { const r = document.createElement('button'); r.style.cssText = 'position:relative;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;border-radius:10px;background:var(--card);padding:11px 13px;cursor:pointer;overflow:hidden';
       r.innerHTML = `<i class="fl" style="position:absolute;left:0;top:0;bottom:0;background:var(--raised);width:0"></i><i class="tint" style="position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in oklab,var(--accent-tint) 70%, transparent)"></i><span style="position:relative;flex:1;font-size:14px;line-height:1.5">${n}</span><b class="tt" style="position:relative;font-size:13px;font-variant-numeric:tabular-nums"></b><span class="mk" style="position:relative;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;padding:0;font-size:12px;color:var(--success)"></span>`;
       r.setAttribute('aria-pressed', 'false'); box.appendChild(r);
-      r.onclick = () => { if (mine === i) mine = -1; else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
+      r.onclick = () => { if (mine === i){ votes[i]--; mine = -1; } else { if (mine >= 0) votes[mine]--; votes[i]++; mine = i; } sync(false); };
       return { r, tt:$(r,'.tt'), fl:$(r,'.fl'), tint:$(r,'.tint'), mk:$(r,'.mk'), bar:new Track(0), lead:new Track(0), dg:new Digits($(r,'.tt'), 2) }; });
     rows.forEach(x => { const a = document.createElement('span'); a.className = 'layer'; a.textContent = ''; x.mk.appendChild(a); });
-    function sync(inst){ const tot = votes.reduce((a,b) => a+b, 0), mx = Math.max(...votes), li = votes.indexOf(mx), t0 = now();
-      rows.forEach((x,i) => { const p = votes[i]/Math.max(1, tot);
+    function sync(inst){ const { shares, leader: li } = pollTally(votes), t0 = now();
+      rows.forEach((x,i) => { const p = shares[i]/100;
         if (inst || REDUCE){ x.bar.jump(p); x.lead.jump(i === li ? 1 : 0); x.dg.set(String(votes[i]).padStart(2,' '), true); }
-        else { x.bar.set(p, S.soft, t0 + i*.05); x.lead.set(i === li ? 1 : 0, S.soft, t0); x.dg.set(String(votes[i]).padStart(2,' ')); }
+        else { x.bar.set(p, S.soft, t0 + staggerAt(i, .05)); x.lead.set(i === li ? 1 : 0, S.soft, t0); x.dg.set(String(votes[i]).padStart(2,' ')); }
         x.mk.firstChild.textContent = mine === i ? '✓' : ''; x.mk.style.borderColor = mine === i ? 'var(--success)' : 'var(--line)';
         x.r.setAttribute('aria-pressed', mine === i); x.tt.style.display = show ? '' : 'none'; }); }
     $(st,'.pg-tg').onclick = e2 => { show = !show; const b = e2.currentTarget; b.textContent = show ? 'Totals on' : 'Totals off'; b.setAttribute('aria-pressed', show); sync(true); };
@@ -22307,7 +22347,7 @@ atom({ id:'presencelive', cat:'Dynamic', name:'Presence avatars', block:'avatars
       e.textContent = N[id % 6]; stage.appendChild(e);
       return { id, e, x:new Track(0), sc:new Track(1), o:new Track(1) }; };
     for (let i = 0; i < 3; i++){ const a = mk(nextId++); a.x.jump(i*24); order.push(a); }
-    const layout = (t, keep) => order.forEach((a,i) => { if (a !== keep) a.x.set(i*24, S.base, t + i*.05); a.e.style.zIndex = 10 - i; });
+    const layout = (t, keep) => order.forEach((a,i) => { if (a !== keep) a.x.set(i*24, S.base, t + staggerAt(i, .05)); a.e.style.zIndex = 10 - i; });
     layout(-9); order.forEach((a,i) => a.e.style.zIndex = 10 - i);
     $(st,'button.jn').onclick = () => { if (order.length >= 6) return; const t = now(), a = mk(nextId++);
       a.x.jump(order.length*24 + 20); a.sc.jump(REDUCE ? 1 : .6); a.o.jump(0);
@@ -22453,25 +22493,27 @@ atom({ id:'logtail', cat:'Dynamic', name:'Streaming log tail', block:'log, feed'
 
 atom({ id:'heartbeat', cat:'Dynamic', name:'Heartbeat status', block:'status, health', fam:['S','M'],
   html:`<div class="card col" style="width:min(380px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">API status</b><div class="row" style="gap:10px;align-items:center"><span class="shape" style="width:32px;height:32px;border-radius:10px;background:var(--raised);display:grid;place-items:center;padding:0"><i class="dot" style="display:block;width:12px;height:12px;border-radius:50%;background:var(--success);transform:translateY(.5px)"></i></span><span class="lb" style="position:relative;font-size:14px;font-weight:600;line-height:1.5;min-height:21px;min-width:120px"></span></div><div class="cp small muted" style="position:relative;font-size:12px;line-height:1.5;min-height:18px"></div><div class="row" style="gap:8px;align-items:center"><button class="btn rp" style="min-height:32px">Replay</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="lp"> loop</label></div></div><div class="hint">Slow clock while live · morphs as it degrades</div>`,
-  desc:'The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. The pass ends settled on live.',
+  desc:'The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. When reports stop, the status goes stale: the dot turns grey and stops breathing, so a silent feed never reads as live. The pass ends settled on live.',
   api:'health.set(0|1|2, S.soft) every 2.2s   breathe: 1 ± .06·sin(2πt/2.4)',
   init(st){
     const lb = $(st,'.lb'), cp = $(st,'.cp'), dot = $(st,'.dot'), lp = $(st,'.lp');
-    const S3 = [['Live','All systems normal · settled'],['Degraded','p99 up 2× · watching'],['Outage','Failing over · on it']];
-    const lsw = new Swap(0), csw = new Swap(0), h = new Track(0);
+    const S3 = [['Live','All systems normal · settled'],['Degraded','p99 up 2× · watching'],['Outage','Failing over · on it'],['Stale','No update for 2 min · retrying']];
+    const lsw = new Swap(0), csw = new Swap(0), h = new Track(0), stale = new Track(0);
     S3.forEach(([a,b]) => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = a; lb.appendChild(e);
       const c = document.createElement('span'); c.className = 'layer'; c.textContent = b; cp.appendChild(c); });
     let k = 0, next = 1.4, done = false;
-    $(st,'.rp').onclick = () => { const t = now(); k = 0; done = false; next = t + .3; lsw.to(0); csw.to(0); h.set(0, S.soft, t); };
+    $(st,'.rp').onclick = () => { const t = now(); k = 0; done = false; next = t + .3; lsw.to(0); csw.to(0); h.set(0, S.soft, t); stale.set(0, S.snap, t); };
     const col = v => v < 1 ? mix(v,'var(--warning)','var(--success)') : mix(v - 1,'var(--danger)','var(--warning)');
     return t => { if (lp.checked) done = false;
       if (!done && t >= next){ k++;
-        if (k >= 3){ k = 0; done = !lp.checked; }
+        if (k >= S3.length){ k = 0; done = !lp.checked; }
         lsw.to(k); csw.to(k);
-        if (REDUCE) h.jump(k); else h.set(k, S.soft, t);
+        const hk = k === 3 ? 2 : k, gs = k === 3 ? 1 : 0;
+        if (k === 0 && stale.target) h.jump(0); else if (REDUCE) h.jump(hk); else h.set(hk, S.soft, t);
+        if (REDUCE) stale.jump(gs); else stale.set(gs, S.soft, t);
         next = t + 2.2; }
-      const ph = REDUCE ? 1 : .5 + .5*Math.sin(t*2*Math.PI/2.4), br = REDUCE ? 1 : 1 + .06*Math.sin(t*2*Math.PI/2.4);
-      dot.style.background = col(clamp(h.at(t), 0, 2));
+      const quiet = k === 3, ph = REDUCE || quiet ? 1 : .5 + .5*Math.sin(t*2*Math.PI/2.4), br = REDUCE || quiet ? 1 : 1 + .06*Math.sin(t*2*Math.PI/2.4);
+      dot.style.background = mix(clamp(stale.at(t)), 'var(--muted)', col(clamp(h.at(t), 0, 2)));
       dot.style.opacity = (.72 + .28*ph).toFixed(3);
       dot.style.transform = `scale(${br.toFixed(3)}) translateY(.5px)`;
       [...lb.children].forEach((e,j) => lsw.apply(e,j,t)); [...cp.children].forEach((e,j) => csw.apply(e,j,t)); };
@@ -22492,7 +22534,7 @@ atom({ id:'catchup', cat:'Dynamic', name:'Catch-up burst', block:'metric, sync',
     let live = true, wave = [];
     $(st,'.dp').onclick = () => { live = false; wave = []; pl.textContent = 'Offline · 5 waiting'; cap.textContent = 'Dropped · holding until reconnect'; };
     $(st,'.rc').onclick = () => { if (live) return; const t = now(), n = 5;
-      wave = Array.from({ length:n }, (_,i) => ({ at: wv.checked && !REDUCE ? t + i*.06 : t, i }));
+      wave = Array.from({ length:n }, (_,i) => ({ at: wv.checked && !REDUCE ? t + staggerAt(i, .06) : t, i }));
       pl.textContent = 'Syncing…'; cap.textContent = 'Applying the backlog…'; };
     return t => { while (wave.length && t >= wave[0].at){ const { i } = wave.shift();
         R.forEach(x => { const step = 3 + ((i*7 + x.v) % 23); x.v += step; x.d.dir = 1; x.d.set(String(x.v), REDUCE);
@@ -22516,10 +22558,10 @@ atom({ id:'livepoll', cat:'Forms', name:'Live poll', block:'poll, vote', fam:['M
     let voted = -1, total = 0;
     const paint = () => cap.textContent = voted < 0 ? `Tap to vote · ${total} of 128 in` : `Vote counted · ${total} of 128 in · settled`;
     rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0 && !ch.checked) return;
-      voted = i; total++; const t0 = now();
-      rows.forEach((x,j) => { const pc = O[j][1] + (j === i ? 2 : 0);
+      if (voted < 0) total++; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 2 : 0)));
+      rows.forEach((x,j) => { const pc = shares[j];
         if (REDUCE){ x.v.jump(pc); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
-        else { x.v.set(pc, S.base, t0 + j*.06); x.o.set(1, S.base, t0 + EXIT + j*.06); x.c.set(j === i ? 1 : 0, S.base, t0); }
+        else { x.v.set(pc, S.base, t0 + staggerAt(j, .06)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .06)); x.c.set(j === i ? 1 : 0, S.base, t0); }
         x.b.style.cursor = ch.checked ? 'pointer' : 'default'; });
       paint(); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0, S.snap); x.o.set(0, S.snap); x.c.set(0, S.snap); x.b.style.cursor = 'pointer'; }); paint(); };
@@ -22652,14 +22694,14 @@ atom({ id:'issuelist', cat:'SEO', name:'Issue severity list', block:'seo audit, 
     requestAnimationFrame(() => { const t0 = now(); rows.forEach((r,i) => {
         r.fx.style.height = 'auto'; const full = r.b.offsetHeight; r.fx.style.height = '0px'; r.base = r.b.offsetHeight; r.H = full;
         r.h.jump(0);
-        if (REDUCE) r.o.jump(1); else r.o.set(1, S.base, t0 + i*.06); });
+        if (REDUCE) r.o.jump(1); else r.o.set(1, S.base, t0 + staggerAt(i, .06)); });
       rows.forEach(r => r.h.jump(0));
       requestAnimationFrame(() => rows.forEach(r => { if (!r.done && !r.open) r.h.jump(r.base); }));
       paint(); });
     dv.onchange = paint;
     $(st,'.rs').onclick = () => { dg.dir = 1; if (REDUCE) dg.set('3', true); else dg.set('3'); fin.to(0);
       rows.forEach((r,i) => { r.done = false; r.open = false; r.rv.disabled = false; r.tg.setAttribute('aria-expanded', 'false');
-        if (REDUCE){ r.o.jump(1); r.h.jump(r.base); } else { r.o.set(1, S.base, now() + i*.06); r.h.set(r.base); } }); paint(); };
+        if (REDUCE){ r.o.jump(1); r.h.jump(r.base); } else { r.o.set(1, S.base, now() + staggerAt(i, .06)); r.h.set(r.base); } }); paint(); };
     return t => { rows.forEach(r => { r.w.style.height = px(Math.max(0, r.h.at(t))); r.w.style.visibility = r.done && clamp(r.o.at(t)) < .02 ? 'hidden' : 'visible';
         fade(r.b, clamp(r.o.at(t)), (1-clamp(r.o.at(t)))*6); r.fx.style.height = px(Math.max(0, r.h.at(t) - r.base)); });
       dg.render(t); L.forEach((el,k) => fin.apply(el,k,t)); };
@@ -22855,7 +22897,7 @@ atom({ id:'vitals', cat:'SEO', name:'Core vitals bars', block:'seo vitals, metri
       rows.forEach((r,i) => { const good = Math.random() < .7;
         r.val = good ? r.m.lo + Math.random()*(r.m.lim[0]-r.m.lo) : r.m.lim[0] + Math.random()*(r.m.hi-r.m.lim[0]);
         const p = clamp((r.val - r.m.lo)/(r.m.hi - r.m.lo));
-        if (REDUCE){ r.v.jump(p); r.dg.set(r.m.fmt(r.val), true); } else { r.v.set(p, S.base, t0 + i*.04); r.dg.set(r.m.fmt(r.val)); } });
+        if (REDUCE){ r.v.jump(p); r.dg.set(r.m.fmt(r.val), true); } else { r.v.set(p, S.base, t0 + staggerAt(i, .04)); r.dg.set(r.m.fmt(r.val)); } });
       const pass = rows.every(r => r.val <= r.m.lim[0]);
       setTimeout(() => sw.to(pass ? 1 : 0), REDUCE ? 0 : 700); };
     $(st,'.ms').onclick = go; go();
@@ -23156,7 +23198,7 @@ atom({ id:'savemeter', cat:'Guidance', name:'Save meter', block:'form completene
 
 
 atom({ id:'undotoast', cat:'Guidance', name:'Undo toast', block:'undo, archive', fam:['X','S','T'], tall:true,
-  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px;min-height:210px;overflow:hidden"><b style="font-size:15px;font-weight:600;line-height:1.5">Roadmap</b><div class="small muted" style="line-height:1.5">Archive a step — it waits behind the toast.</div><div class="itwrap" style="overflow:hidden;margin-top:8px"><div class="it row" style="gap:10px;padding:8px 0;min-height:32px"><span style="display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent-tint);padding:0;flex:none;font-size:13px;font-weight:600;color:var(--accent)"><span style="transform:translateY(-.5px)">Q3</span></span><span class="col" style="gap:0;flex:1"><b style="font-size:14px;line-height:1.5">Launch checklist</b><span class="cap" style="font-size:12px;color:var(--muted);line-height:1.5">4 of 4 · ships Friday</span></span><span class="ck" style="position:relative;display:inline-block;width:18px;height:14px"><span class="layer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span></span><button class="btn ar" style="min-height:32px;padding:6px 12px">Archive</button></div></div><div class="ts" style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--ink);color:var(--card);border-radius:10px;padding:10px 12px;visibility:hidden"><div class="row" style="gap:10px"><span style="position:relative;width:20px;height:20px;flex:none;display:grid;place-items:center;padding:0"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/><circle class="ring" cx="10" cy="10" r="8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 10 10)"/></svg></span><span style="font-size:13px;line-height:1.5;flex:1">Step archived</span><button class="btn un" style="min-height:32px;padding:6px 12px;background:transparent;color:var(--card);border-color:rgba(255,255,255,.4)">Undo</button></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Demo:</span></div></div><div class="hint">Archive parks the step · the ring drains in 6s</div>`,
+  html:`<div class="col" style="gap:8px;align-items:center;width:100%"><div class="ui card" style="position:relative;width:min(320px,94%);padding:14px 16px;min-height:210px;overflow:hidden"><b style="font-size:15px;font-weight:600;line-height:1.5">Roadmap</b><div class="small muted" style="line-height:1.5">Archive a step — it waits behind the toast.</div><div class="itwrap" style="overflow:hidden;margin-top:8px"><div class="it row" style="gap:10px;padding:8px 0;min-height:32px"><span style="display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--accent-tint);padding:0;flex:none;font-size:13px;font-weight:600;color:var(--accent)"><span style="transform:translateY(-.5px)">Q3</span></span><span class="col" style="gap:0;flex:1"><b style="font-size:14px;line-height:1.5">Launch checklist</b><span class="cap" style="font-size:12px;color:var(--muted);line-height:1.5">4 of 4 · ships Friday</span></span><span class="ck" style="position:relative;display:inline-block;width:18px;height:14px"><span class="layer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg></span></span><button class="btn ar" style="min-height:32px;padding:6px 12px">Archive</button></div></div><div class="ts" role="status" aria-live="polite" style="position:absolute;left:12px;right:12px;bottom:12px;background:var(--ink);color:var(--card);border-radius:10px;padding:10px 12px;visibility:hidden"><div class="row" style="gap:10px"><span style="position:relative;width:20px;height:20px;flex:none;display:grid;place-items:center;padding:0"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="rgba(255,255,255,.25)" stroke-width="2.5"/><circle class="ring" cx="10" cy="10" r="8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" transform="rotate(-90 10 10)"/></svg></span><span style="font-size:13px;line-height:1.5;flex:1">Step archived</span><button class="btn un" style="min-height:32px;padding:6px 12px;background:transparent;color:var(--card);border-color:rgba(255,255,255,.4)">Undo</button></div></div></div><div class="tw row small muted" style="gap:6px"><span style="font-size:12px">Demo:</span></div></div><div class="hint">Archive parks the step · the ring drains in 6s</div>`,
   desc:'Archiving collapses the step on a height spring while the toast rises; its ring drains over six seconds. Undo restores the height and swaps a check in. Expiry or Undo both land in a quiet terminal.',
   api:'item.h.set(0) parks behind   toast.o.set(1, base) + ring 6s   undo: h.set(full), check.to(1) · REDUCE: jump',
   init(st){
@@ -23309,7 +23351,8 @@ atom({ id:'segswitch', cat:'Views', name:'Segmented view switch', block:'segment
     const place = i => { const b = btns[i]; return [b.offsetLeft + 2, b.offsetLeft + b.offsetWidth - 2]; };
     const go = i => { if (i === cur){ swH.cur = -1; swH.to(i); swR.cur = -1; swR.to(i, now() + .05); return; } cur = i; const [a, b] = place(i); e.go(a, b);
       swH.to(i); swR.to(i, now() + .05); h.set(V[i].H); if (rc.checked) dg.set(V[i].c); else dg.set(V[i].c, true); paint(); };
-    const paint = () => btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; });
+    const seg = segmented(btns, i => go(i));
+    const paint = () => { seg.mark(cur); btns.forEach((b, k) => { b.style.color = k === cur ? 'var(--ink)' : 'var(--muted)'; b.style.fontWeight = k === cur ? 600 : 500; }); };
     btns.forEach((b, i) => b.onclick = () => go(i));
     requestAnimationFrame(() => { const [a, b] = place(0); e.jump(a, b); paint(); });
     dg.set('12', true); paint();
@@ -23438,7 +23481,7 @@ atom({ id:'ptrarm', cat:'Views', name:'Pull-to-refresh arm', block:'pull to refr
         pull.jump(dy < TH ? dy : TH + rb(dy - TH, K())); sw.to(pull.target > TH ? 1 : 0); },
       up:() => { if (loading) return; const v = pull.target;
         if (v > TH){ loading = true; spinT0 = now(); pull.set(54, S.base);
-          setTimeout(() => { open.forEach((o, i) => { o.jump(0); o.set(1, S.soft, now() + i * .07); });
+          setTimeout(() => { open.forEach((o, i) => { o.jump(0); o.set(1, S.soft, now() + staggerAt(i, .07)); });
             pull.set(0, S.base); sw.to(2); loading = false; }, REDUCE ? 60 : 900); }
         else pull.set(0, S.base); } });
     lbl.textContent = 'Pull to refresh';
@@ -23787,7 +23830,7 @@ atom({ id:'pickuptime', cat:'Storefront', name:'Pickup time picker', block:'pick
     const layers = D.map(d => { const e2 = document.createElement('span'); return e2; });
     db.forEach((b, i) => b.onclick = () => { if (i === day) return; day = i; slot = -1; const t0 = now();
       if (REDUCE){ de.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth); draw(true); pe.jump(0, 0); pop.jump(0); }
-      else { de.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); dop.set(1); q = SL[day].map((_, k) => [t0 + k * .06, () => draw(k === SL[day].length - 1)]); }
+      else { de.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); dop.set(1); q = SL[day].map((_, k) => [t0 + staggerAt(k, .06), () => draw(k === SL[day].length - 1)]); }
       db.forEach((x, j) => { x.setAttribute('aria-pressed', j === day); x.style.color = mix(j === day ? 1 : 0, 'var(--card)', 'var(--ink)'); });
       cf.textContent = 'Pick a time ' + D[day].toLowerCase() + '.'; });
     we.onchange = () => { db[2].style.display = we.checked ? '' : 'none'; if (!we.checked && day === 2) db[0].click(); };
@@ -23837,7 +23880,7 @@ atom({ id:'addressform', cat:'Forms', name:'Address form', block:'address, count
     uk.innerHTML = `<div class="row" style="gap:8px"><input aria-label="Postcode" class="zp2" placeholder="Postcode" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"><input aria-label="County" placeholder="County" style="height:36px;flex:1;min-width:0;border:1.5px solid var(--muted);border-radius:9px;padding:0 12px;font-size:14px"></div><span class="cy2 small" style="font-size:12px;color:var(--muted);line-height:1.5">Try SW1A 1AA.</span>`;
     set.appendChild(uk);
     const e = edges(0, 0), sw = new Swap(0), h = new Track(76), csw = new Swap(0);
-    const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'Unknown ZIP — keep typing'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
+    const CL = ['Enter ZIP to look up the city', 'San Francisco, CA', 'No city for that ZIP. Check the digits or type the city.'].map(s => { const el = document.createElement('span'); el.className = 'layer'; el.style.justifyContent = 'flex-start'; el.textContent = s; cy.appendChild(el); return el; });
     let mode = 0;
     const H = [76, 76];
     const pick = (i, inst) => { mode = i; btns.forEach((b, j) => { b.setAttribute('aria-pressed', j === i); if (!inst) b.style.color = ''; });
@@ -23871,9 +23914,9 @@ atom({ id:'reviewform', cat:'Forms', name:'Review form', block:'review form, pho
       b.onclick = () => { const o = !b._on; b._on = o; b.setAttribute('aria-pressed', o); tiles[i].h.set(o ? 1 : 0, S.base);
         if (o) setTimeout(() => tiles[i].sh.set(1, S.soft), REDUCE ? 0 : 180); else tiles[i].sh.jump(0);
         b.innerHTML = o ? `<span style="width:100%;height:100%;background:linear-gradient(135deg,var(--line-soft),var(--raised));display:grid;place-items:center;font-size:18px">◍</span>` : b.innerHTML; }; }
-    const M = ['😞', '🙁', '😐', '🙂', '😍'], MN = ['Tap a face', 'Rough', 'Okay', 'Fine', 'Good', 'Loved it'];
+    const M = [-4, -2, 0, 2, 4].map(c => ic(`<circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01"/><path d="M8 ${15.5 - c/4} Q12 ${15.5 + c/2} 16 ${15.5 - c/4}"/>`, 26, 1.6)), MN = ['Tap a face', 'Rough', 'Okay', 'Fine', 'Good', 'Loved it'];
     const L = MN.map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.textContent = s; ml.appendChild(e); return e; });
-    const faces = M.map((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-label', MN[i + 1]); b.textContent = m;
+    const faces = M.map((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-label', MN[i + 1]); b.innerHTML = m;
       b.style.cssText = 'width:36px;height:36px;padding:0;border:0;background:none;font-size:20px;cursor:pointer;display:grid;place-items:center;filter:grayscale(1);opacity:.55'; md.appendChild(b); return b; });
     const mood = new Track(2), msw = new Swap(0), psw = new Swap(0);
     const PL = ['Post review', '✓ Thanks — posted'].map(s => { const e = document.createElement('span'); e.className = 'layer'; e.textContent = s; snd.appendChild(e); return e; });
@@ -24472,7 +24515,7 @@ atom({ id:'referralprog', cat:'Newsletter', name:'Referral progress', block:'new
     let n = 0;
     $(st,'.adv').onclick = () => { if (n >= 5) return; n++; const t0 = now();
       if (REDUCE){ fillT.jump(n/5); dots.forEach((d,i) => d.v.jump(i < n ? 1 : 0)); dg.set(String(n), true); rsw.cur = n >= 5 ? 1 : 0; }
-      else { fillT.set(n/5); dots.forEach((d,i) => { if (i === n-1) d.v.set(1, S.base, t0 + i*.06); }); dg.set(String(n)); rsw.to(n >= 5 ? 1 : 0); } };
+      else { fillT.set(n/5); dots.forEach((d,i) => { if (i === n-1) d.v.set(1, S.base, t0 + staggerAt(i, .06)); }); dg.set(String(n)); rsw.to(n >= 5 ? 1 : 0); } };
     return t => { fill.style.width = (clamp(fillT.at(t))*100).toFixed(2) + '%'; dg.render(t);
       dots.forEach(d => { const k = clamp(d.v.at(t)); d.s.style.background = mix(k,'var(--ink)','transparent'); d.s.style.color = mix(k,'var(--card)','var(--muted)'); d.s.style.borderColor = mix(k,'var(--ink)','var(--line)'); });
       R.forEach((x,i) => rsw.apply(x,i,t));
@@ -24569,10 +24612,10 @@ atom({ id:'pollblock', cat:'Newsletter', name:'Reader poll', block:'newsletter, 
       $$(b,'span')[2].textContent = n; pl.appendChild(b);
       return { b, fill:$(b,'i'), ck:$(b,'.ck'), pct:$$(b,'span')[3], v:new Track(0, S.lazy), o:new Track(0), c:new Track(0) }; });
     let voted = -1;
-    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now();
-      rows.forEach((x,j) => { const p = O[j][1] + (j === i ? 2 : -1);
+    rows.forEach((r,i) => r.b.onclick = () => { if (voted >= 0) return; voted = i; const t0 = now(), { shares } = pollTally(O.map(([, c], j) => c + (j === i ? 2 : 0)));
+      rows.forEach((x,j) => { const p = shares[j];
         if (REDUCE){ x.v.jump(p); x.o.jump(1); x.c.jump(j === i ? 1 : 0); }
-        else { x.v.set(p, S.base, t0 + j*.05); x.o.set(1, S.base, t0 + EXIT + j*.05); x.c.set(j === i ? 1 : 0); }
+        else { x.v.set(p, S.base, t0 + staggerAt(j, .05)); x.o.set(1, S.base, t0 + EXIT + staggerAt(j, .05)); x.c.set(j === i ? 1 : 0); }
         x.b.style.cursor = 'default'; }); });
     $(st,'.rs').onclick = () => { voted = -1; rows.forEach(x => { x.v.set(0); x.o.set(0, S.snap); x.c.set(0); x.b.style.cursor = 'pointer'; }); };
     return t => rows.forEach(r => { const v = r.v.at(t), c = clamp(r.c.at(t));
@@ -24666,7 +24709,7 @@ atom({ id:'prefcenter', cat:'Newsletter', name:'Preference center', block:'newsl
       if (inst){ pm.jump(mode === 0 ? 1 : 0); } else { pm.set(mode === 0 ? 1 : 0); }
       P.mode = mode; };
     P.b.onclick = () => { const t0 = now(); const to = P.mode === 0 ? 0 : 1;
-      C.forEach((c,i) => { if (REDUCE) c.v.jump(to); else c.v.set(to, S.base, t0 + i*.05); c.b.setAttribute('aria-pressed', !!to); });
+      C.forEach((c,i) => { if (REDUCE) c.v.jump(to); else c.v.set(to, S.base, t0 + staggerAt(i, .05)); c.b.setAttribute('aria-pressed', !!to); });
       syncParent(); nsw.to(wk.checked && to ? 1 : 0); };
     C.forEach(c => c.b.onclick = () => { c.v.set(c.v.target ? 0 : 1); c.b.setAttribute('aria-pressed', !!c.v.target); syncParent(); });
     wk.onchange = () => nsw.to(wk.checked && P.mode !== -1 ? 1 : 0);
@@ -25384,7 +25427,7 @@ atom({ id:'cartdrawer', cat:'Commerce', name:'Cart drawer', block:'cart, drawer,
     return t => { const p = clamp(open.at(t)); dw.style.transform = `translateX(${((1-p)*232).toFixed(1)}px)`;
       dw.style.visibility = p < .01 ? 'hidden' : 'visible'; dw.setAttribute('aria-hidden', String(p < .01));
       scr.style.opacity = (p*.35).toFixed(3); scr.style.pointerEvents = p > .5 ? 'auto' : 'none';
-      R.forEach((r,i) => { const q = open.target === 1 ? clamp(prog(t, t0 + i*.04)) : 1; r.style.opacity = q.toFixed(3); r.style.transform = `translateX(${((1-q)*16).toFixed(1)}px)`; });
+      R.forEach((r,i) => { const q = open.target === 1 ? clamp(prog(t, t0 + staggerAt(i, .04))) : 1; r.style.opacity = q.toFixed(3); r.style.transform = `translateX(${((1-q)*16).toFixed(1)}px)`; });
       bar.style.width = (clamp(fill.at(t))*100).toFixed(1) + '%'; L.forEach((e,k) => sv.apply(e,k,t));
       $(st,'.st').textContent = money(sub.at(t)); $(st,'.tt').textContent = money(tot.at(t)); };
   }});
@@ -25506,7 +25549,7 @@ atom({ id:'taxest', cat:'Commerce', name:'Tax estimator', block:'checkout, tax, 
     $(st,'.rt').onchange = () => { if (t0 > 0){ const r = rate(), x = 68*r; tx.set(x); tt.set(68 + x); } };
     return t => { const p = clamp(open.at(t)); fd.style.maxHeight = (p*300).toFixed(0) + 'px'; fd.style.opacity = p.toFixed(3);
       const vals = [sub.at(t), tx.at(t), tt.at(t)];
-      R.forEach((el,i) => { const q = t0 < 0 ? 0 : clamp(prog(t, t0 + i*.05)); el.parentElement.style.opacity = q.toFixed(3);
+      R.forEach((el,i) => { const q = t0 < 0 ? 0 : clamp(prog(t, t0 + staggerAt(i, .05))); el.parentElement.style.opacity = q.toFixed(3);
         el.parentElement.style.transform = `translateY(${((1-q)*8).toFixed(1)}px)`; el.textContent = money(Math.max(0, vals[i])); }); };
   }});
 atom({ id:'expresspay', cat:'Commerce', name:'Express pay sheet', block:'checkout, sheet, wallets', fam:['M','S'], tall:true,
@@ -25526,7 +25569,7 @@ atom({ id:'expresspay', cat:'Commerce', name:'Express pay sheet', block:'checkou
     // A wallet press opens the order sheet; a press with the sheet already open confirms, so every press responds.
     cf.onclick = pay; WB.forEach(b => b.onclick = () => { if (sheet.target === 1) pay(); else sheet.set(1); });
     sh.onclick = e => { if (e.target === sh) sheet.set(0); };
-    return t => { WB.forEach((b,i) => { const q = clamp(prog(t, t0 + i*.06)); b.style.opacity = q.toFixed(3); b.style.transform = `translateY(${((1-q)*10).toFixed(1)}px)`; });
+    return t => { WB.forEach((b,i) => { const q = clamp(prog(t, t0 + staggerAt(i, .06))); b.style.opacity = q.toFixed(3); b.style.transform = `translateY(${((1-q)*10).toFixed(1)}px)`; });
       const p = clamp(sheet.at(t)); sh.style.transform = `translateY(${((1-p)*220).toFixed(1)}px)`;
       L.forEach((r,i) => { const q = clamp(prog(t, now() - 9 + 0)); r.style.opacity = p.toFixed(3); });
       const g = clamp(ok.at(t)); cf.style.background = mix(g,'var(--success)','var(--ink)'); };
@@ -25746,7 +25789,7 @@ atom({ id:'velosheet', cat:'Overlays', name:'Velocity drawer', block:'Drag 1:1, 
     st.addEventListener('keydown', ev => { if (ev.key === 'Escape' && x.target === 0){ x.set(-W, S.snap); last?.focus?.(); } });
     return t => { const v = held ? hx : x.at(t), p = clamp(1+v/W); dw.style.transform = `translateX(${px(v)})`; sr.style.opacity = (p*.3).toFixed(3); sr.style.pointerEvents = p > .5 ? 'auto' : 'none';
       const settled = !held && Math.abs(v) < 1;
-      links.forEach((a,i) => { const q = settled && $(st,'.st2').checked ? clamp(prog(t, tOpen+.06+i*.045)) : (x.target === 0 ? 1 : 0);
+      links.forEach((a,i) => { const q = settled && $(st,'.st2').checked ? clamp(prog(t, tOpen+.06+staggerAt(i, .045))) : (x.target === 0 ? 1 : 0);
         a.style.opacity = q.toFixed(3); a.style.transform = `translateX(${px((1-q)*-12)})`; }); };
   }});
 atom({ id:'carettip', cat:'Overlays', name:'Caret tooltip', block:'Follows caret, Swap per word', fam:['X','S'], tall:false,
@@ -25808,7 +25851,7 @@ atom({ id:'dialogform', cat:'Overlays', name:'Dialog form steps', block:'Pinned 
       dl.style.opacity = p.toFixed(3); dl.style.visibility = p < .01 ? 'hidden' : 'visible'; dl.style.transform = `translate(-50%,calc(-50% + ${px((1-p)*8)})) scale(${(.96+.04*p).toFixed(4)})`; dl.style.pointerEvents = p > .5 ? 'auto' : 'none';
       layers.forEach((e,k) => sw.apply(e,k,t)); };
   }});
-atom({ id:'confirmhold', cat:'Overlays', name:'Hold to confirm', block:'Danger slides in, hold + countdown', fam:['X','T'], tall:true,
+atom({ id:'confirmhold', cat:'Overlays', name:'Hold to confirm a deletion', block:'Danger slides in, hold + countdown', fam:['X','T'], tall:true,
   html:`<div class="card col" style="width:min(270px,86%);padding:8px"><div class="rw" style="overflow:hidden"><div class="row fr" style="justify-content:space-between;padding:8px 10px"><span class="small" style="font-weight:500;font-size:13.5px;line-height:1.5">About page</span><button class="btn del" style="color:var(--danger);min-height:36px;padding:4px 10px">Delete</button></div></div></div><div class="sr" style="position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none"></div><div class="dl card" role="alertdialog" aria-label="Confirm delete" style="position:absolute;left:50%;top:50%;width:min(250px,84%);padding:18px 20px;visibility:hidden;border-radius:15px"><b style="display:block;font-size:15px;font-weight:600;line-height:1.5">Delete \u201cAbout\u201d?</b><p class="small muted" style="margin:6px 0 12px;font-size:13px;line-height:1.55">Hold the button 3s to confirm.</p><button class="btn hd" style="width:100%;min-height:40px;background:var(--danger);border-color:var(--danger);color:#fff;position:relative;overflow:hidden"><span class="fl" style="position:absolute;inset:0;background:#ffffff2e;width:0"></span><span class="lb" style="position:relative">Hold to delete \u00b7 <b class="cd"></b></span></button><div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn cs" style="min-height:36px">Cancel</button></div></div><label class="row small muted" style="gap:6px;position:absolute;top:10px;right:12px;font-size:12px"><input type="checkbox" class="ct" checked> 3s countdown</label><div class="hint">Danger slides after dialog \u00b7 row collapses</div>`,
   desc:'The danger confirm slides in on base after the dialog. Hold-to-confirm runs a digits countdown, then the row collapses only after exit.',
   api:'dlg base; hold 3s Digits; row.h base after exit',
@@ -25859,7 +25902,7 @@ atom({ id:'bundlesweep', cat:'Email', name:'Bundle sweep', block:'email, bundle,
       const t = now();
       if (done){ done = false; sw.to(0, t); dg.set('3'); o.forEach(x => x.set(1, S.base, t)); h.forEach(x => x.set(54, S.base, t)); btn.textContent = 'Archive bundle'; return; }
       done = true; btn.textContent = 'Undo';
-      rows.forEach((r, i) => { o[i].set(0, S.base, t + i*.05); h[i].set(0, S.base, t + .18 + i*.06); });
+      rows.forEach((r, i) => { o[i].set(0, S.base, t + staggerAt(i, .05)); h[i].set(0, S.base, t + .18 + staggerAt(i, .06)); });
       dg.set('0'); sw.to(1, t + .3);
     };
     return t => { rows.forEach((d, i) => { const p = clamp(o[i].at(t)), hh = Math.max(0, h[i].at(t));
@@ -25879,7 +25922,7 @@ atom({ id:'snoozesheet', cat:'Email', name:'Snooze sheet', block:'email, snooze,
     const chips = times.map(s => { const b = document.createElement('button'); b.className = 'btn'; b.style.cssText = 'min-height:32px;margin:0 6px 6px 0;font-size:13px'; b.textContent = s; sheet.appendChild(b); return b; });
     const sh = new Track(0), ce = chips.map(() => new Track(0)), rh = new Track(58), sw = new Swap(0);
     let open = false;
-    const show = v => { open = v; const t = now(); sh.set(v ? 1 : 0, v ? S.base : S.snap, t); if (v) chips.forEach((c, i) => { ce[i].jump(0); ce[i].set(1, S.base, t + .08 + i*.04); }); };
+    const show = v => { open = v; const t = now(); sh.set(v ? 1 : 0, v ? S.base : S.snap, t); if (v) chips.forEach((c, i) => { ce[i].jump(0); ce[i].set(1, S.base, t + .08 + staggerAt(i, .04)); }); };
     btn.onclick = () => show(!open);
     chips.forEach((c, i) => c.onclick = () => { const t = now(); show(false); rh.set(0, S.base, t); rh.set(58, S.soft, t + .22); sw.to(1, t + .22); btn.textContent = 'Snoozed'; btn.disabled = true; });
     return t => { const p = clamp(sh.at(t));
@@ -25949,7 +25992,7 @@ atom({ id:'branchfold', cat:'Email', name:'Branch fold', block:'email, thread, q
     let full = 0; requestAnimationFrame(() => { full = box.scrollHeight; });
     let open = true;
     qbtn.onclick = () => { open = !open; const t = now(); if (!full) full = box.scrollHeight;
-      fold.set(open ? 1 : 0, S.base, t); sw.to(open ? 0 : 1, t); cn.forEach((c, i) => c.set(open ? 1 : 0, S.lazy, t + i*.03)); };
+      fold.set(open ? 1 : 0, S.base, t); sw.to(open ? 0 : 1, t); cn.forEach((c, i) => c.set(open ? 1 : 0, S.lazy, t + staggerAt(i, .03))); };
     return t => { const p = clamp(fold.at(t));
       if (full) box.style.height = px(p*full); box.style.opacity = (.45 + .55*p).toFixed(3);
       box.style.visibility = p < .02 ? 'hidden' : 'visible';
@@ -25974,7 +26017,7 @@ atom({ id:'attachstrip', cat:'Email', name:'Attachment strip', block:'email, att
     const names = files.map(f => f[0] + ' · ' + f[1]).map(s => { const e = document.createElement('span'); e.className = 'layer'; e.style.justifyContent = 'flex-start'; e.style.fontSize = '13px'; e.textContent = s; pn.appendChild(e); return e; });
     const en = th.map(() => new Track(0)), sw = new Swap(0), rad = new Track(10), ovd = new Digits(ov, 1);
     let left = 2; ovd.set('2', true); sw.to(0, now());
-    const t0 = now() + .2; th.forEach((b, i) => en[i].set(1, S.base, t0 + i*.03));
+    const t0 = now() + .2; th.forEach((b, i) => en[i].set(1, S.base, t0 + staggerAt(i, .03)));
     const sel = i => { const t = now(); sw.to(i, t); rad.set(10 + i*4, S.base, t); pic.textContent = files[i][1]; };
     th.forEach((b, i) => b.onclick = () => sel(i));
     sel(0);
@@ -26189,9 +26232,9 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
       box.appendChild(d);
       return { d, bar: d.querySelector('.bar'), ck: d.querySelector('.ck'), pc: d.querySelector('.pc'), w: new Track(0), f: new Track(0) };
     });
-    const paint = (t, instant) => { const sum = opts.reduce((a, o) => a + o[1], 0);
-      rows.forEach((r, i) => { const p = opts[i][1] / sum;
-        r.w.set(p*100, S.base, t + i*.06); r.f.set(1, S.lazy, t + .15 + i*.06);
+    const paint = (t, instant) => { const { shares } = pollTally(opts.map(o => o[1]));
+      rows.forEach((r, i) => { const p = shares[i] / 100;
+        r.w.set(p*100, S.base, t + staggerAt(i, .06)); r.f.set(1, S.lazy, t + .15 + staggerAt(i, .06));
         if (instant){ r.w.jump(p*100); r.f.jump(1); }
         r.ck.textContent = i === mine ? '✓' : '';
         r.ck.style.background = i === mine ? 'var(--ink)' : 'var(--card)';
@@ -26202,7 +26245,7 @@ atom({ id:'emailpoll', cat:'Email', name:'Poll by email', block:'email, poll, vo
       if (mine === i) return;
       if (mine >= 0 && !chg.checked) return;
       if (mine >= 0) opts[mine][1]--;
-      opts[i][1]++; mine = i; total++;
+      if (mine < 0) total++; opts[i][1]++; mine = i;
       tot.set(String(total)); paint(t); });
     paint(now() + .15);
     return t => { rows.forEach(r => { r.bar.style.width = Math.max(0, r.w.at(t)).toFixed(2) + '%';
@@ -26560,7 +26603,7 @@ atom({ id:'audio-recorder', cat:'Audio', name:'Voice recorder', block:'audio, re
     rcStop.onclick = () => { const t = now(), el = t - t0; clipLen = Math.max(1, Math.round(el));
       const src = samples.length ? samples : [.4], out = [...Array(NC)].map((_,i) => { const a = Math.floor(i/NC*src.length), b = Math.max(a + 1, Math.floor((i + 1)/NC*src.length)); return Math.max(...src.slice(a, b)); });
       const top = Math.max(...out) || 1;
-      cb.forEach((_,i) => { const from = 4 + hist[Math.min(NL - 1, Math.floor(i/NC*NL))]*32, to = 4 + clamp(out[i]/top, .12, 1)*32; ch[i].jump(from); if (REDUCE) ch[i].jump(to); else ch[i].set(to, S.soft, t + i*.012); });
+      cb.forEach((_,i) => { const from = 4 + hist[Math.min(NL - 1, Math.floor(i/NC*NL))]*32, to = 4 + clamp(out[i]/top, .12, 1)*32; ch[i].jump(from); if (REDUCE) ch[i].jump(to); else ch[i].set(to, S.soft, t + staggerAt(i, .012)); });
       len.textContent = AU_FMT(clipLen); pp = 0; playing = false; icon.jump(0); go('clip', target(), t); say(`Clip saved, ${AU_FMT(clipLen)}`); rcPlay.focus({ preventScroll:true }); };
     rcPlay.onclick = () => { const t = now(); if (!playing){ if (pp >= 1) pp = 0; pt0 = t - pp*clipLen; playing = true; } else { pp = clamp((t - pt0)/clipLen); playing = false; } if (REDUCE) icon.jump(playing ? 1 : 0); else icon.set(playing ? 1 : 0); rcPlay.setAttribute('aria-label', playing ? 'Pause clip' : 'Play clip'); };
     rcDel.onclick = () => { playing = false; pp = 0; icon.jump(0); go('idle', 56, now()); say('Clip deleted'); rcMic.focus({ preventScroll:true }); };
@@ -26633,7 +26676,7 @@ atom({ id:'audio-room', cat:'Audio', name:'Audio room', block:'audio, room, spea
     const relayout = (t, jump) => tiles.forEach((tl, i) => { const s = slot(i, tiles.length); const set = (tr, v) => (jump || REDUCE) ? tr.jump(v) : tr.set(v, S.base, t); set(tl.x, s.x); set(tl.y, s.y); set(tl.w, s.w); set(tl.h, s.h); });
     function add(name, idx, t, instant){
       const rmTile = AU_EL('button', 'position:absolute;left:0;top:0;border:0;border-radius:14px;background:var(--raised);color:var(--ink);padding:0;cursor:pointer;overflow:visible;transform-origin:50% 50%',
-        `<span class="ring" style="position:absolute;left:50%;top:14px;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:var(--accent);opacity:0;pointer-events:none"></span><span style="position:absolute;left:50%;top:14px;width:44px;height:44px;margin-left:-22px;border-radius:50%;display:grid;place-items:center;font:600 16px var(--sans);color:var(--card);background:${HUES[idx % HUES.length]}">${name[0]}</span><span style="position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;line-height:1.2">${name}</span><svg class="mu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:8px;top:8px"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/><path class="sl" d="M4 4L20 20" pathLength="1" stroke="var(--danger)" stroke-width="2.4" stroke-dasharray="1" stroke-dashoffset="1"/></svg><span class="hd" aria-hidden="true" style="position:absolute;right:6px;top:4px;font-size:16px;line-height:1">✋</span>`);
+        `<span class="ring" style="position:absolute;left:50%;top:14px;width:44px;height:44px;margin-left:-22px;border-radius:50%;background:var(--accent);opacity:0;pointer-events:none"></span><span style="position:absolute;left:50%;top:14px;width:44px;height:44px;margin-left:-22px;border-radius:50%;display:grid;place-items:center;font:600 16px var(--sans);color:var(--card);background:${HUES[idx % HUES.length]}">${name[0]}</span><span style="position:absolute;left:0;right:0;bottom:8px;text-align:center;font-size:12px;line-height:1.2">${name}</span><svg class="mu" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="position:absolute;left:8px;top:8px"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/><path class="sl" d="M4 4L20 20" pathLength="1" stroke="var(--danger)" stroke-width="2.4" stroke-dasharray="1" stroke-dashoffset="1"/></svg><span class="hd" aria-hidden="true" style="position:absolute;right:6px;top:4px;line-height:0;color:var(--ink)">${ic(I.hand,16,1.75)}</span>`);
       const tl = { name, idx, el:rmTile, ring:$(rmTile,'.ring'), sl:$(rmTile,'.sl'), mu:$(rmTile,'.mu'), hd:$(rmTile,'.hd'), x:new Track(0), y:new Track(0), w:new Track(100), h:new Track(100), sc:new Track(instant || REDUCE ? 1 : 0, S.base), msl:new Track(0, S.snap), hand:new Track(0, POP), muted:false, up:false, s:0 };
       rmTile.setAttribute('aria-pressed', 'false'); rmTile.setAttribute('aria-label', `Mute ${name}`);
       rmTile.onclick = () => { tl.muted = !tl.muted; tl.msl.set(tl.muted ? 1 : 0); rmTile.setAttribute('aria-pressed', String(tl.muted)); rmTile.setAttribute('aria-label', `${tl.muted ? 'Unmute' : 'Mute'} ${name}`); };
@@ -26728,7 +26771,7 @@ atom({ id:'comments-reactions', cat:'Comments', name:'Reaction picker', block:'c
     let isOpen = false, mine = -1, hold = 0, held = false;
     const sync = () => chips.forEach((c,i) => { const on = counts[i] > 0; c.el.hidden = !on && c.o.target === 0 && !c.pend; c.el.setAttribute('aria-pressed', String(mine === i)); c.el.setAttribute('aria-label', `${E[i]} ${NAMES[i]}, ${counts[i]}${mine === i ? ', you reacted' : ''}`); c.inn.style.boxShadow = mine === i ? '0 0 0 1.5px var(--accent)' : '0 0 0 1.5px transparent'; c.inn.style.background = mine === i ? 'color-mix(in oklab, var(--accent) 14%, var(--raised))' : 'var(--raised)'; });
     const setOpen = (on, byKey) => { if (on === isOpen) return; isOpen = on; rpOpen.setAttribute('aria-expanded', String(on)); const t = now();
-      if (on){ pick.style.visibility = 'visible'; picks.forEach((p,i) => { p.y.jump(REDUCE ? 0 : 16); p.o.jump(REDUCE ? 1 : 0); if (!REDUCE){ p.y.set(0, S.base, t + i*.04); p.o.set(1, S.base, t + i*.04); } }); if (REDUCE) shell.jump(1); else shell.set(1, S.base, t); if (byKey) picks[Math.max(0, mine)].el.focus({ preventScroll:true }); }
+      if (on){ pick.style.visibility = 'visible'; picks.forEach((p,i) => { p.y.jump(REDUCE ? 0 : 16); p.o.jump(REDUCE ? 1 : 0); if (!REDUCE){ p.y.set(0, S.base, t + staggerAt(i, .04)); p.o.set(1, S.base, t + staggerAt(i, .04)); } }); if (REDUCE) shell.jump(1); else shell.set(1, S.base, t); if (byKey) picks[Math.max(0, mine)].el.focus({ preventScroll:true }); }
       else { if (REDUCE){ shell.jump(0); picks.forEach(p => p.o.jump(0)); } else { shell.set(0, S.snap, t); picks.forEach(p => p.o.set(0, S.snap, t)); } } };
     const change = (i, delta, t) => { counts[i] = Math.max(0, counts[i] + delta); digits[i].set(String(counts[i]), REDUCE); const c = chips[i]; c.pend = false; if (counts[i] > 0){ c.el.hidden = false; c.o.set(1, S.snap, t); } else c.o.set(0, S.snap, t); if (!REDUCE && delta > 0){ c.sc.jump(.8); c.sc.set(1, pop, t); } sync(); };
     const toggleMine = (i, from) => { const t = now(); const cardR = card.getBoundingClientRect();
@@ -26881,7 +26924,7 @@ atom({ id:'msg-delivery', cat:'Messaging', name:'Delivery ticks', block:'messagi
     reset(0.3);
     return t => { const dt0 = t - t0;
       for (let n = step + 1; n < SCHED.length; n++) if (dt0 >= SCHED[n]) go(n, t);
-      if (!seenOn && dt0 >= SEEN){ seenOn = true; lo.set(1, S.snap, t); seen.forEach((s,i) => { if (REDUCE){ s.x.jump(0); s.o.jump(1); } else { s.x.set(0, S.base, t + i*.06); s.o.set(1, S.base, t + i*.06); } }); mkSend.disabled = false; mkSend.style.opacity = '1'; }
+      if (!seenOn && dt0 >= SEEN){ seenOn = true; lo.set(1, S.snap, t); seen.forEach((s,i) => { if (REDUCE){ s.x.jump(0); s.o.jump(1); } else { s.x.set(0, S.base, t + staggerAt(i, .06)); s.o.set(1, S.base, t + staggerAt(i, .06)); } }); mkSend.disabled = false; mkSend.style.opacity = '1'; }
       layers.forEach((e,i) => sw.apply(e, i, t));
       tk.style.stroke = 'currentColor'; tk.style.color = mix(clamp(rd.at(t)), 'var(--accent)', 'var(--muted)');
       clock.style.opacity = clamp(kc.at(t)).toFixed(3); hand.style.transformOrigin = '7px 7px'; hand.style.transform = `rotate(${REDUCE ? 0 : ((t*180) % 360).toFixed(1)}deg)`;
@@ -26998,7 +27041,7 @@ atom({ id:'feedback-pin-review', cat:'Feedback', name:'Pin and comment review', 
   }});
 
 atom({ id:'feedback-helpful', cat:'Feedback', name:'Helpful thumbs', block:'feedback, helpful, survey', fam:['M','S','E'],
-  html:`<div class="card" style="width:min(340px,94%);padding:0;overflow:hidden"><div class="fh-panel" style="position:relative;height:96px"><div class="fh-ask" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:10px"><b style="font-size:15px;font-weight:600">Was this article helpful?</b><div class="row" style="gap:8px"><button class="fh-up" aria-pressed="false" style="${FB_BTN}display:flex;align-items:center;gap:8px;background:var(--raised);color:var(--ink)"><span aria-hidden="true" style="font-size:18px">👍</span>Yes</button><button class="fh-down" aria-pressed="false" style="${FB_BTN}display:flex;align-items:center;gap:8px;background:var(--raised);color:var(--ink)"><span aria-hidden="true" style="font-size:18px">👎</span>No</button></div></div><div class="fh-why" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:10px"><b class="fh-q" style="font-size:15px;font-weight:600"></b><div class="fh-chips" role="group" aria-label="Reasons" style="display:flex;flex-wrap:wrap;gap:6px"></div><div class="row" style="gap:8px"><button class="fh-send" style="${FB_BTN}background:var(--ink);color:var(--card)">Send feedback</button><button class="fh-back" style="${FB_BTN}background:none;color:var(--muted)">Back</button></div></div><div class="fh-done" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:6px"><b style="font-size:15px;font-weight:600">Thanks, that helps us.</b><span class="small muted fh-sum" style="font-size:13px;line-height:1.4"></span><button class="fh-change" style="${FB_BTN}align-self:flex-start;background:none;color:var(--accent);padding:0 4px">Change answer</button></div></div></div><div class="hint">Choose Yes or No, tick the reasons, send. The panel height follows each step</div>`,
+  html:`<div class="card" style="width:min(340px,94%);padding:0;overflow:hidden"><div class="fh-panel" style="position:relative;height:96px"><div class="fh-ask" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:10px"><b style="font-size:15px;font-weight:600">Was this article helpful?</b><div class="row" style="gap:8px"><button class="fh-up" aria-pressed="false" style="${FB_BTN}display:flex;align-items:center;gap:8px;background:var(--raised);color:var(--ink)">${ic(I.thumbUp,18,1.75)}Yes</button><button class="fh-down" aria-pressed="false" style="${FB_BTN}display:flex;align-items:center;gap:8px;background:var(--raised);color:var(--ink)">${ic(I.thumbDown,18,1.75)}No</button></div></div><div class="fh-why" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:10px"><b class="fh-q" style="font-size:15px;font-weight:600"></b><div class="fh-chips" role="group" aria-label="Reasons" style="display:flex;flex-wrap:wrap;gap:6px"></div><div class="row" style="gap:8px"><button class="fh-send" style="${FB_BTN}background:var(--ink);color:var(--card)">Send feedback</button><button class="fh-back" style="${FB_BTN}background:none;color:var(--muted)">Back</button></div></div><div class="fh-done" style="position:absolute;left:0;right:0;top:0;padding:14px;display:flex;flex-direction:column;gap:6px"><b style="font-size:15px;font-weight:600">Thanks, that helps us.</b><span class="small muted fh-sum" style="font-size:13px;line-height:1.4"></span><button class="fh-change" style="${FB_BTN}align-self:flex-start;background:none;color:var(--accent);padding:0 4px">Change answer</button></div></div></div><div class="hint">Choose Yes or No, tick the reasons, send. The panel height follows each step</div>`,
   desc:'Choosing a thumb swaps the question for reason chips that fit that answer, and sending swaps in a thank-you that repeats what was chosen. The panel height springs to the measured size of each step instead of jumping.',
   api:'step.to(ask | why | done)   panel.h.set(measure(layer), soft)   chips: aria-pressed toggles   Change answer → ask',
   init(st){

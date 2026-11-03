@@ -9,7 +9,7 @@ atom({ id:'progress', cat:'Data', name:'Progress bars', block:'progress, poll', 
     const rows = N.map(name => { const r = document.createElement('div'); r.className = 'col'; r.style.gap = '6px';
       r.innerHTML = `<div class="row small" style="justify-content:space-between"><span></span><span class="row" style="gap:4px"><span class="ck" style="display:inline-flex;color:var(--success);opacity:0">${ic(I.check,13,3)}</span><span class="num muted pc"></span></span></div><div style="height:8px;border-radius:4px;background:var(--raised);overflow:hidden"><div class="fl" style="height:100%;border-radius:4px;background:var(--ink)"></div></div>`;
       r.querySelector('span').textContent = name; box.appendChild(r); return { pct:$(r,'.pc'), fill:$(r,'.fl'), ck:$(r,'.ck'), v:new Track(0), done:new Track(0) }; });
-    const setTargets = vals => { const t0 = now(); rows.forEach((r,i) => { r.v.set(vals[i], S.base, t0 + i*.04); r.done.set(vals[i] >= 100 ? 1 : 0, S.base, t0 + i*.04); }); };
+    const setTargets = vals => { const t0 = now(); rows.forEach((r,i) => { r.v.set(vals[i], S.base, t0 + staggerAt(i, .04)); r.done.set(vals[i] >= 100 ? 1 : 0, S.base, t0 + staggerAt(i, .04)); }); };
     const go = () => setTargets(N.map(() => Math.round(15 + Math.random()*85)));
     $(st,'.sf').onclick = go; $(st,'.full').onclick = () => setTargets(N.map(() => 100)); go();
     return t => rows.forEach(r => { const v = r.v.at(t), dn = tn.checked ? clamp(r.done.at(t)) : 0;

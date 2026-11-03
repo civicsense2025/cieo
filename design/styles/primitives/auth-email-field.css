@@ -8,7 +8,7 @@
     background: var(--cieo-color-surface); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body);
   }
-  :where(.cieo) .cieo-auth-input:focus-visible { outline: 2px solid var(--cieo-color-accent); outline-offset: 2px; }
+  :where(.cieo) .cieo-auth-input:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   :where(.cieo) .cieo-auth-error { font-size: var(--cieo-text-small); color: var(--cieo-color-danger); }
   @media (prefers-reduced-motion: reduce) {
     :root:not([data-motion='full']) :where(.cieo).cieo-auth-email-field * { animation: none !important; transition: none !important; }

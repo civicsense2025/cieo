@@ -13,14 +13,14 @@
   :where(.cieo) .cieo-comment-composer-pane[data-phase='enter'] { animation: cieo-composer-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit, 100ms) both; }
   :where(.cieo) .cieo-comment-composer-input { display: block; inline-size: 100%; box-sizing: border-box; min-block-size: 1.5em; max-block-size: calc(1.5em * 6); margin: 0; padding: 0; border: 0; outline: none; resize: none; overflow-y: auto; background: transparent; color: inherit; font: inherit; font-size: var(--cieo-text-body); line-height: 1.5; }
   :where(.cieo) .cieo-comment-composer-input::placeholder { color: var(--cieo-color-subtle); }
-  :where(.cieo) .cieo-comment-composer-input:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 4px; border-radius: var(--cieo-radius-small); }
+  :where(.cieo) .cieo-comment-composer-input:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: 4px; border-radius: var(--cieo-radius-small); }
   :where(.cieo) .cieo-comment-composer-attachments { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); min-inline-size: 0; }
   :where(.cieo) .cieo-comment-composer-bar { display: flex; align-items: center; gap: var(--cieo-space-2); min-inline-size: 0; }
   :where(.cieo) .cieo-comment-composer-tools { display: flex; align-items: center; flex-wrap: wrap; gap: var(--cieo-space-1); flex: 1; min-inline-size: 0; color: var(--cieo-color-muted); }
   :where(.cieo) .cieo-comment-composer-bar > span:first-child:empty { flex: 1; }
   :where(.cieo) .cieo-comment-composer-submit { flex: none; min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-4); border: 0; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); cursor: pointer; transition: opacity var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
-  :where(.cieo) .cieo-comment-composer-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-  :where(.cieo) .cieo-comment-composer-submit:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-comment-composer-submit:disabled { opacity: var(--cieo-disabled-opacity); cursor: not-allowed; }
+  :where(.cieo) .cieo-comment-composer-submit:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (pointer: coarse) { :where(.cieo) .cieo-comment-composer-submit { min-block-size: var(--cieo-touch-target); } }
   @keyframes cieo-composer-out { to { opacity: 0; } }
   @keyframes cieo-composer-in { from { opacity: 0; } }

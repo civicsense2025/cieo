@@ -12,7 +12,7 @@
   :where(.cieo) .cieo-audio-room-button { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-touch-target); padding-inline: var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-raised); color: inherit; font: inherit; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); cursor: pointer; transition: background var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), color var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
   :where(.cieo) .cieo-audio-room-button[aria-pressed='true'] { background: var(--cieo-color-accent-soft); border-color: var(--cieo-color-accent); color: var(--cieo-color-accent); }
   :where(.cieo) .cieo-audio-room-button[data-tone='danger'] { border-color: var(--cieo-color-danger); background: var(--cieo-color-danger-soft); color: var(--cieo-color-danger); }
-  :where(.cieo) .cieo-audio-room-button:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-audio-room-button:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (prefers-reduced-motion: reduce) {
     :where(.cieo) .cieo-audio-room-button { transition: none !important; }
   }

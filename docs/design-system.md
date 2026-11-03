@@ -23,14 +23,14 @@ Cieo keeps the existing spring engine and adds an optional visual layer. The sam
 </main>
 ```
 
-The `.cieo` boundary scopes the primitive styles. Custom properties alone do not restyle an application. The stylesheet uses cascade layers so normal, unlayered application styles can override it without an `!important` contest. The controls still need real labels, correct HTML elements, and application behavior.
+The `.cieo` boundary scopes the primitive styles. The design kit's `.cieo-field` and `.cieo-check` rules skip `cieo/controls` elements (`.cieo-ctl`), so both stylesheets can load on one page. Custom properties alone do not restyle an application. The stylesheet uses cascade layers so normal, unlayered application styles can override it without an `!important` contest. The controls still need real labels, correct HTML elements, and application behavior.
 
 ```js
 import { createTheme, applyTheme } from 'cieo/design';
 import 'cieo/design.css';
 import 'cieo/primitives.css';
 const controller = applyTheme(document.querySelector('.workspace'), createTheme({
-  brand: 'iris', scheme: 'dark', density: 'comfortable', radius: 'soft',
+  brand: 'studio', scheme: 'dark', density: 'comfortable', radius: 'soft',
 }));
 // On a user preference change:
 controller.update(createTheme({ brand: 'lagoon', scheme: 'dark' }));
@@ -62,6 +62,8 @@ The [social, audio and engagement kit](social-kit.md) (comments and nested repli
 ## Accessibility boundaries
 
 The color auditor checks 32 named pairs: text and accents against four neutral surfaces, control boundaries, focus, selection, filled and soft accents, and four feedback surfaces. Standard text targets 4.5:1; the high-contrast option targets 7:1. Boundaries and focus target 3:1. These are color-pair checks, not a WCAG conformance certificate.
+
+Every primitive shares one interaction baseline, enforced by `test/primitive-states.test.mjs`: focus rings read `--cieo-focus-width`, `--cieo-color-focus` and `--cieo-focus-offset`; disabled states read `--cieo-disabled-opacity`; and hover-only styles sit inside `@media (hover: hover)` so they never stick after a tap. Disclosure that also opens on focus (tooltips, hover cards, submenus) is the one exception.
 
 Coarse-pointer controls have a 44 CSS-pixel floor in the primitive stylesheet, even with compact density. That design target is deliberately larger than the WCAG 2.2 AA minimum of 24 CSS pixels, which also has exceptions. The stylesheet preserves native keyboard focus, gives errors a dashed boundary, uses visible feedback labels, handles forced colors, and removes primitive transitions under reduced motion. The motion token stylesheet now clears stagger and drift as well as durations.
 

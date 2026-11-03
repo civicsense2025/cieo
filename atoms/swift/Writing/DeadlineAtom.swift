@@ -28,7 +28,7 @@ public struct DeadlineAtom: MotionAtomView {
                         Capsule().fill(danger ? Color.red.opacity(0.25) : Color.primary.opacity(0.12))
                         Capsule().fill(danger ? .red : .primary)
                             .padding(.leading, inset).animation(reduce ? nil : .motion(.base), value: remaining)
-                            .padding(.trailing, inset).animation(reduce ? nil : .motion(.base).delay(0.06), value: remaining)
+                            .padding(.trailing, inset).animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: remaining)
                     }
                     .frame(height: 3)
                 }

@@ -26,7 +26,7 @@ atom({ id:'bundlesweep', cat:'Email', name:'Bundle sweep', block:'email, bundle,
       const t = now();
       if (done){ done = false; sw.to(0, t); dg.set('3'); o.forEach(x => x.set(1, S.base, t)); h.forEach(x => x.set(54, S.base, t)); btn.textContent = 'Archive bundle'; return; }
       done = true; btn.textContent = 'Undo';
-      rows.forEach((r, i) => { o[i].set(0, S.base, t + i*.05); h[i].set(0, S.base, t + .18 + i*.06); });
+      rows.forEach((r, i) => { o[i].set(0, S.base, t + staggerAt(i, .05)); h[i].set(0, S.base, t + .18 + staggerAt(i, .06)); });
       dg.set('0'); sw.to(1, t + .3);
     };
     return t => { rows.forEach((d, i) => { const p = clamp(o[i].at(t)), hh = Math.max(0, h[i].at(t));

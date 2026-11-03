@@ -5,7 +5,7 @@
   :where(.cieo) .cieo-reaction-picker-emoji { display: inline-block; transition: transform var(--motion-duration-snap, 150ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
   :where(.cieo) .cieo-reaction-picker-item:hover .cieo-reaction-picker-emoji, :where(.cieo) .cieo-reaction-picker-item:focus-visible .cieo-reaction-picker-emoji { transform: scale(1.25); }
   :where(.cieo) .cieo-reaction-picker-item[aria-pressed='true'] { background: var(--cieo-color-accent-soft); }
-  :where(.cieo) .cieo-reaction-picker-item:focus-visible { outline: 2px solid var(--cieo-color-focus); outline-offset: 2px; }
+  :where(.cieo) .cieo-reaction-picker-item:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (pointer: coarse) { :where(.cieo) .cieo-reaction-picker-item { min-inline-size: var(--cieo-touch-target); min-block-size: var(--cieo-touch-target); } }
   @keyframes cieo-reaction-rise { from { opacity: 0.45; transform: translateY(6px); } }
   @media (prefers-reduced-motion: reduce) { :where(.cieo) .cieo-reaction-picker-item, :where(.cieo) .cieo-reaction-picker-emoji { animation: none; transition: none; } :where(.cieo) .cieo-reaction-picker-item:hover .cieo-reaction-picker-emoji, :where(.cieo) .cieo-reaction-picker-item:focus-visible .cieo-reaction-picker-emoji { transform: none; } }
