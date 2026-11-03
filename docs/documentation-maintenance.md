@@ -103,3 +103,12 @@ Version 0.6.3 adds the sign-in transition and recorder waveform motion. The vers
 ## Release 0.6.4
 
 Version 0.6.4 keeps Select choices readable in right-to-left text and with reduced motion. The version appears in `package.json`, the lockfile and the install line in the README.
+
+## Running the full check on a fresh checkout
+
+Two outputs are generated, not committed, so `npm run check` reports them stale until they exist:
+
+- `node scripts/build-design.mjs` writes `design/generated/` (gitignored).
+- `node scripts/check-catalogue-inventory.mjs` writes `docs/generated/catalogue-inventory.json`. This file is tracked and hashes every Swift atom, so commit the regenerated copy in any change that edits a Swift atom.
+
+The browser checks in `test/catalogue/` need Playwright, which this package does not install; they are not part of `npm run check`.
