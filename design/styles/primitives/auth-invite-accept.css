@@ -15,7 +15,7 @@
   }
   :where(.cieo) .cieo-auth-decline {
     min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
-    background: var(--cieo-color-surface-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
+    background: var(--cieo-color-raised, var(--cieo-color-surface)); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 16px;
   }
   :where(.cieo) .cieo-auth-accept:disabled, :where(.cieo) .cieo-auth-decline:disabled { opacity: .6; cursor: default; }

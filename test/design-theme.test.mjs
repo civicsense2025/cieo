@@ -9,7 +9,7 @@ test('all 648 supported theme combinations satisfy every advertised color pair',
     for (const density of Object.keys(densities)) for (const radius of Object.keys(radii))
       for (const contrast of ['standard', 'high']) for (const font of Object.keys(fonts)) {
         const theme = createTheme({ brand, scheme, density, radius, contrast, font });
-        assert.equal(Object.keys(theme.tokens).length, 73);
+        assert.equal(Object.keys(theme.tokens).length, 74);
         assert.equal(auditTheme(theme).length, 32);
         assert.ok(auditTheme(theme).every((result) => result.pass)); count += 1;
       }

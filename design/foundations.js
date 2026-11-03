@@ -35,4 +35,5 @@ export function foundations(config, put) {
   put('layer-sticky', 'number', 10, 'Sticky local navigation layer.');
   put('layer-popover', 'number', 20, 'Nonmodal floating content layer.');
   put('layer-toast', 'number', 30, 'Status-notification layer.');
+  put('layer-modal', 'number', 40, 'Modal surfaces: dialogs, sheets and lightboxes.');
 }

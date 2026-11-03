@@ -9,7 +9,7 @@
   :where(.cieo) .cieo-auth-sessions { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
   :where(.cieo) .cieo-auth-session {
     display: flex; flex-direction: column; gap: 2px;
-    background: var(--cieo-color-surface-raised, var(--cieo-color-surface)); border-radius: 9px; padding: 12px 14px;
+    background: var(--cieo-color-raised, var(--cieo-color-surface)); border-radius: 9px; padding: 12px 14px;
   }
   :where(.cieo) .cieo-auth-session-device { font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-session-meta { font-size: var(--cieo-text-small); color: var(--cieo-color-text); }

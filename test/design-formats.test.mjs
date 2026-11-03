@@ -34,7 +34,7 @@ test('configuration parsing enforces schema version, shape and UTF-8 size', () =
   const schema = themeSchema();
   assert.equal(schema.additionalProperties, false);
   assert.equal(schema.properties.options.properties.overrides.additionalProperties, false);
-  assert.equal(Object.keys(schema.properties.options.properties.overrides.properties).length, 73);
+  assert.equal(Object.keys(schema.properties.options.properties.overrides.properties).length, 74);
 });
 test('native exporters preserve dimensions, deterministic names and caller-selected reference size', () => {
   const theme = createTheme();

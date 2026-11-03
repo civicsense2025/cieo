@@ -4,27 +4,27 @@
    exits take 100ms before entrances begin, and reduced motion makes everything instant. */
 
 :where(.cieo-ctl) {
-  --_bg: var(--cieo-control-bg, Field);
-  --_fg: var(--cieo-control-fg, FieldText);
-  --_muted: var(--cieo-control-muted, color-mix(in oklab, currentColor 62%, transparent));
-  --_border: var(--cieo-control-border, color-mix(in oklab, currentColor 24%, transparent));
-  --_border-strong: var(--cieo-control-border-strong, color-mix(in oklab, currentColor 48%, transparent));
-  --_raised: var(--cieo-control-raised, color-mix(in oklab, currentColor 8%, transparent));
-  --_accent: var(--cieo-control-accent, CanvasText);
-  --_accent-fg: var(--cieo-control-accent-fg, Canvas);
-  --_danger: var(--cieo-control-danger, light-dark(#b0342f, #f08a84));
-  --_success: var(--cieo-control-success, light-dark(#3f6b21, #9cc97a));
+  --_bg: var(--cieo-control-bg, var(--cieo-color-surface, Field));
+  --_fg: var(--cieo-control-fg, var(--cieo-color-text, FieldText));
+  --_muted: var(--cieo-control-muted, var(--cieo-color-muted, color-mix(in oklab, currentColor 62%, transparent)));
+  --_border: var(--cieo-control-border, var(--cieo-color-border, color-mix(in oklab, currentColor 24%, transparent)));
+  --_border-strong: var(--cieo-control-border-strong, var(--cieo-color-border-strong, color-mix(in oklab, currentColor 48%, transparent)));
+  --_raised: var(--cieo-control-raised, var(--cieo-color-raised, color-mix(in oklab, currentColor 8%, transparent)));
+  --_accent: var(--cieo-control-accent, var(--cieo-color-accent, CanvasText));
+  --_accent-fg: var(--cieo-control-accent-fg, var(--cieo-color-on-accent, Canvas));
+  --_danger: var(--cieo-control-danger, var(--cieo-color-danger, light-dark(#b0342f, #f08a84)));
+  --_success: var(--cieo-control-success, var(--cieo-color-success, light-dark(#3f6b21, #9cc97a)));
   --_success-fg: var(--cieo-control-success-fg, Canvas);
   --_popover: var(--cieo-control-popover-bg, var(--_bg));
   --_shadow: var(--cieo-control-shadow, 0 1px 2px rgb(0 0 0 / 0.06), 0 12px 32px rgb(0 0 0 / 0.12));
   --_knob: var(--cieo-control-knob, var(--_bg));
-  --_radius: var(--cieo-radius, 10px);
-  --_h-sm: var(--cieo-control-height-sm, 32px);
-  --_h-md: var(--cieo-control-height-md, 40px);
+  --_radius: var(--cieo-radius, var(--cieo-radius-control, 10px));
+  --_h-sm: var(--cieo-control-height-sm, var(--cieo-control-small, 32px));
+  --_h-md: var(--cieo-control-height-md, var(--cieo-control-height, 40px));
   --_field-h: var(--cieo-field-height, 52px);
-  --_ring: var(--cieo-focus-ring, 2px solid var(--_accent));
+  --_ring: var(--cieo-focus-ring, var(--cieo-focus-width, 2px) solid var(--cieo-color-focus, var(--_accent)));
   --_ring-offset: var(--cieo-focus-offset, 2px);
-  --_font: var(--cieo-control-font, inherit);
+  --_font: var(--cieo-control-font, var(--cieo-font-sans, inherit));
   --_snap: var(--motion-duration-snap, 200ms);
   --_base: var(--motion-duration-base, 300ms);
   --_soft: var(--motion-duration-soft, 440ms);
@@ -72,7 +72,7 @@
 .cieo-draw { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--_snap) var(--_ease-exit); }
 [data-on] > .cieo-icon .cieo-draw,
 [data-on] > svg .cieo-draw { stroke-dashoffset: 0; transition: stroke-dashoffset var(--_soft) var(--_ease) calc(var(--_exit) * 1.8); }
-.cieo-spin { animation: cieo-spin 0.8s linear infinite; }
+.cieo-spin { animation: cieo-spin calc(var(--motion-duration-lazy, 740ms) + var(--motion-lag, 60ms)) linear infinite; /* 800ms loop */ }
 @keyframes cieo-spin { to { rotate: 360deg; } }
 
 /* ---------- Button ---------- */
@@ -143,7 +143,7 @@
 .cieo-select[data-enhanced] .cieo-select-native { visibility: hidden; pointer-events: none; }
 .cieo-select-trigger { position: absolute; inset: 0; }
 .cieo-select-pop {
-  position: absolute; z-index: var(--cieo-popover-z, 50);
+  position: absolute; z-index: var(--cieo-layer-popover, 20);
   left: 0; top: calc(100% + 4px); min-width: 100%; max-width: min(24rem, calc(100vw - 32px));
   visibility: hidden; opacity: 0; transform-origin: 20px 0;
 }
@@ -261,7 +261,7 @@
   flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0 4px 0 0;
   border: 0; background: none; color: inherit; outline: none; appearance: none;
   font: inherit; font-size: 1rem;
-  transition: opacity var(--_base) var(--_ease) 120ms;
+  transition: opacity var(--_base) var(--_ease) var(--_exit);
 }
 .cieo-search-input::placeholder { color: var(--_muted); }
 .cieo-search[data-enhanced] .cieo-search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }

@@ -380,6 +380,11 @@
               "type": "number",
               "minimum": 0,
               "maximum": 10000
+            },
+            "layer-modal": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
             }
           }
         }
