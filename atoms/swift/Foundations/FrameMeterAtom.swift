@@ -27,7 +27,7 @@ private struct SettleWatcher: View {
     var onSettled: () -> Void
 
     var body: some View {
-        Color.clear.onChange(of: Int(value * 1000)) { _ in
+        Color.clear.onChange(of: Int(value * 1000)) {
             if active && abs(value - target) < 0.005 { onSettled() }
         }
     }

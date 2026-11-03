@@ -48,7 +48,7 @@ public struct FocusRingAtom: MotionAtomView {
                 }
             }
             .frame(maxWidth: 340)
-            .onChange(of: focused) { _ in show() }
+            .onChange(of: focused) { show() }
         }
     }
 
