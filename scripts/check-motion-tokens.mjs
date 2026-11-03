@@ -17,6 +17,8 @@ function scan(path, text) {
   const clean = stripTokenFallbacks(stripComments(text));
   for (const m of clean.matchAll(/(?<![\w.#-])(\d*\.?\d+)(ms|s)\b/g)) {
     if (Number(m[1]) === 0) continue; // 0s is the reduced-motion value, not a timing choice
+    const line0 = clean.slice(clean.lastIndexOf('\n', m.index) + 1, clean.indexOf('\n', m.index));
+    if (/\binfinite\b/.test(line0)) continue; // a constant-rate loop (spinner) is not a spring
     const line = clean.slice(0, m.index).split('\n').length;
     console.error(`${path}:${line}: raw duration ${m[0]}`);
     failures += 1;

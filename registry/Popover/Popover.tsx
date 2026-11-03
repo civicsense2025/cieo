@@ -74,7 +74,7 @@ export function Popover({ trigger, open, defaultOpen = false, onOpenChange, chil
   }) : <button type="button" aria-haspopup="dialog" aria-expanded={visible} aria-controls={visible ? panelId : undefined} onClick={toggle} onKeyDown={triggerKey}>{trigger}</button>;
   const content = presence.mounted ? <div ref={attachPanel} className="cieo-p-popover-position" data-side={position?.side ?? side}
     style={{ position: 'fixed', left: position?.x ?? 0, top: position?.y ?? 0, maxWidth: position?.maxWidth,
-      maxHeight: position?.maxHeight, pointerEvents: visible ? undefined : 'none', visibility: client && !position ? 'hidden' : undefined, zIndex: 'var(--cieo-layer-popover, 20)' }}>
+      maxHeight: position?.maxHeight, pointerEvents: visible ? undefined : 'none', visibility: client && !position ? 'hidden' : undefined, zIndex: portal ? 'var(--cieo-popover-z, calc(var(--cieo-layer-modal, 40) + 1))' : 'var(--cieo-popover-z, var(--cieo-layer-popover, 20))' }}>
     <div {...customizePart(slotProps?.content)} ref={presence.ref} id={panelId} role="dialog" tabIndex={-1} onKeyDown={panelKey} aria-label={label ?? (isValidElement<{children?: ReactNode}>(trigger) && typeof trigger.props.children === 'string' ? trigger.props.children : 'Popover')}
       aria-hidden={!visible || undefined} inert={!visible || undefined} className={`cieo cieo-p-popover-panel ${slotProps?.content?.className ?? ''}`}
       style={{ ...slotProps?.content?.style, maxWidth: 'inherit', maxHeight: 'inherit', overflow: 'auto' }}>

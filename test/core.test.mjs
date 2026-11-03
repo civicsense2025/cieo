@@ -97,3 +97,18 @@ test('motion is disallowed inside any subtree that turns motion off or down, and
   assert.equal(allowed('feedback', within({})), true);
   assert.equal(subtreeReduced(null), false);
 });
+
+test('a reduced flag on <html> is page state, not a subtree: setMotionState can still override it', () => {
+  const html = { tag: 'html' };
+  const prev = globalThis.document;
+  globalThis.document = { documentElement: html, hidden: false };
+  try {
+    const el = { closest: () => html }; // the only match for REDUCED_SUBTREE is <html> itself
+    assert.equal(subtreeReduced(el), false);
+    setMotionState(() => ({ reduced: false }));
+    assert.equal(allowed('feedback', { closest: () => html, getBoundingClientRect: () => ({ width: 1, height: 1, top: 0, left: 0, bottom: 1, right: 1 }) }), true);
+  } finally {
+    setMotionState(null);
+    if (prev === undefined) delete globalThis.document; else globalThis.document = prev;
+  }
+});

@@ -53,7 +53,7 @@ const controller = applyTheme(document.documentElement, theme);
 controller.destroy();
 ```
 
-The design layer has six brand starting points, 73 semantic tokens, explicit color-pair audits, scoped theming, a CLI, typed JSON, and Swift/Rust/Kotlin/Dart/Python/C constant generators. Native hosts still supply their own components, rendering, accessibility, and text scaling. The existing Motion Atoms catalogue and its recipe runtime remain unchanged.
+The design layer has six brand starting points, 74 semantic tokens, explicit color-pair audits, scoped theming, a CLI, typed JSON, and Swift/Rust/Kotlin/Dart/Python/C constant generators. Native hosts still supply their own components, rendering, accessibility, and text scaling. The existing Motion Atoms catalogue and its recipe runtime remain unchanged.
 
 Pin a reviewed commit or release containing this change. Older tags don't acquire new files when this branch changes. `prepare` and `prepack` generate portable token artifacts using only Node built-ins; the checked-in spring engine still needs no consumer-side TypeScript compilation.
 
@@ -161,15 +161,15 @@ Theme with these variables (all optional). Each one falls back first to the matc
 | `--cieo-control-bg`, `--cieo-control-fg` | [`color-surface`, `color-text`] `Field`, `FieldText` | control surface and text |
 | `--cieo-control-muted` | [`color-muted`] fg at 62% | labels at rest, placeholders, descriptions |
 | `--cieo-control-border`, `--cieo-control-border-strong` | [`color-border`, `color-border-strong`] fg at 24%, 48% | borders, hover borders |
-| `--cieo-control-raised` | [`color-raised`] fg at 8% | hover fills, the listbox highlight |
+| `--cieo-control-raised` | [`color-sunken`] fg at 8% | hover fills, the listbox highlight |
 | `--cieo-control-accent`, `--cieo-control-accent-fg` | [`color-accent`, `color-on-accent`] `CanvasText`, `Canvas` | primary button, checked fills, switch track |
 | `--cieo-control-danger`, `--cieo-control-success`, `--cieo-control-success-fg` | [`color-danger`, `color-success`] red, green, `Canvas` | invalid and valid states, done buttons |
-| `--cieo-control-popover-bg`, `--cieo-control-shadow`, `--cieo-layer-popover` | bg, soft shadow, 20 | the listbox |
+| `--cieo-control-popover-bg`, `--cieo-control-shadow`, `--cieo-popover-z` | bg, soft shadow, [`layer-popover`] 20 | the listbox |
 | `--cieo-control-knob` | bg | switch knob, range thumb |
 | `--cieo-radius` | [`radius-control`] 10px | corner radius |
 | `--cieo-control-height-sm`, `--cieo-control-height-md`, `--cieo-field-height` | [`control-small`, `control-height`] 32px, 40px; 52px | control heights |
 | `--cieo-focus-ring`, `--cieo-focus-offset` | [`focus-width`, `color-focus`, `focus-offset`] 2px solid accent, 2px | focus outline |
-| `--cieo-control-font` | [`font-sans`] inherit | font family |
+| `--cieo-control-font` | inherit | font family |
 | `--cieo-disabled-opacity` | 0.55 | every disabled control, option and toggle |
 | `--cieo-search-width`, `--cieo-search-radius` | 100% (16rem collapsible), pill | search field |
 
