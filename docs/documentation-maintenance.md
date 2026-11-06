@@ -104,6 +104,10 @@ Version 0.6.3 adds the sign-in transition and recorder waveform motion. The vers
 
 Version 0.6.4 keeps Select choices readable in right-to-left text and with reduced motion. The version appears in `package.json`, the lockfile and the install line in the README.
 
+## Release 0.6.5
+
+Version 0.6.5 releases everything merged since 0.6.4, including the sortable list, the action bar, the spring channel and `data-motion` support, so consumers can pin one tagged version. The version appears in `package.json`, the lockfile, the install line in the README and the component pages.
+
 ## Running the full check on a fresh checkout
 
 Two outputs are generated, not committed, so `npm run check` reports them stale until they exist:
