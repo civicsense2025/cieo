@@ -1,0 +1,7 @@
+/* design/styles/primitives/portrait.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-portrait { display: inline-block; inline-size: 2.25rem; aspect-ratio: 1; border-radius: 50%; background: var(--cieo-color-sunken) center 20% / cover no-repeat; box-shadow: 0 0 0 2px var(--cieo-portrait-ring, transparent); flex: none; }
+  :where(.cieo).cieo-p-portrait[data-size="small"] { inline-size: 1.5rem; }
+  :where(.cieo).cieo-p-portrait[data-size="large"] { inline-size: 5.5rem; }
+  :where(.cieo).cieo-p-portrait[data-grayscale] { background-color: var(--cieo-color-canvas); background-blend-mode: luminosity; }
+}

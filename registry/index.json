@@ -541,6 +541,28 @@
         "parts.ts"
       ]
     },
+    "BigNumber": {
+      "files": [
+        "BigNumber/BigNumber.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "BlockPanel": {
+      "files": [
+        "BlockPanel/BlockPanel.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "Blockquote": {
       "files": [
         "Blockquote/Blockquote.tsx"
@@ -1016,6 +1038,17 @@
         "parts.ts"
       ]
     },
+    "ContentFrame": {
+      "files": [
+        "ContentFrame/ContentFrame.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "ConversationList": {
       "files": [
         "ConversationList/ConversationList.tsx"
@@ -1320,6 +1353,17 @@
         "parts.ts"
       ]
     },
+    "FrameBar": {
+      "files": [
+        "FrameBar/FrameBar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "Grid": {
       "files": [
         "Grid/Grid.tsx"
@@ -1411,6 +1455,17 @@
         "parts.ts"
       ]
     },
+    "IndexRow": {
+      "files": [
+        "IndexRow/IndexRow.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "InputGroup": {
       "files": [
         "InputGroup/InputGroup.tsx"
@@ -1491,6 +1546,17 @@
     "LayoutPanel": {
       "files": [
         "LayoutPanel/LayoutPanel.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "LegendItem": {
+      "files": [
+        "LegendItem/LegendItem.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -1703,6 +1769,17 @@
         "parts.ts"
       ]
     },
+    "NumberedSteps": {
+      "files": [
+        "NumberedSteps/NumberedSteps.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "Outline": {
       "files": [
         "Outline/Outline.tsx"
@@ -1744,6 +1821,19 @@
       "packageImports": [
         "cieo/react"
       ],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "PersonRow": {
+      "files": [
+        "PersonRow/PersonRow.tsx"
+      ],
+      "registryDependencies": [
+        "Portrait"
+      ],
+      "packageImports": [],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -1793,6 +1883,17 @@
         "parts.ts"
       ]
     },
+    "Portrait": {
+      "files": [
+        "Portrait/Portrait.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "PowerSearch": {
       "files": [
         "PowerSearch/PowerSearch.tsx"
@@ -1806,6 +1907,17 @@
     "ProgressBar": {
       "files": [
         "ProgressBar/ProgressBar.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "QuotedText": {
+      "files": [
+        "QuotedText/QuotedText.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -1878,6 +1990,17 @@
         "parts.ts"
       ]
     },
+    "ReferenceText": {
+      "files": [
+        "ReferenceText/ReferenceText.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "ReplyPreview": {
       "files": [
         "ReplyPreview/ReplyPreview.tsx"
@@ -1906,6 +2029,19 @@
       ],
       "registryDependencies": [
         "Mention"
+      ],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "RollCall": {
+      "files": [
+        "RollCall/RollCall.tsx"
+      ],
+      "registryDependencies": [
+        "PersonRow"
       ],
       "packageImports": [],
       "sharedFiles": [
@@ -1943,6 +2079,17 @@
     "Section": {
       "files": [
         "Section/Section.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "SectionHeader": {
+      "files": [
+        "SectionHeader/SectionHeader.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -2014,6 +2161,17 @@
     "SelectorOption": {
       "files": [
         "SelectorOption/SelectorOption.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "ShareBar": {
+      "files": [
+        "ShareBar/ShareBar.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -2199,6 +2357,17 @@
     "Step": {
       "files": [
         "Step/Step.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "StepList": {
+      "files": [
+        "StepList/StepList.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],
@@ -2589,6 +2758,17 @@
     "TopNavMenu": {
       "files": [
         "TopNavMenu/TopNavMenu.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "TopicChip": {
+      "files": [
+        "TopicChip/TopicChip.tsx"
       ],
       "registryDependencies": [],
       "packageImports": [],

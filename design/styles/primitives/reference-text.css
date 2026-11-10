@@ -1,0 +1,4 @@
+/* design/styles/primitives/reference-text.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-reference-text { font-family: var(--cieo-font-mono); font-size: var(--cieo-text-caption); font-weight: var(--cieo-weight-medium); font-variant-numeric: tabular-nums; color: var(--cieo-color-muted); }
+}

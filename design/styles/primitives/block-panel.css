@@ -1,0 +1,6 @@
+/* design/styles/primitives/block-panel.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-block-panel { display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-6); border-radius: var(--cieo-radius-surface); background: var(--cieo-block, var(--cieo-color-text)); color: var(--cieo-on-block, var(--cieo-color-canvas)); }
+  :where(.cieo).cieo-p-block-panel[data-tone="surface"] { background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-block-panel[data-tone="accent"] { background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); }
+}

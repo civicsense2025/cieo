@@ -1,0 +1,6 @@
+/* design/styles/primitives/content-frame.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-content-frame { display: grid; grid-template-rows: auto 1fr auto; gap: var(--cieo-space-6); padding: 6%; background: var(--cieo-frame-ground, var(--cieo-color-canvas)); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-content-frame[data-ground="block"] { --cieo-color-text: var(--cieo-on-block, var(--cieo-color-canvas)); --cieo-color-muted: var(--cieo-on-block-muted, var(--cieo-color-subtle)); background: var(--cieo-block, var(--cieo-color-text)); }
+  :where(.cieo).cieo-p-content-frame__body { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: var(--cieo-space-4); }
+}

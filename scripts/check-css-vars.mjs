@@ -27,7 +27,9 @@ for (const m of readFileSync(`${root}/design/foundations.js`, 'utf8').matchAll(/
 // Documented consumer override hooks: intentionally never declared by Cieo, always used with a fallback
 // that reads a theme token. Keep this list short; a new hook needs a fallback and a line here.
 const HOOKS = [/^--cieo-control-(bg|fg|muted|border|border-strong|raised|accent|accent-fg|danger|success|success-fg|popover-bg|shadow|knob|height-sm|height-md|font)$/,
-  /^--cieo-popover-(z|border|radius|background|color|padding|shadow)$/, /^--cieo-search-(width|radius)$/, /^--cieo-(radius|field-height|focus-ring)$/, /^--cieo-i$/];
+  /^--cieo-popover-(z|border|radius|background|color|padding|shadow)$/, /^--cieo-search-(width|radius)$/, /^--cieo-(radius|field-height|focus-ring)$/, /^--cieo-i$/,
+  // Editorial frames: per-instance colours set inline (topic dot, portrait ring, legend swatch, roll-call group) and the host's block ground and its text partners.
+  /^--cieo-(topic-dot|portrait-ring|legend|roll|block|on-block|on-block-muted|frame-ground)$/];
 let failures = 0;
 for (const [p, line, name] of uses) {
   if (defined.has(name) || HOOKS.some((h) => h.test(name))) continue;

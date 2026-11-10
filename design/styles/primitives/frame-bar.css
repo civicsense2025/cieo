@@ -1,0 +1,6 @@
+/* design/styles/primitives/frame-bar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-frame-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--cieo-space-2) var(--cieo-space-6); }
+  :where(.cieo).cieo-p-frame-bar[data-edge="bottom"] { align-items: flex-end; }
+  :where(.cieo).cieo-p-frame-bar__trailing { text-align: end; max-inline-size: 58%; font-size: var(--cieo-text-caption); color: var(--cieo-color-muted); text-wrap: balance; }
+}
