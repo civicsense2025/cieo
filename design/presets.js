@@ -8,7 +8,7 @@ export const brands = Object.freeze({
   mono: Object.freeze({ light: '#242830', dark: '#e3e7ed', label: 'Monochrome' }),
 });
 export const densities = Object.freeze({ compact: 32, comfortable: 40, spacious: 48 });
-export const radii = Object.freeze({ crisp: [2, 4, 8], soft: [8, 12, 16], round: [12, 16, 24] });
+export const radii = Object.freeze({ square: [0, 0, 0], crisp: [2, 4, 8], soft: [8, 12, 16], round: [12, 16, 24] });
 Object.values(radii).forEach(Object.freeze);
 export const fonts = Object.freeze({
   system: Object.freeze(['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif']),
