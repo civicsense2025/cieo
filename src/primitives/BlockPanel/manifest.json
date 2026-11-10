@@ -1,0 +1,154 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.block-panel",
+  "componentVersion": "1.0.0",
+  "name": "BlockPanel",
+  "layer": "organism",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/BlockPanel/BlockPanel.tsx",
+    "symbol": "BlockPanel"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "tone",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "block",
+          "surface",
+          "accent"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "block",
+      "constraints": {}
+    },
+    {
+      "id": "children",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Additional root CSS class. Built-in classes remain."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "block-panel",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-body"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "tone",
+        "children",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "block-panel"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    },
+    {
+      "id": "apple.swiftui",
+      "minimumOS": {
+        "iOS": "17",
+        "macOS": "14"
+      },
+      "implementation": "implemented",
+      "properties": [],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "A flat block, surface or accent panel for the one thing a section's reader is working in."
+  },
+  "extensions": {
+    "customization": {
+      "presentationParts": [
+        "root"
+      ],
+      "ownedSemantics": true,
+      "existingContentSlotsPreserved": true
+    }
+  }
+}

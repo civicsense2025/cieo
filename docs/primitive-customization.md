@@ -1,6 +1,6 @@
 # Primitive customization
 
-All 222 catalogue exports have an explicit customization contract: 215 expose named presentation slots, and seven delegate to an existing owning API. The [inventory](generated/primitive-customization.json) records each component, layer, named parts, and content slots.
+All 238 catalogue exports have an explicit customization contract: 231 expose named presentation slots, and seven delegate to an existing owning API. The [inventory](generated/primitive-customization.json) records each component, layer, named parts, and content slots.
 
 ## Presentation and composition
 

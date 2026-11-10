@@ -1,0 +1,6 @@
+/* design/styles/primitives/section-header.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-section-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--cieo-space-2) var(--cieo-space-6); }
+  :where(.cieo).cieo-p-section-header :is(h2, h3, h4) { margin: 0; font-size: var(--cieo-text-heading); font-weight: var(--cieo-weight-display); letter-spacing: -.03em; line-height: var(--cieo-leading-tight); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-section-header__action { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+}
