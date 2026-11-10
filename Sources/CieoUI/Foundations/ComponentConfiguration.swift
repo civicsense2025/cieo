@@ -37,6 +37,11 @@ public struct ComponentTypography {
     public var caption: Font
     /// A glyph beside the smallest text, such as a count badge's mark or a caption's icon.
     public var smallGlyph: Font
+    // MARK: - Editorial frames
+    /// One short line above a headline, such as "The Senate is debating it now", and a topic chip's text.
+    public var kicker: Font
+    /// A reference read as data, such as a section number ("§1302") or a page count ("4/18"). Monospaced by default.
+    public var reference: Font
 
     public init(action: Font = .body.weight(.semibold), selection: Font = .body,
                 field: Font = .body, fieldLabel: Font = .headline,
@@ -46,7 +51,9 @@ public struct ComponentTypography {
                 detail: Font = .subheadline, strongDetail: Font = .subheadline.weight(.bold), reading: Font = .subheadline,
                 glyph: Font = .footnote.weight(.semibold), prominentGlyph: Font = .title3,
                 value: Font = .headline.monospacedDigit(), marker: Font = .headline.weight(.black),
-                caption: Font = .caption2.weight(.semibold), smallGlyph: Font = .caption2.weight(.semibold)) {
+                caption: Font = .caption2.weight(.semibold), smallGlyph: Font = .caption2.weight(.semibold),
+                kicker: Font = .subheadline.weight(.semibold),
+                reference: Font = .footnote.monospaced().weight(.medium)) {
         self.action = action; self.selection = selection
         self.field = field; self.fieldLabel = fieldLabel
         self.title = title; self.subtitle = subtitle
@@ -58,6 +65,7 @@ public struct ComponentTypography {
         self.value = value; self.marker = marker
         self.caption = caption
         self.smallGlyph = smallGlyph
+        self.kicker = kicker; self.reference = reference
     }
 }
 
