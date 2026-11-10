@@ -1,0 +1,9 @@
+// src/primitives/RollCall/RollCall.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
+import { PersonRow } from '../PersonRow/PersonRow.js';
+export function rollColumns(n) { return Math.min(4, Math.max(1, Math.floor(Number.isFinite(n) ? n : 3))); }
+export function RollCall({ className, slotProps, groups, columns = 3 }) {
+    return (_jsx("div", { ...customizePart(slotProps?.root, "cieo cieo-p-roll-call", undefined, className), style: { columnCount: rollColumns(columns) }, children: groups.filter((g) => g.members.length > 0).map((g) => (_jsxs("section", { style: { ['--cieo-roll']: g.color }, children: [_jsxs("h3", { children: [_jsx("i", { "aria-hidden": "true" }), g.title, " ", _jsx("span", { children: g.members.length })] }), _jsx("ul", { children: g.members.map((m) => _jsx("li", { children: _jsx(PersonRow, { compact: true, grayscale: true, name: m.name, detail: m.detail, src: m.src, ring: g.color }) }, m.id)) })] }, g.id))) }));
+}

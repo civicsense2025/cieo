@@ -232,3 +232,14 @@ rendering observations; producer tests alone do not establish consumer acceptanc
 [Maintenance process](documentation-maintenance.md) records same-PR and after-merge checks. [Source map](source-map.json) assigns current API documentation ownership.
 
 A failed recorder completion preserves the last observed elapsed time, including while paused, while discarding its temporary clip and releasing the capture session. The paused-completion regression compares against the captured paused state rather than assuming a timer has never fired.
+
+## Editorial frames
+
+One idea per frame, in sentence case, on a ground chosen by role. These pieces read every style from the slots; the host installs its palette, a medium display weight and its fonts.
+
+- Text roles: `componentTypography.kicker` (the short line above a headline and a chip's text) and `reference` (monospaced by default, for section numbers and page counts).
+- Atoms: [TopicChip](../Sources/CieoUI/Atoms/TopicChip.swift) (accent dot and topic, replacing uppercase eyebrows), [ReferenceText](../Sources/CieoUI/Atoms/ReferenceText.swift) (`ReferenceText.page(4, of: 18)` reads "Page 4 of 18" and never shows page 0 or a page past the total), [Portrait](../Sources/CieoUI/Atoms/Portrait.swift) (a face in a circle with a meaning-carrying ring; grayscale by saturation keeps the ring in colour; no photo shows a quiet fill, never initials), [LegendItem](../Sources/CieoUI/Atoms/LegendItem.swift) (a swatch and the meaning in words).
+- Molecules: [FrameBar](../Sources/CieoUI/Molecules/FrameBar.swift) (leading and trailing pieces along a frame's edge, stacking when narrow), [PersonRow](../Sources/CieoUI/Molecules/PersonRow.swift) (portrait, one-line name, detail; `compact` is a roll-call entry), [QuotedText](../Sources/CieoUI/Molecules/QuotedText.swift) (a reference, a hanging accent quotation mark and the exact words; no side border), [StepList](../Sources/CieoUI/Molecules/StepList.swift) (quiet numbers, a check once done, "next" on the current step; a stale index is clamped).
+- Organisms: [ContentFrame](../Sources/CieoUI/Organisms/ContentFrame.swift) (top bar, centred content, bottom bar on `background` or `block`; on a block, foreground and secondary switch to the block's partners) and [RollCall](../Sources/CieoUI/Organisms/RollCall.swift) (groups led by a dot, title and count, with compact rows in as many columns as fit; a bad column width falls back to 140 points).
+
+[EditorialFrameTests](../Tests/CieoUITests/EditorialFrameTests.swift) pin the page bounds, the step states and the column fallback, and draw every piece at 390 points in light and dark.

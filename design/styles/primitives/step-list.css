@@ -1,0 +1,10 @@
+/* design/styles/primitives/step-list.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-step-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--cieo-space-4); }
+  :where(.cieo).cieo-p-step-list li { display: grid; grid-template-columns: 2ch 1fr; column-gap: var(--cieo-space-3); }
+  :where(.cieo).cieo-p-step-list__n { grid-row: 1 / 3; font-family: var(--cieo-font-mono); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-step-list li:not([data-state="upcoming"]) .cieo-p-step-list__n { color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-step-list b { font-weight: 600; color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-step-list__next, :where(.cieo).cieo-p-step-list__detail { font-weight: var(--cieo-weight-medium); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-step-list__detail { grid-column: 2; font-weight: var(--cieo-weight-normal); font-size: var(--cieo-text-small); }
+}

@@ -1,0 +1,153 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.roll-call",
+  "componentVersion": "1.0.0",
+  "name": "RollCall",
+  "layer": "organism",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/RollCall/RollCall.tsx",
+    "symbol": "RollCall"
+  },
+  "dependencies": ["PersonRow"],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "groups",
+      "type": {
+        "kind": "array",
+        "items": {
+          "kind": "record",
+          "fields": []
+        }
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "{ id: string; title: string; color: string; members: { id: string; name: string; detail?: string; src?: string }[] }[]"
+    },
+    {
+      "id": "columns",
+      "type": {
+        "kind": "integer"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 3,
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Additional root CSS class. Built-in classes remain."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "roll-call",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-body"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "groups",
+        "columns",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "roll-call"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    },
+    {
+      "id": "apple.swiftui",
+      "minimumOS": {
+        "iOS": "17",
+        "macOS": "14"
+      },
+      "implementation": "implemented",
+      "properties": [],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Everyone by name, grouped (such as by party), each group with a dot, title and count, in columns."
+  },
+  "extensions": {
+    "customization": {
+      "presentationParts": [
+        "root"
+      ],
+      "ownedSemantics": true,
+      "existingContentSlotsPreserved": true
+    }
+  }
+}

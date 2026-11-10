@@ -1,0 +1,5 @@
+/* design/styles/primitives/share-bar.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-share-bar { display: flex; gap: 3px; block-size: var(--cieo-space-4); inline-size: 100%; }
+  :where(.cieo).cieo-p-share-bar > span { flex-basis: 0; min-inline-size: 3px; }
+}

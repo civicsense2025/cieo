@@ -227,6 +227,14 @@
       "types": "./dist/primitives/Banner/Banner.d.ts",
       "default": "./dist/primitives/Banner/Banner.js"
     },
+    "./BigNumber": {
+      "types": "./dist/primitives/BigNumber/BigNumber.d.ts",
+      "default": "./dist/primitives/BigNumber/BigNumber.js"
+    },
+    "./BlockPanel": {
+      "types": "./dist/primitives/BlockPanel/BlockPanel.d.ts",
+      "default": "./dist/primitives/BlockPanel/BlockPanel.js"
+    },
     "./Blockquote": {
       "types": "./dist/primitives/Blockquote/Blockquote.d.ts",
       "default": "./dist/primitives/Blockquote/Blockquote.js"
@@ -391,6 +399,10 @@
       "types": "./dist/primitives/ComplexSelector/ComplexSelector.d.ts",
       "default": "./dist/primitives/ComplexSelector/ComplexSelector.js"
     },
+    "./ContentFrame": {
+      "types": "./dist/primitives/ContentFrame/ContentFrame.d.ts",
+      "default": "./dist/primitives/ContentFrame/ContentFrame.js"
+    },
     "./ConversationList": {
       "types": "./dist/primitives/ConversationList/ConversationList.d.ts",
       "default": "./dist/primitives/ConversationList/ConversationList.js"
@@ -491,6 +503,10 @@
       "types": "./dist/primitives/FormLayout/FormLayout.d.ts",
       "default": "./dist/primitives/FormLayout/FormLayout.js"
     },
+    "./FrameBar": {
+      "types": "./dist/primitives/FrameBar/FrameBar.d.ts",
+      "default": "./dist/primitives/FrameBar/FrameBar.js"
+    },
     "./Grid": {
       "types": "./dist/primitives/Grid/Grid.d.ts",
       "default": "./dist/primitives/Grid/Grid.js"
@@ -523,6 +539,10 @@
       "types": "./dist/primitives/IconButton/IconButton.d.ts",
       "default": "./dist/primitives/IconButton/IconButton.js"
     },
+    "./IndexRow": {
+      "types": "./dist/primitives/IndexRow/IndexRow.d.ts",
+      "default": "./dist/primitives/IndexRow/IndexRow.js"
+    },
     "./InputGroup": {
       "types": "./dist/primitives/InputGroup/InputGroup.d.ts",
       "default": "./dist/primitives/InputGroup/InputGroup.js"
@@ -554,6 +574,10 @@
     "./LayoutPanel": {
       "types": "./dist/primitives/LayoutPanel/LayoutPanel.d.ts",
       "default": "./dist/primitives/LayoutPanel/LayoutPanel.js"
+    },
+    "./LegendItem": {
+      "types": "./dist/primitives/LegendItem/LegendItem.d.ts",
+      "default": "./dist/primitives/LegendItem/LegendItem.js"
     },
     "./Lightbox": {
       "types": "./dist/primitives/Lightbox/Lightbox.d.ts",
@@ -623,6 +647,10 @@
       "types": "./dist/primitives/NumberInput/NumberInput.d.ts",
       "default": "./dist/primitives/NumberInput/NumberInput.js"
     },
+    "./NumberedSteps": {
+      "types": "./dist/primitives/NumberedSteps/NumberedSteps.d.ts",
+      "default": "./dist/primitives/NumberedSteps/NumberedSteps.js"
+    },
     "./Outline": {
       "types": "./dist/primitives/Outline/Outline.d.ts",
       "default": "./dist/primitives/Outline/Outline.js"
@@ -639,6 +667,10 @@
       "types": "./dist/primitives/Pagination/Pagination.d.ts",
       "default": "./dist/primitives/Pagination/Pagination.js"
     },
+    "./PersonRow": {
+      "types": "./dist/primitives/PersonRow/PersonRow.d.ts",
+      "default": "./dist/primitives/PersonRow/PersonRow.js"
+    },
     "./PlaybackRateButton": {
       "types": "./dist/primitives/PlaybackRateButton/PlaybackRateButton.d.ts",
       "default": "./dist/primitives/PlaybackRateButton/PlaybackRateButton.js"
@@ -651,6 +683,10 @@
       "types": "./dist/primitives/Popover/Popover.d.ts",
       "default": "./dist/primitives/Popover/Popover.js"
     },
+    "./Portrait": {
+      "types": "./dist/primitives/Portrait/Portrait.d.ts",
+      "default": "./dist/primitives/Portrait/Portrait.js"
+    },
     "./PowerSearch": {
       "types": "./dist/primitives/PowerSearch/PowerSearch.d.ts",
       "default": "./dist/primitives/PowerSearch/PowerSearch.js"
@@ -658,6 +694,10 @@
     "./ProgressBar": {
       "types": "./dist/primitives/ProgressBar/ProgressBar.d.ts",
       "default": "./dist/primitives/ProgressBar/ProgressBar.js"
+    },
+    "./QuotedText": {
+      "types": "./dist/primitives/QuotedText/QuotedText.d.ts",
+      "default": "./dist/primitives/QuotedText/QuotedText.js"
     },
     "./RadioList": {
       "types": "./dist/primitives/RadioList/RadioList.d.ts",
@@ -679,6 +719,10 @@
       "types": "./dist/primitives/ReactionSummary/ReactionSummary.d.ts",
       "default": "./dist/primitives/ReactionSummary/ReactionSummary.js"
     },
+    "./ReferenceText": {
+      "types": "./dist/primitives/ReferenceText/ReferenceText.d.ts",
+      "default": "./dist/primitives/ReferenceText/ReferenceText.js"
+    },
     "./ReplyPreview": {
       "types": "./dist/primitives/ReplyPreview/ReplyPreview.d.ts",
       "default": "./dist/primitives/ReplyPreview/ReplyPreview.js"
@@ -691,6 +735,10 @@
       "types": "./dist/primitives/RichText/RichText.d.ts",
       "default": "./dist/primitives/RichText/RichText.js"
     },
+    "./RollCall": {
+      "types": "./dist/primitives/RollCall/RollCall.d.ts",
+      "default": "./dist/primitives/RollCall/RollCall.js"
+    },
     "./RunControls": {
       "types": "./dist/primitives/RunControls/RunControls.d.ts",
       "default": "./dist/primitives/RunControls/RunControls.js"
@@ -702,6 +750,10 @@
     "./Section": {
       "types": "./dist/primitives/Section/Section.d.ts",
       "default": "./dist/primitives/Section/Section.js"
+    },
+    "./SectionHeader": {
+      "types": "./dist/primitives/SectionHeader/SectionHeader.d.ts",
+      "default": "./dist/primitives/SectionHeader/SectionHeader.js"
     },
     "./SeenBy": {
       "types": "./dist/primitives/SeenBy/SeenBy.d.ts",
@@ -726,6 +778,10 @@
     "./SelectorOption": {
       "types": "./dist/primitives/SelectorOption/SelectorOption.d.ts",
       "default": "./dist/primitives/SelectorOption/SelectorOption.js"
+    },
+    "./ShareBar": {
+      "types": "./dist/primitives/ShareBar/ShareBar.d.ts",
+      "default": "./dist/primitives/ShareBar/ShareBar.js"
     },
     "./ShareButton": {
       "types": "./dist/primitives/ShareButton/ShareButton.d.ts",
@@ -790,6 +846,10 @@
     "./Step": {
       "types": "./dist/primitives/Step/Step.d.ts",
       "default": "./dist/primitives/Step/Step.js"
+    },
+    "./StepList": {
+      "types": "./dist/primitives/StepList/StepList.d.ts",
+      "default": "./dist/primitives/StepList/StepList.js"
     },
     "./Stepper": {
       "types": "./dist/primitives/Stepper/Stepper.d.ts",
@@ -922,6 +982,10 @@
     "./TopNavMenu": {
       "types": "./dist/primitives/TopNavMenu/TopNavMenu.d.ts",
       "default": "./dist/primitives/TopNavMenu/TopNavMenu.js"
+    },
+    "./TopicChip": {
+      "types": "./dist/primitives/TopicChip/TopicChip.d.ts",
+      "default": "./dist/primitives/TopicChip/TopicChip.js"
     },
     "./TreeList": {
       "types": "./dist/primitives/TreeList/TreeList.d.ts",

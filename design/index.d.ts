@@ -1,7 +1,7 @@
 export type Brand = 'studio' | 'iris' | 'lagoon' | 'ember' | 'rose' | 'mono';
 export type Scheme = 'light' | 'dark';
 export type Density = 'compact' | 'comfortable' | 'spacious';
-export type Radius = 'crisp' | 'soft' | 'round';
+export type Radius = 'square' | 'crisp' | 'soft' | 'round';
 export type Font = 'system' | 'humanist' | 'mono';
 export type TokenValue = string | number | readonly string[];
 export interface ThemeOptions {

@@ -1,0 +1,9 @@
+/* design/styles/primitives/index-row.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-index-row { display: grid; grid-template-columns: auto 1fr; gap: var(--cieo-space-4); align-items: baseline; padding-block: var(--cieo-space-3); color: var(--cieo-color-text); text-decoration: none; min-block-size: var(--cieo-touch-target); }
+  :where(.cieo).cieo-p-index-row__rank { font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-display); font-variant-numeric: tabular-nums; color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-p-index-row__text { display: grid; gap: var(--cieo-space-1); }
+  :where(.cieo).cieo-p-index-row__text b { font-weight: 600; }
+  :where(.cieo).cieo-p-index-row__text span { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-index-row__text i { display: block; block-size: 4px; background: var(--cieo-color-accent); }
+}

@@ -13,8 +13,8 @@ const entries=primitiveCustomizationInventory();
 test('every catalogue primitive has an explicit customization contract or delegated owning API',()=>{
   const saved=JSON.parse(readFileSync(new URL('../docs/generated/primitive-customization.json',import.meta.url),'utf8'));
   assert.deepEqual(saved.entries,entries);
-  assert.equal(entries.length,222);
-  assert.equal(entries.filter((entry)=>entry.status==='named-slots').length,215);
+  assert.equal(entries.length,238);
+  assert.equal(entries.filter((entry)=>entry.status==='named-slots').length,231);
   assert.deepEqual(entries.filter((entry)=>entry.status==='delegated-api').map((entry)=>entry.name),['CheckboxInput','CheckboxListItem','PowerSearch','RadioListItem','Selector','Slider','VStack']);
 });
 

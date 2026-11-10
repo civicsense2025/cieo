@@ -41,6 +41,7 @@
         },
         "radius": {
           "enum": [
+            "square",
             "crisp",
             "soft",
             "round"
@@ -312,6 +313,11 @@
               "maximum": 1000
             },
             "weight-strong": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "weight-display": {
               "type": "number",
               "minimum": 1,
               "maximum": 1000

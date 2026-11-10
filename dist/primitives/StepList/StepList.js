@@ -1,0 +1,15 @@
+// src/primitives/StepList/StepList.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
+/** Clamps the current step into the list, so a stale index never marks everything done. */
+export function stepState(index, current, count) {
+    const c = Math.min(Math.max(0, Number.isFinite(current) ? current : 0), Math.max(0, count - 1));
+    return index < c ? 'done' : index === c ? 'current' : 'upcoming';
+}
+export function StepList({ className, slotProps, steps, current, nextLabel = 'next' }) {
+    return (_jsx("ol", { ...customizePart(slotProps?.root, "cieo cieo-p-step-list", undefined, className), children: steps.map((s, i) => {
+            const state = stepState(i, current, steps.length);
+            return (_jsxs("li", { "data-state": state, "aria-current": state === 'current' ? 'step' : undefined, children: [_jsx("span", { className: "cieo-p-step-list__n", "aria-hidden": "true", children: state === 'done' ? '✓' : i + 1 }), _jsxs("b", { children: [s.title, state === 'current' ? _jsxs("span", { className: "cieo-p-step-list__next", children: [" \u00B7 ", nextLabel] }) : null] }), s.detail ? _jsx("span", { className: "cieo-p-step-list__detail", children: s.detail }) : null] }, i));
+        }) }));
+}
