@@ -14,7 +14,7 @@ Labelled numeric field: one native number input reusing the shared input style.
 
 ## Anatomy
 
-Wrapping `<label>`: visible `.cieo-label` span plus `<input type="number" class="cieo cieo-input">`. No new CSS; the input face comes from `design/styles/controls.css`.
+Wrapping `<label>`: visible `.cieo-label` span plus `<input type="number" class="cieo cieo-input">`, with an optional `.cieo-input-unit` suffix (`unit`). The input face comes from `design/styles/controls.css`; only the unit span has component CSS.
 
 ## Behavior
 
@@ -27,7 +27,7 @@ No motion. Native spinners and keyboard stepping; `defaultValue` sets the uncont
 
 ## Do / don't
 
-- Do: `<NumberInput label="Quantity" min={1} max={10} defaultValue={1} />`.
+- Do: `<NumberInput label="Longest edge" unit="px" min={64} max={2048} defaultValue={512} />`; name the unit in the label too, so the pairing reads once.
 - Don't: use NumberInput for ZIP codes or phone numbers; text preserves formatting.
 
 ## Customization
@@ -49,4 +49,4 @@ Storybook-free: covered by `test/primitives-lane-form.test.mjs` + docs preview. 
 
 ## Host customization
 
-`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `label`, `input`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.
+`className` adds a root class without replacing Cieo’s classes. `slotProps` exposes `root`, `label`, `input`, `unit`. Each part accepts `className`, `style`, `title`, and non-reserved `data-*` attributes. Roles, accessible names, values, event handlers, refs, state markers, and dynamic geometry remain component-owned. Existing content props retain their original semantics.

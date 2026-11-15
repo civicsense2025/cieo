@@ -104,6 +104,10 @@ Version 0.6.3 adds the sign-in transition and recorder waveform motion. The vers
 
 Version 0.6.4 keeps Select choices readable in right-to-left text and with reduced motion. The version appears in `package.json`, the lockfile and the install line in the README.
 
+## Release 0.7.0
+
+Version 0.7.0 adds the Forma set: DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches, plus pill buttons, link segments, number units and the forma ink brand with an audited Forma recipe. Additive only; existing consumers upgrade by tag. The version appears in `package.json`, the lockfile and the install line in the README.
+
 ## Running the full check on a fresh checkout
 
 Two outputs are generated, not committed, so `npm run check` reports them stale until they exist:

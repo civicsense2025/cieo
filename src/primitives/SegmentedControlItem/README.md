@@ -14,7 +14,7 @@ One segment inside a segmented control, pressed when the control value matches.
 
 ## Anatomy
 
-Native `<button>` with `aria-pressed`. `data-picked` mirrors state for styling; picked segments lift off the pill container.
+Native `<button>` with `aria-pressed`, or a native `<a>` with `aria-current="page"` when `href` is set (tool switchers keep link semantics). `data-picked` mirrors state for styling; picked segments lift off the pill container.
 
 ## Behavior
 

@@ -3,7 +3,7 @@
    label blur-swaps to a spinner and then a check in place (surface and cart recipes) while the width springs to fit. */
 import { forwardRef, useEffect, useLayoutEffect, useRef, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { S } from '../core/spring.js';
-import { buttonClassName, type ButtonVariant, type ControlSize } from './classes.js';
+import { buttonClassName, type ButtonVariant, type ButtonShape, type ControlSize } from './classes.js';
 import { CheckIcon, SpinnerIcon } from './icons.js';
 import { Driver, px } from './motion.js';
 
@@ -14,6 +14,8 @@ export type ButtonState = 'idle' | 'pending' | 'done';
 interface ButtonOwnProps {
   variant?: ButtonVariant;
   size?: ControlSize;
+  /** Pill (fully rounded) shape for compact product bars. Defaults to rect. */
+  shape?: ButtonShape;
   block?: boolean;
   /** Leading icon, or the whole content of an icon-only button. */
   icon?: ReactNode;
@@ -30,7 +32,7 @@ type Base = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & ButtonOw
 export type ButtonProps = Base & ({ children: ReactNode } | { children?: undefined; icon: ReactNode; 'aria-label': string });
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(props, ref) {
-  const { variant, size, block, icon, state, pendingLabel = 'Working', doneLabel, className, type, onClick, children, ...rest } = props;
+  const { variant, size, shape, block, icon, state, pendingLabel = 'Working', doneLabel, className, type, onClick, children, ...rest } = props;
   const iconOnly = children === undefined || children === null;
   const morph = state !== undefined;
   const busy = state === 'pending';
@@ -83,7 +85,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       {...rest}
       ref={setRef}
       type={type ?? 'button'}
-      className={buttonClassName({ variant, size, block, iconOnly, className })}
+      className={buttonClassName({ variant, size, shape, block, iconOnly, className })}
       data-state={morph ? state : undefined}
       aria-busy={busy || undefined}
       aria-disabled={busy ? true : rest['aria-disabled']}

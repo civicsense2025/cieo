@@ -1,0 +1,21 @@
+@layer cieo.components {
+  :where(.cieo).cieo-compare { position: relative; overflow: hidden; border-radius: var(--cieo-radius-surface); background: var(--cieo-color-sunken); touch-action: pan-y; }
+  :where(.cieo) .cieo-compare-before, :where(.cieo) .cieo-compare-after { display: block; }
+  :where(.cieo) .cieo-compare-before > *, :where(.cieo) .cieo-compare-after > * { display: block; inline-size: 100%; }
+  :where(.cieo) .cieo-compare-after { position: absolute; inset: 0; }
+  :where(.cieo) .cieo-compare-divider {
+    position: absolute; inset-block: 0; inline-size: 44px; margin-inline-start: -22px; padding: 0;
+    border: 0; background: transparent; cursor: ew-resize; touch-action: none;
+  }
+  :where(.cieo) .cieo-compare-divider::before {
+    content: ""; position: absolute; inset-block: 0; inset-inline-start: 50%; inline-size: 2px; margin-inline-start: -1px;
+    background: var(--cieo-color-surface); box-shadow: 0 0 0 1px var(--cieo-color-border-strong);
+  }
+  :where(.cieo) .cieo-compare-divider::after {
+    content: ""; position: absolute; inset-block-start: 50%; inset-inline-start: 50%;
+    inline-size: 32px; block-size: 32px; translate: -50% -50%; border-radius: var(--cieo-radius-pill);
+    background: var(--cieo-color-surface); box-shadow: 0 0 0 1px var(--cieo-color-border-strong);
+  }
+  :where(.cieo) .cieo-compare-divider:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+  @media (hover: hover) { :where(.cieo) .cieo-compare-divider:hover::before { background: var(--cieo-color-accent); } }
+}

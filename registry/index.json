@@ -825,6 +825,17 @@
         "parts.ts"
       ]
     },
+    "ClipRange": {
+      "files": [
+        "ClipRange/ClipRange.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "Code": {
       "files": [
         "Code/Code.tsx"
@@ -1005,6 +1016,20 @@
         "parts.ts"
       ]
     },
+    "CompareCurtain": {
+      "files": [
+        "CompareCurtain/CompareCurtain.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
+      ]
+    },
     "ComplexSelector": {
       "files": [
         "ComplexSelector/ComplexSelector.tsx"
@@ -1137,6 +1162,19 @@
       ],
       "registryDependencies": [],
       "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "DropZone": {
+      "files": [
+        "DropZone/DropZone.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -1749,6 +1787,17 @@
         "parts.ts"
       ]
     },
+    "PaletteSwatches": {
+      "files": [
+        "PaletteSwatches/PaletteSwatches.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "PlaybackRateButton": {
       "files": [
         "PlaybackRateButton/PlaybackRateButton.tsx"
@@ -1802,6 +1851,23 @@
         "cieo/controls"
       ],
       "sharedFiles": []
+    },
+    "PreviewStage": {
+      "files": [
+        "PreviewStage/PreviewStage.tsx"
+      ],
+      "registryDependencies": [
+        "SegmentedControl",
+        "SegmentedControlItem"
+      ],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "motion.ts",
+        "parts.ts"
+      ]
     },
     "ProgressBar": {
       "files": [
@@ -2427,6 +2493,20 @@
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "Toast": {
+      "files": [
+        "Toast/Toast.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "motion.ts",
         "parts.ts"
       ]
     },

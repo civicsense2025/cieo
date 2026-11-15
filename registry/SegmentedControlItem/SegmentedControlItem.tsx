@@ -12,12 +12,21 @@ export interface SegmentedControlItemProps {
 
   /** Segment key matched against the control value. Required. */
   value: string;
+  /** Link target. When set, renders an <a> (with aria-current when picked) so tool switchers keep link semantics. */
+  href?: string;
   children: ReactNode;
 }
 
-export function SegmentedControlItem({ className, slotProps, value, children }: SegmentedControlItemProps) {
+export function SegmentedControlItem({ className, slotProps, value, href, children }: SegmentedControlItemProps) {
   const control = useContext(SegmentedControlContext);
   const picked = control?.value === value;
+  if (href !== undefined) {
+    return (
+      <a href={href} aria-current={picked ? 'page' : undefined} data-picked={picked} onClick={() => control?.onSelect?.(value)} className="cieo cieo-segmented-control-item" {...customizePart(slotProps?.root, "cieo cieo-segmented-control-item", undefined, className)}>
+        {children}
+      </a>
+    );
+  }
   return (
     <button type="button" aria-pressed={picked} data-picked={picked} onClick={() => control?.onSelect?.(value)} className="cieo cieo-segmented-control-item" {...customizePart(slotProps?.root, "cieo cieo-segmented-control-item", undefined, className)}>
       {children}

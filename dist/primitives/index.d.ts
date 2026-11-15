@@ -63,6 +63,7 @@ export { CheckboxList, type CheckboxListProps } from './CheckboxList/CheckboxLis
 export { CheckboxListItem, type CheckboxListItemProps } from './CheckboxListItem/CheckboxListItem.js';
 export { Citation, type CitationProps } from './Citation/Citation.js';
 export { ClickableCard, type ClickableCardProps } from './ClickableCard/ClickableCard.js';
+export { formatClipTime, ClipRange, type ClipRangeProps } from './ClipRange/ClipRange.js';
 export { Code, type CodeProps } from './Code/Code.js';
 export { CodeBlock, type CodeBlockProps } from './CodeBlock/CodeBlock.js';
 export { Collapsible, type CollapsibleProps } from './Collapsible/Collapsible.js';
@@ -78,6 +79,7 @@ export { commentDepth, commentHasRail, Comment, type CommentProps, type CommentS
 export { composerLength, composerCanSubmit, composerShowsCount, composerKeyAction, CommentComposer, type CommentComposerProps, type ComposerState } from './CommentComposer/CommentComposer.js';
 export { buildCommentTree, countDescendants, visibleReplies, flattenReplies, moreRepliesLabel, CommentThread, type FlatComment, type CommentRenderContext, type CommentThreadProps } from './CommentThread/CommentThread.js';
 export { formatCompactCount, formatExactCount, CompactCount, type CompactCountProps } from './CompactCount/CompactCount.js';
+export { curtainFraction, curtainKeyMove, CompareCurtain, type CompareCurtainProps } from './CompareCurtain/CompareCurtain.js';
 export { ComplexSelector, type ComplexSelectorSection, type ComplexSelectorProps } from './ComplexSelector/ComplexSelector.js';
 export { conversationIds, conversationOrder, conversationTabbable, conversationRove, ConversationList, ConversationListContext, type ConversationListContextValue, type ConversationListProps } from './ConversationList/ConversationList.js';
 export { nodeText, unreadBadgeText, conversationLabel, ConversationListItem, type ConversationSummary, type ConversationListItemProps } from './ConversationListItem/ConversationListItem.js';
@@ -89,6 +91,7 @@ export { deliveryLabel, DeliveryStatus, type DeliveryStatusProps, type DeliveryS
 export { Dialog, type DialogProps } from './Dialog/Dialog.js';
 export { DialogHeader, type DialogHeaderProps } from './DialogHeader/DialogHeader.js';
 export { Divider, type DividerProps } from './Divider/Divider.js';
+export { DropZone, type DropZoneProps } from './DropZone/DropZone.js';
 export { DropdownMenu, DropdownMenuContext, type DropdownMenuContextValue, type DropdownMenuProps } from './DropdownMenu/DropdownMenu.js';
 export { DropdownMenuCheckboxItem, type DropdownMenuCheckboxItemProps } from './DropdownMenuCheckboxItem/DropdownMenuCheckboxItem.js';
 export { DropdownMenuDivider, type DropdownMenuDividerProps } from './DropdownMenuDivider/DropdownMenuDivider.js';
@@ -141,10 +144,12 @@ export { Outline, type OutlineItem, type OutlineProps } from './Outline/Outline.
 export { OverflowList, type OverflowListProps } from './OverflowList/OverflowList.js';
 export { Overlay, type OverlayProps } from './Overlay/Overlay.js';
 export { Pagination, type PaginationProps } from './Pagination/Pagination.js';
+export { PaletteSwatches, type PaletteSwatch, type PaletteSwatchesProps } from './PaletteSwatches/PaletteSwatches.js';
 export { normalizePlaybackRate, normalizePlaybackRates, nextRate, playbackRateName, PlaybackRateButton, DEFAULT_PLAYBACK_RATES, type PlaybackRateButtonProps } from './PlaybackRateButton/PlaybackRateButton.js';
 export { pollPercentages, pollAnnouncement, Poll, type PollOption, type PollProps } from './Poll/Poll.js';
 export { Popover, type PopoverProps } from './Popover/Popover.js';
 export { PowerSearch, type PowerSearchProps } from './PowerSearch/PowerSearch.js';
+export { PreviewStage, type PreviewStageProps, type PreviewBackdrop } from './PreviewStage/PreviewStage.js';
 export { ProgressBar, type ProgressBarProps } from './ProgressBar/ProgressBar.js';
 export { RadioList, type RadioListProps } from './RadioList/RadioList.js';
 export { RadioListItem, type RadioListItemProps } from './RadioListItem/RadioListItem.js';
@@ -198,6 +203,7 @@ export { thumbsStep, ThumbsFeedback, THUMBS_INITIAL, type ThumbsState, type Thum
 export { TimeInput, type TimeInputProps } from './TimeInput/TimeInput.js';
 export { Timer, type TimerProps } from './Timer/Timer.js';
 export { Timestamp, type TimestampProps } from './Timestamp/Timestamp.js';
+export { startToastDeadline, pauseToastDeadline, resumeToastDelay, Toast, type ToastDeadline, type ToastProps, type ToastTone } from './Toast/Toast.js';
 export { ToggleButton, type ToggleButtonProps } from './ToggleButton/ToggleButton.js';
 export { ToggleButtonGroup, ToggleButtonGroupContext, type ToggleButtonGroupContextValue, type ToggleButtonGroupProps } from './ToggleButtonGroup/ToggleButtonGroup.js';
 export { Token, type TokenProps } from './Token/Token.js';

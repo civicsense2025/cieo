@@ -1,6 +1,6 @@
 {
   "name": "cieo",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "Critically damped spring motion for web (DOM and React) and SwiftUI, with the Motion Atoms recipes.",
   "license": "MIT",
   "type": "module",
@@ -327,6 +327,10 @@
       "types": "./dist/primitives/ClickableCard/ClickableCard.d.ts",
       "default": "./dist/primitives/ClickableCard/ClickableCard.js"
     },
+    "./ClipRange": {
+      "types": "./dist/primitives/ClipRange/ClipRange.d.ts",
+      "default": "./dist/primitives/ClipRange/ClipRange.js"
+    },
     "./Code": {
       "types": "./dist/primitives/Code/Code.d.ts",
       "default": "./dist/primitives/Code/Code.js"
@@ -387,6 +391,10 @@
       "types": "./dist/primitives/CompactCount/CompactCount.d.ts",
       "default": "./dist/primitives/CompactCount/CompactCount.js"
     },
+    "./CompareCurtain": {
+      "types": "./dist/primitives/CompareCurtain/CompareCurtain.d.ts",
+      "default": "./dist/primitives/CompareCurtain/CompareCurtain.js"
+    },
     "./ComplexSelector": {
       "types": "./dist/primitives/ComplexSelector/ComplexSelector.d.ts",
       "default": "./dist/primitives/ComplexSelector/ComplexSelector.js"
@@ -430,6 +438,10 @@
     "./Divider": {
       "types": "./dist/primitives/Divider/Divider.d.ts",
       "default": "./dist/primitives/Divider/Divider.js"
+    },
+    "./DropZone": {
+      "types": "./dist/primitives/DropZone/DropZone.d.ts",
+      "default": "./dist/primitives/DropZone/DropZone.js"
     },
     "./DropdownMenu": {
       "types": "./dist/primitives/DropdownMenu/DropdownMenu.d.ts",
@@ -639,6 +651,10 @@
       "types": "./dist/primitives/Pagination/Pagination.d.ts",
       "default": "./dist/primitives/Pagination/Pagination.js"
     },
+    "./PaletteSwatches": {
+      "types": "./dist/primitives/PaletteSwatches/PaletteSwatches.d.ts",
+      "default": "./dist/primitives/PaletteSwatches/PaletteSwatches.js"
+    },
     "./PlaybackRateButton": {
       "types": "./dist/primitives/PlaybackRateButton/PlaybackRateButton.d.ts",
       "default": "./dist/primitives/PlaybackRateButton/PlaybackRateButton.js"
@@ -654,6 +670,10 @@
     "./PowerSearch": {
       "types": "./dist/primitives/PowerSearch/PowerSearch.d.ts",
       "default": "./dist/primitives/PowerSearch/PowerSearch.js"
+    },
+    "./PreviewStage": {
+      "types": "./dist/primitives/PreviewStage/PreviewStage.d.ts",
+      "default": "./dist/primitives/PreviewStage/PreviewStage.js"
     },
     "./ProgressBar": {
       "types": "./dist/primitives/ProgressBar/ProgressBar.d.ts",
@@ -866,6 +886,10 @@
     "./Timestamp": {
       "types": "./dist/primitives/Timestamp/Timestamp.d.ts",
       "default": "./dist/primitives/Timestamp/Timestamp.js"
+    },
+    "./Toast": {
+      "types": "./dist/primitives/Toast/Toast.d.ts",
+      "default": "./dist/primitives/Toast/Toast.js"
     },
     "./ToggleButton": {
       "types": "./dist/primitives/ToggleButton/ToggleButton.d.ts",

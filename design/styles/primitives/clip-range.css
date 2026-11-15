@@ -1,0 +1,9 @@
+@layer cieo.components {
+  :where(.cieo).cieo-clip-range { display: grid; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-clip-range-row { display: grid; grid-template-columns: minmax(4rem, auto) 1fr; align-items: center; gap: var(--cieo-space-3); }
+  :where(.cieo) .cieo-clip-range-row label { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-clip-range-row input[type='range'] { accent-color: var(--cieo-color-accent); min-block-size: var(--cieo-control-small); }
+  :where(.cieo) .cieo-clip-range-row input[type='range']:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+  :where(.cieo) .cieo-clip-range-row input[type='range']:disabled { opacity: var(--cieo-disabled-opacity); }
+  :where(.cieo) .cieo-clip-range-value { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); font-variant-numeric: tabular-nums; }
+}

@@ -6,6 +6,7 @@ export const brands = Object.freeze({
   ember: Object.freeze({ light: '#b4432f', dark: '#f3a089', label: 'Warm ember' }),
   rose: Object.freeze({ light: '#aa326d', dark: '#f0a0c8', label: 'Wild rose' }),
   mono: Object.freeze({ light: '#242830', dark: '#e3e7ed', label: 'Monochrome' }),
+  forma: Object.freeze({ light: '#1F201C', dark: '#F2F1EC', label: 'Forma ink' }),
 });
 export const densities = Object.freeze({ compact: 32, comfortable: 40, spacious: 48 });
 export const radii = Object.freeze({ crisp: [2, 4, 8], soft: [8, 12, 16], round: [12, 16, 24] });
