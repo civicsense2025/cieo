@@ -2,10 +2,13 @@
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'text';
 export type ControlSize = 'sm' | 'md';
+export type ButtonShape = 'rect' | 'pill';
 
 export interface ButtonClassOptions {
   variant?: ButtonVariant;
   size?: ControlSize;
+  /** Pill (fully rounded) shape for compact product bars. Defaults to rect. */
+  shape?: ButtonShape;
   /** Square, icon-only shape. The element must carry an aria-label. */
   iconOnly?: boolean;
   /** Fills the width of its container. */
@@ -22,6 +25,7 @@ export function buttonClassName(o: ButtonClassOptions = {}): string {
     'cieo-btn',
     `cieo-btn--${o.variant ?? 'secondary'}`,
     `cieo-btn--${o.size ?? 'md'}`,
+    o.shape === 'pill' && 'cieo-btn--pill',
     o.iconOnly && 'cieo-btn--icon',
     o.block && 'cieo-btn--block',
     o.className,

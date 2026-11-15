@@ -108,6 +108,7 @@
 .cieo-btn[data-state] { overflow: hidden; }
 .cieo-btn.cieo-btn--primary[data-state="done"] { background: var(--_success); color: var(--_success-fg); }
 .cieo-btn.cieo-btn:not(.cieo-btn--primary)[data-state="done"] { color: var(--_success); border-color: color-mix(in oklab, var(--_success) 55%, transparent); }
+.cieo-btn--pill { border-radius: var(--cieo-radius-pill, 999px); }
 /* Touch: a 44px hit area without changing the drawn size (morphing buttons clip, so they grow instead). */
 @media (pointer: coarse) {
   .cieo-btn:not([data-state])::before { content: ""; position: absolute; left: 50%; top: 50%; width: max(100%, 44px); height: max(100%, 44px); translate: -50% -50%; }

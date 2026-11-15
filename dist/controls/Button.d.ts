@@ -1,9 +1,11 @@
 import { type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { type ButtonVariant, type ControlSize } from './classes.js';
+import { type ButtonVariant, type ButtonShape, type ControlSize } from './classes.js';
 export type ButtonState = 'idle' | 'pending' | 'done';
 interface ButtonOwnProps {
     variant?: ButtonVariant;
     size?: ControlSize;
+    /** Pill (fully rounded) shape for compact product bars. Defaults to rect. */
+    shape?: ButtonShape;
     block?: boolean;
     /** Leading icon, or the whole content of an icon-only button. */
     icon?: ReactNode;
