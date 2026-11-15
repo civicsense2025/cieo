@@ -18,7 +18,7 @@ Fixed bottom notice on the toast layer: message, optional action slot, dismiss b
 
 ## Behavior
 
-Entering rises on the base spring; closing (timer, Escape, dismiss) plays the exit spring before unmounting. Reduced motion and `motion={false}` show and hide the end state. Stacking is host-owned: render one Toast per notice in a column.
+Entering rises on the base spring; closing (timer, Escape, dismiss) plays the exit spring before unmounting. Hovering or focusing pauses the auto-dismiss deadline and leaving or blurring outside resumes it with the time that was left, so a slow read never loses the notice. Reduced motion and `motion={false}` show and hide the end state. Stacking is host-owned: render one Toast per notice in a column.
 
 ## Keyboard / accessibility
 

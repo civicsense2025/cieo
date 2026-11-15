@@ -86,7 +86,7 @@ export { commentDepth, commentHasRail, Comment, type CommentProps, type CommentS
 export { composerLength, composerCanSubmit, composerShowsCount, composerKeyAction, CommentComposer, type CommentComposerProps, type ComposerState } from './CommentComposer/CommentComposer.js';
 export { buildCommentTree, countDescendants, visibleReplies, flattenReplies, moreRepliesLabel, CommentThread, type FlatComment, type CommentRenderContext, type CommentThreadProps } from './CommentThread/CommentThread.js';
 export { formatCompactCount, formatExactCount, CompactCount, type CompactCountProps } from './CompactCount/CompactCount.js';
-export { CompareCurtain, type CompareCurtainProps } from './CompareCurtain/CompareCurtain.js';
+export { curtainFraction, curtainKeyMove, CompareCurtain, type CompareCurtainProps } from './CompareCurtain/CompareCurtain.js';
 export { ComplexSelector, type ComplexSelectorSection, type ComplexSelectorProps } from './ComplexSelector/ComplexSelector.js';
 export { conversationIds, conversationOrder, conversationTabbable, conversationRove, ConversationList, ConversationListContext, type ConversationListContextValue, type ConversationListProps } from './ConversationList/ConversationList.js';
 export { nodeText, unreadBadgeText, conversationLabel, ConversationListItem, type ConversationSummary, type ConversationListItemProps } from './ConversationListItem/ConversationListItem.js';
@@ -210,7 +210,7 @@ export { thumbsStep, ThumbsFeedback, THUMBS_INITIAL, type ThumbsState, type Thum
 export { TimeInput, type TimeInputProps } from './TimeInput/TimeInput.js';
 export { Timer, type TimerProps } from './Timer/Timer.js';
 export { Timestamp, type TimestampProps } from './Timestamp/Timestamp.js';
-export { Toast, type ToastProps, type ToastTone } from './Toast/Toast.js';
+export { startToastDeadline, pauseToastDeadline, resumeToastDelay, Toast, type ToastDeadline, type ToastProps, type ToastTone } from './Toast/Toast.js';
 export { ToggleButton, type ToggleButtonProps } from './ToggleButton/ToggleButton.js';
 export { ToggleButtonGroup, ToggleButtonGroupContext, type ToggleButtonGroupContextValue, type ToggleButtonGroupProps } from './ToggleButtonGroup/ToggleButtonGroup.js';
 export { Token, type TokenProps } from './Token/Token.js';

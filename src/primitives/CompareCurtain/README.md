@@ -18,12 +18,13 @@ Stacked `before` (full-bleed) and `after` (clipped from the inline end by `posit
 
 ## Behavior
 
-Pointer drag on the divider paints 1:1 and reports through `onMove`; on release the layer settles at the host value. Arrows move by `step`, Home/End jump to the ends. Reduced motion and `motion={false}` jump to the value.
+Pointer drag on the divider paints 1:1 from the inline-start edge in both directions and reports through `onMove`; on release the layer settles at the host value. Arrows move by `step`, PageUp/PageDown by `largeStep` (ten times `step`), Home/End jump to the ends. Reduced motion and `motion={false}` jump to the value.
 
 ## Keyboard / accessibility
 
 - Divider is a native button with the slider role: `aria-valuemin/max/now` plus `aria-valuetext` ("42 percent vector result visible") from `valueText`.
-- `aria-orientation="horizontal"`; arrow keys, Home, and End are handled on the divider.
+- `aria-orientation="horizontal"`; arrows, PageUp/PageDown, Home, and End are handled on the divider. Arrows follow APG direction: in RTL, ArrowRight decreases and ArrowLeft increases; PageUp/PageDown are direction-independent.
+- Direction is read from computed style at interaction time; the server render assumes LTR until the first interaction paints.
 - Clip geometry is physical (inline-end side); mirrored RTL layouts are a known limitation.
 
 ## Do / don't
@@ -37,8 +38,8 @@ Use the typed presentation parts listed under Host customization. Defaults still
 
 ## Limitations
 
-- LTR clip geometry only; RTL mirroring stays host-owned.
 - Layers must share dimensions; the component clips, never scales.
+- The server render paints LTR geometry until the first interaction reads the direction.
 
 ## Related
 

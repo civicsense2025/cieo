@@ -9,6 +9,27 @@ import { motionAttrs, type MotionProps } from '../motion.js';
 
 export type ToastTone = 'info' | 'success' | 'warning' | 'danger';
 
+/** Pauseable auto-dismiss deadline. Pure math; the component owns the setTimeout. */
+export interface ToastDeadline {
+  /** ms left when paused; the armed duration when running. */
+  remaining: number;
+  /** Epoch ms the running timer fires, or null when paused or disabled. */
+  firesAt: number | null;
+}
+/** Starts (or restarts) the deadline for a duration at now. Non-positive durations never fire. */
+export function startToastDeadline(duration: number, now: number): ToastDeadline {
+  return duration > 0 ? { remaining: duration, firesAt: now + duration } : { remaining: 0, firesAt: null };
+}
+/** Freezes a running deadline at now; the returned remaining resumes it later. Idles pass through. */
+export function pauseToastDeadline(state: ToastDeadline, now: number): ToastDeadline {
+  if (state.firesAt === null) return state;
+  return { remaining: Math.max(0, state.firesAt - now), firesAt: null };
+}
+/** ms to arm when resuming a paused deadline; 0 means no timer. */
+export function resumeToastDelay(state: ToastDeadline): number {
+  return state.firesAt === null ? state.remaining : 0;
+}
+
 export interface ToastProps extends MotionProps {
   className?: string;
   slotProps?: { root?: PrimitivePartProps; message?: PrimitivePartProps; action?: PrimitivePartProps; dismiss?: PrimitivePartProps };
@@ -34,11 +55,40 @@ export function Toast({ className, slotProps, message, tone = 'info', open = tru
   const done = useRef(onDone);
   done.current = onDone;
   useDismiss(open, () => done.current?.(), [ref], { outside: false });
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const deadline = useRef<ToastDeadline>(startToastDeadline(duration, Date.now()));
+  function clearTimer() {
+    if (timer.current !== null) {
+      clearTimeout(timer.current);
+      timer.current = null;
+    }
+  }
+  function arm(ms: number) {
+    clearTimer();
+    if (ms <= 0 || !open) {
+      deadline.current = { remaining: 0, firesAt: null };
+      return;
+    }
+    deadline.current = startToastDeadline(ms, Date.now());
+    timer.current = setTimeout(() => {
+      timer.current = null;
+      deadline.current = { remaining: 0, firesAt: null };
+      done.current?.();
+    }, ms);
+  }
   useEffect(() => {
-    if (!open || duration <= 0) return;
-    const id = setTimeout(() => done.current?.(), duration);
-    return () => clearTimeout(id);
+    arm(duration);
+    return clearTimer;
   }, [open, duration, message]);
+  /* WCAG 2.2 timing: hovering or focusing pauses the deadline; leaving or
+     blurring outside resumes it with the time that was left. */
+  function pause() {
+    deadline.current = pauseToastDeadline(deadline.current, Date.now());
+    clearTimer();
+  }
+  function resume() {
+    if (timer.current === null) arm(resumeToastDelay(deadline.current));
+  }
   void exiting;
   if (!mounted) return null;
   return (
@@ -47,6 +97,12 @@ export function Toast({ className, slotProps, message, tone = 'info', open = tru
       role={tone === 'danger' || tone === 'warning' ? 'alert' : 'status'}
       data-tone={tone}
       className="cieo cieo-toast"
+      onPointerEnter={pause}
+      onPointerLeave={resume}
+      onFocus={pause}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) resume();
+      }}
       {...motionAttrs({ motion, entering, exiting })}
       {...customizePart(slotProps?.root, "cieo cieo-toast", undefined, className)}
     >

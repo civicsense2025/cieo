@@ -23,5 +23,11 @@ export interface CompareCurtainProps extends MotionProps {
     onMove?: (position: number) => void;
     /** Keyboard step in points. Defaults to 4. */
     step?: number;
+    /** Large keyboard step in points for PageUp/PageDown. Defaults to ten times step. */
+    largeStep?: number;
 }
-export declare function CompareCurtain({ className, slotProps, label, valueText, before, after, position, onMove, step, motion, entering, exiting }: CompareCurtainProps): import("react/jsx-runtime").JSX.Element;
+/** Pointer fraction from the inline-start edge, so dragging toward inline-start reduces the value in both directions. */
+export declare function curtainFraction(clientX: number, left: number, right: number, rtl: boolean): number;
+/** Keyboard move in points for a key; 'min'/'max' for Home/End, null when unhandled. Arrows follow APG direction: in RTL, ArrowRight decreases. */
+export declare function curtainKeyMove(key: string, step: number, largeStep: number, rtl: boolean): number | 'min' | 'max' | null;
+export declare function CompareCurtain({ className, slotProps, label, valueText, before, after, position, onMove, step, largeStep, motion, entering, exiting }: CompareCurtainProps): import("react/jsx-runtime").JSX.Element;

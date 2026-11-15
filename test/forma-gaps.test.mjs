@@ -8,9 +8,9 @@ import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import { DropZone } from '../dist/primitives/DropZone/DropZone.js';
-import { CompareCurtain } from '../dist/primitives/CompareCurtain/CompareCurtain.js';
+import { CompareCurtain, curtainFraction, curtainKeyMove } from '../dist/primitives/CompareCurtain/CompareCurtain.js';
 import { PreviewStage } from '../dist/primitives/PreviewStage/PreviewStage.js';
-import { Toast } from '../dist/primitives/Toast/Toast.js';
+import { Toast, startToastDeadline, pauseToastDeadline, resumeToastDelay } from '../dist/primitives/Toast/Toast.js';
 import { ClipRange, formatClipTime } from '../dist/primitives/ClipRange/ClipRange.js';
 import { PaletteSwatches } from '../dist/primitives/PaletteSwatches/PaletteSwatches.js';
 import { SegmentedControl } from '../dist/primitives/SegmentedControl/SegmentedControl.js';
@@ -53,9 +53,34 @@ test('CompareCurtain is a slider with keyboard support and live text', () => {
   assert.match(html, /aria-valuetext="42 percent vector result visible"/);
   assert.match(html, /clip-path:\s*inset\(0 58/);
   const code = src('CompareCurtain');
-  for (const marker of ['ArrowRight', 'ArrowLeft', 'Home', 'End', 'useSpring', 'setPointerCapture', 'aria-orientation']) {
+  for (const marker of ['ArrowRight', 'ArrowLeft', 'Home', 'End', 'PageUp', 'PageDown', 'useSpring', 'setPointerCapture', 'aria-orientation', 'curtainFraction', 'curtainKeyMove', 'step * 10']) {
     assert.ok(code.includes(marker), `missing marker: ${marker}`);
   }
+});
+
+test('curtainFraction measures from the inline-start edge in both directions', () => {
+  assert.equal(curtainFraction(30, 0, 100, false), 0.3);
+  assert.equal(curtainFraction(30, 0, 100, true), 0.7);
+  assert.equal(curtainFraction(0, 0, 100, false), 0);
+  assert.equal(curtainFraction(0, 0, 100, true), 1);
+  assert.equal(curtainFraction(100, 0, 100, false), 1);
+  assert.equal(curtainFraction(100, 0, 100, true), 0);
+  assert.equal(curtainFraction(50, 200, 200, false), 0);
+});
+
+test('curtainKeyMove follows APG arrows with RTL inversion and large steps', () => {
+  assert.equal(curtainKeyMove('ArrowRight', 4, 40, false), 4);
+  assert.equal(curtainKeyMove('ArrowRight', 4, 40, true), -4);
+  assert.equal(curtainKeyMove('ArrowLeft', 4, 40, false), -4);
+  assert.equal(curtainKeyMove('ArrowLeft', 4, 40, true), 4);
+  assert.equal(curtainKeyMove('ArrowUp', 4, 40, true), -4);
+  assert.equal(curtainKeyMove('ArrowDown', 4, 40, true), 4);
+  assert.equal(curtainKeyMove('PageUp', 4, 40, false), 40);
+  assert.equal(curtainKeyMove('PageUp', 4, 40, true), 40);
+  assert.equal(curtainKeyMove('PageDown', 4, 40, false), -40);
+  assert.equal(curtainKeyMove('Home', 4, 40, false), 'min');
+  assert.equal(curtainKeyMove('End', 4, 40, true), 'max');
+  assert.equal(curtainKeyMove('Enter', 4, 40, false), null);
 });
 
 test('PreviewStage regions, toolbar, and backdrop switch render with names', () => {
@@ -84,7 +109,24 @@ test('Toast announces once and names its dismiss', () => {
   const danger = renderToStaticMarkup(h(Toast, { message: 'Failed', tone: 'danger', open: true, onDone() {}, duration: 0, children: 'x' }));
   assert.match(danger, /role="alert"/);
   const code = src('Toast');
-  for (const marker of ['usePresence', 'useDismiss', 'setTimeout', 'duration <= 0']) {
+  for (const marker of ['usePresence', 'useDismiss', 'setTimeout', 'ms <= 0']) {
+    assert.ok(code.includes(marker), `missing marker: ${marker}`);
+  }
+});
+
+test('Toast deadline pauses on hover/focus and resumes with the time left', () => {
+  const running = startToastDeadline(5000, 1000);
+  assert.deepEqual(running, { remaining: 5000, firesAt: 6000 });
+  const paused = pauseToastDeadline(running, 2500);
+  assert.deepEqual(paused, { remaining: 3500, firesAt: null });
+  assert.equal(resumeToastDelay(paused), 3500);
+  assert.deepEqual(pauseToastDeadline(paused, 9000), paused);
+  assert.equal(resumeToastDelay(running), 0);
+  assert.deepEqual(pauseToastDeadline(startToastDeadline(5000, 1000), 7000), { remaining: 0, firesAt: null });
+  assert.deepEqual(startToastDeadline(0, 1000), { remaining: 0, firesAt: null });
+  assert.deepEqual(startToastDeadline(-5, 1000), { remaining: 0, firesAt: null });
+  const code = src('Toast');
+  for (const marker of ['onPointerEnter', 'onPointerLeave', 'onFocus={pause}', 'onBlur', 'relatedTarget', 'startToastDeadline', 'pauseToastDeadline', 'resumeToastDelay']) {
     assert.ok(code.includes(marker), `missing marker: ${marker}`);
   }
 });
@@ -155,12 +197,25 @@ test('new stylesheets read tokens and guard motion', () => {
   for (const file of ['dropzone.css', 'compare-curtain.css', 'preview-stage.css', 'toast.css', 'clip-range.css', 'palette-swatches.css', 'number-input.css']) {
     const content = css(file);
     assert.ok(content.includes('@layer cieo.components'), `${file} missing layer`);
-    assert.ok(!/var\(--(?!cieo-|motion-)/.test(content), `${file} references a non-token variable`);
+    const extra = [...content.matchAll(/var\(--(?!cieo-|motion-)([\w-]+)/g)].map((m) => m[1]);
+    assert.deepEqual(extra.filter((v) => !['preview-backdrop-light', 'preview-backdrop-dark'].includes(v)), [], `${file} references a non-token variable`);
   }
+  const stage = css('preview-stage.css');
+  assert.match(stage, /--preview-backdrop-light:\s*#ffffff/);
+  assert.match(stage, /--preview-backdrop-dark:\s*#111111/);
+  assert.match(stage, /content data like swatch fills/);
+  assert.match(stage, /background:\s*var\(--preview-backdrop-light\)/);
+  assert.match(stage, /background:\s*var\(--preview-backdrop-dark\)/);
   for (const file of ['dropzone.css', 'preview-stage.css', 'palette-swatches.css']) {
     assert.match(css(file), /prefers-reduced-motion/, `${file} animates without a reduced-motion guard`);
   }
   assert.match(readFileSync('src/controls/controls.css', 'utf8'), /--cieo-radius-pill/);
+});
+
+test('segment link styling scopes to anchors; buttons stay byte-identical', () => {
+  const item = readFileSync('design/styles/primitives/segmented-control-item.css', 'utf8');
+  assert.match(item, /\.cieo-segmented-control-item\[href\]\s*\{\s*text-decoration:\s*none;\s*\}/);
+  assert.ok(!/\.cieo-segmented-control-item\s*\{[^}]*text-decoration/.test(item), 'base rule carries no text-decoration');
 });
 
 test('new primitives are exported, registered, and documented', () => {

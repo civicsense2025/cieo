@@ -21,6 +21,7 @@
     { "id": "position", "type": { "kind": "number" }, "required": true, "nullable": false, "constraints": {}, "note": "Divider position, 0-100. Clamped." },
     { "id": "onMove", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (position: number) => void; no function kind exists in the manifest precedent." },
     { "id": "step", "type": { "kind": "number" }, "required": false, "nullable": false, "default": 4, "constraints": {} },
+    { "id": "largeStep", "type": { "kind": "number" }, "required": false, "nullable": false, "constraints": {}, "note": "PageUp/PageDown step in points. Defaults to ten times step." },
     {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Additional root CSS class. Built-in classes remain."},
     {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation parts: root, before, after, divider. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."}
   ],
@@ -31,7 +32,7 @@
   "variants": [],
   "styleParts": [{ "id": "divider", "overrides": ["background"], "tokenRoles": ["surface", "border-strong"] }],
   "constraints": { "layout": ["clipped-layers"], "content": ["slider-role-divider"], "motion": ["spring-settle"] },
-  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "valueText", "before", "after", "position", "onMove", "step", "className", "slotProps"], "states": [], "events": [], "parts": ["divider"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
+  "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "valueText", "before", "after", "position", "onMove", "step", "largeStep", "className", "slotProps"], "states": [], "events": [], "parts": ["divider"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Before/after compare with a slider-role divider." },
