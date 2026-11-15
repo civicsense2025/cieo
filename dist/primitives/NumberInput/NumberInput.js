@@ -1,10 +1,10 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
-export function NumberInput({ className, slotProps, label, min, max, step, defaultValue, value, name, disabled, required, onChange }) {
+export function NumberInput({ className, slotProps, label, min, max, step, unit, defaultValue, value, name, disabled, required, onChange }) {
     const handle = (e) => {
         const raw = e.currentTarget.value;
         onChange?.(raw === '' || Number.isNaN(e.currentTarget.valueAsNumber) ? null : e.currentTarget.valueAsNumber);
     };
-    return (_jsxs("label", { className: "cieo", ...customizePart(slotProps?.root, "cieo", undefined, className), children: [_jsx("span", { className: "cieo-label", ...customizePart(slotProps?.label, "cieo-label", undefined), children: label }), _jsx("input", { type: "number", className: "cieo cieo-input", name: name, min: min, max: max, step: step, value: value === undefined ? undefined : (value ?? ''), defaultValue: value === undefined ? defaultValue : undefined, disabled: disabled, required: required, onChange: handle, ...customizePart(slotProps?.input, "cieo cieo-input", undefined) })] }));
+    return (_jsxs("label", { className: "cieo", ...customizePart(slotProps?.root, "cieo", undefined, className), children: [_jsx("span", { className: "cieo-label", ...customizePart(slotProps?.label, "cieo-label", undefined), children: label }), _jsx("input", { type: "number", className: "cieo cieo-input", name: name, min: min, max: max, step: step, value: value === undefined ? undefined : (value ?? ''), defaultValue: value === undefined ? defaultValue : undefined, disabled: disabled, required: required, onChange: handle, ...customizePart(slotProps?.input, "cieo cieo-input", undefined) }), unit ? _jsx("span", { className: "cieo-input-unit", ...customizePart(slotProps?.unit, "cieo-input-unit", undefined), children: unit }) : null] }));
 }
