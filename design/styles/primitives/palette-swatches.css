@@ -1,0 +1,19 @@
+@layer cieo.components {
+  :where(.cieo).cieo-swatches { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); }
+  :where(.cieo) .cieo-swatch { position: relative; display: inline-flex; cursor: pointer; border-radius: var(--cieo-radius-pill); }
+  :where(.cieo) .cieo-swatch input[type='radio'] { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
+  :where(.cieo) .cieo-swatch-dot {
+    inline-size: var(--cieo-control-small); block-size: var(--cieo-control-small); border-radius: var(--cieo-radius-pill);
+    border: var(--cieo-border-width) solid var(--cieo-color-border-strong);
+    transition: transform var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), box-shadow var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1));
+  }
+  :where(.cieo).cieo-swatches[data-size='sm'] .cieo-swatch-dot { inline-size: calc(var(--cieo-space-2) + var(--cieo-space-3)); block-size: calc(var(--cieo-space-2) + var(--cieo-space-3)); }
+  :where(.cieo) .cieo-swatch[data-picked='true'] .cieo-swatch-dot { box-shadow: 0 0 0 2px var(--cieo-color-surface), 0 0 0 4px var(--cieo-color-accent); }
+  :where(.cieo) .cieo-swatch input[type='radio']:focus-visible + .cieo-swatch-dot { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+  :where(.cieo) .cieo-swatch input[type='radio']:disabled { cursor: not-allowed; }
+  :where(.cieo) .cieo-swatch input[type='radio']:disabled + .cieo-swatch-dot { opacity: var(--cieo-disabled-opacity); }
+  @media (hover: hover) { :where(.cieo) .cieo-swatch:hover .cieo-swatch-dot { transform: scale(1.08); } }
+  @media (prefers-reduced-motion: reduce) {
+    :root:not([data-motion='full']) :where(.cieo) .cieo-swatch-dot { transition: none; }
+  }
+}

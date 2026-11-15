@@ -1,0 +1,53 @@
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
+/* DropZone. File drop target with an explicit Choose button. The button calls input.click(); nothing relies on implicit label activation. */
+import { useRef, useState } from 'react';
+import { Button } from '../../controls/Button.js';
+function hasFiles(e) {
+    return [...(e.dataTransfer?.types ?? [])].includes('Files');
+}
+export function DropZone({ className, slotProps, label, chooseLabel, hint, accept = 'image/png,image/jpeg,.png,.jpg,.jpeg', multiple = false, disabled = false, error, onFiles, children }) {
+    const input = useRef(null);
+    const depth = useRef(0);
+    const [over, setOver] = useState(false);
+    function choose() {
+        if (!disabled)
+            input.current?.click();
+    }
+    function take(files) {
+        const list = files ? [...files] : [];
+        if (list.length && !disabled)
+            onFiles?.(list);
+    }
+    function onDragEnter(e) {
+        if (disabled || !hasFiles(e))
+            return;
+        depth.current += 1;
+        setOver(true);
+    }
+    function onDragLeave() {
+        depth.current = Math.max(0, depth.current - 1);
+        if (depth.current === 0)
+            setOver(false);
+    }
+    function onDragOver(e) {
+        if (disabled || !hasFiles(e))
+            return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+    }
+    function onDrop(e) {
+        if (disabled || !hasFiles(e))
+            return;
+        e.preventDefault();
+        e.stopPropagation();
+        depth.current = 0;
+        setOver(false);
+        take(e.dataTransfer.files);
+    }
+    return (_jsxs("div", { role: "region", "aria-label": label, "aria-disabled": disabled || undefined, "data-dragover": over || undefined, "data-error": error ? 'true' : undefined, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDragOver: onDragOver, onDrop: onDrop, className: "cieo cieo-dropzone", ...customizePart(slotProps?.root, "cieo cieo-dropzone", undefined, className), children: [children, _jsx(Button, { type: "button", variant: "primary", size: "sm", shape: "pill", disabled: disabled, onClick: choose, ...customizePart(slotProps?.button, undefined, undefined), children: chooseLabel }), _jsx("input", { ref: input, type: "file", className: "cieo-vh", tabIndex: -1, "aria-hidden": "true", accept: accept, multiple: multiple, disabled: disabled, onChange: (e) => {
+                    take(e.target.files);
+                    e.target.value = '';
+                }, ...customizePart(slotProps?.input, "cieo-vh", undefined) }), hint ? _jsx("p", { className: "cieo-dropzone-hint", ...customizePart(slotProps?.hint, "cieo-dropzone-hint", undefined), children: hint }) : null, error ? _jsx("p", { role: "alert", className: "cieo-dropzone-error", ...customizePart(slotProps?.error, "cieo-dropzone-error", undefined), children: error }) : null] }));
+}

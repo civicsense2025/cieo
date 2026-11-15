@@ -65,6 +65,7 @@
     "CheckboxListItem",
     "Citation",
     "ClickableCard",
+    "ClipRange",
     "Code",
     "CodeBlock",
     "Collapsible",
@@ -80,6 +81,7 @@
     "CommentComposer",
     "CommentThread",
     "CompactCount",
+    "CompareCurtain",
     "ComplexSelector",
     "ConversationList",
     "ConversationListItem",
@@ -91,6 +93,7 @@
     "Dialog",
     "DialogHeader",
     "Divider",
+    "DropZone",
     "DropdownMenu",
     "DropdownMenuCheckboxItem",
     "DropdownMenuDivider",
@@ -143,10 +146,12 @@
     "OverflowList",
     "Overlay",
     "Pagination",
+    "PaletteSwatches",
     "PlaybackRateButton",
     "Poll",
     "Popover",
     "PowerSearch",
+    "PreviewStage",
     "ProgressBar",
     "RadioList",
     "RadioListItem",
@@ -200,6 +205,7 @@
     "TimeInput",
     "Timer",
     "Timestamp",
+    "Toast",
     "ToggleButton",
     "ToggleButtonGroup",
     "Token",
@@ -223,5 +229,5 @@
     "VerifiedBadge",
     "VoiceRecorder"
   ],
-  "count": 222
+  "count": 228
 }
