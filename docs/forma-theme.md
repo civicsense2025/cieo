@@ -26,7 +26,7 @@ export function formaTheme(scheme) {
       'color-muted': light ? '#62645D' : '#A3A49C',
       'color-subtle': light ? '#62645D' : '#A3A49C',
       'color-border': light ? '#E4E2DC' : '#33332F',
-      'color-focus': light ? '#3D63DD' : '#8FA3FF',
+      'color-focus': light ? '#3D63DD' : '#8FABFF',
       ...(light ? { 'color-danger': '#B42318', 'color-danger-soft': '#FDF0EE' } : {}),
       'font-sans': FORMA_SANS,
       'radius-surface': '2px',

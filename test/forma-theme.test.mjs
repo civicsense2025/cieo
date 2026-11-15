@@ -22,7 +22,7 @@ function formaTheme(scheme) {
       'color-muted': light ? '#62645D' : '#A3A49C',
       'color-subtle': light ? '#62645D' : '#A3A49C',
       'color-border': light ? '#E4E2DC' : '#33332F',
-      'color-focus': light ? '#3D63DD' : '#8FA3FF',
+      'color-focus': light ? '#3D63DD' : '#8FABFF',
       ...(light ? { 'color-danger': '#B42318', 'color-danger-soft': '#FDF0EE' } : {}),
       'font-sans': SANS,
       'radius-surface': '2px',
@@ -58,7 +58,7 @@ test('forma dark recipe passes all 32 audited pairs with spec tokens', () => {
   assert.equal(theme.tokens['color-text'].value, '#f2f1ec');
   assert.equal(theme.tokens['color-muted'].value, '#a3a49c');
   assert.equal(theme.tokens['color-accent'].value, '#f2f1ec');
-  assert.equal(theme.tokens['color-focus'].value, '#8fa3ff');
+  assert.equal(theme.tokens['color-focus'].value, '#8fabff');
   assert.equal(theme.tokens['color-canvas'].value, '#141412');
   assert.equal(theme.tokens['color-surface'].value, '#1c1c1a');
   assert.equal(theme.tokens['color-border'].value, '#33332f');
