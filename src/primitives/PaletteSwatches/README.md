@@ -45,7 +45,7 @@ LegendItem (atom, one swatch with words), SegmentedControl (molecule, single-sel
 
 ## Evidence
 
-Covered by `test/forma-gaps.test.mjs` (radiogroup semantics, picking, form name). No device acceptance in this plan.
+Covered by `test/tool-components.test.mjs` (radiogroup semantics, picking, form name). No device acceptance in this plan.
 
 ## Host customization
 

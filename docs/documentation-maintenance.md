@@ -108,6 +108,10 @@ Version 0.6.4 keeps Select choices readable in right-to-left text and with reduc
 
 Version 0.7.0 adds the Forma set: DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches, plus pill buttons, link segments, number units and the forma ink brand with an audited Forma recipe. Additive only; existing consumers upgrade by tag. The version appears in `package.json`, the lockfile and the install line in the README.
 
+## Unreleased
+
+The `forma` brand preset is removed; it was an app-specific skin, and Cieo ships generic starting points only. The six tool components added in 0.7.0 (DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches) stay, grouped as the `tools` pack in the catalogue. Apps that passed `brand: 'forma'` pass `brand: 'mono'` and override the accent, or set their own accent tokens. Breaking for those apps, so it ships in the next minor release.
+
 ## Running the full check on a fresh checkout
 
 Two outputs are generated, not committed, so `npm run check` reports them stale until they exist:

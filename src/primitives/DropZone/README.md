@@ -46,7 +46,7 @@ FileInput (atom, labelled picker with no drag handling), Button (controls, the C
 
 ## Evidence
 
-Covered by `test/forma-gaps.test.mjs` (button-click activation, drag-over state, error alert). No device acceptance in this plan.
+Covered by `test/tool-components.test.mjs` (button-click activation, drag-over state, error alert). No device acceptance in this plan.
 
 ## Host customization
 
