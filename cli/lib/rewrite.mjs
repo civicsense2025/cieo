@@ -36,15 +36,18 @@ function unclassifiedImport(spec, fromFile) {
 function classifyRelative(spec, fromFile) {
   if (spec.startsWith('./')) {
     if (COMPANION_FILES[`${fromFile}|${spec}`]) return { kind: 'shared' };
+    // A shared module at the primitives root reaches its root neighbours with ./ .
+    if (!fromFile.includes('/') && ['./parts.js', './customization.js'].includes(spec)) return { kind: 'shared' };
     throw unclassifiedImport(spec, fromFile);
   }
-  const ups = (spec.match(/\.\.\//g) || []).length;
+  // Root-level shared modules sit one directory above component files, so their depth counts one more.
+  const ups = (spec.match(/\.\.\//g) || []).length + (fromFile && !fromFile.includes('/') ? 1 : 0);
   const rest = spec.replace(/^(\.\.\/)+/, '');
   if (ups === 1) {
     if (rest === 'customization.js') return { kind: 'shared' };
     if (rest === 'parts.js') return { kind: 'shared' };
     if (rest === 'motion.js') return { kind: 'shared' };
-    if (['AuthSignInCard/AuthMotion.js', 'VoiceRecorder/recorderVisual.js'].includes(rest)) return { kind: 'shared' };
+    if (['auth-shared.js', 'VoiceRecorder/recorderVisual.js'].includes(rest)) return { kind: 'shared' };
     const [first] = rest.split('/');
     if (/^[A-Z]/.test(first) && rest === `${first}/${first}.js`) return { kind: 'sibling' };
     throw unclassifiedImport(spec, fromFile);

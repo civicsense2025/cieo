@@ -2,7 +2,7 @@
 /* AuthPasswordInput. Password input with snap strength feedback and a focus-preserving show/hide swap. */
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 

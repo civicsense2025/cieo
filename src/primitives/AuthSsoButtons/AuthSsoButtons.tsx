@@ -3,7 +3,7 @@ import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* AuthSsoButtons. One button per identity provider; pending copy swaps in place alongside aria-busy. */
 import type { CSSProperties } from 'react';
-import { AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthSwapText } from '../auth-shared.js';
 
 export interface AuthSsoProvider {
   id: string;

@@ -4,8 +4,9 @@ import { existsSync } from 'node:fs';
 const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', controls: 'cieo/controls', design: 'cieo/design', agent: 'cieo/agent', core: 'cieo' };
 // Modules with their own package subpath, checked before the area they live in. Mirrored in cli/lib/rewrite.mjs.
 const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
+const ROOT_SHARED = { './parts.js': 'parts.ts', './customization.js': 'customization.ts' };
 const COMPANION_FILES = {
-  'AuthSignInCard/AuthMotion.js': 'AuthSignInCard/AuthMotion.tsx',
+  'auth-shared.js': 'auth-shared.tsx',
   'VoiceRecorder/recorderVisual.js': 'VoiceRecorder/recorderVisual.ts',
 };
 
@@ -13,18 +14,18 @@ export function classifyImport(spec, fromFile = '') {
   if (spec === 'react' || spec.startsWith('react/') || spec === 'react-dom') return { kind: 'peer' };
   if (!spec.startsWith('.')) throw new Error(`Unclassified bare import '${spec}' — registry generation refuses to guess`);
   if (spec.startsWith('./')) {
-    if (fromFile === 'customization.ts' && spec === './parts.js') return { kind: 'shared', file: 'parts.ts' };
+    // A shared module at the primitives root imports its root neighbours with ./ .
+    if (fromFile && !fromFile.includes('/') && ROOT_SHARED[spec]) return { kind: 'shared', file: ROOT_SHARED[spec] };
     const popoverFiles = { 'Popover/Popover.tsx|./focus.js': 'Popover/focus.ts', 'Popover/Popover.tsx|./position.js': 'Popover/position.ts', 'Popover/Popover.tsx|./usePopoverPosition.js': 'Popover/usePopoverPosition.ts', 'Popover/usePopoverPosition.ts|./position.js': 'Popover/position.ts' };
     if (popoverFiles[`${fromFile}|${spec}`]) return { kind: 'shared', file: popoverFiles[`${fromFile}|${spec}`] };
-    const companion = fromFile === 'AuthSignInCard/AuthSignInCard.tsx' && spec === './AuthMotion.js'
-      ? 'AuthSignInCard/AuthMotion.tsx'
-      : fromFile === 'VoiceRecorder/VoiceRecorder.tsx' && spec === './recorderVisual.js'
+    const companion = fromFile === 'VoiceRecorder/VoiceRecorder.tsx' && spec === './recorderVisual.js'
         ? 'VoiceRecorder/recorderVisual.ts'
         : null;
     if (companion) return { kind: 'shared', file: companion };
     throw new Error(`Unclassified import '${spec}' — registry generation refuses to guess`);
   }
-  const ups = (spec.match(/\.\.\//g) || []).length;
+  // Root-level shared modules sit one directory above component files, so their depth counts one more.
+  const ups = (spec.match(/\.\.\//g) || []).length + (fromFile && !fromFile.includes('/') ? 1 : 0);
   const rest = spec.replace(/^(\.\.\/)+/, '');
   if (ups === 1) {
     if (rest === 'customization.js') return { kind: 'shared', file: 'customization.ts' };

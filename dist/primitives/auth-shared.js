@@ -1,7 +1,8 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useLayoutEffect, useRef, useState } from 'react';
-import { useReducedMotion, useSpring, useSwap, subtreeReduced } from '../../react/index.js';
+import { customizePart } from './customization.js';
+import { useReducedMotion, useSpring, useSwap, subtreeReduced } from '../react/index.js';
 const FOCUSABLE = 'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 function HeightSpring({ target, element }) {
     useSpring(target, (value) => {
@@ -97,4 +98,7 @@ export function AuthMotionMessage({ id, value, className, role }) {
     }, [motionDisabled, leaving, key, done]);
     return (_jsx("span", { ref: root, id: id, className: `cieo-auth-motion-message ${className}`, "data-open": open ? '' : undefined, role: role, "aria-live": role === 'status' ? 'polite' : undefined, "aria-atomic": role ? 'true' : undefined, children: _jsxs("span", { className: "cieo-swap cieo-auth-swap cieo-auth-motion-message-inner", children: [leaving ? _jsx("span", { className: "cieo-swap-out cieo-auth-swap-out", "aria-hidden": "true", onAnimationEnd: (event) => { if (event.target === event.currentTarget)
                         done(key); }, children: leaving }, `out-${key}`) : null, _jsx("span", { className: "cieo-swap-in cieo-auth-swap-in", "data-swap": leaving !== null ? '' : undefined, children: shown }, `in-${key}`)] }) }));
+}
+export function AuthCardShell({ id, title, status, style, children, footer, className, slotProps, slots }) {
+    return (_jsxs("section", { className: "cieo cieo-auth-card", "aria-labelledby": `${id}-title`, style: style, ...customizePart(slotProps?.root, 'cieo cieo-auth-card', style, className), children: [_jsx("h2", { className: "cieo-auth-card-title", id: `${id}-title`, ...customizePart(slotProps?.title, 'cieo-auth-card-title'), children: title }), slots?.beforeForm, children, slots?.afterForm, _jsx(AuthMotionMessage, { className: "cieo-auth-status", role: "status", value: status }), slots?.footer !== undefined ? (slots.footer === null ? null : _jsx("div", { className: "cieo-auth-routes", ...customizePart(slotProps?.footer, 'cieo-auth-routes'), children: slots.footer })) : (footer ? _jsx("p", { className: "cieo-auth-routes", ...customizePart(slotProps?.footer, 'cieo-auth-routes'), children: footer }) : null)] }));
 }

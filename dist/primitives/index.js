@@ -36,7 +36,7 @@ export { AuthPasswordInput } from './AuthPasswordInput/AuthPasswordInput.js';
 export { AuthResetFlow } from './AuthResetFlow/AuthResetFlow.js';
 export { AuthResetForm } from './AuthResetForm/AuthResetForm.js';
 export { AuthSessionList } from './AuthSessionList/AuthSessionList.js';
-export { AuthCardShell, AuthSignInCard } from './AuthSignInCard/AuthSignInCard.js';
+export { AuthSignInCard, AuthCardShell } from './AuthSignInCard/AuthSignInCard.js';
 export { AuthSignUpCard } from './AuthSignUpCard/AuthSignUpCard.js';
 export { AuthSsoButtons } from './AuthSsoButtons/AuthSsoButtons.js';
 export { Avatar } from './Avatar/Avatar.js';

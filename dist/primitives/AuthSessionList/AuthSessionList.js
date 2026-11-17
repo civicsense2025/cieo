@@ -4,7 +4,7 @@ import { customizePart } from '../customization.js';
 /* AuthSessionList. Removal is immediate; surviving device rows reflow on Cieo's base spring. */
 import { useRef } from 'react';
 import { useFlip } from '../../react/index.js';
-import { useAuthMotionDisabled } from '../AuthSignInCard/AuthMotion.js';
+import { useAuthMotionDisabled } from '../auth-shared.js';
 function SessionReflow({ list, order }) {
     useFlip(list, order, { stagger: 0.02 });
     return null;

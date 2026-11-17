@@ -5,7 +5,7 @@ import { customizePart } from '../customization.js';
 import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
-import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 
 export interface AuthCredentialFormProps {

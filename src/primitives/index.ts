@@ -36,7 +36,7 @@ export { AuthPasswordInput, type AuthPasswordInputProps } from './AuthPasswordIn
 export { AuthResetFlow, type AuthResetFlowProps } from './AuthResetFlow/AuthResetFlow.js';
 export { AuthResetForm, type AuthResetFormProps } from './AuthResetForm/AuthResetForm.js';
 export { AuthSessionList, type AuthSession, type AuthSessionListProps } from './AuthSessionList/AuthSessionList.js';
-export { AuthCardShell, AuthSignInCard, type AuthCardSlotProps, type AuthCardSlots, type AuthSignInCardProps } from './AuthSignInCard/AuthSignInCard.js';
+export { AuthSignInCard, AuthCardShell, type AuthSignInCardProps, type AuthCardSlotProps, type AuthCardSlots } from './AuthSignInCard/AuthSignInCard.js';
 export { AuthSignUpCard, type AuthSignUpCardProps } from './AuthSignUpCard/AuthSignUpCard.js';
 export { AuthSsoButtons, type AuthSsoProvider, type AuthSsoButtonsProps } from './AuthSsoButtons/AuthSsoButtons.js';
 export { Avatar, type AvatarProps } from './Avatar/Avatar.js';

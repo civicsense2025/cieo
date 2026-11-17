@@ -2,7 +2,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AuthPasswordInput. Password input with snap strength feedback and a focus-preserving show/hide swap. */
 import { useRef, useState } from 'react';
-import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 import { customizePart } from '../customization.js';
 function scorePassword(pw) {
     let score = 0;

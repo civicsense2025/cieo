@@ -92,9 +92,9 @@ test('ships auth and recorder companion modules as shared files without primitiv
   try {
     const prim = join(tree, 'src/primitives');
     const files = {
-      'AuthAccountCard/AuthAccountCard.tsx': "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';\nexport const AuthAccountCard = AuthMotionMessage;\n",
-      'AuthSignInCard/AuthSignInCard.tsx': "import { AuthMotionMessage } from './AuthMotion.js';\nexport const AuthSignInCard = AuthMotionMessage;\n",
-      'AuthSignInCard/AuthMotion.tsx': "import { useState } from '../../react/index.js';\nexport const AuthMotionMessage = useState;\n",
+      'AuthAccountCard/AuthAccountCard.tsx': "import { AuthMotionMessage } from '../auth-shared.js';\nexport const AuthAccountCard = AuthMotionMessage;\n",
+      'AuthSignInCard/AuthSignInCard.tsx': "import { AuthMotionMessage } from '../auth-shared.js';\nexport const AuthSignInCard = AuthMotionMessage;\n",
+      'auth-shared.tsx': "import { useState } from '../react/index.js';\nexport const AuthMotionMessage = useState;\n",
       'VoiceRecorder/VoiceRecorder.tsx': "import { recorderVisual } from './recorderVisual.js';\nexport const VoiceRecorder = recorderVisual;\n",
       'VoiceRecorder/recorderVisual.ts': "export const recorderVisual = () => null;\n",
     };
@@ -108,14 +108,14 @@ test('ships auth and recorder companion modules as shared files without primitiv
     }
 
     const { index } = buildRegistry(tree);
-    assert.deepEqual(index.shared, ['AuthSignInCard/AuthMotion.tsx', 'VoiceRecorder/recorderVisual.ts']);
-    assert.deepEqual(index.components.AuthAccountCard.sharedFiles, ['AuthSignInCard/AuthMotion.tsx']);
+    assert.deepEqual(index.shared, ['VoiceRecorder/recorderVisual.ts', 'auth-shared.tsx']);
+    assert.deepEqual(index.components.AuthAccountCard.sharedFiles, ['auth-shared.tsx']);
     assert.deepEqual(index.components.AuthAccountCard.registryDependencies, []);
     assert.deepEqual(index.components.AuthAccountCard.packageImports, ['cieo/react']);
-    assert.deepEqual(index.components.AuthSignInCard.sharedFiles, ['AuthSignInCard/AuthMotion.tsx']);
+    assert.deepEqual(index.components.AuthSignInCard.sharedFiles, ['auth-shared.tsx']);
     assert.deepEqual(index.components.AuthSignInCard.packageImports, ['cieo/react']);
     assert.deepEqual(index.components.VoiceRecorder.sharedFiles, ['VoiceRecorder/recorderVisual.ts']);
-    assert.equal(readFileSync(join(tree, 'registry/AuthSignInCard/AuthMotion.tsx'), 'utf8'), files['AuthSignInCard/AuthMotion.tsx']);
+    assert.equal(readFileSync(join(tree, 'registry/auth-shared.tsx'), 'utf8'), files['auth-shared.tsx']);
     assert.equal(readFileSync(join(tree, 'registry/VoiceRecorder/recorderVisual.ts'), 'utf8'), files['VoiceRecorder/recorderVisual.ts']);
   } finally {
     rmSync(tree, { recursive: true, force: true });
@@ -128,12 +128,12 @@ test('fails closed on an unclassified import inside a shared companion', () => {
     const prim = join(tree, 'src/primitives');
     mkdirSync(join(prim, 'AuthAccountCard'), { recursive: true });
     mkdirSync(join(prim, 'AuthSignInCard'), { recursive: true });
-    writeFileSync(join(prim, 'AuthAccountCard/AuthAccountCard.tsx'), "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';\nexport const AuthAccountCard = AuthMotionMessage;\n");
-    writeFileSync(join(prim, 'AuthSignInCard/AuthMotion.tsx'), "import { helper } from '../../utils/thing.js';\nexport const AuthMotionMessage = helper;\n");
+    writeFileSync(join(prim, 'AuthAccountCard/AuthAccountCard.tsx'), "import { AuthMotionMessage } from '../auth-shared.js';\nexport const AuthAccountCard = AuthMotionMessage;\n");
+    writeFileSync(join(prim, 'auth-shared.tsx'), "import { helper } from '../utils/thing.js';\nexport const AuthMotionMessage = helper;\n");
     writeFileSync(join(prim, 'AuthAccountCard/manifest.json'), manifest('AuthAccountCard', []));
     writeFileSync(join(prim, 'AuthSignInCard/manifest.json'), manifest('AuthSignInCard', []));
 
-    assert.throws(() => buildRegistry(tree), /Unclassified import '\.\.\/\.\.\/utils\/thing\.js'/);
+    assert.throws(() => buildRegistry(tree), /Unclassified import '\.\.\/utils\/thing\.js'/);
   } finally {
     rmSync(tree, { recursive: true, force: true });
   }

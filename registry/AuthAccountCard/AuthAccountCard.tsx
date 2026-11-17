@@ -4,7 +4,7 @@ import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
-import { AuthMotionFrame, AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionFrame, AuthMotionMessage } from '../auth-shared.js';
 
 export interface AuthAccountCardProps {
   className?: string;

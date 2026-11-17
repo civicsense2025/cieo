@@ -1,7 +1,7 @@
 'use client';
 /* AuthSignUpCard. Full sign-up card with spring-led labels and status presence. */
 import type { CSSProperties } from 'react';
-import { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../AuthSignInCard/AuthSignInCard.js';
+import { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../auth-shared.js';
 import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';
 
 export interface AuthSignUpCardProps {

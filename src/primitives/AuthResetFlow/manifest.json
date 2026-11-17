@@ -15,7 +15,7 @@
     "path": "src/primitives/AuthResetFlow/AuthResetFlow.tsx",
     "symbol": "AuthResetFlow"
   },
-  "dependencies": ["AuthResetForm", "AuthSignInCard"],
+  "dependencies": ["AuthResetForm"],
   "nativePrimitives": [],
   "properties": [
     {

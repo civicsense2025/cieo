@@ -4,7 +4,7 @@ import { customizePart } from '../customization.js';
 /* AuthMfaChallenge. OTP and recovery panes share a measured spring-sized frame. */
 import { useState } from 'react';
 import { AuthOtpInput } from '../AuthOtpInput/AuthOtpInput.js';
-import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 export function AuthMfaChallenge({ className, slotProps, id, pending, error, style, onSubmit, onRecovery }) {
     const [useRecovery, setUseRecovery] = useState(false);
     const [recovery, setRecovery] = useState('');

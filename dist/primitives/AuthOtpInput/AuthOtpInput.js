@@ -2,7 +2,7 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 /* AuthOtpInput. Digit boxes acknowledge entry on snap; paste and keyboard behavior stay native and accessible. */
 import { useRef, useState } from 'react';
-import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage } from '../auth-shared.js';
 import { customizePart } from '../customization.js';
 export function AuthOtpInput({ className, slotProps, id, length = 6, label = 'Verification code', error, disabled, style, onComplete, onChange }) {
     const [digits, setDigits] = useState(() => Array.from({ length }, () => ''));

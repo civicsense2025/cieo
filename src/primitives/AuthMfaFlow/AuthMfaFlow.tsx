@@ -1,8 +1,8 @@
 'use client';
 /* AuthMfaFlow. MFA card with challenge, smoothly swapping resend copy, and status. */
 import type { CSSProperties } from 'react';
-import { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../AuthSignInCard/AuthSignInCard.js';
-import { AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../auth-shared.js';
+import { AuthSwapText } from '../auth-shared.js';
 import { AuthMfaChallenge } from '../AuthMfaChallenge/AuthMfaChallenge.js';
 
 export interface AuthMfaFlowProps {

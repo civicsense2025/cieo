@@ -5,7 +5,7 @@ import { customizePart } from '../customization.js';
 import { useState } from 'react';
 import type { CSSProperties } from 'react';
 import { AuthOtpInput } from '../AuthOtpInput/AuthOtpInput.js';
-import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 
 export interface AuthMfaChallengeProps {
   className?: string;
