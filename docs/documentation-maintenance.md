@@ -112,6 +112,10 @@ Version 0.7.0 adds the Forma set: DropZone, CompareCurtain, PreviewStage, Toast,
 
 The `forma` brand preset is removed; it was an app-specific skin, and Cieo ships generic starting points only. The six tool components added in 0.7.0 (DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches) stay, grouped as the `tools` pack in the catalogue. Apps that passed `brand: 'forma'` pass `brand: 'mono'` and override the accent, or set their own accent tokens. Breaking for those apps, so it ships in the next minor release.
 
+## Deploying the site
+
+See [Cloudflare deploy](cloudflare-deploy.md). The docs prev/next chain is rebuilt by `node scripts/build-component-index.mjs` and pinned by `test/deploy-site.test.mjs`.
+
 ## Running the full check on a fresh checkout
 
 Two outputs are generated, not committed, so `npm run check` reports them stale until they exist:

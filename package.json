@@ -1097,7 +1097,9 @@
     "studio": "node scripts/serve-studio.mjs",
     "studio:standalone": "node scripts/build-standalone.mjs",
     "check:size": "node scripts/bundlesize.mjs",
-    "check:css-vars": "node scripts/check-css-vars.mjs"
+    "check:css-vars": "node scripts/check-css-vars.mjs",
+    "deploy:build": "node scripts/build-deploy.mjs",
+    "deploy": "npm run deploy:build && npx --yes wrangler@4.160.0 deploy"
   },
   "bin": {
     "cieo": "bin/cieo.mjs",

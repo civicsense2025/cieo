@@ -63,8 +63,8 @@ items.forEach((item, i) => {
   const next = items[(i + 1) % items.length];
   const path = `${root}/site/components/${item.dir}.html`;
   const html = readFileSync(path, 'utf8')
-    .replace(/<a data-prev>.*?<\/a>/, `<a data-prev href="./${prev.dir}.html">${prev.name}</a>`)
-    .replace(/<a data-next>.*?<\/a>/, `<a data-next href="./${next.dir}.html">${next.name}</a>`);
+    .replace(/<a data-prev[^>]*>.*?<\/a>/, `<a data-prev href="./${prev.dir}.html">${prev.name}</a>`)
+    .replace(/<a data-next[^>]*>.*?<\/a>/, `<a data-next href="./${next.dir}.html">${next.name}</a>`);
   writes.push([path, html]);
 });
 

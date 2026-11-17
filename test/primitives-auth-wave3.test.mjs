@@ -93,10 +93,7 @@ test('Wave 3 doc pages carry the catalogue markers and a prev/next chain', () =>
     assert.match(html, /<a data-prev/);
     assert.match(html, /<a data-next/);
   }
-  const invite = readFileSync('site/components/AuthInviteAccept.html', 'utf8');
-  assert.match(invite, /href="\.\/AuthSessionList\.html"/);
-  const sessions = readFileSync('site/components/AuthSessionList.html', 'utf8');
-  assert.match(sessions, /href="\.\/AuthAccountCard\.html"/);
+  // The chain's targets for every page are pinned in test/deploy-site.test.mjs.
 });
 
 test('Wave 3 recipes exist with visible confirmation states and hints', () => {
