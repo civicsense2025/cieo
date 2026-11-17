@@ -5,7 +5,7 @@ import { customizePart } from '../customization.js';
 import { useState } from 'react';
 import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
 import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
-import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 export function AuthResetForm({ className, slotProps, id, step, pending, error, style, onRequest, onConfirm }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

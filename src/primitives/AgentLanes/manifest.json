@@ -6,7 +6,7 @@
   "name": "AgentLanes",
   "layer": "organism",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "agent",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

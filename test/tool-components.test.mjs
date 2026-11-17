@@ -1,4 +1,4 @@
-// Forma gaps: the six new primitives plus the three covered-with-addition hooks.
+// Tool components: the six primitives for import, compare, preview, notice, trim and palette screens, plus the pill-button, link-segment and number-unit hooks.
 // Render assertions run against dist/ (npm test builds first); contract markers
 // against src/; motion and token rules against the stylesheets.
 import { test } from 'node:test';

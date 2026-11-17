@@ -4,7 +4,7 @@
   "id": "core.center",
   "componentVersion": "1.0.0",
   "name": "Center",
-  "layer": "atom",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

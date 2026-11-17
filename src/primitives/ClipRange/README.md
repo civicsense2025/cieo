@@ -45,7 +45,7 @@ Slider (atom, single styled range), NumberInput (atom, exact-value box), Preview
 
 ## Evidence
 
-Covered by `test/forma-gaps.test.mjs` (labels, clamping, readout format). No device acceptance in this plan.
+Covered by `test/tool-components.test.mjs` (labels, clamping, readout format). No device acceptance in this plan.
 
 ## Host customization
 

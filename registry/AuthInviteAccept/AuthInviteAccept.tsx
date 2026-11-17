@@ -3,7 +3,7 @@ import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* AuthInviteAccept. Org invite card with smooth, truthful pending and error feedback. */
 import type { CSSProperties } from 'react';
-import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 
 export interface AuthInviteAcceptProps {
   className?: string;

@@ -46,7 +46,7 @@ Banner (molecule, persistent notice bar), Dialog (molecule, modal panel), EmptyS
 
 ## Evidence
 
-Covered by `test/forma-gaps.test.mjs` (roles, timer, Escape, exit unmount). No device acceptance in this plan.
+Covered by `test/tool-components.test.mjs` (roles, timer, Escape, exit unmount). No device acceptance in this plan.
 
 ## Host customization
 

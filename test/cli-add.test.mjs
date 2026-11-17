@@ -185,14 +185,14 @@ test('add copies and rewrites auth and recorder companion modules for consumers'
   try {
     const auth = runAdd(['AuthEmailField'], dir);
     assert.equal(auth.status, 0, auth.stderr);
-    for (const rel of ['AuthEmailField/AuthEmailField.tsx', 'AuthSignInCard/AuthMotion.tsx']) {
+    for (const rel of ['AuthEmailField/AuthEmailField.tsx', 'auth-shared.tsx']) {
       assert.ok(existsSync(componentPath(dir, rel)), `${rel} must be copied`);
       const installed = readFileSync(componentPath(dir, rel), 'utf8');
       assert.equal(installed, registryContent(rel));
       assertNoPackageTerritoryImports(installed, rel);
     }
-    assert.match(readFileSync(componentPath(dir, 'AuthEmailField/AuthEmailField.tsx'), 'utf8'), /from '\.\.\/AuthSignInCard\/AuthMotion'/);
-    assert.match(readFileSync(componentPath(dir, 'AuthSignInCard/AuthMotion.tsx'), 'utf8'), /from 'cieo\/react'/);
+    assert.match(readFileSync(componentPath(dir, 'AuthEmailField/AuthEmailField.tsx'), 'utf8'), /from '\.\.\/auth-shared'/);
+    assert.match(readFileSync(componentPath(dir, 'auth-shared.tsx'), 'utf8'), /from 'cieo\/react'/);
 
     const recorder = runAdd(['VoiceRecorder'], dir);
     assert.equal(recorder.status, 0, recorder.stderr);

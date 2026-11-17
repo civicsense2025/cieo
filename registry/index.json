@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "shared": [
-    "AuthSignInCard/AuthMotion.tsx",
     "Popover/focus.ts",
     "Popover/position.ts",
     "Popover/usePopoverPosition.ts",
     "VoiceRecorder/recorderVisual.ts",
+    "auth-shared.tsx",
     "customization.ts",
     "motion.ts",
     "parts.ts"
@@ -267,7 +267,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -284,7 +284,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -298,7 +298,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -312,7 +312,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -328,7 +328,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -338,14 +338,15 @@
         "AuthMfaFlow/AuthMfaFlow.tsx"
       ],
       "registryDependencies": [
-        "AuthMfaChallenge",
-        "AuthSignInCard"
+        "AuthMfaChallenge"
       ],
       "packageImports": [
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx"
+        "auth-shared.tsx",
+        "customization.ts",
+        "parts.ts"
       ]
     },
     "AuthOtpInput": {
@@ -357,7 +358,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -371,7 +372,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -385,7 +386,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -395,11 +396,16 @@
         "AuthResetFlow/AuthResetFlow.tsx"
       ],
       "registryDependencies": [
-        "AuthResetForm",
-        "AuthSignInCard"
+        "AuthResetForm"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "auth-shared.tsx",
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AuthResetForm": {
       "files": [
@@ -413,7 +419,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -427,7 +433,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -443,7 +449,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]
@@ -453,11 +459,16 @@
         "AuthSignUpCard/AuthSignUpCard.tsx"
       ],
       "registryDependencies": [
-        "AuthCredentialForm",
-        "AuthSignInCard"
+        "AuthCredentialForm"
       ],
-      "packageImports": [],
-      "sharedFiles": []
+      "packageImports": [
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "auth-shared.tsx",
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "AuthSsoButtons": {
       "files": [
@@ -468,7 +479,7 @@
         "cieo/react"
       ],
       "sharedFiles": [
-        "AuthSignInCard/AuthMotion.tsx",
+        "auth-shared.tsx",
         "customization.ts",
         "parts.ts"
       ]

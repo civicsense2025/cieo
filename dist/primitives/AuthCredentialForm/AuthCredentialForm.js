@@ -4,7 +4,7 @@ import { customizePart } from '../customization.js';
 /* AuthCredentialForm. Email plus password with motion-preserving pending and error states. */
 import { useState } from 'react';
 import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
-import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
 export function AuthCredentialForm({ className, slotProps, id, mode = 'signin', pending, error, style, onSubmit }) {
     const [email, setEmail] = useState('');

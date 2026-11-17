@@ -6,7 +6,7 @@
   "name": "AuthEmailField",
   "layer": "atom",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "auth",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

@@ -1,6 +1,8 @@
 'use client';
-import { useLayoutEffect, useRef, useState, type AnimationEvent, type ReactNode, type RefObject } from 'react';
-import { useReducedMotion, useSpring, useSwap, subtreeReduced } from '../../react/index.js';
+import { useLayoutEffect, useRef, useState, type AnimationEvent, type CSSProperties, type ReactNode, type RefObject } from 'react';
+import type { PrimitivePartProps } from './parts.js';
+import { customizePart } from './customization.js';
+import { useReducedMotion, useSpring, useSwap, subtreeReduced } from '../react/index.js';
 
 const FOCUSABLE = 'button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 
@@ -121,5 +123,22 @@ export function AuthMotionMessage({ id, value, className, role }: { id?: string;
         <span key={`in-${key}`} className="cieo-swap-in cieo-auth-swap-in" data-swap={leaving !== null ? '' : undefined}>{shown}</span>
       </span>
     </span>
+  );
+}
+
+/* Shared by every Auth card: the slot types and the card frame. Lives here, not in a card, so no part depends on a finished card. */
+export interface AuthCardSlotProps { root?: PrimitivePartProps; title?: PrimitivePartProps; footer?: PrimitivePartProps; }
+export interface AuthCardSlots { beforeForm?: ReactNode; afterForm?: ReactNode; footer?: ReactNode; }
+
+export function AuthCardShell({ id, title, status, style, children, footer, className, slotProps, slots }: { className?: string; slotProps?: AuthCardSlotProps; slots?: AuthCardSlots; id: string; title: string; status?: string; style?: CSSProperties; children: ReactNode; footer?: ReactNode }) {
+  return (
+    <section className="cieo cieo-auth-card" aria-labelledby={`${id}-title`} style={style} {...customizePart(slotProps?.root, 'cieo cieo-auth-card', style, className)}>
+      <h2 className="cieo-auth-card-title" id={`${id}-title`} {...customizePart(slotProps?.title, 'cieo-auth-card-title')}>{title}</h2>
+      {slots?.beforeForm}
+      {children}
+      {slots?.afterForm}
+      <AuthMotionMessage className="cieo-auth-status" role="status" value={status} />
+      {slots?.footer !== undefined ? (slots.footer === null ? null : <div className="cieo-auth-routes" {...customizePart(slotProps?.footer, 'cieo-auth-routes')}>{slots.footer}</div>) : (footer ? <p className="cieo-auth-routes" {...customizePart(slotProps?.footer, 'cieo-auth-routes')}>{footer}</p> : null)}
+    </section>
   );
 }

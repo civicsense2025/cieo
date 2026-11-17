@@ -2,7 +2,7 @@
 /* AuthOtpInput. Digit boxes acknowledge entry on snap; paste and keyboard behavior stay native and accessible. */
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage } from '../auth-shared.js';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 

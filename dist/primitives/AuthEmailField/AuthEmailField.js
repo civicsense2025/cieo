@@ -1,6 +1,6 @@
 'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage } from '../auth-shared.js';
 import { customizePart } from '../customization.js';
 export function AuthEmailField({ className, slotProps, id, label = 'Email', value, defaultValue, error, disabled, style, onChange, onBlur }) {
     const describedBy = error ? `${id}-error` : undefined;

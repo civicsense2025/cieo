@@ -6,7 +6,7 @@
   "name": "ChatComposerInput",
   "layer": "atom",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "messaging",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

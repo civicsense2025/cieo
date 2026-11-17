@@ -4,7 +4,7 @@
   "id": "core.stack",
   "componentVersion": "1.0.0",
   "name": "Stack",
-  "layer": "molecule",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

@@ -6,7 +6,7 @@
   "name": "AudioPlayer",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "audio",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

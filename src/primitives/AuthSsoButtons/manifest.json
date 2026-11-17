@@ -6,7 +6,7 @@
   "name": "AuthSsoButtons",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "auth",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

@@ -7,10 +7,10 @@ import { AuthEmailField } from '../dist/primitives/AuthEmailField/AuthEmailField
 import { TableHeaderCell } from '../dist/primitives/TableHeaderCell/TableHeaderCell.js';
 
 test('progress presentation slots cannot replace value, label or semantics', () => {
-  const html = renderToStaticMarkup(h(ProgressBar, {value:25,max:100,label:'Tracing',className:'forma-progress',slotProps:{root:{className:'custom-track',style:{width:180},role:'button',value:99,'aria-label':'Wrong','data-owner':'forma'}}}));
-  assert.match(html,/class="cieo cieo-progress forma-progress custom-track"/);
+  const html = renderToStaticMarkup(h(ProgressBar, {value:25,max:100,label:'Tracing',className:'host-progress',slotProps:{root:{className:'custom-track',style:{width:180},role:'button',value:99,'aria-label':'Wrong','data-owner':'host'}}}));
+  assert.match(html,/class="cieo cieo-progress host-progress custom-track"/);
   assert.match(html,/value="25"/);assert.match(html,/aria-label="Tracing"/);assert.doesNotMatch(html,/Wrong|role="button"/);
-  assert.match(html,/data-owner="forma"/);
+  assert.match(html,/data-owner="host"/);
 });
 
 test('email input slots retain native label, error relationship and controlled value', () => {

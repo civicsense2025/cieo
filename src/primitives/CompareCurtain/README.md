@@ -47,7 +47,7 @@ PreviewStage (molecule, single-image zoom stage), Slider (atom, single-value ran
 
 ## Evidence
 
-Covered by `test/forma-gaps.test.mjs` (slider semantics, keyboard steps, reduced-motion jump). No device acceptance in this plan.
+Covered by `test/tool-components.test.mjs` (slider semantics, keyboard steps, reduced-motion jump). No device acceptance in this plan.
 
 ## Host customization
 

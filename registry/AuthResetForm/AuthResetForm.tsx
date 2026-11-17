@@ -6,7 +6,7 @@ import { useState } from 'react';
 import type { CSSProperties, FormEvent } from 'react';
 import { AuthEmailField } from '../AuthEmailField/AuthEmailField.js';
 import { AuthPasswordInput } from '../AuthPasswordInput/AuthPasswordInput.js';
-import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionFrame, AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 
 export interface AuthResetFormProps {
   className?: string;

@@ -6,7 +6,7 @@
   "name": "SpeakerTile",
   "layer": "atom",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "audio",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

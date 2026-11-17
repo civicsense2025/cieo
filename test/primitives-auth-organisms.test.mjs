@@ -4,8 +4,11 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 test('AuthSignInCard composes credentials with heading, routes, and status', () => {
-  const src = readFileSync('src/primitives/AuthSignInCard/AuthSignInCard.tsx', 'utf8');
-  assert.match(src, /AuthCredentialForm/);
+  // The heading, routes and status live in the shared card frame the card is built on.
+  const card = readFileSync('src/primitives/AuthSignInCard/AuthSignInCard.tsx', 'utf8');
+  const src = card + readFileSync('src/primitives/auth-shared.tsx', 'utf8');
+  assert.match(card, /AuthCredentialForm/);
+  assert.match(card, /<AuthCardShell/);
   assert.match(src, /<h2/);
   assert.match(src, /role="status"|role=\{'status'\}/);
 });

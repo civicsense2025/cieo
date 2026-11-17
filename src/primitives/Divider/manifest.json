@@ -4,7 +4,7 @@
   "id": "core.divider",
   "componentVersion": "1.0.0",
   "name": "Divider",
-  "layer": "atom",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

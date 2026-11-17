@@ -20,16 +20,16 @@ const REWRITES = [
     expected: "import { Overlay } from '../Overlay/Overlay';\n",
   },
   {
-    name: 'AuthMotion sibling helper keeps its path and loses its extension',
-    source: "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion.js';\n",
+    name: 'shared Auth module keeps its path and loses its extension',
+    source: "import { AuthMotionMessage } from '../auth-shared.js';\n",
     fromFile: 'AuthAccountCard/AuthAccountCard.tsx',
-    expected: "import { AuthMotionMessage } from '../AuthSignInCard/AuthMotion';\n",
+    expected: "import { AuthMotionMessage } from '../auth-shared';\n",
   },
   {
-    name: 'AuthMotion same-folder helper maps to the same registry file',
-    source: "import { AuthMotionMessage } from './AuthMotion.js';\n",
-    fromFile: 'AuthSignInCard/AuthSignInCard.tsx',
-    expected: "import { AuthMotionMessage } from './AuthMotion';\n",
+    name: 'a root-level shared module reaches its neighbour by ./',
+    source: "import { customizePart } from './customization.js';\n",
+    fromFile: 'auth-shared.tsx',
+    expected: "import { customizePart } from './customization';\n",
   },
   {
     name: 'VoiceRecorder same-folder helper is treated as shared',
@@ -221,7 +221,7 @@ test('every real primitive rewrites exactly as the classifier table says', () =>
   }
   const scan = scanRegistrySources(root);
   const sharedFiles = [...new Set(Object.values(scan).flatMap((component) => component.sharedFiles))].sort();
-  assert.ok(sharedFiles.includes('AuthSignInCard/AuthMotion.tsx'));
+  assert.ok(sharedFiles.includes('auth-shared.tsx'));
   assert.ok(sharedFiles.includes('VoiceRecorder/recorderVisual.ts'));
   for (const rel of sharedFiles) {
     const source = readFileSync(join(primDir, rel), 'utf8');

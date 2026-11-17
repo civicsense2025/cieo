@@ -4,7 +4,7 @@
   "id": "core.overlay",
   "componentVersion": "1.0.0",
   "name": "Overlay",
-  "layer": "atom",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

@@ -16,13 +16,24 @@ const items = names.map((dir) => {
     console.error(`missing doc page: site/components/${dir}.html`);
     process.exitCode = 1;
   }
-  return { dir, name: manifest.name ?? dir, layer: manifest.layer ?? 'atom' };
+  return { dir, name: manifest.name ?? dir, layer: manifest.layer, pack: manifest.packId };
 });
 if (process.exitCode) process.exit(process.exitCode);
 items.sort((a, b) => (a.dir < b.dir ? -1 : 1));
 
-const groups = { atom: [], molecule: [], organism: [] };
-for (const item of items) (groups[item.layer] ?? groups.atom).push(item);
+// Generic parts first (by layer), then one section per use-case pack.
+const LAYERS = [['primitive', 'Primitives'], ['atom', 'Atoms'], ['molecule', 'Molecules'], ['organism', 'Organisms']];
+const PACKS = [['auth', 'Auth'], ['messaging', 'Messaging'], ['audio', 'Audio'], ['agent', 'Agents'], ['social', 'Social'], ['editorial', 'Editorial'], ['tools', 'Tools']];
+const core = items.filter((i) => i.pack === 'core');
+const unknownLayer = items.filter((i) => !LAYERS.some(([id]) => id === i.layer));
+if (unknownLayer.length) { console.error(`unknown layer on: ${unknownLayer.map((i) => i.dir).join(', ')}`); process.exit(1); }
+const unknownPack = items.filter((i) => i.pack !== 'core' && !PACKS.some(([id]) => id === i.pack));
+if (unknownPack.length) { console.error(`unknown pack on: ${unknownPack.map((i) => i.dir).join(', ')}`); process.exit(1); }
+const groups = Object.fromEntries(LAYERS.map(([id]) => [id, core.filter((i) => i.layer === id)]));
+const packSection = ([id, title]) => {
+  const list = items.filter((i) => i.pack === id);
+  return `<section id="pack-${id}" aria-labelledby="pack-${id}-h"><h2 id="pack-${id}-h">${title} pack <span class="doc-count">${list.length}</span></h2><ul>${list.map((i) => `<li><a href="./${i.dir}.html">${i.name}</a> <span class="doc-level">${i.layer}</span></li>`).join('')}</ul></section>`;
+};
 
 const section = (id, title, list) =>
   `<section id="${id}" aria-labelledby="${id}-h"><h2 id="${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul>${list
@@ -34,13 +45,12 @@ const index = `<!doctype html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Components · Cieo</title><link rel="stylesheet" href="../../design/themes.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"></head>
 <body class="cieo cieo-docsite"><div class="doc-shell">
-<nav class="doc-rail" aria-label="On this page"><span class="doc-label">On this page</span><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a><a href="#elsewhere">Elsewhere</a></nav>
+<nav class="doc-rail" aria-label="On this page"><span class="doc-label">On this page</span><a href="#primitives">Primitives</a><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a>${PACKS.map(([id, title]) => `<a href="#pack-${id}">${title}</a>`).join('')}<a href="#elsewhere">Elsewhere</a></nav>
 <div class="doc-main">
 <header class="doc-head"><p class="doc-crumbs"><span>Cieo</span><span aria-hidden="true">/</span><span>Components</span></p><h1>Components <span class="doc-count">${items.length}</span></h1><p>Every primitive on its own page: the import, a preview, properties, the guide from its README, and the tokens it reads.</p></header>
 <div class="doc-register">
-${section('atoms', 'Atoms', groups.atom)}
-${section('molecules', 'Molecules', groups.molecule)}
-${section('organisms', 'Organisms', groups.organism)}
+${LAYERS.map(([id, title]) => section(id + 's', title, groups[id])).join('\n')}
+${PACKS.map(packSection).join('\n')}
 <section id="elsewhere" aria-labelledby="elsewhere-h"><h2 id="elsewhere-h">Elsewhere</h2><ul><li><a href="../../docs/controls.html">Form controls (cieo/controls)</a></li><li><a href="../../docs/catalogue.html">Recipe catalogue</a></li><li><a href="../../docs/studio/index.html">Design studio</a></li><li><a href="../composites/index.html">Composites</a></li></ul></section>
 </div>
 </div>

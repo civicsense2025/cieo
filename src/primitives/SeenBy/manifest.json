@@ -6,7 +6,7 @@
   "name": "SeenBy",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "messaging",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

@@ -56,11 +56,13 @@ for (const { dir, values } of entries) {
   // Normalize a lane typo (stray quote) found in 4 pages; emitted shell is clean.
   const html = raw.replaceAll('<div data-dont">', '<div data-dont>');
   const title = between(html, '<title>', ' · Cieo</title>');
-  const level = between(html, '<span data-level>', '</span>');
   const summary = part(html, 'summary', () => between(html, `</h1><p>`, `</p>`));
   const preview = part(html, 'preview', () => stripTrailingDiv(between(html, '<div data-preview>', '<div role="tablist"')));
   const code = part(html, 'code', () => between(html, '<code data-code>', '</code>'));
   const manifest = JSON.parse(readFileSync(`${root}/src/primitives/${dir}/manifest.json`, 'utf8'));
+  // The manifest owns the layer and pack; the page label never drifts from it.
+  if (!manifest.layer || !manifest.packId) throw new Error(`${dir}: manifest needs layer and packId`);
+  const level = manifest.layer[0].toUpperCase() + manifest.layer.slice(1) + (manifest.packId === 'core' ? '' : ` · ${manifest.packId[0].toUpperCase()}${manifest.packId.slice(1)} pack`);
   const props = syncPropertyRows(between(html, '<tbody>', '</tbody>'), manifest.properties);
   const doing = part(html, 'do', () => stripTrailingDiv(between(html, '<div data-do>', '<div data-dont>')));
   const dont = part(html, 'dont', () => stripTrailingDiv(between(html, '<div data-dont>', '</section>')));

@@ -6,7 +6,7 @@
   "name": "AgentIcon",
   "layer": "atom",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "agent",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

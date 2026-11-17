@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { type AuthCardSlotProps, type AuthCardSlots } from '../AuthSignInCard/AuthSignInCard.js';
+import { type AuthCardSlotProps, type AuthCardSlots } from '../auth-shared.js';
 export interface AuthMfaFlowProps {
     className?: string;
     slotProps?: AuthCardSlotProps;

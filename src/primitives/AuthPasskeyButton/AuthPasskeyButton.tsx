@@ -1,7 +1,7 @@
 'use client';
 /* AuthPasskeyButton. Passkey ceremony button with smooth pending copy and fallback presence. */
 import type { CSSProperties } from 'react';
-import { AuthMotionMessage, AuthSwapText } from '../AuthSignInCard/AuthMotion.js';
+import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 

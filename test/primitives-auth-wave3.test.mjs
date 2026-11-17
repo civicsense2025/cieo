@@ -82,7 +82,7 @@ test('Wave 3 doc pages carry the catalogue markers and a prev/next chain', () =>
   for (const [file, name] of pages) {
     const html = readFileSync(file, 'utf8');
     assert.match(html, new RegExp(`<title>${name} · Cieo</title>`));
-    assert.match(html, /<span data-level>(molecule|organism)<\/span>/);
+    assert.match(html, /<span data-level>(Atom|Molecule|Organism) · Auth pack<\/span>/);
     assert.match(html, new RegExp(`<h1>${name}<\/h1>`));
     assert.match(html, /<div [^>]*\bdata-preview\b/);
     assert.match(html, /<div [^>]*role="tablist"/);

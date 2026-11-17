@@ -1,7 +1,7 @@
 'use client';
 /* AuthResetFlow. Reset card whose request and confirmation panes share the auth motion frame. */
 import type { CSSProperties } from 'react';
-import { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../AuthSignInCard/AuthSignInCard.js';
+import { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../auth-shared.js';
 import { AuthResetForm } from '../AuthResetForm/AuthResetForm.js';
 
 export interface AuthResetFlowProps {

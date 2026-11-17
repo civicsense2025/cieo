@@ -7,8 +7,9 @@ test('classifies each territory', () => {
   assert.deepEqual(classifyImport('react/jsx-runtime'), { kind: 'peer' });
   assert.deepEqual(classifyImport('../motion.js'), { kind: 'shared', file: 'motion.ts' });
   assert.deepEqual(classifyImport('../Overlay/Overlay.js'), { kind: 'sibling', dir: 'Overlay' });
-  assert.deepEqual(classifyImport('../AuthSignInCard/AuthMotion.js', 'AuthAccountCard/AuthAccountCard.tsx'), { kind: 'shared', file: 'AuthSignInCard/AuthMotion.tsx' });
-  assert.deepEqual(classifyImport('./AuthMotion.js', 'AuthSignInCard/AuthSignInCard.tsx'), { kind: 'shared', file: 'AuthSignInCard/AuthMotion.tsx' });
+  assert.deepEqual(classifyImport('../auth-shared.js', 'AuthAccountCard/AuthAccountCard.tsx'), { kind: 'shared', file: 'auth-shared.tsx' });
+  assert.deepEqual(classifyImport('./parts.js', 'auth-shared.tsx'), { kind: 'shared', file: 'parts.ts' });
+  assert.deepEqual(classifyImport('../react/index.js', 'auth-shared.tsx'), { kind: 'package', packageImport: 'cieo/react' });
   assert.deepEqual(classifyImport('./recorderVisual.js', 'VoiceRecorder/VoiceRecorder.tsx'), { kind: 'shared', file: 'VoiceRecorder/recorderVisual.ts' });
   assert.deepEqual(classifyImport('../../react/index.js'), { kind: 'package', packageImport: 'cieo/react' });
   assert.deepEqual(classifyImport('../../dom/scroll.js'), { kind: 'package', packageImport: 'cieo/dom' });
@@ -29,8 +30,8 @@ test('scans the real tree and finds the known edges', () => {
   assert.deepEqual(scan.Dialog.registryDependencies, ['Overlay']);
   assert.ok(scan.Dialog.packageImports.includes('cieo/react'));
   assert.ok(scan.Dialog.sharedFiles.includes('motion.ts'));
-  assert.ok(scan.AuthAccountCard.sharedFiles.includes('AuthSignInCard/AuthMotion.tsx'));
-  assert.ok(scan.AuthSignInCard.sharedFiles.includes('AuthSignInCard/AuthMotion.tsx'));
+  assert.ok(scan.AuthAccountCard.sharedFiles.includes('auth-shared.tsx'));
+  assert.ok(scan.AuthSignInCard.sharedFiles.includes('auth-shared.tsx'));
   assert.deepEqual(scan.AuthAccountCard.registryDependencies, []);
   assert.ok(scan.VoiceRecorder.sharedFiles.includes('VoiceRecorder/recorderVisual.ts'));
   assert.deepEqual(scan.Avatar.registryDependencies, []);

@@ -6,7 +6,7 @@
   "name": "AuthSignUpCard",
   "layer": "organism",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "auth",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],
@@ -15,7 +15,7 @@
     "path": "src/primitives/AuthSignUpCard/AuthSignUpCard.tsx",
     "symbol": "AuthSignUpCard"
   },
-  "dependencies": ["AuthCredentialForm", "AuthSignInCard"],
+  "dependencies": ["AuthCredentialForm"],
   "nativePrimitives": [],
   "properties": [
     {

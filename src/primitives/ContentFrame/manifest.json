@@ -6,7 +6,7 @@
   "name": "ContentFrame",
   "layer": "organism",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "editorial",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

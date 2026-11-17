@@ -46,7 +46,7 @@ CompareCurtain (molecule, shared-divider compare), SegmentedControl (molecule, t
 
 ## Evidence
 
-Covered by `test/forma-gaps.test.mjs` (backdrop switch, zoom controls, fit toggle). No device acceptance in this plan.
+Covered by `test/tool-components.test.mjs` (backdrop switch, zoom controls, fit toggle). No device acceptance in this plan.
 
 ## Host customization
 

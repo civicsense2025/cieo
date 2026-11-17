@@ -4,7 +4,7 @@
   "id": "core.grid",
   "componentVersion": "1.0.0",
   "name": "Grid",
-  "layer": "molecule",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",
