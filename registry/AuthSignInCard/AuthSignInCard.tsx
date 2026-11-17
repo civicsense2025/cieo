@@ -1,8 +1,6 @@
 'use client';
 /* AuthSignInCard. Full sign-in card with spring-led labels and status presence. */
-import type { PrimitivePartProps } from '../parts.js';
-import { customizePart } from '../customization.js';
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import { AuthCredentialForm } from '../AuthCredentialForm/AuthCredentialForm.js';
 import { AuthCardShell, AuthMotionMessage, type AuthCardSlotProps, type AuthCardSlots } from '../auth-shared.js';
 export { AuthCardShell, type AuthCardSlotProps, type AuthCardSlots } from '../auth-shared.js';

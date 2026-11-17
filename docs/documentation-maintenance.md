@@ -106,7 +106,7 @@ Version 0.6.4 keeps Select choices readable in right-to-left text and with reduc
 
 ## Release 0.7.0
 
-Version 0.7.0 adds the Forma set: DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches, plus pill buttons, link segments, number units and the forma ink brand with an audited Forma recipe. Additive only; existing consumers upgrade by tag. The version appears in `package.json`, the lockfile and the install line in the README.
+Version 0.7.0 adds the Forma set: DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches, plus pill buttons, link segments and number units. The forma ink brand shipped here was removed afterwards; see Unreleased. Additive only; existing consumers upgrade by tag. The version appears in `package.json`, the lockfile and the install line in the README.
 
 ## Unreleased
 

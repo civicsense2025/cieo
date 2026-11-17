@@ -16,7 +16,7 @@ const items = names.map((dir) => {
     console.error(`missing doc page: site/components/${dir}.html`);
     process.exitCode = 1;
   }
-  return { dir, name: manifest.name ?? dir, layer: manifest.layer ?? 'atom', pack: manifest.packId ?? 'core' };
+  return { dir, name: manifest.name ?? dir, layer: manifest.layer, pack: manifest.packId };
 });
 if (process.exitCode) process.exit(process.exitCode);
 items.sort((a, b) => (a.dir < b.dir ? -1 : 1));
@@ -25,6 +25,8 @@ items.sort((a, b) => (a.dir < b.dir ? -1 : 1));
 const LAYERS = [['primitive', 'Primitives'], ['atom', 'Atoms'], ['molecule', 'Molecules'], ['organism', 'Organisms']];
 const PACKS = [['auth', 'Auth'], ['messaging', 'Messaging'], ['audio', 'Audio'], ['agent', 'Agents'], ['social', 'Social'], ['editorial', 'Editorial'], ['tools', 'Tools']];
 const core = items.filter((i) => i.pack === 'core');
+const unknownLayer = items.filter((i) => !LAYERS.some(([id]) => id === i.layer));
+if (unknownLayer.length) { console.error(`unknown layer on: ${unknownLayer.map((i) => i.dir).join(', ')}`); process.exit(1); }
 const unknownPack = items.filter((i) => i.pack !== 'core' && !PACKS.some(([id]) => id === i.pack));
 if (unknownPack.length) { console.error(`unknown pack on: ${unknownPack.map((i) => i.dir).join(', ')}`); process.exit(1); }
 const groups = Object.fromEntries(LAYERS.map(([id]) => [id, core.filter((i) => i.layer === id)]));

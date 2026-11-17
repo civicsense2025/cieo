@@ -15,7 +15,6 @@ const COMPANION_FILES = {
   'Popover/Popover.tsx|./position.js': true,
   'Popover/Popover.tsx|./usePopoverPosition.js': true,
   'Popover/usePopoverPosition.ts|./position.js': true,
-  'AuthSignInCard/AuthSignInCard.tsx|./AuthMotion.js': true,
   'VoiceRecorder/VoiceRecorder.tsx|./recorderVisual.js': true,
 };
 

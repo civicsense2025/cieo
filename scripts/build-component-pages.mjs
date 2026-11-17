@@ -61,6 +61,7 @@ for (const { dir, values } of entries) {
   const code = part(html, 'code', () => between(html, '<code data-code>', '</code>'));
   const manifest = JSON.parse(readFileSync(`${root}/src/primitives/${dir}/manifest.json`, 'utf8'));
   // The manifest owns the layer and pack; the page label never drifts from it.
+  if (!manifest.layer || !manifest.packId) throw new Error(`${dir}: manifest needs layer and packId`);
   const level = manifest.layer[0].toUpperCase() + manifest.layer.slice(1) + (manifest.packId === 'core' ? '' : ` · ${manifest.packId[0].toUpperCase()}${manifest.packId.slice(1)} pack`);
   const props = syncPropertyRows(between(html, '<tbody>', '</tbody>'), manifest.properties);
   const doing = part(html, 'do', () => stripTrailingDiv(between(html, '<div data-do>', '<div data-dont>')));
