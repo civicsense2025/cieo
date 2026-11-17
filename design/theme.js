@@ -1,12 +1,12 @@
 import { markTheme } from './registry.js';
-import { brands, surfaces } from './presets.js';
+import { brands, grounds } from './presets.js';
 import { contrastRatio, foreground, mix, readable } from './color.js';
 import { options, validTokenValue, freeze } from './validation.js';
 import { foundations } from './foundations.js';
 
 /** Pure, deterministic and server-safe. A brand seed is adjusted for its semantic contrast role. */
 export function createTheme(input = {}) {
-  const config = options(input), base = surfaces[config.scheme], tokens = Object.create(null);
+  const config = options(input), base = grounds[config.ground][config.scheme], tokens = Object.create(null);
   const minimum = config.contrast === 'high' ? 7 : 4.5;
   const put = (name, type, value, description) => { tokens[name] = { type, value, description }; };
   const color = (name, value, description) => put(`color-${name}`, 'color', value, description);

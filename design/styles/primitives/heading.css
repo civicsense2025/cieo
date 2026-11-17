@@ -4,6 +4,8 @@
     margin: 0; font-family: var(--cieo-font-sans); font-weight: var(--cieo-weight-strong);
     line-height: var(--cieo-leading-tight); color: var(--cieo-color-text);
   }
+  /* Large headings take the theme's display face; it is the UI font unless a theme chooses otherwise. */
+  :where(.cieo).cieo-p-heading:is([data-level='1'], [data-level='2'], [data-level='3']) { font-family: var(--cieo-font-display); }
   :where(.cieo).cieo-p-heading[data-level='1'] { font-size: 2em; }
   :where(.cieo).cieo-p-heading[data-level='2'] { font-size: 1.5em; }
   :where(.cieo).cieo-p-heading[data-level='3'] { font-size: 1.25em; }

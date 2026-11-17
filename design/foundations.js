@@ -1,4 +1,4 @@
-import { densities, radii, fonts } from './presets.js';
+import { densities, radii, fonts, displays } from './presets.js';
 
 /** Numeric decisions are shared by CSS and native exports; rem remains relative on web. */
 export function foundations(config, put) {
@@ -15,6 +15,7 @@ export function foundations(config, put) {
   put('focus-width', 'dimension', '2px', 'Keyboard focus indicator width.');
   put('focus-offset', 'dimension', '3px', 'Space separating focus from the control.');
   put('font-sans', 'fontFamily', fonts[config.font], 'Local UI font stack; never fetched by Cieo.');
+  put('font-display', 'fontFamily', displays[config.display] ?? fonts[config.font], 'Heading font stack: the UI font unless a display face is chosen; never fetched by Cieo.');
   put('font-mono', 'fontFamily', fonts.mono, 'Local code and measurement font stack.');
   const sizes = { caption: .75, small: .875, body: 1, lead: 1.125, title: 1.5, heading: 2, display: 3.5 };
   for (const [name, size] of Object.entries(sizes)) put(`text-${name}`, 'dimension', `${size}rem`, `Responsive type role: ${name}.`);
@@ -28,9 +29,11 @@ export function foundations(config, put) {
   put('measure', 'dimension', '42rem', 'Comfortable text-column maximum width.');
   put('container', 'dimension', '80rem', 'Wide-layout maximum width.');
   put('sidebar', 'dimension', '18rem', 'Preferred sidebar width before wrapping.');
-  put('shadow-blur', 'dimension', '24px', 'Soft elevation blur; optional surface treatment.');
-  put('shadow-y', 'dimension', '8px', 'Soft elevation vertical offset.');
-  put('shadow-alpha', 'number', config.scheme === 'dark' ? .28 : .08, 'Elevation opacity.');
+  const ring = config.elevation === 'ring';
+  put('ring-width', 'dimension', ring ? '1px' : '0px', 'Hairline drawn around a raised surface; zero unless the elevation is ring.');
+  put('shadow-blur', 'dimension', ring ? '4px' : '24px', 'Elevation blur; small for ring elevation, diffuse for soft.');
+  put('shadow-y', 'dimension', ring ? '1px' : '8px', 'Elevation vertical offset.');
+  put('shadow-alpha', 'number', ring ? (config.scheme === 'dark' ? .4 : .05) : config.scheme === 'dark' ? .28 : .08, 'Elevation opacity.');
   put('disabled-opacity', 'number', .55, 'Disabled controls retain their shape and label.');
   put('layer-base', 'number', 0, 'Normal content layer.');
   put('layer-sticky', 'number', 10, 'Sticky local navigation layer.');
