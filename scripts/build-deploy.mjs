@@ -9,7 +9,7 @@ import { dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node
 import { fileURLToPath } from 'node:url';
 
 export const ENTRY_PAGES = [
-  'site/components/index.html', 'site/composites/index.html',
+  'site/index.html', 'site/pricing.html', 'site/contact.html', 'site/components/index.html', 'site/composites/index.html',
   'docs/catalogue.html', 'docs/controls.html', 'docs/workbench.html', 'docs/library.html', 'docs/collection.html',
   'docs/studio/index.html', 'docs/agent-identity.html',
 ];
@@ -92,11 +92,11 @@ export function build(out, repo = root) {
   if (missing.length) throw new Error(`Broken references:\n  ${missing.join('\n  ')}`);
   rmSync(out, { recursive: true, force: true });
   for (const f of files) { mkdirSync(dirname(join(out, f)), { recursive: true }); cpSync(join(repo, f), join(out, f)); }
-  writeFileSync(join(out, '_redirects'), '/ /site/components/ 302\n');
+  writeFileSync(join(out, '_redirects'), '/ /site/ 302\n');
   const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/design/themes.css"><link rel="stylesheet" href="/tokens/tokens.css"></head><body style="font-family:system-ui,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1rem">${body}</body></html>`;
   // A host that ignores _redirects still lands on the components index.
-  writeFileSync(join(out, 'index.html'), page('Cieo', '<meta http-equiv="refresh" content="0; url=/site/components/"><h1>Cieo</h1><p><a href="/site/components/">Components</a></p>'));
-  writeFileSync(join(out, '404.html'), page('Page not found · Cieo', '<h1>Page not found</h1><p>That page is not in the docs. <a href="/site/components/">Browse the components</a> or the <a href="/docs/catalogue.html">catalogue</a>.</p>'));
+  writeFileSync(join(out, 'index.html'), page('Cieo', '<meta http-equiv="refresh" content="0; url=/site/"><h1>Cieo</h1><p><a href="/site/">Home</a></p>'));
+  writeFileSync(join(out, '404.html'), page('Page not found · Cieo', '<h1>Page not found</h1><p>That page is not in the docs. <a href="/site/">Go home</a> or <a href="/site/components/">browse the library</a> or the <a href="/docs/catalogue.html">catalogue</a>.</p>'));
   writeFileSync(join(out, '_headers'), [
     '/*', '  X-Content-Type-Options: nosniff', '  Referrer-Policy: strict-origin-when-cross-origin', '  Permissions-Policy: camera=(), microphone=(), geolocation=()', '',
     '  Cache-Control: public, max-age=300', '',
