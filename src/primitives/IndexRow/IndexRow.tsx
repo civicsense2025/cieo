@@ -19,6 +19,6 @@ export function rankLabel(rank: number): string { return String(Math.max(1, Math
 export function barFraction(value?: number): number | null { return value === undefined || !Number.isFinite(value) ? null : Math.min(1, Math.max(0, value)); }
 export function IndexRow({ className, slotProps, rank, title, note, fraction, href }: IndexRowProps) {
   const f = barFraction(fraction);
-  const body = (<><span className="cieo-p-index-row__rank" aria-hidden="true">{rankLabel(rank)}</span><span className="cieo-p-index-row__text"><b>{title}</b>{note ? <span>{note}</span> : null}{f === null ? null : <i style={{ inlineSize: `${f * 100}%` }} />}</span></>);
+  const body = (<><span className="cieo-p-index-row__rank" aria-hidden="true">{rankLabel(rank)}</span><span className="cieo-sr-only">{rankLabel(rank).replace(/^0/, '')}. </span><span className="cieo-p-index-row__text"><b>{title}</b>{note ? <span>{note}</span> : null}{f === null ? null : <i role="meter" aria-label={title} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(f * 100)} aria-valuetext={`${Math.round(f * 100)} percent`} style={{ inlineSize: `${f * 100}%` }} />}</span></>);
   return href ? <a {...customizePart(slotProps?.root, "cieo cieo-p-index-row", undefined, className)} href={href}>{body}</a> : <div {...customizePart(slotProps?.root, "cieo cieo-p-index-row", undefined, className)}>{body}</div>;
 }

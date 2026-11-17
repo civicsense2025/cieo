@@ -2,7 +2,6 @@ import type { PrimitivePartProps } from '../parts.js';
 export interface ShareBarSegment {
     value: number;
     color: string;
-    label?: string;
 }
 export interface ShareBarProps {
     className?: string;

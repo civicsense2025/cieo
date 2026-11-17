@@ -47,3 +47,51 @@ test('roll-call columns stay between one and four', () => {
   assert.equal(rollColumns(9), 4);
   assert.equal(rollColumns(Number.NaN), 3);
 });
+
+// Rendered output: what a screen reader and a stylesheet actually receive.
+import { readFileSync } from 'node:fs';
+import { createElement as h } from 'react';
+import { renderToStaticMarkup as render } from 'react-dom/server';
+import { ReferenceText } from '../dist/primitives/ReferenceText/ReferenceText.js';
+import { StepList } from '../dist/primitives/StepList/StepList.js';
+import { IndexRow } from '../dist/primitives/IndexRow/IndexRow.js';
+import { Portrait, cssUrl } from '../dist/primitives/Portrait/Portrait.js';
+
+test('a spoken page count is hidden text beside the visible one, not an aria-label on a span', () => {
+  const html = render(h(ReferenceText, { spoken: 'Page 4 of 18' }, '4/18'));
+  assert.ok(!html.includes('aria-label'));
+  assert.match(html, /aria-hidden="true">4\/18</);
+  assert.match(html, /cieo-sr-only">Page 4 of 18</);
+});
+
+test('step lists say which step each is, and which are done', () => {
+  const html = render(h(StepList, { steps: [{ title: 'Draft' }, { title: 'Vote', detail: 'Friday' }, { title: 'Sign' }], current: 1 }));
+  assert.match(html, /Step 1 of 3, <\/span>Draft/);
+  assert.equal((html.match(/, done</g) || []).length, 1);
+  assert.match(html, /aria-current="step"/);
+  assert.match(html, /Friday/);
+});
+
+test('an index row exposes its rank and its bar value to assistive tech', () => {
+  const html = render(h(IndexRow, { rank: 3, title: 'Water', fraction: 0.42 }));
+  assert.match(html, /cieo-sr-only">3\. </);
+  assert.match(html, /role="meter"[^>]*aria-valuenow="42"/);
+});
+
+test('a portrait url survives quotes, parentheses and line breaks', () => {
+  assert.equal(cssUrl('a"b)c\nd\\e.png'), 'url("a%22b%29c%0Ad%5Ce.png")');
+  assert.match(render(h(Portrait, { src: 'x"y.png' })), /background-image:url\(&quot;x%22y\.png&quot;\)/);
+});
+
+test('block-ground frames never read their own inverted text colour as their background', () => {
+  const css = readFileSync(new URL('../design/styles/primitives/content-frame.css', import.meta.url), 'utf8');
+  const rule = css.split('\n').find((l) => l.includes('[data-ground="block"] {'));
+  assert.ok(rule && rule.includes('background: var(--cieo-block, var(--cieo-color-text))'));
+  assert.ok(!rule.includes('--cieo-color-text:'), 'the frame itself must not redefine the token its background falls back to');
+  assert.match(css, /\[data-ground="block"\] > \* \{ --cieo-color-text: var\(--cieo-on-block/);
+});
+
+test('roll-call groups stay whole across columns', () => {
+  const css = readFileSync(new URL('../design/styles/primitives/roll-call.css', import.meta.url), 'utf8');
+  assert.match(css, /> section \{ break-inside: avoid; \}/);
+});

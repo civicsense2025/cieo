@@ -3,7 +3,7 @@
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* ShareBar. Twin of CieoUI ShareBar: a missing figure never shows as a fake split. */
-export interface ShareBarSegment { value: number; color: string; label?: string }
+export interface ShareBarSegment { value: number; color: string }
 export interface ShareBarProps {
   className?: string;
   slotProps?: { root?: PrimitivePartProps };

@@ -12,13 +12,17 @@ export interface StepListProps {
   /** Index of the step in progress; earlier steps are done. */
   current: number;
   nextLabel?: string;
+  /** Spoken after a finished step. */
+  doneLabel?: string;
+  /** Spoken before each step, such as "Step 2 of 4". */
+  stepLabel?: (n: number, total: number) => string;
 }
 /** Clamps the current step into the list, so a stale index never marks everything done. */
 export function stepState(index: number, current: number, count: number): StepState {
   const c = Math.min(Math.max(0, Number.isFinite(current) ? current : 0), Math.max(0, count - 1));
   return index < c ? 'done' : index === c ? 'current' : 'upcoming';
 }
-export function StepList({ className, slotProps, steps, current, nextLabel = 'next' }: StepListProps) {
+export function StepList({ className, slotProps, steps, current, nextLabel = 'next', doneLabel = 'done', stepLabel = (n, total) => `Step ${n} of ${total}` }: StepListProps) {
   return (
     <ol {...customizePart(slotProps?.root, "cieo cieo-p-step-list", undefined, className)}>
       {steps.map((s, i) => {
@@ -26,7 +30,8 @@ export function StepList({ className, slotProps, steps, current, nextLabel = 'ne
         return (
           <li key={i} data-state={state} aria-current={state === 'current' ? 'step' : undefined}>
             <span className="cieo-p-step-list__n" aria-hidden="true">{state === 'done' ? '✓' : i + 1}</span>
-            <b>{s.title}{state === 'current' ? <span className="cieo-p-step-list__next"> · {nextLabel}</span> : null}</b>
+            <b><span className="cieo-sr-only">{stepLabel(i + 1, steps.length)}, </span>{s.title}{state === 'current' ? <span className="cieo-p-step-list__next"> · {nextLabel}</span> : null}</b>
+            {state === 'done' ? <span className="cieo-sr-only">, {doneLabel}</span> : null}
             {s.detail ? <span className="cieo-p-step-list__detail">{s.detail}</span> : null}
           </li>
         );

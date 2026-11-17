@@ -52,7 +52,7 @@ public struct StepList: View {
                 }
                 .foregroundStyle(theme.foreground)
                 .accessibilityElement(children: .combine)
-                .accessibilityLabel(Text("Step \(index + 1) of \(steps.count), \(step.title)") + (state == .current ? Text(", ") + nextLabel : Text(verbatim: "")))
+                .accessibilityLabel(Text("Step \(index + 1) of \(steps.count), \(step.title)") + (state == .current ? Text(", ") + nextLabel : Text(verbatim: "")) + (step.detail.map { Text(verbatim: ", \($0)") } ?? Text(verbatim: "")))
                 .accessibilityValue(state == .done ? Text("done") : Text(verbatim: ""))
             }
         }

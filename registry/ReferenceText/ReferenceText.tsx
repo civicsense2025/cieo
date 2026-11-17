@@ -18,5 +18,6 @@ export function pageBounds(page: number, total: number): [number, number] {
   return [p, t];
 }
 export function ReferenceText({ className, slotProps, spoken, children }: ReferenceTextProps) {
-  return (<span {...customizePart(slotProps?.root, "cieo cieo-p-reference-text", undefined, className)} aria-label={spoken}>{children}</span>);
+  // aria-label is not announced on a generic span, so the spoken form is hidden text beside the visible one.
+  return (<span {...customizePart(slotProps?.root, "cieo cieo-p-reference-text", undefined, className)}>{spoken ? <><span aria-hidden="true">{children}</span><span className="cieo-sr-only">{spoken}</span></> : children}</span>);
 }
