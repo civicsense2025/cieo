@@ -1,6 +1,6 @@
 # Cloudflare deploy
 
-The docs, catalogue, studio and composites are static pages, served by a Cloudflare assets-only Worker named `cieo`. There is no server code.
+The docs, catalogue, studio and composites are static pages, served by a Cloudflare assets-only Worker named `cieo`. There is no server code. It is live on the account's `workers.dev` address for the `cieo` Worker (first deployed 2026-11-17 from `d426cd8`); `npx wrangler@4.160.0 deployments list --name cieo` shows the current version and `npm run deploy` prints the address.
 
 - [What gets published](#what-gets-published)
 - [Deploying](#deploying)
@@ -28,6 +28,10 @@ The folder also gets a root `index.html` and a `404.html` of its own. The build 
 1. Sign in once: `npx wrangler@4.160.0 login`.
 2. Pick the account, and the domain if the site is not served on the default `workers.dev` address.
 3. This repository has a Vercel preview project (`cieo-catalogue-ui-review`) linked to Git. Disconnect it before merging a move to Cloudflare, so Vercel does not keep deploying beside it.
+
+## URLs
+
+Cloudflare serves clean URLs: `/site/components/Toast.html` redirects to `/site/components/Toast`, and folder pages end in a slash. Relative links in the pages keep working from either form. Links must match the file's letter case exactly.
 
 ## Checking a deploy
 
