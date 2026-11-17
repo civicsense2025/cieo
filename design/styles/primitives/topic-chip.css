@@ -1,0 +1,5 @@
+/* design/styles/primitives/topic-chip.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-topic-chip { display: inline-flex; align-items: center; gap: var(--cieo-space-2); font-size: var(--cieo-text-small); font-weight: 600; letter-spacing: -.01em; color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-topic-chip::before { content: ""; inline-size: .6em; block-size: .6em; border-radius: 50%; background: var(--cieo-topic-dot, var(--cieo-color-accent)); flex: none; }
+}

@@ -1,0 +1,149 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.topic-chip",
+  "componentVersion": "1.0.0",
+  "name": "TopicChip",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/TopicChip/TopicChip.tsx",
+    "symbol": "TopicChip"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "children",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "dot",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "CSS colour for the dot; defaults to the accent."
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Additional root CSS class. Built-in classes remain."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "topic-chip",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-body"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "children",
+        "dot",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "topic-chip"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    },
+    {
+      "id": "apple.swiftui",
+      "minimumOS": {
+        "iOS": "17",
+        "macOS": "14"
+      },
+      "implementation": "implemented",
+      "properties": [],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "What a frame, section or story is about: an accent dot and a topic in sentence case."
+  },
+  "extensions": {
+    "customization": {
+      "presentationParts": [
+        "root"
+      ],
+      "ownedSemantics": true,
+      "existingContentSlotsPreserved": true
+    }
+  }
+}

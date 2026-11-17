@@ -21,6 +21,7 @@ export function foundations(config, put) {
   put('weight-normal', 'fontWeight', 400, 'Readable body weight.');
   put('weight-medium', 'fontWeight', 500, 'Control and label weight.');
   put('weight-strong', 'fontWeight', 650, 'Heading and emphasis weight.');
+  put('weight-display', 'fontWeight', 500, 'Large display headlines and numerals: big type reads as weight already, so it stays medium.');
   put('leading-tight', 'number', 1.1, 'Display and title line height.');
   put('leading-body', 'number', 1.6, 'Long-form reading line height.');
   put('leading-control', 'number', 1.25, 'Compact interface line height.');

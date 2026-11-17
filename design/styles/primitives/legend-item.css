@@ -1,0 +1,5 @@
+/* design/styles/primitives/legend-item.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-legend-item { display: inline-flex; align-items: center; gap: var(--cieo-space-1); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-legend-item::before { content: ""; inline-size: .75em; block-size: .75em; background: var(--cieo-legend); flex: none; }
+}

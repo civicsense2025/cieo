@@ -1,0 +1,10 @@
+/* design/styles/primitives/person-row.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-person-row { display: flex; align-items: center; gap: var(--cieo-space-3); color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-person-row__text { display: grid; gap: 2px; min-inline-size: 0; }
+  :where(.cieo).cieo-p-person-row__text b { font-weight: 600; white-space: nowrap; }
+  :where(.cieo).cieo-p-person-row__text span { font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-person-row[data-compact] { gap: var(--cieo-space-2); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-p-person-row[data-compact] .cieo-p-person-row__text { display: flex; gap: var(--cieo-space-1); white-space: nowrap; }
+  :where(.cieo).cieo-p-person-row[data-compact] .cieo-p-person-row__text b { font-weight: var(--cieo-weight-medium); }
+}

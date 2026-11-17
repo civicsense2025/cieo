@@ -1,0 +1,7 @@
+// src/primitives/LegendItem/LegendItem.tsx
+'use client';
+import { jsx as _jsx } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
+export function LegendItem({ className, slotProps, color, children }) {
+    return (_jsx("span", { ...customizePart(slotProps?.root, "cieo cieo-p-legend-item", undefined, className), style: { ['--cieo-legend']: color }, children: children }));
+}

@@ -1,0 +1,8 @@
+// src/primitives/PersonRow/PersonRow.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
+import { Portrait } from '../Portrait/Portrait.js';
+export function PersonRow({ className, slotProps, name, detail, src, ring, compact = false, grayscale = false }) {
+    return (_jsxs("div", { ...customizePart(slotProps?.root, "cieo cieo-p-person-row", undefined, className), "data-compact": compact ? '' : undefined, children: [_jsx(Portrait, { src: src, ring: ring, grayscale: grayscale, size: compact ? 'small' : 'regular' }), _jsxs("span", { className: "cieo-p-person-row__text", children: [_jsx("b", { children: name }), detail ? _jsx("span", { children: detail }) : null] })] }));
+}

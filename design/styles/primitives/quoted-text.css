@@ -1,0 +1,8 @@
+/* design/styles/primitives/quoted-text.css */
+@layer cieo.components {
+  :where(.cieo).cieo-p-quoted-text { margin: 0; display: grid; gap: var(--cieo-space-3); }
+  :where(.cieo).cieo-p-quoted-text__ref { font-family: var(--cieo-font-mono); font-size: var(--cieo-text-caption); color: var(--cieo-color-muted); }
+  :where(.cieo).cieo-p-quoted-text blockquote { margin: 0; position: relative; padding-inline-start: .55em; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-display); line-height: 1.12; letter-spacing: -.035em; color: var(--cieo-color-text); }
+  :where(.cieo).cieo-p-quoted-text blockquote::before { content: "\201C"; position: absolute; inset-inline-start: 0; color: var(--cieo-color-accent); }
+  :where(.cieo).cieo-p-quoted-text mark { background: none; color: inherit; text-decoration: underline; text-decoration-thickness: .08em; text-underline-offset: .18em; }
+}

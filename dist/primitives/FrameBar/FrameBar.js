@@ -1,0 +1,7 @@
+// src/primitives/FrameBar/FrameBar.tsx
+'use client';
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { customizePart } from '../customization.js';
+export function FrameBar({ className, slotProps, leading, trailing, edge = 'top' }) {
+    return (_jsxs("div", { ...customizePart(slotProps?.root, "cieo cieo-p-frame-bar", undefined, className), "data-edge": edge, children: [_jsx("div", { className: "cieo-p-frame-bar__leading", children: leading }), trailing ? _jsx("div", { className: "cieo-p-frame-bar__trailing", children: trailing }) : null] }));
+}

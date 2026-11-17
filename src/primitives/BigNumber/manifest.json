@@ -1,0 +1,162 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.big-number",
+  "componentVersion": "1.0.0",
+  "name": "BigNumber",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/BigNumber/BigNumber.tsx",
+    "symbol": "BigNumber"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "value",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "layout",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "inline",
+          "stacked"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "stacked",
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Additional root CSS class. Built-in classes remain."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation parts: root. Accepts className, style, title and non-reserved data attributes; owned semantics and dynamic styles remain."
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "big-number",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-body"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [],
+    "content": [],
+    "motion": [
+      "no-motion"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "value",
+        "label",
+        "layout",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "big-number"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    },
+    {
+      "id": "apple.swiftui",
+      "minimumOS": {
+        "iOS": "17",
+        "macOS": "14"
+      },
+      "implementation": "implemented",
+      "properties": [],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "A numeral set large with its label inline or stacked, read as one phrase."
+  },
+  "extensions": {
+    "customization": {
+      "presentationParts": [
+        "root"
+      ],
+      "ownedSemantics": true,
+      "existingContentSlotsPreserved": true
+    }
+  }
+}

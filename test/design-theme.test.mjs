@@ -3,18 +3,16 @@ import assert from 'node:assert/strict';
 import { createTheme, auditTheme, brands, densities, radii, fonts, contrastRatio } from '../design/index.js';
 import { readable, mix, channels } from '../design/color.js';
 
-test('all 756 supported theme combinations satisfy every advertised color pair', () => {
-  let count = 0;
+test('all 1008 supported theme combinations satisfy every advertised color pair', () => {  let count = 0;
   for (const brand of Object.keys(brands)) for (const scheme of ['light', 'dark'])
     for (const density of Object.keys(densities)) for (const radius of Object.keys(radii))
       for (const contrast of ['standard', 'high']) for (const font of Object.keys(fonts)) {
         const theme = createTheme({ brand, scheme, density, radius, contrast, font });
-        assert.equal(Object.keys(theme.tokens).length, 74);
+        assert.equal(Object.keys(theme.tokens).length, 75);
         assert.equal(auditTheme(theme).length, 32);
         assert.ok(auditTheme(theme).every((result) => result.pass)); count += 1;
       }
-  assert.equal(count, 756);
-});
+  assert.equal(count, 1008);});
 test('custom seeds remain readable instead of silently emitting inaccessible accent fills', () => {
   for (const accent of ['#ffffff', '#000000', '#777777', '#00ffff', '#ffff00', '#ff0000', '#0000ff', '#123456', '#abcdef']) {
     for (const scheme of ['light', 'dark']) for (const contrast of ['standard', 'high']) {
