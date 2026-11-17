@@ -5,7 +5,8 @@ import assert from 'node:assert/strict';
 import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { build, collect, localRefs } from '../scripts/build-deploy.mjs';
+import { assertSafeOut, build, collect, existsExact, localRefs } from '../scripts/build-deploy.mjs';
+import { deployBlocker } from '../scripts/deploy.mjs';
 
 const write = (repo, rel, text) => { mkdirSync(join(repo, rel, '..'), { recursive: true }); writeFileSync(join(repo, rel), text); };
 
@@ -35,7 +36,7 @@ test('a missing stylesheet, script or image fails the build and names the page',
     write(repo, 'a/index.html', '<link rel="stylesheet" href="./gone.css"><img src="./gone.png"><script src="/root.js"></script>');
     const { missing } = collect(repo, ['a/index.html']);
     assert.deepEqual(missing.map((m) => m.split(' ')[0]), ['a/gone.css', 'a/gone.png', 'a/index.html']);
-    assert.throws(() => build(join(repo, 'out'), repo), /Broken references/);
+    assert.throws(() => build(join(repo, '.out'), repo), /Broken references/);
   } finally { rmSync(repo, { recursive: true, force: true }); }
 });
 
@@ -52,10 +53,44 @@ test('sample links, inline script text and folder links do not count as broken',
   } finally { rmSync(repo, { recursive: true, force: true }); }
 });
 
-test('no doc page shows a photo that is not in the repository', () => {
-  for (const f of ['site/components/AspectRatio.html', 'site/components/Lightbox.html', 'site/composites/storefront.html']) {
-    assert.ok(!/\.(jpe?g|png|webp)["']/.test(readFileSync(f, 'utf8')), `${f} references a missing photo`);
-  }
+test('a link with the wrong letter case fails, because Cloudflare is case-sensitive and macOS is not', () => {
+  assert.ok(existsExact(process.cwd(), 'site/components/Toast.html'));
+  assert.ok(!existsExact(process.cwd(), 'site/components/toast.html'));
+  assert.ok(!existsExact(process.cwd(), 'Design/themes.css'));
+  const repo = mkdtempSync(join(tmpdir(), 'cieo-deploy-repo-'));
+  try {
+    write(repo, 'a/index.html', '<a href="./Page.html">x</a><img srcset="./one.png 1x, ./two.png 2x"><video poster="./cover.png"></video>');
+    write(repo, 'a/page.html', '<p/>');
+    const { missing } = collect(repo, ['a/index.html']);
+    assert.deepEqual(missing, ['a/Page.html', 'a/cover.png', 'a/one.png', 'a/two.png']);
+  } finally { rmSync(repo, { recursive: true, force: true }); }
+});
+
+test('the output folder can never be the repository, a source folder or an ancestor', () => {
+  const repo = mkdtempSync(join(tmpdir(), 'cieo-deploy-repo-'));
+  try {
+    for (const bad of [repo, join(repo, 'src'), join(repo, 'site/components'), join(repo, '..'), join(repo, 'dist')]) assert.throws(() => assertSafeOut(bad, repo), /Refusing/, bad);
+    for (const ok of [join(repo, '.deploy'), join(tmpdir(), 'somewhere-else')]) assert.doesNotThrow(() => assertSafeOut(ok, repo), ok);
+  } finally { rmSync(repo, { recursive: true, force: true }); }
+});
+
+test('the site has a root page and a not-found page of its own', () => {
+  const out = mkdtempSync(join(tmpdir(), 'cieo-deploy-'));
+  try {
+    build(out);
+    assert.match(readFileSync(join(out, 'index.html'), 'utf8'), /url=\/site\/components\//);
+    assert.match(readFileSync(join(out, '404.html'), 'utf8'), /Page not found/);
+    assert.match(readFileSync(join(out, '_headers'), 'utf8'), /\.mjs/);
+  } finally { rmSync(out, { recursive: true, force: true }); }
+});
+
+test('a deploy is refused from a dirty tree, a branch, or a main that is not origin/main', () => {
+  const ok = { branch: 'main', dirty: false, head: 'abc', originMain: 'abc' };
+  assert.equal(deployBlocker(ok), null);
+  assert.match(deployBlocker({ ...ok, dirty: true }), /uncommitted/);
+  assert.match(deployBlocker({ ...ok, branch: 'feat/x' }), /not main/);
+  assert.match(deployBlocker({ ...ok, head: 'def' }), /not at origin\/main/);
+  assert.match(deployBlocker({ ...ok, originMain: '' }), /git fetch/);
 });
 
 test('every component page links to its alphabetical neighbours', () => {
@@ -74,5 +109,6 @@ test('wrangler serves the built folder as static assets and the folder is never 
   assert.ok(!/"main"/.test(cfg), 'static assets only: no worker code to run');
   assert.match(readFileSync('.gitignore', 'utf8'), /^\.deploy\/$/m);
   const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
-  assert.match(pkg.scripts.deploy, /wrangler@\d+\.\d+\.\d+ deploy/, 'wrangler is pinned, not floating');
+  assert.equal(pkg.scripts.deploy, 'node scripts/deploy.mjs', 'deploys go through the guard');
+  assert.match(readFileSync('scripts/deploy.mjs', 'utf8'), /wrangler@\d+\.\d+\.\d+/, 'wrangler is pinned, not floating');
 });

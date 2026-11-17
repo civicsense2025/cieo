@@ -13,13 +13,15 @@ The docs, catalogue, studio and composites are static pages, served by a Cloudfl
 
 ## Deploying
 
-Deploy from a clean checkout at `origin/main`, after the pull request is merged:
+`npm run deploy` refuses unless the tree is clean and `main` equals `origin/main`, so a feature branch or stale checkout can never publish. Then it builds the folder and runs the pinned `wrangler@4.160.0`.
 
-1. `git fetch && git status` shows nothing to commit and `main` equals `origin/main`.
-2. `npm ci` if the lockfile changed.
-3. `npm run deploy`, which builds the folder and runs the pinned `wrangler@4.160.0`.
+1. Merge the pull request.
+2. `git switch main && git pull`, and `npm ci` if the lockfile changed.
+3. `npm run deploy`.
 
-`wrangler` is pinned in the script instead of installed, so the package keeps no deploy-time dependency. Move the pin when you have vetted a release at least a week old.
+`wrangler` is pinned in `scripts/deploy.mjs` instead of installed, so the package keeps no deploy-time dependency. Move the pin when you have vetted a release at least a week old.
+
+The folder also gets a root `index.html` and a `404.html` of its own. The build refuses to rebuild into any folder that could hold source, and a link whose letter case differs from the file name fails, because Cloudflare is case-sensitive.
 
 ## Before the first deploy
 
