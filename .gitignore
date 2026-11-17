@@ -21,3 +21,6 @@ __pycache__/
 # uncomment the lines below, and let `prepack`/CI build them on demand.
 # dist/
 # *.tgz
+
+# Static site folder built for Cloudflare (npm run deploy:build).
+.deploy/
