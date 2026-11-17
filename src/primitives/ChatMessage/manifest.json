@@ -6,7 +6,7 @@
   "name": "ChatMessage",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "messaging",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

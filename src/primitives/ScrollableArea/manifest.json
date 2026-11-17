@@ -4,7 +4,7 @@
   "id": "core.scrollable-area",
   "componentVersion": "1.0.0",
   "name": "ScrollableArea",
-  "layer": "molecule",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

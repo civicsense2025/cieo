@@ -6,7 +6,7 @@
   "name": "ReferenceText",
   "layer": "atom",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "editorial",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

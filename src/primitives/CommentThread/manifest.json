@@ -6,7 +6,7 @@
   "name": "CommentThread",
   "layer": "organism",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "social",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

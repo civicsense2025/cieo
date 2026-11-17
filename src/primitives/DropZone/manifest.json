@@ -6,7 +6,7 @@
   "name": "DropZone",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "tools",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

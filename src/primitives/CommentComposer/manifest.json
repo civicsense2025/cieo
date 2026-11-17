@@ -6,7 +6,7 @@
   "name": "CommentComposer",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "social",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

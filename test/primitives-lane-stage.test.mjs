@@ -35,7 +35,7 @@ for (const c of COMPONENTS) {
     const m = JSON.parse(readFileSync(`src/primitives/${c.name}/manifest.json`, 'utf8'));
     assert.equal(m.id, c.id);
     assert.equal(m.name, c.name);
-    assert.equal(m.packId, 'core');
+    assert.match(m.packId, /^(core|auth|messaging|audio|agent|social|editorial|tools)$/);
     assert.equal(m.status, 'experimental');
   });
 

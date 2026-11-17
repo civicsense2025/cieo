@@ -4,7 +4,7 @@
   "id": "core.grid-span",
   "componentVersion": "1.0.0",
   "name": "GridSpan",
-  "layer": "atom",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

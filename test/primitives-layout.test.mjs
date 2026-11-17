@@ -17,7 +17,7 @@ test('Divider renders hr with optional label', () => {
   const src = readFileSync('src/primitives/Divider/Divider.tsx', 'utf8');
   assert.match(src, /<hr/); assert.match(src, /aria-label=\{label\}/);
 });
-test('Divider manifest is an atom', () => {
+test('Divider manifest is a primitive', () => {
   const m = JSON.parse(readFileSync('src/primitives/Divider/manifest.json', 'utf8'));
-  assert.equal(m.id, 'core.divider'); assert.equal(m.layer, 'atom');
+  assert.equal(m.id, 'core.divider'); assert.equal(m.layer, 'primitive');
 });

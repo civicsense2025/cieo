@@ -55,7 +55,9 @@ for (const c of COMPONENTS) {
   test(`${c.name} doc page has h1, level, and one prop row per manifest property`, () => {
     const html = readFileSync(`site/components/${c.name}.html`, 'utf8');
     assert.ok(html.includes(`<h1>${c.name}</h1>`), 'missing h1');
-    assert.ok(html.includes(`<span data-level>${c.level}</span>`), 'missing level');
+    const m = JSON.parse(readFileSync(`src/primitives/${c.name}/manifest.json`, 'utf8'));
+    const label = m.layer[0].toUpperCase() + m.layer.slice(1) + (m.packId === 'core' ? '' : ` · ${m.packId[0].toUpperCase()}${m.packId.slice(1)} pack`);
+    assert.ok(html.includes(`<span data-level>${label}</span>`), 'the page names the manifest layer');
     assert.ok(html.includes('data-do') && html.includes('data-dont'), 'missing do/dont');
     const tbody = html.match(/<tbody>([\s\S]*)<\/tbody>/);
     assert.ok(tbody, 'missing tbody');

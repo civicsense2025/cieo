@@ -4,7 +4,7 @@
   "id": "core.v-stack",
   "componentVersion": "1.0.0",
   "name": "VStack",
-  "layer": "atom",
+  "layer": "primitive",
   "artifactKind": "component",
   "packId": "core",
   "status": "experimental",

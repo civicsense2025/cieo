@@ -6,7 +6,7 @@
   "name": "RunControls",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "agent",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

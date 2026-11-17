@@ -24,7 +24,7 @@ test('Overlay CSS fixes the scrim to the viewport', () => {
   const css = readFileSync('design/styles/primitives/overlay.css', 'utf8');
   assert.match(css, /position:\s*fixed/); assert.match(css, /inset:\s*0/);
 });
-test('Overlay manifest is an atom', () => {
+test('Overlay manifest is a primitive', () => {
   const m = JSON.parse(readFileSync('src/primitives/Overlay/manifest.json', 'utf8'));
-  assert.equal(m.id, 'core.overlay'); assert.equal(m.layer, 'atom');
+  assert.equal(m.id, 'core.overlay'); assert.equal(m.layer, 'primitive');
 });

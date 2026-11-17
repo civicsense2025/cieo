@@ -6,7 +6,7 @@
   "name": "IndexRow",
   "layer": "molecule",
   "artifactKind": "component",
-  "packId": "core",
+  "packId": "editorial",
   "status": "experimental",
   "owner": "library-maintainer",
   "aliases": [],

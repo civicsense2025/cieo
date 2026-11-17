@@ -48,7 +48,7 @@ test('all 19 lane-content manifests parse with unique ids', () => {
     const m = JSON.parse(readFileSync(`src/primitives/${c.name}/manifest.json`, 'utf8'));
     assert.equal(m.$schema, '../../../schemas/component.schema.json');
     assert.equal(m.schemaVersion, '1.0.0');
-    assert.equal(m.packId, 'core');
+    assert.match(m.packId, /^(core|auth|messaging|audio|agent|social|editorial|tools)$/);
     assert.equal(m.status, 'experimental');
     assert.ok(!ids.has(m.id), `duplicate id ${m.id}`);
     ids.add(m.id);
