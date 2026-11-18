@@ -49,6 +49,9 @@ export function MotionFrame({
   const cancelRef = useRef<Cancel | null>(null);
   const readyRef = useRef(false);
   const prevKeyRef = useRef<{ set: boolean; key: string | number }>({ set: false, key: contentKey });
+  /* An inline preset object changes identity every render; the observer must not restart for that. */
+  const presetRef = useRef(preset);
+  presetRef.current = preset;
 
   const { ref: axisRef } = useSharedAxis<HTMLDivElement>(contentKey, direction, {
     axis,
@@ -101,7 +104,7 @@ export function MotionFrame({
       }
       frame.style.height = `${current.toFixed(2)}px`;
       frame.style.overflow = 'clip';
-      tr.set(target, config('feedback', cfgOf(preset)));
+      tr.set(target, config('feedback', cfgOf(presetRef.current)));
       if (!cancelRef.current) {
         cancelRef.current = run({
           kind: 'feedback',
@@ -132,7 +135,7 @@ export function MotionFrame({
       cancelRef.current?.();
       cancelRef.current = null;
     };
-  }, [isDisabled, preset]);
+  }, [isDisabled]);
 
   return (
     <div

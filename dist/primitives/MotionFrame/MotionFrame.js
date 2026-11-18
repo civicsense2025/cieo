@@ -16,6 +16,9 @@ export function MotionFrame({ className, slotProps, contentKey = 'default', dire
     const cancelRef = useRef(null);
     const readyRef = useRef(false);
     const prevKeyRef = useRef({ set: false, key: contentKey });
+    /* An inline preset object changes identity every render; the observer must not restart for that. */
+    const presetRef = useRef(preset);
+    presetRef.current = preset;
     const { ref: axisRef } = useSharedAxis(contentKey, direction, {
         axis,
         distance,
@@ -70,7 +73,7 @@ export function MotionFrame({ className, slotProps, contentKey = 'default', dire
             }
             frame.style.height = `${current.toFixed(2)}px`;
             frame.style.overflow = 'clip';
-            tr.set(target, config('feedback', cfgOf(preset)));
+            tr.set(target, config('feedback', cfgOf(presetRef.current)));
             if (!cancelRef.current) {
                 cancelRef.current = run({
                     kind: 'feedback',
@@ -100,6 +103,6 @@ export function MotionFrame({ className, slotProps, contentKey = 'default', dire
             cancelRef.current?.();
             cancelRef.current = null;
         };
-    }, [isDisabled, preset]);
+    }, [isDisabled]);
     return (_jsx("div", { ref: frameRef, "data-direction": direction, "data-content-key": String(contentKey), "data-motion": isDisabled ? 'off' : 'on', className: "cieo cieo-motion-frame", ...customizePart(slotProps?.root, 'cieo cieo-motion-frame', undefined, className), children: _jsx("div", { ref: measureRef, className: "cieo-motion-frame-content", ...customizePart(slotProps?.content, 'cieo-motion-frame-content'), children: _jsx("div", { ref: axisRef, children: children }, String(contentKey)) }) }));
 }

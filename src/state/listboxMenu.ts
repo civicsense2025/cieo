@@ -145,7 +145,10 @@ export function reduceListboxMenu(
       };
     }
     case 'SET_OPTIONS': {
-      return { prev: state, next: { ...state, options: [...event.options] }, event, changed: true, direction: 0 };
+      const options = [...event.options];
+      const stillThere = state.selectedId !== null && options.some((o) => o.id === state.selectedId);
+      const activeIndex = !state.open ? -1 : state.activeIndex >= 0 && state.activeIndex < options.length && !options[state.activeIndex]!.disabled ? state.activeIndex : firstEnabledIndex(options);
+      return { prev: state, next: { ...state, options, activeIndex, selectedId: stillThere ? state.selectedId : null }, event, changed: true, direction: 0 };
     }
     case 'KEY_DOWN': {
       const k = event.key;
@@ -210,6 +213,7 @@ export function createListboxMenuMachine(options: ListboxMenuOptions = {}): Mach
   const timeoutMs = options.typeaheadTimeoutMs ?? 500;
   return createMachineStore(
     createInitialListboxMenuState(options),
-    (state, event) => reduceListboxMenu(state, event, loop, timeoutMs),
+    // The reducer stays pure; the store stamps key presses so typeahead can tell a pause from a continuation.
+    (state, event) => reduceListboxMenu(state, event.type === 'KEY_DOWN' && event.timeMs === undefined ? { ...event, timeMs: performance.now() } : event, loop, timeoutMs),
   );
 }

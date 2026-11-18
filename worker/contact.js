@@ -89,7 +89,7 @@ export async function handleContact(request, env, now = Date.now()) {
   const done = () => (wantsJson ? json(200, { ok: true }) : back('sent=1'));
   // Without script a visitor must land back on the form, with the reason in words, never on a raw JSON page.
   const refererPath = (() => { try { return new URL(request.headers.get('referer') || '').pathname; } catch { return ''; } })();
-  const contactRoute = refererPath === '/contact' || refererPath === '/contact.html' ? '/contact' : '/site/contact';
+  const contactRoute = refererPath === '/contact' || refererPath === '/contact.html' ? '/contact' : '/contact';
   const back = (query) => new Response(null, { status: 303, headers: { ...SECURITY_HEADERS, location: `${contactRoute}?${query}` } });
   const fail = (status, error, code) => (wantsJson ? json(status, { error }) : back(`error=${code}`));
 

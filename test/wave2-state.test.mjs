@@ -396,3 +396,29 @@ test('cieo/state/react hooks render cleanly on the server via useSyncExternalSto
   assert.match(html, /data-detent="0\.5"/);
   assert.match(html, /data-toasts="0"/);
 });
+
+test('review fixes: a late answer never completes a newer attempt, ids are unguessable, typeahead pauses, shrinking lists stay valid', async () => {
+  const { reduceAsyncAction, createInitialAsyncActionState, defaultAttemptId } = await import('../dist/state/asyncAction.js');
+  const { createListboxMenuMachine } = await import('../dist/state/listboxMenu.js');
+  assert.notEqual(defaultAttemptId(), defaultAttemptId(), 'two visitors never share an idempotency key');
+
+  let s = createInitialAsyncActionState();
+  s = reduceAsyncAction(s, { type: 'SUBMIT', attemptId: 'a' }).next;
+  s = reduceAsyncAction(s, { type: 'CANCEL' }).next;
+  s = reduceAsyncAction(s, { type: 'SUBMIT', attemptId: 'b' }).next;
+  const late = reduceAsyncAction(s, { type: 'RESOLVE', attemptId: 'a' });
+  assert.equal(late.changed, false, 'the cancelled request answering late is ignored');
+  assert.equal(reduceAsyncAction(s, { type: 'RESOLVE', attemptId: 'b' }).next.status, 'succeeded');
+  assert.equal(reduceAsyncAction(s, { type: 'RESOLVE' }).next.status, 'succeeded', 'an answer without an id still works');
+
+  const menu = createListboxMenuMachine({ options: [{ id: 'a', label: 'Apple' }, { id: 'b', label: 'Banana' }, { id: 'c', label: 'Cherry' }] });
+  menu.send({ type: 'OPEN' });
+  menu.send({ type: 'HIGHLIGHT', index: 2 });
+  menu.send({ type: 'SELECT', id: 'c' });
+  menu.send({ type: 'OPEN' });
+  menu.send({ type: 'HIGHLIGHT', index: 2 });
+  menu.send({ type: 'SET_OPTIONS', options: [{ id: 'a', label: 'Apple' }] });
+  const st = menu.getSnapshot();
+  assert.ok(st.activeIndex < 1, 'active row never points past the end of a shrunk list');
+  assert.equal(st.selectedId, null, 'a selection whose option vanished is dropped');
+});

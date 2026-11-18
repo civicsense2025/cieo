@@ -122,3 +122,48 @@ test('the Worker is served on the public custom domain, and no secret or address
   assert.match(config, /"routes": \[\{ "pattern": "[a-z0-9.-]+", "custom_domain": true \}\]/);
   assert.ok(!/re_[A-Za-z0-9]{16,}|@[a-z0-9-]+\.[a-z]{2,}/i.test(config.replace(/"Cieo <[^>]*>"/g, '')), 'no key or email address in the config');
 });
+
+/** Resolves a page's reference the way a browser does (`..` stops at the root), then applies the published redirects and Cloudflare's folder-index rule. */
+function servedFile(out, pagePath, ref, redirects) {
+  let path = new URL(ref, `https://cieo.test${pagePath}`).pathname;
+  for (const [from, to] of redirects) {
+    if (from.endsWith('/*') && path.startsWith(from.slice(0, -1))) path = to.replace(':splat', path.slice(from.length - 1));
+    else if (from === path) path = to;
+  }
+  path = decodeURIComponent(path);
+  if (path.endsWith('/')) path += 'index.html';
+  return existsSync(join(out, path)) ? path : null;
+}
+
+test('every link, script, stylesheet, image and search result in the built site resolves once site/ is served at the root', () => {
+  const out = mkdtempSync(join(tmpdir(), 'cieo-deploy-links-'));
+  try {
+    build(out);
+    const redirects = readFileSync(join(out, '_redirects'), 'utf8').trim().split('\n').map((l) => l.split(/\s+/).slice(0, 2));
+    const pages = [];
+    const walk = (d) => { for (const e of readdirSync(d, { withFileTypes: true })) { const p = join(d, e.name); if (e.isDirectory()) walk(p); else if (p.endsWith('.html')) pages.push(p); } };
+    walk(out);
+    assert.ok(pages.length > 250, 'the built site holds the component pages');
+    const broken = [];
+    for (const file of pages) {
+      const pagePath = `/${file.slice(out.length + 1)}`;
+      const markup = readFileSync(file, 'utf8').replace(/(<script\b[^>]*>)[\s\S]*?<\/script>/gi, '$1</script>');
+      for (const m of markup.matchAll(/<(\w+)\b[^>]*?\b(?:href|src)=["']([^"']+)["']/g)) {
+        const [, tag, ref] = m;
+        if (/^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i.test(ref)) continue;
+        if (ref.startsWith('/') && !/^(?:link|script|img|audio|video|source)$/i.test(tag)) continue; // root links in previews are sample content
+        if (!servedFile(out, pagePath, ref, redirects)) broken.push(`${pagePath} -> ${ref}`);
+      }
+    }
+    assert.deepEqual(broken.slice(0, 10), [], `${broken.length} references do not resolve`);
+
+    const { items } = JSON.parse(readFileSync(join(out, 'search-index.json'), 'utf8'));
+    const lost = items.filter((i) => !servedFile(out, '/index.html', i.href, redirects)).map((i) => i.href);
+    assert.deepEqual(lost.slice(0, 10), [], `${lost.length} search results lead nowhere`);
+
+    for (const [from, to] of redirects) {
+      assert.match(from, /^\//); assert.match(to, /^\//);
+      if (!from.endsWith('*')) assert.ok(servedFile(out, '/index.html', to, []), `redirect target ${to} exists`);
+    }
+  } finally { rmSync(out, { recursive: true, force: true }); }
+});

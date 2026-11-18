@@ -57,8 +57,8 @@ export type CieoI18nProviderProps = I18nProviderProps;
 export function CieoI18nProvider({
   className,
   slotProps,
-  locale = 'en',
-  dir = 'ltr',
+  locale,
+  dir,
   strings,
   children,
 }: I18nProviderProps) {

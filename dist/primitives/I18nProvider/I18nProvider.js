@@ -19,7 +19,7 @@ export const CieoI18nContext = createContext({
     dir: 'ltr',
     strings: DEFAULT_CIEO_STRINGS,
 });
-export function CieoI18nProvider({ className, slotProps, locale = 'en', dir = 'ltr', strings, children, }) {
+export function CieoI18nProvider({ className, slotProps, locale, dir, strings, children, }) {
     const parent = useContext(CieoI18nContext);
     const value = useMemo(() => ({
         locale: locale ?? parent.locale,

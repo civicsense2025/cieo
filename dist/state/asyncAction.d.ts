@@ -12,13 +12,16 @@ export type AsyncActionEvent = {
     readonly anchorRect?: AnchorRect;
 } | {
     readonly type: 'RESOLVE';
+    readonly attemptId?: string;
     readonly announcement?: string;
 } | {
     readonly type: 'REJECT';
+    readonly attemptId?: string;
     readonly error?: string;
     readonly announcement?: string;
 } | {
     readonly type: 'TIMEOUT';
+    readonly attemptId?: string;
     readonly announcement?: string;
 } | {
     readonly type: 'CANCEL';
@@ -30,6 +33,8 @@ export interface AsyncActionOptions {
     readonly initialStatus?: AsyncActionStatus;
     readonly createAttemptId?: (attemptNumber: number) => string;
 }
+/** Unguessable by default: the id is often forwarded as an idempotency key, so two visitors must never share one. */
+export declare const defaultAttemptId: () => string;
 export declare function createInitialAsyncActionState(initialStatus?: AsyncActionStatus): AsyncActionState;
 export declare function reduceAsyncAction(state: AsyncActionState, event: AsyncActionEvent, mintId?: (attemptNumber: number) => string): TransitionEnvelope<AsyncActionState, AsyncActionEvent>;
 export declare function createAsyncActionMachine(options?: AsyncActionOptions): MachineStore<AsyncActionState, AsyncActionEvent>;

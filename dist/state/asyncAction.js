@@ -1,9 +1,13 @@
 /* Headless async action machine: double-submit lock, attemptId preservation on retry, truthful timeout -> uncertain. */
 import { createMachineStore, unchanged } from './types.js';
+/** Unguessable by default: the id is often forwarded as an idempotency key, so two visitors must never share one. */
+export const defaultAttemptId = () => typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : `attempt-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+/** A late answer to a cancelled or superseded attempt must not complete the current one. */
+const staleAnswer = (state, attemptId) => attemptId !== undefined && attemptId !== state.attemptId;
 export function createInitialAsyncActionState(initialStatus = 'idle') {
     return { status: initialStatus, attemptId: null, attemptCount: 0 };
 }
-export function reduceAsyncAction(state, event, mintId = (n) => `attempt-${n}`) {
+export function reduceAsyncAction(state, event, mintId = defaultAttemptId) {
     switch (event.type) {
         case 'SUBMIT': {
             // Double-submit lock while in-flight.
@@ -23,7 +27,7 @@ export function reduceAsyncAction(state, event, mintId = (n) => `attempt-${n}`) 
             };
         }
         case 'RESOLVE': {
-            if (state.status !== 'pending')
+            if (state.status !== 'pending' || staleAnswer(state, event.attemptId))
                 return unchanged(state, event);
             const next = { status: 'succeeded', attemptId: state.attemptId, attemptCount: state.attemptCount };
             return {
@@ -37,7 +41,7 @@ export function reduceAsyncAction(state, event, mintId = (n) => `attempt-${n}`) 
             };
         }
         case 'REJECT': {
-            if (state.status !== 'pending')
+            if (state.status !== 'pending' || staleAnswer(state, event.attemptId))
                 return unchanged(state, event);
             const next = {
                 status: 'failed',
@@ -56,7 +60,7 @@ export function reduceAsyncAction(state, event, mintId = (n) => `attempt-${n}`) 
             };
         }
         case 'TIMEOUT': {
-            if (state.status !== 'pending')
+            if (state.status !== 'pending' || staleAnswer(state, event.attemptId))
                 return unchanged(state, event);
             const next = { status: 'uncertain', attemptId: state.attemptId, attemptCount: state.attemptCount };
             return {
@@ -92,6 +96,6 @@ export function reduceAsyncAction(state, event, mintId = (n) => `attempt-${n}`) 
     }
 }
 export function createAsyncActionMachine(options = {}) {
-    const mint = options.createAttemptId ?? ((n) => `attempt-${n}`);
+    const mint = options.createAttemptId ?? defaultAttemptId;
     return createMachineStore(createInitialAsyncActionState(options.initialStatus), (state, event) => reduceAsyncAction(state, event, mint));
 }
