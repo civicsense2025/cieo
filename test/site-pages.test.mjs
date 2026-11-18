@@ -60,6 +60,19 @@ test('pricing says free and open source, states the suggested amount, and never 
   else assert.match(html, /aria-disabled="true"/, 'without a payment link the button is visibly inactive, not a dead link');
 });
 
+test('the payment link is a hosted https Stripe page, so no card data ever touches the Cieo site', () => {
+  const { url } = siteConfig.support;
+  assert.match(url, /^https:\/\/buy\.stripe\.com\/[A-Za-z0-9]+$/);
+  assert.ok(!/<form[^>]*action=["']https?:\/\/(?!cieo)/.test(read('site/pricing.html')), 'pricing posts nowhere');
+});
+
+test('the thank-you note shows only when the visitor returns from paying (the #thanks target)', () => {
+  assert.match(read('site/pricing.html'), /id="thanks"[^>]*role="status"/);
+  const css = read('site/site.css');
+  assert.match(css, /\.site-thanks \{ display: none;/);
+  assert.match(css, /\.site-thanks:target \{ display: block; \}/);
+});
+
 test('the contact form never claims delivery before the server has said so', () => {
   const js = read('site/contact.js');
   assert.match(js, /if \(response\.ok\)/);

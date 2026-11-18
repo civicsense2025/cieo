@@ -41,11 +41,15 @@ Set up once, by the owner:
 
 1. **Secrets** (never committed): `npx wrangler@4.160.0 secret put RESEND_API_KEY` and `npx wrangler@4.160.0 secret put CONTACT_TO` (the inbox that receives messages). Check first with `npx wrangler@4.160.0 secret list`.
 2. **Sender**: until a domain is verified with Resend, the sandbox sender is used and Resend delivers only to the account owner's own address, so set `CONTACT_TO` to that address for testing. For real use, verify the sending domain in Resend (it asks for DNS records), then set `CONTACT_FROM` in `wrangler.jsonc` under `vars` to something like `Cieo <hello@your-domain>`.
-3. **Subdomain**: add the Cieo subdomain to the domain's DNS in the same Cloudflare account, then attach it to the Worker as a custom domain in the dashboard (Workers, `cieo`, Settings, Domains).
+3. **Subdomain**: `wrangler.jsonc` lists the public address under `routes` as a custom domain, so a deploy creates its DNS record and certificate. The domain's zone must be in the same Cloudflare account as the Worker. Change the `pattern` there if the address moves.
 
 The rate limit's `namespace_id` in `wrangler.jsonc` must be unique in the Cloudflare account; if another Worker already uses `424201`, change it, or the two share one counter. Limits are approximate and per Cloudflare location, so treat them as a brake on abuse, not a hard cap.
 
 Until step 1 is done the form answers "Messages are not being accepted right now" instead of failing silently.
+
+## The support payment
+
+The pricing page's button opens a hosted Stripe payment link, set as `support.url` in `scripts/lib/site-config.mjs`. Visitors pay the suggested amount or more, on Stripe's page, so no card data reaches this site; Stripe sends the receipt. After paying, Stripe returns the visitor to the pricing page at `#thanks`, which reveals a thank-you note. To change the amount or link, create a new payment link in the Stripe dashboard (or `stripe payment_links create`), set the new URL in `site-config.mjs`, and rebuild. Paying unlocks nothing, and the page says so.
 
 ## Checking a deploy
 

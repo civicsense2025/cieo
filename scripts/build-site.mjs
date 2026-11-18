@@ -116,6 +116,7 @@ function pricing(f) {
   <p class="site-lead">Cieo is MIT licensed. Use it in personal and commercial work with no fee, no license key and no account.</p>
 </section>
 <section class="site-wrap">
+  <p id="thanks" class="site-thanks" role="status" tabindex="-1">Thank you. Your support keeps Cieo maintained, and a receipt is on its way to your email.</p>
   <div class="price-panel">
     <div>
       <p class="site-label">The library</p>

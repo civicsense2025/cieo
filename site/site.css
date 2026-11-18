@@ -107,6 +107,8 @@ body.cieo-site {
 .codeblock { margin: 0; padding: var(--cieo-space-4) var(--cieo-space-6); overflow-x: auto; border-radius: var(--cieo-radius-surface); background: var(--cieo-color-text); color: var(--cieo-color-canvas); font-size: var(--cieo-text-small); line-height: 1.8; }
 
 /* Pricing */
+.site-thanks { display: none; margin-block-end: var(--cieo-space-6); padding: var(--cieo-space-4) var(--cieo-space-6); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); color: var(--cieo-color-text); }
+.site-thanks:target { display: block; }
 .price-panel { display: grid; gap: var(--cieo-space-8); padding: var(--cieo-space-8); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); box-shadow: 0 0 0 var(--cieo-ring-width) var(--cieo-color-border), 0 var(--cieo-shadow-y) var(--cieo-shadow-blur) color-mix(in srgb, var(--cieo-color-shadow) calc(var(--cieo-shadow-alpha) * 100%), transparent); }
 @media (min-width: 56rem) { .price-panel { grid-template-columns: 1fr 1fr; gap: var(--cieo-space-12); } }
 .price-figure { font: var(--cieo-weight-display) clamp(3.5rem, 8vw, 6rem)/1 var(--cieo-font-display); letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
