@@ -26,10 +26,12 @@ export function validateContact(input) {
 }
 
 /** True when the visitor looks like a script: the hidden field is filled, or the form was submitted too fast or too late. */
-export function looksAutomated(body, now = Date.now()) {
+export function looksAutomated(body, now = Date.now(), { stampRequired = false } = {}) {
   if (oneLine(body?.website)) return true;
   const stamp = Number(body?.t);
-  if (!Number.isFinite(stamp) || stamp <= 0) return false; // without script there is no stamp; the other checks still apply
+  // The page's own script always sends a stamp, so a JSON post without one did not come from the page. A plain form
+  // post (no script) cannot stamp itself, so it is judged on the hidden field and the rate limit alone.
+  if (!Number.isFinite(stamp) || stamp <= 0) return stampRequired;
   const elapsed = now - stamp;
   return elapsed < LIMITS.minFillMs || elapsed > LIMITS.maxFillMs;
 }
@@ -42,8 +44,14 @@ export function buildEmail({ name, email, topic, message }, env) {
   return { from: env.CONTACT_FROM || 'Cieo <onboarding@resend.dev>', to: [env.CONTACT_TO], replyTo: [email], subject, text, html };
 }
 
+/** The same submission always gets the same key, so a double click or a retry cannot send two emails (Resend keeps keys for 24 hours). */
+export async function submissionKey({ email, message }, stamp) {
+  const bytes = new TextEncoder().encode(`${email}\n${message}\n${stamp || ''}`);
+  const digest = await crypto.subtle.digest('SHA-256', bytes);
+  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 48);
+}
+
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { ...SECURITY_HEADERS, 'content-type': 'application/json' } });
-const fail = (status, error) => json(status, { error });
 
 async function readBody(request) {
   const type = (request.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
@@ -59,38 +67,42 @@ async function readBody(request) {
 /** Same-origin only: a form on another site cannot post here through a visitor's browser. */
 export function sameOrigin(request) {
   const origin = request.headers.get('origin');
-  if (!origin) return false;
+  // Some privacy settings strip Origin; the browser still labels the request itself, and that label cannot be set by a page.
+  if (!origin) return request.headers.get('sec-fetch-site') === 'same-origin';
   try { return new URL(origin).host === new URL(request.url).host; } catch { return false; }
 }
 
 export async function handleContact(request, env, now = Date.now()) {
   if (request.method !== 'POST') return new Response('Method not allowed', { status: 405, headers: { ...SECURITY_HEADERS, allow: 'POST' } });
-  if (!sameOrigin(request)) return fail(403, 'This form can only be sent from the Cieo site.');
+  if (!sameOrigin(request)) return json(403, { error: 'This form can only be sent from the Cieo site.' });
   const wantsJson = (request.headers.get('accept') || '').includes('application/json');
-  const done = () => (wantsJson ? json(200, { ok: true }) : new Response(null, { status: 303, headers: { ...SECURITY_HEADERS, location: '/site/contact?sent=1' } }));
+  const done = () => (wantsJson ? json(200, { ok: true }) : back('sent=1'));
+  // Without script a visitor must land back on the form, with the reason in words, never on a raw JSON page.
+  const back = (query) => new Response(null, { status: 303, headers: { ...SECURITY_HEADERS, location: `/site/contact?${query}` } });
+  const fail = (status, error, code) => (wantsJson ? json(status, { error }) : back(`error=${code}`));
 
   const read = await readBody(request);
-  if (read.tooLarge) return fail(413, 'That message is too large.');
-  if (read.bad) return fail(400, 'We could not read that message.');
-  if (looksAutomated(read.body, now)) return done(); // say nothing to a script; send nothing
+  if (read.tooLarge) return fail(413, 'That message is too large.', 'large');
+  if (read.bad) return fail(400, 'We could not read that message.', 'unreadable');
+  if (looksAutomated(read.body, now, { stampRequired: wantsJson })) return done(); // say nothing to a script; send nothing
 
   if (env.CONTACT_LIMITER) {
     const ip = request.headers.get('cf-connecting-ip') || 'unknown';
     const { success } = await env.CONTACT_LIMITER.limit({ key: ip });
-    if (!success) return fail(429, 'Too many messages just now. Please try again in a few minutes.');
+    if (!success) return fail(429, 'Too many messages just now. Please try again in a few minutes.', 'busy');
   }
   const checked = validateContact(read.body);
-  if (!checked.ok) return fail(400, checked.error);
-  if (!env.RESEND_API_KEY || !env.CONTACT_TO) { console.error('contact: not configured'); return fail(503, 'Messages are not being accepted right now. Please try again later.'); }
+  if (!checked.ok) return fail(400, checked.error, 'invalid');
+  if (!env.RESEND_API_KEY || !env.CONTACT_TO) { console.error('contact: not configured'); return fail(503, 'Messages are not being accepted right now. Please try again later.', 'closed'); }
 
   let response;
   try {
     response = await fetch('https://api.resend.com/emails', {
       method: 'POST', redirect: 'manual', signal: AbortSignal.timeout(8000),
-      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', 'idempotency-key': crypto.randomUUID() },
+      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', 'idempotency-key': await submissionKey(checked.value, read.body.t) },
       body: JSON.stringify(buildEmail(checked.value, env)),
     });
-  } catch { console.error('contact: send failed (network)'); return fail(502, 'We could not send that just now. Please try again.'); }
-  if (!response.ok) { console.error(`contact: send refused (${response.status})`); return fail(502, 'We could not send that just now. Please try again.'); }
+  } catch { console.error('contact: send failed (network)'); return fail(502, 'We could not send that just now. Please try again.', 'failed'); }
+  if (!response.ok) { console.error(`contact: send refused (${response.status})`); return fail(502, 'We could not send that just now. Please try again.', 'failed'); }
   return done();
 }

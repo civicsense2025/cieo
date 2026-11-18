@@ -2,14 +2,19 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { buildEmail, escapeHtml, handleContact, LIMITS, looksAutomated, oneLine, sameOrigin, validateContact } from '../worker/contact.js';
+import { buildEmail, escapeHtml, handleContact, LIMITS, looksAutomated, oneLine, sameOrigin, submissionKey, validateContact } from '../worker/contact.js';
 import worker from '../worker/index.js';
 
 const URL_ = 'https://cieo.example/api/contact';
 const good = { name: 'Ada Lovelace', email: 'ada@example.org', topic: 'bug', message: 'The toast preview floats over the table on my phone.' };
 const env = (extra = {}) => ({ RESEND_API_KEY: 're_test_key_123', CONTACT_TO: 'owner@example.net', ...extra });
-const req = (body, { origin = 'https://cieo.example', type = 'application/json', accept = 'application/json', method = 'POST', headers = {} } = {}) =>
-  new Request(URL_, { method, headers: { origin, 'content-type': type, accept, ...headers }, body: method === 'GET' ? undefined : type === 'application/json' ? JSON.stringify(body) : new URLSearchParams(body).toString() });
+// A JSON post carries the fill-time stamp the page's own script adds; pass stamp: false to leave it out.
+const req = (body, { origin = 'https://cieo.example', type = 'application/json', accept = 'application/json', method = 'POST', headers = {}, stamp = true } = {}) => {
+  const data = type === 'application/json' && stamp && body && body.t === undefined ? { t: String(Date.now() - 8000), ...body } : body;
+  const h = { 'content-type': type, accept, ...headers };
+  if (origin) h.origin = origin;
+  return new Request(URL_, { method, headers: h, body: method === 'GET' ? undefined : type === 'application/json' ? JSON.stringify(data) : new URLSearchParams(data).toString() });
+};
 const withFetch = async (impl, run) => { const real = globalThis.fetch; const calls = []; globalThis.fetch = async (...a) => { calls.push(a); return impl(...a); }; try { return await run(calls); } finally { globalThis.fetch = real; } };
 const ok = () => new Response(JSON.stringify({ id: 'abc' }), { status: 200 });
 const quiet = async (run) => { const e = console.error; console.error = () => {}; try { return await run(); } finally { console.error = e; } };
@@ -80,8 +85,8 @@ test('only a same-origin POST is accepted', async () => {
 
 test('oversized, unreadable and unsupported bodies are refused before any work', async () => {
   assert.equal((await handleContact(req({ ...good, message: 'z'.repeat(LIMITS.body) }), env())).status, 413);
-  assert.equal((await handleContact(new Request(URL_, { method: 'POST', headers: { origin: 'https://cieo.example', 'content-type': 'application/json' }, body: '{nope' }), env())).status, 400);
-  assert.equal((await handleContact(new Request(URL_, { method: 'POST', headers: { origin: 'https://cieo.example', 'content-type': 'text/plain' }, body: 'hi' }), env())).status, 400);
+  assert.equal((await handleContact(new Request(URL_, { method: 'POST', headers: { origin: 'https://cieo.example', accept: 'application/json', 'content-type': 'application/json' }, body: '{nope' }), env())).status, 400);
+  assert.equal((await handleContact(new Request(URL_, { method: 'POST', headers: { origin: 'https://cieo.example', accept: 'application/json', 'content-type': 'text/plain' }, body: 'hi' }), env())).status, 400);
 });
 
 test('a valid message is sent to Resend once, with the key in the header and never in the response', async () => {
@@ -161,4 +166,45 @@ test('the contact page posts to the endpoint the Worker serves, and every field 
   assert.match(html, /action="\/api\/contact"/);
   for (const name of ['name', 'email', 'topic', 'message']) assert.match(html, new RegExp(`<label>[^<]*<(?:input|select|textarea) name="${name}"`), name);
   assert.match(html, /name="website"[^>]*tabindex="-1"/);
+});
+
+test('a script post without the page\'s fill-time stamp is dropped, but a plain form post is judged without one', async () => {
+  assert.equal(looksAutomated({}, Date.now(), { stampRequired: true }), true);
+  assert.equal(looksAutomated({}, Date.now(), { stampRequired: false }), false);
+  await withFetch(ok, async (calls) => {
+    assert.equal((await handleContact(req(good, { stamp: false }), env())).status, 200);
+    assert.equal(calls.length, 0, 'nothing sent');
+    const plain = await handleContact(req(good, { type: 'application/x-www-form-urlencoded', accept: 'text/html' }), env());
+    assert.equal(plain.status, 303);
+    assert.equal(calls.length, 1, 'a visitor without script is still served');
+  });
+});
+
+test('the same submission always gets the same idempotency key, and a different one a different key', async () => {
+  const a = await submissionKey(good, '1700000000000'), b = await submissionKey({ ...good }, '1700000000000');
+  assert.equal(a, b);
+  assert.notEqual(a, await submissionKey({ ...good, message: 'A different message entirely.' }, '1700000000000'));
+  assert.notEqual(a, await submissionKey(good, '1700000009999'));
+  assert.match(a, /^[0-9a-f]{48}$/);
+  const keys = [];
+  await withFetch(ok, async (calls) => {
+    for (let i = 0; i < 2; i += 1) { await handleContact(req({ ...good, t: String(Date.now() - 8000) }), env()); keys.push(calls[i][1].headers['idempotency-key']); }
+  });
+  assert.equal(keys[0].length, 48);
+});
+
+test('a visitor without script lands back on the form with the reason, never on a JSON page', async () => {
+  const plain = (body, extra = {}) => req(body, { type: 'application/x-www-form-urlencoded', accept: 'text/html', ...extra });
+  const where = async (request, e = env()) => { const r = await handleContact(request, e); return [r.status, r.headers.get('location')]; };
+  assert.deepEqual(await where(plain({ ...good, email: 'nope' })), [303, '/site/contact?error=invalid']);
+  assert.deepEqual(await where(plain(good), env({ CONTACT_LIMITER: { limit: async () => ({ success: false }) } })), [303, '/site/contact?error=busy']);
+  await quiet(async () => assert.deepEqual(await where(plain(good), { CONTACT_TO: 'x@example.net' }), [303, '/site/contact?error=closed']));
+  const html = readFileSync('site/contact.js', 'utf8');
+  for (const code of ['invalid', 'large', 'unreadable', 'busy', 'closed', 'failed']) assert.match(html, new RegExp(`${code}: '`), `contact.js words the ${code} reason`);
+});
+
+test('a request that lost its Origin is accepted only when the browser labels it same-origin', () => {
+  assert.equal(sameOrigin(req(good, { origin: null, headers: { 'sec-fetch-site': 'same-origin' } })), true);
+  assert.equal(sameOrigin(req(good, { origin: null, headers: { 'sec-fetch-site': 'cross-site' } })), false);
+  assert.equal(sameOrigin(req(good, { origin: null })), false);
 });

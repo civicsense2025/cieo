@@ -7,7 +7,10 @@ if (form) {
   const stamp = form.querySelector('input[name="t"]');
   const say = (state, text) => { status.dataset.state = state; status.textContent = text; };
   stamp.value = String(Date.now()); // a form filled in under two seconds is a script, not a person
-  if (new URLSearchParams(location.search).get('sent') === '1') say('ok', 'Thank you. Your message is on its way.');
+  const params = new URLSearchParams(location.search);
+  const reasons = { invalid: 'Please check your name, email and message and try again.', large: 'That message is too large.', unreadable: 'We could not read that message.', busy: 'Too many messages just now. Please try again in a few minutes.', closed: 'Messages are not being accepted right now. Please try again later.', failed: 'We could not send that just now. Please try again.' };
+  if (params.get('sent') === '1') say('ok', 'Thank you. Your message is on its way.');
+  else if (reasons[params.get('error')]) say('error', reasons[params.get('error')]);
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;

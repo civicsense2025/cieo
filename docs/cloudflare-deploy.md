@@ -43,6 +43,8 @@ Set up once, by the owner:
 2. **Sender**: until a domain is verified with Resend, the sandbox sender is used and Resend delivers only to the account owner's own address, so set `CONTACT_TO` to that address for testing. For real use, verify the sending domain in Resend (it asks for DNS records), then set `CONTACT_FROM` in `wrangler.jsonc` under `vars` to something like `Cieo <hello@your-domain>`.
 3. **Subdomain**: add the Cieo subdomain to the domain's DNS in the same Cloudflare account, then attach it to the Worker as a custom domain in the dashboard (Workers, `cieo`, Settings, Domains).
 
+The rate limit's `namespace_id` in `wrangler.jsonc` must be unique in the Cloudflare account; if another Worker already uses `424201`, change it, or the two share one counter. Limits are approximate and per Cloudflare location, so treat them as a brake on abuse, not a hard cap.
+
 Until step 1 is done the form answers "Messages are not being accepted right now" instead of failing silently.
 
 ## Checking a deploy
