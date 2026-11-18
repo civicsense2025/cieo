@@ -1,6 +1,6 @@
 # Cieo design foundation
 
-Cieo keeps the existing spring engine and adds an optional visual layer. The same semantic decisions travel as CSS, typed JSON, or native constants. Importing the motion engine does not load this layer, and importing the design API does not touch the document or start an animation. Apple applications can also import the separate [CieoUI component foundation](apple-components.md); it does not depend on the reference recipe catalogue.
+Cieo keeps the existing spring engine and adds an optional visual layer. The same semantic decisions travel as CSS, typed JSON, or native constants. Importing the motion engine does not load this layer, and importing the design API does not touch the document or start an animation. Apple applications can also import the separate [CieoUI component foundation](apple-components.md); it does not depend on the reference recipe catalog.
 
 ## Contents
 
@@ -44,7 +44,7 @@ Controllers own one element each. A second controller on the same element throws
 
 Seven starting points cover olive, iris, lagoon, ember, rose, monochrome, and instrument ink (a warm near-black for editorial, precise interfaces). Each separates the brand accent from success, warning, danger, and information. Choices combine freely:
 
-- **Brand, appearance and contrast** decide every color. Three grounds change the neutral surfaces: `cool` (the default), `paper` (a warm off-white) and `mist` (a quiet cool grey). Every brand, appearance, contrast level and ground is audited, 168 color combinations in all.
+- **Brand, appearance and contrast** decide every color. Three grounds change the neutral surfaces: `cool` (the default), `paper` (a warm off-white) and `mist` (a quiet cool gray). Every brand, appearance, contrast level and ground is audited, 168 color combinations in all.
 - **Density, corners, fonts, display face and elevation** decide dimensions and type only. Corners are `square`, `crisp`, `soft`, `round` and `pill` (fully round controls, gently rounded cards). The display face (`sans` or a local `serif`) applies to large headings only and defaults to the UI font. Elevation is `soft` (a diffuse shadow) or `ring` (a one-pixel hairline with the faintest lift).
 
 These combinations are test cases, not separately counted improvements. The Cieo site uses instrument ink on paper with pill corners, the serif display face and ring elevation; the recipe is `scripts/lib/site-theme.mjs` and the generated stylesheet is `site/theme.css`.
@@ -57,7 +57,7 @@ createTheme({
 });
 ```
 
-An accent seed can change when contrast requires it. The resolved accent is available in `theme.tokens['color-accent']`. An override changes the named token, not every dependent token: a custom color set must still satisfy the pair audit. Color overrides don't automatically recolor the old Motion Atoms catalogue or an application's existing components.
+An accent seed can change when contrast requires it. The resolved accent is available in `theme.tokens['color-accent']`. An override changes the named token, not every dependent token: a custom color set must still satisfy the pair audit. Color overrides don't automatically recolor the old Motion Atoms catalog or an application's existing components.
 
 Component stylesheets live one per primitive under `design/styles/primitives/` (including `motion-frame.css`, `morph-surface.css`, `stagger-group.css`, and `i18n-provider.css`) and read only these tokens; for example, the reorderable list's lifted row uses `border-strong` for its ring, so a theme change restyles it with everything else.
 

@@ -1,6 +1,6 @@
 # FileInput
 
-Labelled file picker: one native file input reusing the shared input style.
+Labeled file picker: one native file input reusing the shared input style.
 
 ## Use when
 

@@ -3,7 +3,7 @@ import Cieo
 
 public struct PageTurnAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-page", category: "Image transitions", name: "Page turn",
-        summary: "The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalogue or a printed story.")
+        summary: "The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalog or a printed story.")
     public init() {}
 
     public var body: some View {

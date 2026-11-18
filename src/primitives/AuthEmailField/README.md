@@ -1,6 +1,6 @@
 # AuthEmailField
 
-Labelled email input with an inline error, for auth forms.
+Labeled email input with an inline error, for auth forms.
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|

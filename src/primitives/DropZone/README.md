@@ -9,7 +9,7 @@ File drop target with an explicit Choose button. The button calls `input.click()
 
 ## Avoid when
 
-- The form needs one labelled upload with no drag handling; use FileInput.
+- The form needs one labeled upload with no drag handling; use FileInput.
 - The host already owns a custom picker; this component owns the zone and the button together.
 
 ## Anatomy
@@ -42,7 +42,7 @@ Use the typed presentation parts listed under Host customization. Defaults still
 
 ## Related
 
-FileInput (atom, labelled picker with no drag handling), Button (controls, the Choose affordance), Banner (molecule, persistent error surface).
+FileInput (atom, labeled picker with no drag handling), Button (controls, the Choose affordance), Banner (molecule, persistent error surface).
 
 ## Evidence
 

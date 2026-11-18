@@ -4,7 +4,7 @@ import Cieo
 public struct DepthParallaxPhotoAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-depth", category: "Photo effects", name: "Depth parallax",
         summary: "The photo is split into planes by aerial perspective (farther ridges are lighter). The pointer offsets each plane by its depth around a pivot at the middle ridge: sky and far ridge drift against the pointer, the foreground follows it, at most about 1% of the width. Planes ride a lazy spring and drift home when the pointer leaves. Use when: a landing hero needs a sense of place without video, and the photo must stay fully readable.")
-    @State private var pointer = CGPoint(x: 0, y: 0)       // -0.5...0.5 around the centre
+    @State private var pointer = CGPoint(x: 0, y: 0)       // -0.5...0.5 around the center
     public init() {}
 
     public var body: some View {

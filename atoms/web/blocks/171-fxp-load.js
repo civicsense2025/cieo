@@ -121,7 +121,7 @@ function lazyPhoto(name, aspect = 1.5, tod = 0){
   return o;
 }
 // cover mapping: frame uv → source uv = uv*xy + zw; f = focal point, z = extra zoom
-// default focal x sits right of centre: every PhotoKit landscape has its sun at x ≈ .68, so narrow (phone)
+// default focal x sits right of center: every PhotoKit landscape has its sun at x ≈ .68, so narrow (phone)
 // crops keep the sun whole instead of slicing it at the frame edge
 const cover = (fw, fh, sw, sh, fx = .78, fy = .5, z = 1) => { const af = fw/fh, as = sw/sh; let sx = 1, sy = 1;
   if (af > as) sy = as/af; else sx = af/as; sx /= z; sy /= z; return [sx, sy, (1 - sx)*fx, (1 - sy)*fy]; };
@@ -137,7 +137,7 @@ function boxBlur(a, w, h, r){
     for (let y = 0; y < h; y++){ q[y*w + x] = s/n; s += o[Math.min(h - 1, y + r + 1)*w + x] - o[Math.max(0, y - r)*w + x]; } }
   return q;
 }
-/* depth from aerial perspective: in these landscapes every ridge or tree row is a flat colour and farther
+/* depth from aerial perspective: in these landscapes every ridge or tree row is a flat color and farther
    planes are lighter. Luminance peaks become planes (brightest = farthest); every pixel snaps to its nearest
    plane, so anti-aliased edges never invent an in-between plane. Nearer planes are dilated by two texels. */
 function depthOf(img){
@@ -293,7 +293,7 @@ atom({ id:'fxp-rack', cat:'Photo effects', name:'Hover rack focus', block:'hero,
   }});
 
 /* =============================================================== 3. brand duotone */
-atom({ id:'fxp-duo', cat:'Photo effects', name:'Brand tint to colour', block:'card grid, team, articles (image)', fam:['M'], wide:true, tall:true,
+atom({ id:'fxp-duo', cat:'Photo effects', name:'Brand tint to color', block:'card grid, team, articles (image)', fam:['M'], wide:true, tall:true,
   html:`${CSS}<style>
 .fxp-dh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex:none}
 .fxp-dh b{font-size:18px;letter-spacing:-.02em;font-weight:600}
@@ -308,8 +308,8 @@ atom({ id:'fxp-duo', cat:'Photo effects', name:'Brand tint to colour', block:'ca
 @container (max-width:520px){.fxp-dg{gap:10px}.fxp-dt{font-size:13px}.fxp-dm{font-size:12px}}
 </style><div class="fxp-w"><div class="fxp-dh"><b>From the field</b><span class="fxp-tx">4 new stories this week</span></div><div class="fxp-dg"></div>
 <div class="fxp-bar"><span class="fxp-tx">Tint</span><div class="seg" role="group" aria-label="Tint"><div class="ind"></div><button>Ink</button><button>Moss</button><button>Ember</button></div><span class="fxp-gap"></span><span class="fxp-tx">Hover or Tab to a story</span></div></div>`,
-  desc:'Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full colour on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with colour reserved for the item you are on.',
-  api:'duo = gradientMap(lum, [dark, tint, light])   card.colour.set(hover || focus ? 1 : 0, S.soft)',
+  desc:'Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full color on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with color reserved for the item you are on.',
+  api:'duo = gradientMap(lum, [dark, tint, light])   card.color.set(hover || focus ? 1 : 0, S.soft)',
   init(st){
     // focal x per photo: keep the sun whole or leave it out, never cut in half at the card edge
     const D = [['ridge', 'What the ridge keeps', 'Field notes · 6 min', .8], ['harbor', 'Low tide, six a.m.', 'Dispatch · 4 min', .2], ['meadow', 'A meadow in August', 'Essay · 9 min', .15], ['canyon', 'Inside the canyon wall', 'Field notes · 7 min', .85]];
@@ -369,8 +369,8 @@ atom({ id:'fxp-relight', cat:'Photo effects', name:'Relight with the sun', block
 <svg class="fxp-path" aria-hidden="true"><path fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="2 6" stroke-linecap="round"/></svg>
 <button type="button" class="fxp-sun" role="slider" aria-label="Sun position" aria-valuemin="0" aria-valuemax="100"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="rgba(12,16,22,.4)" stroke-width="3.5"/><circle cx="24" cy="24" r="20" fill="none" stroke="#fff" stroke-width="1.5"/></svg></button><span class="fxp-chip"></span></div>
 <div class="fxp-bar"><button type="button" class="btn" data-g="0">Midday</button><button type="button" class="btn" data-g=".82">Golden hour</button><button type="button" class="btn fxp-now">Match my time</button><span class="fxp-gap"></span><span class="fxp-tx" aria-live="polite"></span></div></div>`,
-  desc:'Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centred on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.',
-  api:'mask = g + (pool(sun) − .45)·.7·sin(πg)   colour = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)',
+  desc:'Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centered on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.',
+  api:'mask = g + (pool(sun) − .45)·.7·sin(πg)   color = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), sun = $(st, '.fxp-sun'), ring = $$(sun, 'circle'), path = $(st, '.fxp-path path'), chip = $(st, '.fxp-chip'), out = $(st, '.fxp-tx'), s = surface(fr, cv);
     const G = new Track(.62, S.soft), hov = new Track(0, S.base); let day = null, gold = null, sky = null, W = 0, H = 0, sig = '', held = false, pv = '', now0 = null;
@@ -475,7 +475,7 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
 </style><div class="fxp-w"><div class="fxp-ed"><div class="fxp-et"><span class="fxp-ek">Field notes · Issue 14</span><h4 class="fxp-eh">Where the coast road ends</h4><p class="fxp-es">Forty miles of switchbacks, one diner, and the light that makes the drive worth it.</p><span class="fxp-eb">Words by Ines Alvarez · Photographs by Theo Marsh</span></div>
 <div class="fxp-fr" role="img" aria-label="Coast road at midday"><canvas class="fxp-cv" aria-hidden="true"></canvas></div></div>
 <div class="fxp-bar"><div class="seg" role="group" aria-label="Screen"><div class="ind"></div><button>Dots</button><button>Lines</button></div><label class="fxp-rg">Resolve <input id="fxp-screen-p" type="range" min="0" max="100" value="0"></label><button type="button" class="btn fxp-rp">Replay</button></div></div>`,
-  desc:'The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colours. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s colour, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.',
+  desc:'The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colors. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s color, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.',
   api:'cell = c0·(1.4/c0)^smoothstep(0,.9,p)   dot r = √(coverage/π)   out = mix(screen, photo, smoothstep(.62,1,p))',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), rg = $(st, '#fxp-screen-p'), s = surface(fr, cv), ph = lazyPhoto('coast');
@@ -495,7 +495,7 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
     };
   }});
 
-/* =============================================================== 7. colour grade + histogram */
+/* =============================================================== 7. color grade + histogram */
 const FS_GRADE = `uniform sampler2D uImg;uniform vec4 uCov;uniform float uEV,uT,uClip;uniform vec3 uHi,uLo;
 void main(){vec2 s=v*uCov.xy+uCov.zw;vec3 c=texture2D(uImg,s).rgb;vec3 l=pow(c,vec3(2.2));
 vec3 m=vec3(1.+.28*uT,1.+.04*uT,1.-.30*uT);m/=dot(m,vec3(.2126,.7152,.0722));l*=m*exp2(uEV);
@@ -521,7 +521,7 @@ atom({ id:'fxp-grade', cat:'Photo effects', name:'Grade with live histogram', bl
 <div class="fxp-sl"><label for="fxp-grade-ev">Exposure <b data-k="ev"></b></label><input id="fxp-grade-ev" type="range" min="-2" max="2" step=".05" value="0"></div>
 <div class="fxp-sl"><label for="fxp-grade-t">Temperature <b data-k="t"></b></label><input id="fxp-grade-t" type="range" min="-1" max="1" step=".02" value="0"></div>
 <div class="fxp-gb"><button type="button" class="btn fxp-au">Auto</button><button type="button" class="btn fxp-rs">Reset</button><button type="button" class="btn fxp-ck" aria-pressed="false">Show clipping</button></div></div></div></div>`,
-  desc:'Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a grey-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.',
+  desc:'Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a gray-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.',
   api:'lin = srgb^2.2 · wb(T) · 2^EV   hist = Σ LUT(px)   ev.set(auto, S.soft) | ev.jump(slider)',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), chip = $(st, '.fxp-chip'), hcv = $(st, '.fxp-hc canvas'), s = surface(fr, cv), ph = lazyPhoto('lake');
@@ -541,7 +541,7 @@ atom({ id:'fxp-grade', cat:'Photo effects', name:'Grade with live histogram', bl
       const img = ph.need(s.cw, s.ch); if (!img) return;
       if (pv !== ph.v){ pv = ph.v; small = scaled(img, 200, Math.round(200*img.height/img.width)).d(); let r = 0, b = 0; const ls = [];
         for (let i = 0; i < small.length; i += 4){ const R = (small[i]/255)**2.2, G2 = (small[i + 1]/255)**2.2, B = (small[i + 2]/255)**2.2; r += R; b += B; ls.push(Math.max(R, G2, B)); }
-        // auto: expose to the right (98th percentile lands at .92, so a small sun disc may clip) and half a grey-world white balance
+        // auto: expose to the right (98th percentile lands at .92, so a small sun disc may clip) and half a gray-world white balance
         ls.sort((p, q) => p - q); const p98 = ls[Math.floor(ls.length*.98)] || 1;
         auto = [clamp(Math.round(Math.log2(.92/p98)*20)/20, -2, 2), clamp(Math.round((b - r)/(r + b)*1.5*50)/50, -.6, .6)]; }
       if (theme !== themeV){ theme = themeV; HI = tok(st, '--danger'); LO = tok(st, '--accent'); sig = hsig = ''; }
@@ -569,17 +569,17 @@ atom({ id:'fxp-grade', cat:'Photo effects', name:'Grade with live histogram', bl
     };
   }});
 
-/* =============================================================== 8. paint to reveal colour */
+/* =============================================================== 8. paint to reveal color */
 const FS_PAINT = `uniform sampler2D uImg,uMask;uniform vec4 uCov;
 void main(){vec2 s=v*uCov.xy+uCov.zw;vec3 c=texture2D(uImg,s).rgb;float m=smoothstep(.08,.6,texture2D(uMask,v).r);
 float g=lum(c);g=mix(g,g*g*(3.-2.*g),.4);gl_FragColor=vec4(mix(vec3(g),c,m),1.);}`;
-atom({ id:'fxp-paint', cat:'Photo effects', name:'Paint in colour', block:'hero, before/after story (image)', fam:['D','T'], wide:true, tall:true,
+atom({ id:'fxp-paint', cat:'Photo effects', name:'Paint in color', block:'hero, before/after story (image)', fam:['D','T'], wide:true, tall:true,
   html:`${CSS}<style>
 .fxp-br{position:absolute;left:0;top:0;border-radius:50%;pointer-events:none;z-index:2;box-shadow:0 0 0 1.5px #fff,0 0 0 3px rgba(12,16,22,.35)}
-</style><div class="fxp-w"><div class="fxp-fr" tabindex="0" role="img" aria-label="Late summer field in black and white. Drag, or use arrow keys with Space, to paint colour back in."><canvas class="fxp-cv" aria-hidden="true"></canvas><i class="fxp-br"></i><span class="fxp-chip">Drag to paint colour</span></div>
+</style><div class="fxp-w"><div class="fxp-fr" tabindex="0" role="img" aria-label="Late summer field in black and white. Drag, or use arrow keys with Space, to paint color back in."><canvas class="fxp-cv" aria-hidden="true"></canvas><i class="fxp-br"></i><span class="fxp-chip">Drag to paint color</span></div>
 <div class="fxp-bar"><div class="seg" role="group" aria-label="After painting"><div class="ind"></div><button>Heals back</button><button>Stays</button></div><button type="button" class="btn fxp-all">Reveal all</button><span class="fxp-gap"></span><span class="fxp-tx">Keys: arrows move, Space paints</span></div></div>`,
-  desc:'A soft brush paints the colour photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the colour drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the centre outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colourisation changed.',
-  api:'cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   colour = mix(mono, photo, smoothstep(.08,.6,m))',
+  desc:'A soft brush paints the color photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the color drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the center outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colorisation changed.',
+  api:'cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   color = mix(mono, photo, smoothstep(.08,.6,m))',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), br = $(st, '.fxp-br'), chip = $(st, '.fxp-chip'), s = surface(fr, cv), ph = lazyPhoto('field');
     let keep = false; const seg = mkSeg($(st, '.seg'), i => { const t = now(); if (a0) for (let k = 0; k < a0.length; k++){ if (a0[k] > 0){ a0[k] = str(k, t); ts[k] = t - 1; tp[k] = t; } } keep = i === 1; last = t; });
@@ -633,7 +633,7 @@ atom({ id:'fxp-burns', cat:'Photo effects', name:'Face-safe Ken Burns', block:'h
 </style><div class="fxp-w"><div class="fxp-fr fxp-kb" role="region" aria-roledescription="slideshow" aria-label="Photo stories"><canvas class="fxp-cv" aria-hidden="true"></canvas><div class="fxp-ks"><span>Face kept in frame</span></div><div class="fxp-km"><canvas aria-hidden="true"></canvas><b></b><i></i></div><span class="fxp-chip" aria-live="off"></span></div>
 <div class="fxp-bar"><button type="button" class="btn fxp-pv" aria-label="Previous photo">Previous</button><button type="button" class="btn fxp-pp" aria-pressed="false">Pause</button><button type="button" class="btn fxp-nx" aria-label="Next photo">Next</button><span class="fxp-tx fxp-ct"></span><span class="fxp-gap"></span><button type="button" class="btn fxp-sa" aria-pressed="false">Show safe area</button></div></div>`,
   desc:'Each photo carries a focal box (the face, or the subject). The planner works out the largest zoom that still contains the box at this frame’s aspect ratio, then pans and zooms between two valid framings over seven seconds, clamping every frame so the face is never cut. If the frame is too wide even at full size, it zooms out over a blurred extension of the same photo instead of cropping the head. Slides cross-fade for 1.2 s while still moving. Use when: a hero slideshow or story cover animates portraits that must survive phone, tablet and desktop crops.',
-  api:'zMax = min(1.16, cropW/boxW, cropH/boxH)   centre = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2',
+  api:'zMax = min(1.16, cropW/boxW, cropH/boxH)   center = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), safe = $(st, '.fxp-ks'), map = $(st, '.fxp-km'), mcv = $(map, 'canvas'), mcrop = $(map, 'i'), mbox = $(map, 'b'), chip = $(st, '.fxp-chip'), ct = $(st, '.fxp-ct'), s = surface(fr, cv);
     const SL = [{ n:'portrait', a:.8, box:[.33, .24, .67, .58], alt:'Portrait, window light' }, { n:'studio', a:1.5, box:[.24, .36, .76, .66], alt:'Still life, three pears' }, { n:'harbor', a:1.5, box:[.08, .5, .92, .84], alt:'Harbor, low tide' }];
@@ -733,7 +733,7 @@ atom({ id:'fxp-frost', cat:'Photo effects', name:'Frost behind captions', block:
 @container (max-width:560px){.fxp-fc{left:14px;bottom:14px;max-width:calc(100% - 28px)}.fxp-fh{font-size:22px}.fxp-fb{font-size:13px}}
 .fxp-cr{display:inline-flex;align-items:center;gap:6px}
 </style><div class="fxp-w"><div class="fxp-fr"><canvas class="fxp-cv" aria-hidden="true"></canvas><div class="fxp-fc"><span class="fxp-fk1">Harbor, low tide</span><span class="fxp-fh">The boats come in at six</span><span class="fxp-fb">Crews unload before the light goes. Photographs by Theo Marsh.</span></div></div>
-<div class="fxp-bar"><div class="seg" role="group" aria-label="Caption colour"><div class="ind"></div><button>Light text</button><button>Dark text</button></div><label class="fxp-rg">Frost <input id="fxp-frost-r" type="range" min="4" max="28" value="16"></label><label class="fxp-rg">Headline <input id="fxp-frost-cap" type="text" value="The boats come in at six" maxlength="60" style="width:180px;font:13px var(--sans);color:var(--ink);background:var(--card);border:1.5px solid var(--muted);border-radius:8px;padding:4px 8px"></label><button type="button" class="btn fxp-rp">Replay</button><span class="fxp-gap"></span><span class="fxp-tx fxp-cr" aria-live="polite"></span></div></div>`,
+<div class="fxp-bar"><div class="seg" role="group" aria-label="Caption color"><div class="ind"></div><button>Light text</button><button>Dark text</button></div><label class="fxp-rg">Frost <input id="fxp-frost-r" type="range" min="4" max="28" value="16"></label><label class="fxp-rg">Headline <input id="fxp-frost-cap" type="text" value="The boats come in at six" maxlength="60" style="width:180px;font:13px var(--sans);color:var(--ink);background:var(--card);border:1.5px solid var(--muted);border-radius:8px;padding:4px 8px"></label><button type="button" class="btn fxp-rp">Replay</button><span class="fxp-gap"></span><span class="fxp-tx fxp-cr" aria-live="polite"></span></div></div>`,
   desc:'The whole photo starts frosted, then clears in a wave that runs from the far corners toward the caption, leaving frost hugging only the actual lines of text (measured from the live DOM, so it follows wrapping and edits). The frost is blurred, grain-dithered, and toned just enough to reach 6:1 contrast under its worst patch, and the readout shows the ratio with and without it. Use when: captions or headlines sit on busy photos and must pass contrast without a heavy box or gradient.',
   api:'field = max(blur(lineRects), .4·falloff(box))   frost = smoothstep(th, th+.25, field), th = −.3 + .72·p   tone k solves contrast ≥ 6:1',
   init(st){
@@ -814,10 +814,10 @@ atom({ id:'fxp-palette', cat:'Photo effects', name:'Theme from photo', block:'si
 .fxp-cta{align-self:flex-start;border:0;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
 @container (max-width:720px){.fxp-pl{flex-direction:column;gap:10px}.fxp-pc{width:auto;flex-direction:column;gap:10px}.fxp-sw{flex-direction:row;gap:6px}.fxp-sw button{grid-template-columns:1fr;justify-items:center;padding:4px;gap:3px;flex:1;min-width:0}.fxp-sw code{display:none}.fxp-sw i{width:100%;height:22px}.fxp-pvw{padding:10px 12px;gap:6px}.fxp-pvw p{display:none}}
 </style><div class="fxp-w"><div class="fxp-pl"><div class="fxp-fr" role="img"><canvas class="fxp-cv" aria-hidden="true"></canvas><span class="fxp-chip"></span></div>
-<div class="fxp-pc"><div class="fxp-sw" role="radiogroup" aria-label="Colours in this photo"></div><div class="fxp-pvw"><b class="fxp-ph"></b><p>Guided walks every Saturday, April to October. Small groups, early starts.</p><button type="button" class="fxp-cta">Book a walk</button><span class="fxp-tx fxp-cc"></span></div></div></div>
-<div class="fxp-bar"><div class="seg" role="group" aria-label="Cover photo"><div class="ind"></div><button>Canyon</button><button>Coast</button><button>Meadow</button></div><span class="fxp-gap"></span><span class="fxp-tx">Hover a colour to find it, Enter to use it</span></div></div>`,
-  desc:'Original: the cover photo proposes the site’s accent. Five colours are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to grey), and choosing it morphs the preview button to that colour, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colours that actually belong to their imagery.',
-  api:'palette = kmeans(oklab(px), 5)   spot = mix(px, grey, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)',
+<div class="fxp-pc"><div class="fxp-sw" role="radiogroup" aria-label="Colors in this photo"></div><div class="fxp-pvw"><b class="fxp-ph"></b><p>Guided walks every Saturday, April to October. Small groups, early starts.</p><button type="button" class="fxp-cta">Book a walk</button><span class="fxp-tx fxp-cc"></span></div></div></div>
+<div class="fxp-bar"><div class="seg" role="group" aria-label="Cover photo"><div class="ind"></div><button>Canyon</button><button>Coast</button><button>Meadow</button></div><span class="fxp-gap"></span><span class="fxp-tx">Hover a color to find it, Enter to use it</span></div></div>`,
+  desc:'Original: the cover photo proposes the site’s accent. Five colors are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to gray), and choosing it morphs the preview button to that color, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colors that actually belong to their imagery.',
+  api:'palette = kmeans(oklab(px), 5)   spot = mix(px, gray, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), chip = $(st, '.fxp-chip'), swb = $(st, '.fxp-sw'), cta = $(st, '.fxp-cta'), cc = $(st, '.fxp-cc'), title = $(st, '.fxp-ph'), s = surface(fr, cv);
     const SC = [['canyon', 'Canyon trail days'], ['coast', 'Coast road walks'], ['meadow', 'High meadow mornings']], photos = SC.map(([n]) => lazyPhoto(n)), pals = [null, null, null];

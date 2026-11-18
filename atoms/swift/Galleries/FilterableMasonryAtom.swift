@@ -3,7 +3,7 @@ import Cieo
 
 public struct FilterableMasonryAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-masonry-filter", category: "Galleries", name: "Filterable masonry that reflows",
-        summary: "Choosing a subject runs three beats in order. Photos that no longer match shrink to their own centre in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own centre, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.")
+        summary: "Choosing a subject runs three beats in order. Photos that no longer match shrink to their own center in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own center, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.")
     @State private var filter = 0
     @State private var old: [Int: CGRect] = [:]
     @State private var new: [Int: CGRect] = [:]

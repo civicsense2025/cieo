@@ -18,7 +18,7 @@ A `button` with an icon and swapping label, plus a polite live region.
 
 - `shareMethod(navigator)` picks native, copy or none.
 - After copying, the label reads Link copied for 2 seconds and the live region says it.
-- Cancelling the native sheet is silent. Any other native failure falls back to copying.
+- Canceling the native sheet is silent. Any other native failure falls back to copying.
 - `onShared` runs only after a success.
 
 ## Keyboard / accessibility

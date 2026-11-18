@@ -41,7 +41,7 @@ Use the typed presentation parts listed under Host customization. Defaults still
 
 ## Related
 
-LegendItem (atom, one swatch with words), SegmentedControl (molecule, single-select pill), RadioList (molecule, labelled radio rows).
+LegendItem (atom, one swatch with words), SegmentedControl (molecule, single-select pill), RadioList (molecule, labeled radio rows).
 
 ## Evidence
 

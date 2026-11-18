@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-test('IconButton renders labelled button with size', () => {
+test('IconButton renders labeled button with size', () => {
   const src = readFileSync('src/primitives/IconButton/IconButton.tsx', 'utf8');
   assert.match(src, /<button/); assert.match(src, /aria-label=\{label\}/); assert.match(src, /data-size/);
 });

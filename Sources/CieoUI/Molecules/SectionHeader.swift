@@ -27,7 +27,7 @@ public struct SectionHeader: View {
     /// A title with any trailing view, such as a `Link` or a menu. The accessory takes the action's type
     /// (`strongBody`) and the accent unless it sets its own, and stacks under the title when space runs out.
     /// Text accessories align to the first baseline by default. Use `.center` for an icon-only control
-    /// that has no text baseline; the title and accessory then share a vertical centre in the wide row.
+    /// that has no text baseline; the title and accessory then share a vertical center in the wide row.
     public init<Accessory: View>(_ title: Text, accessoryAlignment: VerticalAlignment = .firstTextBaseline,
                                 @ViewBuilder accessory: () -> Accessory) {
         self.title = title
@@ -43,7 +43,7 @@ public struct SectionHeader: View {
     }
 
     /// A title with a quiet trailing value, such as a count ("12") or a total, in the `value` role and the
-    /// secondary colour. VoiceOver reads the title, then the value.
+    /// secondary color. VoiceOver reads the title, then the value.
     public init(_ title: Text, value: Text) {
         self.init(title) { SectionHeaderValue(value: value) }
     }

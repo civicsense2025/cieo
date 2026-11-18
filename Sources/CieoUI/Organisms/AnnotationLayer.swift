@@ -182,7 +182,7 @@ public struct AnnotationLayer<Content: View, Popover: View>: View {
             }
             if let target, let at = targetPoint, box.width > 0, box.height > 0 {
                 let anchor = CGPoint(x: at.x * box.width,
-                                     y: at.y * box.height - AnnotationPin.centreRise(diameter: pinDiameter))
+                                     y: at.y * box.height - AnnotationPin.centerRise(diameter: pinDiameter))
                 popover(target, dismiss)
                     .placed(beside: anchor, in: box, gap: pinDiameter / 2 + metrics.compact)
                     .transition(.opacity)

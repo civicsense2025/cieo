@@ -85,7 +85,7 @@ test('CharacterCountRing speaks the count once, not live, and shows the number o
   assert.match(far, /stroke-dashoffset:/);
 });
 
-test('Comment: article labelled by its byline; slots render in order; avatar is smaller from depth 1', () => {
+test('Comment: article labeled by its byline; slots render in order; avatar is smaller from depth 1', () => {
   const out = html(h(Comment, { author: 'Ava', avatar: h('i', null, 'A'), time: '2h', menu: h('button', null, 'More'), attachments: h('div', { id: 'att' }), actions: h('div', { id: 'act' }), replies: h('div', { id: 'rep' }), id: 'c1' }, 'Body text'));
   assert.match(out, /^<article[^>]*id="c1"/);
   const label = /aria-labelledby="([^"]+)"/.exec(out)[1];
@@ -219,7 +219,7 @@ const people = buildCommentTree([
 ]);
 const render = (node, ctx) => h(Comment, { author: node.name, avatar: node.name[0], depth: ctx.depth, replies: ctx.replies, id: node.id, state: ctx.hiddenCount ? 'default' : 'default' }, `text-${node.id}`);
 
-test('CommentThread: nested lists, reply cap with a reveal button, labelled branches', () => {
+test('CommentThread: nested lists, reply cap with a reveal button, labeled branches', () => {
   const out = html(h(CommentThread, { label: 'Comments', items: people, renderItem: render, branchLabel: (p) => `Replies to ${p.name}` }));
   assert.match(out, /^<section[^>]*aria-label="Comments"/);
   assert.match(out, /<ul role="list"[^>]*aria-label="Replies to Ava"/);

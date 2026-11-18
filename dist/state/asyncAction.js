@@ -2,7 +2,7 @@
 import { createMachineStore, unchanged } from './types.js';
 /** Unguessable by default: the id is often forwarded as an idempotency key, so two visitors must never share one. */
 export const defaultAttemptId = () => typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : `attempt-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
-/** A late answer to a cancelled or superseded attempt must not complete the current one. */
+/** A late answer to a canceled or superseded attempt must not complete the current one. */
 const staleAnswer = (state, attemptId) => attemptId !== undefined && attemptId !== state.attemptId;
 export function createInitialAsyncActionState(initialStatus = 'idle') {
     return { status: initialStatus, attemptId: null, attemptCount: 0 };
@@ -76,14 +76,14 @@ export function reduceAsyncAction(state, event, mintId = defaultAttemptId) {
         case 'CANCEL': {
             if (state.status !== 'pending')
                 return unchanged(state, event);
-            const next = { status: 'cancelled', attemptId: state.attemptId, attemptCount: state.attemptCount };
+            const next = { status: 'canceled', attemptId: state.attemptId, attemptCount: state.attemptCount };
             return {
                 prev: state,
                 next,
                 event,
                 changed: true,
                 direction: -1,
-                announcement: event.announcement ?? 'Cancelled.',
+                announcement: event.announcement ?? 'Canceled.',
             };
         }
         case 'RESET': {

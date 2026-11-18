@@ -16,9 +16,9 @@ final class ReorderTests: XCTestCase {
         XCTAssertFalse(d.isMoving)
     }
 
-    func testDraggingDownPastTheNextRowsCentreMovesOneAndTwoPlaces() throws {
+    func testDraggingDownPastTheNextRowsCenterMovesOneAndTwoPlaces() throws {
         var d = try drag(from: 0)
-        d.update(translation: 70) // the row's lower edge passes the second row's centre
+        d.update(translation: 70) // the row's lower edge passes the second row's center
         XCTAssertEqual(d.over, 1)
         d.update(translation: 190)
         XCTAssertEqual(d.over, 3)
@@ -27,7 +27,7 @@ final class ReorderTests: XCTestCase {
     func testDraggingUpMovesTowardsTheTop() throws {
         var d = try drag(from: 3)
         d.update(translation: -100)
-        XCTAssertEqual(d.over, 1, "the top edge is still below the first row's centre")
+        XCTAssertEqual(d.over, 1, "the top edge is still below the first row's center")
         d.update(translation: -160)
         XCTAssertEqual(d.over, 0)
     }
@@ -70,7 +70,7 @@ final class ReorderTests: XCTestCase {
     }
 
     /// Rows of different heights: a drag that puts the row over a target's place lands in that place, even
-    /// when the row stops a hair short of the target's centre.
+    /// when the row stops a hair short of the target's center.
     func testDroppingARowOnATargetLandsInTheTargetsPlace() {
         let centers: [Double] = [40, 150, 250, 340, 440, 530]
         func over(_ from: Int, _ center: Double) -> Int {

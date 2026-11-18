@@ -3,7 +3,7 @@ import Cieo
 
 public struct StatusChipAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "statuschip", category: "Admin kit", name: "Status chip",
-        summary: "One chip morphs through Draft, Scheduled, Live and Error: the background and dot colours cross-fade through weighted state colours, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.")
+        summary: "One chip morphs through Draft, Scheduled, Live and Error: the background and dot colors cross-fade through weighted state colors, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.")
 
     private let states: [(String, Color, CGFloat)] = [("Draft", .gray, 74), ("Scheduled", .orange, 108), ("Live", .green, 66), ("Error", .red, 74)]
     @Environment(\.accessibilityReduceMotion) private var reduce

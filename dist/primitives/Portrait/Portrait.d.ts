@@ -6,9 +6,9 @@ export interface PortraitProps {
     };
     src?: string;
     size?: 'small' | 'regular' | 'large';
-    /** Ring colour, such as a party colour. */
+    /** Ring color, such as a party color. */
     ring?: string;
-    /** Grayscale by blend, so the ring keeps its colour. */
+    /** Grayscale by blend, so the ring keeps its color. */
     grayscale?: boolean;
 }
 /** A quoted CSS url() value. Quotes, backslashes, parentheses and control characters are percent-encoded; JSON escaping is not CSS escaping. */

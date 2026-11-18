@@ -11,7 +11,7 @@ Digit boxes for verification codes.
 | `disabled` | boolean | `false` | Disabled state. |
 | `onComplete` | `(code: string) => void` | — | Fires once the last box fills. |
 
-Paste strips spaces and dashes, keeping digits in order. Typing advances focus; Backspace in an empty box moves back. Each box is labelled "Digit N of M".
+Paste strips spaces and dashes, keeping digits in order. Typing advances focus; Backspace in an empty box moves back. Each box is labeled "Digit N of M".
 
 Filled boxes acknowledge entry on the snap token and errors use base presence. Reduced motion and `data-motion="off"` update instantly.
 

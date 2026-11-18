@@ -3,7 +3,7 @@ import Cieo
 
 public struct FlyToStripAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-flyto", category: "Image transitions", name: "Fly-to strip",
-        summary: "The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.")
+        summary: "The view pulls back in proportion to how fast it is traveling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.")
     @State private var target = 0
     @State private var held = false
     public init() {}

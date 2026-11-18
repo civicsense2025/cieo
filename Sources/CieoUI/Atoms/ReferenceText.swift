@@ -4,7 +4,7 @@ import SwiftUI
 public typealias MonoText = ReferenceText
 
 /// A reference read as data: a section number ("Endangered Species Act §1302") or a page count ("4/18").
-/// Set in the `reference` role (monospaced by default) and the secondary colour. Never a label or heading.
+/// Set in the `reference` role (monospaced by default) and the secondary color. Never a label or heading.
 public struct ReferenceText: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography

@@ -12,7 +12,7 @@ public struct FaceSafeKenBurnsAtom: MotionAtomView {
     private let boxes: [CGRect] = [CGRect(x: 0.55, y: 0.2, width: 0.18, height: 0.3), CGRect(x: 0.2, y: 0.3, width: 0.25, height: 0.35), CGRect(x: 0.4, y: 0.15, width: 0.3, height: 0.25)]
     private let hold = 7.0, fade = 1.2
 
-    /// A framing: zoom and centre, clamped so the focal box is always inside the window.
+    /// A framing: zoom and center, clamped so the focal box is always inside the window.
     private func framing(_ box: CGRect, zoom: Double, _ toward: Double) -> (z: Double, c: CGPoint) {
         let zMax = min(1 / box.width, 1 / box.height) * 0.9          // largest zoom that still contains the box
         let z = min(zoom, zMax)

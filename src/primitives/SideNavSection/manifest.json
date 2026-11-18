@@ -28,6 +28,6 @@
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "className", "slotProps"], "states": [], "events": [], "parts": ["group"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Optionally labelled group of rail links." },
+  "documentation": { "path": "README.md", "purpose": "Optionally labeled group of rail links." },
   "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

@@ -23,7 +23,7 @@ public struct Theme {
     public var selection: Color
     /// The unfilled part of bars, rings and connectors.
     public var track: Color
-    /// A dark colour block that holds live state, such as a quiz or the selected item.
+    /// A dark color block that holds live state, such as a quiz or the selected item.
     public var block: Color
     public var onBlock: Color
     public var onBlockSecondary: Color

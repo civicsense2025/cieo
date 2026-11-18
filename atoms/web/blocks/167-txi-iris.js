@@ -258,7 +258,7 @@ function kit(st, o){
 /* ================================================================ 1. Focal iris */
 atom({ id:'txi-iris', cat:'Image transitions', name:'Focal iris', block:'gallery, hero slideshow, portfolio', fam:['M','D'], tall:true,
   html:shell('txi-iris', 'Focal iris slideshow'),
-  desc:'The next photo opens in a circle centred on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.',
+  desc:'The next photo opens in a circle centered on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.',
   api:'next.clip = circle(R·p at focus(next)); next.scale = 1.1 − .1p; prev.scale = 1 + .05·pNext about focus(next)',
   init(st){
     const items = pics('portrait', 'studio', 'harbor', 'ridge', 'city', 'coast');
@@ -319,8 +319,8 @@ atom({ id:'txi-blinds', cat:'Image transitions', name:'Blinds', block:'lookbook,
 /* ================================================================ 4. Develop (luminance dissolve, WebGL) */
 atom({ id:'txi-develop', cat:'Image transitions', name:'Develop', block:'before and after, time-lapse, story', fam:['T','S'], tall:true,
   html:shell('txi-develop', 'Develop slideshow'),
-  desc:'The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its colour after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.',
-  api:'arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; colour = mix(grey, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)',
+  desc:'The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its color after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.',
+  api:'arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; color = mix(gray, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)',
   init(st){
     const items = pics({ name:'lake', tod:1 }, 'studio', { name:'city', tod:1 }, 'forest', { name:'coast', tod:1 }, 'dunes');
     const range = cv => { const c = document.createElement('canvas'); c.width = 32; c.height = 20; const x = c.getContext('2d', { willReadFrequently:true }); x.drawImage(cv, 0, 0, 32, 20);
@@ -400,9 +400,9 @@ atom({ id:'txi-tiles', cat:'Image transitions', name:'Tile wave', block:'gallery
   }});
 
 /* ================================================================ 8. Page turn */
-atom({ id:'txi-page', cat:'Image transitions', name:'Page turn', block:'lookbook, catalogue, printed story', fam:['D','M'], wide:true, tall:true,
+atom({ id:'txi-page', cat:'Image transitions', name:'Page turn', block:'lookbook, catalog, printed story', fam:['D','M'], wide:true, tall:true,
   html:shell('txi-page', 'Page turn slideshow'),
-  desc:'The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalogue or a printed story.',
+  desc:'The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalog or a printed story.',
   api:'fold.x = W(1 − q); tilt = .1·sin πq; flap = mirror(page right of fold)·scaleX(.58) + paper wash; shadow along fold',
   init(st){
     const items = pics('studio', 'portrait', 'ridge', 'harbor', 'field', 'city'); let paper = 'var(--card)', pt = -9;
@@ -501,7 +501,7 @@ void main(){ vec2 q = Q(); vec3 c = tx(q).rgb;
 /* ================================================================ 12. Fly-to strip (zoom out with speed, own invention) */
 atom({ id:'txi-flyto', cat:'Image transitions', name:'Fly-to strip', block:'chapters, numbered steps, long galleries', fam:['M','D'], wide:true, tall:true,
   html:shell('txi-flyto', 'Fly-to strip', `<div class="txi-trk" aria-hidden="true">${'<div class="txi-pn"><img alt=""><i class="txi-sh"></i></div>'.repeat(8)}</div><div class="txi-hit"></div><div class="txi-dots" role="group" aria-label="Jump to photo"><i class="txi-dind"></i>${'<button type="button" class="txi-dot" aria-label="Jump to photo"><i></i></button>'.repeat(8)}</div>`),
-  desc:'The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.',
+  desc:'The view pulls back in proportion to how fast it is traveling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.',
   api:'pos.set(i); zoom = 1 − min(.44, .1·|d pos/dt|^.85); view = translate(center − pos·(W + gap)·zoom) scale(zoom)',
   init(st){
     const items = pics('ridge', 'lake', 'dunes', 'city', 'coast', 'forest', 'field', 'canyon'), trk = $(st,'.txi-trk'), pns = $$(st,'.txi-pn').map(el => ({ el, img:el.firstChild, sh:el.lastChild })),

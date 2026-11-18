@@ -1,6 +1,6 @@
 /* site/site.css: the Cieo site chrome and its home, pricing and contact pages.
    Built only on Cieo tokens (site/theme.css), so it restyles with the theme. Typographic and instrumental:
-   a serif display face for headlines, mono for readouts and labels, hairline rules for structure, ink for the one action.
+   the sans stack for headlines, mono for readouts and labels, hairline rules for structure, ink for the one action.
    No gradients, glass or decorative shadows. */
 :root { color-scheme: light dark; }
 body.cieo-site {

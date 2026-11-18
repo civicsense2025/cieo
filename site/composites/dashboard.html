@@ -5,188 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin dashboard · Cieo</title>
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
-<style>
-body {
-  margin: 0;
-  font-family: var(--cieo-font-sans);
-  background: var(--cieo-color-canvas);
-  color: var(--cieo-color-text);
-}
-.dash { display: flex; }
-.dash-nav {
-  width: max-content;
-  padding: var(--cieo-space-4);
-  background: var(--cieo-color-surface);
-  border-inline-end: var(--cieo-border-width) solid var(--cieo-color-border);
-}
-.dash-nav ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--cieo-space-2); }
-.dash-nav button {
-  width: 100%;
-  text-align: start;
-  font: inherit;
-  padding: var(--cieo-space-2) var(--cieo-space-3);
-  border: var(--cieo-border-width) solid transparent;
-  border-radius: var(--cieo-radius-control);
-  background: transparent;
-  color: var(--cieo-color-text);
-  cursor: pointer;
-}
-.dash-nav button[aria-current="page"] {
-  background: var(--cieo-color-accent-soft);
-  color: var(--cieo-color-accent);
-  border-color: var(--cieo-color-accent);
-}
-.dash-main { flex: 1; padding: var(--cieo-space-4); max-width: var(--cieo-container); }
-.dash-main a { color: var(--cieo-color-accent); }
-.dash-main .facts { margin-block-end: var(--cieo-space-4); }
-.dash-main .facts p { margin: 0; color: var(--cieo-color-muted); }
-.dash-main .fact-number { font-size: var(--cieo-text-title); }
-.dash-badge {
-  display: inline-block;
-  margin-inline-start: var(--cieo-space-2);
-  padding: 0 var(--cieo-space-2);
-  border-radius: var(--cieo-radius-pill);
-  border: var(--cieo-border-width) solid transparent;
-  vertical-align: middle;
-}
-.dash-badge[data-tone="success"] { background: var(--cieo-color-success-soft); color: var(--cieo-color-success); }
-.dash-badge[data-tone="warning"] { background: var(--cieo-color-warning-soft); color: var(--cieo-color-warning); }
-.dash-badge[data-tone="danger"] { background: var(--cieo-color-danger-soft); color: var(--cieo-color-danger); }
-.dash-badge[data-tone="info"] { background: var(--cieo-color-info-soft); color: var(--cieo-color-info); }
-table { width: 100%; border-collapse: collapse; background: var(--cieo-color-surface); }
-caption { text-align: start; font-weight: bold; margin-block-end: var(--cieo-space-2); }
-th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
-.dash-sort {
-  font: inherit;
-  font-weight: 700;
-  background: none;
-  border: none;
-  padding: 0;
-  color: inherit;
-  cursor: pointer;
-}
-.dash-sort:disabled { opacity: .55; cursor: default; }
-.dash-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--cieo-space-2) var(--cieo-space-3);
-  align-items: end;
-  margin-block-end: var(--cieo-space-2);
-}
-.dash-toolbar .dash-field { margin-block-end: 0; min-width: min(100%, 220px); }
-.dash-field { display: grid; gap: var(--cieo-space-1); margin-block-end: var(--cieo-space-3); }
-.dash-field input[type="text"],
-.dash-field input[type="search"],
-.dash-field input[type="email"],
-.dash-field select {
-  font: inherit;
-  color: var(--cieo-color-text);
-  background: var(--cieo-color-surface);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
-  border-radius: var(--cieo-radius-control);
-  padding: var(--cieo-space-2) var(--cieo-space-3);
-  min-height: var(--cieo-control-height);
-}
-.dash-field input[aria-invalid="true"] { border-color: var(--cieo-color-danger); }
-.dash-field input:disabled, .dash-field select:disabled { opacity: .55; }
-.dash-error { margin: 0; color: var(--cieo-color-danger); }
-.dash-form-error {
-  margin-block-end: var(--cieo-space-3);
-  padding: var(--cieo-space-3);
-  background: var(--cieo-color-danger-soft);
-  color: var(--cieo-color-danger);
-  border: var(--cieo-border-width) solid var(--cieo-color-danger);
-  border-radius: var(--cieo-radius-surface);
-}
-.dash-check { display: flex; align-items: center; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
-.dash-check input { accent-color: var(--cieo-color-accent); }
-.dash-range { display: flex; align-items: center; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
-.dash-range input { accent-color: var(--cieo-color-accent); }
-.dash-actions { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); align-items: center; }
-.dash-save {
-  font: inherit;
-  padding: var(--cieo-space-2) var(--cieo-space-4);
-  min-height: var(--cieo-control-height);
-  border: var(--cieo-border-width) solid var(--cieo-color-accent);
-  border-radius: var(--cieo-radius-control);
-  background: var(--cieo-color-accent);
-  color: var(--cieo-color-on-accent);
-  cursor: pointer;
-}
-.dash-btn {
-  font: inherit;
-  padding: var(--cieo-space-2) var(--cieo-space-3);
-  min-height: var(--cieo-control-height);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
-  border-radius: var(--cieo-radius-control);
-  background: var(--cieo-color-surface);
-  color: var(--cieo-color-text);
-  cursor: pointer;
-}
-.dash-btn:disabled { opacity: .55; cursor: default; }
-.dash-saved {
-  margin-block-start: var(--cieo-space-3);
-  padding: var(--cieo-space-3);
-  background: var(--cieo-color-success-soft);
-  color: var(--cieo-color-success);
-  border: var(--cieo-border-width) solid var(--cieo-color-success);
-  border-radius: var(--cieo-radius-surface);
-}
-.dash-status {
-  margin-block-start: var(--cieo-space-3);
-  padding: var(--cieo-space-3);
-  background: var(--cieo-color-info-soft);
-  color: var(--cieo-color-info);
-  border: var(--cieo-border-width) solid var(--cieo-color-info);
-  border-radius: var(--cieo-radius-surface);
-}
-.dash-count { color: var(--cieo-color-muted); }
-.dash-empty {
-  background: var(--cieo-color-surface);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
-  border-radius: var(--cieo-radius-surface);
-  padding: var(--cieo-space-4);
-  margin-block-end: var(--cieo-space-3);
-}
-.dash-empty h3 { margin: 0 0 var(--cieo-space-1); }
-.dash-empty p { margin: 0 0 var(--cieo-space-2); color: var(--cieo-color-muted); }
-.dash-loading p { margin: 0 0 var(--cieo-space-2); color: var(--cieo-color-muted); }
-.dash-skel { display: grid; gap: var(--cieo-space-2); margin-block-end: var(--cieo-space-3); }
-.dash-skel span {
-  display: block;
-  height: var(--cieo-space-3);
-  background: var(--cieo-color-accent-soft);
-  border-radius: var(--cieo-radius-control);
-}
-.dash-skel span:nth-child(2) { width: 82%; }
-.dash-skel span:nth-child(3) { width: 64%; }
-.dash-built { margin-block-start: var(--cieo-space-4); }
-.dash-built ul { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
-.dash-built a { color: var(--cieo-color-accent); }
-.dash-related { margin-block-start: var(--cieo-space-4); }
-.dash-related ul { display: grid; gap: var(--cieo-space-2); list-style: none; margin: var(--cieo-space-2) 0 0; padding: 0; }
-:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0s; animation-duration: 0s; }
-}
-</style>
+<link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
 <a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
-<header>
-<p><a href="./index.html">Composites</a></p>
-<h1>Admin dashboard</h1>
-<p>Track orders and adjust store settings; built only from shipped parts.</p>
+<main id="main" class="site-wrap comp-page">
+<header class="comp-head">
+<p class="site-label"><a href="./">Composites</a> / Admin dashboard</p>
+<h1 class="site-title">Admin dashboard</h1>
+<p class="site-prose">Track orders and adjust store settings; built only from shipped parts.</p>
 </header>
-<div class="dash" data-parts="AppShell SideNav SideNavItem Card Badge Table TableHeader TableBody TableRow TableCell Field FieldStatus Slider Banner EmptyState Skeleton Heading Text">
+<div class="comp-screen dash" data-parts="AppShell SideNav SideNavItem Card Badge Table TableHeader TableBody TableRow TableCell Field FieldStatus Slider Banner EmptyState Skeleton Heading Text">
 <nav class="dash-nav" aria-label="Store sections">
+<p class="site-label">Drift Goods</p>
 <ul>
-<li><button type="button" data-nav="overview" aria-current="page">Overview</button></li>
-<li><button type="button" data-nav="orders">Orders</button></li>
-<li><button type="button" data-nav="settings">Settings</button></li>
+<li><button class="cieo-button" type="button" data-nav="overview" aria-current="page">Overview</button></li>
+<li><button class="cieo-button" type="button" data-nav="orders">Orders</button></li>
+<li><button class="cieo-button" type="button" data-nav="settings">Settings</button></li>
 </ul>
 </nav>
-<main class="dash-main" id="main">
+<div class="dash-main">
 <section data-panel="overview" aria-label="Overview">
 <div class="facts">
 <div><p>Revenue</p><strong class="fact-number">$48,210</strong><span class="dash-badge" data-tone="success">+12%</span></div>
@@ -195,7 +33,7 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <div><p>Active carts</p><strong class="fact-number">312</strong><span class="dash-badge" data-tone="info">live</span></div>
 </div>
 <h2>Recent orders</h2>
-<table>
+<div class="cieo-table-wrap"><table class="cieo-table">
 <caption>Recent orders</caption>
 <thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
 <tbody>
@@ -205,28 +43,28 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <tr><td>#1038</td><td>Noah Kim</td><td>$212.00</td><td><span class="dash-badge" data-tone="warning">Pending</span></td></tr>
 <tr><td>#1037</td><td>Ava Patel</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
 </tbody>
-</table>
-<p><button class="dash-btn" type="button" data-goto="orders">See all orders</button></p>
+</table></div>
+<p><button class="cieo-button" type="button" data-goto="orders">See all orders</button></p>
 <p>New here? Preview the buyer flow in the <a href="./storefront.html">storefront</a>.</p>
 </section>
 <section data-panel="orders" aria-label="Orders" hidden>
 <h2 tabindex="-1">Orders</h2>
 <div class="dash-toolbar">
-<div class="dash-field">
+<div class="dash-field cieo-field">
 <label for="dash-search">Search orders</label>
-<input id="dash-search" type="search" data-orders-search placeholder="Order number or customer" autocomplete="off">
+<input class="cieo-input" id="dash-search" type="search" data-orders-search placeholder="Order number or customer" autocomplete="off">
 </div>
-<div class="dash-field">
+<div class="dash-field cieo-field">
 <label for="dash-status">Status</label>
-<select id="dash-status" data-orders-status>
+<select class="cieo-input" id="dash-status" data-orders-status>
 <option value="all">All statuses</option>
 <option value="Paid">Paid</option>
 <option value="Pending">Pending</option>
 <option value="Refunded">Refunded</option>
 </select>
 </div>
-<button class="dash-btn" type="button" data-orders-refresh>Refresh orders</button>
-<button class="dash-btn" type="button" data-empty-demo>Preview empty state</button>
+<button class="cieo-button" type="button" data-orders-refresh>Refresh orders</button>
+<button class="cieo-button" type="button" data-empty-demo>Preview empty state</button>
 </div>
 <p class="dash-count" role="status" data-orders-count>Showing 5 of 5 orders.</p>
 <div class="dash-loading" role="status" data-orders-loading hidden>
@@ -236,20 +74,20 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <div class="dash-empty" data-empty-results hidden>
 <h3>No matching orders</h3>
 <p>Nothing fits that search or status. Loosen the filters to see more.</p>
-<p><button class="dash-btn" type="button" data-clear-filters>Clear search and filters</button></p>
+<p><button class="cieo-button" type="button" data-clear-filters>Clear search and filters</button></p>
 </div>
 <div class="dash-empty" data-empty-orders hidden>
 <h3>No orders yet</h3>
 <p>New orders will land here. Preview the buyer flow in the <a href="./storefront.html">storefront</a>.</p>
-<p><button class="dash-btn" type="button" data-restore-orders>Restore demo orders</button></p>
+<p><button class="cieo-button" type="button" data-restore-orders>Restore demo orders</button></p>
 </div>
-<table data-orders-table>
+<div class="cieo-table-wrap"><table class="cieo-table" data-orders-table>
 <caption>Orders</caption>
 <thead><tr>
-<th scope="col" aria-sort="descending"><button type="button" class="dash-sort" data-sort="order">Order <span aria-hidden="true" data-arrow>↓</span></button></th>
-<th scope="col" aria-sort="none"><button type="button" class="dash-sort" data-sort="customer">Customer <span aria-hidden="true" data-arrow></span></button></th>
-<th scope="col" aria-sort="none"><button type="button" class="dash-sort" data-sort="total">Total <span aria-hidden="true" data-arrow></span></button></th>
-<th scope="col" aria-sort="none"><button type="button" class="dash-sort" data-sort="status">Status <span aria-hidden="true" data-arrow></span></button></th>
+<th scope="col" aria-sort="descending"><button type="button" class="cieo-button" data-variant="quiet" data-size="small" data-sort="order">Order <span aria-hidden="true" data-arrow>↓</span></button></th>
+<th scope="col" aria-sort="none"><button type="button" class="cieo-button" data-variant="quiet" data-size="small" data-sort="customer">Customer <span aria-hidden="true" data-arrow></span></button></th>
+<th scope="col" aria-sort="none"><button type="button" class="cieo-button" data-variant="quiet" data-size="small" data-sort="total">Total <span aria-hidden="true" data-arrow></span></button></th>
+<th scope="col" aria-sort="none"><button type="button" class="cieo-button" data-variant="quiet" data-size="small" data-sort="status">Status <span aria-hidden="true" data-arrow></span></button></th>
 </tr></thead>
 <tbody data-orders-body>
 <tr><td>#1041</td><td>Amara Okafor</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
@@ -258,44 +96,47 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <tr><td>#1038</td><td>Noah Kim</td><td>$212.00</td><td><span class="dash-badge" data-tone="warning">Pending</span></td></tr>
 <tr><td>#1037</td><td>Ava Patel</td><td>$148.00</td><td><span class="dash-badge" data-tone="success">Paid</span></td></tr>
 </tbody>
-</table>
+</table></div>
 <p>Visits tied to an order are scheduled in the <a href="./booking.html">booking flow</a>.</p>
 </section>
 <section data-panel="settings" aria-label="Settings" hidden>
 <h2>Settings</h2>
 <form data-settings-form novalidate>
 <div class="dash-form-error" role="alert" data-settings-error hidden>Fix the highlighted fields, then save again.</div>
-<div class="dash-field">
+<div class="dash-field cieo-field">
 <label for="dash-store">Store name</label>
-<input id="dash-store" type="text" data-setting="store" value="Drift Goods" maxlength="40" aria-describedby="dash-store-error">
-<p class="dash-error" id="dash-store-error" data-error="store" hidden>Give the store a name of at least 2 characters.</p>
+<input class="cieo-input" id="dash-store" type="text" data-setting="store" value="Drift Goods" maxlength="40" aria-describedby="dash-store-error">
+<p class="dash-error cieo-p-field-status" id="dash-store-error" data-error="store" hidden>Give the store a name of at least 2 characters.</p>
 </div>
-<div class="dash-field">
+<div class="dash-field cieo-field">
 <label for="dash-contact">Support reply-to (optional)</label>
-<input id="dash-contact" type="email" data-setting="contact" value="" placeholder="help@example.com" autocomplete="email" aria-describedby="dash-contact-error">
-<p class="dash-error" id="dash-contact-error" data-error="contact" hidden>That reply-to needs an @ sign, or leave it blank.</p>
+<input class="cieo-input" id="dash-contact" type="email" data-setting="contact" value="" placeholder="help@example.com" autocomplete="email" aria-describedby="dash-contact-error">
+<p class="dash-error cieo-p-field-status" id="dash-contact-error" data-error="contact" hidden>That reply-to needs an @ sign, or leave it blank.</p>
 </div>
-<div class="dash-check">
-<input id="dash-notify" type="checkbox" role="switch" data-setting="notify" checked>
+<div class="dash-check cieo-check">
+<input class="cieo-choice" id="dash-notify" type="checkbox" role="switch" data-setting="notify" checked>
 <label for="dash-notify">Email notifications</label>
 </div>
-<div class="dash-field">
+<div class="dash-field cieo-field">
 <label for="dash-threshold">Low-stock threshold</label>
 <div class="dash-range">
-<input id="dash-threshold" type="range" min="0" max="50" value="12" data-setting="threshold" aria-describedby="dash-threshold-error">
+<input class="cieo-choice" id="dash-threshold" type="range" min="0" max="50" value="12" data-setting="threshold" aria-describedby="dash-threshold-error">
 <output data-readout for="dash-threshold">12 units</output>
 </div>
-<p class="dash-error" id="dash-threshold-error" data-error="threshold" hidden>Pick a threshold between 0 and 50.</p>
+<p class="dash-error cieo-p-field-status" id="dash-threshold-error" data-error="threshold" hidden>Pick a threshold between 0 and 50.</p>
 </div>
 <div class="dash-actions">
-<button class="dash-save" type="submit" data-save>Save settings</button>
-<button class="dash-btn" type="button" data-discard>Discard changes</button>
+<button class="cieo-button" data-variant="primary" type="submit" data-save>Save settings</button>
+<button class="cieo-button" type="button" data-discard>Discard changes</button>
 </div>
 </form>
 <div class="dash-saved" role="status" data-saved hidden>Settings saved.</div>
 <p class="dash-status" role="status" data-settings-status hidden></p>
 <p>Not sure about a threshold? Talk it through in the <a href="./chat.html">chat demo</a>.</p>
 </section>
+</div>
+</div>
+<div class="comp-notes">
 <section aria-label="Behavior">
 <h2>Behavior</h2>
 <ul>
@@ -308,7 +149,7 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <li>Escape clears the order search. Enter inside a settings field saves.</li>
 </ul>
 </section>
-<section class="dash-related" aria-label="Related flows">
+<section aria-label="Related flows">
 <h2>Related flows</h2>
 <ul>
 <li><a href="./storefront.html">Storefront</a> — the buyer side that creates the orders listed here.</li>
@@ -316,32 +157,34 @@ th, td { text-align: start; padding: var(--cieo-space-2) var(--cieo-space-3); bo
 <li><a href="./booking.html">Booking</a> — schedule the visits tied to these orders.</li>
 </ul>
 </section>
-<section class="dash-built" data-built-from aria-label="Built from">
-<h2>Built from</h2>
-<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
-<ul>
-<li><a href="../components/AppShell.html">AppShell</a></li>
-<li><a href="../components/SideNav.html">SideNav</a></li>
-<li><a href="../components/SideNavItem.html">SideNavItem</a></li>
-<li><a href="../components/Card.html">Card</a></li>
-<li><a href="../components/Badge.html">Badge</a></li>
-<li><a href="../components/Table.html">Table</a></li>
-<li><a href="../components/TableHeader.html">TableHeader</a></li>
-<li><a href="../components/TableBody.html">TableBody</a></li>
-<li><a href="../components/TableRow.html">TableRow</a></li>
-<li><a href="../components/TableCell.html">TableCell</a></li>
-<li><a href="../components/Field.html">Field</a></li>
-<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
-<li><a href="../components/Slider.html">Slider</a></li>
-<li><a href="../components/Banner.html">Banner</a></li>
-<li><a href="../components/EmptyState.html">EmptyState</a></li>
-<li><a href="../components/Skeleton.html">Skeleton</a></li>
-<li><a href="../components/Heading.html">Heading</a></li>
-<li><a href="../components/Text.html">Text</a></li>
+</div>
+<section data-built-from aria-labelledby="built-from-h">
+<h2 id="built-from-h">Built from</h2>
+<p data-reuse>20 library components make up this screen. Each card is the component itself; open one to see its usage and props. Recompose from the parts, never paste this page.</p>
+<ul class="comp-parts">
+<li class="comp-part"><a class="comp-part-link" href="../components/AppShell.html"><span class="comp-part-name">AppShell</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-app-shell"><div class="cieo-app-shell-nav"><div aria-label="App" data-was="nav"><a data-anchor="#bills">Bills</a> <a data-anchor="#votes">Votes</a></div></div><div class="cieo-app-shell-main"><p>Bill tracker page</p></div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/SideNav.html"><span class="comp-part-name">SideNav</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div aria-label="Docs sections" data-collapsed="false" class="cieo cieo-side-nav" data-was="nav"><h2 class="cieo cieo-side-nav-heading">Guide</h2><a data-anchor="#intro" class="cieo cieo-side-nav-item">Introduction</a><a data-anchor="#setup" aria-current="page" class="cieo cieo-side-nav-item">Setup</a><a data-anchor="#api" class="cieo cieo-side-nav-item">API</a></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/SideNavItem.html"><span class="comp-part-name">SideNavItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><a class="cieo cieo-side-nav-item">Side Nav Item</a></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Card.html"><span class="comp-part-name">Card</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-card"><h2>Billing summary</h2><p>$12.00 due May 1 for the Monthly plan.</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Badge.html"><span class="comp-part-name">Badge</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span data-status="default" class="cieo cieo-badge">Badge</span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Table.html"><span class="comp-part-name">Table</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><table aria-label="Registered voters" class="cieo cieo-table"><thead class="cieo cieo-table-header"><tr data-selected="false" aria-selected="false" class="cieo cieo-table-row"><th scope="col" aria-sort="ascending" data-sort="asc" class="cieo cieo-table-header-cell"><button type="button" aria-label="Sort by Name">Name</button></th><th scope="col" class="cieo cieo-table-header-cell">Status</th><th scope="col" class="cieo cieo-table-header-cell">Ward</th></tr></thead><tbody class="cieo cieo-table-body"><tr data-selected="false" aria-selected="false" class="cieo cieo-table-row"><td class="cieo cieo-table-cell">Ava Reyes</td><td class="cieo cieo-table-cell">Active</td><td class="cieo cieo-table-cell">4</td></tr><tr data-selected="true" aria-selected="true" class="cieo cieo-table-row"><td class="cieo cieo-table-cell">Ben Ito</td><td class="cieo cieo-table-cell">Pending</td><td class="cieo cieo-table-cell">2</td></tr><tr data-selected="false" aria-selected="false" class="cieo cieo-table-row"><td class="cieo cieo-table-cell">Cy Moss</td><td class="cieo cieo-table-cell">Active</td><td class="cieo cieo-table-cell">7</td></tr></tbody></table></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/TableHeader.html"><span class="comp-part-name">TableHeader</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><thead class="cieo cieo-table-header">Table Header</thead></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/TableBody.html"><span class="comp-part-name">TableBody</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><tbody class="cieo cieo-table-body">Table Body</tbody></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/TableRow.html"><span class="comp-part-name">TableRow</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><table><tbody><tr data-selected="false" aria-selected="false" class="cieo cieo-table-row">Table Row</tr></tbody></table></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/TableCell.html"><span class="comp-part-name">TableCell</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><table><tbody><tr><td class="cieo cieo-table-cell">Table Cell</td></tr></tbody></table></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Field.html"><span class="comp-part-name">Field</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-field"><label for="cp-Field-email">Email</label><input id="cp-Field-email" type="email" class="cieo-ctl cieo-input"/><p id="cp-Field-email-help" class="cieo-p-help">Use your work email</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/FieldStatus.html"><span class="comp-part-name">FieldStatus</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><p class="cieo cieo-p-field-status" data-tone="description">Field Status</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Slider.html"><span class="comp-part-name">Slider</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><div class="cieo-ctl cieo-range" style="--cieo-range-p:50.000"><div class="cieo-range-head"><label for="cp-Slider-_R_0_r" class="cieo-label"></label></div><input id="cp-Slider-_R_0_r" type="range" class="cieo-range-input"/></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Banner.html"><span class="comp-part-name">Banner</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="status" data-tone="info" class="cieo cieo-p-banner"><div class="cieo-p-banner-body">Banner</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/EmptyState.html"><span class="comp-part-name">EmptyState</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-empty-state"><h2 class="cieo-p-empty-state-title">Empty State</h2><div class="cieo-p-empty-state-action">Empty State</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Skeleton.html"><span class="comp-part-name">Skeleton</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span class="cieo cieo-p-skeleton"><span aria-hidden="true" class="cieo-p-skeleton-lines"><span class="cieo-p-skeleton-line"></span><span class="cieo-p-skeleton-line"></span><span class="cieo-p-skeleton-line"></span></span><span class="cieo-p-skeleton-label">Loading</span></span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Heading.html"><span class="comp-part-name">Heading</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><h2 data-level="2" class="cieo cieo-p-heading">Heading</h2></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Text.html"><span class="comp-part-name">Text</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><p data-size="default" class="cieo cieo-p-text">Text</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Button.html"><span class="comp-part-name">Button</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md"><span class="cieo-btn-text">Button</span></button></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/CheckboxList.html"><span class="comp-part-name">CheckboxList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="group" aria-label="Notification channels" class="cieo cieo-p-checkbox-list"><label class="cieo-ctl cieo-toggle cieo-check"><span class="cieo-toggle-hit"><input type="checkbox" class="cieo-toggle-input"/><span class="cieo-check-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path class="cieo-check-tick" d="M5 12.5 10 17.5 19 7" pathLength="1"></path><path class="cieo-check-dash" d="M6 12h12" pathLength="1"></path></svg></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Email</span></span></label><label class="cieo-ctl cieo-toggle cieo-check"><span class="cieo-toggle-hit"><input type="checkbox" class="cieo-toggle-input"/><span class="cieo-check-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path class="cieo-check-tick" d="M5 12.5 10 17.5 19 7" pathLength="1"></path><path class="cieo-check-dash" d="M6 12h12" pathLength="1"></path></svg></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">SMS</span></span></label><label class="cieo-ctl cieo-toggle cieo-check"><span class="cieo-toggle-hit"><input type="checkbox" class="cieo-toggle-input"/><span class="cieo-check-box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path class="cieo-check-tick" d="M5 12.5 10 17.5 19 7" pathLength="1"></path><path class="cieo-check-dash" d="M6 12h12" pathLength="1"></path></svg></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Push</span></span></label></div></div></li>
 </ul>
 </section>
 </main>
-</div>
 <footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer><script type="module" src="../search.js" data-site-up="../"></script>
 <script src="./dashboard.js" defer></script>
 </body>

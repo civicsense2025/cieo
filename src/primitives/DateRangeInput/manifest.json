@@ -28,6 +28,6 @@
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "className", "slotProps"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Labelled start/end date pair." },
+  "documentation": { "path": "README.md", "purpose": "Labeled start/end date pair." },
   "extensions": { "styleDependency": "design/styles/controls.css", "customization": {"parts":["root","startField","startLabel","startInput","endField","endLabel","endInput"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"} }
 }

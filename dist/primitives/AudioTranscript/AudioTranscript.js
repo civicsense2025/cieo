@@ -45,7 +45,7 @@ export const TRANSCRIPT_QUIET_MS = 4000;
 export function shouldAutoScroll(now, lastUserScroll, quietMs = TRANSCRIPT_QUIET_MS) {
     return lastUserScroll === null || now - lastUserScroll >= quietMs;
 }
-/** New scrollTop that brings a word into view (centred), or null when it is already fully visible. */
+/** New scrollTop that brings a word into view (centered), or null when it is already fully visible. */
 export function transcriptScrollTop(wordTop, wordHeight, viewHeight, scrollTop) {
     if (wordTop >= scrollTop && wordTop + wordHeight <= scrollTop + viewHeight)
         return null;

@@ -20,7 +20,7 @@ atom({ id:'colorpicker', cat:'Design tools', name:'Color picker', block:'section
     fbtns.forEach((b,i) => b.onclick = () => selfmt(i)); requestAnimationFrame(() => selfmt(0, true)); document.fonts && document.fonts.ready.then(() => selfmt(fmt, true));
     ok.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>Copied';
     cp.onclick = async () => { const h = ((H.target % 360) + 360) % 360, s = clamp(Sa.target), v = clamp(V.target), val = fmt ? rgb(h, s, v) : hex(h, s, v).toUpperCase();
-      try { await navigator.clipboard.writeText(val);csw.to('ok');cok.set(1);back=now()+1.6; } catch { window.CieoCatalogue?.announce(`Copy color: ${val}`); } };
+      try { await navigator.clipboard.writeText(val);csw.to('ok');cok.set(1);back=now()+1.6; } catch { window.CieoCatalog?.announce(`Copy color: ${val}`); } };
     return t => { if (back && t >= back){ back = 0; csw.to('hex'); cok.set(0); }
       const h = H.at(t), s = clamp(Sa.at(t)), v = clamp(V.at(t)), hn = ((h % 360) + 360) % 360, c = hex(hn, s, v);
       sv.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; k1.style.left = (s*100).toFixed(2) + '%'; k1.style.top = ((1 - v)*100).toFixed(2) + '%'; k1.style.background = c; k2.style.left = (clamp(h/360)*100).toFixed(2) + '%'; k2.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; sw.style.background = c;

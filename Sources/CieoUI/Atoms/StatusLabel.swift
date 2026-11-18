@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// A glyph and a short line of text in one tone, for an error under a field or a notice's heading.
-/// The glyph is decorative; the text carries the meaning. It sits centred on the first line of text and
+/// The glyph is decorative; the text carries the meaning. It sits centered on the first line of text and
 /// takes its size from the label's font, so it follows the text role and Dynamic Type.
 public struct StatusLabel: View {
     public enum Tone: Sendable, CaseIterable { case neutral, accent, danger }

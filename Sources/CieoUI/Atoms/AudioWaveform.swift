@@ -16,7 +16,7 @@ public struct AudioWaveform: View {
 
     /// `peaks` can be any length and scale; empty draws a row of ticks. `bars` fixes the bar count up to
     /// `maximumBarCount`, otherwise as many bars as fit the width are drawn. Without `onSeek` the waveform
-    /// is a labelled picture. `label` names what it is ("Voice note from Ana").
+    /// is a labeled picture. `label` names what it is ("Voice note from Ana").
     public init(peaks: [Double], duration: TimeInterval, current: TimeInterval, label: String,
                 bars: Int? = nil, onSeek: ((TimeInterval) -> Void)? = nil) {
         self.peaks = peaks
@@ -151,7 +151,7 @@ public struct AudioWaveform: View {
     static func finite(_ n: Double) -> Double { n.isFinite ? n : 0 }
 }
 
-/// Seek accessibility and keyboard handling for a scrubber; a labelled picture when there is no seeking.
+/// Seek accessibility and keyboard handling for a scrubber; a labeled picture when there is no seeking.
 struct SeekSemantics: ViewModifier {
     let onSeek: ((TimeInterval) -> Void)?
     let current: TimeInterval

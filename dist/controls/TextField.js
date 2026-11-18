@@ -1,6 +1,6 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
-/* TextField: a native <input> in the field frame. Without JavaScript it is a labelled input that submits normally. */
+/* TextField: a native <input> in the field frame. Without JavaScript it is a labeled input that submits normally. */
 import { forwardRef } from 'react';
 import { FieldFrame, useField } from './Field.js';
 import { customizeControlPart } from './parts.js';

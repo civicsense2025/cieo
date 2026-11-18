@@ -132,7 +132,7 @@ atom({ id:'txs-hgallery', cat:CAT, name:'Pinned horizontal gallery', block:'gall
 <div class="txs2-tr">${HG.map((n, i) => `<figure class="txs2-cd"><div class="txs2-ph"><canvas role="img" aria-label="Photograph: ${CAP(n)}"></canvas></div><figcaption><b>${CAP(n)}</b><span class="num">0${i + 1}</span></figcaption></figure>`).join('')}</div>
 <div class="txs2-bar" aria-hidden="true"><i></i></div></div></section>
 <div class="txs-body"><span class="txs-k">After the row</span><h4>Vertical scroll in, sideways travel out</h4><p>The wheel and the keyboard still scroll down. The row is pinned while it has distance left to cover, one pixel across for every pixel down, then the page lets go and carries on.</p><p>Inside each frame the photo drifts against the travel, so near frames feel closer than the row behind them.</p></div>`),
-  desc:'Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the centre. Reduced motion keeps the 1:1 travel and drops the inner drift.',
+  desc:'Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the center. Reduced motion keeps the 1:1 travel and drops the inner drift.',
   api:'x = −p·(trackW − W)   img[i].x = −(cx[i] − W/2)/W·.18·cardW   bar.scaleX = p   section.h = H + travel',
   init(st){
     const sec = $(st,'.txs2-sec'), hd = $(st,'.txs2-hd'), tr = $(st,'.txs2-tr'), cards = $$(st,'.txs2-cd'), phs = $$(st,'.txs2-ph'), cvs = $$(st,'.txs2-ph canvas'), bar = $(st,'.txs2-bar i');
@@ -159,7 +159,7 @@ atom({ id:'txs-hgallery', cat:CAT, name:'Pinned horizontal gallery', block:'gall
 const STK = [
   { n:'field', k:'01 · Ingest', h:'Copy the card before you look at it', b:'Two copies, two drives, then format. Nothing gets culled on the camera, where the screen lies about focus.' },
   { n:'portrait', k:'02 · Cull', h:'One pass for focus, one for feeling', b:'The first pass removes what is soft. The second keeps what you would hang. Most shoots end with eleven frames out of four hundred.' },
-  { n:'studio', k:'03 · Grade', h:'Fix the light, then stop', b:'White balance from the grey card, exposure from the highlights, and a single curve. Anything more starts to show.' },
+  { n:'studio', k:'03 · Grade', h:'Fix the light, then stop', b:'White balance from the gray card, exposure from the highlights, and a single curve. Anything more starts to show.' },
   { n:'lake', k:'04 · Print', h:'The print is the final edit', b:'A 40 by 50 centimetre proof on matte paper shows what the screen hid: the shadows were two stops too heavy.' }];
 atom({ id:'txs-stackcards', cat:CAT, name:'Stacking cards', block:'feature-cards, process-steps', fam:['M','T'], wide:true, tall:true,
   html: frame('Story: from card to print', `<style>
@@ -273,7 +273,7 @@ atom({ id:'txs-chapters', cat:CAT, name:'Chapter scrollytelling', block:'scrolly
 </style><div class="txs5-w"><div class="txs5-fg"><div class="txs5-im">${CH.map(c => `<canvas role="img" aria-label="Photograph: ${CAP(c.n)}"></canvas>`).join('')}<div class="txs5-dt" aria-hidden="true">${CH.map(() => '<i></i>').join('')}</div></div><div class="txs5-cp">${CH.map(c => `<span class="layer">${CAP(c.n)}</span>`).join('')}</div></div>
 <div class="txs5-st">${CH.map(c => `<section class="txs5-s"><div><span class="txs-k">${c.k}</span><h4>${c.h}</h4><p>${c.b}</p></div></section>`).join('')}</div></div>
 <div class="txs-body"><span class="txs-k">End of the day</span><h4>Four places, one roll</h4><p>The photo changes in the gap between two chapters, never while you are reading one. Scroll back and the earlier light slides back down.</p></div><p class="txs-sr" aria-live="polite"></p>`),
-  desc:'Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centred, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.',
+  desc:'Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centered, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.',
   api:'f = i + (focus − c[i])/(c[i+1] − c[i])   q = ease((frac(f) − .3)/.4)   next.clip = inset((1−q)·80% 0 0 0)   next.y = (1−q)·20%   prev.y = −q·18%',
   init(st){
     const w = $(st,'.txs5-w'), im = $(st,'.txs5-im'), cvs = $$(st,'.txs5-im canvas'), dots = $$(st,'.txs5-dt i'), caps = $$(st,'.txs5-cp .layer'), steps = $$(st,'.txs5-s'), live = $(st,'.txs-sr');
@@ -302,7 +302,7 @@ atom({ id:'txs-chapters', cat:CAT, name:'Chapter scrollytelling', block:'scrolly
 
 /* ================================================================ 6. Parallax depth planes */
 // split one PhotoKit scene into planes. Each ridge is a flat fill plus grain: per column we walk up
-// from the bottom through flat runs (no drift), cluster their colours across the image, then classify
+// from the bottom through flat runs (no drift), cluster their colors across the image, then classify
 // every pixel bottom-up, only ever stepping to a farther tone, and stop at the sky.
 function splitPlanes(src){
   const W = src.width, H = src.height, d = src.getContext('2d').getImageData(0, 0, W, H).data, cls = new Int8Array(W*H).fill(-1);
@@ -325,7 +325,7 @@ function splitPlanes(src){
     sky[x] = y + 1; }
   const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; };
   const skyC = mk(), sx = skyC.getContext('2d'), sd = sx.createImageData(W, H);
-  // behind the ridges the sky continues: each column's colour just above its ridge, plus seeded grain
+  // behind the ridges the sky continues: each column's color just above its ridge, plus seeded grain
   const fill = []; for (let x = 0; x < W; x++){ const y0 = Math.max(0, sky[x] - 7); fill.push(avg(x, y0, Math.max(0, y0 - 8))); }
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){ const o = (y*W + x)*4;
     if (y < sky[x] - 7){ sd.data[o] = d[o]; sd.data[o + 1] = d[o + 1]; sd.data[o + 2] = d[o + 2]; }
@@ -471,7 +471,7 @@ const RC = [
   { n:'meadow', h:'Light', b:['Side light shows texture; back light shows shape. Front light shows neither, which is why noon is hard.', 'Expose for the brightest thing you care about and let the rest fall where it falls.'] },
   { n:'field', h:'Foreground', b:['A near subject gives the eye a step into the frame. Grass, a rock or a fence post is enough.', 'Stop down to f/11 and focus a third of the way in, so the step and the distance are both sharp.'] },
   { n:'harbor', h:'Weather', b:['The best skies are the ones forecasts call bad: clearing storms, low cloud, haze after rain.', 'Stay twenty minutes after you think the light is gone. It usually comes back once, briefly.'] },
-  { n:'canyon', h:'Print', b:['A print shows what a screen forgives. Shadows block up and colour shifts warm under room light.', 'Proof small, look at it in daylight for a day, then print it large.'] }];
+  { n:'canyon', h:'Print', b:['A print shows what a screen forgives. Shadows block up and color shifts warm under room light.', 'Proof small, look at it in daylight for a day, then print it large.'] }];
 atom({ id:'txs-chapterrail', cat:CAT, name:'Chapter rail with gentle snap', block:'article, table-of-contents, reading-progress', fam:['E','T'], wide:true, tall:true,
   html: frame('Guide: reading a landscape photograph', `<style>
 .txs9-ar{padding:24px 24px 60px 214px;max-width:820px}

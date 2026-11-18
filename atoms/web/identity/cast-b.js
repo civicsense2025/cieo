@@ -26,7 +26,7 @@ const once = (s, k, c, fn) => { if (c && !s.once[k]){ s.once[k] = 1; fn(); } };
 const wp = (ch, x, y) => [ch.x + x*ch.u, ch.y + y*ch.u];
 const lookP = (ch, x, y, d) => { const p = wp(ch, x, y); ch.look(p[0], p[1], d); };
 
-/* ---------- path helpers, all in body units (origin bottom centre, y up is negative) ---------- */
+/* ---------- path helpers, all in body units (origin bottom center, y up is negative) ---------- */
 const pt = (x, y) => n2(x) + ' ' + n2(y);
 const poly = (ps, z) => 'M' + ps.map(p => pt(p[0], p[1])).join('L') + (z ? 'Z' : '');
 const tf = (ox, oy, a = 0, k = 1) => { const c = Math.cos(a)*k, s = Math.sin(a)*k; return (x, y) => [ox + x*c - y*s, oy + x*s + y*c]; };
@@ -179,7 +179,7 @@ const ROLES = [
 { k:'designer', name:'Designer', grp:'people', expr:'happy', act:'delighted', ad:3.3, ip:6.4, side:-1, ext:[-30, 46], bb:[-36, -84, 47, 3],
   mean:'Drafts layouts and tunes spacing and type.', prop:'holding a pointer cursor',
   persona:'Cheerful, and fussy about two pixels.',
-  sig:'Draws a square in the air with its cursor, fills it with colour and clicks.',
+  sig:'Draws a square in the air with its cursor, fills it with color and clicks.',
   parts:[['fill', 'w'], ['trail', 's'], ['arm', 's'], ['cur', 'pk', .9]],
   init:() => ({ x:V(33.5), y:V(-44), tr:[], tro:V(0), fo:V(0), ck:V(1), d0:null, sq:null }),
   idle(s, ch, t){ s.sq = [31, -66, 10]; s.d0 = t + .35; s.tr = []; s.tro = V(1); },

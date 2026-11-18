@@ -77,8 +77,8 @@ final class PressAndHoldStatusChipTests: XCTestCase {
         for tone in StatusChip.Tone.allCases where tone != .active {
             XCTAssertEqual(StatusChip.fill(tone, in: theme), theme.surface, "\(tone)")
         }
-        let colours = StatusChip.Tone.allCases.map { StatusChip.foreground($0, in: theme) }
-        XCTAssertEqual(Set(colours.map { "\($0)" }).count, colours.count, "no two tones share a colour")
+        let colors = StatusChip.Tone.allCases.map { StatusChip.foreground($0, in: theme) }
+        XCTAssertEqual(Set(colors.map { "\($0)" }).count, colors.count, "no two tones share a color")
     }
 
     @MainActor
@@ -117,12 +117,12 @@ final class PressAndHoldStatusChipTests: XCTestCase {
     }
 
     @MainActor
-    func testChipColoursComeFromTheHostTheme() throws {
+    func testChipColorsComeFromTheHostTheme() throws {
         let red = Color(red: 1, green: 0, blue: 0)
         for tone in StatusChip.Tone.allCases {
             let theme = Theme(accent: red, surface: red, foreground: red, tint: red, danger: red, success: red, warning: red)
             let chip = StatusChip("Open", tone: tone).fixedSize().environment(\.componentTheme, theme)
-            XCTAssertTrue(ComponentIconTests.containsRed(try image(chip)), "\(tone) draws with the host's colour")
+            XCTAssertTrue(ComponentIconTests.containsRed(try image(chip)), "\(tone) draws with the host's color")
         }
     }
 

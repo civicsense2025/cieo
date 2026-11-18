@@ -17,7 +17,7 @@
   main().catch(error=>{
     const node=document.getElementById('library-loading');node.replaceChildren();
     const p=document.createElement('p');p.textContent=error.message;node.append(p);
-    const hint=document.createElement('p');hint.textContent='Open this file inside the repository, or build the standalone catalogue.';node.append(hint);
+    const hint=document.createElement('p');hint.textContent='Open this file inside the repository, or build the standalone catalog.';node.append(hint);
     console.error(error);
   });
 })();

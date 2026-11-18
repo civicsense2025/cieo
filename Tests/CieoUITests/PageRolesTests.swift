@@ -63,7 +63,7 @@ final class PageRolesTests: XCTestCase {
                 .environment(\.componentTheme, Theme(floatingShadow: shadow))
         }
         let cast = try XCTUnwrap(ImageRenderer(content: sheet(ComponentShadow(color: red, radius: 6, y: 8))).cgImage)
-        XCTAssertTrue(ComponentIconTests.containsRed(cast), "the floating shadow takes the host colour")
+        XCTAssertTrue(ComponentIconTests.containsRed(cast), "the floating shadow takes the host color")
         let flat = try XCTUnwrap(ImageRenderer(content: sheet(.none)).cgImage)
         XCTAssertFalse(ComponentIconTests.containsRed(flat))
     }

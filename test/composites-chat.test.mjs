@@ -16,7 +16,7 @@ test('chat uses shipped parts, linked built-from, guarded sends', () => {
   const parts = [...html.matchAll(/data-parts="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
   assert.ok(parts.length > 8, 'data-parts missing');
   for (const p of parts) assert.ok(names.includes(p), `unshipped part: ${p}`);
-  assert.ok(html.includes('<section data-built-from>'));
+  assert.ok(/<section data-built-from[ >]/.test(html));
   for (const p of parts) assert.ok(html.includes(`../components/${p}.html`), `built-from missing link: ${p}`);
   const js = readFileSync('site/composites/chat.js', 'utf8');
   for (const s of ['data-input', 'data-send', 'aria-disabled', 'scrollHeight', '400']) {

@@ -81,11 +81,11 @@ atom({ id:'agentmarks', cat:'Agent identity', name:'Agent mark concepts', block:
 .amk-tag{font-size:11px;padding:1px 6px;border-radius:5px;border:1px solid var(--line);color:var(--muted)}
 @container (max-width:900px){.amk-grid{grid-template-columns:repeat(3,minmax(0,1fr));overflow-y:auto}.amk-why{display:none}}
 @container (max-width:560px){.amk-grid{grid-template-columns:minmax(0,1fr);gap:6px}.amk-c{flex-direction:row;align-items:center;gap:12px;padding:8px 10px}.amk-big svg{width:48px;height:48px}.amk-mid{display:flex;flex-direction:column;gap:6px;min-width:0}.amk-top p{display:none}.amk-ctx{gap:8px 12px}.amk-ctx .amk-by{display:none}}
-</style><div class="amk-root"><div class="amk-top"><p>Five directions drawn from the Arc brand package. Agents are square and people are round, so who did what never rests on colour.</p>
+</style><div class="amk-root"><div class="amk-top"><p>Five directions drawn from the Arc brand package. Agents are square and people are round, so who did what never rests on color.</p>
 <div class="amk-sg" role="group" aria-label="Motion"><button type="button" aria-pressed="true" data-w="0">At rest</button><button type="button" aria-pressed="false" data-w="1">Working</button></div></div>
 <div class="amk-grid"></div>
 <div class="amk-ctx" aria-label="Selected mark in context"><span><span class="amk-pe">MR</span>Maya</span><span class="amk-chip" data-x="chip"></span><span data-x="pin"></span><span class="amk-by" data-x="by"></span></div></div>`,
-  desc:'Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.',
+  desc:'Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text color. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.',
   api:'mark(concept, size, brand)   working.set(0 | 1)   draw({ t, w, th })   ctx.render(selected)',
   init(st){
     const grid = $(st,'.amk-grid'), W = new Track(0), marks = []; let sel = 0, th = 0, lt = null;

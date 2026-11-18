@@ -26,7 +26,7 @@ A `role="img"` root named by `label`, holding `bars` hidden bar elements. Height
 
 ## Keyboard / accessibility
 
-The root is a labelled image. The level is deliberately not announced as a changing value, because a value that changes 20 times a second is noise to a screen reader.
+The root is a labeled image. The level is deliberately not announced as a changing value, because a value that changes 20 times a second is noise to a screen reader.
 
 ## Do / don't
 

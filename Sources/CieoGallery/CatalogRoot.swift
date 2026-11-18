@@ -163,7 +163,7 @@ public enum CatalogCommandIndex {
 
     private static func keywords(for section: AdaptiveCatalogSection) -> [String] {
         switch section {
-        case .overview: ["home", "summary", "catalogue"]
+        case .overview: ["home", "summary", "catalog"]
         case .themeStudio: ["wcag", "contrast", "brand", "ground", "palette", "studio"]
         case .atoms: ["button", "chip", "ring", "status", "atom"]
         case .molecules: ["field", "notice", "tabs", "search", "molecule"]

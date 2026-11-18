@@ -3,7 +3,7 @@ import Cieo
 
 public struct ChapterScrollytellingAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-chapters", category: "Scroll stories", name: "Chapter scrollytelling",
-        summary: "Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centred, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.")
+        summary: "Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centered, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.")
     public init() {}
     private let steps = [("Arrive", "The path starts low."), ("Climb", "Switchbacks open the view."), ("Ridge", "The whole valley, at once.")]
 

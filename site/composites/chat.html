@@ -5,49 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chat workspace · Cieo</title>
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
-<style>
-.cieo-chat-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans)}
-.cieo-chat-panes{display:grid;gap:var(--cieo-space-4)}
-.cieo-chat-list{overflow-y:auto;max-block-size:70vh;scroll-behavior:smooth}
-.cieo-chat-composer-row{display:flex;gap:var(--cieo-space-2)}
-.cieo-chat-fade{transition:opacity var(--motion-duration-base) var(--motion-ease-spring)}
-.cieo-chat-threads ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--cieo-space-2)}
-.cieo-chat-threads button{width:100%;text-align:start;font:inherit;color:var(--cieo-color-text);background:transparent;border:var(--cieo-border-width) solid transparent;border-radius:var(--cieo-radius-control);padding:var(--cieo-space-2) var(--cieo-space-3);cursor:pointer}
-.cieo-chat-threads button[aria-current="true"]{background:var(--cieo-color-accent-soft);color:var(--cieo-color-accent);border-color:var(--cieo-color-accent)}
-.cieo-chat-threads button span{display:block}
-.cieo-chat-thread-sub{color:var(--cieo-color-muted)}
-.cieo-chat-budget-meter{width:100%;accent-color:var(--cieo-color-accent)}
-.cieo-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
-@media (min-width:48rem){
-.cieo-chat-panes{grid-template-columns:12rem minmax(0,1fr)}
-.cieo-chat-rail{grid-column:1/-1;display:grid;gap:var(--cieo-space-4);grid-template-columns:repeat(2,1fr)}
-}
-@media (min-width:70rem){
-.cieo-chat-panes{grid-template-columns:14rem minmax(0,1fr) 18rem}
-.cieo-chat-rail{grid-column:auto;grid-template-columns:1fr}
-}
-@media (prefers-reduced-motion: reduce){
-.cieo-chat-list{scroll-behavior:auto}
-.cieo-chat-fade{transition:none}
-}
-</style>
+<link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
 <a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
-<main id="main" class="cieo-chat-page" data-parts="ChatLayout">
-<header>
-<p><a href="./index.html">Composites</a></p>
-<h1 data-parts="Heading">Chat workspace</h1>
-<p data-parts="Text">Three seeded threads with local replies — no messages leave this page.</p>
+<main id="main" class="site-wrap comp-page">
+<header class="comp-head">
+<p class="site-label"><a href="./">Composites</a> / Chat workspace</p>
+<h1 class="site-title">Chat workspace</h1>
+<p class="site-prose">Three seeded threads with local replies — no messages leave this page.</p>
 </header>
+<div class="comp-screen cieo-chat-page" data-parts="ChatLayout">
 <div class="cieo-chat-panes">
 <nav class="cieo-chat-threads" aria-label="Threads" data-threads>
 <h2 data-parts="Heading">Threads</h2>
 <ul class="cieo cieo-p-list" data-parts="List">
-<li class="cieo-p-list-item" data-parts="ListItem"><button type="button" data-thread="theming" aria-controls="thread-panel-theming" aria-current="true"><span data-thread-title>Theming help</span><span class="cieo-chat-thread-sub" data-parts="Text">Buttons and tokens</span></button></li>
-<li class="cieo-p-list-item" data-parts="ListItem"><button type="button" data-thread="checkout" aria-controls="thread-panel-checkout"><span data-thread-title>Bag totals</span><span class="cieo-chat-thread-sub" data-parts="Text">Delivery math</span></button></li>
-<li class="cieo-p-list-item" data-parts="ListItem"><button type="button" data-thread="fresh" aria-controls="thread-panel-fresh"><span data-thread-title>New idea</span><span class="cieo-chat-thread-sub" data-parts="Text">Blank thread</span></button></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><button class="cieo-button" type="button" data-thread="theming" aria-controls="thread-panel-theming" aria-current="true"><span data-thread-title>Theming help</span><span class="cieo-chat-thread-sub" data-parts="Text">Buttons and tokens</span></button></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><button class="cieo-button" type="button" data-thread="checkout" aria-controls="thread-panel-checkout"><span data-thread-title>Bag totals</span><span class="cieo-chat-thread-sub" data-parts="Text">Delivery math</span></button></li>
+<li class="cieo-p-list-item" data-parts="ListItem"><button class="cieo-button" type="button" data-thread="fresh" aria-controls="thread-panel-fresh"><span data-thread-title>New idea</span><span class="cieo-chat-thread-sub" data-parts="Text">Blank thread</span></button></li>
 </ul>
 <p data-parts="Text">Tip: press <kbd class="cieo cieo-p-kbd" data-parts="Kbd">/</kbd> to jump to the composer.</p>
 </nav>
@@ -55,7 +30,7 @@
 <section data-thread-panel="theming" id="thread-panel-theming" aria-label="Theming help">
 <div class="cieo-chat-list" data-parts="ChatMessageList" data-list="theming" role="log" aria-label="Conversation — Theming help">
 <div class="cieo-chat-message cieo-chat-fade" data-parts="ChatSystemMessage">Demo replies locally — no messages leave this page.</div>
-<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage" data-from="you">
 <div data-parts="ChatMessageMetadata"><span>You</span> <time>09:41</time></div>
 <div data-parts="ChatMessageBubble"><p data-parts="Text">How do I theme the buttons?</p></div>
 </article>
@@ -71,7 +46,7 @@
 </section>
 <section data-thread-panel="checkout" id="thread-panel-checkout" aria-label="Bag totals">
 <div class="cieo-chat-list" data-parts="ChatMessageList" data-list="checkout" role="log" aria-label="Conversation — Bag totals">
-<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage">
+<article class="cieo-chat-message cieo-chat-fade" data-parts="ChatMessage" data-from="you">
 <div data-parts="ChatMessageMetadata"><span>You</span> <time>10:02</time></div>
 <div data-parts="ChatMessageBubble"><p data-parts="Text">Why does express add $12 at checkout?</p></div>
 </article>
@@ -94,9 +69,9 @@
 <form class="cieo-chat-composer-row" data-parts="ChatComposer" data-composer aria-label="Send a message">
 <div data-parts="ChatComposerInput">
 <label for="chat-input">Message</label>
-<textarea id="chat-input" data-input placeholder="Ask something…" rows="2"></textarea>
+<textarea class="cieo-input" id="chat-input" data-input placeholder="Ask something…" rows="2"></textarea>
 </div>
-<button type="submit" data-send>Send</button>
+<button class="cieo-button" data-variant="primary" type="submit" data-send>Send</button>
 </form>
 <p class="cieo-visually-hidden" role="status" data-status></p>
 </div>
@@ -134,6 +109,7 @@
 </div>
 </div>
 </div>
+<div class="comp-notes">
 <section aria-label="Behavior">
 <h2 data-parts="Heading">Behavior</h2>
 <ul>
@@ -145,32 +121,35 @@
 <li>The meter counts about one token per four characters in the open thread and updates with every sent or retried reply.</li>
 </ul>
 </section>
-<section data-built-from>
-<h2 data-parts="Heading">Built from</h2>
-<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
-<ul>
-<li><a href="../components/ChatLayout.html">ChatLayout</a></li>
-<li><a href="../components/ChatMessage.html">ChatMessage</a></li>
-<li><a href="../components/ChatMessageBubble.html">ChatMessageBubble</a></li>
-<li><a href="../components/ChatMessageList.html">ChatMessageList</a></li>
-<li><a href="../components/ChatMessageMetadata.html">ChatMessageMetadata</a></li>
-<li><a href="../components/ChatSystemMessage.html">ChatSystemMessage</a></li>
-<li><a href="../components/ChatComposer.html">ChatComposer</a></li>
-<li><a href="../components/ChatComposerInput.html">ChatComposerInput</a></li>
-<li><a href="../components/Token.html">Token</a></li>
-<li><a href="../components/Code.html">Code</a></li>
-<li><a href="../components/CodeBlock.html">CodeBlock</a></li>
-<li><a href="../components/Heading.html">Heading</a></li>
-<li><a href="../components/Text.html">Text</a></li>
-<li><a href="../components/Card.html">Card</a></li>
-<li><a href="../components/MetadataList.html">MetadataList</a></li>
-<li><a href="../components/MetadataListItem.html">MetadataListItem</a></li>
-<li><a href="../components/List.html">List</a></li>
-<li><a href="../components/ListItem.html">ListItem</a></li>
-<li><a href="../components/EmptyState.html">EmptyState</a></li>
-<li><a href="../components/ProgressBar.html">ProgressBar</a></li>
-<li><a href="../components/Kbd.html">Kbd</a></li>
-<li><a href="../components/Banner.html">Banner</a> (rendered by JS after a failed reply)</li>
+</div>
+<section data-built-from aria-labelledby="built-from-h">
+<h2 id="built-from-h">Built from</h2>
+<p data-reuse>24 library components make up this screen. Each card is the component itself; open one to see its usage and props. Recompose from the parts, never paste this page.</p>
+<ul class="comp-parts">
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatLayout.html"><span class="comp-part-name">ChatLayout</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-chat-layout"><div data-pane="transcript"><div role="log" aria-label="Support thread" class="cieo cieo-chat-message-list"><article class="cieo cieo-chat-message"><span data-author="true">Ava</span><div data-variant="incoming" class="cieo cieo-chat-message-bubble">Your refund is on its way.</div></article></div></div><div data-pane="rail"><div class="cieo cieo-card"><h2>Refund policy</h2>Refunds land in 5 to 10 days.</div></div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Heading.html"><span class="comp-part-name">Heading</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><h2 data-level="2" class="cieo cieo-p-heading">Heading</h2></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/List.html"><span class="comp-part-name">List</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><ul aria-label="Latest stories" class="cieo cieo-p-list"><li class="cieo-p-list-item">House passes school funding bill</li><li class="cieo-p-list-item">Senate schedules vote for Thursday</li><li class="cieo-p-list-item">Committee delays redistricting hearing</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ListItem.html"><span class="comp-part-name">ListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><ul><li class="cieo-p-list-item">List Item</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Button.html"><span class="comp-part-name">Button</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md"><span class="cieo-btn-text">Button</span></button></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Text.html"><span class="comp-part-name">Text</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><p data-size="default" class="cieo cieo-p-text">Text</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Kbd.html"><span class="comp-part-name">Kbd</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><kbd class="cieo cieo-p-kbd">Kbd</kbd></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatMessageList.html"><span class="comp-part-name">ChatMessageList</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div role="log" aria-label="Support thread" class="cieo cieo-chat-message-list"><article class="cieo cieo-chat-message"><span data-author="true">Ava</span><time>9:41</time><div data-variant="incoming" class="cieo cieo-chat-message-bubble">Your refund of $42.18 is on its way.</div></article><article class="cieo cieo-chat-message"><span data-author="true">You</span><time>9:42</time><div data-variant="outgoing" class="cieo cieo-chat-message-bubble">Thanks! When will it land?</div></article></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatMessage.html"><span class="comp-part-name">ChatMessage</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><article class="cieo cieo-chat-message"><span data-author="true">Ava</span><time>9:41</time><div data-variant="incoming" class="cieo cieo-chat-message-bubble">Your refund is on its way.</div></article></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatSystemMessage.html"><span class="comp-part-name">ChatSystemMessage</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><p class="cieo cieo-chat-system-message">Chat System Message</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatMessageMetadata.html"><span class="comp-part-name">ChatMessageMetadata</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><p class="cieo cieo-chat-message-metadata">Chat Message Metadata</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatMessageBubble.html"><span class="comp-part-name">ChatMessageBubble</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><div data-variant="incoming" class="cieo cieo-chat-message-bubble">Your refund is on its way.</div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/CodeBlock.html"><span class="comp-part-name">CodeBlock</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><pre class="cieo cieo-p-code-block"><code>Code Block</code></pre></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Code.html"><span class="comp-part-name">Code</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><code class="cieo cieo-p-code">Code</code></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Token.html"><span class="comp-part-name">Token</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span data-tone="default" class="cieo cieo-p-token">Token</span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/EmptyState.html"><span class="comp-part-name">EmptyState</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-empty-state"><h2 class="cieo-p-empty-state-title">Empty State</h2><div class="cieo-p-empty-state-action">Empty State</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatComposer.html"><span class="comp-part-name">ChatComposer</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><form aria-label="Send a message" class="cieo cieo-chat-composer">Chat Composer</form></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatComposerInput.html"><span class="comp-part-name">ChatComposerInput</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><textarea aria-label="Chat Composer Input" rows="1" class="cieo cieo-chat-composer-input"></textarea></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Field.html"><span class="comp-part-name">Field</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-field"><label for="cp-Field-email">Email</label><input id="cp-Field-email" type="email" class="cieo-ctl cieo-input"/><p id="cp-Field-email-help" class="cieo-p-help">Use your work email</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Card.html"><span class="comp-part-name">Card</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-card"><h2>Billing summary</h2><p>$12.00 due May 1 for the Monthly plan.</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/MetadataList.html"><span class="comp-part-name">MetadataList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><dl class="cieo cieo-metadata-list"><div class="cieo cieo-metadata-list-item"><dt>Status</dt><dd>Active</dd></div><div class="cieo cieo-metadata-list-item"><dt>Owner</dt><dd>Library team</dd></div><div class="cieo cieo-metadata-list-item"><dt>Updated</dt><dd>Oct 2026</dd></div></dl></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/MetadataListItem.html"><span class="comp-part-name">MetadataListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><div class="cieo cieo-metadata-list-item"><dt>Metadata List Item</dt><dd>Metadata List Item</dd></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ProgressBar.html"><span class="comp-part-name">ProgressBar</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><progress value="60" max="100" aria-label="Upload progress" class="cieo cieo-progress"></progress></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Banner.html"><span class="comp-part-name">Banner</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="status" data-tone="info" class="cieo cieo-p-banner"><div class="cieo-p-banner-body">Banner</div></div></div></li>
 </ul>
 </section>
 </main>

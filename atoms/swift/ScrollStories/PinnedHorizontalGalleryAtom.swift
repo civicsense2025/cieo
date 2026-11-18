@@ -3,7 +3,7 @@ import Cieo
 
 public struct PinnedHorizontalGalleryAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-hgallery", category: "Scroll stories", name: "Pinned horizontal gallery",
-        summary: "Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the centre. Reduced motion keeps the 1:1 travel and drops the inner drift.")
+        summary: "Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the center. Reduced motion keeps the 1:1 travel and drops the inner drift.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     public init() {}
     private let count = 5

@@ -18,7 +18,7 @@ export function shareMethod(nav) {
 export function isShareableUrl(url) {
     return safeHref(url, { relative: false }) !== null;
 }
-/** Shares through the best method. A user cancelling the native sheet is `cancelled`, not an error; any other native failure falls back to copying. */
+/** Shares through the best method. A user canceling the native sheet is `canceled`, not an error; any other native failure falls back to copying. */
 export async function runShare(nav, data) {
     if (!isShareableUrl(data.url))
         return 'unavailable';
@@ -32,7 +32,7 @@ export async function runShare(nav, data) {
         }
         catch (error) {
             if (error?.name === 'AbortError')
-                return 'cancelled';
+                return 'canceled';
             if (typeof nav.clipboard?.writeText !== 'function')
                 return 'failed';
         }

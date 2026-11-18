@@ -3,7 +3,7 @@ import Cieo
 
 public struct FocalIrisAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txi-iris", category: "Image transitions", name: "Focal iris",
-        summary: "The next photo opens in a circle centred on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.")
+        summary: "The next photo opens in a circle centered on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.")
     public init() {}
     private let subject = CGPoint(x: 0.6, y: 0.4)
 

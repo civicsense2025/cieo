@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// One-time split of the Motion Atoms catalogue into atoms/web: runtime (core + page), one file per top-level
-// block of the atoms section, and index.json. build-catalogue.mjs reassembles them; the round trip must be exact.
+// One-time split of the Motion Atoms catalog into atoms/web: runtime (core + page), one file per top-level
+// block of the atoms section, and index.json. build-catalog.mjs reassembles them; the round trip must be exact.
 import fs from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';

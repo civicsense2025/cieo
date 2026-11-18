@@ -3,7 +3,6 @@ export type Scheme = 'light' | 'dark';
 export type Density = 'compact' | 'comfortable' | 'spacious';
 export type Radius = 'square' | 'crisp' | 'soft' | 'round' | 'pill';
 export type Font = 'system' | 'humanist' | 'mono';
-export type Display = 'sans' | 'serif';
 export type Ground = 'cool' | 'paper' | 'mist';
 export type Elevation = 'soft' | 'ring';
 export type TokenValue = string | number | readonly string[];
@@ -21,7 +20,7 @@ export interface ThemeReference {
 }
 export interface ThemeOptions {
   brand?: Brand; scheme?: Scheme; density?: Density; radius?: Radius;
-  contrast?: 'standard' | 'high'; font?: Font; display?: Display; ground?: Ground; elevation?: Elevation;
+  contrast?: 'standard' | 'high'; font?: Font; ground?: Ground; elevation?: Elevation;
   zeta?: number; accent?: string;
   components?: Record<string, Record<string, string | number>>;
   overrides?: Record<string, TokenValue>;
@@ -60,7 +59,6 @@ export const brands: Readonly<Record<Brand, Readonly<{ light: string; dark: stri
 export const densities: Readonly<Record<Density, number>>;
 export const radii: Readonly<Record<Radius, readonly number[]>>;
 export const fonts: Readonly<Record<Font, readonly string[]>>;
-export const displays: Readonly<Record<Display, readonly string[] | null>>;
 export const grounds: Readonly<Record<Ground, Readonly<Record<Scheme, Readonly<Record<string, string>>>>>>;
 export const elevations: Readonly<Record<Elevation, Elevation>>;
 export function themeSchema(): Record<string, unknown>;

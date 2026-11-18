@@ -44,7 +44,7 @@ final class AvatarTests: XCTestCase {
     }
 
     /// `swift test` has no accessibility tree, so the spoken contract is pinned in the source: one image
-    /// element labelled with the name, its initials and photo hidden inside it.
+    /// element labeled with the name, its initials and photo hidden inside it.
     func testVoiceOverReadsTheNameOnceAsAnImage() throws {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
         let source = try String(contentsOf: root.appendingPathComponent("Sources/CieoUI/Atoms/Avatar.swift"), encoding: .utf8)

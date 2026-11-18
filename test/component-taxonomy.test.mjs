@@ -55,7 +55,7 @@ test('core never depends on a use-case pack, and a pack only on core or itself',
   assert.deepEqual(crossing, []);
 });
 
-test('the catalogue index lists every layer and every pack that has components', () => {
+test('the catalog index lists every layer and every pack that has components', () => {
   const html = readFileSync('site/components/index.html', 'utf8');
   for (const id of ['primitives', 'atoms', 'molecules', 'organisms']) assert.ok(html.includes(`id="${id}"`), id);
   for (const p of new Set(dirs.map((d) => manifest[d].packId).filter((p) => p !== 'core'))) assert.ok(html.includes(`id="pack-${p}"`), p);

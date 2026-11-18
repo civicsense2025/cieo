@@ -1,4 +1,4 @@
-/* Preserve the catalogue recipe primitives. No preview is a screenshot or a reimplementation. */
+/* Preserve the catalog recipe primitives. No preview is a screenshot or a reimplementation. */
 .lib-grid { display:grid; grid-template-columns:repeat(var(--library-columns),minmax(0,1fr)); gap:var(--library-gap); align-items:start; }
 .library-page .tile { min-width:0; border:0; background:transparent; border-radius:var(--library-radius); scroll-margin-top:96px; }
 .library-page .tile.wide:not([data-featured]) { grid-column:1/-1; }

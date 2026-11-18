@@ -9,6 +9,6 @@ atom({ id:'popover', cat:'Overlays', name:'Popover', block:'Popover primitive, s
     const L = ['Copy', ic(I.check,14,2.5) + 'Copied'].map(h => { const e = document.createElement('span'); e.className = 'layer'; e.style.gap = '4px'; e.innerHTML = h; cp.appendChild(e); return e; });
     const set = v => { openSet(o, v); tr.setAttribute('aria-expanded', v); };
     tr.onclick = () => set(!o.target); outside(st, [tr, pv], () => set(false)); st.addEventListener('keydown', ev => { if (ev.key === 'Escape'){ set(false); tr.focus(); } });
-    cp.onclick=async()=>{try{await navigator.clipboard.writeText('https://example.site/p/spring-launch');sw.to(1);ok.set(1);back=now()+1.6}catch{const input=$(st,'input');input.focus();input.select();window.CieoCatalogue?.announce('Copy the selected link.')}};
+    cp.onclick=async()=>{try{await navigator.clipboard.writeText('https://example.site/p/spring-launch');sw.to(1);ok.set(1);back=now()+1.6}catch{const input=$(st,'input');input.focus();input.select();window.CieoCatalog?.announce('Copy the selected link.')}};
     return t => { if (back && t >= back){ back = 0; sw.to(0); ok.set(0); } pop(pv, o.at(t), -6); L.forEach((e,k) => sw.apply(e,k,t,3)); cp.style.color = mix(ok.at(t),'var(--success)','var(--ink)'); };
   }});

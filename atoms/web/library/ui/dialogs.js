@@ -62,7 +62,7 @@
       const source=document.getElementById('component-source');
       const valid=typeof a.sourceFile==='string' && /^blocks\/[\w.-]+\.js$/.test(a.sourceFile);
       source.hidden=!valid;
-      if (valid) source.href=`https://github.com/civicsense2025/cieo/blob/work/catalogue-visual-refinement/atoms/web/${a.sourceFile}`;
+      if (valid) source.href=`https://github.com/civicsense2025/cieo/blob/work/catalogue-visual-refinement/atoms/web/${a.sourceFile}`; // us-spelling-keep
       open(detail,trigger); cards.ensure(a); playback.focus(a); updateSaved();
       requestAnimationFrame(()=>window.dispatchEvent(new Event('resize')));
     };

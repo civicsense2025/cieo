@@ -161,7 +161,7 @@
   "evidence": [],
   "documentation": {
     "path": "README.md",
-    "purpose": "One idea on one ground: a top bar, the content centred, a bottom bar; left-aligned."
+    "purpose": "One idea on one ground: a top bar, the content centered, a bottom bar; left-aligned."
   },
   "extensions": {
     "customization": {

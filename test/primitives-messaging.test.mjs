@@ -64,7 +64,7 @@ test('DeliveryStatus speaks the state, carries it for the CSS, and only failure 
   assert.match(timed, /cieo-sr-only">Read, 9:41 AM</);
 });
 
-test('seenByLabel and listNames summarise readers', () => {
+test('seenByLabel and listNames summarize readers', () => {
   assert.equal(seenByLabel([]), '');
   assert.equal(seenByLabel(['Ava']), 'Seen by Ava');
   assert.equal(seenByLabel(['Ava', 'Ben']), 'Seen by Ava and Ben');
@@ -102,7 +102,7 @@ test('unreadDividerLabel prefers the host label, then a count, then the default'
   assert.equal(unreadDividerLabel(3, '  '), '3 new messages');
 });
 
-test('UnreadDivider is a labelled separator with one rule on each side', () => {
+test('UnreadDivider is a labeled separator with one rule on each side', () => {
   const html = renderToStaticMarkup(h(UnreadDivider, { count: 3 }));
   assert.match(html, /role="separator"/);
   assert.match(html, /aria-label="3 new messages"/);
@@ -121,7 +121,7 @@ test('groupAvatarLabel and layout: faces up to four, then three plus a +n tile',
   assert.deepEqual(groupAvatarLayout([]), { faces: [], more: 0 });
 });
 
-test('GroupAvatar is one labelled image with the right number of slots per layout', () => {
+test('GroupAvatar is one labeled image with the right number of slots per layout', () => {
   const make = (n, props = {}) => renderToStaticMarkup(h(GroupAvatar, { people: Array.from({ length: n }, (_, i) => person(`P${i}`)), ...props }));
   for (const n of [1, 2, 3, 4]) {
     const html = make(n);
@@ -160,7 +160,7 @@ test('unreadBadgeText clamps and caps', () => {
   assert.equal(unreadBadgeText(2.8), '2');
 });
 
-test('conversationLabel summarises a row for screen readers', () => {
+test('conversationLabel summarizes a row for screen readers', () => {
   assert.equal(conversationLabel({ title: 'Design team', unread: 3, preview: 'Ava: see you at 3', time: '9:41 AM' }), 'Design team, 3 unread, Ava: see you at 3, 9:41 AM');
   assert.equal(conversationLabel({ title: 'Ben' }), 'Ben');
   assert.equal(conversationLabel({ title: 'Ben', unread: 0, muted: true, pinned: true, preview: 'ok' }), 'Ben, muted, pinned, ok');

@@ -220,7 +220,7 @@ func phPhoto(_ seed: Int, _ size: CGSize, golden: Double = 0) -> some View {
     AtomPhoto(seed: seed, goldenHour: golden).frame(width: size.width, height: size.height)
 }
 
-/// A circle mask centred on `c` with radius `r`, in a `size` box.
+/// A circle mask centered on `c` with radius `r`, in a `size` box.
 func phCircle(_ c: CGPoint, _ r: Double, _ size: CGSize) -> some View {
     Circle().frame(width: max(0.1, 2 * r), height: max(0.1, 2 * r)).position(c).frame(width: size.width, height: size.height)
 }

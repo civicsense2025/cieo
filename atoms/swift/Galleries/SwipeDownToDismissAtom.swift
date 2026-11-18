@@ -3,7 +3,7 @@ import Cieo
 
 public struct SwipeDownToDismissAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-swipe-dismiss", category: "Galleries", name: "Swipe down to dismiss",
-        summary: "Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to centre. Use when a viewer needs the natural, touch-first way out.")
+        summary: "Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to center. Use when a viewer needs the natural, touch-first way out.")
     @State private var rest = CGSize.zero
     @State private var open = true
     public init() {}

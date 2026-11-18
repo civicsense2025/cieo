@@ -1,6 +1,6 @@
 /* ---- agent spot illustrations: sixteen agent states drawn in the role-icon hand ----
    The role icons at illustration scale: a paper plate, one soft leaf wash in the scene's group
-   colour (Check blue, Content lavender, Operate green, People peach), a few confident round-capped
+   color (Check blue, Content lavender, Operate green, People peach), a few confident round-capped
    strokes, objects drawn as simple friendly glyphs (page, lens, pin, pencil, key, envelope, clock)
    and the small tilted equator under the subject. Agents are the square tile mark (the role-icon
    tile: rounded square, leaf wash, arc); people are round heads. One description per drawing
@@ -40,7 +40,7 @@ const join = (...ms) => ms.reduce((a, m) => ({ ...a, ...m, rest:{ ...(a.rest || 
 
 const rr = (x, y, w, h, r) => `M${r1(x + r)} ${r1(y)}H${r1(x + w - r)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(x + w)} ${r1(y + r)}V${r1(y + h - r)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(x + w - r)} ${r1(y + h)}H${r1(x + r)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(x)} ${r1(y + h - r)}V${r1(y + r)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(x + r)} ${r1(y)}Z`;
 
-// the leaf wash from the role icons (64 grid: M14 52C19 21 45 12 55 20C49 44 34 55 14 52Z), placed by centre, size and turn
+// the leaf wash from the role icons (64 grid: M14 52C19 21 45 12 55 20C49 44 34 55 14 52Z), placed by center, size and turn
 const LEAF = [[14, 52], [19, 21], [45, 12], [55, 20], [49, 44], [34, 55], [14, 52]];
 const leafD = (cx, cy, w, h, rot = 0) => { const c = Math.cos(rot*Math.PI/180), s = Math.sin(rot*Math.PI/180);
   const p = LEAF.map(([x, y]) => { const u = (x - 34.5)/41*w, v = (y - 33.5)/43*h; return r1(cx + u*c - v*s) + ' ' + r1(cy + u*s + v*c); });
@@ -392,7 +392,7 @@ atom({ id:'agentillustrations', cat:'Agent identity', name:'Agent spot illustrat
 <div class="ail-info"><p class="ail-n num" aria-live="polite"></p><div class="ail-ts"><div><h4 id="agentillustrations-h0"></h4><p></p></div><div aria-hidden="true"><h4></h4><p></p></div></div>
 <div class="ail-act"><button type="button" class="btn ail-rp">${ic('<path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/>', 15)}Replay</button><button type="button" class="ail-ib" data-d="-1" aria-label="Previous illustration">${ic('<path d="M15 6l-6 6 6 6"/>', 16)}</button><button type="button" class="ail-ib" data-d="1" aria-label="Next illustration">${ic('<path d="M9 6l6 6-6 6"/>', 16)}</button></div></div>
 <button type="button" class="ail-ib ail-x" aria-label="Close">${ic(I.x, 16)}</button></div></div>`,
-  desc:'Sixteen spot drawings for agent states, drawn like the role icons at a larger size: a paper plate, one soft leaf wash in the scene\u2019s group colour, a few round-capped strokes, simple glyphs (page, lens, pin, pencil, key, envelope, clock) and the small tilted equator under the subject. Agents are the square role-icon tile and people are round heads. Each card traces its strokes when it first scrolls into view, then pins, seals and tiles settle on a critically damped spring; the wash breathes, the arc turns in quarter steps and one small part moves (a lens scanning, a plug trying again, a clock ticking) only while you hover, focus or (on a phone) land on that card, and everything holds still off-screen or under reduced motion. Tapping a card grows its plate into a large view, the title and caption follow 80ms later, Previous and Next swap drawings (old one out, new one traces in) and Replay draws it again.',
+  desc:'Sixteen spot drawings for agent states, drawn like the role icons at a larger size: a paper plate, one soft leaf wash in the scene\u2019s group color, a few round-capped strokes, simple glyphs (page, lens, pin, pencil, key, envelope, clock) and the small tilted equator under the subject. Agents are the square role-icon tile and people are round heads. Each card traces its strokes when it first scrolls into view, then pins, seals and tiles settle on a critically damped spring; the wash breathes, the arc turns in quarter steps and one small part moves (a lens scanning, a plug trying again, a clock ticking) only while you hover, focus or (on a phone) land on that card, and everything holds still off-screen or under reduced motion. Tapping a card grows its plate into a large view, the title and caption follow 80ms later, Previous and Next swap drawings (old one out, new one traces in) and Replay draws it again.',
   api:'card.enter → stroke.draw(spring) → pin.settle(t + d) · arc.th += π/2 each step while active · plate.{x,y,w,h}.set(open ? frame : cardRect) · art.swap(i)',
   init(st){
     const gal = $(st,'.ail-gal'), nav = $(st,'.ail-nav'), lb = $(st,'.ail-lb'), big = $(st,'.ail-big'), info = $(st,'.ail-info'), scrim = $(st,'.ail-scrim');

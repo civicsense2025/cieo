@@ -6,12 +6,12 @@ export type ShareNavigator = {
         writeText?: unknown;
     };
 };
-export type ShareOutcome = 'native' | 'copy' | 'cancelled' | 'failed' | 'unavailable';
+export type ShareOutcome = 'native' | 'copy' | 'canceled' | 'failed' | 'unavailable';
 /** How a link can be shared here: the native sheet first, then the clipboard, otherwise not at all. */
 export declare function shareMethod(nav: ShareNavigator | undefined): ShareMethod;
 /** True only for absolute http and https URLs; anything else (javascript:, data:, relative paths) is never shared. */
 export declare function isShareableUrl(url: string): boolean;
-/** Shares through the best method. A user cancelling the native sheet is `cancelled`, not an error; any other native failure falls back to copying. */
+/** Shares through the best method. A user canceling the native sheet is `canceled`, not an error; any other native failure falls back to copying. */
 export declare function runShare(nav: ShareNavigator | undefined, data: {
     url: string;
     title?: string;

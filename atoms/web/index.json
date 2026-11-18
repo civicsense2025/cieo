@@ -1337,7 +1337,7 @@
   "id": "seg",
   "category": "Admin kit",
   "name": "Segmented control",
-  "summary": "A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.",
+  "summary": "A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label color morphs, arrow keys, Home and End move the selection, and there are two sizes.",
   "file": "blocks/151-sidesheet.js",
   "api": "left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? \"fwd\" : \"back\"   lead.set(v); trail.set(v, t + LAG)",
   "layer": "organism"
@@ -1346,7 +1346,7 @@
   "id": "statuschip",
   "category": "Admin kit",
   "name": "Status chip",
-  "summary": "One chip morphs through Draft, Scheduled, Live and Error: the background and dot colours cross-fade through weighted state colours, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.",
+  "summary": "One chip morphs through Draft, Scheduled, Live and Error: the background and dot colors cross-fade through weighted state colors, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.",
   "file": "blocks/151-sidesheet.js",
   "api": "w[i].set(i === next ? 1 : 0)   width.set(measure(label))   label.to(next)   retry.set(next === error)",
   "layer": "atom"
@@ -1373,7 +1373,7 @@
   "id": "themetoggle",
   "category": "Admin kit",
   "name": "Theme toggle",
-  "summary": "One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every colour between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.",
+  "summary": "One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every color between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.",
   "file": "blocks/151-sidesheet.js",
   "api": "pts[i] = lerp(sun[i], moon[i], p)   ray.r = lerp(R0, 4, p)   card.color = mix(dark, light, theme.at(t))   pref = next === system ? \"system\" : next",
   "layer": "molecule"
@@ -1941,7 +1941,7 @@
   "id": "footer-region-theme",
   "category": "Footers",
   "name": "Footer with language picker and theme toggle",
-  "summary": "The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every colour in the page below cross-fades on one spring; System keeps following the real page theme.",
+  "summary": "The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every color in the page below cross-fades on one spring; System keeps following the real page theme.",
   "file": "blocks/160-footer-minimal.js",
   "api": "pop.o.set(open)   hl.go(top, bottom)   strings[i].swap(at = now + i·12ms)   page.color = mix(dark, light, theme.at(t))",
   "layer": "organism"
@@ -1950,7 +1950,7 @@
   "id": "footer-status",
   "category": "Footers",
   "name": "Footer with live status",
-  "summary": "The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes colour 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there as the list opens.",
+  "summary": "The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes color 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there as the list opens.",
   "file": "blocks/160-footer-minimal.js",
   "api": "g.set(0 | 1 | 2)   dot, tint = mix(g)   label.to(i)   pill.w.set(measure(label))   row[i].c.set(v, now + i·45ms)",
   "layer": "organism"
@@ -2031,7 +2031,7 @@
   "id": "fz8-full",
   "category": "Footers",
   "name": "Full footer with staggered entrance",
-  "summary": "The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labelled string out in 100ms and the new text in, one group after another.",
+  "summary": "The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labeled string out in 100ms and the new text in, one group after another.",
   "file": "blocks/161-fz1-wordmark.js",
   "api": "item[i].set(1, S.soft, t + i·0.055)   letter[j].set(1, S.soft, t + n·0.055 + j·0.04)   bar[k].set(1, S.soft, …k·0.012)   text.o.set(0, S.snap) → swap copy → o.set(1)",
   "layer": "organism"
@@ -2123,7 +2123,7 @@
   "name": "Evidence capture",
   "summary": "The agent scrolls to the element and a capture frame snaps in around it, leading edges first with the trailing edges 60ms behind, while the rest of the page dims. The region flashes once, lifts off the page as a snapshot, and shrinks and travels into the tray, landing in the slot that has just opened for it. Only when it lands does the saved-screenshots count roll up. Open any thumbnail and it grows from its own slot into a viewer with who captured it and the element it shows; arrows swap between shots.",
   "file": "blocks/163-agentpin.js",
-  "api": "box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centred)",
+  "api": "box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centered)",
   "layer": "organism"
  },
  {
@@ -2211,7 +2211,7 @@
   "id": "runreplay",
   "category": "Agent activity",
   "name": "Agent run replay",
-  "summary": "The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centred, and clicking a row glides the playhead there on a spring.",
+  "summary": "The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centered, and clicking a row glides the playhead there on a spring.",
   "file": "blocks/164-agentstatus.js",
   "api": "ph = drag ? pointer.x : coast(release.v) | play ? ph + dt·speed : ph   state = derive(ph)   page.view/url/fields/pins = state   cursor.at(ph) = lerp(spotᵢ, spotᵢ₊₁, ease)   row.now = last(at ≤ ph)",
   "layer": "organism"
@@ -2247,7 +2247,7 @@
   "id": "txi-iris",
   "category": "Image transitions",
   "name": "Focal iris",
-  "summary": "The next photo opens in a circle centred on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.",
+  "summary": "The next photo opens in a circle centered on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.",
   "file": "blocks/167-txi-iris.js",
   "api": "next.clip = circle(R·p at focus(next)); next.scale = 1.1 − .1p; prev.scale = 1 + .05·pNext about focus(next)",
   "layer": "molecule"
@@ -2274,9 +2274,9 @@
   "id": "txi-develop",
   "category": "Image transitions",
   "name": "Develop",
-  "summary": "The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its colour after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.",
+  "summary": "The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its color after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.",
   "file": "blocks/167-txi-iris.js",
-  "api": "arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; colour = mix(grey, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)",
+  "api": "arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; color = mix(gray, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)",
   "layer": "molecule"
  },
  {
@@ -2310,7 +2310,7 @@
   "id": "txi-page",
   "category": "Image transitions",
   "name": "Page turn",
-  "summary": "The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalogue or a printed story.",
+  "summary": "The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalog or a printed story.",
   "file": "blocks/167-txi-iris.js",
   "api": "fold.x = W(1 − q); tilt = .1·sin πq; flap = mirror(page right of fold)·scaleX(.58) + paper wash; shadow along fold",
   "layer": "molecule"
@@ -2346,7 +2346,7 @@
   "id": "txi-flyto",
   "category": "Image transitions",
   "name": "Fly-to strip",
-  "summary": "The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.",
+  "summary": "The view pulls back in proportion to how fast it is traveling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.",
   "file": "blocks/167-txi-iris.js",
   "api": "pos.set(i); zoom = 1 − min(.44, .1·|d pos/dt|^.85); view = translate(center − pos·(W + gap)·zoom) scale(zoom)",
   "layer": "organism"
@@ -2427,7 +2427,7 @@
   "id": "txc-compare",
   "category": "Carousels",
   "name": "Before and after lens",
-  "summary": "The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centred on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.",
+  "summary": "The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centered on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.",
   "file": "blocks/168-txc-film.js",
   "api": "x = held ? pointer + catch(t) : x.at(t);  lens: L = 40 + 108·open, zoom = 1 + 1.25·open;  after.clip = inset(0 0 0 x)",
   "layer": "molecule"
@@ -2472,7 +2472,7 @@
   "id": "gal-swipe-dismiss",
   "category": "Galleries",
   "name": "Swipe down to dismiss",
-  "summary": "Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to centre. Use when a viewer needs the natural, touch-first way out.",
+  "summary": "Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to center. Use when a viewer needs the natural, touch-first way out.",
   "file": "blocks/169-gal-grid-lightbox.js",
   "api": "photo = fit + finger; scale = 1 − .42·pull; scrim = 1 − dy/(.55H); release: proj = dy + vy·.22 > .2H ? flyTo(tile, vy) : settle(0, vy)",
   "layer": "molecule"
@@ -2490,7 +2490,7 @@
   "id": "gal-masonry-filter",
   "category": "Galleries",
   "name": "Filterable masonry that reflows",
-  "summary": "Choosing a subject runs three beats in order. Photos that no longer match shrink to their own centre in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own centre, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.",
+  "summary": "Choosing a subject runs three beats in order. Photos that no longer match shrink to their own center in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own center, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.",
   "file": "blocks/169-gal-grid-lightbox.js",
   "api": "leave: s→0 (snap, k·20ms) · stay: x,y→slot (soft, 80ms + k·30ms) · enter: s→1 (base, 200ms + k·35ms) · height.set(newH)",
   "layer": "molecule"
@@ -2508,9 +2508,9 @@
   "id": "gal-contact-loupe",
   "category": "Galleries",
   "name": "Contact sheet with a loupe",
-  "summary": "A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens centre, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the centre crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.",
+  "summary": "A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens center, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the center crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.",
   "file": "blocks/169-gal-grid-lightbox.js",
-  "api": "lens.xy.set(pointer, snap); content = sheet·scale(3.4) translated so lens centre = sheet point; label.swap(frameUnderLens)",
+  "api": "lens.xy.set(pointer, snap); content = sheet·scale(3.4) translated so lens center = sheet point; label.swap(frameUnderLens)",
   "layer": "molecule"
  },
  {
@@ -2526,7 +2526,7 @@
   "id": "gal-hover-focus",
   "category": "Galleries",
   "name": "Hover-focus grid",
-  "summary": "The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of colour, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.",
+  "summary": "The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of color, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.",
   "file": "blocks/169-gal-grid-lightbox.js",
   "api": "hover(i): others.r.set(1, soft, delay d(i,j)·.14ms/px) · i.r.set(0) · leave: all.r.set(0, lazy) · r → saturate, brightness, scale",
   "layer": "atom"
@@ -2544,7 +2544,7 @@
   "id": "gal-cull-deck",
   "category": "Galleries",
   "name": "Cull deck: keep or reject by throwing",
-  "summary": "The top photo follows the pointer one to one and tilts with how far it has travelled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.",
+  "summary": "The top photo follows the pointer one to one and tilts with how far it has traveled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.",
   "file": "blocks/169-gal-grid-lightbox.js",
   "api": "pos = index + clamp(|dx|/.55w); card(i).depth = max(0, i − pos); release: |dx + vx·.2| > .38w ? fly(tray slot | off-edge, vx) : return(0, vx)",
   "layer": "molecule"
@@ -2562,7 +2562,7 @@
   "id": "txs-hgallery",
   "category": "Scroll stories",
   "name": "Pinned horizontal gallery",
-  "summary": "Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the centre. Reduced motion keeps the 1:1 travel and drops the inner drift.",
+  "summary": "Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the center. Reduced motion keeps the 1:1 travel and drops the inner drift.",
   "file": "blocks/170-txs-zoomhero.js",
   "api": "x = −p·(trackW − W)   img[i].x = −(cx[i] − W/2)/W·.18·cardW   bar.scaleX = p   section.h = H + travel",
   "layer": "molecule"
@@ -2589,7 +2589,7 @@
   "id": "txs-chapters",
   "category": "Scroll stories",
   "name": "Chapter scrollytelling",
-  "summary": "Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centred, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.",
+  "summary": "Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centered, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.",
   "file": "blocks/170-txs-zoomhero.js",
   "api": "f = i + (focus − c[i])/(c[i+1] − c[i])   q = ease((frac(f) − .3)/.4)   next.clip = inset((1−q)·80% 0 0 0)   next.y = (1−q)·20%   prev.y = −q·18%",
   "layer": "molecule"
@@ -2660,19 +2660,19 @@
  {
   "id": "fxp-duo",
   "category": "Photo effects",
-  "name": "Brand tint to colour",
-  "summary": "Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full colour on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with colour reserved for the item you are on.",
+  "name": "Brand tint to color",
+  "summary": "Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full color on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with color reserved for the item you are on.",
   "file": "blocks/171-fxp-load.js",
-  "api": "duo = gradientMap(lum, [dark, tint, light])   card.colour.set(hover || focus ? 1 : 0, S.soft)",
+  "api": "duo = gradientMap(lum, [dark, tint, light])   card.color.set(hover || focus ? 1 : 0, S.soft)",
   "layer": "molecule"
  },
  {
   "id": "fxp-relight",
   "category": "Photo effects",
   "name": "Relight with the sun",
-  "summary": "Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centred on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.",
+  "summary": "Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centered on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.",
   "file": "blocks/171-fxp-load.js",
-  "api": "mask = g + (pool(sun) − .45)·.7·sin(πg)   colour = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)",
+  "api": "mask = g + (pool(sun) − .45)·.7·sin(πg)   color = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)",
   "layer": "molecule"
  },
  {
@@ -2688,7 +2688,7 @@
   "id": "fxp-screen",
   "category": "Photo effects",
   "name": "Halftone to photo",
-  "summary": "The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colours. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s colour, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.",
+  "summary": "The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colors. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s color, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.",
   "file": "blocks/171-fxp-load.js",
   "api": "cell = c0·(1.4/c0)^smoothstep(0,.9,p)   dot r = √(coverage/π)   out = mix(screen, photo, smoothstep(.62,1,p))",
   "layer": "molecule"
@@ -2697,7 +2697,7 @@
   "id": "fxp-grade",
   "category": "Photo effects",
   "name": "Grade with live histogram",
-  "summary": "Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a grey-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.",
+  "summary": "Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a gray-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.",
   "file": "blocks/171-fxp-load.js",
   "api": "lin = srgb^2.2 · wb(T) · 2^EV   hist = Σ LUT(px)   ev.set(auto, S.soft) | ev.jump(slider)",
   "layer": "molecule"
@@ -2705,10 +2705,10 @@
  {
   "id": "fxp-paint",
   "category": "Photo effects",
-  "name": "Paint in colour",
-  "summary": "A soft brush paints the colour photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the colour drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the centre outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colourisation changed.",
+  "name": "Paint in color",
+  "summary": "A soft brush paints the color photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the color drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the center outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colorisation changed.",
   "file": "blocks/171-fxp-load.js",
-  "api": "cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   colour = mix(mono, photo, smoothstep(.08,.6,m))",
+  "api": "cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   color = mix(mono, photo, smoothstep(.08,.6,m))",
   "layer": "molecule"
  },
  {
@@ -2717,7 +2717,7 @@
   "name": "Face-safe Ken Burns",
   "summary": "Each photo carries a focal box (the face, or the subject). The planner works out the largest zoom that still contains the box at this frame’s aspect ratio, then pans and zooms between two valid framings over seven seconds, clamping every frame so the face is never cut. If the frame is too wide even at full size, it zooms out over a blurred extension of the same photo instead of cropping the head. Slides cross-fade for 1.2 s while still moving. Use when: a hero slideshow or story cover animates portraits that must survive phone, tablet and desktop crops.",
   "file": "blocks/171-fxp-load.js",
-  "api": "zMax = min(1.16, cropW/boxW, cropH/boxH)   centre = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2",
+  "api": "zMax = min(1.16, cropW/boxW, cropH/boxH)   center = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2",
   "layer": "molecule"
  },
  {
@@ -2742,18 +2742,18 @@
   "id": "fxp-palette",
   "category": "Photo effects",
   "name": "Theme from photo",
-  "summary": "Original: the cover photo proposes the site’s accent. Five colours are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to grey), and choosing it morphs the preview button to that colour, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colours that actually belong to their imagery.",
+  "summary": "Original: the cover photo proposes the site’s accent. Five colors are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to gray), and choosing it morphs the preview button to that color, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colors that actually belong to their imagery.",
   "file": "blocks/171-fxp-load.js",
-  "api": "palette = kmeans(oklab(px), 5)   spot = mix(px, grey, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)",
+  "api": "palette = kmeans(oklab(px), 5)   spot = mix(px, gray, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)",
   "layer": "molecule"
  },
  {
-  "id": "agentbehaviours",
+  "id": "agentbehaviors",
   "category": "Agent identity",
-  "name": "Agent behaviours",
-  "summary": "One agent performs eighteen behaviours inside a small web page, each a short loop that ends where it began. It hops to get around and every landing squashes and recovers without bouncing. What it carries trails its body and tilts against the motion. It leans into whatever it pushes, and its face changes mood brows first, then lids, then mouth. The page answers on the same clock: a button squashes, an outline snaps leading edge first, a pin goes in, text is struck through. Asking permission waits for your real Allow or Deny.",
+  "name": "Agent behaviors",
+  "summary": "One agent performs eighteen behaviors inside a small web page, each a short loop that ends where it began. It hops to get around and every landing squashes and recovers without bouncing. What it carries trails its body and tilts against the motion. It leans into whatever it pushes, and its face changes mood brows first, then lids, then mouth. The page answers on the same clock: a button squashes, an outline snaps leading edge first, a pin goes in, text is struck through. Asking permission waits for your real Allow or Deny.",
   "api": "",
-  "file": "identity/agentbehaviours.js",
+  "file": "identity/agentbehaviors.js",
   "layer": "molecule"
  },
  {
@@ -2762,7 +2762,7 @@
   "name": "Agent duet",
   "summary": "Two agents and Maya’s cursor work one checkout page. The review agent lifts its lens to the total, the outline snaps around it, and it plants a pin. It turns to the fix agent, they catch each other’s eye, and the note flies across on a spring. The fix agent hops over, its pencil nudges the total back into line, and the reviewer watches and smiles. Maya’s cursor comes in, both agents look up at it, and her click resolves the pin. They hop, staggered. Drag either agent to interrupt: the other stops to watch, and once it lands they pick up the beat they were on.",
   "api": "",
-  "file": "identity/agentbehaviours.js",
+  "file": "identity/agentbehaviors.js",
   "layer": "molecule"
  },
  {
@@ -2796,7 +2796,7 @@
   "id": "agentmarks",
   "category": "Agent identity",
   "name": "Agent mark concepts",
-  "summary": "Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.",
+  "summary": "Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text color. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.",
   "api": "",
   "file": "identity/agentmark.js",
   "layer": "molecule"
@@ -2869,7 +2869,7 @@
   "id": "focusline",
   "category": "Writing",
   "name": "Focus sentence",
-  "summary": "One sentence at a time carries full ink while the rest sink to a dim grey on the same soft spring. Moving the caret simply retargets that spring, so focus bends mid-flight instead of restarting.",
+  "summary": "One sentence at a time carries full ink while the rest sink to a dim gray on the same soft spring. Moving the caret simply retargets that spring, so focus bends mid-flight instead of restarting.",
   "file": "blocks/174-focusline.js",
   "api": "caret.set(i): op.set(k==i?1:.35, S.soft)",
   "layer": "molecule"
@@ -3869,7 +3869,7 @@
   "id": "heartbeat",
   "category": "Dynamic",
   "name": "Heartbeat status",
-  "summary": "The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. When reports stop, the status goes stale: the dot turns grey and stops breathing, so a silent feed never reads as live. The pass ends settled on live.",
+  "summary": "The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. When reports stop, the status goes stale: the dot turns gray and stops breathing, so a silent feed never reads as live. The pass ends settled on live.",
   "file": "blocks/333-heartbeat.js",
   "api": "health.set(0|1|2, S.soft) every 2.2s   breathe: 1 ± .06·sin(2πt/2.4)",
   "layer": "molecule"
@@ -5004,7 +5004,7 @@
   "id": "auth-invite",
   "category": "Auth",
   "name": "Org invite",
-  "summary": "Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never colour alone.",
+  "summary": "Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never color alone.",
   "file": "blocks/560-auth-wave3.js",
   "api": "auth, invite, team",
   "layer": "molecule"
@@ -5112,7 +5112,7 @@
   "id": "msg-delivery",
   "category": "Messaging",
   "name": "Delivery ticks",
-  "summary": "The clock hand turns while sending. A first check draws in on Sent, a second slides in beside it on Delivered, both turn to the accent colour on Read, then the Seen by avatars slide in one after another.",
+  "summary": "The clock hand turns while sending. A first check draws in on Sent, a second slides in beside it on Delivered, both turn to the accent color on Read, then the Seen by avatars slide in one after another.",
   "file": "blocks/563-messaging.js",
   "api": "status: 0 sending → 1 sent (c1.draw) → 2 delivered (c2.draw) → 3 read (tint.set(1)) → seen[i].x.set(0, base, t + i·0.06)",
   "layer": "molecule"

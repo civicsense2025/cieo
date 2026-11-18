@@ -457,32 +457,32 @@ const setup = (fixture) => {
 
 ## Phase 5 — Docs site (Lane D, independent)
 
-### Task 13: Pages deploy, honest per-component commands, catalogue quickstart
+### Task 13: Pages deploy, honest per-component commands, catalog quickstart
 
 **Files:**
 - Create: `scripts/check-site-links.mjs`, `test/site-links.test.mjs`
 - Create: `.github/workflows/pages.yml`
 - Create: `site/index.html` (authored landing: quickstart + links; nothing generates it today — verified absent)
 - Modify: `scripts/build-component-pages.mjs` (footer `data-install` line ~52), `site/component.html` (reference shell footer), regenerate `site/components/**` (169 pages + generated `components/index.html`)
-- Modify: `atoms/web/shell.library.before.html` (the catalogue's real header at `<header class="top">` ~line 121 — NOT `scripts/build-library.mjs`, which has no markup; verified), regenerate `docs/catalogue.html`
+- Modify: `atoms/web/shell.library.before.html` (the catalog's real header at `<header class="top">` ~line 121 — NOT `scripts/build-library.mjs`, which has no markup; verified), regenerate `docs/catalog.html`
 
 **Interfaces:**
-- Produces: `checkSiteLinks(dir): string[]` (list of `file → missing target` for every relative `href`/`src` in `**/*.html`; skips `http(s):`, `mailto:`, `#`, `data:`; `/`-rooted resolved against `dir`; trailing-slash targets require `index.html`). CLI exit 1 on nonempty. Pages artifact layout: `public/` = contents of `site/` + `tokens/` + `design/` + selected `docs/` surfaces (`catalogue.html`, `agent-identity.html`, `workbench.html`, `studio/`) — so existing `../../tokens/...`, `../../design/...`, `../../docs/workbench.html` references resolve; component URLs stay `/components/<Name>.html`, root is `/index.html`.
+- Produces: `checkSiteLinks(dir): string[]` (list of `file → missing target` for every relative `href`/`src` in `**/*.html`; skips `http(s):`, `mailto:`, `#`, `data:`; `/`-rooted resolved against `dir`; trailing-slash targets require `index.html`). CLI exit 1 on nonempty. Pages artifact layout: `public/` = contents of `site/` + `tokens/` + `design/` + selected `docs/` surfaces (`catalog.html`, `agent-identity.html`, `workbench.html`, `studio/`) — so existing `../../tokens/...`, `../../design/...`, `../../docs/workbench.html` references resolve; component URLs stay `/components/<Name>.html`, root is `/index.html`.
 
 - [ ] **Step 1: Failing test** — `test/site-links.test.mjs` builds three tmp trees (clean, missing target, external-only) and asserts `checkSiteLinks`. Then run `node scripts/check-site-links.mjs site` on the current tree: record the baseline failures (site pages reference `../../tokens/` outside the tree — expected; the checker runs against the assembled `public/`, so document that the site-only run is informational).
 - [ ] **Step 2: Implement checker + test** → PASS. Commit check-only: `git add scripts/check-site-links.mjs test/site-links.test.mjs && git commit -m "Dev: The Pages build can no longer ship with silently broken links." -- scripts/check-site-links.mjs test/site-links.test.mjs`
 - [ ] **Step 3: Footer command swap** — in `scripts/build-component-pages.mjs` replace `<code data-install>npm install github:civicsense2025/cieo#v0.3.0</code>` with `<code data-install>npx cieo add ${dir}</code>` (the per-component id); mirror in `site/component.html`; regenerate pages; `node scripts/build-component-pages.mjs --check` green. Commit: `git add scripts/build-component-pages.mjs site && git commit -m "Users: Every component page now shows the one command that actually brings it in." -- scripts/build-component-pages.mjs site` (site/component.html and site/components/** travel together).
-- [ ] **Step 4: Catalogue quickstart strip** — edit `atoms/web/shell.library.before.html` (the catalogue shell): insert directly after its header, `<header class="top">` (verified at ~line 121):
+- [ ] **Step 4: Catalog quickstart strip** — edit `atoms/web/shell.library.before.html` (the catalog shell): insert directly after its header, `<header class="top">` (verified at ~line 121):
 
 ```html
 <div class="cieo-quickstart" role="note"><p><strong>Use Cieo in one command:</strong> <code>npx cieo init</code> sets up themed tokens, wires the CSS, and adds your first component. Then <code>npx cieo add dialog</code> for more. <a href="../">Component docs</a></p></div>
 ```
 
-  Style it with one rule added to that file's style block: `.cieo-quickstart{display:flex;gap:.5rem;padding:.75rem 1rem;border:1px solid var(--border-control, rgba(0,0,0,.2));border-radius:var(--radius-control,10px);margin:1rem 0}`. Regenerate: `node scripts/build-catalogue.mjs`. Commit: `git add atoms/web/shell.library.before.html docs/catalogue.html && git commit -m "Users: The catalogue opens with the one command that gets you started." -- atoms/web/shell.library.before.html docs/catalogue.html`
-- [ ] **Step 5: Root landing page** — create `site/index.html` (nothing generates it; the Pages checker and the catalogue strip's `href="../"` require it):
+  Style it with one rule added to that file's style block: `.cieo-quickstart{display:flex;gap:.5rem;padding:.75rem 1rem;border:1px solid var(--border-control, rgba(0,0,0,.2));border-radius:var(--radius-control,10px);margin:1rem 0}`. Regenerate: `node scripts/build-catalog.mjs`. Commit: `git add atoms/web/shell.library.before.html docs/catalog.html && git commit -m "Users: The catalog opens with the one command that gets you started." -- atoms/web/shell.library.before.html docs/catalog.html`
+- [ ] **Step 5: Root landing page** — create `site/index.html` (nothing generates it; the Pages checker and the catalog strip's `href="../"` require it):
 
 ```html
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cieo</title><link rel="stylesheet" href="tokens/tokens.css"><link rel="stylesheet" href="design/primitives.css"></head><body class="cieo"><main><h1>Cieo</h1><p>Calm, critically damped spring motion with a design foundation, for the web and SwiftUI.</p><p><code>npx cieo init</code> — themed tokens, wired CSS, and your first component in one command.</p><nav><a href="components/">Component docs</a> · <a href="docs/catalogue.html">Catalogue</a> · <a href="docs/studio/">Studio</a> · <a href="docs/workbench.html">Workbench</a></nav></main></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cieo</title><link rel="stylesheet" href="tokens/tokens.css"><link rel="stylesheet" href="design/primitives.css"></head><body class="cieo"><main><h1>Cieo</h1><p>Calm, critically damped spring motion with a design foundation, for the web and SwiftUI.</p><p><code>npx cieo init</code> — themed tokens, wired CSS, and your first component in one command.</p><nav><a href="components/">Component docs</a> · <a href="docs/catalog.html">Catalog</a> · <a href="docs/studio/">Studio</a> · <a href="docs/workbench.html">Workbench</a></nav></main></body></html>
 ```
 
   Commit: `git add site/index.html && git commit -m "Users: The docs site gets a front door that says how to start." -- site/index.html`
@@ -500,7 +500,7 @@ gh api repos/actions/deploy-pages/git/ref/tags/v4 --jq '.object.sha'
 mkdir -p public/docs
 cp -R site/. public/
 cp -R tokens design public/
-cp docs/catalogue.html docs/agent-identity.html docs/workbench.html public/docs/
+cp docs/catalog.html docs/agent-identity.html docs/workbench.html public/docs/
 cp -R docs/studio public/docs/studio
 node scripts/check-site-links.mjs public
 ```
@@ -627,7 +627,7 @@ Dependencies are explicit; only genuinely independent lanes run in parallel, eac
 
 1. **Wave 1 (parallel, disjoint files):**
    - **Lane R — registry:** Tasks 1–2 (owns `scripts/lib/registry.mjs`, `scripts/build-registry.mjs`, `registry/`, `src/primitives/*/manifest.json`, `package.json`).
-   - **Lane D — docs site:** Task 13 (owns `scripts/build-component-pages.mjs`, `scripts/build-library.mjs`, `site/**`, `docs/catalogue.html`, `.github/workflows/pages.yml`, `scripts/check-site-links.mjs`).
+   - **Lane D — docs site:** Task 13 (owns `scripts/build-component-pages.mjs`, `scripts/build-library.mjs`, `site/**`, `docs/catalog.html`, `.github/workflows/pages.yml`, `scripts/check-site-links.mjs`).
    - **Lane G — readiness:** Tasks 14–15 (owns `LICENSE`, `README.md`, `CONTRIBUTING.md`, `docs/installation.md`, `docs/cli.md`, `docs/source-map.json`, `.github/workflows/release.yml`).
 2. **Merge order into the feature branch:** R → D → G (R first: Lane C consumes `registry/`).
 3. **Wave 2 (sequential chain, one builder lane on the feature branch):** Lane C Tasks 3–8 → Lane I Tasks 9–10 → Lane E Tasks 11–12.

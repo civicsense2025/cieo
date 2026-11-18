@@ -63,7 +63,7 @@ Ship two distinct things so agents stop blending them:
    - Decorative stack: root `aria-hidden="true"`. Row supplies accessible names in its own `aria-label` (e.g. `aria-label="Brown v. Board, Warren, Marshall, +2 more"`), so screen readers do not hear each name twice.
    - Content rule: exclusion respected — Earl Warren (and any person with no approved photo) renders initials, never a wrong photo. No photo fallback guessing.
    - Props: `people: { name, initials, src? }[]`, `max?: number` (default 4), `size?: sm|md`.
-2. `AvatarGroupAnimated` (demo only): keeps the `084-avatars.js` fan-out + popover for the catalogue demo page. Not for rows. README says so explicitly.
+2. `AvatarGroupAnimated` (demo only): keeps the `084-avatars.js` fan-out + popover for the catalog demo page. Not for rows. README says so explicitly.
 
 Do/don't pairs on the doc page show static-in-row (do) vs fan-out-in-row (don't, with reason: cost + motion + a11y).
 

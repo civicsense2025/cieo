@@ -38,7 +38,7 @@
       "required": false,
       "nullable": false,
       "constraints": {},
-      "note": "CSS colour for the dot; defaults to the accent."
+      "note": "CSS color for the dot; defaults to the accent."
     },
     {
       "id": "className",

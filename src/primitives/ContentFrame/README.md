@@ -1,6 +1,6 @@
 # ContentFrame
 
-One idea on one ground: a top bar, the content centred, a bottom bar; left-aligned.
+One idea on one ground: a top bar, the content centered, a bottom bar; left-aligned.
 
 ## Use when
 

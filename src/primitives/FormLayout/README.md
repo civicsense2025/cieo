@@ -27,7 +27,7 @@ No motion. Single column by default; `columns` widens to `2-4`. The grid never s
 
 ## Do / don't
 
-- Do: `<FormLayout columns={2}>` with labelled fields inside a host `<form>`.
+- Do: `<FormLayout columns={2}>` with labeled fields inside a host `<form>`.
 - Don't: render the `<form>` tag here; nested forms are invalid HTML.
 
 ## Customization

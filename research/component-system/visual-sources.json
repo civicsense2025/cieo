@@ -40,7 +40,7 @@
     "url": "https://www.designsystems.com/how-a-small-team-built-figma-dot-coms-design-system/",
     "fullTextRead": true,
     "keyLesson": "An inventory exposed repeated patterns and outliers; extracting smaller flexible foundations helped a small team reuse existing work and justify exceptions.",
-    "cieoImplication": "Audit Cieo recipes before promotion. Consolidate genuine shared anatomy, retain justified layout freedom, and avoid adopting branded color nicknames or Figma marketing structures. Catalogue composition must not silently redefine reusable component ownership.",
+    "cieoImplication": "Audit Cieo recipes before promotion. Consolidate genuine shared anatomy, retain justified layout freedom, and avoid adopting branded color nicknames or Figma marketing structures. Catalog composition must not silently redefine reusable component ownership.",
     "textFile": "how-a-small-team-built-figma-dot-coms-design-system.txt",
     "rawSha256": "2c068d282d0dac2df797b3f74a09ae900ecf0f972153c22ab3496ff40d143c95"
   },
@@ -112,7 +112,7 @@
     "url": "https://www.designsystems.com/why-we-build-design-systems-an-agencys-perspective/",
     "fullTextRead": true,
     "keyLesson": "An agency handoff should provide reusable ingredients and guidance for extending functionality and aesthetics, with collaboration and continued feedback suited to each client.",
-    "cieoImplication": "Explain the task a Cieo component helps accomplish, where it fits, and how a consumer extends it safely. Cieo owns reusable source; Tessera consumes the catalogue. Avoid promising productivity gains without consumer evidence.",
+    "cieoImplication": "Explain the task a Cieo component helps accomplish, where it fits, and how a consumer extends it safely. Cieo owns reusable source; Tessera consumes the catalog. Avoid promising productivity gains without consumer evidence.",
     "textFile": "why-we-build-design-systems-an-agencys-perspective.txt",
     "rawSha256": "d99cd526beeec8f914d3daad157ac89b9f3367f1db30351c7b118c714327cf84"
   }

@@ -1,4 +1,4 @@
-export type FinishReason = 'settled' | 'cancelled' | 'gated' | 'failed' | 'disposed';
+export type FinishReason = 'settled' | 'canceled' | 'gated' | 'failed' | 'disposed';
 export interface FrameEnvironment {
     request(callback: (milliseconds: number) => void): number;
     cancel(handle: number): void;

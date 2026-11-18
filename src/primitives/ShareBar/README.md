@@ -25,7 +25,7 @@ Root `div.cieo-p-share-bar[role=img]`.
 ## Do / don't
 
 - Do: `<ShareBar label="Yes 73, No 25" segments={...} />`
-- Don't: Don't rely on colour; pair with LegendItem and labelled ends.
+- Don't: Don't rely on color; pair with LegendItem and labeled ends.
 
 ## Apple twin
 

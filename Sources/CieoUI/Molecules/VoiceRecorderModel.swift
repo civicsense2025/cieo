@@ -166,7 +166,7 @@ public final class VoiceRecorderModel {
         guard wasActive else { return }
         level = 0
         send(.cancel)
-        announce(.cancelled)
+        announce(.canceled)
         if notify { onCancel?() }
     }
 

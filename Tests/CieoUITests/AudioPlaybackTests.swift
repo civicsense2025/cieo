@@ -131,24 +131,24 @@ private final class FakeSystemAudioSessionBackend: AudioSessionBackend, @uncheck
 private final class ManualAudioSessionRetryTicket: AudioSessionRetryTicket, @unchecked Sendable {
     private let lock = NSLock()
     private var operation: (@Sendable () -> Void)?
-    private var cancelled = false
+    private var canceled = false
     private var delivered = false
 
     init(operation: @escaping @Sendable () -> Void) { self.operation = operation }
 
     var isPending: Bool {
         lock.lock(); defer { lock.unlock() }
-        return !cancelled && !delivered && operation != nil
+        return !canceled && !delivered && operation != nil
     }
 
-    var isCancelledAndUndelivered: Bool {
+    var isCanceledAndUndelivered: Bool {
         lock.lock(); defer { lock.unlock() }
-        return cancelled && !delivered
+        return canceled && !delivered
     }
 
     func cancel() {
         lock.lock(); defer { lock.unlock() }
-        cancelled = true
+        canceled = true
         operation = nil
     }
 
@@ -199,9 +199,9 @@ private final class ManualAudioSessionRetryScheduler: AudioSessionRetryScheduler
     }
 
     @discardableResult
-    func deliverNextCancelledTicket() -> Bool {
+    func deliverNextCanceledTicket() -> Bool {
         lock.lock()
-        let ticket = tickets.first(where: \.isCancelledAndUndelivered)
+        let ticket = tickets.first(where: \.isCanceledAndUndelivered)
         lock.unlock()
         return ticket?.deliver() ?? false
     }
@@ -745,9 +745,9 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertThrowsError(try manager.deactivate(owner: replacementRecordingOwner))
         XCTAssertEqual(scheduler.pendingCount, 1, "a new failure creates only one live ticket")
 
-        XCTAssertTrue(scheduler.deliverNextCancelledTicket(), "a queued stale delivery can arrive after cancellation")
+        XCTAssertTrue(scheduler.deliverNextCanceledTicket(), "a queued stale delivery can arrive after cancellation")
         XCTAssertEqual(manager.reconciliationStatus, .retrying(attempt: 1, maximumAttempts: 3, message: "category"))
-        XCTAssertEqual(backend.categories, [.playback, .playAndRecord], "the cancelled callback has no backend effect")
+        XCTAssertEqual(backend.categories, [.playback, .playAndRecord], "the canceled callback has no backend effect")
         XCTAssertEqual(scheduler.pendingCount, 1)
 
         XCTAssertTrue(scheduler.runNext())
@@ -871,8 +871,8 @@ final class AudioPlaybackTests: XCTestCase {
         XCTAssertEqual(scheduler.pendingCount, 0)
         manager = nil
 
-        XCTAssertNil(weakManager.value, "cancelling a stale ticket breaks its manager retention")
-        XCTAssertTrue(scheduler.deliverNextCancelledTicket())
+        XCTAssertNil(weakManager.value, "canceling a stale ticket breaks its manager retention")
+        XCTAssertTrue(scheduler.deliverNextCanceledTicket())
         XCTAssertTrue(backend.isActive)
         XCTAssertEqual(backend.activeValues, [true, false])
     }

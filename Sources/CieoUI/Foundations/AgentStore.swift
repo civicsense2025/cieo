@@ -173,7 +173,7 @@ public struct AgentSnapshot: Equatable, Sendable {
             let prior = s.drafts[id]
             if e.type != "draft.begin" && prior == nil { return nil }
             if let prior, prior.status != .open { return nil }
-            let status: AgentDraftStatus = e.type == "draft.cancel" ? .cancelled : (e.type == "draft.complete" ? .complete : .open)
+            let status: AgentDraftStatus = e.type == "draft.cancel" ? .canceled : (e.type == "draft.complete" ? .complete : .open)
             let draftText = e.data["text"]?.stringValue.map { String($0.prefix(limits.maxTextChars)) } ?? prior?.text ?? ""
             let draft = DraftView(
                 id: id, runId: e.runId, agentId: e.agentId, text: draftText,

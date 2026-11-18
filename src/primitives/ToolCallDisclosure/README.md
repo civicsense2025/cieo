@@ -30,7 +30,7 @@ Native open and close, no motion. Phase words: Running, Done, Failed. The error 
 
 ## Customization
 
-Body content via children. Colours from tokens. `TOOL_PHASE_WORDS` is exported.
+Body content via children. Colors from tokens. `TOOL_PHASE_WORDS` is exported.
 
 ## Limitations
 

@@ -36,7 +36,7 @@
   "events": [],
   "variants": [],
   "styleParts": [{ "id": "rows", "overrides": [], "tokenRoles": ["text", "accent"] }],
-  "constraints": { "layout": ["paired-sliders"], "content": ["labelled-pair"], "motion": ["no-motion"] },
+  "constraints": { "layout": ["paired-sliders"], "content": ["labeled-pair"], "motion": ["no-motion"] },
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "startLabel", "lengthLabel", "min", "max", "step", "unit", "start", "length", "disabled", "onStartChange", "onLengthChange", "formatValue", "className", "slotProps"], "states": [], "events": [], "parts": ["rows"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],

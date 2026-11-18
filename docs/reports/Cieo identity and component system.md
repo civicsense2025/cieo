@@ -21,7 +21,7 @@ The corrected organization preserves one Cieo repository and package. It separat
 
 A generic selection toolbar stays core even if first demonstrated in a writer. The current Writing category must be reviewed by purpose rather than moved wholesale. A simulated compiler remains a recipe until a real host supplies its state and operation contract. Airbnb’s account supports promoting team patterns after their wider usefulness is tested; it does not require every specialized pattern to enter the core. ([Maintenance](https://www.designsystems.com/5-tips-from-an-airbnb-designer-on-maintaining-a-design-system/))
 
-**A nested folder alone is not optional.** The proposal explicitly excludes `Extensions` from the core Swift target and declares Writing as its own target at that path. Core-only consumers neither import nor link it; catalogue insertion also defaults to core only. Broad package builds can still include optional targets, and package-level dependency resolution is a separate concern. The exporter currently copies CieoUI recursively, so its selection rules must change before a nested extension is added. ([Swift target API source](../../research/component-system/package-target-source.md), [architecture notes](../../research/component-system/component-architecture.md))
+**A nested folder alone is not optional.** The proposal explicitly excludes `Extensions` from the core Swift target and declares Writing as its own target at that path. Core-only consumers neither import nor link it; catalog insertion also defaults to core only. Broad package builds can still include optional targets, and package-level dependency resolution is a separate concern. The exporter currently copies CieoUI recursively, so its selection rules must change before a nested extension is added. ([Swift target API source](../../research/component-system/package-target-source.md), [architecture notes](../../research/component-system/component-architecture.md))
 
 ## Research changes the system beyond its folders
 
@@ -31,7 +31,7 @@ Three decisions follow:
 
 - **Use native controls where they already own the behavior.** Style a SwiftUI Button or compose a TextField with a label; do not invent wrappers solely to fill an atomic diagram.
 - **Give each component one manifest authority.** Typed inputs, slots, states, events, style parts and platform evidence sit beside source. Generated discovery and Tessera projections read that contract.
-- **Separate catalogue coverage from production readiness.** The inspected baseline has 540 public Swift recipe declarations, including 45 in Writing, alongside 11 current CieoUI production Swift files. Every existing ID needs a disposition; a polished recipe does not establish a reusable production API. ([source audit](../../research/component-system/component-architecture.md))
+- **Separate catalog coverage from production readiness.** The inspected baseline has 540 public Swift recipe declarations, including 45 in Writing, alongside 11 current CieoUI production Swift files. Every existing ID needs a disposition; a polished recipe does not establish a reusable production API. ([source audit](../../research/component-system/component-architecture.md))
 
 The operating model can stay small: one accountable owner per component, explicit contribution reasons, and one readiness matrix. A contribution needs a reusable problem, justified composition, documented states and scoped evidence. Enterprise committees or background adoption tracking add no necessary value here. ([Contributions](https://www.designsystems.com/keeping-design-system-contributions-in-check/), [operations notes](../../research/component-system/operations-and-coverage.md))
 
@@ -71,7 +71,7 @@ The work follows five bounded phases, with acceptance defined in the [architectu
 2. **Establish contracts and foundations.** Validate manifests, semantic styles and controlled APIs; retain `Cieo`, `CieoUI`, `CieoAtoms` and existing consumer entry points.
 3. **Promote coherent components.** Build core behavior first, then optional Writing assemblies; keep simulated operations visibly demonstrative.
 4. **Make export selection explicit.** Derive source/resource closure from selected products and preserve exact-byte provenance and destination-edit safeguards.
-5. **Adapt Tessera through its catalogue owner.** Keep discover, preview, edit, export and generate capabilities independent; preserve unavailable-pack content. Tessera currently pins `68b5026`, while this research inspected Apple foundation `9d2574f`.
+5. **Adapt Tessera through its catalog owner.** Keep discover, preview, edit, export and generate capabilities independent; preserve unavailable-pack content. Tessera currently pins `68b5026`, while this research inspected Apple foundation `9d2574f`.
 
 Standalone Cieo work can precede Tessera’s native application. Tessera’s accepted prototype and signed sandbox host/helper spike remain separate prerequisites; Cieo’s package work cannot close them. ([Tessera parity contract findings](../../research/component-system/component-architecture.md))
 

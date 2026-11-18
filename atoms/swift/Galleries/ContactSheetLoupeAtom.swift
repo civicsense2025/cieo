@@ -3,7 +3,7 @@ import Cieo
 
 public struct ContactSheetLoupeAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-contact-loupe", category: "Galleries", name: "Contact sheet with a loupe",
-        summary: "A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens centre, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the centre crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.")
+        summary: "A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens center, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the center crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.")
     @State private var point = CGPoint(x: 150, y: 90)
     @State private var active = false
     public init() {}
@@ -36,7 +36,7 @@ public struct ContactSheetLoupeAtom: MotionAtomView {
                             sheet(s)
                             ZStack {
                                 Color(white: 0.1)
-                                // the sheet itself, scaled 3.4 times about the lens centre
+                                // the sheet itself, scaled 3.4 times about the lens center
                                 sheet(s).scaleEffect(3.4, anchor: UnitPoint(x: c.x / s.width, y: c.y / s.height))
                             }
                             .mask(phCircle(c, 46, s))

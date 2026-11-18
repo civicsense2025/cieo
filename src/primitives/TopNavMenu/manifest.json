@@ -28,6 +28,6 @@
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "className", "slotProps"], "states": [], "events": [], "parts": ["group"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Labelled group of top-nav links." },
+  "documentation": { "path": "README.md", "purpose": "Labeled group of top-nav links." },
   "extensions": { "customization": {"parts":["root"],"contract":"presentation-only; controlled semantics and computed geometry remain library-owned"}}
 }

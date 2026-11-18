@@ -83,7 +83,7 @@ test('a portrait url survives quotes, parentheses and line breaks', () => {
   assert.match(render(h(Portrait, { src: 'x"y.png' })), /background-image:url\(&quot;x%22y\.png&quot;\)/);
 });
 
-test('block-ground frames never read their own inverted text colour as their background', () => {
+test('block-ground frames never read their own inverted text color as their background', () => {
   const css = readFileSync(new URL('../design/styles/primitives/content-frame.css', import.meta.url), 'utf8');
   const rule = css.split('\n').find((l) => l.includes('[data-ground="block"] {'));
   assert.ok(rule && rule.includes('background: var(--cieo-block, var(--cieo-color-text))'));

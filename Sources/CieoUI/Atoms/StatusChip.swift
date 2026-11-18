@@ -2,12 +2,12 @@ import SwiftUI
 
 /// A small rounded label that says where something stands: "Open", "In progress", "Done". It is sized to
 /// its content, wraps instead of truncating at large text sizes, and is not interactive (wrap it in a
-/// Button or a Menu label when it should be). Tone picks the colour from the host's theme; the title
+/// Button or a Menu label when it should be). Tone picks the color from the host's theme; the title
 /// carries the meaning, so the glyph is optional and decorative.
 ///
 /// VoiceOver reads the title and nothing else, so a chip in a row reads as the status word.
 public struct StatusChip: View {
-    /// How the chip is coloured. Every tone reads a theme role, so a host restyles all chips at once.
+    /// How the chip is colored. Every tone reads a theme role, so a host restyles all chips at once.
     public enum Tone: Sendable, CaseIterable {
         /// Nothing special: not started, or no state worth stressing.
         case neutral
@@ -62,7 +62,7 @@ public struct StatusChip: View {
         .accessibilityLabel(title)
     }
 
-    /// The text and glyph colour a tone uses.
+    /// The text and glyph color a tone uses.
     static func foreground(_ tone: Tone, in theme: Theme) -> Color {
         switch tone {
         case .neutral: theme.foreground

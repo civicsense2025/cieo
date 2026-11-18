@@ -113,7 +113,7 @@ export interface AgentIconDefinition {
   /** Human name, e.g. "Browsing". */
   name: string;
   group: AgentIconGroup;
-  /** Status colour the icon carries, or null for the current text colour. */
+  /** Status color the icon carries, or null for the current text color. */
   tone: AgentIconTone | null;
   /** What the icon's motion shows in the original atom. */
   description: string;

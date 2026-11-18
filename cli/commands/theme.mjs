@@ -8,7 +8,7 @@ export const USAGE = `Usage: cieo theme [key=value ...] [--print]
 
 Set theme axes in cieo.json and regenerate the theme stylesheet.
 
-Axes (any of): brand, scheme, density, radius, contrast, font, display, ground, elevation, accent, zeta
+Axes (any of): brand, scheme, density, radius, contrast, font, ground, elevation, accent, zeta
 Example: npx cieo theme brand=instrument ground=paper radius=pill
 
 Options:
@@ -17,7 +17,7 @@ Options:
 `;
 
 const FLAGS = { print: 'boolean', help: 'boolean' };
-export const THEME_KEYS = ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'accent', 'zeta'];
+export const THEME_KEYS = ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'ground', 'elevation', 'accent', 'zeta'];
 
 function parsePairs(positionals) {
   const pairs = [];

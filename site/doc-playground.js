@@ -1,5 +1,5 @@
 // site/doc-playground.js — M3-caliber interactive component stage, multi-platform tabs, and live FSM explorer.
-import { brands, createTheme, densities, grounds, radii, themeToCssVariables } from '../design/index.js';
+import { brands, createTheme, densities, grounds, radii, variables } from '../design/index.js';
 import { rovingTabs } from './roving-tabs.js';
 import { S, settleTime } from '../dist/core/spring.js';
 import {
@@ -10,18 +10,59 @@ import {
   createReorderMachine,
   createSelectionMachine,
   createSheetDetentsMachine,
-  createToastQueue,
+  createToastQueueMachine,
 } from '../dist/state/index.js';
 
-// 1. Multi-platform tablist (click + ArrowLeft/ArrowRight/Home/End)
+// 1. Multi-platform tablist (click + ArrowLeft/ArrowRight/Home/End + #panel-id deep links).
+// Panels are hidden through the attribute and an inline display, because stylesheet display rules on .doc-stage beat [hidden].
 const tabs = [...document.querySelectorAll('.doc-tabs [role="tab"]')];
+const copyText = (text, button, idle) => {
+  const done = () => {
+    button.textContent = 'Copied';
+    setTimeout(() => { button.textContent = idle; }, 1500);
+  };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done, done);
+  else done();
+};
 if (tabs.length) {
-  rovingTabs(tabs, (index) => {
-    tabs.forEach((t, j) => {
-      const panel = document.getElementById(t.getAttribute('aria-controls'));
-      if (panel) panel.hidden = index !== j;
-    });
+  const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')));
+  // The stage toolbar and telemetry belong to the Preview panel only.
+  const previewOnly = [...document.querySelectorAll('[data-stage-toolbar], [data-telemetry]')];
+  const setShown = (el, on) => { el.hidden = !on; el.style.display = on ? '' : 'none'; };
+  const select = rovingTabs(tabs, (index) => {
+    panels.forEach((panel, j) => { if (panel) setShown(panel, index === j); });
+    previewOnly.forEach((el) => setShown(el, index === 0));
   });
+  const fromHash = () => {
+    const i = panels.findIndex((p) => p && `#${p.id}` === location.hash);
+    if (i >= 0) select(i);
+  };
+  addEventListener('hashchange', fromHash);
+  select(0);
+  fromHash();
+  // Code panels: keyboard-scrollable and each carries its own copy button.
+  tabs.forEach((tab, i) => {
+    const panel = panels[i];
+    if (!panel || panel.tagName !== 'PRE') return;
+    panel.tabIndex = 0;
+    panel.style.fontFamily = 'var(--cieo-font-mono, ui-monospace, monospace)';
+    panel.style.whiteSpace = 'pre';
+    panel.style.overflow = 'auto';
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'doc-button';
+    btn.dataset.copyCode = panel.id;
+    btn.textContent = 'Copy code';
+    btn.addEventListener('click', () => copyText(panel.querySelector('code')?.textContent ?? panel.textContent, btn, 'Copy code'));
+    panel.before(btn);
+    panel.copyButton = btn;
+  });
+  // Keep each copy button next to its panel's visibility.
+  const syncCopy = () => panels.forEach((p) => { if (p?.copyButton) setShown(p.copyButton, !p.hidden); });
+  tabs.forEach((t) => t.addEventListener('click', syncCopy));
+  addEventListener('hashchange', syncCopy);
+  tabs.forEach((t) => t.addEventListener('keydown', () => queueMicrotask(syncCopy)));
+  syncCopy();
 }
 
 // 2. Copy import button
@@ -47,6 +88,11 @@ const stage = document.querySelector('[data-preview]');
 const telemetry = document.querySelector('[data-telemetry]');
 const codeEl = document.querySelector('[data-code]');
 const baseCode = codeEl ? codeEl.textContent : '';
+
+if (stage) {
+  // Overlay components (Dialog, Sheet, Lightbox) position a fixed scrim; containing it keeps the scrim and the dialog inside the stage so they cannot cover the page's own tabs.
+  stage.style.contain = 'layout paint';
+}
 
 if (toolbar && stage) {
   const compName = toolbar.dataset.component || 'Component';
@@ -104,8 +150,8 @@ if (toolbar && stage) {
     const presetName = toolbar.querySelector('[data-stage-preset]').value;
     const cfg = S[presetName] || S.base;
 
-    const theme = createTheme({ brand, ground, scheme, density, radius, display: 'serif' });
-    const vars = themeToCssVariables(theme);
+    const theme = createTheme({ brand, ground, scheme, density, radius });
+    const vars = variables(theme);
     for (const [k, v] of Object.entries(vars)) stage.style.setProperty(k, v);
     stage.style.colorScheme = scheme;
 
@@ -279,7 +325,7 @@ if (fsmSection) {
       }
       case 'toastQueue': {
         let seq = 1;
-        const q = createToastQueue({ maxVisible: 2 });
+        const q = createToastQueueMachine({ maxVisible: 2 });
         return {
           label: () => `visible ${q.getSnapshot().visible.length} · queued ${q.getSnapshot().queued.length}`,
           snapshot: () => q.getSnapshot(),
@@ -319,3 +365,6 @@ if (fsmSection) {
     renderEnvelope(null);
   }
 }
+
+// Marks the page interactive so tests and assistive tooling can wait for the tabs, knobs and machines to be wired.
+document.documentElement.dataset.playgroundReady = 'true';

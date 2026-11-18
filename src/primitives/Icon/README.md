@@ -1,6 +1,6 @@
 # Icon
 
-Decorative glyph slot, labelled only when meaningful alone.
+Decorative glyph slot, labeled only when meaningful alone.
 
 ## Use when
 
@@ -14,7 +14,7 @@ Decorative glyph slot, labelled only when meaningful alone.
 
 ## Anatomy
 
-Root `span.cieo.cieo-p-icon` with `data-size`; single glyph child. Labelled form uses `role="img"` + `aria-label`; unlabelled form is `aria-hidden`.
+Root `span.cieo.cieo-p-icon` with `data-size`; single glyph child. Labeled form uses `role="img"` + `aria-label`; unlabeled form is `aria-hidden`.
 
 ## Behavior
 
@@ -22,8 +22,8 @@ No motion. Size defaults to `md`; `sm` shrinks the glyph box. The glyph inherits
 
 ## Keyboard / accessibility
 
-- Unlabelled icons are `aria-hidden="true"` and add nothing to the tree.
-- Labelled icons use `role="img"` with a short name; types do not require it, judgment does.
+- Unlabeled icons are `aria-hidden="true"` and add nothing to the tree.
+- Labeled icons use `role="img"` with a short name; types do not require it, judgment does.
 
 ## Do / don't
 

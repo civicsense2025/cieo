@@ -101,6 +101,7 @@ test('the site theme passes every contrast pair in light, dark and high contrast
     assert.ok(auditTheme(createTheme({ ...siteThemeOptions, scheme, contrast })).every((r) => r.pass), `${scheme} ${contrast}`);
   }
   const css = read('site/theme.css');
-  assert.match(css, /--cieo-font-display: "Iowan Old Style"/);
+  assert.doesNotMatch(css, /Iowan|Palatino|Georgia|[^-]serif\b/i, 'no serif face anywhere in the site theme');
+  assert.equal(css.match(/--cieo-font-display: ([^;]+);/)[1], css.match(/--cieo-font-sans: ([^;]+);/)[1], 'headings use the sans stack');
   assert.match(css, /--cieo-radius-control: 9999px/);
 });

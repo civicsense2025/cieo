@@ -1,5 +1,5 @@
 import { hex } from './color.js';
-import { brands, densities, radii, fonts, displays, grounds, elevations } from './presets.js';
+import { brands, densities, radii, fonts, grounds, elevations } from './presets.js';
 
 export function record(value, name) {
   if (!value || typeof value !== 'object' || Array.isArray(value) || ![Object.prototype, null].includes(Object.getPrototypeOf(value))) {
@@ -39,7 +39,7 @@ export function validComponentOverrides(raw) {
 }
 
 export function options(input = {}) {
-  keys(input, ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'accent', 'zeta', 'components', 'overrides'], 'theme option');
+  keys(input, ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'ground', 'elevation', 'accent', 'zeta', 'components', 'overrides'], 'theme option');
   const get = (key, fallback) => input[key] === undefined ? fallback : input[key];
   const zeta = get('zeta', 1);
   if (typeof zeta !== 'number' || !Number.isFinite(zeta)) throw new TypeError('zeta must be a finite number.');
@@ -51,7 +51,6 @@ export function options(input = {}) {
     radius: choice(get('radius', 'soft'), Object.keys(radii), 'radius'),
     contrast: choice(get('contrast', 'standard'), ['standard', 'high'], 'contrast'),
     font: choice(get('font', 'system'), Object.keys(fonts), 'font'),
-    display: choice(get('display', 'sans'), Object.keys(displays), 'display'),
     ground: choice(get('ground', 'cool'), Object.keys(grounds), 'ground'),
     elevation: choice(get('elevation', 'soft'), Object.keys(elevations), 'elevation'),
     zeta,

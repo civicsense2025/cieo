@@ -817,7 +817,7 @@ ${gPageCSS('rpg')}
 <div class="rrp-sp" role="group" aria-label="Playback speed"><button type="button" data-s="1" aria-pressed="true">1×</button><button type="button" data-s="2" aria-pressed="false">2×</button></div>
 <div class="rrp-sb" role="slider" tabindex="0" aria-label="Run position" aria-valuemin="0" aria-valuemax="24" aria-valuenow="0"><div class="rrp-tr"></div><div class="rrp-pf"></div><div class="rrp-tks"></div><div class="rrp-ph"><i class="rrp-ln"></i><i class="rrp-hd"></i><span class="rrp-bb">0:00</span></div></div></div>
 <div class="rrp-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
-  desc:'The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centred, and clicking a row glides the playhead there on a spring.',
+  desc:'The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centered, and clicking a row glides the playhead there on a spring.',
   api:'ph = drag ? pointer.x : coast(release.v) | play ? ph + dt·speed : ph   state = derive(ph)   page.view/url/fields/pins = state   cursor.at(ph) = lerp(spotᵢ, spotᵢ₊₁, ease)   row.now = last(at ≤ ph)',
   init(st){
     const END = 24;

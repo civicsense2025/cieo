@@ -1,14 +1,14 @@
 """NPS scale motion: the plate lands exactly on the chosen option, stays inside the scale while it moves,
 and animating it does not force a layout every frame.
-Run: python3 test/browser/nps.py   (builds the catalogue into a temp dir; no installs or external requests)
+Run: python3 test/browser/nps.py   (builds the catalog into a temp dir; no installs or external requests)
 """
 import json, pathlib, subprocess, sys, tempfile
 from playwright.sync_api import sync_playwright
 root = pathlib.Path(__file__).resolve().parents[2]
 checks = {}; errors = []
 with tempfile.TemporaryDirectory(prefix='cieo-nps-') as tmp:
-    page_file = pathlib.Path(tmp) / 'catalogue.html'
-    subprocess.run(['node', str(root / 'scripts/build-catalogue.mjs'), str(page_file)], check=True, capture_output=True)
+    page_file = pathlib.Path(tmp) / 'catalog.html'
+    subprocess.run(['node', str(root / 'scripts/build-catalog.mjs'), str(page_file)], check=True, capture_output=True)
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={'width': 1400, 'height': 900})

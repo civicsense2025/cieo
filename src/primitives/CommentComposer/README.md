@@ -23,7 +23,7 @@ A `form` with an optional reply quote, then an avatar beside a column of: input 
 
 ## Keyboard / accessibility
 
-The form and input are named. Tools sit in a labelled group; the ring speaks its count once; the post button shows its busy state.
+The form and input are named. Tools sit in a labeled group; the ring speaks its count once; the post button shows its busy state.
 
 ## Do / don't
 

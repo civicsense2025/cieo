@@ -3,7 +3,7 @@ import Cieo
 
 public struct SegmentedControlAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "seg", category: "Admin kit", name: "Segmented control",
-        summary: "A measured two-edge indicator, same rules as the edge indicator hook: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.")
+        summary: "A measured two-edge indicator, same rules as the edge indicator hook: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label color morphs, arrow keys, Home and End move the selection, and there are two sizes.")
 
     public init() {}
 

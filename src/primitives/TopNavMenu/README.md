@@ -1,6 +1,6 @@
 # TopNavMenu
 
-Labelled group of top-nav links (a product family, a docs section).
+Labeled group of top-nav links (a product family, a docs section).
 
 ## Use when
 
@@ -28,7 +28,7 @@ No motion. Always visible; never collapses. Group never steals focus.
 ## Do / don't
 
 - Do: `<TopNavMenu label="Products">` with three product links.
-- Don't: wrap the whole nav to save labelling; the shared group implies relation.
+- Don't: wrap the whole nav to save labeling; the shared group implies relation.
 
 ## Customization
 

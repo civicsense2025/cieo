@@ -32,7 +32,7 @@ atom({ id:'qaupvote', cat:'Forms', name:'Live Q&A upvote', block:'q&a (upvote, q
       rows.forEach(it => { const k = rk.indexOf(it);
         it.y.set(so.checked ? (k - it.home)*h : 0, S.base, t0); }); };
     const vote = (it, d) => { if (it.done) return; it.votes += d; it.dg.set(String(it.votes).padStart(2,' ')); layout();
-      // voted state: ink fill plus a check glyph and label, so it reads without colour
+      // voted state: ink fill plus a check glyph and label, so it reads without color
       it.up.style.background = 'var(--ink)'; it.up.style.color = 'var(--card)'; it.up.textContent = '✓ Voted'; };
     const resolve = it => { if (it.done) return; const t0 = now(); it.done = true;
       it.sw.to(1, t0); it.dim.set(1, S.base, t0);

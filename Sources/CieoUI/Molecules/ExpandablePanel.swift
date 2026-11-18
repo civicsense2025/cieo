@@ -36,7 +36,7 @@ public struct ExpandablePanel<Content: View>: View {
         self.init(Text(verbatim: String(title)), isExpanded: isExpanded, content: content)
     }
 
-    /// A trailing view on the title row, such as a count, drawn in the detail type and secondary colour.
+    /// A trailing view on the title row, such as a count, drawn in the detail type and secondary color.
     public init<Accessory: View>(_ title: Text, isExpanded: Binding<Bool>, @ViewBuilder content: () -> Content,
                                  @ViewBuilder accessory: () -> Accessory) {
         self.init(title: title, bound: isExpanded, initiallyExpanded: false, content: content(),

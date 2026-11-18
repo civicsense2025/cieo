@@ -1,8 +1,16 @@
-import { toCSS, toDTCG, toPortable, serializeTheme, toNative } from '../../design/index.js';
+import { createTheme, toCSS, toDTCG, toPortable, serializeTheme, toNative } from '../../design/index.js';
 
-const extensions = { css: 'css', dtcg: 'tokens.json', json: 'json', config: 'theme.json', swift: 'swift', rust: 'rs', kotlin: 'kt', dart: 'dart', python: 'py', c: 'h' };
+const extensions = { cli: 'txt', css: 'css', dtcg: 'tokens.json', json: 'json', config: 'theme.json', swift: 'swift', rust: 'rs', kotlin: 'kt', dart: 'dart', python: 'py', c: 'h' };
+const AXES = ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'ground', 'elevation', 'accent'];
+/** The one-line `npx cieo theme` command that reproduces this theme: brand always, every other axis only when it differs from the default. */
+export function cliCommand(theme) {
+  const base = createTheme().options;
+  const pairs = AXES.filter((axis) => axis === 'brand' || (theme.options[axis] !== undefined && theme.options[axis] !== base[axis])).map((axis) => `${axis}=${theme.options[axis]}`);
+  return `npx cieo theme ${pairs.join(' ')}\n`;
+}
 export function exportContent(theme, format) {
   if (!Object.hasOwn(extensions, format)) throw new TypeError('Unknown export format.');
+  if (format === 'cli') return cliCommand(theme);
   if (format === 'css') return toCSS(theme);
   if (format === 'dtcg') return JSON.stringify(toDTCG(theme), null, 2) + '\n';
   if (format === 'json') return JSON.stringify(toPortable(theme), null, 2) + '\n';

@@ -1320,7 +1320,7 @@ final class AudioCaptureTests: XCTestCase {
         XCTAssertEqual(Recorder.remainingSeconds(elapsed: 130, maxDuration: 120), 0)
         XCTAssertEqual(Recorder.announcementText(.recording), "Recording")
         XCTAssertEqual(Recorder.announcementText(.paused), "Paused")
-        XCTAssertEqual(Recorder.announcementText(.cancelled), "Recording cancelled")
+        XCTAssertEqual(Recorder.announcementText(.canceled), "Recording canceled")
         XCTAssertEqual(Recorder.announcementText(.releaseToCancel), "Release to cancel")
         XCTAssertEqual(Recorder.announcementText(.stopped, seconds: 12), "Recording stopped, 12 seconds")
         XCTAssertEqual(Recorder.announcementText(.stopped, seconds: 1), "Recording stopped, 1 second")
@@ -1355,15 +1355,15 @@ final class AudioCaptureTests: XCTestCase {
     }
 
     @MainActor
-    func testCancellingWhileWaitingForPermissionDropsTheLateAnswer() async throws {
+    func testCancelingWhileWaitingForPermissionDropsTheLateAnswer() async throws {
         let model = Recorder(permission: { try? await Task.sleep(for: .milliseconds(50)); return true })
-        var cancelled = 0
-        model.onCancel = { cancelled += 1 }
+        var canceled = 0
+        model.onCancel = { canceled += 1 }
         model.start()
         model.cancel()
         try await Task.sleep(for: .milliseconds(150))
         XCTAssertEqual(model.state.phase, .idle, "a late grant after cancel is ignored")
-        XCTAssertEqual(cancelled, 1)
+        XCTAssertEqual(canceled, 1)
     }
 
     @MainActor

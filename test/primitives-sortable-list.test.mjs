@@ -92,12 +92,12 @@ test('announcements name the item and its 1-based position', () => {
   assert.match(sortableAnnouncement('lift', 'Draft', 2, 5), /Picked up Draft, position 2 of 5/);
   assert.equal(sortableAnnouncement('move', 'Draft', 3, 5), 'Draft moved to position 3 of 5.');
   assert.equal(sortableAnnouncement('drop', 'Draft', 3, 5), 'Draft dropped at position 3 of 5.');
-  assert.match(sortableAnnouncement('cancel', 'Draft', 2, 5), /cancelled.*position 2 of 5/);
+  assert.match(sortableAnnouncement('cancel', 'Draft', 2, 5), /canceled.*position 2 of 5/);
 });
 
 const item = (id, label) => h(SortableListItem, { key: id, id, label: label ?? id.toUpperCase() }, `row ${id}`);
 
-test('renders items in `order` regardless of child order, with one labelled handle each', () => {
+test('renders items in `order` regardless of child order, with one labeled handle each', () => {
   const html = renderToStaticMarkup(h(SortableList, { label: 'Stages', order: ['c', 'a', 'b'], onReorder() {} }, item('a'), item('b'), item('c')));
   assert.match(html, /^<ul[^>]*aria-label="Stages"/);
   assert.deepEqual([...html.matchAll(/data-sortable-id="(\w)"/g)].map((m) => m[1]), ['c', 'a', 'b']);

@@ -131,7 +131,7 @@ test('Toast deadline pauses on hover/focus and resumes with the time left', () =
   }
 });
 
-test('ClipRange pairs two labelled native sliders with a tied readout', () => {
+test('ClipRange pairs two labeled native sliders with a tied readout', () => {
   const html = renderToStaticMarkup(h(ClipRange, { label: 'Clip range', startLabel: 'Start', lengthLabel: 'Length', max: 12, start: 2, length: 4, onStartChange() {}, onLengthChange() {} }));
   assert.match(html, /role="group"/);
   assert.match(html, /aria-label="Clip range"/);

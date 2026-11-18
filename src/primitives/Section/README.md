@@ -24,7 +24,7 @@ No motion. Title renders only when provided; otherwise the section is grouped by
 
 - Root carries the region name (`aria-label`, optional). Prefer a visible `title` over a silent label.
 - Do not repeat the title text inside children headings; keep one heading per section.
-- A labelled section becomes a landmark; unlabelled sections stay plain groups.
+- A labeled section becomes a landmark; unlabeled sections stay plain groups.
 
 ## Do / don't
 
@@ -38,7 +38,7 @@ Title and label only. Spacing and type come from Cieo tokens; do not restyle the
 ## Limitations
 
 - One title heading only. Complex headers (actions, meta) belong to the host.
-- No landmark semantics beyond the labelled region; dialogs and navigation need their own primitives.
+- No landmark semantics beyond the labeled region; dialogs and navigation need their own primitives.
 
 ## Related
 

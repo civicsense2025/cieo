@@ -123,7 +123,7 @@
       "posterOrFrameObserved": false,
       "sourceTextRead": true,
       "sourceTextLesson": "Forge source compares distinct brand homepages and explains sharing layered base components while preserving layout freedom.",
-      "cieoImplication": "Preserve reusable behavior without making every Cieo consumer share the catalogue look. Homepage composition and motion remain unobserved.",
+      "cieoImplication": "Preserve reusable behavior without making every Cieo consumer share the catalog look. Homepage composition and motion remain unobserved.",
       "blocker": "cua.createBrowserTab('iab', requested URL, {visible:false}) returned 'Browser is not available: iab'; cua.listBrowsers() returned []. This is an environment blocker, not an individually verified resource failure."
     },
     {

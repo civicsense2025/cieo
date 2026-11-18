@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Typography &amp; Shape · Foundations · Cieo</title>
-<meta name="description" content="Iowan Old Style display serif, tabular UI sans and monospace scale, 5 corner profiles (square, crisp, soft, round, pill), and 3 densities.">
+<title>Type and shape · Foundations · Cieo</title>
+<meta name="description" content="One clean sans typeface for headings and body, five corner styles and three spacing densities, without ever shrinking a touch target.">
 <meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
 <link rel="stylesheet" href="./foundations.css">
@@ -15,43 +15,49 @@
   <div class="doc-shell">
     <nav class="doc-rail" aria-label="Foundations chapters">
       <span class="doc-label">Foundations</span>
-      <a href="./index.html">Overview</a><a href="./physics.html">Physics &amp; Velocity</a><a href="./choreography.html">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html" aria-current="page">Typography &amp; Shape</a><a href="./agents.html">Agent Identity</a>
+      <a href="./index.html">Overview</a><a href="./physics.html">Springs that settle</a><a href="./choreography.html">Motion between screens</a><a href="./color.html">Color that stays readable</a><a href="./typography.html" aria-current="page">Type and shape</a><a href="./agents.html">Agents you can trust</a>
     </nav>
     <div class="doc-main">
       <header class="doc-head">
-      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Typography &amp; Shape</span></p>
-      <h1>Editorial voice and quiet geometry.</h1>
-      <p>Display headings pair <code>Iowan Old Style</code> editorial serif with clean system sans body copy and tabular monospace telemetry—zero external font round-trips, zero layout shift.</p>
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Type and shape</span></p>
+      <h1>One typeface, calm shapes.</h1>
+      <p>Cieo uses a single clean sans typeface for headings, body text and buttons, so a screen reads in one voice. It is the font already on the person's device, so there is nothing to download and no text jumping around while a font loads. Corner style and spacing change the personality of an app without touching how easy it is to tap.</p>
     </header>
 
     <section aria-labelledby="type-h">
-      <h2 id="type-h">Type scale specimen</h2>
+      <h2 id="type-h">The type, top to bottom</h2>
       <div class="fnd-lab fnd-type-stack">
-        <div><span class="site-label">Display · --cieo-font-display (Iowan Old Style)</span><p class="fnd-specimen-display">Motion that settles without a bounce.</p></div>
-        <div><span class="site-label">Title · --cieo-text-xl / --cieo-font-sans</span><p class="fnd-specimen-title">Every control reads semantic tokens, never hardcoded hex values.</p></div>
-        <div><span class="site-label">Numeric &amp; Code · --cieo-font-mono (tabular-nums)</span><p class="fnd-specimen-mono">ω = 22 rad/s · ζ = 1.00 · settle = 180.4 ms · 0123456789</p></div>
+        <div><span class="site-label">Headline</span><p class="fnd-specimen-display">Plans that settle into place.</p></div>
+        <div><span class="site-label">Section title</span><p class="fnd-specimen-title">Every control takes its color and size from the theme.</p></div>
+        <div><span class="site-label">Body text</span><p class="fnd-specimen-body">Body text is set for long reading: generous line height, and never too wide to follow from one line to the next.</p></div>
+        <div><span class="site-label">Numbers and code</span><p class="fnd-specimen-mono">$1,240.50 &middot; 12:45 &middot; 0123456789</p></div>
       </div>
+      <p><strong>How to use it.</strong> Use the size names (<code>--cieo-text-heading</code>, <code>--cieo-text-body</code>) instead of pixel values, and the weight names for emphasis. Headings use the same font as the rest of the page. If your brand needs a different feel, choose <code>font: 'humanist'</code> or <code>'mono'</code> in the theme and every heading and label follows.</p>
     </section>
 
     <section aria-labelledby="shape-h">
-      <h2 id="shape-h">Interactive corner profiles &amp; density scale</h2>
-      <p>Switch among all 5 corner profiles (<code>square</code>, <code>crisp</code>, <code>soft</code>, <code>round</code>, <code>pill</code>) and 3 density tiers without shrinking accessible hit targets below 24×24 CSS px.</p>
+      <h2 id="shape-h">Corners and spacing</h2>
+      <p>Try the five corner styles and three densities. Dense layouts fit more on screen, spacious ones are easier on thumbs. Buttons and fields never get smaller than a comfortable touch target in any of them.</p>
       <div class="fnd-lab" data-shape-lab>
         <div class="fnd-controls">
-          <div class="fnd-presets" role="group" aria-label="Corner profile"><button type="button" data-shape-radius="square" aria-pressed="false">square</button><button type="button" data-shape-radius="crisp" aria-pressed="false">crisp</button><button type="button" data-shape-radius="soft" aria-pressed="false">soft</button><button type="button" data-shape-radius="round" aria-pressed="false">round</button><button type="button" data-shape-radius="pill" aria-pressed="true">pill</button></div>
-          <div class="fnd-presets" role="group" aria-label="Density"><button type="button" data-shape-density="compact" aria-pressed="false">compact</button><button type="button" data-shape-density="comfortable" aria-pressed="true">comfortable</button><button type="button" data-shape-density="spacious" aria-pressed="false">spacious</button></div>
+          <div class="fnd-presets" role="group" aria-label="Corner style"><button type="button" data-shape-radius="square" aria-pressed="false">Square</button><button type="button" data-shape-radius="crisp" aria-pressed="false">Crisp</button><button type="button" data-shape-radius="soft" aria-pressed="false">Soft</button><button type="button" data-shape-radius="round" aria-pressed="false">Round</button><button type="button" data-shape-radius="pill" aria-pressed="true">Pill</button></div>
+          <div class="fnd-presets" role="group" aria-label="Spacing density"><button type="button" data-shape-density="compact" aria-pressed="false">Compact</button><button type="button" data-shape-density="comfortable" aria-pressed="true">Comfortable</button><button type="button" data-shape-density="spacious" aria-pressed="false">Spacious</button></div>
         </div>
         <div class="fnd-shape-preview" data-shape-stage>
           <div class="fnd-shape-card">
-            <strong>Surface radius &amp; control rhythm</strong>
-            <p>Controls, inputs, and cards inherit <code>--cieo-radius-control</code> and <code>--cieo-radius-surface</code> automatically.</p>
+            <strong>Invite a teammate</strong>
+            <p>They get an email with a link that works for seven days.</p>
             <div class="fnd-shape-actions">
-              <button type="button" class="cieo cieo-button" data-variant="primary">Save changes</button>
+              <button type="button" class="cieo cieo-button" data-variant="primary">Send invite</button>
               <span class="cieo cieo-badge" data-status="success">Synced</span>
             </div>
           </div>
         </div>
       </div>
+      <p><strong>How to use it.</strong> Corners and density are two options on the theme. Everything that uses the theme updates together, so you never restyle buttons one by one.</p>
+      <pre class="doc-code"><code>import { createTheme } from 'cieo/design';
+
+createTheme({ radius: 'soft', density: 'compact' });</code></pre>
     </section>
     </div>
   </div>

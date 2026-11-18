@@ -43,15 +43,15 @@ test('first-frame failure restores touched styles and removes owner', () => {
 
 test('last legacy job cancellation releases RAF handle zero once', () => {
   const previous = { request: globalThis.requestAnimationFrame, cancel: globalThis.cancelAnimationFrame };
-  const cancelled = [];
+  const canceled = [];
   globalThis.requestAnimationFrame = () => 0;
-  globalThis.cancelAnimationFrame = handle => cancelled.push(handle);
+  globalThis.cancelAnimationFrame = handle => canceled.push(handle);
   try {
     const cancel = run({ step: () => true });
     assert.equal(active(), 1);
     cancel(); cancel();
     assert.equal(active(), 0);
-    assert.deepEqual(cancelled, [0]);
+    assert.deepEqual(canceled, [0]);
   } finally {
     if (previous.request) globalThis.requestAnimationFrame = previous.request;
     else delete globalThis.requestAnimationFrame;

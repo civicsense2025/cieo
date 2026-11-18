@@ -8,7 +8,7 @@ Static overlapping face stack for rows. Decorative; the row owns the accessible 
 
 ## Avoid when
 
-- You need hover fan-out or name popovers in a list. That demo is `AvatarGroupAnimated` on the catalogue page only; it costs too much across dozens of rows and breaks reduced-motion.
+- You need hover fan-out or name popovers in a list. That demo is `AvatarGroupAnimated` on the catalog page only; it costs too much across dozens of rows and breaks reduced-motion.
 - A face has no approved photo: render `initials`, never a guessed photo. Earl Warren shows EW.
 
 ## Accessibility
@@ -27,7 +27,7 @@ Size `sm|md` and `max` only. Overlap, ring, and initials styling come from token
 
 ## Related
 
-Avatar (atom, single face), AvatarGroupAnimated (catalogue demo only), List (organism rows).
+Avatar (atom, single face), AvatarGroupAnimated (catalog demo only), List (organism rows).
 
 ## Evidence
 

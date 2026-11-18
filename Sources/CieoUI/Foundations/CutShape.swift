@@ -5,7 +5,7 @@ public enum CutCorner: Sendable, Hashable, CaseIterable {
     case topLeading, topTrailing, bottomLeading, bottomTrailing
 }
 
-/// Geometric cuts for photos and colour blocks: arches, circles, quarter circles and pills.
+/// Geometric cuts for photos and color blocks: arches, circles, quarter circles and pills.
 /// Curves meet the frame's edges, so the cut always fills its frame without clipping or stretching.
 public struct CutShape: Shape {
     public enum Kind: Sendable, Hashable {
@@ -51,7 +51,7 @@ public struct CutShape: Shape {
         case .square:
             return Path(rect)
         case let .quarter(corner):
-            // The ellipse is centred on the opposite corner, so its arc runs through the named one.
+            // The ellipse is centered on the opposite corner, so its arc runs through the named one.
             let left = corner == .topLeading || corner == .bottomLeading
             let top = corner == .topLeading || corner == .topTrailing
             let oval = CGRect(x: rect.minX - (left ? 0 : w), y: rect.minY - (top ? 0 : h), width: 2 * w, height: 2 * h)

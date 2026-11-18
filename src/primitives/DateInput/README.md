@@ -1,6 +1,6 @@
 # DateInput
 
-Labelled calendar-date field: one native date input reusing the shared input style.
+Labeled calendar-date field: one native date input reusing the shared input style.
 
 ## Use when
 

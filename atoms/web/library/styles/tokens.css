@@ -33,10 +33,10 @@
 :root[data-cieo-library][data-theme="dark"][data-accent="coral"] { --accent:#f2b1a4; --accent-tint:#42302c; }
 :root[data-cieo-library][data-theme="dark"][data-accent="blue"] { --accent:#adc7ff; --accent-tint:#2c3651; }
 :root[data-cieo-library][data-theme="dark"][data-accent="neutral"] { --accent:#d1d5df; --accent-tint:#343841; }
-.cieo-catalogue [data-tone="lilac"] { --preview:var(--lib-lilac); }
-.cieo-catalogue [data-tone="mint"] { --preview:var(--lib-mint); }
-.cieo-catalogue [data-tone="peach"] { --preview:var(--lib-peach); }
-.cieo-catalogue [data-tone="blue"] { --preview:var(--lib-blue); }
-.cieo-catalogue [data-tone="yellow"] { --preview:var(--lib-yellow); }
-.cieo-catalogue [data-tone="pink"] { --preview:var(--lib-pink); }
-:root[data-backdrops="false"] .cieo-catalogue .tile { --preview:var(--raised); }
+.cieo-catalog [data-tone="lilac"] { --preview:var(--lib-lilac); }
+.cieo-catalog [data-tone="mint"] { --preview:var(--lib-mint); }
+.cieo-catalog [data-tone="peach"] { --preview:var(--lib-peach); }
+.cieo-catalog [data-tone="blue"] { --preview:var(--lib-blue); }
+.cieo-catalog [data-tone="yellow"] { --preview:var(--lib-yellow); }
+.cieo-catalog [data-tone="pink"] { --preview:var(--lib-pink); }
+:root[data-backdrops="false"] .cieo-catalog .tile { --preview:var(--raised); }

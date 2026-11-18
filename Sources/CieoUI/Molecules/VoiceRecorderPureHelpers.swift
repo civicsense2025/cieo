@@ -29,7 +29,7 @@ public extension VoiceRecorderModel {
 
     /// Discrete events that are announced to VoiceOver. The running clock never is.
     enum AnnouncementKind: Sendable, Equatable {
-        case recording, paused, cancelled, denied, unsupported, failed, releaseToCancel, stopped, limit
+        case recording, paused, canceled, denied, unsupported, failed, releaseToCancel, stopped, limit
     }
 
     /// A finished take. The file is an AAC `.m4a` in the temporary directory; move or upload it, the
@@ -63,7 +63,7 @@ public extension VoiceRecorderModel {
     }
 
     /// Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach
-    /// done, so a cancelled take can never produce a clip.
+    /// done, so a canceled take can never produce a clip.
     nonisolated static func step(_ state: RecorderState, _ event: Event) -> RecorderState {
         let phase = state.phase
         func to(_ next: Phase, elapsed: Int? = nil, reason: ErrorReason? = nil) -> RecorderState {
@@ -154,7 +154,7 @@ public extension VoiceRecorderModel {
         switch kind {
         case .recording: "Recording"
         case .paused: "Paused"
-        case .cancelled: "Recording cancelled"
+        case .canceled: "Recording canceled"
         case .denied: "Microphone access is blocked. Allow it in Settings."
         case .unsupported: "Voice recording is not supported on this device."
         case .failed: "Recording failed. Try again."

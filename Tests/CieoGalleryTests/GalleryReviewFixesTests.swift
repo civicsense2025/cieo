@@ -12,7 +12,7 @@ final class GalleryReviewFixesTests: XCTestCase {
     func testPhysicsLabDefaultsToCriticallyDamped() {
         XCTAssertEqual(PhysicsLabView.defaultZeta, 1.0)
         let names = Set(PhysicsLabView.sampleCurves(mode: .position, customW: 22, customZeta: PhysicsLabView.defaultZeta).map(\.series))
-        XCTAssertEqual(names, Set(PhysicsLabView.seriesNames), "every plotted series has a themed colour")
+        XCTAssertEqual(names, Set(PhysicsLabView.seriesNames), "every plotted series has a themed color")
     }
 
     func testShellTabsUseSiteNavLabelsAndCompactHidesKeyboardHint() {

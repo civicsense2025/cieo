@@ -22,7 +22,7 @@ Components for threaded discussion, voice notes, reactions, group messaging and 
 | Messaging | TypingIndicator, DeliveryStatus, UnreadDivider, GroupAvatar | SeenBy, ConversationListItem | ConversationList |
 | Review | AnnotationPin | FeedbackPopover, ActivityItem | AnnotationLayer |
 
-Every component page lives under `site/components/<Name>.html`; live motion demos are in the catalogue under Audio, Comments, Messaging and Feedback. Apple apps get the same components, names and rules in `CieoUI`; see [Apple components](apple-components.md).
+Every component page lives under `site/components/<Name>.html`; live motion demos are in the catalog under Audio, Comments, Messaging and Feedback. Apple apps get the same components, names and rules in `CieoUI`; see [Apple components](apple-components.md).
 
 ## A thread with nested replies
 

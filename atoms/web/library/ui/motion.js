@@ -1,4 +1,4 @@
-/* Presentation animation uses the existing catalogue Track, S and shared clock. */
+/* Presentation animation uses the existing catalog Track, S and shared clock. */
 (() => {
   const L = window.CieoLibrary;
   L.createPlayback = (atoms,state,errors) => {

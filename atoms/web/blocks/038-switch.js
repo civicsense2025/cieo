@@ -9,7 +9,7 @@ atom({
       </button>
     </div><div class="small muted" style="margin-top:24px">Notifications <span class="switch-state">off</span></div>
   </div><div class="hint">A soft stretch. A clear state.</div>`,
-  desc:'The knob leads with one edge and trails with the other. A native button supplies click and keyboard activation; cancelled presses never toggle the value.',
+  desc:'The knob leads with one edge and trails with the other. A native button supplies click and keyboard activation; canceled presses never toggle the value.',
   api:'knob.go(l, r)   press.set(down ? 1 : 0, S.snap)',
   init(st){
     const tg=$(st,'.tg'),kn=$(st,'.kn'),rail=$(st,'.rail'),label=$(st,'.switch-state');

@@ -5,7 +5,7 @@ Full search box under its Astryx name: a thin contract over the SearchField cont
 ## Use when
 
 - The design calls the control PowerSearch. Import from this path, not from controls directly.
-- You need a labelled native search input with clear button and optional collapsible form.
+- You need a labeled native search input with clear button and optional collapsible form.
 
 ## Avoid when
 

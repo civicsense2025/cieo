@@ -1,5 +1,5 @@
 // src/primitives/Icon/Icon.tsx
-/* Icon. Decorative glyph slot; labelled only when it carries meaning alone. */
+/* Icon. Decorative glyph slot; labeled only when it carries meaning alone. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';

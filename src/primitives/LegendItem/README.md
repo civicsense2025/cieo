@@ -4,7 +4,7 @@ A chart key: a square swatch and the meaning in words.
 
 ## Use when
 
-- A bar or chart uses colour for groups.
+- A bar or chart uses color for groups.
 
 ## Avoid when
 
@@ -25,7 +25,7 @@ No motion.
 ## Do / don't
 
 - Do: `<LegendItem color="var(--party-r)">Republican</LegendItem>`
-- Don't: Don't use a legend instead of labelling bar ends.
+- Don't: Don't use a legend instead of labeling bar ends.
 
 ## Apple twin
 

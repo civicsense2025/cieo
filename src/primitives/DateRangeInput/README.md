@@ -1,6 +1,6 @@
 # DateRangeInput
 
-Labelled start/end date pair: two native date inputs under one group name (trip dates, report window).
+Labeled start/end date pair: two native date inputs under one group name (trip dates, report window).
 
 ## Use when
 

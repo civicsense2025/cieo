@@ -1,5 +1,5 @@
 // Agent UI primitives: server renders that pin the agreed behavior. Approvals and stops are never optimistic, text is
-// never HTML, colour never carries a status alone, and the icon data module is plain data with no globals.
+// never HTML, color never carries a status alone, and the icon data module is plain data with no globals.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -54,7 +54,7 @@ test('AgentStatus: label overrides words and name precedes them', () => {
   assert.match(html, /data-status="running"/);
 });
 
-test('AgentActivity: a labelled log with one keyed row per entry, in order', () => {
+test('AgentActivity: a labeled log with one keyed row per entry, in order', () => {
   const entries = [
     { seq: 1, at, runId: 'r1', agentId: 'a1', type: 'run.status', ref: 'r1' },
     { seq: 3, at, runId: 'r1', agentId: 'a1', type: 'tool.call', ref: 'c1' },
@@ -83,7 +83,7 @@ test('ToolCallDisclosure: native details with name and phase words; error only w
   assert.ok(!render(ToolCallDisclosure, { call: call('finished', { error: 'stale' }) }).includes('stale'), 'a stale error never shows on success');
 });
 
-test('ApprovalRequest: a section labelled by its title', () => {
+test('ApprovalRequest: a section labeled by its title', () => {
   const html = render(ApprovalRequest, { approval: approval('pending') });
   const id = html.match(/aria-labelledby="([^"]+)"/)[1];
   assert.match(html, new RegExp(`<h3 id="${id}">Publish the draft\\?</h3>`));
@@ -192,7 +192,7 @@ test('agent icons: plain data, no globals, every icon has drawing data at every 
   assert.equal(readFileSync('atoms/web/identity/agenticons-actions.js', 'utf8').includes('globalThis.AgentActionIcons'), true, 'the original atom is untouched');
 });
 
-test('AgentIcon: renders every icon; decorative unless labelled; tone from data', () => {
+test('AgentIcon: renders every icon; decorative unless labeled; tone from data', () => {
   for (const icon of AGENT_ICONS) {
     const html = render(AgentIcon, { icon: icon.id });
     assert.match(html, /^<svg class="cieo cieo-p-agent-icon" viewBox="0 0 64 64" width="24" height="24"/);
@@ -201,9 +201,9 @@ test('AgentIcon: renders every icon; decorative unless labelled; tone from data'
     assert.equal(html.includes(`data-tone="${icon.tone}"`), icon.tone !== null);
     assert.ok(!/stroke-width="[^"]*"[^>]*stroke-width/.test(html) && !/[a-z]+-[a-z]+=\{/.test(html));
   }
-  const labelled = render(AgentIcon, { icon: 'failed', label: 'Failed', size: 16 });
-  assert.match(labelled, /role="img" aria-label="Failed"/);
-  assert.ok(!labelled.includes('aria-hidden'));
+  const labeled = render(AgentIcon, { icon: 'failed', label: 'Failed', size: 16 });
+  assert.match(labeled, /role="img" aria-label="Failed"/);
+  assert.ok(!labeled.includes('aria-hidden'));
   assert.equal(render(AgentIcon, { icon: 'nope' }), '', 'an unknown id renders nothing');
   assert.ok(!render(AgentIcon, { icon: 'done', outline: false }).includes('rx="15"'), 'outline can be turned off');
 });

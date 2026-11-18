@@ -7,7 +7,7 @@ import { customizePart } from '../customization.js';
 export interface TopicChipProps {
   className?: string;
   slotProps?: { root?: PrimitivePartProps };
-  /** Colour for the dot, for a chip on a dark or photo ground. Defaults to the accent. */
+  /** Color for the dot, for a chip on a dark or photo ground. Defaults to the accent. */
   dot?: string;
   children: ReactNode;
 }

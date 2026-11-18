@@ -2,20 +2,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { FrameScheduler } from '../dist/live/frame-scheduler.js';
 function clock() {
-  let serial = 0; const jobs = new Map(); const cancelled = [];
-  return { jobs, cancelled,
+  let serial = 0; const jobs = new Map(); const canceled = [];
+  return { jobs, canceled,
     request: callback => { const id = serial++; jobs.set(id, callback); return id; },
-    cancel: id => { cancelled.push(id); jobs.delete(id); },
+    cancel: id => { canceled.push(id); jobs.delete(id); },
     tick: ms => { const values = [...jobs.values()]; jobs.clear(); values.forEach(fn => fn(ms)); },
   };
 }
 function setup(capacity) { const c = clock(); const errors = []; let allowed = true;
   return { c, errors, gate: v => { allowed = v; }, scheduler: new FrameScheduler({...c, allowed: () => allowed, onError: e => errors.push(e)}, capacity) };
 }
-test('cancelling the last job cancels RAF handle zero and calls completion once', () => {
+test('canceling the last job cancels RAF handle zero and calls completion once', () => {
   const {c, scheduler} = setup(); const reasons = []; const cancel = scheduler.start({step: () => true, finish: r => reasons.push(r)});
-  assert.equal(c.jobs.size, 1); cancel(); cancel(); assert.deepEqual(c.cancelled, [0]);
-  assert.equal(c.jobs.size, 0); assert.equal(scheduler.active, 0); assert.deepEqual(reasons, ['cancelled']);
+  assert.equal(c.jobs.size, 1); cancel(); cancel(); assert.deepEqual(c.canceled, [0]);
+  assert.equal(c.jobs.size, 0); assert.equal(scheduler.active, 0); assert.deepEqual(reasons, ['canceled']);
 });
 test('a settled scheduler requests no idle frames', () => {
   const {c, scheduler} = setup(); let calls = 0; scheduler.start({step: () => { calls++; return false; }});

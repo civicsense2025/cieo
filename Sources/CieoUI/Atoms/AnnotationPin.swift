@@ -117,8 +117,8 @@ public struct AnnotationPin: View {
     /// Height of a pin whose body is `diameter` wide.
     public static func height(forDiameter diameter: CGFloat) -> CGFloat { diameter * heightRatio }
 
-    /// How far the centre of the round body sits above the tip.
-    public static func centreRise(diameter: CGFloat) -> CGFloat { height(forDiameter: diameter) - diameter / 2 }
+    /// How far the center of the round body sits above the tip.
+    public static func centerRise(diameter: CGFloat) -> CGFloat { height(forDiameter: diameter) - diameter / 2 }
 
     /// Accessible name: "Comment 3, open" or "Comment 3 by Ava, resolved". The index is clamped to at least 1.
     public static func annotationPinLabel(_ index: Int, state: State = .open, author: String? = nil) -> String {
@@ -138,16 +138,16 @@ public struct AnnotationPin: View {
 struct Teardrop: Shape {
     func path(in rect: CGRect) -> Path {
         let r = rect.width / 2
-        let centre = CGPoint(x: rect.midX, y: rect.minY + r)
+        let center = CGPoint(x: rect.midX, y: rect.minY + r)
         let tip = CGPoint(x: rect.midX, y: rect.maxY)
-        let reach = tip.y - centre.y
+        let reach = tip.y - center.y
         guard reach > r else { return Path(ellipseIn: rect) }
         let phi = acos(r / reach)
-        let right = CGPoint(x: centre.x + r * sin(phi), y: centre.y + r * cos(phi))
+        let right = CGPoint(x: center.x + r * sin(phi), y: center.y + r * cos(phi))
         var path = Path()
         path.move(to: tip)
         path.addLine(to: right)
-        path.addArc(center: centre, radius: r, startAngle: .radians(.pi / 2 - phi),
+        path.addArc(center: center, radius: r, startAngle: .radians(.pi / 2 - phi),
                     endAngle: .radians(.pi / 2 + phi), clockwise: true)
         path.closeSubpath()
         return path

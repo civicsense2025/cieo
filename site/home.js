@@ -56,7 +56,7 @@ if (root) {
       lane.pos = lane.goal + x; lane.v = v;
       const travel = lane.goal - lane.start;
       if (Math.abs(travel) > 0.01) lane.peak = Math.max(lane.peak, (Math.sign(travel) * (lane.pos - lane.goal)) / Math.abs(travel));
-      // Settled means within 0.1% of the distance travelled, the same bar the library's settleTime() uses.
+      // Settled means within 0.1% of the distance traveled, the same bar the library's settleTime() uses.
       if (Math.abs(x) <= 1e-3 * Math.max(Math.abs(travel), 0.05) && Math.abs(v) < 5e-2) { lane.moving = false; lane.pos = lane.goal; lane.v = 0; lane.settledAt = dt; }
       else any = true;
       draw(lane);

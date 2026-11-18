@@ -1,10 +1,10 @@
-"""Catalogue atoms never read layout inside their frame loop.
+"""Catalog atoms never read layout inside their frame loop.
 A frame loop that reads offset*/client*/getBoundingClientRect after writing styles forces a layout every frame, which is what made
 motion jagged under load. Each tile below is shown alone, its controls are clicked, and every layout read made while the tile's
 render function runs is counted. Reads that are the one-time first measurement of an element (size()) are not counted.
 Elements an atom follows (a cursor on a moving target, a panel under a header) are read through frameLayout(), which hands back a
 snapshot taken at the start of the frame; only the first read of a new element is live.
-Run: python3 test/browser/frame-reads.py   (builds the catalogue into a temp dir; no installs or external requests)
+Run: python3 test/browser/frame-reads.py   (builds the catalog into a temp dir; no installs or external requests)
 """
 import pathlib, subprocess, sys, tempfile
 from playwright.sync_api import sync_playwright
@@ -25,8 +25,8 @@ INSTRUMENT = '''() => { window.__reads = 0; window.__in = 0; const P = Element.p
   const g = P.getBoundingClientRect; P.getBoundingClientRect = function () { count(); return g.call(this); }; }'''
 failures = {}; errors = []; checks = {}
 with tempfile.TemporaryDirectory(prefix='cieo-frames-') as tmp:
-    page_file = pathlib.Path(tmp) / 'catalogue.html'
-    subprocess.run(['node', str(root / 'scripts/build-catalogue.mjs'), str(page_file)], check=True, capture_output=True)
+    page_file = pathlib.Path(tmp) / 'catalog.html'
+    subprocess.run(['node', str(root / 'scripts/build-catalog.mjs'), str(page_file)], check=True, capture_output=True)
     with sync_playwright() as p:
         browser = p.chromium.launch()
         page = browser.new_page(viewport={'width': 1400, 'height': 900})
@@ -54,7 +54,7 @@ with tempfile.TemporaryDirectory(prefix='cieo-frames-') as tmp:
             # a handful of reads per click (event handlers measuring a just-changed DOM) is fine; a read on most frames is the bug
             if reads / max(frames, 1) > 0.2: failures[atom] = round(reads / max(frames, 1), 2)
         checks['no-layout-reads-in-frame-loops'] = not failures
-        # the shared catalogue loop must not measure off-screen tiles or re-set the hidden attribute every frame
+        # the shared catalog loop must not measure off-screen tiles or re-set the hidden attribute every frame
         page.evaluate("document.querySelectorAll('article.tile').forEach(t => t.style.display = '')"); page.wait_for_timeout(600)
         scrim = page.evaluate('''() => new Promise(done => { let n = 0; const m = new MutationObserver(r => { n += r.length; });
           m.observe(document.getElementById('focusScrim'), { attributes: true, attributeFilter: ['hidden'] }); setTimeout(() => done(n), 600); })''')

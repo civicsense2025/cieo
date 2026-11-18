@@ -3,7 +3,7 @@ import Cieo
 
 public struct BeforeAfterLensAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txc-compare", category: "Carousels", name: "Before and after lens",
-        summary: "The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centred on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.")
+        summary: "The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centered on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var clock = PhClock(0.5, .snap)
     @State private var live: Double?
@@ -28,7 +28,7 @@ public struct BeforeAfterLensAtom: MotionAtomView {
                         layers(f, g.size)
                         Rectangle().fill(.white).frame(width: 2).position(x: g.size.width * f, y: g.size.height / 2)
                         Circle().fill(.white).frame(width: 26, height: 26).shadow(radius: 3).position(x: g.size.width * f, y: g.size.height / 2)
-                        // while held the knob opens into a 2.25x lens centred on the seam
+                        // while held the knob opens into a 2.25x lens centered on the seam
                         layers(f, g.size).scaleEffect(2.25, anchor: UnitPoint(x: f, y: 0.5))
                             .mask(phCircle(CGPoint(x: g.size.width * f, y: g.size.height / 2), 44, g.size))
                             .overlay(Circle().stroke(.white, lineWidth: 2).frame(width: 88, height: 88).position(x: g.size.width * f, y: g.size.height / 2))

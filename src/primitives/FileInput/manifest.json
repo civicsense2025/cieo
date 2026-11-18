@@ -31,6 +31,6 @@
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "name", "accept", "multiple", "className", "slotProps"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Labelled native file picker." },
+  "documentation": { "path": "README.md", "purpose": "Labeled native file picker." },
   "extensions": { "styleDependency": "design/styles/controls.css", "customization": {"presentationParts":["root","label","input"],"ownedSemantics":true,"existingContentSlotsPreserved":true} }
 }

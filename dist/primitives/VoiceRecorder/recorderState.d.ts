@@ -36,7 +36,7 @@ export type RecorderEvent = {
 export declare const recorderIdle: RecorderState;
 /** True while a microphone, or a request for one, is in use. */
 export declare function isRecorderActive(phase: RecorderPhase): boolean;
-/** Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach done, so a cancelled take can never produce a clip. */
+/** Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach done, so a canceled take can never produce a clip. */
 export declare function voiceRecorderStep(state: RecorderState, event: RecorderEvent): RecorderState;
 /** True when a step finished a take, which is the only moment a clip may be handed to the host. */
 export declare function shouldEmitClip(prev: RecorderState, next: RecorderState): boolean;
@@ -58,7 +58,7 @@ export declare function recorderAfterCleanup(state: RecorderState): RecorderStat
 export declare function remainingSeconds(elapsed: number, maxDuration: number): number;
 /** True in the last 10 seconds of a take, when the clock switches to a countdown. Short limits (10s or less) never warn. */
 export declare function isNearLimit(elapsed: number, maxDuration: number): boolean;
-export type RecorderAnnouncement = 'recording' | 'paused' | 'cancelled' | 'denied' | 'unsupported' | 'failed' | 'release-to-cancel' | 'stopped' | 'limit';
+export type RecorderAnnouncement = 'recording' | 'paused' | 'canceled' | 'denied' | 'unsupported' | 'failed' | 'release-to-cancel' | 'stopped' | 'limit';
 /** Sentence for the live region. Only discrete events are announced, never the running clock. */
 export declare function recorderAnnouncement(kind: RecorderAnnouncement, seconds?: number): string;
 export interface VoiceClip {

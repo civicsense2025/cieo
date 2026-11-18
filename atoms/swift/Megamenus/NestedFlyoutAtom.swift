@@ -112,8 +112,8 @@ private struct FlyColumn: View {
         task?.cancel()
         let target = node.kids.isEmpty ? nil : node.id
         guard openID != target else { return }
-        let travelling = openID != nil && inTriangle(pointer, anchor, CGPoint(x: child.minX, y: child.minY), CGPoint(x: child.minX, y: child.maxY))
-        let wait = openID == nil ? 100 : (travelling ? 350 : 50)
+        let traveling = openID != nil && inTriangle(pointer, anchor, CGPoint(x: child.minX, y: child.minY), CGPoint(x: child.minX, y: child.maxY))
+        let wait = openID == nil ? 100 : (traveling ? 350 : 50)
         task = Task {
             try? await Task.sleep(for: .milliseconds(wait))
             guard !Task.isCancelled else { return }

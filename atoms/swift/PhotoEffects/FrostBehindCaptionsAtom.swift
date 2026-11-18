@@ -14,12 +14,12 @@ public struct FrostBehindCaptionsAtom: MotionAtomView {
                 PhFollow(target: 1, preset: .soft, epoch: epoch) { raw in
                     let t = frost ? raw : 1
                     GeometryReader { g in
-                        let centre = UnitPoint(x: 0.28, y: 0.78)
+                        let center = UnitPoint(x: 0.28, y: 0.78)
                         ZStack(alignment: .bottomLeading) {
                             phPhoto(0, g.size)
                             // the whole photo starts frosted, then clears from the far corners toward the caption
                             Rectangle().fill(.ultraThinMaterial)
-                                .mask(RadialGradient(colors: [.white, .white, .clear], center: centre, startRadius: 0, endRadius: max(1, g.size.width * (1.1 - 1.05 * phSmooth(t)))))
+                                .mask(RadialGradient(colors: [.white, .white, .clear], center: center, startRadius: 0, endRadius: max(1, g.size.width * (1.1 - 1.05 * phSmooth(t)))))
                                 .opacity(frost ? 1 : 0)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("The river crossing").font(.headline)

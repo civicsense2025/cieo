@@ -31,7 +31,7 @@ public enum ApprovalState: String, CaseIterable, Codable, Equatable, Sendable {
 }
 
 public enum AgentDraftStatus: String, CaseIterable, Codable, Equatable, Sendable {
-    case open, cancelled, complete
+    case open, canceled, complete
     public var isSettled: Bool { self != .open }
 }
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agent Identity &amp; Supervision · Foundations · Cieo</title>
-<meta name="description" content="Visual identity and supervision laws for software agents: square bodies with globe antennas versus round human avatars, 24 status glyphs, and non-optimistic approvals.">
+<title>Agents you can trust · Foundations · Cieo</title>
+<meta name="description" content="AI helpers look different from people, ask before anything final, and never claim success before it is confirmed. Try the approval demo.">
 <meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
 <link rel="stylesheet" href="./foundations.css">
@@ -15,17 +15,17 @@
   <div class="doc-shell">
     <nav class="doc-rail" aria-label="Foundations chapters">
       <span class="doc-label">Foundations</span>
-      <a href="./index.html">Overview</a><a href="./physics.html">Physics &amp; Velocity</a><a href="./choreography.html">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html" aria-current="page">Agent Identity</a>
+      <a href="./index.html">Overview</a><a href="./physics.html">Springs that settle</a><a href="./choreography.html">Motion between screens</a><a href="./color.html">Color that stays readable</a><a href="./typography.html">Type and shape</a><a href="./agents.html" aria-current="page">Agents you can trust</a>
     </nav>
     <div class="doc-main">
       <header class="doc-head">
-      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Agent Identity</span></p>
-      <h1>Agents are square; people are round.</h1>
-      <p>A reader must tell in a peripheral glance who acted and who approved. Human avatars are always circular; software agents always occupy a crisp rounded-square silhouette topped with a globe antenna.</p>
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Agents you can trust</span></p>
+      <h1>Know who did what, and what is sure.</h1>
+      <p>When software acts on your behalf, you need two answers at a glance: was that a person or an automated helper, and did it really happen? Cieo gives helpers, called agents, a square shape with a small antenna, and keeps people round. Agents also never say something worked until the system behind them confirms it.</p>
     </header>
 
     <section aria-labelledby="silhouette-h">
-      <h2 id="silhouette-h">1. Silhouette &amp; supervision contract</h2>
+      <h2 id="silhouette-h">Square for agents, round for people</h2>
       <div class="fnd-lab fnd-compare-marks">
         <div class="fnd-mark-box">
           <svg viewBox="0 0 80 80" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
@@ -36,8 +36,8 @@
             <circle cx="48" cy="38" r="2.4" fill="currentColor"/>
             <path d="M33 48 Q40 52 47 48" stroke-linecap="round"/>
           </svg>
-          <strong>Software Agent</strong>
-          <p>Square body + globe antenna. Never impersonates a person; pauses visibly on <a href="../components/ApprovalRequest.html">ApprovalRequest</a>.</p>
+          <strong>Software agent</strong>
+          <p>A square body with an antenna. It never pretends to be a person, and it stops to ask before anything final (<a href="../components/ApprovalRequest.html">ApprovalRequest</a>).</p>
         </div>
         <div class="fnd-mark-box">
           <svg viewBox="0 0 80 80" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
@@ -45,20 +45,38 @@
             <circle cx="40" cy="34" r="7"/>
             <path d="M25 56 C28 47 52 47 55 56" stroke-linecap="round"/>
           </svg>
-          <strong>Human Supervisor</strong>
-          <p>Circular avatar (<a href="../components/Avatar.html">Avatar</a>). Owns final consent for destructive or external actions.</p>
+          <strong>Person</strong>
+          <p>A round avatar (<a href="../components/Avatar.html">Avatar</a>). A person gives the final yes for anything destructive or sent outside.</p>
         </div>
       </div>
     </section>
 
+    <section aria-labelledby="approval-h">
+      <h2 id="approval-h">An approval that tells the truth</h2>
+      <p>Press <strong>Approve</strong>. The button says it is waiting until the system confirms. Turn on <strong>The server does not answer</strong> and you will see Cieo admit it is not sure, instead of showing a success it cannot prove.</p>
+      <div class="fnd-lab" data-approval-lab>
+        <div class="fnd-approval">
+          <span class="cieo-badge" data-approval-badge data-status="info">Waiting for you</span>
+          <p data-approval-text>Agent wants to send the invoice to 42 customers.</p>
+          <div class="fnd-shape-actions">
+            <button type="button" class="cieo cieo-button" data-variant="primary" data-approve>Approve</button>
+            <button type="button" class="cieo cieo-button" data-reset hidden>Try again</button>
+          </div>
+        </div>
+        <label class="fnd-check"><input type="checkbox" data-offline> The server does not answer</label>
+        <p class="fnd-readout" data-approval-status aria-live="polite">Nothing has been sent.</p>
+      </div>
+      <p><strong>How to use it.</strong> Use <a href="../components/ApprovalRequest.html">ApprovalRequest</a> and <a href="../components/RunControls.html">RunControls</a> with an async action. The action moves from idle to pending, then to done, failed or uncertain, and the screen only shows success once your code reports it. Also see <a href="../components/AgentStatus.html">AgentStatus</a>, <a href="../components/AgentActivity.html">AgentActivity</a>, <a href="../components/AgentLanes.html">AgentLanes</a>, <a href="../components/StreamingMessage.html">StreamingMessage</a> and <a href="../components/ToolCallDisclosure.html">ToolCallDisclosure</a>.</p>
+    </section>
+
     <section aria-labelledby="glyphs-h">
-      <h2 id="glyphs-h">2. Optical-size status glyphs (24 states)</h2>
-      <p>Every <a href="../components/AgentIcon.html">AgentIcon</a> carries three hand-tuned optical tiers (<code>≤20px</code> compact, <code>24px</code> regular, <code>&gt;24px</code> large) with stroke compensation so outlines stay crisp at badge scale and hero scale alike.</p>
+      <h2 id="glyphs-h">24 status icons that stay crisp at any size</h2>
+      <p>Each icon is redrawn for small, regular and large sizes, with the line weight adjusted so it looks equally sharp in a tiny badge and on a hero card. Pick a size to see it.</p>
       <div class="fnd-lab" data-agent-size-lab>
-        <div class="fnd-presets" role="group" aria-label="Optical glyph size">
-          <button type="button" data-glyph-size="18" aria-pressed="false">18 px · compact</button>
-          <button type="button" data-glyph-size="24" aria-pressed="false">24 px · regular</button>
-          <button type="button" data-glyph-size="36" aria-pressed="true">36 px · large</button>
+        <div class="fnd-presets" role="group" aria-label="Icon size">
+          <button type="button" data-glyph-size="18" aria-pressed="false">Small, 18 px</button>
+          <button type="button" data-glyph-size="24" aria-pressed="false">Regular, 24 px</button>
+          <button type="button" data-glyph-size="36" aria-pressed="true">Large, 36 px</button>
         </div>
         <div class="fnd-agent-grid">
     <div class="fnd-agent-glyph" data-agent-icon="browsing">
@@ -206,11 +224,7 @@
     </div>
   </div>
       </div>
-    </section>
-
-    <section aria-labelledby="pack-h">
-      <h2 id="pack-h">3. Non-optimistic agent pack components</h2>
-      <p>Approval and run controls use Cieo's <code>asyncAction</code> state machine: pressing Approve transitions to <code>pending</code> until the host confirms execution, surfacing <code>uncertain</code> rather than false success on timeout. Inspect <a href="../components/AgentStatus.html">AgentStatus</a>, <a href="../components/AgentActivity.html">AgentActivity</a>, <a href="../components/AgentLanes.html">AgentLanes</a>, <a href="../components/ApprovalRequest.html">ApprovalRequest</a>, <a href="../components/RunControls.html">RunControls</a>, <a href="../components/StreamingMessage.html">StreamingMessage</a>, and <a href="../components/ToolCallDisclosure.html">ToolCallDisclosure</a>.</p>
+      <p><strong>How to use it.</strong> Render <code>AgentIcon</code> with the icon name and a size, and it picks the right drawing for you: <code>&lt;AgentIcon icon="waiting" size={24} /&gt;</code>.</p>
     </section>
     </div>
   </div>

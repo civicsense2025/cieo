@@ -1,4 +1,4 @@
-"""Catalogue completeness and decorative chrome checks without starting every view."""
+"""Catalog completeness and decorative chrome checks without starting every view."""
 from pathlib import Path
 import re
 import unittest

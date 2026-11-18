@@ -53,7 +53,7 @@ final class MessagingFeedbackTests: XCTestCase {
 
     // MARK: - SeenBy, listNames, GroupAvatar
 
-    func testSeenByLabelAndListNamesSummariseReaders() {
+    func testSeenByLabelAndListNamesSummarizeReaders() {
         XCTAssertEqual(SeenBy.seenByLabel([]), "")
         XCTAssertEqual(SeenBy.seenByLabel(["Ava"]), "Seen by Ava")
         XCTAssertEqual(SeenBy.seenByLabel(["Ava", "Ben"]), "Seen by Ava and Ben")
@@ -126,7 +126,7 @@ final class MessagingFeedbackTests: XCTestCase {
         XCTAssertEqual(ConversationListItem<EmptyView>.unreadBadgeText(-4), "0")
     }
 
-    func testConversationLabelSummarisesARowForScreenReaders() {
+    func testConversationLabelSummarizesARowForScreenReaders() {
         let label = ConversationListItem<EmptyView>.conversationLabel
         XCTAssertEqual(label(.init(title: "Design team", unread: 3, preview: "Ava: see you at 3", time: "9:41 AM")),
                        "Design team, 3 unread, Ava: see you at 3, 9:41 AM")
@@ -184,10 +184,10 @@ final class MessagingFeedbackTests: XCTestCase {
         XCTAssertEqual(AnnotationPin.clampUnit(.infinity), 0)
     }
 
-    func testPinGeometryPutsTheBodyCentreAboveTheTip() {
+    func testPinGeometryPutsTheBodyCenterAboveTheTip() {
         let d: CGFloat = 28
         XCTAssertGreaterThan(AnnotationPin.height(forDiameter: d), d)
-        XCTAssertEqual(AnnotationPin.centreRise(diameter: d), AnnotationPin.height(forDiameter: d) - d / 2, accuracy: 1e-9)
+        XCTAssertEqual(AnnotationPin.centerRise(diameter: d), AnnotationPin.height(forDiameter: d) - d / 2, accuracy: 1e-9)
     }
 
     func testTheTeardropEndsInATipOnTheBottomEdge() {
@@ -197,7 +197,7 @@ final class MessagingFeedbackTests: XCTestCase {
         XCTAssertEqual(path.boundingRect.minY, rect.minY, accuracy: 0.01)
         XCTAssertEqual(path.boundingRect.width, rect.width, accuracy: 0.01)
         XCTAssertTrue(path.contains(CGPoint(x: 14, y: 14)))
-        XCTAssertTrue(path.contains(CGPoint(x: 14, y: 33)), "the tip tapers along the centre line")
+        XCTAssertTrue(path.contains(CGPoint(x: 14, y: 33)), "the tip tapers along the center line")
         XCTAssertFalse(path.contains(CGPoint(x: 2, y: 33)), "and is narrow near the bottom")
     }
 

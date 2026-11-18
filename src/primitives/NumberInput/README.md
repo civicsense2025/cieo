@@ -1,6 +1,6 @@
 # NumberInput
 
-Labelled numeric field: one native number input reusing the shared input style.
+Labeled numeric field: one native number input reusing the shared input style.
 
 ## Use when
 

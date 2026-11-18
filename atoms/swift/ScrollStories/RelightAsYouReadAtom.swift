@@ -5,7 +5,7 @@ public struct RelightAsYouReadAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "txs-relight", category: "Scroll stories", name: "Relight as you read",
         summary: "Use when the photo should keep pace with long-form reading: an essay, a case study, a place. As you read, the city relights from noon to golden hour. The warm exposure arrives as a soft band sweeping from the sun’s corner (top right) toward the bottom left, so light visibly travels across the scene; the time tag counts with it and the paragraph being read brightens. Reduced motion replaces the sweep with an even cross-fade.")
     public init() {}
-    private let paras = ["Noon: flat light, every roof the same grey.", "Mid-afternoon: shadows lengthen toward the river.", "Evening: the far hills catch it first."]
+    private let paras = ["Noon: flat light, every roof the same gray.", "Mid-afternoon: shadows lengthen toward the river.", "Evening: the far hills catch it first."]
 
     public var body: some View {
         PhScrollStory(hint: "As you read, the scene relights from noon to golden hour", length: 3) { p, s in

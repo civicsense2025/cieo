@@ -76,7 +76,7 @@ final class SectionHeaderAccessoryTests: XCTestCase {
     func testValueIsQuietAndReadsTheValueRole() throws {
         let header = SectionHeader("Bills", value: Text(verbatim: "12"))
         XCTAssertTrue(ComponentIconTests.containsRed(try image(header.environment(\.componentTheme, Theme(secondary: red)))),
-                      "the value uses the secondary colour")
+                      "the value uses the secondary color")
         XCTAssertFalse(ComponentIconTests.containsRed(try image(header.environment(\.componentTheme, Theme(accent: red)))),
                        "the value is not styled as an action")
         let plain = try image(header).height

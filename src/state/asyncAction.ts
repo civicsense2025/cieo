@@ -1,7 +1,7 @@
 /* Headless async action machine: double-submit lock, attemptId preservation on retry, truthful timeout -> uncertain. */
 import { createMachineStore, unchanged, type AnchorRect, type MachineStore, type TransitionEnvelope } from './types.js';
 
-export type AsyncActionStatus = 'idle' | 'pending' | 'succeeded' | 'failed' | 'cancelled' | 'uncertain';
+export type AsyncActionStatus = 'idle' | 'pending' | 'succeeded' | 'failed' | 'canceled' | 'uncertain';
 
 export interface AsyncActionState {
   readonly status: AsyncActionStatus;
@@ -27,7 +27,7 @@ export interface AsyncActionOptions {
 export const defaultAttemptId = (): string =>
   typeof globalThis.crypto?.randomUUID === 'function' ? globalThis.crypto.randomUUID() : `attempt-${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
 
-/** A late answer to a cancelled or superseded attempt must not complete the current one. */
+/** A late answer to a canceled or superseded attempt must not complete the current one. */
 const staleAnswer = (state: AsyncActionState, attemptId: string | undefined): boolean =>
   attemptId !== undefined && attemptId !== state.attemptId;
 
@@ -103,14 +103,14 @@ export function reduceAsyncAction(
     }
     case 'CANCEL': {
       if (state.status !== 'pending') return unchanged(state, event);
-      const next: AsyncActionState = { status: 'cancelled', attemptId: state.attemptId, attemptCount: state.attemptCount };
+      const next: AsyncActionState = { status: 'canceled', attemptId: state.attemptId, attemptCount: state.attemptCount };
       return {
         prev: state,
         next,
         event,
         changed: true,
         direction: -1,
-        announcement: event.announcement ?? 'Cancelled.',
+        announcement: event.announcement ?? 'Canceled.',
       };
     }
     case 'RESET': {

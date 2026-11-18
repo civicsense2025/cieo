@@ -1,5 +1,5 @@
 'use client';
-/* AuthEmailField. Labelled email input with a motion-preserving inline alert bound through aria-describedby. */
+/* AuthEmailField. Labeled email input with a motion-preserving inline alert bound through aria-describedby. */
 import type { CSSProperties } from 'react';
 import { AuthMotionMessage } from '../auth-shared.js';
 import type { PrimitivePartProps } from '../parts.js';

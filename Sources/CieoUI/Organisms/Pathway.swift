@@ -161,7 +161,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
                 }
                 .background(alignment: .top) {
                     if index > 0 {
-                        // Spans from the previous column's centre to this one's, arching above the line of nodes.
+                        // Spans from the previous column's center to this one's, arching above the line of nodes.
                         GeometryReader { proxy in
                             PathwayArch()
                                 .stroke(lineColor(after: items[index - 1]), style: lineStyle)
@@ -218,7 +218,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
                         .frame(width: node * metrics.glyphScale / 2, height: node * metrics.glyphScale / 2)
                         .foregroundStyle(theme.onAccent)
                 } else {
-                    // The current node inverts: screen colour on the foreground colour.
+                    // The current node inverts: screen color on the foreground color.
                     Text("\(Self.stepNumber(at: index, firstNumber: firstNumber))").font(typography.marker).monospacedDigit()
                         .foregroundStyle(current == .current ? AnyShapeStyle(.background) : AnyShapeStyle(theme.foreground))
                 }
@@ -231,7 +231,7 @@ public struct Pathway<Item: Identifiable, Label: View>: View {
     }
 }
 
-/// An S-curve from one node's centre above to the next node's centre below.
+/// An S-curve from one node's center above to the next node's center below.
 struct PathwayBend: Shape {
     var from: CGFloat
     var to: CGFloat

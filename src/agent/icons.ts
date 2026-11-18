@@ -13,7 +13,7 @@ export interface AgentIconDefinition {
   /** Human name, e.g. "Browsing". */
   name: string;
   group: AgentIconGroup;
-  /** Status colour the icon carries, or null for the current text colour. */
+  /** Status color the icon carries, or null for the current text color. */
   tone: AgentIconTone | null;
   /** What the icon's motion shows in the original atom. */
   description: string;
@@ -107,7 +107,7 @@ const g23r: IconTree = [['path', { d: "M25 31V25C25 14 39 14 39 25V31" }], ['rec
 const g23l = g23r;
 
 export const AGENT_ICONS: readonly AgentIconDefinition[] = [
-  { id: "browsing", name: "Browsing", group: "Doing", tone: null, description: "The square pupil looks from stop to stop along the equator, one page at a time, then settles in the centre.", compact: g0c, regular: g0r, large: g0l },
+  { id: "browsing", name: "Browsing", group: "Doing", tone: null, description: "The square pupil looks from stop to stop along the equator, one page at a time, then settles in the center.", compact: g0c, regular: g0r, large: g0l },
   { id: "navigating", name: "Navigating", group: "Doing", tone: null, description: "The trail pulls back to its start, then the square draws it again as it travels to the next page.", compact: g1c, regular: g1r, large: g1l },
   { id: "clicking", name: "Clicking", group: "Doing", tone: null, description: "The pointer dips toward its target, the click marks pull in, then burst back out as it lands.", compact: g2c, regular: g2r, large: g2l },
   { id: "typing", name: "Typing", group: "Doing", tone: null, description: "The caret steps right one letter at a time and the line grows behind it, then clears for the next pass.", compact: g3c, regular: g3r, large: g3l },
@@ -128,9 +128,9 @@ export const AGENT_ICONS: readonly AgentIconDefinition[] = [
   { id: "scheduled", name: "Scheduled", group: "Waiting", tone: null, description: "The minute hand ticks round a full turn in four quarter steps while the arc hand holds at twelve.", compact: g18c, regular: g18r, large: g18l },
   { id: "offline", name: "Offline", group: "Waiting", tone: null, description: "The slash is drawn across the signal and the arcs go quiet from the outside in, then they come back one by one.", compact: g19c, regular: g19r, large: g19l },
   { id: "retrying", name: "Retrying", group: "Outcome", tone: null, description: "The arc withdraws almost to nothing and is drawn again, arrowhead leading, around the same circle.", compact: g20c, regular: g20r, large: g20l },
-  { id: "done", name: "Done", group: "Outcome", tone: "success", description: "The check is drawn in two strokes, short arm first, in the success colour.", compact: g21c, regular: g21r, large: g21l },
-  { id: "failed", name: "Failed", group: "Outcome", tone: "danger", description: "The two strokes cross one after the other, in the danger colour. Nothing shakes.", compact: g22c, regular: g22r, large: g22l },
-  { id: "blocked", name: "Blocked by permission", group: "Outcome", tone: "warning", description: "The shackle tries to lift, can’t, and drops back. The lock stays shut, in the warning colour.", compact: g23c, regular: g23r, large: g23l },
+  { id: "done", name: "Done", group: "Outcome", tone: "success", description: "The check is drawn in two strokes, short arm first, in the success color.", compact: g21c, regular: g21r, large: g21l },
+  { id: "failed", name: "Failed", group: "Outcome", tone: "danger", description: "The two strokes cross one after the other, in the danger color. Nothing shakes.", compact: g22c, regular: g22r, large: g22l },
+  { id: "blocked", name: "Blocked by permission", group: "Outcome", tone: "warning", description: "The shackle tries to lift, can’t, and drops back. The lock stays shut, in the warning color.", compact: g23c, regular: g23r, large: g23l },
 ];
 
 export type AgentIconId = "browsing" | "navigating" | "clicking" | "typing" | "scrolling" | "inspecting" | "capturing" | "comparing" | "pinning" | "thinking" | "planning" | "commenting" | "suggesting" | "asking" | "handing" | "taking" | "waiting" | "paused" | "scheduled" | "offline" | "retrying" | "done" | "failed" | "blocked";

@@ -1,6 +1,6 @@
 # Primitive customization
 
-All 254 catalogue exports have an explicit customization contract: 242 expose named presentation slots directly, and twelve delegate to an existing owning API. Pure, hook-free layout, typography, and display primitives ship as React Server Components without `'use client'`. The [inventory](generated/primitive-customization.json) records each component, layer, named parts, and content slots.
+All 254 catalog exports have an explicit customization contract: 242 expose named presentation slots directly, and twelve delegate to an existing owning API. Pure, hook-free layout, typography, and display primitives ship as React Server Components without `'use client'`. The [inventory](generated/primitive-customization.json) records each component, layer, named parts, and content slots.
 
 ## Presentation and composition
 
@@ -18,7 +18,7 @@ Decorative motion internals and hidden assistive text are not replacement conten
 
 ## Verification and maintenance
 
-`npm test` includes rendered customization tests for all 81 non-Popover/TabList molecules, all 25 organisms, representative native atoms, executable-prop rejection, protected form values, and dynamic geometry. A catalogue test typechecks all 215 named root contracts and verifies that click handlers are rejected from presentation slots. A data-attribute scan guards every owned catalogue marker against runtime replacement.
+`npm test` includes rendered customization tests for all 81 non-Popover/TabList molecules, all 25 organisms, representative native atoms, executable-prop rejection, protected form values, and dynamic geometry. A catalog test typechecks all 215 named root contracts and verifies that click handlers are rejected from presentation slots. A data-attribute scan guards every owned catalog marker against runtime replacement.
 
 Run `node scripts/check-primitive-customization.mjs --write` when a public contract changes. The non-writing invocation verifies inventory drift. `scripts/build-component-pages.mjs` synchronizes missing property rows from manifests while preserving authored rows; generated rows update when their contract changes.
 

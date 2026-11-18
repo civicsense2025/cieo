@@ -175,7 +175,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 </head>
 <body>
 <a class="ui-skip" href="#collection">Skip to the collection</a>
-<aside class="ui-sidebar" id="rail" aria-label="Catalogue navigation">
+<aside class="ui-sidebar" id="rail" aria-label="Catalog navigation">
   <a class="ui-brand" href="#all" aria-label="Cieo, all atoms"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M15 3c-7 0-11 4-11 10h11V3Zm3 1v11h11C29 8 25 4 18 4Zm10 14H17v11c7 0 11-4 11-11ZM14 28V17H3c0 7 4 11 11 11Z"/></svg>cieo<span>01</span></a>
   <nav id="rail-nav" class="ui-navigation" aria-label="Collections"></nav>
   <div class="ui-sidebar-footer"><span><i class="ui-status-dot"></i>Made to move</span><button class="ui-button ghost icon" data-open="appearance-dialog" aria-label="Appearance" data-icon="settings"></button></div>
@@ -196,7 +196,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
   <p id="filter-summary" class="ui-filter-summary" aria-live="polite" hidden></p>
   <div id="groups" role="tabpanel" aria-labelledby="family-tab-all"></div>
   <div id="empty-state" class="ui-empty" hidden><span data-icon="search"></span><h2>Nothing here. Yet.</h2><p>Try another search, or save a few atoms to start a collection.</p><button class="ui-button" id="clear-filters">Show all atoms</button></div>
-  <noscript><p>This catalogue needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
+  <noscript><p>This catalog needs JavaScript to run its live motion recipes. The source files remain available in atoms/web.</p></noscript>
 </main>
 <nav class="ui-bottom" aria-label="Mobile collection actions"><button data-open="browse-dialog"><span data-icon="grid"></span>Browse</button><button id="mobile-saved"><span data-icon="bookmark"></span><span>Saved <span id="mobile-saved-count">0</span></span></button><button data-open="appearance-dialog"><span data-icon="settings"></span>Appearance</button></nav>
 <dialog class="ui-dialog" id="browse-dialog" aria-labelledby="browse-title"><div class="ui-dialog-heading"><h2 id="browse-title">Collections</h2><button class="ui-button ghost icon" data-close aria-label="Close collections" data-icon="close"></button></div><div class="ui-rail-slot" id="rail-slot"></div></dialog>
@@ -209,7 +209,7 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
     <p class="ui-muted" style="font-size:12px;margin:0">Appearance and saved atoms stay in this browser. Nothing is sent to a server.</p>
   </div>
 </dialog>
-<dialog class="ui-dialog" id="inspect-dialog" aria-labelledby="inspect-title"><div class="ui-dialog-heading"><h2 id="inspect-title">Atom details</h2><button class="ui-button ghost icon" data-close aria-label="Close atom details" data-icon="close"></button></div><div class="ui-inspect-body"><div id="inspect-preview"></div><div class="ui-inspect-meta"><p id="inspect-description"></p><div><h3>Motion</h3><div class="ui-meta-tags" id="inspect-families"></div></div><div><h3>Recipe</h3><pre id="inspect-code"></pre><button class="ui-button" id="copy-recipe"><span data-icon="copy"></span>Copy recipe</button></div><a id="inspect-source" target="_blank" rel="noopener noreferrer">View source</a><button id="inspect-save" class="ui-button" aria-pressed="false"><span data-icon="bookmark"></span><span id="inspect-save-label">Save</span></button><p class="ui-inspect-note">The original live atom, not a video. The recipe uses the catalogue runtime; adapt it through cieo/dom or cieo/react.</p></div></div></dialog>
+<dialog class="ui-dialog" id="inspect-dialog" aria-labelledby="inspect-title"><div class="ui-dialog-heading"><h2 id="inspect-title">Atom details</h2><button class="ui-button ghost icon" data-close aria-label="Close atom details" data-icon="close"></button></div><div class="ui-inspect-body"><div id="inspect-preview"></div><div class="ui-inspect-meta"><p id="inspect-description"></p><div><h3>Motion</h3><div class="ui-meta-tags" id="inspect-families"></div></div><div><h3>Recipe</h3><pre id="inspect-code"></pre><button class="ui-button" id="copy-recipe"><span data-icon="copy"></span>Copy recipe</button></div><a id="inspect-source" target="_blank" rel="noopener noreferrer">View source</a><button id="inspect-save" class="ui-button" aria-pressed="false"><span data-icon="bookmark"></span><span id="inspect-save-label">Save</span></button><p class="ui-inspect-note">The original live atom, not a video. The recipe uses the catalog runtime; adapt it through cieo/dom or cieo/react.</p></div></div></dialog>
 <div id="announcer" class="ui-sr" role="status" aria-live="polite"></div><div id="toast" class="ui-toast" hidden></div>
 <script>
 window.CIEO_SOURCE_HINT="runtime.core.js";
@@ -1260,7 +1260,7 @@ atom({
       </button>
     </div><div class="small muted" style="margin-top:24px">Notifications <span class="switch-state">off</span></div>
   </div><div class="hint">A soft stretch. A clear state.</div>`,
-  desc:'The knob leads with one edge and trails with the other. A native button supplies click and keyboard activation; cancelled presses never toggle the value.',
+  desc:'The knob leads with one edge and trails with the other. A native button supplies click and keyboard activation; canceled presses never toggle the value.',
   api:'knob.go(l, r)   press.set(down ? 1 : 0, S.snap)',
   init(st){
     const tg=$(st,'.tg'),kn=$(st,'.kn'),rail=$(st,'.rail'),label=$(st,'.switch-state');
@@ -1886,7 +1886,7 @@ atom({ id:'popover', cat:'Overlays', name:'Popover', block:'Popover primitive, s
     const L = ['Copy', ic(I.check,14,2.5) + 'Copied'].map(h => { const e = document.createElement('span'); e.className = 'layer'; e.style.gap = '4px'; e.innerHTML = h; cp.appendChild(e); return e; });
     const set = v => { openSet(o, v); tr.setAttribute('aria-expanded', v); };
     tr.onclick = () => set(!o.target); outside(st, [tr, pv], () => set(false)); st.addEventListener('keydown', ev => { if (ev.key === 'Escape'){ set(false); tr.focus(); } });
-    cp.onclick=async()=>{try{await navigator.clipboard.writeText('https://example.site/p/spring-launch');sw.to(1);ok.set(1);back=now()+1.6}catch{const input=$(st,'input');input.focus();input.select();window.CieoCatalogue?.announce('Copy the selected link.')}};
+    cp.onclick=async()=>{try{await navigator.clipboard.writeText('https://example.site/p/spring-launch');sw.to(1);ok.set(1);back=now()+1.6}catch{const input=$(st,'input');input.focus();input.select();window.CieoCatalog?.announce('Copy the selected link.')}};
     return t => { if (back && t >= back){ back = 0; sw.to(0); ok.set(0); } pop(pv, o.at(t), -6); L.forEach((e,k) => sw.apply(e,k,t,3)); cp.style.color = mix(ok.at(t),'var(--success)','var(--ink)'); };
   }});
 window.CIEO_SOURCE_HINT="blocks/068-contextmenu.js";
@@ -2812,7 +2812,7 @@ window.CIEO_SOURCE_HINT="blocks/111-selectresize.js";
 
 
 atom({ id:'selectresize', cat:'Design tools', name:'Select, move and snap', block:'section/columns editor', fam:['D','M'], wide:true, tall:true,
-  html:`<div class="cv card" style="position:relative;width:min(600px,94%);height:280px;overflow:hidden;background:var(--bg)"><div class="ref" style="position:absolute;left:60px;top:60px;width:160px;height:110px;border-radius:10px;background:var(--raised)"></div><i class="gx" style="position:absolute;top:0;bottom:0;width:1px;background:var(--danger)"></i><i class="gy" style="position:absolute;left:0;right:0;height:1px;background:var(--danger)"></i><div class="sh" style="position:absolute;left:0;top:0;border-radius:10px;background:var(--accent);cursor:move;touch-action:none"><i class="hd" style="position:absolute;right:-6px;bottom:-6px;width:12px;height:12px;border-radius:3px;background:var(--card);border:2px solid var(--ink);cursor:nwse-resize"></i></div><span class="dim small num" style="position:absolute;left:0;top:0;background:var(--ink);color:var(--card);padding:1px 6px;border-radius:5px;white-space:nowrap"></span></div><div class="hint" style="bottom:2px">Drag the green box near the grey one · drag the corner to resize</div>`,
+  html:`<div class="cv card" style="position:relative;width:min(600px,94%);height:280px;overflow:hidden;background:var(--bg)"><div class="ref" style="position:absolute;left:60px;top:60px;width:160px;height:110px;border-radius:10px;background:var(--raised)"></div><i class="gx" style="position:absolute;top:0;bottom:0;width:1px;background:var(--danger)"></i><i class="gy" style="position:absolute;left:0;right:0;height:1px;background:var(--danger)"></i><div class="sh" style="position:absolute;left:0;top:0;border-radius:10px;background:var(--accent);cursor:move;touch-action:none"><i class="hd" style="position:absolute;right:-6px;bottom:-6px;width:12px;height:12px;border-radius:3px;background:var(--card);border:2px solid var(--ink);cursor:nwse-resize"></i></div><span class="dim small num" style="position:absolute;left:0;top:0;background:var(--ink);color:var(--card);padding:1px 6px;border-radius:5px;white-space:nowrap"></span></div><div class="hint" style="bottom:2px">Drag the green box near the gray one · drag the corner to resize</div>`,
   desc:'Moving and resizing follow the pointer, but within 8px of the other shape’s edges or center the box is pulled into alignment on a stiff spring, and a red guide marks the match.',
   api:'x = near(raw, guides, 8) ?? raw; box.x.set(x, S.snap)   guide.o.set(snapped)',
   init(st){
@@ -2858,7 +2858,7 @@ atom({ id:'colorpicker', cat:'Design tools', name:'Color picker', block:'section
     fbtns.forEach((b,i) => b.onclick = () => selfmt(i)); requestAnimationFrame(() => selfmt(0, true)); document.fonts && document.fonts.ready.then(() => selfmt(fmt, true));
     ok.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17.5 19 7"/></svg>Copied';
     cp.onclick = async () => { const h = ((H.target % 360) + 360) % 360, s = clamp(Sa.target), v = clamp(V.target), val = fmt ? rgb(h, s, v) : hex(h, s, v).toUpperCase();
-      try { await navigator.clipboard.writeText(val);csw.to('ok');cok.set(1);back=now()+1.6; } catch { window.CieoCatalogue?.announce(`Copy color: ${val}`); } };
+      try { await navigator.clipboard.writeText(val);csw.to('ok');cok.set(1);back=now()+1.6; } catch { window.CieoCatalog?.announce(`Copy color: ${val}`); } };
     return t => { if (back && t >= back){ back = 0; csw.to('hex'); cok.set(0); }
       const h = H.at(t), s = clamp(Sa.at(t)), v = clamp(V.at(t)), hn = ((h % 360) + 360) % 360, c = hex(hn, s, v);
       sv.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; k1.style.left = (s*100).toFixed(2) + '%'; k1.style.top = ((1 - v)*100).toFixed(2) + '%'; k1.style.background = c; k2.style.left = (clamp(h/360)*100).toFixed(2) + '%'; k2.style.background = `hsl(${h.toFixed(1)} 100% 50%)`; sw.style.background = c;
@@ -5139,7 +5139,7 @@ atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', f
       { n:'Maya Okafor', s:'Brand strategy call', w:'Mon 12 Oct · 10:30', len:'60 min', loc:'Video call', pr:'$180.00', st:'Confirmed', tn:'good', note:'Wants to review the new pricing page before launch. Sent the brand guide on Friday.' },
       { n:'Theo Lindqvist', s:'Site audit', w:'Tue 13 Oct · 14:00', len:'90 min', loc:'Studio, Lisbon', pr:'$320.00', st:'Pending', tn:'warn', note:'Deposit not yet received. Hold the slot until Wednesday noon, then release it.' },
       { n:'Priya Raman', s:'Onboarding workshop', w:'Wed 14 Oct · 09:00', len:'2 hr', loc:'Video call', pr:'$450.00', st:'Confirmed', tn:'good', note:'Six people from the events team attend. Needs the shared workspace set up beforehand.' },
-      { n:'Jonas Weber', s:'Content review', w:'Thu 15 Oct · 16:15', len:'45 min', loc:'Phone', pr:'$95.00', st:'Cancelled', tn:'bad', note:'Cancelled on Monday because of a travel clash. Offered two new times by email.' },
+      { n:'Jonas Weber', s:'Content review', w:'Thu 15 Oct · 16:15', len:'45 min', loc:'Phone', pr:'$95.00', st:'Canceled', tn:'bad', note:'Canceled on Monday because of a travel clash. Offered two new times by email.' },
       { n:'Amara Nwosu', s:'Follow-up session', w:'Fri 16 Oct · 11:00', len:'30 min', loc:'Video call', pr:'$60.00', st:'Confirmed', tn:'good', note:'Second session after the launch. Bring the analytics export from the first month.' }
     ];
     const root = $(st,'.ss'), list = $(st,'.ss-ls'), sheet = $(st,'.ss-sh'), scrim = $(st,'.ss-sc'), xb = $(st,'.ss-x'), lw = $(st,'.ss-lw');
@@ -5209,7 +5209,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-c">Show grid</span><div class="sg sm" role="group" aria-labelledby="sg-c"><div class="sg-i"></div><button type="button">Off</button><button type="button">On</button></div></div>
 <div class="sg-ro" aria-hidden="true"></div></div>`,
-  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
+  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label color morphs, arrow keys, Home and End move the selection, and there are two sizes.',
   api:'left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? "fwd" : "back"   lead.set(v); trail.set(v, t + LAG)',
   init(st){
     const kit = (el, start) => {
@@ -5260,7 +5260,7 @@ atom({ id:'statuschip', cat:CAT, name:'Status chip', block:'StatusChip', fam:['M
 .sc-ms{position:absolute;visibility:hidden;white-space:nowrap;font-size:12px;font-weight:500}
 .sc-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style><div class="card sc-c"></div><div class="hint">Click a chip to cycle. On Error, Retry goes back through Scheduled to Live.</div>`,
-  desc:'One chip morphs through Draft, Scheduled, Live and Error: the background and dot colours cross-fade through weighted state colours, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.',
+  desc:'One chip morphs through Draft, Scheduled, Live and Error: the background and dot colors cross-fade through weighted state colors, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.',
   api:'w[i].set(i === next ? 1 : 0)   width.set(measure(label))   label.to(next)   retry.set(next === error)',
   init(st){
     const ST = [
@@ -5429,7 +5429,7 @@ atom({ id:'themetoggle', cat:CAT, name:'Theme toggle', block:'ThemeToggle', fam:
 </style><div class="tt-w"><div class="row"><button type="button" class="tt-b" aria-label="Switch to dark mode" title="Switch to dark mode"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="tt-bd"/><g class="tt-rg"></g></svg></button><div class="tt-s" aria-live="polite"><span data-k="sl">Following system · light</span><span data-k="sd">Following system · dark</span><span data-k="pl">Pinned to light</span><span data-k="pd">Pinned to dark</span></div></div>
 <div class="tt-pv"><div class="tt-hd"><b>Weekly traffic</b><span class="tt-ch">+18%</span></div><div class="tt-bars" aria-hidden="true"><i style="height:45%"></i><i style="height:60%"></i><i style="height:38%"></i><i style="height:72%"></i><i style="height:64%"></i><i style="height:88%"></i><i style="height:100%"></i></div><p>Pricing page visits grew after the new hero shipped on Tuesday.</p><div class="tt-bt" aria-hidden="true"><span class="tt-p1">View report</span><span class="tt-p2">Share</span></div></div>
 <div class="small muted">Preview card only. This page keeps its own theme.</div></div>`,
-  desc:'One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every colour between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.',
+  desc:'One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every color between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.',
   api:'pts[i] = lerp(sun[i], moon[i], p)   ray.r = lerp(R0, 4, p)   card.color = mix(dark, light, theme.at(t))   pref = next === system ? "system" : next',
   init(st){
     // 48 shared points: first 36 trace the outer arc, last 12 the inner arc. The sun is a circle sampled at the same angles.
@@ -5496,7 +5496,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
 <div class="dv-fr" role="img" aria-label="Preview of the site at the chosen width"><div class="dv-cr"><span class="dv-dt"><i></i><i></i><i></i></span><span class="dv-ur"><span>northlight.studio</span><span class="dv-wd num">0 px</span></span></div>
 <div class="dv-pg"><div class="dv-nv"><b>Northlight</b><span class="dv-lk"><span>Work</span><span>Studio</span><span>Journal</span></span><span class="dv-cta">Book a call</span><span class="dv-bg">${ic(I.menu, 16)}</span></div>
 <div class="dv-hr"><div><h4>Calm websites for small studios</h4><p>Design, build and launch in six weeks, with one person to talk to.</p><span class="dv-cta" style="display:inline-block">Start a project</span></div><div class="dv-im"></div></div>
-<div class="dv-gr"><div class="dv-cd"><b>Strategy</b>Positioning and page map</div><div class="dv-cd"><b>Design</b>Type, colour and layout</div><div class="dv-cd"><b>Build</b>Fast, accessible pages</div></div></div></div></div>`,
+<div class="dv-gr"><div class="dv-cd"><b>Strategy</b>Positioning and page map</div><div class="dv-cd"><b>Design</b>Type, color and layout</div><div class="dv-cd"><b>Build</b>Fast, accessible pages</div></div></div></div></div>`,
   desc:'The three icon buttons share one indicator whose edges lag: leading edge first, trailing 60ms later. The preview frame is a single element whose width, corner radius, bezel and chrome height spring together from one device value, so going Desktop to Phone passes through tablet like a real resize. The page inside is container-queried: columns collapse, the nav folds to a menu and cards stack as the width crosses each breakpoint.',
   api:'u.set(device)   width = piece([avail, min(820, .72·avail), min(390, .4·avail)], u)   radius = piece([10, 18, 30], u)   ind.go(l, r)',
   init(st){
@@ -8208,7 +8208,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
       r.slot = mSlot(li, r.in, enter ? 0 : 1); if (enter) r.slot.open(true, now(), lag);
       r.msg.textContent = d.er || '';
       list.appendChild(li); rows.push(r); setState(r, k, true); r.er.jump(k === 2 ? 1 : 0); r.ok.jump(k === 2 ? 1 : 0); r.dim.jump(k === 3 ? 1 : 0);
-      btn.onclick = () => { if (r.k === 0){ r.job++; setState(r, 3); say(d.n + ' disconnected'); } else if (r.k === 1){ r.job++; setState(r, 3); say('Cancelled'); } else start(r); };
+      btn.onclick = () => { if (r.k === 0){ r.job++; setState(r, 3); say(d.n + ' disconnected'); } else if (r.k === 1){ r.job++; setState(r, 3); say('Canceled'); } else start(r); };
       $(li,'.cnl-rm').onclick = () => remove(r);
       return r;
     };
@@ -10389,7 +10389,7 @@ function kit(st, o = {}){
   K.below = el => frameLayout(el).rect.bottom - frameLayout(fr).rect.top - frameLayout(fr).ct;
   K.watch = (el, fn) => { new ResizeObserver(fn).observe(el); document.fonts.ready.then(fn); };
 
-  // hover / focus colour as a spring instead of a CSS state
+  // hover / focus color as a spring instead of a CSS state
   K.hover = (el, kind = 'color', a = 'var(--hx-fg,var(--ink))', b = 'var(--hx-mu,var(--muted))') => {
     const h = new Track(0, S.snap), cu = new Track(0, S.base), on = () => h.set(1), off = () => h.set(0);
     el.addEventListener('pointerenter', on); el.addEventListener('pointerleave', off); el.addEventListener('focus', on); el.addEventListener('blur', off);
@@ -10813,7 +10813,7 @@ atom({ id:'header-rail', cat:'Headers', name:'Header: side rail', block:'site-he
 .hx-fr[data-n] .hd9-x{display:grid}
 .hd9-sc{position:absolute;inset:0;z-index:5;background:color-mix(in oklab,var(--ink) 38%,transparent);visibility:hidden;opacity:0}
 .hd9-ft .hx-cta{height:40px}
-</style>` + shell(`<div class="hd9-bar"><a href="#" class="hx-lg" aria-label="Ledgerly home"><i class="hx-mk"></i><span>Ledgerly</span></a><div class="hx-ac"></div>${BURGER('hd9-rail')}</div><div class="hd9-ct">${PAGE()}</div>`, { extra:SEG('mode','Rail',['On hover','Pinned'],'Rail behaviour') }, `<div class="hd9-sc"></div><i class="hd9-sd"></i><aside class="hd9-rl" id="hd9-rail" aria-label="Site"><button type="button" class="hd9-x" aria-label="Close menu">${ic(I.x,18)}</button><a href="#" class="hd9-lg" aria-label="Ledgerly home"><i class="hx-mk"></i><span class="hd9-lb">Ledgerly</span></a><nav class="hd9-nv" aria-label="Main"><i class="hd9-pt"></i></nav><div class="hd9-ft"><div class="hd9-fo"></div><div class="hd9-fi"><button type="button" class="hd9-av" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu, Maya Rios"><span class="hx-av"><span>MR</span></span><span class="hx-fn hd9-lb"><b>Maya Rios</b><span>maya@brightleaf.example</span></span></button></div></div></aside>`),
+</style>` + shell(`<div class="hd9-bar"><a href="#" class="hx-lg" aria-label="Ledgerly home"><i class="hx-mk"></i><span>Ledgerly</span></a><div class="hx-ac"></div>${BURGER('hd9-rail')}</div><div class="hd9-ct">${PAGE()}</div>`, { extra:SEG('mode','Rail',['On hover','Pinned'],'Rail behavior') }, `<div class="hd9-sc"></div><i class="hd9-sd"></i><aside class="hd9-rl" id="hd9-rail" aria-label="Site"><button type="button" class="hd9-x" aria-label="Close menu">${ic(I.x,18)}</button><a href="#" class="hd9-lg" aria-label="Ledgerly home"><i class="hx-mk"></i><span class="hd9-lb">Ledgerly</span></a><nav class="hd9-nv" aria-label="Main"><i class="hd9-pt"></i></nav><div class="hd9-ft"><div class="hd9-fo"></div><div class="hd9-fi"><button type="button" class="hd9-av" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu, Maya Rios"><span class="hx-av"><span>MR</span></span><span class="hx-fn hd9-lb"><b>Maya Rios</b><span>maya@brightleaf.example</span></span></button></div></div></aside>`),
   desc:'Hover or focus the rail and it widens from 64px to 232px first; the labels fade in 60ms later, each 20ms after the last, so text never spills out of a half-open rail. Leaving reverses it: labels go first, then the width closes. The active plate slides between rows with lagging edges. Pinned keeps it open and the page slides over to make room. Narrow: the rail becomes a drawer opened from a top bar, with labels already showing.',
   api:'rail.w.set(hover ? 232 : 64)   label[i].o.set(1, S.base, t + .06 + i\u00b7.02)   exit: labels.o.set(0); rail.w.set(64, S.base, t + .05)   page.pad.set(pinned ? 232 : 64)',
   init(st){
@@ -11400,7 +11400,7 @@ atom({ id:'footer-region-theme', cat:CAT, name:'Footer with language picker and 
 <div class="${P6}ct"><button type="button" class="${P6}lg6" aria-haspopup="listbox" aria-expanded="false" aria-label="Language and region">${ic(K.globe, 16, 1.8)}${k6('cur')}${ic(I.chev, 14, 2)}</button>
 <div class="${P6}tg" role="radiogroup" aria-label="Theme"><i class="${P6}tp"></i>${[['system', 'System', K.mon], ['light', 'Light', K.sun], ['dark', 'Dark', K.moon]].map(([m, n, d]) => `<button type="button" role="radio" aria-checked="false" aria-label="${n}" title="${n}" data-m="${m}">${ic(d, 16, 1.8)}</button>`).join('')}</div></div>${btt(P6, '')}</div></div></div>`,
     extra:`<div class="${P6}pp" aria-hidden="true"><div class="${P6}hd">Language and region</div><div class="${P6}lb" role="listbox" tabindex="-1" aria-label="Language and region"><i class="${P6}hl"></i></div></div>` }),
-  desc:'The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every colour in the page below cross-fades on one spring; System keeps following the real page theme.',
+  desc:'The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every color in the page below cross-fades on one spring; System keeps following the real page theme.',
   api:'pop.o.set(open)   hl.go(top, bottom)   strings[i].swap(at = now + i·12ms)   page.color = mix(dark, light, theme.at(t))',
   init(st){
     const k = kit(st, P6), w = k.w, tr = $(st, '.' + P6 + 'lg6'), pp = $(st, '.' + P6 + 'pp'), lb = $(pp, '.' + P6 + 'lb'), hl = $(pp, '.' + P6 + 'hl');
@@ -11503,7 +11503,7 @@ atom({ id:'footer-status', cat:CAT, name:'Footer with live status', block:'site-
 <div class="${P7}ib" data-i="out"><span>${ic(I.alert, 16)}</span><div><b>Publishing and the public API are down</b><p>We are working on a fix. Published sites keep serving from cache. Next update by 14:30 UTC.</p>${lk(P7, 'View incident', { ar:'ur' })}</div></div></div></div>
 <div class="${P7}det" id="${P7}det"><div class="${P7}di"><ul class="${P7}cg">${COMP.map(c => `<li class="${P7}cr"><i class="${P7}rd"></i><span class="${P7}rn">${c}</span><span class="${P7}rs"></span></li>`).join('')}</ul><p class="${P7}up">99.98% uptime over the last 90 days</p></div></div>
 <div class="${P7}bm"><p>© 2026 Northlight Studio, Inc.</p><ul class="${P7}ls">${lis(P7, ['Privacy', 'Terms', 'Security', 'Cookie settings'])}</ul>${btt(P7)}</div></div></div>` }),
-  desc:'The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes colour 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there as the list opens.',
+  desc:'The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes color 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there as the list opens.',
   api:'g.set(0 | 1 | 2)   dot, tint = mix(g)   label.to(i)   pill.w.set(measure(label))   row[i].c.set(v, now + i·45ms)',
   init(st){
     const k = kit(st, P7), pill = $(st, '.' + P7 + 'pl'), dot = $(pill, '.' + P7 + 'dt'), pt = $(pill, '.' + P7 + 'pt'), pm = $(pill, '.' + P7 + 'pm'), cv = $(pill, '.' + P7 + 'cv'), det = $(st, '.' + P7 + 'det'), di = $(det, '.' + P7 + 'di'), inc = $(st, '.' + P7 + 'inc'), ii = $(inc, '.' + P7 + 'ii');
@@ -11775,7 +11775,7 @@ ${faux('fz2-', { brand:'Tidewell', nav:['Features', 'Pricing', 'Customers'], kic
       <ul class="fz2-pf"><li>${ic(I.check, 15, 2.5)}Import clients from a spreadsheet</li><li>${ic(I.check, 15, 2.5)}Bank transfer, card and direct debit</li><li>${ic(I.check, 15, 2.5)}Cancel any time from Settings</li></ul>
     </div>
   </section>
-  <nav class="fz2-cs" aria-label="Footer">${cols('fz2-', [['Product', ['Invoicing', 'Quotes', 'Expenses', 'Payment links', 'Reports']], ['Solutions', ['Freelancers', 'Agencies', 'Consultants', 'Accountants']], ['Learn', ['Guides', 'Templates', 'Tax calendar', 'Help centre']], ['Company', ['About', 'Customers', 'Careers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Security', 'Cookies']]])}</nav>
+  <nav class="fz2-cs" aria-label="Footer">${cols('fz2-', [['Product', ['Invoicing', 'Quotes', 'Expenses', 'Payment links', 'Reports']], ['Solutions', ['Freelancers', 'Agencies', 'Consultants', 'Accountants']], ['Learn', ['Guides', 'Templates', 'Tax calendar', 'Help center']], ['Company', ['About', 'Customers', 'Careers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Security', 'Cookies']]])}</nav>
   <div class="fz2-bot"><b><i></i>Tidewell</b><span>© 2026 Tidewell Software Ltd.</span><span>Registered in England and Wales, no. 11874390</span></div>
 </div></div>`,
   desc:'Once 96px of the band is on screen, the eyebrow fades up first, then the headline words rise out of their masks 45ms apart, then the actions and reassurances follow in the same order. The button is one element that morphs on hover: it widens to make room for the arrow, its corners round from 14 to a full pill, its fill turns from light to the accent, and it presses in 3% on the snap spring. Link underlines wipe in from the left and leave to the right.',
@@ -11852,7 +11852,7 @@ ${faux('fz3-', { brand:'Northgate Cloud', nav:['Platform', 'Pricing', 'Docs'], k
     ['Pricing', [['Plans', 'compare tiers'], ['Cost calculator', 'estimate price'], ['Startup credits', 'program discount'], ['Invoices', 'billing payments receipts'], ['Reserved capacity', 'commit savings'], ['Education', 'students discounts']]],
     ['Resources', [['Blog', 'articles posts'], ['Case studies', 'customers stories'], ['Webinars', 'events video'], ['Architecture center', 'reference diagrams'], ['Whitepapers', 'reports research'], ['Community forum', 'help questions']]],
     ['Company', [['About', 'team mission'], ['Careers', 'jobs hiring openings'], ['Press', 'media news'], ['Partners', 'resellers integrators'], ['Investors', 'funding'], ['Contact sales', 'talk pricing']]],
-    ['Support', [['Help centre', 'faq articles'], ['Open a ticket', 'contact issue billing'], ['Trust centre', 'security compliance soc iso'], ['Report abuse', 'spam'], ['Accessibility', 'a11y wcag'], ['Privacy and terms', 'legal gdpr policies']]]])}</nav>
+    ['Support', [['Help center', 'faq articles'], ['Open a ticket', 'contact issue billing'], ['Trust center', 'security compliance soc iso'], ['Report abuse', 'spam'], ['Accessibility', 'a11y wcag'], ['Privacy and terms', 'legal gdpr policies']]]])}</nav>
   <div class="fz3-bot"><b>Northgate Cloud</b><span>© 2026 Northgate Systems GmbH</span><a class="fz3-lk" href="#" style="padding:0;font-size:12.5px"><span>Imprint</span><i></i></a></div>
 </div></div>`,
   desc:'Typing filters the whole map at once. Every link that does not match steps back to 16% opacity with a slight blur, 5ms apart in reading order, while matches stay full and underline from the left. A column with no match dims its heading, the count rolls its digits, and no results opens a one-line hint below the field. Enter or the down arrow moves focus to the first match, Escape clears, and the slash key focuses the field from anywhere in the footer.',
@@ -12063,7 +12063,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
     ['ISO 27001', 'Certified since 2024', 'Scope covers the apps, the API and support tooling.'],
     ['GDPR ready', 'EU data stays in the EU', 'Accounts created in Europe are stored in Frankfurt.'],
     ['99.95% uptime', 'Last 12 months', 'Service credits apply below 99.9% in any month.']].map(([n, h, d], i) => `<span role="listitem" style="display:inline-flex"><button type="button" class="fz5-bd" aria-describedby="fz5-tp${i}">${ic(SHIELD, 16, 2)}${n}</button><span class="fz5-tp" id="fz5-tp${i}" role="tooltip"><b>${h}</b>${d}</span></span>`).join('')}</div>
-  <nav class="fz5-cs" aria-label="Footer">${cols('fz5-', [['Product', ['Budgets', 'Receipts', 'Shared accounts', 'Bank sync', 'Pricing']], ['Company', ['About', 'Careers', 'Press', 'Contact']], ['Help', ['Help centre', 'Security', 'System status', 'Accessibility']]])}
+  <nav class="fz5-cs" aria-label="Footer">${cols('fz5-', [['Product', ['Budgets', 'Receipts', 'Shared accounts', 'Bank sync', 'Pricing']], ['Company', ['About', 'Careers', 'Press', 'Contact']], ['Help', ['Help center', 'Security', 'System status', 'Accessibility']]])}
     <div class="fz5-so"><h4 class="fz5-h">Follow</h4><div class="fz5-sl">${['LinkedIn', 'YouTube', 'Instagram', 'Mastodon'].map(n => `<a class="fz5-pl" href="#"><span>${n}</span>${UPR}</a>`).join('')}</div></div></nav>
   <div class="fz5-bot"><span>© 2026 Trove Money, Inc.</span><span>Trove is a budgeting app. It does not hold or move your money.</span><a href="#">Privacy</a><a href="#">Terms</a></div>
 </div></div>`,
@@ -12149,7 +12149,7 @@ ${faux('fz6-', { brand:'Alder', nav:['Product', 'Pricing', 'Customers'], kicker:
 <div class="fz6-ft" role="contentinfo">
   <div class="fz6-top">
     <div><p class="fz6-nm"><i></i>Alder</p><p class="fz6-ds">Planning for teams that work across more than one board.</p></div>
-    <nav class="fz6-cs" aria-label="Footer">${cols('fz6-', [['Product', ['Boards', 'Timelines', 'Docs', 'Automations', 'Reports']], ['Solutions', ['Engineering', 'Product', 'Design', 'Marketing', 'Operations']], ['Company', ['About', 'Customers', 'Careers', 'Press', 'Contact']], ['Support', ['Help centre', 'Community', 'API docs', 'System status', 'Security']]])}</nav>
+    <nav class="fz6-cs" aria-label="Footer">${cols('fz6-', [['Product', ['Boards', 'Timelines', 'Docs', 'Automations', 'Reports']], ['Solutions', ['Engineering', 'Product', 'Design', 'Marketing', 'Operations']], ['Company', ['About', 'Customers', 'Careers', 'Press', 'Contact']], ['Support', ['Help center', 'Community', 'API docs', 'System status', 'Security']]])}</nav>
   </div>
   <div><button type="button" class="fz6-tg" aria-expanded="false" aria-controls="fz6-more"><span class="fz6-tl"></span><small>Integrations, comparisons and offices</small><span class="fz6-ch">${ic(I.chev, 16, 2)}</span></button>
     <div class="fz6-mb" id="fz6-more" role="group" aria-label="More links"><div class="fz6-in">
@@ -12404,7 +12404,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
   <div class="fz8-wm" aria-hidden="true"><span class="fz8-wt">${[...'cairn analytics'].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('')}</span></div>
   <div class="fz8-bt"><span>© 2026 Cairn Analytics, Inc.</span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookie settings</a></div>
 </div><button type="button" class="btn fz8-rp">Replay</button></div>`,
-  desc:'The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labelled string out in 100ms and the new text in, one group after another.',
+  desc:'The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labeled string out in 100ms and the new text in, one group after another.',
   api:'item[i].set(1, S.soft, t + i·0.055)   letter[j].set(1, S.soft, t + n·0.055 + j·0.04)   bar[k].set(1, S.soft, …k·0.012)   text.o.set(0, S.snap) → swap copy → o.set(1)',
   init(st){
     noNav(st);
@@ -13951,7 +13951,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
   <div class="evc-vw"><div class="evc-sc"></div><div class="evc-vp card" role="dialog" aria-modal="true" aria-label="Saved screenshot"><div class="evc-vc"><div class="evc-vh"><b class="evc-vt"></b><button type="button" class="evc-pv" aria-label="Previous screenshot">${ic('<path d="m15 6-6 6 6 6"/>', 16)}</button><button type="button" class="evc-nx" aria-label="Next screenshot">${ic('<path d="m9 6 6 6-6 6"/>', 16)}</button><button type="button" class="evc-cl" aria-label="Close screenshot">${ic(I.x, 16)}</button></div><div class="evc-vb"><div class="evc-vl"></div><div class="evc-vl"></div></div></div></div></div>
   </div>`,
   desc:'The agent scrolls to the element and a capture frame snaps in around it, leading edges first with the trailing edges 60ms behind, while the rest of the page dims. The region flashes once, lifts off the page as a snapshot, and shrinks and travels into the tray, landing in the slot that has just opened for it. Only when it lands does the saved-screenshots count roll up. Open any thumbnail and it grows from its own slot into a viewer with who captured it and the element it shows; arrows swap between shots.',
-  api:'box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centred)',
+  api:'box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centered)',
   init(st){
     const root = $(st, '.evc-root'), site = new Site(st, 'evc'), ov = site.ov, stEls = $$(st, '.evc-st>span'), capB = $(st, '.evc-cap'), rpB = $(st, '.evc-rp'), list = $(st, '.evc-ls'), cnt = $(st, '.evc-cn'), fly = $(st, '.evc-fly');
     const vw = $(st, '.evc-vw'), vsc = $(st, '.evc-sc'), vp = $(st, '.evc-vp'), vc = $(st, '.evc-vc'), vls = $$(st, '.evc-vl'), vt = $(st, '.evc-vt'), vPrev = $(st, '.evc-pv'), vNext = $(st, '.evc-nx'), vClose = $(st, '.evc-cl');
@@ -14053,7 +14053,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
         s.boxShadow = `0 0 0 3000px ${mix(bo * .9, 'color-mix(in oklab, var(--ink) 40%, transparent)', 'transparent')}`; s.background = mix(fv, 'var(--card)', 'transparent'); s.borderWidth = px(1.5 + 1.5 * fv); tg.style.top = r.y < 24 ? 'calc(100% + 5px)' : '-23px'; tg.style.opacity = bo.toFixed(3);
         tf.children[0].style.opacity = bo.toFixed(3);
       } else tf.style.visibility = 'hidden';
-      // viewer: one rect morphs from the thumbnail slot to the centred viewer
+      // viewer: one rect morphs from the thumbnail slot to the centered viewer
       const v = clamp(vo.at(t));
       if (v > .002 && viewFrom){
         const rr = { w:st.clientWidth, h:st.clientHeight }, tx = (rr.w - VW) / 2 - 12, ty = (rr.h - VH) / 2 - 12;
@@ -14382,7 +14382,7 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
   }});
 
 /* ================================================================ 7. Needs a human decision */
-// a status chip whose width, colour and label morph through its states
+// a status chip whose width, color and label morph through its states
 class Chip {
   constructor(el, states){ this.el = el; this.st = states; this.ls = $$(el, ':scope > span'); this.v = new Track(0, S.base); this.w = []; }
   measure(){ this.w = this.ls.map(l => l.offsetWidth + 2); }
@@ -15327,7 +15327,7 @@ ${gPageCSS('rpg')}
 <div class="rrp-sp" role="group" aria-label="Playback speed"><button type="button" data-s="1" aria-pressed="true">1×</button><button type="button" data-s="2" aria-pressed="false">2×</button></div>
 <div class="rrp-sb" role="slider" tabindex="0" aria-label="Run position" aria-valuemin="0" aria-valuemax="24" aria-valuenow="0"><div class="rrp-tr"></div><div class="rrp-pf"></div><div class="rrp-tks"></div><div class="rrp-ph"><i class="rrp-ln"></i><i class="rrp-hd"></i><span class="rrp-bb">0:00</span></div></div></div>
 <div class="rrp-live" role="status" aria-live="polite" style="${SR}"></div></div>`,
-  desc:'The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centred, and clicking a row glides the playhead there on a spring.',
+  desc:'The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centered, and clicking a row glides the playhead there on a spring.',
   api:'ph = drag ? pointer.x : coast(release.v) | play ? ph + dt·speed : ph   state = derive(ph)   page.view/url/fields/pins = state   cursor.at(ph) = lerp(spotᵢ, spotᵢ₊₁, ease)   row.now = last(at ≤ ph)',
   init(st){
     const END = 24;
@@ -16062,7 +16062,7 @@ function kit(st, o){
 /* ================================================================ 1. Focal iris */
 atom({ id:'txi-iris', cat:'Image transitions', name:'Focal iris', block:'gallery, hero slideshow, portfolio', fam:['M','D'], tall:true,
   html:shell('txi-iris', 'Focal iris slideshow'),
-  desc:'The next photo opens in a circle centred on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.',
+  desc:'The next photo opens in a circle centered on its own subject, starting 10% large and settling, while the current photo pushes in 5% toward that same point and dims; reversing closes the iris into the subject. Use it when the subject matters more than the place, like portraits, products or a featured story.',
   api:'next.clip = circle(R·p at focus(next)); next.scale = 1.1 − .1p; prev.scale = 1 + .05·pNext about focus(next)',
   init(st){
     const items = pics('portrait', 'studio', 'harbor', 'ridge', 'city', 'coast');
@@ -16123,8 +16123,8 @@ atom({ id:'txi-blinds', cat:'Image transitions', name:'Blinds', block:'lookbook,
 /* ================================================================ 4. Develop (luminance dissolve, WebGL) */
 atom({ id:'txi-develop', cat:'Image transitions', name:'Develop', block:'before and after, time-lapse, story', fam:['T','S'], tall:true,
   html:shell('txi-develop', 'Develop slideshow'),
-  desc:'The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its colour after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.',
-  api:'arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; colour = mix(grey, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)',
+  desc:'The new photo arrives by brightness, highlights first and shadows last, the way a print comes up in the developer tray: undeveloped areas pale toward paper, and each area gains its color after its tone. Use it when the frame stays in the same place and only the moment changes, like before and after or a time-lapse.',
+  api:'arrive(px) = (p − .55·(1 − blurredLum(px)))/.45; color = mix(gray, rgb, arrive − .3); veil = .58·sin πp·(1 − arrive)',
   init(st){
     const items = pics({ name:'lake', tod:1 }, 'studio', { name:'city', tod:1 }, 'forest', { name:'coast', tod:1 }, 'dunes');
     const range = cv => { const c = document.createElement('canvas'); c.width = 32; c.height = 20; const x = c.getContext('2d', { willReadFrequently:true }); x.drawImage(cv, 0, 0, 32, 20);
@@ -16204,9 +16204,9 @@ atom({ id:'txi-tiles', cat:'Image transitions', name:'Tile wave', block:'gallery
   }});
 
 /* ================================================================ 8. Page turn */
-atom({ id:'txi-page', cat:'Image transitions', name:'Page turn', block:'lookbook, catalogue, printed story', fam:['D','M'], wide:true, tall:true,
+atom({ id:'txi-page', cat:'Image transitions', name:'Page turn', block:'lookbook, catalog, printed story', fam:['D','M'], wide:true, tall:true,
   html:shell('txi-page', 'Page turn slideshow'),
-  desc:'The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalogue or a printed story.',
+  desc:'The photo lifts from its right edge along a softly bowed fold: its back shows through, mirrored and washed like thin paper, and a shadow runs along the fold onto the next page. Going back lays the page down again. Use it for sequences people read in order, like a lookbook, a catalog or a printed story.',
   api:'fold.x = W(1 − q); tilt = .1·sin πq; flap = mirror(page right of fold)·scaleX(.58) + paper wash; shadow along fold',
   init(st){
     const items = pics('studio', 'portrait', 'ridge', 'harbor', 'field', 'city'); let paper = 'var(--card)', pt = -9;
@@ -16305,7 +16305,7 @@ void main(){ vec2 q = Q(); vec3 c = tx(q).rgb;
 /* ================================================================ 12. Fly-to strip (zoom out with speed, own invention) */
 atom({ id:'txi-flyto', cat:'Image transitions', name:'Fly-to strip', block:'chapters, numbered steps, long galleries', fam:['M','D'], wide:true, tall:true,
   html:shell('txi-flyto', 'Fly-to strip', `<div class="txi-trk" aria-hidden="true">${'<div class="txi-pn"><img alt=""><i class="txi-sh"></i></div>'.repeat(8)}</div><div class="txi-hit"></div><div class="txi-dots" role="group" aria-label="Jump to photo"><i class="txi-dind"></i>${'<button type="button" class="txi-dot" aria-label="Jump to photo"><i></i></button>'.repeat(8)}</div>`),
-  desc:'The view pulls back in proportion to how fast it is travelling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.',
+  desc:'The view pulls back in proportion to how fast it is traveling, slides along the strip and settles back in, so a jump of five photos shows more of the set than a step of one, and dragging lifts it slightly so neighbours peek in. Use it when position in the set matters, like chapters or numbered steps.',
   api:'pos.set(i); zoom = 1 − min(.44, .1·|d pos/dt|^.85); view = translate(center − pos·(W + gap)·zoom) scale(zoom)',
   init(st){
     const items = pics('ridge', 'lake', 'dunes', 'city', 'coast', 'forest', 'field', 'canyon'), trk = $(st,'.txi-trk'), pns = $$(st,'.txi-pn').map(el => ({ el, img:el.firstChild, sh:el.lastChild })),
@@ -16883,7 +16883,7 @@ atom({ id:'txc-compare', cat:'Carousels', name:'Before and after lens', block:'c
     <div class="txc-cm-wrap"><div class="txc-cm-fr"><div class="txc-cm-a"></div><div class="txc-cm-b"></div><span class="txc-chip txc-cm-lb txc-cm-l" aria-hidden="true">Midday</span><span class="txc-chip txc-cm-lb txc-cm-r" aria-hidden="true">Golden hour</span><i class="txc-cm-ln"></i></div>
     <div class="txc-cm-k" role="slider" tabindex="0" aria-label="Divider between midday and golden hour" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-describedby="txc-compare-help"><div class="txc-cm-lens"><div class="txc-cm-za"></div><div class="txc-cm-zb"></div><i class="txc-cm-zl"></i></div><span class="txc-cm-gr"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 7-5 5 5 5M15 7l5 5-5 5"/></svg></span></div></div>
     <p class="txc-cm-cap"><b></b><span class="txc-m">Drag the handle · hold to magnify</span></p><span id="txc-compare-help" class="txc-sr">Left and right arrows move the divider, Shift or Page keys move it faster, Home and End go to the edges. Enter toggles the magnifier.</span></div>`,
-  desc:'The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centred on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.',
+  desc:'The divider tracks the pointer exactly; a tap on the photo glides it to the tap and then tracks 1:1, and a fast release carries it a little further without overshoot. While held, the knob opens into a 2.25× lens centered on the seam, so both lights can be compared at the same pixel; on touch the lens floats above the finger. It is a real slider: arrows, Shift, Page keys, Home and End, and Enter or Magnify keep the lens open. Inspired by Juxtapose and the iOS text loupe. Use when two aligned images differ in detail, such as edits, relights, or before and after.',
   api:'x = held ? pointer + catch(t) : x.at(t);  lens: L = 40 + 108·open, zoom = 1 + 1.25·open;  after.clip = inset(0 0 0 x)',
   init(st){
     const q = [], root = $(st,'.txc-root'), seg = $(st,'.txc-cm-seg'), ind = $(st,'.txc-cm-ind'), sbs = $$(seg,'button'), mag = $(st,'.txc-cm-mag'), wrap = $(st,'.txc-cm-wrap'), fr = $(st,'.txc-cm-fr'), A = $(st,'.txc-cm-a'), B = $(st,'.txc-cm-b'), ln = $(st,'.txc-cm-ln'), lL = $(st,'.txc-cm-l'), lR = $(st,'.txc-cm-r');
@@ -17047,7 +17047,7 @@ window.CIEO_SOURCE_HINT="blocks/169-gal-grid-lightbox.js";
    Every atom here draws its photographs with PhotoKit and shares four small tools:
    cover()   shows one image cover-cropped into any rect using only transform + clip-path, so a shared element
              can change aspect ratio (4:3 tile to 3:2 viewer) on the compositor with no layout.
-   Reflow    items that travel between layouts: leavers shrink to their own centre, stayers travel in order,
+   Reflow    items that travel between layouts: leavers shrink to their own center, stayers travel in order,
              arrivals grow in last. Used by the masonry and the collection morph.
    swapO     opacity of a single element that swaps content: exit 100ms, then enter.
    loader    spreads photo generation over frames so first paint never stalls. */
@@ -17301,7 +17301,7 @@ atom({ id:'gal-grid-lightbox', cat:'Galleries', name:'Grid to lightbox, shared e
 
 atom({ id:'gal-swipe-dismiss', cat:'Galleries', name:'Swipe down to dismiss', block:'gallery grid, lightbox, image', fam:['D','M','X'], wide:true, tall:true,
   html:lbHTML('', ['Field recordings', 'Open a photo, then pull it down'], 'The photo follows your finger. A quick flick closes it.'),
-  desc:'Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to centre. Use when a viewer needs the natural, touch-first way out.',
+  desc:'Open a photo and drag it anywhere: it follows the pointer one to one and shrinks about the point you hold as you pull down, while the scrim fades with the distance and the controls fade out within the first 70 pixels. On release the pointer velocity decides: a fast flick or more than a fifth of the height hands the photo to the shared-element flight back to its tile, keeping the finger speed, and anything less springs back to center. Use when a viewer needs the natural, touch-first way out.',
   api:'photo = fit + finger; scale = 1 − .42·pull; scrim = 1 − dy/(.55H); release: proj = dy + vy·.22 > .2H ? flyTo(tile, vy) : settle(0, vy)',
   init(st){ return lightbox(st, { swipe:true, cols:[3, 4, 4], meta:'place', items:[['harbor','l'], ['meadow','s'], ['canyon','l'], ['studio','s'], ['dunes','l'], ['portrait','p'], ['ridge','l'], ['coast','p'], ['field','l'], ['lake','l'], ['city','l'], ['forest','l']].map(([n, k]) => ({ n, k })) }); } });
 
@@ -17409,7 +17409,7 @@ atom({ id:'gal-masonry-filter', cat:'Galleries', name:'Filterable masonry that r
   html:`<div class="txg txg-ms"><div class="txg-hd"><div><h4>Contact prints</h4><p><span class="txg-num txg-ms-n"></span> of 16 photographs</p></div><span class="txg-hint">Pick a subject. Photos that stay travel to their new place.</span></div>
 <div class="txg-chips" role="group" aria-label="Filter photographs by subject"><div class="ind"></div></div>
 <div class="txg-ms-sc"><div class="txg-ms-in" role="list" aria-label="Photographs"></div></div><span class="txg-sr" role="status"></span></div>`,
-  desc:'Choosing a subject runs three beats in order. Photos that no longer match shrink to their own centre in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own centre, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.',
+  desc:'Choosing a subject runs three beats in order. Photos that no longer match shrink to their own center in 100ms, staggered 20ms apart. Then the photos that stay travel to their new slots on a soft spring, one every 30ms in reading order so the reflow sweeps rather than jumps. Last, photos that now match grow in from their own center, 200ms in. The pill behind the active filter is a two-edge indicator (leading edge first, trailing edge 60ms behind) and the count rolls its digits. Use when a gallery filters in place and people should keep track of what moved where.',
   api:'leave: s→0 (snap, k·20ms) · stay: x,y→slot (soft, 80ms + k·30ms) · enter: s→1 (base, 200ms + k·35ms) · height.set(newH)',
   init(st){
     const root = $(st, '.txg-ms'), sc = $(root, '.txg-ms-sc'), inn = $(root, '.txg-ms-in'), chipsEl = $(root, '.txg-chips'), ind = $(chipsEl, '.ind'), sr = $(root, '.txg-sr');
@@ -17499,8 +17499,8 @@ atom({ id:'gal-contact-loupe', cat:'Galleries', name:'Contact sheet with a loupe
   html:`<div class="txg txg-cs"><div class="txg-hd"><div><h4>Roll 07, Sierra</h4><p><span class="txg-num txg-cs-n"></span> picked of 32 frames</p></div><span class="txg-hint">Move over the sheet to read a frame. Click, or press Enter, to pick it.</span></div>
 <div class="txg-cs-wrap"><div class="txg-cs-sheet" role="group" aria-label="Contact sheet, 32 frames. Arrow keys move between frames, Enter picks."><div class="txg-cs-in"></div></div>
 <div class="txg-cs-lens" aria-hidden="true"><div class="txg-cs-in" inert></div></div><div class="txg-cs-lab" aria-hidden="true"></div></div></div>`,
-  desc:'A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens centre, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the centre crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.',
-  api:'lens.xy.set(pointer, snap); content = sheet·scale(3.4) translated so lens centre = sheet point; label.swap(frameUnderLens)',
+  desc:'A round loupe follows the pointer on a snap spring, so it trails the hand by a few frames instead of being glued to it. What it shows is the sheet itself, scaled 3.4 times about the lens center, so frames cross the glass continuously and picks you have marked show up inside it. The lens pops in on enter and out on leave, and its label swaps (out, then in) as the center crosses from one frame to the next. On touch the lens sits above the finger so it is never hidden by it; from the keyboard it parks on the focused frame. Use when people must judge sharpness or expression across many small frames without opening each one.',
+  api:'lens.xy.set(pointer, snap); content = sheet·scale(3.4) translated so lens center = sheet point; label.swap(frameUnderLens)',
   init(st){
     const root = $(st, '.txg-cs'), wrap = $(root, '.txg-cs-wrap'), sheet = $(root, '.txg-cs-sheet'), inn = $(sheet, '.txg-cs-in'), lens = $(root, '.txg-cs-lens'), lin = $(lens, '.txg-cs-in'), lab = $(root, '.txg-cs-lab'), dgp = new Digits($(root, '.txg-cs-n'), 2);
     const N = 32, TODS = [0, 1, .5], frames = []; const L = loader(), TL = timeline();
@@ -17617,7 +17617,7 @@ document.head.insertAdjacentHTML('beforeend', `<style id="txg-fg">
 </style>`);
 atom({ id:'gal-hover-focus', cat:'Galleries', name:'Hover-focus grid', block:'gallery grid, image', fam:['M','E'], wide:true, tall:true,
   html:`<div class="txg txg-fg"><div class="txg-hd"><div><h4>Selected work, 2025</h4><p>10 photographs</p></div><span class="txg-hint">Hover to look at one. Click, or tap, to hold the focus.</span></div><div class="txg-fg-g" role="group" aria-label="Photographs"></div></div>`,
-  desc:'The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of colour, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.',
+  desc:'The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of color, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.',
   api:'hover(i): others.r.set(1, soft, delay d(i,j)·.14ms/px) · i.r.set(0) · leave: all.r.set(0, lazy) · r → saturate, brightness, scale',
   init(st){
     const root = $(st, '.txg-fg'), grid = $(root, '.txg-fg-g'), L = loader();
@@ -17745,7 +17745,7 @@ atom({ id:'gal-cull-deck', cat:'Galleries', name:'Cull deck: keep or reject by t
 <div class="txg-cd-sum"><b>Roll reviewed</b><p></p><button class="btn ink" data-a="again">Review again</button></div></div>
 <div class="txg-cd-cap" aria-hidden="true"></div><div class="txg-cd-tray" role="img" aria-label="Kept photos"></div>
 <div class="txg-cd-bar"><button class="btn" data-a="rej">${ic(GI.cross, 16)}Reject</button><button class="btn" data-a="undo" disabled>${ic(GI.undo, 16)}Undo</button><button class="btn ink" data-a="keep">${ic(I.check, 16)}Keep</button></div><span class="txg-sr" role="status"></span><div class="txg-cd-cards"></div></div>`,
-  desc:'The top photo follows the pointer one to one and tilts with how far it has travelled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.',
+  desc:'The top photo follows the pointer one to one and tilts with how far it has traveled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.',
   api:'pos = index + clamp(|dx|/.55w); card(i).depth = max(0, i − pos); release: |dx + vx·.2| > .38w ? fly(tray slot | off-edge, vx) : return(0, vx)',
   init(st){
     const root = $(st, '.txg-cd'), deck = $(root, '.txg-cd-deck'), lay = $(root, '.txg-cd-cards'), sum = $(deck, '.txg-cd-sum'), tray = $(root, '.txg-cd-tray'), stEl = $(root, '.txg-cd-st'), capEl = $(root, '.txg-cd-cap'), sr = $(root, '.txg-sr');
@@ -17934,7 +17934,7 @@ atom({ id:'txs-hgallery', cat:CAT, name:'Pinned horizontal gallery', block:'gall
 <div class="txs2-tr">${HG.map((n, i) => `<figure class="txs2-cd"><div class="txs2-ph"><canvas role="img" aria-label="Photograph: ${CAP(n)}"></canvas></div><figcaption><b>${CAP(n)}</b><span class="num">0${i + 1}</span></figcaption></figure>`).join('')}</div>
 <div class="txs2-bar" aria-hidden="true"><i></i></div></div></section>
 <div class="txs-body"><span class="txs-k">After the row</span><h4>Vertical scroll in, sideways travel out</h4><p>The wheel and the keyboard still scroll down. The row is pinned while it has distance left to cover, one pixel across for every pixel down, then the page lets go and carries on.</p><p>Inside each frame the photo drifts against the travel, so near frames feel closer than the row behind them.</p></div>`),
-  desc:'Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the centre. Reduced motion keeps the 1:1 travel and drops the inner drift.',
+  desc:'Use when a short run of related photos sits inside a long page and a carousel would hide them behind buttons. The section pins while the row has travel left: each pixel scrolled down moves the row one pixel left, smoothed by the follower. Inside every card the photo drifts against the travel by up to 10% of its width (depth), the progress line fills, and the counter changes as a card crosses the center. Reduced motion keeps the 1:1 travel and drops the inner drift.',
   api:'x = −p·(trackW − W)   img[i].x = −(cx[i] − W/2)/W·.18·cardW   bar.scaleX = p   section.h = H + travel',
   init(st){
     const sec = $(st,'.txs2-sec'), hd = $(st,'.txs2-hd'), tr = $(st,'.txs2-tr'), cards = $$(st,'.txs2-cd'), phs = $$(st,'.txs2-ph'), cvs = $$(st,'.txs2-ph canvas'), bar = $(st,'.txs2-bar i');
@@ -17961,7 +17961,7 @@ atom({ id:'txs-hgallery', cat:CAT, name:'Pinned horizontal gallery', block:'gall
 const STK = [
   { n:'field', k:'01 · Ingest', h:'Copy the card before you look at it', b:'Two copies, two drives, then format. Nothing gets culled on the camera, where the screen lies about focus.' },
   { n:'portrait', k:'02 · Cull', h:'One pass for focus, one for feeling', b:'The first pass removes what is soft. The second keeps what you would hang. Most shoots end with eleven frames out of four hundred.' },
-  { n:'studio', k:'03 · Grade', h:'Fix the light, then stop', b:'White balance from the grey card, exposure from the highlights, and a single curve. Anything more starts to show.' },
+  { n:'studio', k:'03 · Grade', h:'Fix the light, then stop', b:'White balance from the gray card, exposure from the highlights, and a single curve. Anything more starts to show.' },
   { n:'lake', k:'04 · Print', h:'The print is the final edit', b:'A 40 by 50 centimetre proof on matte paper shows what the screen hid: the shadows were two stops too heavy.' }];
 atom({ id:'txs-stackcards', cat:CAT, name:'Stacking cards', block:'feature-cards, process-steps', fam:['M','T'], wide:true, tall:true,
   html: frame('Story: from card to print', `<style>
@@ -18075,7 +18075,7 @@ atom({ id:'txs-chapters', cat:CAT, name:'Chapter scrollytelling', block:'scrolly
 </style><div class="txs5-w"><div class="txs5-fg"><div class="txs5-im">${CH.map(c => `<canvas role="img" aria-label="Photograph: ${CAP(c.n)}"></canvas>`).join('')}<div class="txs5-dt" aria-hidden="true">${CH.map(() => '<i></i>').join('')}</div></div><div class="txs5-cp">${CH.map(c => `<span class="layer">${CAP(c.n)}</span>`).join('')}</div></div>
 <div class="txs5-st">${CH.map(c => `<section class="txs5-s"><div><span class="txs-k">${c.k}</span><h4>${c.h}</h4><p>${c.b}</p></div></section>`).join('')}</div></div>
 <div class="txs-body"><span class="txs-k">End of the day</span><h4>Four places, one roll</h4><p>The photo changes in the gap between two chapters, never while you are reading one. Scroll back and the earlier light slides back down.</p></div><p class="txs-sr" aria-live="polite"></p>`),
-  desc:'Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centred, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.',
+  desc:'Use when each block of a narrative has its own picture: a case study, a trip, a product tour. Text steps scroll on the left while the photo pins on the right (on phones the photo pins full height and the steps scroll over it as cards). The photo holds while a step is centered, then in the gap between steps the next photo rises from below through a mask while the old one drifts up 18%, both tied to scroll so it reverses exactly. The caption swaps (exit, then enter) at the midpoint and the active step brightens. Reduced motion cross-fades.',
   api:'f = i + (focus − c[i])/(c[i+1] − c[i])   q = ease((frac(f) − .3)/.4)   next.clip = inset((1−q)·80% 0 0 0)   next.y = (1−q)·20%   prev.y = −q·18%',
   init(st){
     const w = $(st,'.txs5-w'), im = $(st,'.txs5-im'), cvs = $$(st,'.txs5-im canvas'), dots = $$(st,'.txs5-dt i'), caps = $$(st,'.txs5-cp .layer'), steps = $$(st,'.txs5-s'), live = $(st,'.txs-sr');
@@ -18104,7 +18104,7 @@ atom({ id:'txs-chapters', cat:CAT, name:'Chapter scrollytelling', block:'scrolly
 
 /* ================================================================ 6. Parallax depth planes */
 // split one PhotoKit scene into planes. Each ridge is a flat fill plus grain: per column we walk up
-// from the bottom through flat runs (no drift), cluster their colours across the image, then classify
+// from the bottom through flat runs (no drift), cluster their colors across the image, then classify
 // every pixel bottom-up, only ever stepping to a farther tone, and stop at the sky.
 function splitPlanes(src){
   const W = src.width, H = src.height, d = src.getContext('2d').getImageData(0, 0, W, H).data, cls = new Int8Array(W*H).fill(-1);
@@ -18127,7 +18127,7 @@ function splitPlanes(src){
     sky[x] = y + 1; }
   const mk = () => { const c = document.createElement('canvas'); c.width = W; c.height = H; return c; };
   const skyC = mk(), sx = skyC.getContext('2d'), sd = sx.createImageData(W, H);
-  // behind the ridges the sky continues: each column's colour just above its ridge, plus seeded grain
+  // behind the ridges the sky continues: each column's color just above its ridge, plus seeded grain
   const fill = []; for (let x = 0; x < W; x++){ const y0 = Math.max(0, sky[x] - 7); fill.push(avg(x, y0, Math.max(0, y0 - 8))); }
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++){ const o = (y*W + x)*4;
     if (y < sky[x] - 7){ sd.data[o] = d[o]; sd.data[o + 1] = d[o + 1]; sd.data[o + 2] = d[o + 2]; }
@@ -18273,7 +18273,7 @@ const RC = [
   { n:'meadow', h:'Light', b:['Side light shows texture; back light shows shape. Front light shows neither, which is why noon is hard.', 'Expose for the brightest thing you care about and let the rest fall where it falls.'] },
   { n:'field', h:'Foreground', b:['A near subject gives the eye a step into the frame. Grass, a rock or a fence post is enough.', 'Stop down to f/11 and focus a third of the way in, so the step and the distance are both sharp.'] },
   { n:'harbor', h:'Weather', b:['The best skies are the ones forecasts call bad: clearing storms, low cloud, haze after rain.', 'Stay twenty minutes after you think the light is gone. It usually comes back once, briefly.'] },
-  { n:'canyon', h:'Print', b:['A print shows what a screen forgives. Shadows block up and colour shifts warm under room light.', 'Proof small, look at it in daylight for a day, then print it large.'] }];
+  { n:'canyon', h:'Print', b:['A print shows what a screen forgives. Shadows block up and color shifts warm under room light.', 'Proof small, look at it in daylight for a day, then print it large.'] }];
 atom({ id:'txs-chapterrail', cat:CAT, name:'Chapter rail with gentle snap', block:'article, table-of-contents, reading-progress', fam:['E','T'], wide:true, tall:true,
   html: frame('Guide: reading a landscape photograph', `<style>
 .txs9-ar{padding:24px 24px 60px 214px;max-width:820px}
@@ -18535,7 +18535,7 @@ function lazyPhoto(name, aspect = 1.5, tod = 0){
   return o;
 }
 // cover mapping: frame uv → source uv = uv*xy + zw; f = focal point, z = extra zoom
-// default focal x sits right of centre: every PhotoKit landscape has its sun at x ≈ .68, so narrow (phone)
+// default focal x sits right of center: every PhotoKit landscape has its sun at x ≈ .68, so narrow (phone)
 // crops keep the sun whole instead of slicing it at the frame edge
 const cover = (fw, fh, sw, sh, fx = .78, fy = .5, z = 1) => { const af = fw/fh, as = sw/sh; let sx = 1, sy = 1;
   if (af > as) sy = as/af; else sx = af/as; sx /= z; sy /= z; return [sx, sy, (1 - sx)*fx, (1 - sy)*fy]; };
@@ -18551,7 +18551,7 @@ function boxBlur(a, w, h, r){
     for (let y = 0; y < h; y++){ q[y*w + x] = s/n; s += o[Math.min(h - 1, y + r + 1)*w + x] - o[Math.max(0, y - r)*w + x]; } }
   return q;
 }
-/* depth from aerial perspective: in these landscapes every ridge or tree row is a flat colour and farther
+/* depth from aerial perspective: in these landscapes every ridge or tree row is a flat color and farther
    planes are lighter. Luminance peaks become planes (brightest = farthest); every pixel snaps to its nearest
    plane, so anti-aliased edges never invent an in-between plane. Nearer planes are dilated by two texels. */
 function depthOf(img){
@@ -18707,7 +18707,7 @@ atom({ id:'fxp-rack', cat:'Photo effects', name:'Hover rack focus', block:'hero,
   }});
 
 /* =============================================================== 3. brand duotone */
-atom({ id:'fxp-duo', cat:'Photo effects', name:'Brand tint to colour', block:'card grid, team, articles (image)', fam:['M'], wide:true, tall:true,
+atom({ id:'fxp-duo', cat:'Photo effects', name:'Brand tint to color', block:'card grid, team, articles (image)', fam:['M'], wide:true, tall:true,
   html:`${CSS}<style>
 .fxp-dh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex:none}
 .fxp-dh b{font-size:18px;letter-spacing:-.02em;font-weight:600}
@@ -18722,8 +18722,8 @@ atom({ id:'fxp-duo', cat:'Photo effects', name:'Brand tint to colour', block:'ca
 @container (max-width:520px){.fxp-dg{gap:10px}.fxp-dt{font-size:13px}.fxp-dm{font-size:12px}}
 </style><div class="fxp-w"><div class="fxp-dh"><b>From the field</b><span class="fxp-tx">4 new stories this week</span></div><div class="fxp-dg"></div>
 <div class="fxp-bar"><span class="fxp-tx">Tint</span><div class="seg" role="group" aria-label="Tint"><div class="ind"></div><button>Ink</button><button>Moss</button><button>Ember</button></div><span class="fxp-gap"></span><span class="fxp-tx">Hover or Tab to a story</span></div></div>`,
-  desc:'Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full colour on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with colour reserved for the item you are on.',
-  api:'duo = gradientMap(lum, [dark, tint, light])   card.colour.set(hover || focus ? 1 : 0, S.soft)',
+  desc:'Every photo is gradient-mapped through three tokens (darkest neutral, a tint, lightest neutral), so mixed sources read as one set in both themes. The story under the pointer or keyboard focus cross-fades back to full color on a soft spring; switching the tint dissolves old map into new. Use when: a grid mixes photos from many sources and needs one calm brand look, with color reserved for the item you are on.',
+  api:'duo = gradientMap(lum, [dark, tint, light])   card.color.set(hover || focus ? 1 : 0, S.soft)',
   init(st){
     // focal x per photo: keep the sun whole or leave it out, never cut in half at the card edge
     const D = [['ridge', 'What the ridge keeps', 'Field notes · 6 min', .8], ['harbor', 'Low tide, six a.m.', 'Dispatch · 4 min', .2], ['meadow', 'A meadow in August', 'Essay · 9 min', .15], ['canyon', 'Inside the canyon wall', 'Field notes · 7 min', .85]];
@@ -18783,8 +18783,8 @@ atom({ id:'fxp-relight', cat:'Photo effects', name:'Relight with the sun', block
 <svg class="fxp-path" aria-hidden="true"><path fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="2 6" stroke-linecap="round"/></svg>
 <button type="button" class="fxp-sun" role="slider" aria-label="Sun position" aria-valuemin="0" aria-valuemax="100"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="20" fill="none" stroke="rgba(12,16,22,.4)" stroke-width="3.5"/><circle cx="24" cy="24" r="20" fill="none" stroke="#fff" stroke-width="1.5"/></svg></button><span class="fxp-chip"></span></div>
 <div class="fxp-bar"><button type="button" class="btn" data-g="0">Midday</button><button type="button" class="btn" data-g=".82">Golden hour</button><button type="button" class="btn fxp-now">Match my time</button><span class="fxp-gap"></span><span class="fxp-tx" aria-live="polite"></span></div></div>`,
-  desc:'Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centred on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.',
-  api:'mask = g + (pool(sun) − .45)·.7·sin(πg)   colour = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)',
+  desc:'Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centered on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.',
+  api:'mask = g + (pool(sun) − .45)·.7·sin(πg)   color = mix(day, golden, mask)   sun drawn on sky only; g.release(g, v·dg/dpx)',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), sun = $(st, '.fxp-sun'), ring = $$(sun, 'circle'), path = $(st, '.fxp-path path'), chip = $(st, '.fxp-chip'), out = $(st, '.fxp-tx'), s = surface(fr, cv);
     const G = new Track(.62, S.soft), hov = new Track(0, S.base); let day = null, gold = null, sky = null, W = 0, H = 0, sig = '', held = false, pv = '', now0 = null;
@@ -18889,7 +18889,7 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
 </style><div class="fxp-w"><div class="fxp-ed"><div class="fxp-et"><span class="fxp-ek">Field notes · Issue 14</span><h4 class="fxp-eh">Where the coast road ends</h4><p class="fxp-es">Forty miles of switchbacks, one diner, and the light that makes the drive worth it.</p><span class="fxp-eb">Words by Ines Alvarez · Photographs by Theo Marsh</span></div>
 <div class="fxp-fr" role="img" aria-label="Coast road at midday"><canvas class="fxp-cv" aria-hidden="true"></canvas></div></div>
 <div class="fxp-bar"><div class="seg" role="group" aria-label="Screen"><div class="ind"></div><button>Dots</button><button>Lines</button></div><label class="fxp-rg">Resolve <input id="fxp-screen-p" type="range" min="0" max="100" value="0"></label><button type="button" class="btn fxp-rp">Replay</button></div></div>`,
-  desc:'The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colours. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s colour, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.',
+  desc:'The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colors. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s color, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.',
   api:'cell = c0·(1.4/c0)^smoothstep(0,.9,p)   dot r = √(coverage/π)   out = mix(screen, photo, smoothstep(.62,1,p))',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), rg = $(st, '#fxp-screen-p'), s = surface(fr, cv), ph = lazyPhoto('coast');
@@ -18909,7 +18909,7 @@ atom({ id:'fxp-screen', cat:'Photo effects', name:'Halftone to photo', block:'ed
     };
   }});
 
-/* =============================================================== 7. colour grade + histogram */
+/* =============================================================== 7. color grade + histogram */
 const FS_GRADE = `uniform sampler2D uImg;uniform vec4 uCov;uniform float uEV,uT,uClip;uniform vec3 uHi,uLo;
 void main(){vec2 s=v*uCov.xy+uCov.zw;vec3 c=texture2D(uImg,s).rgb;vec3 l=pow(c,vec3(2.2));
 vec3 m=vec3(1.+.28*uT,1.+.04*uT,1.-.30*uT);m/=dot(m,vec3(.2126,.7152,.0722));l*=m*exp2(uEV);
@@ -18935,7 +18935,7 @@ atom({ id:'fxp-grade', cat:'Photo effects', name:'Grade with live histogram', bl
 <div class="fxp-sl"><label for="fxp-grade-ev">Exposure <b data-k="ev"></b></label><input id="fxp-grade-ev" type="range" min="-2" max="2" step=".05" value="0"></div>
 <div class="fxp-sl"><label for="fxp-grade-t">Temperature <b data-k="t"></b></label><input id="fxp-grade-t" type="range" min="-1" max="1" step=".02" value="0"></div>
 <div class="fxp-gb"><button type="button" class="btn fxp-au">Auto</button><button type="button" class="btn fxp-rs">Reset</button><button type="button" class="btn fxp-ck" aria-pressed="false">Show clipping</button></div></div></div></div>`,
-  desc:'Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a grey-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.',
+  desc:'Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a gray-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.',
   api:'lin = srgb^2.2 · wb(T) · 2^EV   hist = Σ LUT(px)   ev.set(auto, S.soft) | ev.jump(slider)',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), chip = $(st, '.fxp-chip'), hcv = $(st, '.fxp-hc canvas'), s = surface(fr, cv), ph = lazyPhoto('lake');
@@ -18955,7 +18955,7 @@ atom({ id:'fxp-grade', cat:'Photo effects', name:'Grade with live histogram', bl
       const img = ph.need(s.cw, s.ch); if (!img) return;
       if (pv !== ph.v){ pv = ph.v; small = scaled(img, 200, Math.round(200*img.height/img.width)).d(); let r = 0, b = 0; const ls = [];
         for (let i = 0; i < small.length; i += 4){ const R = (small[i]/255)**2.2, G2 = (small[i + 1]/255)**2.2, B = (small[i + 2]/255)**2.2; r += R; b += B; ls.push(Math.max(R, G2, B)); }
-        // auto: expose to the right (98th percentile lands at .92, so a small sun disc may clip) and half a grey-world white balance
+        // auto: expose to the right (98th percentile lands at .92, so a small sun disc may clip) and half a gray-world white balance
         ls.sort((p, q) => p - q); const p98 = ls[Math.floor(ls.length*.98)] || 1;
         auto = [clamp(Math.round(Math.log2(.92/p98)*20)/20, -2, 2), clamp(Math.round((b - r)/(r + b)*1.5*50)/50, -.6, .6)]; }
       if (theme !== themeV){ theme = themeV; HI = tok(st, '--danger'); LO = tok(st, '--accent'); sig = hsig = ''; }
@@ -18983,17 +18983,17 @@ atom({ id:'fxp-grade', cat:'Photo effects', name:'Grade with live histogram', bl
     };
   }});
 
-/* =============================================================== 8. paint to reveal colour */
+/* =============================================================== 8. paint to reveal color */
 const FS_PAINT = `uniform sampler2D uImg,uMask;uniform vec4 uCov;
 void main(){vec2 s=v*uCov.xy+uCov.zw;vec3 c=texture2D(uImg,s).rgb;float m=smoothstep(.08,.6,texture2D(uMask,v).r);
 float g=lum(c);g=mix(g,g*g*(3.-2.*g),.4);gl_FragColor=vec4(mix(vec3(g),c,m),1.);}`;
-atom({ id:'fxp-paint', cat:'Photo effects', name:'Paint in colour', block:'hero, before/after story (image)', fam:['D','T'], wide:true, tall:true,
+atom({ id:'fxp-paint', cat:'Photo effects', name:'Paint in color', block:'hero, before/after story (image)', fam:['D','T'], wide:true, tall:true,
   html:`${CSS}<style>
 .fxp-br{position:absolute;left:0;top:0;border-radius:50%;pointer-events:none;z-index:2;box-shadow:0 0 0 1.5px #fff,0 0 0 3px rgba(12,16,22,.35)}
-</style><div class="fxp-w"><div class="fxp-fr" tabindex="0" role="img" aria-label="Late summer field in black and white. Drag, or use arrow keys with Space, to paint colour back in."><canvas class="fxp-cv" aria-hidden="true"></canvas><i class="fxp-br"></i><span class="fxp-chip">Drag to paint colour</span></div>
+</style><div class="fxp-w"><div class="fxp-fr" tabindex="0" role="img" aria-label="Late summer field in black and white. Drag, or use arrow keys with Space, to paint color back in."><canvas class="fxp-cv" aria-hidden="true"></canvas><i class="fxp-br"></i><span class="fxp-chip">Drag to paint color</span></div>
 <div class="fxp-bar"><div class="seg" role="group" aria-label="After painting"><div class="ind"></div><button>Heals back</button><button>Stays</button></div><button type="button" class="btn fxp-all">Reveal all</button><span class="fxp-gap"></span><span class="fxp-tx">Keys: arrows move, Space paints</span></div></div>`,
-  desc:'A soft brush paints the colour photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the colour drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the centre outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colourisation changed.',
-  api:'cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   colour = mix(mono, photo, smoothstep(.08,.6,m))',
+  desc:'A soft brush paints the color photo through a black-and-white print. Every cell of the mask stores when it was painted, so the heal is a pure function of time: it holds for 1.4 s, then the color drains back over 2.6 s, and painting again resets the hold. Reveal all opens from the center outward. Use when: a story or campaign hero invites people to explore, or to show what a restoration or colorisation changed.',
+  api:'cell = { a0, ts, tp }   m(t) = a0 · ramp(t − ts) · heal(t − tp − 1.4s)   color = mix(mono, photo, smoothstep(.08,.6,m))',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), br = $(st, '.fxp-br'), chip = $(st, '.fxp-chip'), s = surface(fr, cv), ph = lazyPhoto('field');
     let keep = false; const seg = mkSeg($(st, '.seg'), i => { const t = now(); if (a0) for (let k = 0; k < a0.length; k++){ if (a0[k] > 0){ a0[k] = str(k, t); ts[k] = t - 1; tp[k] = t; } } keep = i === 1; last = t; });
@@ -19047,7 +19047,7 @@ atom({ id:'fxp-burns', cat:'Photo effects', name:'Face-safe Ken Burns', block:'h
 </style><div class="fxp-w"><div class="fxp-fr fxp-kb" role="region" aria-roledescription="slideshow" aria-label="Photo stories"><canvas class="fxp-cv" aria-hidden="true"></canvas><div class="fxp-ks"><span>Face kept in frame</span></div><div class="fxp-km"><canvas aria-hidden="true"></canvas><b></b><i></i></div><span class="fxp-chip" aria-live="off"></span></div>
 <div class="fxp-bar"><button type="button" class="btn fxp-pv" aria-label="Previous photo">Previous</button><button type="button" class="btn fxp-pp" aria-pressed="false">Pause</button><button type="button" class="btn fxp-nx" aria-label="Next photo">Next</button><span class="fxp-tx fxp-ct"></span><span class="fxp-gap"></span><button type="button" class="btn fxp-sa" aria-pressed="false">Show safe area</button></div></div>`,
   desc:'Each photo carries a focal box (the face, or the subject). The planner works out the largest zoom that still contains the box at this frame’s aspect ratio, then pans and zooms between two valid framings over seven seconds, clamping every frame so the face is never cut. If the frame is too wide even at full size, it zooms out over a blurred extension of the same photo instead of cropping the head. Slides cross-fade for 1.2 s while still moving. Use when: a hero slideshow or story cover animates portraits that must survive phone, tablet and desktop crops.',
-  api:'zMax = min(1.16, cropW/boxW, cropH/boxH)   centre = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2',
+  api:'zMax = min(1.16, cropW/boxW, cropH/boxH)   center = clamp(lerp(a0,a1,ease(u)), box ∩ image)   Pause meets WCAG 2.2.2',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), safe = $(st, '.fxp-ks'), map = $(st, '.fxp-km'), mcv = $(map, 'canvas'), mcrop = $(map, 'i'), mbox = $(map, 'b'), chip = $(st, '.fxp-chip'), ct = $(st, '.fxp-ct'), s = surface(fr, cv);
     const SL = [{ n:'portrait', a:.8, box:[.33, .24, .67, .58], alt:'Portrait, window light' }, { n:'studio', a:1.5, box:[.24, .36, .76, .66], alt:'Still life, three pears' }, { n:'harbor', a:1.5, box:[.08, .5, .92, .84], alt:'Harbor, low tide' }];
@@ -19147,7 +19147,7 @@ atom({ id:'fxp-frost', cat:'Photo effects', name:'Frost behind captions', block:
 @container (max-width:560px){.fxp-fc{left:14px;bottom:14px;max-width:calc(100% - 28px)}.fxp-fh{font-size:22px}.fxp-fb{font-size:13px}}
 .fxp-cr{display:inline-flex;align-items:center;gap:6px}
 </style><div class="fxp-w"><div class="fxp-fr"><canvas class="fxp-cv" aria-hidden="true"></canvas><div class="fxp-fc"><span class="fxp-fk1">Harbor, low tide</span><span class="fxp-fh">The boats come in at six</span><span class="fxp-fb">Crews unload before the light goes. Photographs by Theo Marsh.</span></div></div>
-<div class="fxp-bar"><div class="seg" role="group" aria-label="Caption colour"><div class="ind"></div><button>Light text</button><button>Dark text</button></div><label class="fxp-rg">Frost <input id="fxp-frost-r" type="range" min="4" max="28" value="16"></label><label class="fxp-rg">Headline <input id="fxp-frost-cap" type="text" value="The boats come in at six" maxlength="60" style="width:180px;font:13px var(--sans);color:var(--ink);background:var(--card);border:1.5px solid var(--muted);border-radius:8px;padding:4px 8px"></label><button type="button" class="btn fxp-rp">Replay</button><span class="fxp-gap"></span><span class="fxp-tx fxp-cr" aria-live="polite"></span></div></div>`,
+<div class="fxp-bar"><div class="seg" role="group" aria-label="Caption color"><div class="ind"></div><button>Light text</button><button>Dark text</button></div><label class="fxp-rg">Frost <input id="fxp-frost-r" type="range" min="4" max="28" value="16"></label><label class="fxp-rg">Headline <input id="fxp-frost-cap" type="text" value="The boats come in at six" maxlength="60" style="width:180px;font:13px var(--sans);color:var(--ink);background:var(--card);border:1.5px solid var(--muted);border-radius:8px;padding:4px 8px"></label><button type="button" class="btn fxp-rp">Replay</button><span class="fxp-gap"></span><span class="fxp-tx fxp-cr" aria-live="polite"></span></div></div>`,
   desc:'The whole photo starts frosted, then clears in a wave that runs from the far corners toward the caption, leaving frost hugging only the actual lines of text (measured from the live DOM, so it follows wrapping and edits). The frost is blurred, grain-dithered, and toned just enough to reach 6:1 contrast under its worst patch, and the readout shows the ratio with and without it. Use when: captions or headlines sit on busy photos and must pass contrast without a heavy box or gradient.',
   api:'field = max(blur(lineRects), .4·falloff(box))   frost = smoothstep(th, th+.25, field), th = −.3 + .72·p   tone k solves contrast ≥ 6:1',
   init(st){
@@ -19228,10 +19228,10 @@ atom({ id:'fxp-palette', cat:'Photo effects', name:'Theme from photo', block:'si
 .fxp-cta{align-self:flex-start;border:0;border-radius:9px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer}
 @container (max-width:720px){.fxp-pl{flex-direction:column;gap:10px}.fxp-pc{width:auto;flex-direction:column;gap:10px}.fxp-sw{flex-direction:row;gap:6px}.fxp-sw button{grid-template-columns:1fr;justify-items:center;padding:4px;gap:3px;flex:1;min-width:0}.fxp-sw code{display:none}.fxp-sw i{width:100%;height:22px}.fxp-pvw{padding:10px 12px;gap:6px}.fxp-pvw p{display:none}}
 </style><div class="fxp-w"><div class="fxp-pl"><div class="fxp-fr" role="img"><canvas class="fxp-cv" aria-hidden="true"></canvas><span class="fxp-chip"></span></div>
-<div class="fxp-pc"><div class="fxp-sw" role="radiogroup" aria-label="Colours in this photo"></div><div class="fxp-pvw"><b class="fxp-ph"></b><p>Guided walks every Saturday, April to October. Small groups, early starts.</p><button type="button" class="fxp-cta">Book a walk</button><span class="fxp-tx fxp-cc"></span></div></div></div>
-<div class="fxp-bar"><div class="seg" role="group" aria-label="Cover photo"><div class="ind"></div><button>Canyon</button><button>Coast</button><button>Meadow</button></div><span class="fxp-gap"></span><span class="fxp-tx">Hover a colour to find it, Enter to use it</span></div></div>`,
-  desc:'Original: the cover photo proposes the site’s accent. Five colours are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to grey), and choosing it morphs the preview button to that colour, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colours that actually belong to their imagery.',
-  api:'palette = kmeans(oklab(px), 5)   spot = mix(px, grey, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)',
+<div class="fxp-pc"><div class="fxp-sw" role="radiogroup" aria-label="Colors in this photo"></div><div class="fxp-pvw"><b class="fxp-ph"></b><p>Guided walks every Saturday, April to October. Small groups, early starts.</p><button type="button" class="fxp-cta">Book a walk</button><span class="fxp-tx fxp-cc"></span></div></div></div>
+<div class="fxp-bar"><div class="seg" role="group" aria-label="Cover photo"><div class="ind"></div><button>Canyon</button><button>Coast</button><button>Meadow</button></div><span class="fxp-gap"></span><span class="fxp-tx">Hover a color to find it, Enter to use it</span></div></div>`,
+  desc:'Original: the cover photo proposes the site’s accent. Five colors are clustered in OKLab and listed by share. Hovering or arrowing to one spotlights where it lives in the photo (everything else dims to gray), and choosing it morphs the preview button to that color, with text flipped to whichever of white or ink passes contrast. Changing the cover cross-fades photo and palette together. Use when: a site builder or profile lets people pick theme colors that actually belong to their imagery.',
+  api:'palette = kmeans(oklab(px), 5)   spot = mix(px, gray, a·(1 − e^(−|Δoklab|²/σ²)))   accent.set(swatch, S.base)',
   init(st){
     const fr = $(st, '.fxp-fr'), cv = $(fr, 'canvas'), chip = $(st, '.fxp-chip'), swb = $(st, '.fxp-sw'), cta = $(st, '.fxp-cta'), cc = $(st, '.fxp-cc'), title = $(st, '.fxp-ph'), s = surface(fr, cv);
     const SC = [['canyon', 'Canyon trail days'], ['coast', 'Coast road walks'], ['meadow', 'High meadow mornings']], photos = SC.map(([n]) => lazyPhoto(n)), pals = [null, null, null];
@@ -19321,7 +19321,7 @@ atom({ id:'corkboard', cat:'Writing', name:'Corkboard cards', block:'writing, bo
 window.CIEO_SOURCE_HINT="blocks/174-focusline.js";
 atom({ id:'focusline', cat:'Writing', name:'Focus sentence', block:'writing, focus', fam:['M','X'], tall:true,
   html:`<style>.btn{min-height:32px!important;border-radius:8px!important;font-size:13px!important;line-height:1.5!important}b,h4{font-size:15px!important;font-weight:600!important;line-height:1.5!important}.small{font-size:12.5px!important;line-height:1.5!important}.hint{font-size:12.5px!important;line-height:1.5!important}.card{line-height:1.5!important}.dg,.dn,.ctr,.ct,.iv,.len,.dm,.ds,.eg,.d{font-variant-numeric:tabular-nums!important}.av,.nd{padding:0!important;display:grid!important;place-items:center!important}</style><div class="pg small" style="display:flex;flex-direction:column;gap:8px;max-width:300px"></div><div class="row" style="gap:8px;margin-top:8px;padding:12px"><button class="pv">Prev</button><button class="nx">Next</button></div><label class="row small muted" style="gap:8px;align-items:center;font-size:12.5px;line-height:1.5"><input type="checkbox" class="twk" checked> <span>Dim rest</span></label><div class="hint">Move the caret</div>`,
-  desc:'One sentence at a time carries full ink while the rest sink to a dim grey on the same soft spring. Moving the caret simply retargets that spring, so focus bends mid-flight instead of restarting.',
+  desc:'One sentence at a time carries full ink while the rest sink to a dim gray on the same soft spring. Moving the caret simply retargets that spring, so focus bends mid-flight instead of restarting.',
   api:'caret.set(i): op.set(k==i?1:.35, S.soft)',
   init(st){
     const L = ['The house had been empty for years.', 'Mara pushed the door and it sang.', 'Dust stood up in the light.', 'Somewhere upstairs, a floorboard answered.'];
@@ -21405,7 +21405,7 @@ atom({ id:'qaupvote', cat:'Forms', name:'Live Q&A upvote', block:'q&a (upvote, q
       rows.forEach(it => { const k = rk.indexOf(it);
         it.y.set(so.checked ? (k - it.home)*h : 0, S.base, t0); }); };
     const vote = (it, d) => { if (it.done) return; it.votes += d; it.dg.set(String(it.votes).padStart(2,' ')); layout();
-      // voted state: ink fill plus a check glyph and label, so it reads without colour
+      // voted state: ink fill plus a check glyph and label, so it reads without color
       it.up.style.background = 'var(--ink)'; it.up.style.color = 'var(--card)'; it.up.textContent = '✓ Voted'; };
     const resolve = it => { if (it.done) return; const t0 = now(); it.done = true;
       it.sw.to(1, t0); it.dim.set(1, S.base, t0);
@@ -23143,7 +23143,7 @@ window.CIEO_SOURCE_HINT="blocks/333-heartbeat.js";
 
 atom({ id:'heartbeat', cat:'Dynamic', name:'Heartbeat status', block:'status, health', fam:['S','M'],
   html:`<div class="card col" style="width:min(380px,calc(100% - 24px));margin:0 auto;padding:15px 16px;gap:8px"><b style="font-size:15px;font-weight:600;line-height:1.45">API status</b><div class="row" style="gap:10px;align-items:center"><span class="shape" style="width:32px;height:32px;border-radius:10px;background:var(--raised);display:grid;place-items:center;padding:0"><i class="dot" style="display:block;width:12px;height:12px;border-radius:50%;background:var(--success);transform:translateY(.5px)"></i></span><span class="lb" style="position:relative;font-size:14px;font-weight:600;line-height:1.5;min-height:21px;min-width:120px"></span></div><div class="cp small muted" style="position:relative;font-size:12px;line-height:1.5;min-height:18px"></div><div class="row" style="gap:8px;align-items:center"><button class="btn rp" style="min-height:32px">Replay</button><label class="row small muted" style="gap:6px;align-items:center;cursor:pointer;margin-left:auto;font-size:12px"><input type="checkbox" class="lp"> loop</label></div></div><div class="hint">Slow clock while live · morphs as it degrades</div>`,
-  desc:'The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. When reports stop, the status goes stale: the dot turns grey and stops breathing, so a silent feed never reads as live. The pass ends settled on live.',
+  desc:'The dot breathes on a slow clock while live. As health degrades the dot morphs warning to danger and the label swaps with it. When reports stop, the status goes stale: the dot turns gray and stops breathing, so a silent feed never reads as live. The pass ends settled on live.',
   api:'health.set(0|1|2, S.soft) every 2.2s   breathe: 1 ± .06·sin(2πt/2.4)',
   init(st){
     const lb = $(st,'.lb'), cp = $(st,'.cp'), dot = $(st,'.dot'), lp = $(st,'.lp');
@@ -24952,7 +24952,7 @@ atom({ id:'stickycta', cat:'Landing', name:'Sticky CTA reveal', block:'Landing s
       const w = past && !near ? 1 : 0;
       if (w !== want){ want = w; REDUCE ? y.jump(w) : y.set(w); }
     }, { passive:true });
-    // selected plan gets a check icon and semibold weight, so the state reads without colour
+    // selected plan gets a check icon and semibold weight, so the state reads without color
     const place = (i, inst) => { $$(sm,'button').forEach((x,j) => { x.dataset.l ??= x.textContent; x.style.display = 'inline-flex'; x.style.alignItems = 'center'; x.style.gap = '5px';
       x.style.fontWeight = j === i ? '600' : '500'; x.style.color = j === i ? 'var(--ink)' : ''; x.innerHTML = (j === i ? ic(I.check, 12, 2.6) : '') + x.dataset.l; });
       const b = $$(sm,'button')[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); };
@@ -27309,7 +27309,7 @@ window.CIEO_SOURCE_HINT="blocks/560-auth-wave3.js";
 
 atom({ id:'auth-invite', cat:'Auth', name:'Org invite', block:'auth, invite, team', fam:['M','S'],
   html:`<div class="card col" style="width:min(320px,92%);padding:14px;gap:8px;background:#fff;color:#171717"><b style="font-size:15px;font-weight:600">You are invited</b><p style="font-size:13.5px;line-height:1.5;margin:0">Priya invited you to join Acme Studio as Editor.</p><div class="st-panes" style="position:relative;overflow:hidden"><div class="st-main col" style="position:absolute;inset:0 0 auto;gap:8px"><button class="ac" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Accept invite to Acme Studio</button><button class="dc" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Decline invite to Acme Studio</button></div><div class="st-cf col" style="position:absolute;inset:0 0 auto;gap:8px"><p style="font-size:13.5px;line-height:1.5;margin:0">Decline the invite to Acme Studio?</p><button class="cf" style="height:44px;border-radius:9px;border:0;background:#171717;color:#fff;font-weight:500;cursor:pointer;font-size:14px">Confirm decline</button><button class="kp" style="height:44px;border-radius:9px;border:0;background:#f1f1f1;color:#171717;font-weight:500;cursor:pointer;font-size:14px">Keep my invite</button></div></div><p class="sm" role="status" style="font-size:12.5px;line-height:1.5;margin:0;min-height:19px;color:#171717"></p></div><div class="hint">Accept lands, decline asks first</div>`,
-  desc:'Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never colour alone.',
+  desc:'Accept lands a welcome line while decline arms an inline confirm step. Keep returns to the invite; every ending is text, never color alone.',
   api:'accept -> welcomed   decline -> confirm -> declined | kept',
   init(st){
     const panes = $(st,'.st-panes'), main = $(st,'.st-main'), cf = $(st,'.st-cf'), sm = $(st,'.sm'), sw = new Swap('main'), h = new Track(0, S.soft), motion = motionSettings(st);
@@ -27493,7 +27493,7 @@ atom({ id:'audio-recorder', cat:'Audio', name:'Voice recorder', block:'audio, re
     const go = (next, w, t) => { state = next; sw.to(next, t); mic.to(next, t); if (REDUCE) width.jump(w); else width.set(w, S.base, t); };
     const say = s => { note.textContent = s; };
     rcMic.onclick = () => { const t = now(); t0 = t; hist = Array(NL).fill(0); samples = []; lastS = -1; sec = -1; dm.set('0', true); ds.set('00', true); go('rec', target(), t); say('Recording'); rcStop.focus({ preventScroll:true }); };
-    const cancel = () => { if (state !== 'rec') return; go('idle', 56, now()); say('Recording cancelled'); rcMic.focus({ preventScroll:true }); };
+    const cancel = () => { if (state !== 'rec') return; go('idle', 56, now()); say('Recording canceled'); rcMic.focus({ preventScroll:true }); };
     rcCancel.onclick = cancel;
     pill.onkeydown = e => { if (e.key === 'Escape') cancel(); };
     rcStop.onclick = () => { const t = now(), el = t - t0; clipLen = Math.max(1, Math.round(el));
@@ -27805,7 +27805,7 @@ atom({ id:'msg-typing', cat:'Messaging', name:'Typing to message', block:'messag
 
 atom({ id:'msg-delivery', cat:'Messaging', name:'Delivery ticks', block:'messaging, delivery, read receipts', fam:['M','S','E','T'],
   html:`<div class="card col" style="width:min(340px,94%);padding:14px;gap:10px"><div style="align-self:flex-end;max-width:84%;padding:8px 12px 6px;border-radius:18px 18px 4px 18px;background:var(--raised);color:var(--ink)"><div style="font-size:14px;line-height:1.4">Running ten minutes late, start without me.</div><div class="row" style="justify-content:flex-end;gap:6px;margin-top:2px;font-size:11px;line-height:16px"><span class="mk-st" aria-live="polite" style="position:relative;display:block;height:16px;min-width:52px;text-align:right"></span><svg class="mk-tk" width="22" height="14" viewBox="0 0 22 14" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="ck"><circle cx="7" cy="7" r="5.2" stroke="currentColor" opacity=".8"/><path class="hand" d="M7 7V3.8" stroke="currentColor"/></g><path class="c1" d="M2.5 7.5l3.2 3.2L12 4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path class="c2" d="M9 9.2l1.5 1.5L16.8 4" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg></div></div><div class="mk-seen row" style="justify-content:flex-end;gap:8px;min-height:24px;font-size:12px"><span class="muted mk-lbl" style="opacity:0">Seen by</span><span class="mk-av" style="display:flex"></span></div><button class="mk-send" style="${MS_BTN}align-self:flex-start">Send again</button></div><div class="hint">Watch one message go from sending to sent, delivered and read, then the seen avatars slide in</div>`,
-  desc:'The clock hand turns while sending. A first check draws in on Sent, a second slides in beside it on Delivered, both turn to the accent colour on Read, then the Seen by avatars slide in one after another.',
+  desc:'The clock hand turns while sending. A first check draws in on Sent, a second slides in beside it on Delivered, both turn to the accent color on Read, then the Seen by avatars slide in one after another.',
   api:'status: 0 sending → 1 sent (c1.draw) → 2 delivered (c2.draw) → 3 read (tint.set(1)) → seen[i].x.set(0, base, t + i·0.06)',
   init(st){
     const tk = $(st,'.mk-tk'), c1 = $(st,'.c1'), c2 = $(st,'.c2'), clock = $(st,'.ck'), hand = $(st,'.hand'), stEl = $(st,'.mk-st'), lbl = $(st,'.mk-lbl'), avs = $(st,'.mk-av');
@@ -27970,9 +27970,9 @@ atom({ id:'feedback-helpful', cat:'Feedback', name:'Helpful thumbs', block:'feed
     return t => { Object.keys(L).forEach(k => sw.apply(L[k], k, t)); panel.style.height = px(h.at(t)); };
   }});
 
-window.CIEO_SOURCE_HINT="catalogue/icons.js";
+window.CIEO_SOURCE_HINT="catalog/icons.js";
 /* Original 20px stroke icons. No icon font, network, or framework dependency. */
-window.CieoCatalogue = (() => {
+window.CieoCatalog = (() => {
   const paths = {
     search:'<circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/>',
     grid:'<rect x="3" y="3" width="5" height="5" rx="1"/><rect x="12" y="3" width="5" height="5" rx="1"/><rect x="3" y="12" width="5" height="5" rx="1"/><rect x="12" y="12" width="5" height="5" rx="1"/>',
@@ -28005,12 +28005,12 @@ window.CieoCatalogue = (() => {
   return { icon, paintIcons, announce, read, save, frames:new Set(), reduced:matchMedia('(prefers-reduced-motion:reduce)').matches, paused:false, active:null };
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/isolation.js";
+window.CIEO_SOURCE_HINT="catalog/isolation.js";
 /* Recipe styles previously leaked across tiles (pricing .ps broke the color picker).
    Parse with the browser CSS parser, then scope selectors to the stable live stage.
    Scoped nodes can move into the inspector without changing their CSS identity. */
 (() => {
-  const c=window.CieoCatalogue;
+  const c=window.CieoCatalog;
   function selectors(text){
     const parts=[];let start=0,depth=0,quote='';
     for(let i=0;i<text.length;i++){
@@ -28036,11 +28036,11 @@ window.CIEO_SOURCE_HINT="catalogue/isolation.js";
   };
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/appearance.js";
+window.CIEO_SOURCE_HINT="catalog/appearance.js";
 (() => {
-  const c=window.CieoCatalogue, root=document.documentElement;
+  const c=window.CieoCatalog, root=document.documentElement;
   const choices={appearance:['system','light','dark'],accent:['iris','blue','green','coral'],density:['comfortable','compact'],corners:['soft','crisp']};
-  const stored=c.read('cieo-catalogue-appearance',{});
+  const stored=c.read('cieo-catalog-appearance',{});
   const settings=Object.fromEntries(Object.entries(choices).map(([key,values])=>[key, values.includes(stored?.[key])?stored[key]:values[0]]));
   const system=matchMedia('(prefers-color-scheme:dark)');
   const apply=()=>{
@@ -28057,16 +28057,16 @@ window.CIEO_SOURCE_HINT="catalogue/appearance.js";
     const button=e.target.closest('button');if(!button)return;
     for(const [key,values] of Object.entries(choices)) if(values.includes(button.dataset[key])) {
       settings[key]=button.dataset[key];apply();
-      if(!c.save('cieo-catalogue-appearance',settings))c.announce('Appearance changed. Browser storage is unavailable.');
+      if(!c.save('cieo-catalog-appearance',settings))c.announce('Appearance changed. Browser storage is unavailable.');
     }
   });
   system.addEventListener('change',apply);addEventListener('resize',apply,{passive:true});apply();
   c.appearance={settings,apply};
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/navigation.js";
+window.CIEO_SOURCE_HINT="catalog/navigation.js";
 (() => {
-  const c=window.CieoCatalogue;
+  const c=window.CieoCatalog;
   c.familyNames={M:'Morph',S:'Swap',D:'Drag',E:'Edges',X:'Enter / exit',T:'Time'};
   c.collections={Interface:['Content','Admin','Admin kit','Inputs','Forms','Overlays','Navigation','Chrome'],Creating:['Design tools','Editor','Workspace','Layout'],Writing:['Writing','Documents','Workflow'],Imagery:['Photo effects','Image transitions','Carousels','Galleries','Scroll stories','Media']};
   c.categoryCounts=new Map(); A.forEach(a=>c.categoryCounts.set(a.cat,(c.categoryCounts.get(a.cat)||0)+1));
@@ -28116,10 +28116,10 @@ window.CIEO_SOURCE_HINT="catalogue/navigation.js";
   c.paintIcons();
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/gallery.js";
+window.CIEO_SOURCE_HINT="catalog/gallery.js";
 (() => {
-  const c=window.CieoCatalogue, grid=document.getElementById('groups');
-  const known=new Set(A.map(a=>a.id)), stored=c.read('cieo-catalogue-saved',[]);
+  const c=window.CieoCatalog, grid=document.getElementById('groups');
+  const known=new Set(A.map(a=>a.id)), stored=c.read('cieo-catalog-saved',[]);
   c.favorites=new Set(Array.isArray(stored)?stored.filter(id=>known.has(id)):[]);
   c.byElement=new Map();c.byId=new Map(A.map(a=>[a.id,a]));
   // Real recipes, simply curated at the front. No duplicate preview instances.
@@ -28129,7 +28129,7 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
   });
   c.toggleSave=(id)=>{
     c.favorites.has(id)?c.favorites.delete(id):c.favorites.add(id);
-    if(!c.save('cieo-catalogue-saved',[...c.favorites]))c.announce('Saved for this session. Browser storage is unavailable.');
+    if(!c.save('cieo-catalog-saved',[...c.favorites]))c.announce('Saved for this session. Browser storage is unavailable.');
     const saved=c.favorites.has(id);document.querySelectorAll(`[data-save="${id}"]`).forEach(b=>{b.setAttribute('aria-pressed',String(saved));b.setAttribute('aria-label',`${saved?'Saved':'Save'} ${c.byId.get(id).name}`)});
     c.markNavigation();c.updateInspectorSave?.();if(c.route().saved)c.filter();
   };
@@ -28270,9 +28270,9 @@ window.CIEO_SOURCE_HINT="catalogue/gallery.js";
   c.startRoute=routeChanged;
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/dialogs.js";
+window.CIEO_SOURCE_HINT="catalog/dialogs.js";
 (() => {
-  const c=window.CieoCatalogue,openers=new WeakMap();
+  const c=window.CieoCatalog,openers=new WeakMap();
   c.openDialog=(dialog,trigger)=>{
     if(dialog.open)return;document.querySelectorAll('.ui-dialog[open]').forEach(d=>d.close());
     openers.set(dialog,trigger||document.activeElement);dialog.showModal();document.body.style.overflow='hidden';
@@ -28305,9 +28305,9 @@ window.CIEO_SOURCE_HINT="catalogue/dialogs.js";
   });
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/inspector.js";
+window.CIEO_SOURCE_HINT="catalog/inspector.js";
 (() => {
-  const c=window.CieoCatalogue,dialog=document.getElementById('inspect-dialog');
+  const c=window.CieoCatalog,dialog=document.getElementById('inspect-dialog');
   const preview=document.getElementById('inspect-preview');let held=null,placeholder=null,opener=null;
   // Move, never clone, the existing stage. IDs, focus handlers and spring state survive.
   c.inspect=(id,trigger)=>{
@@ -28320,7 +28320,7 @@ window.CIEO_SOURCE_HINT="catalogue/inspector.js";
     document.getElementById('inspect-code').textContent=a.api;
     document.getElementById('inspect-families').replaceChildren(...a.fam.map(f=>{const span=document.createElement('span');span.textContent=c.familyNames[f];return span}));
     const source=document.getElementById('inspect-source'),file=a.file;
-    source.hidden=!file;if(file)source.href='https://github.com/civicsense2025/cieo/blob/design/catalogue-ui-refinement/atoms/web/'+file;
+    source.hidden=!file;if(file)source.href='https://github.com/civicsense2025/cieo/blob/design/catalogue-ui-refinement/atoms/web/'+file; // us-spelling-keep
     if(!dialog.open)c.openDialog(dialog,trigger);
     c.initAtom(a);c.updateInspectorSave();c.invalidate?.();
     // Components which measure once on setup also need their normal resize pathway.
@@ -28341,12 +28341,12 @@ window.CIEO_SOURCE_HINT="catalogue/inspector.js";
   };
 })();
 
-window.CIEO_SOURCE_HINT="catalogue/runtime.js";
-/* The catalogue uses its existing Track/edges and existing recipe render functions.
+window.CIEO_SOURCE_HINT="catalog/runtime.js";
+/* The catalog uses its existing Track/edges and existing recipe render functions.
    Pausing freezes its clock; system reduced motion renders settled snapshots after input.
    Individual legacy recipes can still own timers, so this isn't an accessibility certificate. */
 (() => {
-  const c=window.CieoCatalogue,media=matchMedia('(prefers-reduced-motion:reduce)');
+  const c=window.CieoCatalog,media=matchMedia('(prefers-reduced-motion:reduce)');
   let frame=null,dirty=true;
   function render(ms){
     frame=null;if(document.hidden)return;
@@ -28367,7 +28367,7 @@ window.CIEO_SOURCE_HINT="catalogue/runtime.js";
   media.addEventListener('change',()=>{c.reduced=media.matches;c.invalidate();updatePause()});
   const pause=document.getElementById('pause-motion');
   function updatePause(){pause.innerHTML=c.icon(c.paused||c.reduced?'play':'pause');pause.setAttribute('aria-pressed',String(c.paused||c.reduced));pause.setAttribute('aria-label',c.reduced?'Reduced motion is enabled':c.paused?'Resume previews':'Pause previews');document.getElementById('motion-speed').disabled=c.reduced}
-  pause.onclick=()=>{if(c.reduced){c.announce('The catalogue follows the system Reduce Motion setting.');return}c.paused=!c.paused;updatePause();c.invalidate()};
+  pause.onclick=()=>{if(c.reduced){c.announce('The catalog follows the system Reduce Motion setting.');return}c.paused=!c.paused;updatePause();c.invalidate()};
   document.getElementById('motion-speed').onchange=e=>{const v=Number(e.target.value);clock.scale=[1,.25,.1].includes(v)?v:1};
   c.startRoute();updatePause();c.invalidate();
   window.CIEO_REVIEW={count:A.length,ids:A.map(a=>a.id),initAll:()=>{A.forEach(c.initAtom);c.invalidate()},errors:()=>A.filter(a=>a.el.dataset.error).map(a=>a.id)};

@@ -1,11 +1,11 @@
 import SwiftUI
 
-/// A glyph that sits on a line of text: centred on that line and sized from its font, whether the glyph
+/// A glyph that sits on a line of text: centered on that line and sized from its font, whether the glyph
 /// is an SF Symbol or a shape the host draws.
 ///
 /// A view with no text has no baseline, so a bare glyph in a `.firstTextBaseline` stack rests its bottom
 /// edge on the text's baseline and floats above the letters. This view carries the baseline of one line
-/// in `font`, so in such a stack it lines up with the text's first line, and the glyph sits centred on
+/// in `font`, so in such a stack it lines up with the text's first line, and the glyph sits centered on
 /// that line. A drawn shape fills a square of `glyphScale` times the line height, so it grows with
 /// Dynamic Type and follows the text role; an SF Symbol keeps the size its own font gives it.
 public struct InlineGlyph<Glyph: View>: View {
@@ -34,7 +34,7 @@ public struct InlineGlyph<Glyph: View>: View {
     }
 }
 
-/// Places the glyph (second subview) centred on the line box of the reference text (first subview), and
+/// Places the glyph (second subview) centered on the line box of the reference text (first subview), and
 /// reports the reference text's baselines as its own.
 struct InlineGlyphLayout: Layout {
     let scale: CGFloat
@@ -60,9 +60,9 @@ struct InlineGlyphLayout: Layout {
 
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         guard let measure = measure(subviews) else { return }
-        let centre = CGPoint(x: bounds.midX, y: bounds.midY)
-        subviews[0].place(at: centre, anchor: .center, proposal: .unspecified)
-        subviews[1].place(at: centre, anchor: .center,
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
+        subviews[0].place(at: center, anchor: .center, proposal: .unspecified)
+        subviews[1].place(at: center, anchor: .center,
                           proposal: ProposedViewSize(width: measure.side, height: measure.side))
     }
 

@@ -1,0 +1,1856 @@
+{
+ "ActivityItem": {
+  "props": {
+   "actor": {
+    "name": "Ava",
+    "avatar": {
+     "$el": "Avatar",
+     "props": {
+      "name": "Ava",
+      "initials": "AV"
+     }
+    }
+   }
+  },
+  "children": "liked your reply"
+ },
+ "AgentActivity": {
+  "props": {
+   "entries": [
+    {
+     "seq": 1,
+     "at": "2026-10-22T10:00:00Z",
+     "runId": "r1",
+     "agentId": "a1",
+     "type": "status",
+     "ref": null
+    },
+    {
+     "seq": 2,
+     "at": "2026-10-22T10:00:00Z",
+     "runId": "r1",
+     "agentId": "a1",
+     "type": "tool",
+     "ref": null
+    }
+   ],
+   "describe": "$fn"
+  }
+ },
+ "AgentIcon": {
+  "props": {
+   "icon": "browsing"
+  },
+  "children": null
+ },
+ "AgentLanes": {
+  "props": {
+   "agents": [
+    {
+     "id": "a1",
+     "runId": "r1",
+     "parentAgentId": null,
+     "name": "Researcher",
+     "status": "working",
+     "reason": null,
+     "location": null,
+     "openMessageId": null
+    }
+   ],
+   "renderLane": "$fn"
+  }
+ },
+ "AlertDialog": {
+  "props": {
+   "open": true,
+   "label": "Delete draft"
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "This cannot be undone."
+    ]
+   }
+  ]
+ },
+ "AnnotationLayer": {
+  "props": {
+   "label": "Review layer",
+   "pins": [
+    {
+     "id": "p1",
+     "x": 0.3,
+     "y": 0.4
+    },
+    {
+     "id": "p2",
+     "x": 0.7,
+     "y": 0.6
+    }
+   ],
+   "active": false,
+   "onPlace": "$fn",
+   "onSelect": "$fn",
+   "renderPopover": "$fn"
+  },
+  "children": [
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "minHeight": "8rem"
+     }
+    },
+    "children": [
+     "Annotated content"
+    ]
+   }
+  ]
+ },
+ "AppShell": {
+  "props": {
+   "nav": {
+    "$el": "nav",
+    "props": {
+     "aria-label": "App"
+    },
+    "children": [
+     {
+      "$el": "a",
+      "props": {
+       "href": "#bills"
+      },
+      "children": [
+       "Bills"
+      ]
+     },
+     " ",
+     {
+      "$el": "a",
+      "props": {
+       "href": "#votes"
+      },
+      "children": [
+       "Votes"
+      ]
+     }
+    ]
+   }
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Bill tracker page"
+    ]
+   }
+  ]
+ },
+ "ApprovalRequest": {
+  "props": {
+   "approval": {
+    "id": "ap1",
+    "runId": "r1",
+    "agentId": "a1",
+    "title": "Send the report",
+    "detail": "Email the Q3 report to the board.",
+    "status": "pending",
+    "requestedAt": "2026-10-22T10:00:00Z",
+    "resolvedAt": null
+   }
+  }
+ },
+ "AudioRoom": {
+  "props": {
+   "title": "Town hall",
+   "speakers": [
+    {
+     "id": "s1",
+     "name": "Ana",
+     "avatar": {
+      "$el": "Avatar",
+      "props": {
+       "name": "Ana",
+       "initials": "AN"
+      }
+     }
+    },
+    {
+     "id": "s2",
+     "name": "Ben",
+     "avatar": {
+      "$el": "Avatar",
+      "props": {
+       "name": "Ben",
+       "initials": "BE"
+      }
+     }
+    }
+   ],
+   "listenerCount": 24,
+   "self": {
+    "muted": true,
+    "handRaised": false,
+    "canSpeak": true
+   },
+   "onToggleMute": "$fn",
+   "onToggleHand": "$fn",
+   "onLeave": "$fn"
+  },
+  "children": null
+ },
+ "AudioTranscript": {
+  "props": {
+   "label": "Transcript",
+   "current": 0.5,
+   "words": [
+    {
+     "text": "Good",
+     "start": 0,
+     "end": 0.4
+    },
+    {
+     "text": "evening",
+     "start": 0.4,
+     "end": 0.9
+    },
+    {
+     "text": "everyone",
+     "start": 0.9,
+     "end": 1.5
+    }
+   ]
+  }
+ },
+ "AudioWaveform": {
+  "props": {
+   "label": "Voice note",
+   "duration": 63,
+   "current": 20,
+   "peaks": [
+    0.2,
+    0.5,
+    0.8,
+    0.4,
+    0.9,
+    0.6,
+    0.3,
+    0.7,
+    0.5,
+    0.2,
+    0.4,
+    0.8
+   ]
+  }
+ },
+ "AuthSessionList": {
+  "props": {
+   "id": "sessions",
+   "sessions": [
+    {
+     "id": "s1",
+     "device": "MacBook Pro",
+     "location": "Portland, OR",
+     "lastActive": "Now"
+    },
+    {
+     "id": "s2",
+     "device": "iPhone",
+     "location": "Seattle, WA",
+     "lastActive": "2 days ago"
+    }
+   ],
+   "onRevoke": "$fn"
+  }
+ },
+ "AuthSsoButtons": {
+  "props": {
+   "id": "sso",
+   "providers": [
+    {
+     "id": "google",
+     "label": "Google"
+    },
+    {
+     "id": "apple",
+     "label": "Apple"
+    }
+   ],
+   "onPress": "$fn"
+  }
+ },
+ "Avatar": {
+  "props": {
+   "name": "Ada Lovelace",
+   "initials": "AL"
+  }
+ },
+ "AvatarGroup": {
+  "props": {
+   "people": [
+    {
+     "name": "Earl Warren",
+     "initials": "EW"
+    },
+    {
+     "name": "Thurgood Marshall",
+     "initials": "TM"
+    },
+    {
+     "name": "Ruth Ginsburg",
+     "initials": "RG"
+    }
+   ],
+   "max": 4
+  }
+ },
+ "BottomSheet": {
+  "props": {
+   "open": true,
+   "label": "Filters"
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Sheet content"
+    ]
+   }
+  ]
+ },
+ "Breadcrumbs": {
+  "props": {
+   "label": "Breadcrumb"
+  },
+  "children": [
+   {
+    "$el": "BreadcrumbItem",
+    "children": [
+     {
+      "$el": "a",
+      "props": {
+       "href": "#"
+      },
+      "children": [
+       "Home"
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "BreadcrumbItem",
+    "children": [
+     {
+      "$el": "a",
+      "props": {
+       "href": "#"
+      },
+      "children": [
+       "Library"
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "BreadcrumbItem",
+    "props": {
+     "current": true
+    },
+    "children": [
+     "Report"
+    ]
+   }
+  ]
+ },
+ "ButtonGroup": {
+  "props": {
+   "label": "Clipboard actions"
+  },
+  "children": [
+   {
+    "$el": "Button",
+    "children": [
+     "Copy"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Cut"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Paste"
+    ]
+   }
+  ]
+ },
+ "Calendar": {
+  "props": {
+   "year": 2026,
+   "month": 11,
+   "selected": "2026-11-18",
+   "onSelect": "$fn"
+  }
+ },
+ "Card": {
+  "props": {
+   "title": "Billing summary"
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "$12.00 due May 1 for the Monthly plan."
+    ]
+   }
+  ]
+ },
+ "Carousel": {
+  "props": {
+   "label": "Featured guides"
+  },
+  "children": [
+   {
+    "$el": "article",
+    "children": [
+     {
+      "$el": "a",
+      "props": {
+       "href": "#r"
+      },
+      "children": [
+       "Refund timelines"
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "article",
+    "children": [
+     {
+      "$el": "a",
+      "props": {
+       "href": "#s"
+      },
+      "children": [
+       "Shipping windows"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "Center": {
+  "props": {
+   "maxWidth": "24rem"
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Centered content"
+    ]
+   }
+  ]
+ },
+ "ChatLayout": {
+  "props": {
+   "rail": {
+    "$el": "Card",
+    "props": {
+     "title": "Refund policy"
+    },
+    "children": [
+     "Refunds land in 5 to 10 days."
+    ]
+   }
+  },
+  "children": [
+   {
+    "$el": "ChatMessageList",
+    "props": {
+     "label": "Support thread"
+    },
+    "children": [
+     {
+      "$el": "ChatMessage",
+      "props": {
+       "author": "Ava"
+      },
+      "children": [
+       {
+        "$el": "ChatMessageBubble",
+        "props": {
+         "variant": "incoming"
+        },
+        "children": [
+         "Your refund is on its way."
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "ChatMessage": {
+  "props": {
+   "author": "Ava",
+   "time": "9:41"
+  },
+  "children": [
+   {
+    "$el": "ChatMessageBubble",
+    "props": {
+     "variant": "incoming"
+    },
+    "children": [
+     "Your refund is on its way."
+    ]
+   }
+  ]
+ },
+ "ChatMessageBubble": {
+  "props": {
+   "variant": "incoming"
+  },
+  "children": [
+   "Your refund is on its way."
+  ]
+ },
+ "ChatMessageList": {
+  "props": {
+   "label": "Support thread"
+  },
+  "children": [
+   {
+    "$el": "ChatMessage",
+    "props": {
+     "author": "Ava",
+     "time": "9:41"
+    },
+    "children": [
+     {
+      "$el": "ChatMessageBubble",
+      "props": {
+       "variant": "incoming"
+      },
+      "children": [
+       "Your refund of $42.18 is on its way."
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "ChatMessage",
+    "props": {
+     "author": "You",
+     "time": "9:42"
+    },
+    "children": [
+     {
+      "$el": "ChatMessageBubble",
+      "props": {
+       "variant": "outgoing"
+      },
+      "children": [
+       "Thanks! When will it land?"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "CheckboxInput": {
+  "props": {
+   "label": "Email me updates"
+  },
+  "children": null
+ },
+ "CheckboxList": {
+  "props": {
+   "label": "Notification channels"
+  },
+  "children": [
+   {
+    "$el": "CheckboxListItem",
+    "props": {
+     "label": "Email"
+    }
+   },
+   {
+    "$el": "CheckboxListItem",
+    "props": {
+     "label": "SMS"
+    }
+   },
+   {
+    "$el": "CheckboxListItem",
+    "props": {
+     "label": "Push"
+    }
+   }
+  ]
+ },
+ "CheckboxListItem": {
+  "props": {
+   "label": "Agree to terms"
+  },
+  "children": null
+ },
+ "Collapsible": {
+  "props": {
+   "title": "Meeting filters",
+   "defaultOpen": true
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Optional date and ward refinements."
+    ]
+   }
+  ]
+ },
+ "CollapsibleGroup": {
+  "props": {
+   "label": "Ballot questions"
+  },
+  "children": [
+   {
+    "$el": "Collapsible",
+    "props": {
+     "title": "Measure 4",
+     "value": "m4",
+     "defaultOpen": true
+    },
+    "children": [
+     "Funds school repairs."
+    ]
+   },
+   {
+    "$el": "Collapsible",
+    "props": {
+     "title": "Measure 7",
+     "value": "m7"
+    },
+    "children": [
+     "Updates zoning."
+    ]
+   }
+  ]
+ },
+ "CommandPalette": {
+  "props": {
+   "label": "Site commands",
+   "open": true,
+   "query": ""
+  },
+  "children": [
+   {
+    "$el": "CommandPaletteInput",
+    "props": {
+     "label": "Filter commands",
+     "placeholder": "Type to filter\u2026"
+    }
+   },
+   {
+    "$el": "CommandPaletteList",
+    "props": {
+     "label": "Commands"
+    },
+    "children": [
+     {
+      "$el": "CommandPaletteGroup",
+      "props": {
+       "label": "Actions"
+      },
+      "children": [
+       {
+        "$el": "CommandPaletteItem",
+        "props": {
+         "value": "new",
+         "selected": true
+        },
+        "children": [
+         "New bill"
+        ]
+       },
+       {
+        "$el": "CommandPaletteItem",
+        "props": {
+         "value": "dash"
+        },
+        "children": [
+         "Go to dashboard"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "CommandPaletteFooter",
+    "children": [
+     "\u2191\u2193 to navigate \u00b7 \u21b5 to select"
+    ]
+   }
+  ]
+ },
+ "ComplexSelector": {
+  "props": {
+   "label": "Region",
+   "sections": [
+    {
+     "label": "Americas",
+     "options": [
+      {
+       "value": "us",
+       "label": "United States"
+      },
+      {
+       "value": "ca",
+       "label": "Canada"
+      }
+     ]
+    },
+    {
+     "label": "Europe",
+     "options": [
+      {
+       "value": "de",
+       "label": "Germany"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "ConversationList": {
+  "props": {
+   "label": "Conversations",
+   "selectedId": "design"
+  },
+  "children": [
+   {
+    "$el": "ConversationListItem",
+    "props": {
+     "id": "design",
+     "title": "Design team",
+     "avatar": {
+      "$el": "Avatar",
+      "props": {
+       "name": "Design team",
+       "initials": "DT"
+      }
+     },
+     "preview": "Ava: see you at 3",
+     "time": "9:41 AM",
+     "unread": 3
+    }
+   },
+   {
+    "$el": "ConversationListItem",
+    "props": {
+     "id": "ben",
+     "title": "Ben Ito",
+     "avatar": {
+      "$el": "Avatar",
+      "props": {
+       "name": "Ben Ito",
+       "initials": "BI"
+      }
+     },
+     "preview": "Sounds good",
+     "time": "Yesterday"
+    }
+   }
+  ]
+ },
+ "Dialog": {
+  "props": {
+   "open": true,
+   "label": "Rename file"
+  },
+  "children": [
+   {
+    "$el": "h2",
+    "children": [
+     "Rename file"
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Pick a new name for this file."
+    ]
+   }
+  ]
+ },
+ "DialogHeader": {
+  "props": {
+   "title": "Rename file",
+   "onClose": "$fn"
+  },
+  "children": null
+ },
+ "DropdownMenu": {
+  "props": {
+   "label": "Sort options",
+   "open": true,
+   "trigger": {
+    "$el": "Button",
+    "children": [
+     "Sort"
+    ]
+   }
+  },
+  "children": [
+   {
+    "$el": "DropdownMenuItem",
+    "props": {
+     "label": "Newest first"
+    }
+   },
+   {
+    "$el": "DropdownMenuItem",
+    "props": {
+     "label": "Oldest first"
+    }
+   },
+   {
+    "$el": "DropdownMenuDivider"
+   },
+   {
+    "$el": "DropdownMenuItem",
+    "props": {
+     "label": "Most voted"
+    }
+   }
+  ]
+ },
+ "FeedbackPopover": {
+  "props": {
+   "open": true,
+   "onOpenChange": "$fn",
+   "onSubmit": "$fn"
+  },
+  "children": null
+ },
+ "Field": {
+  "props": {
+   "label": "Email",
+   "htmlFor": "email",
+   "description": "Use your work email"
+  },
+  "children": [
+   {
+    "$el": "input",
+    "props": {
+     "id": "email",
+     "type": "email",
+     "className": "cieo-ctl cieo-input"
+    }
+   }
+  ]
+ },
+ "Grid": {
+  "props": {},
+  "children": [
+   {
+    "$el": "GridSpan",
+    "props": {
+     "span": 8
+    },
+    "children": [
+     {
+      "$el": "BlockPanel",
+      "children": [
+       "Bill tracker dashboard"
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "GridSpan",
+    "props": {
+     "span": 4
+    },
+    "children": [
+     {
+      "$el": "BlockPanel",
+      "children": [
+       "Vote alerts rail"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "GroupAvatar": {
+  "props": {
+   "people": [
+    {
+     "name": "Earl Warren",
+     "initials": "EW"
+    },
+    {
+     "name": "Thurgood Marshall",
+     "initials": "TM"
+    }
+   ]
+  }
+ },
+ "Icon": {
+  "props": {
+   "label": "Home"
+  },
+  "children": [
+   "\u2605"
+  ]
+ },
+ "IconButton": {
+  "props": {
+   "label": "Close"
+  },
+  "children": [
+   "\u00d7"
+  ]
+ },
+ "InputGroup": {
+  "props": {
+   "label": "Price in dollars"
+  },
+  "children": [
+   {
+    "$el": "InputGroupText",
+    "children": [
+     "$"
+    ]
+   },
+   {
+    "$el": "input",
+    "props": {
+     "type": "text",
+     "aria-label": "Price",
+     "className": "cieo-ctl cieo-input"
+    }
+   },
+   {
+    "$el": "InputGroupText",
+    "children": [
+     ".00"
+    ]
+   }
+  ]
+ },
+ "Layout": {
+  "children": [
+   {
+    "$el": "LayoutHeader",
+    "children": [
+     "Civic Tracker"
+    ]
+   },
+   {
+    "$el": "LayoutContent",
+    "children": [
+     "Bill tracker page body"
+    ]
+   },
+   {
+    "$el": "LayoutFooter",
+    "children": [
+     "Session data: public record"
+    ]
+   }
+  ]
+ },
+ "Lightbox": {
+  "props": {
+   "open": true,
+   "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='320' height='200'><rect width='320' height='200' fill='%23c9c5ba'/></svg>",
+   "alt": "Placeholder image"
+  },
+  "children": null
+ },
+ "List": {
+  "props": {
+   "label": "Latest stories"
+  },
+  "children": [
+   {
+    "$el": "ListItem",
+    "children": [
+     "House passes school funding bill"
+    ]
+   },
+   {
+    "$el": "ListItem",
+    "children": [
+     "Senate schedules vote for Thursday"
+    ]
+   },
+   {
+    "$el": "ListItem",
+    "children": [
+     "Committee delays redistricting hearing"
+    ]
+   }
+  ]
+ },
+ "MetadataList": {
+  "children": [
+   {
+    "$el": "MetadataListItem",
+    "props": {
+     "term": "Status"
+    },
+    "children": [
+     "Active"
+    ]
+   },
+   {
+    "$el": "MetadataListItem",
+    "props": {
+     "term": "Owner"
+    },
+    "children": [
+     "Library team"
+    ]
+   },
+   {
+    "$el": "MetadataListItem",
+    "props": {
+     "term": "Updated"
+    },
+    "children": [
+     "Oct 2026"
+    ]
+   }
+  ]
+ },
+ "MobileNav": {
+  "props": {
+   "label": "Main",
+   "open": true
+  },
+  "children": [
+   {
+    "$el": "a",
+    "props": {
+     "href": "#"
+    },
+    "children": [
+     "Home"
+    ]
+   },
+   {
+    "$el": "a",
+    "props": {
+     "href": "#"
+    },
+    "children": [
+     "Library"
+    ]
+   }
+  ]
+ },
+ "NumberedSteps": {
+  "props": {
+   "steps": [
+    {
+     "title": "Connect",
+     "detail": "Link your account."
+    },
+    {
+     "title": "Configure"
+    },
+    {
+     "title": "Ship"
+    }
+   ]
+  }
+ },
+ "Outline": {
+  "props": {
+   "items": [
+    {
+     "id": "intro",
+     "label": "Introduction"
+    },
+    {
+     "id": "usage",
+     "label": "Usage"
+    },
+    {
+     "id": "api",
+     "label": "API"
+    }
+   ]
+  }
+ },
+ "PaletteSwatches": {
+  "props": {
+   "label": "Accent color",
+   "name": "accent",
+   "swatches": [
+    {
+     "value": "ink",
+     "label": "Ink",
+     "color": "#17150f"
+    },
+    {
+     "value": "blue",
+     "label": "Blue",
+     "color": "#2865b2"
+    },
+    {
+     "value": "red",
+     "label": "Red",
+     "color": "#b0342f"
+    }
+   ]
+  }
+ },
+ "Poll": {
+  "props": {
+   "question": "Which day works best?",
+   "options": [
+    {
+     "id": "a",
+     "label": "Tuesday",
+     "votes": 12
+    },
+    {
+     "id": "b",
+     "label": "Thursday",
+     "votes": 7
+    }
+   ],
+   "onVote": "$fn"
+  }
+ },
+ "PowerSearch": {
+  "children": null
+ },
+ "ProgressBar": {
+  "props": {
+   "value": 60,
+   "label": "Upload progress"
+  }
+ },
+ "RadioList": {
+  "props": {
+   "label": "Delivery speed"
+  },
+  "children": [
+   {
+    "$el": "RadioListItem",
+    "props": {
+     "label": "Standard",
+     "name": "speed",
+     "value": "standard"
+    }
+   },
+   {
+    "$el": "RadioListItem",
+    "props": {
+     "label": "Express",
+     "name": "speed",
+     "value": "express"
+    }
+   },
+   {
+    "$el": "RadioListItem",
+    "props": {
+     "label": "Overnight",
+     "name": "speed",
+     "value": "overnight"
+    }
+   }
+  ]
+ },
+ "RadioListItem": {
+  "children": null
+ },
+ "ReactionSummary": {
+  "props": {
+   "reactions": [
+    {
+     "id": "like",
+     "emoji": "\ud83d\udc4d",
+     "label": "Like",
+     "count": 4
+    },
+    {
+     "id": "heart",
+     "emoji": "\u2764\ufe0f",
+     "label": "Love",
+     "count": 2
+    }
+   ],
+   "onToggle": "$fn"
+  }
+ },
+ "RollCall": {
+  "props": {
+   "groups": [
+    {
+     "id": "g1",
+     "title": "Yes",
+     "color": "#2f7d4f",
+     "members": [
+      {
+       "id": "m1",
+       "name": "Warren"
+      },
+      {
+       "id": "m2",
+       "name": "Marshall"
+      }
+     ]
+    },
+    {
+     "id": "g2",
+     "title": "No",
+     "color": "#b0342f",
+     "members": [
+      {
+       "id": "m3",
+       "name": "Taney"
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "RunControls": {
+  "props": {
+   "run": {
+    "id": "r1",
+    "status": "working",
+    "reason": null,
+    "startedAt": "2026-10-22T10:00:00Z",
+    "updatedAt": "2026-10-22T10:00:00Z"
+   }
+  },
+  "children": null
+ },
+ "Section": {
+  "props": {
+   "title": "Notifications"
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Email me when a bill I follow moves chambers."
+    ]
+   }
+  ]
+ },
+ "SeenBy": {
+  "props": {
+   "people": [
+    {
+     "name": "Earl Warren",
+     "initials": "EW"
+    },
+    {
+     "name": "Thurgood Marshall",
+     "initials": "TM"
+    }
+   ]
+  }
+ },
+ "SegmentedControl": {
+  "props": {
+   "label": "Calendar view",
+   "defaultValue": "day"
+  },
+  "children": [
+   {
+    "$el": "SegmentedControlItem",
+    "props": {
+     "value": "day"
+    },
+    "children": [
+     "Day"
+    ]
+   },
+   {
+    "$el": "SegmentedControlItem",
+    "props": {
+     "value": "week"
+    },
+    "children": [
+     "Week"
+    ]
+   },
+   {
+    "$el": "SegmentedControlItem",
+    "props": {
+     "value": "month"
+    },
+    "children": [
+     "Month"
+    ]
+   }
+  ]
+ },
+ "Selector": {
+  "props": {
+   "label": "Fruit",
+   "options": [
+    "Apple",
+    "Banana",
+    "Cherry"
+   ]
+  },
+  "children": null
+ },
+ "ShareBar": {
+  "props": {
+   "label": "Vote share",
+   "segments": [
+    {
+     "value": 60,
+     "color": "#2865b2"
+    },
+    {
+     "value": 30,
+     "color": "#b0342f"
+    },
+    {
+     "value": 10,
+     "color": "#8a857a"
+    }
+   ]
+  }
+ },
+ "SideNav": {
+  "props": {
+   "label": "Docs sections"
+  },
+  "children": [
+   {
+    "$el": "SideNavHeading",
+    "children": [
+     "Guide"
+    ]
+   },
+   {
+    "$el": "SideNavItem",
+    "props": {
+     "href": "#intro"
+    },
+    "children": [
+     "Introduction"
+    ]
+   },
+   {
+    "$el": "SideNavItem",
+    "props": {
+     "href": "#setup",
+     "current": true
+    },
+    "children": [
+     "Setup"
+    ]
+   },
+   {
+    "$el": "SideNavItem",
+    "props": {
+     "href": "#api"
+    },
+    "children": [
+     "API"
+    ]
+   }
+  ]
+ },
+ "Slider": {
+  "children": null
+ },
+ "SortableList": {
+  "props": {
+   "label": "Pipeline stages",
+   "order": [
+    "draft",
+    "review",
+    "ship"
+   ],
+   "onReorder": "$fn"
+  },
+  "children": [
+   {
+    "$el": "SortableListItem",
+    "props": {
+     "id": "draft",
+     "label": "Draft"
+    },
+    "children": [
+     "Draft"
+    ]
+   },
+   {
+    "$el": "SortableListItem",
+    "props": {
+     "id": "review",
+     "label": "Review"
+    },
+    "children": [
+     "Review"
+    ]
+   },
+   {
+    "$el": "SortableListItem",
+    "props": {
+     "id": "ship",
+     "label": "Ship"
+    },
+    "children": [
+     "Ship"
+    ]
+   }
+  ]
+ },
+ "Stack": {
+  "props": {
+   "gap": "md"
+  },
+  "children": [
+   {
+    "$el": "h3",
+    "children": [
+     "Card title"
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Card body text."
+    ]
+   },
+   {
+    "$el": "Button",
+    "props": {
+     "variant": "primary"
+    },
+    "children": [
+     "Save"
+    ]
+   }
+  ]
+ },
+ "StepList": {
+  "props": {
+   "steps": [
+    {
+     "title": "Draft",
+     "detail": "Write the first pass."
+    },
+    {
+     "title": "Review"
+    },
+    {
+     "title": "Publish"
+    }
+   ],
+   "current": 1
+  }
+ },
+ "Stepper": {
+  "props": {
+   "label": "Checkout",
+   "steps": [
+    {
+     "label": "Cart",
+     "state": "done"
+    },
+    {
+     "label": "Shipping",
+     "state": "current"
+    },
+    {
+     "label": "Payment",
+     "state": "todo"
+    }
+   ]
+  }
+ },
+ "StreamingMessage": {
+  "props": {
+   "message": {
+    "id": "m1",
+    "runId": "r1",
+    "agentId": "a1",
+    "text": "Looking up the roll call for that session...",
+    "complete": false,
+    "truncated": false,
+    "startedAt": "2026-10-22T10:00:00Z",
+    "updatedAt": "2026-10-22T10:00:00Z"
+   }
+  },
+  "children": null
+ },
+ "Switch": {
+  "props": {
+   "label": "Notifications"
+  },
+  "children": null
+ },
+ "Tab": {},
+ "TabList": {
+  "props": {
+   "label": "Sections",
+   "defaultValue": "overview"
+  },
+  "children": [
+   {
+    "$el": "Tab",
+    "props": {
+     "value": "overview"
+    },
+    "children": [
+     "Overview"
+    ]
+   },
+   {
+    "$el": "Tab",
+    "props": {
+     "value": "activity"
+    },
+    "children": [
+     "Activity"
+    ]
+   },
+   {
+    "$el": "Tab",
+    "props": {
+     "value": "settings"
+    },
+    "children": [
+     "Settings"
+    ]
+   }
+  ]
+ },
+ "TabMenu": {
+  "props": {
+   "label": "Sections",
+   "defaultValue": "overview"
+  },
+  "children": [
+   {
+    "$el": "Tab",
+    "props": {
+     "value": "overview"
+    },
+    "children": [
+     "Overview"
+    ]
+   },
+   {
+    "$el": "Tab",
+    "props": {
+     "value": "activity"
+    },
+    "children": [
+     "Activity"
+    ]
+   },
+   {
+    "$el": "Tab",
+    "props": {
+     "value": "settings"
+    },
+    "children": [
+     "Settings"
+    ]
+   }
+  ]
+ },
+ "Table": {
+  "props": {
+   "label": "Registered voters"
+  },
+  "children": [
+   {
+    "$el": "TableHeader",
+    "children": [
+     {
+      "$el": "TableRow",
+      "children": [
+       {
+        "$el": "TableHeaderCell",
+        "props": {
+         "scope": "col",
+         "sort": "asc"
+        },
+        "children": [
+         "Name"
+        ]
+       },
+       {
+        "$el": "TableHeaderCell",
+        "props": {
+         "scope": "col"
+        },
+        "children": [
+         "Status"
+        ]
+       },
+       {
+        "$el": "TableHeaderCell",
+        "props": {
+         "scope": "col"
+        },
+        "children": [
+         "Ward"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "TableBody",
+    "children": [
+     {
+      "$el": "TableRow",
+      "props": {
+       "selected": false
+      },
+      "children": [
+       {
+        "$el": "TableCell",
+        "children": [
+         "Ava Reyes"
+        ]
+       },
+       {
+        "$el": "TableCell",
+        "children": [
+         "Active"
+        ]
+       },
+       {
+        "$el": "TableCell",
+        "children": [
+         "4"
+        ]
+       }
+      ]
+     },
+     {
+      "$el": "TableRow",
+      "props": {
+       "selected": true
+      },
+      "children": [
+       {
+        "$el": "TableCell",
+        "children": [
+         "Ben Ito"
+        ]
+       },
+       {
+        "$el": "TableCell",
+        "children": [
+         "Pending"
+        ]
+       },
+       {
+        "$el": "TableCell",
+        "children": [
+         "2"
+        ]
+       }
+      ]
+     },
+     {
+      "$el": "TableRow",
+      "props": {
+       "selected": false
+      },
+      "children": [
+       {
+        "$el": "TableCell",
+        "children": [
+         "Cy Moss"
+        ]
+       },
+       {
+        "$el": "TableCell",
+        "children": [
+         "Active"
+        ]
+       },
+       {
+        "$el": "TableCell",
+        "children": [
+         "7"
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "TextArea": {
+  "props": {
+   "label": "Notes"
+  },
+  "children": null
+ },
+ "TextField": {
+  "props": {
+   "label": "Display name"
+  },
+  "children": null
+ },
+ "ToggleButtonGroup": {
+  "props": {
+   "label": "Text alignment",
+   "defaultValue": "left"
+  },
+  "children": [
+   {
+    "$el": "ToggleButton",
+    "props": {
+     "label": "Align left",
+     "value": "left"
+    },
+    "children": [
+     "Left"
+    ]
+   },
+   {
+    "$el": "ToggleButton",
+    "props": {
+     "label": "Align center",
+     "value": "center"
+    },
+    "children": [
+     "Center"
+    ]
+   },
+   {
+    "$el": "ToggleButton",
+    "props": {
+     "label": "Align right",
+     "value": "right"
+    },
+    "children": [
+     "Right"
+    ]
+   }
+  ]
+ },
+ "Tokenizer": {
+  "props": {
+   "label": "Tags",
+   "values": [
+    "civics",
+    "senate",
+    "2026"
+   ]
+  },
+  "children": null
+ },
+ "ToolCallDisclosure": {
+  "props": {
+   "call": {
+    "id": "t1",
+    "runId": "r1",
+    "agentId": "a1",
+    "name": "search_bills",
+    "phase": "finished",
+    "summary": "Found 12 matching bills.",
+    "error": null,
+    "startedAt": "2026-10-22T10:00:00Z",
+    "updatedAt": "2026-10-22T10:00:00Z"
+   }
+  },
+  "children": null
+ },
+ "TopNav": {
+  "props": {
+   "label": "Primary"
+  },
+  "children": [
+   {
+    "$el": "TopNavHeading",
+    "props": {
+     "href": "#"
+    },
+    "children": [
+     "Cieo"
+    ]
+   },
+   {
+    "$el": "TopNavItem",
+    "props": {
+     "href": "#docs"
+    },
+    "children": [
+     "Docs"
+    ]
+   },
+   {
+    "$el": "TopNavItem",
+    "props": {
+     "href": "#pricing",
+     "current": true
+    },
+    "children": [
+     "Pricing"
+    ]
+   }
+  ]
+ },
+ "Typeahead": {
+  "props": {
+   "label": "Find a bill",
+   "value": "hr 1",
+   "open": true
+  },
+  "children": [
+   {
+    "$el": "TypeaheadItem",
+    "props": {
+     "value": "hr12",
+     "selected": true
+    },
+    "children": [
+     "H.R. 12"
+    ]
+   },
+   {
+    "$el": "TypeaheadItem",
+    "props": {
+     "value": "hr14"
+    },
+    "children": [
+     "H.R. 14"
+    ]
+   }
+  ]
+ },
+ "TypingIndicator": {
+  "props": {
+   "names": [
+    "Ava",
+    "Ben"
+   ]
+  },
+  "children": null
+ }
+}

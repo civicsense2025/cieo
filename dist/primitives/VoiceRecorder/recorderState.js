@@ -6,7 +6,7 @@ export const recorderIdle = { phase: 'idle', elapsed: 0, reason: null };
 export function isRecorderActive(phase) {
     return phase === 'requesting' || phase === 'recording' || phase === 'paused';
 }
-/** Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach done, so a cancelled take can never produce a clip. */
+/** Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach done, so a canceled take can never produce a clip. */
 export function voiceRecorderStep(state, event) {
     const { phase } = state;
     const to = (next, extra = {}) => ({ phase: next, elapsed: state.elapsed, reason: null, ...extra });
@@ -109,8 +109,8 @@ export function recorderAnnouncement(kind, seconds = 0) {
             return 'Recording';
         case 'paused':
             return 'Paused';
-        case 'cancelled':
-            return 'Recording cancelled';
+        case 'canceled':
+            return 'Recording canceled';
         case 'denied':
             return 'Microphone access is blocked. Allow it in your browser settings.';
         case 'unsupported':

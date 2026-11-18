@@ -23,8 +23,8 @@
   var successEl = document.querySelector('[data-success]');
   var successNote = document.querySelector('[data-success-note]');
   var statusEl = document.querySelector('[data-booking-status]');
-  var cancelledEl = document.querySelector('[data-cancelled]');
-  var cancelledRef = document.querySelector('[data-cancelled-ref]');
+  var canceledEl = document.querySelector('[data-canceled]');
+  var canceledRef = document.querySelector('[data-canceled-ref]');
   var cancelConfirm = document.querySelector('[data-cancel-confirm]');
   var dayError = document.querySelector('[data-day-error]');
   var slotError = document.querySelector('[data-slot-error]');
@@ -267,20 +267,20 @@
       visitsEl.insertBefore(row, visitsEl.firstChild);
     }
     row.setAttribute('data-visit-day', day);
-    row.removeAttribute('data-visit-cancelled');
+    row.removeAttribute('data-visit-canceled');
     var past = isPast(day);
     row.innerHTML = '<span class="cieo cieo-badge" data-status="' + (past ? 'default' : 'success') + '">' +
       (past ? 'Past visit' : 'Upcoming visit') + '</span> ' + visitText(ref, day, slot);
   }
 
-  function markVisitCancelled(ref) {
+  function markVisitCanceled(ref) {
     if (!visitsEl) return;
     var row = visitsEl.querySelector('[data-visit-ref="' + ref + '"]');
     if (!row) return;
-    row.setAttribute('data-visit-cancelled', 'true');
+    row.setAttribute('data-visit-canceled', 'true');
     var badge = row.querySelector('.cieo-badge');
     if (badge) {
-      badge.textContent = 'Cancelled visit';
+      badge.textContent = 'Canceled visit';
       badge.setAttribute('data-status', 'danger');
     }
   }
@@ -325,7 +325,7 @@
     upsertVisitRow(ref, state.day, state.slot);
     if (cancelConfirm) cancelConfirm.hidden = true;
     form.hidden = true;
-    if (cancelledEl) cancelledEl.hidden = true;
+    if (canceledEl) canceledEl.hidden = true;
     if (successEl) {
       successEl.hidden = false;
       setStep('confirm');
@@ -338,7 +338,7 @@
 
   function showFormAtDay() {
     if (successEl) successEl.hidden = true;
-    if (cancelledEl) cancelledEl.hidden = true;
+    if (canceledEl) canceledEl.hidden = true;
     if (cancelConfirm) cancelConfirm.hidden = true;
     form.hidden = false;
     hideError();
@@ -376,15 +376,15 @@
     if (successEl) successEl.hidden = true;
     var records = loadRecords();
     if (ref && records[ref]) {
-      records[ref].status = 'cancelled';
+      records[ref].status = 'canceled';
       saveRecords(records);
     }
-    if (ref) markVisitCancelled(ref);
-    if (cancelledRef) cancelledRef.textContent = ref || '—';
-    if (cancelledEl) {
-      cancelledEl.hidden = false;
+    if (ref) markVisitCanceled(ref);
+    if (canceledRef) canceledRef.textContent = ref || '—';
+    if (canceledEl) {
+      canceledEl.hidden = false;
       setStep('manage');
-      var heading = cancelledEl.querySelector('[data-cancelled-heading]');
+      var heading = canceledEl.querySelector('[data-canceled-heading]');
       if (heading && heading.focus) heading.focus();
     }
   }
@@ -449,7 +449,7 @@
     var records = loadRecords();
     var saved = records[found.ref];
     var holder = saved && saved.name ? saved.name : 'holder ' + found.initials;
-    var status = saved && saved.status === 'cancelled' ? 'Cancelled visit' : statusFor(found.day);
+    var status = saved && saved.status === 'canceled' ? 'Canceled visit' : statusFor(found.day);
     var dayOut = document.querySelector('[data-lookup-day]');
     var timeOut = document.querySelector('[data-lookup-time]');
     var holderOut = document.querySelector('[data-lookup-holder]');
@@ -469,7 +469,7 @@
   function refreshVisitStates() {
     if (!visitsEl) return;
     Array.prototype.forEach.call(visitsEl.querySelectorAll('[data-visit]'), function (row) {
-      if (row.hasAttribute('data-visit-cancelled')) return;
+      if (row.hasAttribute('data-visit-canceled')) return;
       var badge = row.querySelector('.cieo-badge');
       setStatusBadge(badge, row.getAttribute('data-visit-day') || TODAY);
     });

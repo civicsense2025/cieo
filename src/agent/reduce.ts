@@ -30,7 +30,7 @@ export type ToolPhase = 'started' | 'finished' | 'failed';
 export interface ToolCallView { id: string; runId: string; agentId: string; name: string; phase: ToolPhase; summary: string | null; error: string | null; startedAt: string; updatedAt: string; }
 export type ApprovalStatus = 'pending' | 'approved' | 'denied' | 'expired';
 export interface ApprovalView { id: string; runId: string; agentId: string; title: string | null; detail: string | null; status: ApprovalStatus; requestedAt: string; resolvedAt: string | null; }
-export type DraftStatus = 'open' | 'cancelled' | 'complete';
+export type DraftStatus = 'open' | 'canceled' | 'complete';
 export interface DraftView { id: string; runId: string; agentId: string; text: string; anchor: unknown; status: DraftStatus; artifactId: string | null; updatedAt: string; }
 export interface ArtifactView { id: string; runId: string; agentId: string; kind: string; title: string | null; savedAt: string; }
 export interface ActivityEntry {
@@ -201,7 +201,7 @@ function apply(s: AgentRunState, e: AgentEvent, limits: Readonly<AgentLimits>): 
       const prior = withRun.drafts.get(id);
       if (e.type !== 'draft.begin' && !prior) return null;
       if (prior && prior.status !== 'open') return null;
-      const status: DraftStatus = e.type === 'draft.cancel' ? 'cancelled' : e.type === 'draft.complete' ? 'complete' : 'open';
+      const status: DraftStatus = e.type === 'draft.cancel' ? 'canceled' : e.type === 'draft.complete' ? 'complete' : 'open';
       const draft: DraftView = {
         id, runId: e.runId, agentId: e.agentId,
         text: typeof data.text === 'string' ? data.text.slice(0, limits.maxTextChars) : prior?.text ?? '',

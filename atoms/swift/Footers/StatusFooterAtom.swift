@@ -3,7 +3,7 @@ import Cieo
 
 public struct StatusFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-status", category: "Footers", name: "Footer with live status",
-        summary: "The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes colour 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there.")
+        summary: "The pill is one element. Switching state morphs its dot and tint along green, amber, red on a single value; the label swaps out then in while the pill springs to the new text width. Next, the incident note opens beneath it (height first, then content) and, if the details list is open, each affected service dot changes color 45ms after the last. Clicking the pill opens the per-service list; if the page was at the bottom it stays pinned there.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var state = 0
     @State private var details = false

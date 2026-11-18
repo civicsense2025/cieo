@@ -77,7 +77,7 @@ test('waveformKeyStep map: arrows 5s, pages 10 percent, ends, clamped, others nu
   assert.equal(waveformKeyStep('a', 40, 100), null);
   assert.equal(waveformKeyStep(' ', 40, 100), null);
 });
-test('AudioWaveform is a labelled image without onSeek and a slider with it', () => {
+test('AudioWaveform is a labeled image without onSeek and a slider with it', () => {
   const peaks = [0.1, 0.8, 0.4];
   const ro = html(AudioWaveform, { peaks, duration: 63, current: 12, label: 'Note', bars: 8 });
   assert.match(ro, /role="img"/);

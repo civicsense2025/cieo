@@ -61,7 +61,7 @@ test('actionBarIndex: arrows wrap, Home/End jump, other keys ignored', () => {
   assert.equal(actionBarIndex('a', 1, 4), null);
   assert.equal(actionBarIndex('ArrowRight', 0, 0), null);
 });
-test('ActionBar renders a labelled toolbar with its children and layout hooks', () => {
+test('ActionBar renders a labeled toolbar with its children and layout hooks', () => {
   const html = render(h(ActionBar, { label: 'Post actions', size: 'sm', align: 'between' }, h('button', null, 'a'), h('button', null, 'b')));
   has(html, /role="toolbar"(?=[^>]*aria-label="Post actions")(?=[^>]*data-size="sm")(?=[^>]*data-align="between")/);
   has(html, /<button>a<\/button><button>b<\/button>/);
@@ -144,7 +144,7 @@ test('runShare: native, copy, user cancel, native failure fallback, and failures
   assert.equal(await runShare({ clipboard: { writeText: async (s) => { copied = s; } } }, { url }), 'copy');
   assert.equal(copied, url);
   const abort = Object.assign(new Error('x'), { name: 'AbortError' });
-  assert.equal(await runShare({ share: async () => { throw abort; }, clipboard: { writeText: async () => { throw new Error('must not copy'); } } }, { url }), 'cancelled');
+  assert.equal(await runShare({ share: async () => { throw abort; }, clipboard: { writeText: async () => { throw new Error('must not copy'); } } }, { url }), 'canceled');
   assert.equal(await runShare({ share: async () => { throw new Error('boom'); }, clipboard: { writeText: async (s) => { copied = 'fallback:' + s; } } }, { url }), 'copy');
   assert.equal(copied, 'fallback:' + url);
   assert.equal(await runShare({ share: async () => { throw new Error('boom'); } }, { url }), 'failed');

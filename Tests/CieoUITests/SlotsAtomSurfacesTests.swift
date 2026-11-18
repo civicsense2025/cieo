@@ -3,7 +3,7 @@ import SwiftUI
 import XCTest
 
 /// Pins that the surface atoms (SelectionChip, BlockPanel, CutSurface, ShareBar, ActionButton) read
-/// their colours, type, spacing and glyphs from the host, so one host value restyles every use.
+/// their colors, type, spacing and glyphs from the host, so one host value restyles every use.
 final class SlotsAtomSurfacesTests: XCTestCase {
     private let red = Color(red: 1, green: 0, blue: 0)
 

@@ -5,26 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Agent run · Cieo</title>
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
-<style>
-.cieo-run-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans);padding-inline:var(--cieo-space-4)}
-.cieo-run-panes{display:grid;gap:var(--cieo-space-4)}
-.cieo-run-main,.cieo-run-rail{display:grid;gap:var(--cieo-space-4);align-content:start;min-inline-size:0}
-.cieo-run-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--cieo-space-3)}
-.cieo-run-tools{display:grid;gap:var(--cieo-space-2)}
-.cieo-run-draft{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
-.cieo-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
-@media (min-width:60rem){.cieo-run-panes{grid-template-columns:minmax(0,1fr) 20rem}}
-</style>
+<link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
 <a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
-<main id="main" class="cieo-run-page">
-<header>
-<p><a href="./index.html">Composites</a></p>
-<h1 data-parts="Heading">Agent run</h1>
-<p data-parts="Text">A recorded agent run replays into a real agent store. Nothing leaves this page, and every change on screen comes from an event in the log.</p>
+<main id="main" class="site-wrap comp-page">
+<header class="comp-head">
+<p class="site-label"><a href="./">Composites</a> / Agent run</p>
+<h1 class="site-title">Agent run</h1>
+<p class="site-prose">A recorded agent run replays into a real agent store. Nothing leaves this page, and every change on screen comes from an event in the log.</p>
 </header>
+<div class="comp-screen cieo-run-page">
 <div class="cieo-run-bar">
 <div class="cieo cieo-p-run-controls" data-parts="RunControls" role="group" aria-label="Run controls" data-run-controls data-status="starting">
 <span class="cieo cieo-p-agent-status" data-parts="AgentStatus" data-run-status data-status="starting" data-tone="info"><span aria-hidden="true" data-status="info" class="cieo cieo-p-status-dot" data-parts="StatusDot"></span><span data-label>Starting</span></span>
@@ -74,6 +65,7 @@
 </div>
 <p class="cieo-visually-hidden" role="status" data-announce></p>
 </div>
+<div class="comp-notes">
 <section aria-label="Behavior">
 <h2 data-parts="Heading">Behavior</h2>
 <ul>
@@ -84,22 +76,24 @@
 <li>Replay starts over from an empty store.</li>
 </ul>
 </section>
-<section data-built-from>
-<h2 data-parts="Heading">Built from</h2>
-<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
-<ul>
-<li><a href="../components/RunControls.html">RunControls</a></li>
-<li><a href="../components/AgentStatus.html">AgentStatus</a></li>
-<li><a href="../components/StatusDot.html">StatusDot</a></li>
-<li><a href="../components/AgentLanes.html">AgentLanes</a></li>
-<li><a href="../components/StreamingMessage.html">StreamingMessage</a></li>
-<li><a href="../components/ChatMessage.html">ChatMessage</a></li>
-<li><a href="../components/ToolCallDisclosure.html">ToolCallDisclosure</a> (rendered by JS for each tool call)</li>
-<li><a href="../components/ApprovalRequest.html">ApprovalRequest</a> (rendered by JS when the run asks)</li>
-<li><a href="../components/AgentActivity.html">AgentActivity</a></li>
-<li><a href="../components/Card.html">Card</a></li>
-<li><a href="../components/Heading.html">Heading</a></li>
-<li><a href="../components/Text.html">Text</a></li>
+</div>
+<section data-built-from aria-labelledby="built-from-h">
+<h2 id="built-from-h">Built from</h2>
+<p data-reuse>13 library components make up this screen. Each card is the component itself; open one to see its usage and props. Recompose from the parts, never paste this page.</p>
+<ul class="comp-parts">
+<li class="comp-part"><a class="comp-part-link" href="../components/RunControls.html"><span class="comp-part-name">RunControls</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-run-controls" role="group" aria-label="Run controls" data-status="working"><span class="cieo cieo-p-agent-status" data-status="working" data-tone="default"><span aria-hidden="true" data-status="default" class="cieo cieo-p-status-dot"></span><span data-label="true">working</span></span></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/AgentStatus.html"><span class="comp-part-name">AgentStatus</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span class="cieo cieo-p-agent-status" data-tone="default"><span aria-hidden="true" data-status="default" class="cieo cieo-p-status-dot"></span><span data-label="true"></span></span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/StatusDot.html"><span class="comp-part-name">StatusDot</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span aria-hidden="true" data-status="default" class="cieo cieo-p-status-dot"></span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Button.html"><span class="comp-part-name">Button</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md"><span class="cieo-btn-text">Button</span></button></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/AgentLanes.html"><span class="comp-part-name">AgentLanes</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><ul class="cieo cieo-p-agent-lanes" aria-label="Agents"><li data-agent-id="a1" data-depth="0" data-status="working"><div aria-labelledby="cp-AgentLanes-_R_1_"><div data-was="header"><span id="cp-AgentLanes-_R_1_" data-agent-name="true">Researcher</span><span class="cieo cieo-p-agent-status" data-status="working" data-tone="default"><span aria-hidden="true" data-status="default" class="cieo cieo-p-status-dot"></span><span data-label="true">working</span></span></div><div data-lane-body="true"></div></div></li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ChatMessage.html"><span class="comp-part-name">ChatMessage</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><article class="cieo cieo-chat-message"><span data-author="true">Ava</span><time>9:41</time><div data-variant="incoming" class="cieo cieo-chat-message-bubble">Your refund is on its way.</div></article></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/StreamingMessage.html"><span class="comp-part-name">StreamingMessage</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><article class="cieo cieo-chat-message"><div class="cieo cieo-p-streaming-message" data-complete="false" aria-busy="true"><p data-text="true">Looking up the roll call for that session...</p></div></article></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Card.html"><span class="comp-part-name">Card</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-card"><h2>Billing summary</h2><p>$12.00 due May 1 for the Monthly plan.</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Heading.html"><span class="comp-part-name">Heading</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><h2 data-level="2" class="cieo cieo-p-heading">Heading</h2></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Text.html"><span class="comp-part-name">Text</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><p data-size="default" class="cieo cieo-p-text">Text</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/AgentActivity.html"><span class="comp-part-name">AgentActivity</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><ol class="cieo cieo-p-agent-activity" role="log" aria-label="Agent activity"><li data-type="status" data-seq="1"></li><li data-type="tool" data-seq="2"></li></ol></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ToolCallDisclosure.html"><span class="comp-part-name">ToolCallDisclosure</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><details class="cieo cieo-p-tool-call-disclosure" data-phase="finished"><summary><span aria-hidden="true" data-status="success" class="cieo cieo-p-status-dot"></span><span data-name="true">search_bills</span><span data-phase-text="true">Done</span></summary><div data-body="true"><p data-summary="true">Found 12 matching bills.</p></div></details></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ApprovalRequest.html"><span class="comp-part-name">ApprovalRequest</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-approval-request" aria-labelledby="cp-ApprovalRequest-_R_0_" data-status="pending"><h3 id="cp-ApprovalRequest-_R_0_">Send the report</h3><p data-detail="true">Email the Q3 report to the board.</p><p data-status-text="true">Waiting for your decision</p><div data-actions="true"><button type="button" class="cieo-ctl cieo-btn cieo-btn--primary cieo-btn--md" data-state="idle"><span class="cieo-layer" data-on="true"><span class="cieo-btn-text">Approve</span></span><span class="cieo-layer" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.25" class="cieo-icon cieo-spin"><path d="M12 3a9 9 0 0 1 9 9"></path></svg></span><span class="cieo-layer cieo-btn-done" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.5" class="cieo-icon"><path d="M5 12.5 10 17.5 19 7" pathLength="1" class="cieo-draw"></path></svg></span><span class="cieo-layer cieo-btn-failed" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.25" class="cieo-icon"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5h.01"></path></svg></span><span class="cieo-layer cieo-btn-uncertain" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.25" class="cieo-icon"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5h.01"></path></svg><span class="cieo-btn-text">Sending could not be confirmed</span></span><span class="cieo-vh" role="status"></span></button><button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md" data-state="idle"><span class="cieo-layer" data-on="true"><span class="cieo-btn-text">Deny</span></span><span class="cieo-layer" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.25" class="cieo-icon cieo-spin"><path d="M12 3a9 9 0 0 1 9 9"></path></svg></span><span class="cieo-layer cieo-btn-done" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.5" class="cieo-icon"><path d="M5 12.5 10 17.5 19 7" pathLength="1" class="cieo-draw"></path></svg></span><span class="cieo-layer cieo-btn-failed" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.25" class="cieo-icon"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5h.01"></path></svg></span><span class="cieo-layer cieo-btn-uncertain" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" stroke-width="2.25" class="cieo-icon"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5h.01"></path></svg><span class="cieo-btn-text">Sending could not be confirmed</span></span><span class="cieo-vh" role="status"></span></button></div></div></div></li>
 </ul>
 </section>
 </main>

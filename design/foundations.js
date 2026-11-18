@@ -1,4 +1,4 @@
-import { densities, radii, fonts, displays } from './presets.js';
+import { densities, radii, fonts } from './presets.js';
 
 /** Numeric decisions are shared by CSS and native exports; rem remains relative on web. */
 export function foundations(config, put) {
@@ -17,7 +17,7 @@ export function foundations(config, put) {
   put('focus-width', 'dimension', '2px', 'Keyboard focus indicator width.');
   put('focus-offset', 'dimension', '3px', 'Space separating focus from the control.');
   put('font-sans', 'fontFamily', fonts[config.font], 'Local UI font stack; never fetched by Cieo.');
-  put('font-display', 'fontFamily', displays[config.display] ?? fonts[config.font], 'Heading font stack: the UI font unless a display face is chosen; never fetched by Cieo.');
+  put('font-display', 'fontFamily', fonts[config.font], 'Heading font stack: always the UI sans font, so headings and body read as one voice; never fetched by Cieo.');
   put('font-mono', 'fontFamily', fonts.mono, 'Local code and measurement font stack.');
   const sizes = { caption: .75, small: .875, body: 1, lead: 1.125, title: 1.5, heading: 2, display: 3.5 };
   for (const [name, size] of Object.entries(sizes)) put(`text-${name}`, 'dimension', `${size}rem`, `Responsive type role: ${name}.`);

@@ -31,6 +31,6 @@
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["id", "label", "error", "disabled", "className", "slotProps"], "states": [], "events": ["onChange"], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Labelled email field with inline error for auth forms." },
+  "documentation": { "path": "README.md", "purpose": "Labeled email field with inline error for auth forms." },
   "extensions": { "customization": {"presentationParts":["root","label","input"],"ownedSemantics":true,"existingContentSlotsPreserved":true}}
 }

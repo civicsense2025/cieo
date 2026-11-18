@@ -1,5 +1,5 @@
 @media (min-width:1600px) { .lib-main { padding-block-start:48px; } .lib-spotlights { gap:24px; } }
-@media (max-width:1399px) { .cieo-catalogue .lib-grid { grid-template-columns:repeat(min(var(--lib-columns),2),minmax(0,1fr)); } .lib-spotlight { gap:8px; padding:16px 12px; } .lib-spotlight .lib-collection-art { inline-size:48px; } .lib-spotlight strong { font-size:12px; } }
+@media (max-width:1399px) { .cieo-catalog .lib-grid { grid-template-columns:repeat(min(var(--lib-columns),2),minmax(0,1fr)); } .lib-spotlight { gap:8px; padding:16px 12px; } .lib-spotlight .lib-collection-art { inline-size:48px; } .lib-spotlight strong { font-size:12px; } }
 @media (max-width:1199px) {
   :root[data-cieo-library] { --lib-sidebar:200px; --lib-padding:24px; }
   .lib-sidebar { padding-inline:8px; }
@@ -49,11 +49,11 @@
   .lib-spotlight small { font-size:10px; }
   .lib-families { inline-size:100%; border-radius:12px; }
   .lib-family { min-block-size:40px; padding-inline:12px; }
-  .cieo-catalogue .lib-grid { grid-template-columns:minmax(0,1fr); }
-  .cieo-catalogue .tile.wide { grid-column:auto; }
-  .cieo-catalogue .tile>header { padding:8px; }
-  .cieo-catalogue .tile h3 { font-size:13px; }
-  .cieo-catalogue .lib-card-actions .lib-icon-button { inline-size:40px; block-size:40px; }
+  .cieo-catalog .lib-grid { grid-template-columns:minmax(0,1fr); }
+  .cieo-catalog .tile.wide { grid-column:auto; }
+  .cieo-catalog .tile>header { padding:8px; }
+  .cieo-catalog .tile h3 { font-size:13px; }
+  .cieo-catalog .lib-card-actions .lib-icon-button { inline-size:40px; block-size:40px; }
   .lib-dialog { margin:auto 0 0; inline-size:100%; max-inline-size:100%; max-block-size:calc(100dvh - 32px); border-radius:24px 24px 0 0; padding-block-end:env(safe-area-inset-bottom,0px); }
   .lib-dialog-top { padding:16px; gap:8px; position:sticky; inset-block-start:0; background:var(--tile); z-index:3; }
   .lib-dialog-top h2 { font-size:18px; }
@@ -65,9 +65,9 @@
 }
 @media (pointer:coarse) {
   .lib-icon-button,.lib-button,.lib-nav-button,.lib-choice,.lib-swatch { min-block-size:48px; min-inline-size:48px; }
-  .cieo-catalogue .lib-card-actions .lib-icon-button { inline-size:48px; block-size:48px; }
+  .cieo-catalog .lib-card-actions .lib-icon-button { inline-size:48px; block-size:48px; }
   .lib-categories .lib-nav-button { min-block-size:44px; }
   .lib-settings-form select { min-block-size:44px; }
-  .cieo-catalogue .stage .btn,.cieo-catalogue .stage .seg button { min-block-size:44px; }
+  .cieo-catalog .stage .btn,.cieo-catalog .stage .seg button { min-block-size:44px; }
   .lib-search input { font-size:16px; }
 }

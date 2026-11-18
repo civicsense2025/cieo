@@ -1,4 +1,4 @@
-/* Pure catalogue state helpers; the engine and recipes own all animation behavior. */
+/* Pure catalog state helpers; the engine and recipes own all animation behavior. */
 (() => {
   const L = window.CieoLibrary = window.CieoLibrary || {};
   L.defaults = Object.freeze({ view:'featured', category:'', query:'', family:'*', theme:'system', accent:'iris', density:'comfortable', columns:3, backdrops:true, speed:1, sort:'curated' });

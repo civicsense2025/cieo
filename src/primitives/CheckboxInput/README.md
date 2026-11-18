@@ -5,7 +5,7 @@ Single checkbox under its Astryx name: a thin contract over the Checkbox control
 ## Use when
 
 - The design calls the control CheckboxInput. Import from this path, not from controls directly.
-- You need one labelled native checkbox with optional indeterminate state.
+- You need one labeled native checkbox with optional indeterminate state.
 
 ## Avoid when
 

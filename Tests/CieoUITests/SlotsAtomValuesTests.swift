@@ -146,11 +146,11 @@ final class SlotsAtomValuesTests: XCTestCase {
         let red = Theme(accent: Color(red: 1, green: 0, blue: 0))
         let image = try bitmap(HighlightSurface(progress: 0.5).frame(width: 100, height: 50)
             .environment(\.componentTheme, red))
-        let centre = image.pixel(x: 50, y: 25)
-        XCTAssertEqual(Int(centre.a), 184, accuracy: 4, "the fill keeps its 72% strength")
-        XCTAssertEqual(centre.r, centre.a, "the host accent is the only colour in the fill")
-        XCTAssertEqual(centre.g, 0)
-        XCTAssertEqual(centre.b, 0)
+        let center = image.pixel(x: 50, y: 25)
+        XCTAssertEqual(Int(center.a), 184, accuracy: 4, "the fill keeps its 72% strength")
+        XCTAssertEqual(center.r, center.a, "the host accent is the only color in the fill")
+        XCTAssertEqual(center.g, 0)
+        XCTAssertEqual(center.b, 0)
     }
 
     @MainActor

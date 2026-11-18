@@ -1,6 +1,6 @@
 # TopNav
 
-Sticky site header with a labelled primary nav (brand, section links, a mega menu).
+Sticky site header with a labeled primary nav (brand, section links, a mega menu).
 
 ## Use when
 
@@ -36,7 +36,7 @@ Label only. Colors, height, and borders come from Cieo tokens; do not restyle pe
 
 ## Limitations
 
-- One nav per header. A second landmark needs its own labelled nav outside.
+- One nav per header. A second landmark needs its own labeled nav outside.
 - No overflow menu; too many items clip on narrow screens (use MobileNav).
 
 ## Related

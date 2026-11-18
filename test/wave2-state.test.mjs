@@ -128,9 +128,9 @@ test('1. asyncAction: double-submit lock, attemptId preservation on retry, TIMEO
   m.send({ type: 'SUBMIT' });
   assert.notEqual(m.getSnapshot().attemptId, firstAttemptId, 'fresh attemptId minted after succeeded');
 
-  // CANCEL -> 'cancelled', RESET -> 'idle'
+  // CANCEL -> 'canceled', RESET -> 'idle'
   const can = m.send({ type: 'CANCEL' });
-  assert.equal(can.next.status, 'cancelled');
+  assert.equal(can.next.status, 'canceled');
   m.send({ type: 'RESET' });
   assert.equal(m.getSnapshot().status, 'idle');
   assert.equal(m.getSnapshot().attemptId, null);
@@ -407,7 +407,7 @@ test('review fixes: a late answer never completes a newer attempt, ids are ungue
   s = reduceAsyncAction(s, { type: 'CANCEL' }).next;
   s = reduceAsyncAction(s, { type: 'SUBMIT', attemptId: 'b' }).next;
   const late = reduceAsyncAction(s, { type: 'RESOLVE', attemptId: 'a' });
-  assert.equal(late.changed, false, 'the cancelled request answering late is ignored');
+  assert.equal(late.changed, false, 'the canceled request answering late is ignored');
   assert.equal(reduceAsyncAction(s, { type: 'RESOLVE', attemptId: 'b' }).next.status, 'succeeded');
   assert.equal(reduceAsyncAction(s, { type: 'RESOLVE' }).next.status, 'succeeded', 'an answer without an id still works');
 

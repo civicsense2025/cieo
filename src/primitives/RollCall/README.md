@@ -25,7 +25,7 @@ Root `div.cieo-p-roll-call` in CSS columns; one `section` per group.
 ## Do / don't
 
 - Do: `<RollCall groups={[{ id: 'r', title: 'Republicans', color: 'var(--party-r)', members }]} />`
-- Don't: Don't colour names; the ring and heading carry the group.
+- Don't: Don't color names; the ring and heading carry the group.
 
 ## Apple twin
 

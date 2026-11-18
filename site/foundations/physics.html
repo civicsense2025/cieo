@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Physics &amp; Velocity · Foundations · Cieo</title>
-<meta name="description" content="Interactive closed-form spring response explorer, damping ratio zeta clamping, rubberBand drag bounds, and projectToDetent velocity snapping.">
+<title>Springs that settle · Foundations · Cieo</title>
+<meta name="description" content="Cieo motion glides to a stop instead of bouncing or jerking. Try the speed and bounce yourself, then see how a sheet snaps when you let go.">
 <meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
 <link rel="stylesheet" href="./foundations.css">
@@ -15,59 +15,85 @@
   <div class="doc-shell">
     <nav class="doc-rail" aria-label="Foundations chapters">
       <span class="doc-label">Foundations</span>
-      <a href="./index.html">Overview</a><a href="./physics.html" aria-current="page">Physics &amp; Velocity</a><a href="./choreography.html">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html">Agent Identity</a>
+      <a href="./index.html">Overview</a><a href="./physics.html" aria-current="page">Springs that settle</a><a href="./choreography.html">Motion between screens</a><a href="./color.html">Color that stays readable</a><a href="./typography.html">Type and shape</a><a href="./agents.html">Agents you can trust</a>
     </nav>
     <div class="doc-main">
       <header class="doc-head">
-      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Physics &amp; Velocity</span></p>
-      <h1>Closed-form spring physics.</h1>
-      <p>Every motion is evaluated analytically at timestamp <code>t</code> as a sum of damped step responses: zero numerical drift, interruptible mid-flight with continuous velocity, and clamped to <code>0.7 ≤ zeta ≤ 1.0</code>: zeta = 1 is the default, and the 0.7 floor allows at most about 5% overshoot.</p>
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Springs that settle</span></p>
+      <h1>Motion that glides to a stop.</h1>
+      <p>When someone taps a button or drags a sheet, it should move like a real object: it speeds up, glides, and comes to rest. Cieo does this with springs, which are motion that eases to rest on its own instead of following a fixed animation clip. Nothing wobbles or gets cut short, the most a spring may overshoot is about 5%, and if the person changes their mind halfway the motion carries on smoothly from where it is.</p>
     </header>
 
     <section aria-labelledby="curve-h">
-      <h2 id="curve-h">Interactive step response &amp; overshoot explorer</h2>
-      <div class="fnd-lab" data-physics-lab>
+      <h2 id="curve-h">Try a spring</h2>
+      <p>Press <strong>Move it</strong> to send the dot across. Pick how quickly it should arrive, and how much bounce it is allowed. Cieo keeps bounce small on purpose: at most about 5% past the target, usually none.</p>
+      <div class="fnd-lab" data-spring-lab>
         <div class="fnd-controls">
-          <div class="fnd-presets" role="group" aria-label="Spring presets">
-            <button type="button" data-preset="snap" data-w="34" aria-pressed="false">snap · ω 34</button>
-            <button type="button" data-preset="base" data-w="22" aria-pressed="true">base · ω 22</button>
-            <button type="button" data-preset="soft" data-w="15" aria-pressed="false">soft · ω 15</button>
-            <button type="button" data-preset="lazy" data-w="9" aria-pressed="false">lazy · ω 9</button>
+          <div class="fnd-presets" role="group" aria-label="Spring speed presets">
+            <button type="button" data-preset="snap" data-w="34" aria-pressed="false">Quick</button>
+            <button type="button" data-preset="base" data-w="22" aria-pressed="true">Balanced</button>
+            <button type="button" data-preset="soft" data-w="15" aria-pressed="false">Gentle</button>
+            <button type="button" data-preset="lazy" data-w="9" aria-pressed="false">Slow</button>
           </div>
-          <label class="fnd-slider">Natural frequency ω (<output data-w-out>22</output> rad/s)
+          <label class="fnd-slider">Speed
             <input type="range" min="6" max="45" step="1" value="22" data-w-input>
           </label>
-          <label class="fnd-slider">Damping ratio zeta (<output data-z-out>1.00</output>)
-            <input type="range" min="0.7" max="1" step="0.02" value="1" data-z-input>
+          <label class="fnd-slider">Bounce: none to a little
+            <input type="range" min="0" max="0.3" step="0.02" value="0" data-b-input>
           </label>
+          <button type="button" class="cieo cieo-button" data-variant="primary" data-go>Move it</button>
         </div>
-        <svg class="fnd-plot" viewBox="0 0 600 200" role="img" aria-label="Closed-form spring step response curve" data-spring-svg>
+        <div class="fnd-track" aria-hidden="true"><span class="fnd-dot" data-dot></span></div>
+        <svg class="fnd-plot" viewBox="0 0 600 200" role="img" aria-label="How far the dot has traveled over time: a smooth curve that rises and settles on its target" data-spring-svg>
           <line x1="36" y1="36" x2="576" y2="36" class="fnd-axis-target" />
           <line x1="36" y1="168" x2="576" y2="168" class="fnd-axis-base" />
           <path d="" class="fnd-curve-under" data-curve-bounce />
           <path d="" class="fnd-curve-main" data-curve-cieo />
         </svg>
-        <p class="fnd-readout" data-physics-readout aria-live="polite">ω = 22 rad/s · zeta = 1.00 · 99.9% settle = 418 ms · Cieo overshoot = 0.0% (unclamped bouncy zeta = 0.45 overshoots by 20.5%)</p>
+        <p class="fnd-legend"><span class="fnd-key fnd-key-main" aria-hidden="true"></span>Cieo spring <span class="fnd-key fnd-key-under" aria-hidden="true"></span>A bouncy spring, which Cieo does not use</p>
+        <p class="fnd-readout" data-spring-readout aria-live="polite">Settles in 418 ms. It never goes past its target.</p>
       </div>
+      <p><strong>How to use it.</strong> You rarely write spring math yourself. Components already move on a spring, and you choose a feel by name: <code>snap</code> for small feedback like a press, <code>base</code> for most things, <code>soft</code> for big panels, <code>lazy</code> for slow reveals. To move your own element, hand a target number to <code>useSpring</code> and draw each frame it gives back.</p>
+      <pre class="doc-code"><code>import { useSpring } from 'cieo/react';
+
+useSpring(open ? 0 : 320, (y) => {
+  sheet.current.style.transform = 'translateY(' + y + 'px)';
+}, { preset: 'soft' });</code></pre>
     </section>
 
     <section aria-labelledby="gesture-h">
-      <h2 id="gesture-h">Gesture boundaries: <code>rubberBand</code> &amp; <code>projectToDetent</code></h2>
-      <p>Direct manipulation tracks the pointer 1:1 inside valid bounds, compresses asymptotically past limits via <code>rubberBand(offset, dimension, 0.55)</code>, and projects release velocity onto sorted sheet detents via <code>projectToDetent(position, velocity, detents)</code>.</p>
+      <h2 id="gesture-h">Dragging, pulling past the edge, and letting go</h2>
+      <p>A sheet follows your finger exactly while you drag. Pull it past its limit and it gets harder and harder to move, like stretching a rubber band. Let go and it snaps to the nearest resting place, and a quick flick carries it to the next one.</p>
       <div class="fnd-lab" data-detent-lab>
         <div class="fnd-controls">
-          <label class="fnd-slider">Release position (<output data-pos-out>0.48</output>)
+          <label class="fnd-slider">Where you let go (<output data-pos-out>48</output>%)
             <input type="range" min="0" max="1" step="0.02" value="0.48" data-pos-input>
           </label>
-          <label class="fnd-slider">Release velocity (<output data-vel-out>0</output> /s)
+          <label class="fnd-slider">How hard you flick (<output data-vel-out>0</output>)
             <input type="range" min="-2.5" max="2.5" step="0.1" value="0" data-vel-input>
           </label>
-          <label class="fnd-slider">Over-drag offset (<output data-rb-in>80</output> px)
-            <input type="range" min="-240" max="240" step="10" value="80" data-rb-input>
+          <label class="fnd-slider">How far past the edge you pull (<output data-rb-in>80</output> px)
+            <input type="range" min="0" max="240" step="10" value="80" data-rb-input>
           </label>
         </div>
-        <p class="fnd-readout" data-detent-readout aria-live="polite">Detents [0, 0.5, 0.9] → snapped detent: 0.50 · rubberBand(80px, 200px) → 49.4 px</p>
+        <div class="fnd-detent" aria-hidden="true">
+          <span class="fnd-stop" style="inset-inline-start:0%"></span>
+          <span class="fnd-stop" style="inset-inline-start:50%"></span>
+          <span class="fnd-stop" style="inset-inline-start:90%"></span>
+          <span class="fnd-marker fnd-marker-release" data-release></span>
+          <span class="fnd-marker fnd-marker-snap" data-snap></span>
+        </div>
+        <div class="fnd-bars" aria-hidden="true">
+          <div><span class="fnd-bar" data-pull-bar></span></div>
+          <div><span class="fnd-bar fnd-bar-moved" data-moved-bar></span></div>
+        </div>
+        <p class="fnd-readout" data-detent-readout aria-live="polite">The sheet settles on the 50% stop. You pulled 80 px past the edge, but it only moved 49 px.</p>
       </div>
+      <p><strong>How to use it.</strong> Two small helpers do the work during a drag. <code>rubberBand</code> turns how far past the edge the pointer went into how far the sheet moves, and <code>projectToDetent</code> picks the resting place from the release position and flick speed.</p>
+      <pre class="doc-code"><code>import { rubberBand, projectToDetent } from 'cieo/live';
+
+const shown = rubberBand(pulledPastEdge, sheetHeight, 0.55);
+const restAt = projectToDetent(position, velocity, [0, 0.5, 0.9]);</code></pre>
     </section>
     </div>
   </div>

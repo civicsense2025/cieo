@@ -1,10 +1,10 @@
 (() => {
   const L=window.CieoLibrary;
   L.mount=atoms => {
-    if (window.CieoCatalogue) throw new Error('The catalogue can only mount once.');
-    const state={...L.validSettings(L.safeRead('cieo:catalogue:view:v2')),...L.route(location.hash,atoms)};
+    if (window.CieoCatalog) throw new Error('The catalog can only mount once.');
+    const state={...L.validSettings(L.safeRead('cieo:catalog:view:v2')),...L.route(location.hash,atoms)};
     state.paused=matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const ids=new Set(atoms.map(a=>a.id)),stored=L.safeRead('cieo:catalogue:saved:v2');
+    const ids=new Set(atoms.map(a=>a.id)),stored=L.safeRead('cieo:catalog:saved:v2');
     const saved=new Set(Array.isArray(stored)?stored.filter(id=>ids.has(id)):[]);
     if(ids.size!==atoms.length) throw new Error('Duplicate atom IDs in the source registry.');
     const errors=[],search=document.getElementById('library-search'),grid=document.getElementById('library-grid');
@@ -27,7 +27,7 @@
     };
     const persist=() => {
       const data={};for(const key of ['theme','accent','density','columns','backdrops','speed','sort'])data[key]=state[key];
-      L.safeWrite('cieo:catalogue:view:v2',data);playback.request();
+      L.safeWrite('cieo:catalog:view:v2',data);playback.request();
     };
     const route=() => {
       const p=new URLSearchParams();
@@ -72,7 +72,7 @@
     const save=a => {
       if(saved.has(a.id))saved.delete(a.id);else saved.add(a.id);
       const b=a.el.querySelector('.lib-save');b.setAttribute('aria-pressed',String(saved.has(a.id)));b.setAttribute('aria-label',`${saved.has(a.id)?'Unsave':'Save'} ${a.name}`);
-      const ok=L.safeWrite('cieo:catalogue:saved:v2',[...saved]);
+      const ok=L.safeWrite('cieo:catalog:saved:v2',[...saved]);
       announce(`${saved.has(a.id)?'Saved':'Removed'}${ok?'':' for this session only'}`);
       dialogs.updateSaved();render();
     };
@@ -118,7 +118,7 @@
     document.getElementById('library-total').textContent=`${atoms.length} live motion atoms`;
     document.getElementById('library-loading').hidden=true;
     document.title='Cieo — Motion library';
-    window.CieoCatalogue={atoms,errors,get state(){return {...state,saved:[...saved]};},ensure:cards.ensure,select:pick};
+    window.CieoCatalog={atoms,errors,get state(){return {...state,saved:[...saved]};},ensure:cards.ensure,select:pick};
     window.addEventListener('pagehide',e=>{if(!e.persisted){cards.destroy();playback.destroy();clearTimeout(toastTimer);clearTimeout(searchTimer);}},{once:true});
     if(state.atom){const a=atoms.find(a=>a.id===state.atom);requestAnimationFrame(()=>dialogs.inspect(a,a.el.querySelector('button')));}
   };

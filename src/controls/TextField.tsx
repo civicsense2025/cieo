@@ -1,5 +1,5 @@
 'use client';
-/* TextField: a native <input> in the field frame. Without JavaScript it is a labelled input that submits normally. */
+/* TextField: a native <input> in the field frame. Without JavaScript it is a labeled input that submits normally. */
 import { forwardRef, type InputHTMLAttributes } from 'react';
 import { FieldFrame, useField, type FieldFrameSlots, type FieldOwnProps } from './Field.js';
 import { customizeControlPart, type ControlPartProps } from './parts.js';
