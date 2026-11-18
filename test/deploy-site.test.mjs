@@ -111,3 +111,9 @@ test('wrangler serves the built folder as assets and the folder is never committ
   assert.equal(pkg.scripts.deploy, 'node scripts/deploy.mjs', 'deploys go through the guard');
   assert.match(readFileSync('scripts/deploy.mjs', 'utf8'), /wrangler@\d+\.\d+\.\d+/, 'wrangler is pinned, not floating');
 });
+
+test('the Worker is served on the public custom domain, and no secret or address is committed in its config', () => {
+  const config = readFileSync('wrangler.jsonc', 'utf8');
+  assert.match(config, /"routes": \[\{ "pattern": "[a-z0-9.-]+", "custom_domain": true \}\]/);
+  assert.ok(!/re_[A-Za-z0-9]{16,}|@[a-z0-9-]+\.[a-z]{2,}/i.test(config.replace(/"Cieo <[^>]*>"/g, '')), 'no key or email address in the config');
+});

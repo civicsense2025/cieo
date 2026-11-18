@@ -4,6 +4,8 @@
   "name": "cieo",
   "main": "worker/index.js",
   "compatibility_date": "2026-11-01",
+  // The public address. The zone must be in this Cloudflare account; the DNS record is created on deploy.
+  "routes": [{ "pattern": "cieo.meridianproject.studio", "custom_domain": true }],
   "assets": {
     "directory": ".deploy",
     "binding": "ASSETS",
