@@ -164,3 +164,16 @@ body.cieo-site {
 .form-status[data-state="ok"] { color: var(--cieo-color-success); }
 
 @media (prefers-reduced-motion: reduce) { .marker { will-change: auto; } }
+
+/* Copy button on code blocks: the kit's icon button, pinned to the block's corner. The two glyphs trade places on a spring. */
+.copy-wrap { position: relative; min-inline-size: 0; }
+.copy-wrap > pre { padding-inline-end: calc(var(--cieo-control-small) + var(--cieo-space-4)); }
+.copy-wrap > .copy-button { position: absolute; inset-block-start: var(--cieo-space-2); inset-inline-end: var(--cieo-space-2); background: transparent; color: inherit; border-color: color-mix(in srgb, currentColor 30%, transparent); }
+.copy-wrap > pre ~ .copy-button { color: var(--cieo-color-canvas); }
+.copy-button { position: relative; }
+.copy-glyph { display: inline-flex; transition: scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)), opacity var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+.copy-glyph svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.copy-glyph[data-glyph="done"] { position: absolute; scale: 0.4; opacity: 0; }
+.copy-button[data-copied] .copy-glyph[data-glyph="copy"] { scale: 0.4; opacity: 0; }
+.copy-button[data-copied] .copy-glyph[data-glyph="done"] { scale: 1; opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .copy-glyph { transition: none; } }
