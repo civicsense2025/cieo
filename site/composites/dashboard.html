@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
-<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" id="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 17 17"/></svg><kbd aria-hidden="true">⌘K</kbd></button><button type="button" class="site-menu-btn" data-site-menu aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 7h14M3 13h14"/></svg></button></header>
 <main id="main" class="site-wrap comp-page">
 <header class="comp-head">
 <p class="site-label"><a href="./">Composites</a> / Admin dashboard</p>
@@ -33,7 +33,7 @@
 <div><p>Active carts</p><strong class="fact-number">312</strong><span class="dash-badge" data-tone="info">live</span></div>
 </div>
 <h2>Recent orders</h2>
-<div class="cieo-table-wrap"><table class="cieo-table">
+<div class="cieo-table-wrap"><table class="cieo cieo-table">
 <caption>Recent orders</caption>
 <thead><tr><th scope="col">Order</th><th scope="col">Customer</th><th scope="col">Total</th><th scope="col">Status</th></tr></thead>
 <tbody>
@@ -81,7 +81,7 @@
 <p>New orders will land here. Preview the buyer flow in the <a href="./storefront.html">storefront</a>.</p>
 <p><button class="cieo-button" type="button" data-restore-orders>Restore demo orders</button></p>
 </div>
-<div class="cieo-table-wrap"><table class="cieo-table" data-orders-table>
+<div class="cieo-table-wrap"><table class="cieo cieo-table" data-orders-table>
 <caption>Orders</caption>
 <thead><tr>
 <th scope="col" aria-sort="descending"><button type="button" class="cieo-button" data-variant="quiet" data-size="small" data-sort="order">Order <span aria-hidden="true" data-arrow>↓</span></button></th>
@@ -106,12 +106,12 @@
 <div class="dash-field cieo-field">
 <label for="dash-store">Store name</label>
 <input class="cieo-input" id="dash-store" type="text" data-setting="store" value="Drift Goods" maxlength="40" aria-describedby="dash-store-error">
-<p class="dash-error cieo-p-field-status" id="dash-store-error" data-error="store" hidden>Give the store a name of at least 2 characters.</p>
+<p class="cieo dash-error cieo-p-field-status" id="dash-store-error" data-error="store" hidden>Give the store a name of at least 2 characters.</p>
 </div>
 <div class="dash-field cieo-field">
 <label for="dash-contact">Support reply-to (optional)</label>
 <input class="cieo-input" id="dash-contact" type="email" data-setting="contact" value="" placeholder="help@example.com" autocomplete="email" aria-describedby="dash-contact-error">
-<p class="dash-error cieo-p-field-status" id="dash-contact-error" data-error="contact" hidden>That reply-to needs an @ sign, or leave it blank.</p>
+<p class="cieo dash-error cieo-p-field-status" id="dash-contact-error" data-error="contact" hidden>That reply-to needs an @ sign, or leave it blank.</p>
 </div>
 <div class="dash-check cieo-check">
 <input class="cieo-choice" id="dash-notify" type="checkbox" role="switch" data-setting="notify" checked>
@@ -123,7 +123,7 @@
 <input class="cieo-choice" id="dash-threshold" type="range" min="0" max="50" value="12" data-setting="threshold" aria-describedby="dash-threshold-error">
 <output data-readout for="dash-threshold">12 units</output>
 </div>
-<p class="dash-error cieo-p-field-status" id="dash-threshold-error" data-error="threshold" hidden>Pick a threshold between 0 and 50.</p>
+<p class="cieo dash-error cieo-p-field-status" id="dash-threshold-error" data-error="threshold" hidden>Pick a threshold between 0 and 50.</p>
 </div>
 <div class="dash-actions">
 <button class="cieo-button" data-variant="primary" type="submit" data-save>Save settings</button>

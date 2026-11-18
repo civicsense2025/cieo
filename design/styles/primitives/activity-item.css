@@ -1,6 +1,6 @@
 /* design/styles/primitives/activity-item.css */
 @layer cieo.components {
-  :where(.cieo).cieo-activity-item { position: relative; display: flex; align-items: flex-start; gap: var(--cieo-space-3); padding: var(--cieo-space-3); border-radius: var(--cieo-radius-control); color: var(--cieo-color-text); font-size: var(--cieo-text-small); }
+  :where(.cieo).cieo-activity-item { position: relative; display: flex; align-items: flex-start; gap: var(--cieo-space-3); padding: var(--cieo-space-3); border-radius: var(--cieo-radius-surface); color: var(--cieo-color-text); font-size: var(--cieo-text-small); }
   @media (hover: hover) { :where(.cieo).cieo-activity-item[data-interactive='true']:hover { background: var(--cieo-color-sunken); } }
   :where(.cieo) .cieo-activity-item-lead { position: relative; flex: none; }
   :where(.cieo) .cieo-activity-item-badge { position: absolute; inset-inline-end: -0.25rem; inset-block-end: -0.25rem; display: grid; place-items: center; inline-size: 1.125rem; block-size: 1.125rem; border: 2px solid var(--cieo-color-canvas); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-sunken); color: var(--cieo-color-muted); font-size: var(--cieo-text-caption); }

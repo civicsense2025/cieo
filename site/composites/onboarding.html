@@ -35,15 +35,15 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 <link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
-<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
-<header class="onboard-layout">
-<p><a href="./index.html">Composites</a></p>
-<h1>Get set up in four short moves</h1>
-<p>Welcome, profile, preferences, done — every step reads on this page with scripts off, and the stepper only moves forward once each step checks out.</p>
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" id="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 17 17"/></svg><kbd aria-hidden="true">⌘K</kbd></button><button type="button" class="site-menu-btn" data-site-menu aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 7h14M3 13h14"/></svg></button></header>
+<header class="onboard-layout comp-head">
+<p class="site-label"><a href="./">Composites</a> / Get set up in four short moves</p>
+<h1 class="site-title">Get set up in four short moves</h1>
+<p class="site-prose">Welcome, profile, preferences, done — every step reads on this page with scripts off, and the stepper only moves forward once each step checks out.</p>
 </header>
 <main class="onboard-layout" id="main" data-parts="Stepper Step ProgressBar Field FieldStatus Card Avatar RadioList RadioListItem Banner Badge Heading Text List ListItem MetadataList MetadataListItem Kbd">
 <section class="onboard-card" aria-label="Onboarding progress">
-<h2 class="cieo-p-heading">Where you are</h2>
+<h2 class="cieo cieo-p-heading">Where you are</h2>
 <ol class="cieo-p-stepper onboard-stepper" data-stepper aria-label="Onboarding steps">
 <li class="cieo-p-step"><button type="button" data-step="welcome" aria-current="step">Welcome</button></li>
 <li class="cieo-p-step"><button type="button" data-step="profile">Profile</button></li>
@@ -51,12 +51,12 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 <li class="cieo-p-step"><button type="button" data-step="done">Done</button></li>
 </ol>
 <progress class="cieo cieo-progress" data-progress value="1" max="4" aria-label="Onboarding progress"></progress>
-<p class="cieo-p-text" data-progress-text>Step 1 of 4 — Welcome.</p>
+<p class="cieo cieo-p-text" data-progress-text>Step 1 of 4 — Welcome.</p>
 <p class="onboard-visually-hidden" role="status" data-status></p>
 </section>
 <section class="onboard-card" aria-labelledby="onboard-welcome-heading" data-step-panel="welcome">
-<h2 class="cieo-p-heading" id="onboard-welcome-heading" tabindex="-1">Welcome to Cieo</h2>
-<p class="cieo-p-text">Three minutes now saves ten later: tell us who is joining, shape a quiet workspace, then grab an invite code for a teammate.</p>
+<h2 class="cieo cieo-p-heading" id="onboard-welcome-heading" tabindex="-1">Welcome to Cieo</h2>
+<p class="cieo cieo-p-text">Three minutes now saves ten later: tell us who is joining, shape a quiet workspace, then grab an invite code for a teammate.</p>
 <ul class="cieo cieo-p-list">
 <li class="cieo-p-list-item">Profile takes one screen — a name, an email, and a face for the room.</li>
 <li class="cieo-p-list-item">Preferences stay boring on purpose — a theme, a switch, and a digest rhythm.</li>
@@ -65,14 +65,14 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 <p class="onboard-actions"><button type="button" data-next="profile">Begin setup</button> <button type="button" data-skip="done">Skip setup</button></p>
 </section>
 <section class="onboard-card" aria-labelledby="onboard-profile-heading" data-step-panel="profile">
-<h2 class="cieo-p-heading" id="onboard-profile-heading" tabindex="-1">Tell us who is joining</h2>
-<p class="cieo-p-text">This is the name teammates see and the email receipts reach. Nothing is sent anywhere.</p>
-<div class="cieo-p-field onboard-field">
+<h2 class="cieo cieo-p-heading" id="onboard-profile-heading" tabindex="-1">Tell us who is joining</h2>
+<p class="cieo cieo-p-text">This is the name teammates see and the email receipts reach. Nothing is sent anywhere.</p>
+<div class="cieo cieo-p-field onboard-field">
 <label for="onboard-name">Display name</label>
 <input id="onboard-name" name="name" type="text" autocomplete="name" data-name aria-describedby="onboard-name-error">
 <p class="cieo cieo-p-field-status" role="alert" data-name-error id="onboard-name-error" hidden>Add a display name so the room knows what to call you.</p>
 </div>
-<div class="cieo-p-field onboard-field">
+<div class="cieo cieo-p-field onboard-field">
 <label for="onboard-email">Email</label>
 <input id="onboard-email" name="email" type="email" autocomplete="email" data-email aria-describedby="onboard-email-error" placeholder="you@example.com">
 <p class="cieo cieo-p-field-status" role="alert" data-email-error id="onboard-email-error" hidden>Add an email like you@example.com — it needs text on both sides of the @ sign.</p>
@@ -88,9 +88,9 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 <p class="onboard-actions"><button type="button" data-back="welcome">Back</button> <button type="button" data-next="preferences">Continue</button> <button type="button" data-skip="preferences">Skip this step</button></p>
 </section>
 <section class="onboard-card" aria-labelledby="onboard-prefs-heading" data-step-panel="preferences">
-<h2 class="cieo-p-heading" id="onboard-prefs-heading" tabindex="-1">Shape the workspace</h2>
-<p class="cieo-p-text">Pick how Cieo looks and how loudly it talks to you. Both choices wait for you — the step holds until each has an answer.</p>
-<fieldset class="cieo-p-radio-list" data-theme-group>
+<h2 class="cieo cieo-p-heading" id="onboard-prefs-heading" tabindex="-1">Shape the workspace</h2>
+<p class="cieo cieo-p-text">Pick how Cieo looks and how loudly it talks to you. Both choices wait for you — the step holds until each has an answer.</p>
+<fieldset class="cieo cieo-p-radio-list" data-theme-group>
 <legend>Theme</legend>
 <p class="cieo cieo-p-field-status" role="alert" data-theme-error id="onboard-theme-error" hidden>Pick a theme to continue — light, dark, or system.</p>
 <label class="cieo-p-radio-list-item"><input type="radio" name="theme" value="Light" data-theme> Light — paper-bright surfaces</label>
@@ -101,7 +101,7 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 <input id="onboard-notify" type="checkbox" role="switch" checked data-notify>
 <label for="onboard-notify">Product notifications</label>
 </div>
-<div class="cieo-p-field onboard-field">
+<div class="cieo cieo-p-field onboard-field">
 <label for="onboard-digest">Digest emails</label>
 <select id="onboard-digest" data-digest aria-describedby="onboard-digest-error">
 <option value="">Choose a rhythm…</option>
@@ -114,28 +114,28 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 <p class="onboard-actions"><button type="button" data-back="profile">Back</button> <button type="button" data-next="done">Finish setup</button> <button type="button" data-skip="done">Skip this step</button></p>
 </section>
 <section class="onboard-card" aria-labelledby="onboard-done-heading" data-step-panel="done" data-success>
-<h2 class="cieo-p-heading" id="onboard-done-heading" tabindex="-1" data-done-heading>All set</h2>
+<h2 class="cieo cieo-p-heading" id="onboard-done-heading" tabindex="-1" data-done-heading>All set</h2>
 <div class="cieo cieo-p-banner">
 <p class="cieo-p-banner-title">Setup complete.</p>
 </div>
-<p class="cieo-p-text"><span class="cieo cieo-badge" data-status="success" data-done-badge>Ready to explore</span> Here is what Cieo remembered — kept on this page only.</p>
-<dl class="cieo-metadata-list" data-summary>
-<div class="cieo-metadata-list-item"><dt>Name</dt><dd data-summary-name>—</dd></div>
-<div class="cieo-metadata-list-item"><dt>Email</dt><dd data-summary-email>—</dd></div>
-<div class="cieo-metadata-list-item"><dt>Avatar</dt><dd data-summary-avatar>—</dd></div>
-<div class="cieo-metadata-list-item"><dt>Theme</dt><dd data-summary-theme>—</dd></div>
-<div class="cieo-metadata-list-item"><dt>Notifications</dt><dd data-summary-notify>—</dd></div>
-<div class="cieo-metadata-list-item"><dt>Digest</dt><dd data-summary-digest>—</dd></div>
+<p class="cieo cieo-p-text"><span class="cieo cieo-badge" data-status="success" data-done-badge>Ready to explore</span> Here is what Cieo remembered — kept on this page only.</p>
+<dl class="cieo cieo-metadata-list" data-summary>
+<div class="cieo cieo-metadata-list-item"><dt>Name</dt><dd data-summary-name>—</dd></div>
+<div class="cieo cieo-metadata-list-item"><dt>Email</dt><dd data-summary-email>—</dd></div>
+<div class="cieo cieo-metadata-list-item"><dt>Avatar</dt><dd data-summary-avatar>—</dd></div>
+<div class="cieo cieo-metadata-list-item"><dt>Theme</dt><dd data-summary-theme>—</dd></div>
+<div class="cieo cieo-metadata-list-item"><dt>Notifications</dt><dd data-summary-notify>—</dd></div>
+<div class="cieo cieo-metadata-list-item"><dt>Digest</dt><dd data-summary-digest>—</dd></div>
 </dl>
-<h3 class="cieo-p-heading">Invite a teammate</h3>
-<p class="cieo-p-text">Hand them this code at the door — it carries your initials so the room knows who sent them.</p>
-<p class="cieo-p-text"><code class="onboard-code" data-referral-code>CIEO-START-7Q2D</code></p>
+<h3 class="cieo cieo-p-heading">Invite a teammate</h3>
+<p class="cieo cieo-p-text">Hand them this code at the door — it carries your initials so the room knows who sent them.</p>
+<p class="cieo cieo-p-text"><code class="onboard-code" data-referral-code>CIEO-START-7Q2D</code></p>
 <p class="onboard-actions"><button type="button" data-copy>Copy invite code</button></p>
 <p class="cieo cieo-p-field-status" role="status" data-copy-status></p>
 <p class="onboard-actions"><button type="button" data-restart>Start over</button> <button type="button" data-back="preferences">Review preferences</button></p>
 </section>
 <section aria-label="Behavior">
-<h2 class="cieo-p-heading">Behavior</h2>
+<h2 class="cieo cieo-p-heading">Behavior</h2>
 <ul>
 <li>Every step reads with scripts disabled; the stepper only takes over once scripts load.</li>
 <li>Forward moves validate first — a missing name, a broken email, an unpicked theme, or an unchosen digest each raise their own inline note and hold the step.</li>
@@ -148,7 +148,7 @@ body{margin:0;font-family:var(--cieo-font-sans);background:var(--cieo-color-canv
 </ul>
 </section>
 <section aria-label="Related screens">
-<h2 class="cieo-p-heading">Related screens</h2>
+<h2 class="cieo cieo-p-heading">Related screens</h2>
 <ul>
 <li><a href="./dashboard.html">Admin dashboard</a> — tune store settings once the workspace feels like home.</li>
 <li><a href="./booking.html">Booking</a> — put the new profile to work and hold a visit.</li>

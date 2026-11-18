@@ -221,3 +221,13 @@ document.addEventListener('keydown', (e) => {
     else openSearch(document.activeElement);
   }
 });
+
+// Phone menu: the two-line button opens the nav panel under the header; Escape or a link closes it.
+const menuBtn = document.querySelector('[data-site-menu]');
+if (menuBtn) {
+  const header = menuBtn.closest('.site-header');
+  const setOpen = (open) => { header.toggleAttribute('data-menu-open', open); menuBtn.setAttribute('aria-expanded', String(open)); };
+  menuBtn.addEventListener('click', () => setOpen(menuBtn.getAttribute('aria-expanded') !== 'true'));
+  header.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') { setOpen(false); menuBtn.focus(); } });
+  header.querySelectorAll('.site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+}

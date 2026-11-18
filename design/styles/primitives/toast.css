@@ -5,7 +5,7 @@
     display: flex; align-items: center; gap: var(--cieo-space-3);
     max-inline-size: min(28rem, calc(100vw - var(--cieo-space-6))); padding: var(--cieo-space-3) var(--cieo-space-4);
     background: var(--cieo-color-surface); color: var(--cieo-color-text);
-    border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control);
+    border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-surface);
   }
   :where(.cieo) .cieo-toast-message { margin: 0; font-size: var(--cieo-text-small); }
   :where(.cieo).cieo-toast[data-tone='success'] { border-inline-start: var(--cieo-border-width) solid var(--cieo-color-success); }

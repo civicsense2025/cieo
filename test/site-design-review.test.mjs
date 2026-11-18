@@ -65,11 +65,15 @@ test('the dashboard uses one hairline facts row and the composites index is a gr
   assert.doesNotMatch(read('site/foundations/foundations.css'), /\.fnd-grid|\.fnd-card/);
 });
 
-test('the header never wraps on phones: nav is one scrolling row and the header is not sticky there', () => {
+test('on phones the nav folds into a menu opened by a two-line button, and search is an icon', () => {
   const css = read('site/site.css');
   const phone = css.slice(css.indexOf('@media (max-width: 64rem)'));
-  assert.match(phone, /\.site-nav \{[^}]*flex-wrap: nowrap[^}]*overflow-x: auto/);
-  assert.match(phone, /\.site-header \{[^}]*position: static/);
+  assert.match(phone, /\.site-nav \{[^}]*display: none/);
+  assert.match(phone, /\.site-header\[data-menu-open\] \.site-nav \{[^}]*display: flex/);
+  assert.match(phone, /\.site-menu-btn \{[^}]*display: inline-flex/);
+  const chrome = read('scripts/lib/site-chrome.mjs');
+  assert.match(chrome, /M3 7h14M3 13h14/, 'a two-line hamburger');
+  assert.doesNotMatch(chrome, /<span>Search<\/span>/, 'search is an icon, labelled for screen readers');
 });
 
 test('phones keep the chapter and section links as a scrolling row instead of hiding them', () => {

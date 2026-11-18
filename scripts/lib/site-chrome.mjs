@@ -31,8 +31,9 @@ function resolveNavHref(up, href) {
 /** `up` is the relative path from the page to /site/, such as './' on the home page and '../' in the library. */
 export function siteHeader(up, current = '', skipTo = 'main') {
   const links = NAV.map(([label, href]) => `<a href="${resolveNavHref(up, href)}"${current === label ? ' aria-current="page"' : ''}>${label}</a>`).join('');
-  const searchBtn = `<button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button>`;
-  return `<a class="site-skip" href="#${skipTo}">Skip to content</a><header class="site-header"><a class="site-mark" href="${up}" aria-label="${siteConfig.name} home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="${springCurve()}" class="site-mark-curve"/></svg><span>${siteConfig.name}</span></a><nav class="site-nav" aria-label="Site">${links}</nav>${searchBtn}</header>`;
+  const searchBtn = `<button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 17 17"/></svg><kbd aria-hidden="true">⌘K</kbd></button>`;
+  const menuBtn = `<button type="button" class="site-menu-btn" data-site-menu aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 7h14M3 13h14"/></svg></button>`;
+  return `<a class="site-skip" href="#${skipTo}">Skip to content</a><header class="site-header"><a class="site-mark" href="${up}" aria-label="${siteConfig.name} home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="${springCurve()}" class="site-mark-curve"/></svg><span>${siteConfig.name}</span></a><nav class="site-nav" id="site-nav" aria-label="Site">${links}</nav>${searchBtn}${menuBtn}</header>`;
 }
 
 export function siteFooter(up) {

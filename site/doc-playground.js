@@ -16,11 +16,16 @@ import {
 // 1. Multi-platform tablist (click + ArrowLeft/ArrowRight/Home/End + #panel-id deep links).
 // Panels are hidden through the attribute and an inline display, because stylesheet display rules on .doc-stage beat [hidden].
 const tabs = [...document.querySelectorAll('.doc-tabs [role="tab"]')];
+// Copy buttons are icons: the glyph turns into a check for a moment, and the accessible name says what happened.
+const COPY_ICON = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><rect x="7" y="7" width="9" height="9" rx="2"/><path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg>';
+const CHECK_ICON = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m4 10.5 4 4 8-9"/></svg>';
+const flashCopied = (button, idle) => {
+  button.innerHTML = CHECK_ICON;
+  button.setAttribute('aria-label', 'Copied');
+  setTimeout(() => { button.innerHTML = COPY_ICON; button.setAttribute('aria-label', idle); }, 1500);
+};
 const copyText = (text, button, idle) => {
-  const done = () => {
-    button.textContent = 'Copied';
-    setTimeout(() => { button.textContent = idle; }, 1500);
-  };
+  const done = () => flashCopied(button, idle);
   if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done, done);
   else done();
 };
@@ -50,9 +55,11 @@ if (tabs.length) {
     panel.style.overflow = 'auto';
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'doc-button';
+    btn.className = 'doc-button doc-icon-button';
     btn.dataset.copyCode = panel.id;
-    btn.textContent = 'Copy code';
+    btn.title = 'Copy code';
+    btn.setAttribute('aria-label', 'Copy code');
+    btn.innerHTML = COPY_ICON;
     btn.addEventListener('click', () => copyText(panel.querySelector('code')?.textContent ?? panel.textContent, btn, 'Copy code'));
     panel.before(btn);
     panel.copyButton = btn;
@@ -70,10 +77,7 @@ const copyBtn = document.querySelector('[data-copy-import]');
 if (copyBtn) {
   copyBtn.addEventListener('click', () => {
     const text = document.querySelector('[data-import]')?.textContent || '';
-    const done = () => {
-      copyBtn.textContent = 'Copied';
-      setTimeout(() => { copyBtn.textContent = 'Copy import'; }, 1500);
-    };
+    const done = () => flashCopied(copyBtn, 'Copy import');
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text).then(done, done);
     } else {

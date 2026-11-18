@@ -97,7 +97,8 @@ def tabs_on_component(pg):
     check(btn.is_visible(), f'{pg.url}: code panel has no visible copy button')
     btn.click()
     pg.wait_for_timeout(100)
-    check(btn.inner_text() == 'Copied', f'{pg.url}: copy button did not confirm')
+    check(btn.get_attribute('aria-label') == 'Copied', f'{pg.url}: copy button did not confirm')
+    check(btn.locator('svg').count() == 1 and btn.inner_text().strip() == '', f'{pg.url}: copy button must be an icon, not text')
     check(pg.evaluate('navigator.clipboard.readText()').strip() == pg.locator('#panel-code code').inner_text().strip(), f'{pg.url}: clipboard text differs from the code panel')
     # deep link
     pg.goto(pg.url.split('#')[0] + '#panel-code')
@@ -179,6 +180,14 @@ with sync_playwright() as p:
         pp = phone.new_page()
         pp.goto(base + '/docs/studio/', wait_until='networkidle')
         check(pp.evaluate('document.documentElement.scrollWidth <= innerWidth'), '/docs/studio/: scrolls sideways at 320px')
+        phone.close()
+        # every page fits a phone: no sideways scrolling at 390px
+        phone = browser.new_context(viewport={'width': 390, 'height': 800}, has_touch=True)
+        for url in pages:
+            pp = phone.new_page()
+            pp.goto(base + url, wait_until='networkidle')
+            check(pp.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{url}: scrolls sideways at 390px')
+            pp.close()
         phone.close()
     finally:
         browser.close()

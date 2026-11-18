@@ -2,7 +2,7 @@
 @layer cieo.components {
   :where(.cieo).cieo-comment {
     --_av: 2.25rem; --_gap: var(--cieo-space-3); --_pad: var(--cieo-space-3); --_rail: 2px;
-    position: relative; display: grid; grid-template-columns: var(--_av) minmax(0, 1fr); column-gap: var(--_gap); padding-block-start: var(--_pad); color: var(--cieo-color-text); font-size: var(--cieo-text-body); border-radius: var(--cieo-radius-control);
+    position: relative; display: grid; grid-template-columns: var(--_av) minmax(0, 1fr); column-gap: var(--_gap); padding-block-start: var(--_pad); color: var(--cieo-color-text); font-size: var(--cieo-text-body); border-radius: var(--cieo-radius-surface);
   }
   :where(.cieo).cieo-comment[data-depth]:not([data-depth='0']) { --_av: 1.5rem; }
   :where(.cieo) .cieo-comment-rail { grid-column: 1; grid-row: 1; display: flex; flex-direction: column; align-items: center; min-block-size: 0; }
