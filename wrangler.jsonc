@@ -14,7 +14,7 @@
     "run_worker_first": ["/api/*"]
   },
   // Messages are sent from the domain verified with Resend; without this variable the sandbox sender is used.
-  "vars": { "CONTACT_FROM": "Cieo <hello@meridianproject.studio>" },
+  "vars": { "CONTACT_FROM": "Cieo <hello@send.meridianproject.studio>" },
   "ratelimits": [
     { "name": "CONTACT_LIMITER", "namespace_id": "424201", "simple": { "limit": 3, "period": 60 } }
   ]
