@@ -11,7 +11,7 @@ public struct AudioPlayer: View {
 
     @Environment(\.componentMetrics) private var metrics
     @Environment(\.dynamicTypeSize) private var typeSize
-    @State private var owned = OwnedModel()
+    @State private var ownedModel: AudioPlaybackModel?
     private let injected: AudioPlaybackModel?
     private let url: URL?
     private let knownDuration: TimeInterval?
@@ -45,102 +45,100 @@ public struct AudioPlayer: View {
         self.rates = rates
     }
 
-    public var body: some View {
-        let model = resolvedModel
-        content(model)
-            .accessibilityElement(children: .contain)
-            .accessibilityLabel(label)
-            .onDisappear { model.pause() }
+    private var activeModel: AudioPlaybackModel? {
+        injected ?? ownedModel
     }
 
-    private var resolvedModel: AudioPlaybackModel {
-        if let injected { return injected }
-        return owned.model(url: url ?? URL(fileURLWithPath: "/"), duration: knownDuration)
+    public var body: some View {
+        content(activeModel)
+            .accessibilityElement(children: .contain)
+            .accessibilityLabel(label)
+            .onAppear {
+                if injected == nil, ownedModel == nil, let url {
+                    ownedModel = AudioPlaybackModel(url: url, duration: knownDuration)
+                }
+            }
+            .onChange(of: url) { _, nextURL in
+                guard injected == nil else { return }
+                ownedModel?.teardown()
+                ownedModel = nextURL.map { AudioPlaybackModel(url: $0, duration: knownDuration) }
+            }
+            .onDisappear {
+                activeModel?.pause()
+            }
     }
 
     @ViewBuilder
-    private func content(_ model: AudioPlaybackModel) -> some View {
-        let known = model.duration
-        let playing = model.state == .playing
-        let button = AudioPlayButton(playing: playing, loading: model.state == .loading, label: label,
-                                     size: variant == .full ? .large : .medium) { model.toggle() }
-        let scrubber = scrubber(model)
+    private func content(_ model: AudioPlaybackModel?) -> some View {
+        let state = model?.state ?? .loading
+        let current = model?.currentTime ?? 0
+        let known = model?.duration ?? AudioPlaybackModel.usable(knownDuration)
+        let currentRate = model?.rate ?? 1
+        let playing = state == .playing
+        let button = AudioPlayButton(playing: playing, loading: state == .loading, label: label,
+                                     size: variant == .full ? .large : .medium) { model?.toggle() }
+        let scrubber = scrubber(model, state: state, current: current, duration: known ?? 0)
         if typeSize.isAccessibilitySize {
             VStack(alignment: .leading, spacing: metrics.compact) {
                 button
                 scrubber
-                clocks(model, known: known)
-                if variant == .full && model.state != .error { rate(model) }
+                clocks(state: state, current: current, known: known)
+                if variant == .full && state != .error { rate(model, currentRate: currentRate) }
             }
         } else if variant == .full {
             HStack(spacing: metrics.medium) {
                 button
                 VStack(alignment: .leading, spacing: metrics.tight) {
                     scrubber
-                    clocks(model, known: known)
+                    clocks(state: state, current: current, known: known)
                 }
-                if model.state != .error { rate(model) }
+                if state != .error { rate(model, currentRate: currentRate) }
             }
         } else {
             HStack(spacing: metrics.compact) {
                 button
                 scrubber
-                if model.state != .error { clocks(model, known: known) }
+                if state != .error { clocks(state: state, current: current, known: known) }
             }
         }
     }
 
     @ViewBuilder
-    private func clocks(_ model: AudioPlaybackModel, known: TimeInterval?) -> some View {
+    private func clocks(state: AudioPlaybackState, current: TimeInterval, known: TimeInterval?) -> some View {
         switch variant {
         case .compact:
-            let resting = model.currentTime < 1 && model.state != .playing
-            AudioTime(current: model.currentTime, duration: known, mode: resting ? .total : .remaining)
+            let resting = current < 1 && state != .playing
+            AudioTime(current: current, duration: known, mode: resting ? .total : .remaining)
         case .full:
             HStack {
-                AudioTime(current: model.currentTime)
+                AudioTime(current: current)
                 Spacer(minLength: metrics.compact)
-                AudioTime(current: model.currentTime, duration: known, mode: known == nil ? .elapsed : .remaining)
+                AudioTime(current: current, duration: known, mode: known == nil ? .elapsed : .remaining)
             }
         }
     }
 
-    private func rate(_ model: AudioPlaybackModel) -> some View {
-        PlaybackRateButton(rate: model.rate, rates: rates) { model.setRate($0) }
+    private func rate(_ model: AudioPlaybackModel?, currentRate: Double) -> some View {
+        PlaybackRateButton(rate: currentRate, rates: rates) { model?.setRate($0) }
     }
 
     @ViewBuilder
-    private func scrubber(_ model: AudioPlaybackModel) -> some View {
-        if model.state == .error {
+    private func scrubber(_ model: AudioPlaybackModel?, state: AudioPlaybackState,
+                          current: TimeInterval, duration: TimeInterval) -> some View {
+        if state == .error {
             HStack(spacing: metrics.compact) {
                 StatusLabel("Couldn't play this clip", icon: .error, tone: .danger)
-                Button("Retry") { model.retry() }
+                Button("Retry") { model?.retry() }
                     .buttonStyle(ActionButtonStyle(.quiet))
             }
         } else if peaks.isEmpty {
-            ProgressTrack(current: model.currentTime, duration: model.duration ?? 0, label: "Seek in \(label)") {
-                model.seek(to: $0)
+            ProgressTrack(current: current, duration: duration, label: "Seek in \(label)") {
+                model?.seek(to: $0)
             }
         } else {
-            AudioWaveform(peaks: peaks, duration: model.duration ?? 0, current: model.currentTime,
-                          label: "Seek in \(label)") { model.seek(to: $0) }
+            AudioWaveform(peaks: peaks, duration: duration, current: current,
+                          label: "Seek in \(label)") { model?.seek(to: $0) }
         }
-    }
-}
-
-/// Holds the model a URL-initialised player creates, once, and rebuilds it only when the URL changes.
-@MainActor
-private final class OwnedModel {
-    private var model: AudioPlaybackModel?
-    private var url: URL?
-
-    func model(url: URL, duration: TimeInterval?) -> AudioPlaybackModel {
-        if let model, self.url == url { return model }
-        model?.teardown()
-        let fresh = AudioPlaybackModel(url: url, duration: duration)
-        model = fresh
-        self.url = url
-        return fresh
     }
 }
 

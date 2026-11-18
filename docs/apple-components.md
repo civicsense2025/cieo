@@ -1,6 +1,6 @@
 # Apple component foundation
 
-Cieo owns the reusable Swift source. `CieoUI` depends only on the existing Cieo motion engine; the complete 550-recipe native catalogue remains in the separate `CieoAtoms` product. `CieoGallery` exposes both that catalogue and the reusable controls without changing authentication.
+Cieo owns the reusable Swift source. `CieoUI` depends only on the Cieo motion engine; the complete 550-recipe native catalogue lives in `CieoAtoms` (which depends on `Cieo` and `CieoUI` so recipes can adopt shared theme, typography, metrics, `RenderPolicy` and `FlowStack` foundations). `CieoGallery` exposes both that catalogue and the reusable controls—covered by `CieoGalleryTests`—without changing authentication.
 
 The [catalogue migration receipt](catalogue-inventory.md) records current recipe identities and source hashes; it does not establish production component readiness.
 
@@ -18,6 +18,8 @@ The [catalogue migration receipt](catalogue-inventory.md) records current recipe
 - [Haptics and drag to reorder](#haptics-and-drag-to-reorder)
 - [Consumer rollout boundary](#consumer-rollout-boundary)
 - [Documentation ownership](#documentation-ownership)
+- [Editorial frames](#editorial-frames)
+- [Wave 2 physics, state, agents, styles and adaptive gallery](#wave-2-physics-state-agents-styles-and-adaptive-gallery)
 
 ## Implementation contract
 
@@ -37,9 +39,9 @@ Acceptance requires the Cieo full package and web gates, policy regression tests
 
 ## Interactive gallery
 
-The optional `CieoGallery` product contains local fixtures and no authentication dependency. Its opening screen searches all 550 recipes, filters by searchable category and provides Saved and Recent collections. Each detail instantiates one recipe on a stationary, vertically scrolling canvas. Pause/Resume and Replay remain outside scrolling content, and recipe notes open separately. Inactive or paused details unmount their preview. Native Liquid Glass styles preview controls on iOS/macOS 26+, with an opaque fallback for Reduce Transparency and older systems. Foundations & controls opens motion replay, atoms, molecules and composed patterns. The production `CieoUI` product now includes ActionButton, ProgressRing, SelectionChip, SearchField, PreferenceRow, ExpandablePanel and TaskPanel alongside the original eight components. Hosts own bindings, asynchronous work and cancellation.
+The optional `CieoGallery` product contains local fixtures and no authentication dependency. Its opening screen searches all 550 recipes, filters by searchable category (with `MotionAtomInfo` supporting optional `layer`, `pack`, `families` and `formula` metadata) and provides Saved and Recent collections. Each detail instantiates one recipe on a stationary, vertically scrolling canvas. Pause/Resume and Replay remain outside scrolling content, and recipe notes open separately. Inactive or paused details unmount their preview. Native Liquid Glass styles preview controls on iOS/macOS 26+, with an opaque fallback for Reduce Transparency and older systems. Foundations & controls opens motion replay, atoms, molecules, editorial & display pieces (`EditorialExamples.swift`) and composed patterns, and its Theme & Rendering sheet includes a live 7-brand and 3-ground preset switcher. The production `CieoUI` product includes ActionButton, ProgressRing, SelectionChip, SearchField, PreferenceRow, ExpandablePanel and TaskPanel alongside the editorial, social, audio and messaging components. Hosts own bindings, asynchronous work and cancellation.
 
-Spring tracks use the shared Snap/Base/Soft presets. The Metal highlight accepts finite progress and remains opt-in in production. The gallery opts in explicitly; system accessibility, scene inactivity and Low Power Mode still disable effects. There are no continuous animation loops. The demo provides a reduced-motion preview in Rendering settings.
+Spring tracks use the shared Snap/Base/Soft/Lazy presets (`SpringPreset(w:zeta:)` supports exact analytical underdamped motion for `zeta` in `0.7...1.0` while keeping `zeta == 1.0` critically damped, `Animation.motion(_:initialVelocity:)` and `withMotion(_:initialVelocity:reduceMotion:_:)` forward release velocity, `EdgesIndicator.Axis` tracks `.horizontal`, `.vertical` or `.both` with trailing-edge lag, and `MotionSchedule` steps at 120 Hz until `restTime` so idle CPU is zero). The Metal highlight accepts finite progress and remains opt-in in production. The gallery opts in explicitly; system accessibility, scene inactivity and Low Power Mode still disable effects. There are no continuous animation loops. The demo provides a reduced-motion preview in Rendering settings.
 
 ## Soft surfaces
 
@@ -51,14 +53,14 @@ The complete portable export includes CieoAtoms and its registry tests. Native s
 
 [ComponentConfiguration](../Sources/CieoUI/Foundations/ComponentConfiguration.swift)
 adds `ComponentTypography` (action, selection, field, fieldLabel), immutable
-`ComponentMetrics` (compact, standard, corner, touchTarget), and per-control
+`ComponentMetrics` (with tiered radii `cornerSmall`, `corner`, `cornerSurface`, `cornerPill`, density heights `controlXS`, `controlSmall`, `controlHeight`, `controlLarge`, `controlXL`, and `ComponentMetrics.preset(density:corners:)`), and per-control
 `ControlAppearance`. Install `componentTypography`, `componentMetrics` and
-`componentTheme` through [Theme](../Sources/CieoUI/Foundations/Theme.swift).
+`componentTheme` through [Theme](../Sources/CieoUI/Foundations/Theme.swift), or construct one of the 21 generated brand-by-ground palettes via `Theme.preset(brand:ground:elevation:)` backed by [ThemePresets](../Sources/CieoUI/Foundations/ThemePresets.swift) (`ThemeBrand`: `.instrument`, `.ledger`, `.folio`, `.signal`, `.atelier`, `.verdict`, `.almanac`; `ThemeGround`: `.paper`, `.chalk`, `.night`; `ElevationStyle`: `.ring`, `.soft`).
 Defaults preserve existing callers. Geometry rejects nonfinite overrides,
 normalizes negative dimensions and retains a 44-point minimum target.
 
 [ActionButtonStyle](../Sources/CieoUI/Atoms/ActionButtonStyle.swift) accepts
-`appearance`; [fieldChrome](../Sources/CieoUI/Molecules/FieldChrome.swift) styles
+an optional `appearance`, falls back to `@Environment(\.controlAppearance)` when omitted, and honors `configuration.role == .destructive` with `theme.danger`; [fieldChrome](../Sources/CieoUI/Molecules/FieldChrome.swift) styles
 a host-owned native field without taking focus, submit, validation or text state.
 Appearance overrides font, padding, minimum dimensions, radius and semantic
 colors, including an optional host border. `borderPlacement` selects centered
@@ -69,8 +71,9 @@ Hosts keep field input purpose and
 platform keyboard/content configuration.
 
 [ActionButton](../Sources/CieoUI/Atoms/ActionButton.swift) accepts emphasis,
-appearance, readyAccessibilityValue and busyAccessibilityValue.
-[SegmentedTabs](../Sources/CieoUI/Molecules/SegmentedTabs.swift) switches between views of one screen: an accent underline marks the chosen tab over a single hairline, the row scrolls sideways instead of cutting a title, and a bound value that is not one of the tabs shows the first. Each tab can carry a spoken value such as a count.
+`ActionButton.Sizing` (`.flexible` default or `.fitted` for intrinsic-width toolbar/inline actions), appearance, readyAccessibilityValue and busyAccessibilityValue.
+[SegmentedTabs](../Sources/CieoUI/Molecules/SegmentedTabs.swift) switches between views of one screen: an accent `EdgesIndicator` underline glides between chosen tabs over a single hairline (respecting `RenderPolicy`), the row scrolls sideways instead of cutting a title, and a bound value that is not one of the tabs shows the first. Each tab can carry a spoken value such as a count.
+[FeedbackPopover](../Sources/CieoUI/Molecules/FeedbackPopover.swift) accepts an optional controlled `text: Binding<String>?` and `preserveDraftOnSubmit: Bool` so asynchronous hosts can retain drafts until submission succeeds.
 
 [SelectionChip](../Sources/CieoUI/Atoms/SelectionChip.swift) accepts selected and
 unselected accessibility values; [SearchField](../Sources/CieoUI/Molecules/SearchField.swift)
@@ -127,10 +130,10 @@ Components choose a role and never a value. A host changes one value at the root
 
 | Slot | Where | Roles |
 | --- | --- | --- |
-| Colour | `componentTheme` | accent, onAccent, tint, surface, foreground, secondary, subtle, border, track, block, onBlock, onBlockSecondary, danger, success, warning; background (the page) and quietBackground (a grouped ground), both defaulting to the platform's system colours |
-| Elevation | `componentTheme.floatingShadow` | one `ComponentShadow` (colour, radius, x, y) cast by `.floatingShadow()` under anything that floats; `ComponentShadow.none` keeps a host flat |
+| Colour | `componentTheme` | accent, onAccent, accentHover, accentSoft, onAccentSoft, tint, surface, surfaceLow, surfaceHigh, raised, sunken, foreground, secondary, subtle, border, borderStrong, focus, selection, track, block, onBlock, onBlockSecondary, danger, dangerSoft, success, successSoft, warning, warningSoft, info, infoSoft; background (the page) and quietBackground (a grouped ground), both defaulting to the platform's system colours |
+| Elevation | `componentTheme.floatingShadow` / `elevationRingWidth` | one `ComponentShadow` (colour, radius, x, y) cast by `.floatingShadow()` under anything that floats (`ComponentShadow.none` keeps a host flat), paired with `elevationRingWidth` for crisp ring elevation |
 | Text | `componentTypography` | title, subtitle, heading, strongHeading, body, strongBody, detail, strongDetail, reading, glyph, prominentGlyph, value, marker, caption, smallGlyph (a glyph beside the smallest text), plus the control roles action, selection, field, fieldLabel |
-| Spacing and strokes | `componentMetrics` | tight 4, compact 8, snug 10 (the inside of a pill or chip), medium 12, standard 16, loose 20, section 24; corner; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
+| Spacing and strokes | `componentMetrics` | tight 4, compact 8, snug 10 (the inside of a pill or chip), medium 12, standard 16, loose 20, section 24; cornerSmall, corner, cornerSurface, cornerPill; controlXS, controlSmall, controlHeight, controlLarge, controlXL; touchTarget (44 floor); bar, thinBar, hairline; glyphScale 0.8 (a drawn glyph's side as a share of its text line, 0 to 1) |
 | Press feedback | `controlAppearance` | pressedOpacity and disabledOpacity for controls that take no `appearance:` of their own, such as SegmentedControl |
 | Glyphs | `componentIcons` | disclosure, info, check, previous, next, search, clear, error, selected, unselected (the host closure runs on the main actor, so a glyph may hold `@ScaledMetric` state) |
 | Display type | `displayTypography` | display, title, headline and three numeral sizes |
@@ -160,8 +163,8 @@ SwiftUI twins of the web social kit, with the same names, behaviour rules and pu
 
 | Area | Atoms | Molecules | Organisms |
 | --- | --- | --- | --- |
-| Audio | AudioTime, AudioPlayButton, AudioWaveform, PlaybackRateButton, AudioLevelMeter, SpeakerTile | AudioPlayer (with `AudioPlaybackModel`), AudioTranscript, VoiceRecorder (with `VoiceRecorderModel`) | AudioRoom |
-| Comments | ByLine, ReplyPreview, CharacterCountRing, VerifiedBadge, Mention, RichText, NewItemsPill | Comment, CommentComposer, LinkPreview | CommentThread |
+| Audio | AudioTime, AudioPlayButton, AudioWaveform, PlaybackRateButton, AudioLevelMeter, SpeakerTile | AudioPlayer (with [AudioPlaybackModel](../Sources/CieoUI/Molecules/AudioPlaybackModel.swift), [AudioPlaybackEngine](../Sources/CieoUI/Molecules/AudioPlaybackEngine.swift) and [AudioSessionManager](../Sources/CieoUI/Molecules/AudioSessionManager.swift)), AudioTranscript, VoiceRecorder (with [VoiceRecorderModel](../Sources/CieoUI/Molecules/VoiceRecorderModel.swift), [VoiceRecorderRuntime](../Sources/CieoUI/Molecules/VoiceRecorderRuntime.swift), [VoiceRecorderDevice](../Sources/CieoUI/Molecules/VoiceRecorderDevice.swift) and [VoiceRecorderPureHelpers](../Sources/CieoUI/Molecules/VoiceRecorderPureHelpers.swift)) | AudioRoom |
+| Comments | ByLine, ReplyPreview, CharacterCountRing, VerifiedBadge, Mention, RichText, NewItemsPill | Comment, CommentComposer, LinkPreview | [CommentThread](../Sources/CieoUI/Organisms/CommentThread.swift) (with [CommentTree](../Sources/CieoUI/Organisms/CommentTree.swift)) |
 | Engagement | CompactCount, CountButton, FollowButton, NotifyToggle, ShareButton, Rating | ActionBar, ReactionPicker, ReactionSummary, Poll, ThumbsFeedback | |
 | Messaging | TypingIndicator, DeliveryStatus, UnreadDivider, Avatar, GroupAvatar | SeenBy, ConversationListItem | ConversationList |
 | Review | AnnotationPin | FeedbackPopover, ActivityItem | AnnotationLayer |
@@ -238,8 +241,27 @@ A failed recorder completion preserves the last observed elapsed time, including
 One idea per frame, in sentence case, on a ground chosen by role. These pieces read every style from the slots; the host installs its palette, a medium display weight and its fonts.
 
 - Text roles: `componentTypography.kicker` (the short line above a headline and a chip's text) and `reference` (monospaced by default, for section numbers and page counts).
-- Atoms: [TopicChip](../Sources/CieoUI/Atoms/TopicChip.swift) (accent dot and topic, replacing uppercase eyebrows), [ReferenceText](../Sources/CieoUI/Atoms/ReferenceText.swift) (`ReferenceText.page(4, of: 18)` reads "Page 4 of 18" and never shows page 0 or a page past the total), [Portrait](../Sources/CieoUI/Atoms/Portrait.swift) (a face in a circle with a meaning-carrying ring; grayscale by saturation keeps the ring in colour; no photo shows a quiet fill, never initials), [LegendItem](../Sources/CieoUI/Atoms/LegendItem.swift) (a swatch and the meaning in words).
-- Molecules: [FrameBar](../Sources/CieoUI/Molecules/FrameBar.swift) (leading and trailing pieces along a frame's edge, stacking when narrow), [PersonRow](../Sources/CieoUI/Molecules/PersonRow.swift) (portrait, one-line name, detail; `compact` is a roll-call entry), [QuotedText](../Sources/CieoUI/Molecules/QuotedText.swift) (a reference, a hanging accent quotation mark and the exact words; no side border), [StepList](../Sources/CieoUI/Molecules/StepList.swift) (quiet numbers, a check once done, "next" on the current step; a stale index is clamped).
-- Organisms: [ContentFrame](../Sources/CieoUI/Organisms/ContentFrame.swift) (top bar, centred content, bottom bar on `background` or `block`; on a block, foreground and secondary switch to the block's partners) and [RollCall](../Sources/CieoUI/Organisms/RollCall.swift) (groups led by a dot, title and count, with compact rows in as many columns as fit; a bad column width falls back to 140 points).
+- Atoms: [TopicChip](../Sources/CieoUI/Atoms/TopicChip.swift) (canonical alias `TagChip`; accent dot and topic, replacing uppercase eyebrows), [ReferenceText](../Sources/CieoUI/Atoms/ReferenceText.swift) (canonical alias `MonoText`; `ReferenceText.page(4, of: 18)` reads "Page 4 of 18" and never shows page 0 or a page past the total), [Portrait](../Sources/CieoUI/Atoms/Portrait.swift) (a face in a circle with a meaning-carrying ring; grayscale by saturation keeps the ring in colour; no photo shows a quiet fill, never initials), [LegendItem](../Sources/CieoUI/Atoms/LegendItem.swift) (a swatch and the meaning in words), and `ProportionBar` (canonical alias for `ShareBar`).
+- Molecules: [FrameBar](../Sources/CieoUI/Molecules/FrameBar.swift) (canonical alias `PageBar`; leading and trailing pieces along a frame's edge, stacking when narrow), [PersonRow](../Sources/CieoUI/Molecules/PersonRow.swift) (portrait, one-line name, detail; `compact` is a roll-call entry), [QuotedText](../Sources/CieoUI/Molecules/QuotedText.swift) (a reference, a hanging accent quotation mark and the exact words; no side border), [StepList](../Sources/CieoUI/Molecules/StepList.swift) (quiet numbers, a check once done, "next" on the current step; a stale index is clamped).
+- Organisms: [ContentFrame](../Sources/CieoUI/Organisms/ContentFrame.swift) (top bar, centred content, bottom bar on `background` or `block`; on a block, foreground and secondary switch to the block's partners) and [RollCall](../Sources/CieoUI/Organisms/RollCall.swift) (canonical alias `GroupedRoster`; groups led by a dot, title and count, with compact rows in as many columns as fit; a bad column width falls back to 140 points).
 
 [EditorialFrameTests](../Tests/CieoUITests/EditorialFrameTests.swift) pin the page bounds, the step states and the column fallback, and draw every piece at 390 points in light and dark.
+
+## Wave 2 physics, state, agents, styles and adaptive gallery
+
+Wave 2 extends `Cieo`, `CieoUI`, and `CieoGallery` while preserving the 300-line file ceiling and environment-slot architecture:
+
+- **Physics (`Cieo`)**: [Physics](../Sources/Cieo/Physics.swift) adds `MotionPhysics.rubberBand(overshoot:dimension:resistance:)`, `MotionPhysics.projectMomentum(value:velocity:decelerationRate:)`, `MotionPhysics.projectToDetent(value:velocity:detents:velocityThreshold:)`, and `VelocityTracker` for bounded sliding-window release velocity.
+- **State machines, motion policy, copy & styles (`CieoUI` foundations)**:
+  - [StateMachines](../Sources/CieoUI/Foundations/StateMachines.swift) provides `TransitionEnvelope`, `AsyncActionPhase` / `AsyncActionState` (preserving `attemptID` across `.failed` and `.uncertain` retries while minting fresh IDs after `.succeeded`), and `SheetDetentState`.
+  - [InputStateMachines](../Sources/CieoUI/Foundations/InputStateMachines.swift) adds `DisclosureState` (reversible mid-flight), `FieldValidationState` (reward early on input, punish late on blur) and `SelectionState` (single or multiple with a roving focus index and a direction sign), matching the web `cieo/state` machines.
+  - [ComponentMotionConfiguration](../Sources/CieoUI/Foundations/ComponentMotionConfiguration.swift) and [ComponentStrings](../Sources/CieoUI/Foundations/ComponentStrings.swift) install semantic spring/scale/speed presets, `HapticsPolicy` (`.disabled`, `.subtle`, `.standard`), and localizable default copy via `@Entry` environment values.
+  - [ComponentStyles](../Sources/CieoUI/Foundations/ComponentStyles.swift) defines `ChipStyle` (`.capsule`, `.rounded`, `.soft`, `.outlined`), `NoticeStyle` + `Notice.Tone` (`.neutral`, `.info`, `.success`, `.warning`, `.danger`), and `ProgressRingStyle` (`.automatic`, `.subtle`) with `*StyleConfiguration` values and `.chipStyle(_:)`, `.noticeStyle(_:)`, and `.progressRingStyle(_:)` modifiers.
+- **Agent, overlay, toast & auth controls (`CieoUI`)**:
+  - [AgentEvent](../Sources/CieoUI/Foundations/AgentEvent.swift), [AgentViews](../Sources/CieoUI/Foundations/AgentViews.swift), and [AgentStore](../Sources/CieoUI/Foundations/AgentStore.swift) reduce contiguous agent streams with duplicate suppression, gap detection, settled-first entity eviction, and non-optimistic approval state.
+  - [AgentStatus](../Sources/CieoUI/Atoms/AgentStatus.swift), [AgentIcon](../Sources/CieoUI/Atoms/AgentIcon.swift) (24 geometric roles), [RunControls](../Sources/CieoUI/Molecules/RunControls.swift), [ToolCallDisclosure](../Sources/CieoUI/Molecules/ToolCallDisclosure.swift), [ApprovalRequest](../Sources/CieoUI/Molecules/ApprovalRequest.swift), [AgentLanes](../Sources/CieoUI/Organisms/AgentLanes.swift) (cycle-safe hierarchy), and [AgentActivity](../Sources/CieoUI/Organisms/AgentActivity.swift) render host-owned agent state.
+  - [ToastQueueModel](../Sources/CieoUI/Foundations/ToastQueueModel.swift), [ToastBanner](../Sources/CieoUI/Molecules/ToastBanner.swift), [ToastHost](../Sources/CieoUI/Molecules/ToastHost.swift), [BottomSheetPanel](../Sources/CieoUI/Organisms/BottomSheetPanel.swift), [CommandPaletteView](../Sources/CieoUI/Organisms/CommandPaletteView.swift), [SelectMenu](../Sources/CieoUI/Molecules/SelectMenu.swift), [ModalDialog](../Sources/CieoUI/Molecules/ModalDialog.swift), [DataTable](../Sources/CieoUI/Organisms/DataTable.swift), [AuthOtpInput](../Sources/CieoUI/Atoms/AuthOtpInput.swift), [AuthPasswordField](../Sources/CieoUI/Atoms/AuthPasswordField.swift), and [AuthSignInCard](../Sources/CieoUI/Organisms/AuthSignInCard.swift) cover priority toasts, detent sheets, keyboard-roving command palettes with `EdgesIndicator`, single/multi searchable select menus, destructive/async modal dialogs, sortable multi-column data tables, and accessible authentication flows.
+  - [ActionButton](../Sources/CieoUI/Atoms/ActionButton.swift), [SelectionChip](../Sources/CieoUI/Atoms/SelectionChip.swift), [ProgressRing](../Sources/CieoUI/Atoms/ProgressRing.swift), [LabeledField](../Sources/CieoUI/Molecules/LabeledField.swift), and [Notice](../Sources/CieoUI/Molecules/Notice.swift) add `@ViewBuilder` content/icon/label/action slots and `AsyncActionPhase` wiring without breaking existing call sites.
+- **Adaptive gallery (`CieoGallery`) & standalone app (`CieoShowcase`)**:
+  - [CatalogRoot](../Sources/CieoGallery/CatalogRoot.swift) hosts [AdaptiveCatalogShell](../Sources/CieoGallery/AdaptiveCatalogShell.swift) (`NavigationSplitView` + live `.inspector` on regular widths/macOS; `TabView`/`NavigationStack` + multi-detent sheet inspector on compact widths) with global `⌘K` command search (`CatalogCommandIndex` + `CommandPaletteView` indexing sections, featured `MotionAtoms`, and instant brand/ground switching), [ConfigurableSpecimen](../Sources/CieoGallery/ConfigurableSpecimen.swift) (container width slider, `DynamicTypeSize` override, LTR/RTL toggle, and copyable SwiftUI code), [ThemeStudioView](../Sources/CieoGallery/ThemeStudioView.swift), [PhysicsLabView](../Sources/CieoGallery/PhysicsLabView.swift) (Swift `Charts` `x(t)`, `v(t)`, `Track` retarget superposition, and live `MotionHaptic` log), and [AgentAndAuthExamples](../Sources/CieoGallery/AgentAndAuthExamples.swift).
+  - [CieoShowcaseApp](../Sources/CieoShowcase/CieoShowcaseApp.swift) provides the standalone runnable `CieoShowcase` executable target (`swift build --product CieoShowcase`) with native macOS window sizing and `.commands` menu bar integration (`⌘K` Command Search, `⌥⌘I` Inspector toggle, Theme Brand/Ground menus, and Reduce Motion preview) while keeping `scripts/export-apple.py` library-mirror clean.

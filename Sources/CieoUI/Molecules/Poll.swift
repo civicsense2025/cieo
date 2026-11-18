@@ -113,6 +113,7 @@ private struct PollRow: View {
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
     @Environment(\.componentIcons) private var icons
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     let option: PollOption
     let percent: Int
@@ -170,7 +171,7 @@ private struct PollRow: View {
         .motionAnimation(.soft, value: shownPercent)
         .task(id: results) {
             guard results else { revealed = false; return }
-            if !reduceMotion { try? await Task.sleep(for: .milliseconds(delay)) }
+            if policy.allowsMotion && !reduceMotion { try? await Task.sleep(for: .milliseconds(delay)) }
             revealed = true
         }
     }

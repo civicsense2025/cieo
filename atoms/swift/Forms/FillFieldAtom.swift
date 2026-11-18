@@ -7,8 +7,9 @@ public struct FillFieldAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var value = ""
     @State private var touched = false
+    @State private var requiredField = true
     private var bad: Bool { touched && !value.isEmpty && value.count < 3 }
-    private var empty: Bool { touched && value.isEmpty }
+    private var empty: Bool { requiredField && touched && value.isEmpty }
     private var good: Bool { value.count >= 3 }
     public init() {}
 
@@ -39,7 +40,7 @@ public struct FillFieldAtom: MotionAtomView {
                 }
                 .padding(16).frame(maxWidth: 320)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("Required field", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Required field", isOn: $requiredField).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

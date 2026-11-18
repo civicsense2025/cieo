@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct CallRsvpAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "rsvp", category: "Forms", name: "Call RSVP",
+    public static let info = MotionAtomInfo(id: "rsvp", category: "Video calls", name: "Call RSVP",
         summary: "The plate slides behind your pick with its trailing edge 60 ms late, and the headcount rolls its digits. Your answer swaps in a terminal you can change.")
 
     private let options = ["Going", "Maybe", "Can't"]

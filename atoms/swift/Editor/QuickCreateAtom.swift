@@ -47,7 +47,7 @@ public struct QuickCreateAtom: MotionAtomView {
                 switch stage {
                 case .button: Button { go(.menu) } label: { Label { Text("New").offset(y: nudge) } icon: { Image(systemName: "plus").offset(y: nudge) }.font(.footnote.weight(.semibold)).frame(maxWidth: .infinity, maxHeight: .infinity) }.buttonStyle(.plain)
                 case .menu:
-                    VStack(spacing: 0) { ForEach(Array(kinds.enumerated()), id: \.offset) { i, k in
+                    VStack(spacing: 0) { ForEach(Array(kinds.enumerated()), id: \.element.0) { i, k in
                         Button { kind = k.0; go(.form) } label: {
                             HStack(spacing: 8) {
                                 Image(systemName: k.1).frame(width: 26, height: 26).background(.quaternary, in: RoundedRectangle(cornerRadius: 8)).offset(y: nudge)

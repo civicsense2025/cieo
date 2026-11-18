@@ -33,7 +33,7 @@ public struct DeliveryStatus: View {
         }
         .font(typography.detail)
         .foregroundStyle(color)
-        .motion(.base, value: status)
+        .motionAnimation(.base, value: status)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Self.spokenLabel(status, time: time))
         .onChange(of: status) { _, new in

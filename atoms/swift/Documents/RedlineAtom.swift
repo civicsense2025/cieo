@@ -8,16 +8,17 @@ public struct RedlineAtom: MotionAtomView {
     private enum Mode { case original, compare, revised }
     @State private var mode = Mode.compare
     @State private var accepted = false
+    @State private var markupColors = true
     public init() {}
 
     private func oldSpan() -> Text {
         Text(" Payment is due in 30 days. ").font(.callout)
-            .foregroundColor(mode == .compare ? .red : (mode == .revised || accepted ? .clear : .primary))
+            .foregroundColor(mode == .compare ? (markupColors ? .red : .secondary) : (mode == .revised || accepted ? .clear : .primary))
     }
 
     private func newSpan() -> Text {
         Text(" Payment is due in 14 days with a 2% discount. ").font(.callout)
-            .foregroundColor(mode == .original ? .clear : .primary)
+            .foregroundColor(mode == .original ? .clear : (mode == .compare && markupColors && !accepted ? .green : .primary))
     }
 
     public var body: some View {
@@ -37,7 +38,7 @@ public struct RedlineAtom: MotionAtomView {
                         if accepted { Text("All changes accepted — clean copy ✓").foregroundStyle(.green).motionTransition(.swap()) }
                     }.font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
                 }
-                Toggle("Show markup colors", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Show markup colors", isOn: $markupColors).font(.caption).foregroundStyle(.secondary)
             }
             .padding(16).frame(maxWidth: 400)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

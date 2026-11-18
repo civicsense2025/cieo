@@ -8,6 +8,7 @@ public struct OfferStackAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var gone: Set<Int> = []
     @State private var dragX: CGFloat = 0
+    @State private var showDepth = true
     public init() {}
     private var live: [Int] { offers.indices.filter { !gone.contains($0) } }
     public var body: some View {
@@ -30,16 +31,16 @@ public struct OfferStackAtom: MotionAtomView {
                             Button { withMotion(.base, reduceMotion: reduce) { _ = gone.insert(i) } } label: { Image(systemName: "xmark").font(.caption) }.buttonStyle(.plain).accessibilityLabel("Dismiss \(offers[i].0)")
                         }
                         .padding(12).background { RoundedRectangle(cornerRadius: 12).fill(.background) }.shadow(radius: 3)
-                        .scaleEffect(1 - CGFloat(depth) * 0.04).offset(y: CGFloat(depth) * 10)
+                        .scaleEffect(showDepth ? 1 - CGFloat(depth) * 0.04 : 1).offset(y: showDepth ? CGFloat(depth) * 10 : 0)
                         .offset(x: depth == 0 ? dragX : 0)
                         .gesture(depth == 0 ? DragGesture().onChanged { dragX = $0.translation.width }
                             .onEnded { v in
                                 if abs(v.translation.width) > 90 || abs(v.predictedEndTranslation.width) > 260 { withMotion(.base, reduceMotion: reduce) { gone.insert(i); dragX = 0 } }
                                 else { withMotion(.base, reduceMotion: reduce) { dragX = 0 } } } : nil)
-                        .motion(.base, value: live).motion(.base, value: dragX)
+                        .motion(.base, value: live).motion(.base, value: dragX).motion(.base, value: showDepth)
                     }
                 }.frame(height: 130)
-                Toggle("Depth effect", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Depth effect", isOn: $showDepth).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 320)
         }
     }

@@ -43,7 +43,7 @@ public struct StepList: View {
                     .frame(minWidth: metrics.loose, alignment: .leading)
                     .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: metrics.tight) {
-                        (Text(step.title) + (state == .current ? Text(verbatim: " · ").foregroundColor(theme.secondary) + nextLabel.foregroundColor(theme.secondary) : Text(verbatim: "")))
+                        (Text(step.title) + (state == .current ? Text(verbatim: " · ").foregroundStyle(theme.secondary) + nextLabel.foregroundStyle(theme.secondary) : Text(verbatim: "")))
                             .font(typography.strongBody)
                         if let detail = step.detail {
                             Text(detail).font(typography.detail).foregroundStyle(theme.secondary)

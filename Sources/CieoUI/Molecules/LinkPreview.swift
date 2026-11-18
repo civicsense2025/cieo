@@ -74,7 +74,7 @@ public struct LinkPreview: View {
                 content.transition(.opacity)
             }
         }
-        .motion(.base, value: loading)
+        .motionAnimation(.base, value: loading)
     }
 
     private var content: some View {

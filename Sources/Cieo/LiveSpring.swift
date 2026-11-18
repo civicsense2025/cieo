@@ -14,14 +14,16 @@ public struct LiveSpring: Sendable {
     private var velocity: Double = 0
     private var epoch: Double
     private var frequency: Double
+    private var zeta: Double
     private let positionTolerance: Double
     private let velocityTolerance: Double
 
-    public init(_ value: Double, at time: Double, frequency: Double = 22,
+    public init(_ value: Double, at time: Double, frequency: Double = 22, zeta: Double = 1.0,
                 positionTolerance: Double = 0.001, velocityTolerance: Double = 0.001) throws {
         try Self.value(value)
         try Self.time(time, since: 0)
         try Self.frequency(frequency)
+        try Self.damping(zeta)
         guard positionTolerance.isFinite, velocityTolerance.isFinite,
               (1e-12...1e6).contains(positionTolerance),
               (1e-12...1e6).contains(velocityTolerance) else { throw LiveSpringError.invalidValue }
@@ -29,6 +31,7 @@ public struct LiveSpring: Sendable {
         origin = value
         epoch = time
         self.frequency = frequency
+        self.zeta = zeta
         self.positionTolerance = positionTolerance
         self.velocityTolerance = velocityTolerance
     }
@@ -37,50 +40,77 @@ public struct LiveSpring: Sendable {
         try Self.time(time, since: epoch)
         let dt = time - epoch
         let w = frequency
-        let u = w * dt
+        if zeta >= 1.0 {
+            let u = w * dt
+            if u > 745 { return LiveSpringSample(value: target, velocity: 0, moving: false) }
+            let offset = origin - target
+            let e = exp(-u)
+            let a = velocity + w * offset
+            let remaining = e * (offset + a * dt)
+            let speed = e * (velocity - w * a * dt)
+            let positionEnvelope = e * (1 + u) * (abs(offset) + abs(velocity) / w)
+            let velocityEnvelope = w * positionEnvelope + e * abs(velocity)
+            let moving = positionEnvelope > positionTolerance || velocityEnvelope > velocityTolerance
+            return LiveSpringSample(value: moving ? target + remaining : target,
+                                    velocity: moving ? speed : 0, moving: moving)
+        }
+        let alpha = zeta * w
+        let u = alpha * dt
         if u > 745 { return LiveSpringSample(value: target, velocity: 0, moving: false) }
+        let wd = w * (1 - zeta * zeta).squareRoot()
         let offset = origin - target
         let e = exp(-u)
-        let a = velocity + w * offset
-        let remaining = e * (offset + a * dt)
-        let speed = e * (velocity - w * a * dt)
-        let positionEnvelope = e * (1 + u) * (abs(offset) + abs(velocity) / w)
-        let velocityEnvelope = w * positionEnvelope + e * abs(velocity)
+        let b = (velocity + alpha * offset) / wd
+        let d = (alpha * velocity + w * w * offset) / wd
+        let c = cos(wd * dt)
+        let s = sin(wd * dt)
+        let remaining = e * (offset * c + b * s)
+        let speed = e * (velocity * c - d * s)
+        let positionEnvelope = e * hypot(offset, b)
+        let velocityEnvelope = e * hypot(velocity, d)
         let moving = positionEnvelope > positionTolerance || velocityEnvelope > velocityTolerance
         return LiveSpringSample(value: moving ? target + remaining : target,
                                 velocity: moving ? speed : 0, moving: moving)
     }
 
-    public mutating func retarget(_ value: Double, at time: Double, frequency: Double? = nil) throws {
+    public mutating func retarget(_ value: Double, at time: Double, frequency: Double? = nil,
+                                  zeta: Double? = nil) throws {
         try Self.value(value)
         let nextFrequency = frequency ?? self.frequency
+        let nextZeta = zeta ?? self.zeta
         try Self.frequency(nextFrequency)
+        try Self.damping(nextZeta)
         let current = try sample(at: time)
         origin = current.value
         velocity = current.velocity
         target = value
         epoch = time
         self.frequency = nextFrequency
+        self.zeta = nextZeta
     }
 
     public mutating func release(from: Double, velocity: Double, to: Double,
-                                 at time: Double, frequency: Double? = nil) throws {
+                                 at time: Double, frequency: Double? = nil, zeta: Double? = nil) throws {
         try Self.value(from)
         try Self.value(velocity)
         try Self.value(to)
         try Self.time(time, since: epoch)
         let nextFrequency = frequency ?? self.frequency
+        let nextZeta = zeta ?? self.zeta
         try Self.frequency(nextFrequency)
+        try Self.damping(nextZeta)
         origin = from
         self.velocity = velocity
         target = to
         epoch = time
         self.frequency = nextFrequency
+        self.zeta = nextZeta
     }
 
     public mutating func jump(_ value: Double, at time: Double) throws {
         try release(from: value, velocity: 0, to: value, at: time)
     }
+
     private static func value(_ value: Double) throws {
         guard value.isFinite, abs(value) <= 1e12 else { throw LiveSpringError.invalidValue }
     }
@@ -91,5 +121,8 @@ public struct LiveSpring: Sendable {
     }
     private static func frequency(_ value: Double) throws {
         guard value.isFinite, (0.001...10_000).contains(value) else { throw LiveSpringError.invalidFrequency }
+    }
+    private static func damping(_ value: Double) throws {
+        guard value.isFinite, (0.7...1.0).contains(value) else { throw LiveSpringError.invalidValue }
     }
 }

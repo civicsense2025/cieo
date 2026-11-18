@@ -55,7 +55,7 @@ public struct AudioTranscript: View {
                                   Self.shouldAutoScroll(now: Date().timeIntervalSinceReferenceDate,
                                                         lastUserScroll: lastUserScroll?.timeIntervalSinceReferenceDate)
                             else { return }
-                            withMotion(.soft, reduceMotion: reduceMotion) { proxy.scrollTo(index, anchor: .center) }
+                            withMotion(.soft, reduceMotion: reduceMotion || !policy.allowsMotion) { proxy.scrollTo(index, anchor: .center) }
                         }
                 }
             } else {
@@ -66,16 +66,24 @@ public struct AudioTranscript: View {
         .accessibilityLabel(label)
     }
 
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
+    private struct IndexedWord: Identifiable {
+        let index: Int
+        let word: Word
+        var id: String { "\(index)-\(word.start)-\(word.text)" }
+    }
+
     private func flow(active: Int) -> some View {
-        FlowStack(spacing: .zero) {
-            ForEach(Array(words.enumerated()), id: \.offset) { index, word in
-                wordView(word, isActive: index == active).id(index)
+        let items = words.enumerated().map { IndexedWord(index: $0.offset, word: $0.element) }
+        return FlowStack(spacing: .zero) {
+            ForEach(items) { item in
+                wordView(item.word, isActive: item.index == active).id(item.index)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .motion(.base, value: active)
+        .motionAnimation(.base, value: active)
     }
 
     @ViewBuilder

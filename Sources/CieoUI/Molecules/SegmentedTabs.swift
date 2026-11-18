@@ -1,3 +1,4 @@
+import Cieo
 import SwiftUI
 
 /// A row of tabs that switch between views of the same screen: the chosen tab sits on an accent underline over
@@ -18,9 +19,13 @@ public struct SegmentedTabs<Value: Hashable>: View {
         }
     }
 
+    private static var coordinateSpace: String { "segmented-tabs" }
+
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
+    @State private var frames: [AnyHashable: CGRect] = [:]
     private let tabs: [Tab]
     @Binding private var selection: Value
 
@@ -37,6 +42,8 @@ public struct SegmentedTabs<Value: Hashable>: View {
 
     public var body: some View {
         let current = Self.selected(in: tabs.map(\.value), matching: selection)
+        let underlineHeight = metrics.compact / 2
+        let measuredFrame = current.flatMap { frames[AnyHashable($0)] }
         let row = HStack(spacing: metrics.compact) {
             ForEach(tabs) { tab in
                 let isSelected = tab.value == current
@@ -47,19 +54,32 @@ public struct SegmentedTabs<Value: Hashable>: View {
                         .padding(.horizontal, metrics.standard)
                         .frame(minHeight: metrics.touchTarget)
                         .overlay(alignment: .bottom) {
-                            Rectangle().fill(theme.accent)
-                                .frame(height: metrics.compact / 2)
-                                .opacity(isSelected ? 1 : 0)
+                            if isSelected && measuredFrame == nil {
+                                Rectangle().fill(theme.accent).frame(height: underlineHeight)
+                            }
                         }
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .reportFrame(tab.value, in: Self.coordinateSpace)
                 .motionAnimation(.snap, value: isSelected)
                 .accessibilityValue(tab.accessibilityValue ?? Text(verbatim: ""))
                 .accessibilityAddTraits(isSelected ? [.isSelected] : [])
             }
         }
-        // The row sits still when it fits and scrolls sideways only when it does not.
+        .overlay(alignment: .topLeading) {
+            if let f = measuredFrame {
+                EdgesIndicator(
+                    frame: CGRect(x: f.minX, y: f.maxY - underlineHeight, width: f.width, height: underlineHeight),
+                    shape: Rectangle(),
+                    style: theme.accent,
+                    motionEnabled: policy.allowsMotion
+                )
+            }
+        }
+        .coordinateSpace(name: Self.coordinateSpace)
+        .onPreferenceChange(FramePreferenceKey.self) { frames = $0 }
+
         ViewThatFits(in: .horizontal) {
             row
             ScrollView(.horizontal, showsIndicators: false) { row }

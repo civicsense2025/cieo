@@ -19,9 +19,9 @@ public struct CmdPaletteAtom: MotionAtomView {
     }
     public var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Command palette").font(.system(size: 15, weight: .semibold)).lineSpacing(22.5)
+            Text("Command palette").font(.system(size: 15, weight: .semibold)).lineSpacing(3)
             Text("Type to filter · ↑↓ move · Enter runs · Esc closes")
-                .font(.system(size: 12.5)).foregroundStyle(.secondary).lineSpacing(18.75)
+                .font(.system(size: 12.5)).foregroundStyle(.secondary).lineSpacing(3)
             VStack(spacing: 8) {
                 Button(open ? "Close palette" : "Open palette ⌘K") { open.toggle(); ran = nil }
                     .frame(minHeight: 32).frame(maxWidth: .infinity)
@@ -30,8 +30,10 @@ public struct CmdPaletteAtom: MotionAtomView {
                         .textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10)).focused($focused)
                         .font(.system(size: 13.5)).frame(minHeight: 36)
                         .onAppear { focused = true }
+                        .onChange(of: query) { _, _ in highlight = 0 }
                     VStack(spacing: 0) {
-                        ForEach(Array(matches.enumerated()), id: \.offset) { i, c in
+                        ForEach(matches, id: \.self) { c in
+                            let i = matches.firstIndex(of: c) ?? 0
                             Button { ran = c } label: {
                                 HStack { Text(c).font(.system(size: 13.5)); Spacer() }
                                     .frame(minHeight: 40).padding(.horizontal, 10)
@@ -43,7 +45,7 @@ public struct CmdPaletteAtom: MotionAtomView {
                             if i < matches.count - 1 { Divider() }
                         }
                     }
-                    .animation(reduce ? nil : .motion(.base), value: matches.count)
+                    .animation(reduce ? nil : .motion(.base), value: matches)
                     Text(ran.map { "Ran “\($0)” ✓" } ?? "\(matches.count) of \(cmds.count) commands")
                         .font(.system(size: 12)).foregroundStyle(.secondary).monospacedDigit()
                         .frame(maxWidth: .infinity, alignment: .leading)

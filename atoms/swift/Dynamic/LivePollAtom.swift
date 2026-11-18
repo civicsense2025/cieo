@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct LivePollAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "livepoll", category: "Forms", name: "Live poll",
+    public static let info = MotionAtomInfo(id: "livepoll", category: "Dynamic", name: "Live poll",
         summary: "A vote morphs each option into its result bar with stagger. Percentages roll up together, and the chosen row keeps its check. It ends counted and settled.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     private let options = [("Booking calendar", 38), ("Course player", 27), ("Job board", 21)]

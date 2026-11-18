@@ -17,7 +17,7 @@ public struct MergeStepAtom: MotionAtomView {
     @State private var bottom = 180.0
     public init() {}
 
-    private var bad: Bool { records[cur].fields.contains(where: \.2) }
+    private var bad: Bool { tweak && records[cur].fields.contains(where: \.2) }
 
     public var body: some View {
         AtomStage(hint: "Step through merge candidates") {

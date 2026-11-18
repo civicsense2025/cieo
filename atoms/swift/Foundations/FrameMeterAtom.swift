@@ -1,9 +1,11 @@
 import SwiftUI
+import Observation
 import Cieo
+import CieoUI
 
-/// Frame stats sampled from TimelineView dates. Plain vars on purpose:
-/// the animation timeline already re-renders every frame, so nothing is published during render.
-final class FrameMeterStore: ObservableObject {
+/// Frame stats sampled from TimelineView dates via `.onChange`, never mutating during `body`.
+@Observable
+final class FrameMeterStore {
     var last = Date()
     var frameMs = 0
     var dropped = 0
@@ -37,16 +39,18 @@ public struct FrameMeterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "framemeter", category: "Foundations", name: "Frame meter",
         summary: "Start the spring and watch real frame times roll in. Anything over 25ms counts as dropped.")
     @Environment(\.accessibilityReduceMotion) private var reduce
-    @StateObject private var meter = FrameMeterStore()
+    @Environment(\.renderPolicy) private var policy
+    @State private var meter = FrameMeterStore()
     @State private var swing = Track(0, preset: .soft)
     public init() {}
+
+    private var motionPaused: Bool { reduce || !policy.allowsMotion }
 
     public var body: some View {
         AtomStage(hint: "Frame time and dropped frames while the spring runs") {
             VStack(spacing: 16) {
-                TimelineView(.animation(paused: false)) { ctx in
+                TimelineView(.animation(paused: motionPaused || !meter.running)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
-                    let _ = meter.sample(ctx.date)
                     let v = swing.value(at: t)
                     ZStack {
                         GeometryReader { g in
@@ -57,7 +61,10 @@ public struct FrameMeterAtom: MotionAtomView {
                             }
                         }
                         .frame(height: 40)
-                        SettleWatcher(value: v, target: swing.target, active: meter.running && !reduce) { flip(at: t) }
+                        SettleWatcher(value: v, target: swing.target, active: meter.running && !motionPaused) { flip(at: t) }
+                    }
+                    .onChange(of: ctx.date) { _, newDate in
+                        meter.sample(newDate)
                     }
                 }
                 HStack(spacing: 16) {
@@ -87,7 +94,7 @@ public struct FrameMeterAtom: MotionAtomView {
     private func start() {
         meter.running = true
         meter.last = Date()
-        if reduce { swing.jump(1) } else { swing.set(1, at: Date().timeIntervalSinceReferenceDate) }
+        if motionPaused { swing.jump(1) } else { swing.set(1, at: Date().timeIntervalSinceReferenceDate) }
     }
 
     private func stop() {
@@ -96,7 +103,7 @@ public struct FrameMeterAtom: MotionAtomView {
     }
 
     private func flip(at t: Double) {
-        guard meter.running, !reduce else { return }
+        guard meter.running, !motionPaused else { return }
         swing.set(swing.target > 0.5 ? 0 : 1, at: max(t, Date().timeIntervalSinceReferenceDate))
     }
 }

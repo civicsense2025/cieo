@@ -7,7 +7,10 @@ public struct FormFlowAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var oneCol = false
     @State private var liveError = true
+    @State private var fullName = "Ada"
     @State private var email = ""
+    @State private var city = "Lagos"
+    @State private var zip = "10001"
     @State private var showError = false
     @State private var saved = false
     @FocusState private var emailFocused: Bool
@@ -48,7 +51,7 @@ public struct FormFlowAtom: MotionAtomView {
         let cols = [GridItem(.flexible()), GridItem(.flexible())]
         let single = [GridItem(.flexible())]
         return LazyVGrid(columns: oneCol ? single : cols, spacing: 8) {
-            field("Name", text: .constant("Ada"))
+            field("Name", text: $fullName)
             VStack(alignment: .leading, spacing: 4) {
                 Text("Email").font(.footnote)
                 TextField("you@site.com", text: $email)
@@ -65,8 +68,8 @@ public struct FormFlowAtom: MotionAtomView {
                         .transition(.motionSwap())
                 }
             }
-            field("City", text: .constant("Lagos"))
-            field("Zip", text: .constant("10001"))
+            field("City", text: $city)
+            field("Zip", text: $zip)
         }
         .animation(reduce ? nil : .motion(.base), value: oneCol)
         .animation(reduce ? nil : .motion(.base), value: showError)

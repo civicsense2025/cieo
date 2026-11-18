@@ -19,6 +19,7 @@ public struct Comment<Avatar: View, Content: View>: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.commentHasNextSibling) private var hasNextSibling
     @SwiftUI.State private var tinted: Bool
@@ -119,15 +120,15 @@ public struct Comment<Avatar: View, Content: View>: View {
         }
         .background(alignment: .topLeading) { elbow }
         .background(theme.tint.opacity(tinted ? 1 : 0), in: .rect(cornerRadius: metrics.corner))
-        .opacity(arrived ? 1 : MotionTokens.arriveOpacity)
-        .offset(y: arrived || reduceMotion ? 0 : MotionTokens.drift)
+        .opacity(arrived || reduceMotion || !policy.allowsMotion ? 1 : MotionTokens.arriveOpacity)
+        .offset(y: arrived || reduceMotion || !policy.allowsMotion ? 0 : MotionTokens.drift)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text(author))
         .accessibilityHidden(false)
         .task(id: state) { await fade() }
         .onAppear {
             guard !arrived else { return }
-            withMotion(.base, reduceMotion: reduceMotion) { arrived = true }
+            withMotion(.base, reduceMotion: reduceMotion || !policy.allowsMotion) { arrived = true }
         }
     }
 
@@ -222,7 +223,7 @@ public struct Comment<Avatar: View, Content: View>: View {
         tinted = true
         try? await Task.sleep(for: .seconds(MotionTokens.durationLazy))
         guard !Task.isCancelled else { return }
-        withMotion(.lazy, reduceMotion: reduceMotion) { tinted = false }
+        withMotion(.lazy, reduceMotion: reduceMotion || !policy.allowsMotion) { tinted = false }
     }
 }
 

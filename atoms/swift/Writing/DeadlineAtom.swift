@@ -12,7 +12,7 @@ public struct DeadlineAtom: MotionAtomView {
     private let total = 612
     public init() {}
 
-    private var danger: Bool { remaining < 600 }
+    private var danger: Bool { tweak && remaining < 600 }
     private var clock: String { String(format: "%02d:%02d", remaining / 60, remaining % 60) }
 
     public var body: some View {

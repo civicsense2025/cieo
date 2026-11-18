@@ -26,9 +26,11 @@ public struct ClipperAtom: MotionAtomView {
                 }
                 .padding(16)
                 .frame(maxWidth: 320)
-                .background(over ? Color.accentColor.opacity(0.15) : Color.clear)
-                .overlay(RoundedRectangle(cornerRadius: 12).fill(over ? Color.accentColor : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
+                .background(over && tweak ? Color.accentColor.opacity(0.15) : Color.clear)
+                .overlay(RoundedRectangle(cornerRadius: 12).fill(over && tweak ? Color.accentColor : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
+                .onHover { hovering in if tweak { withMotion(.snap, reduceMotion: reduce) { over = hovering } } }
                 .animation(reduce ? nil : .motion(.snap), value: over)
+                .animation(reduce ? nil : .motion(.snap), value: tweak)
                 .animation(reduce ? nil : .motion(.base), value: saved)
                 Toggle("Tint on hover", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)

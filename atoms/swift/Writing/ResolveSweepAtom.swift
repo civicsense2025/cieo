@@ -23,7 +23,7 @@ public struct ResolveSweepAtom: MotionAtomView {
                 HStack(spacing: 8) {
                     Text("Open threads").font(.system(size: 12.5).weight(.semibold))
                     RollingDigits(open)
-                    HStack(spacing: -6) {
+                    HStack(spacing: tweak ? -6 : 4) {
                         ForEach(threads.indices, id: \.self) { i in
                             Text(threads[i].1).font(.system(size: 12, weight: .semibold)).foregroundStyle(.white)
                                 .frame(width: 24, height: 24).background(threads[i].2, in: Circle())
@@ -32,8 +32,9 @@ public struct ResolveSweepAtom: MotionAtomView {
                                 .opacity(gone[i] ? 0.35 : 1)
                         }
                     }
-                    .offset(x: open == threads.count ? 0 : -4 * Double(threads.count - open))
+                    .offset(x: !tweak || open == threads.count ? 0 : -4 * Double(threads.count - open))
                     .animation(reduce ? nil : .motion(.base), value: open)
+                    .animation(reduce ? nil : .motion(.base), value: tweak)
                     Spacer()
                     Button("Resolve all") { resolveAll() }.buttonStyle(.borderedProminent).frame(minHeight: 32).controlSize(.small).disabled(open == 0)
                 }

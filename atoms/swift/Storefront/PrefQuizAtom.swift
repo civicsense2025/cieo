@@ -7,6 +7,7 @@ public struct PrefQuizAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var step = 0
     @State private var dir: CGFloat = 1
+    @State private var restartWhenDone = false
     public init() {}
     public var body: some View {
         AtomStage(hint: "Answer two questions for a shelf") {
@@ -36,8 +37,15 @@ public struct PrefQuizAtom: MotionAtomView {
                     insertion: .modifier(active: QuizSlide(x: 24 * dir), identity: QuizSlide(x: 0)).animation(.motion(.base).delay(Motion.exit)),
                     removal: .modifier(active: QuizSlide(x: -24 * dir), identity: QuizSlide(x: 0)).animation(.motionExit)))
                 .id(step)
-                Toggle("Restart when done", isOn: .constant(false)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Restart when done", isOn: $restartWhenDone).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 320)
+            .onChange(of: step) { _, s in
+                guard s == 2 && restartWhenDone else { return }
+                Task {
+                    try? await Task.sleep(for: .milliseconds(reduce ? 100 : 1200))
+                    if step == 2 && restartWhenDone { dir = -1; withMotion(.base, reduceMotion: reduce) { step = 0 } }
+                }
+            }
         }
     }
     private func qcard(_ q: String, _ answers: [String]) -> some View {

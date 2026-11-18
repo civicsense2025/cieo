@@ -33,7 +33,7 @@ public struct AudioTime: View {
             .foregroundStyle(theme.secondary)
             .lineLimit(1)
             .contentTransition(.numericText())
-            .motion(.snap, value: Self.text(current: current, duration: duration, mode: mode))
+            .motionAnimation(.snap, value: Self.text(current: current, duration: duration, mode: mode))
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Self.spoken(current: current, duration: duration, mode: mode))
     }

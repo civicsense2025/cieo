@@ -38,7 +38,7 @@ public struct RecallAtom: MotionAtomView {
                             }
                         }
                         .buttonStyle(.bordered).frame(minHeight: 32)
-                        .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: interval)
+                        .animation(reduce ? nil : .motion(.base).delay(tweak ? Motion.lag : 0), value: interval)
                     }
                     Text("in").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     Text(interval).font(.headline.monospacedDigit())

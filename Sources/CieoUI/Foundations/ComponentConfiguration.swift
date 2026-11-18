@@ -21,8 +21,7 @@ public struct ComponentTypography {
     public var detail: Font
     /// A short bold caption, such as the label beside a big number.
     public var strongDetail: Font
-    /// Running text people read at length, such as an article or lesson body. A host can size it
-    /// differently by width (smaller on a phone than on a tablet) and scale it with Dynamic Type.
+    /// Running text people read at length, such as an article or lesson body.
     public var reading: Font
     /// A glyph that sits beside text, such as a disclosure chevron or pager arrow.
     public var glyph: Font
@@ -81,7 +80,15 @@ public struct ComponentMetrics {
     public let standard: CGFloat
     public let loose: CGFloat
     public let section: CGFloat
+    public let cornerSmall: CGFloat
     public let corner: CGFloat
+    public let cornerSurface: CGFloat
+    public let cornerPill: CGFloat
+    public let controlXS: CGFloat
+    public let controlSmall: CGFloat
+    public let controlHeight: CGFloat
+    public let controlLarge: CGFloat
+    public let controlXL: CGFloat
     public let touchTarget: CGFloat
     /// Thickness of a bar, ring or segment that carries a value.
     public let bar: CGFloat
@@ -89,8 +96,7 @@ public struct ComponentMetrics {
     public let thinBar: CGFloat
     /// Width of an outline or divider.
     public let hairline: CGFloat
-    /// A glyph's side as a share of the line of text it sits beside, from 0 to 1. A drawn shape fills a
-    /// square this size; an SF Symbol keeps the size its font gives it.
+    /// A glyph's side as a share of the line of text it sits beside, from 0 to 1.
     public let glyphScale: CGFloat
     // MARK: - Social and audio
     /// A person's picture beside a post.
@@ -108,7 +114,9 @@ public struct ComponentMetrics {
                 loose: CGFloat = 20, section: CGFloat = 24, corner: CGFloat = 12, touchTarget: CGFloat = 44,
                 bar: CGFloat = 8, thinBar: CGFloat = 6, hairline: CGFloat = 1, glyphScale: CGFloat = 0.8,
                 avatar: CGFloat = 36, avatarSmall: CGFloat = 24, rail: CGFloat = 2, ring: CGFloat = 24,
-                thumbnail: CGFloat = 88) {
+                thumbnail: CGFloat = 88, cornerSmall: CGFloat = 8, cornerSurface: CGFloat = 16,
+                cornerPill: CGFloat = 9999, controlXS: CGFloat = 28, controlSmall: CGFloat = 32,
+                controlHeight: CGFloat = 40, controlLarge: CGFloat = 48, controlXL: CGFloat = 52) {
         self.tight = Self.dimension(tight, fallback: 4)
         self.compact = Self.dimension(compact, fallback: 8)
         self.snug = Self.dimension(snug, fallback: 10)
@@ -116,7 +124,15 @@ public struct ComponentMetrics {
         self.standard = Self.dimension(standard, fallback: 16)
         self.loose = Self.dimension(loose, fallback: 20)
         self.section = Self.dimension(section, fallback: 24)
+        self.cornerSmall = Self.dimension(cornerSmall, fallback: 8)
         self.corner = Self.dimension(corner, fallback: 12)
+        self.cornerSurface = Self.dimension(cornerSurface, fallback: 16)
+        self.cornerPill = Self.dimension(cornerPill, fallback: 9999)
+        self.controlXS = Self.dimension(controlXS, fallback: 28)
+        self.controlSmall = Self.dimension(controlSmall, fallback: 32)
+        self.controlHeight = Self.dimension(controlHeight, fallback: 40)
+        self.controlLarge = Self.dimension(controlLarge, fallback: 48)
+        self.controlXL = Self.dimension(controlXL, fallback: 52)
         self.touchTarget = max(44, Self.dimension(touchTarget, fallback: 44))
         self.bar = Self.dimension(bar, fallback: 8)
         self.thinBar = Self.dimension(thinBar, fallback: 6)
@@ -127,6 +143,23 @@ public struct ComponentMetrics {
         self.rail = Self.dimension(rail, fallback: 2)
         self.ring = Self.dimension(ring, fallback: 24)
         self.thumbnail = Self.dimension(thumbnail, fallback: 88)
+    }
+
+    /// Builds `ComponentMetrics` from Cieo's density and corner profiles.
+    public static func preset(density: ComponentDensity = .comfortable, corners: CornerProfile = .soft) -> ComponentMetrics {
+        let h = density.heights
+        let r = corners.radii
+        return ComponentMetrics(
+            corner: r.control,
+            cornerSmall: r.small,
+            cornerSurface: r.surface,
+            cornerPill: r.pill,
+            controlXS: h.xs,
+            controlSmall: h.small,
+            controlHeight: h.regular,
+            controlLarge: h.large,
+            controlXL: h.xl
+        )
     }
 
     static func dimension(_ value: CGFloat, fallback: CGFloat) -> CGFloat {

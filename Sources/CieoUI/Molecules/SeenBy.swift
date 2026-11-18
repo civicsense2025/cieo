@@ -36,7 +36,7 @@ public struct SeenBy: View {
                         .background(theme.track, in: Circle())
                 }
             }
-            .motion(.base, value: people.map(\.id) + ["\(split.rest)"])
+            .motionAnimation(.base, value: people.map(\.id) + ["\(split.rest)"])
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(Self.seenByLabel(people.map(\.name)))
         }

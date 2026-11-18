@@ -29,7 +29,7 @@ public struct AnalyticsDashboardAtom: MotionAtomView {
                     stat("Visitors", Count(value: stats[0], format: 0), deltas[0]); stat("Conversion", Count(value: stats[1], format: 1, suffix: "%"), deltas[1]); stat("Orders", Count(value: stats[2], format: 0), deltas[2])
                 }
                 VStack(alignment: .leading, spacing: 2) {
-                    TimelineView(.animation(paused: false)) { tl in
+                    TimelineView(.animation(paused: reduce || line.restTime == nil)) { tl in
                         let t = tl.date.timeIntervalSinceReferenceDate
                         Chart(values: line.map { $0.value(at: t) }).stroke(Color.accentColor, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round)).frame(height: 70)
                     }

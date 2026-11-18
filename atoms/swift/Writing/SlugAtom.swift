@@ -13,7 +13,7 @@ public struct SlugAtom: MotionAtomView {
         let s = title.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }.joined(separator: "-")
         return s.isEmpty ? "untitled" : s
     }
-    private var isTaken: Bool { taken.contains(slug) }
+    private var isTaken: Bool { tweak && taken.contains(slug) }
 
     public var body: some View {
         AtomStage(hint: "Try “Water rates” — that slug is taken") {

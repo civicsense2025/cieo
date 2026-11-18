@@ -8,6 +8,7 @@ public struct AudioPlayButton: View {
 
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let playing: Bool
     private let loading: Bool
@@ -33,9 +34,9 @@ public struct AudioPlayButton: View {
                 PlayPauseShape(pause: playing ? 1 : 0)
                     .fill(theme.onAccent)
                     .padding(side * Self.glyphInset)
-                    .motion(.snap, value: playing)
+                    .motionAnimation(.snap, value: playing)
                     .opacity(loading ? 0 : 1)
-                if loading { LoadingRing(reduceMotion: reduceMotion) }
+                if loading { LoadingRing(reduceMotion: reduceMotion || !policy.allowsMotion) }
             }
             .frame(width: side, height: side)
             .frame(minWidth: metrics.touchTarget, minHeight: metrics.touchTarget)

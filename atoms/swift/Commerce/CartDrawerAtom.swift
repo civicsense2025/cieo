@@ -19,7 +19,7 @@ public struct CartDrawerAtom: MotionAtomView {
                 VStack(spacing: 8) {
                     Text("Scout backpack").font(.system(size: 15, weight: .semibold))
                     Text("$68").font(.system(size: 15, weight: .semibold)).monospacedDigit()
-                    Text("Ballistic nylon, lifetime repairs.").font(.system(size: 13)).lineSpacing(6.5)
+                    Text("Ballistic nylon, lifetime repairs.").font(.system(size: 13)).lineSpacing(3)
                     Button("View cart") { withMotion(.base, reduceMotion: reduce) { open = true } }
                         .frame(height: 38).frame(maxWidth: .infinity)
                         .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
@@ -37,10 +37,10 @@ public struct CartDrawerAtom: MotionAtomView {
                             ProgressView(value: min(1, subtotal / threshold)).tint(.primary)
                             SwapText(subtotal >= threshold ? "Free shipping unlocked" : "Away from free shipping")
                                 .font(.system(size: 12.5)).frame(maxWidth: .infinity, alignment: .leading)
-                            ForEach(Array(items.enumerated()), id: \.offset) { i, it in
+                            ForEach(Array(items.enumerated()), id: \.element.0) { i, it in
                                 HStack {
                                     RoundedRectangle(cornerRadius: 12).fill(.quaternary).frame(width: 48, height: 36)
-                                    Text(it.0).font(.system(size: 13)).lineSpacing(6.5)
+                                    Text(it.0).font(.system(size: 13)).lineSpacing(3)
                                     Spacer()
                                     Text(it.1, format: .currency(code: "USD")).font(.system(size: 13)).monospacedDigit()
                                 }

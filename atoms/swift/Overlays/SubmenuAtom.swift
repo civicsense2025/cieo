@@ -7,11 +7,12 @@ public struct SubmenuAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var child = false
+    @State private var keepParentOpen = true
     public init() {}
     public var body: some View {
         AtomStage(hint: "Open Share, Esc steps back one level") {
             VStack(spacing: 8) {
-                Toggle("Keep parent open", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                Toggle("Keep parent open", isOn: $keepParentOpen).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                 Button("Open menu") { withMotion(.base, reduceMotion: reduce) { open.toggle(); if (!open) { child = false } } }
                     .buttonStyle(.borderedProminent)
                 HStack(alignment: .top, spacing: 0) {
@@ -27,7 +28,7 @@ public struct SubmenuAtom: MotionAtomView {
                         }
                         Text("Delete").font(.callout).foregroundStyle(.red).frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 10).padding(.vertical, 9)
                     }
-                    .frame(width: 150).padding(6).basicsPanel(radius: 14).opacity(open ? 1 : 0)
+                    .frame(width: 150).padding(6).basicsPanel(radius: 14).opacity(open && (keepParentOpen || !child) ? 1 : 0)
                     if child {
                         VStack(spacing: 0) {
                             ForEach(["Copy link", "Email", "Messages"], id: \.self) { n in

@@ -21,7 +21,7 @@ public struct DeliveryNotesAtom: MotionAtomView {
                         .font(.system(size: 13)).frame(maxWidth: .infinity, alignment: .leading).buttonStyle(.plain).foregroundStyle(Color.accentColor)
                 }
                 if open {
-                    TextEditor(text: $note).font(.system(size: 13)).lineSpacing(6.5)
+                    TextEditor(text: $note).font(.system(size: 13)).lineSpacing(3)
                         .frame(height: 72).padding(6)
                         .background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
                         .transition(.move(edge: .top).combined(with: .opacity))
@@ -42,7 +42,7 @@ public struct DeliveryNotesAtom: MotionAtomView {
                 }
                 if !saved.isEmpty && !open {
                     HStack(spacing: 8) {
-                        Text(saved).font(.system(size: 13)).lineSpacing(6.5).lineLimit(1)
+                        Text(saved).font(.system(size: 13)).lineSpacing(3).lineLimit(1)
                             .padding(.horizontal, 12).frame(height: 30)
                             .background(.quaternary, in: Capsule())
                         Button("Edit") { withMotion(.base, reduceMotion: reduce) { open = true } }

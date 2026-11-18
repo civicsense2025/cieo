@@ -159,7 +159,7 @@ public struct CommentComposer: View {
                     .transition(.opacity)
             }
         }
-        .motion(.base, value: recorderSlot != nil)
+        .motionAnimation(.base, value: recorderSlot != nil)
     }
 
     private var bar: some View {
@@ -194,7 +194,7 @@ public struct CommentComposer: View {
             .buttonStyle(ActionButtonStyle(.prominent))
             .keyboardShortcut(.return, modifiers: .command)
             .disabled(!canPost)
-            .motion(.snap, value: isPending)
+            .motionAnimation(.snap, value: isPending)
         }
     }
 }

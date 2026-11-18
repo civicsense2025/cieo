@@ -7,18 +7,19 @@ public struct SheetDetentsAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var detent: PresentationDetent = .height(60)
     @State private var open = false
+    @State private var bgInert = true
     public init() {}
     public var body: some View {
         AtomStage(hint: "Drag or flick: peek → half → full") {
             VStack(spacing: 8) {
-                Toggle("Background inert", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                Toggle("Background inert", isOn: $bgInert).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                 Button("Share options") { open = true }.buttonStyle(.borderedProminent)
                 Text("Pages · Home · About · Journal").font(.caption).foregroundStyle(.secondary)
             }
             .sheet(isPresented: $open) {
                 sheetBody.presentationDetents([.height(60), .medium, .large], selection: $detent)
                     .presentationDragIndicator(.visible)
-                    .presentationBackgroundInteraction(.disabled)
+                    .presentationBackgroundInteraction(bgInert ? .disabled : .enabled(upThrough: .medium))
                     .interactiveDismissDisabled(false)
             }
         }

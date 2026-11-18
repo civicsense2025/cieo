@@ -6,6 +6,7 @@ public struct DateSignAtom: MotionAtomView {
         summary: "The calendar disc glides to the picked day while the date swaps in below. The pick holds a signed-and-dated terminal.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var day = 2
+    @State private var includeTime = true
     private let days = ["Mon 6", "Tue 7", "Wed 8", "Thu 9", "Fri 10"]
     public init() {}
 
@@ -29,13 +30,14 @@ public struct DateSignAtom: MotionAtomView {
                     }
                     .font(.headline).frame(maxWidth: .infinity, minHeight: 28, alignment: .leading)
                     ZStack(alignment: .leading) {
-                        Text("Signed October \(days[day].suffix(2)) ✓").foregroundStyle(.green).id(day).motionTransition(.swap())
+                        Text(includeTime ? "Signed October \(days[day].suffix(2)) · 09:41 ✓" : "Signed October \(days[day].suffix(2)) ✓")
+                            .foregroundStyle(.green).id("\(day)-\(includeTime)").motionTransition(.swap())
                     }
                     .font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
                 }
                 .padding(16).frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("Include time of signing", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Include time of signing", isOn: $includeTime).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

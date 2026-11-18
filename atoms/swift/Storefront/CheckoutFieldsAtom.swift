@@ -9,6 +9,7 @@ public struct CheckoutFieldsAtom: MotionAtomView {
     @State private var email = ""
     @State private var tried = false
     @State private var paid = false
+    @State private var validateLive = true
     public init() {}
     private var nameOK: Bool { name.trimmingCharacters(in: .whitespaces).count > 1 }
     private var emailOK: Bool { email.contains("@") && email.contains(".") }
@@ -16,14 +17,14 @@ public struct CheckoutFieldsAtom: MotionAtomView {
         AtomStage(hint: "Leave a field empty, then fix it") {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Payment details").font(.callout.weight(.semibold))
-                field("Full name", text: $name, bad: tried && !nameOK, msg: "Enter your full name")
-                field("Email", text: $email, bad: tried && !emailOK, msg: "Enter a valid email")
+                field("Full name", text: $name, bad: ((validateLive && !name.isEmpty) || tried) && !nameOK, msg: "Enter your full name")
+                field("Email", text: $email, bad: ((validateLive && !email.isEmpty) || tried) && !emailOK, msg: "Enter a valid email")
                 HStack {
                     Button(paid ? "Paid — receipt sent" : "Pay $24.00") {
                         tried = true
                         if nameOK && emailOK { withMotion(.base, reduceMotion: reduce) { paid = true } }
                     }.buttonStyle(.borderedProminent).controlSize(.small).disabled(paid).tint(paid ? .green : .accentColor)
-                    Toggle("Validate live", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                    Toggle("Validate live", isOn: $validateLive).font(.caption).foregroundStyle(.secondary)
                 }
             }.frame(maxWidth: 300)
         }

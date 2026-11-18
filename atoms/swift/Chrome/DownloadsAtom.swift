@@ -30,7 +30,7 @@ public struct DownloadsAtom: MotionAtomView {
                 .frame(maxWidth: .infinity, minHeight: 32)
                 if running || done {
                     VStack(spacing: 0) {
-                        ForEach(Array(files.enumerated()), id: \.offset) { i, f in
+                        ForEach(Array(files.enumerated()), id: \.element) { i, f in
                             HStack(spacing: 10) {
                                 ZStack {
                                     Circle().stroke(Color.primary.opacity(0.12), lineWidth: 3)

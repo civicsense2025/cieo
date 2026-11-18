@@ -7,8 +7,13 @@ public struct JurisdictionAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var pick = 0
+    @State private var usOnly = true
     @FocusState private var focused: Bool
-    private let options = ["Nevada", "California", "New York", "Texas", "Delaware"]
+    private var options: [String] {
+        usOnly
+            ? ["Nevada", "California", "New York", "Texas", "Delaware"]
+            : ["Nevada", "California", "New York", "Ontario", "England & Wales"]
+    }
     public init() {}
 
     public var body: some View {
@@ -49,7 +54,7 @@ public struct JurisdictionAtom: MotionAtomView {
                 }
                 .padding(16).frame(maxWidth: 320)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("US states only", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("US states only", isOn: $usOnly).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

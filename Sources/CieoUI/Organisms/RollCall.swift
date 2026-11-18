@@ -1,5 +1,8 @@
 import SwiftUI
 
+/// Canonical alias matching Cieo's cross-platform vocabulary.
+public typealias GroupedRoster = RollCall
+
 /// Everyone by name, grouped (such as by party), each group led by a dot, its name and a count, then its people
 /// in as many columns as fit. Alphabetical order is the host's. VoiceOver reads each group's heading, then its people.
 public struct RollCall: View {

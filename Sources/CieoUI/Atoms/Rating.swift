@@ -10,6 +10,7 @@ public struct Rating: View {
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentIcons) private var icons
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let binding: Binding<Int>?
     private let fixed: Double
@@ -142,7 +143,7 @@ public struct Rating: View {
     private func popNewStars() async {
         let from = previous
         previous = roundedValue
-        guard binding != nil, !reduceMotion, roundedValue > from else { return }
+        guard binding != nil, policy.allowsMotion, !reduceMotion, roundedValue > from else { return }
         let delays = Self.ratingPopDelays(from: from, to: roundedValue)
         var lastDelay = 0
         for (offset, delay) in delays.enumerated() {

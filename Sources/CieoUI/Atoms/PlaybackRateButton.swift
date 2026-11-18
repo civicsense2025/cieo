@@ -25,7 +25,7 @@ public struct PlaybackRateButton: View {
                 .font(typography.strongDetail.monospacedDigit())
                 .foregroundStyle(theme.foreground)
                 .contentTransition(.numericText(value: displayedRate))
-                .motion(.base, value: displayedRate)
+                .motionAnimation(.base, value: displayedRate)
                 .padding(.horizontal, metrics.medium)
                 .frame(minWidth: metrics.touchTarget, minHeight: metrics.touchTarget)
                 .background(theme.surface, in: .capsule)

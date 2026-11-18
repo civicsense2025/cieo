@@ -1,5 +1,8 @@
 import SwiftUI
 
+/// Canonical alias matching Cieo's cross-platform vocabulary.
+public typealias PageBar = FrameBar
+
 /// The edge of a frame: one piece on the leading side and one on the trailing side, such as a topic chip and a
 /// page count along the top, or a wordmark and a source along the bottom. The trailing piece wraps under the
 /// leading one when the width is too narrow, so neither truncates.

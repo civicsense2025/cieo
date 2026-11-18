@@ -26,7 +26,7 @@ public struct ToolApprovalAtom: MotionAtomView {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(r.tool).font(.callout.monospaced().weight(.semibold))
                         VStack(alignment: .leading, spacing: 2) {
-                            ForEach(Array(r.args.enumerated()), id: \.offset) { i, a in
+                            ForEach(Array(r.args.enumerated()), id: \.element) { i, a in
                                 if i < 2 || allArgs { Text(a).font(.caption.monospaced()).transition(.opacity) }
                             }
                         }

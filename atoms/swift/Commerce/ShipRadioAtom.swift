@@ -31,7 +31,7 @@ public struct ShipRadioAtom: MotionAtomView {
                             }
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack(spacing: 6) {
-                                    Text(opts[i].0).font(.system(size: 13, weight: .semibold)).lineSpacing(6.5)
+                                    Text(opts[i].0).font(.system(size: 13, weight: .semibold)).lineSpacing(3)
                                     if i == 0 { Text("Free $75+").font(.system(size: 12)).bold().padding(.horizontal, 8).background(.quaternary, in: Capsule()) }
                                 }
                                 Text(opts[i].1 == opts[0].1 && free75 ? "Free*" : money(opts[i].1))

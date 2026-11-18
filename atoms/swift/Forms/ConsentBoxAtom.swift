@@ -7,6 +7,7 @@ public struct ConsentBoxAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     private enum Mode { case none, partial, full }
     @State private var mode = Mode.none
+    @State private var recordTimestamp = true
     public init() {}
 
     public var body: some View {
@@ -38,14 +39,14 @@ public struct ConsentBoxAtom: MotionAtomView {
                             switch mode {
                             case .none: Text("Not consented").foregroundStyle(.secondary).motionTransition(.swap())
                             case .partial: Text("Partially selected").motionTransition(.swap())
-                            case .full: Text("Consent recorded ✓").foregroundStyle(.green).motionTransition(.swap())
+                            case .full: Text(recordTimestamp ? "Consent recorded · 09:41 ✓" : "Consent recorded ✓").foregroundStyle(.green).motionTransition(.swap())
                             }
                         }.font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
                     }
                 }
                 .padding(16).frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("Record consent timestamp", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Record consent timestamp", isOn: $recordTimestamp).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

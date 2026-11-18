@@ -25,7 +25,7 @@ public struct PersonRow<Photo: View>: View {
             if compact {
                 HStack(spacing: metrics.compact) {
                     Portrait(size: .small, ring: ring, grayscale: grayscale, photo: photo)
-                    (name + (detail.map { Text(verbatim: " ") + $0.foregroundColor(theme.secondary) } ?? Text(verbatim: "")))
+                    (name + (detail.map { Text(verbatim: " ") + $0.foregroundStyle(theme.secondary) } ?? Text(verbatim: "")))
                         .font(typography.detail)
                         .lineLimit(1)
                 }

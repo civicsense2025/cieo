@@ -80,8 +80,8 @@ public struct FlatplanAtom: MotionAtomView {
             }
             .onEnded { _ in
                 let k = min(max(0, Int((dragY / rowH).rounded())), order.count - 1)
-                withMotion(.base, reduceMotion: reduce) { held = nil; folio = k + 1 }
-                moveMarker(k)
+                withMotion(.base, reduceMotion: reduce) { held = nil; if tweak { folio = k + 1 } }
+                if tweak { moveMarker(k) }
             }
     }
 

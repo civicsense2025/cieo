@@ -7,9 +7,14 @@ public struct AddressFormAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var country = 0
     @State private var zip = ""
+    @State private var state = ""
+    @State private var postcode = ""
+    @State private var county = ""
+    @State private var lookupCity = true
     @Namespace private var seg
     public init() {}
     private var city: String {
+        guard lookupCity else { return "Manual city entry" }
         if zip == "94110" { return "San Francisco, CA" }
         return zip.count >= 5 ? "Unknown ZIP — keep typing" : "Enter ZIP to look up the city"
     }
@@ -29,21 +34,22 @@ public struct AddressFormAtom: MotionAtomView {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 8) {
                                 TextField("ZIP code", text: $zip).softFieldSurface().font(.footnote)
-                                TextField("State", text: .constant("")).softFieldSurface().font(.footnote)
+                                    .onChange(of: zip) { _, newZip in if lookupCity && newZip == "94110" && state.isEmpty { state = "CA" } }
+                                TextField("State", text: $state).softFieldSurface().font(.footnote)
                             }
                             SwapText(city).font(.caption).foregroundStyle(.secondary)
                         }.motionTransition(.swap()).id(country)
                     } else {
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(spacing: 8) {
-                                TextField("Postcode", text: .constant("")).softFieldSurface().font(.footnote)
-                                TextField("County", text: .constant("")).softFieldSurface().font(.footnote)
+                                TextField("Postcode", text: $postcode).softFieldSurface().font(.footnote)
+                                TextField("County", text: $county).softFieldSurface().font(.footnote)
                             }
                             Text("Try SW1A 1AA.").font(.caption).foregroundStyle(.secondary)
                         }.motionTransition(.swap()).id(country)
                     }
                 }.frame(height: 76, alignment: .top)
-                Toggle("Look up city", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Look up city", isOn: $lookupCity).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 320)
         }
     }

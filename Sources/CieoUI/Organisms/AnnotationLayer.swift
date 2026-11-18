@@ -93,7 +93,7 @@ public struct AnnotationLayer<Content: View, Popover: View>: View {
             .accessibilityElement(children: .contain)
             .accessibilityLabel(Text(label))
             .accessibilityAction(named: Text("Add comment here")) { place(LayerPoint(x: 0.5, y: 0.5)) }
-            .motion(.base, value: target)
+            .motionAnimation(.base, value: target)
             .onChange(of: isCommenting) { _, on in
                 if !on { reticle = nil }
                 AccessibilityNotification.Announcement(on ? Self.commentModeOn : Self.commentModeOff).post()

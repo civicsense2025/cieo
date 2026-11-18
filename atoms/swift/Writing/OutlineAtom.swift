@@ -28,7 +28,7 @@ public struct OutlineAtom: MotionAtomView {
                 }
                 .padding(14)
                 .background(.quaternary.opacity(0.2), in: RoundedRectangle(cornerRadius: 10))
-                .scaleEffect(path.isEmpty ? 1 : 1, anchor: .topLeading)
+                .scaleEffect(path.isEmpty ? 1 : (tweak ? 1.02 : 1), anchor: .topLeading)
                 .animation(reduce ? nil : .motion(.base), value: path)
                 Text("Winter notes · Reading list · Drafts").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .opacity(path.isEmpty ? 1 : 0)
@@ -37,7 +37,7 @@ public struct OutlineAtom: MotionAtomView {
                     Button("Back") { withMotion(.base, reduceMotion: reduce) { path = [] } }.buttonStyle(.bordered).frame(minHeight: 32)
                     Spacer()
                     Button("1") { withMotion(.base, reduceMotion: reduce) { path = [] } }.buttonStyle(.bordered).frame(minHeight: 32)
-                    Button("2") { withMotion(.base, reduceMotion: reduce) { path = ["Opening image"] } }.buttonStyle(.bordered).frame(minHeight: 32)
+                    Button("2") { if tweak { withMotion(.base, reduceMotion: reduce) { path = ["Opening image"] } } }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
                 Toggle("Zoom to child", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
@@ -50,6 +50,6 @@ public struct OutlineAtom: MotionAtomView {
     private var current: [String] { path.isEmpty ? kids : grand }
 
     private func zoom(_ k: String) {
-        if path.isEmpty { withMotion(.base, reduceMotion: reduce) { path = [k] } }
+        if tweak && path.isEmpty { withMotion(.base, reduceMotion: reduce) { path = [k] } }
     }
 }

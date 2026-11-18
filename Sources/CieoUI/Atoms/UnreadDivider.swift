@@ -7,6 +7,7 @@ public struct UnreadDivider: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var arrived = false
     private let text: String
@@ -24,11 +25,11 @@ public struct UnreadDivider: View {
                 .font(typography.strongDetail)
                 .foregroundStyle(theme.accent)
                 .lineLimit(1)
-                .opacity(arrived ? 1 : Motion.arriveOpacity)
+                .opacity(arrived || reduceMotion || !policy.allowsMotion ? 1 : Motion.arriveOpacity)
             rule
         }
         .padding(.vertical, metrics.compact)
-        .onAppear { withMotion(.base, reduceMotion: reduceMotion) { arrived = true } }
+        .onAppear { withMotion(.base, reduceMotion: reduceMotion || !policy.allowsMotion) { arrived = true } }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(text)
     }

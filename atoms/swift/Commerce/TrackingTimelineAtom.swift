@@ -31,7 +31,7 @@ public struct TrackingTimelineAtom: MotionAtomView {
                                         .scaleEffect(i <= cur ? 1 : 0)
                                         .animation(reduce ? nil : .motion(.base).delay(Motion.lag), value: cur)
                                 }
-                                Text(stops[i]).font(.system(size: 13)).lineSpacing(6.5)
+                                Text(stops[i]).font(.system(size: 13)).lineSpacing(3)
                                 if i == 3 && cur >= 3 {
                                     Image(systemName: "checkmark").foregroundStyle(.green).transition(.opacity)
                                 }
@@ -47,7 +47,7 @@ public struct TrackingTimelineAtom: MotionAtomView {
                     }
                     .opacity(fill.value(at: t) >= 0 ? 1 : 1)
                 }
-                SwapText(cur >= 3 ? "Receipt · review your tote" : "").font(.system(size: 13)).lineSpacing(6.5)
+                SwapText(cur >= 3 ? "Receipt · review your tote" : "").font(.system(size: 13)).lineSpacing(3)
                     .frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
                 HStack(spacing: 8) {
                     Button(cur >= 3 ? "Restart" : "Advance") {

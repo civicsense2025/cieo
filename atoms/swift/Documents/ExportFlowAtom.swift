@@ -8,13 +8,14 @@ public struct ExportFlowAtom: MotionAtomView {
     private enum Phase { case idle, busy, done }
     @State private var phase = Phase.idle
     @State private var progress = 0.0
+    @State private var includeAnnotations = true
     @State private var run: Task<Void, Never>?
     public init() {}
 
     public var body: some View {
         AtomStage(hint: "Export, watch it creep, then pop done") {
             VStack(spacing: 12) {
-                Text("Contract.pdf · 2.4 MB").font(.headline)
+                Text(includeAnnotations ? "Contract.pdf · 2.6 MB" : "Contract.pdf · 2.4 MB").font(.headline)
                 ZStack {
                     switch phase {
                     case .idle: Button("Export PDF", action: start).frame(minHeight: 32)
@@ -36,11 +37,11 @@ public struct ExportFlowAtom: MotionAtomView {
                 }
                 .frame(height: 8)
                 ZStack(alignment: .leading) {
-                    if phase == .done { Text("Saved to Downloads ✓").foregroundStyle(.green).motionTransition(.swap()) }
+                    if phase == .done { Text(includeAnnotations ? "Saved with annotations ✓" : "Saved to Downloads ✓").foregroundStyle(.green).motionTransition(.swap()) }
                     else { Text(phase == .busy ? "Writing pages…" : "Ready to export").foregroundStyle(.secondary).motionTransition(.swap()) }
                 }
                 .font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
-                Toggle("Include annotations", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Include annotations", isOn: $includeAnnotations).font(.caption).foregroundStyle(.secondary)
             }
             .padding(16).frame(maxWidth: 340)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

@@ -29,10 +29,23 @@ public enum MotionHaptic: Sendable, Equatable, CaseIterable {
     }
 }
 
+private struct MotionHapticResolverModifier<Trigger: Equatable>: ViewModifier {
+    @Environment(\.hapticsPolicy) private var policy
+    let trigger: Trigger
+    let resolve: (Trigger, Trigger) -> MotionHaptic?
+
+    func body(content: Content) -> some View {
+        content.sensoryFeedback(trigger: trigger) { old, new in
+            guard let haptic = resolve(old, new) else { return nil }
+            return policy.feedback(for: haptic)
+        }
+    }
+}
+
 public extension View {
-    /// Plays `haptic` each time `trigger` changes.
+    /// Plays `haptic` each time `trigger` changes, honoring `hapticsPolicy`.
     func motionHaptic<Trigger: Equatable>(_ haptic: MotionHaptic, trigger: Trigger) -> some View {
-        sensoryFeedback(haptic.feedback, trigger: trigger)
+        modifier(MotionHapticResolverModifier(trigger: trigger) { _, _ in haptic })
     }
 
     /// Plays the haptic `resolve` picks for each change of `trigger`, or none when it returns `nil`. Use it
@@ -41,6 +54,6 @@ public extension View {
         trigger: Trigger,
         _ resolve: @escaping (_ old: Trigger, _ new: Trigger) -> MotionHaptic?
     ) -> some View {
-        sensoryFeedback(trigger: trigger) { old, new in resolve(old, new)?.feedback }
+        modifier(MotionHapticResolverModifier(trigger: trigger, resolve: resolve))
     }
 }

@@ -19,7 +19,7 @@ public struct UndoRedoAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Make a few changes, then undo") {
             VStack(alignment: .leading, spacing: 10) {
-                TimelineView(.animation) { ctx in
+                TimelineView(.animation(paused: reduce)) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     let s = sT.value(at: t), g = max(0, min(1, 1 - (t - ghostAt) / 0.5))
                     ZStack(alignment: .topLeading) {

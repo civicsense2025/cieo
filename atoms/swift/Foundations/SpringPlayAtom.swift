@@ -7,6 +7,8 @@ public struct SpringPlayAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var play = Track(0.5, preset: .base)
     @State private var lanes = [SpringPreset.snap, .base, .soft, .lazy].map { Track(0.5, preset: $0) }
+    @State private var vel = DataVelocity()
+    @State private var dragging = false
     @State private var pick = 1
     private let names = ["snap", "base", "soft", "lazy"]
     private let presets: [SpringPreset] = [.snap, .base, .soft, .lazy]
@@ -15,31 +17,35 @@ public struct SpringPlayAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the dot, release to settle") {
-            VStack(spacing: 16) {
-                GeometryReader { g in
-                    let w = max(1, g.size.width - 24)
-                    ZStack(alignment: .leading) {
-                        RoundedRectangle(cornerRadius: 12).fill(.quaternary)
-                        Circle().fill(.primary).frame(width: 24, height: 24)
-                            .offset(x: 12 + CGFloat(play.value(at: now)) * w)
-                    }
-                    .gesture(DragGesture(minimumDistance: 0).onChanged { v in
-                        let f = clamp01((v.location.x - 24) / w)
-                        play.jump(f); for i in lanes.indices { lanes[i].jump(f) }
-                    }.onEnded { v in
-                        let f = clamp01((v.location.x - 24) / w)
-                        let to = f > 0.5 ? 0.0 : 1.0
-                        let t = now
-                        if reduce { play.jump(to); for i in lanes.indices { lanes[i].jump(to) } }
-                        else {
-                            play.release(from: f, velocity: 0, to: to, preset: presets[pick], at: t)
-                            for i in lanes.indices { lanes[i].release(from: f, velocity: 0, to: to, at: t) }
+            TimelineView(.motion(play, lanes)) { ctx in
+                let t = ctx.date.timeIntervalSinceReferenceDate
+                VStack(spacing: 16) {
+                    GeometryReader { g in
+                        let w = max(1, g.size.width - 24)
+                        ZStack(alignment: .leading) {
+                            RoundedRectangle(cornerRadius: 12).fill(.quaternary)
+                            Circle().fill(.primary).frame(width: 24, height: 24)
+                                .offset(x: 12 + CGFloat(play.value(at: t)) * w)
                         }
-                    })
-                }
-                .frame(height: 64)
-                TimelineView(.animation(paused: reduce)) { ctx in
-                    let t = ctx.date.timeIntervalSinceReferenceDate
+                        .gesture(DragGesture(minimumDistance: 0).onChanged { v in
+                            if !dragging { dragging = true; vel.reset() }
+                            let f = clamp01((v.location.x - 24) / w)
+                            vel.add(f, at: v.time.timeIntervalSinceReferenceDate)
+                            play.jump(f); for i in lanes.indices { lanes[i].jump(f) }
+                        }.onEnded { v in
+                            dragging = false
+                            let f = clamp01((v.location.x - 24) / w)
+                            let to = f > 0.5 ? 0.0 : 1.0
+                            let v0 = vel.v
+                            let releaseTime = now
+                            if reduce { play.jump(to); for i in lanes.indices { lanes[i].jump(to) } }
+                            else {
+                                play.release(from: f, velocity: v0, to: to, preset: presets[pick], at: releaseTime)
+                                for i in lanes.indices { lanes[i].release(from: f, velocity: v0, to: to, at: releaseTime) }
+                            }
+                        })
+                    }
+                    .frame(height: 64)
                     VStack(spacing: 8) {
                         ForEach(0..<4, id: \.self) { i in
                             GeometryReader { g in
@@ -54,21 +60,21 @@ public struct SpringPlayAtom: MotionAtomView {
                             .frame(height: 24)
                         }
                     }
-                }
-                .frame(height: 4 * 24 + 3 * 8)
-                Text("\(names[pick]) · \(durs[pick])")
-                    .font(.system(size: 13, design: .monospaced)).foregroundStyle(.secondary)
-                HStack(spacing: 8) {
-                    Text("Preset").font(.caption).foregroundStyle(.secondary)
-                    ForEach(0..<4, id: \.self) { i in
-                        Button(names[i]) { pick = i; play.preset = presets[i] }
-                            .buttonStyle(.bordered).controlSize(.small)
-                            .frame(minHeight: 32)
-                            .tint(pick == i ? .accentColor : nil)
+                    .frame(height: 4 * 24 + 3 * 8)
+                    Text("\(names[pick]) · \(durs[pick])")
+                        .font(.system(size: 13, design: .monospaced)).foregroundStyle(.secondary)
+                    HStack(spacing: 8) {
+                        Text("Preset").font(.caption).foregroundStyle(.secondary)
+                        ForEach(0..<4, id: \.self) { i in
+                            Button(names[i]) { pick = i; play.preset = presets[i] }
+                                .buttonStyle(.bordered).controlSize(.small)
+                                .frame(minHeight: 32)
+                                .tint(pick == i ? .accentColor : nil)
+                        }
                     }
                 }
+                .frame(maxWidth: 340)
             }
-            .frame(maxWidth: 340)
         }
     }
 

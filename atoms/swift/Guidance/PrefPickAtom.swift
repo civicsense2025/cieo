@@ -1,5 +1,6 @@
 import SwiftUI
 import Cieo
+import CieoUI
 
 public struct PrefPickAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "prefpick", category: "Guidance", name: "Preference picker",
@@ -73,30 +74,8 @@ private struct FlowChips: View {
             .scaleEffect(sel ? 1.05 : 1)
     }
     var body: some View {
-        FlowLayout(spacing: 8) {
+        FlowStack(spacing: 8) {
             ForEach(topics.indices, id: \.self) { i in chip(i) }
-        }
-    }
-}
-
-private struct FlowLayout: Layout {
-    var spacing: CGFloat = 8
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        var w: CGFloat = 0, h: CGFloat = 0, rowW: CGFloat = 0, rowH: CGFloat = 0
-        for s in subviews {
-            let d = s.sizeThatFits(.unspecified)
-            if rowW + d.width > (proposal.width ?? 292) { w = max(w, rowW); h += rowH + spacing; rowW = 0; rowH = 0 }
-            rowW += d.width + spacing; rowH = max(rowH, d.height)
-        }
-        return CGSize(width: max(w, rowW), height: h + rowH)
-    }
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        var x = bounds.minX, y = bounds.minY, rowH: CGFloat = 0
-        for s in subviews {
-            let d = s.sizeThatFits(.unspecified)
-            if x + d.width > bounds.maxX { x = bounds.minX; y += rowH + spacing; rowH = 0 }
-            s.place(at: CGPoint(x: x, y: y), proposal: .unspecified)
-            x += d.width + spacing; rowH = max(rowH, d.height)
         }
     }
 }

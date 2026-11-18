@@ -27,12 +27,18 @@ public struct AudioLevelMeter: View {
         self.init(level: level, bars: bars, label: Text(label))
     }
 
+    private struct BarSlot: Identifiable {
+        let id: Int
+        let fraction: Double
+    }
+
     public var body: some View {
+        let bars = Self.levelBars(level, count: count).enumerated().map { BarSlot(id: $0.offset, fraction: $0.element) }
         HStack(alignment: .center, spacing: metrics.tight) {
-            ForEach(Array(Self.levelBars(level, count: count).enumerated()), id: \.offset) { _, fraction in
+            ForEach(bars) { bar in
                 Capsule()
                     .fill(theme.accent)
-                    .frame(width: metrics.thinBar, height: height * fraction)
+                    .frame(width: metrics.thinBar, height: height * bar.fraction)
             }
         }
         .frame(height: height)

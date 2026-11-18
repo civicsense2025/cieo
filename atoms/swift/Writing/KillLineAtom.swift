@@ -9,6 +9,7 @@ public struct KillLineAtom: MotionAtomView {
     @State private var tweak = true
     @State private var dragX = 0.0
     @State private var armed = false
+    @State private var pendingConfirm = false
     @State private var cut = false
     public init() {}
     private let threshold = 120.0
@@ -30,9 +31,13 @@ public struct KillLineAtom: MotionAtomView {
                                 .gesture(DragGesture(minimumDistance: 4).onChanged { g in
                                     dragX = reduce ? g.translation.width : max(0, g.translation.width)
                                     armed = dragX > threshold
-                                }.onEnded { g in
-                                    if dragX > threshold { kill() }
-                                    else { withMotion(.base, reduceMotion: reduce) { dragX = 0; armed = false } }
+                                }.onEnded { _ in
+                                    if dragX > threshold {
+                                        if tweak { withMotion(.snap, reduceMotion: reduce) { pendingConfirm = true; dragX = threshold } }
+                                        else { kill() }
+                                    } else {
+                                        withMotion(.base, reduceMotion: reduce) { dragX = 0; armed = false; pendingConfirm = false }
+                                    }
                                 })
                                 .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 0.94)))
                         }
@@ -43,9 +48,13 @@ public struct KillLineAtom: MotionAtomView {
                     .animation(reduce ? nil : .motion(.base), value: stories.count)
                 }
                 HStack {
-                    Button("Restore") { withMotion(.base, reduceMotion: reduce) { cut = false; dragX = 0; armed = false } }
+                    if pendingConfirm && !cut {
+                        Button("Cut now", role: .destructive) { pendingConfirm = false; kill() }
+                            .buttonStyle(.borderedProminent).frame(minHeight: 32)
+                    }
+                    Button("Restore") { withMotion(.base, reduceMotion: reduce) { cut = false; dragX = 0; armed = false; pendingConfirm = false } }
                         .buttonStyle(.bordered).frame(minHeight: 32)
-                    Text(cut ? "cut" : armed ? "release to cut" : "").font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    Text(cut ? "cut" : pendingConfirm ? "confirm cut?" : armed ? "release to cut" : "").font(.system(size: 12.5)).foregroundStyle(.secondary)
                 }
                 Toggle("Confirm cut", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)

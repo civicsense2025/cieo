@@ -7,13 +7,14 @@ public struct VeloSheetAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var settled = false
+    @State private var stagger = true
     private let links = ["Home", "Events", "Members", "Library", "Settings"]
     public init() {}
     public var body: some View {
         AtomStage(hint: "Fling to snap · links stagger after settle") {
             ZStack(alignment: .leading) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Toggle("Stagger links", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                    Toggle("Stagger links", isOn: $stagger).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                     Button("Open navigation") { show(true) }.buttonStyle(.borderedProminent)
                     Text("Drags 1:1 · release speed decides.").font(.caption).foregroundStyle(.secondary)
                 }
@@ -30,9 +31,9 @@ public struct VeloSheetAtom: MotionAtomView {
     private var drawer: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Common Room").font(.headline).padding(.horizontal, 10).padding(.bottom, 8)
-            ForEach(Array(links.enumerated()), id: \.offset) { i, n in
+            ForEach(Array(links.enumerated()), id: \.element) { i, n in
                 Text(n).font(.callout.weight(.medium)).padding(.horizontal, 10).padding(.vertical, 9)
-                    .transition(reduce ? .identity : .opacity.combined(with: .offset(x: -12)))
+                    .transition(reduce ? .identity : .opacity.combined(with: .offset(x: -12)).animation(.motion(.base).delay(stagger ? Motion.lag + Double(i) * 0.03 : Motion.lag)))
             }
         }
         .padding(.vertical, 16).padding(.horizontal, 10).frame(width: 200, alignment: .leading)

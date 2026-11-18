@@ -17,7 +17,7 @@ public struct StylePaintAtom: MotionAtomView {
                     ForEach(styles.indices, id: \.self) { i in
                         Button(styles[i]) { pick(i) }.buttonStyle(.plain).frame(minHeight: 32).padding(.horizontal, 10).padding(.vertical, 6)
                             .background(RoundedRectangle(cornerRadius: 8).fill(sel == i ? Color.primary.opacity(0.08) : Color.clear))
-                            .onHover { if $0 { pick(i) } }
+                            .onHover { if $0 && tweak { pick(i) } }
                     }
                 }
                 .animation(reduce ? nil : .motion(.base), value: sel)

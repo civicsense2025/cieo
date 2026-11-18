@@ -8,7 +8,7 @@ public struct ReactionsAtom: MotionAtomView {
     private let choices = ["❤", "👏", "🎉"]
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var floats: [Floater] = []
-    @State private var pile: [String] = []
+    @State private var pile: [PileReaction] = []
     @State private var total = 0
     @State private var big = false
     public init() {}
@@ -17,6 +17,11 @@ public struct ReactionsAtom: MotionAtomView {
         let id = UUID()
         let emoji: String
         var risen = false
+    }
+
+    private struct PileReaction: Identifiable {
+        let id = UUID()
+        let emoji: String
     }
 
     private var done: Bool { total >= 5 }
@@ -35,8 +40,8 @@ public struct ReactionsAtom: MotionAtomView {
                     }
                     .padding(.leading, 60).padding(.bottom, 40)
                     HStack(spacing: 6) {
-                        ForEach(Array(pile.enumerated()), id: \.offset) { index, e in
-                            Text(e).font(.system(size: 15))
+                        ForEach(Array(pile.enumerated()), id: \.element.id) { index, item in
+                            Text(item.emoji).font(.system(size: 15))
                                 .frame(width: 30, height: 30)
                                 .background(Circle().fill(.quaternary))
                                 .animation(reduce ? nil : .motion(.base).delay(Double(min(index, 5)) * 0.05), value: pile.count)
@@ -78,7 +83,7 @@ public struct ReactionsAtom: MotionAtomView {
 
     private func send(_ emoji: String) {
         total += 1
-        pile.append(emoji)
+        pile.append(PileReaction(emoji: emoji))
         if pile.count > 6 { pile.removeFirst() }
         if reduce { return }
         let f = Floater(emoji: emoji)

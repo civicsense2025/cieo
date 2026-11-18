@@ -70,7 +70,7 @@ public struct ContextMenuAtom: MotionAtomView {
 
     private var menu: some View {
         VStack(spacing: 0) {
-            ForEach(Array(items.enumerated()), id: \.offset) { i, name in
+            ForEach(Array(items.enumerated()), id: \.element) { i, name in
                 if name == "—" {
                     Divider().padding(.vertical, 4)
                 } else {

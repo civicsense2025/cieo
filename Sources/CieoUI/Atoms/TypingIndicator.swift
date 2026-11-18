@@ -15,6 +15,7 @@ public struct TypingIndicator: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var onScreen = false
@@ -43,7 +44,7 @@ public struct TypingIndicator: View {
                     .accessibilityAddTraits(.updatesFrequently)
             }
         }
-        .motion(.base, value: key.isEmpty)
+        .motionAnimation(.base, value: key.isEmpty)
         .onChange(of: key) { _, new in
             if !new.isEmpty {
                 held = names
@@ -68,7 +69,7 @@ public struct TypingIndicator: View {
         }
     }
 
-    private var paused: Bool { !onScreen || scenePhase != .active || reduceMotion }
+    private var paused: Bool { !onScreen || scenePhase != .active || reduceMotion || !policy.allowsMotion }
 
     private var dots: some View {
         TimelineView(.animation(paused: paused)) { context in

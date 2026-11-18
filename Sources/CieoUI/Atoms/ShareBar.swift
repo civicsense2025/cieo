@@ -1,5 +1,8 @@
 import SwiftUI
 
+/// Canonical alias matching Cieo's cross-platform vocabulary.
+public typealias ProportionBar = ShareBar
+
 /// Shares of a whole as one rounded bar, such as two candidates' vote shares.
 /// It draws nothing unless every share is a positive number, so a missing figure never shows as a fake split.
 public struct ShareBar: View {

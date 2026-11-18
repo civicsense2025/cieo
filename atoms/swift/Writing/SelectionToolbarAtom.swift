@@ -55,7 +55,7 @@ public struct SelectionToolbarAtom: MotionAtomView {
 
     private var toolbar: some View {
         HStack(spacing: 2) {
-            ForEach(Array(["bold", "italic", "underline", "link"].enumerated()), id: \.offset) { i, name in
+            ForEach(Array(["bold", "italic", "underline", "link"].enumerated()), id: \.element) { i, name in
                 Button { if pressed.contains(i) { pressed.remove(i) } else { pressed.insert(i) } } label: {
                     Image(systemName: name).frame(width: 30, height: 30)
                         .background(pressed.contains(i) ? AnyShapeStyle(.quaternary) : AnyShapeStyle(.clear), in: RoundedRectangle(cornerRadius: 7))

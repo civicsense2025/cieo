@@ -26,17 +26,20 @@ public struct SettingSearchAtom: MotionAtomView {
             VStack(spacing: 8) {
                 TextField("Search settings…", text: $query).textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10))
                     .font(.system(size: 13.5)).frame(minHeight: 36)
+                    .onChange(of: query) { _, _ in highlight = 0 }
                 ForEach(data.map(\.0), id: \.self) { sec in
                     let rows = matches.filter { $0.sec == sec }
                     if !rows.isEmpty {
                         VStack(alignment: .leading, spacing: 0) {
                             Text(sec).font(.system(size: 13, weight: .semibold))
                                 .padding(.horizontal, 10).padding(.vertical, 4)
-                            ForEach(Array(rows.enumerated()), id: \.offset) { _, r in
+                            ForEach(rows, id: \.row) { r in
+                                let idx = matches.firstIndex { $0.row == r.row } ?? 0
                                 Button { jumped = r.row } label: {
                                     Text(r.row).font(.system(size: 13.5))
                                         .frame(maxWidth: .infinity, minHeight: 40, alignment: .leading)
                                         .padding(.horizontal, 10)
+                                        .background(idx == highlight ? Color.primary.opacity(0.08) : .clear, in: RoundedRectangle(cornerRadius: 8))
                                 }
                                 .buttonStyle(.plain)
                                 .transition(.opacity.combined(with: .move(edge: .top)))

@@ -39,7 +39,7 @@ public struct TaxEstimatorAtom: MotionAtomView {
                             .background(.primary, in: RoundedRectangle(cornerRadius: 9)).foregroundStyle(.background)
                     }
                     .transition(.move(edge: .top).combined(with: .opacity))
-                    if let error { Text(error).font(.system(size: 12.5)).lineSpacing(6.5).foregroundStyle(.red).frame(maxWidth: .infinity, alignment: .leading) }
+                    if let error { Text(error).font(.system(size: 12.5)).lineSpacing(3).foregroundStyle(.red).frame(maxWidth: .infinity, alignment: .leading) }
                     TimelineView(.motion([tax, total])) { ctx in
                         let t = ctx.date.timeIntervalSinceReferenceDate
                         VStack(spacing: 6) {
@@ -64,7 +64,7 @@ public struct TaxEstimatorAtom: MotionAtomView {
             Spacer()
             Text(money(max(0, v))).monospacedDigit()
         }
-        .font(strong ? .system(size: 15, weight: .semibold) : .system(size: 13)).lineSpacing(6.5)
+        .font(strong ? .system(size: 15, weight: .semibold) : .system(size: 13)).lineSpacing(3)
         .opacity(fired ? 1 : 0)
         .animation(reduce ? nil : .motion(.base).delay(Double(delay) * 0.05), value: fired)
     }

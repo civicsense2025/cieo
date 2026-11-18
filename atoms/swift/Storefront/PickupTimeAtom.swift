@@ -9,14 +9,16 @@ public struct PickupTimeAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var day = 0
     @State private var slot: String? = nil
+    @State private var includeWeekend = true
     @Namespace private var disc
     @Namespace private var plate
     public init() {}
+    private var dayIndices: [Int] { includeWeekend ? [0, 1, 2] : [0, 1] }
     public var body: some View {
         AtomStage(hint: "Days glide, slots stagger, choice lifts") {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Choose pickup time").font(.callout.weight(.semibold))
-                HStack(spacing: 4) { ForEach(days.indices, id: \.self) { i in
+                HStack(spacing: 4) { ForEach(dayIndices, id: \.self) { i in
                     Button(days[i]) { withMotion(.base, reduceMotion: reduce) { day = i; slot = nil } }
                     .buttonStyle(.plain).font(.footnote.weight(.medium)).frame(height: 32).padding(.horizontal, 12)
                     .background(day == i ? AnyShapeStyle(Color.primary) : AnyShapeStyle(Color.clear))
@@ -33,7 +35,8 @@ public struct PickupTimeAtom: MotionAtomView {
                     .background { if slot == s { RoundedRectangle(cornerRadius: 10).fill(Color.primary).opacity(0.10).padding(-3).matchedGeometryEffect(id: "plate", in: plate) } }
                 } }.id(day).motionTransition(.swap())
                 SwapText(slot.map { "\(days[day]) at \($0) — ready in 15 min." } ?? "Pick a day to see slots.").font(.caption).foregroundStyle(.secondary)
-                Toggle("Include weekend", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Include weekend", isOn: $includeWeekend).font(.caption).foregroundStyle(.secondary)
+                    .onChange(of: includeWeekend) { _, on in if !on && day == 2 { withMotion(.base, reduceMotion: reduce) { day = 0; slot = nil } } }
             }.frame(maxWidth: 320)
         }
     }

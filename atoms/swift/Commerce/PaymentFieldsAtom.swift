@@ -73,7 +73,7 @@ public struct PaymentFieldsAtom: MotionAtomView {
         Group {
             if let s {
                 Label(s.1, systemImage: s.0 ? "checkmark.circle" : "exclamationmark.circle")
-                    .font(.system(size: 12.5)).lineSpacing(6.5).foregroundStyle(s.0 ? .green : .red)
+                    .font(.system(size: 12.5)).lineSpacing(3).foregroundStyle(s.0 ? .green : .red)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 Text("").font(.system(size: 12.5)).frame(maxWidth: .infinity, minHeight: 19, alignment: .leading)

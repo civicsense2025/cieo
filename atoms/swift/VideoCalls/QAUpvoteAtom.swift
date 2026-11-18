@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct QAUpvoteAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "qaupvote", category: "Forms", name: "Live Q&A upvote",
+    public static let info = MotionAtomInfo(id: "qaupvote", category: "Video calls", name: "Live Q&A upvote",
         summary: "Voting springs each row to its new rank on base while the counts roll digits. Resolving swaps a row to answered; the last one swaps in an empty terminal.")
 
     private struct Item: Identifiable {

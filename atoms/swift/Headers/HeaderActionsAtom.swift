@@ -52,7 +52,7 @@ public struct HeaderActionsAtom: MotionAtomView {
 
     private var accountMenu: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ForEach(Array(["Profile", "Billing", "Sign out"].enumerated()), id: \.offset) { i, t in
+            ForEach(Array(["Profile", "Billing", "Sign out"].enumerated()), id: \.element) { i, t in
                 Button { withMotion(.base, reduceMotion: reduce) { menu = false; if i == 2 { signedIn = false } } } label: { Text(t).font(.caption).padding(.horizontal, 10).padding(.vertical, 6) }
                     .buttonStyle(.plain).megaRise(i, of: 3, lead: 0)
             }

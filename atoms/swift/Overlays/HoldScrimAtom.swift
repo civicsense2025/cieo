@@ -7,13 +7,14 @@ public struct HoldScrimAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
     @State private var progress: Double = 0
+    @State private var spaceHolds = true
     @State private var task: Task<Void, Never>?
     public init() {}
     public var body: some View {
         AtomStage(hint: "Press dims deeper · hold 500ms dismisses") {
             ZStack {
                 VStack(spacing: 8) {
-                    Toggle("Space holds too", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                    Toggle("Space holds too", isOn: $spaceHolds).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                     Button("Open preview") { withMotion(.base, reduceMotion: reduce) { open = true; progress = 0 } }
                         .buttonStyle(.borderedProminent)
                     Text("Hold the shade to dismiss").font(.headline)
@@ -27,7 +28,7 @@ public struct HoldScrimAtom: MotionAtomView {
                         .transition(reduce ? .identity : .scale(scale: 0.9).combined(with: .opacity).animation(.motion(.snap)))
                 }
             }
-            .onKeyPress(.space) { press(); return .handled }
+            .onKeyPress(.space) { guard spaceHolds && open else { return .ignored }; press(); return .handled }
             .onKeyPress(.escape) { dismiss(); return .handled }
         }
     }

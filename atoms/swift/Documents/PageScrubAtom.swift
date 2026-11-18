@@ -9,6 +9,7 @@ public struct PageScrubAtom: MotionAtomView {
     @State private var knob = 0.0
     @State private var plate = 0.0
     @State private var ghost = 0.0
+    @State private var snapToPage = true
     private let titles = ["Cover", "Parties", "Schedule", "Signatures", "Exhibits"]
     public init() {}
 
@@ -29,15 +30,15 @@ public struct PageScrubAtom: MotionAtomView {
                     }
                     .gesture(DragGesture(minimumDistance: 2).onChanged { v in
                         knob = min(1, max(0, v.location.x / w))
-                    }.onEnded { v in
+                    }.onEnded { _ in
                         let to = min(4, max(0, Int((knob * 4).rounded())))
-                        withMotion(.base, reduceMotion: reduce) { land(to, width: w) }
+                        withMotion(.base, reduceMotion: reduce) { land(to, snapKnob: snapToPage) }
                     })
                 }
                 .frame(height: 32)
                 HStack(spacing: 8) {
                     ForEach(0..<5, id: \.self) { i in
-                        Button("\(i + 1)") { withMotion(.base, reduceMotion: reduce) { land(i, width: nil) } }
+                        Button("\(i + 1)") { withMotion(.base, reduceMotion: reduce) { land(i, snapKnob: true) } }
                             .frame(minWidth: 32, minHeight: 32).background(i == page ? Color.accentColor.opacity(0.15) : .clear, in: RoundedRectangle(cornerRadius: 8))
                             .foregroundStyle(i == page ? Color.accentColor : .primary)
                     }
@@ -48,15 +49,17 @@ public struct PageScrubAtom: MotionAtomView {
                     }
                 }
                 .font(.caption).frame(maxWidth: .infinity, minHeight: 22)
-                Toggle("Snap to page", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Snap to page", isOn: $snapToPage).font(.caption).foregroundStyle(.secondary)
             }
             .padding(16).frame(maxWidth: 360)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
         }
     }
 
-    private func land(_ i: Int, width: CGFloat?) {
-        page = i; knob = Double(i) / 4; plate = Double(i) / 4
+    private func land(_ i: Int, snapKnob: Bool) {
+        page = i
+        let target = snapKnob ? Double(i) / 4 : knob
+        knob = target; plate = Double(i) / 4
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
             withMotion(.base, reduceMotion: reduce) { ghost = Double(i) / 4 }
         }

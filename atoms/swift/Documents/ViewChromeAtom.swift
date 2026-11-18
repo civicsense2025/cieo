@@ -7,6 +7,7 @@ public struct ViewChromeAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var page = 1
     @State private var chrome = 1.0
+    @State private var autoHide = true
     @State private var idle: Task<Void, Never>?
     private let total = 4
     private let pages = ["§1 Parties agree to the spring delivery schedule.", "§2 The market bell marks the opening of trade.", "§3 Attention is paid in full on receipt.", "§4 Care survives termination of this agreement."]
@@ -28,12 +29,16 @@ public struct ViewChromeAtom: MotionAtomView {
                         if i == page - 1 { Text(pages[i]).motionTransition(.swap()) }
                     }
                 }
-                .font(.callout).lineSpacing(6).frame(maxWidth: .infinity, minHeight: 72, alignment: .leading).opacity(0.35 + 0.65 * chrome)
+                .font(.callout).lineSpacing(3).frame(maxWidth: .infinity, minHeight: 72, alignment: .leading).opacity(0.35 + 0.65 * chrome)
                 ZStack(alignment: .leading) {
                     if page == total { Text("Caught up — nothing left to read ✓").foregroundStyle(.green).motionTransition(.swap()) }
                 }
                 .font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
-                Toggle("Hide chrome after 2s idle", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Hide chrome after 2s idle", isOn: $autoHide).font(.caption).foregroundStyle(.secondary)
+                    .onChange(of: autoHide) { _, on in
+                        if on { arm() }
+                        else { idle?.cancel(); withMotion(.base, reduceMotion: reduce) { chrome = 1.0 } }
+                    }
             }
             .padding(16).frame(maxWidth: 360)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
@@ -50,6 +55,7 @@ public struct ViewChromeAtom: MotionAtomView {
 
     private func arm() {
         idle?.cancel()
+        guard autoHide else { return }
         idle = Task {
             try? await Task.sleep(for: .seconds(2))
             if Task.isCancelled { return }

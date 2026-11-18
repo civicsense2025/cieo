@@ -10,13 +10,14 @@ public struct DialogFormAtom: MotionAtomView {
     @State private var email = "maya@studio.co"
     @State private var role = "Editor"
     @State private var error = ""
+    @State private var focusInvalid = true
     @FocusState private var field: Int?
     public init() {}
     public var body: some View {
         AtomStage(hint: "Step 1 of 2 · invalid shows danger") {
             ZStack {
                 VStack(spacing: 8) {
-                    Toggle("Focus first invalid", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                    Toggle("Focus first invalid", isOn: $focusInvalid).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                     Button("Invite member") { step = 0; error = ""; withMotion(.base, reduceMotion: reduce) { open = true }; field = 0 }
                         .buttonStyle(.borderedProminent)
                 }
@@ -54,7 +55,11 @@ public struct DialogFormAtom: MotionAtomView {
     }
     private func valid(_ tag: Int) -> Bool { tag == 0 ? email.contains("@") && email.contains(".") : role.count >= 2 }
     private func next() {
-        guard valid(step) else { error = step == 0 ? "Enter an email like maya@studio.co." : "Give a role with at least 2 letters."; field = step; return }
+        guard valid(step) else {
+            error = step == 0 ? "Enter an email like maya@studio.co." : "Give a role with at least 2 letters."
+            if focusInvalid { field = step }
+            return
+        }
         error = ""
         if step == 0 { withMotion(.base, reduceMotion: reduce) { step = 1 }; field = 1 }
         else { withMotion(.snap, reduceMotion: reduce) { open = false } }

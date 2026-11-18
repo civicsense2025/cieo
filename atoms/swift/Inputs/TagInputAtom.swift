@@ -1,5 +1,6 @@
 import SwiftUI
 import Cieo
+import CieoUI
 
 public struct TagInputAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "taginput", category: "Inputs", name: "Tag input",
@@ -96,41 +97,9 @@ public struct TagInputAtom: MotionAtomView {
     }
 }
 
-/// Left-aligned wrapping rows with 6 pt gaps.
-struct BasicsLeadingFlow: Layout {
-    func rows(_ width: CGFloat, _ subviews: Subviews) -> [[Int]] {
-        var out: [[Int]] = [[]]
-        var x: CGFloat = 0
-        for i in subviews.indices {
-            let w = subviews[i].sizeThatFits(.unspecified).width
-            if x > 0, x + w > width {
-                out.append([])
-                x = 0
-            }
-            out[out.count - 1].append(i)
-            x += w + 6
-        }
-        return out
-    }
-
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        let r = rows(proposal.width ?? .infinity, subviews)
-        let h = r.map { row in row.map { subviews[$0].sizeThatFits(.unspecified).height }.max() ?? 0 }
-        return CGSize(width: proposal.width ?? 320, height: h.reduce(0, +) + 6 * CGFloat(max(0, r.count - 1)))
-    }
-
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        var y = bounds.minY
-        for row in rows(bounds.width, subviews) {
-            var x = bounds.minX
-            let h = row.map { subviews[$0].sizeThatFits(.unspecified).height }.max() ?? 0
-            for i in row {
-                let s = subviews[i].sizeThatFits(.unspecified)
-                let w = i == subviews.count - 1 ? max(s.width, bounds.maxX - x) : s.width
-                subviews[i].place(at: CGPoint(x: x, y: y + (h - s.height) / 2), proposal: ProposedViewSize(width: w, height: s.height))
-                x += s.width + 6
-            }
-            y += h + 6
-        }
-    }
+/// Left-aligned wrapping rows with 6 pt gaps delegating to `CieoUI.FlowStack`.
+struct BasicsLeadingFlow<Content: View>: View {
+    let content: Content
+    init(@ViewBuilder content: () -> Content) { self.content = content() }
+    var body: some View { FlowStack(spacing: 6) { content } }
 }

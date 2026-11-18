@@ -24,10 +24,16 @@ public struct TemplateAtom: MotionAtomView {
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     if sel < 0 { Text("Pick a template to insert").font(.system(size: 14)).foregroundStyle(.secondary) }
-                    else { VStack(alignment: .leading) { Text(names[sel]).bold(); Text(bodies[sel]).font(.system(size: 14)).foregroundStyle(.secondary) }.id(sel).motionTransition(.swap()) }
+                    else {
+                        VStack(alignment: .leading) {
+                            if tweak { Text(names[sel]).bold() }
+                            Text(bodies[sel]).font(.system(size: 14)).foregroundStyle(.secondary)
+                        }.id("\(sel)-\(tweak)").motionTransition(.swap())
+                    }
                 }.padding(14).frame(maxWidth: .infinity, minHeight: 110, alignment: .topLeading)
                 .background(.quaternary).clipShape(RoundedRectangle(cornerRadius: 10))
                 .animation(reduce ? nil : .motion(.base), value: sel)
+                .animation(reduce ? nil : .motion(.base), value: tweak)
                 Toggle("Insert with title", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)

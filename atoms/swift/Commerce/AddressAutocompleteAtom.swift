@@ -25,12 +25,12 @@ public struct AddressAutocompleteAtom: MotionAtomView {
                     .background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
                     .onChange(of: q) { picked = nil }
                 VStack(spacing: 4) {
-                    ForEach(Array(matches.enumerated()), id: \.offset) { _, a in
+                    ForEach(matches, id: \.0) { a in
                         Button {
                             withMotion(.base, reduceMotion: reduce) { picked = "\(a.0) \(a.1)"; q = a.0 }
                         } label: {
                             HStack(spacing: 8) {
-                                Text(a.0).font(.system(size: 13)).lineSpacing(6.5)
+                                Text(a.0).font(.system(size: 13)).lineSpacing(3)
                                 Spacer()
                                 Text(a.1).font(.system(size: 12.5)).foregroundStyle(.secondary)
                             }
@@ -45,7 +45,7 @@ public struct AddressAutocompleteAtom: MotionAtomView {
                 .animation(reduce ? nil : .motion(.base), value: q)
                 .animation(reduce ? nil : .motion(.base), value: usOnly)
                 SwapText(picked != nil ? "Picked — edit to search again" : "")
-                    .font(.system(size: 13)).lineSpacing(6.5).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
+                    .font(.system(size: 13)).lineSpacing(3).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
                 Toggle("US only", isOn: $usOnly).font(.system(size: 12.5)).foregroundStyle(.secondary).nativeToggleStyle()
             }
             .padding(14).frame(maxWidth: 300)

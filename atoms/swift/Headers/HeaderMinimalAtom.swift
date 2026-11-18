@@ -21,7 +21,7 @@ public struct HeaderMinimalAtom: MotionAtomView {
                     VStack(alignment: .leading, spacing: 10) {
                         Spacer().frame(height: 60)
                         if open {
-                            ForEach(Array(["Work", "Studio", "Journal", "Contact"].enumerated()), id: \.offset) { i, t in
+                            ForEach(Array(["Work", "Studio", "Journal", "Contact"].enumerated()), id: \.element) { i, t in
                                 Text(t).font(.title2.weight(.semibold)).foregroundStyle(.background)
                                     .opacity(hover == nil || hover == i ? 1 : 0.4).motion(.snap, value: hover)
                                     .onHover { hover = $0 ? i : nil }
