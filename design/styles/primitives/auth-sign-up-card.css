@@ -2,12 +2,12 @@
 @layer cieo.components {
   :where(.cieo).cieo-auth-card {
     display: inline-flex; flex-direction: column; gap: 14px;
-    background: var(--cieo-color-surface); border-radius: 14px; padding: 20px;
+    background: var(--cieo-color-surface); border-radius: var(--cieo-radius-surface); padding: 20px;
     max-width: 22.5rem;
   }
   :where(.cieo) .cieo-auth-card-title { margin: 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-status { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
-  :where(.cieo) .cieo-auth-routes { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-auth-routes { margin: 0; display: flex; flex-wrap: wrap; gap: var(--cieo-space-1) var(--cieo-space-4); font-size: var(--cieo-text-small); }
   :where(.cieo) .cieo-auth-routes a { color: var(--cieo-color-text); }
   @media (prefers-reduced-motion: reduce) {
     :root:not([data-motion='full']) :where(.cieo).cieo-auth-card * { animation: none !important; transition: none !important; }

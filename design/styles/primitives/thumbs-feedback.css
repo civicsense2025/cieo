@@ -1,7 +1,7 @@
 /* design/styles/primitives/thumbs-feedback.css */
 @layer cieo.components {
   :where(.cieo).cieo-thumbs-feedback { display: block; color: var(--cieo-color-text); }
-  :where(.cieo) .cieo-thumbs-panel { overflow: clip; overflow-clip-margin: 4px; }
+  :where(.cieo) .cieo-thumbs-panel { overflow: clip; overflow-clip-margin: var(--cieo-space-1); }
   :where(.cieo) .cieo-thumbs-inner { position: relative; }
   :where(.cieo) .cieo-thumbs-leaving { position: absolute; inset: 0 0 auto 0; pointer-events: none; animation: cieo-thumbs-out var(--motion-duration-exit, 100ms) cubic-bezier(.4,0,1,1) both; }
   :where(.cieo) .cieo-thumbs-entering[data-swap] { animation: cieo-thumbs-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) var(--motion-duration-exit, 100ms) both; }

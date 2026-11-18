@@ -51,7 +51,7 @@
   label:where(.cieo):where(:not(.cieo-ctl, .cieo-check)) { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; color: var(--cieo-color-text); }
   :where(.cieo) .cieo-check:where(:not(.cieo-ctl)) { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-control-height); cursor: pointer; }
   :where(.cieo) .cieo-check:where(:not(.cieo-ctl)) input { inline-size: 1.125rem; block-size: 1.125rem; margin: 0; flex: none; }
-  :where(.cieo) .cieo-badge { display: inline-flex; align-items: center; gap: var(--cieo-space-1); padding: .25rem .625rem; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent-soft); color: var(--cieo-color-on-accent-soft); font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); }
+  :where(.cieo) .cieo-badge { display: inline-flex; align-items: center; gap: var(--cieo-space-1); padding: .25rem .625rem; border-radius: var(--cieo-radius-control); background: var(--cieo-color-accent-soft); color: var(--cieo-color-on-accent-soft); font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); }
   :where(.cieo) .cieo-badge[data-status='success'] { color: var(--cieo-color-success); background: var(--cieo-color-success-soft); }
   :where(.cieo) .cieo-badge[data-status='warning'] { color: var(--cieo-color-warning); background: var(--cieo-color-warning-soft); }
   :where(.cieo) .cieo-badge[data-status='danger'] { color: var(--cieo-color-danger); background: var(--cieo-color-danger-soft); }

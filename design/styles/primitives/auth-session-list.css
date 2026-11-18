@@ -1,27 +1,27 @@
 /* design/styles/primitives/auth-session-list.css */
 @layer cieo.components {
   :where(.cieo).cieo-auth-session-list {
-    display: inline-flex; flex-direction: column; gap: 12px;
-    background: var(--cieo-color-surface); border-radius: 14px; padding: 20px;
+    display: inline-flex; flex-direction: column; gap: var(--cieo-space-3);
+    background: var(--cieo-color-surface); border-radius: var(--cieo-radius-surface); padding: 20px;
     max-width: 22.5rem;
   }
   :where(.cieo) .cieo-auth-card-title { margin: 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); color: var(--cieo-color-text); }
-  :where(.cieo) .cieo-auth-sessions { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  :where(.cieo) .cieo-auth-sessions { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: var(--cieo-space-2); }
   :where(.cieo) .cieo-auth-session {
     display: flex; flex-direction: column; gap: 2px;
-    background: var(--cieo-color-raised, var(--cieo-color-surface)); border-radius: 9px; padding: 12px 14px;
+    background: var(--cieo-color-raised, var(--cieo-color-surface)); border-radius: var(--cieo-radius-surface); padding: var(--cieo-space-3) 14px;
   }
   :where(.cieo) .cieo-auth-session-device { font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-session-meta { font-size: var(--cieo-text-small); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-session-current { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
   :where(.cieo) .cieo-auth-revoke {
-    align-self: flex-start; min-height: 2.75rem; border: 0; border-radius: 9px; cursor: pointer;
+    align-self: flex-start; min-height: 2.75rem; border: 0; border-radius: var(--cieo-radius-surface); cursor: pointer;
     background: none; color: var(--cieo-color-danger);
-    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 4px;
+    font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-medium); padding: 0 var(--cieo-space-1);
   }
   :where(.cieo) .cieo-auth-revoke:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
   @media (max-width: 30rem), (pointer: coarse) {
-    :where(.cieo) .cieo-auth-revoke { min-height: 2.75rem; padding: 12px 4px; }
+    :where(.cieo) .cieo-auth-revoke { min-height: 2.75rem; padding: var(--cieo-space-3) var(--cieo-space-1); }
   }
   @media (prefers-reduced-motion: reduce) {
     :root:not([data-motion='full']) :where(.cieo).cieo-auth-session-list * { animation: none !important; transition: none !important; }

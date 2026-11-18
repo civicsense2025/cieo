@@ -3,7 +3,7 @@
   :where(.cieo).cieo-p-avatar-status-dot-wrap { position: relative; display: inline-flex; flex: none; }
   :where(.cieo) .cieo-p-avatar-status-dot {
     position: absolute; inset-block-end: 0; inset-inline-end: 0;
-    inline-size: 0.75rem; block-size: 0.75rem; border-radius: 999px;
+    inline-size: 0.75rem; block-size: 0.75rem; border-radius: var(--cieo-radius-pill);
     background: var(--cieo-color-muted); border: 2px solid var(--cieo-color-surface);
   }
   :where(.cieo) .cieo-p-avatar-status-dot[data-status='success'] { background: var(--cieo-color-success); }

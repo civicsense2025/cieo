@@ -73,7 +73,7 @@ test('on phones the nav folds into a menu opened by a two-line button, and searc
   assert.match(phone, /\.site-menu-btn \{[^}]*display: inline-flex/);
   const chrome = read('scripts/lib/site-chrome.mjs');
   assert.match(chrome, /M3 7h14M3 13h14/, 'a two-line hamburger');
-  assert.doesNotMatch(chrome, /<span>Search<\/span>/, 'search is an icon, labelled for screen readers');
+  assert.doesNotMatch(chrome, /<span>Search<\/span>/, 'search is an icon, labeled for screen readers');
 });
 
 test('phones keep the chapter and section links as a scrolling row instead of hiding them', () => {

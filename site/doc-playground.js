@@ -136,11 +136,14 @@ if (toolbar && stage) {
   // Slow motion stretches every motion token the stage reads: durations grow by 1/speed and spring frequencies shrink by speed.
   const DURATION_TOKENS = { 'base': 300, 'exit': 100, 'lazy': 740, 'snap': 200, 'soft': 440 };
   const OMEGA_TOKENS = { base: 22, lazy: 9, snap: 34, soft: 15 };
+  // The Spring menu repoints the "base" tokens, which most components animate with, at the chosen preset; slow motion then stretches whatever is chosen.
   const applyTimeScale = () => {
-    const set = (name, value) => (speedScale === 1 ? stage.style.removeProperty(name) : stage.style.setProperty(name, value));
-    for (const [k, ms] of Object.entries(DURATION_TOKENS)) set(`--cieo-motion-duration-${k}`, `${Math.round(ms / speedScale)}ms`);
-    for (const [k, w] of Object.entries(OMEGA_TOKENS)) set(`--cieo-motion-spring-${k}-w`, String(+(w * speedScale).toFixed(2)));
-    set('--cieo-motion-lag', `${Math.round(60 / speedScale)}ms`);
+    const preset = toolbar.querySelector('[data-stage-preset]')?.value || 'base';
+    const set = (name, value, keep) => (keep ? stage.style.setProperty(name, value) : stage.style.removeProperty(name));
+    const custom = speedScale !== 1;
+    for (const [k, ms] of Object.entries(DURATION_TOKENS)) set(`--cieo-motion-duration-${k}`, `${Math.round((k === 'base' ? DURATION_TOKENS[preset] : ms) / speedScale)}ms`, custom || (k === 'base' && preset !== 'base'));
+    for (const [k, w] of Object.entries(OMEGA_TOKENS)) set(`--cieo-motion-spring-${k}-w`, String(+((k === 'base' ? OMEGA_TOKENS[preset] : w) * speedScale).toFixed(2)), custom || (k === 'base' && preset !== 'base'));
+    set('--cieo-motion-lag', `${Math.round(60 / speedScale)}ms`, custom);
   };
   const syncStage = () => {
     const brand = toolbar.querySelector('[data-stage-brand]').value;

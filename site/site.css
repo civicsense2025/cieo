@@ -24,11 +24,6 @@ body.cieo-site {
 :root { --site-header-h: 3.5rem; }
 @media (pointer: coarse) { :root { --site-header-h: 4.25rem; } }
 .site-header { box-sizing: border-box; min-block-size: var(--site-header-h); }
-.site-mark { margin-inline-end: auto; }
-  .site-nav { order: 3; flex: 0 0 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--cieo-space-4) * -1); padding-inline: var(--cieo-space-4); }
-  .site-nav::-webkit-scrollbar { display: none; }
-  .site-nav a { flex: none; white-space: nowrap; }
-}
 .site-mark { display: inline-flex; align-items: center; gap: var(--cieo-space-2); text-decoration: none; font: var(--cieo-weight-display) 1.375rem/1 var(--cieo-font-display); letter-spacing: -.02em; }
 .site-mark svg { overflow: visible; }
 .site-mark-base { fill: none; stroke: var(--cieo-color-border-strong); stroke-width: 1; }
