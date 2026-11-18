@@ -111,7 +111,7 @@ test('a visitor without script is redirected back to the contact page', async ()
   await withFetch(ok, async () => {
     const res = await handleContact(req(good, { type: 'application/x-www-form-urlencoded', accept: 'text/html' }), env());
     assert.equal(res.status, 303);
-    assert.equal(res.headers.get('location'), '/site/contact?sent=1');
+    assert.equal(res.headers.get('location'), '/contact?sent=1');
   });
 });
 
@@ -200,9 +200,9 @@ test('the same submission always gets the same idempotency key, and a different 
 test('a visitor without script lands back on the form with the reason, never on a JSON page', async () => {
   const plain = (body, extra = {}) => req(body, { type: 'application/x-www-form-urlencoded', accept: 'text/html', ...extra });
   const where = async (request, e = env()) => { const r = await handleContact(request, e); return [r.status, r.headers.get('location')]; };
-  assert.deepEqual(await where(plain({ ...good, email: 'nope' })), [303, '/site/contact?error=invalid']);
-  assert.deepEqual(await where(plain(good), env({ CONTACT_LIMITER: { limit: async () => ({ success: false }) } })), [303, '/site/contact?error=busy']);
-  await quiet(async () => assert.deepEqual(await where(plain(good), { CONTACT_TO: 'x@example.net' }), [303, '/site/contact?error=closed']));
+  assert.deepEqual(await where(plain({ ...good, email: 'nope' })), [303, '/contact?error=invalid']);
+  assert.deepEqual(await where(plain(good), env({ CONTACT_LIMITER: { limit: async () => ({ success: false }) } })), [303, '/contact?error=busy']);
+  await quiet(async () => assert.deepEqual(await where(plain(good), { CONTACT_TO: 'x@example.net' }), [303, '/contact?error=closed']));
   const html = readFileSync('site/contact.js', 'utf8');
   for (const code of ['invalid', 'large', 'unreadable', 'busy', 'closed', 'failed']) assert.match(html, new RegExp(`${code}: '`), `contact.js words the ${code} reason`);
 });
