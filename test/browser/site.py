@@ -98,7 +98,7 @@ def tabs_on_component(pg):
     btn.click()
     pg.wait_for_timeout(100)
     check(btn.get_attribute('aria-label') == 'Copied', f'{pg.url}: copy button did not confirm')
-    check(btn.locator('svg').count() == 1 and btn.inner_text().strip() == '', f'{pg.url}: copy button must be an icon, not text')
+    check(btn.locator('svg').count() == 2 and btn.inner_text().strip() == '', f'{pg.url}: copy button must be an icon, not text')
     check(pg.evaluate('navigator.clipboard.readText()').strip() == pg.locator('#panel-code code').inner_text().strip(), f'{pg.url}: clipboard text differs from the code panel')
     # deep link
     pg.goto(pg.url.split('#')[0] + '#panel-code')
@@ -167,6 +167,35 @@ with sync_playwright() as p:
             serif = sorted(f for f in fonts if f.lower().startswith(('courier', 'times', 'georgia', 'palatino', 'garamond')))
             check(not serif, f'{url}: text renders in a serif font: {serif}')
             ctx.close()
+        # every code block carries an icon copy button that copies the code and plays the spring swap
+        for url in ['/', '/foundations/physics', '/components/Button']:
+            ctx, pg, log = visit(browser, url)
+            ctx.grant_permissions(['clipboard-read', 'clipboard-write'], origin=base)
+            blocks = pg.evaluate("[...document.querySelectorAll('pre')].filter(p => p.offsetParent && !p.closest('[hidden]') && !p.matches('[data-fsm-out]')).length")
+            covered = pg.evaluate("[...document.querySelectorAll('pre')].filter(p => p.offsetParent && !p.closest('[hidden]') && !p.matches('[data-fsm-out]') && (p.closest('.copy-wrap') || p.closest('.cieo-import-banner') || p.previousElementSibling?.matches('.copy-button'))).length")
+            missing = pg.evaluate("[...document.querySelectorAll('pre')].filter(p => p.offsetParent && !p.closest('[hidden]') && !p.matches('[data-fsm-out]') && !(p.closest('.copy-wrap') || p.closest('.cieo-import-banner') || p.previousElementSibling?.matches('.copy-button'))).map(p => p.outerHTML.slice(0, 120))")
+            check(blocks == covered, f'{url}: {blocks - covered} visible code block(s) have no copy button: {missing}')
+            btn = pg.locator('.copy-button:visible').first
+            if btn.count():
+                check(not (btn.inner_text() or '').strip(), f'{url}: the copy button must be an icon, not words')
+                btn.click()
+                pg.wait_for_timeout(200)
+                check(btn.evaluate('el => el.hasAttribute("data-copied")') and btn.get_attribute('aria-label') == 'Copied', f'{url}: copy button gave no confirmation')
+                check(len(pg.evaluate('navigator.clipboard.readText()')) > 5, f'{url}: copy button put nothing on the clipboard')
+                check(btn.evaluate('el => getComputedStyle(el.querySelector(".copy-glyph")).transitionProperty').find('scale') >= 0, f'{url}: copy icon swap is not animated')
+            else:
+                check(False, f'{url}: no visible copy button found')
+            problems.extend(f'{url}: {line}' for line in log)
+            ctx.close()
+        # the Library page shows every part live, inside its own tile, without opening anything
+        ctx, pg, log = visit(browser, '/components/')
+        check(pg.locator('.tile').count() >= 250, '/components/: every library part needs a live tile')
+        check(pg.evaluate("[...document.querySelectorAll('.tile-stage')].every(s => s.closest('.doc-register') && getComputedStyle(s).contain.includes('paint'))"), '/components/: a tile preview escaped its frame')
+        check(pg.evaluate("(() => { const d = document.querySelector('.tile .cieo-dialog'); const t = d?.closest('.tile').getBoundingClientRect(); const r = d?.getBoundingClientRect(); return !!d && r.left >= t.left - 1 && r.right <= t.right + 1; })()"), '/components/: the Dialog tile spills outside its tile')
+        check(pg.evaluate("[...document.querySelectorAll('.tile-stage')].every(s => s.inert)"), '/components/: tile previews must be inert so tapping a tile opens the page')
+        check(pg.evaluate("new Set([...document.querySelectorAll('[id]')].map(e => e.id)).size === document.querySelectorAll('[id]').length"), '/components/: tile previews repeat an id')
+        problems.extend(f'/components/: {line}' for line in log)
+        ctx.close()
         # the Studio responds to its controls and fits a 320px phone
         ctx, pg, log = visit(browser, '/docs/studio/')
         btn = pg.locator('#board .cieo-btn').first

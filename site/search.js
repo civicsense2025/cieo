@@ -1,3 +1,4 @@
+import { enhanceCodeBlocks } from './copy-button.js';
 /* Global ⌘K / Ctrl+K instant search modal across Components, Motion Recipes, Foundations, and Composites. */
 const scriptEl = document.querySelector('script[data-site-up]');
 const up = scriptEl?.getAttribute('data-site-up') || './';
@@ -231,3 +232,5 @@ if (menuBtn) {
   header.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') { setOpen(false); menuBtn.focus(); } });
   header.querySelectorAll('.site-nav a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
 }
+
+enhanceCodeBlocks();

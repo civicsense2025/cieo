@@ -1,6 +1,7 @@
 // site/doc-playground.js — M3-caliber interactive component stage, multi-platform tabs, and live FSM explorer.
 import { brands, createTheme, densities, grounds, radii, variables } from '../design/index.js';
 import { rovingTabs } from './roving-tabs.js';
+import { makeCopyButton } from './copy-button.js';
 import { S, settleTime } from '../dist/core/spring.js';
 import {
   createAsyncActionMachine,
@@ -16,19 +17,6 @@ import {
 // 1. Multi-platform tablist (click + ArrowLeft/ArrowRight/Home/End + #panel-id deep links).
 // Panels are hidden through the attribute and an inline display, because stylesheet display rules on .doc-stage beat [hidden].
 const tabs = [...document.querySelectorAll('.doc-tabs [role="tab"]')];
-// Copy buttons are icons: the glyph turns into a check for a moment, and the accessible name says what happened.
-const COPY_ICON = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><rect x="7" y="7" width="9" height="9" rx="2"/><path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg>';
-const CHECK_ICON = '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><path d="m4 10.5 4 4 8-9"/></svg>';
-const flashCopied = (button, idle) => {
-  button.innerHTML = CHECK_ICON;
-  button.setAttribute('aria-label', 'Copied');
-  setTimeout(() => { button.innerHTML = COPY_ICON; button.setAttribute('aria-label', idle); }, 1500);
-};
-const copyText = (text, button, idle) => {
-  const done = () => flashCopied(button, idle);
-  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done, done);
-  else done();
-};
 if (tabs.length) {
   const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')));
   // The stage toolbar and telemetry belong to the Preview panel only.
@@ -53,14 +41,8 @@ if (tabs.length) {
     panel.style.fontFamily = 'var(--cieo-font-mono, ui-monospace, monospace)';
     panel.style.whiteSpace = 'pre';
     panel.style.overflow = 'auto';
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'doc-button doc-icon-button';
+    const btn = makeCopyButton('Copy code', () => panel.querySelector('code')?.textContent ?? panel.textContent);
     btn.dataset.copyCode = panel.id;
-    btn.title = 'Copy code';
-    btn.setAttribute('aria-label', 'Copy code');
-    btn.innerHTML = COPY_ICON;
-    btn.addEventListener('click', () => copyText(panel.querySelector('code')?.textContent ?? panel.textContent, btn, 'Copy code'));
     panel.before(btn);
     panel.copyButton = btn;
   });
@@ -72,18 +54,12 @@ if (tabs.length) {
   syncCopy();
 }
 
-// 2. Copy import button
-const copyBtn = document.querySelector('[data-copy-import]');
-if (copyBtn) {
-  copyBtn.addEventListener('click', () => {
-    const text = document.querySelector('[data-import]')?.textContent || '';
-    const done = () => flashCopied(copyBtn, 'Copy import');
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(text).then(done, done);
-    } else {
-      done();
-    }
-  });
+// 2. Copy import button: swapped for the shared spring-animated icon button.
+const staticCopy = document.querySelector('[data-copy-import]');
+if (staticCopy) {
+  const copyBtn = makeCopyButton('Copy import', () => document.querySelector('[data-import]')?.textContent || '');
+  copyBtn.dataset.copyImport = '';
+  staticCopy.replaceWith(copyBtn);
 }
 
 // 3. Interactive Stage Toolbar + Slow-Mo + Spring Telemetry HUD + Manifest Prop Knobs

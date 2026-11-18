@@ -1852,5 +1852,9 @@
    ]
   },
   "children": null
- }
+ },
+  "HStack": {"props": {}, "children": [{"$el":"Button","children":["Save"]},{"$el":"Button","props":{"variant":"ring"},"children":["Cancel"]},{"$el":"Badge","children":["New"]}]},
+  "VStack": {"props": {}, "children": [{"$el":"div","props":{"style":{"padding":"var(--cieo-space-2) var(--cieo-space-3)","borderRadius":"var(--cieo-radius-small)","background":"var(--cieo-color-sunken)","fontSize":"var(--cieo-text-small)"}},"children":["One"]},{"$el":"div","props":{"style":{"padding":"var(--cieo-space-2) var(--cieo-space-3)","borderRadius":"var(--cieo-radius-small)","background":"var(--cieo-color-sunken)","fontSize":"var(--cieo-text-small)"}},"children":["Two"]},{"$el":"div","props":{"style":{"padding":"var(--cieo-space-2) var(--cieo-space-3)","borderRadius":"var(--cieo-radius-small)","background":"var(--cieo-color-sunken)","fontSize":"var(--cieo-text-small)"}},"children":["Three"]}]},
+  "Divider": {"props": {}, "children": []},
+  "AspectRatio": {"props": {"ratio": 1.6}, "children": [{"$el":"div","props":{"style":{"inlineSize":"100%","blockSize":"100%","background":"var(--cieo-color-sunken)","borderRadius":"var(--cieo-radius-small)"}},"children":[]}]}
 }
