@@ -1,6 +1,6 @@
 # Primitive customization
 
-All 238 catalogue exports have an explicit customization contract: 231 expose named presentation slots, and seven delegate to an existing owning API. The [inventory](generated/primitive-customization.json) records each component, layer, named parts, and content slots.
+All 254 catalogue exports have an explicit customization contract: 242 expose named presentation slots directly, and twelve delegate to an existing owning API. Pure, hook-free layout, typography, and display primitives ship as React Server Components without `'use client'`. The [inventory](generated/primitive-customization.json) records each component, layer, named parts, and content slots.
 
 ## Presentation and composition
 
@@ -12,7 +12,7 @@ Slots deliberately cannot replace native elements, handlers, refs, roles, ARIA, 
 
 ## Delegated APIs
 
-CheckboxInput, CheckboxListItem, RadioListItem, PowerSearch, Selector, and Slider remain aliases of Cieo's production controls. They retain those native-prop and content contracts without introducing duplicate control implementations. VStack delegates to Stack and inherits its newly named root presentation slot.
+Button, TextField, TextArea, Switch, RadioGroup, CheckboxInput, CheckboxListItem, RadioListItem, PowerSearch, Selector, and Slider remain aliases of Cieo's production controls (`Button`, `TextField`, `TextArea`, `Switch`, `RadioGroup`, `Checkbox`, `Radio`, `SearchField`, `Select`, and `Range`). Because every control in `cieo/controls` exposes typed `slotProps` (`ControlPartProps`), these eleven delegated primitives inherit their owning control's named presentation parts directly without introducing duplicate control implementations. VStack delegates to Stack and inherits its named `root` presentation slot.
 
 Decorative motion internals and hidden assistive text are not replacement content slots. A host can customize their surrounding named surface, while semantic text and movement remain library-owned.
 

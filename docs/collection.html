@@ -214,11 +214,12 @@ kbd{padding:1px 5px;border:1px solid var(--line);border-radius:4px;font:11px var
 <script>
 window.CIEO_SOURCE_HINT="runtime.core.js";
 /* ================================================================ core */
-const MOTION_MEDIA = matchMedia('(prefers-reduced-motion: reduce)');
-const REDUCE = MOTION_MEDIA.matches;
+const MOTION_MEDIA = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+let REDUCE = MOTION_MEDIA.matches;
+MOTION_MEDIA.addEventListener?.('change', e => { REDUCE = e.matches; });
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
-const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
+const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3, ARRIVE = .45;
 // Per-item delay: i * gap, or 0 under reduced motion (read live, so data-motion overrides apply). Given the group
 // size n, the gap shrinks so the whole group lands within STAGGER_MAX, the same rule as Swift's Motion.stagger.
 const staggerAt = (i, gap = .04, n = 0) => motionReduced() ? 0 : i*(n > 1 ? Math.min(gap, STAGGER_MAX/(n - 1)) : gap);
@@ -265,8 +266,8 @@ function motionSettings(el){
 
 function resp(dt, x0, v0, cfg){
   if (dt <= 0) return x0;
-  let w = cfg.w, z = cfg.z ?? 1;
-  if (REDUCE){ w *= 1.8; z = 1; }
+  let w = cfg.w, z = Math.max(.7, Math.min(1, cfg.z ?? 1));
+  if (REDUCE || motionReduced()){ w *= 1.8; z = 1; }
   if (z < 1){
     const wd = w*Math.sqrt(1-z*z), e = Math.exp(-z*w*dt);
     return e*(x0*Math.cos(wd*dt) + ((v0 + z*w*x0)/wd)*Math.sin(wd*dt));
@@ -363,14 +364,28 @@ function scrollState(el){ const s = { top:el.scrollTop, max:0 }, upd = () => { s
 // element a frame asked about recently; frameLayout(el) then hands back that snapshot (at most one frame old) instead of forcing a layout
 // mid-frame after styles were written. An element seen for the first time is read live once. Event handlers and one-off measurements
 // that must see a just-changed DOM should keep reading the element directly.
-const FRAME_LAYOUT = { epoch:0, map:new Map() };
+const FRAME_LAYOUT = { epoch:0, map:new Map(), active:false };
 const snapRead = (el, epoch) => { const r = el.getBoundingClientRect();
   return { epoch, used:epoch, rect:{ left:r.left, top:r.top, right:r.right, bottom:r.bottom, width:r.width, height:r.height },
     ol:el.offsetLeft, ot:el.offsetTop, w:el.offsetWidth, h:el.offsetHeight, cw:el.clientWidth, ch:el.clientHeight, cl:el.clientLeft, ct:el.clientTop,
     sw:el.scrollWidth, sh:el.scrollHeight, sl:el.scrollLeft, st:el.scrollTop }; };
-function frameLayout(el){ let s = FRAME_LAYOUT.map.get(el); if (!s || s.epoch !== FRAME_LAYOUT.epoch) s = snapRead(el, FRAME_LAYOUT.epoch); s.used = FRAME_LAYOUT.epoch; FRAME_LAYOUT.map.set(el, s); return s; }
-(function layTick(){ requestAnimationFrame(layTick); FRAME_LAYOUT.epoch++;
-  for (const [el, s] of FRAME_LAYOUT.map){ if (FRAME_LAYOUT.epoch - s.used > 4) FRAME_LAYOUT.map.delete(el); else if (s.epoch !== FRAME_LAYOUT.epoch){ const f = snapRead(el, FRAME_LAYOUT.epoch); f.used = s.used; FRAME_LAYOUT.map.set(el, f); } } })();
+function scheduleLayTick(){
+  if (FRAME_LAYOUT.active || document.hidden || !FRAME_LAYOUT.map.size) return;
+  FRAME_LAYOUT.active = true;
+  requestAnimationFrame(layTick);
+}
+function layTick(){
+  FRAME_LAYOUT.active = false;
+  if (document.hidden || !FRAME_LAYOUT.map.size) return;
+  FRAME_LAYOUT.epoch++;
+  for (const [el, s] of FRAME_LAYOUT.map){
+    if (FRAME_LAYOUT.epoch - s.used > 4) FRAME_LAYOUT.map.delete(el);
+    else if (s.epoch !== FRAME_LAYOUT.epoch){ const f = snapRead(el, FRAME_LAYOUT.epoch); f.used = s.used; FRAME_LAYOUT.map.set(el, f); }
+  }
+  if (FRAME_LAYOUT.map.size) scheduleLayTick();
+}
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleLayTick(); });
+function frameLayout(el){ let s = FRAME_LAYOUT.map.get(el); if (!s || s.epoch !== FRAME_LAYOUT.epoch) s = snapRead(el, FRAME_LAYOUT.epoch); s.used = FRAME_LAYOUT.epoch; FRAME_LAYOUT.map.set(el, s); scheduleLayTick(); return s; }
 const money = v => '$' + v.toFixed(2);
 // measure an element's natural width by rendering a hidden clone
 function measureW(el, text){
@@ -22557,7 +22572,7 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
         const c = document.createElement('button'); c.textContent = 'Continue';
         c.style.cssText = 'min-height:34px;border-radius:8px;border:0;background:var(--ink);color:var(--card);cursor:pointer;font-size:13px;font-weight:600';
         c.onclick = () => { if (ans[k]){ need.to(0); next(); }
-          else { sh.release(10, 0, 0, { w:46, z:.22 }); need.to(1); } };
+          else { sh.release(10, 0, 0, { w:46, z:.7 }); need.to(1); } };
         L.appendChild(c);
         const wrap = document.createElement('span');
         wrap.style.cssText = 'position:relative;display:grid;min-height:18px';
@@ -27549,7 +27564,7 @@ atom({ id:'audio-room', cat:'Audio', name:'Audio room', block:'audio, room, spea
     const rmLeave = $(st,'button.rm-leave');
     const rmHand = $(st,'button.rm-hand');
     const PEOPLE = ['Ava','Ben','You','Cy','Dee','Eli','Fay'], HUES = ['var(--accent)','var(--success)','var(--ink)','var(--danger)','var(--warning)','var(--muted)','var(--accent)'], MAX = 7;
-    const POP = { w:22, z:.5 };
+    const POP = { w:22, z:.75 };
     let tiles = [], leaving = [], nextName = 0, last = 0;
     const slot = (i, n) => { const W = size(grid).cw || 316, H = 168, gap = 8, cols = n <= 3 ? n : n <= 4 ? 2 : 3, rows = Math.ceil(n/cols);
       const w = (W - gap*(cols - 1))/cols, h = clamp((H - gap*(rows - 1))/rows, 72, 110), r = Math.floor(i/cols), c = i % cols, inRow = r === rows - 1 ? n - r*cols : cols;
@@ -27623,7 +27638,7 @@ atom({ id:'comments-thread', cat:'Comments', name:'Threaded replies', block:'com
     const ln = new Digits($(st,'.ct-ln'), 3), cn = new Digits($(st,'.ct-cn'), 2), rn = new Digits($(st,'.ct-rn'), 2); ln.set('164', true); cn.set('2', true); rn.set('6', true);
     const heartFill = $(ctLike,'.fill'), repIcon = $(ctRep,'svg'), say = $(st,'.ct-say'), vm = $(st,'.ct-vm'), box = $(st,'.ct-more-box'), inner = $(st,'.ct-in');
     const sayEl = ['', 'Link copied'].map(s => { const e = CM_EL('span', 'position:absolute;left:4px;top:0;font-size:12px;line-height:20px', s); say.appendChild(e); return e; }); const ssw = new Swap(0);
-    const pop = { w:24, z:.45 }, hs = new Track(1, S.snap), rs = new Track(1, S.snap), mh = new Track(0, S.base), vh = new Track(44, S.base), vo = new Track(1, S.base);
+    const pop = { w:24, z:.75 }, hs = new Track(1, S.snap), rs = new Track(1, S.snap), mh = new Track(0, S.base), vh = new Track(44, S.base), vo = new Track(1, S.base);
     let liked = false, reposted = false, open = false, copyAt = 0;
     ctLike.onclick = () => { liked = !liked; ln.set(String(164 + (liked ? 1 : 0)), REDUCE); ctLike.setAttribute('aria-pressed', String(liked)); ctLike.setAttribute('aria-label', `Like, ${164 + (liked ? 1 : 0)}`); if (REDUCE) hs.jump(1); else { hs.jump(.7); hs.set(1, pop); } ctLike.style.color = liked ? 'var(--danger)' : 'var(--ink)'; heartFill.setAttribute('fill', liked ? 'currentColor' : 'none'); };
     ctRep.onclick = () => { reposted = !reposted; rn.set(String(6 + (reposted ? 1 : 0)), REDUCE); ctRep.setAttribute('aria-pressed', String(reposted)); ctRep.setAttribute('aria-label', `Repost, ${6 + (reposted ? 1 : 0)}`); if (REDUCE) rs.jump(1); else { rs.jump(.7); rs.set(1, pop); } ctRep.style.color = reposted ? 'var(--success)' : 'var(--ink)'; };
@@ -27650,7 +27665,7 @@ atom({ id:'comments-reactions', cat:'Comments', name:'Reaction picker', block:'c
     function mkChip(e, i){ const rpChip = CM_EL('button', 'min-height:44px;border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font-size:13px;position:relative', `<span class="in" style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--raised);box-shadow:0 0 0 1.5px transparent"><span aria-hidden="true" style="font-size:15px">${e}</span><span class="num"></span></span>`); rpChip.type = 'button'; rpChip.onclick = () => toggleMine(i, rpChip); chipsEl.appendChild(rpChip);
       const d = new Digits($(rpChip,'.num'), 2); d.set(String(counts[i]), true); digits.push(d); return { el:rpChip, inn:$(rpChip,'.in'), o:new Track(counts[i] ? 1 : 0, S.snap), sc:new Track(1, S.snap) }; }
     const chips = E.map(mkChip);
-    const pop = { w:24, z:.45 }, shell = new Track(0, S.base), flies = [], q = [];
+    const pop = { w:24, z:.75 }, shell = new Track(0, S.base), flies = [], q = [];
     let isOpen = false, mine = -1, hold = 0, held = false;
     const sync = () => chips.forEach((c,i) => { const on = counts[i] > 0; c.el.hidden = !on && c.o.target === 0 && !c.pend; c.el.setAttribute('aria-pressed', String(mine === i)); c.el.setAttribute('aria-label', `${E[i]} ${NAMES[i]}, ${counts[i]}${mine === i ? ', you reacted' : ''}`); c.inn.style.boxShadow = mine === i ? '0 0 0 1.5px var(--accent)' : '0 0 0 1.5px transparent'; c.inn.style.background = mine === i ? 'color-mix(in oklab, var(--accent) 14%, var(--raised))' : 'var(--raised)'; });
     const setOpen = (on, byKey) => { if (on === isOpen) return; isOpen = on; rpOpen.setAttribute('aria-expanded', String(on)); const t = now();
@@ -27760,7 +27775,7 @@ window.CIEO_SOURCE_HINT="blocks/563-messaging.js";
 const MS_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
 const MS_AV = (name, size, hue) => `<span aria-hidden="true" style="flex:none;width:${size}px;height:${size}px;border-radius:50%;display:grid;place-items:center;background:${hue};color:var(--card);font:600 ${Math.round(size*.42)}px var(--sans)">${name[0].toUpperCase()}</span>`;
 const MS_BTN = 'min-height:44px;padding:0 16px;border:0;border-radius:12px;background:var(--ink);color:var(--card);font-size:13px;font-weight:500;cursor:pointer;';
-const MS_POP = { w:24, z:.45 };
+const MS_POP = { w:24, z:.75 };
 
 atom({ id:'msg-typing', cat:'Messaging', name:'Typing to message', block:'messaging, typing, reply', fam:['M','S','X','T'], tall:true,
   html:`<div class="card col" style="width:min(340px,94%);padding:0;gap:0;overflow:hidden"><div class="mt-th" role="log" aria-live="polite" style="height:236px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:12px;overflow:hidden"></div><div class="row" style="padding:8px 12px;border-top:1px solid var(--line-soft);justify-content:space-between"><span class="small muted">Priya</span><button class="mt-ask" style="${MS_BTN}">Send a question</button></div></div><div class="hint">Send a question. Three dots wave, then the dots grow into the reply bubble</div>`,
@@ -27821,7 +27836,7 @@ atom({ id:'msg-delivery', cat:'Messaging', name:'Delivery ticks', block:'messagi
 atom({ id:'msg-inbox', cat:'Messaging', name:'Inbox reorder', block:'messaging, inbox, unread', fam:['M','S','E','X'], tall:true,
   html:`<div class="card col" style="width:min(340px,94%);padding:8px;gap:8px"><div class="mi-list" role="list" aria-label="Conversations" style="position:relative;height:232px"></div><div class="row" style="justify-content:space-between;padding:0 4px"><span class="small muted mi-note" role="status" aria-live="polite"></span><button class="mi-new" style="${MS_BTN}">New message</button></div></div><div class="hint">Send a new message, or open a conversation to clear its unread badge</div>`,
   desc:'A new message makes its conversation slide to the top while every row in between slides down by one slot. Its unread badge pops past full size and the count rolls; opening the conversation shrinks the badge away.',
-  api:'order = [touched, ...rest]   row[i].y.set(slot(order.indexOf(i)), base)   badge.s.set(1, {w:24,z:.45})   count → Digits',
+  api:'order = [touched, ...rest]   row[i].y.set(slot(order.indexOf(i)), base)   badge.s.set(1, {w:24,z:.75})   count → Digits',
   init(st){
     const list = $(st,'.mi-list'), note = $(st,'.mi-note');
     const mi_new = $(st,'button.mi-new');
@@ -27876,13 +27891,13 @@ window.CIEO_SOURCE_HINT="blocks/564-feedback.js";
 
 // Feedback recipes: pin-and-comment review and a helpful/not helpful panel. Nothing leaves the page.
 const FB_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
-const FB_POP = { w:24, z:.45 };
+const FB_POP = { w:24, z:.75 };
 const FB_BTN = 'min-height:44px;padding:0 14px;border:0;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;';
 
 atom({ id:'feedback-pin-review', cat:'Feedback', name:'Pin and comment review', block:'feedback, review, annotations', fam:['M','S','X'], tall:true,
   html:`<div class="card col" style="width:min(340px,94%);padding:10px;gap:8px"><div class="row" style="justify-content:space-between"><button class="fb-mode" aria-pressed="false" style="${FB_BTN}background:var(--raised);color:var(--ink)">Comment mode: off</button><span class="small muted fb-n" role="status" aria-live="polite"></span></div><div class="fb-page" style="position:relative;height:210px;border-radius:10px;background:var(--bg);overflow:hidden;border:1px solid var(--line)"><div aria-hidden="true" style="position:absolute;inset:0;padding:12px;display:flex;flex-direction:column;gap:8px"><i style="display:block;height:10px;width:30%;border-radius:5px;background:var(--line)"></i><i style="display:block;height:18px;width:72%;border-radius:6px;background:var(--raised)"></i><i style="display:block;height:10px;width:90%;border-radius:5px;background:var(--line-soft)"></i><i style="display:block;height:10px;width:60%;border-radius:5px;background:var(--line-soft)"></i><i style="display:block;flex:1;border-radius:8px;background:var(--raised)"></i><i style="display:block;height:26px;width:38%;border-radius:8px;background:var(--line)"></i></div><button class="fb-hit" tabindex="-1" aria-label="Page canvas. Press Enter to drop a pin at the crosshair, arrow keys move it" style="position:absolute;inset:0;width:100%;height:100%;border:0;background:none;padding:0;pointer-events:none;border-radius:0"></button><i class="fb-cross" aria-hidden="true" style="position:absolute;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;pointer-events:none;opacity:0"><b style="position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--accent)"></b><b style="position:absolute;top:8px;left:0;right:0;height:2px;background:var(--accent)"></b></i><div class="fb-pins"></div><div class="fb-po" role="dialog" aria-label="Comment" style="position:absolute;left:0;top:0;width:176px;padding:8px;border-radius:12px;background:var(--card);box-shadow:var(--float-shadow, var(--shadow));visibility:hidden;opacity:0"><div class="po-edit"><textarea class="po-text" rows="2" aria-label="Your comment" placeholder="Add a comment" style="width:100%;box-sizing:border-box;resize:none;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:6px 8px;font:13px/1.35 var(--sans)"></textarea><div class="row" style="gap:6px;margin-top:6px"><button class="po-post" style="${FB_BTN}flex:1;padding:0 8px;background:var(--ink);color:var(--card)">Post</button><button class="po-cancel" style="${FB_BTN}flex:1;padding:0 8px;background:var(--raised);color:var(--ink)">Cancel</button></div></div><div class="po-view" hidden><div class="po-msg" style="font-size:13px;line-height:1.35;padding:2px 2px 6px;overflow-wrap:anywhere"></div><div class="row" style="gap:6px"><button class="po-resolve" style="${FB_BTN}flex:1;padding:0 8px;background:var(--success);color:var(--card)">Resolve</button><button class="po-close" style="${FB_BTN}flex:1;padding:0 8px;background:var(--raised);color:var(--ink)">Close</button></div></div></div></div></div><div class="hint">Turn on comment mode, then click the page. Without a mouse use arrow keys and Enter</div>`,
   desc:'In comment mode a crosshair follows the pointer or the arrow keys, and a click drops a numbered pin that pops past its rest size. A popover opens beside it and flips to the other side near the edge; Post turns the pin solid and Resolve fades it away.',
-  api:'pin.s.set(1, {w:24,z:.45})   side = pin.x > W/2 ? left : right   po.{x,y} = clamp(pin ± 22, edge)   post: fill.set(1)   resolve: o.set(0)',
+  api:'pin.s.set(1, {w:24,z:.75})   side = pin.x > W/2 ? left : right   po.{x,y} = clamp(pin ± 22, edge)   post: fill.set(1)   resolve: o.set(0)',
   init(st){
     const page = $(st,'.fb-page'), pinsEl = $(st,'.fb-pins'), po = $(st,'.fb-po'), cross = $(st,'.fb-cross'), count = $(st,'.fb-n'), ta = $(st,'.po-text'), edit = $(st,'.po-edit'), view = $(st,'.po-view'), msg = $(st,'.po-msg');
     const fbMode = $(st,'button.fb-mode');

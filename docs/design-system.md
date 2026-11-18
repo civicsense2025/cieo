@@ -23,7 +23,7 @@ Cieo keeps the existing spring engine and adds an optional visual layer. The sam
 </main>
 ```
 
-The `.cieo` boundary scopes the primitive styles. The design kit's `.cieo-field` and `.cieo-check` rules skip `cieo/controls` elements (`.cieo-ctl`), so both stylesheets can load on one page. Custom properties alone do not restyle an application. The stylesheet uses cascade layers so normal, unlayered application styles can override it without an `!important` contest. The controls still need real labels, correct HTML elements, and application behavior.
+The `.cieo` boundary scopes the primitive styles. The design kit's `.cieo-field` and `.cieo-check` rules skip `cieo/controls` elements (`.cieo-ctl`), and both `cieo/primitives.css` and `cieo/controls.css` declare their component rules inside `@layer cieo.components`, so both stylesheets can load on one page and normal, unlayered application styles override either without an `!important` contest. Custom properties alone do not restyle an application. The controls still need real labels, correct HTML elements, and application behavior.
 
 ```js
 import { createTheme, applyTheme } from 'cieo/design';
@@ -48,7 +48,7 @@ Seven starting points cover olive, iris, lagoon, ember, rose, monochrome, and in
 - **Density, corners, fonts, display face and elevation** decide dimensions and type only. Corners are `square`, `crisp`, `soft`, `round` and `pill` (fully round controls, gently rounded cards). The display face (`sans` or a local `serif`) applies to large headings only and defaults to the UI font. Elevation is `soft` (a diffuse shadow) or `ring` (a one-pixel hairline with the faintest lift).
 
 These combinations are test cases, not separately counted improvements. The Cieo site uses instrument ink on paper with pill corners, the serif display face and ring elevation; the recipe is `scripts/lib/site-theme.mjs` and the generated stylesheet is `site/theme.css`.
-The 77 tokens cover neutral surfaces; primary, muted, and subtle content; accent and status pairs; spacing; radii; control dimensions; focus; typography (including `weight-display` 500 for large headlines and numerals); reading measures; elevation; and layer order (`layer-base` 0, `layer-sticky` 10, `layer-popover` 20 for nonmodal floating UI, `layer-toast` 30, `layer-modal` 40 for dialogs, sheets and lightboxes). `npm run check:css-vars` fails when any `var(--cieo-*)` names a token that does not exist; consumer override hooks (such as `--cieo-control-*` and `--cieo-popover-z`) are listed by name in `scripts/check-css-vars.mjs`; most fall back to a theme token, and the rest to a fixed default. Explicit token overrides offer a lower-level escape hatch. `createTheme()` rejects unknown keys, invalid types, non-finite numbers, unsafe CSS values, and failing audited color pairs.
+The 77 tokens cover neutral surfaces; primary, muted, and subtle content; accent and status pairs; spacing; radii; control dimensions; focus; typography (including `weight-display` 500 for large headlines and numerals); reading measures; elevation; and layer order (`layer-base` 0, `layer-sticky` 10, `layer-popover` 20 for nonmodal floating UI, `layer-toast` 30, `layer-modal` 40 for dialogs, sheets and lightboxes, with `Overlay` scrims sitting at `calc(var(--cieo-layer-modal, 40) - 1)`). `npm run check:css-vars` fails when any `var(--cieo-*)` names a token that does not exist; consumer override hooks (such as `--cieo-control-*`, `--cieo-popover-z`, `--cieo-overlay-z`, `--cieo-dialog-z`, `--cieo-sheet-z`, and `--cieo-toast-z`) are listed by name in `scripts/check-css-vars.mjs`; most fall back to a theme token, and the rest to a fixed default. Explicit token overrides offer a lower-level escape hatch. `createTheme()` rejects unknown keys, invalid types, non-finite numbers, unsafe CSS values, and failing audited color pairs.
 
 ```js
 createTheme({
@@ -59,7 +59,7 @@ createTheme({
 
 An accent seed can change when contrast requires it. The resolved accent is available in `theme.tokens['color-accent']`. An override changes the named token, not every dependent token: a custom color set must still satisfy the pair audit. Color overrides don't automatically recolor the old Motion Atoms catalogue or an application's existing components.
 
-Component stylesheets live one per primitive under `design/styles/primitives/` and read only these tokens; for example, the reorderable list's lifted row uses `border-strong` for its ring, so a theme change restyles it with everything else.
+Component stylesheets live one per primitive under `design/styles/primitives/` (including `motion-frame.css`, `morph-surface.css`, `stagger-group.css`, and `i18n-provider.css`) and read only these tokens; for example, the reorderable list's lifted row uses `border-strong` for its ring, so a theme change restyles it with everything else.
 
 The [social, audio and engagement kit](social-kit.md) (comments and nested replies, voice notes, reactions, group messaging, pin-and-comment review) styles itself only through these tokens, one stylesheet per component under `design/styles/primitives/`, so a theme change recolors it with everything else.
 
@@ -108,7 +108,7 @@ Six generators emit Swift, Rust, Kotlin, Dart, Python, and C constants. Namespac
 
 `npm run studio` serves only the preview's document, style, and token directories on loopback. It has no write endpoints or dependency installation. `npm run studio:standalone` creates `Cieo-studio.html`, a single-file offline preview with an import map. The modular studio is `docs/studio/index.html`; the standalone build is a convenience artifact, not a general-purpose bundler.
 
-The studio previews all axes, semantic colors, token search, task progress, form validation, motion replay, and right-to-left layout. System appearance, contrast, and reduced-motion changes update live. Mobile controls collapse above the specimen. Local persistence requires the “Remember on this device” option; blocked storage and clipboard access have visible fallbacks. Imports are size-limited and validated before applying. The demo does not create real hosted projects.
+The studio previews all axes (`brand`, `scheme`, `contrast`, `density`, `ground` across `cool`/`paper`/`mist`, `radius` across `square`/`crisp`/`soft`/`round`/`pill`, `font`, `display` across `sans`/`serif`, `elevation` across `soft`/`ring`, and `motion`), semantic colors, token search, task progress, form validation, motion replay, and right-to-left layout. System appearance, contrast, and reduced-motion changes update live. Mobile controls collapse above the specimen. Local persistence requires the “Remember on this device” option; blocked storage and clipboard access have visible fallbacks. Imports are size-limited and validated before applying. The demo does not create real hosted projects.
 
 ```sh
 node scripts/export-theme.mjs config > my-theme.json

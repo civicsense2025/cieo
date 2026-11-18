@@ -29,7 +29,7 @@ refresh = () => {
   controller.update(theme);
   document.documentElement.dataset.motion = value.motion === 'reduced' || system.reduced ? 'reduced' : 'system';
   $('preview').dir = value.rtl ? 'rtl' : 'ltr';
-  for (const key of ['scheme', 'density', 'radius', 'contrast', 'font', 'motion']) $(key).value = value[key];
+  for (const key of ['scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'motion']) $(key).value = value[key];
   $('accent').value = value.accent ?? '';
   $('remember').checked = state.remembered; $('rtl').checked = value.rtl;
   document.querySelectorAll('[name="brand"]').forEach((radio) => { radio.checked = radio.value === value.brand; });
@@ -46,7 +46,7 @@ $('theme-controls').addEventListener('change', (event) => {
   if (target.name === 'brand') { change({ brand: target.value, accent: undefined }); return; }
   if (target.id === 'remember') { state.setRemember(target.checked); refresh(); return; }
   if (target.id === 'rtl') { change({ rtl: target.checked }); return; }
-  if (['scheme', 'density', 'radius', 'contrast', 'font', 'motion'].includes(target.id)) change({ [target.id]: target.value });
+  if (['scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'motion'].includes(target.id)) change({ [target.id]: target.value });
 });
 const applyAccent = () => {
   if (!$('accent').reportValidity()) return;

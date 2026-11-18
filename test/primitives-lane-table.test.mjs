@@ -4,26 +4,26 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 
 const COMPS = [
-  { name: 'Table', id: 'core.table', dir: 'Table', css: 'table',
-    tsx: ["'use client'", '<table', 'aria-label={label}', 'cieo-table'],
+  { name: 'Table', id: 'core.table', dir: 'Table', css: 'table', rsc: true,
+    tsx: ['<table', 'aria-label={label}', 'cieo-table'],
     cssMarkers: ['cieo-table', 'border-collapse', '--cieo-color-border'] },
-  { name: 'TableHeader', id: 'core.table-header', dir: 'TableHeader', css: 'table-header',
-    tsx: ["'use client'", '<thead', 'cieo-table-header'],
+  { name: 'TableHeader', id: 'core.table-header', dir: 'TableHeader', css: 'table-header', rsc: true,
+    tsx: ['<thead', 'cieo-table-header'],
     cssMarkers: ['cieo-table-header', '--cieo-color-border-strong'] },
-  { name: 'TableBody', id: 'core.table-body', dir: 'TableBody', css: 'table-body',
-    tsx: ["'use client'", '<tbody', 'cieo-table-body'],
+  { name: 'TableBody', id: 'core.table-body', dir: 'TableBody', css: 'table-body', rsc: true,
+    tsx: ['<tbody', 'cieo-table-body'],
     cssMarkers: ['cieo-table-body', '--cieo-color-border'] },
-  { name: 'TableRow', id: 'core.table-row', dir: 'TableRow', css: 'table-row',
-    tsx: ["'use client'", '<tr', 'data-selected', 'cieo-table-row'],
+  { name: 'TableRow', id: 'core.table-row', dir: 'TableRow', css: 'table-row', rsc: true,
+    tsx: ['<tr', 'data-selected', 'cieo-table-row'],
     cssMarkers: ['cieo-table-row', '--cieo-color-selection'] },
-  { name: 'TableCell', id: 'core.table-cell', dir: 'TableCell', css: 'table-cell',
-    tsx: ["'use client'", '<td', 'cieo-table-cell'],
+  { name: 'TableCell', id: 'core.table-cell', dir: 'TableCell', css: 'table-cell', rsc: true,
+    tsx: ['<td', 'cieo-table-cell'],
     cssMarkers: ['cieo-table-cell', '--cieo-space-'] },
   { name: 'TableHeaderCell', id: 'core.table-header-cell', dir: 'TableHeaderCell', css: 'table-header-cell',
     tsx: ["'use client'", '<th', 'scope', 'aria-sort', 'onSort', 'cieo-table-header-cell'],
     cssMarkers: ['cieo-table-header-cell', '--cieo-'] },
-  { name: 'TableFooter', id: 'core.table-footer', dir: 'TableFooter', css: 'table-footer',
-    tsx: ["'use client'", '<tfoot', 'cieo-table-footer'],
+  { name: 'TableFooter', id: 'core.table-footer', dir: 'TableFooter', css: 'table-footer', rsc: true,
+    tsx: ['<tfoot', 'cieo-table-footer'],
     cssMarkers: ['cieo-table-footer', '--cieo-color-border-strong'] },
   { name: 'TableSelectionToolbar', id: 'core.table-selection-toolbar', dir: 'TableSelectionToolbar', css: 'table-selection-toolbar',
     tsx: ["'use client'", 'selectedCount', 'selected', 'cieo-table-selection-toolbar'],
@@ -51,6 +51,7 @@ const COMPS = [
 for (const c of COMPS) {
   test(`${c.name} tsx uses native semantics and tokens class`, () => {
     const src = readFileSync(`src/primitives/${c.dir}/${c.name}.tsx`, 'utf8');
+    if (c.rsc) assert.doesNotMatch(src, /^['"]use client['"]/m);
     for (const m of c.tsx) assert.ok(src.includes(m), `missing marker ${m}`);
   });
 

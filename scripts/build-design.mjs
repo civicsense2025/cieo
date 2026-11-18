@@ -3,7 +3,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { dirname, resolve, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createTheme, brands, toCSS, toDTCG, toPortable, toNative, themeSchema } from '../design/index.js';
+import { createTheme, brands, toCSS, toDTCG, toPortable, toNative, toSwiftPresets, themeSchema } from '../design/index.js';
 import { siteThemeOptions } from './lib/site-theme.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -15,6 +15,7 @@ const base = createTheme();
 put('design/generated/default.tokens.json', json(toDTCG(base)));
 put('design/generated/default.portable.json', json(toPortable(base)));
 put('design/theme.schema.json', json(themeSchema()));
+put('Sources/CieoUI/Foundations/ThemePresets.swift', toSwiftPresets());
 for (const [target, extension] of Object.entries({ swift: 'swift', rust: 'rs', kotlin: 'kt', dart: 'dart', python: 'py', c: 'h' })) {
   put(`design/generated/CieoDesignTokens.${extension}`, toNative(base, target));
 }

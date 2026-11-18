@@ -77,7 +77,7 @@ test('the contact form never claims delivery before the server has said so', () 
   const js = read('site/contact.js');
   assert.match(js, /if \(response\.ok\)/);
   assert.match(js, /reportValidity/);
-  assert.match(js, /catch \{ say\('error'/);
+  assert.match(js, /catch (?:\(\w+\) )?\{ say\('error'/);
 });
 
 test('the instrument is operable without a pointer and announces its result', () => {

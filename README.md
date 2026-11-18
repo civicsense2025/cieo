@@ -19,7 +19,10 @@ For reusable production controls, add the separate `CieoUI` product. Its [Apple 
 ```ts
 import { Track, S } from 'cieo';                  // spring math, no DOM
 import { enter, exit, swap, flip, digits, edges, track, scrollTo } from 'cieo/dom';
-import { useSpring, SwapText, Digits, useEdges, useFlip, usePresence } from 'cieo/react';
+import { useSpring, SwapText, Digits, useEdges, useFlip, usePresence, useGestureSpring, useSharedAxis } from 'cieo/react';
+import { SpringChannel, SpringVector2D, SpringRect, rubberBand, projectToDetent, PointerVelocityTracker } from 'cieo/live';
+import { createAsyncActionMachine, createDisclosureMachine, createSheetDetentsMachine, createToastQueueMachine } from 'cieo/state';
+import { useControllableState, useAsyncAction, useDisclosure, useSheetDetents, useToastQueue } from 'cieo/state/react';
 import 'cieo/tokens.css';                          // --motion-duration-*, --motion-ease-spring
 ```
 
@@ -66,7 +69,7 @@ Pin a reviewed commit or release containing this change. Older tags don't acquir
 | soft | 15 | 440 ms | progress, size morphs, scrolling |
 | lazy | 9 | 740 ms | ambient decoration only |
 
-Shared rules: content leaves in 100 ms before new content enters; a sliding indicator's trailing edge follows 60 ms behind; group stagger never exceeds 300 ms; new list items arrive from 0.45 opacity, never from 0. In SwiftUI, `.motion(preset)` is `interpolatingSpring(stiffness: w², damping: 2w)`, the same curve as the web.
+Shared rules: content leaves in 100 ms before new content enters; a sliding indicator's trailing edge follows 60 ms behind; group stagger never exceeds 300 ms; new list items arrive from 0.45 opacity, never from 0. `SpringConfig` (`resp`, `vel`, `settleTime`, `Track`) accepts an optional damping ratio `z` (`0.7 <= z <= 1.0`, default `1`, clamped to `1` under reduced motion), and `SpringChannel` in `cieo/live` accepts `zeta` (`0.7 <= zeta <= 1.0`) with $C^1$ velocity continuity across retargets. `edges` (`cieo/dom`) and `useEdges` (`cieo/react`) accept `axis?: 'x' | 'y' | 'both'` for horizontal, vertical, or 2D leading-trailing indicators. In SwiftUI, `.motion(preset)` is `interpolatingSpring(stiffness: w², damping: 2w)`, the same curve as the web.
 
 ## Atoms
 
@@ -94,7 +97,7 @@ import 'cieo/controls.css';
 
 | Component | Key props |
 | --- | --- |
-| `Button` | `variant` primary, secondary (default), ghost, text; `size` sm, md; `icon`; icon-only needs `aria-label` (enforced by the types); `block`; `state` idle, pending, done with `pendingLabel` and `doneLabel` morphs in place |
+| `Button` | `variant` primary, secondary (default), ghost, text; `size` sm, md, lg; `tone` neutral, accent, danger, success, warning; `asChild`; `icon`; icon-only needs `aria-label` (enforced by the types); `block`; `state` idle, pending, done/succeeded, failed, uncertain with `pendingLabel`, `doneLabel`, `failedLabel`, `uncertainLabel` morphs in place |
 | `buttonClassName(opts)` | the same classes for an `<a>` or `<Link>`; plain function, callable from a server component |
 | `Select` | `label` (required), `hideLabel`, `name`, `options` (strings or `{ value, label, disabled }`), `value` or `defaultValue`, `onValueChange`, `autoSubmit`, `form`, `size`, `description` |
 | `TextField` | `label` (required), `type` text, email, search, url, number, tel, password; `description`, `error`, `validate(value)` returns a message, `status`, `prefix`, `suffix` |
@@ -152,7 +155,7 @@ consumer dependency update is implied.
 
 How they behave without scripts: `Select` is a styled native select (after hydration it becomes a combobox and listbox with arrows, Home, End, Page keys, type-ahead, Enter, Space, Escape and Tab; the native select stays in the form, invisible and hidden from assistive tech, and receives every pick as a real `change` event). Field labels float with CSS alone, a server `error` shows its message, and `Range` draws its fill at the initial value. `autoSubmit` needs scripts, so keep a submit button in the form.
 
-Next.js: the components are client modules (`'use client'` per file); a server component can render them with serialisable props (`options`, `autoSubmit`), but not `onValueChange`. The listbox is positioned inside the control, so an ancestor with `overflow: hidden` clips it.
+Next.js and React Server Components: interactive controls and stateful primitives declare `'use client'`, while pure layout, typography, and display primitives (`Stack`, `HStack`, `VStack`, `Grid`, `GridSpan`, `Center`, `Section`, `Text`, `Heading`, `Icon`, `Badge`, `Divider`, `Kbd`, `Code`, `Blockquote`, `Citation`, `Card`, `BigNumber`, `BlockPanel`, `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableCell`, `TableFooter`) ship as pure Server Components without `'use client'`. `cieo/controls.css` wraps all rules in `@layer cieo.components` so unlayered consumer styles override cleanly without specificity wars, and every control (`Button`, `Select`, `TextField`, `TextArea`, `SearchField`, `Checkbox`, `Switch`, `RadioGroup`, `Radio`, `Range`) accepts typed `slotProps` (`ControlPartProps`) for named sub-element presentation customization while protecting native handlers, roles, values, and state attributes. The listbox is positioned inside `Select`, so an ancestor with `overflow: hidden` clips it.
 
 Theme with these variables (all optional). Each one falls back first to the matching `cieo/design` token (shown in brackets), so a page that loads `cieo/design.css` themes the controls automatically; without it the fallbacks are system colours, so dark mode follows `color-scheme` until you set your own:
 

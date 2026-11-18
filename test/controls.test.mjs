@@ -229,7 +229,7 @@ test('module boundaries: components are client modules, class helpers are not', 
   for (const f of ['Button.js', 'Select.js', 'Field.js', 'TextField.js', 'TextArea.js', 'SearchField.js', 'Toggles.js', 'Range.js']) {
     assert.match(await read(f), /^'use client';/, f);
   }
-  for (const f of ['classes.js', 'index.js', 'listbox.js', 'native.js', 'field-state.js']) {
+  for (const f of ['classes.js', 'index.js', 'listbox.js', 'native.js', 'field-state.js', 'parts.js', 'select-popup.js']) {
     assert.doesNotMatch(await read(f), /^['"]use client['"]/, f);
   }
   assert.match(await read('controls.css'), /prefers-reduced-motion/, 'the stylesheet ships in dist');

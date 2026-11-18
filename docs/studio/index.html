@@ -17,7 +17,7 @@
     <header class="studio-nav">
       <a class="wordmark" href="./index.html" aria-label="Cieo design studio home"><span class="mark" aria-hidden="true">c</span>cieo<span class="wordmark-dot" aria-hidden="true">.</span></a>
       <span class="nav-description">Theme, type and motion, previewed live.</span>
-      <a href="../catalogue.html" class="catalogue-link">Motion catalogue <span aria-hidden="true">↗</span></a>
+      <a href="../../site/recipes/" class="catalogue-link">Motion recipes <span aria-hidden="true">↗</span></a>
     </header>
     <div class="studio-intro">
       <div><h1>Your character.<br><span>Every surface.</span></h1><p>A quieter foundation. A sharper identity. Make it yours, then take it anywhere.</p></div>
@@ -44,9 +44,9 @@
         <form id="theme-controls" class="cieo-stack">
           <fieldset class="brand-fieldset"><legend>Character</legend><div class="brand-choices" id="brand-choices"></div></fieldset>
           <div class="cieo-grid control-pair"><div class="cieo-field"><label for="scheme">Appearance</label><select id="scheme" class="cieo-input"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div><div class="cieo-field"><label for="contrast">Contrast</label><select id="contrast" class="cieo-input"><option value="system">System</option><option value="standard">Standard</option><option value="high">High</option></select></div></div>
-          <div class="cieo-field"><label for="density">Density</label><select id="density" class="cieo-input"><option value="compact">Compact</option><option value="comfortable" selected>Comfortable</option><option value="spacious">Spacious</option></select></div>
-          <div class="cieo-field"><label for="radius">Corners</label><select id="radius" class="cieo-input"><option value="crisp">Crisp</option><option value="soft" selected>Soft</option><option value="round">Round</option></select></div>
-          <div class="cieo-field"><label for="font">Typography</label><select id="font" class="cieo-input"><option value="system">System sans</option><option value="humanist">Humanist</option><option value="mono">Monospace</option></select></div>
+          <div class="cieo-grid control-pair"><div class="cieo-field"><label for="density">Density</label><select id="density" class="cieo-input"><option value="compact">Compact</option><option value="comfortable" selected>Comfortable</option><option value="spacious">Spacious</option></select></div><div class="cieo-field"><label for="ground">Ground</label><select id="ground" class="cieo-input"><option value="cool" selected>Cool</option><option value="paper">Paper</option><option value="mist">Mist</option></select></div></div>
+          <div class="cieo-grid control-pair"><div class="cieo-field"><label for="radius">Corners</label><select id="radius" class="cieo-input"><option value="square">Square</option><option value="crisp">Crisp</option><option value="soft" selected>Soft</option><option value="round">Round</option><option value="pill">Pill</option></select></div><div class="cieo-field"><label for="elevation">Elevation</label><select id="elevation" class="cieo-input"><option value="soft" selected>Soft shadow</option><option value="ring">Hairline ring</option></select></div></div>
+          <div class="cieo-grid control-pair"><div class="cieo-field"><label for="font">Typography</label><select id="font" class="cieo-input"><option value="system">System sans</option><option value="humanist">Humanist</option><option value="mono">Monospace</option></select></div><div class="cieo-field"><label for="display">Display face</label><select id="display" class="cieo-input"><option value="sans" selected>Match body sans</option><option value="serif">Editorial serif</option></select></div></div>
           <div class="cieo-field"><label for="accent">Custom accent seed</label><div class="accent-entry"><input id="accent" class="cieo-input" placeholder="#6246c7" pattern="#[0-9a-fA-F]{6}" maxlength="7" spellcheck="false" aria-describedby="accent-help"><button type="button" id="apply-accent" class="cieo-button">Apply</button></div><p id="accent-help" class="cieo-help">Six-digit hex. Cieo adjusts the seed when a contrast role needs it.</p></div>
           <div class="cieo-field"><label for="motion">Motion</label><select id="motion" class="cieo-input"><option value="system">Respect system</option><option value="reduced">Reduced</option></select></div>
           <label class="cieo-check"><input type="checkbox" id="rtl">Preview right to left</label>
@@ -57,7 +57,7 @@
         <p class="inspector-status" id="status" role="status" aria-live="polite" aria-atomic="true">Ready to make it yours.</p>
       </aside>
     </div>
-    <footer class="studio-footer"><span>Cieo design foundation</span><a href="../design-system.md">Integration notes</a></footer>
+    <footer class="studio-footer"><span>Cieo design foundation</span><a href="../../site/components/">Integration notes</a></footer>
   </div>
   <dialog id="export-dialog" class="export-dialog"><form method="dialog"><div class="section-heading"><h2>Copy your export</h2><button class="cieo-button" aria-label="Close export">Close</button></div><p>Clipboard access isn't available here. Select the text below and copy it.</p><label class="cieo-sr-only" for="export-text">Export contents</label><textarea id="export-text" class="cieo-input" readonly rows="14"></textarea></form></dialog>
   <noscript><p class="no-script">The specimen works without JavaScript. Live customization requires JavaScript; prebuilt exports are in the design/generated folder.</p></noscript>

@@ -22,7 +22,7 @@ test('every density, corner, font, display and elevation choice builds a complet
   for (const density of Object.keys(densities)) for (const radius of Object.keys(radii)) for (const font of Object.keys(fonts))
     for (const display of Object.keys(displays)) for (const elevation of Object.keys(elevations)) {
       const theme = createTheme({ density, radius, font, display, elevation, brand: 'instrument', ground: 'paper' });
-      assert.equal(Object.keys(theme.tokens).length, 77);
+      assert.equal(Object.keys(theme.tokens).length, 106);
       assert.ok(auditTheme(theme).every((result) => result.pass)); count += 1;
     }
   assert.equal(count, 3 * 5 * 3 * 2 * 2);
