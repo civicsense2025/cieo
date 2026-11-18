@@ -22,7 +22,7 @@ export function siteHeader(up, current = '') {
 
 export function siteFooter(up) {
   const links = NAV.map(([label, href]) => `<a href="${up}${href}">${label}</a>`).join('');
-  return `<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>${siteConfig.name} is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer">${links}<a href="${esc(siteConfig.repo)}">GitHub</a></nav></div></footer>`;
+  return `<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>${siteConfig.name} is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer">${links}<a href="${esc(siteConfig.repo)}">Source</a></nav></div></footer>`;
 }
 
 /** Stylesheets in cascade order: the site theme, the library's component styles, then the site and docs rules. */
