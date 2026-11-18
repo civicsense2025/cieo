@@ -58,7 +58,7 @@ public final class ToastQueueModel {
             actionTitle: actionTitle,
             duration: safeDuration,
             remaining: safeDuration,
-            deadline: isPaused ? nil : now + safeDuration,
+            deadline: nil,
             sequence: nextSequence
         )
         items.removeAll { $0.id == id }
@@ -70,6 +70,7 @@ public final class ToastQueueModel {
         if items.count > maxCapacity {
             items.removeLast(items.count - maxCapacity)
         }
+        reconcileDeadlines(at: now)
         return id
     }
 
@@ -87,9 +88,7 @@ public final class ToastQueueModel {
     public func resume(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         guard isPaused else { return }
         isPaused = false
-        for index in items.indices {
-            items[index].deadline = now + items[index].remaining
-        }
+        reconcileDeadlines(at: now)
     }
 
     public func tick(at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
@@ -98,10 +97,25 @@ public final class ToastQueueModel {
             guard let deadline = item.deadline else { return false }
             return deadline <= now
         }
+        reconcileDeadlines(at: now)
     }
 
-    public func dismiss(id: UUID) {
+    public func dismiss(id: UUID, at now: TimeInterval = ProcessInfo.processInfo.systemUptime) {
         items.removeAll { $0.id == id }
+        reconcileDeadlines(at: now)
+    }
+
+    /// A toast's clock runs only while it is visible and the queue is not paused; toasts pushed out of view freeze, promoted ones start.
+    private func reconcileDeadlines(at now: TimeInterval) {
+        for index in items.indices {
+            let isVisible = index < maxVisible && !isPaused
+            if isVisible, items[index].deadline == nil {
+                items[index].deadline = now + items[index].remaining
+            } else if !isVisible, let deadline = items[index].deadline {
+                items[index].remaining = max(0, deadline - now)
+                items[index].deadline = nil
+            }
+        }
     }
 
     @discardableResult

@@ -32,14 +32,15 @@ public struct ConfigurableSpecimenState: Equatable, Sendable {
 
     public var constrainWidth: Bool
     public private(set) var constrainedWidth: Double
-    public var typeSizePreset: TypeSizePreset
+    /// `nil` follows the reader's system text size.
+    public var typeSizePreset: TypeSizePreset?
     public var layoutDirection: LayoutDirection
     public var isCodeExpanded: Bool
 
     public init(
         constrainWidth: Bool = false,
         constrainedWidth: Double = 390,
-        typeSizePreset: TypeSizePreset = .large,
+        typeSizePreset: TypeSizePreset? = nil,
         layoutDirection: LayoutDirection = .leftToRight,
         isCodeExpanded: Bool = false
     ) {
@@ -67,6 +68,7 @@ public struct ConfigurableSpecimen<Content: View>: View {
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
     @Environment(\.componentMotion) private var motionConfig
+    @Environment(\.dynamicTypeSize) private var systemTypeSize
 
     private let title: String
     private let code: String?
@@ -95,7 +97,7 @@ public struct ConfigurableSpecimen<Content: View>: View {
             }
             content
                 .frame(maxWidth: state.constrainWidth ? CGFloat(state.constrainedWidth) : .infinity, alignment: .leading)
-                .dynamicTypeSize(state.typeSizePreset.dynamicTypeSize)
+                .dynamicTypeSize(state.typeSizePreset?.dynamicTypeSize ?? systemTypeSize)
                 .environment(\.layoutDirection, state.layoutDirection)
             if let code, !code.isEmpty {
                 codeSection(code)
@@ -117,23 +119,13 @@ public struct ConfigurableSpecimen<Content: View>: View {
                 .foregroundStyle(theme.foreground)
                 .accessibilityAddTraits(.isHeader)
             Spacer(minLength: metrics.compact)
-            Button {
+            toolButton(showControls ? "Hide stage" : "Stage", color: theme.accent, expanded: showControls) {
                 showControls.toggle()
-            } label: {
-                Text(showControls ? "Hide stage" : "Stage")
-                    .font(typography.strongDetail)
-                    .foregroundStyle(theme.accent)
             }
-            .buttonStyle(.plain)
             if let code, !code.isEmpty {
-                Button {
+                toolButton(state.isCodeExpanded ? "Hide code" : "Code", color: theme.secondary, expanded: state.isCodeExpanded) {
                     state.isCodeExpanded.toggle()
-                } label: {
-                    Text(state.isCodeExpanded ? "Hide code" : "Code")
-                        .font(typography.strongDetail)
-                        .foregroundStyle(theme.secondary)
                 }
-                .buttonStyle(.plain)
             }
         }
     }
@@ -152,12 +144,13 @@ public struct ConfigurableSpecimen<Content: View>: View {
                 )
                 .chipStyle(.soft)
                 Picker("Text size", selection: $state.typeSizePreset) {
+                    Text(verbatim: "System").tag(ConfigurableSpecimenState.TypeSizePreset?.none)
                     ForEach(ConfigurableSpecimenState.TypeSizePreset.allCases, id: \.self) { preset in
-                        Text(verbatim: preset.rawValue).tag(preset)
+                        Text(verbatim: preset.rawValue).tag(Optional(preset))
                     }
                 }
                 .pickerStyle(.segmented)
-                .frame(maxWidth: 220)
+                .frame(maxWidth: 280)
             }
             if state.constrainWidth {
                 HStack(spacing: metrics.compact) {
@@ -171,6 +164,8 @@ public struct ConfigurableSpecimen<Content: View>: View {
                         ),
                         in: ConfigurableSpecimenState.minWidth...ConfigurableSpecimenState.maxWidth
                     )
+                    .accessibilityLabel("Container width")
+                    .accessibilityValue("\(Int(state.constrainedWidth)) points")
                 }
             }
         }
@@ -187,15 +182,10 @@ public struct ConfigurableSpecimen<Content: View>: View {
                         .font(typography.strongDetail)
                         .foregroundStyle(theme.secondary)
                     Spacer()
-                    Button {
+                    toolButton(copiedCount > 0 ? "Copied" : "Copy", color: theme.accent, expanded: nil) {
                         copyToPasteboard(snippet)
                         copiedCount += 1
-                    } label: {
-                        Text(copiedCount > 0 ? "Copied" : "Copy")
-                            .font(typography.strongDetail)
-                            .foregroundStyle(theme.accent)
                     }
-                    .buttonStyle(.plain)
                 }
                 Text(verbatim: snippet)
                     .font(typography.reference)
@@ -206,6 +196,19 @@ public struct ConfigurableSpecimen<Content: View>: View {
                     .background(theme.sunken, in: .rect(cornerRadius: metrics.cornerSmall))
             }
         }
+    }
+
+    /// Text button with a full touch target; `expanded` (when set) is spoken as the disclosure state.
+    private func toolButton(_ title: String, color: Color, expanded: Bool?, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(verbatim: title)
+                .font(typography.strongDetail)
+                .foregroundStyle(color)
+                .frame(minWidth: metrics.touchTarget, minHeight: metrics.touchTarget)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityValue(expanded.map { $0 ? "Expanded" : "Collapsed" } ?? "")
     }
 
     private func copyToPasteboard(_ text: String) {

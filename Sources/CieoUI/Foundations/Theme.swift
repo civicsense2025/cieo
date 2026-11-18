@@ -47,6 +47,8 @@ public struct Theme {
     public var background: Color
     /// A quiet ground set apart from the page, such as a grouped region or an inset well.
     public var quietBackground: Color
+    /// The dim layer behind a modal overlay such as the command palette.
+    public var scrim: Color
     /// The shadow under something that floats above the page, such as a sheet handle bar or a floating
     /// action. Flat surfaces take no shadow.
     public var floatingShadow: ComponentShadow
@@ -69,7 +71,8 @@ public struct Theme {
                 successSoft: Color? = nil, warningSoft: Color? = nil,
                 dangerSoft: Color? = nil, infoSoft: Color? = nil,
                 borderStrong: Color = .primary.opacity(0.42), focus: Color? = nil,
-                selection: Color? = nil, elevationRingWidth: CGFloat = 0)
+                selection: Color? = nil, elevationRingWidth: CGFloat = 0,
+                scrim: Color = Color.black.opacity(0.28))
     {
         let resolvedTint = tint ?? accent.opacity(0.18)
         self.accent = accent
@@ -104,6 +107,7 @@ public struct Theme {
         self.infoSoft = infoSoft ?? info.opacity(0.14)
         self.background = background
         self.quietBackground = quietBackground
+        self.scrim = scrim
         self.floatingShadow = floatingShadow
         self.elevationRingWidth = ComponentMetrics.dimension(elevationRingWidth, fallback: 0)
     }

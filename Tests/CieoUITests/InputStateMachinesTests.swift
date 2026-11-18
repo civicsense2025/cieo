@@ -51,3 +51,80 @@ final class InputStateMachinesTests: XCTestCase {
         XCTAssertEqual(multi.send(.select(9)).haptic, nil, "unknown items are ignored")
     }
 }
+
+final class AsyncActionLateAnswerTests: XCTestCase {
+    func testLateSuccessAfterCancelCannotFlipCancelled() {
+        var machine = AsyncActionState()
+        machine.begin()
+        machine.cancel()
+        let late = machine.succeed()
+        XCTAssertFalse(late.changed)
+        XCTAssertEqual(machine.phase, .cancelled)
+        XCTAssertNil(late.haptic)
+    }
+
+    func testAnswersOutsidePendingAreIgnored() {
+        var machine = AsyncActionState()
+        XCTAssertFalse(machine.fail("x").changed)
+        XCTAssertFalse(machine.timeout().changed)
+        XCTAssertFalse(machine.cancel().changed)
+        XCTAssertEqual(machine.phase, .idle)
+        machine.begin()
+        machine.succeed()
+        XCTAssertFalse(machine.fail("late").changed)
+        XCTAssertEqual(machine.phase, .succeeded)
+    }
+
+    func testAnswerForSupersededAttemptIsIgnored() {
+        var machine = AsyncActionState()
+        machine.begin()
+        let first = machine.attemptID
+        machine.cancel()
+        machine.begin()
+        XCTAssertNotEqual(machine.attemptID, first)
+        XCTAssertFalse(machine.succeed(attemptID: first).changed)
+        XCTAssertEqual(machine.phase, .pending)
+        XCTAssertTrue(machine.succeed(attemptID: machine.attemptID).changed)
+        XCTAssertEqual(machine.phase, .succeeded)
+    }
+}
+
+@MainActor
+final class ToastQueueVisibilityClockTests: XCTestCase {
+    func testQueuedToastsAreNotExpiredBeforeTheyAreSeen() {
+        let queue = ToastQueueModel(maxCapacity: 12, maxVisible: 3)
+        let ids = (0..<5).map { queue.enqueue(title: "T\($0)", duration: 4, now: 0) }
+        queue.tick(at: 4.1)
+        XCTAssertEqual(queue.items.map(\.id), Array(ids[3...]), "the first three expire; the waiting two are still unseen")
+        XCTAssertEqual(queue.visibleItems.count, 2)
+        queue.tick(at: 8.0)
+        XCTAssertEqual(queue.items.count, 2, "promoted toasts get a full duration from the moment they appear")
+        queue.tick(at: 8.2)
+        XCTAssertTrue(queue.items.isEmpty)
+    }
+
+    func testToastPushedOutOfViewFreezesItsTimer() {
+        let queue = ToastQueueModel(maxCapacity: 12, maxVisible: 2)
+        let low = queue.enqueue(title: "Low", priority: .neutral, duration: 4, now: 0)
+        _ = queue.enqueue(title: "Mid", priority: .info, duration: 40, now: 0)
+        queue.tick(at: 3.0)
+        _ = queue.enqueue(title: "Urgent", priority: .danger, duration: 40, now: 3.0)
+        XCTAssertFalse(queue.visibleItems.contains { $0.id == low })
+        queue.tick(at: 30.0)
+        XCTAssertTrue(queue.items.contains { $0.id == low }, "hidden toast keeps its remaining second")
+        XCTAssertEqual(queue.items.first { $0.id == low }?.remaining ?? 0, 1.0, accuracy: 0.001)
+    }
+}
+
+final class AuthOtpSanitizeTests: XCTestCase {
+    func testNonAsciiDigitsMapToAsciiAndOthersDrop() {
+        XCTAssertEqual(AuthOtpInput.sanitize("١٢٣٤٥٦", length: 6), "123456", "Arabic-Indic digits")
+        XCTAssertEqual(AuthOtpInput.sanitize("１２３abc４", length: 6), "1234", "full-width digits")
+        XCTAssertEqual(AuthOtpInput.sanitize("²³⑦", length: 6), "", "superscripts and circled digits are not decimal digits")
+    }
+
+    func testExtraKeystrokesAreTrimmedSoBackspaceRemovesOneDigit() {
+        XCTAssertEqual(AuthOtpInput.sanitize("1234567", length: 6), "123456")
+        XCTAssertEqual(AuthOtpInput.sanitize("", length: 6), "")
+    }
+}

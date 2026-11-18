@@ -54,6 +54,7 @@ public struct CommandPaletteView: View {
 
     @Binding private var isPresented: Bool
     @State private var query = ""
+    @FocusState private var isSearchFocused: Bool
     @State private var highlightedID: String?
     @State private var rowFrames: [AnyHashable: CGRect] = [:]
     private let groups: [CommandGroup]
@@ -105,6 +106,8 @@ public struct CommandPaletteView: View {
                 isPresented = false
                 return .handled
             }
+            .defaultFocus($isSearchFocused, true)
+            .onAppear { isSearchFocused = true } // typing, arrows and Escape work as soon as the palette opens
             .motionHaptic(.selection, trigger: highlightedID)
             .accessibilityElement(children: .contain)
         }
@@ -123,6 +126,7 @@ public struct CommandPaletteView: View {
                 .textFieldStyle(.plain)
                 .font(typography.field)
                 .foregroundStyle(theme.foreground)
+                .focused($isSearchFocused)
                 .onSubmit { selectHighlighted() }
             if !query.isEmpty {
                 Button { query = "" } label: {

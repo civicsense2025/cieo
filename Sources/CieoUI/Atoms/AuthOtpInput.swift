@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// OTP verification code input field that sanitizes typed and pasted text to decimal digits.
+/// OTP verification code input field that sanitizes typed and pasted text to ASCII digits 0-9 (other scripts map to their ASCII value).
 public struct AuthOtpInput: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
@@ -9,6 +9,7 @@ public struct AuthOtpInput: View {
     @Environment(\.componentMotion) private var motionConfig
 
     @Binding private var code: String
+    @State private var fieldText: String
     @FocusState private var isFocused: Bool
     private let length: Int
     private let error: Text?
@@ -21,30 +22,22 @@ public struct AuthOtpInput: View {
         onComplete: ((String) -> Void)? = nil
     ) {
         _code = code
-        self.length = max(1, min(12, length))
+        let resolvedLength = max(1, min(12, length))
+        _fieldText = State(initialValue: Self.sanitize(code.wrappedValue, length: resolvedLength))
+        self.length = resolvedLength
         self.error = error
         self.onComplete = onComplete
     }
 
     public var body: some View {
         let sanitized = Self.sanitize(code, length: length)
-        let sanitizedBinding = Binding<String>(
-            get: { sanitized },
-            set: { next in
-                let clean = Self.sanitize(next, length: length)
-                if code != clean {
-                    code = clean
-                    if clean.count == length { onComplete?(clean) }
-                }
-            }
-        )
 
         VStack(alignment: .leading, spacing: metrics.compact) {
             Text(verbatim: strings.otpTitle)
                 .font(typography.fieldLabel)
                 .foregroundStyle(theme.foreground)
             ZStack(alignment: .leading) {
-                TextField(strings.otpTitle, text: sanitizedBinding)
+                TextField(strings.otpTitle, text: $fieldText)
                     .textFieldStyle(.plain)
                     .focused($isFocused)
                     #if os(iOS)
@@ -53,7 +46,21 @@ public struct AuthOtpInput: View {
                     #elseif os(macOS)
                     .textContentType(.oneTimeCode)
                     #endif
-                    .opacity(0) // literal-ok: underlying native field receives focus, paste, and VoiceOver while digit cells draw above
+                    // The real field stays in the accessibility tree (VoiceOver reads and edits the code through it); it is only hidden visually.
+                    .foregroundStyle(Color.clear)
+                    .tint(Color.clear)
+                    .onChange(of: fieldText) { _, typed in
+                        let clean = Self.sanitize(typed, length: length)
+                        if typed != clean { fieldText = clean }
+                        if code != clean {
+                            code = clean
+                            if clean.count == length { onComplete?(clean) }
+                        }
+                    }
+                    .onChange(of: code) { _, external in
+                        let clean = Self.sanitize(external, length: length)
+                        if fieldText != clean { fieldText = clean }
+                    }
                 HStack(spacing: metrics.compact) {
                     ForEach(0..<length, id: \.self) { index in
                         digitCell(at: index, in: sanitized)
@@ -89,7 +96,12 @@ public struct AuthOtpInput: View {
 
     /// Strips non-digits and truncates to `length`.
     public static func sanitize(_ input: String, length: Int) -> String {
-        let digits = input.unicodeScalars.filter(CharacterSet.decimalDigits.contains)
-        return String(String(digits).prefix(max(0, length)))
+        var digits = ""
+        for scalar in input.unicodeScalars where scalar.properties.numericType == .decimal {
+            guard let value = scalar.properties.numericValue, (0...9).contains(value) else { continue }
+            digits.append(String(Int(value)))
+            if digits.count >= max(0, length) { break }
+        }
+        return digits
     }
 }

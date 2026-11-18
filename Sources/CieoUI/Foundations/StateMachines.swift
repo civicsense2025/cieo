@@ -98,17 +98,28 @@ public struct AsyncActionState: Equatable, Sendable {
         return TransitionEnvelope(prev: prev, next: .pending, event: .begin, direction: 1, announcement: "In progress")
     }
 
+    /// Answers (succeed, fail, timeout, cancel) only land on a pending attempt, and, when an id is given, only on the current attempt.
+    private func accepts(_ answered: UUID?) -> Bool {
+        phase == .pending && (answered == nil || answered == attemptID)
+    }
+
+    private func ignored(_ event: AsyncActionEvent) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
+        TransitionEnvelope(prev: phase, next: phase, event: event)
+    }
+
     @discardableResult
-    public mutating func succeed(announcement: String? = "Completed") -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
+    public mutating func succeed(announcement: String? = "Completed", attemptID answered: UUID? = nil) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
         let prev = phase
+        guard accepts(answered) else { return ignored(.succeed) }
         phase = .succeeded
         needsFreshAttemptOnNextBegin = true
         return TransitionEnvelope(prev: prev, next: .succeeded, event: .succeed, direction: 1, haptic: .success, announcement: announcement)
     }
 
     @discardableResult
-    public mutating func fail(_ message: String) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
+    public mutating func fail(_ message: String, attemptID answered: UUID? = nil) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
         let prev = phase
+        guard accepts(answered) else { return ignored(.fail) }
         let clean = message.isEmpty ? "Action failed" : message
         phase = .failed(clean)
         needsFreshAttemptOnNextBegin = false
@@ -116,8 +127,9 @@ public struct AsyncActionState: Equatable, Sendable {
     }
 
     @discardableResult
-    public mutating func timeout(_ message: String = AsyncActionPhase.defaultUncertainMessage) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
+    public mutating func timeout(_ message: String = AsyncActionPhase.defaultUncertainMessage, attemptID answered: UUID? = nil) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
         let prev = phase
+        guard accepts(answered) else { return ignored(.timeout) }
         let clean = message.isEmpty ? AsyncActionPhase.defaultUncertainMessage : message
         phase = .uncertain(clean)
         needsFreshAttemptOnNextBegin = false
@@ -125,8 +137,9 @@ public struct AsyncActionState: Equatable, Sendable {
     }
 
     @discardableResult
-    public mutating func cancel() -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
+    public mutating func cancel(attemptID answered: UUID? = nil) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
         let prev = phase
+        guard accepts(answered) else { return ignored(.cancel) }
         phase = .cancelled
         needsFreshAttemptOnNextBegin = true
         return TransitionEnvelope(prev: prev, next: .cancelled, event: .cancel, direction: -1, announcement: "Cancelled")

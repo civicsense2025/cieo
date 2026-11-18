@@ -9,7 +9,10 @@ public struct ModalDialog<Content: View>: View {
     @Environment(\.componentMetrics) private var metrics
     @Environment(\.componentMotion) private var motionConfig
 
+    private enum FocusTarget: Hashable { case cancel }
+
     @Binding private var isPresented: Bool
+    @FocusState private var focus: FocusTarget?
     private let title: Text
     private let message: Text?
     private let confirmTitle: LocalizedStringKey
@@ -64,6 +67,7 @@ public struct ModalDialog<Content: View>: View {
                         action: dismissIfUnlocked
                     )
                     .disabled(confirmPhase.isLocked)
+                    .focused($focus, equals: .cancel)
 
                     ActionButton(
                         confirmTitle,
@@ -84,6 +88,8 @@ public struct ModalDialog<Content: View>: View {
                 cornerRadius: metrics.cornerSurface
             )
             .floatingShadow()
+            .defaultFocus($focus, .cancel)
+            .onAppear { focus = .cancel } // keyboard focus starts inside the dialog so Escape and Return act at once
             .onKeyPress(.escape) {
                 guard !confirmPhase.isLocked else { return .handled }
                 dismissIfUnlocked()

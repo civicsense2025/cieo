@@ -9,6 +9,9 @@ public struct ThemeStudioView: View {
     @Environment(\.componentMetrics) private var metrics
     @Environment(\.componentTypography) private var typography
 
+    /// One chip look for every control in the studio.
+    static let chipStyle = SoftChipStyle()
+
     private let externalBrand: Binding<ThemeBrand>?
     private let externalGround: Binding<ThemeGround>?
     private let externalElevation: Binding<ElevationStyle>?
@@ -50,7 +53,7 @@ public struct ThemeStudioView: View {
                             Text(verbatim: option.label),
                             isSelected: selectionBinding(option, in: activeBrand)
                         )
-                        .chipStyle(.soft)
+                        .chipStyle(Self.chipStyle)
                     }
                 }
                 Text("Ground").font(typography.fieldLabel)
@@ -60,28 +63,29 @@ public struct ThemeStudioView: View {
                             Text(verbatim: option.rawValue.capitalized),
                             isSelected: selectionBinding(option, in: activeGround)
                         )
+                        .chipStyle(Self.chipStyle)
                     }
                 }
-                HStack(spacing: metrics.compact) {
+                FlowStack(spacing: metrics.compact) {
                     ForEach(ElevationStyle.allCases, id: \.self) { option in
                         SelectionChip(
                             Text(verbatim: option.rawValue.capitalized),
                             isSelected: selectionBinding(option, in: activeElevation)
                         )
-                        .chipStyle(.rounded)
+                        .chipStyle(Self.chipStyle)
                     }
                     SelectionChip("Dark audit", isSelected: $previewDark)
-                        .chipStyle(.outlined)
+                        .chipStyle(Self.chipStyle)
                 }
             }
 
             Specimen(title: "Live WCAG 2.2 Contrast Audit") {
-                contrastRow("Foreground on Surface", fg: theme.foreground, bg: theme.surface, env: auditEnv)
-                contrastRow("Secondary on Surface", fg: theme.secondary, bg: theme.surface, env: auditEnv)
-                contrastRow("OnAccent on Accent", fg: theme.onAccent, bg: theme.accent, env: auditEnv)
-                contrastRow("Success on SuccessSoft", fg: theme.success, bg: theme.successSoft, env: auditEnv)
-                contrastRow("Warning on WarningSoft", fg: theme.warning, bg: theme.warningSoft, env: auditEnv)
-                contrastRow("Danger on DangerSoft", fg: theme.danger, bg: theme.dangerSoft, env: auditEnv)
+                contrastRow("Foreground on Surface", fg: theme.foreground, bg: theme.surface, env: auditEnv, theme: theme)
+                contrastRow("Secondary on Surface", fg: theme.secondary, bg: theme.surface, env: auditEnv, theme: theme)
+                contrastRow("OnAccent on Accent", fg: theme.onAccent, bg: theme.accent, env: auditEnv, theme: theme)
+                contrastRow("Success on SuccessSoft", fg: theme.success, bg: theme.successSoft, env: auditEnv, theme: theme)
+                contrastRow("Warning on WarningSoft", fg: theme.warning, bg: theme.warningSoft, env: auditEnv, theme: theme)
+                contrastRow("Danger on DangerSoft", fg: theme.danger, bg: theme.dangerSoft, env: auditEnv, theme: theme)
             }
 
             Specimen(title: "Audited Component Previews") {
@@ -91,8 +95,8 @@ public struct ThemeStudioView: View {
                     HStack(spacing: metrics.medium) {
                         ProgressRing(value: 0.78, diameter: 64)
                         VStack(alignment: .leading, spacing: metrics.compact) {
-                            SelectionChip("Capsule", isSelected: .constant(true)).chipStyle(.capsule)
-                            SelectionChip("Outlined", isSelected: .constant(true)).chipStyle(.outlined)
+                            SelectionChip("Capsule", isSelected: .constant(true)).chipStyle(Self.chipStyle)
+                            SelectionChip("Outlined", isSelected: .constant(true)).chipStyle(Self.chipStyle)
                         }
                     }
                 }
@@ -102,7 +106,7 @@ public struct ThemeStudioView: View {
         }
     }
 
-    private func contrastRow(_ title: String, fg: Color, bg: Color, env: EnvironmentValues) -> some View {
+    private func contrastRow(_ title: String, fg: Color, bg: Color, env: EnvironmentValues, theme: Theme) -> some View {
         let ratio = Self.contrastRatio(fg, bg, in: env)
         let tier = ratio >= 7.0 ? "AAA" : (ratio >= 4.5 ? "AA" : (ratio >= 3.0 ? "AA Large" : "Low"))
         let chipTone: StatusChip.Tone = ratio >= 4.5 ? .done : (ratio >= 3.0 ? .attention : .danger)
@@ -116,7 +120,7 @@ public struct ThemeStudioView: View {
                         .font(typography.strongBody)
                         .foregroundStyle(fg)
                 }
-                .componentBorder(fg.opacity(0.25), width: metrics.hairline, cornerRadius: metrics.cornerSmall)
+                .componentBorder(theme.border, width: metrics.hairline, cornerRadius: metrics.cornerSmall)
             Text(verbatim: title)
                 .font(typography.detail)
                 .frame(maxWidth: .infinity, alignment: .leading)

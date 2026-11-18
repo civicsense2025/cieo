@@ -155,7 +155,7 @@ final class CieoGalleryTests: XCTestCase {
             isCodeExpanded: true
         )
         XCTAssertEqual(specState.constrainedWidth, 720)
-        XCTAssertEqual(specState.typeSizePreset.dynamicTypeSize, .accessibility2)
+        XCTAssertEqual(specState.typeSizePreset?.dynamicTypeSize, .accessibility2)
         specState.setWidth(120)
         XCTAssertEqual(specState.constrainedWidth, 240)
 

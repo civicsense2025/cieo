@@ -32,7 +32,7 @@ public struct PhysicsLabView: View {
 
     @State private var curveMode: CurveMode = .position
     @State private var customW: Double = 22
-    @State private var customZeta: Double = 0.85
+    @State private var customZeta: Double = PhysicsLabView.defaultZeta
     @State private var dragOffset: CGSize = .zero
     @State private var tracker = VelocityTracker()
     @State private var releaseVelocity: CGVector = .zero
@@ -42,6 +42,11 @@ public struct PhysicsLabView: View {
     @State private var nextLogID = 1
     @State private var agentStore = PhysicsLabView.seededStore()
     @State private var nextSeq = 3
+
+    /// Critically damped, the house default: it settles without overshoot.
+    public static let defaultZeta: Double = 1.0
+    /// Preset order used for the chart series and their ink-based colours.
+    public static let seriesNames = ["snap", "base", "soft", "lazy", "custom"]
 
     public init() {}
 
@@ -73,8 +78,12 @@ public struct PhysicsLabView: View {
             HStack(spacing: metrics.compact) {
                 Text(verbatim: "ω \(Int(customW))").font(typography.reference)
                 Slider(value: $customW, in: 6...48)
+                    .accessibilityLabel("Stiffness ω")
+                    .accessibilityValue("\(Int(customW))")
                 Text(verbatim: String(format: "ζ %.2f", customZeta)).font(typography.reference)
                 Slider(value: $customZeta, in: 0.7...1.0)
+                    .accessibilityLabel("Damping ratio ζ")
+                    .accessibilityValue(String(format: "%.2f", customZeta))
             }
             Chart(samples) { sample in
                 LineMark(
@@ -89,11 +98,17 @@ public struct PhysicsLabView: View {
                         .foregroundStyle(theme.subtle)
                 }
             }
+            .chartForegroundStyleScale(domain: Self.seriesNames, range: seriesColors)
             .frame(height: 190)
             Text(verbatim: String(format: "Custom settle time (99.9%%): %.0f ms", custom.settleTime() * 1000))
                 .font(typography.reference)
                 .foregroundStyle(theme.secondary)
         }
+    }
+
+    /// Ink first, accent only for the preset being tuned; no default rainbow palette.
+    private var seriesColors: [Color] {
+        [theme.foreground, theme.secondary, theme.subtle, theme.borderStrong, theme.accent]
     }
 
     private var velocityDragSpecimen: some View {

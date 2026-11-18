@@ -11,7 +11,7 @@ public struct AdaptiveCatalogShell: View {
     @State private var recipePath: [String] = []
     @State private var brand: ThemeBrand = .instrument
     @State private var ground: ThemeGround = .paper
-    @State private var corners: CornerProfile = .soft
+    @State private var corners: CornerProfile = .pill
     @State private var density: ComponentDensity = .comfortable
     @State private var elevation: ElevationStyle = .ring
     @State private var isRTL = false
@@ -22,13 +22,18 @@ public struct AdaptiveCatalogShell: View {
     @State private var compactInspectorSheet = false
     @State private var commandPaletteOpen = false
 
+    /// Compact (iPhone) tab titles, shared with the site's navigation where the two map one to one.
+    public static let compactTabTitles = ["Foundations", "Studio", "Library", "Recipes", "Physics"]
+    private static let contentMaxWidth: CGFloat = 760
+    private static let paletteMaxSize = CGSize(width: 540, height: 420)
+
     private let commandGroups = CatalogCommandIndex.groups()
 
     public init() {}
 
     public var body: some View {
         let activeTheme = Theme.preset(brand: brand, ground: ground, elevation: elevation)
-        let activeMetrics = ComponentMetrics.preset(density: density, corners: corners)
+        let activeMetrics = metrics
 
         ZStack {
             Group {
@@ -39,15 +44,16 @@ public struct AdaptiveCatalogShell: View {
                 }
             }
             if commandPaletteOpen {
-                Color.black.opacity(0.28)
+                activeTheme.scrim
                     .ignoresSafeArea()
                     .onTapGesture { commandPaletteOpen = false }
                     .accessibilityHidden(true)
                 CommandPaletteView(isPresented: $commandPaletteOpen, groups: commandGroups) { id in
                     applyCommand(id)
                 }
-                .frame(maxWidth: 540, maxHeight: 420)
-                .padding(20)
+                .frame(maxWidth: Self.paletteMaxSize.width, maxHeight: Self.paletteMaxSize.height)
+                .padding(activeMetrics.loose)
+                .accessibilityAddTraits(.isModal)
             }
         }
         .focusedSceneValue(\.catalogShowcaseActions, showcaseActions)
@@ -57,6 +63,8 @@ public struct AdaptiveCatalogShell: View {
         .componentMotion(ComponentMotionConfiguration(speed: motionSpeed))
         .renderingPreferences(effectsEnabled: effectsEnabled, motionDisabled: reduceMotion)
     }
+
+    private var metrics: ComponentMetrics { ComponentMetrics.preset(density: density, corners: corners) }
 
     private var showcaseActions: CatalogShowcaseActions {
         CatalogShowcaseActions(
@@ -101,20 +109,20 @@ public struct AdaptiveCatalogShell: View {
 
     private func compactShell(theme: Theme) -> some View {
         TabView {
-            compactTab(.overview, title: "Overview", symbol: "square.grid.2x2", theme: theme)
-            compactTab(.themeStudio, title: "Studio", symbol: "paintpalette", theme: theme)
+            compactTab(.overview, title: Self.compactTabTitles[0], symbol: "square.grid.2x2", theme: theme)
+            compactTab(.themeStudio, title: Self.compactTabTitles[1], symbol: "paintpalette", theme: theme)
             NavigationStack {
                 sidebarList
-                    .navigationTitle("Components")
+                    .navigationTitle(Self.compactTabTitles[2])
                     .navigationDestination(for: AdaptiveCatalogSection.self) { sectionDetail($0, theme: theme) }
                     .toolbar { compactToolbar }
             }
-            .tabItem { Label("Components", systemImage: "square.stack.3d.up") }
+            .tabItem { Label(Self.compactTabTitles[2], systemImage: "square.stack.3d.up") }
             NavigationStack(path: $recipePath) {
                 sectionDetail(.motionRecipes, theme: theme).toolbar { compactToolbar }
             }
-            .tabItem { Label("Recipes", systemImage: "sparkles.rectangle.stack") }
-            compactTab(.physicsLab, title: "Physics", symbol: "function", theme: theme)
+            .tabItem { Label(Self.compactTabTitles[3], systemImage: "sparkles.rectangle.stack") }
+            compactTab(.physicsLab, title: Self.compactTabTitles[4], symbol: "function", theme: theme)
         }
         .sheet(isPresented: $compactInspectorSheet) {
             NavigationStack {
@@ -156,7 +164,7 @@ public struct AdaptiveCatalogShell: View {
                 sidebarRow(.overview)
                 sidebarRow(.themeStudio)
             }
-            Section("Components") {
+            Section("Library") {
                 sidebarRow(.atoms)
                 sidebarRow(.molecules)
                 sidebarRow(.editorial)
@@ -182,7 +190,7 @@ public struct AdaptiveCatalogShell: View {
             LibraryCatalog()
         } else {
             ScrollView {
-                VStack(alignment: .leading, spacing: 24) {
+                VStack(alignment: .leading, spacing: metrics.section) {
                     switch section {
                     case .overview: overviewSpecimen
                     case .themeStudio: ThemeStudioView(brand: $brand, ground: $ground, elevation: $elevation)
@@ -199,8 +207,8 @@ public struct AdaptiveCatalogShell: View {
                     case .motionRecipes: EmptyView()
                     }
                 }
-                .padding(20)
-                .frame(maxWidth: 760, alignment: .leading)
+                .padding(metrics.loose)
+                .frame(maxWidth: Self.contentMaxWidth, alignment: .leading)
                 .frame(maxWidth: .infinity)
             }
             .background(theme.quietBackground)
@@ -209,28 +217,33 @@ public struct AdaptiveCatalogShell: View {
     }
 
     private var overviewSpecimen: some View {
-        VStack(alignment: .leading, spacing: 24) {
+        VStack(alignment: .leading, spacing: metrics.section) {
             Specimen(title: "Cieo Design & Motion System") {
-                HStack(alignment: .firstTextBaseline, spacing: 24) {
+                HStack(alignment: .firstTextBaseline, spacing: metrics.section) {
                     BigNumber("\(MotionAtoms.all.count)", label: "motion recipes", role: .numeralMedium, layout: .stacked)
                     BigNumber("21", label: "brand × ground palettes", role: .numeralSmall, layout: .stacked)
                     BigNumber("24", label: "agent icon roles", role: .numeralSmall, layout: .stacked)
                 }
                 Notice(
-                    "Press ⌘K for global command search",
+                    LocalizedStringKey(Self.searchNoticeTitle(isCompact: isCompactLayout)),
                     detail: "Jump to any component section, open featured motion recipes, or switch brand and ground palettes instantly.",
                     tone: .info
                 )
             }
             Specimen(title: "Explore Studios") {
-                FlowStack(spacing: 8) {
-                    ActionButton("Command Search (⌘K)", emphasis: .prominent, sizing: .fitted) { commandPaletteOpen = true }
+                FlowStack(spacing: metrics.compact) {
+                    ActionButton(isCompactLayout ? "Command Search" : "Command Search (⌘K)", emphasis: .prominent, sizing: .fitted) { commandPaletteOpen = true }
                     ActionButton("Theme Studio", emphasis: .quiet, sizing: .fitted) { selection = .themeStudio }
                     ActionButton("Agents & Auth", emphasis: .quiet, sizing: .fitted) { selection = .agentAndAuth }
                     ActionButton("Physics Lab", emphasis: .quiet, sizing: .fitted) { selection = .physicsLab }
                 }
             }
         }
+    }
+
+    /// The ⌘K hint only makes sense where a hardware keyboard shortcut exists, so compact (iPhone) layouts drop it.
+    public static func searchNoticeTitle(isCompact: Bool) -> String {
+        isCompact ? "Use Command Search to jump anywhere" : "Press ⌘K for global command search"
     }
 
     private var inspectorControls: some View {
