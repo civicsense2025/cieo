@@ -1,5 +1,6 @@
 // site/doc-playground.js — M3-caliber interactive component stage, multi-platform tabs, and live FSM explorer.
 import { brands, createTheme, densities, grounds, radii, themeToCssVariables } from '../design/index.js';
+import { rovingTabs } from './roving-tabs.js';
 import { S, settleTime } from '../dist/core/spring.js';
 import {
   createAsyncActionMachine,
@@ -15,28 +16,10 @@ import {
 // 1. Multi-platform tablist (click + ArrowLeft/ArrowRight/Home/End)
 const tabs = [...document.querySelectorAll('.doc-tabs [role="tab"]')];
 if (tabs.length) {
-  const selectTab = (index) => {
+  rovingTabs(tabs, (index) => {
     tabs.forEach((t, j) => {
-      const on = index === j;
-      t.setAttribute('aria-selected', String(on));
-      t.tabIndex = on ? 0 : -1;
       const panel = document.getElementById(t.getAttribute('aria-controls'));
-      if (panel) panel.hidden = !on;
-    });
-  };
-  tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => selectTab(i));
-    tab.addEventListener('keydown', (e) => {
-      const n = tabs.length;
-      const next = e.key === 'ArrowRight' ? (i + 1) % n
-        : e.key === 'ArrowLeft' ? (i - 1 + n) % n
-        : e.key === 'Home' ? 0
-        : e.key === 'End' ? n - 1
-        : -1;
-      if (next < 0) return;
-      e.preventDefault();
-      selectTab(next);
-      tabs[next].focus();
+      if (panel) panel.hidden = index !== j;
     });
   });
 }
@@ -100,6 +83,15 @@ if (toolbar && stage) {
   ].join('');
 
   let speedScale = 1;
+  // Slow motion stretches every motion token the stage reads: durations grow by 1/speed and spring frequencies shrink by speed.
+  const DURATION_TOKENS = { 'base': 300, 'exit': 100, 'lazy': 740, 'snap': 200, 'soft': 440 };
+  const OMEGA_TOKENS = { base: 22, lazy: 9, snap: 34, soft: 15 };
+  const applyTimeScale = () => {
+    const set = (name, value) => (speedScale === 1 ? stage.style.removeProperty(name) : stage.style.setProperty(name, value));
+    for (const [k, ms] of Object.entries(DURATION_TOKENS)) set(`--cieo-motion-duration-${k}`, `${Math.round(ms / speedScale)}ms`);
+    for (const [k, w] of Object.entries(OMEGA_TOKENS)) set(`--cieo-motion-spring-${k}-w`, String(+(w * speedScale).toFixed(2)));
+    set('--cieo-motion-lag', `${Math.round(60 / speedScale)}ms`);
+  };
   const syncStage = () => {
     const brand = toolbar.querySelector('[data-stage-brand]').value;
     const ground = toolbar.querySelector('[data-stage-ground]').value;
@@ -117,6 +109,7 @@ if (toolbar && stage) {
     for (const [k, v] of Object.entries(vars)) stage.style.setProperty(k, v);
     stage.style.colorScheme = scheme;
 
+    applyTimeScale();
     const baseSettleMs = Math.round(settleTime(cfg) * 1000);
     const dilatedMs = Math.round(baseSettleMs / speedScale);
     if (telemetry) {
@@ -167,6 +160,8 @@ if (toolbar && stage) {
         if (val) {
           activeProps.push(`${prop}="${val}"`);
           if (target) target.dataset[prop] = val;
+        } else if (target) {
+          delete target.dataset[prop];
         }
       }
     }

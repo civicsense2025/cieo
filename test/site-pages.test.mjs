@@ -36,7 +36,7 @@ test('every site and library page has the shared header, a skip link, one h1, a 
     assert.match(html, /<main id="main">/, file);
     assert.equal((html.match(/<h1[ >]/g) || []).length, 1, `${file} has exactly one h1`);
     for (const [label] of NAV) assert.ok(html.includes(`>${label}</a>`), `${file} links ${label}`);
-    assert.match(html, /<link rel="stylesheet" href="[./]*site\/theme\.css">/, file);
+    assert.match(html, /<link rel="stylesheet" href="(?:\.\.?\/)theme\.css">/, file);
   }
   for (const f of ['site/index.html', 'site/pricing.html', 'site/contact.html']) assert.match(read(f), /<meta name="description" content="[^"]{20,}"/, f);
 });

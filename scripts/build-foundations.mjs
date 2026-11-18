@@ -12,6 +12,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { brands, grounds, radii, densities } from '../design/index.js';
 import { AGENT_ICONS, AGENT_ICON_VIEWBOX, agentIconGlyph, agentIconOutline, agentIconStrokeWidth, roundIconUnit } from '../dist/agent/icons.js';
+import { recipeCount } from './lib/recipe-count.mjs';
 import { siteFooter, siteHeader, siteStyles } from './lib/site-chrome.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -82,13 +83,7 @@ ${siteFooter('../')}
 }
 
 function overviewPage() {
-  const cards = FOUNDATION_CHAPTERS.slice(1).map((c, i) => `
-    <a class="fnd-card" href="./${c.slug}">
-      <span class="site-label">0${i + 1}</span>
-      <h2>${esc(c.title)}</h2>
-      <p>${esc(c.summary)}</p>
-    </a>
-  `).join('');
+  const cards = FOUNDATION_CHAPTERS.slice(1).map((c, i) => `<li><a href="./${c.slug}"><span class="index-count">0${i + 1}</span><span class="index-name">${esc(c.title)}</span><span class="index-note">${esc(c.summary)}</span></a></li>`).join('');
 
   return shell({
     slug: 'index.html',
@@ -97,14 +92,14 @@ function overviewPage() {
     body: `<header class="doc-head">
       <p class="doc-crumbs"><a href="../">Home</a><span aria-hidden="true">/</span><span>Foundations</span></p>
       <h1>Foundations that hold across platforms.</h1>
-      <p>Every Cieo control, primitive, and recipe obeys one physical and visual contract: closed-form springs that never bounce past their rest state, OKLCH palettes audited across 168 theme combinations, and state machines that never claim an unconfirmed outcome.</p>
+      <p>Every Cieo control, primitive, and recipe obeys one physical and visual contract: closed-form springs that settle without visible bounce (ζ = 1 default; the 0.7 floor allows at most about 5% overshoot), OKLCH palettes audited across 168 theme combinations, and state machines that never claim an unconfirmed outcome.</p>
     </header>
     <section aria-label="Chapters">
-      <div class="fnd-grid">${cards}</div>
+      <ul class="index-list">${cards}</ul>
     </section>
     <section class="fnd-callout">
       <h2>Explore live surfaces</h2>
-      <p>Test tokens interactively in <a href="../../docs/studio/">Theme Studio</a>, inspect all components in the <a href="../components/">Component Library</a>, or scrub 561 specimens in <a href="../recipes/">Motion Recipes</a>.</p>
+      <p>Test tokens interactively in <a href="../../docs/studio/">Theme Studio</a>, inspect all components in the <a href="../components/">Component Library</a>, or scrub ${recipeCount()} specimens in <a href="../recipes/">Motion Recipes</a>.</p>
     </section>`,
   });
 }
@@ -117,7 +112,7 @@ function physicsPage() {
     body: `<header class="doc-head">
       <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Physics &amp; Velocity</span></p>
       <h1>Closed-form spring physics.</h1>
-      <p>Every motion is evaluated analytically at timestamp <code>t</code> as a sum of damped step responses: zero numerical drift, interruptible mid-flight with continuous velocity, and strictly clamped to <code>0.7 ≤ zeta ≤ 1.0</code> so interface chrome never wobbles.</p>
+      <p>Every motion is evaluated analytically at timestamp <code>t</code> as a sum of damped step responses: zero numerical drift, interruptible mid-flight with continuous velocity, and clamped to <code>0.7 ≤ zeta ≤ 1.0</code>: zeta = 1 is the default, and the 0.7 floor allows at most about 5% overshoot.</p>
     </header>
 
     <section aria-labelledby="curve-h">
@@ -185,12 +180,12 @@ function choreographyPage() {
       <div class="fnd-lab" data-choreo-demo>
         <div class="fnd-tabs" role="tablist" aria-label="Choreography specimen steps">
           <span class="fnd-tab-pill" data-choreo-pill aria-hidden="true"></span>
-          <button type="button" role="tab" aria-selected="true" data-step="0">1. Presence</button>
-          <button type="button" role="tab" aria-selected="false" data-step="1">2. MotionFrame</button>
-          <button type="button" role="tab" aria-selected="false" data-step="2">3. SharedAxis</button>
-          <button type="button" role="tab" aria-selected="false" data-step="3">4. MorphSurface</button>
+          <button type="button" role="tab" id="choreo-tab-0" aria-controls="choreo-panel" aria-selected="true" tabindex="0" data-step="0">1. Presence</button>
+          <button type="button" role="tab" id="choreo-tab-1" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="1">2. MotionFrame</button>
+          <button type="button" role="tab" id="choreo-tab-2" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="2">3. SharedAxis</button>
+          <button type="button" role="tab" id="choreo-tab-3" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="3">4. MorphSurface</button>
         </div>
-        <div class="fnd-stage-card" data-choreo-panel>
+        <div class="fnd-stage-card" id="choreo-panel" role="tabpanel" aria-labelledby="choreo-tab-0" tabindex="0" data-choreo-panel>
           <h3 data-choreo-title>Presence &amp; Arrival</h3>
           <p data-choreo-body>Overlays enter on the base spring (ω = 22) from 0.97 scale and exit faster on snap (ω = 34). New list items arrive from ARRIVE = 0.45 opacity, never from 0, and StaggerGroup compresses per-item delays so total stagger never exceeds 300 ms.</p>
         </div>
@@ -366,31 +361,11 @@ function agentsPage() {
 
 function buildFoundationsCss() {
   return `/* Generated by scripts/build-foundations.mjs */
-.fnd-grid {
-  display: grid;
-  gap: var(--cieo-space-4);
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
-  margin-block: var(--cieo-space-6);
-}
-.fnd-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cieo-space-2);
-  padding: var(--cieo-space-6);
-  background: var(--cieo-color-surface);
-  border: 1px solid var(--cieo-color-border);
-  border-radius: var(--cieo-radius-surface);
-  text-decoration: none;
-  color: var(--cieo-color-text);
-}
-.fnd-card:hover { border-color: var(--cieo-color-border-strong); }
-.fnd-card h2 { margin: 0; font-size: var(--cieo-text-title); }
-.fnd-card p { margin: 0; color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
 .fnd-callout {
   margin-block-start: var(--cieo-space-8);
   padding: var(--cieo-space-6);
   background: var(--cieo-color-sunken);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
 }
 .fnd-lab {
@@ -400,7 +375,7 @@ function buildFoundationsCss() {
   padding: var(--cieo-space-6);
   margin-block: var(--cieo-space-4);
   background: var(--cieo-color-surface);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
 }
 .fnd-controls {
@@ -419,7 +394,7 @@ function buildFoundationsCss() {
 .fnd-controls select {
   min-height: 2rem;
   padding: 0 var(--cieo-space-2);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border-strong);
   border-radius: var(--cieo-radius-control);
   background: var(--cieo-color-canvas);
   color: var(--cieo-color-text);
@@ -432,7 +407,7 @@ function buildFoundationsCss() {
   gap: 4px;
   padding: 3px;
   background: var(--cieo-color-sunken);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border-strong);
   border-radius: var(--cieo-radius-control);
 }
 .fnd-presets button {
@@ -441,19 +416,20 @@ function buildFoundationsCss() {
   color: var(--cieo-color-muted);
   font: inherit;
   font-size: var(--cieo-text-caption);
-  padding: 5px 10px;
-  border-radius: calc(var(--cieo-radius-control) - 2px);
+  padding: var(--cieo-space-1) var(--cieo-space-3);
+  border-radius: var(--cieo-radius-small);
   cursor: pointer;
 }
+/* Selected is ink on paper, never a faint fill alone. */
 .fnd-presets button[aria-pressed="true"] {
-  background: var(--cieo-color-surface);
-  color: var(--cieo-color-text);
+  background: var(--cieo-color-accent);
+  color: var(--cieo-color-on-accent);
 }
 .fnd-plot {
   width: 100%;
   height: auto;
   background: var(--cieo-color-canvas);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
 }
 .fnd-axis-target { stroke: var(--cieo-color-border-strong); stroke-dasharray: 4 4; }
@@ -474,7 +450,7 @@ function buildFoundationsCss() {
   gap: 4px;
   padding: 4px;
   background: var(--cieo-color-sunken);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border-strong);
   border-radius: var(--cieo-radius-control);
   align-self: flex-start;
 }
@@ -484,8 +460,9 @@ function buildFoundationsCss() {
   left: 0;
   height: calc(100% - 8px);
   background: var(--cieo-color-surface);
-  border-radius: calc(var(--cieo-radius-control) - 2px);
-  box-shadow: 0 1px 2px color-mix(in oklab, var(--cieo-color-text) 10%, transparent);
+  border: var(--cieo-border-width) solid var(--cieo-color-text);
+  border-radius: var(--cieo-radius-small);
+  box-sizing: border-box;
   pointer-events: none;
 }
 .fnd-tabs button {
@@ -496,13 +473,13 @@ function buildFoundationsCss() {
   color: var(--cieo-color-text);
   font: inherit;
   font-size: var(--cieo-text-caption);
-  padding: 6px 12px;
+  padding: var(--cieo-space-1) var(--cieo-space-3);
   cursor: pointer;
 }
 .fnd-stage-card {
   padding: var(--cieo-space-6);
   background: var(--cieo-color-canvas);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
 }
 .fnd-stage-card h3 { margin: 0 0 var(--cieo-space-2); }
@@ -514,21 +491,21 @@ function buildFoundationsCss() {
 }
 .fnd-swatch {
   padding: var(--cieo-space-3);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   display: flex;
   flex-direction: column;
   gap: 4px;
   font-size: var(--cieo-text-caption);
 }
-.fnd-swatch code { font-family: var(--cieo-font-mono); font-size: 11px; }
+.fnd-swatch code { font-family: var(--cieo-font-mono); font-size: var(--cieo-text-caption); }
 .fnd-specimen-display { margin: var(--cieo-space-1) 0 0; font-family: var(--cieo-font-display); font-size: var(--cieo-text-display); line-height: 1.1; }
 .fnd-specimen-title { margin: var(--cieo-space-1) 0 0; font-size: var(--cieo-text-title); font-weight: var(--cieo-weight-strong); }
 .fnd-specimen-mono { margin: var(--cieo-space-1) 0 0; font-family: var(--cieo-font-mono); font-size: var(--cieo-text-small); font-variant-numeric: tabular-nums; }
 .fnd-shape-card {
   padding: var(--cieo-space-6);
   background: var(--cieo-color-canvas);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   display: flex;
   flex-direction: column;
@@ -546,7 +523,7 @@ function buildFoundationsCss() {
   gap: var(--cieo-space-2);
   padding: var(--cieo-space-4);
   background: var(--cieo-color-canvas);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
 }
 .fnd-mark-box p { margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
@@ -562,17 +539,22 @@ function buildFoundationsCss() {
   gap: 4px;
   padding: var(--cieo-space-3);
   background: var(--cieo-color-canvas);
-  border: 1px solid var(--cieo-color-border);
+  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   text-align: center;
   font-size: var(--cieo-text-caption);
 }
-.fnd-agent-glyph span { color: var(--cieo-color-muted); font-size: 11px; }
+.fnd-agent-glyph span { color: var(--cieo-color-muted); font-size: var(--cieo-text-caption); }
+@media (pointer: coarse) {
+  .fnd-controls select, .fnd-presets button, .fnd-tabs button, .fnd-shape-actions button, .fnd-lab button { min-height: var(--cieo-touch-target); }
+  .fnd-controls select { min-width: var(--cieo-touch-target); }
+}
 `;
 }
 
 function buildFoundationsJs() {
   return `// Generated by scripts/build-foundations.mjs — interactive labs for Physics, Choreography, OKLCH Color, Shape, and Agents
+import { rovingTabs } from '../roving-tabs.js';
 import { LAG, S, Track, now, resp, run, settleTime } from '../../dist/core/spring.js';
 import { projectToDetent, rubberBand } from '../../dist/live/index.js';
 import { auditTheme, createTheme, themeToCssVariables } from '../../design/index.js';
@@ -731,11 +713,9 @@ if (choreoLab) {
     });
   };
 
-  btns.forEach((btn, idx) => {
-    btn.addEventListener('click', () => {
-      btns.forEach((b, j) => b.setAttribute('aria-selected', String(j === idx)));
-      placePill(idx, false);
-    });
+  rovingTabs(btns, (idx) => {
+    panel.setAttribute('aria-labelledby', \`choreo-tab-\${idx}\`);
+    placePill(idx, false);
   });
   placePill(0, true);
 }

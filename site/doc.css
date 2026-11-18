@@ -15,10 +15,14 @@ body.cieo-docsite {
 /* Layout: a sticky rail of section links beside one reading column. */
 .doc-shell { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--cieo-space-8); max-inline-size: 72rem; margin-inline: auto; padding: var(--cieo-space-6) var(--cieo-space-4) var(--cieo-space-16); }
 @media (min-width: 60rem) { .doc-shell { grid-template-columns: 12rem minmax(0, 1fr); padding-inline: var(--cieo-space-8); } }
-.doc-rail { display: none; }
+/* Phones: the section links stay reachable as one scrolling row of chips; wide screens get the sticky rail. */
+.doc-rail { display: flex; flex-wrap: nowrap; align-items: center; gap: var(--cieo-space-2); overflow-x: auto; scrollbar-width: none; font-size: var(--cieo-text-small); }
+.doc-rail::-webkit-scrollbar { display: none; }
+.doc-rail .doc-label { flex: none; }
+.doc-rail a { flex: none; padding: var(--cieo-space-1) var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-pill); text-decoration: none; color: var(--cieo-color-muted); white-space: nowrap; }
 @media (min-width: 60rem) {
-  .doc-rail { display: grid; align-content: start; gap: var(--cieo-space-1); position: sticky; inset-block-start: calc(var(--cieo-space-6) + 3.5rem); font-size: var(--cieo-text-small); }
-  .doc-rail a { padding: var(--cieo-space-1) 0 var(--cieo-space-1) var(--cieo-space-3); border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); text-decoration: none; color: var(--cieo-color-muted); }
+  .doc-rail { display: grid; overflow: visible; align-content: start; gap: var(--cieo-space-1); position: sticky; inset-block-start: calc(var(--cieo-space-6) + var(--site-header-h)); font-size: var(--cieo-text-small); }
+  .doc-rail a { padding: var(--cieo-space-1) 0 var(--cieo-space-1) var(--cieo-space-3); border: 0; border-radius: 0; white-space: normal; border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); text-decoration: none; color: var(--cieo-color-muted); }
   @media (hover: hover) { .doc-rail a:hover { color: var(--cieo-color-text); border-color: var(--cieo-color-border-strong); } }
 }
 .doc-label { display: block; font-size: var(--cieo-text-caption); letter-spacing: .02em; color: var(--cieo-color-subtle); }
@@ -47,7 +51,10 @@ body.cieo-docsite {
 .cieo-import-banner pre { margin: 0; overflow-x: auto; }
 .doc-button { min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
 @media (hover: hover) { .doc-button:hover { background: var(--cieo-color-sunken); } }
-@media (pointer: coarse) { .doc-button { min-block-size: var(--cieo-touch-target); } }
+@media (pointer: coarse) {
+  .doc-button, .doc-tabs [role="tab"], .doc-speed-group button, .doc-knob select, .doc-rail a, .doc-register li a { min-block-size: var(--cieo-touch-target); }
+  .doc-rail a, .doc-register li a, .doc-tabs [role="tab"] { display: inline-flex; align-items: center; }
+}
 
 /* Example: a measured stage (a quiet 8px grid) and a code view, switched by real tabs. */
 .doc-example { border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); overflow: hidden; }
@@ -107,9 +114,9 @@ body.cieo-docsite {
 /* Interactive Stage Toolbar, Telemetry HUD, SVG Anatomy, and FSM Matrix */
 .doc-stage-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--cieo-space-2) var(--cieo-space-3); padding: var(--cieo-space-3) var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-sunken); }
 .doc-knob { display: inline-flex; flex-direction: column; gap: 2px; font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-muted); }
-.doc-knob select { min-block-size: 1.85rem; padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-text-caption) var(--cieo-font-sans); }
+.doc-knob select { min-block-size: 1.85rem; padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-text-caption) var(--cieo-font-sans); }
 .doc-knob-check { flex-direction: row; align-items: center; gap: var(--cieo-space-1); padding-block-end: 4px; }
-.doc-speed-group { display: inline-flex; gap: 2px; padding: 2px; border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); }
+.doc-speed-group { display: inline-flex; gap: 2px; padding: 2px; border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); }
 .doc-speed-group button { border: 0; background: none; color: var(--cieo-color-muted); font: var(--cieo-text-caption) var(--cieo-font-mono); padding: 3px 7px; border-radius: var(--cieo-radius-small); cursor: pointer; }
 .doc-speed-group button[aria-pressed="true"] { background: var(--cieo-color-text); color: var(--cieo-color-surface); }
 .doc-telemetry { padding: var(--cieo-space-2) var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-surface); font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-muted); font-variant-numeric: tabular-nums; }

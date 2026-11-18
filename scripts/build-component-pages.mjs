@@ -119,15 +119,22 @@ function extractKnobs(properties = []) {
   return knobs;
 }
 
+const ANATOMY_PER_ROW = 4;
+/** Every slot is drawn, in rows of four, so the diagram's markers always match the numbered list beside it. */
+const anatomyRows = (parts) => Math.max(1, Math.ceil((parts.length - 1) / ANATOMY_PER_ROW));
+const anatomyHeight = (parts) => 44 + anatomyRows(parts) * 52 + 4;
+
 function renderAnatomySvg(parts) {
-  const shown = parts.slice(0, 5);
-  const inner = shown.slice(1);
+  const inner = parts.slice(1);
+  const w = Math.floor((440 - (ANATOMY_PER_ROW - 1) * 12) / ANATOMY_PER_ROW);
   const boxes = inner.map((p, i) => {
-    const w = Math.floor((440 - (inner.length - 1) * 12) / Math.max(1, inner.length));
-    const x = 40 + i * (w + 12);
-    return `<rect x="${x}" y="30" width="${w}" height="40" rx="6" fill="none" stroke="currentColor" stroke-dasharray="3 3"/><circle cx="${x + 14}" cy="50" r="9" fill="currentColor"/><text x="${x + 14}" y="54" text-anchor="middle" font-size="10" fill="var(--cieo-color-canvas)">${i + 2}</text><text x="${x + 30}" y="54" font-size="11" fill="currentColor">${esc(p)}</text>`;
+    const x = 40 + (i % ANATOMY_PER_ROW) * (w + 12);
+    const y = 30 + Math.floor(i / ANATOMY_PER_ROW) * 52;
+    const label = p.length > 11 ? `${p.slice(0, 10)}…` : p;
+    return `<rect x="${x}" y="${y}" width="${w}" height="40" rx="6" fill="none" stroke="currentColor" stroke-dasharray="3 3"/><circle cx="${x + 14}" cy="${y + 20}" r="9" fill="currentColor"/><text x="${x + 14}" y="${y + 24}" text-anchor="middle" font-size="10" fill="var(--cieo-color-canvas)">${i + 2}</text><text x="${x + 30}" y="${y + 24}" font-size="11" fill="currentColor">${esc(label)}</text>`;
   }).join('');
-  return `<rect x="16" y="14" width="488" height="68" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="30" cy="26" r="9" fill="currentColor"/><text x="30" y="30" text-anchor="middle" font-size="10" fill="var(--cieo-color-canvas)">1</text>${inner.length ? boxes : `<text x="46" y="30" font-size="11" fill="currentColor">root</text>`}`;
+  const frameH = anatomyHeight(parts) - 28;
+  return `<rect x="16" y="14" width="488" height="${frameH}" rx="10" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="30" cy="26" r="9" fill="currentColor"/><text x="30" y="30" text-anchor="middle" font-size="10" fill="var(--cieo-color-canvas)">1</text>${inner.length ? boxes : `<text x="46" y="30" font-size="11" fill="currentColor">root</text>`}`;
 }
 
 /** Every design and motion token the component's stylesheet reads, so the page states its dependencies. */
@@ -183,7 +190,7 @@ for (const { dir, values } of entries) {
     tokens.length && ['tokens', 'Tokens'],
   ].filter(Boolean).map(([id, label]) => `<a href="#${id}">${label}</a>`).join('');
 
-  const anatomySection = `<section id="anatomy" aria-labelledby="anatomy-h"><h2 id="anatomy-h">Anatomy</h2><figure class="doc-anatomy"><svg data-anatomy-svg viewBox="0 0 520 96" role="img" aria-label="${esc(title)} anatomy">${renderAnatomySvg(parts)}</svg><ol class="doc-anatomy-list">${parts.map((p, i) => `<li><b>${i + 1}</b><code>slotProps.${esc(p)}</code></li>`).join('')}</ol></figure></section>`;
+  const anatomySection = `<section id="anatomy" aria-labelledby="anatomy-h"><h2 id="anatomy-h">Anatomy</h2><figure class="doc-anatomy"><svg data-anatomy-svg viewBox="0 0 520 ${anatomyHeight(parts)}" role="img" aria-label="${esc(title)} anatomy">${renderAnatomySvg(parts)}</svg><ol class="doc-anatomy-list">${parts.map((p, i) => `<li><b>${i + 1}</b><code>slotProps.${esc(p)}</code></li>`).join('')}</ol></figure></section>`;
   const fsmSection = fsmKind
     ? `<section id="state-machine" data-fsm-machine="${fsmKind}" aria-labelledby="fsm-h"><h2 id="fsm-h">State machine</h2><p>Interactive <code>${fsmKind}</code> state transitions and <code>TransitionEnvelope</code> output from <code>cieo/state</code>.</p><div class="doc-fsm" data-fsm-mount></div></section>`
     : '';

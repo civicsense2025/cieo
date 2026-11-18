@@ -1,4 +1,5 @@
 // Shared header, footer and head for every site page, so the docs and the pages around them read as one site.
+import { posix } from 'node:path';
 import { siteConfig } from './site-config.mjs';
 
 /** The mark is the spring's own step response, y = 1 - e^(-wt)(1 + wt): it rises and settles without overshoot. */
@@ -23,15 +24,15 @@ export const NAV = Object.freeze([
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
 function resolveNavHref(up, href) {
-  if (href.startsWith('../')) return up === './' ? href : `${up}${href}`;
+  if (href.startsWith('../')) return up === './' ? href : posix.normalize(`${up}${href}`);
   return `${up}${href}`;
 }
 
 /** `up` is the relative path from the page to /site/, such as './' on the home page and '../' in the library. */
-export function siteHeader(up, current = '') {
+export function siteHeader(up, current = '', skipTo = 'main') {
   const links = NAV.map(([label, href]) => `<a href="${resolveNavHref(up, href)}"${current === label ? ' aria-current="page"' : ''}>${label}</a>`).join('');
-  const searchBtn = `<button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button>`;
-  return `<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="${up}" aria-label="${siteConfig.name} home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="${springCurve()}" class="site-mark-curve"/></svg><span>${siteConfig.name}</span></a><nav class="site-nav" aria-label="Site">${links}</nav>${searchBtn}</header>`;
+  const searchBtn = `<button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button>`;
+  return `<a class="site-skip" href="#${skipTo}">Skip to content</a><header class="site-header"><a class="site-mark" href="${up}" aria-label="${siteConfig.name} home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="${springCurve()}" class="site-mark-curve"/></svg><span>${siteConfig.name}</span></a><nav class="site-nav" aria-label="Site">${links}</nav>${searchBtn}</header>`;
 }
 
 export function siteFooter(up) {
@@ -42,6 +43,20 @@ export function siteFooter(up) {
 /** Stylesheets in cascade order: the site theme, the library's component styles, then the site and docs rules. */
 export function siteStyles(up, withDocs = false) {
   const root = up === './' ? '../' : `${up}../`;
-  return [`${root}site/theme.css`, `${root}tokens/tokens.css`, `${root}design/primitives.css`, ...(withDocs ? [`${up}doc.css`] : []), `${up}site.css`]
+  return [`${up}theme.css`, `${root}tokens/tokens.css`, `${root}design/primitives.css`, ...(withDocs ? [`${up}doc.css`] : []), `${up}site.css`]
     .map((href) => `<link rel="stylesheet" href="${href}">`).join('');
+}
+
+/** Swaps the skip link, header, footer and search script of a hand-written page for the shared ones, so it cannot drift from the rest of the site. */
+export function stampChrome(html, up, current) {
+  return html
+    .replace(/<a class="site-skip"[\s\S]*?<\/header>/, () => siteHeader(up, current))
+    .replace(/<footer class="site-footer">[\s\S]*?<\/footer>(?:\s*<script type="module" src="[^"]*search\.js"[^>]*><\/script>)?/, () => siteFooter(up))
+    .replace(/(<link rel="stylesheet" href=")(?:\.\.\/)+site\/theme\.css(">)/, `$1${up}theme.css$2`);
+}
+
+/** Pages outside site/ (the Studio) mark where the shared chrome goes with <!-- site-header --> and <!-- site-footer --> pairs. */
+export function stampMarked(html, up, current, skipTo) {
+  const swap = (name, markup) => (text) => text.replace(new RegExp(`(<!-- ${name} -->)[\\s\\S]*?(<!-- /${name} -->)`), (_, a, b) => `${a}\n${markup}\n${b}`);
+  return swap('site-footer', siteFooter(up))(swap('site-header', siteHeader(up, current, skipTo))(html));
 }

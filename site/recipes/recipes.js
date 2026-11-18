@@ -125,7 +125,7 @@ function createTile(a) {
   const el = document.createElement('article');
   el.className = 'tile' + (a.wide ? ' wide' : '') + (a.tall ? ' tall' : '') + (a.big ? ' big' : '');
   el.id = a.id;
-  const fams = (a.fam || []).map((f) => `<span title="${FAM_NAMES[f] || f}">${f}</span>`).join('');
+  const fams = (a.fam || []).map((f) => `<span role="img" aria-label="${FAM_NAMES[f] || f}" title="${FAM_NAMES[f] || f}">${f}</span>`).join('');
   const comp = COMP_BY_ID.get(a.id);
   const compHtml = comp ? `<a class="recipe-comp-link" href="../components/${comp}.html">${comp} spec →</a>` : '';
   el.innerHTML = `<header><h3></h3><div class="fam">${fams}</div></header><div class="block"><span data-block-name></span>${compHtml}</div><div class="stage">${a.html}</div><footer><details><summary>Formula &amp; source (${a.file || 'atoms/web'})</summary><p data-desc></p><pre data-api></pre></details></footer>`;
@@ -250,14 +250,31 @@ function initSections() {
     sectionMap.set(cat.slug, sec);
     sectionObserver.observe(sec);
   }
-  // Eagerly hydrate the first category and any deep-linked hash target
+  // Eagerly hydrate the first category; deep links are handled by goToHash, on load and on every hash change.
   if (CATEGORIES[0]) loadCategory(CATEGORIES[0].slug);
-  const hashId = location.hash.slice(1);
-  if (hashId) {
-    const owner = CATEGORIES.find((c) => 'cat-' + c.slug === hashId || c.items.some((it) => it.id === hashId));
-    if (owner) loadCategory(owner.slug).then(() => document.getElementById(hashId)?.scrollIntoView({ block: 'start' }));
-  }
+  goToHash();
 }
+
+// Load the category that owns the hash target, then scroll to it. A filter that hides the target is cleared first.
+async function goToHash() {
+  let hashId = location.hash.slice(1);
+  try { hashId = decodeURIComponent(hashId); } catch { /* keep the raw hash */ }
+  if (!hashId) return;
+  const owner = CATEGORIES.find((c) => 'cat-' + c.slug === hashId || c.items.some((it) => it.id === hashId));
+  if (!owner) return;
+  await loadCategory(owner.slug);
+  let target = document.getElementById(hashId);
+  if (target?.hidden || target?.closest('[hidden]')) {
+    activeQuery = ''; activeCat = '*'; activeFam = '*';
+    if (searchInput) searchInput.value = '';
+    if (catSelect) catSelect.value = '*';
+    famButtons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.fam || '*') === '*')));
+    applyFilters();
+    target = document.getElementById(hashId);
+  }
+  target?.scrollIntoView({ block: 'start' });
+}
+window.addEventListener('hashchange', goToHash);
 
 searchInput?.addEventListener('input', () => {
   activeQuery = searchInput.value.trim().toLowerCase();

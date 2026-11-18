@@ -10,6 +10,7 @@ let statusEl = null;
 let results = [];
 let activeIdx = 0;
 let lastTrigger = null;
+let inerted = [];
 
 function loadIndex() {
   if (!indexPromise) {
@@ -45,12 +46,14 @@ function renderResults() {
   if (!results.length) {
     const empty = document.createElement('li');
     empty.className = 'site-search-empty';
-    empty.textContent = 'No matching components, recipes, or guides.';
+    empty.textContent = 'No matching components, recipes, composites, or guides.';
     listEl.appendChild(empty);
     if (statusEl) statusEl.textContent = '0 results';
+    input?.setAttribute('aria-expanded', 'false');
     return;
   }
   if (statusEl) statusEl.textContent = `${results.length} results`;
+  input?.setAttribute('aria-expanded', 'true');
   results.forEach((item, idx) => {
     const li = document.createElement('li');
     li.setAttribute('role', 'option');
@@ -92,8 +95,16 @@ function syncActive() {
   }
 }
 
+/** The placeholder states what the loaded index really holds, so it cannot drift from the site. */
+function describeIndex(all) {
+  if (!input || !all.length) return;
+  const n = (kind) => all.filter((i) => i.kind === kind).length;
+  input.placeholder = `Search ${n('component')} components, ${n('recipe')} recipes, ${n('composite')} composites, foundations…`;
+}
+
 async function runFilter() {
   const all = await loadIndex();
+  describeIndex(all);
   const q = (input?.value || '').trim().toLowerCase();
   const scored = [];
   for (const item of all) {
@@ -115,8 +126,8 @@ function ensureModal() {
   modal.innerHTML = `
     <div class="site-search-dialog" role="dialog" aria-modal="true" aria-label="Search Cieo">
       <div class="site-search-bar">
-        <label for="site-search-input" class="site-sr">Search components, motion recipes, and foundations</label>
-        <input id="site-search-input" type="search" role="combobox" aria-expanded="true" aria-controls="site-search-list" aria-autocomplete="list" placeholder="Search 254 components, motion recipes, foundations…" autocomplete="off">
+        <label for="site-search-input" class="site-sr">Search components, motion recipes, composites, and foundations</label>
+        <input id="site-search-input" type="search" role="combobox" aria-expanded="false" aria-controls="site-search-list" aria-autocomplete="list" placeholder="Search the library, recipes, composites, foundations…" autocomplete="off">
         <button type="button" class="site-search-esc" data-search-close aria-label="Close search">Esc</button>
       </div>
       <ul id="site-search-list" class="site-search-list" role="listbox" aria-label="Search results"></ul>
@@ -164,10 +175,24 @@ function ensureModal() {
   return modal;
 }
 
+/** While the dialog is open the rest of the page is inert (no focus, no assistive-tech reach) and does not scroll. */
+function lockPage(dialogHost) {
+  inerted = [...document.body.children].filter((el) => el !== dialogHost && !el.inert && el.tagName !== 'SCRIPT');
+  inerted.forEach((el) => { el.inert = true; });
+  document.documentElement.style.overflow = 'hidden';
+}
+
+function unlockPage() {
+  inerted.forEach((el) => { el.inert = false; });
+  inerted = [];
+  document.documentElement.style.overflow = '';
+}
+
 function openSearch(trigger) {
   lastTrigger = trigger || document.activeElement;
   const el = ensureModal();
   el.hidden = false;
+  lockPage(el);
   runFilter();
   input?.focus();
   input?.select();
@@ -176,6 +201,8 @@ function openSearch(trigger) {
 function closeSearch(restoreFocus) {
   if (!modal || modal.hidden) return;
   modal.hidden = true;
+  input?.setAttribute('aria-expanded', 'false');
+  unlockPage();
   if (restoreFocus && lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
 }
 

@@ -6,11 +6,11 @@
 <title>Foundations · Foundations · Cieo</title>
 <meta name="description" content="The physics, choreography, OKLCH color architecture, typography, and agent supervision contracts shared by Cieo on Web and SwiftUI.">
 <meta name="color-scheme" content="light dark">
-<link rel="stylesheet" href="../../site/theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
 <link rel="stylesheet" href="./foundations.css">
 </head>
 <body class="cieo cieo-docsite cieo-site">
-<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/" aria-current="page">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/" aria-current="page">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
 <main id="main">
   <div class="doc-shell">
     <nav class="doc-rail" aria-label="Foundations chapters">
@@ -21,40 +21,10 @@
       <header class="doc-head">
       <p class="doc-crumbs"><a href="../">Home</a><span aria-hidden="true">/</span><span>Foundations</span></p>
       <h1>Foundations that hold across platforms.</h1>
-      <p>Every Cieo control, primitive, and recipe obeys one physical and visual contract: closed-form springs that never bounce past their rest state, OKLCH palettes audited across 168 theme combinations, and state machines that never claim an unconfirmed outcome.</p>
+      <p>Every Cieo control, primitive, and recipe obeys one physical and visual contract: closed-form springs that settle without visible bounce (ζ = 1 default; the 0.7 floor allows at most about 5% overshoot), OKLCH palettes audited across 168 theme combinations, and state machines that never claim an unconfirmed outcome.</p>
     </header>
     <section aria-label="Chapters">
-      <div class="fnd-grid">
-    <a class="fnd-card" href="./physics.html">
-      <span class="site-label">01</span>
-      <h2>Physics &amp; Velocity</h2>
-      <p>Closed-form damped springs (zeta in [0.7, 1.0]), momentum projection, rubberBand bounds, and projectToDetent.</p>
-    </a>
-  
-    <a class="fnd-card" href="./choreography.html">
-      <span class="site-label">02</span>
-      <h2>Choreography</h2>
-      <p>Presence asymmetry, MotionFrame height morphs, SharedAxis transitions, 2D Edges lag, and MorphSurface FLIP.</p>
-    </a>
-  
-    <a class="fnd-card" href="./color.html">
-      <span class="site-label">03</span>
-      <h2>OKLCH Color &amp; Contrast</h2>
-      <p>Four-tier semantic tokens and live explorer across all 168 WCAG-audited brand, ground, scheme, and contrast pairs.</p>
-    </a>
-  
-    <a class="fnd-card" href="./typography.html">
-      <span class="site-label">04</span>
-      <h2>Typography &amp; Shape</h2>
-      <p>Editorial Iowan Old Style display serif, tabular UI sans/mono scale, 5 corner profiles, and 3 density tiers.</p>
-    </a>
-  
-    <a class="fnd-card" href="./agents.html">
-      <span class="site-label">05</span>
-      <h2>Agent Identity</h2>
-      <p>Why agents are square with a globe antenna while people stay round, 24 live status glyphs, and non-optimistic approvals.</p>
-    </a>
-  </div>
+      <ul class="index-list"><li><a href="./physics.html"><span class="index-count">01</span><span class="index-name">Physics &amp; Velocity</span><span class="index-note">Closed-form damped springs (zeta in [0.7, 1.0]), momentum projection, rubberBand bounds, and projectToDetent.</span></a></li><li><a href="./choreography.html"><span class="index-count">02</span><span class="index-name">Choreography</span><span class="index-note">Presence asymmetry, MotionFrame height morphs, SharedAxis transitions, 2D Edges lag, and MorphSurface FLIP.</span></a></li><li><a href="./color.html"><span class="index-count">03</span><span class="index-name">OKLCH Color &amp; Contrast</span><span class="index-note">Four-tier semantic tokens and live explorer across all 168 WCAG-audited brand, ground, scheme, and contrast pairs.</span></a></li><li><a href="./typography.html"><span class="index-count">04</span><span class="index-name">Typography &amp; Shape</span><span class="index-note">Editorial Iowan Old Style display serif, tabular UI sans/mono scale, 5 corner profiles, and 3 density tiers.</span></a></li><li><a href="./agents.html"><span class="index-count">05</span><span class="index-name">Agent Identity</span><span class="index-note">Why agents are square with a globe antenna while people stay round, 24 live status glyphs, and non-optimistic approvals.</span></a></li></ul>
     </section>
     <section class="fnd-callout">
       <h2>Explore live surfaces</h2>

@@ -59,7 +59,7 @@ test('all 8 composite pages and composites/index.html load site/theme.css, token
   assert.equal(files.length, 9);
   for (const file of files) {
     const html = readFileSync(`site/composites/${file}`, 'utf8');
-    assert.match(html, /href="\.\.\/\.\.\/site\/theme\.css"/, `${file} missing site/theme.css`);
+    assert.match(html, /href="\.\.\/theme\.css"/, `${file} missing the site theme (relative to site/)`);
     assert.match(html, /href="\.\.\/\.\.\/tokens\/tokens\.css"/, `${file} missing tokens/tokens.css`);
     assert.match(html, /href="\.\.\/\.\.\/design\/primitives\.css"/, `${file} missing design/primitives.css`);
     assert.match(html, /class="site-header"/, `${file} missing unified site-header`);

@@ -6,8 +6,9 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { brands, radii, densities, grounds } from '../design/index.js';
+import { recipeCount } from './lib/recipe-count.mjs';
 import { siteConfig } from './lib/site-config.mjs';
-import { siteFooter, siteHeader, siteStyles } from './lib/site-chrome.mjs';
+import { siteFooter, siteHeader, siteStyles, stampChrome, stampMarked } from './lib/site-chrome.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
@@ -24,7 +25,7 @@ export function facts(repo = root) {
   }
   return {
     components: dirs.length, layers, packs,
-    recipes: JSON.parse(readFileSync(`${repo}/atoms/web/index.json`, 'utf8')).length,
+    recipes: recipeCount(repo),
     brands: Object.keys(brands).length, corners: Object.keys(radii).length, densities: Object.keys(densities).length, grounds: Object.keys(grounds).length,
     version: JSON.parse(readFileSync(`${repo}/package.json`, 'utf8')).version,
   };
@@ -176,7 +177,16 @@ function contact() {
 
 export function pages(repo = root) {
   const f = facts(repo);
-  return { 'site/index.html': home(f), 'site/pricing.html': pricing(f), 'site/contact.html': contact() };
+  const out = { 'site/index.html': home(f), 'site/pricing.html': pricing(f), 'site/contact.html': contact() };
+  // Composite screens are hand-written; only their chrome (skip link, header, footer, search) is owned here.
+  for (const name of readdirSync(`${repo}/site/composites`).filter((n) => n.endsWith('.html'))) {
+    const rel = `site/composites/${name}`;
+    out[rel] = stampChrome(readFileSync(`${repo}/${rel}`, 'utf8'), '../', 'Composites');
+  }
+  // The Studio lives under docs/; its chrome points back into site/.
+  const studio = 'docs/studio/index.html';
+  out[studio] = stampMarked(readFileSync(`${repo}/${studio}`, 'utf8'), '../../site/', 'Studio', 'preview');
+  return out;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
