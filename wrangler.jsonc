@@ -13,9 +13,8 @@
     // Only the form endpoint runs code; every other path is served straight from the assets.
     "run_worker_first": ["/api/*"]
   },
-  // Messages sent from a verified domain: set this variable to e.g. "Cieo <hello@your-domain>".
-  // Until the domain is verified with Resend, the default sandbox sender is used.
-  "vars": {},
+  // Messages are sent from the domain verified with Resend; without this variable the sandbox sender is used.
+  "vars": { "CONTACT_FROM": "Cieo <hello@meridianproject.studio>" },
   "ratelimits": [
     { "name": "CONTACT_LIMITER", "namespace_id": "424201", "simple": { "limit": 3, "period": 60 } }
   ]

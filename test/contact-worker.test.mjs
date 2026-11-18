@@ -158,7 +158,11 @@ test('the Worker config runs code only for the form, rate limits it, and commits
   assert.match(cfg, /"run_worker_first": \["\/api\/\*"\]/);
   assert.match(cfg, /"CONTACT_LIMITER"/);
   assert.ok(!/re_[A-Za-z0-9]{8,}/.test(cfg), 'no API key');
-  assert.ok(!/[\w.-]+@[\w-]+\.[a-z]{2,}/i.test(cfg.replace(/hello@your-domain/g, '')), 'no email address');
+  // The sender is a public From address and may be set; the inbox that receives messages (CONTACT_TO) must stay a secret.
+  const sender = cfg.match(/"CONTACT_FROM": "Cieo <(hello@[\w.-]+\.[a-z]{2,})>"/);
+  assert.ok(sender, 'the sender is a role address on the verified domain');
+  assert.ok(!/[\w.-]+@[\w-]+\.[a-z]{2,}/i.test(cfg.replace(sender[1], '')), 'no other email address');
+  assert.ok(!/"CONTACT_TO"/.test(cfg), 'the receiving inbox is not in the config');
 });
 
 test('the contact page posts to the endpoint the Worker serves, and every field has a label', () => {
