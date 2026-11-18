@@ -133,3 +133,15 @@ body.cieo-docsite {
 .doc-fsm-pill { padding: var(--cieo-space-1) var(--cieo-space-3); border-radius: var(--cieo-radius-control); background: var(--cieo-color-sunken); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); font: var(--cieo-text-small) var(--cieo-font-mono); }
 .doc-fsm-actions { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); }
 .doc-fsm-log { margin: 0; padding: var(--cieo-space-3); max-block-size: 14rem; overflow: auto; border-radius: var(--cieo-radius-small); background: var(--cieo-color-sunken); font: var(--cieo-text-caption)/1.5 var(--cieo-font-mono); }
+
+/* Library tiles: each part drawn live (and inert) in a quiet frame, name underneath, the whole tile is the link. */
+.doc-register .tiles { grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); gap: var(--cieo-space-3); border-block-start: 0; }
+.doc-register .tile { position: relative; display: grid; grid-template-rows: 7rem auto; border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); overflow: hidden; transition: scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+.doc-register .tile-stage { zoom: .85; display: grid; place-items: center; padding: var(--cieo-space-3); overflow: hidden; contain: layout paint; background: var(--cieo-color-canvas); pointer-events: none; }
+.doc-register .tile-stage > * { max-inline-size: 100%; }
+.doc-register .tile-name { padding: var(--cieo-space-2) var(--cieo-space-3); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+.doc-register .tile-name::after { content: ""; position: absolute; inset: 0; }
+.doc-register .tile:focus-within { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+@media (hover: hover) { .doc-register .tile:hover { scale: 1.02; border-color: var(--cieo-color-border-strong); } }
+@media (prefers-reduced-motion: reduce) { .doc-register .tile { transition: none; } .doc-register .tile:hover { scale: none; } }
+.doc-register .tile-list, .doc-register .tile-list li { margin: 0; padding: 0; list-style: none; border: 0; display: block; }

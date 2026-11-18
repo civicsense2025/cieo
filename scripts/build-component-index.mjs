@@ -31,28 +31,35 @@ if (unknownLayer.length) { console.error(`unknown layer on: ${unknownLayer.map((
 const unknownPack = items.filter((i) => i.pack !== 'core' && !PACKS.some(([id]) => id === i.pack));
 if (unknownPack.length) { console.error(`unknown pack on: ${unknownPack.map((i) => i.dir).join(', ')}`); process.exit(1); }
 const groups = Object.fromEntries(LAYERS.map(([id]) => [id, core.filter((i) => i.layer === id)]));
+// A tile is the real part, drawn live and inert, with its name underneath. The whole tile is the link.
+const previewOf = (dir) => {
+  const html = readFileSync(`${root}/site/components/${dir}.html`, 'utf8').match(/<!--preview-->([\s\S]*?)<!--\/preview-->/)?.[1] ?? '';
+  // The same markup appears on every page, so ids and the references to them are made unique per tile.
+  // Landmarks become plain boxes (a tile is not a page region), and list items get a list to live in so the browser keeps the tile intact.
+  const plain = html.replace(/<(\/?)(header|main|footer|nav|aside|section|article|form)\b/g, '<$1div');
+  const wrapped = /^\s*<li\b/.test(plain) ? `<ul class="tile-list">${plain}</ul>` : plain;
+  return wrapped.replace(/\b(id|for|aria-labelledby|aria-describedby|aria-controls)="([^"]+)"/g, (_, a, v) => `${a}="${v.split(' ').map((t) => `${t}-t-${dir}`).join(' ')}"`);
+};
+const tile = (i) => `<li class="tile"><div class="tile-stage" inert>${previewOf(i.dir)}</div><a class="tile-name" href="./${i.dir}.html">${i.name}</a></li>`;
 const packSection = ([id, title]) => {
   const list = items.filter((i) => i.pack === id);
-  return `<section id="pack-${id}" aria-labelledby="pack-${id}-h"><h2 id="pack-${id}-h">${title} pack <span class="doc-count">${list.length}</span></h2><ul>${list.map((i) => `<li><a href="./${i.dir}.html">${i.name}</a> <span class="doc-level">${i.layer}</span></li>`).join('')}</ul></section>`;
+  return `<section id="pack-${id}" aria-labelledby="pack-${id}-h"><h2 id="pack-${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul class="tiles">${list.map(tile).join('')}</ul></section>`;
 };
 
 const section = (id, title, list) =>
-  `<section id="${id}" aria-labelledby="${id}-h"><h2 id="${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul>${list
-    .map((i) => `<li><a href="./${i.dir}.html">${i.name}</a></li>`)
-    .join('')}</ul></section>`;
+  `<section id="${id}" aria-labelledby="${id}-h"><h2 id="${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul class="tiles">${list.map(tile).join('')}</ul></section>`;
 
 const index = `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Components · Cieo</title>${siteStyles('../', true)}</head>
 <body class="cieo cieo-docsite cieo-site">${siteHeader('../', 'Library')}<main id="main"><div class="doc-shell">
-<nav class="doc-rail" aria-label="On this page"><span class="doc-label">On this page</span><a href="#primitives">Primitives</a><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a>${PACKS.map(([id, title]) => `<a href="#pack-${id}">${title}</a>`).join('')}<a href="#elsewhere">Elsewhere</a></nav>
+<nav class="doc-rail" aria-label="On this page"><a href="#primitives">Primitives</a><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a>${PACKS.map(([id, title]) => `<a href="#pack-${id}">${title}</a>`).join('')}</nav>
 <div class="doc-main">
-<header class="doc-head"><p class="doc-crumbs"><span>Cieo</span><span aria-hidden="true">/</span><span>Library</span></p><h1>Library <span class="doc-count">${items.length}</span></h1><p>Every primitive on its own page: the import, a preview, properties, the guide from its README, and the tokens it reads.</p></header>
+<header class="doc-head"><h1>Library <span class="doc-count">${items.length}</span></h1></header>
 <div class="doc-register">
 ${LAYERS.map(([id, title]) => section(id + 's', title, groups[id])).join('\n')}
 ${PACKS.map(packSection).join('\n')}
-<section id="elsewhere" aria-labelledby="elsewhere-h"><h2 id="elsewhere-h">Elsewhere</h2><ul><li><a href="../foundations/">Foundations</a></li><li><a href="../recipes/">Motion recipes</a></li><li><a href="../../docs/controls.html">Form controls (cieo/controls)</a></li><li><a href="../../docs/studio/index.html">Design studio</a></li><li><a href="../composites/index.html">Composites</a></li></ul></section>
 </div>
 </div>
 </div></main>${siteFooter('../')}</body></html>
