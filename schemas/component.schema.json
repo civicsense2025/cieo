@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cieo.dev/schemas/component.schema.json",
+  "title": "Cieo Component Manifest",
+  "description": "Cross-platform contract and customization manifest for Cieo primitives, atoms, molecules, and organisms.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "id",
+    "componentVersion",
+    "name",
+    "layer",
+    "artifactKind",
+    "packId",
+    "status",
+    "owner",
+    "aliases",
+    "source",
+    "dependencies",
+    "nativePrimitives",
+    "properties",
+    "slots",
+    "state",
+    "transitions",
+    "events",
+    "variants",
+    "styleParts",
+    "constraints",
+    "platforms",
+    "readiness",
+    "evidence",
+    "documentation",
+    "extensions"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "id": { "type": "string", "minLength": 1 },
+    "componentVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "name": { "type": "string", "minLength": 1 },
+    "layer": { "type": "string", "enum": ["primitive", "atom", "molecule", "organism"] },
+    "artifactKind": { "type": "string", "enum": ["component"] },
+    "packId": {
+      "type": "string",
+      "enum": ["core", "auth", "messaging", "audio", "agent", "social", "editorial", "tools"]
+    },
+    "status": { "type": "string", "enum": ["experimental", "beta", "stable", "deprecated"] },
+    "owner": { "type": "string", "minLength": 1 },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string", "minLength": 1 },
+          {
+            "type": "object",
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "note": { "type": "string" }
+            }
+          }
+        ]
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["target", "path", "symbol"],
+      "properties": {
+        "target": { "type": "string" },
+        "path": { "type": "string" },
+        "symbol": { "type": "string" }
+      }
+    },
+    "dependencies": { "type": "array", "items": { "type": "string" } },
+    "nativePrimitives": { "type": "array", "items": { "type": "string" } },
+    "properties": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "required", "nullable"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "type": { "type": "object" },
+          "required": { "type": "boolean" },
+          "nullable": { "type": "boolean" },
+          "default": {},
+          "constraints": { "type": "object" },
+          "note": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "slots": { "type": "array", "items": { "type": "object" } },
+    "state": { "type": "array", "items": { "type": "object" } },
+    "transitions": { "type": "array", "items": { "type": "object" } },
+    "events": { "type": "array", "items": { "type": "object" } },
+    "variants": { "type": "array", "items": { "type": "object" } },
+    "styleParts": { "type": "array", "items": { "type": "object" } },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "layout": { "type": "array", "items": { "type": "string" } },
+        "content": { "type": "array", "items": { "type": "string" } },
+        "motion": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "implementation"],
+        "properties": {
+          "id": { "type": "string" },
+          "minimumOS": { "type": "object" },
+          "implementation": { "type": "string", "enum": ["implemented", "planned", "omitted"] },
+          "properties": { "type": "array", "items": { "type": "string" } },
+          "states": { "type": "array", "items": { "type": "string" } },
+          "events": { "type": "array", "items": { "type": "string" } },
+          "parts": { "type": "array", "items": { "type": "string" } },
+          "actions": { "type": "object" }
+        }
+      }
+    },
+    "readiness": {
+      "type": "object",
+      "properties": {
+        "api": { "type": "string" },
+        "documentation": { "type": "string" },
+        "release": { "type": "string" }
+      }
+    },
+    "evidence": { "type": "array", "items": { "type": "object" } },
+    "documentation": {
+      "type": "object",
+      "required": ["path", "purpose"],
+      "properties": {
+        "path": { "type": "string" },
+        "purpose": { "type": "string" }
+      }
+    },
+    "extensions": { "type": "object" }
+  }
+}

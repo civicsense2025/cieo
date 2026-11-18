@@ -1,9 +1,10 @@
 export { createTheme, auditTheme } from './theme.js';
 export { brands, densities, radii, fonts, displays, grounds, elevations } from './presets.js';
-export { contrastRatio } from './color.js';
+export { contrastRatio, hexToOklch, oklchToHex, tonalRamp } from './color.js';
 export { toCSS, variables } from './css.js';
 export { toDTCG, toPortable, serializeTheme, parseTheme } from './formats.js';
 export { toNative } from './native.js';
+export { toSwiftPresets } from './swift-presets.js';
 export { applyTheme } from './apply.js';
 export { themeSchema } from './schema.js';
 export { watchSystemPreferences } from './preferences.js';

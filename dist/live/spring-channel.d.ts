@@ -5,6 +5,7 @@ export interface SpringSample {
 }
 export interface LiveSpringOptions {
     readonly w?: number;
+    readonly zeta?: number;
     readonly positionTolerance?: number;
     readonly velocityTolerance?: number;
 }
@@ -14,12 +15,13 @@ export declare class SpringChannel {
     private epoch;
     private destination;
     private w;
+    private zeta;
     private readonly positionTolerance;
     private readonly velocityTolerance;
     constructor(value: number, atSeconds: number, options?: LiveSpringOptions);
     get target(): number;
     sample(atSeconds: number): SpringSample;
-    retarget(to: number, atSeconds: number, w?: number): void;
-    release(from: number, velocity: number, to: number, atSeconds: number, w?: number): void;
+    retarget(to: number, atSeconds: number, w?: number, zeta?: number): void;
+    release(from: number, velocity: number, to: number, atSeconds: number, w?: number, zeta?: number): void;
     jump(to: number, atSeconds: number): void;
 }

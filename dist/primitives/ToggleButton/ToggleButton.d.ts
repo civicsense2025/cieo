@@ -17,4 +17,4 @@ export interface ToggleButtonProps {
     onPressedChange?: (pressed: boolean) => void;
     children: ReactNode;
 }
-export declare function ToggleButton({ className, slotProps, label, pressed, defaultPressed, value, onPressedChange, children }: ToggleButtonProps): import("react/jsx-runtime").JSX.Element;
+export declare function ToggleButton({ className, slotProps, label, pressed, defaultPressed, value, onPressedChange, children, }: ToggleButtonProps): import("react/jsx-runtime").JSX.Element;

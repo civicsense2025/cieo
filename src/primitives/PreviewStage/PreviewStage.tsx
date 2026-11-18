@@ -69,7 +69,7 @@ export function PreviewStage({ className, slotProps, label, backdrop = 'checker'
   return (
     <figure className="cieo cieo-stage" {...motionAttrs({ motion, entering, exiting })} {...customizePart(slotProps?.root, "cieo cieo-stage", undefined, className)}>
       <div role="region" aria-label={label} tabIndex={0} data-backdrop={backdrop} data-fitted={fitted || undefined} className="cieo-stage-viewport" {...customizePart(slotProps?.viewport, "cieo-stage-viewport", undefined)}>
-        <div className="cieo-stage-media" style={fitted ? undefined : { scale: String(zoom) }} {...customizePart(slotProps?.media, "cieo-stage-media", undefined)}>
+        <div className="cieo-stage-media" style={fitted ? undefined : { scale: String(zoom) }} {...customizePart(slotProps?.media, "cieo-stage-media", fitted ? undefined : { scale: String(zoom) })}>
           {children}
         </div>
       </div>

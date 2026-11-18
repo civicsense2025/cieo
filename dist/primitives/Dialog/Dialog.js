@@ -2,6 +2,7 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 import { useDismiss, useModalFocus, usePresence } from '../../react/index.js';
+import { useControllableState } from '../../state/react.js';
 import { Overlay } from '../Overlay/Overlay.js';
 import { motionAttrs } from '../motion.js';
 const ORIGINS = {
@@ -9,13 +10,26 @@ const ORIGINS = {
     rise: { x: 0, y: 4, scale: 1, opacity: 0, blur: 0 },
     scale: { x: 0, y: 0, scale: 0.96, opacity: 0, blur: 0 },
 };
-export function Dialog({ label, open, onClose, dismissOnOutsidePress = true, role = 'dialog', children, motion, entering = 'rise', exiting = 'rise', className, slotProps }) {
-    const origin = entering === 'none' ? { x: 0, y: 0, scale: 1, opacity: 1, blur: 0 } : entering === 'fade' ? ORIGINS.fade : entering === 'scale' ? ORIGINS.scale : ORIGINS.rise;
+export function Dialog({ label, open: openProp, defaultOpen = false, onOpenChange, onClose: onCloseProp, dismissOnOutsidePress = true, role = 'dialog', children, motion, entering = 'rise', exiting = 'rise', className, slotProps, }) {
+    const [openState, setOpenState] = useControllableState({
+        value: openProp,
+        defaultValue: defaultOpen,
+        onChange: onOpenChange,
+    });
+    const open = openProp !== undefined ? openProp : openState;
+    const onClose = onCloseProp !== undefined || onOpenChange !== undefined || openProp === undefined
+        ? () => {
+            setOpenState(false);
+            onCloseProp?.();
+        }
+        : undefined;
+    const enterOrigin = entering === 'none' ? { x: 0, y: 0, scale: 1, opacity: 1, blur: 0 } : entering === 'fade' ? ORIGINS.fade : entering === 'scale' ? ORIGINS.scale : ORIGINS.rise;
+    const exitOrigin = exiting === 'none' ? { x: 0, y: 0, scale: 1, opacity: 1, blur: 0 } : exiting === 'fade' ? ORIGINS.fade : exiting === 'scale' ? ORIGINS.scale : ORIGINS.rise;
+    const origin = (open ?? false) ? enterOrigin : exitOrigin;
     const { mounted, ref } = usePresence(open ?? false, { disabled: motion === false, from: origin });
     const onTab = useModalFocus(open ?? false, ref);
     useDismiss(open ?? false, () => onClose?.(), [ref], { outside: false });
     if (!mounted)
         return null;
-    void exiting;
-    return (_jsxs(_Fragment, { children: [_jsx(Overlay, { onPress: dismissOnOutsidePress ? onClose : undefined }), _jsx("div", { ref: ref, role: role, "aria-modal": "true", "aria-label": label, tabIndex: -1, onKeyDown: onTab, className: "cieo cieo-dialog", ...motionAttrs({ motion, entering, exiting }), ...customizePart(slotProps?.root, "cieo cieo-dialog", undefined, className), children: children })] }));
+    return (_jsxs(_Fragment, { children: [_jsx(Overlay, { onPress: dismissOnOutsidePress ? onClose : undefined }), _jsx("div", { ref: ref, role: role, "aria-modal": "true", "aria-label": label, tabIndex: -1, onKeyDown: onTab, className: "cieo cieo-dialog", ...motionAttrs({ motion }), ...customizePart(slotProps?.root, 'cieo cieo-dialog', undefined, className), children: children })] }));
 }

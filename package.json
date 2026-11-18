@@ -41,6 +41,14 @@
       "types": "./dist/live/index.d.ts",
       "default": "./dist/live/index.js"
     },
+    "./state": {
+      "types": "./dist/state/index.d.ts",
+      "default": "./dist/state/index.js"
+    },
+    "./state/react": {
+      "types": "./dist/state/react.d.ts",
+      "default": "./dist/state/react.js"
+    },
     "./agent": {
       "types": "./dist/agent/index.d.ts",
       "default": "./dist/agent/index.js"
@@ -254,6 +262,10 @@
     "./Breadcrumbs": {
       "types": "./dist/primitives/Breadcrumbs/Breadcrumbs.d.ts",
       "default": "./dist/primitives/Breadcrumbs/Breadcrumbs.js"
+    },
+    "./Button": {
+      "types": "./dist/primitives/Button/Button.d.ts",
+      "default": "./dist/primitives/Button/Button.js"
     },
     "./ButtonGroup": {
       "types": "./dist/primitives/ButtonGroup/ButtonGroup.d.ts",
@@ -543,6 +555,10 @@
       "types": "./dist/primitives/HoverCard/HoverCard.d.ts",
       "default": "./dist/primitives/HoverCard/HoverCard.js"
     },
+    "./I18nProvider": {
+      "types": "./dist/primitives/I18nProvider/I18nProvider.d.ts",
+      "default": "./dist/primitives/I18nProvider/I18nProvider.js"
+    },
     "./Icon": {
       "types": "./dist/primitives/Icon/Icon.d.ts",
       "default": "./dist/primitives/Icon/Icon.js"
@@ -635,6 +651,14 @@
       "types": "./dist/primitives/MoreMenu/MoreMenu.d.ts",
       "default": "./dist/primitives/MoreMenu/MoreMenu.js"
     },
+    "./MorphSurface": {
+      "types": "./dist/primitives/MorphSurface/MorphSurface.d.ts",
+      "default": "./dist/primitives/MorphSurface/MorphSurface.js"
+    },
+    "./MotionFrame": {
+      "types": "./dist/primitives/MotionFrame/MotionFrame.d.ts",
+      "default": "./dist/primitives/MotionFrame/MotionFrame.js"
+    },
     "./MultiSelector": {
       "types": "./dist/primitives/MultiSelector/MultiSelector.d.ts",
       "default": "./dist/primitives/MultiSelector/MultiSelector.js"
@@ -718,6 +742,10 @@
     "./QuotedText": {
       "types": "./dist/primitives/QuotedText/QuotedText.d.ts",
       "default": "./dist/primitives/QuotedText/QuotedText.js"
+    },
+    "./RadioGroup": {
+      "types": "./dist/primitives/RadioGroup/RadioGroup.d.ts",
+      "default": "./dist/primitives/RadioGroup/RadioGroup.js"
     },
     "./RadioList": {
       "types": "./dist/primitives/RadioList/RadioList.d.ts",
@@ -835,6 +863,10 @@
       "types": "./dist/primitives/Slider/Slider.d.ts",
       "default": "./dist/primitives/Slider/Slider.js"
     },
+    "./Slot": {
+      "types": "./dist/primitives/Slot/Slot.d.ts",
+      "default": "./dist/primitives/Slot/Slot.js"
+    },
     "./SortableList": {
       "types": "./dist/primitives/SortableList/SortableList.d.ts",
       "default": "./dist/primitives/SortableList/SortableList.js"
@@ -859,6 +891,10 @@
       "types": "./dist/primitives/StackItem/StackItem.d.ts",
       "default": "./dist/primitives/StackItem/StackItem.js"
     },
+    "./StaggerGroup": {
+      "types": "./dist/primitives/StaggerGroup/StaggerGroup.d.ts",
+      "default": "./dist/primitives/StaggerGroup/StaggerGroup.js"
+    },
     "./StatusDot": {
       "types": "./dist/primitives/StatusDot/StatusDot.d.ts",
       "default": "./dist/primitives/StatusDot/StatusDot.js"
@@ -878,6 +914,10 @@
     "./StreamingMessage": {
       "types": "./dist/primitives/StreamingMessage/StreamingMessage.d.ts",
       "default": "./dist/primitives/StreamingMessage/StreamingMessage.js"
+    },
+    "./Switch": {
+      "types": "./dist/primitives/Switch/Switch.d.ts",
+      "default": "./dist/primitives/Switch/Switch.js"
     },
     "./Tab": {
       "types": "./dist/primitives/Tab/Tab.d.ts",
@@ -926,6 +966,14 @@
     "./Text": {
       "types": "./dist/primitives/Text/Text.d.ts",
       "default": "./dist/primitives/Text/Text.js"
+    },
+    "./TextArea": {
+      "types": "./dist/primitives/TextArea/TextArea.d.ts",
+      "default": "./dist/primitives/TextArea/TextArea.js"
+    },
+    "./TextField": {
+      "types": "./dist/primitives/TextField/TextField.d.ts",
+      "default": "./dist/primitives/TextField/TextField.js"
     },
     "./Thumbnail": {
       "types": "./dist/primitives/Thumbnail/Thumbnail.d.ts",
@@ -1079,7 +1127,7 @@
     "test": "npm run build && node --test test/*.test.mjs",
     "test:cli": "node test/cli/e2e.mjs",
     "check:catalogue": "node scripts/check-catalogue-inventory.mjs --check",
-    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && npm run check:css-vars && npm run check:catalogue && node scripts/build-component-index.mjs --check && node scripts/build-site.mjs --check && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
+    "check": "bash scripts/check-brand.sh && npm run test && npm run check:design && npm run test:design:types && node scripts/wire-primitives.mjs --check && node scripts/build-component-pages.mjs --check && node scripts/check-motion-tokens.mjs && npm run check:css-vars && npm run check:catalogue && node scripts/build-component-index.mjs --check && node scripts/build-site.mjs --check && node scripts/build-search-index.mjs --check && node scripts/check-recipes.mjs && node scripts/build-registry.mjs --check && git diff --exit-code -- registry src/primitives dist design/themes.css design/theme.schema.json && npm run test:cli",
     "test:browser": "python3 test/browser/smoke.py",
     "test:nps": "python3 test/browser/nps.py",
     "test:frames": "python3 test/browser/frame-reads.py",
@@ -1089,7 +1137,7 @@
     "prepare": "node scripts/build-design.mjs",
     "prepack": "node scripts/build-design.mjs",
     "build:design": "node scripts/build-design.mjs",
-    "build:pages": "node scripts/wire-primitives.mjs && node scripts/build-component-pages.mjs && node scripts/build-component-index.mjs && node scripts/build-site.mjs",
+    "build:pages": "node scripts/wire-primitives.mjs && node scripts/build-component-pages.mjs && node scripts/build-component-index.mjs && node scripts/build-site.mjs && node scripts/build-search-index.mjs",
     "check:design": "node scripts/build-design.mjs --check && node scripts/check-design-ledger.mjs",
     "test:design": "node --test test/design-*.test.mjs",
     "test:design:types": "tsc -p test/types/tsconfig.json",

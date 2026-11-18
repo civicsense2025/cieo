@@ -1,13 +1,29 @@
 @layer cieo.components {
   :where(.cieo)[data-motion='off'], :where(.cieo)[data-motion='off'] * { animation: none !important; transition: none !important; }
-  :where(.cieo)[data-entering='fade'] { animation: cieo-enter-fade var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
-  :where(.cieo)[data-entering='rise'] { animation: cieo-enter-rise var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
-  :where(.cieo)[data-entering='scale'] { animation: cieo-enter-scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)) both; }
-  :where(.cieo)[data-entering='none'] { animation: none; }
+  :where(.cieo)[data-entering='fade']:where(:not([style*='will-change'])) { animation: cieo-enter-fade var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(0.2, 0.15, 0.2, 1)) both; }
+  :where(.cieo)[data-entering='rise']:where(:not([style*='will-change'])) { animation: cieo-enter-rise var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(0.2, 0.15, 0.2, 1)) both; }
+  :where(.cieo)[data-entering='scale']:where(:not([style*='will-change'])) { animation: cieo-enter-scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(0.2, 0.15, 0.2, 1)) both; }
+  :where(.cieo)[data-entering='none'], :where(.cieo)[data-exiting='none'] { animation: none; }
+  :where(.cieo)[data-exiting='fade']:where(:not([style*='will-change'])) { animation: cieo-exit-fade var(--motion-duration-exit, 100ms) var(--motion-ease-exit, cubic-bezier(0.4, 0, 1, 1)) both; }
+  :where(.cieo)[data-exiting='rise']:where(:not([style*='will-change'])) { animation: cieo-exit-rise var(--motion-duration-exit, 100ms) var(--motion-ease-exit, cubic-bezier(0.4, 0, 1, 1)) both; }
+  :where(.cieo)[data-exiting='scale']:where(:not([style*='will-change'])) { animation: cieo-exit-scale var(--motion-duration-exit, 100ms) var(--motion-ease-exit, cubic-bezier(0.4, 0, 1, 1)) both; }
+  .cieo-swap { display: inline-grid; vertical-align: baseline; }
+  .cieo-swap > * { grid-area: 1 / 1; }
+  .cieo-swap-out { pointer-events: none; animation: cieo-swap-out var(--motion-duration-exit, 100ms) var(--motion-ease-exit, cubic-bezier(0.4, 0, 1, 1)) both; }
+  .cieo-swap-in[data-swap] { animation: cieo-swap-in var(--motion-duration-base, 300ms) var(--motion-ease-spring, cubic-bezier(0.2, 0.15, 0.2, 1)) var(--motion-duration-exit, 100ms) both; }
   @keyframes cieo-enter-fade { from { opacity: 0; } }
   @keyframes cieo-enter-rise { from { opacity: 0; transform: translateY(var(--motion-drift, 4px)); } }
   @keyframes cieo-enter-scale { from { opacity: 0; transform: scale(0.96); } }
+  @keyframes cieo-exit-fade { to { opacity: 0; } }
+  @keyframes cieo-exit-rise { to { opacity: 0; transform: translateY(var(--motion-drift, 4px)); } }
+  @keyframes cieo-exit-scale { to { opacity: 0; transform: scale(0.96); } }
+  @keyframes cieo-swap-out { to { opacity: 0; transform: translateY(calc(var(--motion-drift, 4px) * -1)); } }
+  @keyframes cieo-swap-in { from { opacity: 0; transform: translateY(var(--motion-drift, 4px)); } }
   @media (prefers-reduced-motion: reduce) {
-    :root:not([data-motion='full']) :where(.cieo)[data-entering] { animation: none; }
+    :root:not([data-motion='full']) :where(.cieo):is([data-entering], [data-exiting]),
+    :root:not([data-motion='full']) :is(.cieo-swap-out, .cieo-swap-in[data-swap]) { animation: none; animation-duration: 0s; animation-delay: 0s; }
   }
+  :where([data-motion='reduced'], [data-reduced-motion='true']) :is(.cieo-swap-out, .cieo-swap-in[data-swap]) { animation: none; animation-duration: 0s; animation-delay: 0s; }
+  :where([data-motion='off']) .cieo-swap-out { display: none; }
+  :where([data-motion='off']) .cieo-swap-in[data-swap] { animation: none; }
 }

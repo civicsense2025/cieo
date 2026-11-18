@@ -1,0 +1,253 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.button",
+  "componentVersion": "1.0.0",
+  "name": "Button",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/Button/Button.tsx",
+    "symbol": "Button"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "variant",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "primary",
+          "secondary",
+          "ghost",
+          "text"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "secondary",
+      "constraints": {}
+    },
+    {
+      "id": "size",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "sm",
+          "md",
+          "lg"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "md",
+      "constraints": {}
+    },
+    {
+      "id": "tone",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "neutral",
+          "accent",
+          "danger",
+          "success",
+          "warning"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "neutral",
+      "constraints": {}
+    },
+    {
+      "id": "shape",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "rect",
+          "pill"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "rect",
+      "constraints": {}
+    },
+    {
+      "id": "state",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "idle",
+          "pending",
+          "done",
+          "succeeded",
+          "failed",
+          "uncertain"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "asChild",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "block",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "pendingLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Working",
+      "constraints": {}
+    },
+    {
+      "id": "doneLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "failedLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "uncertainLabel",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "Sending could not be confirmed",
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "text",
+        "content"
+      ],
+      "min": 0,
+      "max": 4,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [],
+  "constraints": {
+    "layout": [
+      "wraps-control"
+    ],
+    "content": [
+      "no-fork-of-control"
+    ],
+    "motion": [
+      "control-spring-only"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "variant",
+        "size",
+        "tone",
+        "shape",
+        "state",
+        "asChild",
+        "block",
+        "pendingLabel",
+        "doneLabel",
+        "failedLabel",
+        "uncertainLabel",
+        "className"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "First-class primitive contract over the Button control with async state morphing, tone, size, and asChild."
+  },
+  "extensions": {
+    "wraps": "src/controls/Button.tsx",
+    "customization": {
+      "status": "delegated",
+      "target": "Button",
+      "parts": [
+        "root",
+        "text",
+        "pending",
+        "done",
+        "failed",
+        "uncertain"
+      ],
+      "reason": "Alias of Button; preserves its native/owning component props instead of creating a second control contract."
+    }
+  }
+}

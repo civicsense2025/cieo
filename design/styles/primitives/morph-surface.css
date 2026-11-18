@@ -1,0 +1,4 @@
+/* design/styles/primitives/morph-surface.css */
+@layer cieo.components {
+  :where(.cieo).cieo-morph-surface { display: block; min-inline-size: 0; color: var(--cieo-color-text); }
+}

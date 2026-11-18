@@ -1,5 +1,4 @@
 // src/primitives/Heading/Heading.tsx
-'use client';
 /* Heading. Section titles h1–h6 with an em-based scale. One h1 per page. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

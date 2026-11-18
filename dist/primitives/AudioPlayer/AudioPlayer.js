@@ -8,58 +8,8 @@ import { AudioPlayButton } from '../AudioPlayButton/AudioPlayButton.js';
 import { AudioTime } from '../AudioTime/AudioTime.js';
 import { AudioWaveform, audioSeekText, useScrub } from '../AudioWaveform/AudioWaveform.js';
 import { DEFAULT_PLAYBACK_RATES, normalizePlaybackRate, normalizePlaybackRates, PlaybackRateButton } from '../PlaybackRateButton/PlaybackRateButton.js';
-/** Pure state step driven by the audio element's events. Error is sticky until retry; ended returns to ready-to-play on the next play. */
-export function audioPlayerStep(state, event) {
-    if (event === 'source')
-        return 'loading';
-    if (event === 'retry')
-        return state === 'error' ? 'loading' : state;
-    if (state === 'error')
-        return state;
-    switch (event) {
-        case 'error':
-            return 'error';
-        case 'loadedmetadata':
-            return state === 'loading' ? 'ready' : state;
-        case 'play':
-            return 'playing';
-        case 'pause':
-            return state === 'playing' ? 'ready' : state;
-        case 'ended':
-            return 'ended';
-    }
-}
-let tokenCount = 0;
-/** Unique token for one player instance. Not useId, which repeats across separate React roots on one page. Also unique across separately bundled copies of this module. */
-export function createAudioPlayerToken() {
-    tokenCount += 1;
-    return `cieo-audio-${tokenCount}-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
-}
-/** Event other copies of the player listen for on the document. detail.id is the token of the player that started. */
-export const AUDIO_PLAY_EVENT = 'cieo:audio-play';
-const players = new Map();
-/** Registers a player so a later one can pause it. Also listens for the document event, so separately bundled copies cooperate. Returns the cleanup. */
-export function registerAudioPlayer(id, pause, target = typeof document === 'undefined' ? null : document) {
-    const entry = { pause };
-    players.set(id, entry);
-    const onOther = (e) => {
-        if (e.detail?.id !== id)
-            pause();
-    };
-    target?.addEventListener(AUDIO_PLAY_EVENT, onOther);
-    return () => {
-        if (players.get(id) === entry)
-            players.delete(id);
-        target?.removeEventListener(AUDIO_PLAY_EVENT, onOther);
-    };
-}
-/** Called when player `id` starts: pauses every other registered player and announces it for other copies of this module. */
-export function claimAudioPlayback(id, target = typeof document === 'undefined' ? null : document) {
-    for (const [other, p] of players)
-        if (other !== id)
-            p.pause();
-    target?.dispatchEvent(new CustomEvent(AUDIO_PLAY_EVENT, { detail: { id } }));
-}
+import { AUDIO_PLAY_EVENT, audioPlayerStep, claimAudioPlayback, createAudioPlayerToken, registerAudioPlayer, } from './audioPlayerState.js';
+export { audioPlayerStep, createAudioPlayerToken, registerAudioPlayer, claimAudioPlayback, AUDIO_PLAY_EVENT };
 export function AudioPlayer({ className, slotProps, src, label, peaks, duration, variant = 'compact', rates = DEFAULT_PLAYBACK_RATES, onPlay, onPause, onEnded, onTimeUpdate }) {
     const tokenRef = useRef(null);
     if (tokenRef.current === null)
@@ -80,7 +30,6 @@ export function AudioPlayer({ className, slotProps, src, label, peaks, duration,
     const known = metaDuration ?? duration ?? 0;
     const live = useRef({ known, onPlay, onPause, onEnded, onTimeUpdate, seconds });
     live.current = { known, onPlay, onPause, onEnded, onTimeUpdate, seconds };
-    // Smooth progress: the fill is a CSS variable written per frame; React state only moves once per whole second.
     const paint = useCallback((t) => {
         const d = live.current.known;
         root.current?.style.setProperty('--cieo-audio-progress', String(d > 0 ? Math.min(1, Math.max(0, t / d)) : 0));
@@ -90,7 +39,6 @@ export function AudioPlayer({ className, slotProps, src, label, peaks, duration,
             setSeconds(whole);
         }
     }, []);
-    // The fill var is written only here (never through the style prop) so a re-render can't snap it back to a whole second.
     useEffect(() => paint(audio.current?.currentTime ?? 0), [known, paint, src]);
     useIsoLayoutEffect(() => {
         dispatch('source');
@@ -151,7 +99,6 @@ export function AudioPlayer({ className, slotProps, src, label, peaks, duration,
             appliedRate.current = safeRate;
         }
         catch {
-            /* keep the label aligned with the last rate the browser accepted */
             if (rate !== appliedRate.current)
                 setRate(appliedRate.current);
         }

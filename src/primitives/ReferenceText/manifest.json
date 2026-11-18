@@ -9,7 +9,9 @@
   "packId": "editorial",
   "status": "experimental",
   "owner": "library-maintainer",
-  "aliases": [],
+  "aliases": [
+    "MonoText"
+  ],
   "source": {
     "target": "web",
     "path": "src/primitives/ReferenceText/ReferenceText.tsx",

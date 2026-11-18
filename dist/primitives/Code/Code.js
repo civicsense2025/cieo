@@ -1,5 +1,3 @@
-// src/primitives/Code/Code.tsx
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function Code({ className, slotProps, children }) {

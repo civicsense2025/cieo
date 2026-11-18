@@ -1,4 +1,3 @@
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* TableFooter. <tfoot> wrapper for summary rows. Host supplies TableRow rows; this owns footer grouping semantics only. */

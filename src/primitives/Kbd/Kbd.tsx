@@ -1,5 +1,4 @@
 // src/primitives/Kbd/Kbd.tsx
-'use client';
 /* Kbd. One keyboard key or shortcut chord. Host supplies key names as children. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

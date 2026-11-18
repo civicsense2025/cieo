@@ -10,5 +10,5 @@ export interface NumberedStepsProps {
   steps: NumberedStep[];
 }
 export function NumberedSteps({ className, slotProps, steps }: NumberedStepsProps) {
-  return (<ol {...customizePart(slotProps?.root, "cieo cieo-p-numbered-steps", undefined, className)}>{steps.map((s, i) => <li key={i}><span aria-hidden="true">{i + 1}</span><b>{s.title}</b>{s.detail ? <small>{s.detail}</small> : null}</li>)}</ol>);
+  return (<ol className="cieo cieo-p-numbered-steps" {...customizePart(slotProps?.root, "cieo cieo-p-numbered-steps", undefined, className)}>{steps.map((s, i) => <li key={i}><span aria-hidden="true">{i + 1}</span><b>{s.title}</b>{s.detail ? <small>{s.detail}</small> : null}</li>)}</ol>);
 }

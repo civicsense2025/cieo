@@ -2,20 +2,28 @@ const PACKAGE_AREAS = {
   react: 'cieo/react',
   dom: 'cieo/dom',
   live: 'cieo/live',
+  state: 'cieo/state',
   controls: 'cieo/controls',
   design: 'cieo/design',
   agent: 'cieo/agent',
   core: 'cieo',
 };
 // Modules with their own package subpath, checked before the area they live in. Mirrored in scripts/lib/registry.mjs.
-const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
+const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons', 'state/react.js': 'cieo/state/react' };
 const COMPANION_FILES = {
   'customization.ts|./parts.js': true,
   'Popover/Popover.tsx|./focus.js': true,
   'Popover/Popover.tsx|./position.js': true,
   'Popover/Popover.tsx|./usePopoverPosition.js': true,
   'Popover/usePopoverPosition.ts|./position.js': true,
+  'AudioPlayer/AudioPlayer.tsx|./audioPlayerState.js': true,
   'VoiceRecorder/VoiceRecorder.tsx|./recorderVisual.js': true,
+  'VoiceRecorder/VoiceRecorder.tsx|./recorderState.js': true,
+  'VoiceRecorder/VoiceRecorder.tsx|./recorderTake.js': true,
+  'VoiceRecorder/VoiceRecorder.tsx|./RecorderControls.js': true,
+  'VoiceRecorder/RecorderControls.tsx|./recorderVisual.js': true,
+  'VoiceRecorder/RecorderControls.tsx|./recorderState.js': true,
+  'VoiceRecorder/recorderTake.ts|./recorderState.js': true,
 };
 
 /* Deliberately shape-based, mirroring scanImportSpecifiers in scripts/lib/registry.mjs:

@@ -1,0 +1,91 @@
+/* Paired 2D vector and 5-channel Container Transform geometry springs built on SpringChannel. */
+import { SpringChannel } from './spring-channel.js';
+export class SpringVector2D {
+    constructor(initial, atSeconds, options = {}) {
+        this.cx = new SpringChannel(initial.x, atSeconds, options);
+        this.cy = new SpringChannel(initial.y, atSeconds, options);
+    }
+    get target() {
+        return { x: this.cx.target, y: this.cy.target };
+    }
+    sample(atSeconds) {
+        const sx = this.cx.sample(atSeconds);
+        const sy = this.cy.sample(atSeconds);
+        return {
+            x: sx.value,
+            y: sy.value,
+            vx: sx.velocity,
+            vy: sy.velocity,
+            moving: sx.moving || sy.moving,
+        };
+    }
+    retarget(to, atSeconds, w, zeta) {
+        this.cx.retarget(to.x, atSeconds, w, zeta);
+        this.cy.retarget(to.y, atSeconds, w, zeta);
+    }
+    release(from, velocity, to, atSeconds, w, zeta) {
+        this.cx.release(from.x, velocity.x, to.x, atSeconds, w, zeta);
+        this.cy.release(from.y, velocity.y, to.y, atSeconds, w, zeta);
+    }
+    jump(to, atSeconds) {
+        this.cx.jump(to.x, atSeconds);
+        this.cy.jump(to.y, atSeconds);
+    }
+}
+/** Five-channel SpringChannel bundle (x, y, width, height, radius) for interruptible Container Transform. */
+export class SpringRect {
+    constructor(initial, atSeconds, options = {}) {
+        this.cx = new SpringChannel(initial.x, atSeconds, options);
+        this.cy = new SpringChannel(initial.y, atSeconds, options);
+        this.cw = new SpringChannel(initial.width, atSeconds, options);
+        this.ch = new SpringChannel(initial.height, atSeconds, options);
+        this.cr = new SpringChannel(initial.radius ?? 0, atSeconds, options);
+    }
+    get target() {
+        return {
+            x: this.cx.target,
+            y: this.cy.target,
+            width: this.cw.target,
+            height: this.ch.target,
+            radius: this.cr.target,
+        };
+    }
+    sample(atSeconds) {
+        const sx = this.cx.sample(atSeconds);
+        const sy = this.cy.sample(atSeconds);
+        const sw = this.cw.sample(atSeconds);
+        const sh = this.ch.sample(atSeconds);
+        const sr = this.cr.sample(atSeconds);
+        return {
+            x: sx.value,
+            y: sy.value,
+            width: Math.max(0, sw.value),
+            height: Math.max(0, sh.value),
+            radius: Math.max(0, sr.value),
+            moving: sx.moving || sy.moving || sw.moving || sh.moving || sr.moving,
+        };
+    }
+    retarget(to, atSeconds, w, zeta) {
+        this.cx.retarget(to.x, atSeconds, w, zeta);
+        this.cy.retarget(to.y, atSeconds, w, zeta);
+        this.cw.retarget(to.width, atSeconds, w, zeta);
+        this.ch.retarget(to.height, atSeconds, w, zeta);
+        if (to.radius !== undefined)
+            this.cr.retarget(to.radius, atSeconds, w, zeta);
+    }
+    release(from, velocity, to, atSeconds, w, zeta) {
+        this.cx.release(from.x, velocity.x ?? 0, to.x, atSeconds, w, zeta);
+        this.cy.release(from.y, velocity.y ?? 0, to.y, atSeconds, w, zeta);
+        this.cw.release(from.width, velocity.width ?? 0, to.width, atSeconds, w, zeta);
+        this.ch.release(from.height, velocity.height ?? 0, to.height, atSeconds, w, zeta);
+        this.cr.release(from.radius ?? this.cr.target, velocity.radius ?? 0, to.radius ?? this.cr.target, atSeconds, w, zeta);
+    }
+    jump(to, atSeconds) {
+        this.cx.jump(to.x, atSeconds);
+        this.cy.jump(to.y, atSeconds);
+        this.cw.jump(to.width, atSeconds);
+        this.ch.jump(to.height, atSeconds);
+        if (to.radius !== undefined)
+            this.cr.jump(to.radius, atSeconds);
+    }
+}

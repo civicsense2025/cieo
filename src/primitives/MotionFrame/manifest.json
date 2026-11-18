@@ -1,0 +1,199 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.motion-frame",
+  "componentVersion": "1.0.0",
+  "name": "MotionFrame",
+  "layer": "primitive",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/MotionFrame/MotionFrame.tsx",
+    "symbol": "MotionFrame"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "contentKey",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "default",
+      "constraints": {},
+      "note": "Key identifying the active content pane; changing it triggers directional arrival and height spring."
+    },
+    {
+      "id": "direction",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 0,
+      "constraints": {},
+      "note": "Shared-axis sign: 1 forward, -1 backward, 0 neutral arrival."
+    },
+    {
+      "id": "axis",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "x",
+          "y"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "x",
+      "constraints": {},
+      "note": "Travel axis for directional swaps."
+    },
+    {
+      "id": "distance",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 16,
+      "constraints": {},
+      "note": "Travel distance in pixels on contentKey change."
+    },
+    {
+      "id": "motion",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": true,
+      "constraints": {},
+      "note": "False snaps height and content immediately."
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {},
+      "note": "Alias to disable motion."
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Appended to the root classes without replacing library classes."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation record; see TypeScript declaration. Named parts: root, content."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "content",
+        "component"
+      ],
+      "min": 0,
+      "max": 64,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-primary"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "shrinkable-min-inline-0"
+    ],
+    "content": [
+      "semantic-children"
+    ],
+    "motion": [
+      "critically-damped-spring"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "contentKey",
+        "direction",
+        "axis",
+        "distance",
+        "motion",
+        "disabled",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "ResizeObserver height spring with directional shared-axis contentKey swaps."
+  },
+  "extensions": {
+    "customization": {
+      "parts": [
+        "root",
+        "content"
+      ],
+      "contract": "presentation-only; controlled semantics and computed geometry remain library-owned"
+    }
+  }
+}

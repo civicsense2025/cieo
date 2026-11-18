@@ -1,4 +1,3 @@
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* TableHeader. <thead> wrapper for column header rows. Host supplies TableHeaderCell cells; this owns header grouping semantics only. */

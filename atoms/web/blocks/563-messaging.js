@@ -3,7 +3,7 @@
 const MS_EL = (tag, css, html) => { const e = document.createElement(tag); if (css) e.style.cssText = css; if (html != null) e.innerHTML = html; return e; };
 const MS_AV = (name, size, hue) => `<span aria-hidden="true" style="flex:none;width:${size}px;height:${size}px;border-radius:50%;display:grid;place-items:center;background:${hue};color:var(--card);font:600 ${Math.round(size*.42)}px var(--sans)">${name[0].toUpperCase()}</span>`;
 const MS_BTN = 'min-height:44px;padding:0 16px;border:0;border-radius:12px;background:var(--ink);color:var(--card);font-size:13px;font-weight:500;cursor:pointer;';
-const MS_POP = { w:24, z:.45 };
+const MS_POP = { w:24, z:.75 };
 
 atom({ id:'msg-typing', cat:'Messaging', name:'Typing to message', block:'messaging, typing, reply', fam:['M','S','X','T'], tall:true,
   html:`<div class="card col" style="width:min(340px,94%);padding:0;gap:0;overflow:hidden"><div class="mt-th" role="log" aria-live="polite" style="height:236px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:12px;overflow:hidden"></div><div class="row" style="padding:8px 12px;border-top:1px solid var(--line-soft);justify-content:space-between"><span class="small muted">Priya</span><button class="mt-ask" style="${MS_BTN}">Send a question</button></div></div><div class="hint">Send a question. Three dots wave, then the dots grow into the reply bubble</div>`,
@@ -64,7 +64,7 @@ atom({ id:'msg-delivery', cat:'Messaging', name:'Delivery ticks', block:'messagi
 atom({ id:'msg-inbox', cat:'Messaging', name:'Inbox reorder', block:'messaging, inbox, unread', fam:['M','S','E','X'], tall:true,
   html:`<div class="card col" style="width:min(340px,94%);padding:8px;gap:8px"><div class="mi-list" role="list" aria-label="Conversations" style="position:relative;height:232px"></div><div class="row" style="justify-content:space-between;padding:0 4px"><span class="small muted mi-note" role="status" aria-live="polite"></span><button class="mi-new" style="${MS_BTN}">New message</button></div></div><div class="hint">Send a new message, or open a conversation to clear its unread badge</div>`,
   desc:'A new message makes its conversation slide to the top while every row in between slides down by one slot. Its unread badge pops past full size and the count rolls; opening the conversation shrinks the badge away.',
-  api:'order = [touched, ...rest]   row[i].y.set(slot(order.indexOf(i)), base)   badge.s.set(1, {w:24,z:.45})   count → Digits',
+  api:'order = [touched, ...rest]   row[i].y.set(slot(order.indexOf(i)), base)   badge.s.set(1, {w:24,z:.75})   count → Digits',
   init(st){
     const list = $(st,'.mi-list'), note = $(st,'.mi-note');
     const mi_new = $(st,'button.mi-new');

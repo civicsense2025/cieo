@@ -1,4 +1,3 @@
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* Stack. Vertical rhythm for grouped content: one gap between every child. For cards and rows, not page grids. */

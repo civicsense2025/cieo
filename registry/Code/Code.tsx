@@ -1,5 +1,4 @@
 // src/primitives/Code/Code.tsx
-'use client';
 /* Code. Inline code span for names, keys, and short snippets inside prose. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

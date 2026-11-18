@@ -1,5 +1,4 @@
 // src/primitives/HStack/HStack.tsx
-'use client';
 /* HStack. Horizontal row with one gap between every child. For toolbars and action rows, not page grids. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

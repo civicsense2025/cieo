@@ -1,10 +1,13 @@
-/* Spring core: closed-form, critically damped springs. A frame is a pure function of time and nothing
-   overshoots. One rAF loop runs only while a job still moves; when idle it requests no frames.
-   Safe to import on the server: browser APIs are touched only when a motion runs. */
+/* Spring core: closed-form, critically damped (default) or bounded underdamped springs.
+   A frame is a pure function of time. One rAF loop runs only while a job still moves; when idle it
+   requests no frames. Safe to import on the server: browser APIs are touched only when a motion runs. */
+import { state } from './scheduler.js';
 
 export interface SpringConfig {
-  /** Natural frequency in rad/s. Settles (99.9%) in about 9.2 / w seconds. */
+  /** Natural frequency in rad/s. Settles (99.9%) in about 9.2 / w seconds at critical damping. */
   w: number;
+  /** Optional damping ratio (0.7 <= z <= 1.0, default 1). Clamped to 1 when reduced motion is active. */
+  z?: number;
 }
 
 export const S = {
@@ -24,24 +27,53 @@ export const ARRIVE = 0.45;
 export const now = (): number => (typeof performance !== 'undefined' ? performance.now() : Date.now()) / 1000;
 export const clamp = (v: number, a = 0, b = 1): number => Math.min(b, Math.max(a, v));
 
-/** Offset left after dt seconds for a critically damped spring released at offset x0 with velocity v0. */
-export const resp = (dt: number, x0: number, v0: number, cfg: SpringConfig): number =>
-  dt <= 0 ? x0 : Math.exp(-cfg.w * dt) * (x0 + (v0 + cfg.w * x0) * dt);
+const resolveZ = (cfg: SpringConfig): number =>
+  cfg.z === undefined || !Number.isFinite(cfg.z) || state().reduced ? 1 : clamp(cfg.z, 0.7, 1);
+
+/** Offset left after dt seconds for a spring released at offset x0 with velocity v0. */
+export function resp(dt: number, x0: number, v0: number, cfg: SpringConfig): number {
+  if (dt <= 0) return x0;
+  const z = resolveZ(cfg);
+  if (z >= 1) return Math.exp(-cfg.w * dt) * (x0 + (v0 + cfg.w * x0) * dt);
+  const a = z * cfg.w;
+  const wd = cfg.w * Math.sqrt(1 - z * z);
+  return Math.exp(-a * dt) * (x0 * Math.cos(wd * dt) + ((v0 + a * x0) / wd) * Math.sin(wd * dt));
+}
 
 /** Velocity of the same spring after dt seconds. */
-export const vel = (dt: number, x0: number, v0: number, cfg: SpringConfig): number =>
-  dt <= 0 ? v0 : Math.exp(-cfg.w * dt) * (v0 - cfg.w * (v0 + cfg.w * x0) * dt);
+export function vel(dt: number, x0: number, v0: number, cfg: SpringConfig): number {
+  if (dt <= 0) return v0;
+  const z = resolveZ(cfg);
+  if (z >= 1) return Math.exp(-cfg.w * dt) * (v0 - cfg.w * (v0 + cfg.w * x0) * dt);
+  const a = z * cfg.w;
+  const wd = cfg.w * Math.sqrt(1 - z * z);
+  return Math.exp(-a * dt) * (v0 * Math.cos(wd * dt) - ((a * v0 + cfg.w * cfg.w * x0) / wd) * Math.sin(wd * dt));
+}
 
 /** 0 → 1 progress of a step that started at t0. */
 export const prog = (t: number, t0: number, cfg: SpringConfig = S.base): number => 1 - resp(t - t0, 1, 0, cfg);
 
-/** Seconds until a unit step is within `epsilon` of its target. */
+/** Seconds until a unit step stays within `epsilon` of its target. */
 export function settleTime(cfg: SpringConfig, epsilon = 1e-3): number {
+  const z = resolveZ(cfg);
+  if (z >= 1) {
+    let lo = 0;
+    let hi = 60 / cfg.w;
+    for (let i = 0; i < 50; i += 1) {
+      const mid = (lo + hi) / 2;
+      if (resp(mid, 1, 0, cfg) > epsilon) lo = mid;
+      else hi = mid;
+    }
+    return hi;
+  }
+  const a = z * cfg.w;
+  const wd = cfg.w * Math.sqrt(1 - z * z);
   let lo = 0;
-  let hi = 60 / cfg.w;
+  let hi = 60 / a;
   for (let i = 0; i < 50; i += 1) {
     const mid = (lo + hi) / 2;
-    if (resp(mid, 1, 0, cfg) > epsilon) lo = mid;
+    const m = Math.min(mid, 1 / wd);
+    if (Math.exp(-a * mid) * (1 + a * m) > epsilon) lo = mid;
     else hi = mid;
   }
   return hi;
@@ -94,7 +126,6 @@ export class Track {
     for (let i = 0; i < n; i += 1) {
       const e = events[i];
       const dt = t - e.t;
-      // resp(dt <= 0) is exactly x0, without touching Math.exp.
       v += dt <= 0 ? e.x0 : resp(dt, e.x0, e.v0, e.cfg);
     }
     return v;
@@ -108,7 +139,6 @@ export class Track {
     for (let i = 0; i < n; i += 1) {
       const e = events[i];
       const dt = t - e.t;
-      // vel(dt <= 0) is exactly v0, without touching Math.exp.
       v += dt <= 0 ? e.v0 : vel(dt, e.x0, e.v0, e.cfg);
     }
     return v;
@@ -119,20 +149,28 @@ export class Track {
     const events = this.ev;
     const n = events.length;
     if (n === 0) return 0;
-    // In-place compaction: same keep/drop predicate as the old filter, no new array.
     let kept = 0;
     for (let i = 0; i < n; i += 1) {
       const e = events[i];
       const age = t - e.t;
-      // Future events are always kept; also skips Math.exp for dt < 0.
       if (age < 0) {
         if (kept !== i) events[kept] = e;
         kept += 1;
         continue;
       }
       const w = e.cfg.w;
-      const wAge = w * age;
-      if (Math.exp(-wAge) * (1 + wAge) * (Math.abs(e.x0) + Math.abs(e.v0) / w) > 1e-3) {
+      const z = resolveZ(e.cfg);
+      let env: number;
+      if (z >= 1) {
+        const wAge = w * age;
+        env = Math.exp(-wAge) * (1 + wAge) * (Math.abs(e.x0) + Math.abs(e.v0) / w);
+      } else {
+        const a = z * w;
+        const wd = w * Math.sqrt(1 - z * z);
+        const m = Math.min(age, 1 / wd);
+        env = Math.exp(-a * age) * (Math.abs(e.x0) * (1 + a * m) + Math.abs(e.v0) * m);
+      }
+      if (env > 1e-3) {
         if (kept !== i) events[kept] = e;
         kept += 1;
       }
@@ -146,176 +184,19 @@ export class Track {
   }
 }
 
-/* Gating. 'feedback' = a user-initiated state change, 'entrance' = page or section entrances,
-   'ambient' = idle decoration. Reduced motion or a hidden page: nothing animates. Pause: only
-   feedback animates, on the snap preset. Offscreen elements never animate. */
-export type MotionKind = 'feedback' | 'entrance' | 'ambient';
-export interface MotionState {
-  paused: boolean;
-  reduced: boolean;
-  hidden: boolean;
-}
-
-const KINDS: MotionKind[] = ['feedback', 'entrance', 'ambient'];
-let override: (() => Partial<MotionState>) | null = null;
-
-/** Lets an app supply its own pause / reduced-motion switch. Call setMotionState(null) to restore defaults. */
-export function setMotionState(fn: (() => Partial<MotionState>) | null): void {
-  override = fn;
-  sync();
-}
-
-let reducedList: MediaQueryList | null | undefined;
-/** One cached media query list instead of a matchMedia call per job per frame. */
-export function reducedQuery(): MediaQueryList | null {
-  if (reducedList === undefined) reducedList = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : null;
-  return reducedList;
-}
-
-export function state(): MotionState {
-  const hasDom = typeof document !== 'undefined';
-  const root = hasDom ? document.documentElement.dataset : null;
-  /* data-motion="full" overrides the OS setting, as in tokens.css; "reduced" forces it on. */
-  const reduced = root?.motion === 'full' ? false : reducedQuery()?.matches === true || root?.reducedMotion === 'true' || root?.motion === 'reduced';
-  const base: MotionState = {
-    paused: false,
-    reduced,
-    hidden: hasDom && document.hidden,
-  };
-  return override ? { ...base, ...override() } : base;
-}
-
-/** Every attribute that turns motion down for a subtree below <html>: the component prop (motion={false} →
-    data-motion="off"), a host-level reduced preference, and the legacy flag. JS springs honour all three; the
-    page-level form on <html> is read by state(), so setMotionState() can still override it. */
-export const REDUCED_SUBTREE = '[data-motion="off"], [data-motion="reduced"], [data-reduced-motion="true"]';
-
-/** True when el sits inside a subtree whose motion is off or reduced. A descendant cannot opt back in. */
-export function subtreeReduced(el?: Element | null): boolean {
-  const hit = !!el && typeof el.closest === 'function' ? el.closest(REDUCED_SUBTREE) : null;
-  return hit !== null && (typeof document === 'undefined' || hit !== document.documentElement);
-}
-
-export function onscreen(el?: Element | null): boolean {
-  if (!el || typeof innerHeight === 'undefined') return true;
-  const r = el.getBoundingClientRect();
-  return r.width + r.height > 0 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
-}
-
-export function allowed(kind: MotionKind = 'feedback', el?: Element | null): boolean {
-  if (!KINDS.includes(kind)) throw new TypeError(`Unknown motion kind: ${kind}`);
-  return allowedWith(state(), kind, el);
-}
-
-/* Per-job check against an already-read MotionState. Same predicate as allowed():
-   callers hoist one state() read per frame pass instead of one per job per frame.
-   The kind guard is repeated so tick()/sync() keep the throw for unknown kinds. */
-function allowedWith(s: MotionState, kind: MotionKind, el?: Element | null): boolean {
-  if (!KINDS.includes(kind)) throw new TypeError(`Unknown motion kind: ${kind}`);
-  if (s.reduced || s.hidden) return false;
-  if (s.paused && kind !== 'feedback') return false;
-  if (!el) return true;
-  // A host can reduce motion for one subtree (a dialog with its own preference); a descendant cannot opt back in.
-  if (subtreeReduced(el)) return false;
-  return onscreen(el);
-}
-
-/** The preset a helper should use: paused feedback still shows, on the fastest spring. */
-export const config = (kind: MotionKind, cfg: SpringConfig = S.base): SpringConfig => (state().paused && kind === 'feedback' ? S.snap : cfg);
-
-/* The loop. A job is { step(t) -> true while moving, kind, finish() }. finish() sets the final state. */
-export interface Job {
-  step: (t: number) => boolean | void;
-  kind?: MotionKind;
-  finish?: () => void;
-}
-
-const jobs = new Set<Job>();
-let raf: number | null = null;
-let listening = false;
-
-function settle(job: Job): void {
-  jobs.delete(job);
-  try {
-    job.finish?.();
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-function tick(): void {
-  raf = null;
-  const t = now();
-  // One motion-state read per frame pass: document/override polling is O(1), not O(jobs).
-  // Per-job onscreen(el) checks still run inside allowedWith; jobs carry no el today.
-  const s = state();
-  // Snapshot: a step may add or cancel jobs, and new jobs wait for the next frame.
-  for (const job of [...jobs]) {
-    if (!jobs.has(job)) continue;
-    if (!allowedWith(s, job.kind ?? 'feedback')) {
-      settle(job);
-      continue;
-    }
-    let moving = false;
-    try {
-      moving = job.step(t) === true;
-    } catch (error) {
-      console.error(error);
-    }
-    if (!moving && jobs.has(job)) settle(job);
-  }
-  if (jobs.size && raf === null) raf = requestAnimationFrame(tick);
-}
-
-/** When the motion state changes, running springs that are no longer allowed jump to their end state. */
-export function sync(): void {
-  // Snapshot: a finishing job may flip the motion state and run() an allowed
-  // replacement, which lands in the live Set mid-pass. The pre-pass gate must
-  // never settle jobs created by this pass, so new jobs wait for the next pass.
-  const s = state();
-  for (const job of [...jobs]) {
-    if (!jobs.has(job)) continue;
-    if (!allowedWith(s, job.kind ?? 'feedback')) settle(job);
-  }
-  if (!jobs.size && raf !== null) {
-    cancelAnimationFrame(raf);
-    raf = null;
-  }
-}
-
-/* Process-lifetime singleton on purpose: one motion:change + one visibilitychange + one media
-   listener serves every job, added once on first run() and never removed. Deliberately no
-   unlisten export: removing them while jobs run would strand springs on a stale gate, and
-   re-adding per run would churn listeners. No per-instance accumulation: run() adds no
-   listeners itself, it only flips `listening`. */
-function listen(): void {
-  if (listening || typeof document === 'undefined') return;
-  listening = true;
-  document.addEventListener('motion:change', sync);
-  document.addEventListener('visibilitychange', sync);
-  reducedQuery()?.addEventListener('change', sync);
-}
-
-const noop = (): void => {};
-
-/** Schedules a job and returns cancel(), which finishes it at once. Disallowed jobs finish immediately. */
-export function run(step: Job | Job['step'], opts: { kind?: MotionKind; finish?: () => void } = {}): () => void {
-  const job: Job = typeof step === 'function' ? { step, kind: opts.kind ?? 'feedback', finish: opts.finish } : { ...step, kind: step.kind ?? 'feedback' };
-  if (!allowed(job.kind) || typeof requestAnimationFrame !== 'function') {
-    settle(job);
-    return noop;
-  }
-  listen();
-  jobs.add(job);
-  if (raf === null) raf = requestAnimationFrame(tick);
-  return () => {
-    if (jobs.has(job)) settle(job);
-    // Finishing the last job also releases the already-requested browser callback.
-    if (!jobs.size && raf !== null) {
-      cancelAnimationFrame(raf);
-      raf = null;
-    }
-  };
-}
-
-export const active = (): number => jobs.size;
+export {
+  setMotionState,
+  reducedQuery,
+  state,
+  REDUCED_SUBTREE,
+  subtreeReduced,
+  onscreen,
+  allowed,
+  config,
+  sync,
+  run,
+  active,
+  type MotionKind,
+  type MotionState,
+  type Job,
+} from './scheduler.js';

@@ -15,6 +15,10 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
+    { "id": "multiple", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {}, "note": "Allow multiple disclosures open simultaneously." },
+    { "id": "value", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Controlled open item key or keys." },
+    { "id": "defaultValue", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Initial open item key or keys when uncontrolled." },
+    { "id": "onValueChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Called with next open key or keys." },
     {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
     {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],

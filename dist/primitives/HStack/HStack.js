@@ -1,5 +1,3 @@
-// src/primitives/HStack/HStack.tsx
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function HStack({ className, slotProps, gap = 'md', children }) {

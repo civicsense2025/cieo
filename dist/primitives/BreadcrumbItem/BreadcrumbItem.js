@@ -1,6 +1,11 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { Slot } from '../Slot/Slot.js';
 import { customizePart } from '../customization.js';
-export function BreadcrumbItem({ className, slotProps, current = false, children }) {
-    return (_jsx("li", { "aria-current": current ? 'page' : undefined, className: "cieo-p-crumb", ...customizePart(slotProps?.root, "cieo-p-crumb", undefined, className), children: children }));
+export function BreadcrumbItem({ className, slotProps, current = false, asChild = false, ref, style, children, ...rest }) {
+    const customized = customizePart(slotProps?.root, 'cieo-p-crumb', style, className);
+    if (asChild) {
+        return (_jsx(Slot, { asChild: true, ref: ref, ...rest, "aria-current": current ? 'page' : undefined, className: "cieo-p-crumb", style: style, ...customized, children: children }));
+    }
+    return (_jsx("li", { ref: ref, ...rest, "aria-current": current ? 'page' : undefined, className: "cieo-p-crumb", style: style, ...customized, children: children }));
 }

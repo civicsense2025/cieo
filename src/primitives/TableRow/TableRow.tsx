@@ -1,4 +1,3 @@
-'use client';
 /* TableRow. <tr> with optional selected highlight. Host owns which rows are selected; this owns row rendering only. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

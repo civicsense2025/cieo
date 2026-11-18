@@ -38,7 +38,7 @@ atom({ id:'comments-thread', cat:'Comments', name:'Threaded replies', block:'com
     const ln = new Digits($(st,'.ct-ln'), 3), cn = new Digits($(st,'.ct-cn'), 2), rn = new Digits($(st,'.ct-rn'), 2); ln.set('164', true); cn.set('2', true); rn.set('6', true);
     const heartFill = $(ctLike,'.fill'), repIcon = $(ctRep,'svg'), say = $(st,'.ct-say'), vm = $(st,'.ct-vm'), box = $(st,'.ct-more-box'), inner = $(st,'.ct-in');
     const sayEl = ['', 'Link copied'].map(s => { const e = CM_EL('span', 'position:absolute;left:4px;top:0;font-size:12px;line-height:20px', s); say.appendChild(e); return e; }); const ssw = new Swap(0);
-    const pop = { w:24, z:.45 }, hs = new Track(1, S.snap), rs = new Track(1, S.snap), mh = new Track(0, S.base), vh = new Track(44, S.base), vo = new Track(1, S.base);
+    const pop = { w:24, z:.75 }, hs = new Track(1, S.snap), rs = new Track(1, S.snap), mh = new Track(0, S.base), vh = new Track(44, S.base), vo = new Track(1, S.base);
     let liked = false, reposted = false, open = false, copyAt = 0;
     ctLike.onclick = () => { liked = !liked; ln.set(String(164 + (liked ? 1 : 0)), REDUCE); ctLike.setAttribute('aria-pressed', String(liked)); ctLike.setAttribute('aria-label', `Like, ${164 + (liked ? 1 : 0)}`); if (REDUCE) hs.jump(1); else { hs.jump(.7); hs.set(1, pop); } ctLike.style.color = liked ? 'var(--danger)' : 'var(--ink)'; heartFill.setAttribute('fill', liked ? 'currentColor' : 'none'); };
     ctRep.onclick = () => { reposted = !reposted; rn.set(String(6 + (reposted ? 1 : 0)), REDUCE); ctRep.setAttribute('aria-pressed', String(reposted)); ctRep.setAttribute('aria-label', `Repost, ${6 + (reposted ? 1 : 0)}`); if (REDUCE) rs.jump(1); else { rs.jump(.7); rs.set(1, pop); } ctRep.style.color = reposted ? 'var(--success)' : 'var(--ink)'; };
@@ -65,7 +65,7 @@ atom({ id:'comments-reactions', cat:'Comments', name:'Reaction picker', block:'c
     function mkChip(e, i){ const rpChip = CM_EL('button', 'min-height:44px;border:0;background:none;padding:0;cursor:pointer;color:var(--ink);font-size:13px;position:relative', `<span class="in" style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:var(--raised);box-shadow:0 0 0 1.5px transparent"><span aria-hidden="true" style="font-size:15px">${e}</span><span class="num"></span></span>`); rpChip.type = 'button'; rpChip.onclick = () => toggleMine(i, rpChip); chipsEl.appendChild(rpChip);
       const d = new Digits($(rpChip,'.num'), 2); d.set(String(counts[i]), true); digits.push(d); return { el:rpChip, inn:$(rpChip,'.in'), o:new Track(counts[i] ? 1 : 0, S.snap), sc:new Track(1, S.snap) }; }
     const chips = E.map(mkChip);
-    const pop = { w:24, z:.45 }, shell = new Track(0, S.base), flies = [], q = [];
+    const pop = { w:24, z:.75 }, shell = new Track(0, S.base), flies = [], q = [];
     let isOpen = false, mine = -1, hold = 0, held = false;
     const sync = () => chips.forEach((c,i) => { const on = counts[i] > 0; c.el.hidden = !on && c.o.target === 0 && !c.pend; c.el.setAttribute('aria-pressed', String(mine === i)); c.el.setAttribute('aria-label', `${E[i]} ${NAMES[i]}, ${counts[i]}${mine === i ? ', you reacted' : ''}`); c.inn.style.boxShadow = mine === i ? '0 0 0 1.5px var(--accent)' : '0 0 0 1.5px transparent'; c.inn.style.background = mine === i ? 'color-mix(in oklab, var(--accent) 14%, var(--raised))' : 'var(--raised)'; });
     const setOpen = (on, byKey) => { if (on === isOpen) return; isOpen = on; rpOpen.setAttribute('aria-expanded', String(on)); const t = now();

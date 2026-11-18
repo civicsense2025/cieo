@@ -1,0 +1,163 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.i18n-provider",
+  "componentVersion": "1.0.0",
+  "name": "I18nProvider",
+  "layer": "primitive",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/I18nProvider/I18nProvider.tsx",
+    "symbol": "I18nProvider"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "locale",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "default": "en",
+      "constraints": {},
+      "note": "BCP 47 locale tag applied to lang."
+    },
+    {
+      "id": "dir",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "ltr",
+          "rtl",
+          "auto"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "ltr",
+      "constraints": {},
+      "note": "Writing direction applied to the subtree."
+    },
+    {
+      "id": "strings",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Partial overrides merged over DEFAULT_CIEO_STRINGS."
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Appended to the root classes without replacing library classes."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation record; see TypeScript declaration. Named parts: root."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "content",
+        "component"
+      ],
+      "min": 0,
+      "max": 64,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-primary"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "shrinkable-min-inline-0"
+    ],
+    "content": [
+      "semantic-children"
+    ],
+    "motion": [
+      "critically-damped-spring"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "locale",
+        "dir",
+        "strings",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Root-installable locale, writing direction (LTR/RTL), and built-in UI string overrides via CieoI18nProvider."
+  },
+  "extensions": {
+    "customization": {
+      "parts": [
+        "root"
+      ],
+      "contract": "presentation-only; controlled semantics and computed geometry remain library-owned"
+    }
+  }
+}

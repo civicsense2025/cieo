@@ -1,0 +1,109 @@
+/* Headless sheet detents machine: sorted detents, drag, velocity-projected release, snap, and dismiss. */
+import { projectToDetent } from '../live/physics.js';
+import { createMachineStore, unchanged } from './types.js';
+function normalizeDetents(raw) {
+    if (raw.length === 0)
+        throw new RangeError('Sheet detents must not be empty');
+    const unique = [...new Set(raw)].sort((a, b) => a - b);
+    return Object.freeze(unique);
+}
+function nearestIndex(detents, target) {
+    let best = 0;
+    let bestDist = Math.abs(detents[0] - target);
+    for (let i = 1; i < detents.length; i += 1) {
+        const dist = Math.abs(detents[i] - target);
+        if (dist < bestDist) {
+            best = i;
+            bestDist = dist;
+        }
+    }
+    return best;
+}
+export function createInitialSheetDetentsState(options = {}) {
+    const detents = normalizeDetents(options.detents ?? [0, 0.5, 0.9]);
+    const index = options.initialIndex !== undefined
+        ? Math.min(detents.length - 1, Math.max(0, options.initialIndex))
+        : options.initialDetent !== undefined
+            ? nearestIndex(detents, options.initialDetent)
+            : detents.length > 1 && detents[0] === 0
+                ? 1
+                : 0;
+    return { detents, index, position: detents[index], dragging: false };
+}
+export function reduceSheetDetents(state, event, velocityThreshold = 450) {
+    switch (event.type) {
+        case 'DRAG': {
+            if (!Number.isFinite(event.position))
+                return unchanged(state, event);
+            if (state.dragging && event.position === state.position)
+                return unchanged(state, event);
+            const direction = (Math.sign(event.position - state.position) || 0);
+            return {
+                prev: state,
+                next: { ...state, position: event.position, dragging: true },
+                event,
+                changed: true,
+                direction,
+            };
+        }
+        case 'RELEASE': {
+            const from = event.position !== undefined && Number.isFinite(event.position) ? event.position : state.position;
+            const vy = event.velocity?.y ?? 0;
+            const targetPos = projectToDetent(from, vy, state.detents, velocityThreshold);
+            const nextIdx = nearestIndex(state.detents, targetPos);
+            const snapped = state.detents[nextIdx];
+            const direction = (Math.sign(snapped - from) || Math.sign(snapped - state.position) || 0);
+            const next = { detents: state.detents, index: nextIdx, position: snapped, dragging: false };
+            const changed = state.dragging || state.index !== nextIdx || state.position !== snapped;
+            if (!changed)
+                return unchanged(state, event);
+            return {
+                prev: state,
+                next,
+                event,
+                changed: true,
+                direction,
+                velocity: event.velocity,
+                haptic: snapped <= 0 ? 'drop' : 'selection',
+            };
+        }
+        case 'SNAP_TO': {
+            const nextIdx = event.index !== undefined
+                ? Math.min(state.detents.length - 1, Math.max(0, event.index))
+                : event.detent !== undefined
+                    ? nearestIndex(state.detents, event.detent)
+                    : state.index;
+            const snapped = state.detents[nextIdx];
+            if (!state.dragging && nextIdx === state.index && snapped === state.position)
+                return unchanged(state, event);
+            const direction = (Math.sign(snapped - state.position) || 0);
+            return {
+                prev: state,
+                next: { detents: state.detents, index: nextIdx, position: snapped, dragging: false },
+                event,
+                changed: true,
+                direction,
+                haptic: snapped <= 0 ? 'drop' : 'selection',
+            };
+        }
+        case 'DISMISS': {
+            const dismissIdx = state.detents[0] === 0 ? 0 : nearestIndex(state.detents, 0);
+            const dismissPos = state.detents[0] === 0 ? 0 : Math.min(0, state.detents[dismissIdx]);
+            if (!state.dragging && state.position === dismissPos && state.index === dismissIdx)
+                return unchanged(state, event);
+            return {
+                prev: state,
+                next: { detents: state.detents, index: dismissIdx, position: dismissPos, dragging: false },
+                event,
+                changed: true,
+                direction: -1,
+                velocity: event.velocity,
+                haptic: 'drop',
+            };
+        }
+    }
+}
+export function createSheetDetentsMachine(options = {}) {
+    const threshold = options.velocityThreshold ?? 450;
+    return createMachineStore(createInitialSheetDetentsState(options), (state, event) => reduceSheetDetents(state, event, threshold));
+}

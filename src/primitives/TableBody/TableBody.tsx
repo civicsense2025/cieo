@@ -1,4 +1,3 @@
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* TableBody. <tbody> wrapper for data rows. Host supplies TableRow rows; this owns body grouping semantics only. */

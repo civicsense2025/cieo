@@ -1,5 +1,4 @@
 // src/primitives/Center/Center.tsx
-'use client';
 /* Center. Centered content column with a max width. Host owns the content; this owns centering only. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

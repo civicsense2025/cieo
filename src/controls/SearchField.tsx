@@ -6,6 +6,17 @@ import { forwardRef, useEffect, useId, useRef, useState, type FormEvent, type In
 import { cx, type ControlSize } from './classes.js';
 import { CloseIcon, SearchIcon } from './icons.js';
 import { setNativeValue } from './native.js';
+import { customizeControlPart, type ControlPartProps } from './parts.js';
+
+export interface SearchFieldSlotProps {
+  root?: ControlPartProps;
+  label?: ControlPartProps;
+  box?: ControlPartProps;
+  icon?: ControlPartProps;
+  toggle?: ControlPartProps;
+  input?: ControlPartProps;
+  clear?: ControlPartProps;
+}
 
 export type SearchFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> & {
   /** Required accessible name. Hidden visually unless showLabel. */
@@ -18,10 +29,11 @@ export type SearchFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type
   /** Start as an icon button that expands into the field. Renders expanded until hydrated. */
   collapsible?: boolean;
   size?: ControlSize;
+  slotProps?: SearchFieldSlotProps;
 };
 
 export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(function SearchField(props, ref) {
-  const { label, showLabel, onSearch, onClear, clearLabel = 'Clear search', collapsible, size = 'md', className, id, onInput, onKeyDown, onBlur, ...rest } = props;
+  const { label, showLabel, onSearch, onClear, clearLabel = 'Clear search', collapsible, size = 'md', slotProps, className, id, onInput, onKeyDown, onBlur, ...rest } = props;
   const uid = useId();
   const inputId = id ?? `${uid}i`;
   const input = useRef<HTMLInputElement | null>(null);
@@ -66,24 +78,28 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
     setTimeout(() => input.current?.focus(), 0);
   };
 
+  const rootClass = cx('cieo-ctl', 'cieo-search', `cieo-search--${size}`, className);
+  const labelClass = showLabel ? 'cieo-label' : 'cieo-vh';
+
   return (
     <div
-      className={cx('cieo-ctl', 'cieo-search', `cieo-search--${size}`, className)}
+      className={rootClass}
       data-enhanced={enhanced || undefined}
       data-collapsible={collapsible || undefined}
       data-open={open || undefined}
       data-filled={filled || undefined}
+      {...customizeControlPart(slotProps?.root, rootClass)}
     >
-      <label htmlFor={inputId} className={showLabel ? 'cieo-label' : 'cieo-vh'}>
+      <label htmlFor={inputId} className={labelClass} {...customizeControlPart(slotProps?.label, labelClass)}>
         {label}
       </label>
-      <div className="cieo-search-box">
+      <div className="cieo-search-box" {...customizeControlPart(slotProps?.box, 'cieo-search-box')}>
         {collapsible && enhanced ? (
-          <button type="button" className="cieo-search-toggle" aria-label={label} aria-expanded={open} aria-controls={inputId} tabIndex={open ? -1 : 0} onClick={() => (open ? input.current?.focus() : expand())}>
+          <button type="button" className="cieo-search-toggle" aria-label={label} aria-expanded={open} aria-controls={inputId} tabIndex={open ? -1 : 0} onClick={() => (open ? input.current?.focus() : expand())} {...customizeControlPart(slotProps?.toggle, 'cieo-search-toggle')}>
             <SearchIcon />
           </button>
         ) : (
-          <span className="cieo-search-icon" aria-hidden="true">
+          <span className="cieo-search-icon" aria-hidden="true" {...customizeControlPart(slotProps?.icon, 'cieo-search-icon')}>
             <SearchIcon />
           </span>
         )}
@@ -111,9 +127,10 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
             if (collapsible && !e.currentTarget.value && !e.currentTarget.parentElement?.contains(e.relatedTarget as Node)) setOpen(false);
             onBlur?.(e);
           }}
+          {...customizeControlPart(slotProps?.input, 'cieo-search-input', rest.style)}
         />
         {enhanced ? (
-          <button type="button" className="cieo-search-clear" aria-label={clearLabel} aria-controls={inputId} data-on={filled || undefined} tabIndex={filled ? 0 : -1} aria-hidden={!filled || undefined} onClick={clear}>
+          <button type="button" className="cieo-search-clear" aria-label={clearLabel} aria-controls={inputId} data-on={filled || undefined} tabIndex={filled ? 0 : -1} aria-hidden={!filled || undefined} onClick={clear} {...customizeControlPart(slotProps?.clear, 'cieo-search-clear')}>
             <CloseIcon />
           </button>
         ) : null}

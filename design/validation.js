@@ -15,9 +15,35 @@ export function choice(value, values, name) {
   if (!values.includes(value)) throw new TypeError(`Invalid ${name}: ${String(value)}`);
   return value;
 }
+const TOKEN_PART = /^[a-z][a-z0-9-]{0,31}$/;
+const SAFE_COMPONENT_VALUE = /^(?:#[\da-fA-F]{6}|(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem|em|ms|s|%)?|0)$/;
+
+export function validComponentOverrides(raw) {
+  const source = record(raw, 'components');
+  const out = {};
+  for (const [comp, props] of Object.entries(source).sort(([a], [b]) => a.localeCompare(b, 'en'))) {
+    if (!TOKEN_PART.test(comp)) throw new TypeError(`Invalid component token namespace: ${comp}`);
+    const entries = record(props, `components.${comp}`);
+    const clean = {};
+    for (const [prop, val] of Object.entries(entries).sort(([a], [b]) => a.localeCompare(b, 'en'))) {
+      if (!TOKEN_PART.test(prop)) throw new TypeError(`Invalid component token property: ${comp}.${prop}`);
+      const str = typeof val === 'number' && Number.isFinite(val) ? String(val) : val;
+      if (typeof str !== 'string' || !SAFE_COMPONENT_VALUE.test(str)) {
+        throw new TypeError(`Unsafe component token value for ${comp}.${prop}`);
+      }
+      clean[prop] = str;
+    }
+    out[comp] = clean;
+  }
+  return out;
+}
+
 export function options(input = {}) {
-  keys(input, ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'accent', 'overrides'], 'theme option');
+  keys(input, ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'accent', 'zeta', 'components', 'overrides'], 'theme option');
   const get = (key, fallback) => input[key] === undefined ? fallback : input[key];
+  const zeta = get('zeta', 1);
+  if (typeof zeta !== 'number' || !Number.isFinite(zeta)) throw new TypeError('zeta must be a finite number.');
+  if (zeta < 0.7 || zeta > 1) throw new RangeError('zeta must be between 0.7 and 1.0.');
   return {
     brand: choice(get('brand', 'studio'), Object.keys(brands), 'brand'),
     scheme: choice(get('scheme', 'light'), ['light', 'dark'], 'scheme'),
@@ -28,7 +54,9 @@ export function options(input = {}) {
     display: choice(get('display', 'sans'), Object.keys(displays), 'display'),
     ground: choice(get('ground', 'cool'), Object.keys(grounds), 'ground'),
     elevation: choice(get('elevation', 'soft'), Object.keys(elevations), 'elevation'),
+    zeta,
     ...(input.accent === undefined ? {} : { accent: hex(input.accent) }),
+    components: validComponentOverrides(get('components', {})),
     overrides: Object.fromEntries(Object.entries(record(get('overrides', {}), 'overrides')).map(([key, value]) => [key, Array.isArray(value) ? [...value] : value])),
   };
 }
@@ -37,6 +65,12 @@ export function validTokenValue(type, value) {
   if (type === 'dimension') {
     if (typeof value !== 'string' || !/^(?:\d+(?:\.\d+)?|\.\d+)(?:px|rem)$/.test(value) || parseFloat(value) > 10000) {
       throw new TypeError('Dimensions must be nonnegative px/rem values up to 10000.');
+    }
+    return value;
+  }
+  if (type === 'duration') {
+    if (typeof value !== 'string' || !/^(?:\d+(?:\.\d+)?|\.\d+)(?:ms|s)$/.test(value) || parseFloat(value) > 10000) {
+      throw new TypeError('Durations must be nonnegative ms/s values up to 10000.');
     }
     return value;
   }

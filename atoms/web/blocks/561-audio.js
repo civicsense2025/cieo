@@ -139,7 +139,7 @@ atom({ id:'audio-room', cat:'Audio', name:'Audio room', block:'audio, room, spea
     const rmLeave = $(st,'button.rm-leave');
     const rmHand = $(st,'button.rm-hand');
     const PEOPLE = ['Ava','Ben','You','Cy','Dee','Eli','Fay'], HUES = ['var(--accent)','var(--success)','var(--ink)','var(--danger)','var(--warning)','var(--muted)','var(--accent)'], MAX = 7;
-    const POP = { w:22, z:.5 };
+    const POP = { w:22, z:.75 };
     let tiles = [], leaving = [], nextName = 0, last = 0;
     const slot = (i, n) => { const W = size(grid).cw || 316, H = 168, gap = 8, cols = n <= 3 ? n : n <= 4 ? 2 : 3, rows = Math.ceil(n/cols);
       const w = (W - gap*(cols - 1))/cols, h = clamp((H - gap*(rows - 1))/rows, 72, 110), r = Math.floor(i/cols), c = i % cols, inRow = r === rows - 1 ? n - r*cols : cols;

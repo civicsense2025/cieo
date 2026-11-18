@@ -31,5 +31,5 @@
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
   "documentation": { "path": "README.md", "purpose": "Thin contract over the SearchField control." },
-  "extensions": { "wraps": "src/controls/SearchField.tsx" }
+  "extensions": { "wraps": "src/controls/SearchField.tsx", "customization": {"status":"delegated","target":"SearchField","parts":["root","label","box","icon","toggle","input","clear"],"reason":"Alias of SearchField; preserves its native/owning component props instead of creating a second control contract."} }
 }

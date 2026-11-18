@@ -1,5 +1,5 @@
-import type { PrimitivePartProps } from '../parts.js';
 import { type ReactNode } from 'react';
+import type { PrimitivePartProps } from '../parts.js';
 export interface DropdownMenuContextValue {
     /** Closes the menu and returns focus to the trigger. */
     close: () => void;
@@ -21,8 +21,10 @@ export interface DropdownMenuProps {
     defaultOpen?: boolean;
     /** Called with the next open state. */
     onOpenChange?: (open: boolean) => void;
+    /** False renders the end state instantly. Defaults to true. */
+    motion?: boolean;
     /** Opener control (usually a Button). Exactly one. */
     trigger: ReactNode;
     children: ReactNode;
 }
-export declare function DropdownMenu({ className, slotProps, label, open, defaultOpen, onOpenChange, trigger, children }: DropdownMenuProps): import("react/jsx-runtime").JSX.Element;
+export declare function DropdownMenu({ className, slotProps, label, open, defaultOpen, onOpenChange, motion, trigger, children, }: DropdownMenuProps): import("react/jsx-runtime").JSX.Element;

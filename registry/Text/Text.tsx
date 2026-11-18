@@ -1,4 +1,3 @@
-'use client';
 /* Text. Body copy with size control. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

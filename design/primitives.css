@@ -112,6 +112,7 @@
 @import './styles/primitives/heading.css';
 @import './styles/primitives/hover-card.css';
 @import './styles/primitives/hstack.css';
+@import './styles/primitives/i18n-provider.css';
 @import './styles/primitives/icon-button.css';
 @import './styles/primitives/icon.css';
 @import './styles/primitives/index-row.css';
@@ -129,6 +130,8 @@
 @import './styles/primitives/metadata-list.css';
 @import './styles/primitives/mobile-nav-toggle.css';
 @import './styles/primitives/mobile-nav.css';
+@import './styles/primitives/morph-surface.css';
+@import './styles/primitives/motion-frame.css';
 @import './styles/primitives/motion.css';
 @import './styles/primitives/nav-heading-menu.css';
 @import './styles/primitives/new-items-pill.css';
@@ -179,6 +182,7 @@
 @import './styles/primitives/spinner.css';
 @import './styles/primitives/stack.css';
 @import './styles/primitives/stackitem.css';
+@import './styles/primitives/stagger-group.css';
 @import './styles/primitives/status-dot.css';
 @import './styles/primitives/step-list.css';
 @import './styles/primitives/step.css';

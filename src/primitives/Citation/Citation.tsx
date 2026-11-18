@@ -1,5 +1,4 @@
 // src/primitives/Citation/Citation.tsx
-'use client';
 /* Citation. Source title, linked when a URL exists. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

@@ -1,5 +1,15 @@
 import { type InputHTMLAttributes } from 'react';
 import { type ControlSize } from './classes.js';
+import { type ControlPartProps } from './parts.js';
+export interface SearchFieldSlotProps {
+    root?: ControlPartProps;
+    label?: ControlPartProps;
+    box?: ControlPartProps;
+    icon?: ControlPartProps;
+    toggle?: ControlPartProps;
+    input?: ControlPartProps;
+    clear?: ControlPartProps;
+}
 export type SearchFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> & {
     /** Required accessible name. Hidden visually unless showLabel. */
     label: string;
@@ -11,6 +21,7 @@ export type SearchFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type
     /** Start as an icon button that expands into the field. Renders expanded until hydrated. */
     collapsible?: boolean;
     size?: ControlSize;
+    slotProps?: SearchFieldSlotProps;
 };
 export declare const SearchField: import("react").ForwardRefExoticComponent<Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size"> & {
     /** Required accessible name. Hidden visually unless showLabel. */
@@ -23,4 +34,5 @@ export declare const SearchField: import("react").ForwardRefExoticComponent<Omit
     /** Start as an icon button that expands into the field. Renders expanded until hydrated. */
     collapsible?: boolean;
     size?: ControlSize;
+    slotProps?: SearchFieldSlotProps;
 } & import("react").RefAttributes<HTMLInputElement>>;

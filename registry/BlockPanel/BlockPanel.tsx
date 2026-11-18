@@ -1,5 +1,4 @@
 // src/primitives/BlockPanel/BlockPanel.tsx
-'use client';
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
@@ -11,5 +10,5 @@ export interface BlockPanelProps {
   children: ReactNode;
 }
 export function BlockPanel({ className, slotProps, tone = 'block', children }: BlockPanelProps) {
-  return (<section {...customizePart(slotProps?.root, "cieo cieo-p-block-panel", undefined, className)} data-tone={tone}>{children}</section>);
+  return (<section className="cieo cieo-p-block-panel" {...customizePart(slotProps?.root, "cieo cieo-p-block-panel", undefined, className)} data-tone={tone}>{children}</section>);
 }

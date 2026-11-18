@@ -1,9 +1,13 @@
 {
   "schemaVersion": 1,
   "shared": [
+    "AudioPlayer/audioPlayerState.ts",
     "Popover/focus.ts",
     "Popover/position.ts",
     "Popover/usePopoverPosition.ts",
+    "VoiceRecorder/RecorderControls.tsx",
+    "VoiceRecorder/recorderState.ts",
+    "VoiceRecorder/recorderTake.ts",
     "VoiceRecorder/recorderVisual.ts",
     "auth-shared.tsx",
     "customization.ts",
@@ -98,7 +102,9 @@
       "registryDependencies": [
         "Dialog"
       ],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/state/react"
+      ],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -201,6 +207,7 @@
       ],
       "packageImports": [],
       "sharedFiles": [
+        "AudioPlayer/audioPlayerState.ts",
         "customization.ts",
         "parts.ts"
       ]
@@ -590,10 +597,15 @@
         "BottomSheet/BottomSheet.tsx"
       ],
       "registryDependencies": [
+        "I18nProvider",
         "Overlay"
       ],
       "packageImports": [
-        "cieo/react"
+        "cieo",
+        "cieo/dom",
+        "cieo/live",
+        "cieo/react",
+        "cieo/state/react"
       ],
       "sharedFiles": [
         "customization.ts",
@@ -616,7 +628,9 @@
       "files": [
         "BreadcrumbItem/BreadcrumbItem.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -633,6 +647,16 @@
         "customization.ts",
         "parts.ts"
       ]
+    },
+    "Button": {
+      "files": [
+        "Button/Button.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
     },
     "ButtonGroup": {
       "files": [
@@ -851,7 +875,9 @@
       "files": [
         "ClickableCard/ClickableCard.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -895,8 +921,14 @@
       "files": [
         "Collapsible/Collapsible.tsx"
       ],
-      "registryDependencies": [],
-      "packageImports": [],
+      "registryDependencies": [
+        "CollapsibleGroup"
+      ],
+      "packageImports": [
+        "cieo",
+        "cieo/dom",
+        "cieo/state/react"
+      ],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -907,7 +939,9 @@
         "CollapsibleGroup/CollapsibleGroup.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/state/react"
+      ],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -919,7 +953,8 @@
       ],
       "registryDependencies": [],
       "packageImports": [
-        "cieo/react"
+        "cieo/react",
+        "cieo/state/react"
       ],
       "sharedFiles": [
         "customization.ts",
@@ -1181,7 +1216,8 @@
         "Overlay"
       ],
       "packageImports": [
-        "cieo/react"
+        "cieo/react",
+        "cieo/state/react"
       ],
       "sharedFiles": [
         "customization.ts",
@@ -1230,7 +1266,8 @@
       ],
       "registryDependencies": [],
       "packageImports": [
-        "cieo/react"
+        "cieo/react",
+        "cieo/state/react"
       ],
       "sharedFiles": [
         "customization.ts",
@@ -1275,7 +1312,8 @@
         "DropdownMenuItem/DropdownMenuItem.tsx"
       ],
       "registryDependencies": [
-        "DropdownMenu"
+        "DropdownMenu",
+        "Slot"
       ],
       "packageImports": [],
       "sharedFiles": [
@@ -1482,6 +1520,17 @@
         "parts.ts"
       ]
     },
+    "I18nProvider": {
+      "files": [
+        "I18nProvider/I18nProvider.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "Icon": {
       "files": [
         "Icon/Icon.tsx"
@@ -1497,7 +1546,9 @@
       "files": [
         "IconButton/IconButton.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -1622,7 +1673,8 @@
         "Overlay"
       ],
       "packageImports": [
-        "cieo/react"
+        "cieo/react",
+        "cieo/state/react"
       ],
       "sharedFiles": [
         "customization.ts",
@@ -1745,6 +1797,36 @@
       ],
       "packageImports": [],
       "sharedFiles": []
+    },
+    "MorphSurface": {
+      "files": [
+        "MorphSurface/MorphSurface.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo",
+        "cieo/dom",
+        "cieo/live"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
+    "MotionFrame": {
+      "files": [
+        "MotionFrame/MotionFrame.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo",
+        "cieo/dom",
+        "cieo/react"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "MultiSelector": {
       "files": [
@@ -2003,6 +2085,16 @@
         "parts.ts"
       ]
     },
+    "RadioGroup": {
+      "files": [
+        "RadioGroup/RadioGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
     "RadioList": {
       "files": [
         "RadioList/RadioList.tsx"
@@ -2195,7 +2287,10 @@
         "SegmentedControl/SegmentedControl.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/react",
+        "cieo/state/react"
+      ],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -2206,7 +2301,8 @@
         "SegmentedControlItem/SegmentedControlItem.tsx"
       ],
       "registryDependencies": [
-        "SegmentedControl"
+        "SegmentedControl",
+        "Slot"
       ],
       "packageImports": [],
       "sharedFiles": [
@@ -2309,7 +2405,9 @@
       "files": [
         "SideNavItem/SideNavItem.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -2347,6 +2445,17 @@
         "cieo/controls"
       ],
       "sharedFiles": []
+    },
+    "Slot": {
+      "files": [
+        "Slot/Slot.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
     },
     "SortableList": {
       "files": [
@@ -2420,6 +2529,20 @@
         "parts.ts"
       ]
     },
+    "StaggerGroup": {
+      "files": [
+        "StaggerGroup/StaggerGroup.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo",
+        "cieo/dom"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "StatusDot": {
       "files": [
         "StatusDot/StatusDot.tsx"
@@ -2478,6 +2601,16 @@
         "customization.ts",
         "parts.ts"
       ]
+    },
+    "Switch": {
+      "files": [
+        "Switch/Switch.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
     },
     "Tab": {
       "files": [
@@ -2619,6 +2752,26 @@
         "parts.ts"
       ]
     },
+    "TextArea": {
+      "files": [
+        "TextArea/TextArea.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
+    "TextField": {
+      "files": [
+        "TextField/TextField.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls"
+      ],
+      "sharedFiles": []
+    },
     "Thumbnail": {
       "files": [
         "Thumbnail/Thumbnail.tsx"
@@ -2682,7 +2835,8 @@
       ],
       "registryDependencies": [],
       "packageImports": [
-        "cieo/react"
+        "cieo/react",
+        "cieo/state/react"
       ],
       "sharedFiles": [
         "customization.ts",
@@ -2708,7 +2862,9 @@
         "ToggleButtonGroup/ToggleButtonGroup.tsx"
       ],
       "registryDependencies": [],
-      "packageImports": [],
+      "packageImports": [
+        "cieo/state/react"
+      ],
       "sharedFiles": [
         "customization.ts",
         "parts.ts"
@@ -2793,7 +2949,9 @@
       "files": [
         "TopNavHeading/TopNavHeading.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -2804,7 +2962,9 @@
       "files": [
         "TopNavItem/TopNavItem.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -2839,7 +2999,9 @@
       "files": [
         "TopNavMegaMenuItem/TopNavMegaMenuItem.tsx"
       ],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "Slot"
+      ],
       "packageImports": [],
       "sharedFiles": [
         "customization.ts",
@@ -2962,6 +3124,9 @@
         "cieo/react"
       ],
       "sharedFiles": [
+        "VoiceRecorder/RecorderControls.tsx",
+        "VoiceRecorder/recorderState.ts",
+        "VoiceRecorder/recorderTake.ts",
         "VoiceRecorder/recorderVisual.ts",
         "customization.ts",
         "parts.ts"

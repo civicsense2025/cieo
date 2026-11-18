@@ -6,11 +6,22 @@ import { useEffect, useId, useMemo, useRef, useState, type ChangeEvent, type Foc
 import { cx } from './classes.js';
 import { nextFieldStatus, resolveFieldStatus, type FieldEvent, type FieldStatus } from './field-state.js';
 import { AlertIcon, CheckIcon } from './icons.js';
+import { customizeControlPart, type ControlPartProps } from './parts.js';
 
 export type { FieldStatus };
 
 /** Return a message (or false) when the value is invalid; null, undefined or true when it is fine. */
 export type Validator = (value: string) => string | boolean | null | undefined;
+
+export interface FieldFrameSlots {
+  root?: ControlPartProps;
+  box?: ControlPartProps;
+  main?: ControlPartProps;
+  label?: ControlPartProps;
+  affix?: ControlPartProps;
+  description?: ControlPartProps;
+  error?: ControlPartProps;
+}
 
 export interface FieldOwnProps {
   /** Required: names the control, floats above the value. */
@@ -139,17 +150,19 @@ export function FieldFrame(props: {
   field: { ids: { control: string; desc: string; msg: string }; status: FieldStatus; message: ReactNode; open: boolean };
   floated: boolean;
   className?: string;
+  slotProps?: FieldFrameSlots;
   footer?: ReactNode;
   children: ReactNode;
 }) {
-  const { own, field, kind } = props;
+  const { own, field, kind, slotProps } = props;
+  const rootClass = cx('cieo-ctl', 'cieo-field', `cieo-field--${kind}`, props.className);
   return (
-    <div className={cx('cieo-ctl', 'cieo-field', `cieo-field--${kind}`, props.className)} data-status={field.status} data-floated={props.floated || undefined}>
-      <div className="cieo-field-box">
-        {own.prefix ? <span className="cieo-field-affix">{own.prefix}</span> : null}
-        <div className="cieo-field-main">
+    <div className={rootClass} data-status={field.status} data-floated={props.floated || undefined} {...customizeControlPart(slotProps?.root, rootClass)}>
+      <div className="cieo-field-box" {...customizeControlPart(slotProps?.box, 'cieo-field-box')}>
+        {own.prefix ? <span className="cieo-field-affix" {...customizeControlPart(slotProps?.affix, 'cieo-field-affix')}>{own.prefix}</span> : null}
+        <div className="cieo-field-main" {...customizeControlPart(slotProps?.main, 'cieo-field-main')}>
           {props.children}
-          <label htmlFor={field.ids.control} className="cieo-field-label">
+          <label htmlFor={field.ids.control} className="cieo-field-label" {...customizeControlPart(slotProps?.label, 'cieo-field-label')}>
             {own.label}
           </label>
         </div>
@@ -161,12 +174,12 @@ export function FieldFrame(props: {
             <AlertIcon />
           </span>
         </span>
-        {own.suffix ? <span className="cieo-field-affix">{own.suffix}</span> : null}
+        {own.suffix ? <span className="cieo-field-affix" {...customizeControlPart(slotProps?.affix, 'cieo-field-affix')}>{own.suffix}</span> : null}
       </div>
       {own.description || props.footer ? (
         <div className="cieo-field-foot">
           {own.description ? (
-            <p id={field.ids.desc} className="cieo-desc">
+            <p id={field.ids.desc} className="cieo-desc" {...customizeControlPart(slotProps?.description, 'cieo-desc')}>
               {own.description}
             </p>
           ) : (
@@ -177,7 +190,7 @@ export function FieldFrame(props: {
       ) : null}
       <div className="cieo-field-msg" data-open={field.open || undefined}>
         <div>
-          <p id={field.ids.msg} className="cieo-field-error" aria-live="polite">
+          <p id={field.ids.msg} className="cieo-field-error" aria-live="polite" {...customizeControlPart(slotProps?.error, 'cieo-field-error')}>
             {field.message}
           </p>
         </div>

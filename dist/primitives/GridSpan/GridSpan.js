@@ -1,5 +1,3 @@
-// src/primitives/GridSpan/GridSpan.tsx
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function GridSpan({ className, slotProps, span, children }) {

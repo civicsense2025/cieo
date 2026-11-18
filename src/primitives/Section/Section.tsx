@@ -1,5 +1,4 @@
 // src/primitives/Section/Section.tsx
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* Section. Page subdivision with an optional title heading. Host owns the content; this owns the landmark + spacing only. */

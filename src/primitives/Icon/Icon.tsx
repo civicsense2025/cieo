@@ -1,5 +1,4 @@
 // src/primitives/Icon/Icon.tsx
-'use client';
 /* Icon. Decorative glyph slot; labelled only when it carries meaning alone. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

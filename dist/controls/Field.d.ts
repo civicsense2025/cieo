@@ -1,8 +1,18 @@
 import { type ChangeEvent, type FocusEvent, type ReactNode } from 'react';
 import { type FieldStatus } from './field-state.js';
+import { type ControlPartProps } from './parts.js';
 export type { FieldStatus };
 /** Return a message (or false) when the value is invalid; null, undefined or true when it is fine. */
 export type Validator = (value: string) => string | boolean | null | undefined;
+export interface FieldFrameSlots {
+    root?: ControlPartProps;
+    box?: ControlPartProps;
+    main?: ControlPartProps;
+    label?: ControlPartProps;
+    affix?: ControlPartProps;
+    description?: ControlPartProps;
+    error?: ControlPartProps;
+}
 export interface FieldOwnProps {
     /** Required: names the control, floats above the value. */
     label: ReactNode;
@@ -63,6 +73,7 @@ export declare function FieldFrame(props: {
     };
     floated: boolean;
     className?: string;
+    slotProps?: FieldFrameSlots;
     footer?: ReactNode;
     children: ReactNode;
 }): import("react/jsx-runtime").JSX.Element;

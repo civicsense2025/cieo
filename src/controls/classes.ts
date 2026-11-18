@@ -2,11 +2,15 @@
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'text';
 export type ControlSize = 'sm' | 'md';
+export type ButtonSize = ControlSize | 'lg';
 export type ButtonShape = 'rect' | 'pill';
+export type ButtonTone = 'neutral' | 'accent' | 'danger' | 'success' | 'warning';
 
 export interface ButtonClassOptions {
   variant?: ButtonVariant;
-  size?: ControlSize;
+  size?: ButtonSize;
+  /** Semantic tone override. Defaults to neutral. */
+  tone?: ButtonTone;
   /** Pill (fully rounded) shape for compact product bars. Defaults to rect. */
   shape?: ButtonShape;
   /** Square, icon-only shape. The element must carry an aria-label. */
@@ -25,6 +29,7 @@ export function buttonClassName(o: ButtonClassOptions = {}): string {
     'cieo-btn',
     `cieo-btn--${o.variant ?? 'secondary'}`,
     `cieo-btn--${o.size ?? 'md'}`,
+    o.tone && o.tone !== 'neutral' && `cieo-btn--tone-${o.tone}`,
     o.shape === 'pill' && 'cieo-btn--pill',
     o.iconOnly && 'cieo-btn--icon',
     o.block && 'cieo-btn--block',

@@ -15,7 +15,7 @@ export interface QuotedTextProps {
 }
 export function QuotedText({ className, slotProps, reference, cite, children }: QuotedTextProps) {
   return (
-    <figure {...customizePart(slotProps?.root, "cieo cieo-p-quoted-text", undefined, className)}>
+    <figure className="cieo cieo-p-quoted-text" {...customizePart(slotProps?.root, "cieo cieo-p-quoted-text", undefined, className)}>
       {reference ? <figcaption className="cieo-p-quoted-text__ref">{reference}</figcaption> : null}
       <blockquote cite={cite}>{children}</blockquote>
     </figure>

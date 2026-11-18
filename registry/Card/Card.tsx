@@ -1,5 +1,4 @@
 // src/primitives/Card/Card.tsx
-'use client';
 /* Card. Section card with an optional title. Host owns the body; this owns surface semantics only. */
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';

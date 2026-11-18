@@ -1,6 +1,7 @@
 /* cieo/controls: form controls on the cieo springs. Import 'cieo/controls.css' once. Components are client
    modules; buttonClassName and cx are plain functions a server component can call. */
 export { buttonClassName, cx } from './classes.js';
+export { customizeControlPart } from './parts.js';
 export { Button } from './Button.js';
 export { Select, resolveOptionNodes, paintLiveOptions } from './Select.js';
 export { TextField } from './TextField.js';

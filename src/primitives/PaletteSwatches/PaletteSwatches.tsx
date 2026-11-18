@@ -60,7 +60,7 @@ export function PaletteSwatches({ className, slotProps, label, name, swatches, v
               aria-label={swatch.label}
               onChange={() => pick(swatch.value)}
             />
-            <span aria-hidden="true" className="cieo-swatch-dot" style={{ backgroundColor: swatch.color } as CSSProperties} {...customizePart(slotProps?.dot, "cieo-swatch-dot", undefined)} />
+            <span aria-hidden="true" className="cieo-swatch-dot" style={{ backgroundColor: swatch.color } as CSSProperties} {...customizePart(slotProps?.dot, "cieo-swatch-dot", { backgroundColor: swatch.color } as CSSProperties)} />
           </label>
         );
       })}

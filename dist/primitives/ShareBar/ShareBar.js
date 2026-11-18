@@ -13,5 +13,5 @@ export function ShareBar({ className, slotProps, segments, label }) {
     const fractions = shareFractions(segments.map((s) => s.value));
     if (!fractions)
         return null;
-    return (_jsx("div", { ...customizePart(slotProps?.root, "cieo cieo-p-share-bar", undefined, className), role: "img", "aria-label": label, children: segments.map((s, i) => _jsx("span", { style: { flexGrow: fractions[i], background: s.color } }, i)) }));
+    return (_jsx("div", { className: "cieo cieo-p-share-bar", ...customizePart(slotProps?.root, "cieo cieo-p-share-bar", undefined, className), role: "img", "aria-label": label, children: segments.map((s, i) => _jsx("span", { style: { flexGrow: fractions[i], background: s.color } }, i)) }));
 }
