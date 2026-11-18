@@ -1,5 +1,5 @@
 // test/social-audio-recipes.test.mjs
-// Pins the audio, comment, messaging and feedback motion recipes in the catalogue.
+// Pins the audio, comment, messaging and feedback motion recipes in the catalog.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -55,8 +55,8 @@ for (const [category, file] of Object.entries(FILES)) {
     test(`${id} honours reduced motion`, () => {
       assert.match(src, /\bREDUCE\b/);
     });
-    test(`${id} uses theme variables, no fixed colours and no oversized type`, () => {
-      assert.ok(!/#[0-9a-fA-F]{3,8}\b(?![^<]*<\/style)/.test(src.replace(/&#\d+;/g, '')), 'no hex colours');
+    test(`${id} uses theme variables, no fixed colors and no oversized type`, () => {
+      assert.ok(!/#[0-9a-fA-F]{3,8}\b(?![^<]*<\/style)/.test(src.replace(/&#\d+;/g, '')), 'no hex colors');
       for (const m of src.matchAll(/font-size\s*:\s*(\d+(?:\.\d+)?)px/g)) assert.ok(Number(m[1]) < 50, `font-size ${m[1]}px`);
       assert.match(src, /var\(--(ink|muted|card|raised|accent|danger)\)/);
     });
@@ -78,7 +78,7 @@ test('these files stay free of words the brand gate forbids and of network calls
   }
 });
 
-test('the catalogue page declares the new categories and places them in a jump group', () => {
+test('the catalog page declares the new categories and places them in a jump group', () => {
   const page = read('atoms/web/runtime.library.page.js');
   for (const category of Object.keys(FILES)) {
     assert.ok(page.includes(`'${category}'`), `${category} in CATS and CATGROUPS`);

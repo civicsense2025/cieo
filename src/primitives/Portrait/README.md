@@ -1,6 +1,6 @@
 # Portrait
 
-A face in a circle with a ring that carries meaning, such as party; grayscale keeps the ring in colour.
+A face in a circle with a ring that carries meaning, such as party; grayscale keeps the ring in color.
 
 ## Use when
 
@@ -16,7 +16,7 @@ Root `span.cieo-p-portrait`, `aria-hidden`; the photo is a background image.
 
 ## Behavior
 
-Grayscale uses `background-blend-mode: luminosity`, not a filter, so the ring is never greyed.
+Grayscale uses `background-blend-mode: luminosity`, not a filter, so the ring is never grayed.
 
 ## Keyboard / accessibility
 
@@ -25,7 +25,7 @@ Grayscale uses `background-blend-mode: luminosity`, not a filter, so the ring is
 ## Do / don't
 
 - Do: `<Portrait src={photo} ring="var(--party-r)" grayscale />`
-- Don't: Don't show initials on grey for a missing photo.
+- Don't: Don't show initials on gray for a missing photo.
 
 ## Apple twin
 

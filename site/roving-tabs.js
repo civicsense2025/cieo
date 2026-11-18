@@ -1,4 +1,4 @@
-// site/roving-tabs.js: one tablist behaviour for the whole site. Click or ArrowLeft/ArrowRight/Home/End selects a tab,
+// site/roving-tabs.js: one tablist behavior for the whole site. Click or ArrowLeft/ArrowRight/Home/End selects a tab,
 // only the selected tab is in the tab order, and `onSelect(index)` lets the page swap its panel.
 export function rovingTabs(tabs, onSelect = () => {}) {
   const select = (index, { focus = false } = {}) => {

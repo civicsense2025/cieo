@@ -53,13 +53,13 @@ final class InputStateMachinesTests: XCTestCase {
 }
 
 final class AsyncActionLateAnswerTests: XCTestCase {
-    func testLateSuccessAfterCancelCannotFlipCancelled() {
+    func testLateSuccessAfterCancelCannotFlipCanceled() {
         var machine = AsyncActionState()
         machine.begin()
         machine.cancel()
         let late = machine.succeed()
         XCTAssertFalse(late.changed)
-        XCTAssertEqual(machine.phase, .cancelled)
+        XCTAssertEqual(machine.phase, .canceled)
         XCTAssertNil(late.haptic)
     }
 

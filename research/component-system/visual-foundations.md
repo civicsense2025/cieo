@@ -26,18 +26,18 @@ The inspected worktree is `/Users/tanho/GitHub_non_cloud/.cieo-worktrees/compone
 
 | Owner inspected | Implemented source facts | Implication for a proposal |
 | --- | --- | --- |
-| [Web palette](../../atoms/web/catalogue/tokens.css) | Light graphite `#202125`, white `#ffffff`, iris `#6654c8`, iris tint `#eeebfa`; separate dark values and alternate accents; 8px unit | Keep this recognizable starting identity; give values semantic role contracts before extending them. |
-| [Web shell](../../atoms/web/catalogue/shell.css) and [recipe presentation](../../atoms/web/catalogue/atoms.css) | Inter-first stack; 14px shell body; labels and metadata include 10–13px; 24px gallery gaps; 24px stage radius; fixed preview stage heights | These are catalogue choices. They do not establish a universal component scale or safe minimum text size. |
+| [Web palette](../../atoms/web/catalog/tokens.css) | Light graphite `#202125`, white `#ffffff`, iris `#6654c8`, iris tint `#eeebfa`; separate dark values and alternate accents; 8px unit | Keep this recognizable starting identity; give values semantic role contracts before extending them. |
+| [Web shell](../../atoms/web/catalog/shell.css) and [recipe presentation](../../atoms/web/catalog/atoms.css) | Inter-first stack; 14px shell body; labels and metadata include 10–13px; 24px gallery gaps; 24px stage radius; fixed preview stage heights | These are catalog choices. They do not establish a universal component scale or safe minimum text size. |
 | [Native theme](../../Sources/CieoUI/Foundations/Theme.swift) | Host accent and system foreground/secondary; 8/16/24 metrics, 12 corner, 44 touch target | Native uses semantic host colors; iris parity does not currently exist automatically. Keep host theming explicit. |
 | [Native field](../../Sources/CieoUI/Molecules/LabeledField.swift) and [button style](../../Sources/CieoUI/Atoms/ActionButtonStyle.swift) | Native TextField and ButtonStyle; field error uses `.red`; button uses alpha-composited tint and opacity states | Semantic migration and actual composed contrast need review; a Theme struct alone does not prove comprehensive state styling. |
-| [Earlier catalogue review](../../docs/catalogue-ui-review.md) | Historical web refinement claims and explicit legacy/native limits | The review names 345 catalogue atoms at its own reviewed commit. Do not substitute that historical number for today's inventory or imply native acceptance. |
+| [Earlier catalog review](../../docs/catalog-ui-review.md) | Historical web refinement claims and explicit legacy/native limits | The review names 345 catalog atoms at its own reviewed commit. Do not substitute that historical number for today's inventory or imply native acceptance. |
 
 These links are relative to this notes directory and resolve inside the assigned Cieo worktree.
 
 #### Proposed palette and shape direction
 
 1. **Use neutral surfaces to keep content primary.** Keep graphite for ordinary text, white for working surfaces, and a light neutral page ground. Retain dark-mode equivalents through roles, not inversion formulas. Proposed role names: `surface-canvas`, `surface-control`, `text-primary`, `text-secondary`, `border-control`, `accent`, and explicit status roles. These are proposal names, not claims of existing API.
-2. **Reserve iris for intention.** Use iris for selected or active emphasis and focus where the composed pair passes. Do not color whole component families merely to differentiate the catalogue. Pastel blue/lilac/peach/mint/butter preview grounds may remain presentation scenery; they should not silently become information or status colors. Color guide role guidance supports this; the exact iris choice comes from Cieo's current source. [Color](https://www.designsystems.com/color-guides/)
+2. **Reserve iris for intention.** Use iris for selected or active emphasis and focus where the composed pair passes. Do not color whole component families merely to differentiate the catalog. Pastel blue/lilac/peach/mint/butter preview grounds may remain presentation scenery; they should not silently become information or status colors. Color guide role guidance supports this; the exact iris choice comes from Cieo's current source. [Color](https://www.designsystems.com/color-guides/)
 3. **Make shape explain structure.** Keep the existing 12-unit native control radius as a candidate control treatment, smaller nested radii where appropriate, and softer large preview surfaces. Avoid giving every surface the same rounded-card silhouette. Use elevation for genuine floating layers, borders for boundaries, whitespace for grouping. Exact radii need optical review, not a mathematical doctrine.
 4. **Separate status from accent.** Error, warning, success, and information need text and appropriate symbols as well as color. An iris-colored button does not signal success; a green theme accent cannot replace success semantics. [Wonder Blocks](https://www.designsystems.com/about-wonder-blocks-khan-academys-design-system-and-the-story-behind-it/)
 
@@ -57,7 +57,7 @@ A dense/comfortable distinction should first be a documented layout choice with 
 
 Components should expose the few slots that reflect real responsibilities: identity/label, value or main content, supporting or error text, leading/trailing action, and an explicitly owned state. Do not turn every slot into a boolean variant. Composition of smaller subcomponents can preserve layout freedom without multiplying complete variants. [Taking cues from code](https://www.designsystems.com/taking-cues-from-code/)
 
-Keep core inputs, buttons, selection primitives, and generic controls available independently of writing. Put reusable Writing domain compositions under `Sources/CieoUI/Extensions/Writing`, separately optional and default off; demonstrations belong in `Examples/Writing`. This boundary is supplied by the user's decision, not dictated by the articles. Cieo owns reusable source and contracts; Tessera consumes and explains them. A catalogue demonstration is evidence of an example, not evidence of a production API.
+Keep core inputs, buttons, selection primitives, and generic controls available independently of writing. Put reusable Writing domain compositions under `Sources/CieoUI/Extensions/Writing`, separately optional and default off; demonstrations belong in `Examples/Writing`. This boundary is supplied by the user's decision, not dictated by the articles. Cieo owns reusable source and contracts; Tessera consumes and explains them. A catalog demonstration is evidence of an example, not evidence of a production API.
 
 Inventory first, promote repeated needs, and justify exceptions rather than making all recipes production components. Figma's small-team account supports extracting flexible foundations from existing work, while retaining justified exceptions. [Small-team system](https://www.designsystems.com/how-a-small-team-built-figma-dot-coms-design-system/)
 
@@ -71,7 +71,7 @@ Inventory first, promote repeated needs, and justify exceptions rather than maki
 
 ### Takeaway
 
-Keep Cieo's interruptible spring vocabulary as a functional signature: movement should preserve orientation and show a state change without making users wait. Accessibility is part of the component contract and the consuming journey, rather than a catalogue badge.
+Keep Cieo's interruptible spring vocabulary as a functional signature: movement should preserve orientation and show a state change without making users wait. Accessibility is part of the component contract and the consuming journey, rather than a catalog badge.
 
 ### Cited Findings
 
@@ -99,7 +99,7 @@ The inspected [RenderPolicy](../../Sources/CieoUI/Foundations/RenderPolicy.swift
 
 #### Additional source-text context from the bounded media round
 
-- Forge explains that common base components can support substantially different brand layouts; its popup-cart/sidebar-cart comparison is present in prose and code. This supports Cieo owning generic behavior and optional compositions while Tessera owns catalogue presentation. The two homepage clips were not observed, so no color, spacing, motion or visual-brand conclusion is attributed to playback. [Forge](https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/)
+- Forge explains that common base components can support substantially different brand layouts; its popup-cart/sidebar-cart comparison is present in prose and code. This supports Cieo owning generic behavior and optional compositions while Tessera owns catalog presentation. The two homepage clips were not observed, so no color, spacing, motion or visual-brand conclusion is attributed to playback. [Forge](https://www.designsystems.com/the-forge-harrys-approach-to-multi-brand-design-systems/)
 - The React containers article describes shared keyboard/focus/RTL logic beneath different visual treatments, with four demos for tabs, styled tabs, randomized UI, and tooltip overrides. This supports explicit behavior ownership; the demos were not exercised and the article-era hooks/ARIA examples are not a current API recommendation. [React containers](https://www.designsystems.com/react-containers-some-assembly-required/)
 - White-labeling illustrates theme constraints but includes an arbitrary CSS injection escape hatch and acknowledges XSS risk. Cieo should not copy that boundary: bounded semantic roles and validated external data are the useful lesson. Historical on-premise deployment does not make unsafe input safe. Its Figma embed was not opened. [White-labeling](https://www.designsystems.com/white-labeling-putting-the-design-system-in-users-hands/)
 - The cached typography-demo text lists type roles, repeated example text, and px labels, but omits actual numeric values. It cannot establish resizing, actual loaded fonts, or usable metrics. The proposed Cieo type roles remain choices for contextual testing. [Typography demo](https://www.designsystems.com/typography/)
@@ -108,7 +108,7 @@ The inspected [RenderPolicy](../../Sources/CieoUI/Foundations/RenderPolicy.swift
 
 - **Component owner:** native semantics, visible names, error association, focus behavior, keyboard activation, and semantic state. Theme values must be evaluated after opacity/compositing; `.opacity(0.5)` is not an accessibility strategy.
 - **Host owner:** real validation, permission, pending/result truth, save durability, undo, localization, and placement within the complete journey. A field component cannot certify the network workflow containing it.
-- **Catalogue owner:** demonstrate long labels, invalid/disabled/pending states, large text, high contrast, reduced motion, and keyboard paths. Show separate evidence statuses for static checks, browser/native interaction, assistive technology, and rendered review.
+- **Catalog owner:** demonstrate long labels, invalid/disabled/pending states, large text, high contrast, reduced motion, and keyboard paths. Show separate evidence statuses for static checks, browser/native interaction, assistive technology, and rendered review.
 
 For icons, keep one-color product glyphs, consistent optical weight, and clear asset naming. The viewed 24/40/80 shop-icon example changes detail with size; it supports purposeful simplification rather than blind scaling. The guide's claim that icons are language-independent is too broad: keep text for unfamiliar actions and test metaphors across locales. Preserve system symbols on native where appropriate instead of redrawing them solely to match a browser screenshot. [Iconography](https://www.designsystems.com/iconography-guide/)
 
@@ -157,7 +157,7 @@ Do not adopt the content article's suggestion to scale text down for localizatio
 4. **What the host supplies:** real data/action/validation/persistence and any domain assumptions; name optional dependencies.
 5. **Try it and inspect proof:** one meaningful task, state variants, source owner, and separately recorded implementation/runtime/visual/accessibility status.
 
-These five fields should be reusable catalogue metadata and documentation structure, not five extra paragraphs of prose on every compact tile. Show the first sentence inline; reveal detail where people inspect a component.
+These five fields should be reusable catalog metadata and documentation structure, not five extra paragraphs of prose on every compact tile. Show the first sentence inline; reveal detail where people inspect a component.
 
 #### Worked explanation: generic input
 
@@ -181,4 +181,4 @@ A useful outline explains where content belongs, rather than displaying decorati
 
 - These worked explanations are original proposals. They do not certify present recipes as production-ready or assert an existing editor adapter API.
 - No usability study establishes time saved, task completion improvement, or a preferred new display face. Do not transfer historical case-study percentages into Cieo benefit claims.
-- Next evidence needed: apply this template to one generic input and one optional Writing composition, with actual state and ownership details, before broad catalogue promotion.
+- Next evidence needed: apply this template to one generic input and one optional Writing composition, with actual state and ownership details, before broad catalog promotion.

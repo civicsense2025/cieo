@@ -1,6 +1,6 @@
 // src/primitives/AgentStatus/AgentStatus.tsx
 'use client';
-/* AgentStatus. A dot plus words that name an agent's or run's reported state. Colour never carries the meaning
+/* AgentStatus. A dot plus words that name an agent's or run's reported state. Color never carries the meaning
    alone: the visible text always says the state, and the dot is decorative. */
 import type { AgentStatus as Status } from '../../agent/event.js';
 import { StatusDot, type StatusDotStatus } from '../StatusDot/StatusDot.js';

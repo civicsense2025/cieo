@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fails when a SwiftUI component hard-codes a font, glyph, colour, spacing step, stroke or opacity.
+# Fails when a SwiftUI component hard-codes a font, glyph, color, spacing step, stroke or opacity.
 # Components read those from the theme, typography, metrics and icons in the environment, so a host
 # restyles every component from one place. Foundations define the defaults and are exempt.
 # A line that genuinely needs a literal says why with `// literal-ok: <reason>`.

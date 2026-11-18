@@ -1,4 +1,4 @@
-export type FinishReason = 'settled' | 'cancelled' | 'gated' | 'failed' | 'disposed';
+export type FinishReason = 'settled' | 'canceled' | 'gated' | 'failed' | 'disposed';
 export interface FrameEnvironment {
   request(callback: (milliseconds: number) => void): number;
   cancel(handle: number): void;
@@ -11,7 +11,7 @@ export interface FrameJob {
 }
 interface Entry { job: FrameJob; born: number; }
 
-// One owner controls the clock, so cancelling a view cannot leave an idle frame loop behind.
+// One owner controls the clock, so canceling a view cannot leave an idle frame loop behind.
 export class FrameScheduler {
   private readonly jobs = new Set<Entry>();
   private handle: number | null = null;
@@ -36,7 +36,7 @@ export class FrameScheduler {
     }
     this.jobs.add(entry);
     this.ensureFrame();
-    return () => { this.finish(entry, 'cancelled'); this.cancelIdleFrame(); };
+    return () => { this.finish(entry, 'canceled'); this.cancelIdleFrame(); };
   }
 
   sync(): void {

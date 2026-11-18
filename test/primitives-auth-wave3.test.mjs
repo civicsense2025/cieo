@@ -73,7 +73,7 @@ test('Wave 3 CSS avoids hairline borders on cards', () => {
   }
 });
 
-test('Wave 3 doc pages carry the catalogue markers and a prev/next chain', () => {
+test('Wave 3 doc pages carry the catalog markers and a prev/next chain', () => {
   const pages = [
     ['site/components/AuthInviteAccept.html', 'AuthInviteAccept'],
     ['site/components/AuthSessionList.html', 'AuthSessionList'],

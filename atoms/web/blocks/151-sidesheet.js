@@ -58,7 +58,7 @@ atom({ id:'sidesheet', cat:CAT, name:'Side detail sheet', block:'DetailSheet', f
       { n:'Maya Okafor', s:'Brand strategy call', w:'Mon 12 Oct · 10:30', len:'60 min', loc:'Video call', pr:'$180.00', st:'Confirmed', tn:'good', note:'Wants to review the new pricing page before launch. Sent the brand guide on Friday.' },
       { n:'Theo Lindqvist', s:'Site audit', w:'Tue 13 Oct · 14:00', len:'90 min', loc:'Studio, Lisbon', pr:'$320.00', st:'Pending', tn:'warn', note:'Deposit not yet received. Hold the slot until Wednesday noon, then release it.' },
       { n:'Priya Raman', s:'Onboarding workshop', w:'Wed 14 Oct · 09:00', len:'2 hr', loc:'Video call', pr:'$450.00', st:'Confirmed', tn:'good', note:'Six people from the events team attend. Needs the shared workspace set up beforehand.' },
-      { n:'Jonas Weber', s:'Content review', w:'Thu 15 Oct · 16:15', len:'45 min', loc:'Phone', pr:'$95.00', st:'Cancelled', tn:'bad', note:'Cancelled on Monday because of a travel clash. Offered two new times by email.' },
+      { n:'Jonas Weber', s:'Content review', w:'Thu 15 Oct · 16:15', len:'45 min', loc:'Phone', pr:'$95.00', st:'Canceled', tn:'bad', note:'Canceled on Monday because of a travel clash. Offered two new times by email.' },
       { n:'Amara Nwosu', s:'Follow-up session', w:'Fri 16 Oct · 11:00', len:'30 min', loc:'Video call', pr:'$60.00', st:'Confirmed', tn:'good', note:'Second session after the launch. Bring the analytics export from the first month.' }
     ];
     const root = $(st,'.ss'), list = $(st,'.ss-ls'), sheet = $(st,'.ss-sh'), scrim = $(st,'.ss-sc'), xb = $(st,'.ss-x'), lw = $(st,'.ss-lw');
@@ -128,7 +128,7 @@ atom({ id:'seg', cat:CAT, name:'Segmented control', block:'Seg · useEdgeIndicat
 <div class="sg-l"><span class="small muted" id="sg-b">Range</span><div class="sg sm" role="group" aria-labelledby="sg-b"><div class="sg-i"></div><button type="button">Day</button><button type="button">Week</button><button type="button">Month</button><button type="button">Year</button></div></div>
 <div class="sg-l"><span class="small muted" id="sg-c">Show grid</span><div class="sg sm" role="group" aria-labelledby="sg-c"><div class="sg-i"></div><button type="button">Off</button><button type="button">On</button></div></div>
 <div class="sg-ro" aria-hidden="true"></div></div>`,
-  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label colour morphs, arrow keys, Home and End move the selection, and there are two sizes.',
+  desc:'A measured two-edge indicator: the active button’s box becomes left and right-inset variables, and data-ind-dir records which way it moved. The leading edge goes now, the trailing edge follows 60ms later, so it stretches then settles. Label color morphs, arrow keys, Home and End move the selection, and there are two sizes.',
   api:'left = btn.offsetLeft; right = W − left − btn.offsetWidth   dir = left > last ? "fwd" : "back"   lead.set(v); trail.set(v, t + LAG)',
   init(st){
     const kit = (el, start) => {
@@ -179,7 +179,7 @@ atom({ id:'statuschip', cat:CAT, name:'Status chip', block:'StatusChip', fam:['M
 .sc-ms{position:absolute;visibility:hidden;white-space:nowrap;font-size:12px;font-weight:500}
 .sc-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style><div class="card sc-c"></div><div class="hint">Click a chip to cycle. On Error, Retry goes back through Scheduled to Live.</div>`,
-  desc:'One chip morphs through Draft, Scheduled, Live and Error: the background and dot colours cross-fade through weighted state colours, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.',
+  desc:'One chip morphs through Draft, Scheduled, Live and Error: the background and dot colors cross-fade through weighted state colors, the label swaps (exit, then enter) and the chip width springs to the measured new label. Error grows a Retry button to its left, so the chip itself never moves; Retry goes to Scheduled and, a moment later, Live.',
   api:'w[i].set(i === next ? 1 : 0)   width.set(measure(label))   label.to(next)   retry.set(next === error)',
   init(st){
     const ST = [
@@ -348,7 +348,7 @@ atom({ id:'themetoggle', cat:CAT, name:'Theme toggle', block:'ThemeToggle', fam:
 </style><div class="tt-w"><div class="row"><button type="button" class="tt-b" aria-label="Switch to dark mode" title="Switch to dark mode"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path class="tt-bd"/><g class="tt-rg"></g></svg></button><div class="tt-s" aria-live="polite"><span data-k="sl">Following system · light</span><span data-k="sd">Following system · dark</span><span data-k="pl">Pinned to light</span><span data-k="pd">Pinned to dark</span></div></div>
 <div class="tt-pv"><div class="tt-hd"><b>Weekly traffic</b><span class="tt-ch">+18%</span></div><div class="tt-bars" aria-hidden="true"><i style="height:45%"></i><i style="height:60%"></i><i style="height:38%"></i><i style="height:72%"></i><i style="height:64%"></i><i style="height:88%"></i><i style="height:100%"></i></div><p>Pricing page visits grew after the new hero shipped on Tuesday.</p><div class="tt-bt" aria-hidden="true"><span class="tt-p1">View report</span><span class="tt-p2">Share</span></div></div>
 <div class="small muted">Preview card only. This page keeps its own theme.</div></div>`,
-  desc:'One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every colour between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.',
+  desc:'One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every color between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.',
   api:'pts[i] = lerp(sun[i], moon[i], p)   ray.r = lerp(R0, 4, p)   card.color = mix(dark, light, theme.at(t))   pref = next === system ? "system" : next',
   init(st){
     // 48 shared points: first 36 trace the outer arc, last 12 the inner arc. The sun is a circle sampled at the same angles.
@@ -415,7 +415,7 @@ atom({ id:'devicetoggle', cat:CAT, name:'Device toggle', block:'DeviceToggle', f
 <div class="dv-fr" role="img" aria-label="Preview of the site at the chosen width"><div class="dv-cr"><span class="dv-dt"><i></i><i></i><i></i></span><span class="dv-ur"><span>northlight.studio</span><span class="dv-wd num">0 px</span></span></div>
 <div class="dv-pg"><div class="dv-nv"><b>Northlight</b><span class="dv-lk"><span>Work</span><span>Studio</span><span>Journal</span></span><span class="dv-cta">Book a call</span><span class="dv-bg">${ic(I.menu, 16)}</span></div>
 <div class="dv-hr"><div><h4>Calm websites for small studios</h4><p>Design, build and launch in six weeks, with one person to talk to.</p><span class="dv-cta" style="display:inline-block">Start a project</span></div><div class="dv-im"></div></div>
-<div class="dv-gr"><div class="dv-cd"><b>Strategy</b>Positioning and page map</div><div class="dv-cd"><b>Design</b>Type, colour and layout</div><div class="dv-cd"><b>Build</b>Fast, accessible pages</div></div></div></div></div>`,
+<div class="dv-gr"><div class="dv-cd"><b>Strategy</b>Positioning and page map</div><div class="dv-cd"><b>Design</b>Type, color and layout</div><div class="dv-cd"><b>Build</b>Fast, accessible pages</div></div></div></div></div>`,
   desc:'The three icon buttons share one indicator whose edges lag: leading edge first, trailing 60ms later. The preview frame is a single element whose width, corner radius, bezel and chrome height spring together from one device value, so going Desktop to Phone passes through tablet like a real resize. The page inside is container-queried: columns collapse, the nav folds to a menu and cards stack as the width crosses each breakpoint.',
   api:'u.set(device)   width = piece([avail, min(820, .72·avail), min(390, .4·avail)], u)   radius = piece([10, 18, 30], u)   ind.go(l, r)',
   init(st){

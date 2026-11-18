@@ -4,7 +4,7 @@ Table header cell with scope and optional sort button.
 
 ## Use when
 
-- Labelling a column (`scope="col"`) or a row (`scope="row"`).
+- Labeling a column (`scope="col"`) or a row (`scope="row"`).
 - The host offers sorting and passes `sort` plus `onSort`.
 
 ## Avoid when

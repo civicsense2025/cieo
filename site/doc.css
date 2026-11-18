@@ -80,7 +80,7 @@ body.cieo-docsite {
 .doc-guide > section { display: grid; gap: var(--cieo-space-2); padding-block-start: var(--cieo-space-4); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); }
 @media (min-width: 48rem) { .doc-guide > section { grid-template-columns: 11rem minmax(0, 1fr); gap: var(--cieo-space-6); } .doc-guide > section > h3 { font: var(--cieo-text-small)/1.6 var(--cieo-font-mono); color: var(--cieo-color-muted); font-weight: var(--cieo-weight-normal); } .doc-guide > section > :not(h3) { grid-column: 2; } }
 
-/* Do / don't: two verdicts, marked by a rule and a word, never by colour alone. */
+/* Do / don't: two verdicts, marked by a rule and a word, never by color alone. */
 .doc-verdicts { display: grid; gap: var(--cieo-space-4); }
 @media (min-width: 48rem) { .doc-verdicts { grid-template-columns: 1fr 1fr; } }
 .doc-verdicts > div { padding-block-start: var(--cieo-space-3); border-block-start: 3px solid var(--cieo-color-success); }

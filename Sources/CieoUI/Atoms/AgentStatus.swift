@@ -2,7 +2,7 @@ import Cieo
 import SwiftUI
 
 /// Displays an agent or run's reported state as a semantic status dot plus visible words.
-/// Colour never stands alone: the status words always name the state.
+/// Color never stands alone: the status words always name the state.
 public struct AgentStatus: View {
     public typealias State = AgentRunStatus
 

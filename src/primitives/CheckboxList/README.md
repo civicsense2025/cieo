@@ -1,6 +1,6 @@
 # CheckboxList
 
-Labelled group of related checkboxes with one shared group name (notification channels, report columns).
+Labeled group of related checkboxes with one shared group name (notification channels, report columns).
 
 ## Use when
 

@@ -1,5 +1,5 @@
 /* cieo/controls.css: styles for cieo/controls inside @layer cieo.components so unlayered consumer CSS wins cleanly.
-   Every colour, radius and size reads a --cieo-* custom property with a neutral system-colour fallback. */
+   Every color, radius and size reads a --cieo-* custom property with a neutral system-color fallback. */
 @layer cieo.components {
   :where(.cieo-ctl) {
     --_bg: var(--cieo-control-bg, var(--cieo-color-surface, Field));

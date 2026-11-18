@@ -14,7 +14,7 @@ Button that toggles the rail; host owns expanded state.
 
 ## Anatomy
 
-Native `<button aria-expanded>` labelled by `label` (defaults to "Collapse navigation").
+Native `<button aria-expanded>` labeled by `label` (defaults to "Collapse navigation").
 
 ## Behavior
 

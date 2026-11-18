@@ -5,45 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inbox · Cieo</title>
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
-<style>
-.cieo-inbox-page{background:var(--cieo-color-surface);color:var(--cieo-color-text);font-family:var(--cieo-font-sans)}
-.cieo-inbox-grid{display:grid;gap:var(--cieo-space-4)}
-.cieo-inbox-search-row{display:flex;flex-wrap:wrap;gap:var(--cieo-space-2);align-items:end}
-.cieo-inbox-list{overflow-y:auto;max-block-size:70vh;scroll-behavior:smooth}
-.cieo-inbox-threads ul{list-style:none;margin:0;padding:0;display:grid;gap:var(--cieo-space-2)}
-.cieo-inbox-threads button{width:100%;text-align:start;font:inherit;color:var(--cieo-color-text);background:transparent;border:var(--cieo-border-width) solid transparent;border-radius:var(--cieo-radius-control);padding:var(--cieo-space-2) var(--cieo-space-3);cursor:pointer;display:grid;gap:var(--cieo-space-1)}
-.cieo-inbox-threads button[aria-current="true"]{background:var(--cieo-color-accent-soft);color:var(--cieo-color-accent);border-color:var(--cieo-color-accent)}
-.cieo-inbox-row-top{display:flex;gap:var(--cieo-space-2);align-items:center;justify-content:space-between}
-.cieo-inbox-subject{font-weight:600}
-.cieo-inbox-snippet{color:var(--cieo-color-muted)}
-.cieo-inbox-actions{display:flex;gap:var(--cieo-space-2);flex-wrap:wrap}
-.cieo-visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-:focus-visible{outline:var(--cieo-focus-width) solid var(--cieo-color-focus);outline-offset:var(--cieo-focus-offset)}
-@media (min-width:48rem){
-.cieo-inbox-grid{grid-template-columns:16rem minmax(0,1fr)}
-}
-@media (prefers-reduced-motion: reduce){
-.cieo-inbox-list{scroll-behavior:auto}
-}
-</style>
+<link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
 <a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
-<div class="cieo-inbox-page">
-<header>
-<p><a href="./index.html">Composites</a></p>
-<h1 data-parts="Heading">Inbox</h1>
-<p data-parts="Text">Six seeded threads with local replies, archive, and undo — nothing ever leaves this page.</p>
-<nav aria-label="More demos">
-<p data-parts="Text">Also try the <a href="./chat.html">chat workspace</a>, the <a href="./booking.html">booking flow</a>, or the <a href="./dashboard.html">admin dashboard</a>.</p>
-</nav>
+<main id="main" class="site-wrap comp-page">
+<header class="comp-head">
+<p class="site-label"><a href="./">Composites</a> / Inbox</p>
+<h1 class="site-title">Inbox</h1>
+<p class="site-prose">Six seeded threads with local replies, archive, and undo — nothing ever leaves this page.</p>
 </header>
-<main id="main" data-parts="Layout LayoutHeader LayoutContent LayoutPanel List ListItem Heading Text Badge Timestamp Avatar Field FieldStatus Banner EmptyState Card Kbd Toolbar MetadataList MetadataListItem" data-inbox>
+<div class="comp-screen cieo-inbox-page" data-parts="Layout LayoutHeader LayoutContent LayoutPanel List ListItem Heading Text Badge Timestamp Avatar Field FieldStatus Banner EmptyState Card Kbd Toolbar MetadataList MetadataListItem" data-inbox>
 <div data-parts="Layout">
 <div data-parts="LayoutHeader">
 <div class="cieo-inbox-search-row" data-parts="Field">
 <label for="inbox-search">Search mail</label>
-<input id="inbox-search" data-search type="search" placeholder="Search senders or subjects…" autocomplete="off">
+<input class="cieo-input" id="inbox-search" data-search type="search" placeholder="Search senders or subjects…" autocomplete="off">
 <p data-parts="Text" data-count>6 threads, 3 unread</p>
 </div>
 </div>
@@ -53,7 +30,7 @@
 <h2 data-parts="Heading">Threads</h2>
 <ul data-parts="List" class="cieo-inbox-list">
 <li data-parts="ListItem" data-thread-row="kiln-schedule" data-unread>
-<button type="button" data-thread="kiln-schedule" aria-controls="panel-kiln-schedule" aria-current="true">
+<button class="cieo-button" type="button" data-thread="kiln-schedule" aria-controls="panel-kiln-schedule" aria-current="true">
 <span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">MO</span><span data-parts="Badge" data-unread-badge>Unread</span></span>
 <span class="cieo-inbox-subject" data-thread-title>Kiln schedule for October</span>
 <span class="cieo-inbox-snippet" data-parts="Text">Mara Okonkwo — open shelves on the 14th</span>
@@ -61,7 +38,7 @@
 </button>
 </li>
 <li data-parts="ListItem" data-thread-row="invoice-1042" data-unread>
-<button type="button" data-thread="invoice-1042" aria-controls="panel-invoice-1042">
+<button class="cieo-button" type="button" data-thread="invoice-1042" aria-controls="panel-invoice-1042">
 <span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">PN</span><span data-parts="Badge" data-unread-badge>Unread</span></span>
 <span class="cieo-inbox-subject" data-thread-title>Invoice 1042 is ready</span>
 <span class="cieo-inbox-snippet" data-parts="Text">Priya Nair — $86.40 due October 23</span>
@@ -69,7 +46,7 @@
 </button>
 </li>
 <li data-parts="ListItem" data-thread-row="garden-rota">
-<button type="button" data-thread="garden-rota" aria-controls="panel-garden-rota">
+<button class="cieo-button" type="button" data-thread="garden-rota" aria-controls="panel-garden-rota">
 <span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">SW</span></span>
 <span class="cieo-inbox-subject" data-thread-title>Garden rota swap</span>
 <span class="cieo-inbox-snippet" data-parts="Text">Sam Whitfield — Saturday watering cover</span>
@@ -77,7 +54,7 @@
 </button>
 </li>
 <li data-parts="ListItem" data-thread-row="book-club" data-unread>
-<button type="button" data-thread="book-club" aria-controls="panel-book-club">
+<button class="cieo-button" type="button" data-thread="book-club" aria-controls="panel-book-club">
 <span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">JP</span><span data-parts="Badge" data-unread-badge>Unread</span></span>
 <span class="cieo-inbox-subject" data-thread-title>Book club: next pick</span>
 <span class="cieo-inbox-snippet" data-parts="Text">June Park — the orchard memoir wins</span>
@@ -85,7 +62,7 @@
 </button>
 </li>
 <li data-parts="ListItem" data-thread-row="lease-renewal">
-<button type="button" data-thread="lease-renewal" aria-controls="panel-lease-renewal">
+<button class="cieo-button" type="button" data-thread="lease-renewal" aria-controls="panel-lease-renewal">
 <span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">OB</span></span>
 <span class="cieo-inbox-subject" data-thread-title>Lease renewal paperwork</span>
 <span class="cieo-inbox-snippet" data-parts="Text">Otis Bell — sign both pages by the 20th</span>
@@ -93,7 +70,7 @@
 </button>
 </li>
 <li data-parts="ListItem" data-thread-row="potluck">
-<button type="button" data-thread="potluck" aria-controls="panel-potluck">
+<button class="cieo-button" type="button" data-thread="potluck" aria-controls="panel-potluck">
 <span class="cieo-inbox-row-top"><span data-parts="Avatar" aria-hidden="true">AR</span></span>
 <span class="cieo-inbox-subject" data-thread-title>Courtyard potluck list</span>
 <span class="cieo-inbox-snippet" data-parts="Text">Ana Ruiz — nine sides, no mains yet</span>
@@ -105,7 +82,7 @@
 <div data-parts="EmptyState" data-empty-results hidden>
 <h2>No matching threads</h2>
 <p>No results for that search — clear it to see all six threads.</p>
-<p><button type="button" data-clear-search>Clear search</button></p>
+<p><button class="cieo-button" type="button" data-clear-search>Clear search</button></p>
 </div>
 <div data-parts="EmptyState" data-empty-threads hidden>
 <h2>No threads left</h2>
@@ -117,8 +94,8 @@
 <div data-parts="Card">
 <h2 data-parts="Heading" tabindex="-1" data-panel-heading>Kiln schedule for October</h2>
 <div data-parts="Toolbar" role="toolbar" aria-label="Actions for Kiln schedule for October">
-<button type="button" data-archive>Archive</button>
-<button type="button" data-delete>Delete</button>
+<button class="cieo-button" type="button" data-archive>Archive</button>
+<button class="cieo-button" type="button" data-delete>Delete</button>
 </div>
 <dl data-parts="MetadataList">
 <div data-parts="MetadataListItem"><dt>From</dt><dd>Mara Okonkwo</dd></div>
@@ -135,8 +112,8 @@
 <div data-parts="Card">
 <h2 data-parts="Heading" tabindex="-1" data-panel-heading>Invoice 1042 is ready</h2>
 <div data-parts="Toolbar" role="toolbar" aria-label="Actions for Invoice 1042 is ready">
-<button type="button" data-archive>Archive</button>
-<button type="button" data-delete>Delete</button>
+<button class="cieo-button" type="button" data-archive>Archive</button>
+<button class="cieo-button" type="button" data-delete>Delete</button>
 </div>
 <dl data-parts="MetadataList">
 <div data-parts="MetadataListItem"><dt>From</dt><dd>Priya Nair</dd></div>
@@ -152,8 +129,8 @@
 <div data-parts="Card">
 <h2 data-parts="Heading" tabindex="-1" data-panel-heading>Garden rota swap</h2>
 <div data-parts="Toolbar" role="toolbar" aria-label="Actions for Garden rota swap">
-<button type="button" data-archive>Archive</button>
-<button type="button" data-delete>Delete</button>
+<button class="cieo-button" type="button" data-archive>Archive</button>
+<button class="cieo-button" type="button" data-delete>Delete</button>
 </div>
 <dl data-parts="MetadataList">
 <div data-parts="MetadataListItem"><dt>From</dt><dd>Sam Whitfield</dd></div>
@@ -169,8 +146,8 @@
 <div data-parts="Card">
 <h2 data-parts="Heading" tabindex="-1" data-panel-heading>Book club: next pick</h2>
 <div data-parts="Toolbar" role="toolbar" aria-label="Actions for Book club: next pick">
-<button type="button" data-archive>Archive</button>
-<button type="button" data-delete>Delete</button>
+<button class="cieo-button" type="button" data-archive>Archive</button>
+<button class="cieo-button" type="button" data-delete>Delete</button>
 </div>
 <dl data-parts="MetadataList">
 <div data-parts="MetadataListItem"><dt>From</dt><dd>June Park</dd></div>
@@ -186,8 +163,8 @@
 <div data-parts="Card">
 <h2 data-parts="Heading" tabindex="-1" data-panel-heading>Lease renewal paperwork</h2>
 <div data-parts="Toolbar" role="toolbar" aria-label="Actions for Lease renewal paperwork">
-<button type="button" data-archive>Archive</button>
-<button type="button" data-delete>Delete</button>
+<button class="cieo-button" type="button" data-archive>Archive</button>
+<button class="cieo-button" type="button" data-delete>Delete</button>
 </div>
 <dl data-parts="MetadataList">
 <div data-parts="MetadataListItem"><dt>From</dt><dd>Otis Bell</dd></div>
@@ -203,8 +180,8 @@
 <div data-parts="Card">
 <h2 data-parts="Heading" tabindex="-1" data-panel-heading>Courtyard potluck list</h2>
 <div data-parts="Toolbar" role="toolbar" aria-label="Actions for Courtyard potluck list">
-<button type="button" data-archive>Archive</button>
-<button type="button" data-delete>Delete</button>
+<button class="cieo-button" type="button" data-archive>Archive</button>
+<button class="cieo-button" type="button" data-delete>Delete</button>
 </div>
 <dl data-parts="MetadataList">
 <div data-parts="MetadataListItem"><dt>From</dt><dd>Ana Ruiz</dd></div>
@@ -218,18 +195,20 @@
 </section>
 <div data-parts="Banner" data-undo-banner role="status" hidden>
 <p data-parts="Text" data-undo-text>Thread moved.</p>
-<p><button type="button" data-undo>Undo</button></p>
+<p><button class="cieo-button" type="button" data-undo>Undo</button></p>
 </div>
 <form data-composer data-parts="Field" aria-label="Reply to this thread">
 <label for="inbox-reply">Reply to <span data-reply-target>Kiln schedule for October</span></label>
-<textarea id="inbox-reply" data-reply rows="3" placeholder="Write a reply…"></textarea>
+<textarea class="cieo-input" id="inbox-reply" data-reply rows="3" placeholder="Write a reply…"></textarea>
 <p data-parts="FieldStatus" data-reply-error role="alert" hidden>Write a reply before sending — empty replies stay on this page.</p>
-<p class="cieo-inbox-actions"><button type="submit" data-send>Send reply</button></p>
+<p class="cieo-inbox-actions"><button class="cieo-button" data-variant="primary" type="submit" data-send>Send reply</button></p>
 </form>
 <p class="cieo-visually-hidden" role="status" data-status></p>
 </div>
 </div>
 </div>
+</div>
+<div class="comp-notes">
 <section aria-labelledby="inbox-shortcuts">
 <h2 id="inbox-shortcuts" data-parts="Heading">Keyboard shortcuts</h2>
 <ul data-parts="List">
@@ -258,30 +237,32 @@
 <li><a href="./storefront.html">Storefront</a> — product page with a live bag.</li>
 </ul>
 </section>
-<section data-built-from>
-<h2 data-parts="Heading">Built from</h2>
-<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
-<ul>
-<li><a href="../components/Layout.html">Layout</a></li>
-<li><a href="../components/LayoutHeader.html">LayoutHeader</a></li>
-<li><a href="../components/LayoutContent.html">LayoutContent</a></li>
-<li><a href="../components/LayoutPanel.html">LayoutPanel</a></li>
-<li><a href="../components/List.html">List</a></li>
-<li><a href="../components/ListItem.html">ListItem</a></li>
-<li><a href="../components/Heading.html">Heading</a></li>
-<li><a href="../components/Text.html">Text</a></li>
-<li><a href="../components/Badge.html">Badge</a></li>
-<li><a href="../components/Timestamp.html">Timestamp</a></li>
-<li><a href="../components/Avatar.html">Avatar</a></li>
-<li><a href="../components/Field.html">Field</a></li>
-<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
-<li><a href="../components/Banner.html">Banner</a></li>
-<li><a href="../components/EmptyState.html">EmptyState</a></li>
-<li><a href="../components/Card.html">Card</a></li>
-<li><a href="../components/Kbd.html">Kbd</a></li>
-<li><a href="../components/Toolbar.html">Toolbar</a></li>
-<li><a href="../components/MetadataList.html">MetadataList</a></li>
-<li><a href="../components/MetadataListItem.html">MetadataListItem</a></li>
+</div>
+<section data-built-from aria-labelledby="built-from-h">
+<h2 id="built-from-h">Built from</h2>
+<p data-reuse>21 library components make up this screen. Each card is the component itself; open one to see its usage and props. Recompose from the parts, never paste this page.</p>
+<ul class="comp-parts">
+<li class="comp-part"><a class="comp-part-link" href="../components/Layout.html"><span class="comp-part-name">Layout</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-layout"><div class="cieo cieo-layout-header" data-was="header">Civic Tracker</div><div class="cieo cieo-layout-content">Bill tracker page body</div><div class="cieo cieo-layout-footer" data-was="footer">Session data: public record</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/LayoutHeader.html"><span class="comp-part-name">LayoutHeader</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><div class="cieo cieo-layout-header" data-was="header">Layout Header</div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/LayoutContent.html"><span class="comp-part-name">LayoutContent</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><div class="cieo cieo-layout-content">Layout Content</div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/LayoutPanel.html"><span class="comp-part-name">LayoutPanel</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><aside aria-label="Layout Panel" data-side="right" class="cieo cieo-layout-panel">Layout Panel</aside></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/List.html"><span class="comp-part-name">List</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><ul aria-label="Latest stories" class="cieo cieo-p-list"><li class="cieo-p-list-item">House passes school funding bill</li><li class="cieo-p-list-item">Senate schedules vote for Thursday</li><li class="cieo-p-list-item">Committee delays redistricting hearing</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ListItem.html"><span class="comp-part-name">ListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><ul><li class="cieo-p-list-item">List Item</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Heading.html"><span class="comp-part-name">Heading</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><h2 data-level="2" class="cieo cieo-p-heading">Heading</h2></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Text.html"><span class="comp-part-name">Text</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><p data-size="default" class="cieo cieo-p-text">Text</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Badge.html"><span class="comp-part-name">Badge</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span data-status="default" class="cieo cieo-badge">Badge</span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Timestamp.html"><span class="comp-part-name">Timestamp</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><time dateTime="Timestamp" class="cieo cieo-p-timestamp">Timestamp</time></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Avatar.html"><span class="comp-part-name">Avatar</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span role="img" aria-label="Ada Lovelace" data-size="md" class="cieo cieo-p-avatar-one"><span class="cieo-p-avatar-one-initials">AL</span></span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Field.html"><span class="comp-part-name">Field</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-field"><label for="cp-Field-email">Email</label><input id="cp-Field-email" type="email" class="cieo-ctl cieo-input"/><p id="cp-Field-email-help" class="cieo-p-help">Use your work email</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/FieldStatus.html"><span class="comp-part-name">FieldStatus</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><p class="cieo cieo-p-field-status" data-tone="description">Field Status</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Banner.html"><span class="comp-part-name">Banner</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="status" data-tone="info" class="cieo cieo-p-banner"><div class="cieo-p-banner-body">Banner</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/EmptyState.html"><span class="comp-part-name">EmptyState</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-empty-state"><h2 class="cieo-p-empty-state-title">Empty State</h2><div class="cieo-p-empty-state-action">Empty State</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Card.html"><span class="comp-part-name">Card</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-card"><h2>Billing summary</h2><p>$12.00 due May 1 for the Monthly plan.</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Kbd.html"><span class="comp-part-name">Kbd</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><kbd class="cieo cieo-p-kbd">Kbd</kbd></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Toolbar.html"><span class="comp-part-name">Toolbar</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="toolbar" class="cieo cieo-toolbar"><span class="cieo-toolbar-actions">Toolbar</span></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/MetadataList.html"><span class="comp-part-name">MetadataList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><dl class="cieo cieo-metadata-list"><div class="cieo cieo-metadata-list-item"><dt>Status</dt><dd>Active</dd></div><div class="cieo cieo-metadata-list-item"><dt>Owner</dt><dd>Library team</dd></div><div class="cieo cieo-metadata-list-item"><dt>Updated</dt><dd>Oct 2026</dd></div></dl></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/MetadataListItem.html"><span class="comp-part-name">MetadataListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><div class="cieo cieo-metadata-list-item"><dt>Metadata List Item</dt><dd>Metadata List Item</dd></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Button.html"><span class="comp-part-name">Button</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md"><span class="cieo-btn-text">Button</span></button></div></li>
 </ul>
 </section>
 </main>

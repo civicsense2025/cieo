@@ -2,7 +2,7 @@
 'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
-/* StatusDot. Bare presence dot, named only when labelled. Pair with visible text. */
+/* StatusDot. Bare presence dot, named only when labeled. Pair with visible text. */
 export type StatusDotStatus = 'default' | 'success' | 'warning' | 'danger' | 'info';
 export interface StatusDotProps {
   className?: string;

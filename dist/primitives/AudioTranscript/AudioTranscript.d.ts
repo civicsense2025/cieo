@@ -18,7 +18,7 @@ export declare function transcriptKeyStep(key: string, index: number, count: num
 export declare const TRANSCRIPT_QUIET_MS = 4000;
 /** True when the reader has not scrolled by hand within the quiet period. */
 export declare function shouldAutoScroll(now: number, lastUserScroll: number | null, quietMs?: number): boolean;
-/** New scrollTop that brings a word into view (centred), or null when it is already fully visible. */
+/** New scrollTop that brings a word into view (centered), or null when it is already fully visible. */
 export declare function transcriptScrollTop(wordTop: number, wordHeight: number, viewHeight: number, scrollTop: number): number | null;
 export interface AudioTranscriptProps {
     className?: string;

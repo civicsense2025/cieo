@@ -22,7 +22,7 @@ const css = (name) => read(name).replace(/@import\s+['"]([^'"]+)['"];?/g, (_, ta
 let html = read('docs/studio/index.html').replace(/<link rel="stylesheet" href="([^"]+)">/g, (_, name) => `<style>\n${css(posix.normalize(posix.join('docs/studio', name)))}\n</style>`);
 html = html.replace('<script type="module" src="./main.js"></script>', `<script type="importmap">${JSON.stringify({ imports }).replaceAll('<', '\\u003c')}</script>\n<script type="module">import 'cieo:docs/studio/main.js';</script>`);
 html = html.replace('href="./index.html"', 'href="#preview"')
-  .replace('href="../catalogue.html"', 'href="https://github.com/civicsense2025/cieo/blob/main/docs/catalogue.html"')
+  .replace('href="../catalog.html"', 'href="https://github.com/civicsense2025/cieo/blob/main/docs/catalogue.html"') // us-spelling-keep
   .replace('href="../../site/components/"', 'href="https://github.com/civicsense2025/cieo/blob/main/docs/design-system.md"');
 const output = resolve(process.argv[2] ?? resolve(root, 'Cieo-studio.html'));
 mkdirSync(dirname(output), { recursive: true }); writeFileSync(output, html);

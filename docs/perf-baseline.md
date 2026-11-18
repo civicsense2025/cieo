@@ -29,7 +29,7 @@ mandate); `tsc --noEmit` used instead. No src/dist edits made.
 |---|---|
 | workbench.html | 3,243,715 |
 | collection.html | 3,227,087 |
-| catalogue.html / library.html | 3,175,205 each |
+| catalog.html / library.html | 3,175,205 each |
 | agent-identity.html | 414,684 |
 | controls.html / studio.html / studio/index.html | 46,285 / 58,899 / 11,280 |
 | **docs html total** | **13,352,360 (~13.4 MB)** |
@@ -82,4 +82,4 @@ Both failures are missing-dep env failures, not code failures. No fixes applied.
 2. **High** — `paint` string churn + `blur()` filter (dom/index.ts:65–70, Select.tsx:145): per-frame template + `toFixed` + blur forces repaint; gate blur behind `BLUR`/progress threshold.
 3. **Medium** — FLIP double-measure (dom/index.ts:231–237 + react/index.tsx:213): `before` snapshot in render phase then re-measure after mutate; forced sync layout on large lists.
 4. **Medium** — render-phase measure in `useFlip` (react/index.tsx:212–214) reads layout during render; move to layout effect or `useSyncExternalStore`.
-5. **Low** — 186 exports + unminified dist + 13.4 MB docs HTML (catalogue/library/workbench ~3.2 MB each): barrel re-exports hurt tree-shaking signals; docs pages need code-split/minify.
+5. **Low** — 186 exports + unminified dist + 13.4 MB docs HTML (catalog/library/workbench ~3.2 MB each): barrel re-exports hurt tree-shaking signals; docs pages need code-split/minify.

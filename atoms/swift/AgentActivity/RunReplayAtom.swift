@@ -3,7 +3,7 @@ import Cieo
 
 public struct RunReplayAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "runreplay", category: "Agent activity", name: "Agent run replay",
-        summary: "The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centred, and clicking a row glides the playhead there on a spring.")
+        summary: "The playhead is the only state: the page, the cursor, the typed text, the pins and the highlighted event are all pure functions of its position. Dragging it moves 1:1 and the page jumps to that moment; on release it coasts a few pixels from your release velocity. Play advances it at 1× or 2×, the event row at the playhead lifts and the list scrolls to keep it centered, and clicking a row glides the playhead there on a spring.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var track = Track(0, preset: .base)
     @State private var dragP: Double?

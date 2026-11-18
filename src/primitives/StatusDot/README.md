@@ -1,6 +1,6 @@
 # StatusDot
 
-Bare presence dot, named only when labelled.
+Bare presence dot, named only when labeled.
 
 ## Use when
 
@@ -14,7 +14,7 @@ Bare presence dot, named only when labelled.
 
 ## Anatomy
 
-Single `span.cieo.cieo-p-status-dot` with `data-status`. Labelled form uses `role="img"` + `aria-label`; unlabelled form is `aria-hidden`.
+Single `span.cieo.cieo-p-status-dot` with `data-status`. Labeled form uses `role="img"` + `aria-label`; unlabeled form is `aria-hidden`.
 
 ## Behavior
 
@@ -22,8 +22,8 @@ No motion. Status defaults to `default`; `success`, `warning`, `danger`, and `in
 
 ## Keyboard / accessibility
 
-- Unlabelled dots are `aria-hidden`; the nearby text must name the state.
-- Labelled dots use `role="img"` so lone dots still announce (e.g. a legend).
+- Unlabeled dots are `aria-hidden`; the nearby text must name the state.
+- Labeled dots use `role="img"` so lone dots still announce (e.g. a legend).
 
 ## Do / don't
 

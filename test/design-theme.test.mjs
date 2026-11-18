@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { createTheme, auditTheme, brands, densities, radii, fonts, displays, grounds, elevations, contrastRatio } from '../design/index.js';
+import { createTheme, auditTheme, brands, densities, radii, fonts, grounds, elevations, contrastRatio } from '../design/index.js';
 import { readable, mix, channels } from '../design/color.js';
 
-// Contrast depends on brand, scheme, contrast and ground. Corner, density, font, display and elevation choices only
+// Contrast depends on brand, scheme, contrast and ground. Corner, density, font and elevation choices only
 // change dimensions and font stacks, so each matrix is walked on its own instead of multiplying into one huge product.
 test('every brand, scheme, contrast and ground satisfies every advertised color pair', () => {
   let count = 0;
@@ -17,15 +17,15 @@ test('every brand, scheme, contrast and ground satisfies every advertised color 
   assert.equal(count, 7 * 2 * 2 * 3);
 });
 
-test('every density, corner, font, display and elevation choice builds a complete theme', () => {
+test('every density, corner, font and elevation choice builds a complete theme', () => {
   let count = 0;
   for (const density of Object.keys(densities)) for (const radius of Object.keys(radii)) for (const font of Object.keys(fonts))
-    for (const display of Object.keys(displays)) for (const elevation of Object.keys(elevations)) {
-      const theme = createTheme({ density, radius, font, display, elevation, brand: 'instrument', ground: 'paper' });
+    for (const elevation of Object.keys(elevations)) {
+      const theme = createTheme({ density, radius, font, elevation, brand: 'instrument', ground: 'paper' });
       assert.equal(Object.keys(theme.tokens).length, 106);
       assert.ok(auditTheme(theme).every((result) => result.pass)); count += 1;
     }
-  assert.equal(count, 3 * 5 * 3 * 2 * 2);
+  assert.equal(count, 3 * 5 * 3 * 2);
 });
 
 test('the pill corner makes controls fully round and leaves cards gently rounded', () => {
@@ -35,12 +35,11 @@ test('the pill corner makes controls fully round and leaves cards gently rounded
   assert.equal(t.tokens['radius-small'].value, '6px');
 });
 
-test('a display face changes only the heading stack, and defaults to the UI font', () => {
-  const plain = createTheme(), serif = createTheme({ display: 'serif' });
+test('headings always use the UI sans stack: there is no serif display face to choose', () => {
+  const plain = createTheme();
   assert.deepEqual(plain.tokens['font-display'].value, plain.tokens['font-sans'].value);
-  assert.notDeepEqual(serif.tokens['font-display'].value, serif.tokens['font-sans'].value);
-  assert.deepEqual(serif.tokens['font-sans'].value, plain.tokens['font-sans'].value);
-  assert.ok(serif.tokens['font-display'].value.includes('serif'));
+  assert.throws(() => createTheme({ display: 'serif' }), /display/);
+  assert.ok(![plain, createTheme({ font: 'humanist' }), createTheme({ font: 'mono' })].some((t) => t.tokens['font-display'].value.some((f) => /Iowan|Palatino|Georgia|^serif$/.test(f))));
   assert.deepEqual(createTheme({ font: 'humanist' }).tokens['font-display'].value, createTheme({ font: 'humanist' }).tokens['font-sans'].value);
 });
 
@@ -54,15 +53,15 @@ test('ring elevation draws a hairline with a small lift, and soft elevation draw
   assert.match(css, /data-elevation='raised'\] \{ box-shadow: 0 0 0 var\(--cieo-ring-width\)/);
 });
 
-test('grounds differ in warmth but never in contrast: paper is warm, mist is cool grey, cool is the default', () => {
+test('grounds differ in warmth but never in contrast: paper is warm, mist is cool gray, cool is the default', () => {
   const warm = (g) => { const [r, , b] = channels(createTheme({ ground: g }).tokens['color-canvas'].value); return r - b; };
   assert.ok(warm('paper') > warm('cool'), 'paper leans warm');
   assert.ok(warm('mist') <= warm('cool') + 2, 'mist stays cool');
   assert.equal(createTheme().options.ground, 'cool');
 });
 
-test('unknown display, ground and elevation choices are refused by name', () => {
-  for (const [key, value] of [['display', 'script'], ['ground', 'sepia'], ['elevation', 'glow']]) assert.throws(() => createTheme({ [key]: value }), new RegExp(`Invalid ${key}`));
+test('unknown ground and elevation choices are refused by name', () => {
+  for (const [key, value] of [['ground', 'sepia'], ['elevation', 'glow']]) assert.throws(() => createTheme({ [key]: value }), new RegExp(`Invalid ${key}`));
 });
 
 test('custom seeds remain readable instead of silently emitting inaccessible accent fills', () => {

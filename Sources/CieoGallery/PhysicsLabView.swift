@@ -45,7 +45,7 @@ public struct PhysicsLabView: View {
 
     /// Critically damped, the house default: it settles without overshoot.
     public static let defaultZeta: Double = 1.0
-    /// Preset order used for the chart series and their ink-based colours.
+    /// Preset order used for the chart series and their ink-based colors.
     public static let seriesNames = ["snap", "base", "soft", "lazy", "custom"]
 
     public init() {}
@@ -224,7 +224,7 @@ public struct PhysicsLabView: View {
         case .pending: "pending"
         case .succeeded: "succeeded"
         case .failed(let msg): "failed (\(msg))"
-        case .cancelled: "cancelled"
+        case .canceled: "canceled"
         case .uncertain(let msg): "uncertain (\(msg))"
         }
     }

@@ -27,7 +27,7 @@ const OPENING = [
   ['writer', 'tool.call', { callId: 'call-1', name: 'search_docs', phase: 'finished', summary: 'Found 3 pricing pages.' }],
   ['writer', 'draft.begin', { draftId: 'draft-1', text: 'Q: Which plan fits a small team?' }],
   ['writer', 'draft.update', { draftId: 'draft-1', text: 'Q: Which plan fits a small team?\nA: Team, up to 10 seats.' }],
-  ['writer', 'approval.requested', { approvalId: 'approval-1', title: 'Publish the pricing FAQ?', detail: 'Writer wants to publish "Pricing FAQ" to the help centre.' }],
+  ['writer', 'approval.requested', { approvalId: 'approval-1', title: 'Publish the pricing FAQ?', detail: 'Writer wants to publish "Pricing FAQ" to the help center.' }],
   ['writer', 'agent.status', { status: 'waiting' }],
 ];
 const AFTER = {

@@ -5,7 +5,7 @@ export interface TopicChipProps {
     slotProps?: {
         root?: PrimitivePartProps;
     };
-    /** Colour for the dot, for a chip on a dark or photo ground. Defaults to the accent. */
+    /** Color for the dot, for a chip on a dark or photo ground. Defaults to the accent. */
     dot?: string;
     children: ReactNode;
 }

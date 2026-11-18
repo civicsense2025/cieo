@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Choreography · Foundations · Cieo</title>
-<meta name="description" content="Interactive choreography specimens: Presence enter/exit, MotionFrame, SharedAxis directional transitions, 2D Edges lag, and MorphSurface FLIP.">
+<title>Motion between screens · Foundations · Cieo</title>
+<meta name="description" content="How Cieo moves content when a view changes, so people keep their place: panels that resize, steps that slide, cards that grow from their button.">
 <meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
 <link rel="stylesheet" href="./foundations.css">
@@ -15,44 +15,52 @@
   <div class="doc-shell">
     <nav class="doc-rail" aria-label="Foundations chapters">
       <span class="doc-label">Foundations</span>
-      <a href="./index.html">Overview</a><a href="./physics.html">Physics &amp; Velocity</a><a href="./choreography.html" aria-current="page">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html">Agent Identity</a>
+      <a href="./index.html">Overview</a><a href="./physics.html">Springs that settle</a><a href="./choreography.html" aria-current="page">Motion between screens</a><a href="./color.html">Color that stays readable</a><a href="./typography.html">Type and shape</a><a href="./agents.html">Agents you can trust</a>
     </nav>
     <div class="doc-main">
       <header class="doc-head">
-      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Choreography</span></p>
-      <h1>Five choreography primitives.</h1>
-      <p>Coordinated surfaces share a small set of spatial rules: asymmetric enter/exit timing, 60 ms leading-before-trailing edge lag, directional shared-axis steps, interruptible container morphs, and stagger spans strictly capped at 300 ms.</p>
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Motion between screens</span></p>
+      <h1>Change without losing your place.</h1>
+      <p>When a screen changes, people lose their place if everything just snaps. Cieo moves the old view into the new one so the eye can follow: a panel grows to fit its new content, steps slide forward or back, a card opens out of the button that started it. Every one of these motions is short and can be interrupted.</p>
     </header>
 
     <section aria-labelledby="edges-h">
-      <h2 id="edges-h">1. Leading &amp; trailing <code>Edges</code> + directional <code>SharedAxis</code></h2>
-      <p>Click or arrow through the steps below: the leading edge departs immediately while the trailing edge follows 60 ms later, and the content panel slides along the motion axis according to <code>direction: -1 | +1</code>.</p>
+      <h2 id="edges-h">Try four kinds of change</h2>
+      <p>Click a tab or use the left and right arrow keys. The highlight stretches toward the new tab, front edge first, and the panel slides in from the side you are moving toward.</p>
       <div class="fnd-lab" data-choreo-demo>
-        <div class="fnd-tabs" role="tablist" aria-label="Choreography specimen steps">
+        <div class="fnd-tabs">
           <span class="fnd-tab-pill" data-choreo-pill aria-hidden="true"></span>
-          <button type="button" role="tab" id="choreo-tab-0" aria-controls="choreo-panel" aria-selected="true" tabindex="0" data-step="0">1. Presence</button>
-          <button type="button" role="tab" id="choreo-tab-1" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="1">2. MotionFrame</button>
-          <button type="button" role="tab" id="choreo-tab-2" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="2">3. SharedAxis</button>
-          <button type="button" role="tab" id="choreo-tab-3" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="3">4. MorphSurface</button>
+          <div class="fnd-tablist" role="tablist" aria-label="Kinds of change">
+          <button type="button" role="tab" id="choreo-tab-0" aria-controls="choreo-panel" aria-selected="true" tabindex="0" data-step="0">Appear and leave</button>
+          <button type="button" role="tab" id="choreo-tab-1" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="1">Resize</button>
+          <button type="button" role="tab" id="choreo-tab-2" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="2">Slide between steps</button>
+          <button type="button" role="tab" id="choreo-tab-3" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="3">Grow from a button</button>
+          </div>
         </div>
         <div class="fnd-stage-card" id="choreo-panel" role="tabpanel" aria-labelledby="choreo-tab-0" tabindex="0" data-choreo-panel>
-          <h3 data-choreo-title>Presence &amp; Arrival</h3>
-          <p data-choreo-body>Overlays enter on the base spring (ω = 22) from 0.97 scale and exit faster on snap (ω = 34). New list items arrive from ARRIVE = 0.45 opacity, never from 0, and StaggerGroup compresses per-item delays so total stagger never exceeds 300 ms.</p>
+          <h3 data-choreo-title>Appear and leave</h3>
+          <p data-choreo-body>Menus and dialogs ease in quickly and leave even faster, so the screen never feels slow to get out of your way. Lists arrive one item after another, and the whole cascade never takes longer than a third of a second.</p>
         </div>
       </div>
+      <p><strong>How to use it.</strong> Wrap content in the part that matches the change and Cieo does the motion. Give <code>MotionFrame</code> a key that changes with the step, and tell it which way you are going with <code>direction</code>: <code>1</code> for forward, <code>-1</code> for back.</p>
+      <pre class="doc-code"><code>import { MotionFrame } from 'cieo/MotionFrame';
+
+&lt;MotionFrame contentKey={step} direction={step &gt; previous ? 1 : -1}&gt;
+  {steps[step]}
+&lt;/MotionFrame&gt;</code></pre>
     </section>
 
     <section aria-labelledby="primitives-map-h">
-      <h2 id="primitives-map-h">2. Component mapping</h2>
+      <h2 id="primitives-map-h">Which part to reach for</h2>
       <div class="doc-table-wrap">
         <table>
-          <thead><tr><th>Primitive / Hook</th><th>Web API</th><th>Apple SwiftUI Counterpart</th><th>Contract</th></tr></thead>
+          <thead><tr><th>You want</th><th>On the web</th><th>On iPhone</th></tr></thead>
           <tbody>
-            <tr><td><a href="../components/MotionFrame.html">MotionFrame</a></td><td><code>&lt;MotionFrame contentKey={step}&gt;</code></td><td><code>CieoMotionFrame</code></td><td>ResizeObserver height spring + directional swap</td></tr>
-            <tr><td><a href="../components/MorphSurface.html">MorphSurface</a></td><td><code>&lt;MorphSurface layoutId="card"&gt;</code></td><td><code>CieoMorphSurface</code></td><td>5-channel SpringRect FLIP container transform</td></tr>
-            <tr><td><a href="../components/StaggerGroup.html">StaggerGroup</a></td><td><code>&lt;StaggerGroup budget={300}&gt;</code></td><td><code>Motion.stagger(i, count:)</code></td><td>Bounded ≤ 300 ms arrival from 0.45 opacity</td></tr>
-            <tr><td><code>useSharedAxis</code></td><td><code>import { useSharedAxis } from 'cieo/react'</code></td><td><code>.cieoSharedAxis(direction:)</code></td><td>Directional ±14 px slide + opacity settle</td></tr>
-            <tr><td><code>useEdges</code></td><td><code>import { useEdges } from 'cieo/react'</code></td><td><code>EdgesTrack</code></td><td>Leading edge now, trailing edge after 60 ms lag</td></tr>
+            <tr><td>A panel that grows or shrinks smoothly when its content changes</td><td><a href="../components/MotionFrame.html"><code>MotionFrame</code></a></td><td><code>CieoMotionFrame</code></td></tr>
+            <tr><td>A card that opens out of the button that started it</td><td><a href="../components/MorphSurface.html"><code>MorphSurface</code></a></td><td><code>CieoMorphSurface</code></td></tr>
+            <tr><td>A list whose items arrive one after another</td><td><a href="../components/StaggerGroup.html"><code>StaggerGroup</code></a></td><td><code>Motion.stagger(i, count:)</code></td></tr>
+            <tr><td>Content that slides forward or back through steps</td><td><code>useSharedAxis</code></td><td><code>.cieoSharedAxis(direction:)</code></td></tr>
+            <tr><td>A highlight that stretches to the newly chosen tab</td><td><code>useEdges</code></td><td><code>EdgesTrack</code></td></tr>
           </tbody>
         </table>
       </div>

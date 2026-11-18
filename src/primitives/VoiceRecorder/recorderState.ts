@@ -34,7 +34,7 @@ export function isRecorderActive(phase: RecorderPhase): boolean {
   return phase === 'requesting' || phase === 'recording' || phase === 'paused';
 }
 
-/** Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach done, so a cancelled take can never produce a clip. */
+/** Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach done, so a canceled take can never produce a clip. */
 export function voiceRecorderStep(state: RecorderState, event: RecorderEvent): RecorderState {
   const { phase } = state;
   const to = (next: RecorderPhase, extra: Partial<RecorderState> = {}): RecorderState => ({ phase: next, elapsed: state.elapsed, reason: null, ...extra });
@@ -137,7 +137,7 @@ export function isNearLimit(elapsed: number, maxDuration: number): boolean {
   return maxDuration > 10 && remainingSeconds(elapsed, maxDuration) <= 10;
 }
 
-export type RecorderAnnouncement = 'recording' | 'paused' | 'cancelled' | 'denied' | 'unsupported' | 'failed' | 'release-to-cancel' | 'stopped' | 'limit';
+export type RecorderAnnouncement = 'recording' | 'paused' | 'canceled' | 'denied' | 'unsupported' | 'failed' | 'release-to-cancel' | 'stopped' | 'limit';
 
 /** Sentence for the live region. Only discrete events are announced, never the running clock. */
 export function recorderAnnouncement(kind: RecorderAnnouncement, seconds = 0): string {
@@ -146,8 +146,8 @@ export function recorderAnnouncement(kind: RecorderAnnouncement, seconds = 0): s
       return 'Recording';
     case 'paused':
       return 'Paused';
-    case 'cancelled':
-      return 'Recording cancelled';
+    case 'canceled':
+      return 'Recording canceled';
     case 'denied':
       return 'Microphone access is blocked. Allow it in your browser settings.';
     case 'unsupported':

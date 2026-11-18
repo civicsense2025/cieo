@@ -15,7 +15,7 @@ enum AgTone {
     }
 }
 
-/// A small status chip. Fill, label colour and icon morph together when the tone changes.
+/// A small status chip. Fill, label color and icon morph together when the tone changes.
 struct AgChip: View {
     let text: String
     var tone: AgTone = .neutral
@@ -104,7 +104,7 @@ struct AgSpinner: View {
     }
 }
 
-/// Runs delayed steps on a main-actor task so a scripted sequence can be cancelled and replayed.
+/// Runs delayed steps on a main-actor task so a scripted sequence can be canceled and replayed.
 @MainActor final class AgScript: ObservableObject {
     private var task: Task<Void, Never>?
     func run(_ steps: @escaping @MainActor (_ wait: (Double) async -> Bool) async -> Void) {

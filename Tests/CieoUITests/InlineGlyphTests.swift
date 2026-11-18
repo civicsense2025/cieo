@@ -2,7 +2,7 @@ import CieoUI
 import SwiftUI
 import XCTest
 
-/// Pins where a glyph beside text lands and how big it is: centred on the first line of text and sized
+/// Pins where a glyph beside text lands and how big it is: centered on the first line of text and sized
 /// from the text's role, for SF Symbols and for shapes a host draws, at default and accessibility sizes.
 final class InlineGlyphTests: XCTestCase {
     private static let scale: CGFloat = 2
@@ -69,7 +69,7 @@ final class InlineGlyphTests: XCTestCase {
     private static let wrapping = "HHHH HHHH HHHH HHHH HHHH HHHH"
 
     @MainActor
-    func testStatusLabelCentresEveryHostGlyphOnTheFirstLine() throws {
+    func testStatusLabelCentersEveryHostGlyphOnTheFirstLine() throws {
         for (name, host) in Self.hosts {
             for (size, dynamicType, typography) in Self.sizes {
                 let label = StatusLabel(Self.wrapping, icon: .check)
@@ -83,13 +83,13 @@ final class InlineGlyphTests: XCTestCase {
                 XCTAssertEqual(measured.glyphMid, measured.capMid, accuracy: max(2, measured.capHeight / 4),
                                "\(name) at \(size) sits on the first line")
                 XCTAssertTrue(measured.firstLine.contains(Int(measured.glyphMid)),
-                              "\(name) at \(size) is centred inside the first line, not above it")
+                              "\(name) at \(size) is centered inside the first line, not above it")
             }
         }
     }
 
     @MainActor
-    func testNoticeAndChoiceCentreHostGlyphsOnTheirFirstLine() throws {
+    func testNoticeAndChoiceCenterHostGlyphsOnTheirFirstLine() throws {
         let shape = Self.hosts[1].1
         let notice = Notice("HHHH HHHH HHHH", detail: "HHHH", icon: .error)
             .environment(\.componentIcons, shape).frame(width: 140, alignment: .leading)

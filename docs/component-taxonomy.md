@@ -32,7 +32,7 @@ The Swift library already uses Atoms, Molecules and Organisms folders. The web l
 | editorial | Articles, rolls, figures, quotes, steps | 15 |
 | tools | Import, compare, preview, trim, palette and notice screens for creative tool apps | 8 |
 
-Import paths do not change: `cieo/Toast` is still `cieo/Toast`. Packs group the catalogue and the docs, not the package.
+Import paths do not change: `cieo/Toast` is still `cieo/Toast`. Packs group the catalog and the docs, not the package.
 
 ## Rules
 

@@ -1,10 +1,10 @@
 # Field
 
-Label plus one control plus a help or error row (every labelled input, select, or custom control).
+Label plus one control plus a help or error row (every labeled input, select, or custom control).
 
 ## Use when
 
-- Every labelled control: wrap the control so label, input, and help text stay in one grid stack.
+- Every labeled control: wrap the control so label, input, and help text stay in one grid stack.
 - The control needs help text (`description`) or a validation message (`error`).
 
 ## Avoid when

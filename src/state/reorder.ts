@@ -160,7 +160,7 @@ export function reduceReorder(
         event,
         changed: true,
         direction: 0,
-        announcement: `${label}, cancelled reorder`,
+        announcement: `${label}, canceled reorder`,
       };
     }
   }

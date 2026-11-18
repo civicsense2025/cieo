@@ -15,7 +15,7 @@ atom({ id:'stickycta', cat:'Landing', name:'Sticky CTA reveal', block:'Landing s
       const w = past && !near ? 1 : 0;
       if (w !== want){ want = w; REDUCE ? y.jump(w) : y.set(w); }
     }, { passive:true });
-    // selected plan gets a check icon and semibold weight, so the state reads without colour
+    // selected plan gets a check icon and semibold weight, so the state reads without color
     const place = (i, inst) => { $$(sm,'button').forEach((x,j) => { x.dataset.l ??= x.textContent; x.style.display = 'inline-flex'; x.style.alignItems = 'center'; x.style.gap = '5px';
       x.style.fontWeight = j === i ? '600' : '500'; x.style.color = j === i ? 'var(--ink)' : ''; x.innerHTML = (j === i ? ic(I.check, 12, 2.6) : '') + x.dataset.l; });
       const b = $$(sm,'button')[i]; inst ? e.jump(b.offsetLeft, b.offsetLeft + b.offsetWidth) : e.go(b.offsetLeft, b.offsetLeft + b.offsetWidth); };

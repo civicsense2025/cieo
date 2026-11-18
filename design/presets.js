@@ -14,14 +14,9 @@ Object.values(radii).forEach(Object.freeze);
 export const fonts = Object.freeze({
   system: Object.freeze(['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif']),
   humanist: Object.freeze(['Avenir Next', 'Segoe UI', 'sans-serif']),
-  mono: Object.freeze(['ui-monospace', 'SFMono-Regular', 'Consolas', 'monospace']),
+  mono: Object.freeze(['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace']),
 });
-/** Display faces for headings only; every stack resolves locally. */
-export const displays = Object.freeze({
-  sans: null,
-  serif: Object.freeze(['Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', 'serif']),
-});
-/** Neutral grounds. cool is the default; paper is a warm off-white; mist is a quiet cool grey. */
+/** Neutral grounds. cool is the default; paper is a warm off-white; mist is a quiet cool gray. */
 export const grounds = Object.freeze({
   cool: Object.freeze({
     light: Object.freeze({ canvas: '#f3f5f7', surface: '#ffffff', raised: '#fafcfe', sunken: '#eceef0', text: '#10141a', muted: '#515963', subtle: '#626a75', border: '#d8dde3', strong: '#7d8793' }),

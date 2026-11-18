@@ -207,7 +207,7 @@ public struct Comment<Avatar: View, Content: View>: View {
         if depth > 0 {
             RailElbow(
                 railX: -(metrics.medium + parentAvatarSize / 2),
-                avatarCentreY: metrics.compact + avatarSize / 2,
+                avatarCenterY: metrics.compact + avatarSize / 2,
                 avatarLeft: -metrics.tight,
                 radius: metrics.standard,
                 continues: hasNextSibling
@@ -240,22 +240,22 @@ public extension Comment where Content == EmptyView {
 /// The curve that leaves a parent's rail, turns into a reply's avatar, and optionally runs on down.
 struct RailElbow: Shape {
     let railX: CGFloat
-    let avatarCentreY: CGFloat
+    let avatarCenterY: CGFloat
     let avatarLeft: CGFloat
     let radius: CGFloat
     let continues: Bool
 
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        let r = Swift.max(0, Swift.min(radius, avatarCentreY, avatarLeft - railX))
+        let r = Swift.max(0, Swift.min(radius, avatarCenterY, avatarLeft - railX))
         let x = rect.minX + railX
         path.move(to: CGPoint(x: x, y: rect.minY))
-        path.addLine(to: CGPoint(x: x, y: rect.minY + avatarCentreY - r))
-        path.addQuadCurve(to: CGPoint(x: x + r, y: rect.minY + avatarCentreY),
-                          control: CGPoint(x: x, y: rect.minY + avatarCentreY))
-        path.addLine(to: CGPoint(x: rect.minX + avatarLeft, y: rect.minY + avatarCentreY))
+        path.addLine(to: CGPoint(x: x, y: rect.minY + avatarCenterY - r))
+        path.addQuadCurve(to: CGPoint(x: x + r, y: rect.minY + avatarCenterY),
+                          control: CGPoint(x: x, y: rect.minY + avatarCenterY))
+        path.addLine(to: CGPoint(x: rect.minX + avatarLeft, y: rect.minY + avatarCenterY))
         if continues {
-            path.move(to: CGPoint(x: x, y: rect.minY + avatarCentreY - r))
+            path.move(to: CGPoint(x: x, y: rect.minY + avatarCenterY - r))
             path.addLine(to: CGPoint(x: x, y: rect.maxY))
         }
         return path

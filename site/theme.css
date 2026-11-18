@@ -39,8 +39,8 @@
   --cieo-disabled-opacity: 0.55;
   --cieo-focus-offset: 3px;
   --cieo-focus-width: 2px;
-  --cieo-font-display: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
-  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Consolas", monospace;
+  --cieo-font-display: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
+  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
   --cieo-font-sans: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
   --cieo-layer-base: 0;
   --cieo-layer-modal: 40;
@@ -149,8 +149,8 @@
   --cieo-disabled-opacity: 0.55;
   --cieo-focus-offset: 3px;
   --cieo-focus-width: 2px;
-  --cieo-font-display: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
-  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Consolas", monospace;
+  --cieo-font-display: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
+  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
   --cieo-font-sans: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
   --cieo-layer-base: 0;
   --cieo-layer-modal: 40;
@@ -261,8 +261,8 @@
   --cieo-disabled-opacity: 0.55;
   --cieo-focus-offset: 3px;
   --cieo-focus-width: 2px;
-  --cieo-font-display: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
-  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Consolas", monospace;
+  --cieo-font-display: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
+  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
   --cieo-font-sans: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
   --cieo-layer-base: 0;
   --cieo-layer-modal: 40;
@@ -374,8 +374,8 @@
   --cieo-disabled-opacity: 0.55;
   --cieo-focus-offset: 3px;
   --cieo-focus-width: 2px;
-  --cieo-font-display: "Iowan Old Style", "Palatino Linotype", "Palatino", "Georgia", serif;
-  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Consolas", monospace;
+  --cieo-font-display: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
+  --cieo-font-mono: ui-monospace, "SFMono-Regular", "Menlo", "Consolas", monospace;
   --cieo-font-sans: system-ui, "-apple-system", "BlinkMacSystemFont", "Segoe UI", sans-serif;
   --cieo-layer-base: 0;
   --cieo-layer-modal: 40;

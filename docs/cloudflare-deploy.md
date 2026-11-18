@@ -1,6 +1,6 @@
 # Cloudflare deploy
 
-The docs, catalogue, studio and composites are static pages, served by a Cloudflare assets-only Worker named `cieo`. There is no server code. It is live on the account's `workers.dev` address for the `cieo` Worker (first deployed 2026-11-17 from `d426cd8`); `npx wrangler@4.160.0 deployments list --name cieo` shows the current version and `npm run deploy` prints the address.
+The docs, catalog, studio and composites are static pages, served by a Cloudflare assets-only Worker named `cieo`. There is no server code. It is live on the account's `workers.dev` address for the `cieo` Worker (first deployed 2026-11-17 from `d426cd8`); `npx wrangler@4.160.0 deployments list --name cieo` shows the current version and `npm run deploy` prints the address.
 
 - [What gets published](#what-gets-published)
 - [Deploying](#deploying)
@@ -9,7 +9,7 @@ The docs, catalogue, studio and composites are static pages, served by a Cloudfl
 
 ## What gets published
 
-`npm run deploy:build` writes `.deploy/` (not committed). It starts at the entry pages listed in `scripts/build-deploy.mjs`, follows every local stylesheet, script, link, and media asset (`img`, `audio`, `video`, `source`), and copies only the files they reference at the same repo paths, inlining local `@import`s inside `.deploy/design/primitives.css` so Cloudflare serves one consolidated primitive stylesheet instead of a multi-file waterfall. A reference to a missing or root-absolute media file fails the build and names the page. Source, tests, raw markdown files and `node_modules` are never published. The `site/` folder is published at the root (`/`, `/components/`, `/recipes/`, `/foundations/`, `/composites/`); pages' `../` links resolve to the shared `design/` and `tokens/` folders because browsers stop at the root. `site/search-index.json` (built by `scripts/build-search-index.mjs`) feeds the ⌘K search. The retired single-file bundles (`/docs/catalogue.html`, `library`, `collection`, `workbench`, `agent-identity`) and the old `/site/*` paths answer with permanent redirects. The offline single-file recipe bundle is `npx cieo recipes --out <file>`. Size is pinned in gzip (about 2 MB) rather than raw bytes.
+`npm run deploy:build` writes `.deploy/` (not committed). It starts at the entry pages listed in `scripts/build-deploy.mjs`, follows every local stylesheet, script, link, and media asset (`img`, `audio`, `video`, `source`), and copies only the files they reference at the same repo paths, inlining local `@import`s inside `.deploy/design/primitives.css` so Cloudflare serves one consolidated primitive stylesheet instead of a multi-file waterfall. A reference to a missing or root-absolute media file fails the build and names the page. Source, tests, raw markdown files and `node_modules` are never published. The `site/` folder is published at the root (`/`, `/components/`, `/recipes/`, `/foundations/`, `/composites/`); pages' `../` links resolve to the shared `design/` and `tokens/` folders because browsers stop at the root. `site/search-index.json` (built by `scripts/build-search-index.mjs`) feeds the ⌘K search. The retired single-file bundles (`/docs/catalog.html`, `library`, `collection`, `workbench`, `agent-identity`) and the old `/site/*` paths answer with permanent redirects. The offline single-file recipe bundle is `npx cieo recipes --out <file>`. Size is pinned in gzip (about 2 MB) rather than raw bytes.
 
 ## Deploying
 
@@ -27,7 +27,7 @@ The folder also gets a root `index.html` and a `404.html` of its own. The build 
 
 1. Sign in once: `npx wrangler@4.160.0 login`.
 2. Pick the account, and the domain if the site is not served on the default `workers.dev` address.
-3. This repository has a Vercel preview project (`cieo-catalogue-ui-review`) linked to Git. Disconnect it before merging a move to Cloudflare, so Vercel does not keep deploying beside it.
+3. This repository has a Vercel preview project (`cieo-catalog-ui-review`) linked to Git. Disconnect it before merging a move to Cloudflare, so Vercel does not keep deploying beside it.
 
 ## URLs
 

@@ -34,7 +34,7 @@ export function sortableAnnouncement(event, name, position, total) {
         return `${name} moved to ${at}.`;
     if (event === 'drop')
         return `${name} dropped at ${at}.`;
-    return `Reorder cancelled. ${name} is back at ${at}.`;
+    return `Reorder canceled. ${name} is back at ${at}.`;
 }
 /** Keyboard key to action while an item is lifted; null for keys that do nothing. */
 export function sortableKeyAction(key) {

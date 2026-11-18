@@ -4,7 +4,7 @@ Loading indicator for pending states, always paired with an accessible label.
 
 ## Use when
 
-- A section, row, or action is pending and needs a labelled "working" state.
+- A section, row, or action is pending and needs a labeled "working" state.
 - The label names what is loading (e.g. `label="Saving draft"`).
 
 ## Avoid when

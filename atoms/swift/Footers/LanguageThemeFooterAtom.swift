@@ -3,7 +3,7 @@ import Cieo
 
 public struct LanguageThemeFooterAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "footer-region-theme", category: "Footers", name: "Footer with language picker and theme toggle",
-        summary: "The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every colour in the page blends on one spring.")
+        summary: "The language button opens a list above itself (below if there is no room) that grows from the button; one highlight plate follows hover and arrow keys with lagging edges. Choosing a language moves the check, closes the list, and every footer string swaps: out in 100ms, back in, staggered 12ms apart down the page. The theme toggle slides one plate between System, Light and Dark while every color in the page blends on one spring.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @Environment(\.colorScheme) private var system
     @State private var lang = 0

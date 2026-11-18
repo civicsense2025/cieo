@@ -45,7 +45,7 @@ const link = (x, y, a, hl, hw, hole) => { const ux = Math.cos(a)*(hl - hw), uy =
   if (hole){ const k = (hl - hw - .2)/(hl - hw); d += bar(x - ux*k, y - uy*k, x + ux*k, y + uy*k, hw*.42); }
   return d; };
 
-/* ---------- pose: body units (origin bottom centre, y up is negative) to world and back ---------- */
+/* ---------- pose: body units (origin bottom center, y up is negative) to world and back ---------- */
 const toW = (c, x, y) => { const z = c.pz; return [c.x + c.u*(x*z.sx - z.sh*y*z.sy), c.y + c.u*y*z.sy]; };
 const toL = (c, X, Y) => { const z = c.pz, ly = (Y - c.y)/(c.u*z.sy); return [((X - c.x)/c.u + z.sh*ly*z.sy)/z.sx, ly]; };
 const face = c => { const z = c.pz, P = z.P, a = P.ft/DEG; return { x:P.fx + z.g2[0]*2.6 + z.fl[0], y:F.y + P.fy + z.g2[1]*1.7 + z.fl[1], c:Math.cos(a), s:Math.sin(a), a:P.ft }; };

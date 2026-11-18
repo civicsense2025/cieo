@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OKLCH Color &amp; Contrast · Foundations · Cieo</title>
-<meta name="description" content="Four-tier OKLCH color system and interactive explorer across all 168 WCAG-audited brand, ground, scheme, and contrast combinations.">
+<title>Color that stays readable · Foundations · Cieo</title>
+<meta name="description" content="Pick any Cieo brand color, in light or dark or high contrast, and text stays easy to read. Try it and see the checks.">
 <meta name="color-scheme" content="light dark">
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
 <link rel="stylesheet" href="./foundations.css">
@@ -15,34 +15,54 @@
   <div class="doc-shell">
     <nav class="doc-rail" aria-label="Foundations chapters">
       <span class="doc-label">Foundations</span>
-      <a href="./index.html">Overview</a><a href="./physics.html">Physics &amp; Velocity</a><a href="./choreography.html">Choreography</a><a href="./color.html" aria-current="page">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html">Agent Identity</a>
+      <a href="./index.html">Overview</a><a href="./physics.html">Springs that settle</a><a href="./choreography.html">Motion between screens</a><a href="./color.html" aria-current="page">Color that stays readable</a><a href="./typography.html">Type and shape</a><a href="./agents.html">Agents you can trust</a>
     </nav>
     <div class="doc-main">
       <header class="doc-head">
-      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>OKLCH Color &amp; Contrast</span></p>
-      <h1>Perceptual OKLCH color, 168 combinations audited.</h1>
-      <p>Cieo generates every surface, ink, border, accent, and status pair in perceptual OKLCH space and audits all <strong>168 combinations</strong> (7 brands × 3 grounds × 2 schemes × 2 contrast modes × status roles) against WCAG contrast thresholds before release.</p>
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Color that stays readable</span></p>
+      <h1>Any brand color, still easy to read.</h1>
+      <p>A color that looks great in a logo can make small text hard to read, especially for people with low vision or in bright sunlight. Cieo builds every text, background, button and status color from your brand color so the contrast, meaning how clearly text stands out from what is behind it, stays high. It is checked in 168 combinations of brand, light/dark and contrast before each release.</p>
     </header>
 
     <section aria-labelledby="matrix-h">
-      <h2 id="matrix-h">Interactive contrast &amp; token auditor</h2>
+      <h2 id="matrix-h">Change the look, watch the checks</h2>
       <div class="fnd-lab" data-color-lab>
         <div class="fnd-controls">
           <label>Brand <select data-color-brand><option value="studio">Studio olive</option><option value="iris">Electric iris</option><option value="lagoon">Deep lagoon</option><option value="ember">Warm ember</option><option value="rose">Wild rose</option><option value="mono">Monochrome</option><option value="instrument" selected>Instrument ink</option></select></label>
-          <label>Ground <select data-color-ground><option value="cool">cool</option><option value="paper" selected>paper</option><option value="mist">mist</option></select></label>
-          <label>Scheme <select data-color-scheme><option value="light">Light</option><option value="dark">Dark</option></select></label>
-          <label>Contrast <select data-color-contrast><option value="standard">Standard (AA)</option><option value="high">High (AAA-targeted)</option></select></label>
+          <label>Background <select data-color-ground><option value="cool">cool</option><option value="paper" selected>paper</option><option value="mist">mist</option></select></label>
+          <label>Mode <select data-color-scheme><option value="light">Light</option><option value="dark">Dark</option></select></label>
+          <label>Contrast <select data-color-contrast><option value="standard">Standard</option><option value="high">High</option></select></label>
         </div>
-        <div class="fnd-swatches" data-color-swatches></div>
-        <div class="doc-table-wrap">
-          <table data-contrast-table>
-            <thead><tr><th>Foreground / Background Pair</th><th>Ratio</th><th>Required</th><th>Verdict</th></tr></thead>
-            <tbody data-contrast-rows>
-              <tr><td>text on canvas</td><td>15.4:1</td><td>4.5:1</td><td>PASS</td></tr>
-            </tbody>
-          </table>
+        <div class="fnd-color-stage" data-color-stage>
+          <strong>Your weekly summary is ready</strong>
+          <p>Three projects moved forward. One needs a decision from you by Friday.</p>
+          <div class="fnd-shape-actions">
+            <button type="button" class="cieo cieo-button" data-variant="primary">Review it</button>
+            <span class="cieo cieo-badge" data-status="success">On track</span>
+            <span class="cieo cieo-badge" data-status="warning">Needs a decision</span>
+            <span class="cieo cieo-badge" data-status="danger">Late</span>
+          </div>
         </div>
+        <p class="fnd-readout" data-contrast-summary aria-live="polite"></p>
+        <details class="fnd-details">
+          <summary>See every color and its check</summary>
+          <div class="fnd-swatches" data-color-swatches></div>
+          <div class="doc-table-wrap">
+            <table data-contrast-table>
+              <thead><tr><th>Text and background</th><th>Contrast</th><th>Needs at least</th><th>Result</th></tr></thead>
+              <tbody data-contrast-rows>
+                <tr><td>Body text on page background</td><td>15.4 to 1</td><td>4.5 to 1</td><td>Pass</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
+      <p><strong>How to use it.</strong> Pick a brand, a background, and whether it is light or dark, then apply the theme to any part of the page. Behind the scenes the colors are built in OKLCH, a color model where equal steps look equally different to the eye, which is why one brand color can produce a full, readable set. If a combination would fail a check, <code>createTheme</code> refuses it and tells you which pair, so unreadable text cannot ship by accident.</p>
+      <pre class="doc-code"><code>import { createTheme, applyTheme } from 'cieo/design';
+
+applyTheme(document.body, createTheme({
+  brand: 'lagoon', ground: 'paper', scheme: 'dark', contrast: 'high',
+}));</code></pre>
     </section>
     </div>
   </div>

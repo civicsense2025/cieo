@@ -12,7 +12,7 @@ public struct IconButton: View {
     private let prominent: Bool
     private let action: () -> Void
 
-    /// `prominent` uses the accent colour and the larger glyph role; otherwise the glyph is quiet.
+    /// `prominent` uses the accent color and the larger glyph role; otherwise the glyph is quiet.
     public init(_ icon: ComponentIcon, label: Text, prominent: Bool = false, action: @escaping () -> Void) {
         self.icon = icon
         self.label = label

@@ -3,7 +3,7 @@ import Cieo
 
 public struct AgentMarksAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "agentmarks", category: "Agent identity", name: "Agent mark concepts",
-        summary: "Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text colour. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.")
+        summary: "Five agent marks drawn from Arc’s own vocabulary instead of a generic sparkle: a turning arc, the review tool’s lens, the orbit eye, the path and the invitation frame. Each shows its brand form (paper tile, one wash, 1.7 ink line) and its product form at 32, 24 and 16px as a square outline that inherits text color. Working turns on each mark’s own motion. Picking a card updates the presence chip, pin and byline below so you judge it in context.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var pick = 0
     @State private var working = false

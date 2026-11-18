@@ -199,7 +199,7 @@ ${faux('fz2-', { brand:'Tidewell', nav:['Features', 'Pricing', 'Customers'], kic
       <ul class="fz2-pf"><li>${ic(I.check, 15, 2.5)}Import clients from a spreadsheet</li><li>${ic(I.check, 15, 2.5)}Bank transfer, card and direct debit</li><li>${ic(I.check, 15, 2.5)}Cancel any time from Settings</li></ul>
     </div>
   </section>
-  <nav class="fz2-cs" aria-label="Footer">${cols('fz2-', [['Product', ['Invoicing', 'Quotes', 'Expenses', 'Payment links', 'Reports']], ['Solutions', ['Freelancers', 'Agencies', 'Consultants', 'Accountants']], ['Learn', ['Guides', 'Templates', 'Tax calendar', 'Help centre']], ['Company', ['About', 'Customers', 'Careers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Security', 'Cookies']]])}</nav>
+  <nav class="fz2-cs" aria-label="Footer">${cols('fz2-', [['Product', ['Invoicing', 'Quotes', 'Expenses', 'Payment links', 'Reports']], ['Solutions', ['Freelancers', 'Agencies', 'Consultants', 'Accountants']], ['Learn', ['Guides', 'Templates', 'Tax calendar', 'Help center']], ['Company', ['About', 'Customers', 'Careers', 'Contact']], ['Legal', ['Privacy', 'Terms', 'Security', 'Cookies']]])}</nav>
   <div class="fz2-bot"><b><i></i>Tidewell</b><span>© 2026 Tidewell Software Ltd.</span><span>Registered in England and Wales, no. 11874390</span></div>
 </div></div>`,
   desc:'Once 96px of the band is on screen, the eyebrow fades up first, then the headline words rise out of their masks 45ms apart, then the actions and reassurances follow in the same order. The button is one element that morphs on hover: it widens to make room for the arrow, its corners round from 14 to a full pill, its fill turns from light to the accent, and it presses in 3% on the snap spring. Link underlines wipe in from the left and leave to the right.',
@@ -276,7 +276,7 @@ ${faux('fz3-', { brand:'Northgate Cloud', nav:['Platform', 'Pricing', 'Docs'], k
     ['Pricing', [['Plans', 'compare tiers'], ['Cost calculator', 'estimate price'], ['Startup credits', 'program discount'], ['Invoices', 'billing payments receipts'], ['Reserved capacity', 'commit savings'], ['Education', 'students discounts']]],
     ['Resources', [['Blog', 'articles posts'], ['Case studies', 'customers stories'], ['Webinars', 'events video'], ['Architecture center', 'reference diagrams'], ['Whitepapers', 'reports research'], ['Community forum', 'help questions']]],
     ['Company', [['About', 'team mission'], ['Careers', 'jobs hiring openings'], ['Press', 'media news'], ['Partners', 'resellers integrators'], ['Investors', 'funding'], ['Contact sales', 'talk pricing']]],
-    ['Support', [['Help centre', 'faq articles'], ['Open a ticket', 'contact issue billing'], ['Trust centre', 'security compliance soc iso'], ['Report abuse', 'spam'], ['Accessibility', 'a11y wcag'], ['Privacy and terms', 'legal gdpr policies']]]])}</nav>
+    ['Support', [['Help center', 'faq articles'], ['Open a ticket', 'contact issue billing'], ['Trust center', 'security compliance soc iso'], ['Report abuse', 'spam'], ['Accessibility', 'a11y wcag'], ['Privacy and terms', 'legal gdpr policies']]]])}</nav>
   <div class="fz3-bot"><b>Northgate Cloud</b><span>© 2026 Northgate Systems GmbH</span><a class="fz3-lk" href="#" style="padding:0;font-size:12.5px"><span>Imprint</span><i></i></a></div>
 </div></div>`,
   desc:'Typing filters the whole map at once. Every link that does not match steps back to 16% opacity with a slight blur, 5ms apart in reading order, while matches stay full and underline from the left. A column with no match dims its heading, the count rolls its digits, and no results opens a one-line hint below the field. Enter or the down arrow moves focus to the first match, Escape clears, and the slash key focuses the field from anywhere in the footer.',
@@ -487,7 +487,7 @@ ${faux('fz5-', { brand:'Trove', nav:['Features', 'Pricing', 'Security'], kicker:
     ['ISO 27001', 'Certified since 2024', 'Scope covers the apps, the API and support tooling.'],
     ['GDPR ready', 'EU data stays in the EU', 'Accounts created in Europe are stored in Frankfurt.'],
     ['99.95% uptime', 'Last 12 months', 'Service credits apply below 99.9% in any month.']].map(([n, h, d], i) => `<span role="listitem" style="display:inline-flex"><button type="button" class="fz5-bd" aria-describedby="fz5-tp${i}">${ic(SHIELD, 16, 2)}${n}</button><span class="fz5-tp" id="fz5-tp${i}" role="tooltip"><b>${h}</b>${d}</span></span>`).join('')}</div>
-  <nav class="fz5-cs" aria-label="Footer">${cols('fz5-', [['Product', ['Budgets', 'Receipts', 'Shared accounts', 'Bank sync', 'Pricing']], ['Company', ['About', 'Careers', 'Press', 'Contact']], ['Help', ['Help centre', 'Security', 'System status', 'Accessibility']]])}
+  <nav class="fz5-cs" aria-label="Footer">${cols('fz5-', [['Product', ['Budgets', 'Receipts', 'Shared accounts', 'Bank sync', 'Pricing']], ['Company', ['About', 'Careers', 'Press', 'Contact']], ['Help', ['Help center', 'Security', 'System status', 'Accessibility']]])}
     <div class="fz5-so"><h4 class="fz5-h">Follow</h4><div class="fz5-sl">${['LinkedIn', 'YouTube', 'Instagram', 'Mastodon'].map(n => `<a class="fz5-pl" href="#"><span>${n}</span>${UPR}</a>`).join('')}</div></div></nav>
   <div class="fz5-bot"><span>© 2026 Trove Money, Inc.</span><span>Trove is a budgeting app. It does not hold or move your money.</span><a href="#">Privacy</a><a href="#">Terms</a></div>
 </div></div>`,
@@ -573,7 +573,7 @@ ${faux('fz6-', { brand:'Alder', nav:['Product', 'Pricing', 'Customers'], kicker:
 <div class="fz6-ft" role="contentinfo">
   <div class="fz6-top">
     <div><p class="fz6-nm"><i></i>Alder</p><p class="fz6-ds">Planning for teams that work across more than one board.</p></div>
-    <nav class="fz6-cs" aria-label="Footer">${cols('fz6-', [['Product', ['Boards', 'Timelines', 'Docs', 'Automations', 'Reports']], ['Solutions', ['Engineering', 'Product', 'Design', 'Marketing', 'Operations']], ['Company', ['About', 'Customers', 'Careers', 'Press', 'Contact']], ['Support', ['Help centre', 'Community', 'API docs', 'System status', 'Security']]])}</nav>
+    <nav class="fz6-cs" aria-label="Footer">${cols('fz6-', [['Product', ['Boards', 'Timelines', 'Docs', 'Automations', 'Reports']], ['Solutions', ['Engineering', 'Product', 'Design', 'Marketing', 'Operations']], ['Company', ['About', 'Customers', 'Careers', 'Press', 'Contact']], ['Support', ['Help center', 'Community', 'API docs', 'System status', 'Security']]])}</nav>
   </div>
   <div><button type="button" class="fz6-tg" aria-expanded="false" aria-controls="fz6-more"><span class="fz6-tl"></span><small>Integrations, comparisons and offices</small><span class="fz6-ch">${ic(I.chev, 16, 2)}</span></button>
     <div class="fz6-mb" id="fz6-more" role="group" aria-label="More links"><div class="fz6-in">
@@ -828,7 +828,7 @@ ${faux('fz8-', { brand:'Cairn', nav:['Product', 'Pricing', 'Docs'], kicker:'Rese
   <div class="fz8-wm" aria-hidden="true"><span class="fz8-wt">${[...'cairn analytics'].map(c => `<span>${c === ' ' ? '&nbsp;' : c}</span>`).join('')}</span></div>
   <div class="fz8-bt"><span>© 2026 Cairn Analytics, Inc.</span><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookie settings</a></div>
 </div><button type="button" class="btn fz8-rp">Replay</button></div>`,
-  desc:'The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labelled string out in 100ms and the new text in, one group after another.',
+  desc:'The footer enters in one staggered sequence: eyebrow, headline, actions, newsletter, the four link columns, social, status and language, each 55ms after the one before, then the wordmark letters rise 40ms apart and the thirty uptime bars grow in. Scrolling away and back replays it. The newsletter field rings in danger for a bad address and opens its message; a good one shrinks the button into a spinner, then a success check, then the field gives way to a confirmation. The language picker pops a listbox above the button; choosing a language blur-swaps every labeled string out in 100ms and the new text in, one group after another.',
   api:'item[i].set(1, S.soft, t + i·0.055)   letter[j].set(1, S.soft, t + n·0.055 + j·0.04)   bar[k].set(1, S.soft, …k·0.012)   text.o.set(0, S.snap) → swap copy → o.set(1)',
   init(st){
     noNav(st);

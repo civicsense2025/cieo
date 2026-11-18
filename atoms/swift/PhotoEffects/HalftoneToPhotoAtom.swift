@@ -3,7 +3,7 @@ import Cieo
 
 public struct HalftoneToPhotoAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-screen", category: "Photo effects", name: "Halftone to photo",
-        summary: "The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colours. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s colour, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.")
+        summary: "The hero arrives as print: an ink screen whose dot sizes carry the photo’s tones in the page’s own ink and paper colors. It then resolves over 2.2 s: the screen gets finer, the dots take on the photo’s color, and the last stretch dissolves into the full photograph. Scrub it, or pick dots or a 15° line screen. Use when: an editorial or campaign hero wants a printed, considered entrance that still ends on the real photo.")
     @State private var pixels: PhPixels?
     @State private var epoch = 0
     @State private var scrub: Double?
@@ -36,7 +36,7 @@ public struct HalftoneToPhotoAtom: MotionAtomView {
         .task { pixels = phSample(seed: 0) }
     }
 
-    /// Dot size carries the tone in ink on paper; the screen gets finer and takes on the photo's colour as t grows.
+    /// Dot size carries the tone in ink on paper; the screen gets finer and takes on the photo's color as t grows.
     private func draw(_ ctx: GraphicsContext, _ size: CGSize, _ t: Double) {
         guard let px = pixels else { return }
         let cell = 14 - 8 * phSmooth(phRange(t, 0, 0.8))

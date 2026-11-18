@@ -1,6 +1,6 @@
 // src/primitives/TopNav/TopNav.tsx
 'use client';
-/* TopNav. Sticky site header with a labelled primary nav. Host supplies brand, items, and menus. */
+/* TopNav. Sticky site header with a labeled primary nav. Host supplies brand, items, and menus. */
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 import type { ReactNode } from 'react';

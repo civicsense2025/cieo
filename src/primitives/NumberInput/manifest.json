@@ -33,6 +33,6 @@
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "min", "max", "step", "unit", "defaultValue", "className", "slotProps"], "states": [], "events": [], "parts": ["input"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],
-  "documentation": { "path": "README.md", "purpose": "Labelled native number field." },
+  "documentation": { "path": "README.md", "purpose": "Labeled native number field." },
   "extensions": { "styleDependency": "design/styles/controls.css", "customization": {"presentationParts":["root","label","input","unit"],"ownedSemantics":true,"existingContentSlotsPreserved":true} }
 }

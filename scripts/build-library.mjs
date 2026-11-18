@@ -11,7 +11,7 @@ const blocks = JSON.parse(read('blocks.json'));
 // Captions: recipe demos keep a trailing `<div class="hint">…</div>` inside
 // their stage HTML. The build lifts trailing plain-text hints out of the
 // preview and renders the text as a caption below the stage. Block sources
-// stay byte-identical in the output (see test/catalogue/build.test.mjs);
+// stay byte-identical in the output (see test/catalog/build.test.mjs);
 // the extraction runs in the page, mirroring gallery.js takeTrailingHint.
 const CAPTION_CSS = '\n.ui-tile-caption{margin:0;padding:12px 20px 0;color:var(--muted);font-size:13px;line-height:1.5;overflow-wrap:anywhere}\n';
 const CAPTION_JS = `

@@ -13,7 +13,7 @@ A post in a thread. The host fills every slot; the comment lays them out and dra
 
 ## Anatomy
 
-An `article` labelled by its byline. Two columns: the avatar column (avatar plus the rail) and the content column (byline and menu, body, attachments, actions, status, then replies).
+An `article` labeled by its byline. Two columns: the avatar column (avatar plus the rail) and the content column (byline and menu, body, attachments, actions, status, then replies).
 
 ## Behavior
 
@@ -23,7 +23,7 @@ An `article` labelled by its byline. Two columns: the avatar column (avatar plus
 
 ## Keyboard / accessibility
 
-The article is labelled by the byline (or the deleted notice). Failed status is announced as an alert, pending as a status. Slots carry their own controls and names.
+The article is labeled by the byline (or the deleted notice). Failed status is announced as an alert, pending as a status. Slots carry their own controls and names.
 
 ## Do / don't
 

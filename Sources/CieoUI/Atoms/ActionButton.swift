@@ -135,7 +135,7 @@ public struct ActionButton: View {
     private var spokenStatus: Text {
         if let phase {
             switch phase {
-            case .idle, .cancelled: return Text(verbatim: strings.actionReady)
+            case .idle, .canceled: return Text(verbatim: strings.actionReady)
             case .pending: return Text(verbatim: strings.actionInProgress)
             case .succeeded: return Text(verbatim: strings.actionCompleted)
             case .failed(let msg): return Text(verbatim: msg)
@@ -183,7 +183,7 @@ public struct ActionButton: View {
             InlineGlyph { icons(.error) }.accessibilityHidden(true)
         case .uncertain:
             InlineGlyph { icons(.warning) }.accessibilityHidden(true)
-        case .idle, .cancelled:
+        case .idle, .canceled:
             EmptyView()
         }
     }

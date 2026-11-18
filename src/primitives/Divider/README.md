@@ -5,7 +5,7 @@ Thematic break between sections. Decorative unless given a label.
 ## Use when
 
 - Two sections need a visible thematic break.
-- A labelled break helps screen readers name the separation.
+- A labeled break helps screen readers name the separation.
 
 ## Avoid when
 
@@ -27,7 +27,7 @@ No motion. Renders a 1px rule in the border token; margins from spacing tokens.
 
 ## Do / don't
 
-- Do: `<Divider />` between card sections, or `<Divider label="Related" />` before a labelled break.
+- Do: `<Divider />` between card sections, or `<Divider label="Related" />` before a labeled break.
 - Don't: place a Divider inside a paragraph or use it for vertical spacing.
 
 ## Customization

@@ -8,9 +8,9 @@ node_modules
 design/generated/
 Cieo-studio.html
 test/browser/artifacts/
-# Local catalogue review outputs and optional linked bootstrap.
+# Local catalog review outputs and optional linked bootstrap.
 review-artifact/
-atoms/web/catalogue/boot.js
+atoms/web/catalog/boot.js
 __pycache__/
 
 # PROPOSAL (not enforced: tracked files stay tracked until an explicit

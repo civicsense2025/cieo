@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-test('Breadcrumbs renders labelled nav with list', () => {
+test('Breadcrumbs renders labeled nav with list', () => {
   const src = readFileSync('src/primitives/Breadcrumbs/Breadcrumbs.tsx', 'utf8');
   assert.match(src, /<nav/); assert.match(src, /aria-label=\{label\}/); assert.match(src, /<ol>/);
 });

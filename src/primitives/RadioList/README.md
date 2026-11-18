@@ -1,6 +1,6 @@
 # RadioList
 
-Labelled single-choice group with radiogroup semantics for its radios (delivery speed, plan tier).
+Labeled single-choice group with radiogroup semantics for its radios (delivery speed, plan tier).
 
 ## Use when
 

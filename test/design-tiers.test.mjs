@@ -125,7 +125,7 @@ test('CLI theme command accepts all 4-tier axes and wireEntry includes controls.
     assert.match(readFileSync(join(dir, 'src/main.tsx'), 'utf8'), /import 'cieo\/controls\.css';/);
     execFileSync(
       process.execPath,
-      [binPath, 'theme', 'brand=instrument', 'ground=paper', 'radius=pill', 'display=serif', 'elevation=ring', 'contrast=high', 'zeta=0.9'],
+      [binPath, 'theme', 'brand=instrument', 'ground=paper', 'radius=pill', 'elevation=ring', 'contrast=high', 'zeta=0.9'],
       { cwd: dir, encoding: 'utf8' },
     );
     const updatedCss = readFileSync(join(dir, 'src/cieo-theme.css'), 'utf8');

@@ -3,7 +3,7 @@ import SwiftUI
 import XCTest
 
 /// Pins that the four molecules (IndexRow, NumberedSteps, InfoButton, SectionHeader) read their type,
-/// colour, spacing, glyphs and touch target from the host slots, so one host value restyles them.
+/// color, spacing, glyphs and touch target from the host slots, so one host value restyles them.
 final class SlotsMoleculeStudyTests: XCTestCase {
     private let red = Color(red: 1, green: 0, blue: 0)
 

@@ -19,7 +19,7 @@ Success means:
 Consolidate the existing gallery pages into one static site. Reuse `design/`, `tokens/`, `atoms/web` and the existing runtime. No framework and no server code. The site is generated from data at build time.
 
 Existing facts this relies on:
-- `docs/catalogue.html` and `docs/library.html` are byte-identical (checked). One becomes a redirect to the new site.
+- `docs/catalog.html` and `docs/library.html` are byte-identical (checked). One becomes a redirect to the new site.
 - `atoms/web/index.json` lists 550 entries with `id`, `category`, `name`, `summary`, `file`, `api`. It has no atom/molecule/organism level.
 - The existing component-contract spec (`2026-10-08-atomic-component-system-design.md`) makes a colocated `manifest.json` plus README the single owner of each component's identity and long-form guidance. This site reads those and does not duplicate them.
 

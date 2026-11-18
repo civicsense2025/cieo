@@ -5,7 +5,7 @@ import SwiftUI
 /// and navigation. The whole row is one button (or link) unless `actions` are present; then the avatar and
 /// text are the button and each action keeps its own control.
 public struct ActivityItem<Avatar: View, Badge: View, Actions: View>: View {
-    /// How the badge on the avatar is coloured.
+    /// How the badge on the avatar is colored.
     public enum Tone: Sendable, CaseIterable { case neutral, accent, danger, success }
     /// What carries the row's main action.
     public enum Main: Sendable { case link, button, plain }
@@ -34,7 +34,7 @@ public struct ActivityItem<Avatar: View, Badge: View, Actions: View>: View {
     ///   - preview: A quoted snippet of the thing acted on, clamped to two lines.
     ///   - time: Human time text such as "2h".
     ///   - unread: Shows a dot and stronger text; turning it off fades the dot out.
-    ///   - tone: Colours the badge.
+    ///   - tone: Colors the badge.
     ///   - href: Makes the whole row a link.
     ///   - onSelect: Makes the whole row a button when there is no `href`.
     ///   - avatar: The actor's face.

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// One idea on one ground: a top bar (topic and page count), the content centred in the space between, and a
+/// One idea on one ground: a top bar (topic and page count), the content centered in the space between, and a
 /// bottom bar (wordmark and source). Everything is left-aligned. `ground` chooses the role: `.page` for claims and
 /// numbers, `.block` for someone's own words or a call to act (text switches to `onBlock`).
 public struct ContentFrame<Top: View, Content: View, Bottom: View>: View {

@@ -22,7 +22,7 @@ public struct SelectMoveSnapAtom: MotionAtomView {
     private func near(_ v: Double, _ c: [Double]) -> Double? { c.first { abs(v - $0) < 8 } }
 
     public var body: some View {
-        AtomStage(hint: "Drag the box near the grey one · drag the corner to resize") {
+        AtomStage(hint: "Drag the box near the gray one · drag the corner to resize") {
             TimelineView(.motion(bx, by, bw, bh, gx, gy)) { ctx in
                 let t = ctx.date.timeIntervalSinceReferenceDate
                 let x = bx.value(at: t), y = by.value(at: t), w = bw.value(at: t), h = bh.value(at: t)

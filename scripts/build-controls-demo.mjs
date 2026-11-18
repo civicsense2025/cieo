@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Renders docs/controls-demo.mjs to static HTML and writes docs/controls.html, which hydrates the same tree.
-// Run after npm run build. The static markup is exactly what a server renders, so the page also shows no-JS behaviour.
+// Run after npm run build. The static markup is exactly what a server renders, so the page also shows no-JS behavior.
 import fs from 'node:fs';
 import path from 'node:path';
 import { createElement as h } from 'react';

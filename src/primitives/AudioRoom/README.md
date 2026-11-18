@@ -25,7 +25,7 @@ A region named by the title, with a header (title, listener faces, count), a sta
 
 ## Keyboard / accessibility
 
-A `section` labelled by its heading. Mute and raise hand use `aria-pressed` with constant labels. The stage is a list named "Speakers".
+A `section` labeled by its heading. Mute and raise hand use `aria-pressed` with constant labels. The stage is a list named "Speakers".
 
 ## Do / don't
 

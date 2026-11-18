@@ -62,12 +62,6 @@
             "mono"
           ]
         },
-        "display": {
-          "enum": [
-            "sans",
-            "serif"
-          ]
-        },
         "ground": {
           "enum": [
             "cool",

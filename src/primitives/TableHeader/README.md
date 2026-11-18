@@ -22,7 +22,7 @@ No motion. Renders children in order; owns no data logic.
 
 ## Keyboard / accessibility
 
-- Lives inside a labelled Table; adds no name of its own.
+- Lives inside a labeled Table; adds no name of its own.
 - Header cells must carry `scope` so readers map columns correctly.
 
 ## Do / don't

@@ -59,7 +59,7 @@ export interface ApprovalView {
     requestedAt: string;
     resolvedAt: string | null;
 }
-export type DraftStatus = 'open' | 'cancelled' | 'complete';
+export type DraftStatus = 'open' | 'canceled' | 'complete';
 export interface DraftView {
     id: string;
     runId: string;

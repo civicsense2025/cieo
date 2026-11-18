@@ -20,7 +20,7 @@ No motion.
 
 ## Keyboard / accessibility
 
-- Text uses the tone's partner colour.
+- Text uses the tone's partner color.
 
 ## Do / don't
 

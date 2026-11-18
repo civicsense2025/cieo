@@ -1,7 +1,7 @@
 import SwiftUI
 import Cieo
 
-/// The agent's square mark: a rounded square with a star. People are round, agents are square, so nothing relies on colour.
+/// The agent's square mark: a rounded square with a star. People are round, agents are square, so nothing relies on color.
 struct AgentMark: View {
     var size: CGFloat = 20
     var body: some View {
@@ -37,7 +37,7 @@ struct AgCursorShape: Shape {
     }
 }
 
-/// A pointer. The tip is at the view's top-left corner. `agent` is ink; yours is the accent colour.
+/// A pointer. The tip is at the view's top-left corner. `agent` is ink; yours is the accent color.
 struct AgCursor: View {
     var agent = true
     var pressed = false

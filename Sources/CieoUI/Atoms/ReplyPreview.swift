@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// A quoted reply with an accent bar. The host owns the excerpt text and what dismiss or jump do.
-/// In the composer it can be cancelled; as a quote inside a message it is a button only when the host
+/// In the composer it can be canceled; as a quote inside a message it is a button only when the host
 /// gives it somewhere to jump.
 public struct ReplyPreview: View {
     /// `composer` sits above an input and can be dismissed; `quote` sits inside a message.

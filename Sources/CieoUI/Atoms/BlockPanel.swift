@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A flat colour panel for the one thing in a section the reader is working in: a quiz, a form,
+/// A flat color panel for the one thing in a section the reader is working in: a quiz, a form,
 /// the selected item. An optional circle can bleed off one corner as decoration.
 public struct BlockPanel<Content: View>: View {
     public enum Tone: Sendable { case block, surface, accent }
@@ -9,7 +9,7 @@ public struct BlockPanel<Content: View>: View {
         public let corner: CutCorner
         public let diameter: CGFloat
         public let color: Color?
-        /// `color` defaults to the accent; on an accent panel, to the block colour.
+        /// `color` defaults to the accent; on an accent panel, to the block color.
         public init(corner: CutCorner = .topTrailing, diameter: CGFloat = 200, color: Color? = nil) {
             self.corner = corner
             self.diameter = diameter.isFinite ? min(600, max(0, diameter)) : 200

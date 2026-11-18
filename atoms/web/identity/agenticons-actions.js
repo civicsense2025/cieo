@@ -44,7 +44,7 @@ const DEFS = [];
 const def = (k, n, g, w, L, st, d, draw) => DEFS.push({ k, n, g, w, L, st, d, draw });
 
 /* ---- Doing ---- */
-def('browsing', 'Browsing', 'Doing', 'm', 2.6, null, 'The square pupil looks from stop to stop along the equator, one page at a time, then settles in the centre.', m => {
+def('browsing', 'Browsing', 'Doing', 'm', 2.6, null, 'The square pupil looks from stop to stop along the equator, one page at a time, then settles in the center.', m => {
   const l = m.lod, x = sq(m.u, 32, [[.3, 22], [.95, 41], [1.55, 26], [2.1, 32]]), y = 32 - (x - 32)*.18;
   return [['arcs', P(l ? 'M13 32C22 16 42 16 51 32C42 48 22 48 13 32Z' : 'M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z')], ['agent', SQ(x, y, l ? 10 : 11, m.c)]]; });
 
@@ -149,14 +149,14 @@ def('retrying', 'Retrying', 'Outcome', 'm', 2.6, null, 'The arc withdraws almost
   return [['arc', P(`M${pt(A)}A${r} ${r} 0 ${f > 180 ? 1 : 0} 1 ${pt(B)}`)], ['head', P(`M${pt(arm(.7))}L${pt(B)}L${pt(arm(-.7))}`)]]; });
 
 const CK = [[19, 33], [27, 41], [46, 22]], CKL = polyLen(CK);
-def('done', 'Done', 'Outcome', 'm', 2, 'success', 'The check is drawn in two strokes, short arm first, in the success colour.', m => {
+def('done', 'Done', 'Outcome', 'm', 2, 'success', 'The check is drawn in two strokes, short arm first, in the success color.', m => {
   const a = polySlice(CK, 0, sq(m.u, 1, [[.1, 0], [.7, 1]], S.soft)*CKL); return [['check', a.d ? P(a.d) : '']]; });
 
-def('failed', 'Failed', 'Outcome', 'm', 2, 'danger', 'The two strokes cross one after the other, in the danger colour. Nothing shakes.', m => {
+def('failed', 'Failed', 'Outcome', 'm', 2, 'danger', 'The two strokes cross one after the other, in the danger color. Nothing shakes.', m => {
   const q1 = sq(m.u, 1, [[.1, 0], [.5, 1]]), q2 = sq(m.u, 1, [[.1, 0], [.75, 1]]);
   return [['stroke-a', q1 > .02 ? P(`M22 22L${r1(22 + 20*q1)} ${r1(22 + 20*q1)}`) : ''], ['stroke-b', q2 > .02 ? P(`M42 22L${r1(42 - 20*q2)} ${r1(22 + 20*q2)}`) : '']]; });
 
-def('blocked', 'Blocked by permission', 'Outcome', 'm', 2.2, 'warning', 'The shackle tries to lift, can’t, and drops back. The lock stays shut, in the warning colour.', m => {
+def('blocked', 'Blocked by permission', 'Outcome', 'm', 2.2, 'warning', 'The shackle tries to lift, can’t, and drops back. The lock stays shut, in the warning color.', m => {
   const l = m.lod, y = sq(m.u, 0, [[.25, -3.5], [.6, 0, S.snap]]);
   return [['shackle', TR(P(l ? 'M26 31V26C26 17 38 17 38 26V31' : 'M25 31V25C25 14 39 14 39 25V31'), 0, y)], ['body', R(19, l ? 32 : 31, 26, l ? 16 : 19, l ? 3 : 4)], ['keyhole', l ? '' : SQ(32, 40.5, 6, m.c)]]; });
 
@@ -241,7 +241,7 @@ atom({ id:'agentactions', cat:'Agent identity', name:'Agent action and state ico
 </style><div class="aax-root"><div class="aax-main"><div class="aax-left"><div class="aax-bar"><div class="aax-sg aax-fm" role="group" aria-label="Icon form"><button type="button" data-f="product" aria-pressed="true">Product</button><button type="button" data-f="brand" aria-pressed="false">Brand</button></div><div class="aax-sg aax-sz" role="group" aria-label="Icon size in pixels"></div><button type="button" class="btn aax-all" aria-pressed="false">Play all</button></div><div class="aax-sheet" role="group" aria-label="Agent action and state icons"></div></div>
 <div class="aax-right"><div class="aax-det" aria-live="polite"><div class="aax-dbig"></div><div><div class="aax-dn"></div><p class="aax-dd"></p></div><div class="aax-ds"></div></div>
 <section class="aax-feed" aria-label="Feed preview"><div class="aax-fh"><h4>Feed preview</h4><div class="aax-now" aria-hidden="true"></div><button type="button" class="btn aax-rp">Replay</button></div><ul class="aax-fl"></ul></section></div></div></div>`,
-  desc:'Twenty-four things an agent does or is, in the agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning colour through the icon and a chip, never a stripe.',
+  desc:'Twenty-four things an agent does or is, in the agent system: the square tile is the agent and a filled square is its hand. Hover or focus an icon to play its own motion: the caret steps, the page slides, the arc is drawn again. Every loop starts and ends at the resting drawing, so leaving an icon just finishes the turn. In the feed, each new row slides in at the top and pushes the rest down, and its icon plays until the next row arrives. Done, Failed and Blocked take the success, danger and warning color through the icon and a chip, never a stripe.',
   api:'frame(def, { brand, size, u })   u = (t − playStart) % loop   leave: u += 2.4·dt until the loop ends   row.y.set(i·pitch)',
   init(st){
     const SZ = { product:[16, 20, 24, 32], brand:[32, 40, 48, 64] }, size = { product:24, brand:40 }, byK = {};
@@ -292,7 +292,7 @@ atom({ id:'agentactions', cat:'Agent identity', name:'Agent action and state ico
     const detail = d => { dBig.replaceChildren(); dS.replaceChildren(); dIcons = [];
       const big = mk(d, true, 64, dBig, now()); big.svg.removeAttribute('aria-hidden'); big.svg.setAttribute('role', 'img'); big.svg.setAttribute('aria-label', d.n + ', brand form'); dIcons.push(big);
       [32, 24, 20, 16].forEach(s => { const f = document.createElement('figure'), cap = document.createElement('figcaption'); f.className = 'aax-df'; if (d.st) f.dataset.st = d.st; cap.textContent = s; dIcons.push(mk(d, false, s, f, now())); f.appendChild(cap); dS.appendChild(f); });
-      dN.textContent = d.n; const sp = document.createElement('span'); sp.textContent = d.g + (d.st ? ` · ${d.st} colour` : ''); dN.appendChild(sp); dD.textContent = d.d; };
+      dN.textContent = d.n; const sp = document.createElement('span'); sp.textContent = d.g + (d.st ? ` · ${d.st} color` : ''); dN.appendChild(sp); dD.textContent = d.d; };
 
     /* ---- feed preview ---- */
     const FEED = [['thinking', 'Read the brief: check the checkout page'], ['planning', 'Planned four checks'], ['navigating', 'Went to /checkout'], ['browsing', 'Read the order summary'], ['scrolling', 'Scrolled to the payment form'],

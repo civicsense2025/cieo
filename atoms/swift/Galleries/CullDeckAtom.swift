@@ -3,7 +3,7 @@ import Cieo
 
 public struct CullDeckAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-cull-deck", category: "Galleries", name: "Cull deck: keep or reject by throwing",
-        summary: "The top photo follows the pointer one to one and tilts with how far it has travelled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.")
+        summary: "The top photo follows the pointer one to one and tilts with how far it has traveled, while the photo beneath it rises and grows by exactly the same amount, so the deck advances as you pull rather than after you let go. Let go and the throw is judged by where it was heading: distance plus a fifth of a second of velocity. A keep carries your speed into a flight that shrinks and re-crops the photo into the next empty slot of the tray. A reject leaves on the other side and fades. Undo returns the last photo along its own path, and the tray slot empties. Keys do the same with no velocity. Use when a shoot has to be sorted quickly and every decision should leave a visible trace.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var top = 0
     @State private var rests: [Int: CGSize] = [:]
@@ -61,7 +61,7 @@ public struct CullDeckAtom: MotionAtomView {
             let fly = phClamp(Double(o.height) / Double(slot.height))               // keep flights shrink and re-crop
             let pull = phClamp(Double(abs(o.width)) / Double(w * 0.6))               // the card beneath rises by the same amount
             ZStack {
-                // the top card draws the two beneath it, so they can rise by exactly what it has travelled
+                // the top card draws the two beneath it, so they can rise by exactly what it has traveled
                 if i == top {
                     ForEach(1...2, id: \.self) { d in
                         if i + d < count {

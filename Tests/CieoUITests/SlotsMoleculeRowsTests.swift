@@ -2,7 +2,7 @@ import CieoUI
 import SwiftUI
 import XCTest
 
-/// Pins that the row, notice, panel and field molecules read their type, glyphs, colours and spacing
+/// Pins that the row, notice, panel and field molecules read their type, glyphs, colors and spacing
 /// from the host, so a host value changes the rendered output.
 final class SlotsMoleculeRowsTests: XCTestCase {
     private static let red = Color(red: 1, green: 0, blue: 0)
@@ -70,7 +70,7 @@ final class SlotsMoleculeRowsTests: XCTestCase {
     func testNoticeSymbolInitStillRendersItsSymbol() throws {
         let notice = Notice("Saved locally", detail: "Stays on this screen.", symbol: "checkmark.circle.fill")
         XCTAssertGreaterThan(try height(notice), 0)
-        XCTAssertFalse(ComponentIconTests.containsRed(try image(notice)), "a symbol takes no host glyph colour")
+        XCTAssertFalse(ComponentIconTests.containsRed(try image(notice)), "a symbol takes no host glyph color")
     }
 
     @MainActor
@@ -152,10 +152,10 @@ final class SlotsMoleculeRowsTests: XCTestCase {
         let theme = Theme(danger: Self.red)
         let withError = LabeledField("Title", text: .constant(""), error: "Enter a title.")
             .environment(\.componentTheme, theme)
-        XCTAssertTrue(ComponentIconTests.containsRed(try image(withError)), "the error is drawn in the danger colour")
+        XCTAssertTrue(ComponentIconTests.containsRed(try image(withError)), "the error is drawn in the danger color")
         let withoutError = LabeledField("Title", text: .constant(""))
             .environment(\.componentTheme, theme)
-        XCTAssertFalse(ComponentIconTests.containsRed(try image(withoutError)), "no error, no danger colour")
+        XCTAssertFalse(ComponentIconTests.containsRed(try image(withoutError)), "no error, no danger color")
     }
 
     @MainActor
@@ -188,7 +188,7 @@ final class SlotsMoleculeRowsTests: XCTestCase {
     func testSearchFieldSurfaceFollowsTheHostTheme() throws {
         let field = SearchField("Search", text: .constant(""))
             .environment(\.componentTheme, Theme(surface: Self.red))
-        XCTAssertTrue(ComponentIconTests.containsRed(try image(field)), "the field surface is the host surface colour")
+        XCTAssertTrue(ComponentIconTests.containsRed(try image(field)), "the field surface is the host surface color")
     }
 
     @MainActor

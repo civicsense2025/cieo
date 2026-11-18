@@ -5,123 +5,122 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Storefront · Cieo</title>
 <link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
-<style>
-main{max-width:40rem;margin:0 auto;padding:var(--cieo-space-4)}
-img{max-width:100%;height:auto}
-[aria-invalid="true"]{outline:2px solid var(--cieo-color-danger,#b3261e)}
-[data-parts="FieldStatus"]{color:var(--cieo-color-danger,#b3261e)}
-:focus-visible{outline:2px solid var(--cieo-color-focus,#1a73e8);outline-offset:2px}
-.skip{position:absolute;left:-9999px;top:0}
-.skip:focus{position:static;left:auto}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-</style>
+<link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
 <a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
-<main id="main">
-<p><a href="./index.html">Composites</a></p>
-<nav aria-label="More demos">
-<p data-parts="Text">Also try the <a href="./dashboard.html">admin dashboard</a>, the <a href="./chat.html">chat workspace</a>, or the <a href="./booking.html">booking flow</a>.</p>
-</nav>
-<h1 data-parts="Heading">Storefront</h1>
-<p data-parts="Text">A product page with a live bag and checkout.</p>
-<h2 data-parts="Heading">Drift Wool Runner</h2>
-
-<section aria-label="Product" data-parts="Card">
-<p data-parts="Badge" data-tone="success">In stock</p>
-<img id="main-image" data-main-image src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23c9cdd2'/%3E%3C/svg%3E" alt="Drift Wool Runner in Fog">
-<div role="group" aria-label="Views" data-parts="Thumbnail">
-<button type="button" data-thumb="Fog" aria-pressed="true" aria-label="View Fog"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23c9cdd2'/%3E%3C/svg%3E" alt="Fog" data-src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23c9cdd2'/%3E%3C/svg%3E" data-alt="Drift Wool Runner in Fog"></button>
-<button type="button" data-thumb="Oak" aria-pressed="false" aria-label="View Oak"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23b08a5c'/%3E%3C/svg%3E" alt="Oak" data-src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%23b08a5c'/%3E%3C/svg%3E" data-alt="Drift Wool Runner in Oak"></button>
-<button type="button" data-thumb="Ink" aria-pressed="false" aria-label="View Ink"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%2326282c'/%3E%3C/svg%3E" alt="Ink" data-src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 3'%3E%3Crect width='4' height='3' fill='%2326282c'/%3E%3C/svg%3E" data-alt="Drift Wool Runner in Ink"></button>
+<main id="main" class="site-wrap comp-page">
+<header class="comp-head">
+<p class="site-label"><a href="./">Composites</a> / Storefront</p>
+<h1 class="site-title" data-parts="Heading">Storefront</h1>
+<p class="site-prose" data-parts="Text">A product page with a live bag and checkout.</p>
+</header>
+<div class="comp-screen sf">
+<div class="sf-top">
+<section class="sf-gallery" aria-label="Product images">
+<div class="sf-visual" role="img" data-main-image data-tone="fog" aria-label="Drift Wool Runner in Fog">
+<svg viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect class="sf-floor" width="400" height="300"/><g class="sf-rug"><rect x="14" y="96" width="372" height="108" rx="3"/><path class="sf-fringe" d="M6 106h8M386 106h8M6 116h8M386 116h8M6 126h8M386 126h8M6 136h8M386 136h8M6 146h8M386 146h8M6 156h8M386 156h8M6 166h8M386 166h8M6 176h8M386 176h8M6 186h8M386 186h8M6 196h8M386 196h8"/><path class="sf-band" d="M44 96v108M52 96v108M348 96v108M356 96v108"/><rect class="sf-field" x="76" y="112" width="248" height="76"/></g></svg>
 </div>
-<p data-parts="Text" data-price>$148.00</p>
-<p data-parts="Text">4.8 (312 reviews)</p>
-<fieldset data-parts="RadioList">
-<legend>Color</legend>
-<label data-parts="RadioListItem"><input type="radio" name="color" value="Fog" checked> Fog</label>
-<label data-parts="RadioListItem"><input type="radio" name="color" value="Oak"> Oak</label>
-<label data-parts="RadioListItem"><input type="radio" name="color" value="Ink"> Ink</label>
-</fieldset>
-<div data-parts="Stepper">
-<button type="button" data-qty-minus data-parts="Step" aria-label="Decrease quantity">−</button>
-<output data-qty aria-live="polite" aria-label="Quantity">1</output>
-<button type="button" data-qty-plus data-parts="Step" aria-label="Increase quantity">+</button>
+<div role="group" aria-label="Views" data-parts="Thumbnail" class="sf-thumbs">
+<button type="button" class="cieo-button" data-thumb="Fog" data-tone="fog" data-alt="Drift Wool Runner in Fog" aria-pressed="true" aria-label="View Fog"><span class="sf-swatch" data-tone="fog" aria-hidden="true"></span>Fog</button>
+<button type="button" class="cieo-button" data-thumb="Oak" data-tone="oak" data-alt="Drift Wool Runner in Oak" aria-pressed="false" aria-label="View Oak"><span class="sf-swatch" data-tone="oak" aria-hidden="true"></span>Oak</button>
+<button type="button" class="cieo-button" data-thumb="Ink" data-tone="ink" data-alt="Drift Wool Runner in Ink" aria-pressed="false" aria-label="View Ink"><span class="sf-swatch" data-tone="ink" aria-hidden="true"></span>Ink</button>
 </div>
-<p data-parts="Text" data-line-total>$148.00</p>
-<button type="button" data-add>Add to bag</button>
 </section>
-
-<hr data-parts="Divider">
-
-<section aria-label="Bag" id="bag" data-cart data-parts="Card">
+<section aria-label="Product" data-parts="Card" class="cieo cieo-card sf-buy">
+<p><span class="cieo-badge" data-parts="Badge" data-status="success">In stock</span></p>
+<h2 data-parts="Heading" class="sf-name">Drift Wool Runner</h2>
+<p class="sf-price-row"><span data-parts="Text" data-price class="sf-price">$148.00</span><span data-parts="Text" class="sf-rating">4.8 (312 reviews)</span></p>
+<p class="sf-lede">A hand-loomed hallway runner in undyed highland wool, 80 by 300 centimeters.</p>
+<fieldset data-parts="RadioList" class="sf-choice">
+<legend>Color</legend>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Fog" class="cieo-choice" checked> Fog</label>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Oak" class="cieo-choice"> Oak</label>
+<label data-parts="RadioListItem"><input type="radio" name="color" value="Ink" class="cieo-choice"> Ink</label>
+</fieldset>
+<div class="sf-buy-row">
+<div data-parts="Stepper" class="sf-stepper" role="group" aria-label="Quantity stepper">
+<button type="button" data-qty-minus data-parts="Step" class="cieo-button" aria-label="Decrease quantity">−</button>
+<output data-qty aria-live="polite" aria-label="Quantity">1</output>
+<button type="button" data-qty-plus data-parts="Step" class="cieo-button" aria-label="Increase quantity">+</button>
+</div>
+<p data-parts="Text" data-line-total class="sf-line-total">$148.00</p>
+<button type="button" class="cieo-button" data-variant="primary" data-add>Add to bag</button>
+</div>
+</section>
+</div>
+<div class="sf-bottom">
+<section aria-label="Bag" id="bag" data-cart data-parts="Card" class="cieo cieo-card sf-bag">
 <h2 data-parts="Heading" tabindex="-1" data-bag-heading>Your bag</h2>
-<div data-cart-empty data-parts="EmptyState">
-<p data-parts="Text">Your bag is empty.</p>
+<div data-cart-empty data-parts="EmptyState" class="sf-empty">
+<p data-parts="Text"><strong>Your bag is empty.</strong></p>
 <p data-parts="Text">Pick a color and a quantity above, then add the runner to start an order.</p>
 </div>
-<ul hidden data-cart-lines data-parts="List"></ul>
-<p hidden data-cart-total-wrap data-parts="Text">Bag total: <span data-cart-total>$0.00</span></p>
-<p role="status" data-bag-status data-parts="Text"></p>
+<ul hidden data-cart-lines data-parts="List" class="sf-lines"></ul>
+<p hidden data-cart-total-wrap data-parts="Text" class="sf-bag-total">Bag total: <span data-cart-total>$0.00</span></p>
+<p role="status" data-bag-status data-parts="Text" class="sf-status"></p>
 </section>
-
-<section aria-label="Checkout" data-checkout data-parts="Card">
+<section aria-label="Checkout" data-checkout data-parts="Card" class="cieo cieo-card sf-checkout">
 <h2 data-parts="Heading">Checkout</h2>
-<div data-parts="Field">
+<div class="sf-fields">
+<div data-parts="Field" class="cieo-field sf-wide">
 <label for="sf-email">Email</label>
-<input id="sf-email" type="email" data-email autocomplete="email">
-<p hidden id="sf-email-error" data-error-for="email" data-parts="FieldStatus"></p>
+<input id="sf-email" type="email" class="cieo-input" data-email autocomplete="email">
+<p hidden id="sf-email-error" data-error-for="email" data-parts="FieldStatus" class="cieo-p-field-status"></p>
 </div>
-<div data-parts="Field">
+<div data-parts="Field" class="cieo-field sf-wide">
 <label for="sf-street">Street</label>
-<input id="sf-street" type="text" data-street autocomplete="street-address">
-<p hidden id="sf-street-error" data-error-for="street" data-parts="FieldStatus"></p>
+<input id="sf-street" type="text" class="cieo-input" data-street autocomplete="street-address">
+<p hidden id="sf-street-error" data-error-for="street" data-parts="FieldStatus" class="cieo-p-field-status"></p>
 </div>
-<div data-parts="Field">
+<div data-parts="Field" class="cieo-field">
 <label for="sf-city">City</label>
-<input id="sf-city" type="text" data-city autocomplete="address-level2">
-<p hidden id="sf-city-error" data-error-for="city" data-parts="FieldStatus"></p>
+<input id="sf-city" type="text" class="cieo-input" data-city autocomplete="address-level2">
+<p hidden id="sf-city-error" data-error-for="city" data-parts="FieldStatus" class="cieo-p-field-status"></p>
 </div>
-<div data-parts="Field">
-<label for="sf-postcode">Postcode</label>
-<input id="sf-postcode" type="text" data-postcode autocomplete="postal-code">
-<p hidden id="sf-postcode-error" data-error-for="postcode" data-parts="FieldStatus"></p>
+<div data-parts="Field" class="cieo-field">
+<label for="sf-postcode">Postal code</label>
+<input id="sf-postcode" type="text" class="cieo-input" data-postcode autocomplete="postal-code">
+<p hidden id="sf-postcode-error" data-error-for="postcode" data-parts="FieldStatus" class="cieo-p-field-status"></p>
 </div>
-<fieldset data-delivery data-parts="RadioList">
+</div>
+<fieldset data-delivery data-parts="RadioList" class="sf-choice">
 <legend>Delivery</legend>
-<label data-parts="RadioListItem"><input type="radio" name="delivery" value="standard" checked> Standard $0</label>
-<label data-parts="RadioListItem"><input type="radio" name="delivery" value="express"> Express $12</label>
+<label data-parts="RadioListItem"><input type="radio" name="delivery" value="standard" class="cieo-choice" checked> Standard $0</label>
+<label data-parts="RadioListItem"><input type="radio" name="delivery" value="express" class="cieo-choice"> Express $12</label>
 </fieldset>
-<h3 data-parts="Heading">Order summary</h3>
-<dl data-order-lines data-parts="MetadataList">
+<h3 data-parts="Heading" class="sf-sub">Order summary</h3>
+<dl data-order-lines data-parts="MetadataList" class="sf-summary">
 <div><dt>No items yet</dt><dd>—</dd></div>
 </dl>
-<p data-parts="Text">Total: <span data-order-total aria-live="polite">$0.00</span></p>
-<button type="button" data-place>Place order</button>
-<p hidden id="order-error" role="alert" data-order-error data-parts="Banner">Check the highlighted fields.</p>
-<p hidden data-order-ok data-parts="Banner" tabindex="-1"><span data-ref-prefix>Order confirmed. Reference </span><span data-ref></span></p>
+<p data-parts="Text" class="sf-total">Total <span data-order-total aria-live="polite">$0.00</span></p>
+<button type="button" class="cieo-button" data-variant="primary" data-size="large" data-place>Place order</button>
+<p hidden id="order-error" role="alert" data-order-error data-parts="Banner" class="cieo-p-banner" data-tone="danger">Check the highlighted fields.</p>
+<p hidden data-order-ok data-parts="Banner" class="cieo-p-banner" data-tone="success" tabindex="-1"><span data-ref-prefix>Order confirmed. Reference </span><span data-ref></span></p>
 <div hidden data-confirm-detail>
 <p data-parts="Text">A receipt is on its way to your inbox. The runner leaves the workshop within two days.</p>
-<button type="button" data-again>Start a new order</button>
+<button type="button" class="cieo-button" data-again>Start a new order</button>
 </div>
 </section>
-
-<section data-parts="Collapsible">
-<h2>Specifications</h2>
+</div>
+<div class="sf-more-wrap">
+<details data-parts="Collapsible" class="sf-more" open>
+<summary>Specifications</summary>
 <p>Hand-loomed from undyed highland wool with a cotton backing for grip on hard floors.</p>
-<p>Measures 80 by 300 centimetres and weighs 4.2 kilograms; pile height is 12 millimetres.</p>
-</section>
-
-<section data-parts="Collapsible">
-<h2>Shipping &amp; returns</h2>
+<p>Measures 80 by 300 centimeters and weighs 4.2 kilograms; pile height is 12 millimeters.</p>
+</details>
+<details data-parts="Collapsible" class="sf-more">
+<summary>Shipping &amp; returns</summary>
 <p>Standard delivery is free and arrives in 5 to 7 days; express delivery costs $12 and arrives in 2 days.</p>
 <p>Returns are free within 60 days provided the runner is clean and in its original packaging.</p>
-</section>
-
+</details>
+</div>
+</div>
+<div class="comp-notes">
 <section aria-label="Behavior">
-<h2 data-parts="Heading">Behavior</h2>
+<h2>Behavior</h2>
 <ul>
-<li>Thumbnails swap the main image and alt text; the active view is pressed.</li>
+<li>Thumbnails swap the main image and its description; the active view is pressed.</li>
 <li>Quantity clamps 1–9; the line total is $148 times quantity; the bag accumulates per color.</li>
 <li>Each bag line carries its own stepper and remove control; stepping down at 1 removes the line.</li>
 <li>Order total is bag plus delivery ($12 express); the summary recomputes from state on every add, edit, removal, and delivery change.</li>
@@ -130,28 +129,29 @@ img{max-width:100%;height:auto}
 <li>Every action is a native button or input, so Tab reaches it all; success and error states take focus, and bag changes are announced.</li>
 </ul>
 </section>
-<section data-built-from>
-<h2>Built from</h2>
-<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
-<ul>
-<li><a href="../components/Thumbnail.html">Thumbnail</a></li>
-<li><a href="../components/RadioList.html">RadioList</a></li>
-<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
-<li><a href="../components/Stepper.html">Stepper</a></li>
-<li><a href="../components/Step.html">Step</a></li>
-<li><a href="../components/Field.html">Field</a></li>
-<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
-<li><a href="../components/Card.html">Card</a></li>
-<li><a href="../components/Collapsible.html">Collapsible</a></li>
-<li><a href="../components/Badge.html">Badge</a></li>
-<li><a href="../components/Banner.html">Banner</a></li>
-<li><a href="../components/MetadataList.html">MetadataList</a> (rendered by JS after Add to bag)</li>
-<li><a href="../components/EmptyState.html">EmptyState</a></li>
-<li><a href="../components/List.html">List</a> (rendered by JS after Add to bag)</li>
-<li><a href="../components/ListItem.html">ListItem</a> (rendered by JS after Add to bag)</li>
-<li><a href="../components/Heading.html">Heading</a></li>
-<li><a href="../components/Text.html">Text</a></li>
-<li><a href="../components/Divider.html">Divider</a></li>
+</div>
+<section data-built-from aria-labelledby="built-from-h">
+<h2 id="built-from-h">Built from</h2>
+<p data-reuse>18 library components make up this screen. Each card is the component itself; open one to see its usage and props. Recompose from the parts, never paste this page.</p>
+<ul class="comp-parts">
+<li class="comp-part"><a class="comp-part-link" href="../components/Heading.html"><span class="comp-part-name">Heading</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><h2 data-level="2" class="cieo cieo-p-heading">Heading</h2></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Text.html"><span class="comp-part-name">Text</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><p data-size="default" class="cieo cieo-p-text">Text</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Thumbnail.html"><span class="comp-part-name">Thumbnail</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><img src="data:image/svg+xml;utf8,&lt;svg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; width=&#x27;320&#x27; height=&#x27;200&#x27;&gt;&lt;rect width=&#x27;320&#x27; height=&#x27;200&#x27; fill=&#x27;%23c9c5ba&#x27;/&gt;&lt;/svg&gt;" alt="Thumbnail" data-size="md" loading="lazy" class="cieo cieo-p-thumbnail"/></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Button.html"><span class="comp-part-name">Button</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><button type="button" class="cieo-ctl cieo-btn cieo-btn--secondary cieo-btn--md"><span class="cieo-btn-text">Button</span></button></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Card.html"><span class="comp-part-name">Card</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-card"><h2>Billing summary</h2><p>$12.00 due May 1 for the Monthly plan.</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Badge.html"><span class="comp-part-name">Badge</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span data-status="default" class="cieo cieo-badge">Badge</span></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/RadioList.html"><span class="comp-part-name">RadioList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="radiogroup" aria-label="Delivery speed" class="cieo cieo-p-radio-list"><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input" name="speed" value="standard"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Standard</span></span></label><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input" name="speed" value="express"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Express</span></span></label><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input" name="speed" value="overnight"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Overnight</span></span></label></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/RadioListItem.html"><span class="comp-part-name">RadioListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label"></span></span></label></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Stepper.html"><span class="comp-part-name">Stepper</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div aria-label="Checkout" class="cieo cieo-stepper" data-was="nav"><ol><li data-state="done">Cart</li><li data-state="current" aria-current="step">Shipping</li><li data-state="todo">Payment</li></ol></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Step.html"><span class="comp-part-name">Step</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><ul><li data-state="todo" class="cieo cieo-step">Step</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/EmptyState.html"><span class="comp-part-name">EmptyState</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-empty-state"><h2 class="cieo-p-empty-state-title">Empty State</h2><div class="cieo-p-empty-state-action">Empty State</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/List.html"><span class="comp-part-name">List</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><ul aria-label="Latest stories" class="cieo cieo-p-list"><li class="cieo-p-list-item">House passes school funding bill</li><li class="cieo-p-list-item">Senate schedules vote for Thursday</li><li class="cieo-p-list-item">Committee delays redistricting hearing</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Field.html"><span class="comp-part-name">Field</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-field"><label for="cp-Field-email">Email</label><input id="cp-Field-email" type="email" class="cieo-ctl cieo-input"/><p id="cp-Field-email-help" class="cieo-p-help">Use your work email</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/FieldStatus.html"><span class="comp-part-name">FieldStatus</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><p class="cieo cieo-p-field-status" data-tone="description">Field Status</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/MetadataList.html"><span class="comp-part-name">MetadataList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><dl class="cieo cieo-metadata-list"><div class="cieo cieo-metadata-list-item"><dt>Status</dt><dd>Active</dd></div><div class="cieo cieo-metadata-list-item"><dt>Owner</dt><dd>Library team</dd></div><div class="cieo cieo-metadata-list-item"><dt>Updated</dt><dd>Oct 2026</dd></div></dl></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Banner.html"><span class="comp-part-name">Banner</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="status" data-tone="info" class="cieo cieo-p-banner"><div class="cieo-p-banner-body">Banner</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Collapsible.html"><span class="comp-part-name">Collapsible</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div data-open="true" class="cieo cieo-collapsible"><button type="button" aria-expanded="true" aria-controls="cp-Collapsible-_R_0_">Meeting filters</button><div id="cp-Collapsible-_R_0_" role="region" aria-label="Meeting filters"><div><p>Optional date and ward refinements.</p></div></div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ListItem.html"><span class="comp-part-name">ListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><ul><li class="cieo-p-list-item">List Item</li></ul></div></li>
 </ul>
 </section>
 </main>

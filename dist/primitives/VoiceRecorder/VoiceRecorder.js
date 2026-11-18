@@ -109,7 +109,7 @@ export function VoiceRecorder({ className, slotProps, onRecorded, onCancel, maxD
         setHold('record');
         holdFrom.current = null;
         send({ type: 'cancel' });
-        setMessage(recorderAnnouncement('cancelled'));
+        setMessage(recorderAnnouncement('canceled'));
         if (options.notify !== false)
             live.current.onCancel?.();
     };

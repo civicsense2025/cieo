@@ -1,4 +1,4 @@
-// One owner controls the clock, so cancelling a view cannot leave an idle frame loop behind.
+// One owner controls the clock, so canceling a view cannot leave an idle frame loop behind.
 export class FrameScheduler {
     constructor(environment, capacity = 256) {
         this.environment = environment;
@@ -63,7 +63,7 @@ export class FrameScheduler {
         }
         this.jobs.add(entry);
         this.ensureFrame();
-        return () => { this.finish(entry, 'cancelled'); this.cancelIdleFrame(); };
+        return () => { this.finish(entry, 'canceled'); this.cancelIdleFrame(); };
     }
     sync() {
         if (!this.environment.allowed()) {

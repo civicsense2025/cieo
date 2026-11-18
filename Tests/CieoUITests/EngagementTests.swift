@@ -98,7 +98,7 @@ final class EngagementTests: XCTestCase {
             XCTAssertNil(ShareButton(urlString: url, display: .iconOnly).url, url)
         }
         XCTAssertNil(ShareButton(nil, display: .iconOnly).url)
-        XCTAssertEqual(ShareButton(urlString: "https://example.com").display, .labeled, "labelled stays the default")
+        XCTAssertEqual(ShareButton(urlString: "https://example.com").display, .labeled, "labeled stays the default")
     }
 
     @MainActor

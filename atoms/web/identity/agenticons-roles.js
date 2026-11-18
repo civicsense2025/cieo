@@ -11,7 +11,7 @@ const GROUPS = { check:'Check', content:'Content', ops:'Operate', people:'People
 const EQ = 'M16 49.5L48 44.5';              // the equator cue: same tilt as the agent mark, sits under every glyph
 const SMALL_MAX = 20;                        // product forms this size or smaller use the simplified drawing
 const RICH_MIN = 48;                         // brand form and product forms this size or larger add the finest details
-const SMALL_SHIFT = 6;                       // the simplified glyph drops the equator, so it moves down to centre
+const SMALL_SHIFT = 6;                       // the simplified glyph drops the equator, so it moves down to center
 const swFor = s => s <= 16 ? 5.2 : s <= 20 ? 4.4 : s <= 24 ? 4 : s <= 32 ? 3 : s <= 48 ? 2.4 : 2;  // ≈1.3 to 1.5px on screen at every size
 const f1 = v => +v.toFixed(2);
 const rr = (x, y, w, h, r) => `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`;
@@ -106,7 +106,7 @@ const ROLES = [
     mt:'The pointer slides toward its target and settles.',
     g:[P('M21 13V36L27 30.5L31 39L35.5 37L31.5 28.5H40Z','cu','D'), P('M21 13V36L27 30.5L31 39L35.5 37L31.5 28.5H40Z','cu','fS'), P(rr(34, 13, 12, 10, 2),'sq','D')],
     mv:[{ ids:['cu'], k:'move', dx:3, dy:2.5 }] },
-  { k:'developer', name:'Developer', grp:'ops', alias:['code','engineer','branch','commit','programmer'],
+  { k:'developer', name:'Developer', grp:'ops', alias:['code','engineer','branch','commit','programr'],
     mean:'Writes and edits code on its own branch.', act:'Editing on branch fix/nav',
     mt:'The brackets open and close.',
     g:[P('M23 17L14.5 26L23 35','l'), P('M41 17L49.5 26L41 35','r'), P('M35 15L29 37','sl','D')],

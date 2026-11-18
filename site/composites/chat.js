@@ -93,6 +93,7 @@
     var article = document.createElement('article');
     article.className = 'cieo-chat-message cieo-chat-fade';
     article.tabIndex = -1;
+    article.setAttribute('data-from', author === 'You' ? 'you' : 'cieo');
     var meta = document.createElement('div');
     var who = document.createElement('span');
     who.textContent = author;
@@ -152,6 +153,7 @@
     body.textContent = 'Nothing left this page — the demo reply failed because the message mentions “fail”.';
     var retry = document.createElement('button');
     retry.type = 'button';
+    retry.className = 'cieo-button';
     retry.setAttribute('data-retry', '');
     retry.textContent = 'Retry reply';
     retry._failedText = original;

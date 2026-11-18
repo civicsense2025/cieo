@@ -36,7 +36,7 @@ test('levelBars: center taller, bounded, safe on junk', () => {
   assert.equal(levelBars(1, 100_000).length, 32, 'helper output stays capped');
 });
 
-test('AudioLevelMeter renders a labelled img with hidden bars and no valuenow', () => {
+test('AudioLevelMeter renders a labeled img with hidden bars and no valuenow', () => {
   const html = renderToStaticMarkup(h(AudioLevelMeter, { level: 0.5 }));
   assert.match(html, /role="img"/);
   assert.match(html, /aria-label="Microphone level"/);
@@ -153,7 +153,7 @@ test('limit warning window and announcements', () => {
   assert.equal(recorderAnnouncement('denied'), 'Microphone access is blocked. Allow it in your browser settings.');
 });
 
-test('VoiceRecorder idle markup: labelled group, mic button, polite status, no clock', () => {
+test('VoiceRecorder idle markup: labeled group, mic button, polite status, no clock', () => {
   const html = renderToStaticMarkup(h(VoiceRecorder, { onRecorded() {} }));
   assert.match(html, /role="group"/);
   assert.match(html, /aria-label="Record a voice reply"/);
@@ -204,7 +204,7 @@ const speakers = [
 ];
 const room = (self, extra = {}) => renderToStaticMarkup(h(AudioRoom, { title: 'Friday jam', speakers, listenerCount: 1240, self, onToggleMute() {}, onToggleHand() {}, onLeave() {}, ...extra }));
 
-test('AudioRoom: labelled region, stage, count, controls', () => {
+test('AudioRoom: labeled region, stage, count, controls', () => {
   const html = room({ muted: false, handRaised: false, canSpeak: true });
   assert.match(html, /<section[^>]*aria-labelledby="([^"]+)"/);
   const id = html.match(/aria-labelledby="([^"]+)"/)[1];

@@ -68,7 +68,7 @@ atom({ id:'audio-recorder', cat:'Audio', name:'Voice recorder', block:'audio, re
     const go = (next, w, t) => { state = next; sw.to(next, t); mic.to(next, t); if (REDUCE) width.jump(w); else width.set(w, S.base, t); };
     const say = s => { note.textContent = s; };
     rcMic.onclick = () => { const t = now(); t0 = t; hist = Array(NL).fill(0); samples = []; lastS = -1; sec = -1; dm.set('0', true); ds.set('00', true); go('rec', target(), t); say('Recording'); rcStop.focus({ preventScroll:true }); };
-    const cancel = () => { if (state !== 'rec') return; go('idle', 56, now()); say('Recording cancelled'); rcMic.focus({ preventScroll:true }); };
+    const cancel = () => { if (state !== 'rec') return; go('idle', 56, now()); say('Recording canceled'); rcMic.focus({ preventScroll:true }); };
     rcCancel.onclick = cancel;
     pill.onkeydown = e => { if (e.key === 'Escape') cancel(); };
     rcStop.onclick = () => { const t = now(), el = t - t0; clipLen = Math.max(1, Math.round(el));

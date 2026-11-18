@@ -27,7 +27,7 @@ const sp = (s, to, w, dt) => { const r = cd(s[0], s[1], to, w, dt); s[0] = r[0];
 
 const INK = '#1d1d1b', PAPER = '#fffaf2';
 const WASH = { blue:'#dce8fb', lavender:'#ede4fb', green:'#e3eedc', warm:'#f1e6d4', rose:'#f6e0da', violet:'#f1e4ff', mint:'#e2f1ea', peach:'#fee8e0' };
-// body: 54-unit soft square, origin at bottom centre, y up is negative
+// body: 54-unit soft square, origin at bottom center, y up is negative
 const U = 54, HW = 27, RAD = 16;
 const F = { y:-26, ex:10.6, ey:-3, rw:3.6, rh:5.0, my:8.6, mw:5.2, bx:10.8 };
 // the wash: the body's lower hemisphere below a tilted equator (the same -10° tilt as the agent mark)
@@ -82,7 +82,7 @@ const STATES = { idle:'neutral', ready:'neutral', listening:'curious', reading:'
   browsing:'curious', thinking:'thinking', waiting:'waiting', 'needs-input':'waiting', done:'proud', success:'happy',
   celebrate:'delighted', starting:'determined', warning:'worried', blocked:'confused', error:'apologetic', paused:'sleepy',
   offline:'sleepy', surprised:'surprised' };
-// prop anchors in body units (origin bottom centre). side lags behind the body like the antenna does
+// prop anchors in body units (origin bottom center). side lags behind the body like the antenna does
 const ANCHORS = { top:[9, -U], side:[HW + 8, -17], front:[0, -9], face:[0, 0] };
 
 /* ---------- geometry: one pure function feeds the live rig and the standalone SVG ---------- */

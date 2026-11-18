@@ -68,11 +68,12 @@ test('all 8 composite pages and composites/index.html load site/theme.css, token
   }
 });
 
-test('docs/studio exposes ground, display, elevation, square/pill radius, and links Integration notes without raw .md in .deploy', () => {
+test('docs/studio exposes ground, elevation, square/pill radius and typeface, and never links a raw .md', () => {
   const html = readFileSync('docs/studio/index.html', 'utf8');
   assert.doesNotMatch(html, /design-system\.md/, 'studio must not link raw .md');
   assert.match(html, /id="ground"/);
-  assert.match(html, /id="display"/);
+  assert.match(html, /id="font"/);
+  assert.doesNotMatch(html, /id="display"|serif/i, 'headings use the sans stack, so there is no display face to pick');
   assert.match(html, /id="elevation"/);
   for (const r of ['square', 'crisp', 'soft', 'round', 'pill']) {
     assert.match(html, new RegExp(`<option value="${r}"`), `radius missing ${r}`);
@@ -81,10 +82,10 @@ test('docs/studio exposes ground, display, elevation, square/pill radius, and li
   globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
   globalThis.location = { href: 'https://example.test/docs/studio/', hash: '' };
   const state = createState(() => ({ scheme: 'light', reduced: false, contrast: 'standard' }), () => {});
-  state.update({ ground: 'paper', display: 'serif', elevation: 'ring', radius: 'pill' });
+  state.update({ ground: 'paper', elevation: 'ring', radius: 'pill' });
   const opts = state.theme().options;
   assert.equal(opts.ground, 'paper');
-  assert.equal(opts.display, 'serif');
+  assert.throws(() => state.update({ display: 'serif' }), /display/, 'the old display axis is gone');
   assert.equal(opts.elevation, 'ring');
   assert.equal(opts.radius, 'pill');
 

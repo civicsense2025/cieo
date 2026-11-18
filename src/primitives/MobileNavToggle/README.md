@@ -14,7 +14,7 @@ Button that opens the drawer; host owns expanded state.
 
 ## Anatomy
 
-Native `<button aria-expanded>` labelled by `label` (defaults to "Open navigation").
+Native `<button aria-expanded>` labeled by `label` (defaults to "Open navigation").
 
 ## Behavior
 

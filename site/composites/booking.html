@@ -17,6 +17,7 @@
 [aria-invalid="true"]{outline:2px solid var(--cieo-color-danger,#b3261e)}
 @media (prefers-reduced-motion:reduce){.booking-layout *{animation:none;transition:none}}
 </style>
+<link rel="stylesheet" href="../../dist/controls/controls.css"><link rel="stylesheet" href="../composites/composites.css"><script>if(location.hash==='#embed')document.documentElement.classList.add('comp-embed')</script>
 </head>
 <body class="cieo cieo-site">
 <a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
@@ -133,12 +134,12 @@
 <p class="booking-actions"><button type="button" data-cancel-yes>Yes, cancel it</button> <button type="button" data-cancel-no>Keep it</button></p>
 </div>
 </section>
-<section class="cieo-card" data-cancelled hidden>
-<h2 tabindex="-1" data-cancelled-heading>Booking cancelled</h2>
+<section class="cieo-card" data-canceled hidden>
+<h2 tabindex="-1" data-canceled-heading>Booking canceled</h2>
 <div class="cieo cieo-p-banner">
-<p class="cieo-p-banner-title">Booking cancelled.</p>
+<p class="cieo-p-banner-title">Booking canceled.</p>
 </div>
-<p class="cieo-p-text">Reference <span data-cancelled-ref>—</span> no longer holds a slot. <span class="cieo cieo-badge" data-status="danger">Cancelled visit</span></p>
+<p class="cieo-p-text">Reference <span data-canceled-ref>—</span> no longer holds a slot. <span class="cieo cieo-badge" data-status="danger">Canceled visit</span></p>
 <p class="booking-actions"><button type="button" data-book-again>Book a new visit</button></p>
 </section>
 <section class="cieo-card" aria-labelledby="visits-heading">
@@ -177,7 +178,7 @@
 <li>Day, time, name, and email each raise their own fix-it note the moment they need attention.</li>
 <li>A confirmed visit can move to a new day or time, or cancel after a second confirming press; Escape keeps the visit.</li>
 <li>References read locally: any BK-YYYYMMDD-HHMM code resolves to its day and time, and visits before 10 October 2026 read as past.</li>
-<li>Keyboard path: Tab moves across days, arrow keys move across times, Enter runs the lookup, Escape steps back from cancelling.</li>
+<li>Keyboard path: Tab moves across days, arrow keys move across times, Enter runs the lookup, Escape steps back from canceling.</li>
 </ul>
 </section>
 <section aria-label="Related screens">
@@ -188,26 +189,26 @@
 <li><a href="./chat.html">Chat workspace</a> — ask the desk anything before you book.</li>
 </ul>
 </section>
-<section data-built-from>
-<h2 class="cieo-p-heading">Built from</h2>
-<p data-reuse>Standalone demo — recompose from the linked parts above; do not import this page or paste this markup as a component.</p>
-<ul>
-<li><a href="../components/Stepper.html">Stepper</a></li>
-<li><a href="../components/Step.html">Step</a></li>
-<li><a href="../components/Calendar.html">Calendar</a></li>
-<li><a href="../components/RadioList.html">RadioList</a></li>
-<li><a href="../components/RadioListItem.html">RadioListItem</a></li>
-<li><a href="../components/Field.html">Field</a></li>
-<li><a href="../components/FieldStatus.html">FieldStatus</a></li>
-<li><a href="../components/Card.html">Card</a></li>
-<li><a href="../components/MetadataList.html">MetadataList</a></li>
-<li><a href="../components/EmptyState.html">EmptyState</a></li>
-<li><a href="../components/Banner.html">Banner</a></li>
-<li><a href="../components/Heading.html">Heading</a></li>
-<li><a href="../components/Text.html">Text</a></li>
-<li><a href="../components/List.html">List</a></li>
-<li><a href="../components/ListItem.html">ListItem</a></li>
-<li><a href="../components/Badge.html">Badge</a></li>
+<section data-built-from aria-labelledby="built-from-h">
+<h2 id="built-from-h">Built from</h2>
+<p data-reuse>16 library components make up this screen. Each card is the component itself; open one to see its usage and props. Recompose from the parts, never paste this page.</p>
+<ul class="comp-parts">
+<li class="comp-part"><a class="comp-part-link" href="../components/Heading.html"><span class="comp-part-name">Heading</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><h2 data-level="2" class="cieo cieo-p-heading">Heading</h2></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Text.html"><span class="comp-part-name">Text</span><span class="comp-part-layer">Primitive</span></a><div class="comp-part-stage" inert><p data-size="default" class="cieo cieo-p-text">Text</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Stepper.html"><span class="comp-part-name">Stepper</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div aria-label="Checkout" class="cieo cieo-stepper" data-was="nav"><ol><li data-state="done">Cart</li><li data-state="current" aria-current="step">Shipping</li><li data-state="todo">Payment</li></ol></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Step.html"><span class="comp-part-name">Step</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><ul><li data-state="todo" class="cieo cieo-step">Step</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Calendar.html"><span class="comp-part-name">Calendar</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="group" aria-label="2026-11" class="cieo cieo-p-calendar"><span class="cieo-p-calendar-weekday" aria-hidden="true">Su</span><span class="cieo-p-calendar-weekday" aria-hidden="true">Mo</span><span class="cieo-p-calendar-weekday" aria-hidden="true">Tu</span><span class="cieo-p-calendar-weekday" aria-hidden="true">We</span><span class="cieo-p-calendar-weekday" aria-hidden="true">Th</span><span class="cieo-p-calendar-weekday" aria-hidden="true">Fr</span><span class="cieo-p-calendar-weekday" aria-hidden="true">Sa</span><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-01">1</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-02">2</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-03">3</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-04">4</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-05">5</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-06">6</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-07">7</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-08">8</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-09">9</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-10">10</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-11">11</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-12">12</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-13">13</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-14">14</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-15">15</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-16">16</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-17">17</button><button type="button" class="cieo-p-calendar-day" aria-pressed="true" aria-label="2026-11-18">18</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-19">19</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-20">20</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-21">21</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-22">22</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-23">23</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-24">24</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-25">25</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-26">26</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-27">27</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-28">28</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-29">29</button><button type="button" class="cieo-p-calendar-day" aria-pressed="false" aria-label="2026-11-30">30</button></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/RadioList.html"><span class="comp-part-name">RadioList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="radiogroup" aria-label="Delivery speed" class="cieo cieo-p-radio-list"><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input" name="speed" value="standard"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Standard</span></span></label><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input" name="speed" value="express"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Express</span></span></label><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input" name="speed" value="overnight"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label">Overnight</span></span></label></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/RadioListItem.html"><span class="comp-part-name">RadioListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><label class="cieo-ctl cieo-toggle cieo-radio"><span class="cieo-toggle-hit"><input type="radio" class="cieo-toggle-input"/><span class="cieo-radio-dot" aria-hidden="true"></span></span><span class="cieo-toggle-text"><span class="cieo-toggle-label"></span></span></label></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Field.html"><span class="comp-part-name">Field</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-field"><label for="cp-Field-email">Email</label><input id="cp-Field-email" type="email" class="cieo-ctl cieo-input"/><p id="cp-Field-email-help" class="cieo-p-help">Use your work email</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/FieldStatus.html"><span class="comp-part-name">FieldStatus</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><p class="cieo cieo-p-field-status" data-tone="description">Field Status</p></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Card.html"><span class="comp-part-name">Card</span><span class="comp-part-layer">Organism</span></a><div class="comp-part-stage" inert><div class="cieo cieo-card"><h2>Billing summary</h2><p>$12.00 due May 1 for the Monthly plan.</p></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/MetadataList.html"><span class="comp-part-name">MetadataList</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><dl class="cieo cieo-metadata-list"><div class="cieo cieo-metadata-list-item"><dt>Status</dt><dd>Active</dd></div><div class="cieo cieo-metadata-list-item"><dt>Owner</dt><dd>Library team</dd></div><div class="cieo cieo-metadata-list-item"><dt>Updated</dt><dd>Oct 2026</dd></div></dl></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/EmptyState.html"><span class="comp-part-name">EmptyState</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div class="cieo cieo-p-empty-state"><h2 class="cieo-p-empty-state-title">Empty State</h2><div class="cieo-p-empty-state-action">Empty State</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Banner.html"><span class="comp-part-name">Banner</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><div role="status" data-tone="info" class="cieo cieo-p-banner"><div class="cieo-p-banner-body">Banner</div></div></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/List.html"><span class="comp-part-name">List</span><span class="comp-part-layer">Molecule</span></a><div class="comp-part-stage" inert><ul aria-label="Latest stories" class="cieo cieo-p-list"><li class="cieo-p-list-item">House passes school funding bill</li><li class="cieo-p-list-item">Senate schedules vote for Thursday</li><li class="cieo-p-list-item">Committee delays redistricting hearing</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/ListItem.html"><span class="comp-part-name">ListItem</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><ul><li class="cieo-p-list-item">List Item</li></ul></div></li>
+<li class="comp-part"><a class="comp-part-link" href="../components/Badge.html"><span class="comp-part-name">Badge</span><span class="comp-part-layer">Atom</span></a><div class="comp-part-stage" inert><span data-status="default" class="cieo cieo-badge">Badge</span></div></li>
 </ul>
 </section>
 </main>

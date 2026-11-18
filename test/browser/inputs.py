@@ -56,16 +56,16 @@ with tempfile.TemporaryDirectory(prefix='cieo-inputs-') as tmp:
                         checks[id + '-prop-update'] = control.input_value() == 'updated'
                         if kind == 'search': checks[id + '-prop-filled'] = page.locator('#' + id + '-form .cieo-search').get_attribute('data-filled') == 'true'
                         if kind == 'area': checks[id + '-prop-count'] = page.locator('#' + id + '-form .cieo-field-count').inner_text().strip() == '7'
-                    control.fill('cancelled' if kind == 'search' else 'x')
+                    control.fill('canceled' if kind == 'search' else 'x')
                     control.press('Tab')
                     page.locator('#' + id + '-cancel').check()
                     page.locator('#' + id + '-form button[type=reset]').click()
-                    checks[id + '-cancelled-reset'] = control.input_value() == ('cancelled' if kind == 'search' else 'x')
-                    if kind != 'search': checks[id + '-cancelled-status'] = control.get_attribute('aria-invalid') == 'true'
+                    checks[id + '-canceled-reset'] = control.input_value() == ('canceled' if kind == 'search' else 'x')
+                    if kind != 'search': checks[id + '-canceled-status'] = control.get_attribute('aria-invalid') == 'true'
                     page.locator('#' + id + '-cancel').uncheck()
                     if mode == 'controlled':
                         page.locator('#' + id + '-form button[type=reset]').click()
-                        checks[id + '-controlled-reset-value'] = control.input_value() == ('cancelled' if kind == 'search' else 'x')
+                        checks[id + '-controlled-reset-value'] = control.input_value() == ('canceled' if kind == 'search' else 'x')
                     if mode == 'uncontrolled':
                         if kind == 'area':
                             control.fill('one\ntwo\nthree\nfour\nfive\nsix')

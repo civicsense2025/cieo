@@ -3,7 +3,7 @@ import Cieo
 
 public struct ThemeToggleAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "themetoggle", category: "Admin kit", name: "Theme toggle",
-        summary: "One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every colour between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.")
+        summary: "One button, and the glyph shows the destination, as in Gesso: the sun’s circle and the moon’s crescent are the same 48 path points interpolated, while the eight rays shrink into the body and fade. At the same moment a local preview card cross-fades every color between its light and dark palettes. Like Gesso, the choice is stored as a pin only while it disagrees with the system, and the status line swaps to say which.")
 
     @Environment(\.colorScheme) private var system
     @Environment(\.accessibilityReduceMotion) private var reduce

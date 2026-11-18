@@ -27,7 +27,7 @@ The current numeral rolls on change; motion={false} renders a plain numeral.
 ## Keyboard / accessibility
 
 - Nav carries the name (`aria-label`, defaults to "Pagination"). Current page announces via `aria-current`.
-- Disabled Previous/Next stay focusable-safe (native `disabled`); keep them labelled.
+- Disabled Previous/Next stay focusable-safe (native `disabled`); keep them labeled.
 
 ## Do / don't
 

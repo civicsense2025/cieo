@@ -44,7 +44,7 @@ The status set is `starting`, `running`, `waiting`, `completed`, `stopped`, `fai
 - **Order.** Sequences at or below the cursor are ignored, and the state object is returned unchanged.
 - **Gaps.** In a contiguous log, a later sequence sets `gap` and applies nothing. `connectEventStream` then reconnects from the cursor. Pass `limits.contiguous: false` for a filtered stream.
 - **Unknown input.** An unknown type or a malformed payload advances the cursor and increments `rejected`, so a newer host never stalls an older client. Frames without a valid envelope can't advance the cursor, so the store counts them in `dropped`.
-- **No optimism.** An approval stays `pending` until the host sends `approval.resolved`. A repeated request never reopens a decision. Commands such as stop, approve and deny are host callbacks.
+- **No optimizm.** An approval stays `pending` until the host sends `approval.resolved`. A repeated request never reopens a decision. Commands such as stop, approve and deny are host callbacks.
 - **Bounded memory.** Activity is a ring (`maxActivity`, default 500). Text is capped (`maxTextChars`, default 20,000, with `truncated` set). Each map holds at most `maxEntities` entries (default 500) and evicts its oldest settled entry first.
 - **Stable selectors.** Selectors cache on the identity of the map they read. Streaming text doesn't rebuild the approval list.
 
@@ -75,7 +75,7 @@ React components that render these views live with the other primitives. Each ta
 | `StreamingMessage` | Message text as plain text. It stays `aria-busy` until complete. |
 | `ToolCallDisclosure` | A tool call as native `details`, with its phase in words. |
 | `ApprovalRequest` | Approve and Deny. While `busy`, both are disabled, and the text still says it's waiting until the host resolves the approval. |
-| `AgentActivity` | The activity ring as a labelled `role="log"` list. |
+| `AgentActivity` | The activity ring as a labeled `role="log"` list. |
 | `AgentIcon` | One agent action or state icon from `cieo/agent-icons`. |
 
 `cieo/agent-icons` exports the 24 agent action and state icons as plain SVG data. Each icon has three detail tiers and no globals. `scripts/build-agent-icons.mjs` generates the data from the icon atom, and `npm run check` fails when the data drifts from the atom.

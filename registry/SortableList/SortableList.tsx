@@ -34,7 +34,7 @@ export function sortableAnnouncement(event: SortableEvent, name: string, positio
   if (event === 'lift') return `Picked up ${name}, ${at}. Arrow keys move it, Space or Enter drops it, Escape cancels.`;
   if (event === 'move') return `${name} moved to ${at}.`;
   if (event === 'drop') return `${name} dropped at ${at}.`;
-  return `Reorder cancelled. ${name} is back at ${at}.`;
+  return `Reorder canceled. ${name} is back at ${at}.`;
 }
 
 export interface SortableSession {

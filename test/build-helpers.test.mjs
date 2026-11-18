@@ -15,10 +15,10 @@ test('an unterminated fence still renders as code, not prose', () => {
   assert.match(readmeHtml('## Use\n```\nlet a = 1'), /<pre><code>let a = 1<\/code><\/pre>/);
 });
 
-test('importing the layer classifier does not rewrite the catalogue index', async () => {
+test('importing the layer classifier does not rewrite the catalog index', async () => {
   const path = new URL('../atoms/web/index.json', import.meta.url);
   const before = readFileSync(path, 'utf8');
-  const { layerOf } = await import('../scripts/catalogue/classify-layers.mjs');
+  const { layerOf } = await import('../scripts/catalog/classify-layers.mjs');
   assert.equal(readFileSync(path, 'utf8'), before);
   assert.equal(layerOf({ category: 'Foundations' }, undefined), 'foundation');
   assert.equal(layerOf({ category: 'Forms' }, { html: '<button>a</button>' }), 'molecule');

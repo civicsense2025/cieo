@@ -12,7 +12,7 @@ npm install github:civicsense2025/cieo#v0.7.0
 
 SwiftUI: in Xcode, File → Add Package Dependencies → `https://github.com/civicsense2025/cieo`, then add `Cieo` (and `CieoAtoms` for the reference atoms).
 
-For reusable production controls, add the separate `CieoUI` product. Its [Apple foundation](docs/apple-components.md) organizes foundations, atoms, molecules and organisms independently of the recipe catalogue. Native Button/TextField semantics remain intact; host-owned state and actions stay outside the design layer. Install `.renderingPreferences()` at the host root, and opt into the bounded Metal decoration only where useful.
+For reusable production controls, add the separate `CieoUI` product. Its [Apple foundation](docs/apple-components.md) organizes foundations, atoms, molecules and organisms independently of the recipe catalog. Native Button/TextField semantics remain intact; host-owned state and actions stay outside the design layer. Install `.renderingPreferences()` at the host root, and opt into the bounded Metal decoration only where useful.
 
 ## Use
 
@@ -56,7 +56,7 @@ const controller = applyTheme(document.documentElement, theme);
 controller.destroy();
 ```
 
-The design layer has six brand starting points, 75 semantic tokens, explicit color-pair audits, scoped theming, a CLI, typed JSON, and Swift/Rust/Kotlin/Dart/Python/C constant generators. Native hosts still supply their own components, rendering, accessibility, and text scaling. The existing Motion Atoms catalogue and its recipe runtime remain unchanged.
+The design layer has six brand starting points, 75 semantic tokens, explicit color-pair audits, scoped theming, a CLI, typed JSON, and Swift/Rust/Kotlin/Dart/Python/C constant generators. Native hosts still supply their own components, rendering, accessibility, and text scaling. The existing Motion Atoms catalog and its recipe runtime remain unchanged.
 
 Pin a reviewed commit or release containing this change. Older tags don't acquire new files when this branch changes. `prepare` and `prepack` generate portable token artifacts using only Node built-ins; the checked-in spring engine still needs no consumer-side TypeScript compilation.
 
@@ -73,9 +73,9 @@ Shared rules: content leaves in 100 ms before new content enters; a sliding indi
 
 ## Atoms
 
-- `atoms/web/index.json`: every atom (id, category, name, summary, file). The recipe code is in `atoms/web/blocks/` (agent identity in `atoms/web/identity/`). The recipes run on the catalogue's own runtime (`atoms/web/runtime.core.js`); port the pattern into your app with `cieo/dom` or `cieo/react`.
+- `atoms/web/index.json`: every atom (id, category, name, summary, file). The recipe code is in `atoms/web/blocks/` (agent identity in `atoms/web/identity/`). The recipes run on the catalog's own runtime (`atoms/web/runtime.core.js`); port the pattern into your app with `cieo/dom` or `cieo/react`.
 - `atoms/swift/<Category>/`: one SwiftUI view per atom, same id, built on Cieo. Browse them with `MotionAtoms.all`.
-- `docs/catalogue.html`: the full interactive catalogue (open in a browser). `docs/agent-identity.html`: agent icons and characters.
+- `docs/catalog.html`: the full interactive catalog (open in a browser). `docs/agent-identity.html`: agent icons and characters.
 
 ## Controls
 
@@ -127,18 +127,18 @@ The controlled/uncontrolled regression fixtures are
 [test/browser/inputs.tsx](test/browser/inputs.tsx) and
 [test/browser/inputs.py](test/browser/inputs.py). These callback repairs are
 unpublished local source changes, not a claim about installed version 0.3.0.
-On an uncancelled native form reset, SearchField refreshes its filled/clear
+On an uncanceled native form reset, SearchField refreshes its filled/clear
 affordance and TextArea refreshes count and bounded height after the browser
-restores defaultValue. Cancelled resets preserve values, status and presentation;
+restores defaultValue. Canceled resets preserve values, status and presentation;
 controlled fields retain host-owned values. Reset does not invoke search/clear or
 change callbacks. Current local browser fixtures pass 109 checks with actual
 control CSS in Chromium 153 at 900px and reduced motion, covering edits, callback
-order, validation/recovery, controlled updates, native reset and cancelled reset.
+order, validation/recovery, controlled updates, native reset and canceled reset.
 That receipt does not establish localization or assistive-technology acceptance.
 
 The local [Radio implementation](src/controls/Toggles.tsx) forwards a standalone
 native `name`. Uncontrolled RadioGroup uses native defaultChecked ownership;
-reset restores its initial choice and cancelled reset preserves the current
+reset restores its initial choice and canceled reset preserves the current
 choice through unrelated host rerenders, without selection callbacks. Controlled
 groups retain host-owned checked values and prop updates. The
 [Radio fixture](test/browser/radio.tsx) and [browser checks](test/browser/radio.py)
@@ -157,7 +157,7 @@ How they behave without scripts: `Select` is a styled native select (after hydra
 
 Next.js and React Server Components: interactive controls and stateful primitives declare `'use client'`, while pure layout, typography, and display primitives (`Stack`, `HStack`, `VStack`, `Grid`, `GridSpan`, `Center`, `Section`, `Text`, `Heading`, `Icon`, `Badge`, `Divider`, `Kbd`, `Code`, `Blockquote`, `Citation`, `Card`, `BigNumber`, `BlockPanel`, `Table`, `TableHeader`, `TableBody`, `TableRow`, `TableCell`, `TableFooter`) ship as pure Server Components without `'use client'`. `cieo/controls.css` wraps all rules in `@layer cieo.components` so unlayered consumer styles override cleanly without specificity wars, and every control (`Button`, `Select`, `TextField`, `TextArea`, `SearchField`, `Checkbox`, `Switch`, `RadioGroup`, `Radio`, `Range`) accepts typed `slotProps` (`ControlPartProps`) for named sub-element presentation customization while protecting native handlers, roles, values, and state attributes. The listbox is positioned inside `Select`, so an ancestor with `overflow: hidden` clips it.
 
-Theme with these variables (all optional). Each one falls back first to the matching `cieo/design` token (shown in brackets), so a page that loads `cieo/design.css` themes the controls automatically; without it the fallbacks are system colours, so dark mode follows `color-scheme` until you set your own:
+Theme with these variables (all optional). Each one falls back first to the matching `cieo/design` token (shown in brackets), so a page that loads `cieo/design.css` themes the controls automatically; without it the fallbacks are system colors, so dark mode follows `color-scheme` until you set your own:
 
 | Variable | Default | Used for |
 | --- | --- | --- |
@@ -176,7 +176,7 @@ Theme with these variables (all optional). Each one falls back first to the matc
 | `--cieo-disabled-opacity` | 0.55 | every disabled control, option and toggle |
 | `--cieo-search-width`, `--cieo-search-radius` | 100% (16rem collapsible), pill | search field |
 
-On touch screens (`pointer: coarse`) every control has at least a 44px hit area. Hover styles apply only on devices that can hover, touch selects (both sizes) use 16px text so iOS Safari does not zoom, and in forced-colors mode the primary button, switch and field borders switch to system colours; a disabled primary button drops its fill. The `cieo/design.css` field and check rules skip `.cieo-ctl` elements, so loading both stylesheets does not restyle these controls. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
+On touch screens (`pointer: coarse`) every control has at least a 44px hit area. Hover styles apply only on devices that can hover, touch selects (both sizes) use 16px text so iOS Safari does not zoom, and in forced-colors mode the primary button, switch and field borders switch to system colors; a disabled primary button drops its fill. The `cieo/design.css` field and check rules skip `.cieo-ctl` elements, so loading both stylesheets does not restyle these controls. `docs/controls.html` shows every control in light and dark; rebuild it with `node scripts/build-controls-demo.mjs`.
 
 ## Agents
 
@@ -187,7 +187,7 @@ On touch screens (`pointer: coarse`) every control has at least a 44px hit area.
 ```bash
 npm install && npm test             # builds dist/ and runs the spring tests
 swift build && swift test           # Swift package and tests
-node scripts/build-catalogue.mjs    # rebuild docs/catalogue.html from atoms/web
+node scripts/build-catalog.mjs    # rebuild docs/catalog.html from atoms/web
 node scripts/gen-swift-index.mjs    # relist Swift atoms after adding one
 ```
 

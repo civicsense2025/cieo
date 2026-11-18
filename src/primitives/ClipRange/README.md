@@ -14,7 +14,7 @@ Start + length pair of native range inputs for trimming media. Host owns both va
 
 ## Anatomy
 
-`role="group"` named by `label`: two labelled native ranges plus an `output` readout ("0:02.5 – 0:04.0"). The length input's `max` recomputes from the start, so the end handle can never pass the media end.
+`role="group"` named by `label`: two labeled native ranges plus an `output` readout ("0:02.5 – 0:04.0"). The length input's `max` recomputes from the start, so the end handle can never pass the media end.
 
 ## Behavior
 

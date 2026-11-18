@@ -50,7 +50,7 @@ final class SlotTests: XCTestCase {
     }
 
     @MainActor
-    func testStatusLabelTakesItsColourFromTheTheme() throws {
+    func testStatusLabelTakesItsColorFromTheTheme() throws {
         let red = Theme(danger: Color(red: 1, green: 0, blue: 0))
         func render(_ tone: StatusLabel.Tone) throws -> CGImage {
             try XCTUnwrap(ImageRenderer(content: StatusLabel("Enter a ZIP code", icon: .error, tone: tone)

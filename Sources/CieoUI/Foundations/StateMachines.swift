@@ -43,7 +43,7 @@ public enum AsyncActionPhase: Equatable, Sendable {
     case pending
     case succeeded
     case failed(String)
-    case cancelled
+    case canceled
     case uncertain(String)
 
     public var isPending: Bool { self == .pending }
@@ -63,7 +63,7 @@ public enum AsyncActionPhase: Equatable, Sendable {
         case .succeeded: .success
         case .failed: .error
         case .uncertain: .warning
-        case .idle, .pending, .cancelled: nil
+        case .idle, .pending, .canceled: nil
         }
     }
 }
@@ -140,9 +140,9 @@ public struct AsyncActionState: Equatable, Sendable {
     public mutating func cancel(attemptID answered: UUID? = nil) -> TransitionEnvelope<AsyncActionPhase, AsyncActionEvent> {
         let prev = phase
         guard accepts(answered) else { return ignored(.cancel) }
-        phase = .cancelled
+        phase = .canceled
         needsFreshAttemptOnNextBegin = true
-        return TransitionEnvelope(prev: prev, next: .cancelled, event: .cancel, direction: -1, announcement: "Cancelled")
+        return TransitionEnvelope(prev: prev, next: .canceled, event: .cancel, direction: -1, announcement: "Canceled")
     }
 
     @discardableResult

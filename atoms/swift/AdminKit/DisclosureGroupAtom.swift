@@ -13,7 +13,7 @@ public struct DisclosureGroupAtom: MotionAtomView {
     public var body: some View {
         AtomStage(hint: "Open groups independently") {
             VStack(alignment: .leading, spacing: 0) {
-                group("Appearance") { Text("Theme, accent colour and density.").font(.footnote).foregroundStyle(.secondary).padding(.vertical, 8) }
+                group("Appearance") { Text("Theme, accent color and density.").font(.footnote).foregroundStyle(.secondary).padding(.vertical, 8) }
                 group("Spacing") {
                     VStack(alignment: .leading, spacing: 0) {
                         group("Outer") { Text("Page margins: 24 px.").font(.footnote).foregroundStyle(.secondary).padding(.vertical, 8) }

@@ -148,7 +148,7 @@ public struct AudioTranscript: View {
         return now - lastUserScroll >= quiet
     }
 
-    /// New scroll offset that brings a word into view (centred), or nil when it is already fully visible.
+    /// New scroll offset that brings a word into view (centered), or nil when it is already fully visible.
     public static func transcriptScrollTop(wordTop: CGFloat, wordHeight: CGFloat, viewHeight: CGFloat,
                                            scrollTop: CGFloat) -> CGFloat? {
         if wordTop >= scrollTop, wordTop + wordHeight <= scrollTop + viewHeight { return nil }

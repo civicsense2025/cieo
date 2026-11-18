@@ -3,7 +3,7 @@ import Cieo
 
 public struct HoverFocusGridAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "gal-hover-focus", category: "Galleries", name: "Hover-focus grid",
-        summary: "The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of colour, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.")
+        summary: "The photo under the pointer stays exactly as it is and gains a small caption. Every other photo quietly drains of color, dims and settles back 3.5 percent, and it does so in a wave: the nearest neighbours go first, the far corner last, about 14ms per 100 pixels. Moving to another photo retargets the same springs, so nothing restarts. Leaving the grid returns everything on the slow spring, over about half a second. Click or tap pins the focus so touch screens and keyboards get the same state; Escape releases it. Use when a portfolio grid should direct attention without hiding the rest.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var focus: Int?
     @State private var pinned = false

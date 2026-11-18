@@ -7,7 +7,7 @@ import SwiftUI
 public struct ReorderDrag: Equatable, Sendable {
     /// The dragged row's index when the drag began.
     public let from: Int
-    /// Each row's vertical centre when the drag began, top to bottom.
+    /// Each row's vertical center when the drag began, top to bottom.
     public let centers: [Double]
     /// The dragged row's height.
     public let height: Double
@@ -49,9 +49,9 @@ public struct ReorderDrag: Equatable, Sendable {
         return 0
     }
 
-    /// The place a row lands when its centre is at `draggedCenter`. The leading edge, not the centre, is
-    /// compared with the other rows' centres, because a centre rarely reaches the next row's centre exactly
-    /// and would drop the row one place short. A `draggedHeight` of 0 compares centres.
+    /// The place a row lands when its center is at `draggedCenter`. The leading edge, not the center, is
+    /// compared with the other rows' centers, because a center rarely reaches the next row's center exactly
+    /// and would drop the row one place short. A `draggedHeight` of 0 compares centers.
     public static func dropIndex(centers: [Double], from: Int, draggedCenter: Double, draggedHeight: Double = 0) -> Int {
         guard centers.indices.contains(from) else { return 0 }
         let half = draggedHeight / 2

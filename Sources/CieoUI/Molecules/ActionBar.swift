@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// A horizontal row of action buttons under a post, such as like, reply and share. The host owns the
-/// buttons; the bar lays them out and reads as one labelled group to VoiceOver.
+/// buttons; the bar lays them out and reads as one labeled group to VoiceOver.
 public struct ActionBar<Content: View>: View {
     /// Where the buttons sit in the row.
     public enum Arrangement: Sendable, CaseIterable {

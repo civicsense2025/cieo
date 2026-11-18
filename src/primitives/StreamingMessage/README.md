@@ -30,7 +30,7 @@ Text is plain text with line breaks kept (`white-space: pre-wrap`). It is never 
 
 ## Customization
 
-`author`, `time`, `truncatedText`. Type and colour from tokens.
+`author`, `time`, `truncatedText`. Type and color from tokens.
 
 ## Limitations
 

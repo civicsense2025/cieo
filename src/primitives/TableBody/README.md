@@ -22,7 +22,7 @@ No motion. Renders rows in order; owns no data logic.
 
 ## Keyboard / accessibility
 
-- Lives inside a labelled Table; adds no name of its own.
+- Lives inside a labeled Table; adds no name of its own.
 - Keep row content plain text or simple controls so readers move quickly.
 
 ## Do / don't

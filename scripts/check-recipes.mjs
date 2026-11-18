@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Guards recipe conventions for the catalogue/library builds.
+// Guards recipe conventions for the catalog/library builds.
 //
 //  (a) hint rule: a block html field containing class="hint" should use a
 //      TRAILING plain-text hint div, which the build extracts into a caption
@@ -351,7 +351,7 @@ function styleMatches(src) {
   }
   return out;
 }
-const SHARED_CSS = ['atoms/web/catalogue/atoms.css', 'atoms/web/catalogue/shell.css'];
+const SHARED_CSS = ['atoms/web/catalog/atoms.css', 'atoms/web/catalog/shell.css'];
 const sharedClasses = new Set();
 for (const rel of SHARED_CSS) {
   try {
@@ -396,7 +396,7 @@ for (const rel of blocks) {
     }
   }
 }
-for (const rel of ['atoms/web/catalogue/atoms.css', 'atoms/web/catalogue/shell.css']) {
+for (const rel of ['atoms/web/catalog/atoms.css', 'atoms/web/catalog/shell.css']) {
   try {
     const css = fs.readFileSync(path.join(root, rel), 'utf8');
     const key = `shared:${path.basename(rel)}`;

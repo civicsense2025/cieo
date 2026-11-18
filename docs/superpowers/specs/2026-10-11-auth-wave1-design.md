@@ -4,7 +4,7 @@ Date: 2026-10-11. Approach A (three waves by flow), Wave 1 scope: sign in, sign 
 
 ## Background
 
-The catalogue has auth fragments (`otp`, `password`, `signupform`, `signupfields`, `authshell`, `oauthgrant`) but no coherent set. Wave 1 covers password and code-based flows. Wave 2 covers passkeys, SSO buttons, and OAuth consent polish. Wave 3 covers org invites, sessions, and account screens.
+The catalog has auth fragments (`otp`, `password`, `signupform`, `signupfields`, `authshell`, `oauthgrant`) but no coherent set. Wave 1 covers password and code-based flows. Wave 2 covers passkeys, SSO buttons, and OAuth consent polish. Wave 3 covers org invites, sessions, and account screens.
 
 ## Architecture
 
@@ -28,7 +28,7 @@ Primitives are presentational. Recipes own state with the existing `Track`/`Swap
 
 ## Error handling
 
-Inline field errors (bad email, weak password, short code); wrong-code clear-and-retry after a beat; rate-limit note with resend countdown; recovery-code fallback path; show/hide toggle keeps focus on the input. Every error has text, never colour alone.
+Inline field errors (bad email, weak password, short code); wrong-code clear-and-retry after a beat; rate-limit note with resend countdown; recovery-code fallback path; show/hide toggle keeps focus on the input. Every error has text, never color alone.
 
 ## Styling and accessibility constraints
 

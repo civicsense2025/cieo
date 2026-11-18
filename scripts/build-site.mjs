@@ -9,6 +9,7 @@ import { brands, radii, densities, grounds } from '../design/index.js';
 import { recipeCount } from './lib/recipe-count.mjs';
 import { siteConfig } from './lib/site-config.mjs';
 import { siteFooter, siteHeader, siteStyles, stampChrome, stampMarked } from './lib/site-chrome.mjs';
+import { builtFromSection, compositeHead, indexCards } from './lib/composites.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
@@ -178,10 +179,16 @@ function contact() {
 export function pages(repo = root) {
   const f = facts(repo);
   const out = { 'site/index.html': home(f), 'site/pricing.html': pricing(f), 'site/contact.html': contact() };
-  // Composite screens are hand-written; only their chrome (skip link, header, footer, search) is owned here.
+  // Composite screens are hand-written; their chrome (skip link, header, footer, search), their stylesheet and the
+  // live "Built from" grid (read from the screen's own markup and the library's previews) are owned here.
   for (const name of readdirSync(`${repo}/site/composites`).filter((n) => n.endsWith('.html'))) {
-    const rel = `site/composites/${name}`;
-    out[rel] = stampChrome(readFileSync(`${repo}/${rel}`, 'utf8'), '../', 'Composites');
+    const rel = `site/composites/${name}`, slug = name.slice(0, -5);
+    let html = stampChrome(readFileSync(`${repo}/${rel}`, 'utf8'), '../', 'Composites');
+    const js = existsSync(`${repo}/site/composites/${slug}.js`) ? readFileSync(`${repo}/site/composites/${slug}.js`, 'utf8') : '';
+    html = html.replace(/(?:<link rel="stylesheet" href="\.\.\/\.\.\/dist\/controls\/controls\.css">)?<link rel="stylesheet" href="\.\.\/composites\/composites\.css"><script>[^<]*<\/script>\n?/, '').replace('</head>', () => `${compositeHead('../', /cieo-ctl/.test(html + js))}\n</head>`);
+    if (slug === 'index') html = html.replace(/<!--comp-cards-->[\s\S]*?<!--\/comp-cards-->/, () => `<!--comp-cards-->\n${indexCards(repo)}\n<!--/comp-cards-->`);
+    else html = html.replace(/<section\b[^>]*data-built-from[^>]*>[\s\S]*?<\/section>/, () => builtFromSection(repo, slug));
+    out[rel] = html;
   }
   // The Studio lives under docs/; its chrome points back into site/.
   const studio = 'docs/studio/index.html';

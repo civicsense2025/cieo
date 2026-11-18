@@ -3,7 +3,7 @@ import Cieo
 
 public struct GradeWithHistogramAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-grade", category: "Photo effects", name: "Grade with live histogram",
-        summary: "Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a grey-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.")
+        summary: "Exposure and white balance are applied in linear light, and the same curve runs on a 1/8-size copy to draw the histogram, so the graph slides with the photo as you scrub. Drag sideways on the photo for exposure, or use the sliders. Auto exposes to the right (the 98th percentile lands just under white) with half a gray-world balance; Auto and Reset glide there on a soft spring. Clipped highlights and crushed shadows can be painted in danger and accent. Use when: people adjust uploads in a media library or editor and need to see what they are losing.")
     @State private var pixels: PhPixels?
     @State private var ev = 0.0
     @State private var warmth = 0.0
@@ -52,7 +52,7 @@ public struct GradeWithHistogramAtom: MotionAtomView {
         }
     }
 
-    /// Expose to the right: the 98th percentile lands just under white, with half a grey-world balance.
+    /// Expose to the right: the 98th percentile lands just under white, with half a gray-world balance.
     private func auto() {
         guard let px = pixels else { return }
         let l = (0..<(px.w * px.h)).map { px.lum($0) }.sorted()

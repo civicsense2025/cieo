@@ -152,7 +152,7 @@ function apply(s, e, limits) {
                 return null;
             if (prior && prior.status !== 'open')
                 return null;
-            const status = e.type === 'draft.cancel' ? 'cancelled' : e.type === 'draft.complete' ? 'complete' : 'open';
+            const status = e.type === 'draft.cancel' ? 'canceled' : e.type === 'draft.complete' ? 'complete' : 'open';
             const draft = {
                 id, runId: e.runId, agentId: e.agentId,
                 text: typeof data.text === 'string' ? data.text.slice(0, limits.maxTextChars) : prior?.text ?? '',

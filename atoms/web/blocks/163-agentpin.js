@@ -461,7 +461,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
   <div class="evc-vw"><div class="evc-sc"></div><div class="evc-vp card" role="dialog" aria-modal="true" aria-label="Saved screenshot"><div class="evc-vc"><div class="evc-vh"><b class="evc-vt"></b><button type="button" class="evc-pv" aria-label="Previous screenshot">${ic('<path d="m15 6-6 6 6 6"/>', 16)}</button><button type="button" class="evc-nx" aria-label="Next screenshot">${ic('<path d="m9 6 6 6-6 6"/>', 16)}</button><button type="button" class="evc-cl" aria-label="Close screenshot">${ic(I.x, 16)}</button></div><div class="evc-vb"><div class="evc-vl"></div><div class="evc-vl"></div></div></div></div></div>
   </div>`,
   desc:'The agent scrolls to the element and a capture frame snaps in around it, leading edges first with the trailing edges 60ms behind, while the rest of the page dims. The region flashes once, lifts off the page as a snapshot, and shrinks and travels into the tray, landing in the slot that has just opened for it. Only when it lands does the saved-screenshots count roll up. Open any thumbnail and it grows from its own slot into a viewer with who captured it and the element it shows; arrows swap between shots.',
-  api:'box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centred)',
+  api:'box.go(prev → region)   flash.set(1) → set(0)   fly.fl.set(1): rect lerp(region → slot)   slot.ent.set(1)   digits.set(n)   viewer.vo.set(1): rect lerp(slot → centered)',
   init(st){
     const root = $(st, '.evc-root'), site = new Site(st, 'evc'), ov = site.ov, stEls = $$(st, '.evc-st>span'), capB = $(st, '.evc-cap'), rpB = $(st, '.evc-rp'), list = $(st, '.evc-ls'), cnt = $(st, '.evc-cn'), fly = $(st, '.evc-fly');
     const vw = $(st, '.evc-vw'), vsc = $(st, '.evc-sc'), vp = $(st, '.evc-vp'), vc = $(st, '.evc-vc'), vls = $$(st, '.evc-vl'), vt = $(st, '.evc-vt'), vPrev = $(st, '.evc-pv'), vNext = $(st, '.evc-nx'), vClose = $(st, '.evc-cl');
@@ -563,7 +563,7 @@ atom({ id:'evidencecapture', cat:'Agent activity', name:'Evidence capture', bloc
         s.boxShadow = `0 0 0 3000px ${mix(bo * .9, 'color-mix(in oklab, var(--ink) 40%, transparent)', 'transparent')}`; s.background = mix(fv, 'var(--card)', 'transparent'); s.borderWidth = px(1.5 + 1.5 * fv); tg.style.top = r.y < 24 ? 'calc(100% + 5px)' : '-23px'; tg.style.opacity = bo.toFixed(3);
         tf.children[0].style.opacity = bo.toFixed(3);
       } else tf.style.visibility = 'hidden';
-      // viewer: one rect morphs from the thumbnail slot to the centred viewer
+      // viewer: one rect morphs from the thumbnail slot to the centered viewer
       const v = clamp(vo.at(t));
       if (v > .002 && viewFrom){
         const rr = { w:st.clientWidth, h:st.clientHeight }, tx = (rr.w - VW) / 2 - 12, ty = (rr.h - VH) / 2 - 12;
@@ -892,7 +892,7 @@ atom({ id:'agentqueue', cat:'Agent activity', name:'Agent comment queue', block:
   }});
 
 /* ================================================================ 7. Needs a human decision */
-// a status chip whose width, colour and label morph through its states
+// a status chip whose width, color and label morph through its states
 class Chip {
   constructor(el, states){ this.el = el; this.st = states; this.ls = $$(el, ':scope > span'); this.v = new Track(0, S.base); this.w = []; }
   measure(){ this.w = this.ls.map(l => l.offsetWidth + 2); }

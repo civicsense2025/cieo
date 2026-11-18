@@ -1,5 +1,5 @@
 // Pins the site's design-review outcomes: shared chrome everywhere, reachable skip links, readable contrast,
-// phone layouts, touch targets, search behaviour, deep links and honest copy.
+// phone layouts, touch targets, search behavior, deep links and honest copy.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -51,12 +51,15 @@ test('the Studio carries the site chrome, keeps its deploy references valid and 
   assert.deepEqual(collect().missing, []);
 });
 
-test('the dashboard uses one hairline facts row and the composites index uses the hairline index list', () => {
+test('the dashboard uses one hairline facts row and the composites index is a grid of live previews', () => {
   const dash = read('site/composites/dashboard.html');
   assert.match(dash, /<div class="facts">/);
   assert.doesNotMatch(dash, /dash-card/);
-  assert.match(read('site/composites/index.html'), /<ul class="index-list"/);
-  assert.doesNotMatch(read('site/composites/index.html'), /index-card/);
+  const index = read('site/composites/index.html');
+  assert.match(index, /<ul class="comp-cards">/);
+  assert.equal((index.match(/<li class="comp-card">/g) ?? []).length, 8, 'one preview card per composite');
+  assert.equal((index.match(/<iframe src="\.\/[a-z-]+\.html#embed"/g) ?? []).length, 8, 'each card shows the live screen');
+  assert.doesNotMatch(index, /index-list|index-card/);
   assert.doesNotMatch(read('site/composites/storefront.html'), /system-ui/);
   assert.match(read('site/foundations/index.html'), /<ul class="index-list"/);
   assert.doesNotMatch(read('site/foundations/foundations.css'), /\.fnd-grid|\.fnd-card/);
@@ -172,12 +175,12 @@ test('copy is honest about bounce, and every page states the same recipe count',
   const pages = [...sitePages, 'docs/studio/index.html'];
   for (const page of pages) assert.doesNotMatch(read(page), /zero bounce|never wobbles|never bounce past/i, page);
   assert.match(read('site/recipes/index.html'), /ζ = 1 default; the 0\.7 floor allows at most about 5% overshoot/);
-  assert.match(read('site/foundations/physics.html'), /zeta = 1 is the default, and the 0\.7 floor allows at most about 5% overshoot/);
+  assert.match(read('site/foundations/physics.html'), /most a spring may overshoot is about 5%/);
   const counts = new Set([
     /<span class="fact-number">(\d+)<\/span><span class="site-label">Motion recipes/.exec(read('site/index.html'))?.[1],
     /<li>(\d+) motion recipes/.exec(read('site/pricing.html'))?.[1],
     /(\d+) live interface motion specimens/.exec(read('site/recipes/index.html'))?.[1],
-    /scrub (\d+) specimens/.exec(read('site/foundations/index.html'))?.[1],
+    /watch (\d+) motion examples/.exec(read('site/foundations/index.html'))?.[1],
     String(JSON.parse(read('atoms/web/index.json')).filter((r) => r.file.startsWith('blocks/')).length),
   ]);
   assert.equal(counts.size, 1, `recipe counts disagree: ${[...counts]}`);

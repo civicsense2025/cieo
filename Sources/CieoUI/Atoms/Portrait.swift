@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// A person's face in a circle, ringed in a colour that carries meaning (such as party). The photo can be drawn
-/// in grayscale by luminosity, which keeps the ring in colour. With no photo it shows a quiet fill, never initials.
+/// A person's face in a circle, ringed in a color that carries meaning (such as party). The photo can be drawn
+/// in grayscale by luminosity, which keeps the ring in color. With no photo it shows a quiet fill, never initials.
 /// The host supplies the image view; the portrait is decorative and hidden from VoiceOver, so the name beside it speaks.
 public struct Portrait<Photo: View>: View {
     public enum Size: Sendable, CaseIterable { case small, regular, large }

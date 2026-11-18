@@ -2,12 +2,12 @@
 // scripts/bundlesize.mjs — delivery budget gate (node built-ins only).
 // Fails (exit 1) when a canonical payload exceeds its recorded budget.
 // Budgets = pre-PR origin/main (f26451b) git-blob sizes +10%, rounded up
-// (verified: primitives 181745, dist total 330120, catalogue 3175205,
+// (verified: primitives 181745, dist total 330120, catalog 3175205,
 // collection 3227087, library 3175205, workbench 3243715):
 //
 //   dist/primitives (non-min)   181745 -> budget 199920
 //   dist total (non-min)         330120 -> budget 363132
-//   docs/catalogue.html         3175205 -> budget 3492726
+//   docs/catalog.html         3175205 -> budget 3492726
 //   docs/collection.html        3227087 -> budget 3549796
 //   docs/library.html           3175205 -> budget 3492726
 //   docs/workbench.html         3243715 -> budget 3568087
@@ -36,7 +36,7 @@ const BUDGETS = [
   { label: 'dist/agent icons', kind: 'files', path: 'dist/agent', files: ['icons.js', 'icons.d.ts'], budget: 19396 },
   // dist total grows by exactly the agent component and icon budgets above.
   { label: 'dist total', kind: 'dir', path: 'dist', exclude: /\.min\.(js|css)$/, budget: 436257 },
-  { label: 'docs/catalogue.html', kind: 'file', path: 'docs/catalogue.html', budget: 3492726 },
+  { label: 'docs/catalog.html', kind: 'file', path: 'docs/catalog.html', budget: 3492726 },
   { label: 'docs/collection.html', kind: 'file', path: 'docs/collection.html', budget: 3549796 },
   { label: 'docs/library.html', kind: 'file', path: 'docs/library.html', budget: 3492726 },
   { label: 'docs/workbench.html', kind: 'file', path: 'docs/workbench.html', budget: 3568087 },

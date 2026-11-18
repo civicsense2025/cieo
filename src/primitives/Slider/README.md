@@ -5,7 +5,7 @@ Thin primitive contract over the production Range control: use where Astryx name
 ## Use when
 
 - The design calls the control Slider. Import from this path, not from controls directly.
-- You need a labelled native range input with track fill and optional live value readout.
+- You need a labeled native range input with track fill and optional live value readout.
 
 ## Avoid when
 

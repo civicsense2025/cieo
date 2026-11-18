@@ -31,7 +31,7 @@ test('1. Unified NAV, ⌘K search-index.json, and site/search.js cover Component
 test('2. Deploy folder eliminates 12.66 MB monolithic docs/*.html bloat (< 5 MB total), flattens site/ to /, and emits 301 redirects', async () => {
   const { files, missing } = collect();
   assert.deepEqual(missing, []);
-  for (const retired of ['docs/catalogue.html', 'docs/library.html', 'docs/collection.html', 'docs/workbench.html', 'docs/agent-identity.html']) {
+  for (const retired of ['docs/catalogue.html', 'docs/library.html', 'docs/collection.html', 'docs/workbench.html', 'docs/agent-identity.html']) { // us-spelling-keep
     assert.ok(!files.includes(retired), `${retired} must not be in deploy collect()`);
   }
 
@@ -61,7 +61,7 @@ test('2. Deploy folder eliminates 12.66 MB monolithic docs/*.html bloat (< 5 MB 
     assert.ok(existsSync(join(out, 'composites/dashboard.html')));
 
     const redirects = readFileSync(join(out, '_redirects'), 'utf8');
-    assert.match(redirects, /\/docs\/catalogue\.html\s+\/recipes\/\s+301/);
+    assert.match(redirects, /\/docs\/catalogue\.html\s+\/recipes\/\s+301/); // us-spelling-keep
     assert.match(redirects, /\/docs\/workbench\.html\s+\/recipes\/\s+301/);
     assert.match(redirects, /\/docs\/agent-identity\.html\s+\/foundations\/agents\.html\s+301/);
     assert.match(redirects, /\/site\/\*\s+\/:splat\s+301/);
@@ -137,10 +137,11 @@ test('5. Foundations portal renders all 6 interactive chapters with single h1 an
     assert.match(html, /aria-current="page">Foundations<\/a>/);
     assert.doesNotMatch(html, /fonts\.googleapis\.com/i);
   }
-  assert.match(readFileSync('site/foundations/physics.html', 'utf8'), /rubberBand|projectToDetent|zeta|overshoot/i);
-  assert.match(readFileSync('site/foundations/choreography.html', 'utf8'), /SharedAxis|MorphSurface|Edges/i);
-  assert.match(readFileSync('site/foundations/color.html', 'utf8'), /168|contrast|oklch/i);
-  assert.match(readFileSync('site/foundations/typography.html', 'utf8'), /pill|crisp|Iowan Old Style/i);
+  // Each chapter shows the real code in its how-to paragraph; the plain-language lead and headings are checked in foundations-plain.test.mjs.
+  assert.match(readFileSync('site/foundations/physics.html', 'utf8'), /rubberBand[\s\S]*projectToDetent|projectToDetent[\s\S]*rubberBand/);
+  assert.match(readFileSync('site/foundations/choreography.html', 'utf8'), /MotionFrame[\s\S]*SharedAxis|SharedAxis[\s\S]*MotionFrame/i);
+  assert.match(readFileSync('site/foundations/color.html', 'utf8'), /168 combinations of brand, light\/dark and contrast/);
+  assert.match(readFileSync('site/foundations/typography.html', 'utf8'), /Pill/);
   assert.match(readFileSync('site/foundations/agents.html', 'utf8'), /square|antenna/i);
 });
 

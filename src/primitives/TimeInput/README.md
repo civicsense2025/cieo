@@ -1,6 +1,6 @@
 # TimeInput
 
-Labelled time-of-day field: one native time input reusing the shared input style.
+Labeled time-of-day field: one native time input reusing the shared input style.
 
 ## Use when
 

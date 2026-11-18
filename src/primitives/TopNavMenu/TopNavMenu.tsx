@@ -2,7 +2,7 @@
 'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
-/* TopNavMenu. Labelled group of top-nav links. Host supplies the links. */
+/* TopNavMenu. Labeled group of top-nav links. Host supplies the links. */
 import type { ReactNode } from 'react';
 
 export interface TopNavMenuProps {

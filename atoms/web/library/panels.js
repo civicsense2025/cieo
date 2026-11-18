@@ -36,7 +36,7 @@
     document.getElementById('lib-inspector-category').textContent=a.cat;
     document.getElementById('lib-inspector-families').textContent=a.fam.map(f=>L.families[f]).join(' · ');
     const source=window.CieoSources?.[id];const link=document.getElementById('lib-source-link');
-    const sourceRef=window.CieoSourceRef||'design/catalogue-soft-workbench';
+    const sourceRef=window.CieoSourceRef||'design/catalog-soft-workbench';
     link.href=source?'https://github.com/civicsense2025/cieo/blob/'+sourceRef+'/atoms/web/'+source:'https://github.com/civicsense2025/cieo/tree/'+sourceRef+'/atoms/web/blocks';
     document.getElementById('lib-inspector-save').dataset.save=id;
     L.showCode('recipe');L.syncSaved();L.openDialog(dialog,opener);L.wake();

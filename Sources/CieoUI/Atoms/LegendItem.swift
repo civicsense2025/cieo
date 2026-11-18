@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A key for a chart: a square swatch and the meaning in words, such as "Republican". Colour never stands alone.
+/// A key for a chart: a square swatch and the meaning in words, such as "Republican". Color never stands alone.
 public struct LegendItem: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography

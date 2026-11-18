@@ -16,7 +16,7 @@ test('DEFAULT_REACTIONS are the six agreed reactions in order', () => {
   assert.ok(DEFAULT_REACTIONS.every((r) => r.emoji.length > 0));
 });
 
-test('ReactionPicker renders a labelled toolbar of named buttons with one tab stop', () => {
+test('ReactionPicker renders a labeled toolbar of named buttons with one tab stop', () => {
   const html = renderToStaticMarkup(h(ReactionPicker, { onPick: noop, selected: ['love'] }));
   assert.match(html, /role="toolbar"/);
   assert.match(html, /aria-label="Add a reaction"/);

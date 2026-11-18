@@ -9,7 +9,7 @@ import { customizePart } from '../customization.js';
 
 export type ShareMethod = 'native' | 'copy' | 'none';
 export type ShareNavigator = { share?: unknown; clipboard?: { writeText?: unknown } };
-export type ShareOutcome = 'native' | 'copy' | 'cancelled' | 'failed' | 'unavailable';
+export type ShareOutcome = 'native' | 'copy' | 'canceled' | 'failed' | 'unavailable';
 
 /** How a link can be shared here: the native sheet first, then the clipboard, otherwise not at all. */
 export function shareMethod(nav: ShareNavigator | undefined): ShareMethod {
@@ -23,7 +23,7 @@ export function isShareableUrl(url: string): boolean {
   return safeHref(url, { relative: false }) !== null;
 }
 
-/** Shares through the best method. A user cancelling the native sheet is `cancelled`, not an error; any other native failure falls back to copying. */
+/** Shares through the best method. A user canceling the native sheet is `canceled`, not an error; any other native failure falls back to copying. */
 export async function runShare(nav: ShareNavigator | undefined, data: { url: string; title?: string; text?: string }): Promise<ShareOutcome> {
   if (!isShareableUrl(data.url)) return 'unavailable';
   const method = shareMethod(nav);
@@ -33,7 +33,7 @@ export async function runShare(nav: ShareNavigator | undefined, data: { url: str
       await (nav.share as (d: object) => Promise<void>)({ url: data.url, ...(data.title ? { title: data.title } : {}), ...(data.text ? { text: data.text } : {}) });
       return 'native';
     } catch (error) {
-      if ((error as { name?: string } | null)?.name === 'AbortError') return 'cancelled';
+      if ((error as { name?: string } | null)?.name === 'AbortError') return 'canceled';
       if (typeof nav.clipboard?.writeText !== 'function') return 'failed';
     }
   }

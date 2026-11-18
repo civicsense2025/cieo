@@ -1,8 +1,8 @@
-.cieo-catalogue { margin:0; background:var(--bg); color:var(--ink); font:14px/1.5 var(--sans); -webkit-font-smoothing:antialiased; }
-.cieo-catalogue *, .cieo-catalogue *::before, .cieo-catalogue *::after { box-sizing:border-box; }
-.cieo-catalogue button,.cieo-catalogue input,.cieo-catalogue select { font:inherit; color:inherit; }
-.cieo-catalogue button { cursor:pointer; }
-.cieo-catalogue [hidden] { display:none!important; }
+.cieo-catalog { margin:0; background:var(--bg); color:var(--ink); font:14px/1.5 var(--sans); -webkit-font-smoothing:antialiased; }
+.cieo-catalog *, .cieo-catalog *::before, .cieo-catalog *::after { box-sizing:border-box; }
+.cieo-catalog button,.cieo-catalog input,.cieo-catalog select { font:inherit; color:inherit; }
+.cieo-catalog button { cursor:pointer; }
+.cieo-catalog [hidden] { display:none!important; }
 .lib-shell { display:grid; grid-template-columns:var(--lib-sidebar) minmax(0,1fr); min-block-size:100dvh; }
 .lib-sidebar { position:sticky; inset-block-start:0; block-size:100dvh; padding:32px 16px 16px; display:flex; flex-direction:column; gap:24px; background:var(--tile); z-index:10; overflow:auto; scrollbar-width:thin; }
 .lib-brand { display:flex; align-items:center; gap:12px; color:var(--ink); text-decoration:none; font-size:28px; line-height:32px; font-weight:750; letter-spacing:-1.5px; padding-inline:16px; }

@@ -284,11 +284,11 @@ function minifyCss(src) {
 }
 
 function cssSelectorsSeq(css) {
-  // Selector fingerprint: text before each `{`, whitespace-normalised.
+  // Selector fingerprint: text before each `{`, whitespace-normalized.
   const noComments = css.replace(/\/\*[\s\S]*?\*\//g, ' ');
   return noComments.split('{').slice(0, -1).map((part) => {
     const sel = part.split('}').pop() ?? '';
-    // Normalise insignificant selector spacing the minifier also removes.
+    // Normalize insignificant selector spacing the minifier also removes.
     return sel.replace(/\s+/g, ' ').trim().replace(/\s*([>+~,])\s*/g, '$1');
   }).join('\n');
 }

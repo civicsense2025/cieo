@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// A photo or flat colour block cut into a `CutShape`. With no content it is a plain block of `fill`.
+/// A photo or flat color block cut into a `CutShape`. With no content it is a plain block of `fill`.
 /// Content fills the frame and is clipped, so a resizable, `scaledToFill` image keeps its proportions.
 public struct CutSurface<Content: View>: View {
     @Environment(\.componentTheme) private var theme
@@ -26,7 +26,7 @@ public struct CutSurface<Content: View>: View {
 }
 
 public extension CutSurface where Content == EmptyView {
-    /// A decorative colour block. It is hidden from assistive technologies.
+    /// A decorative color block. It is hidden from assistive technologies.
     init(_ kind: CutShape.Kind, fill: Color? = nil) {
         self.init(kind, fill: fill) { EmptyView() }
     }

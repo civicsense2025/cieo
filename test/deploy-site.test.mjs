@@ -13,7 +13,7 @@ const write = (repo, rel, text) => { mkdirSync(join(repo, rel, '..'), { recursiv
 test('every page, stylesheet and script the entry pages reference exists', () => {
   const { files, missing } = collect();
   assert.deepEqual(missing, []);
-  for (const f of ['site/components/index.html', 'site/search-index.json', 'design/themes.css', 'design/primitives.css', 'tokens/tokens.css', 'dist/controls/controls.css', 'docs/studio/main.js']) assert.ok(files.includes(f), f);
+  for (const f of ['site/components/index.html', 'site/search-index.json', 'site/theme.css', 'design/primitives.css', 'tokens/tokens.css', 'dist/controls/controls.css', 'docs/studio/main.js']) assert.ok(files.includes(f), f);
 });
 
 test('the built folder serves the site at the root, redirects the retired bundles, and carries safe headers', () => {
@@ -23,6 +23,7 @@ test('the built folder serves the site at the root, redirects the retired bundle
     const redirects = readFileSync(join(out, '_redirects'), 'utf8');
     assert.doesNotMatch(redirects, /^\/ /m, 'the root serves the home page, it does not redirect');
     assert.match(redirects, /^\/site\/\*\s+\/:splat\s+301$/m, 'old /site/ links keep working');
+    assert.match(redirects, /^\/docs\/catalogue\.html\s+\/recipes\/\s+301$/m, 'the retired catalogue page keeps its real URL, whatever spelling the repo uses'); // us-spelling-keep
     const headers = readFileSync(join(out, '_headers'), 'utf8');
     assert.match(headers, /X-Content-Type-Options: nosniff/);
     assert.match(headers, /Referrer-Policy: strict-origin-when-cross-origin/);

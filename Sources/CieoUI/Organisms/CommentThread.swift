@@ -117,7 +117,7 @@ public struct CommentThread<Node: CommentTreeNode, Row: View>: View {
             .background(alignment: .topLeading) {
                 if depth > 0 {
                     RailElbow(railX: -(metrics.medium + (depth <= 1 ? metrics.avatar : metrics.avatarSmall) / 2),
-                              avatarCentreY: metrics.touchTarget / 2, avatarLeft: metrics.avatarSmall,
+                              avatarCenterY: metrics.touchTarget / 2, avatarLeft: metrics.avatarSmall,
                               radius: metrics.standard, continues: false)
                         .stroke(theme.track, style: StrokeStyle(lineWidth: metrics.rail, lineCap: .round))
                         .allowsHitTesting(false).accessibilityHidden(true)

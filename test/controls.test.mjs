@@ -207,7 +207,7 @@ test('no-JS: a form of controls renders to static HTML that submits the right na
     ['status', 'passed'],
     ['year', '2020'],
   ]);
-  assert.match(html, /<label[^>]*for="[^"]+"[^>]*>Sort<\/label>/, 'the native select is labelled before hydration');
+  assert.match(html, /<label[^>]*for="[^"]+"[^>]*>Sort<\/label>/, 'the native select is labeled before hydration');
   assert.doesNotMatch(html, /role="combobox"|role="listbox"/, 'no inert combobox is shown before scripts run');
   assert.match(html, /<button[^>]*type="submit"/);
   assert.match(html, /--cieo-range-p:76\.923/, 'the range fill is drawn at the initial value');

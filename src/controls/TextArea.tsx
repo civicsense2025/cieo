@@ -68,7 +68,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
     const el = field.ref.current;
     const form = el?.form;
     if (!el || !form) return;
-    // Reset fires before the browser restores defaultValue; cancelled resets do nothing.
+    // Reset fires before the browser restores defaultValue; canceled resets do nothing.
     const reset = (event: Event) => {
       setTimeout(() => {
         if (event.defaultPrevented || field.ref.current !== el) return;

@@ -390,7 +390,7 @@ def run_mode(browser, port, mode):
         stages['second-start'] = until(lambda: box.locator('[data-phase=recording]').count() == 1, 5.0)
         page.wait_for_timeout(500)
         page.keyboard.press('Escape')
-        stages['cancelled'] = until(lambda: ev('recorder')[-1:] == ['cancel'])
+        stages['canceled'] = until(lambda: ev('recorder')[-1:] == ['cancel'])
         stages['cancel-idle'] = until(lambda: box.locator('[data-phase=idle]').count() == 1)
         if mode == 'reduce':
             stages['cancel-exit-start'] = True
@@ -578,7 +578,7 @@ def run_mode(browser, port, mode):
             box.get_by_role('button', name='Cancel recording').click()
             live = box.locator('.cieo-voice-recorder-live')
             stages['local-data-reduced-motion-exits-immediately'] = until(lambda: live.count() == 0, 0.5)
-            stages['cancelled'] = until(lambda: ev('recorder')[-1:] == ['cancel'])
+            stages['canceled'] = until(lambda: ev('recorder')[-1:] == ['cancel'])
             recorder.evaluate("el => el.removeAttribute('data-reduced-motion')")
             page.wait_for_timeout(30)
             stages['mic-transition-under-full-override'] = recorder.locator('.cieo-voice-recorder-mic').evaluate("el => getComputedStyle(el).transitionDuration !== '0s'")
@@ -1135,13 +1135,13 @@ def run_mode(browser, port, mode):
         box.get_by_role('button', name='Record a voice reply').click()
         second_started = until(lambda: box.locator('[data-phase=recording]').count() == 1 and page.evaluate('() => window.__audioFake.recorders.length === 2'))
         box.get_by_role('button', name='Cancel recording').click()
-        cancelled = until(lambda: box.locator('[data-phase=idle]').count() == 1)
+        canceled = until(lambda: box.locator('[data-phase=idle]').count() == 1)
         page.evaluate('() => window.__audioFake.recorders[1].finish(); window.__audioFake.recorders[0].finish()')
         delivered = until(lambda: len(ev('recorder-multitake')) == 2)
         callbacks = ev('recorder-multitake')
-        result = first_started and first_pending and second_started and cancelled and delivered and callbacks == ['cancel', {'data': 'take-1', 'size': 6}]
+        result = first_started and first_pending and second_started and canceled and delivered and callbacks == ['cancel', {'data': 'take-1', 'size': 6}]
         if not result:
-            notes['voice-recorder-cancel-pending'] = json.dumps({'stages': [first_started, first_pending, second_started, cancelled, delivered], 'callbacks': callbacks})
+            notes['voice-recorder-cancel-pending'] = json.dumps({'stages': [first_started, first_pending, second_started, canceled, delivered], 'callbacks': callbacks})
         return result
     check('voice-recorder-cancel-preserves-older-pending', recorder_cancel_preserves_pending)
 
@@ -1256,10 +1256,10 @@ def run_mode(browser, port, mode):
           return { sameTarget: target === first.target, moved: shown !== first.shown, closer: Math.abs(target - shown) < Math.abs(first.target - first.shown) };
         }''')
         box.get_by_role('button', name='Cancel recording').click()
-        cancelled = until(lambda: box.locator('[data-phase=idle]').count() == 1)
-        result = started and bounded and intermediate and follow == {'sameTarget': True, 'moved': True, 'closer': True} and cancelled
+        canceled = until(lambda: box.locator('[data-phase=idle]').count() == 1)
+        result = started and bounded and intermediate and follow == {'sameTarget': True, 'moved': True, 'closer': True} and canceled
         if not result:
-            notes['voice-recorder-waveform-smoothing'] = json.dumps({'started': started, 'bounded': bounded, 'intermediate': intermediate, 'follow': follow, 'cancelled': cancelled})
+            notes['voice-recorder-waveform-smoothing'] = json.dumps({'started': started, 'bounded': bounded, 'intermediate': intermediate, 'follow': follow, 'canceled': canceled})
         return result
     check('voice-recorder-waveform-smoothing', recorder_waveform_smoothing)
 

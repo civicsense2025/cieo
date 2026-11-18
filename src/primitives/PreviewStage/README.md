@@ -22,8 +22,8 @@ All values are controlled. Zoom steps clamp to `[zoomStep, maxZoom]`; the reset 
 
 ## Keyboard / accessibility
 
-- Viewport is a labelled region with a tab stop; arrow keys scroll natively.
-- Every toolbar button has a name (`zoomInLabel`, `zoomOutLabel`, `zoomResetLabel`, `fitLabel`); the fit toggle uses `aria-pressed`; the backdrop switch is a labelled group.
+- Viewport is a labeled region with a tab stop; arrow keys scroll natively.
+- Every toolbar button has a name (`zoomInLabel`, `zoomOutLabel`, `zoomResetLabel`, `fitLabel`); the fit toggle uses `aria-pressed`; the backdrop switch is a labeled group.
 - Zoom readout is a live `Digits` roll; under reduced motion it swaps without rolling.
 
 ## Do / don't

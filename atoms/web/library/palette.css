@@ -1,4 +1,4 @@
-/* Catalogue UI only. The existing --ink/--card/--accent contract reaches the real recipes. */
+/* Catalog UI only. The existing --ink/--card/--accent contract reaches the real recipes. */
 :root {
   color-scheme: light;
   --bg: #f7f7f9; --tile: #f2f2f5; --card: #fff; --raised: #eeedf2;

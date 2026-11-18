@@ -20,7 +20,7 @@ Recipes remain examples; source coverage does not mark them production ready.
 
 ## Same PR checks
 
-Catalogue customization is tracked by `scripts/check-primitive-customization.mjs`. The component-page generator synchronizes new property rows from manifests while preserving authored descriptions. Registry and CLI copy plans must include shared customization types and helpers, not just component entry files. Popover also requires the existing React DOM peer for its portal and exports `cieo/popover.css`; consumer packages should pin the reviewed source or release.
+Catalog customization is tracked by `scripts/check-primitive-customization.mjs`. The component-page generator synchronizes new property rows from manifests while preserving authored descriptions. Registry and CLI copy plans must include shared customization types and helpers, not just component entry files. Popover also requires the existing React DOM peer for its portal and exports `cieo/popover.css`; consumer packages should pin the reviewed source or release.
 
 Update the mapped owner in the same PR as a source change, including unchanged
 public behavior for internal repairs. Add source/symbol links and keep current
@@ -34,7 +34,7 @@ ruby scripts/check-documentation.rb --base HEAD --worktree
 
 The [PR template](../.github/pull_request_template.md) records impact and evidence.
 The checker covers Swift sources/tests and reusable web control/design sources,
-not every catalogue recipe or generated site. Existing catalogue checks retain
+not every catalog recipe or generated site. Existing catalog checks retain
 that responsibility. No product build is performed by the docs checker.
 
 Node is pinned in `.nvmrc` and in each workflow's `setup-node` step (currently 24.22.1). Change
@@ -56,7 +56,7 @@ The same job runs `scripts/check-swift-motion.sh` over `Sources/CieoUI`,
 `test/token-parity.test.mjs` (`tokens/tokens.json` matches `tokens.css`, the
 TypeScript engine and the Swift engine), and `scripts/check-motion-tokens.mjs`
 (no raw durations in primitives, controls or the React layer; `0s` is allowed
-for reduced motion). It also runs the catalogue inventory and component index checks.
+for reduced motion). It also runs the catalog inventory and component index checks.
 
 New primitives change `package.json` only through the deep `./<Name>` exports that
 `scripts/wire-primitives.mjs` regenerates; hand edits there are overwritten.
@@ -111,7 +111,7 @@ Version 0.7.0 adds the Forma set: DropZone, CompareCurtain, PreviewStage, Toast,
 
 ## Unreleased
 
-The `forma` brand preset is removed; it was an app-specific skin, and Cieo ships generic starting points only. The six tool components added in 0.7.0 (DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches) stay, grouped as the `tools` pack in the catalogue. Apps that passed `brand: 'forma'` pass `brand: 'mono'` and override the accent, or set their own accent tokens. Breaking for those apps, so it ships in the next minor release.
+The `forma` brand preset is removed; it was an app-specific skin, and Cieo ships generic starting points only. The six tool components added in 0.7.0 (DropZone, CompareCurtain, PreviewStage, Toast, ClipRange and PaletteSwatches) stay, grouped as the `tools` pack in the catalog. Apps that passed `brand: 'forma'` pass `brand: 'mono'` and override the accent, or set their own accent tokens. Breaking for those apps, so it ships in the next minor release.
 
 ## Deploying the site
 
@@ -122,6 +122,6 @@ See [Cloudflare deploy](cloudflare-deploy.md). The docs prev/next chain is rebui
 Two outputs are generated, not committed, so `npm run check` reports them stale until they exist:
 
 - `node scripts/build-design.mjs` writes `design/generated/` (gitignored).
-- `node scripts/check-catalogue-inventory.mjs` writes `docs/generated/catalogue-inventory.json`. This file is tracked and hashes every Swift atom, so commit the regenerated copy in any change that edits a Swift atom.
+- `node scripts/check-catalog-inventory.mjs` writes `docs/generated/catalog-inventory.json`. This file is tracked and hashes every Swift atom, so commit the regenerated copy in any change that edits a Swift atom.
 
-The browser checks in `test/catalogue/` need Playwright, which this package does not install; they are not part of `npm run check`.
+The browser checks in `test/catalog/` need Playwright, which this package does not install; they are not part of `npm run check`.

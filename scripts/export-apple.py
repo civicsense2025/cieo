@@ -76,7 +76,7 @@ def main():
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     manifest = {"schema": 1, "owner": "Cieo runtime", "sourceRevision": revision,
                 "sourcePackageSHA256": digest((ROOT / "Package.swift").read_bytes()),
-                "scope": "Motion core, production UI and complete native recipe catalogue",
+                "scope": "Motion core, production UI and complete native recipe catalog",
                 "files": {name: digest(data) for name, data in sorted(files.items())}}
     files[MANIFEST] = (json.dumps(manifest, indent=2) + "\n").encode()
     if args.check:

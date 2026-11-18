@@ -18,7 +18,8 @@ export const ENTRY_PAGES = [
 export const publishedPath = (rel) => (rel.startsWith('site/') ? rel.slice(5) : rel);
 /** Retired single-file bundles keep working through permanent redirects to the route-split sections. */
 export const REDIRECTS = [
-  ['/docs/catalogue.html', '/recipes/'], ['/docs/library.html', '/recipes/'], ['/docs/collection.html', '/recipes/'], ['/docs/workbench.html', '/recipes/'],
+  ['/docs/catalogue.html', '/recipes/'], // us-spelling-keep: the retired page's real URL stays reachable
+  ['/docs/library.html', '/recipes/'], ['/docs/collection.html', '/recipes/'], ['/docs/workbench.html', '/recipes/'],
   ['/docs/agent-identity.html', '/foundations/agents.html'], ['/site/*', '/:splat'],
 ];
 const TEXT = new Set(['.html', '.css', '.js', '.mjs']);
@@ -113,7 +114,7 @@ export function build(out, repo = root) {
   for (const f of files) { const dest = join(out, publishedPath(f)); mkdirSync(dirname(dest), { recursive: true }); cpSync(join(repo, f), dest); }
   if (files.includes('design/primitives.css')) writeFileSync(join(out, 'design/primitives.css'), inlineCssImports(repo, 'design/primitives.css'));
   writeFileSync(join(out, '_redirects'), REDIRECTS.map(([from, to]) => `${from} ${to} 301`).join('\n') + '\n');
-  const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/design/themes.css"><link rel="stylesheet" href="/tokens/tokens.css"></head><body style="font-family:system-ui,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1rem">${body}</body></html>`;
+  const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/theme.css"><link rel="stylesheet" href="/tokens/tokens.css"></head><body style="font-family:system-ui,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1rem">${body}</body></html>`;
   writeFileSync(join(out, '404.html'), page('Page not found · Cieo', '<h1>Page not found</h1><p>That page is not in the docs. <a href="/">Go home</a>, <a href="/components/">browse the library</a> or the <a href="/recipes/">recipes</a>.</p>'));
   writeFileSync(join(out, '_headers'), [
     '/*', '  X-Content-Type-Options: nosniff', '  Referrer-Policy: strict-origin-when-cross-origin', '  Permissions-Policy: camera=(), microphone=(), geolocation=()', '',

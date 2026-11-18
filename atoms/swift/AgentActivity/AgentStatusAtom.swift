@@ -21,7 +21,7 @@ public struct AgentStatusAtom: MotionAtomView {
 
     public var body: some View {
         let s = states[cur]
-        AtomStage(hint: "Pick a state. Shape and icon change, not just colour.") {
+        AtomStage(hint: "Pick a state. Shape and icon change, not just color.") {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
                     HStack(spacing: 6) {

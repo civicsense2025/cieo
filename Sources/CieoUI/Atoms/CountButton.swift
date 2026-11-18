@@ -5,7 +5,7 @@ import SwiftUI
 /// (reply, share) otherwise. The host owns the state and the number. While pressed the icon dips on the snap
 /// spring; under Reduce Motion it stays still.
 public struct CountButton<Icon: View, ActiveIcon: View>: View {
-    /// The colour the on (or pressed) state takes.
+    /// The color the on (or pressed) state takes.
     public enum Tone: Sendable, CaseIterable { case neutral, accent, danger, success }
 
     /// Scale the icon dips to while pressed.
@@ -87,7 +87,7 @@ public struct CountButton<Icon: View, ActiveIcon: View>: View {
 }
 
 public extension CountButton where ActiveIcon == EmptyView {
-    /// A button whose icon stays the same in both states; the colour alone marks "on".
+    /// A button whose icon stays the same in both states; the color alone marks "on".
     init(_ label: String, count: Int? = nil, unit: String? = nil, tone: Tone = .neutral,
          isOn: Binding<Bool>? = nil, action: (() -> Void)? = nil, @ViewBuilder icon: () -> Icon) {
         self.init(label, count: count, unit: unit, tone: tone, isOn: isOn, action: action, icon: icon) { EmptyView() }

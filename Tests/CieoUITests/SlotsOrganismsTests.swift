@@ -2,7 +2,7 @@ import CieoUI
 import SwiftUI
 import XCTest
 
-/// Pins that each organism reads its colours, type, spacing and glyphs from the host, so one host value
+/// Pins that each organism reads its colors, type, spacing and glyphs from the host, so one host value
 /// restyles it. Outcomes are checked in rendered pixels and heights, not in the implementation.
 final class SlotsOrganismsTests: XCTestCase {
     private struct Node: Identifiable {
@@ -137,7 +137,7 @@ final class SlotsOrganismsTests: XCTestCase {
     @MainActor
     func testUnwalkedPathUsesTheHostSubtleRole() throws {
         let host = try render(pathway(upcoming).environment(\.componentTheme, Theme(subtle: SlotsOrganismsTests.red)))
-        XCTAssertTrue(ComponentIconTests.containsRed(host), "the unwalked line is the host subtle colour")
+        XCTAssertTrue(ComponentIconTests.containsRed(host), "the unwalked line is the host subtle color")
         XCTAssertFalse(ComponentIconTests.containsRed(try render(pathway(upcoming))))
     }
 

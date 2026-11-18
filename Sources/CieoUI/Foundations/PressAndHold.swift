@@ -10,7 +10,7 @@ public enum HoldPolicy {
     public static let defaultMinimumDuration: TimeInterval = 0.5
     /// A hold shorter than this is indistinguishable from a tap; one longer than this looks broken.
     public static let minimumDurationRange: ClosedRange<TimeInterval> = 0.2...5
-    /// Points the finger may drift while the hold is still being recognised, the system's own allowance.
+    /// Points the finger may drift while the hold is still being recognized, the system's own allowance.
     public static let maximumDrift: CGFloat = 10
     /// Points a finger may slide left in hold-to-record before the take is thrown away.
     public static let slideCancelDistance: Double = 80
@@ -91,7 +91,7 @@ public extension View {
     /// - Parameters:
     ///   - minimumDuration: Seconds the press must last. Held inside `HoldPolicy.minimumDurationRange`;
     ///     the default is the system's long-press duration.
-    ///   - isHolding: A binding that is true from the moment the hold is recognised until the finger
+    ///   - isHolding: A binding that is true from the moment the hold is recognized until the finger
     ///     lifts. Drive host haptics from it with `.sensoryFeedback(.impact, trigger: isHolding)`.
     ///   - accessibilityActionName: The name VoiceOver and Switch Control list for the hold, such as
     ///     "Stop commenting". A hold has no gesture-free equivalent, so the name is required.
@@ -101,7 +101,7 @@ public extension View {
     ///
     /// Some system versions also deliver a Button's own action when the finger lifts after a hold. If the
     /// two actions would conflict, have `onHold` set a flag that the tap action reads and clears, and
-    /// confirm the behaviour on a device.
+    /// confirm the behavior on a device.
     func pressAndHold(minimumDuration: TimeInterval = HoldPolicy.defaultMinimumDuration,
                       isHolding: Binding<Bool>? = nil,
                       accessibilityActionName: LocalizedStringKey,

@@ -1,7 +1,7 @@
 import { createTheme, parseTheme, serializeTheme } from '../../design/index.js';
 
 const key = 'cieo-studio-v1';
-export const defaults = Object.freeze({ brand: 'studio', scheme: 'system', density: 'comfortable', radius: 'soft', contrast: 'system', font: 'system', display: 'sans', ground: 'cool', elevation: 'soft', motion: 'system', rtl: false });
+export const defaults = Object.freeze({ brand: 'studio', scheme: 'system', density: 'comfortable', radius: 'soft', contrast: 'system', font: 'system', ground: 'cool', elevation: 'soft', motion: 'system', rtl: false });
 export function createState(system, announce) {
   let value = { ...defaults }, overrides = {}, remember = false;
   const build = () => {

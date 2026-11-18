@@ -1,5 +1,5 @@
 import { type AnchorRect, type MachineStore, type TransitionEnvelope } from './types.js';
-export type AsyncActionStatus = 'idle' | 'pending' | 'succeeded' | 'failed' | 'cancelled' | 'uncertain';
+export type AsyncActionStatus = 'idle' | 'pending' | 'succeeded' | 'failed' | 'canceled' | 'uncertain';
 export interface AsyncActionState {
     readonly status: AsyncActionStatus;
     readonly attemptId: string | null;

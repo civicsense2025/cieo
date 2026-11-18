@@ -4,11 +4,11 @@
 
 The reviewed base is `92de47d803d984d917c4b633ddac7a2a00c84683`. The interrupted attempt had created the tree `bd7664fffe30065b701811f5efbf42d2988d58dd` with 13 design files, but no commit, branch, or pull request. Recovery attached that tree to commit `6b056297865f3db5f79b3605901fea3abc5cf569` on `improvements/portable-design-system`. Subsequent changes complete and test that work.
 
-The package already separates the spring core, document helpers, and React entry point, and supplies a SwiftUI package. Its README describes the web atoms as catalogue recipes rather than production component exports. The review preserves that distinction.
+The package already separates the spring core, document helpers, and React entry point, and supplies a SwiftUI package. Its README describes the web atoms as catalog recipes rather than production component exports. The review preserves that distinction.
 
 ## Findings and changes
 
-The catalogue's `atoms/web/shell.before.html` hardcodes its colors, fonts, density, and layout values. `tokens/tokens.json` only describes motion. The new `design/` API supplies a separate, optional visual contract rather than hardcoding another product identity into the spring engine.
+The catalog's `atoms/web/shell.before.html` hardcodes its colors, fonts, density, and layout values. `tokens/tokens.json` only describes motion. The new `design/` API supplies a separate, optional visual contract rather than hardcoding another product identity into the spring engine.
 
 `package.json` declares `sideEffects: false`, even though consumers import a token stylesheet for its effect on CSS. The change lists `**/*.css` as side-effectful and keeps the JavaScript modules tree-shakeable.
 
@@ -24,7 +24,7 @@ The new studio provides an inspectable, working demonstration rather than replac
 
 ## Deliberate limits
 
-The existing Motion Atoms catalogue remains unchanged and continues to use its own runtime and legacy styling. The new studio links to it in a full repository checkout. This change does not claim that every old recipe has become theme-aware, keyboard-complete, or production-ready.
+The existing Motion Atoms catalog remains unchanged and continues to use its own runtime and legacy styling. The new studio links to it in a full repository checkout. This change does not claim that every old recipe has become theme-aware, keyboard-complete, or production-ready.
 
 The static preview demonstrates a finite spring step at the existing base frequency, not a replacement animation scheduler. The original spring and SwiftUI engines remain unchanged.
 
@@ -38,4 +38,4 @@ The handoff report records the actual local commands, browser harness, compiler 
 
 ## Concurrent upstream work preserved
 
-Before final submission, `main` advanced to `0dca69dc3aa0d2cd10f141ec64d2b4ef3ce6b027` through five commits. The branch incorporates those commits with a merge commit, retaining the new live spring/scheduler API, Swift LiveSpring, updated atom recipes, the library catalogue, and the added engine tests. The package conflict preserves `cieo/live` and expands the upstream CSS side-effect declaration to cover the new design styles. The final upgrade patch targets this newer base; those upstream engine and recipe changes are not counted among this change's 273 refinements.
+Before final submission, `main` advanced to `0dca69dc3aa0d2cd10f141ec64d2b4ef3ce6b027` through five commits. The branch incorporates those commits with a merge commit, retaining the new live spring/scheduler API, Swift LiveSpring, updated atom recipes, the library catalog, and the added engine tests. The package conflict preserves `cieo/live` and expands the upstream CSS side-effect declaration to cover the new design styles. The final upgrade patch targets this newer base; those upstream engine and recipe changes are not counted among this change's 273 refinements.

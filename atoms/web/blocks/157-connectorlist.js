@@ -144,7 +144,7 @@ atom({ id:'connectorlist', cat:'MCP and agents', name:'Connected servers', block
       r.slot = mSlot(li, r.in, enter ? 0 : 1); if (enter) r.slot.open(true, now(), lag);
       r.msg.textContent = d.er || '';
       list.appendChild(li); rows.push(r); setState(r, k, true); r.er.jump(k === 2 ? 1 : 0); r.ok.jump(k === 2 ? 1 : 0); r.dim.jump(k === 3 ? 1 : 0);
-      btn.onclick = () => { if (r.k === 0){ r.job++; setState(r, 3); say(d.n + ' disconnected'); } else if (r.k === 1){ r.job++; setState(r, 3); say('Cancelled'); } else start(r); };
+      btn.onclick = () => { if (r.k === 0){ r.job++; setState(r, 3); say(d.n + ' disconnected'); } else if (r.k === 1){ r.job++; setState(r, 3); say('Canceled'); } else start(r); };
       $(li,'.cnl-rm').onclick = () => remove(r);
       return r;
     };

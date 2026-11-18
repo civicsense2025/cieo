@@ -8,7 +8,7 @@ export const USAGE = `Usage: cieo recipes [--out <file>]
 Export a single-file offline HTML bundle of the Motion Atoms recipe library.
 
 Options:
-  --out <file>  Output path (defaults to ./catalogue.html).
+  --out <file>  Output path (defaults to ./catalog.html).
   --help        Show this help.
 `;
 
@@ -61,7 +61,7 @@ export default async function run(rest) {
   if (positionals.length > 1) {
     throw new UsageError(`Unexpected argument '${positionals[1]}' — usage: cieo recipes [--out <file>]`);
   }
-  const dest = resolve(process.cwd(), flags.out ?? positionals[0] ?? 'catalogue.html');
+  const dest = resolve(process.cwd(), flags.out ?? positionals[0] ?? 'catalog.html');
   const atomsDir = join(packageRoot(), 'atoms/web');
   const read = (f) => readFileSync(join(atomsDir, f), 'utf8');
   const blocks = JSON.parse(read('blocks.json'));

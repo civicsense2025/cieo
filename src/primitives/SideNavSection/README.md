@@ -1,6 +1,6 @@
 # SideNavSection
 
-Optionally labelled group of rail links.
+Optionally labeled group of rail links.
 
 ## Use when
 
@@ -22,8 +22,8 @@ No motion. `label` is optional and renders nothing visible. Group never steals f
 
 ## Keyboard / accessibility
 
-- When labelled, the root carries the name; do not repeat it on children.
-- Unlabelled sections are fine for a single obvious group; label the second one on.
+- When labeled, the root carries the name; do not repeat it on children.
+- Unlabeled sections are fine for a single obvious group; label the second one on.
 
 ## Do / don't
 

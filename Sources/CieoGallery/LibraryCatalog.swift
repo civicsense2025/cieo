@@ -106,7 +106,7 @@ struct LibraryCatalog: View {
     private func toggleSaved(_ id: String) {
         var next = saved
         if next.contains(id) { next.remove(id) } else { next.insert(id) }
-        // Persist only identities from this catalogue; recipe content and running state stay transient.
+        // Persist only identities from this catalog; recipe content and running state stay transient.
         savedIDs = Self.recipes.map(\.id).filter { next.contains($0) }.joined(separator: "|")
     }
 }

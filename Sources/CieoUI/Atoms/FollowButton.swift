@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// A filled "Follow" that becomes an outlined "Following"; pointing at or focusing "Following" previews
-/// "Unfollow" in the danger colour. The host owns the follow state. The button's width follows the word it
+/// "Unfollow" in the danger color. The host owns the follow state. The button's width follows the word it
 /// shows on the base spring, and VoiceOver reads what is shown ("Unfollow Ava").
 public struct FollowButton: View {
     @Environment(\.componentTheme) private var theme

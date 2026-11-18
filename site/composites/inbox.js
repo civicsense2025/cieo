@@ -172,6 +172,7 @@
     var box = panel.querySelector('[data-messages]');
     if (!box) return;
     var article = document.createElement('article');
+    article.setAttribute('data-from', 'you');
     var meta = document.createElement('div');
     var who = document.createElement('span');
     who.textContent = 'You';

@@ -29,7 +29,7 @@ for (const m of readFileSync(`${root}/design/theme.js`, 'utf8').matchAll(/color\
 const HOOKS = [/^--cieo-control-(bg|fg|muted|border|border-strong|raised|accent|accent-fg|danger|success|success-fg|popover-bg|shadow|knob|height-sm|height-md|font)$/,
   /^--cieo-popover-(z|border|radius|background|color|padding|shadow)$/, /^--cieo-search-(width|radius)$/, /^--cieo-(radius|field-height|focus-ring)$/, /^--cieo-i$/,
   /^--cieo-(dialog|sheet|toast|overlay|card|button|badge|tabs|input|chip|avatar|table|menu|tooltip|nav)-(z|bg|fg|color|background|border|radius|padding|gap|shadow|width|height|indicator-color)$/,
-  // Editorial frames: per-instance colours set inline (topic dot, portrait ring, legend swatch, roll-call group) and the host's block ground and its text partners.
+  // Editorial frames: per-instance colors set inline (topic dot, portrait ring, legend swatch, roll-call group) and the host's block ground and its text partners.
   /^--cieo-(topic-dot|portrait-ring|legend|roll|block|on-block|on-block-muted|frame-ground)$/];
 let failures = 0;
 for (const [p, line, name] of uses) {

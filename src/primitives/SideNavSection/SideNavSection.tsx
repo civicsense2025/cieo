@@ -2,7 +2,7 @@
 'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
-/* SideNavSection. Optionally labelled group of rail links. */
+/* SideNavSection. Optionally labeled group of rail links. */
 import type { ReactNode } from 'react';
 
 export interface SideNavSectionProps {

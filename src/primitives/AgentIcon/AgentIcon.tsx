@@ -1,7 +1,7 @@
 // src/primitives/AgentIcon/AgentIcon.tsx
 'use client';
 /* AgentIcon. One agent action or state icon at rest, drawn from cieo/agent-icons data in currentColor. Status
-   icons take their tone colour from tokens. Decorative unless labelled. */
+   icons take their tone color from tokens. Decorative unless labeled. */
 import type { ReactNode } from 'react';
 import {
   AGENT_ICON_VIEWBOX,

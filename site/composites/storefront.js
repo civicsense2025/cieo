@@ -91,6 +91,7 @@
       for (const line of state.lines) {
         const li = document.createElement("li");
         li.setAttribute("data-parts", "ListItem");
+        li.className = "sf-line";
         li.setAttribute("data-line", line.variant);
         const meta = document.createElement("dl");
         meta.setAttribute("data-parts", "MetadataList");
@@ -98,10 +99,12 @@
         li.appendChild(meta);
         const stepper = document.createElement("div");
         stepper.setAttribute("data-parts", "Stepper");
+        stepper.className = "sf-stepper";
         stepper.setAttribute("role", "group");
         stepper.setAttribute("aria-label", `${line.variant} quantity`);
         const dec = document.createElement("button");
         dec.type = "button";
+        dec.className = "cieo-button";
         dec.setAttribute("data-line-dec", line.variant);
         dec.setAttribute("data-parts", "Step");
         dec.setAttribute("aria-label", `One fewer ${line.variant} runner`);
@@ -111,6 +114,7 @@
         out.textContent = String(line.qty);
         const inc = document.createElement("button");
         inc.type = "button";
+        inc.className = "cieo-button";
         inc.setAttribute("data-line-inc", line.variant);
         inc.setAttribute("data-parts", "Step");
         inc.setAttribute("aria-label", `One more ${line.variant} runner`);
@@ -123,6 +127,7 @@
         li.appendChild(total);
         const remove = document.createElement("button");
         remove.type = "button";
+        remove.className = "cieo-button";
         remove.setAttribute("data-line-remove", line.variant);
         remove.setAttribute("aria-label", `Remove ${line.variant} runner from bag`);
         remove.textContent = "Remove";
@@ -183,10 +188,8 @@
 
   for (const btn of thumbBtns) {
     btn.addEventListener("click", () => {
-      const img = btn.querySelector("img");
-      if (!img) return;
-      main.src = img.dataset.src;
-      main.alt = img.dataset.alt;
+      main.dataset.tone = btn.dataset.tone;
+      main.setAttribute("aria-label", btn.dataset.alt);
       for (const b of thumbBtns) b.setAttribute("aria-pressed", String(b === btn));
     });
   }

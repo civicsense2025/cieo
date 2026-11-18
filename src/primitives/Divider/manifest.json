@@ -24,7 +24,7 @@
   "events": [],
   "variants": [],
   "styleParts": [{ "id": "rule", "overrides": ["border"], "tokenRoles": ["border"] }],
-  "constraints": { "layout": ["thematic-break"], "content": ["decorative-unless-labelled"], "motion": ["no-motion"] },
+  "constraints": { "layout": ["thematic-break"], "content": ["decorative-unless-labeled"], "motion": ["no-motion"] },
   "platforms": [{ "id": "web.react", "minimumOS": {}, "implementation": "implemented", "properties": ["label", "className", "slotProps"], "states": [], "events": [], "parts": ["rule"], "actions": { "discover": "implemented", "preview": "planned", "edit": "planned", "export": "planned", "generate": "planned" } }],
   "readiness": { "api": "experimental", "documentation": "draft", "release": "unreleased" },
   "evidence": [],

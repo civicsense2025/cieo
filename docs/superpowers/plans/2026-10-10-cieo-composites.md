@@ -44,7 +44,7 @@
 **Parts (exact `data-parts` list for the page):** AppShell, SideNav, SideNavItem, Card, Badge, Table, TableHeader, TableBody, TableRow, TableCell, Field, Switch, Slider, Button, Banner, Heading, Text.
 
 **Page sections (static HTML, real content):**
-1. AppShell: nav slot = SideNav labelled "Store sections" with items Overview / Orders / Settings (first has `aria-current="page"`); main slot = three `<section>` panels, only Overview visible (others `hidden`).
+1. AppShell: nav slot = SideNav labeled "Store sections" with items Overview / Orders / Settings (first has `aria-current="page"`); main slot = three `<section>` panels, only Overview visible (others `hidden`).
 2. Overview: four Cards — Revenue "$48,210" Badge success "+12%", Orders "1,284" Badge success "+4%", Refunds "23" Badge warning "+8%", Active carts "312" Badge info "live". Followed by Heading "Recent orders" + Table with 5 rows: `#1041 Amara Okafor $148.00 Paid`, `#1040 Liam Chen $296.00 Paid`, `#1039 Sofia Reyes $74.00 Refunded`, `#1038 Noah Kim $212.00 Pending`, `#1037 Ava Patel $148.00 Paid` (status in Badge: success/success/danger/warning/success).
 3. Orders panel: same Table reused statically (duplicate markup, documented as demo data).
 4. Settings panel: Field store name (TextField-style label + input with `data-setting="store"`, value "Drift Goods"), Switch email notifications (checked, `data-setting="notify"`), Slider low-stock threshold (value 12, readout "12 units", `data-setting="threshold"`), Button Save ("Save settings", `data-save`). Hidden Banner region for "Settings saved." confirmation (`data-saved`).
@@ -122,7 +122,7 @@ git commit -m "Add admin dashboard composite with settings persistence."
 
 **Page sections:**
 1. Product Card: main image (`alt="Drift Wool Runner in Fog"`, id `data-main-image`) + 3 Thumbnail buttons (Fog/Oak/Ink, each with img alt + `data-src`/`data-alt`); Heading "Drift Wool Runner"; Badge success "In stock"; Text price `$148.00` (id `data-price`); rating Text "4.8 (312 reviews)".
-2. Variant RadioList labelled "Color" (Fog/Oak/Ink, Fog checked); qty Stepper (minus button `data-qty-minus`, readout `data-qty` starting 1, plus `data-qty-plus`); line total Text (id `data-line-total`, "$148.00"); Button "Add to bag" (`data-add`).
+2. Variant RadioList labeled "Color" (Fog/Oak/Ink, Fog checked); qty Stepper (minus button `data-qty-minus`, readout `data-qty` starting 1, plus `data-qty-plus`); line total Text (id `data-line-total`, "$148.00"); Button "Add to bag" (`data-add`).
 3. Cart Card (id `data-cart`, initially shows EmptyState-ish Text "Your bag is empty."): on add, renders MetadataList row (product, variant, qty) + cart total (id `data-cart-total`).
 4. Checkout Card: contact Field email (`data-email`); address Fields street/city/postcode; delivery RadioList (`data-delivery`: standard $0 / express $12); order total Text (id `data-order-total`); Button "Place order" (`data-place`); hidden Banner success region (`data-order-ok`, text starts "Order confirmed. Reference ").
 5. Collapsible "Specifications" + "Shipping & returns" with two static paragraphs each.
@@ -264,7 +264,7 @@ git commit -m "Add chat workspace composite with local replies."
 **Page sections:**
 1. Stepper (3 Steps: Day current, Time todo, Details todo; `data-stepper`, steps update `aria-current` as flow advances — advancing = completing prior input, single page, no separate URLs).
 2. Calendar October 2026 (`data-calendar`, year 2026 month 10, `data-day` buttons; Sundays disabled with title "No slots Sundays").
-3. Slot RadioList (`data-slots`, labelled "Times"): populated by JS per weekday from this exact table — Mon–Fri `09:00, 10:30, 13:00, 15:30`; Sat `10:00, 11:30`; Sun none → EmptyState "No slots on Sundays — pick another day."
+3. Slot RadioList (`data-slots`, labeled "Times"): populated by JS per weekday from this exact table — Mon–Fri `09:00, 10:30, 13:00, 15:30`; Sat `10:00, 11:30`; Sun none → EmptyState "No slots on Sundays — pick another day."
 4. Details Fields: name (`data-name`), email (`data-email`).
 5. Summary rail Card: MetadataList (`data-summary`) with Day/Time/Name rows, "—" placeholders, updating live.
 6. Confirm Button (`data-confirm`, disabled until day + slot + non-empty name + email containing "@"); success Card (`data-success`, hidden) with Banner "Booked." + reference Text (`data-reference`).

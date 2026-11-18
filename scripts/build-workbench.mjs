@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/** Builds the existing catalogue from every checked-in atom, not a separate specimen set. */
+/** Builds the existing catalog from every checked-in atom, not a separate specimen set. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';

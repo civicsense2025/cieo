@@ -15,7 +15,7 @@ test('storefront uses shipped parts, linked built-from, documented pricing', () 
   const parts = [...html.matchAll(/data-parts="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
   assert.ok(parts.length > 10, 'data-parts missing');
   for (const p of parts) assert.ok(names.includes(p), `unshipped part: ${p}`);
-  assert.ok(html.includes('<section data-built-from>'));
+  assert.ok(/<section data-built-from[ >]/.test(html));
   for (const p of parts) assert.ok(html.includes(`../components/${p}.html`), `built-from missing link: ${p}`);
   const js = readFileSync('site/composites/storefront.js', 'utf8');
   for (const s of ['data-qty', 'data-line-total', '148', 'data-delivery', 'data-order-total', 'DG-']) {

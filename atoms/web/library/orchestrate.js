@@ -1,4 +1,4 @@
-/* Catalogue orchestration. Recipes and the original spring runtime remain the source of truth. */
+/* Catalog orchestration. Recipes and the original spring runtime remain the source of truth. */
 (() => {
   const L=window.CieoLibrary;
   L.syncSaved=()=>{

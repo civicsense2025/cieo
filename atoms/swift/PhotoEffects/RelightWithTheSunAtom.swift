@@ -3,7 +3,7 @@ import Cieo
 
 public struct RelightWithTheSunAtom: MotionAtomView {
     public static let info = MotionAtomInfo(id: "fxp-relight", category: "Photo effects", name: "Relight with the sun",
-        summary: "Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centred on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.")
+        summary: "Two pixel-aligned exposures of the same ridge, midday and golden hour, blend through a soft light mask centered on the sun: light near the sun warms first, the far side last. Drag the sun along its path (1:1, then it coasts on release velocity) and it sets behind the real ridge line. Use when: a hero photo should follow the visitor’s local time or the mood of a page, without shipping a second photo set.")
     public init() {}
     private let start = 0.25
 
@@ -19,7 +19,7 @@ public struct RelightWithTheSunAtom: MotionAtomView {
                     let sun = CGPoint(x: s.width * x, y: s.height * (0.62 - 0.45 * sin(.pi * x)))
                     ZStack {
                         phPhoto(2, s, golden: 0)
-                        // a soft light mask centred on the sun: light near the sun warms first
+                        // a soft light mask centered on the sun: light near the sun warms first
                         phPhoto(2, s, golden: 1).mask(
                             RadialGradient(colors: [.white, .white.opacity(0)], center: UnitPoint(x: sun.x / s.width, y: sun.y / s.height),
                                            startRadius: 10, endRadius: s.width * (0.25 + 0.9 * x)))

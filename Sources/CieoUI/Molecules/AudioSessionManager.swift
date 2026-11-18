@@ -28,7 +28,7 @@ private final class DispatchAudioSessionRetryTicket: AudioSessionRetryTicket, @u
     private let lock = NSLock()
     private var operation: (@Sendable () -> Void)?
     private var workItem: DispatchWorkItem?
-    private var cancelled = false
+    private var canceled = false
     private var delivered = false
 
     init(after delay: TimeInterval, operation: @escaping @Sendable () -> Void) {
@@ -40,7 +40,7 @@ private final class DispatchAudioSessionRetryTicket: AudioSessionRetryTicket, @u
 
     func cancel() {
         lock.lock()
-        cancelled = true
+        canceled = true
         operation = nil
         let workItem = self.workItem
         self.workItem = nil
@@ -50,7 +50,7 @@ private final class DispatchAudioSessionRetryTicket: AudioSessionRetryTicket, @u
 
     private func deliver() {
         lock.lock()
-        guard !cancelled, !delivered else {
+        guard !canceled, !delivered else {
             workItem = nil
             lock.unlock()
             return

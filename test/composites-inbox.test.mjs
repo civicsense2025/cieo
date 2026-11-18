@@ -38,7 +38,7 @@ test('inbox uses shipped parts with linked built-from', () => {
   assert.ok(parts.length > 8, 'data-parts missing');
   for (const p of parts) assert.ok(names.includes(p), `unshipped part: ${p}`);
   assert.ok(!parts.includes('Button'), 'native buttons only: Button primitive must not ship');
-  assert.ok(html.includes('<section data-built-from>'), 'built-from section missing');
+  assert.ok(/<section data-built-from[ >]/.test(html), 'built-from section missing');
   for (const p of new Set(parts)) assert.ok(html.includes(`../components/${p}.html`), `built-from missing link: ${p}`);
 });
 

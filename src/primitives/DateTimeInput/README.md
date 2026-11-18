@@ -1,6 +1,6 @@
 # DateTimeInput
 
-Labelled date-and-time field: one native datetime-local input reusing the shared input style.
+Labeled date-and-time field: one native datetime-local input reusing the shared input style.
 
 ## Use when
 

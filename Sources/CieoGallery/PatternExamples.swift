@@ -56,7 +56,7 @@ struct PatternExamples: View {
     private var panelDetail: LocalizedStringKey {
         switch state {
         case .empty: "Load a local example to try this pattern."
-        case .loading: "A short, cancellable local task is running."
+        case .loading: "A short, cancelable local task is running."
         case .error: "Try again to recover without leaving this screen."
         case .offline: "Saved content stays available."
         case .ready: "The action completed. Clear it to start again."
