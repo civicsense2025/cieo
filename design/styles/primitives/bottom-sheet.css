@@ -1,5 +1,5 @@
 /* design/styles/primitives/bottom-sheet.css */
 @layer cieo.components {
   :where(.cieo).cieo-bottom-sheet { position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--cieo-sheet-z, var(--cieo-layer-modal, 40)); max-block-size: 80vh; overflow: auto; background: var(--cieo-color-surface); color: var(--cieo-color-text); border-block-start: 1px solid var(--cieo-color-border-strong); border-start-start-radius: var(--cieo-radius-control); border-start-end-radius: var(--cieo-radius-control); padding: var(--cieo-space-4); }
-  :where(.cieo).cieo-bottom-sheet [data-sheet-handle] { display: block; inline-size: 2.25rem; block-size: 0.25rem; margin: 0 auto var(--cieo-space-3); padding: 0; border: 0; border-radius: var(--cieo-radius-pill, 9999px); background: var(--cieo-color-border-strong); cursor: grab; touch-action: none; }
+  :where(.cieo).cieo-bottom-sheet [data-sheet-handle] { display: block; inline-size: 2.25rem; block-size: 0.25rem; margin: 0 auto var(--cieo-space-3); padding: 0; border: 0; border-radius: var(--cieo-radius-pill, var(--cieo-radius-pill)); background: var(--cieo-color-border-strong); cursor: grab; touch-action: none; }
 }

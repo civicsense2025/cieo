@@ -19,19 +19,11 @@ body.cieo-site {
 .site-skip { position: absolute; inset-inline-start: var(--cieo-space-4); inset-block-start: -4rem; z-index: var(--cieo-layer-modal); padding: var(--cieo-space-2) var(--cieo-space-4); border-radius: var(--cieo-radius-control); background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); }
 .site-skip:focus { inset-block-start: var(--cieo-space-3); }
 .site-header { position: sticky; inset-block-start: 0; z-index: var(--cieo-layer-sticky); display: flex; align-items: center; justify-content: space-between; gap: var(--cieo-space-4); padding: var(--cieo-space-3) var(--cieo-space-6); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-canvas); }
-/* Below 64rem the header is not sticky: logo and search share the first row and the nav is one scrolling row under them, so it never wraps to several lines.
+/* Below 64rem the header is not sticky: logo, search and the menu button share one row, and the nav opens as a panel under it.
    --site-header-h is the sticky header's height; page-level sticky bars (the recipes toolbar, the doc rail) sit below it. */
 :root { --site-header-h: 3.5rem; }
 @media (pointer: coarse) { :root { --site-header-h: 4.25rem; } }
 .site-header { box-sizing: border-box; min-block-size: var(--site-header-h); }
-@media (max-width: 64rem) {
-  :root { --site-header-h: 0rem; }
-  .site-header { position: static; flex-wrap: wrap; padding-inline: var(--cieo-space-4); row-gap: var(--cieo-space-2); }
-  .site-mark { margin-inline-end: auto; }
-  .site-nav { order: 3; flex: 0 0 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: calc(var(--cieo-space-4) * -1); padding-inline: var(--cieo-space-4); }
-  .site-nav::-webkit-scrollbar { display: none; }
-  .site-nav a { flex: none; white-space: nowrap; }
-}
 .site-mark { display: inline-flex; align-items: center; gap: var(--cieo-space-2); text-decoration: none; font: var(--cieo-weight-display) 1.375rem/1 var(--cieo-font-display); letter-spacing: -.02em; }
 .site-mark svg { overflow: visible; }
 .site-mark-base { fill: none; stroke: var(--cieo-color-border-strong); stroke-width: 1; }
@@ -43,6 +35,18 @@ body.cieo-site {
 .site-search-btn { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-muted); font: var(--cieo-text-small)/1 var(--cieo-font-sans); cursor: pointer; }
 @media (hover: hover) { .site-search-btn:hover { background: var(--cieo-color-sunken); color: var(--cieo-color-text); } }
 .site-search-btn kbd { font: var(--cieo-text-caption)/1 var(--cieo-font-mono); color: var(--cieo-color-subtle); }
+.site-menu-btn { display: none; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-small); min-block-size: var(--cieo-control-small); padding: 0; border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: transparent; color: var(--cieo-color-text); cursor: pointer; }
+.site-menu-btn svg, .site-search-btn svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+@media (max-width: 64rem) {
+  :root { --site-header-h: 0rem; }
+  .site-header { position: relative; padding-inline: var(--cieo-space-4); }
+  .site-mark { margin-inline-end: auto; }
+  .site-menu-btn { display: inline-flex; }
+  .site-search-btn kbd { display: none; }
+  .site-nav { display: none; position: absolute; inset-inline: 0; inset-block-start: 100%; z-index: var(--cieo-layer-sticky); flex-direction: column; align-items: stretch; gap: 0; padding: var(--cieo-space-2) var(--cieo-space-4) var(--cieo-space-4); background: var(--cieo-color-canvas); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+  .site-header[data-menu-open] .site-nav { display: flex; }
+  .site-nav a { padding: var(--cieo-space-3); font-size: var(--cieo-text-body); }
+}
 .site-search-backdrop[hidden] { display: none; }
 .site-search-backdrop { position: fixed; inset: 0; z-index: var(--cieo-layer-modal); display: grid; align-items: start; justify-items: center; padding: clamp(var(--cieo-space-6), 10vh, 6rem) var(--cieo-space-4) var(--cieo-space-4); background: color-mix(in srgb, var(--cieo-color-shadow) 42%, transparent); }
 .site-search-dialog { inline-size: min(40rem, 100%); max-block-size: 76vh; display: grid; grid-template-rows: auto minmax(0, 1fr); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); color: var(--cieo-color-text); overflow: hidden; }
@@ -76,7 +80,7 @@ body.cieo-site {
 @media (hover: hover) { .cieo-site .site-btn:hover { background: var(--cieo-color-accent-hover); } .cieo-site .site-btn[data-variant="ring"]:hover { background: var(--cieo-color-sunken); } }
 .cieo-site .site-btn[aria-disabled="true"] { opacity: var(--cieo-disabled-opacity); cursor: not-allowed; }
 @media (pointer: coarse) {
-  .cieo-site .site-btn, .site-nav a, .site-search-btn, .site-search-esc, .site-footer nav a { min-block-size: var(--cieo-touch-target); }
+  .cieo-site .site-btn, .site-nav a, .site-search-btn, .site-menu-btn, .site-search-esc, .site-footer nav a { min-block-size: var(--cieo-touch-target); }
   .site-nav a, .site-footer nav a { display: inline-flex; align-items: center; }
 }
 

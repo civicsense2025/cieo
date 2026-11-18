@@ -54,3 +54,6 @@
 @media (max-width: 40rem) { .studio-board { grid-template-columns: minmax(0, 1fr); } .studio-cell { border-inline-end: 0; } }
 @media (forced-colors: active) { .brand-choice span { forced-color-adjust: none; } .export-formats button[aria-pressed="true"] { outline: 2px solid Highlight; } }
 @media print { .site-skip, .site-header, .site-footer, .studio-controls { display: none; } }
+
+#share, #reset, #copy, #download, #apply-accent, .export-head button { display: inline-flex; align-items: center; justify-content: center; min-inline-size: var(--cieo-control-height); }
+#share svg, #reset svg, #copy svg, #download svg, #apply-accent svg, .export-head svg { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }

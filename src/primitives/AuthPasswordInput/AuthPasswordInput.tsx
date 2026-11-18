@@ -2,7 +2,7 @@
 /* AuthPasswordInput. Password input with snap strength feedback and a focus-preserving show/hide swap. */
 import { useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { AuthMotionMessage, AuthSwapText } from '../auth-shared.js';
+import { AuthMotionMessage } from '../auth-shared.js';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 
@@ -69,7 +69,11 @@ export function AuthPasswordInput({ className, slotProps, id, label = 'Password'
           disabled={disabled}
           onClick={() => { setShown(s => !s); inputRef.current?.focus(); }} {...customizePart(slotProps?.toggle, "cieo-auth-visibility", undefined)}
         >
-          <AuthSwapText value={shown ? 'Hide' : 'Show'} />
+          <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M2 10s3-6 8-6 8 6 8 6-3 6-8 6-8-6-8-6Z" />
+            <circle cx="10" cy="10" r="2.5" />
+            {shown ? <path d="M3 3l14 14" /> : null}
+          </svg>
         </button>
       </span>
       {showStrength ? (

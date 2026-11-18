@@ -91,7 +91,7 @@
     hideEmpty(activePanel());
     var list = activeList();
     var article = document.createElement('article');
-    article.className = 'cieo-chat-message cieo-chat-fade';
+    article.className = 'cieo cieo-chat-message cieo-chat-fade';
     article.tabIndex = -1;
     article.setAttribute('data-from', author === 'You' ? 'you' : 'cieo');
     var meta = document.createElement('div');
@@ -142,7 +142,7 @@
   function appendFailure(original) {
     var list = activeList();
     var node = document.createElement('div');
-    node.className = 'cieo-chat-message cieo-chat-fade';
+    node.className = 'cieo cieo-chat-message cieo-chat-fade';
     var banner = document.createElement('div');
     banner.setAttribute('data-parts', 'Banner');
     banner.setAttribute('data-tone', 'danger');

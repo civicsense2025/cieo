@@ -148,7 +148,7 @@
 .dash-main > section { display: grid; gap: var(--cieo-space-4); align-content: start; min-inline-size: 0; }
 .dash-main > section[hidden] { display: none; }
 .dash-main a { color: var(--cieo-color-text); }
-@container (max-width: 40rem) {
+@media (max-width: 44rem) {
   .comp-screen.dash { grid-template-columns: minmax(0, 1fr); }
   .dash-nav { border-inline-end: 0; border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); padding: var(--cieo-space-3) var(--cieo-space-4); }
   .dash-nav .site-label { display: none; }
@@ -326,3 +326,9 @@
 .cieo-p-agent-activity { display: grid; gap: var(--cieo-space-1); margin: 0; padding: 0; list-style: none; max-block-size: 22rem; overflow-y: auto; font: var(--cieo-text-caption)/1.5 var(--cieo-font-mono); color: var(--cieo-color-muted); }
 .cieo-p-agent-activity li { padding-block: var(--cieo-space-1); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); overflow-wrap: anywhere; }
 @container (max-width: 56rem) { .cieo-run-panes { grid-template-columns: minmax(0, 1fr); } .cieo-run-page [data-lanes] ul { margin-inline-start: var(--cieo-space-2); } }
+
+/* ---- Plain form screens (booking): fields and buttons take the library's control look ---- */
+.booking-layout input:not([type="checkbox"]):not([type="radio"]) { box-sizing: border-box; inline-size: 100%; max-inline-size: 100%; min-block-size: var(--cieo-control-height); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: min(var(--cieo-radius-control), 1rem); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: inherit; }
+.booking-layout button:not(.cieo-p-calendar-day):not([class*="cieo"]) { min-block-size: var(--cieo-control-height); padding: 0 var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
+.booking-layout button[disabled] { opacity: .5; cursor: not-allowed; }
+.booking-days { grid-column: 1 / -1; }

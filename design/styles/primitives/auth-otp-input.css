@@ -2,9 +2,9 @@
 @layer cieo.components {
   :where(.cieo).cieo-auth-otp-input { display: inline-flex; flex-direction: column; gap: 6px; }
   :where(.cieo) .cieo-auth-label { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
-  :where(.cieo) .cieo-auth-otp-boxes { display: inline-flex; gap: 8px; }
+  :where(.cieo) .cieo-auth-otp-boxes { display: inline-flex; gap: var(--cieo-space-2); }
   :where(.cieo) .cieo-auth-otp-box {
-    width: 2.75rem; height: 2.75rem; border-radius: 9px; text-align: center;
+    width: 2.75rem; height: 2.75rem; border-radius: var(--cieo-radius-surface); text-align: center;
     border: 1.5px solid var(--cieo-color-muted);
     background: var(--cieo-color-surface); color: var(--cieo-color-text);
     font-size: var(--cieo-text-body); font-variant-numeric: tabular-nums;
