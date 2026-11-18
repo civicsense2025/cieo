@@ -1,13 +1,31 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { existsSync } from 'node:fs';
 
-const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', controls: 'cieo/controls', design: 'cieo/design', agent: 'cieo/agent', core: 'cieo' };
+const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', state: 'cieo/state', controls: 'cieo/controls', design: 'cieo/design', agent: 'cieo/agent', core: 'cieo' };
 // Modules with their own package subpath, checked before the area they live in. Mirrored in cli/lib/rewrite.mjs.
-const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons' };
+const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons', 'state/react.js': 'cieo/state/react' };
 const ROOT_SHARED = { './parts.js': 'parts.ts', './customization.js': 'customization.ts' };
 const COMPANION_FILES = {
   'auth-shared.js': 'auth-shared.tsx',
+  'AudioPlayer/audioPlayerState.js': 'AudioPlayer/audioPlayerState.ts',
   'VoiceRecorder/recorderVisual.js': 'VoiceRecorder/recorderVisual.ts',
+  'VoiceRecorder/recorderState.js': 'VoiceRecorder/recorderState.ts',
+  'VoiceRecorder/recorderTake.js': 'VoiceRecorder/recorderTake.ts',
+  'VoiceRecorder/RecorderControls.js': 'VoiceRecorder/RecorderControls.tsx',
+};
+const SAME_FOLDER_COMPANIONS = {
+  'Popover/Popover.tsx|./focus.js': 'Popover/focus.ts',
+  'Popover/Popover.tsx|./position.js': 'Popover/position.ts',
+  'Popover/Popover.tsx|./usePopoverPosition.js': 'Popover/usePopoverPosition.ts',
+  'Popover/usePopoverPosition.ts|./position.js': 'Popover/position.ts',
+  'AudioPlayer/AudioPlayer.tsx|./audioPlayerState.js': 'AudioPlayer/audioPlayerState.ts',
+  'VoiceRecorder/VoiceRecorder.tsx|./recorderVisual.js': 'VoiceRecorder/recorderVisual.ts',
+  'VoiceRecorder/VoiceRecorder.tsx|./recorderState.js': 'VoiceRecorder/recorderState.ts',
+  'VoiceRecorder/VoiceRecorder.tsx|./recorderTake.js': 'VoiceRecorder/recorderTake.ts',
+  'VoiceRecorder/VoiceRecorder.tsx|./RecorderControls.js': 'VoiceRecorder/RecorderControls.tsx',
+  'VoiceRecorder/RecorderControls.tsx|./recorderVisual.js': 'VoiceRecorder/recorderVisual.ts',
+  'VoiceRecorder/RecorderControls.tsx|./recorderState.js': 'VoiceRecorder/recorderState.ts',
+  'VoiceRecorder/recorderTake.ts|./recorderState.js': 'VoiceRecorder/recorderState.ts',
 };
 
 export function classifyImport(spec, fromFile = '') {
@@ -16,12 +34,7 @@ export function classifyImport(spec, fromFile = '') {
   if (spec.startsWith('./')) {
     // A shared module at the primitives root imports its root neighbours with ./ .
     if (fromFile && !fromFile.includes('/') && ROOT_SHARED[spec]) return { kind: 'shared', file: ROOT_SHARED[spec] };
-    const popoverFiles = { 'Popover/Popover.tsx|./focus.js': 'Popover/focus.ts', 'Popover/Popover.tsx|./position.js': 'Popover/position.ts', 'Popover/Popover.tsx|./usePopoverPosition.js': 'Popover/usePopoverPosition.ts', 'Popover/usePopoverPosition.ts|./position.js': 'Popover/position.ts' };
-    if (popoverFiles[`${fromFile}|${spec}`]) return { kind: 'shared', file: popoverFiles[`${fromFile}|${spec}`] };
-    const companion = fromFile === 'VoiceRecorder/VoiceRecorder.tsx' && spec === './recorderVisual.js'
-        ? 'VoiceRecorder/recorderVisual.ts'
-        : null;
-    if (companion) return { kind: 'shared', file: companion };
+    if (SAME_FOLDER_COMPANIONS[`${fromFile}|${spec}`]) return { kind: 'shared', file: SAME_FOLDER_COMPANIONS[`${fromFile}|${spec}`] };
     throw new Error(`Unclassified import '${spec}' — registry generation refuses to guess`);
   }
   // Root-level shared modules sit one directory above component files, so their depth counts one more.

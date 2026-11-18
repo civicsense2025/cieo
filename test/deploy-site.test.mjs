@@ -13,18 +13,21 @@ const write = (repo, rel, text) => { mkdirSync(join(repo, rel, '..'), { recursiv
 test('every page, stylesheet and script the entry pages reference exists', () => {
   const { files, missing } = collect();
   assert.deepEqual(missing, []);
-  for (const f of ['site/components/index.html', 'design/themes.css', 'design/primitives.css', 'tokens/tokens.css', 'dist/controls/controls.css', 'docs/studio/main.js']) assert.ok(files.includes(f), f);
+  for (const f of ['site/components/index.html', 'site/search-index.json', 'design/themes.css', 'design/primitives.css', 'tokens/tokens.css', 'dist/controls/controls.css', 'docs/studio/main.js']) assert.ok(files.includes(f), f);
 });
 
-test('the built folder serves the site root to the components index and carries safe headers', () => {
+test('the built folder serves the site at the root, redirects the retired bundles, and carries safe headers', () => {
   const out = mkdtempSync(join(tmpdir(), 'cieo-deploy-'));
   try {
     build(out);
-    assert.equal(readFileSync(join(out, '_redirects'), 'utf8').trim(), '/ /site/ 302');
+    const redirects = readFileSync(join(out, '_redirects'), 'utf8');
+    assert.doesNotMatch(redirects, /^\/ /m, 'the root serves the home page, it does not redirect');
+    assert.match(redirects, /^\/site\/\*\s+\/:splat\s+301$/m, 'old /site/ links keep working');
     const headers = readFileSync(join(out, '_headers'), 'utf8');
     assert.match(headers, /X-Content-Type-Options: nosniff/);
     assert.match(headers, /Referrer-Policy: strict-origin-when-cross-origin/);
-    assert.ok(existsSync(join(out, 'site/components/Toast.html')));
+    assert.ok(existsSync(join(out, 'components/Toast.html')));
+    assert.ok(!existsSync(join(out, 'site')), 'site/ is flattened into the root');
     assert.ok(!existsSync(join(out, 'src')), 'source is not published');
     assert.ok(!existsSync(join(out, 'node_modules')));
   } finally { rmSync(out, { recursive: true, force: true }); }
@@ -41,7 +44,7 @@ test('a missing stylesheet, script or image fails the build and names the page',
 });
 
 test('sample links, inline script text and folder links do not count as broken', () => {
-  const refs = localRefs('x.html', '<a href="/library">demo</a><audio src="/note.m4a"></audio><script>const t = `<a href="${url}">`</script><a href="./sub/">folder</a>');
+  const refs = localRefs('x.html', '<a href="/library">demo</a><script>const t = `<a href="${url}">`</script><a href="./sub/">folder</a>');
   assert.deepEqual(refs, ['./sub/']);
   const repo = mkdtempSync(join(tmpdir(), 'cieo-deploy-repo-'));
   try {
@@ -78,7 +81,9 @@ test('the site has a root page and a not-found page of its own', () => {
   const out = mkdtempSync(join(tmpdir(), 'cieo-deploy-'));
   try {
     build(out);
-    assert.match(readFileSync(join(out, 'index.html'), 'utf8'), /url=\/site\//);
+    const home = readFileSync(join(out, 'index.html'), 'utf8');
+    assert.match(home, /Motion that settles\./);
+    assert.doesNotMatch(home, /http-equiv="refresh"/);
     assert.match(readFileSync(join(out, '404.html'), 'utf8'), /Page not found/);
     assert.match(readFileSync(join(out, '_headers'), 'utf8'), /\.mjs/);
   } finally { rmSync(out, { recursive: true, force: true }); }
