@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Cieo: motion that settles</title><meta name="description" content="Critically damped spring motion for the web and SwiftUI, and 244 interface parts that move the same way."><meta name="color-scheme" content="light dark"><link rel="stylesheet" href="./../site/theme.css"><link rel="stylesheet" href="./../tokens/tokens.css"><link rel="stylesheet" href="./../design/primitives.css"><link rel="stylesheet" href="./site.css"></head>
+<body class="cieo cieo-site">
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="./" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="./components/">Library</a><a href="./pricing.html">Pricing</a><a href="./contact.html">Contact</a></nav></header>
+<main id="main">
+<section class="site-wrap site-hero">
+  <p class="site-label">Spring motion · Interface parts</p>
+  <h1 class="site-display">Motion that settles.</h1>
+  <p class="site-lead">Cieo is critically damped spring motion for the web and SwiftUI, and a library of 244 interface parts that move the same way: no overshoot, no bounce, nothing left to tune.</p>
+  <div class="site-actions"><a class="site-btn" href="./components/">Browse the library</a><a class="site-btn" data-variant="ring" href="#install">Install</a></div>
+</section>
+<section class="site-wrap" aria-labelledby="instrument-h">
+  <h2 id="instrument-h" class="site-sr">Watch both springs settle</h2>
+  <div class="instrument" data-instrument role="group" aria-label="Two springs chasing one target">
+    <div class="lane" data-lane="settle"><div class="lane-head"><b>Cieo · critically damped</b><output>0.0% · v 0.00/s · overshoot 0.0%</output></div><div class="track"><div class="track-ticks"></div><span class="target"></span><span class="marker"></span></div></div>
+    <div class="lane" data-lane="bounce"><div class="lane-head"><b>Typical bouncy spring</b><output>0.0% · v 0.00/s · overshoot 0.0%</output></div><div class="track"><div class="track-ticks"></div><span class="target"></span><span class="marker"></span></div></div>
+    <div class="instrument-controls"><div class="segments" role="group" aria-label="Move the target"><button type="button" data-target="0" aria-pressed="false">Left</button><button type="button" data-target="0.5" aria-pressed="false">Middle</button><button type="button" data-target="1" aria-pressed="true">Right</button></div><p class="instrument-note">Same natural frequency, different damping. Cieo settles in <span data-settle>0.42 s</span>. Click a track to set the target.</p></div>
+    <p class="site-sr" data-live aria-live="polite"></p>
+  </div>
+</section>
+<section class="site-wrap" style="padding-block-start: var(--cieo-space-16)" aria-label="The library in numbers">
+  <div class="facts">
+    <div><span class="fact-number">244</span><span class="site-label">Components</span></div>
+    <div><span class="fact-number">572</span><span class="site-label">Motion recipes</span></div>
+    <div><span class="fact-number">7</span><span class="site-label">Brands</span></div>
+    <div><span class="fact-number">AA</span><span class="site-label">Contrast audited</span></div>
+  </div>
+</section>
+<section class="site-wrap site-section">
+  <div class="site-section-head"><p class="site-label">Three ideas</p><h2 class="site-title">Less to tune, more to trust.</h2></div>
+  <div class="ideas">
+    <div><h3>One spring, no tuning</h3><p>Every motion is a closed-form critically damped spring set by one number, its natural frequency. It cannot overshoot, so there is no bounce to tune away.</p></div>
+    <div><h3>The same on web and Apple</h3><p>DOM and React on the web, SwiftUI on Apple platforms. The same presets, so a screen feels the same wherever it runs.</p></div>
+    <div><h3>Themed by tokens</h3><p>7 brands, 5 corner profiles, 3 densities and 3 grounds. Every combination of color is audited for contrast before it ships.</p></div>
+  </div>
+</section>
+<section class="site-wrap site-section" id="library">
+  <div class="site-section-head"><p class="site-label">The library</p><h2 class="site-title">Foundations first, then use cases.</h2><p class="site-prose">Primitives are the foundation. Atoms, molecules and organisms build on them. Packs gather the parts that only make sense for one kind of product, so you never see sign-in cards while building a docs site.</p></div>
+  <div class="index-split">
+    <div><h3 class="site-label">By layer</h3><ul class="index-list"><li><a href="./components/#primitives"><span class="index-count">14</span><span class="index-name">Primitives</span><span class="index-note">Layout, text, icon and overlay</span></a></li><li><a href="./components/#atoms"><span class="index-count">108</span><span class="index-name">Atoms</span><span class="index-note">One control or indicator</span></a></li><li><a href="./components/#molecules"><span class="index-count">94</span><span class="index-name">Molecules</span><span class="index-note">A small group that does one job</span></a></li><li><a href="./components/#organisms"><span class="index-count">28</span><span class="index-name">Organisms</span><span class="index-note">A whole section or surface</span></a></li></ul></div>
+    <div><h3 class="site-label">By use case</h3><ul class="index-list"><li><a href="./components/#pack-auth"><span class="index-count">15</span><span class="index-name">Auth</span><span class="index-note">Sign in, sign up, reset and MFA</span></a></li><li><a href="./components/#pack-messaging"><span class="index-count">16</span><span class="index-name">Messaging</span><span class="index-note">Chat and conversations</span></a></li><li><a href="./components/#pack-audio"><span class="index-count">10</span><span class="index-name">Audio</span><span class="index-note">Players, rooms and recording</span></a></li><li><a href="./components/#pack-agent"><span class="index-count">07</span><span class="index-name">Agents</span><span class="index-note">Activity, approvals and tool calls</span></a></li><li><a href="./components/#pack-social"><span class="index-count">12</span><span class="index-name">Social</span><span class="index-note">Comments, polls and reactions</span></a></li><li><a href="./components/#pack-editorial"><span class="index-count">15</span><span class="index-name">Editorial</span><span class="index-note">Rolls, figures, quotes and steps</span></a></li><li><a href="./components/#pack-tools"><span class="index-count">08</span><span class="index-name">Tools</span><span class="index-note">Import, compare, preview and trim</span></a></li></ul></div>
+  </div>
+</section>
+<section class="site-wrap site-section" id="install">
+  <div class="site-section-head"><p class="site-label">Install</p><h2 class="site-title">Two lines to the first part.</h2></div>
+  <pre class="codeblock"><code>npm install github:civicsense2025/cieo#v0.7.0
+import { Badge } from 'cieo/Badge';</code></pre>
+</section>
+</main>
+<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="./components/">Library</a><a href="./pricing.html">Pricing</a><a href="./contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer>
+<script type="module" src="./home.js"></script>
+</body>
+</html>

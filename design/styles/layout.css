@@ -5,7 +5,7 @@
   :where(.cieo) .cieo-container { inline-size: min(100%, var(--cieo-container)); margin-inline: auto; }
   :where(.cieo) .cieo-prose { max-inline-size: var(--cieo-measure); overflow-wrap: anywhere; }
   :where(.cieo) .cieo-surface { background: var(--cieo-color-surface); border-radius: var(--cieo-radius-surface); padding: var(--cieo-space-6); }
-  :where(.cieo) .cieo-surface[data-elevation='raised'] { box-shadow: 0 var(--cieo-shadow-y) var(--cieo-shadow-blur) color-mix(in srgb, var(--cieo-color-shadow) calc(var(--cieo-shadow-alpha) * 100%), transparent); }
+  :where(.cieo) .cieo-surface[data-elevation='raised'] { box-shadow: 0 0 0 var(--cieo-ring-width) var(--cieo-color-border), 0 var(--cieo-shadow-y) var(--cieo-shadow-blur) color-mix(in srgb, var(--cieo-color-shadow) calc(var(--cieo-shadow-alpha) * 100%), transparent); }
   :where(.cieo) .cieo-divider { border: 0; border-block-start: 1px solid var(--cieo-color-border); margin-block: var(--cieo-space-4); inline-size: 100%; }
   :where(.cieo) .cieo-caption { font-size: var(--cieo-text-caption); }
   :where(.cieo) .cieo-small { font-size: var(--cieo-text-small); }

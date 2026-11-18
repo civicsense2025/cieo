@@ -1,12 +1,15 @@
-export type Brand = 'studio' | 'iris' | 'lagoon' | 'ember' | 'rose' | 'mono';
+export type Brand = 'studio' | 'iris' | 'lagoon' | 'ember' | 'rose' | 'mono' | 'instrument';
 export type Scheme = 'light' | 'dark';
 export type Density = 'compact' | 'comfortable' | 'spacious';
-export type Radius = 'square' | 'crisp' | 'soft' | 'round';
+export type Radius = 'square' | 'crisp' | 'soft' | 'round' | 'pill';
 export type Font = 'system' | 'humanist' | 'mono';
+export type Display = 'sans' | 'serif';
+export type Ground = 'cool' | 'paper' | 'mist';
+export type Elevation = 'soft' | 'ring';
 export type TokenValue = string | number | readonly string[];
 export interface ThemeOptions {
   brand?: Brand; scheme?: Scheme; density?: Density; radius?: Radius;
-  contrast?: 'standard' | 'high'; font?: Font; accent?: string;
+  contrast?: 'standard' | 'high'; font?: Font; display?: Display; ground?: Ground; elevation?: Elevation; accent?: string;
   overrides?: Record<string, TokenValue>;
 }
 export interface Token {
@@ -38,6 +41,9 @@ export const brands: Readonly<Record<Brand, Readonly<{ light: string; dark: stri
 export const densities: Readonly<Record<Density, number>>;
 export const radii: Readonly<Record<Radius, readonly number[]>>;
 export const fonts: Readonly<Record<Font, readonly string[]>>;
+export const displays: Readonly<Record<Display, readonly string[] | null>>;
+export const grounds: Readonly<Record<Ground, Readonly<Record<Scheme, Readonly<Record<string, string>>>>>>;
+export const elevations: Readonly<Record<Elevation, Elevation>>;
 export function themeSchema(): Record<string, unknown>;
 export interface SystemPreferences { readonly scheme: Scheme; readonly reduced: boolean; readonly contrast: 'standard' | 'high' }
 export function watchSystemPreferences(listener: (preferences: SystemPreferences) => void, host?: Pick<Window, 'matchMedia'> | Record<string, never>): () => void;

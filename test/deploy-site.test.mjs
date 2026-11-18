@@ -20,7 +20,7 @@ test('the built folder serves the site root to the components index and carries 
   const out = mkdtempSync(join(tmpdir(), 'cieo-deploy-'));
   try {
     build(out);
-    assert.equal(readFileSync(join(out, '_redirects'), 'utf8').trim(), '/ /site/components/ 302');
+    assert.equal(readFileSync(join(out, '_redirects'), 'utf8').trim(), '/ /site/ 302');
     const headers = readFileSync(join(out, '_headers'), 'utf8');
     assert.match(headers, /X-Content-Type-Options: nosniff/);
     assert.match(headers, /Referrer-Policy: strict-origin-when-cross-origin/);
@@ -78,7 +78,7 @@ test('the site has a root page and a not-found page of its own', () => {
   const out = mkdtempSync(join(tmpdir(), 'cieo-deploy-'));
   try {
     build(out);
-    assert.match(readFileSync(join(out, 'index.html'), 'utf8'), /url=\/site\/components\//);
+    assert.match(readFileSync(join(out, 'index.html'), 'utf8'), /url=\/site\//);
     assert.match(readFileSync(join(out, '404.html'), 'utf8'), /Page not found/);
     assert.match(readFileSync(join(out, '_headers'), 'utf8'), /\.mjs/);
   } finally { rmSync(out, { recursive: true, force: true }); }
@@ -102,11 +102,10 @@ test('every component page links to its alphabetical neighbours', () => {
   });
 });
 
-test('wrangler serves the built folder as static assets and the folder is never committed', () => {
+test('wrangler serves the built folder as assets and the folder is never committed', () => {
   const cfg = readFileSync('wrangler.jsonc', 'utf8');
   assert.match(cfg, /"name": "cieo"/);
   assert.match(cfg, /"directory": "\.deploy"/);
-  assert.ok(!/"main"/.test(cfg), 'static assets only: no worker code to run');
   assert.match(readFileSync('.gitignore', 'utf8'), /^\.deploy\/$/m);
   const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
   assert.equal(pkg.scripts.deploy, 'node scripts/deploy.mjs', 'deploys go through the guard');

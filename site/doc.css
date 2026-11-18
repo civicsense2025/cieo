@@ -17,7 +17,7 @@ body.cieo-docsite {
 @media (min-width: 60rem) { .doc-shell { grid-template-columns: 12rem minmax(0, 1fr); padding-inline: var(--cieo-space-8); } }
 .doc-rail { display: none; }
 @media (min-width: 60rem) {
-  .doc-rail { display: grid; align-content: start; gap: var(--cieo-space-1); position: sticky; inset-block-start: var(--cieo-space-6); font-size: var(--cieo-text-small); }
+  .doc-rail { display: grid; align-content: start; gap: var(--cieo-space-1); position: sticky; inset-block-start: calc(var(--cieo-space-6) + 3.5rem); font-size: var(--cieo-text-small); }
   .doc-rail a { padding: var(--cieo-space-1) 0 var(--cieo-space-1) var(--cieo-space-3); border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); text-decoration: none; color: var(--cieo-color-muted); }
   @media (hover: hover) { .doc-rail a:hover { color: var(--cieo-color-text); border-color: var(--cieo-color-border-strong); } }
 }
@@ -27,13 +27,13 @@ body.cieo-docsite {
 .doc-head { display: grid; gap: var(--cieo-space-3); padding-block-end: var(--cieo-space-6); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
 .doc-crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cieo-space-2); margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
 .doc-level { padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); font: var(--cieo-text-caption)/1.6 var(--cieo-font-mono); color: var(--cieo-color-text); }
-.doc-head h1 { margin: 0; font-size: clamp(var(--cieo-text-heading), 6vw, var(--cieo-text-display)); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-strong); letter-spacing: -.025em; }
+.doc-head h1 { margin: 0; font-family: var(--cieo-font-display); font-size: clamp(var(--cieo-text-heading), 6vw, var(--cieo-text-display)); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-strong); letter-spacing: -.025em; }
 .doc-head > p { margin: 0; max-inline-size: var(--cieo-measure); font-size: var(--cieo-text-lead); color: var(--cieo-color-muted); }
 
 /* Sections */
 .doc-main { display: grid; gap: var(--cieo-space-12); min-inline-size: 0; }
 .doc-main > section { display: grid; gap: var(--cieo-space-4); min-inline-size: 0; scroll-margin-block-start: var(--cieo-space-6); }
-.doc-main h2 { margin: 0; font-size: var(--cieo-text-title); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-strong); letter-spacing: -.01em; }
+.doc-main h2 { margin: 0; font-family: var(--cieo-font-display); font-size: var(--cieo-text-title); line-height: var(--cieo-leading-tight); font-weight: var(--cieo-weight-strong); letter-spacing: -.01em; }
 .doc-main h3 { margin: 0; font-size: var(--cieo-text-body); font-weight: var(--cieo-weight-strong); }
 .doc-main p, .doc-main li { max-inline-size: var(--cieo-measure); }
 .doc-main ul { margin: 0; padding-inline-start: var(--cieo-space-4); }
@@ -45,7 +45,7 @@ body.cieo-docsite {
 .cieo-import-banner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--cieo-space-2) var(--cieo-space-4); padding: var(--cieo-space-3) var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); }
 .cieo-import-banner p { grid-column: 1 / -1; margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
 .cieo-import-banner pre { margin: 0; overflow-x: auto; }
-.doc-button { min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
+.doc-button { min-block-size: var(--cieo-control-small); padding: 0 var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-control); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
 @media (hover: hover) { .doc-button:hover { background: var(--cieo-color-sunken); } }
 @media (pointer: coarse) { .doc-button { min-block-size: var(--cieo-touch-target); } }
 
@@ -56,6 +56,8 @@ body.cieo-docsite {
 .doc-tabs [role="tab"][aria-selected="true"] { color: var(--cieo-color-text); border-block-end-color: var(--cieo-color-text); }
 .doc-stage { display: grid; place-items: center; min-block-size: 14rem; padding: var(--cieo-space-8) var(--cieo-space-4); background-color: var(--cieo-color-canvas); background-image: radial-gradient(circle at 1px 1px, var(--cieo-color-border) 1px, transparent 0); background-size: var(--cieo-space-2) var(--cieo-space-2); }
 .doc-stage > * { max-inline-size: 100%; }
+/* A toast is fixed to the viewport in an app; in the preview it sits in the stage so it never floats over the page. */
+.doc-stage .cieo-toast { position: static; translate: none; }
 .doc-code { margin: 0; padding: var(--cieo-space-4); overflow-x: auto; background: var(--cieo-color-text); color: var(--cieo-color-surface); font-size: var(--cieo-text-small); line-height: 1.7; }
 [role="tabpanel"][hidden] { display: none; }
 

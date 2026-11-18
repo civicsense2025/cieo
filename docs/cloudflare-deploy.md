@@ -33,6 +33,20 @@ The folder also gets a root `index.html` and a `404.html` of its own. The build 
 
 Cloudflare serves clean URLs: `/site/components/Toast.html` redirects to `/site/components/Toast`, and folder pages end in a slash. Relative links in the pages keep working from either form. Links must match the file's letter case exactly.
 
+## The contact form
+
+`/api/contact` is the only path that runs code (`worker/contact.js`); everything else is served as static assets. A message is validated, checked for abuse, rate limited to three per minute per address, and sent through Resend. The form refuses other origins, oversized bodies and line breaks in names, ignores messages with a filled hidden field or a fill time under two seconds, and never logs a message or a key.
+
+Set up once, by the owner:
+
+1. **Secrets** (never committed): `npx wrangler@4.160.0 secret put RESEND_API_KEY` and `npx wrangler@4.160.0 secret put CONTACT_TO` (the inbox that receives messages). Check first with `npx wrangler@4.160.0 secret list`.
+2. **Sender**: until a domain is verified with Resend, the sandbox sender is used and Resend delivers only to the account owner's own address, so set `CONTACT_TO` to that address for testing. For real use, verify the sending domain in Resend (it asks for DNS records), then set `CONTACT_FROM` in `wrangler.jsonc` under `vars` to something like `Cieo <hello@your-domain>`.
+3. **Subdomain**: add the Cieo subdomain to the domain's DNS in the same Cloudflare account, then attach it to the Worker as a custom domain in the dashboard (Workers, `cieo`, Settings, Domains).
+
+The rate limit's `namespace_id` in `wrangler.jsonc` must be unique in the Cloudflare account; if another Worker already uses `424201`, change it, or the two share one counter. Limits are approximate and per Cloudflare location, so treat them as a brake on abuse, not a hard cap.
+
+Until step 1 is done the form answers "Messages are not being accepted right now" instead of failing silently.
+
 ## Checking a deploy
 
 Open the root (it should land on the components index), a component page, the catalogue and the studio. In the browser console no request should return 404. The test `test/deploy-site.test.mjs` pins the folder contents and the link rules.

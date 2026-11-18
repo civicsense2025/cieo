@@ -1,5 +1,5 @@
 import { createTheme } from './theme.js';
-import { brands, densities, radii, fonts } from './presets.js';
+import { brands, densities, radii, fonts, displays, grounds, elevations } from './presets.js';
 /** Structural validation for other languages; semantic contrast still needs an audit. */
 export function themeSchema() {
   const properties = {};
@@ -24,6 +24,7 @@ export function themeSchema() {
           brand: { enum: Object.keys(brands) }, scheme: { enum: ['light', 'dark'] },
           density: { enum: Object.keys(densities) }, radius: { enum: Object.keys(radii) },
           contrast: { enum: ['standard', 'high'] }, font: { enum: Object.keys(fonts) },
+          display: { enum: Object.keys(displays) }, ground: { enum: Object.keys(grounds) }, elevation: { enum: Object.keys(elevations) },
           accent: { type: 'string', pattern: '^#[0-9a-fA-F]{6}$' },
           overrides: { type: 'object', additionalProperties: false, properties },
         },
