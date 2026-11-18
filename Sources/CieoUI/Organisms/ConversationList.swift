@@ -44,7 +44,7 @@ public struct ConversationList<Item: Identifiable, Row: View>: View where Item.I
         }
         .environment(\.conversationListContext, ConversationListContext(
             selectedId: selection, select: { selection = $0 }, focus: $focusedId))
-        .motion(.base, value: ids)
+        .motionAnimation(.base, value: ids)
         .onKeyPress(keys: [.upArrow, .downArrow, .home, .end]) { press in
             guard let name = Self.keyName(press.key) else { return .ignored }
             let current = focusedId.flatMap { ids.firstIndex(of: $0) } ?? -1

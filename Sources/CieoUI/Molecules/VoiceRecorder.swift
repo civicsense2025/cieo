@@ -239,7 +239,7 @@ public struct VoiceRecorder: View {
     private func runPulse(recording: Bool) async {
         guard recording, policy.allowsMotion, !reduceMotion else { pulse = false; return }
         while !Task.isCancelled {
-            withMotion(.lazy, reduceMotion: reduceMotion) { pulse.toggle() }
+            withMotion(.lazy, reduceMotion: reduceMotion || !policy.allowsMotion) { pulse.toggle() }
             try? await Task.sleep(for: .seconds(0.8)) // literal-ok: pulse period
         }
         pulse = false

@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct StepperHeaderAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "stepheader", category: "Forms", name: "Stepper header",
+    public static let info = MotionAtomInfo(id: "stepheader", category: "Views", name: "Stepper header",
         summary: "The active plate glides with its leading edge first. The connector fills toward the new step, then the node inks. Finished steps swap their numbers for checks, and extra steps fade at the scrolled edges.")
 
     @Environment(\.accessibilityReduceMotion) private var reduce

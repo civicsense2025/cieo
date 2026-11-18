@@ -10,5 +10,5 @@ export function pageBounds(page, total) {
 }
 export function ReferenceText({ className, slotProps, spoken, children }) {
     // aria-label is not announced on a generic span, so the spoken form is hidden text beside the visible one.
-    return (_jsx("span", { ...customizePart(slotProps?.root, "cieo cieo-p-reference-text", undefined, className), children: spoken ? _jsxs(_Fragment, { children: [_jsx("span", { "aria-hidden": "true", children: children }), _jsx("span", { className: "cieo-sr-only", children: spoken })] }) : children }));
+    return (_jsx("span", { className: "cieo cieo-p-reference-text", ...customizePart(slotProps?.root, "cieo cieo-p-reference-text", undefined, className), children: spoken ? _jsxs(_Fragment, { children: [_jsx("span", { "aria-hidden": "true", children: children }), _jsx("span", { className: "cieo-sr-only", children: spoken })] }) : children }));
 }

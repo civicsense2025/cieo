@@ -13,9 +13,10 @@ public struct AgentStatusAtom: MotionAtomView {
                           St(name: "Blocked", icon: "hand.raised", radius: 2, tone: .warning, action: "Review"),
                           St(name: "Failed", icon: "xmark.octagon", radius: 8, tone: .danger, action: "Retry"),
                           St(name: "Done", icon: "checkmark.circle", radius: 16, tone: .success, action: "Review")]
+    private struct RecentItem: Identifiable { let id = UUID(); let name: String }
     @State private var cur = 0
     @State private var seconds = 0
-    @State private var recent = ["Working"]
+    @State private var recent = [RecentItem(name: "Working")]
     public init() {}
 
     public var body: some View {
@@ -38,7 +39,7 @@ public struct AgentStatusAtom: MotionAtomView {
                 Text("Pick a state to preview it.").font(.caption).foregroundStyle(.secondary)
                 HStack { ForEach(states.indices, id: \.self) { i in Button(states[i].name) { pick(i) }.buttonStyle(AgPress(tone: cur == i ? .info : nil)).font(.caption) } }
                 Text("Recent states").font(.caption.weight(.semibold))
-                ForEach(Array(recent.reversed().prefix(4).enumerated()), id: \.offset) { _, r in Text(r).font(.caption).transition(.opacity) }
+                ForEach(Array(recent.reversed().prefix(4))) { r in Text(r.name).font(.caption).transition(.opacity) }
             }
             .animation(reduce ? nil : .motion(.base), value: recent.count)
         }
@@ -48,5 +49,5 @@ public struct AgentStatusAtom: MotionAtomView {
         }
     }
 
-    private func pick(_ i: Int) { withMotion(.base, reduceMotion: reduce) { cur = i; recent.append(states[i].name) } }
+    private func pick(_ i: Int) { withMotion(.base, reduceMotion: reduce) { cur = i; recent.append(RecentItem(name: states[i].name)) } }
 }

@@ -40,7 +40,9 @@ public struct PlayerAtom: MotionAtomView {
 
     private func stopIfEnded(_ p: Double) {
         guard playing && !held && endMode == 0 && p >= 1 else { return }
-        DispatchQueue.main.async { playing = false; p0 = 1; ended = true }
+        playing = false
+        p0 = 1
+        ended = true
     }
 
     public var body: some View {
@@ -67,10 +69,9 @@ public struct PlayerAtom: MotionAtomView {
                     }
                     .buttonStyle(.plain).accessibilityLabel(ended && endMode == 0 ? "Replay" : playing ? "Pause" : "Play")
                 }
-                TimelineView(.animation) { ctx in
+                TimelineView(.animation(paused: reduce || (!playing && !held && grow.restTime == nil))) { ctx in
                     let t = ctx.date.timeIntervalSinceReferenceDate
                     let p = held ? hp : progress(t), g = grow.value(at: t)
-                    let _ = stopIfEnded(p)
                     let bh = 4 + 4 * g, ts = 8 + 8 * g
                     VStack(spacing: 6) {
                         GeometryReader { geo in
@@ -96,6 +97,9 @@ public struct PlayerAtom: MotionAtomView {
                             Spacer(); Text("3:24")
                         }
                         .font(.caption).monospacedDigit().foregroundStyle(.secondary)
+                    }
+                    .onChange(of: p >= 1) { _, reachedEnd in
+                        if reachedEnd { stopIfEnded(p) }
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel("Seek")

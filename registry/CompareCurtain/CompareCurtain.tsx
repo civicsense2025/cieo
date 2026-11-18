@@ -113,14 +113,16 @@ export function CompareCurtain({ className, slotProps, label, valueText, before,
     onMove?.(moveBy === 'min' ? 0 : moveBy === 'max' ? 100 : clamp(clamped + moveBy));
   }
 
+  const afterStyle = { clipPath: `inset(0 ${(100 - clamped).toFixed(2)}% 0 0)` };
+  const dividerStyle = { insetInlineStart: `${clamped.toFixed(2)}%` };
   return (
     <div className="cieo cieo-compare" {...motionAttrs({ motion, entering, exiting })} {...customizePart(slotProps?.root, "cieo cieo-compare", undefined, className)}>
       <div className="cieo-compare-before" {...customizePart(slotProps?.before, "cieo-compare-before", undefined)}>{before}</div>
       <div
         ref={clipRef}
         className="cieo-compare-after"
-        style={{ clipPath: `inset(0 ${(100 - clamped).toFixed(2)}% 0 0)` }}
-        {...customizePart(slotProps?.after, "cieo-compare-after", undefined)}
+        style={afterStyle}
+        {...customizePart(slotProps?.after, "cieo-compare-after", afterStyle)}
       >
         {after}
       </div>
@@ -135,13 +137,13 @@ export function CompareCurtain({ className, slotProps, label, valueText, before,
         aria-valuetext={`${Math.round(clamped)} percent ${valueText}`}
         aria-orientation="horizontal"
         className="cieo-compare-divider"
-        style={{ insetInlineStart: `${clamped.toFixed(2)}%` }}
+        style={dividerStyle}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         onKeyDown={onKeyDown}
-        {...customizePart(slotProps?.divider, "cieo-compare-divider", undefined)}
+        {...customizePart(slotProps?.divider, "cieo-compare-divider", dividerStyle)}
       />
     </div>
   );

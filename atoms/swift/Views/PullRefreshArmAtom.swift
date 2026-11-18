@@ -35,7 +35,7 @@ public struct PullRefreshArmAtom: MotionAtomView {
                         ProgressView().controlSize(.small).padding(.vertical, 6)
                             .transition(.opacity.animation(reduce ? nil : .motion(.snap)))
                     }
-                    ForEach(Array(rows.enumerated()), id: \.offset) { k, r in
+                    ForEach(Array(rows.enumerated()), id: \.element) { k, r in
                         Text(r).font(.footnote).padding(.vertical, 8)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .id("row\(opened)-\(k)")

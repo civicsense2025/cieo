@@ -23,7 +23,7 @@ public struct SketchTextAtom: MotionAtomView {
                     .opacity(done ? 0 : 1)
                     .animation(reduce ? nil : .motion(.snap), value: done)
                     if done {
-                        (Text("Tomorrow: ") + Text("outline the ").foregroundStyle(.orange) + Text("spring essay."))
+                        (Text("Tomorrow: ") + Text("outline the ").foregroundStyle(tweak ? .orange : .primary) + Text("spring essay."))
                             .font(.system(size: 14))
                             .id(done).motionTransition(.swap())
                             .animation(reduce ? nil : .motion(.base), value: done)

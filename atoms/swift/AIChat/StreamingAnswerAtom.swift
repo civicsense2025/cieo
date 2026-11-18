@@ -1,5 +1,6 @@
 import SwiftUI
 import Cieo
+import CieoUI
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)
@@ -30,7 +31,7 @@ public struct StreamingAnswerAtom: MotionAtomView {
                     Button(action: toggle) { SwapText(running ? "Stop" : "Ask").font(.footnote.weight(.medium)).frame(width: 52, height: 30) }
                         .buttonStyle(.borderedProminent).controlSize(.small)
                 }
-                Flow(spacing: 4) {
+                FlowStack(spacing: 4) {
                     ForEach(0..<shown, id: \.self) { i in
                         Text(words[i]).transition(reduce ? .identity : .modifier(active: Rise(), identity: Rise(blur: 0, o: 1, y: 0)))
                     }
@@ -97,24 +98,5 @@ private struct Caret: View {
             RoundedRectangle(cornerRadius: 2).fill(.primary).frame(width: 6, height: 13)
                 .opacity(running ? (reduce ? 0.7 : 0.55 + 0.35 * cos(tl.date.timeIntervalSinceReferenceDate * 6)) : 0)
         }.accessibilityHidden(true)
-    }
-}
-
-/// Lays children out left to right and wraps to a new line when the row is full.
-private struct Flow: Layout {
-    var spacing: CGFloat
-    private func place(_ width: CGFloat, _ subs: Subviews) -> (frames: [CGRect], size: CGSize) {
-        var x: CGFloat = 0, y: CGFloat = 0, row: CGFloat = 0, out: [CGRect] = []
-        for s in subs {
-            let sz = s.sizeThatFits(.unspecified)
-            if x > 0 && x + sz.width > width { x = 0; y += row + 4; row = 0 }
-            out.append(CGRect(origin: CGPoint(x: x, y: y), size: sz))
-            x += sz.width + spacing; row = max(row, sz.height)
-        }
-        return (out, CGSize(width: width, height: y + row))
-    }
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize { place(proposal.width ?? 300, subviews).size }
-    func placeSubviews(in b: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        for (s, f) in zip(subviews, place(b.width, subviews).frames) { s.place(at: CGPoint(x: b.minX + f.minX, y: b.minY + f.minY), proposal: .unspecified) }
     }
 }

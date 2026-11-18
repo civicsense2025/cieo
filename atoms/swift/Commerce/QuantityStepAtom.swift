@@ -31,7 +31,7 @@ public struct QuantityStepAtom: MotionAtomView {
                                 HStack(spacing: 8) {
                                     RoundedRectangle(cornerRadius: 12).fill(.quaternary).frame(width: 56, height: 42)
                                     VStack(alignment: .leading, spacing: 2) {
-                                        Text(items[i].0).font(.system(size: 13, weight: .semibold)).lineSpacing(6.5)
+                                        Text(items[i].0).font(.system(size: 13, weight: .semibold)).lineSpacing(3)
                                         Text("$\(Int(items[i].1)) each").font(.system(size: 12.5)).foregroundStyle(.secondary)
                                     }
                                     Spacer()

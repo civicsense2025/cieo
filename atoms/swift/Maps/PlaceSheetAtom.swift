@@ -39,7 +39,7 @@ public struct PlaceSheetAtom: MotionAtomView {
                         }
                         if detent == 2 {
                             Text("Farmers market Saturdays, ferry terminal, bay views from the deck.")
-                                .font(.subheadline).foregroundStyle(.secondary).lineSpacing(6)
+                                .font(.subheadline).foregroundStyle(.secondary).lineSpacing(3)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .motionTransition(.presence)
                         }

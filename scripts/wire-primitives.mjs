@@ -28,8 +28,19 @@ const BARREL_HEADER = `// NOTE (bundle size): importing from 'cieo/primitives' p
 // there); do not hand-edit the export list below.
 /* eslint-disable import/no-cycle -- barrel re-exports are intentional by design */
 `;
+const CANONICAL_ALIASES = [
+  ['FrameBar', 'PageBar'],
+  ['ReferenceText', 'MonoText'],
+  ['RollCall', 'GroupedRoster'],
+  ['ShareBar', 'ProportionBar'],
+  ['TopicChip', 'TagChip'],
+];
+const aliasLines = CANONICAL_ALIASES.map(
+  ([target, alias]) => `export { ${target} as ${alias}, type ${target}Props as ${alias}Props } from './${target}/${target}.js';`,
+);
 const barrel = BARREL_HEADER + entries
   .map(({ dir, values, types }) => `export { ${[...values, ...types.map((t) => `type ${t}`)].join(', ')} } from './${dir}/${dir}.js';`)
+  .concat(aliasLines)
   .join('\n') + '\n';
 
 const pkg = JSON.parse(readFileSync(`${root}/package.json`, 'utf8'));

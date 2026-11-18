@@ -12,5 +12,5 @@ export interface FrameBarProps {
   edge?: 'top' | 'bottom';
 }
 export function FrameBar({ className, slotProps, leading, trailing, edge = 'top' }: FrameBarProps) {
-  return (<div {...customizePart(slotProps?.root, "cieo cieo-p-frame-bar", undefined, className)} data-edge={edge}><div className="cieo-p-frame-bar__leading">{leading}</div>{trailing ? <div className="cieo-p-frame-bar__trailing">{trailing}</div> : null}</div>);
+  return (<div className="cieo cieo-p-frame-bar" {...customizePart(slotProps?.root, "cieo cieo-p-frame-bar", undefined, className)} data-edge={edge}><div className="cieo-p-frame-bar__leading">{leading}</div>{trailing ? <div className="cieo-p-frame-bar__trailing">{trailing}</div> : null}</div>);
 }

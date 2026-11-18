@@ -48,8 +48,8 @@ public struct CompileRunAtom: MotionAtomView {
     }
 
     @ViewBuilder private var status: some View {
-        if done { Text("Open manuscript →").foregroundStyle(.green).fontWeight(.semibold) }
-        else if running { Text("Weaving chapters…").foregroundStyle(.secondary) }
+        if done { Text(tweak ? "Open manuscript + notes →" : "Open manuscript →").foregroundStyle(.green).fontWeight(.semibold) }
+        else if running { Text(tweak ? "Weaving chapters & notes…" : "Weaving chapters…").foregroundStyle(.secondary) }
         else { Text("Ready to compile").foregroundStyle(.secondary) }
     }
 

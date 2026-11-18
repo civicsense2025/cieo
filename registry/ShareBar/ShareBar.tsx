@@ -21,7 +21,7 @@ export function ShareBar({ className, slotProps, segments, label }: ShareBarProp
   const fractions = shareFractions(segments.map((s) => s.value));
   if (!fractions) return null;
   return (
-    <div {...customizePart(slotProps?.root, "cieo cieo-p-share-bar", undefined, className)} role="img" aria-label={label}>
+    <div className="cieo cieo-p-share-bar" {...customizePart(slotProps?.root, "cieo cieo-p-share-bar", undefined, className)} role="img" aria-label={label}>
       {segments.map((s, i) => <span key={i} style={{ flexGrow: fractions[i], background: s.color }} />)}
     </div>
   );

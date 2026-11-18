@@ -13,6 +13,7 @@ public struct BudgetAtom: MotionAtomView {
 
     private var alive: [Int] { items.indices.filter { !dead[$0] } }
     private var hours: Int { alive.reduce(0) { $0 + items[$1].1 } }
+    private var freedHours: Int { items.indices.filter { dead[$0] }.reduce(0) { $0 + items[$1].1 } }
     private var leader: Int? { alive.max(by: { items[$0].1 < items[$1].1 }) }
     private func slotOf(_ i: Int) -> Double { Double(alive.firstIndex(of: i) ?? 0) * slot }
 
@@ -25,6 +26,9 @@ public struct BudgetAtom: MotionAtomView {
                     Text("of \(items.count) ·").font(.system(size: 12.5)).foregroundStyle(.secondary)
                     RollingDigits(hours)
                     Text("hrs").font(.system(size: 12.5)).foregroundStyle(.secondary)
+                    if tweak && freedHours > 0 {
+                        Text("· \(freedHours)h freed").font(.system(size: 12.5)).foregroundStyle(.green)
+                    }
                     Spacer()
                     Button("Restore all") { restoreAll() }.buttonStyle(.bordered).frame(minHeight: 32).controlSize(.small).disabled(alive.count == items.count)
                 }

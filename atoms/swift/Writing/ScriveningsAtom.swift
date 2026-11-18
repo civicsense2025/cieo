@@ -28,7 +28,7 @@ public struct ScriveningsAtom: MotionAtomView {
                 }
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach(ordered, id: \.self) { si in
-                        if si != ordered.first {
+                        if tweak && si != ordered.first {
                             Text("§ \(loopIndex(si) + 1) · \(scenes[si])")
                                 .font(.system(size: 12.5)).foregroundStyle(.secondary)
                                 .id("div\(si)").motionTransition(.swap())
@@ -39,6 +39,7 @@ public struct ScriveningsAtom: MotionAtomView {
                 }
                 .padding(14).background(.quaternary.opacity(0.12), in: RoundedRectangle(cornerRadius: 10))
                 .animation(reduce ? nil : .motion(.base), value: sel)
+                .animation(reduce ? nil : .motion(.base), value: tweak)
                 Toggle("Stitch dividers", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)

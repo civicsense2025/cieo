@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct ChatPollAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "chatpoll", category: "Forms", name: "In-chat poll",
+    public static let info = MotionAtomInfo(id: "chatpoll", category: "AI chat", name: "In-chat poll",
         summary: "Each option morphs in place into its result bar. Fills stagger in, percents roll their digits, and the picked row keeps its check.")
 
     private let options = [("Booking calendar", 38), ("Course player", 27), ("Job board", 21), ("Map directory", 14)]

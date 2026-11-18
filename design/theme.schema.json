@@ -81,9 +81,32 @@
             "ring"
           ]
         },
+        "zeta": {
+          "type": "number",
+          "minimum": 0.7,
+          "maximum": 1
+        },
         "accent": {
           "type": "string",
           "pattern": "^#[0-9a-fA-F]{6}$"
+        },
+        "components": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z][a-z0-9-]{0,31}$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "propertyNames": {
+              "pattern": "^[a-z][a-z0-9-]{0,31}$"
+            },
+            "additionalProperties": {
+              "type": [
+                "string",
+                "number"
+              ]
+            }
+          }
         },
         "overrides": {
           "type": "object",
@@ -102,6 +125,18 @@
               "pattern": "^#[0-9a-fA-F]{6}$"
             },
             "color-sunken": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-surface-low": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-surface-high": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "color-scrim": {
               "type": "string",
               "pattern": "^#[0-9a-fA-F]{6}$"
             },
@@ -253,11 +288,19 @@
               "type": "string",
               "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
             },
+            "control-xs": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
             "control-small": {
               "type": "string",
               "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
             },
             "control-large": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "control-xl": {
               "type": "string",
               "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
             },
@@ -422,6 +465,118 @@
               "maximum": 10000
             },
             "layer-modal": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "scrim-alpha": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "state-hover-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "state-focus-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "state-pressed-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "state-selected-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "state-dragged-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "state-pressed-scale": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "state-lifted-scale": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "motion-spring-snap-w": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "motion-spring-base-w": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "motion-spring-soft-w": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "motion-spring-lazy-w": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 10000
+            },
+            "motion-zeta": {
+              "type": "number",
+              "minimum": 0.7,
+              "maximum": 1
+            },
+            "motion-duration-snap": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-duration-base": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-duration-soft": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-duration-lazy": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-duration-exit": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-lag": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-stagger-max": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:ms|s)$"
+            },
+            "motion-arrive-opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "motion-drift": {
+              "type": "string",
+              "pattern": "^(?:[0-9]+(?:\\.[0-9]+)?|\\.[0-9]+)(?:px|rem)$"
+            },
+            "physics-rubber-band": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "physics-flick-velocity": {
               "type": "number",
               "minimum": 0,
               "maximum": 10000

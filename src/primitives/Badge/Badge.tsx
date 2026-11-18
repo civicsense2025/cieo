@@ -1,4 +1,3 @@
-'use client';
 /* Badge. Small status label. Renders the design-system .cieo-badge so there is exactly one badge style; this file owns the contract, not the paint. */
 import type { ReactNode } from 'react';
 import { cx } from '../../controls/classes.js';

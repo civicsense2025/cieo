@@ -1,4 +1,3 @@
-'use client';
 /* TableCell. <td> data cell with standard padding. Host supplies cell content; this owns cell rendering only. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

@@ -48,7 +48,9 @@ public struct CompareAtom: MotionAtomView {
                                 held = false
                                 let near = hx < 0.5 ? 0.0 : 1.0
                                 if moved {
-                                    if reduce { x.jump(near) } else { x.release(from: hx, velocity: vel, to: near, preset: .soft, at: Date.timeIntervalSinceReferenceDate) }
+                                    if !tweak { x.jump(hx) }
+                                    else if reduce { x.jump(near) }
+                                    else { x.release(from: hx, velocity: vel, to: near, preset: .soft, at: Date.timeIntervalSinceReferenceDate) }
                                 }
                                 show(near < 0.5 ? 0 : 1)
                             })

@@ -1,5 +1,4 @@
 // src/primitives/Blockquote/Blockquote.tsx
-'use client';
 /* Blockquote. Quoted passage with an optional source credit. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

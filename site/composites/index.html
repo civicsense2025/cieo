@@ -4,66 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Composites · Cieo</title>
-<link rel="stylesheet" href="../../tokens/tokens.css">
-<link rel="stylesheet" href="../../design/themes.css">
-<style>
-:root { color-scheme: light; }
-body {
-  margin: 0;
-  font-family: var(--cieo-font-sans);
-  background: var(--cieo-color-canvas);
-  color: var(--cieo-color-text);
-}
-.index { max-width: var(--cieo-container); margin-inline: auto; padding: var(--cieo-space-4); }
-.index-cards { display: grid; gap: var(--cieo-space-3); }
-.index-card {
-  background: var(--cieo-color-surface);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
-  border-radius: var(--cieo-radius-surface);
-  padding: var(--cieo-space-3);
-}
-.index-card a { color: var(--cieo-color-accent); }
-:focus-visible { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
-</style>
+<link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
 </head>
-<body>
-<main class="index">
-<h1>Composites</h1>
-<p>Whole screens built only from the parts above — each doubles as proof the parts fit together.</p>
-<div class="index-cards">
-<section class="index-card" aria-labelledby="card-dashboard">
-<h2 id="card-dashboard">Admin dashboard</h2>
-<p>Track orders and adjust store settings from one admin screen. <a href="./dashboard.html">Open admin dashboard with settings</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-storefront">
-<h2 id="card-storefront">Storefront</h2>
-<p>Inspect the product, set quantity, and complete checkout in one flow. <a href="./storefront.html">Open storefront product page with checkout</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-chat">
-<h2 id="card-chat">AI chat</h2>
-<p>Hold a threaded conversation in a workspace that answers locally. <a href="./chat.html">Open AI chat workspace</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-agent-run">
-<h2 id="card-agent-run">Agent run</h2>
-<p>Follow a replayed agent run: streamed text, a tool call, an approval that waits for the log, and a saved draft. <a href="./agent-run.html">Open agent run</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-booking">
-<h2 id="card-booking">Booking</h2>
-<p>Choose a day and time, share details, and receive a reference. <a href="./booking.html">Open scheduling and booking flow</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-settings">
-<h2 id="card-settings">Settings</h2>
-<p>Edit profile and preferences with validation, search, and save that persists. <a href="./settings.html">Open settings flow</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-inbox">
-<h2 id="card-inbox">Inbox</h2>
-<p>Read threads, reply locally, and archive with undo. <a href="./inbox.html">Open inbox flow</a></p>
-</section>
-<section class="index-card" aria-labelledby="card-onboarding">
-<h2 id="card-onboarding">Onboarding</h2>
-<p>Step through welcome, profile, and preferences to a done state with invite code. <a href="./onboarding.html">Open onboarding flow</a></p>
-</section>
-</div>
+<body class="cieo cieo-site">
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/" aria-current="page">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<main id="main" class="site-wrap">
+<h1 class="site-title">Composites</h1>
+<p class="site-prose">Whole screens built only from the library's parts. Each one doubles as proof the parts fit together.</p>
+<ul class="index-list" style="margin-block-start:var(--cieo-space-8)">
+<li><a href="./dashboard.html"><span class="index-count">01</span><span class="index-name">Admin dashboard</span><span class="index-note">Track orders and adjust store settings from one admin screen.</span></a></li>
+<li><a href="./storefront.html"><span class="index-count">02</span><span class="index-name">Storefront</span><span class="index-note">Inspect the product, set quantity, and complete checkout in one flow.</span></a></li>
+<li><a href="./chat.html"><span class="index-count">03</span><span class="index-name">AI chat</span><span class="index-note">Hold a threaded conversation in a workspace that answers locally.</span></a></li>
+<li><a href="./agent-run.html"><span class="index-count">04</span><span class="index-name">Agent run</span><span class="index-note">Follow a replayed agent run: streamed text, a tool call, an approval that waits for the log, and a saved draft.</span></a></li>
+<li><a href="./booking.html"><span class="index-count">05</span><span class="index-name">Booking</span><span class="index-note">Choose a day and time, share details, and receive a reference.</span></a></li>
+<li><a href="./settings.html"><span class="index-count">06</span><span class="index-name">Settings</span><span class="index-note">Edit profile and preferences with validation, search, and save that persists.</span></a></li>
+<li><a href="./inbox.html"><span class="index-count">07</span><span class="index-name">Inbox</span><span class="index-note">Read threads, reply locally, and archive with undo.</span></a></li>
+<li><a href="./onboarding.html"><span class="index-count">08</span><span class="index-name">Onboarding</span><span class="index-note">Step through welcome, profile, and preferences to a done state with invite code.</span></a></li>
+</ul>
 </main>
+<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer><script type="module" src="../search.js" data-site-up="../"></script>
 </body>
 </html>

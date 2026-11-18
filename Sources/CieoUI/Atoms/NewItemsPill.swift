@@ -11,16 +11,18 @@ public struct NewItemsPill: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.locale) private var locale
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var last: Int
     private let count: Int
     private let placement: Placement
-    private let label: (Int) -> String
+    private let customLabel: ((Int) -> String)?
     private let onShow: () -> Void
 
-    private static let locale = Locale(identifier: "en")
+    private static let defaultLocale = Locale(identifier: "en")
 
-    private static func grouped(_ n: Int) -> String {
+    private static func grouped(_ n: Int, locale: Locale) -> String {
         n.formatted(.number.locale(locale))
     }
 
@@ -30,9 +32,14 @@ public struct NewItemsPill: View {
     }
 
     /// The default label: "1 new reply", "3 new replies". Negative counts read as zero.
-    public static func newItemsLabel(_ n: Int) -> String {
+    public static func newItemsLabel(_ n: Int, locale: Locale) -> String {
         let whole = Swift.max(0, n)
-        return "\(grouped(whole)) new \(whole == 1 ? "reply" : "replies")"
+        return "\(grouped(whole, locale: locale)) new \(whole == 1 ? "reply" : "replies")"
+    }
+
+    /// Overload matching `(Int) -> String` for default argument compatibility.
+    public static func newItemsLabel(_ n: Int) -> String {
+        newItemsLabel(n, locale: defaultLocale)
     }
 
     /// What to announce: the label only when the pill first appears (0 to n), nothing on increments (nil),
@@ -43,33 +50,33 @@ public struct NewItemsPill: View {
         return nil
     }
 
-    /// Splits a label into the number that rolls and the words after it. A label that does not start with
-    /// the exact number shows whole, without a roll.
-    public static func splitNewItemsLabel(_ text: String, count n: Int) -> (rolls: Bool, rest: String) {
-        let exact = grouped(Swift.max(0, n))
+    /// Splits a label into the number that rolls and the words after it.
+    public static func splitNewItemsLabel(_ text: String, count n: Int, locale: Locale = Locale(identifier: "en")) -> (rolls: Bool, rest: String) {
+        let exact = grouped(Swift.max(0, n), locale: locale)
         return text.hasPrefix(exact) ? (true, String(text.dropFirst(exact.count))) : (false, text)
     }
 
     /// `onShow` runs when the pill is pressed; the host scrolls to or reveals the new items.
-    public init(count: Int, placement: Placement = .top, label: @escaping (Int) -> String = NewItemsPill.newItemsLabel,
+    public init(count: Int, placement: Placement = .top, label: ((Int) -> String)? = nil,
                 onShow: @escaping () -> Void) {
         let n = Swift.max(0, count)
         self.count = n
         self.placement = placement
-        self.label = label
+        self.customLabel = label
         self.onShow = onShow
         _last = State(initialValue: n)
     }
 
     public var body: some View {
         let shown = count > 0 ? count : last
-        let split = Self.splitNewItemsLabel(label(shown), count: shown)
+        let labelFn: (Int) -> String = customLabel ?? { Self.newItemsLabel($0, locale: locale) }
+        let split = Self.splitNewItemsLabel(labelFn(shown), count: shown, locale: locale)
         ZStack {
             if count > 0 {
                 Button(action: onShow) {
                     HStack(spacing: 0) { // literal-ok: flush stack, the pieces touch by design
                         if split.rolls {
-                            Text(shown, format: .number.notation(.compactName)) // compact count, as the web CompactCount
+                            Text(shown, format: .number.notation(.compactName).locale(locale))
                                 .contentTransition(.numericText(value: Double(shown)))
                         }
                         Text(split.rest)
@@ -82,25 +89,25 @@ public struct NewItemsPill: View {
                     .contentShape(.capsule)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(label(shown))
+                .accessibilityLabel(labelFn(shown))
                 .transition(edgeTransition)
             }
         }
         .frame(maxWidth: .infinity)
-        .motion(.base, value: count > 0)
-        .motion(.base, value: shown)
+        .motionAnimation(.base, value: count > 0)
+        .motionAnimation(.base, value: shown)
         .onAppear {
-            if let message = Self.announcement(previous: 0, next: count, label: label), !message.isEmpty { announce(message) }
+            if let message = Self.announcement(previous: 0, next: count, label: labelFn), !message.isEmpty { announce(message) }
         }
         .onChange(of: count) { old, new in
             if new > 0 { last = new }
-            if let message = Self.announcement(previous: old, next: new, label: label), !message.isEmpty { announce(message) }
+            if let message = Self.announcement(previous: old, next: new, label: labelFn), !message.isEmpty { announce(message) }
         }
     }
 
     private var edgeTransition: AnyTransition {
         let edge: Edge = placement == .top ? .top : .bottom
-        return reduceMotion ? .opacity : .move(edge: edge).combined(with: .opacity)
+        return reduceMotion || !policy.allowsMotion ? .opacity : .move(edge: edge).combined(with: .opacity)
     }
 
     private func announce(_ message: String) {

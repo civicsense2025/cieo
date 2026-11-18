@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct ChatCSATAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "chatcsat", category: "Forms", name: "CSAT in chat",
+    public static let info = MotionAtomInfo(id: "chatcsat", category: "AI chat", name: "CSAT in chat",
         summary: "Faces rise in on soft with a stagger. One mood value drives the big face, so hovering reads as a single expression changing. The caption swaps per score.")
 
     private let names = ["Very unhappy", "Unhappy", "Neutral", "Happy", "Very happy"]

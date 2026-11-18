@@ -9,6 +9,7 @@ public struct ShelfAtom: MotionAtomView {
     @State private var index = 0
     @State private var offset: CGFloat = 0
     @State private var held: CGFloat? = nil
+    @State private var peekNext = true
     public init() {}
     public var body: some View {
         AtomStage(hint: "Drag the shelf, or tap a dot") {
@@ -23,8 +24,8 @@ public struct ShelfAtom: MotionAtomView {
                             Text("$\(items[i].1)").font(.footnote.weight(.semibold)).monospacedDigit()
                         }
                         .frame(width: 132)
-                        .scaleEffect(index == i ? 1 : 0.94).opacity(index == i ? 1 : 0.75)
-                        .motion(.base, value: index)
+                        .scaleEffect(index == i ? 1 : 0.94).opacity(index == i ? 1 : (peekNext ? 0.75 : 0))
+                        .motion(.base, value: index).motion(.base, value: peekNext)
                     }
                 }
                 .offset(x: held ?? -CGFloat(index) * 144)
@@ -41,7 +42,7 @@ public struct ShelfAtom: MotionAtomView {
                             .frame(width: index == i ? 8 : 6, height: index == i ? 8 : 6)
                     }.buttonStyle(.plain).accessibilityLabel("Go to item \(i + 1)")
                 } }.frame(maxWidth: .infinity)
-                Toggle("Peek next card", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Peek next card", isOn: $peekNext).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 340)
         }
     }

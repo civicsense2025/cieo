@@ -1,11 +1,23 @@
 import { type ReactNode } from 'react';
 import { type ControlSize } from './classes.js';
 import { type SelectOption } from './native.js';
-export declare function resolveOptionNodes(box: HTMLDivElement | null, cached: HTMLElement[], open: boolean): HTMLElement[];
-export declare function paintLiveOptions(holder: {
-    current: HTMLElement[];
-}, lastQ: Map<HTMLElement, number>, qFor: (index: number) => number): void;
+import { type ControlPartProps } from './parts.js';
+import { paintLiveOptions, resolveOptionNodes } from './select-popup.js';
+export { resolveOptionNodes, paintLiveOptions };
 export type { SelectOption };
+export interface SelectSlotProps {
+    root?: ControlPartProps;
+    label?: ControlPartProps;
+    box?: ControlPartProps;
+    native?: ControlPartProps;
+    trigger?: ControlPartProps;
+    value?: ControlPartProps;
+    popup?: ControlPartProps;
+    list?: ControlPartProps;
+    plate?: ControlPartProps;
+    option?: ControlPartProps;
+    description?: ControlPartProps;
+}
 export interface SelectProps {
     /** Visible label (required: it names both the native select and the combobox). */
     label: ReactNode;
@@ -17,6 +29,9 @@ export interface SelectProps {
     value?: string;
     defaultValue?: string;
     onValueChange?: (value: string) => void;
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
     /** Submit the owning form after each pick (filter dropdowns in GET forms). Keep a submit button for no-JS. */
     autoSubmit?: boolean;
     /** Associates the native select with a form elsewhere on the page. */
@@ -26,5 +41,6 @@ export interface SelectProps {
     size?: ControlSize;
     description?: ReactNode;
     className?: string;
+    slotProps?: SelectSlotProps;
 }
 export declare function Select(props: SelectProps): import("react/jsx-runtime").JSX.Element;

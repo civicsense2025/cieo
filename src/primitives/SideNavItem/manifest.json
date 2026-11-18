@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/SideNavItem/SideNavItem.tsx", "symbol": "SideNavItem" },
-  "dependencies": [],
+  "dependencies": ["Slot"],
   "nativePrimitives": [],
   "properties": [
     { "id": "href", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 1024 } },

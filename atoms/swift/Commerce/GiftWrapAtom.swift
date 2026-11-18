@@ -9,6 +9,7 @@ public struct GiftWrapAtom: MotionAtomView {
     @State private var fee = Track(0, preset: .base)
     @State private var bow: Double = 0
     @State private var foil = false
+    @State private var note = ""
     public init() {}
 
     private func money(_ v: Double) -> String { v.formatted(.currency(code: "USD").locale(Locale(identifier: "en_US"))) }
@@ -35,7 +36,7 @@ public struct GiftWrapAtom: MotionAtomView {
                     }
                 }
                 if on {
-                    TextField("Gift note…", text: .constant("")).font(.system(size: 13)).lineSpacing(6.5)
+                    TextField("Gift note…", text: $note).font(.system(size: 13)).lineSpacing(3)
                         .padding(8).background(.quaternary, in: RoundedRectangle(cornerRadius: 9))
                         .transition(.move(edge: .top).combined(with: .opacity))
                 }

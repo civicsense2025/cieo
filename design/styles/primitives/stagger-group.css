@@ -1,0 +1,4 @@
+/* design/styles/primitives/stagger-group.css */
+@layer cieo.components {
+  :where(.cieo).cieo-stagger-group { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; }
+}

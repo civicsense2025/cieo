@@ -7,14 +7,24 @@ public struct LoyaltyAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var count = 0
     @State private var pressed = -1
+    @State private var resetAfterClaim = false
+    @State private var claimed = false
     public init() {}
     public var body: some View {
         AtomStage(hint: "Tap a stamp; the sixth morphs to a reward") {
             VStack(alignment: .leading, spacing: 8) {
                 HStack { Text("Coffee club").font(.callout.weight(.semibold)); RollingDigits(count).font(.footnote).foregroundStyle(.secondary) }
                 if count >= 6 {
-                    HStack { Text("Free drink unlocked").font(.footnote.weight(.semibold)); Spacer()
-                        PreviewAction("Claim").buttonStyle(.bordered).controlSize(.small) }
+                    HStack {
+                        Text(claimed ? "Reward claimed ✓" : "Free drink unlocked").font(.footnote.weight(.semibold))
+                        Spacer()
+                        Button(claimed ? "Claimed" : "Claim") {
+                            withMotion(.base, reduceMotion: reduce) {
+                                if resetAfterClaim { count = 0; claimed = false }
+                                else { claimed = true }
+                            }
+                        }.buttonStyle(.bordered).controlSize(.small).disabled(claimed && !resetAfterClaim)
+                    }
                     .padding(14).background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 12))
                     .motionTransition(.swap())
                 } else {
@@ -31,7 +41,7 @@ public struct LoyaltyAtom: MotionAtomView {
                         }
                     }
                 }
-                Toggle("Reset after claim", isOn: .constant(false)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Reset after claim", isOn: $resetAfterClaim).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 300)
         }
     }

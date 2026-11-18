@@ -1,0 +1,184 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.text-field",
+  "componentVersion": "1.0.0",
+  "name": "TextField",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/TextField/TextField.tsx",
+    "symbol": "TextField"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Visible label naming the input."
+    },
+    {
+      "id": "type",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "text",
+          "email",
+          "search",
+          "url",
+          "number",
+          "tel",
+          "password"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "default": "text",
+      "constraints": {}
+    },
+    {
+      "id": "description",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "error",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "status",
+      "type": {
+        "kind": "enum",
+        "values": [
+          "neutral",
+          "valid",
+          "invalid"
+        ]
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "required",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [],
+  "constraints": {
+    "layout": [
+      "wraps-control"
+    ],
+    "content": [
+      "no-fork-of-control"
+    ],
+    "motion": [
+      "control-spring-only"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "label",
+        "type",
+        "description",
+        "error",
+        "status",
+        "disabled",
+        "required",
+        "className"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "First-class primitive contract over the TextField control with reward-early / punish-late validation."
+  },
+  "extensions": {
+    "wraps": "src/controls/TextField.tsx",
+    "customization": {
+      "status": "delegated",
+      "target": "TextField",
+      "parts": [
+        "root",
+        "label",
+        "box",
+        "prefix",
+        "suffix",
+        "input",
+        "description",
+        "error"
+      ],
+      "reason": "Alias of TextField; preserves its native/owning component props instead of creating a second control contract."
+    }
+  }
+}

@@ -9,7 +9,9 @@
       "sources": [
         "Sources/CieoUI/**/*",
         "Tests/CieoUITests/**/*",
-        "Sources/CieoGallery/**/*"
+        "Sources/CieoGallery/**/*",
+        "Sources/CieoShowcase/**/*",
+        "Tests/CieoGalleryTests/**/*"
       ],
       "docs": [
         "docs/apple-components.md"

@@ -11,11 +11,12 @@ const COMMANDS = {
   diff: 'Compare a copied component against the registry.',
   theme: 'Choose theme axes and regenerate the theme stylesheet.',
   doctor: 'Check config, wiring, and copied files; exits nonzero on failure.',
+  recipes: 'Export a standalone offline motion-recipes HTML bundle.',
 };
 
 function helpText() {
   const commands = Object.entries(COMMANDS)
-    .map(([name, description]) => `  ${name.padEnd(7)} ${description}`)
+    .map(([name, description]) => `  ${name.padEnd(8)} ${description}`)
     .join('\n');
   return `cieo: install Cieo components and themes.
 

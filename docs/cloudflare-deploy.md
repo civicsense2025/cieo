@@ -9,7 +9,7 @@ The docs, catalogue, studio and composites are static pages, served by a Cloudfl
 
 ## What gets published
 
-`npm run deploy:build` writes `.deploy/` (not committed). It starts at the entry pages listed in `scripts/build-deploy.mjs` and copies only the files they reference, at the same repo paths, so every relative link keeps working. A reference to a file that does not exist fails the build and names the page. Source, tests and `node_modules` are never published. `/` redirects to `/site/components/`.
+`npm run deploy:build` writes `.deploy/` (not committed). It starts at the entry pages listed in `scripts/build-deploy.mjs`, follows every local stylesheet, script, link, and media asset (`img`, `audio`, `video`, `source`), and copies only the files they reference at the same repo paths, inlining local `@import`s inside `.deploy/design/primitives.css` so Cloudflare serves one consolidated primitive stylesheet instead of a multi-file waterfall. A reference to a missing or root-absolute media file fails the build and names the page. Source, tests, raw markdown files and `node_modules` are never published. The `site/` folder is published at the root (`/`, `/components/`, `/recipes/`, `/foundations/`, `/composites/`); pages' `../` links resolve to the shared `design/` and `tokens/` folders because browsers stop at the root. `site/search-index.json` (built by `scripts/build-search-index.mjs`) feeds the ⌘K search. The retired single-file bundles (`/docs/catalogue.html`, `library`, `collection`, `workbench`, `agent-identity`) and the old `/site/*` paths answer with permanent redirects. The offline single-file recipe bundle is `npx cieo recipes --out <file>`. Size is pinned in gzip (about 2 MB) rather than raw bytes.
 
 ## Deploying
 
@@ -31,11 +31,11 @@ The folder also gets a root `index.html` and a `404.html` of its own. The build 
 
 ## URLs
 
-Cloudflare serves clean URLs: `/site/components/Toast.html` redirects to `/site/components/Toast`, and folder pages end in a slash. Relative links in the pages keep working from either form. Links must match the file's letter case exactly.
+Cloudflare serves clean URLs: `/components/Toast.html` redirects to `/components/Toast`, and folder pages end in a slash. Relative links in the pages keep working from either form. Links must match the file's letter case exactly.
 
 ## The contact form
 
-`/api/contact` is the only path that runs code (`worker/contact.js`); everything else is served as static assets. A message is validated, checked for abuse, rate limited to three per minute per address, and sent through Resend. The form refuses other origins, oversized bodies and line breaks in names, ignores messages with a filled hidden field or a fill time under two seconds, and never logs a message or a key.
+`/api/contact` is the only path that runs code (`worker/contact.js`); everything else is served as static assets. A message is validated, checked for abuse, rate limited to three per minute per address, and sent through Resend. When the client supplies a valid UUID `attemptId` (or `idempotencyKey`), `worker/contact.js` forwards it as Resend's `idempotency-key` header (falling back to deterministic `submissionKey` when stamped or `crypto.randomUUID()` otherwise) so retries never send twice; `site/contact.js` mints one `attemptId` per draft edit and, on `AbortError` / uncertain network timeout, informs the visitor that sending could not be confirmed and can safely be retried without sending twice. The form refuses other origins, oversized bodies and line breaks in names, ignores messages with a filled hidden field or a fill time under two seconds, and never logs a message or a key.
 
 Set up once, by the owner:
 
@@ -53,4 +53,4 @@ The pricing page's button opens a hosted Stripe payment link, set as `support.ur
 
 ## Checking a deploy
 
-Open the root (it should land on the components index), a component page, the catalogue and the studio. In the browser console no request should return 404. The test `test/deploy-site.test.mjs` pins the folder contents and the link rules.
+Open the root (the home page), a component page, `/recipes/`, `/foundations/` and the studio. In the browser console no request should return 404. The test `test/deploy-site.test.mjs` pins the folder contents and the link rules.

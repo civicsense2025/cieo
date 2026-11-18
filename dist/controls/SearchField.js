@@ -7,8 +7,9 @@ import { forwardRef, useEffect, useId, useRef, useState } from 'react';
 import { cx } from './classes.js';
 import { CloseIcon, SearchIcon } from './icons.js';
 import { setNativeValue } from './native.js';
+import { customizeControlPart } from './parts.js';
 export const SearchField = forwardRef(function SearchField(props, ref) {
-    const { label, showLabel, onSearch, onClear, clearLabel = 'Clear search', collapsible, size = 'md', className, id, onInput, onKeyDown, onBlur, ...rest } = props;
+    const { label, showLabel, onSearch, onClear, clearLabel = 'Clear search', collapsible, size = 'md', slotProps, className, id, onInput, onKeyDown, onBlur, ...rest } = props;
     const uid = useId();
     const inputId = id ?? `${uid}i`;
     const input = useRef(null);
@@ -56,7 +57,9 @@ export const SearchField = forwardRef(function SearchField(props, ref) {
         setOpen(true);
         setTimeout(() => input.current?.focus(), 0);
     };
-    return (_jsxs("div", { className: cx('cieo-ctl', 'cieo-search', `cieo-search--${size}`, className), "data-enhanced": enhanced || undefined, "data-collapsible": collapsible || undefined, "data-open": open || undefined, "data-filled": filled || undefined, children: [_jsx("label", { htmlFor: inputId, className: showLabel ? 'cieo-label' : 'cieo-vh', children: label }), _jsxs("div", { className: "cieo-search-box", children: [collapsible && enhanced ? (_jsx("button", { type: "button", className: "cieo-search-toggle", "aria-label": label, "aria-expanded": open, "aria-controls": inputId, tabIndex: open ? -1 : 0, onClick: () => (open ? input.current?.focus() : expand()), children: _jsx(SearchIcon, {}) })) : (_jsx("span", { className: "cieo-search-icon", "aria-hidden": "true", children: _jsx(SearchIcon, {}) })), _jsx("input", { ...rest, ref: setRef, id: inputId, type: "search", className: "cieo-search-input", placeholder: rest.placeholder ?? label, tabIndex: collapsible && enhanced && !open ? -1 : rest.tabIndex, onInput: (e) => {
+    const rootClass = cx('cieo-ctl', 'cieo-search', `cieo-search--${size}`, className);
+    const labelClass = showLabel ? 'cieo-label' : 'cieo-vh';
+    return (_jsxs("div", { className: rootClass, "data-enhanced": enhanced || undefined, "data-collapsible": collapsible || undefined, "data-open": open || undefined, "data-filled": filled || undefined, ...customizeControlPart(slotProps?.root, rootClass), children: [_jsx("label", { htmlFor: inputId, className: labelClass, ...customizeControlPart(slotProps?.label, labelClass), children: label }), _jsxs("div", { className: "cieo-search-box", ...customizeControlPart(slotProps?.box, 'cieo-search-box'), children: [collapsible && enhanced ? (_jsx("button", { type: "button", className: "cieo-search-toggle", "aria-label": label, "aria-expanded": open, "aria-controls": inputId, tabIndex: open ? -1 : 0, onClick: () => (open ? input.current?.focus() : expand()), ...customizeControlPart(slotProps?.toggle, 'cieo-search-toggle'), children: _jsx(SearchIcon, {}) })) : (_jsx("span", { className: "cieo-search-icon", "aria-hidden": "true", ...customizeControlPart(slotProps?.icon, 'cieo-search-icon'), children: _jsx(SearchIcon, {}) })), _jsx("input", { ...rest, ref: setRef, id: inputId, type: "search", className: "cieo-search-input", placeholder: rest.placeholder ?? label, tabIndex: collapsible && enhanced && !open ? -1 : rest.tabIndex, onInput: (e) => {
                             setFilled(e.currentTarget.value.length > 0);
                             onInput?.(e);
                         }, onKeyDown: (e) => {
@@ -71,5 +74,5 @@ export const SearchField = forwardRef(function SearchField(props, ref) {
                             if (collapsible && !e.currentTarget.value && !e.currentTarget.parentElement?.contains(e.relatedTarget))
                                 setOpen(false);
                             onBlur?.(e);
-                        } }), enhanced ? (_jsx("button", { type: "button", className: "cieo-search-clear", "aria-label": clearLabel, "aria-controls": inputId, "data-on": filled || undefined, tabIndex: filled ? 0 : -1, "aria-hidden": !filled || undefined, onClick: clear, children: _jsx(CloseIcon, {}) })) : null] })] }));
+                        }, ...customizeControlPart(slotProps?.input, 'cieo-search-input', rest.style) }), enhanced ? (_jsx("button", { type: "button", className: "cieo-search-clear", "aria-label": clearLabel, "aria-controls": inputId, "data-on": filled || undefined, tabIndex: filled ? 0 : -1, "aria-hidden": !filled || undefined, onClick: clear, ...customizeControlPart(slotProps?.clear, 'cieo-search-clear'), children: _jsx(CloseIcon, {}) })) : null] })] }));
 });

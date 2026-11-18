@@ -1,4 +1,3 @@
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function Table({ label, children, className, slotProps }) {

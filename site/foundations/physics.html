@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Physics &amp; Velocity · Foundations · Cieo</title>
+<meta name="description" content="Interactive closed-form spring response explorer, damping ratio zeta clamping, rubberBand drag bounds, and projectToDetent velocity snapping.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="./foundations.css">
+</head>
+<body class="cieo cieo-docsite cieo-site">
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/" aria-current="page">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<main id="main">
+  <div class="doc-shell">
+    <nav class="doc-rail" aria-label="Foundations chapters">
+      <span class="doc-label">Foundations</span>
+      <a href="./index.html">Overview</a><a href="./physics.html" aria-current="page">Physics &amp; Velocity</a><a href="./choreography.html">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html">Agent Identity</a>
+    </nav>
+    <div class="doc-main">
+      <header class="doc-head">
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Physics &amp; Velocity</span></p>
+      <h1>Closed-form spring physics.</h1>
+      <p>Every motion is evaluated analytically at timestamp <code>t</code> as a sum of damped step responses: zero numerical drift, interruptible mid-flight with continuous velocity, and clamped to <code>0.7 ≤ zeta ≤ 1.0</code>: zeta = 1 is the default, and the 0.7 floor allows at most about 5% overshoot.</p>
+    </header>
+
+    <section aria-labelledby="curve-h">
+      <h2 id="curve-h">Interactive step response &amp; overshoot explorer</h2>
+      <div class="fnd-lab" data-physics-lab>
+        <div class="fnd-controls">
+          <div class="fnd-presets" role="group" aria-label="Spring presets">
+            <button type="button" data-preset="snap" data-w="34" aria-pressed="false">snap · ω 34</button>
+            <button type="button" data-preset="base" data-w="22" aria-pressed="true">base · ω 22</button>
+            <button type="button" data-preset="soft" data-w="15" aria-pressed="false">soft · ω 15</button>
+            <button type="button" data-preset="lazy" data-w="9" aria-pressed="false">lazy · ω 9</button>
+          </div>
+          <label class="fnd-slider">Natural frequency ω (<output data-w-out>22</output> rad/s)
+            <input type="range" min="6" max="45" step="1" value="22" data-w-input>
+          </label>
+          <label class="fnd-slider">Damping ratio zeta (<output data-z-out>1.00</output>)
+            <input type="range" min="0.7" max="1" step="0.02" value="1" data-z-input>
+          </label>
+        </div>
+        <svg class="fnd-plot" viewBox="0 0 600 200" role="img" aria-label="Closed-form spring step response curve" data-spring-svg>
+          <line x1="36" y1="36" x2="576" y2="36" class="fnd-axis-target" />
+          <line x1="36" y1="168" x2="576" y2="168" class="fnd-axis-base" />
+          <path d="" class="fnd-curve-under" data-curve-bounce />
+          <path d="" class="fnd-curve-main" data-curve-cieo />
+        </svg>
+        <p class="fnd-readout" data-physics-readout aria-live="polite">ω = 22 rad/s · zeta = 1.00 · 99.9% settle = 418 ms · Cieo overshoot = 0.0% (unclamped bouncy zeta = 0.45 overshoots by 20.5%)</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="gesture-h">
+      <h2 id="gesture-h">Gesture boundaries: <code>rubberBand</code> &amp; <code>projectToDetent</code></h2>
+      <p>Direct manipulation tracks the pointer 1:1 inside valid bounds, compresses asymptotically past limits via <code>rubberBand(offset, dimension, 0.55)</code>, and projects release velocity onto sorted sheet detents via <code>projectToDetent(position, velocity, detents)</code>.</p>
+      <div class="fnd-lab" data-detent-lab>
+        <div class="fnd-controls">
+          <label class="fnd-slider">Release position (<output data-pos-out>0.48</output>)
+            <input type="range" min="0" max="1" step="0.02" value="0.48" data-pos-input>
+          </label>
+          <label class="fnd-slider">Release velocity (<output data-vel-out>0</output> /s)
+            <input type="range" min="-2.5" max="2.5" step="0.1" value="0" data-vel-input>
+          </label>
+          <label class="fnd-slider">Over-drag offset (<output data-rb-in>80</output> px)
+            <input type="range" min="-240" max="240" step="10" value="80" data-rb-input>
+          </label>
+        </div>
+        <p class="fnd-readout" data-detent-readout aria-live="polite">Detents [0, 0.5, 0.9] → snapped detent: 0.50 · rubberBand(80px, 200px) → 49.4 px</p>
+      </div>
+    </section>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer><script type="module" src="../search.js" data-site-up="../"></script>
+<script type="module" src="./foundations.js"></script>
+</body>
+</html>

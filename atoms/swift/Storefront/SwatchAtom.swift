@@ -7,6 +7,7 @@ public struct SwatchAtom: MotionAtomView {
     private let colors: [(String, Color, Int, Bool)] = [("Ink", .primary, 142, false), ("Moss", .green, 128, false), ("Stone", .gray, 128, true), ("Clay", .orange, 136, false)]
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var pick = 0
+    @State private var showSoldOut = true
     @Namespace private var ring
     public init() {}
     public var body: some View {
@@ -14,7 +15,7 @@ public struct SwatchAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Everyday overshirt").font(.callout.weight(.semibold))
                 HStack { SwapText(colors[pick].0).font(.footnote.weight(.medium)); Text("$\(colors[pick].2)").font(.footnote.weight(.semibold)).monospacedDigit() }
-                HStack(spacing: 12) { ForEach(colors.indices, id: \.self) { i in
+                HStack(spacing: 12) { ForEach(colors.indices.filter { showSoldOut || !colors[$0].3 }, id: \.self) { i in
                     Button { if !colors[i].3 { withMotion(.base, reduceMotion: reduce) { pick = i } } } label: {
                         ZStack {
                             Circle().fill(colors[i].1).frame(width: 26, height: 26).opacity(colors[i].3 ? 0.45 : 1)
@@ -22,8 +23,10 @@ public struct SwatchAtom: MotionAtomView {
                             if colors[i].3 { Image(systemName: "slash.circle").foregroundStyle(.red).font(.caption) }
                         }.frame(width: 36, height: 36)
                     }.buttonStyle(.plain).disabled(colors[i].3).accessibilityLabel(colors[i].0)
-                } }.animation(reduce ? nil : .motion(.base), value: pick)
-                Toggle("Show sold-out variant", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                } }
+                .animation(reduce ? nil : .motion(.base), value: pick)
+                .animation(reduce ? nil : .motion(.base), value: showSoldOut)
+                Toggle("Show sold-out variant", isOn: $showSoldOut).font(.caption).foregroundStyle(.secondary)
             }.frame(maxWidth: 300)
         }
     }

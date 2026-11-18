@@ -6,6 +6,7 @@ public struct SitemapTreeAtom: MotionAtomView {
         summary: "Folders open with height and chevron riding the same base spring, so they never disagree. Orphaned pages carry a warning tint, and the selection trails the tapped row.")
 
     @Environment(\.accessibilityReduceMotion) private var reduce
+    @State private var rootOpen = true
     @State private var journalOpen = false
     @State private var selected = "/"
     @State private var flagOrphans = true
@@ -16,7 +17,7 @@ public struct SitemapTreeAtom: MotionAtomView {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Sitemap · 8 pages").font(.headline)
                 VStack(spacing: 0) {
-                    folderRow("/", open: .constant(true), locked: true)
+                    folderRow("/", open: $rootOpen, locked: true)
                     pageRow("/pricing")
                     pageRow("/journal")
                     folderRow("/journal", open: $journalOpen, locked: false)

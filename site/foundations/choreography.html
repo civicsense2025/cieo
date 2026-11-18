@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Choreography · Foundations · Cieo</title>
+<meta name="description" content="Interactive choreography specimens: Presence enter/exit, MotionFrame, SharedAxis directional transitions, 2D Edges lag, and MorphSurface FLIP.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="./foundations.css">
+</head>
+<body class="cieo cieo-docsite cieo-site">
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/" aria-current="page">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<main id="main">
+  <div class="doc-shell">
+    <nav class="doc-rail" aria-label="Foundations chapters">
+      <span class="doc-label">Foundations</span>
+      <a href="./index.html">Overview</a><a href="./physics.html">Physics &amp; Velocity</a><a href="./choreography.html" aria-current="page">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html">Agent Identity</a>
+    </nav>
+    <div class="doc-main">
+      <header class="doc-head">
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Choreography</span></p>
+      <h1>Five choreography primitives.</h1>
+      <p>Coordinated surfaces share a small set of spatial rules: asymmetric enter/exit timing, 60 ms leading-before-trailing edge lag, directional shared-axis steps, interruptible container morphs, and stagger spans strictly capped at 300 ms.</p>
+    </header>
+
+    <section aria-labelledby="edges-h">
+      <h2 id="edges-h">1. Leading &amp; trailing <code>Edges</code> + directional <code>SharedAxis</code></h2>
+      <p>Click or arrow through the steps below: the leading edge departs immediately while the trailing edge follows 60 ms later, and the content panel slides along the motion axis according to <code>direction: -1 | +1</code>.</p>
+      <div class="fnd-lab" data-choreo-demo>
+        <div class="fnd-tabs" role="tablist" aria-label="Choreography specimen steps">
+          <span class="fnd-tab-pill" data-choreo-pill aria-hidden="true"></span>
+          <button type="button" role="tab" id="choreo-tab-0" aria-controls="choreo-panel" aria-selected="true" tabindex="0" data-step="0">1. Presence</button>
+          <button type="button" role="tab" id="choreo-tab-1" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="1">2. MotionFrame</button>
+          <button type="button" role="tab" id="choreo-tab-2" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="2">3. SharedAxis</button>
+          <button type="button" role="tab" id="choreo-tab-3" aria-controls="choreo-panel" aria-selected="false" tabindex="-1" data-step="3">4. MorphSurface</button>
+        </div>
+        <div class="fnd-stage-card" id="choreo-panel" role="tabpanel" aria-labelledby="choreo-tab-0" tabindex="0" data-choreo-panel>
+          <h3 data-choreo-title>Presence &amp; Arrival</h3>
+          <p data-choreo-body>Overlays enter on the base spring (ω = 22) from 0.97 scale and exit faster on snap (ω = 34). New list items arrive from ARRIVE = 0.45 opacity, never from 0, and StaggerGroup compresses per-item delays so total stagger never exceeds 300 ms.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="primitives-map-h">
+      <h2 id="primitives-map-h">2. Component mapping</h2>
+      <div class="doc-table-wrap">
+        <table>
+          <thead><tr><th>Primitive / Hook</th><th>Web API</th><th>Apple SwiftUI Counterpart</th><th>Contract</th></tr></thead>
+          <tbody>
+            <tr><td><a href="../components/MotionFrame.html">MotionFrame</a></td><td><code>&lt;MotionFrame contentKey={step}&gt;</code></td><td><code>CieoMotionFrame</code></td><td>ResizeObserver height spring + directional swap</td></tr>
+            <tr><td><a href="../components/MorphSurface.html">MorphSurface</a></td><td><code>&lt;MorphSurface layoutId="card"&gt;</code></td><td><code>CieoMorphSurface</code></td><td>5-channel SpringRect FLIP container transform</td></tr>
+            <tr><td><a href="../components/StaggerGroup.html">StaggerGroup</a></td><td><code>&lt;StaggerGroup budget={300}&gt;</code></td><td><code>Motion.stagger(i, count:)</code></td><td>Bounded ≤ 300 ms arrival from 0.45 opacity</td></tr>
+            <tr><td><code>useSharedAxis</code></td><td><code>import { useSharedAxis } from 'cieo/react'</code></td><td><code>.cieoSharedAxis(direction:)</code></td><td>Directional ±14 px slide + opacity settle</td></tr>
+            <tr><td><code>useEdges</code></td><td><code>import { useEdges } from 'cieo/react'</code></td><td><code>EdgesTrack</code></td><td>Leading edge now, trailing edge after 60 ms lag</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer><script type="module" src="../search.js" data-site-up="../"></script>
+<script type="module" src="./foundations.js"></script>
+</body>
+</html>

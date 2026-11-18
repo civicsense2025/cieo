@@ -17,7 +17,7 @@ public struct BottomSheetAtom: MotionAtomView {
 
     public var body: some View {
         AtomStage(hint: "Drag the sheet down to close") {
-            TimelineView(.animation) { ctx in
+            TimelineView(.animation(paused: reduce || (!held && y.restTime == nil))) { ctx in
                 let v = held ? hy : y.value(at: ctx.date.timeIntervalSinceReferenceDate)
                 let o = max(0, min(1, 1 - v / height))
                 ZStack(alignment: .bottom) {

@@ -46,10 +46,10 @@ public struct PromoCodeAtom: MotionAtomView {
                     }
                     .transition(.move(edge: .top).combined(with: .opacity))
                     if let error {
-                        Text(error).font(.system(size: 12.5)).lineSpacing(6.5).foregroundStyle(.red)
+                        Text(error).font(.system(size: 12.5)).lineSpacing(3).foregroundStyle(.red)
                             .frame(maxWidth: .infinity, alignment: .leading).transition(.opacity)
                     } else if !code.isEmpty && !applied {
-                        Text("Codes are 6 letters — try SHIP10.").font(.system(size: 12.5)).lineSpacing(6.5)
+                        Text("Codes are 6 letters — try SHIP10.").font(.system(size: 12.5)).lineSpacing(3)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }

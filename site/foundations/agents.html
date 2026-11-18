@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Identity &amp; Supervision · Foundations · Cieo</title>
+<meta name="description" content="Visual identity and supervision laws for software agents: square bodies with globe antennas versus round human avatars, 24 status glyphs, and non-optimistic approvals.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../doc.css"><link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="./foundations.css">
+</head>
+<body class="cieo cieo-docsite cieo-site">
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/" aria-current="page">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<main id="main">
+  <div class="doc-shell">
+    <nav class="doc-rail" aria-label="Foundations chapters">
+      <span class="doc-label">Foundations</span>
+      <a href="./index.html">Overview</a><a href="./physics.html">Physics &amp; Velocity</a><a href="./choreography.html">Choreography</a><a href="./color.html">OKLCH Color &amp; Contrast</a><a href="./typography.html">Typography &amp; Shape</a><a href="./agents.html" aria-current="page">Agent Identity</a>
+    </nav>
+    <div class="doc-main">
+      <header class="doc-head">
+      <p class="doc-crumbs"><a href="./">Foundations</a><span aria-hidden="true">/</span><span>Agent Identity</span></p>
+      <h1>Agents are square; people are round.</h1>
+      <p>A reader must tell in a peripheral glance who acted and who approved. Human avatars are always circular; software agents always occupy a crisp rounded-square silhouette topped with a globe antenna.</p>
+    </header>
+
+    <section aria-labelledby="silhouette-h">
+      <h2 id="silhouette-h">1. Silhouette &amp; supervision contract</h2>
+      <div class="fnd-lab fnd-compare-marks">
+        <div class="fnd-mark-box">
+          <svg viewBox="0 0 80 80" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <line x1="40" y1="18" x2="40" y2="10"/>
+            <circle cx="40" cy="7" r="3.2" fill="currentColor"/>
+            <rect x="18" y="18" width="44" height="44" rx="10"/>
+            <circle cx="32" cy="38" r="2.4" fill="currentColor"/>
+            <circle cx="48" cy="38" r="2.4" fill="currentColor"/>
+            <path d="M33 48 Q40 52 47 48" stroke-linecap="round"/>
+          </svg>
+          <strong>Software Agent</strong>
+          <p>Square body + globe antenna. Never impersonates a person; pauses visibly on <a href="../components/ApprovalRequest.html">ApprovalRequest</a>.</p>
+        </div>
+        <div class="fnd-mark-box">
+          <svg viewBox="0 0 80 80" width="64" height="64" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <circle cx="40" cy="40" r="24"/>
+            <circle cx="40" cy="34" r="7"/>
+            <path d="M25 56 C28 47 52 47 55 56" stroke-linecap="round"/>
+          </svg>
+          <strong>Human Supervisor</strong>
+          <p>Circular avatar (<a href="../components/Avatar.html">Avatar</a>). Owns final consent for destructive or external actions.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="glyphs-h">
+      <h2 id="glyphs-h">2. Optical-size status glyphs (24 states)</h2>
+      <p>Every <a href="../components/AgentIcon.html">AgentIcon</a> carries three hand-tuned optical tiers (<code>≤20px</code> compact, <code>24px</code> regular, <code>&gt;24px</code> large) with stroke compensation so outlines stay crisp at badge scale and hero scale alike.</p>
+      <div class="fnd-lab" data-agent-size-lab>
+        <div class="fnd-presets" role="group" aria-label="Optical glyph size">
+          <button type="button" data-glyph-size="18" aria-pressed="false">18 px · compact</button>
+          <button type="button" data-glyph-size="24" aria-pressed="false">24 px · regular</button>
+          <button type="button" data-glyph-size="36" aria-pressed="true">36 px · large</button>
+        </div>
+        <div class="fnd-agent-grid">
+    <div class="fnd-agent-glyph" data-agent-icon="browsing">
+      <div class="fnd-agent-svg" data-icon-slot="browsing"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M12 32C21 14 43 14 52 32C43 50 21 50 12 32Z"/><rect x="26.5" y="26.5" width="11" height="11" rx="2.5" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Browsing</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="navigating">
+      <div class="fnd-agent-svg" data-icon-slot="navigating"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M16 46C16 40 16 35 16 30C16 22 22 22 30 22C36 22 41 22 47 22"/><circle cx="16" cy="46" r="3"/><rect x="42.5" y="17.5" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Navigating</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="clicking">
+      <div class="fnd-agent-svg" data-icon-slot="clicking"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M14 17H19"/><path d="M24 7V12"/><path d="M16.5 9.5L20 13"/><path d="M24 16V45L31 38L36 49L41 47L36 36H45Z"/></svg></div>
+      <strong>Clicking</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="typing">
+      <div class="fnd-agent-svg" data-icon-slot="typing"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M14 24H34M39 24H50"/><path d="M14 38H27"/><path d="M33 31V45"/></svg></div>
+      <strong>Typing</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="scrolling">
+      <div class="fnd-agent-svg" data-icon-slot="scrolling"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M14 21H36"/><path d="M14 33H29"/><path d="M14 45H36"/><g opacity="0.35"><path d="M47 17V47"/></g><path d="M47 19V30" stroke-width="3.4"/></svg></div>
+      <strong>Scrolling</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="inspecting">
+      <div class="fnd-agent-svg" data-icon-slot="inspecting"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><rect x="12" y="12" width="28" height="28" rx="8"/><path d="M40 40L51 51"/><path d="M26 19V33"/><path d="M26 19C34 21.8 34 30.2 26 33"/></svg></div>
+      <strong>Inspecting element</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="capturing">
+      <div class="fnd-agent-svg" data-icon-slot="capturing"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M14 26V14H26M38 14H50V26M50 38V50H38M26 50H14V38"/><rect x="27" y="27" width="10" height="10" rx="2.5" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Capturing screenshot</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="comparing">
+      <div class="fnd-agent-svg" data-icon-slot="comparing"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><rect x="14" y="16" width="22" height="18" rx="3"/><rect x="28" y="30" width="22" height="18" rx="3"/></svg></div>
+      <strong>Comparing versions</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="pinning">
+      <div class="fnd-agent-svg" data-icon-slot="pinning"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><ellipse cx="40" cy="47.5" rx="7" ry="2.4"/><path d="M32 34L40 46"/><circle cx="32" cy="26" r="8"/><path d="M28 26H36M32 22V30"/></svg></div>
+      <strong>Pinning</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="thinking">
+      <div class="fnd-agent-svg" data-icon-slot="thinking"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M32 15V49"/><ellipse cx="32" cy="32" rx="9" ry="17"/></svg></div>
+      <strong>Thinking</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="planning">
+      <div class="fnd-agent-svg" data-icon-slot="planning"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M33.1 37L35 37L35 27L46 27" stroke-dasharray="1.6 3.4"/><path d="M15 47L25 47L25 37L33.1 37"/><rect x="28.6" y="32.5" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Planning</strong>
+      <span>Doing</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="commenting">
+      <div class="fnd-agent-svg" data-icon-slot="commenting"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M14 14H50V38H29L21 46V38H14Z"/><path d="M21 22H43"/><path d="M21 30H35"/></svg></div>
+      <strong>Commenting</strong>
+      <span>Talking</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="suggesting">
+      <div class="fnd-agent-svg" data-icon-slot="suggesting"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M14 44H28" stroke-dasharray="4.5 4"/><path d="M31 44L32.8 35.9L43.4 25.3L49.7 31.6L39.1 42.2Z"/><path d="M39.8 28.8L46.2 35.2"/></svg></div>
+      <strong>Suggesting edit</strong>
+      <span>Talking</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="asking">
+      <div class="fnd-agent-svg" data-icon-slot="asking"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M25 24C25 17 39 17 39 25C39 31 32 31 32 38"/><rect x="28" y="44" width="8" height="8" rx="2.4" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Asking permission</strong>
+      <span>Talking</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="handing">
+      <div class="fnd-agent-svg" data-icon-slot="handing"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M13 36L33 32"/><path d="M28.5 28.6L33 32L28.6 35.6"/><path d="M39 18H49V46H39"/><rect x="14.5" y="30.3" width="9" height="9" rx="2.5" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Handing off</strong>
+      <span>Talking</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="taking">
+      <div class="fnd-agent-svg" data-icon-slot="taking"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><g opacity="0.50"><rect x="11" y="35" width="10" height="10" rx="2.5" fill="currentColor" stroke="none"/></g><circle cx="39" cy="25" r="6"/><path d="M28 49V46Q28 38 36 38H42Q50 38 50 46V49"/></svg></div>
+      <strong>Taking over (human)</strong>
+      <span>Talking</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="waiting">
+      <div class="fnd-agent-svg" data-icon-slot="waiting"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M21 15H43M21 49H43M24 15V20L32 32L24 44V49M40 15V20L32 32L40 44V49"/><path d="M26.2 21H37.8"/><path d="M25.5 48H38.5"/></svg></div>
+      <strong>Waiting for you</strong>
+      <span>Waiting</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="paused">
+      <div class="fnd-agent-svg" data-icon-slot="paused"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M24 16V38M40 16V38"/><path d="M16 50L48 44"/></svg></div>
+      <strong>Paused</strong>
+      <span>Waiting</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="scheduled">
+      <div class="fnd-agent-svg" data-icon-slot="scheduled"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><circle cx="32" cy="32" r="16"/><path d="M32 32V21"/><path d="M32 32L41.5 37.5"/></svg></div>
+      <strong>Scheduled</strong>
+      <span>Waiting</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="offline">
+      <div class="fnd-agent-svg" data-icon-slot="offline"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M26.6 39.1A8 8 0 0 1 37.4 39.1"/><path d="M21.3 33.1A16 16 0 0 1 42.7 33.1"/><path d="M15.9 27.2A24 24 0 0 1 48.1 27.2"/><rect x="28.5" y="41.5" width="7" height="7" rx="2.1" fill="currentColor" stroke="none"/><path d="M16 15L46 49"/></svg></div>
+      <strong>Offline</strong>
+      <span>Waiting</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="retrying">
+      <div class="fnd-agent-svg" data-icon-slot="retrying"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M46.1 26.9A15 15 0 1 1 32 17"/><path d="M26.6 12.5L32 17L26.6 21.5"/></svg></div>
+      <strong>Retrying</strong>
+      <span>Outcome</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="done">
+      <div class="fnd-agent-svg" data-icon-slot="done"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M19 33L27 41L46 22"/></svg></div>
+      <strong>Done</strong>
+      <span>Outcome</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="failed">
+      <div class="fnd-agent-svg" data-icon-slot="failed"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M22 22L42 42"/><path d="M42 22L22 42"/></svg></div>
+      <strong>Failed</strong>
+      <span>Outcome</span>
+    </div>
+  
+    <div class="fnd-agent-glyph" data-agent-icon="blocked">
+      <div class="fnd-agent-svg" data-icon-slot="blocked"><svg viewBox="0 0 64 64" width="32" height="32" fill="none" stroke="currentColor" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.6" y="4.6" width="54.9" height="54.9" rx="15"/><path d="M25 31V25C25 14 39 14 39 25V31"/><rect x="19" y="31" width="26" height="19" rx="4"/><rect x="29" y="37.5" width="6" height="6" rx="1.8" fill="currentColor" stroke="none"/></svg></div>
+      <strong>Blocked by permission</strong>
+      <span>Outcome</span>
+    </div>
+  </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="pack-h">
+      <h2 id="pack-h">3. Non-optimistic agent pack components</h2>
+      <p>Approval and run controls use Cieo's <code>asyncAction</code> state machine: pressing Approve transitions to <code>pending</code> until the host confirms execution, surfacing <code>uncertain</code> rather than false success on timeout. Inspect <a href="../components/AgentStatus.html">AgentStatus</a>, <a href="../components/AgentActivity.html">AgentActivity</a>, <a href="../components/AgentLanes.html">AgentLanes</a>, <a href="../components/ApprovalRequest.html">ApprovalRequest</a>, <a href="../components/RunControls.html">RunControls</a>, <a href="../components/StreamingMessage.html">StreamingMessage</a>, and <a href="../components/ToolCallDisclosure.html">ToolCallDisclosure</a>.</p>
+    </section>
+    </div>
+  </div>
+</main>
+<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer><script type="module" src="../search.js" data-site-up="../"></script>
+<script type="module" src="./foundations.js"></script>
+</body>
+</html>

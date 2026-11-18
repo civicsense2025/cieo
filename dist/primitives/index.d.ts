@@ -12,7 +12,7 @@ export { ApprovalRequest, APPROVAL_STATUS_WORDS, type ApprovalRequestProps } fro
 export { AspectRatio, type AspectRatioProps } from './AspectRatio/AspectRatio.js';
 export { rmsLevel, levelBars, AudioLevelMeter, type AudioLevelMeterProps } from './AudioLevelMeter/AudioLevelMeter.js';
 export { audioPlayButtonName, AudioPlayButton, type AudioPlayButtonProps } from './AudioPlayButton/AudioPlayButton.js';
-export { audioPlayerStep, createAudioPlayerToken, registerAudioPlayer, claimAudioPlayback, AudioPlayer, AUDIO_PLAY_EVENT, type AudioPlayerProps, type AudioPlayerState, type AudioPlayerEvent } from './AudioPlayer/AudioPlayer.js';
+export { AudioPlayer, audioPlayerStep, createAudioPlayerToken, registerAudioPlayer, claimAudioPlayback, AUDIO_PLAY_EVENT, type AudioPlayerProps, type AudioPlayerState, type AudioPlayerEvent } from './AudioPlayer/AudioPlayer.js';
 export { stageKey, AudioRoom, type AudioRoomSpeaker, type AudioRoomSelf, type AudioRoomProps } from './AudioRoom/AudioRoom.js';
 export { formatAudioTime, speakAudioTime, AudioTime, type AudioTimeProps } from './AudioTime/AudioTime.js';
 export { activeWordIndex, transcriptKeyStep, shouldAutoScroll, transcriptScrollTop, AudioTranscript, TRANSCRIPT_QUIET_MS, type TranscriptWord, type AudioTranscriptProps } from './AudioTranscript/AudioTranscript.js';
@@ -45,6 +45,7 @@ export { BottomSheet, type BottomSheetProps } from './BottomSheet/BottomSheet.js
 export { BottomSheetSwitcher, type BottomSheetSwitcherProps } from './BottomSheetSwitcher/BottomSheetSwitcher.js';
 export { BreadcrumbItem, type BreadcrumbItemProps } from './BreadcrumbItem/BreadcrumbItem.js';
 export { Breadcrumbs, type BreadcrumbsProps } from './Breadcrumbs/Breadcrumbs.js';
+export { Button, type ButtonProps, type ButtonSize, type ButtonState, type ButtonTone, type ButtonSlotProps } from './Button/Button.js';
 export { ButtonGroup, type ButtonGroupProps } from './ButtonGroup/ButtonGroup.js';
 export { ByLine, type ByLineProps } from './ByLine/ByLine.js';
 export { Calendar, type CalendarProps } from './Calendar/Calendar.js';
@@ -69,7 +70,7 @@ export { formatClipTime, ClipRange, type ClipRangeProps } from './ClipRange/Clip
 export { Code, type CodeProps } from './Code/Code.js';
 export { CodeBlock, type CodeBlockProps } from './CodeBlock/CodeBlock.js';
 export { Collapsible, type CollapsibleProps } from './Collapsible/Collapsible.js';
-export { CollapsibleGroup, type CollapsibleGroupProps } from './CollapsibleGroup/CollapsibleGroup.js';
+export { CollapsibleGroup, CollapsibleGroupContext, type CollapsibleGroupContextValue, type CollapsibleGroupProps } from './CollapsibleGroup/CollapsibleGroup.js';
 export { CommandPalette, CommandPaletteContext, type CommandPaletteContextValue, type CommandPaletteProps } from './CommandPalette/CommandPalette.js';
 export { CommandPaletteEmpty, type CommandPaletteEmptyProps } from './CommandPaletteEmpty/CommandPaletteEmpty.js';
 export { CommandPaletteFooter, type CommandPaletteFooterProps } from './CommandPaletteFooter/CommandPaletteFooter.js';
@@ -117,6 +118,7 @@ export { listNames, groupAvatarLabel, groupAvatarLayout, GroupAvatar, type Group
 export { HStack, type HStackProps } from './HStack/HStack.js';
 export { Heading, type HeadingProps } from './Heading/Heading.js';
 export { HoverCard, type HoverCardProps } from './HoverCard/HoverCard.js';
+export { CieoI18nProvider, useCieoI18n, DEFAULT_CIEO_STRINGS, CieoI18nContext, I18nProvider, type CieoStrings, type CieoI18nContextValue, type I18nProviderProps, type CieoI18nProviderProps } from './I18nProvider/I18nProvider.js';
 export { Icon, type IconProps } from './Icon/Icon.js';
 export { IconButton, type IconButtonProps } from './IconButton/IconButton.js';
 export { rankLabel, barFraction, IndexRow, type IndexRowProps } from './IndexRow/IndexRow.js';
@@ -140,6 +142,8 @@ export { MetadataListItem, type MetadataListItemProps } from './MetadataListItem
 export { MobileNav, type MobileNavProps } from './MobileNav/MobileNav.js';
 export { MobileNavToggle, type MobileNavToggleProps } from './MobileNavToggle/MobileNavToggle.js';
 export { MoreMenu, type MoreMenuProps } from './MoreMenu/MoreMenu.js';
+export { MorphSurface, type MorphSurfaceProps } from './MorphSurface/MorphSurface.js';
+export { MotionFrame, type MotionFrameProps } from './MotionFrame/MotionFrame.js';
 export { MultiSelector, type MultiSelectorProps } from './MultiSelector/MultiSelector.js';
 export { NavHeadingMenu, type NavHeadingMenuProps } from './NavHeadingMenu/NavHeadingMenu.js';
 export { NavIcon, type NavIconProps } from './NavIcon/NavIcon.js';
@@ -161,6 +165,7 @@ export { PowerSearch, type PowerSearchProps } from './PowerSearch/PowerSearch.js
 export { PreviewStage, type PreviewStageProps, type PreviewBackdrop } from './PreviewStage/PreviewStage.js';
 export { ProgressBar, type ProgressBarProps } from './ProgressBar/ProgressBar.js';
 export { QuotedText, type QuotedTextProps } from './QuotedText/QuotedText.js';
+export { RadioGroup, Radio, type RadioGroupProps, type RadioProps, type RadioGroupSlotProps, type RadioSlotProps } from './RadioGroup/RadioGroup.js';
 export { RadioList, type RadioListProps } from './RadioList/RadioList.js';
 export { RadioListItem, type RadioListItemProps } from './RadioListItem/RadioListItem.js';
 export { ratingKeyStep, ratingLabel, ratingPopDelays, Rating, type RatingProps } from './Rating/Rating.js';
@@ -190,17 +195,20 @@ export { SideNavItem, type SideNavItemProps } from './SideNavItem/SideNavItem.js
 export { SideNavSection, type SideNavSectionProps } from './SideNavSection/SideNavSection.js';
 export { Skeleton, type SkeletonProps } from './Skeleton/Skeleton.js';
 export { Slider, type SliderProps } from './Slider/Slider.js';
+export { mergeRefs, mergeSlotProps, Slot, type SlotProps } from './Slot/Slot.js';
 export { sortableMove, sortableDropIndex, sortableAnnouncement, sortableKeyAction, sortableStep, SortableList, SortableListContext, type SortableSession, type SortableStep, type SortableListContextValue, type SortableListProps, type SortableListTag, type SortableEvent, type SortableAction } from './SortableList/SortableList.js';
 export { SortableListItem, type SortableListItemProps } from './SortableListItem/SortableListItem.js';
 export { speakingStep, speakerLabel, SpeakerTile, type SpeakerTileProps, type SpeakerRole } from './SpeakerTile/SpeakerTile.js';
 export { Spinner, type SpinnerProps } from './Spinner/Spinner.js';
 export { Stack, type StackProps } from './Stack/Stack.js';
 export { StackItem, type StackItemProps } from './StackItem/StackItem.js';
+export { computeStaggerDelays, StaggerGroup, type StaggerGroupProps } from './StaggerGroup/StaggerGroup.js';
 export { StatusDot, type StatusDotProps, type StatusDotStatus } from './StatusDot/StatusDot.js';
 export { Step, type StepProps } from './Step/Step.js';
 export { stepState, StepList, type StepListStep, type StepListProps, type StepState } from './StepList/StepList.js';
 export { Stepper, type StepperStep, type StepperProps } from './Stepper/Stepper.js';
 export { StreamingMessage, type StreamingMessageProps } from './StreamingMessage/StreamingMessage.js';
+export { Switch, type SwitchProps, type SwitchSlotProps } from './Switch/Switch.js';
 export { Tab, type TabProps } from './Tab/Tab.js';
 export { TabList, TabContext, type TabContextValue, type TabListProps } from './TabList/TabList.js';
 export { TabMenu, type TabMenuProps } from './TabMenu/TabMenu.js';
@@ -213,6 +221,8 @@ export { TableHeaderCell, type TableHeaderCellProps } from './TableHeaderCell/Ta
 export { TableRow, type TableRowProps } from './TableRow/TableRow.js';
 export { TableSelectionToolbar, type TableSelectionToolbarProps } from './TableSelectionToolbar/TableSelectionToolbar.js';
 export { Text, type TextProps } from './Text/Text.js';
+export { TextArea, type TextAreaProps, type TextAreaSlotProps } from './TextArea/TextArea.js';
+export { TextField, type TextFieldProps, type TextFieldType, type TextFieldSlotProps } from './TextField/TextField.js';
 export { Thumbnail, type ThumbnailProps } from './Thumbnail/Thumbnail.js';
 export { thumbsStep, ThumbsFeedback, THUMBS_INITIAL, type ThumbsState, type ThumbsResult, type ThumbsFeedbackProps, type ThumbValue, type ThumbsStep, type ThumbsEvent } from './ThumbsFeedback/ThumbsFeedback.js';
 export { TimeInput, type TimeInputProps } from './TimeInput/TimeInput.js';
@@ -241,4 +251,9 @@ export { typingLabel, typingSetKey, TypingIndicator, type TypingIndicatorProps }
 export { unreadDividerLabel, UnreadDivider, type UnreadDividerProps } from './UnreadDivider/UnreadDivider.js';
 export { VStack, type VStackProps } from './VStack/VStack.js';
 export { verifiedBadgeSize, VerifiedBadge, type VerifiedBadgeProps, type VerifiedBadgeSize } from './VerifiedBadge/VerifiedBadge.js';
-export { isRecorderActive, voiceRecorderStep, shouldEmitClip, pickRecorderMimeType, downsamplePeaks, holdGesture, limitRemainingMs, clipDuration, recorderAfterCleanup, remainingSeconds, isNearLimit, recorderAnnouncement, VoiceRecorder, recorderIdle, HOLD_CANCEL_DISTANCE, type RecorderState, type VoiceClip, type VoiceRecorderProps, type RecorderPhase, type RecorderErrorReason, type RecorderEvent, type RecorderAnnouncement } from './VoiceRecorder/VoiceRecorder.js';
+export { VoiceRecorder, recorderIdle, isRecorderActive, voiceRecorderStep, shouldEmitClip, pickRecorderMimeType, downsamplePeaks, HOLD_CANCEL_DISTANCE, holdGesture, limitRemainingMs, clipDuration, recorderAfterCleanup, remainingSeconds, isNearLimit, recorderAnnouncement, type VoiceRecorderProps, type RecorderPhase, type RecorderErrorReason, type RecorderState, type RecorderEvent, type RecorderAnnouncement, type VoiceClip } from './VoiceRecorder/VoiceRecorder.js';
+export { FrameBar as PageBar, type FrameBarProps as PageBarProps } from './FrameBar/FrameBar.js';
+export { ReferenceText as MonoText, type ReferenceTextProps as MonoTextProps } from './ReferenceText/ReferenceText.js';
+export { RollCall as GroupedRoster, type RollCallProps as GroupedRosterProps } from './RollCall/RollCall.js';
+export { ShareBar as ProportionBar, type ShareBarProps as ProportionBarProps } from './ShareBar/ShareBar.js';
+export { TopicChip as TagChip, type TopicChipProps as TagChipProps } from './TopicChip/TopicChip.js';

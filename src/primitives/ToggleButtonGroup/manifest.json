@@ -15,9 +15,10 @@
   "nativePrimitives": [],
   "properties": [
     { "id": "label", "type": { "kind": "string" }, "required": true, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 } },
-    { "id": "value", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Selected button value when controlled." },
-    { "id": "defaultValue", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Initial selected value when uncontrolled." },
-    { "id": "onValueChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (value: string) => void; no function kind exists in the manifest precedent." },
+    { "id": "multiple", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {}, "note": "Allow multiple buttons to be pressed simultaneously." },
+    { "id": "value", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Selected button value (or string[] when multiple) when controlled." },
+    { "id": "defaultValue", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Initial selected value (or string[] when multiple) when uncontrolled." },
+    { "id": "onValueChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (value: string | string[]) => void; no function kind exists in the manifest precedent." },
     {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
     {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
   ],

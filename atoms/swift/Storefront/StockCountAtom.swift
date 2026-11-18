@@ -6,6 +6,7 @@ public struct StockCountAtom: MotionAtomView {
         summary: "The bar drains lazily and only changed digits roll. At 5 left the low pill pops in and the message swaps to order soon. Zero holds as sold out.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var stock = 9
+    @State private var autoRestock = true
     private let total = 12
     public init() {}
     public var body: some View {
@@ -24,8 +25,16 @@ public struct StockCountAtom: MotionAtomView {
                     SwapText(stock <= 0 ? "Sold out" : stock <= 5 ? "Order soon" : "In stock").font(.caption).foregroundStyle(.secondary)
                 }
                 HStack {
-                    Button(stock <= 0 ? "Sold out" : "Buy one") { withMotion(.lazy, reduceMotion: reduce) { stock = max(0, stock - 1) } }.buttonStyle(.borderedProminent).controlSize(.small)
-                    Toggle("Auto-restock", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                    Button(stock <= 0 ? "Sold out" : "Buy one") {
+                        withMotion(.lazy, reduceMotion: reduce) { stock = max(0, stock - 1) }
+                        if stock == 0 && autoRestock {
+                            Task {
+                                try? await Task.sleep(for: .milliseconds(reduce ? 50 : 900))
+                                if autoRestock && stock == 0 { withMotion(.lazy, reduceMotion: reduce) { stock = total } }
+                            }
+                        }
+                    }.buttonStyle(.borderedProminent).controlSize(.small).disabled(stock <= 0 && !autoRestock)
+                    Toggle("Auto-restock", isOn: $autoRestock).font(.caption).foregroundStyle(.secondary)
                 }
             }.frame(maxWidth: 300)
         }

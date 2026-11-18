@@ -95,7 +95,7 @@ public struct ActivityItem<Avatar: View, Badge: View, Actions: View>: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             Circle().fill(theme.accent).frame(width: dot, height: dot)
                 .opacity(unread ? 1 : 0)
-                .motion(.base, value: unread)
+                .motionAnimation(.base, value: unread)
                 .accessibilityHidden(true)
         }
         .padding(.vertical, metrics.compact)

@@ -100,7 +100,7 @@ public struct ConversationListItem<Avatar: View>: View {
         }
         .buttonStyle(.plain)
         .modifier(RowFocus(id: id, binding: list?.focus))
-        .motion(.base, value: isSelected)
+        .motionAnimation(.base, value: isSelected)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Self.conversationLabel(summary))
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -150,7 +150,7 @@ public struct ConversationListItem<Avatar: View>: View {
                 previewText.transition(.opacity)
             }
         }
-        .motion(.base, value: isTyping)
+        .motionAnimation(.base, value: isTyping)
     }
 
     private var previewText: Text {
@@ -180,8 +180,8 @@ public struct ConversationListItem<Avatar: View>: View {
                     .transition(.scale(scale: Self.popFrom).combined(with: .opacity))
             }
         }
-        .motion(.snap, value: unread > 0)
-        .motion(.base, value: unread)
+        .motionAnimation(.snap, value: unread > 0)
+        .motionAnimation(.base, value: unread)
     }
 
     /// The badge pops in from this scale.

@@ -7,10 +7,14 @@ public struct DocSearchAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var query = "spring"
     @State private var active = 0
+    @State private var caseInsensitive = true
     private let paras = ["The spring essay opens with a market bell.", "Attention is the spring tax every reader pays.", "Care survives where the spring runs dry."]
     public init() {}
 
-    private var hits: Int { query.lowercased() == "spring" ? 3 : 0 }
+    private var hits: Int {
+        let match = caseInsensitive ? query.lowercased() == "spring" : query == "spring"
+        return match ? 3 : 0
+    }
 
     public var body: some View {
         AtomStage(hint: "Search “spring”, jump with ›, try “xyz”") {
@@ -23,7 +27,7 @@ public struct DocSearchAtom: MotionAtomView {
                 }
                 VStack(spacing: 0) {
                     ForEach(0..<paras.count, id: \.self) { i in
-                        Text(paras[i]).font(.callout).lineSpacing(6).padding(.vertical, 6)
+                        Text(paras[i]).font(.callout).lineSpacing(3).padding(.vertical, 6)
                             .background(i == active && hits > 0 ? Color.accentColor.opacity(0.18) : .clear, in: RoundedRectangle(cornerRadius: 6))
                             .animation(reduce ? nil : .motion(.base), value: active)
                         if i < 2 { Divider() }
@@ -33,7 +37,7 @@ public struct DocSearchAtom: MotionAtomView {
                     if hits == 0 { Text("No matches — try “spring”").foregroundStyle(.secondary).motionTransition(.swap()) }
                 }
                 .font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading)
-                Toggle("Match case-insensitive", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Match case-insensitive", isOn: $caseInsensitive).font(.caption).foregroundStyle(.secondary)
             }
             .padding(16).frame(maxWidth: 380)
             .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))

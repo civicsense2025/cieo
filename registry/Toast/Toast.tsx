@@ -1,11 +1,11 @@
 'use client';
-import type { PrimitivePartProps } from '../parts.js';
-import { customizePart } from '../customization.js';
-/* Toast. Transient status notice with auto-dismiss and an optional action. Host owns open state; closing plays the
-   exit spring before unmounting. Reduced motion shows and hides the end state. */
+/* Toast. Transient status notice with auto-dismiss, hover/focus pause, controllable open state, and spring exit presence. */
 import { useEffect, useRef, type ReactNode } from 'react';
 import { useDismiss, usePresence } from '../../react/index.js';
+import { useControllableState } from '../../state/react.js';
 import { motionAttrs, type MotionProps } from '../motion.js';
+import type { PrimitivePartProps } from '../parts.js';
+import { customizePart } from '../customization.js';
 
 export type ToastTone = 'info' | 'success' | 'warning' | 'danger';
 
@@ -33,14 +33,17 @@ export function resumeToastDelay(state: ToastDeadline): number {
 export interface ToastProps extends MotionProps {
   className?: string;
   slotProps?: { root?: PrimitivePartProps; message?: PrimitivePartProps; action?: PrimitivePartProps; dismiss?: PrimitivePartProps };
-
   /** Notice text. Required. */
   message: string;
   /** Severity. Danger and warning announce as alerts. Defaults to info. */
   tone?: ToastTone;
-  /** Whether the toast is shown. Plays the exit spring before unmounting when closed. Defaults to true. */
+  /** Whether the toast is shown when controlled. Plays the exit spring before unmounting when closed. */
   open?: boolean;
-  /** Called on auto-dismiss timeout, Escape, or the dismiss button. Host closes by setting open. */
+  /** Initial open state when uncontrolled. Defaults to true. */
+  defaultOpen?: boolean;
+  /** Called with the next open state. */
+  onOpenChange?: (open: boolean) => void;
+  /** Called on auto-dismiss timeout, Escape, or the dismiss button. */
   onDone?: () => void;
   /** Auto-dismiss delay in ms. Defaults to 5000. Zero or negative disables the timer. */
   duration?: number;
@@ -50,11 +53,43 @@ export interface ToastProps extends MotionProps {
   children?: ReactNode;
 }
 
-export function Toast({ className, slotProps, message, tone = 'info', open = true, onDone, duration = 5000, dismissLabel = 'Dismiss', children, motion, entering = 'rise', exiting = 'rise' }: ToastProps) {
-  const { mounted, ref } = usePresence<HTMLDivElement>(open, { disabled: motion === false });
-  const done = useRef(onDone);
-  done.current = onDone;
-  useDismiss(open, () => done.current?.(), [ref], { outside: false });
+const ORIGINS = {
+  fade: { x: 0, y: 0, scale: 1, opacity: 0, blur: 0 },
+  rise: { x: 0, y: 4, scale: 1, opacity: 0, blur: 0 },
+  scale: { x: 0, y: 0, scale: 0.96, opacity: 0, blur: 0 },
+} as const;
+
+export function Toast({
+  className,
+  slotProps,
+  message,
+  tone = 'info',
+  open: openProp,
+  defaultOpen = true,
+  onOpenChange,
+  onDone,
+  duration = 5000,
+  dismissLabel = 'Dismiss',
+  children,
+  motion,
+  entering = 'rise',
+  exiting = 'rise',
+}: ToastProps) {
+  const [open, setOpen] = useControllableState<boolean>({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+  const enterOrigin = entering === 'none' ? { x: 0, y: 0, scale: 1, opacity: 1, blur: 0 } : entering === 'fade' ? ORIGINS.fade : entering === 'scale' ? ORIGINS.scale : ORIGINS.rise;
+  const exitOrigin = exiting === 'none' ? { x: 0, y: 0, scale: 1, opacity: 1, blur: 0 } : exiting === 'fade' ? ORIGINS.fade : exiting === 'scale' ? ORIGINS.scale : ORIGINS.rise;
+  const origin = open ? enterOrigin : exitOrigin;
+  const { mounted, ref } = usePresence<HTMLDivElement>(open, { disabled: motion === false, from: origin });
+  const done = useRef<() => void>(() => {});
+  done.current = () => {
+    setOpen(false);
+    onDone?.();
+  };
+  useDismiss(open, () => done.current(), [ref], { outside: false });
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const deadline = useRef<ToastDeadline>(startToastDeadline(duration, Date.now()));
   function clearTimer() {
@@ -73,15 +108,13 @@ export function Toast({ className, slotProps, message, tone = 'info', open = tru
     timer.current = setTimeout(() => {
       timer.current = null;
       deadline.current = { remaining: 0, firesAt: null };
-      done.current?.();
+      done.current();
     }, ms);
   }
   useEffect(() => {
     arm(duration);
     return clearTimer;
   }, [open, duration, message]);
-  /* WCAG 2.2 timing: hovering or focusing pauses the deadline; leaving or
-     blurring outside resumes it with the time that was left. */
   function pause() {
     deadline.current = pauseToastDeadline(deadline.current, Date.now());
     clearTimer();
@@ -89,7 +122,6 @@ export function Toast({ className, slotProps, message, tone = 'info', open = tru
   function resume() {
     if (timer.current === null) arm(resumeToastDelay(deadline.current));
   }
-  void exiting;
   if (!mounted) return null;
   return (
     <div
@@ -103,12 +135,26 @@ export function Toast({ className, slotProps, message, tone = 'info', open = tru
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) resume();
       }}
-      {...motionAttrs({ motion, entering, exiting })}
-      {...customizePart(slotProps?.root, "cieo cieo-toast", undefined, className)}
+      {...motionAttrs({ motion })}
+      {...customizePart(slotProps?.root, 'cieo cieo-toast', undefined, className)}
     >
-      <p className="cieo-toast-message" {...customizePart(slotProps?.message, "cieo-toast-message", undefined)}>{message}</p>
-      {children ? <div className="cieo-toast-action" {...customizePart(slotProps?.action, "cieo-toast-action", undefined)}>{children}</div> : null}
-      <button type="button" aria-label={dismissLabel} className="cieo-toast-dismiss" onClick={() => done.current?.()} {...customizePart(slotProps?.dismiss, "cieo-toast-dismiss", undefined)}>×</button>
+      <p className="cieo-toast-message" {...customizePart(slotProps?.message, 'cieo-toast-message', undefined)}>
+        {message}
+      </p>
+      {children ? (
+        <div className="cieo-toast-action" {...customizePart(slotProps?.action, 'cieo-toast-action', undefined)}>
+          {children}
+        </div>
+      ) : null}
+      <button
+        type="button"
+        aria-label={dismissLabel}
+        className="cieo-toast-dismiss"
+        onClick={() => done.current()}
+        {...customizePart(slotProps?.dismiss, 'cieo-toast-dismiss', undefined)}
+      >
+        ×
+      </button>
     </div>
   );
 }

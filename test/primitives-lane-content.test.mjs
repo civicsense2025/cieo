@@ -25,11 +25,13 @@ const COMPS = [
   { name: 'Skeleton', id: 'core.skeleton', marker: /Array\(lines\)/ },
 ];
 
+const RSC_CONTENT = new Set(['Icon', 'Kbd', 'Code', 'Heading', 'Blockquote', 'Citation']);
 for (const c of COMPS) {
   test(`${c.name} tsx renders marker, manifest id matches, page documents it`, () => {
     const src = readFileSync(`src/primitives/${c.name}/${c.name}.tsx`, 'utf8');
     assert.match(src, c.marker);
-    assert.match(src, /'use client'/);
+    if (RSC_CONTENT.has(c.name)) assert.doesNotMatch(src, /^['"]use client['"]/m);
+    else assert.match(src, /'use client'/);
     const m = JSON.parse(readFileSync(`src/primitives/${c.name}/manifest.json`, 'utf8'));
     assert.equal(m.id, c.id);
     assert.equal(m.name, c.name);

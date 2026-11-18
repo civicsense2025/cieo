@@ -13,8 +13,8 @@ public struct DeckStackAtom: MotionAtomView {
         Card(kind: "Deck", text: "The fee hid in a footnote; low streets flood first when the pumps stop.")
     ]
     @State private var moved: Set<UUID> = []
-    private let limit = 120
     public init() {}
+    private var limit: Int { tweak ? 120 : 160 }
     private var total: Int { cards.reduce(0) { $0 + $1.text.count } }
     private var barColor: Color { let p = Double(total) / Double(limit); return p < 0.6 ? .green : p < 0.85 ? .yellow : .red }
 
@@ -51,6 +51,7 @@ public struct DeckStackAtom: MotionAtomView {
                 }
                 .frame(maxWidth: 340)
                 .animation(reduce ? nil : .motion(.base), value: total)
+                .animation(reduce ? nil : .motion(.base), value: tweak)
                 Button("Shuffle") { shuffle() }.buttonStyle(.bordered).frame(minHeight: 32)
             }
         }

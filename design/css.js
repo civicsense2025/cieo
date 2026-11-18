@@ -8,7 +8,11 @@ export function cssValue(token) {
 }
 export function variables(theme) {
   assertTheme(theme);
-  return Object.fromEntries(Object.entries(theme.tokens).sort(([a], [b]) => a.localeCompare(b, 'en')).map(([key, token]) => [`--cieo-${key}`, cssValue(token)]));
+  const entries = Object.entries(theme.tokens).map(([key, token]) => [`--cieo-${key}`, cssValue(token)]);
+  for (const [comp, props] of Object.entries(theme.options.components ?? {})) {
+    for (const [prop, val] of Object.entries(props)) entries.push([`--cieo-${comp}-${prop}`, String(val)]);
+  }
+  return Object.fromEntries(entries.sort(([a], [b]) => a.localeCompare(b, 'en')));
 }
 /** Conservative selector grammar intentionally prevents stylesheet injection. */
 export function toCSS(theme, target = ':root') {

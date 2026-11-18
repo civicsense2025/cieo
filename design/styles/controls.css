@@ -47,6 +47,8 @@
   :where(.cieo) .cieo-input:disabled { opacity: var(--cieo-disabled-opacity); cursor: not-allowed; }
   :where(.cieo) textarea.cieo-input { resize: vertical; min-block-size: 7rem; }
   :where(.cieo) .cieo-help { color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
+  :where(.cieo) .cieo-label { font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); color: var(--cieo-color-text); }
+  label:where(.cieo):where(:not(.cieo-ctl, .cieo-check)) { display: grid; gap: var(--cieo-space-2); min-inline-size: 0; color: var(--cieo-color-text); }
   :where(.cieo) .cieo-check:where(:not(.cieo-ctl)) { display: inline-flex; align-items: center; gap: var(--cieo-space-2); min-block-size: var(--cieo-control-height); cursor: pointer; }
   :where(.cieo) .cieo-check:where(:not(.cieo-ctl)) input { inline-size: 1.125rem; block-size: 1.125rem; margin: 0; flex: none; }
   :where(.cieo) .cieo-badge { display: inline-flex; align-items: center; gap: var(--cieo-space-1); padding: .25rem .625rem; border-radius: var(--cieo-radius-pill); background: var(--cieo-color-accent-soft); color: var(--cieo-color-on-accent-soft); font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-medium); }

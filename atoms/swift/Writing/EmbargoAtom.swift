@@ -8,11 +8,12 @@ public struct EmbargoAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var remaining = 8
     @State private var tweak = true
+    @State private var manualLift = false
     @State private var lift: CGFloat = 0
     private let total = 8
     public init() {}
 
-    private var live: Bool { remaining <= 0 }
+    private var live: Bool { manualLift || (tweak && remaining <= 0) }
 
     public var body: some View {
         AtomStage(hint: "Only changing digits roll") {
@@ -39,10 +40,16 @@ public struct EmbargoAtom: MotionAtomView {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).fill(live ? Color.green : Color.primary.opacity(0.2)).opacity(0.10).allowsHitTesting(false))
                 .animation(reduce ? nil : .motion(.base), value: live)
-                Button("Reset") {
-                    withMotion(.base, reduceMotion: reduce) { remaining = total; lift = 0 }
+                HStack(spacing: 8) {
+                    if remaining == 0 && !live {
+                        Button("Lift now") { withMotion(.soft, reduceMotion: reduce) { manualLift = true } }
+                            .buttonStyle(.borderedProminent).frame(minHeight: 32)
+                    }
+                    Button("Reset") {
+                        withMotion(.base, reduceMotion: reduce) { remaining = total; manualLift = false; lift = 0 }
+                    }
+                    .buttonStyle(.bordered).frame(minHeight: 32)
                 }
-                .buttonStyle(.bordered).frame(minHeight: 32)
                 Toggle("Auto-lift at zero", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)

@@ -9,7 +9,7 @@ public struct MotionSchedule: TimelineSchedule {
     public init(rest: Double?) { self.rest = rest }
 
     public func entries(from start: Date, mode _: TimelineScheduleMode) -> AnySequence<Date> {
-        let step = 1.0 / 60
+        let step = 1.0 / 120
         let end = rest.map { Date(timeIntervalSinceReferenceDate: $0) }
         return AnySequence(sequence(state: Optional(start)) { (next: inout Date?) -> Date? in
             guard let d = next else { return nil }

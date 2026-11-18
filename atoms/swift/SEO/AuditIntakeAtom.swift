@@ -9,6 +9,7 @@ public struct AuditIntakeAtom: MotionAtomView {
     @State private var step = 0
     @State private var url = "example.site"
     @State private var pages = "100"
+    @State private var email = "you@example.com"
     @State private var emailReport = true
     @State private var queued = false
     public init() {}
@@ -77,7 +78,7 @@ public struct AuditIntakeAtom: MotionAtomView {
                             .id(3).motionTransition(.swap())
                         } else {
                             panel("Where should we send it?") {
-                                TextField("you@example.com", text: .constant("you@example.com"))
+                                TextField("you@example.com", text: $email)
                                     .softFieldSurface().font(.subheadline)
                                 rowNav(showBack: true, next: "Queue audit ✓") {
                                     withMotion(.base, reduceMotion: reduce) { queued = true }

@@ -7,6 +7,7 @@ public struct AnnotThreadAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var resolved = false
     @State private var checked = false
+    @State private var notifyAuthor = true
     public init() {}
 
     public var body: some View {
@@ -38,7 +39,7 @@ public struct AnnotThreadAtom: MotionAtomView {
                         Button("Reopen") { withMotion(.base, reduceMotion: reduce) { resolved = false; checked = false } }.frame(minHeight: 32)
                         if checked { Image(systemName: "checkmark").foregroundStyle(.green).motionTransition(.swap()) }
                         ZStack(alignment: .leading) {
-                            if resolved { Text("resolved ✓").foregroundStyle(.green).motionTransition(.swap()) }
+                            if resolved { Text(notifyAuthor ? "resolved · notified ✓" : "resolved ✓").foregroundStyle(.green).motionTransition(.swap()) }
                             else { Text("open").foregroundStyle(.secondary).motionTransition(.swap()) }
                         }.font(.caption)
                     }
@@ -46,7 +47,7 @@ public struct AnnotThreadAtom: MotionAtomView {
                 }
                 .padding(16).frame(maxWidth: 360)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("Notify author on resolve", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Notify author on resolve", isOn: $notifyAuthor).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

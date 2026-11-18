@@ -1,0 +1,202 @@
+/* Presence (enter/exit), content swap, and persistent property tracking on DOM elements. */
+import { EXIT, S, Track, allowed, clamp, config, now, prog, run, type MotionKind, type SpringConfig } from '../core/spring.js';
+import { animate, gapFor, list, noop, owners, paint, paintFrom, st, type Cancel, type From, type Targets } from './paint.js';
+
+export interface PresenceOptions {
+  kind?: MotionKind;
+  from?: Partial<From>;
+  cfg?: SpringConfig;
+  delay?: number;
+  stagger?: number;
+  remove?: boolean;
+  done?: () => void;
+}
+
+interface PresenceRec {
+  o: Track;
+  from: From;
+  final: () => void;
+  cancel: Cancel;
+}
+const presences = new WeakMap<Element, PresenceRec>();
+const prehidden = new WeakSet<Element>();
+
+function presence(el: HTMLElement, to: 0 | 1, opts: PresenceOptions): Cancel {
+  const kind = opts.kind || 'feedback';
+  const from: From = { x: 0, y: 4, scale: 0.97, opacity: 0, blur: 0, ...opts.from };
+  if (to) el.hidden = false;
+  let rec = presences.get(el);
+  if (!rec && to && el.style.opacity === '0') prehidden.add(el);
+  const final = () => {
+    if (prehidden.delete(el) && to) ['opacity', 'transform', 'filter'].forEach((p) => el.style.removeProperty(p));
+    if (!to) {
+      if (opts.remove) el.remove();
+      else el.hidden = true;
+    }
+    opts.done?.();
+  };
+  if (!rec && !allowed(kind, el)) {
+    owners.get(el)?.();
+    final();
+    return noop;
+  }
+  if (!rec) {
+    const r: PresenceRec = { o: new Track(to ? 0 : 1), from, final, cancel: noop };
+    presences.set(el, r);
+    r.cancel = animate([el], {
+      kind,
+      step: (t) => {
+        paintFrom(el, clamp(r.o.at(t)), r.from);
+        return r.o.prune(t) > 0;
+      },
+      finish: () => {
+        presences.delete(el);
+        r.final();
+      },
+    });
+    rec = r;
+  }
+  rec.from = from;
+  rec.final = final;
+  rec.o.set(to, config(kind, opts.cfg || (to ? S.base : S.snap)), now() + (opts.delay || 0));
+  return rec.cancel;
+}
+
+export function enter(target: Targets, opts: PresenceOptions = {}): Cancel {
+  const els = list(target) as HTMLElement[];
+  const gap = gapFor(els.length, opts.stagger);
+  const cancels = els.map((el, i) => presence(el, 1, { ...opts, delay: (opts.delay || 0) + i * gap }));
+  return () => cancels.forEach((c) => c());
+}
+export const exit = (el: HTMLElement, opts: PresenceOptions = {}): Cancel => presence(el, 0, opts);
+
+export interface SwapOptions {
+  kind?: MotionKind;
+  y?: number;
+  blur?: number;
+  cfg?: SpringConfig;
+  done?: () => void;
+}
+
+/** The old content leaves in EXIT (100 ms, ease-in), then the new content springs in. Never overlapping. */
+export function swap(host: Element, next: string | Node, opts: SwapOptions = {}): Cancel {
+  const kind = opts.kind || 'feedback';
+  const amp = opts.y ?? 4;
+  const blur = opts.blur ?? 0;
+  let placed = false;
+  const put = () => {
+    if (placed) return;
+    placed = true;
+    if (typeof next === 'string') host.textContent = next;
+    else host.replaceChildren(next);
+  };
+  if (!allowed(kind, host)) {
+    owners.get(host)?.();
+    put();
+    opts.done?.();
+    return noop;
+  }
+  const t0 = now();
+  const cfg = config(kind, opts.cfg || S.base);
+  return animate([host], {
+    kind,
+    step(t) {
+      if (t < t0 + EXIT) {
+        const e = clamp((t - t0) / EXIT) ** 2;
+        paint(host, 1 - e, -e * amp, e * blur);
+        return true;
+      }
+      put();
+      const p = clamp(prog(t, t0 + EXIT, cfg));
+      paint(host, p, (1 - p) * amp, (1 - p) * blur);
+      return 1 - p > 1e-3;
+    },
+    finish() {
+      put();
+      opts.done?.();
+    },
+  });
+}
+
+const IDENTITY: Record<string, number> = { x: 0, y: 0, scale: 1, opacity: 1 };
+const tracked = new WeakMap<Element, { tracks: Map<string, Track>; job: Cancel | null; fresh: boolean; lx: number; ly: number; ls: number; lo: number; ltClear: boolean; loClear: boolean; lc: Map<string, number> }>();
+
+export function track(el: Element, prop: string, value: number, opts: { kind?: MotionKind; cfg?: SpringConfig } = {}): Cancel {
+  const kind = opts.kind || 'feedback';
+  const custom = prop.startsWith('--');
+  if (!custom && !(prop in IDENTITY)) throw new TypeError(`track cannot move ${prop}`);
+  let rec = tracked.get(el);
+  if (!rec) {
+    rec = { tracks: new Map(), job: null, fresh: true, lx: 0, ly: 0, ls: 1, lo: 1, ltClear: true, loClear: true, lc: new Map() };
+    tracked.set(el, rec);
+  }
+  const r = rec;
+  if (!r.tracks.has(prop)) r.tracks.set(prop, new Track(custom ? value : IDENTITY[prop]));
+  const draw = (t: number, force = false) => {
+    const first = force || r.fresh;
+    const tx = r.tracks.get('x');
+    const ty = r.tracks.get('y');
+    const ts = r.tracks.get('scale');
+    const to = r.tracks.get('opacity');
+    const x = tx ? tx.at(t) : 0;
+    const y = ty ? ty.at(t) : 0;
+    const s = ts ? ts.at(t) : 1;
+    const o = to ? to.at(t) : 1;
+    if (tx !== undefined || ty !== undefined || ts !== undefined) {
+      const tClear = !(x || y || s !== 1);
+      if (first || tClear !== r.ltClear || Math.abs(x - r.lx) >= 0.01 || Math.abs(y - r.ly) >= 0.01 || Math.abs(s - r.ls) >= 0.0005) {
+        st(el).transform = tClear ? '' : `translate(${x.toFixed(2)}px, ${y.toFixed(2)}px) scale(${s.toFixed(4)})`;
+        r.lx = x;
+        r.ly = y;
+        r.ls = s;
+        r.ltClear = tClear;
+      }
+    }
+    if (to !== undefined) {
+      const oClear = o === 1;
+      if (first || oClear !== r.loClear || Math.abs(o - r.lo) >= 0.0005) {
+        st(el).opacity = oClear ? '' : clamp(o).toFixed(3);
+        r.lo = o;
+        r.loClear = oClear;
+      }
+    }
+    for (const entry of r.tracks) {
+      const k = entry[0];
+      if (k.charCodeAt(0) !== 45 || !k.startsWith('--')) continue;
+      const cv = entry[1].at(t);
+      const prev = r.lc.get(k);
+      if (prev === undefined || Math.abs(cv - prev) >= 0.00005) {
+        st(el).setProperty(k, String(+cv.toFixed(4)));
+        r.lc.set(k, cv);
+      }
+    }
+    r.fresh = false;
+  };
+  const settle = () => {
+    r.tracks.forEach((tr) => tr.jump(tr.target));
+    draw(now(), true);
+    st(el).removeProperty('will-change');
+    if (r.job && owners.get(el) === r.job) owners.delete(el);
+    r.job = null;
+    if (!el.getAttribute('style')) el.removeAttribute('style');
+  };
+  if (!allowed(kind, el)) {
+    r.job?.();
+    r.tracks.get(prop)!.jump(value);
+    settle();
+    return noop;
+  }
+  r.tracks.get(prop)!.set(value, config(kind, opts.cfg || S.base));
+  if (!r.job) {
+    owners.get(el)?.();
+    st(el).willChange = 'transform, opacity';
+    r.job = run({ kind, step: (t) => {
+      draw(t);
+      let moving = false;
+      for (const tr of r.tracks.values()) if (tr.prune(t) > 0) moving = true;
+      return moving;
+    }, finish: settle });
+    owners.set(el, r.job);
+  }
+  return r.job || noop;
+}

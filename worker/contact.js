@@ -44,11 +44,21 @@ export function buildEmail({ name, email, topic, message }, env) {
   return { from: env.CONTACT_FROM || 'Cieo <onboarding@resend.dev>', to: [env.CONTACT_TO], replyTo: [email], subject, text, html };
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 /** The same submission always gets the same key, so a double click or a retry cannot send two emails (Resend keeps keys for 24 hours). */
 export async function submissionKey({ email, message }, stamp) {
   const bytes = new TextEncoder().encode(`${email}\n${message}\n${stamp || ''}`);
   const digest = await crypto.subtle.digest('SHA-256', bytes);
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 48);
+}
+
+/** Prefers a validated client UUID (attemptId / idempotencyKey); falls back to submissionKey when stamped or crypto.randomUUID() otherwise. */
+export async function resolveIdempotencyKey(value, body) {
+  const clientKey = oneLine(body?.attemptId ?? body?.idempotencyKey);
+  if (UUID_RE.test(clientKey)) return clientKey.toLowerCase();
+  if (body?.t) return submissionKey(value, body.t);
+  return crypto.randomUUID();
 }
 
 const json = (status, body) => new Response(JSON.stringify(body), { status, headers: { ...SECURITY_HEADERS, 'content-type': 'application/json' } });
@@ -78,7 +88,9 @@ export async function handleContact(request, env, now = Date.now()) {
   const wantsJson = (request.headers.get('accept') || '').includes('application/json');
   const done = () => (wantsJson ? json(200, { ok: true }) : back('sent=1'));
   // Without script a visitor must land back on the form, with the reason in words, never on a raw JSON page.
-  const back = (query) => new Response(null, { status: 303, headers: { ...SECURITY_HEADERS, location: `/site/contact?${query}` } });
+  const refererPath = (() => { try { return new URL(request.headers.get('referer') || '').pathname; } catch { return ''; } })();
+  const contactRoute = refererPath === '/contact' || refererPath === '/contact.html' ? '/contact' : '/contact';
+  const back = (query) => new Response(null, { status: 303, headers: { ...SECURITY_HEADERS, location: `${contactRoute}?${query}` } });
   const fail = (status, error, code) => (wantsJson ? json(status, { error }) : back(`error=${code}`));
 
   const read = await readBody(request);
@@ -99,7 +111,7 @@ export async function handleContact(request, env, now = Date.now()) {
   try {
     response = await fetch('https://api.resend.com/emails', {
       method: 'POST', redirect: 'manual', signal: AbortSignal.timeout(8000),
-      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', 'idempotency-key': await submissionKey(checked.value, read.body.t) },
+      headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json', 'idempotency-key': await resolveIdempotencyKey(checked.value, read.body) },
       body: JSON.stringify(buildEmail(checked.value, env)),
     });
   } catch { console.error('contact: send failed (network)'); return fail(502, 'We could not send that just now. Please try again.', 'failed'); }

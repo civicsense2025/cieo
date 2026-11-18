@@ -19,6 +19,7 @@ public struct InboxSweepAtom: MotionAtomView {
     public init() {}
 
     private var left: Int { drafts.count - collapsed.count }
+    private var armDistance: CGFloat { tweak ? 80 : 40 }
 
     public var body: some View {
         AtomStage(hint: "Swipe a row past the line to sweep it away") {
@@ -41,7 +42,7 @@ public struct InboxSweepAtom: MotionAtomView {
 
     private func row(_ d: Draft) -> some View {
         let off = offsets[d.id, default: 0]
-        let armed = abs(off) > 80
+        let armed = abs(off) > armDistance
         return ZStack {
             HStack {
                 Text("‹ Sweep").font(.system(size: 12.5))
@@ -61,7 +62,7 @@ public struct InboxSweepAtom: MotionAtomView {
                 .onChanged { v in offsets[d.id] = v.translation.width }
                 .onEnded { v in
                     let fling = abs(v.predictedEndTranslation.width) > 200
-                    if abs(off) > 80 || fling {
+                    if abs(off) > armDistance || fling {
                         let side: CGFloat = (off == 0 ? v.predictedEndTranslation.width : off) >= 0 ? 1 : -1
                         withMotion(.snap, reduceMotion: reduce) { offsets[d.id] = side * 360 }
                         swept.append((d.id, side))

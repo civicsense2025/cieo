@@ -24,7 +24,7 @@ export function stepState(index: number, current: number, count: number): StepSt
 }
 export function StepList({ className, slotProps, steps, current, nextLabel = 'next', doneLabel = 'done', stepLabel = (n, total) => `Step ${n} of ${total}` }: StepListProps) {
   return (
-    <ol {...customizePart(slotProps?.root, "cieo cieo-p-step-list", undefined, className)}>
+    <ol className="cieo cieo-p-step-list" {...customizePart(slotProps?.root, "cieo cieo-p-step-list", undefined, className)}>
       {steps.map((s, i) => {
         const state = stepState(i, current, steps.length);
         return (

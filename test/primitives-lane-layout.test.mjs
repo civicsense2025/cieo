@@ -24,10 +24,12 @@ const LANE = [
   { name: 'AppShell', id: 'core.app-shell', props: 0, tsx: [/cieo-app-shell/, /cieo-app-shell-nav/, /cieo-app-shell-main/], css: [/auto 1fr/, /--cieo-space-4/] },
 ];
 
+const RSC_LAYOUT = new Set(['Section', 'Center', 'Grid', 'GridSpan', 'HStack', 'VStack']);
 for (const entry of LANE) {
   test(`${entry.name} tsx renders landmark, props, and class marker`, () => {
     const src = readFileSync(`src/primitives/${entry.name}/${entry.name}.tsx`, 'utf8');
-    assert.match(src, /'use client';/);
+    if (RSC_LAYOUT.has(entry.name)) assert.doesNotMatch(src, /^['"]use client['"]/m);
+    else assert.match(src, /'use client';/);
     for (const marker of entry.tsx) assert.match(src, marker);
   });
 

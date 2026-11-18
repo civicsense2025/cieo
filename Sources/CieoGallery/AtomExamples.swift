@@ -13,7 +13,14 @@ struct AtomExamples: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Specimen(title: "Buttons you can press") {
+            ConfigurableSpecimen(
+                title: "Buttons you can press",
+                code: """
+                ActionButton("Press me", phase: .idle) {
+                    count += 1
+                }
+                """
+            ) {
                 ActionButton("Press me · \(count)") { count += 1 }
                 Button("Quiet action") { count += 1 }.buttonStyle(ActionButtonStyle(.quiet))
                 ActionButton("Unavailable") {}.disabled(true)
@@ -59,7 +66,26 @@ struct AtomExamples: View {
                     HStack { chips }
                     VStack(alignment: .leading) { chips }
                 }
-                HStack { SymbolMark("checkmark.seal.fill"); Text("Native symbols scale with your text.") }
+                HStack {
+                    InlineGlyph { Circle().fill(.tint) }
+                    SymbolMark("checkmark.seal.fill")
+                    Text("Native symbols and inline glyphs scale with your text.")
+                }
+                StatusLabel("Verified token contrast", icon: .check, tone: .accent)
+            }
+            Specimen(title: "Agent identity & spatial pins") {
+                HStack(spacing: 12) {
+                    AgentStatus(status: .running, name: "Coordinator")
+                    ForEach([AgentIconRole.thinking, .planning, .asking, .done], id: \.self) { role in
+                        AgentIcon(role, size: 24)
+                    }
+                }
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12).fill(.quaternary)
+                    AnnotationPin(index: 1, x: 0.25, y: 0.7, state: .open, author: "Ava")
+                    AnnotationPin(index: 2, x: 0.65, y: 0.65, state: .resolved, initials: "BC")
+                }
+                .frame(height: 88)
             }
         }
     }

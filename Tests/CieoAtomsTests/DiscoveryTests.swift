@@ -3,9 +3,20 @@ import XCTest
 
 final class DiscoveryTests: XCTestCase {
     func testSearchMatchesWordsAcrossMetadataAndIgnoresExtraWhitespace() {
-        let info = MotionAtomInfo(id: "soft-button", category: "Inputs", name: "Soft button", summary: "A press with feedback")
+        let info = MotionAtomInfo(
+            id: "soft-button",
+            category: "Inputs",
+            name: "Soft button",
+            summary: "A press with feedback",
+            layer: "atom",
+            pack: "controls",
+            families: ["Morph"],
+            formula: "resp(dt)"
+        )
         XCTAssertTrue(info.matches("  INPUTS   feedback "))
         XCTAssertTrue(info.matches("soft-button"))
+        XCTAssertTrue(info.matches("controls morph"))
+        XCTAssertTrue(info.matches("atom resp"))
         XCTAssertTrue(info.matches("\n"))
         XCTAssertFalse(info.matches("soft missing"))
     }

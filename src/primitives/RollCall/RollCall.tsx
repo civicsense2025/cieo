@@ -15,8 +15,9 @@ export interface RollCallProps {
 }
 export function rollColumns(n: number): number { return Math.min(4, Math.max(1, Math.floor(Number.isFinite(n) ? n : 3))); }
 export function RollCall({ className, slotProps, groups, columns = 3 }: RollCallProps) {
+  const ownedStyle = { columnCount: rollColumns(columns) };
   return (
-    <div {...customizePart(slotProps?.root, "cieo cieo-p-roll-call", undefined, className)} style={{ columnCount: rollColumns(columns) }}>
+    <div className="cieo cieo-p-roll-call" style={ownedStyle} {...customizePart(slotProps?.root, "cieo cieo-p-roll-call", ownedStyle, className)}>
       {groups.filter((g) => g.members.length > 0).map((g) => (
         <section key={g.id} style={{ ['--cieo-roll' as string]: g.color }}>
           <h3><i aria-hidden="true" />{g.title} <span>{g.members.length}</span></h3>

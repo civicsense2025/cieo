@@ -56,7 +56,7 @@ public struct ListToDetailAtom: MotionAtomView {
                 Text(p.title).font(expanded ? .headline : .footnote.weight(.semibold)).lineLimit(expanded ? 3 : 2)
                 if expanded {
                     Text(p.by).font(.caption).foregroundStyle(.secondary).opacity(textShown ? 1 : 0)
-                    ForEach(Array(p.body.enumerated()), id: \.offset) { k, s in
+                    ForEach(Array(p.body.enumerated()), id: \.element) { k, s in
                         Text(s).font(.footnote).fixedSize(horizontal: false, vertical: true)
                             .opacity(textShown ? 1 : 0).offset(y: textShown ? 0 : 6)
                             .animation(reduce ? nil : (textShown ? .motion(.base).delay(Double(k) * 0.05 + 0.05) : .motionExit), value: textShown)

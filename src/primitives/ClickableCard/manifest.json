@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/ClickableCard/ClickableCard.tsx", "symbol": "ClickableCard" },
-  "dependencies": [],
+  "dependencies": ["Slot"],
   "nativePrimitives": [],
   "properties": [ {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}, {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"See TypeScript declaration for the named presentation or content slot contract."}],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],

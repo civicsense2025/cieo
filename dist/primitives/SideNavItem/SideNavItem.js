@@ -1,7 +1,12 @@
 // src/primitives/SideNavItem/SideNavItem.tsx
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { Slot } from '../Slot/Slot.js';
 import { customizePart } from '../customization.js';
-export function SideNavItem({ className, slotProps, href, current = false, children }) {
-    return (_jsx("a", { href: href, "aria-current": current ? 'page' : undefined, className: "cieo cieo-side-nav-item", ...customizePart(slotProps?.root, "cieo cieo-side-nav-item", undefined, className), children: children }));
+export function SideNavItem({ className, slotProps, href, current = false, asChild = false, ref, style, children, ...rest }) {
+    const customized = customizePart(slotProps?.root, 'cieo cieo-side-nav-item', style, className);
+    if (asChild) {
+        return (_jsx(Slot, { asChild: true, ref: ref, ...rest, ...(href !== undefined ? { href } : {}), "aria-current": current ? 'page' : undefined, className: "cieo cieo-side-nav-item", style: style, ...customized, children: children }));
+    }
+    return (_jsx("a", { ref: ref, ...rest, href: href, "aria-current": current ? 'page' : undefined, className: "cieo cieo-side-nav-item", style: style, ...customized, children: children }));
 }

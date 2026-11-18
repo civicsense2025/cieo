@@ -34,7 +34,7 @@ public struct ExpressPayAtom: MotionAtomView {
                 .padding(14).frame(width: 280, height: 330)
                 if sheet {
                     VStack(spacing: 8) {
-                        Text("Order · 2 items").font(.system(size: 13, weight: .semibold)).lineSpacing(6.5).frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Order · 2 items").font(.system(size: 13, weight: .semibold)).lineSpacing(3).frame(maxWidth: .infinity, alignment: .leading)
                         line("Scout backpack", "$68.00")
                         line("Trail socks", "$14.00")
                         if coupon { line("Coupon SHIP10", "−$10.00") }
@@ -60,7 +60,7 @@ public struct ExpressPayAtom: MotionAtomView {
 
     private func line(_ a: String, _ b: String) -> some View {
         HStack {
-            Text(a).font(.system(size: 13)).lineSpacing(6.5).foregroundStyle(.secondary)
+            Text(a).font(.system(size: 13)).lineSpacing(3).foregroundStyle(.secondary)
             Spacer()
             Text(b).font(.system(size: 13)).monospacedDigit()
         }

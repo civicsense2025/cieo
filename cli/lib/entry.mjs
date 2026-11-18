@@ -13,6 +13,7 @@ const BLOCK_LINES = [
   "import 'cieo/tokens.css';",
   "import 'cieo/design.css';",
   "import 'cieo/primitives.css';",
+  "import 'cieo/controls.css';",
   "import './cieo-theme.css';",
   MARKER_END,
 ];

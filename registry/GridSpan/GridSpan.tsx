@@ -1,5 +1,4 @@
 // src/primitives/GridSpan/GridSpan.tsx
-'use client';
 /* GridSpan. Grid item that spans N columns. Must live inside a Grid; this owns the span only. */
 import type { ReactNode } from 'react';
 import type { PrimitivePartProps } from '../parts.js';

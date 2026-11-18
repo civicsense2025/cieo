@@ -1,0 +1,183 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.text-area",
+  "componentVersion": "1.0.0",
+  "name": "TextArea",
+  "layer": "atom",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/TextArea/TextArea.tsx",
+    "symbol": "TextArea"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Visible label naming the textarea."
+    },
+    {
+      "id": "minRows",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 3,
+      "constraints": {}
+    },
+    {
+      "id": "maxRows",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 12,
+      "constraints": {}
+    },
+    {
+      "id": "showCount",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "description",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "error",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "required",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [],
+  "constraints": {
+    "layout": [
+      "wraps-control"
+    ],
+    "content": [
+      "no-fork-of-control"
+    ],
+    "motion": [
+      "control-spring-only"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "label",
+        "minRows",
+        "maxRows",
+        "showCount",
+        "description",
+        "error",
+        "disabled",
+        "required",
+        "className"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "First-class primitive contract over the auto-growing TextArea control with rolling character counter."
+  },
+  "extensions": {
+    "wraps": "src/controls/TextArea.tsx",
+    "customization": {
+      "status": "delegated",
+      "target": "TextArea",
+      "parts": [
+        "root",
+        "label",
+        "box",
+        "prefix",
+        "suffix",
+        "textarea",
+        "count",
+        "description",
+        "error"
+      ],
+      "reason": "Alias of TextArea; preserves its native/owning component props instead of creating a second control contract."
+    }
+  }
+}

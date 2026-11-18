@@ -7,6 +7,7 @@ public struct ConfirmHoldAtom: MotionAtomView {
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var asking = false
     @State private var gone = false
+    @State private var countdownOn = true
     @State private var progress: Double = 0
     @State private var task: Task<Void, Never>?
     public init() {}
@@ -14,7 +15,7 @@ public struct ConfirmHoldAtom: MotionAtomView {
         AtomStage(hint: "Danger slides in · hold 3s · row collapses") {
             ZStack {
                 VStack(spacing: 10) {
-                    Toggle("3s countdown", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                    Toggle("3s countdown", isOn: $countdownOn).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                     if !gone {
                         HStack { Text("About page").font(.footnote.weight(.medium)); Spacer()
                             Button("Delete") { withMotion(.base, reduceMotion: reduce) { asking = true } }
@@ -22,6 +23,8 @@ public struct ConfirmHoldAtom: MotionAtomView {
                             .padding(.horizontal, 10).padding(.vertical, 8)
                             .frame(width: 270).background(RoundedRectangle(cornerRadius: 10).fill(Color.primary.opacity(0.06)))
                             .transition(reduce ? .identity : .opacity.combined(with: .scale(scale: 0.96)).animation(.motion(.base)))
+                    } else {
+                        Button("Restore page") { withMotion(.base, reduceMotion: reduce) { gone = false } }.buttonStyle(.bordered).controlSize(.small)
                     }
                 }
                 if asking {
@@ -29,16 +32,16 @@ public struct ConfirmHoldAtom: MotionAtomView {
                         .transition(.opacity.animation(reduce ? nil : .motion(.base)))
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Delete “About”?").font(.headline)
-                        Text("Hold the button 3s to confirm.").font(.footnote).foregroundStyle(.secondary)
+                        Text(countdownOn ? "Hold the button 3s to confirm." : "Confirm deletion below.").font(.footnote).foregroundStyle(.secondary)
                         ZStack(alignment: .leading) {
-                            Button {} label: {
-                                Text("Hold to delete · \(max(0, 3 - Int(progress * 3)))")
+                            Button { if !countdownOn { finish() } } label: {
+                                Text(countdownOn ? "Hold to delete · \(max(0, 3 - Int(progress * 3)))" : "Delete now")
                                     .font(.callout.weight(.semibold)).foregroundStyle(.white)
                                     .frame(maxWidth: .infinity, minHeight: 40)
                                     .background(RoundedRectangle(cornerRadius: 10).fill(.red))
                             }
                             .buttonStyle(.plain)
-                            .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in hold() }.onEnded { _ in drop() })
+                            .simultaneousGesture(DragGesture(minimumDistance: 0).onChanged { _ in if countdownOn { hold() } }.onEnded { _ in if countdownOn { drop() } })
                             GeometryReader { g in Color.white.opacity(0.25).frame(width: g.size.width * progress, height: 40).clipShape(RoundedRectangle(cornerRadius: 10)).allowsHitTesting(false) }
                         }
                         HStack { Spacer(); Button("Cancel", action: cancel).buttonStyle(.bordered) }.padding(.top, 4)

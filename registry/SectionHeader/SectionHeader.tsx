@@ -14,5 +14,5 @@ export interface SectionHeaderProps {
 }
 export function SectionHeader({ className, slotProps, title, level = 2, action }: SectionHeaderProps) {
   const Tag = `h${level}` as const;
-  return (<div {...customizePart(slotProps?.root, "cieo cieo-p-section-header", undefined, className)}><Tag>{title}</Tag>{action ? <div className="cieo-p-section-header__action">{action}</div> : null}</div>);
+  return (<div className="cieo cieo-p-section-header" {...customizePart(slotProps?.root, "cieo cieo-p-section-header", undefined, className)}><Tag>{title}</Tag>{action ? <div className="cieo-p-section-header__action">{action}</div> : null}</div>);
 }

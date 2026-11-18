@@ -24,10 +24,12 @@ const COMPONENTS = [
   { name: 'Carousel', id: 'core.carousel', markers: ['useRef', 'scrollBy', 'clientWidth', 'role="region"'] },
 ];
 
+const RSC_STAGE = new Set(['Card']);
 for (const c of COMPONENTS) {
   test(`${c.name} tsx carries contract markers`, () => {
     const src = readFileSync(`src/primitives/${c.name}/${c.name}.tsx`, 'utf8');
-    assert.match(src, /'use client'/);
+    if (RSC_STAGE.has(c.name)) assert.doesNotMatch(src, /^['"]use client['"]/m);
+    else assert.match(src, /'use client'/);
     for (const m of c.markers) assert.ok(src.includes(m), `missing marker: ${m}`);
   });
 

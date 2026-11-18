@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/TopNavHeading/TopNavHeading.tsx", "symbol": "TopNavHeading" },
-  "dependencies": [],
+  "dependencies": ["Slot"],
   "nativePrimitives": [],
   "properties": [
     { "id": "href", "type": { "kind": "string" }, "required": false, "nullable": false, "default": "/", "constraints": { "minLength": 1, "maxLength": 1024 } },

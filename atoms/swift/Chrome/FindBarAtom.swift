@@ -30,7 +30,7 @@ public struct FindBarAtom: MotionAtomView {
                 }
                 .animation(reduce ? nil : .motion(.snap), value: open)
                 Text("A spring settles fast. A spring with damping settles calm.")
-                    .font(.system(size: 13.5)).lineSpacing(8)
+                    .font(.system(size: 13.5)).lineSpacing(3)
                     .padding(.horizontal, 16).padding(.vertical, 14)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 10))

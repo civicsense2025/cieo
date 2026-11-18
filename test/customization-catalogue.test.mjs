@@ -13,9 +13,9 @@ const entries=primitiveCustomizationInventory();
 test('every catalogue primitive has an explicit customization contract or delegated owning API',()=>{
   const saved=JSON.parse(readFileSync(new URL('../docs/generated/primitive-customization.json',import.meta.url),'utf8'));
   assert.deepEqual(saved.entries,entries);
-  assert.equal(entries.length,244);
-  assert.equal(entries.filter((entry)=>entry.status==='named-slots').length,237);
-  assert.deepEqual(entries.filter((entry)=>entry.status==='delegated-api').map((entry)=>entry.name),['CheckboxInput','CheckboxListItem','PowerSearch','RadioListItem','Selector','Slider','VStack']);
+  assert.equal(entries.length,254);
+  assert.equal(entries.filter((entry)=>entry.status==='named-slots').length,242);
+  assert.deepEqual(entries.filter((entry)=>entry.status==='delegated-api').map((entry)=>entry.name),['Button','CheckboxInput','CheckboxListItem','PowerSearch','RadioGroup','RadioListItem','Selector','Slider','Switch','TextArea','TextField','VStack']);
 });
 
 test('runtime presentation props cannot replace any owned catalogue data attribute',()=>{

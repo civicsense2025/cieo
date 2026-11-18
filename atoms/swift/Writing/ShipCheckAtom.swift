@@ -33,11 +33,12 @@ public struct ShipCheckAtom: MotionAtomView {
                 ForEach(steps.indices, id: \.self) { i in row(i) }
                 HStack {
                     Button { ship() } label: {
-                        ZStack { SwapText(all ? "✓ Shipped" : "Ship issue") }
+                        ZStack { SwapText(all && tweak ? "✓ Shipped" : "Ship issue") }
                             .frame(minWidth: 110, minHeight: 34)
                     }
-                    .buttonStyle(.borderedProminent).frame(minHeight: 32).tint(all ? .green : .accentColor)
+                    .buttonStyle(.borderedProminent).frame(minHeight: 32).tint(all && tweak ? .green : .accentColor)
                     .animation(reduce ? nil : .motion(.base), value: all)
+                    .animation(reduce ? nil : .motion(.base), value: tweak)
                     Button("Reset") { reset() }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
                 Toggle("Stamp on complete", isOn: $tweak)

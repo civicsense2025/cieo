@@ -39,7 +39,7 @@ public struct SegSwitchAtom: MotionAtomView {
                         RollingDigits(views[cur].count).font(.caption).foregroundStyle(.secondary)
                         Text("items").font(.caption).foregroundStyle(.secondary)
                     }
-                    ForEach(Array(views[cur].rows.enumerated()), id: \.offset) { k, r in
+                    ForEach(Array(views[cur].rows.enumerated()), id: \.element) { k, r in
                         Text(r).font(.footnote).padding(.vertical, 8)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .id("\(cur)-\(k)")

@@ -30,8 +30,9 @@ public struct QueryRailAtom: MotionAtomView {
                     }
                 }
                 .frame(maxWidth: 340, alignment: .leading)
-                .offset(x: railIn ? 0 : -16).opacity(railIn ? 1 : 0)
+                .offset(x: railIn && tweak ? 0 : -16).opacity(railIn && tweak ? 1 : 0)
                 .animation(reduce ? nil : .motion(.base), value: railIn)
+                .animation(reduce ? nil : .motion(.base), value: tweak)
                 .animation(reduce ? nil : .motion(.base), value: chips.map(\.done))
                 Toggle("Slide rail in", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)

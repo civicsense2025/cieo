@@ -16,7 +16,7 @@ export interface PersonRowProps {
 }
 export function PersonRow({ className, slotProps, name, detail, src, ring, compact = false, grayscale = false }: PersonRowProps) {
   return (
-    <div {...customizePart(slotProps?.root, "cieo cieo-p-person-row", undefined, className)} data-compact={compact ? '' : undefined}>
+    <div className="cieo cieo-p-person-row" {...customizePart(slotProps?.root, "cieo cieo-p-person-row", undefined, className)} data-compact={compact ? '' : undefined}>
       <Portrait src={src} ring={ring} grayscale={grayscale} size={compact ? 'small' : 'regular'} />
       <span className="cieo-p-person-row__text"><b>{name}</b>{detail ? <span>{detail}</span> : null}</span>
     </div>

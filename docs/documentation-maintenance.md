@@ -11,7 +11,8 @@
 ## Owners and scope
 
 [Source map](source-map.json) assigns reusable Apple components, motion, web
-controls, portable design and dependency/documentation tooling to current docs.
+controls, portable design and dependency/documentation tooling to current docs,
+including `Tests/CieoGalleryTests/**/*` and `CieoAtoms`'s shared `CieoUI` foundation dependency in `Package.swift`.
 [Apple contracts](apple-components.md), [web controls](../README.md#controls)
 and [portable design](design-system.md) own generic APIs. Consumers own branding,
 interface copy, domain state, persistence, authentication and acceptance.

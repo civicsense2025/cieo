@@ -31,6 +31,7 @@ public struct SegmentedControlOption<Value: Hashable>: Identifiable {
 /// unselected button. Twin of the web `SegmentedControl`.
 public struct SegmentedControl<Value: Hashable, Accessory: View>: View {
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     private let label: Text
     @Binding private var selection: Value
@@ -60,7 +61,7 @@ public struct SegmentedControl<Value: Hashable, Accessory: View>: View {
                     .scrollBounceBehavior(.basedOnSize, axes: .horizontal)
                     .onAppear { reader.scrollTo(selection) }
                     .onChange(of: selection) { _, value in
-                        withMotion(.base, reduceMotion: reduceMotion) { reader.scrollTo(value) }
+                        withMotion(.base, reduceMotion: reduceMotion || !policy.allowsMotion) { reader.scrollTo(value) }
                     }
             }
         }

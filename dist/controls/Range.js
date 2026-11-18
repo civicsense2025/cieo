@@ -8,9 +8,10 @@ import { S } from '../core/spring.js';
 import { Digits } from '../react/index.js';
 import { cx } from './classes.js';
 import { Driver } from './motion.js';
+import { customizeControlPart } from './parts.js';
 const pct = (v, min, max) => (max > min ? ((v - min) / (max - min)) * 100 : 0);
 export const Range = forwardRef(function Range(props, ref) {
-    const { label, hideLabel, showValue, formatValue = String, className, id, onInput, ...rest } = props;
+    const { label, hideLabel, showValue, formatValue = String, slotProps, className, id, onInput, ...rest } = props;
     const uid = useId();
     const inputId = id ?? `${uid}r`;
     const min = Number(rest.min ?? 0);
@@ -35,7 +36,9 @@ export const Range = forwardRef(function Range(props, ref) {
         else if (ref)
             ref.current = el;
     };
-    return (_jsxs("div", { ref: root, className: cx('cieo-ctl', 'cieo-range', className), style: initial.current, children: [_jsxs("div", { className: hideLabel ? 'cieo-vh' : 'cieo-range-head', children: [_jsx("label", { htmlFor: inputId, className: "cieo-label", children: label }), showValue ? (_jsx("output", { htmlFor: inputId, className: "cieo-range-value", children: _jsx(RangeReadout, { initial: start, format: formatValue, bind: (api) => (readout.current = api) }) })) : null] }), _jsx("input", { ...rest, ref: setRef, id: inputId, type: "range", className: "cieo-range-input", onPointerDown: (e) => {
+    const rootClass = cx('cieo-ctl', 'cieo-range', className);
+    const headClass = hideLabel ? 'cieo-vh' : 'cieo-range-head';
+    return (_jsxs("div", { ref: root, className: rootClass, style: initial.current, ...customizeControlPart(slotProps?.root, rootClass, initial.current), children: [_jsxs("div", { className: headClass, ...customizeControlPart(slotProps?.header, headClass), children: [_jsx("label", { htmlFor: inputId, className: "cieo-label", ...customizeControlPart(slotProps?.label, 'cieo-label'), children: label }), showValue ? (_jsx("output", { htmlFor: inputId, className: "cieo-range-value", ...customizeControlPart(slotProps?.value, 'cieo-range-value'), children: _jsx(RangeReadout, { initial: start, format: formatValue, bind: (api) => (readout.current = api) }) })) : null] }), _jsx("input", { ...rest, ref: setRef, id: inputId, type: "range", className: "cieo-range-input", onPointerDown: (e) => {
                     dragging.current = false;
                     rest.onPointerDown?.(e);
                 }, onPointerMove: (e) => {
@@ -50,7 +53,7 @@ export const Range = forwardRef(function Range(props, ref) {
                     follow(v);
                     readout.current?.set(v);
                     onInput?.(e);
-                } })] }));
+                }, ...customizeControlPart(slotProps?.input, 'cieo-range-input', rest.style) })] }));
 });
 /* The readout keeps its own state so a drag re-renders only the number, never the whole control. */
 function RangeReadout({ initial, format, bind }) {

@@ -22,12 +22,13 @@ for (const p of files) {
   for (const m of text.matchAll(/['"`](--cieo-[\w-]+)['"`]\s*[:,\]]/g)) defined.add(m[1]);
   for (const m of text.matchAll(/var\(\s*(--cieo-[\w-]+)/g)) uses.push([p, text.slice(0, m.index).split('\n').length, m[1]]);
 }
-// Tokens generated at runtime by createTheme are declared through the generator's put() calls.
+// Tokens generated at runtime by createTheme are declared through the generator's put() and color() calls.
 for (const m of readFileSync(`${root}/design/foundations.js`, 'utf8').matchAll(/put\(`?'?([\w-]+)/g)) defined.add(`--cieo-${m[1]}`);
-// Documented consumer override hooks: intentionally never declared by Cieo, always used with a fallback
-// that reads a theme token. Keep this list short; a new hook needs a fallback and a line here.
+for (const m of readFileSync(`${root}/design/theme.js`, 'utf8').matchAll(/color\(`?'?([\w-]+)/g)) defined.add(`--cieo-color-${m[1]}`);
+// Documented consumer & Tier-4 component override hooks: always used with a fallback that reads a theme token.
 const HOOKS = [/^--cieo-control-(bg|fg|muted|border|border-strong|raised|accent|accent-fg|danger|success|success-fg|popover-bg|shadow|knob|height-sm|height-md|font)$/,
   /^--cieo-popover-(z|border|radius|background|color|padding|shadow)$/, /^--cieo-search-(width|radius)$/, /^--cieo-(radius|field-height|focus-ring)$/, /^--cieo-i$/,
+  /^--cieo-(dialog|sheet|toast|overlay|card|button|badge|tabs|input|chip|avatar|table|menu|tooltip|nav)-(z|bg|fg|color|background|border|radius|padding|gap|shadow|width|height|indicator-color)$/,
   // Editorial frames: per-instance colours set inline (topic dot, portrait ring, legend swatch, roll-call group) and the host's block ground and its text partners.
   /^--cieo-(topic-dot|portrait-ring|legend|roll|block|on-block|on-block-muted|frame-ground)$/];
 let failures = 0;

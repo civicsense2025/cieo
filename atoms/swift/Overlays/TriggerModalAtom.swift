@@ -6,18 +6,19 @@ public struct TriggerModalAtom: MotionAtomView {
         summary: "The modal grows from the trigger rect on base while the scrim fades. Closing snaps back into the trigger faster, and focus returns to it.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var open = false
+    @State private var scrimFade = true
     @FocusState private var closeFocused: Bool
     public init() {}
     public var body: some View {
         AtomStage(hint: "Grows from the button, returns into it") {
             ZStack {
                 VStack(spacing: 8) {
-                    Toggle("Scrim fade", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary).controlSize(.small)
+                    Toggle("Scrim fade", isOn: $scrimFade).font(.caption).foregroundStyle(.secondary).controlSize(.small)
                     Button("Read story") { withMotion(.base, reduceMotion: reduce) { open = true }; DispatchQueue.main.asyncAfter(deadline: .now()+0.05) { closeFocused = true } }
                         .buttonStyle(.borderedProminent)
                 }
                 if open {
-                    Color.black.opacity(0.35).ignoresSafeArea().onTapGesture { shut() }
+                    Color.black.opacity(scrimFade ? 0.35 : 0.001).ignoresSafeArea().onTapGesture { shut() }
                         .transition(.opacity.animation(reduce ? nil : .motion(.base)))
                     dialog.transition(reduce ? .identity : .asymmetric(
                         insertion: .opacity.combined(with: .scale(scale: 0.82)).animation(.motion(.base)),

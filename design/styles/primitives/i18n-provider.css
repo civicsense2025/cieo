@@ -1,0 +1,4 @@
+/* design/styles/primitives/i18n-provider.css */
+@layer cieo.components {
+  :where(.cieo).cieo-i18n-provider { min-inline-size: 0; color: var(--cieo-color-text); }
+}

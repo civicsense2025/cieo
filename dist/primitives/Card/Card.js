@@ -1,5 +1,3 @@
-// src/primitives/Card/Card.tsx
-'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function Card({ title, children, className, slotProps }) {

@@ -7,6 +7,15 @@ import { S } from '../core/spring.js';
 import { Digits } from '../react/index.js';
 import { cx } from './classes.js';
 import { Driver } from './motion.js';
+import { customizeControlPart, type ControlPartProps } from './parts.js';
+
+export interface RangeSlotProps {
+  root?: ControlPartProps;
+  header?: ControlPartProps;
+  label?: ControlPartProps;
+  value?: ControlPartProps;
+  input?: ControlPartProps;
+}
 
 export type RangeProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> & {
   label: ReactNode;
@@ -14,12 +23,13 @@ export type RangeProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 's
   /** Show the current value next to the label, rolling as it changes. */
   showValue?: boolean;
   formatValue?: (value: number) => string;
+  slotProps?: RangeSlotProps;
 };
 
 const pct = (v: number, min: number, max: number) => (max > min ? ((v - min) / (max - min)) * 100 : 0);
 
 export const Range = forwardRef<HTMLInputElement, RangeProps>(function Range(props, ref) {
-  const { label, hideLabel, showValue, formatValue = String, className, id, onInput, ...rest } = props;
+  const { label, hideLabel, showValue, formatValue = String, slotProps, className, id, onInput, ...rest } = props;
   const uid = useId();
   const inputId = id ?? `${uid}r`;
   const min = Number(rest.min ?? 0);
@@ -45,14 +55,17 @@ export const Range = forwardRef<HTMLInputElement, RangeProps>(function Range(pro
     else if (ref) ref.current = el;
   };
 
+  const rootClass = cx('cieo-ctl', 'cieo-range', className);
+  const headClass = hideLabel ? 'cieo-vh' : 'cieo-range-head';
+
   return (
-    <div ref={root} className={cx('cieo-ctl', 'cieo-range', className)} style={initial.current}>
-      <div className={hideLabel ? 'cieo-vh' : 'cieo-range-head'}>
-        <label htmlFor={inputId} className="cieo-label">
+    <div ref={root} className={rootClass} style={initial.current} {...customizeControlPart(slotProps?.root, rootClass, initial.current)}>
+      <div className={headClass} {...customizeControlPart(slotProps?.header, headClass)}>
+        <label htmlFor={inputId} className="cieo-label" {...customizeControlPart(slotProps?.label, 'cieo-label')}>
           {label}
         </label>
         {showValue ? (
-          <output htmlFor={inputId} className="cieo-range-value">
+          <output htmlFor={inputId} className="cieo-range-value" {...customizeControlPart(slotProps?.value, 'cieo-range-value')}>
             <RangeReadout initial={start} format={formatValue} bind={(api) => (readout.current = api)} />
           </output>
         ) : null}
@@ -81,6 +94,7 @@ export const Range = forwardRef<HTMLInputElement, RangeProps>(function Range(pro
           readout.current?.set(v);
           onInput?.(e);
         }}
+        {...customizeControlPart(slotProps?.input, 'cieo-range-input', rest.style)}
       />
     </div>
   );

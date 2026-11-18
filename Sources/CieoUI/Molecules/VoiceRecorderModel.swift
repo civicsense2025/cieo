@@ -2,196 +2,6 @@ import AVFoundation
 import Foundation
 import Observation
 
-struct VoiceRecorderFinishReceipt: Sendable {
-    let successfully: Bool
-    let finishedAt: TimeInterval
-}
-
-private final class VoiceRecorderFinishReceiptStore: @unchecked Sendable {
-    private let lock = NSLock()
-    private var pending: VoiceRecorderFinishReceipt?
-
-    func store(_ receipt: VoiceRecorderFinishReceipt) {
-        lock.lock(); defer { lock.unlock() }
-        if pending == nil { pending = receipt }
-    }
-
-    func take() -> VoiceRecorderFinishReceipt? {
-        lock.lock(); defer { lock.unlock() }
-        defer { pending = nil }
-        return pending
-    }
-}
-
-@MainActor
-protocol VoiceRecorderDevice: AnyObject {
-    var isRecording: Bool { get }
-    var currentTime: TimeInterval { get }
-    var averagePower: Float { get }
-    var isMeteringEnabled: Bool { get set }
-    var onEncodingError: (@MainActor () -> Void)? { get set }
-    /// Called when the device stops by itself, with the monotonic time of its delegate event.
-    var onFinished: (@MainActor (Bool, TimeInterval) -> Void)? { get set }
-    /// One-shot receipt captured by the nonisolated delegate before its MainActor delivery is queued.
-    nonisolated func takePendingFinish() -> VoiceRecorderFinishReceipt?
-    func prepareToRecord() -> Bool
-    /// Records for at most `seconds`; the device stops itself at the limit, with no timer needed.
-    func record(forDuration seconds: TimeInterval) -> Bool
-    func pause()
-    func stop()
-    func updateMeters()
-}
-
-typealias VoiceRecorderFactory = @MainActor (URL, [String: Any]) throws -> any VoiceRecorderDevice
-
-@MainActor
-private final class SystemVoiceRecorderDevice: NSObject, VoiceRecorderDevice, AVAudioRecorderDelegate {
-    private let recorder: AVAudioRecorder
-    nonisolated private let finishReceipts = VoiceRecorderFinishReceiptStore()
-    var onEncodingError: (@MainActor () -> Void)?
-    var onFinished: (@MainActor (Bool, TimeInterval) -> Void)?
-
-    init(url: URL, settings: [String: Any]) throws {
-        recorder = try AVAudioRecorder(url: url, settings: settings)
-        super.init()
-        recorder.delegate = self
-    }
-
-    var isRecording: Bool { recorder.isRecording }
-    var currentTime: TimeInterval { recorder.currentTime }
-    var averagePower: Float { recorder.averagePower(forChannel: 0) }
-    var isMeteringEnabled: Bool {
-        get { recorder.isMeteringEnabled }
-        set { recorder.isMeteringEnabled = newValue }
-    }
-
-    func prepareToRecord() -> Bool { recorder.prepareToRecord() }
-    func record(forDuration seconds: TimeInterval) -> Bool { recorder.record(forDuration: seconds) }
-    func pause() { recorder.pause() }
-    func stop() { recorder.stop() }
-    func updateMeters() { recorder.updateMeters() }
-    nonisolated func takePendingFinish() -> VoiceRecorderFinishReceipt? { finishReceipts.take() }
-
-    nonisolated func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        let recorderID = ObjectIdentifier(recorder)
-        Task { @MainActor [weak self] in
-            guard let self, ObjectIdentifier(self.recorder) == recorderID else { return }
-            self.onEncodingError?()
-        }
-    }
-
-    nonisolated func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        let recorderID = ObjectIdentifier(recorder)
-        finishReceipts.store(VoiceRecorderFinishReceipt(successfully: flag, finishedAt: ProcessInfo.processInfo.systemUptime))
-        Task { @MainActor [weak self] in
-            guard let self, ObjectIdentifier(self.recorder) == recorderID,
-                  let receipt = self.takePendingFinish() else { return }
-            self.onFinished?(receipt.successfully, receipt.finishedAt)
-        }
-    }
-}
-
-/// A one-shot transfer from a nonisolated deinitializer to MainActor.
-private struct VoiceRecorderCleanupSnapshot: @unchecked Sendable {
-    let recorder: (any VoiceRecorderDevice)?
-    let timer: Timer?
-    let stopConfirmationTimer: Timer?
-    let fileURL: URL?
-    let sessionOwner: UUID?
-    let interruption: NSObjectProtocol?
-    let audioSession: AudioSessionManaging
-
-    var hasResources: Bool {
-        recorder != nil || timer != nil || stopConfirmationTimer != nil || fileURL != nil || sessionOwner != nil || interruption != nil
-    }
-
-    @MainActor
-    func clean(deleteFile: Bool) {
-        timer?.invalidate()
-        stopConfirmationTimer?.invalidate()
-        if let recorder {
-            recorder.onEncodingError = nil
-            recorder.onFinished = nil
-            recorder.stop()
-        }
-        if deleteFile, let fileURL { try? FileManager.default.removeItem(at: fileURL) }
-        #if os(iOS)
-        if let interruption { NotificationCenter.default.removeObserver(interruption) }
-        #endif
-        if let sessionOwner { try? audioSession.deactivate(owner: sessionOwner) }
-    }
-}
-
-/// Lock-backed resource ownership lets ordinary `deinit` transfer cleanup without touching MainActor state.
-private final class VoiceRecorderCleanupState: @unchecked Sendable {
-    private let lock = NSLock()
-    private let audioSession: AudioSessionManaging
-    private var storedRecorder: (any VoiceRecorderDevice)?
-    private var storedTimer: Timer?
-    private var storedStopConfirmationTimer: Timer?
-    private var storedFileURL: URL?
-    private var storedSessionOwner: UUID?
-    private var storedInterruption: NSObjectProtocol?
-
-    init(audioSession: AudioSessionManaging) { self.audioSession = audioSession }
-
-    @MainActor var recorder: (any VoiceRecorderDevice)? {
-        get { lock.lock(); defer { lock.unlock() }; return storedRecorder }
-        set { lock.lock(); defer { lock.unlock() }; storedRecorder = newValue }
-    }
-
-    @MainActor var timer: Timer? {
-        get { lock.lock(); defer { lock.unlock() }; return storedTimer }
-        set { lock.lock(); defer { lock.unlock() }; storedTimer = newValue }
-    }
-
-    @MainActor var stopConfirmationTimer: Timer? {
-        get { lock.lock(); defer { lock.unlock() }; return storedStopConfirmationTimer }
-        set { lock.lock(); defer { lock.unlock() }; storedStopConfirmationTimer = newValue }
-    }
-
-    @MainActor var fileURL: URL? {
-        get { lock.lock(); defer { lock.unlock() }; return storedFileURL }
-        set { lock.lock(); defer { lock.unlock() }; storedFileURL = newValue }
-    }
-
-    @MainActor var sessionOwner: UUID? {
-        get { lock.lock(); defer { lock.unlock() }; return storedSessionOwner }
-        set { lock.lock(); defer { lock.unlock() }; storedSessionOwner = newValue }
-    }
-
-    @MainActor var interruption: NSObjectProtocol? {
-        get { lock.lock(); defer { lock.unlock() }; return storedInterruption }
-        set { lock.lock(); defer { lock.unlock() }; storedInterruption = newValue }
-    }
-
-    func takeSnapshot() -> VoiceRecorderCleanupSnapshot {
-        lock.lock(); defer { lock.unlock() }
-        let snapshot = VoiceRecorderCleanupSnapshot(
-            recorder: storedRecorder,
-            timer: storedTimer,
-            stopConfirmationTimer: storedStopConfirmationTimer,
-            fileURL: storedFileURL,
-            sessionOwner: storedSessionOwner,
-            interruption: storedInterruption,
-            audioSession: audioSession
-        )
-        storedRecorder = nil
-        storedTimer = nil
-        storedStopConfirmationTimer = nil
-        storedFileURL = nil
-        storedSessionOwner = nil
-        storedInterruption = nil
-        return snapshot
-    }
-
-    func scheduleCleanup() {
-        let snapshot = takeSnapshot()
-        guard snapshot.hasResources else { return }
-        Task { @MainActor in snapshot.clean(deleteFile: true) }
-    }
-}
-
 /// Records a voice clip from the microphone with `AVAudioRecorder` and hands it to the host as a file with
 /// its length and waveform peaks. The host owns what happens to the file; the model owns the microphone.
 ///
@@ -201,71 +11,16 @@ private final class VoiceRecorderCleanupState: @unchecked Sendable {
 @MainActor
 @Observable
 public final class VoiceRecorderModel {
-    // MARK: - Types
-
-    public enum Phase: Sendable, Equatable { case idle, requesting, recording, paused, done, error }
-    public enum ErrorReason: Sendable, Equatable { case denied, unsupported, failed }
-
-    /// Where a take is: phase, whole seconds recorded so far, and the reason when it is in error.
-    public struct RecorderState: Sendable, Equatable {
-        public var phase: Phase
-        /// Whole seconds recorded so far.
-        public var elapsed: Int
-        /// Set only in the error phase.
-        public var reason: ErrorReason?
-
-        public init(phase: Phase = .idle, elapsed: Int = 0, reason: ErrorReason? = nil) {
-            self.phase = phase; self.elapsed = elapsed; self.reason = reason
-        }
-    }
-
-    public enum Event: Sendable, Equatable {
-        case start, granted, denied, unsupported, pause, resume, stop, cancel
-        case tick(Double)
-        case limit, fail, reset
-    }
-
-    /// Outcome of a hold-to-record gesture.
-    public enum HoldOutcome: Sendable, Equatable { case record, cancel }
-
-    /// Discrete events that are announced to VoiceOver. The running clock never is.
-    public enum AnnouncementKind: Sendable, Equatable {
-        case recording, paused, cancelled, denied, unsupported, failed, releaseToCancel, stopped, limit
-    }
-
-    /// A finished take. The file is an AAC `.m4a` in the temporary directory; move or upload it, the
-    /// model never touches it again.
-    public struct Clip: Sendable, Equatable {
-        public let url: URL
-        /// Length in seconds, paused time excluded.
-        public let duration: TimeInterval
-        /// 64 loudness readings from 0 to 1, ready for a waveform.
-        public let peaks: [Double]
-
-        public init(url: URL, duration: TimeInterval, peaks: [Double]) {
-            self.url = url; self.duration = duration; self.peaks = peaks
-        }
-    }
-
-    /// One spoken message. `id` changes every time, so the same sentence can be announced twice.
-    public struct Announcement: Sendable, Equatable {
-        public let id: Int
-        public let text: String
-    }
-
-    /// Asks for microphone permission. Replaceable so hosts and tests can supply their own answer.
-    public typealias PermissionRequest = @Sendable () async -> Bool
-
     // MARK: - Observable state
 
     /// The recorder's state machine position.
-    public private(set) var state = VoiceRecorderModel.idle
+    public internal(set) var state = VoiceRecorderModel.idle
     /// Snapshot of the shared audio-session repair state.
     public var audioSessionStatus: AudioSessionReconciliationStatus { audioSession.reconciliationStatus }
     /// Live loudness from 0 to 1 while recording, 0 otherwise. Steps of 0.02 so views do not churn.
-    public private(set) var level: Double = 0
+    public internal(set) var level: Double = 0
     /// The latest discrete announcement, for the view to post to VoiceOver.
-    public private(set) var announcement: Announcement?
+    public internal(set) var announcement: Announcement?
 
     // MARK: - Configuration
 
@@ -278,43 +33,43 @@ public final class VoiceRecorderModel {
 
     // MARK: - Internals
 
-    private static let limitCompletionTolerance: TimeInterval = 0.1 // literal-ok: bound delegate and timer ordering jitter at the requested endpoint
-    private static let limitCompletionToleranceFraction: TimeInterval = 0.1 // literal-ok: scale the tolerance down for short recording segments
-    private static let stoppedRecorderDelegateGrace: TimeInterval = 0.25 // literal-ok: bounded time for AVAudioRecorder's queued finish callback to reach MainActor
+    static let limitCompletionTolerance: TimeInterval = 0.1 // literal-ok: bound delegate and timer ordering jitter at the requested endpoint
+    static let limitCompletionToleranceFraction: TimeInterval = 0.1 // literal-ok: scale the tolerance down for short recording segments
+    static let stoppedRecorderDelegateGrace: TimeInterval = 0.25 // literal-ok: bounded time for AVAudioRecorder's queued finish callback to reach MainActor
 
-    @ObservationIgnored private let permission: PermissionRequest
-    @ObservationIgnored private let recorderFactory: VoiceRecorderFactory
-    @ObservationIgnored private let audioSession: AudioSessionManaging
-    @ObservationIgnored private let cleanupState: VoiceRecorderCleanupState
-    @ObservationIgnored private let monotonicNow: @Sendable () -> TimeInterval
-    @ObservationIgnored private var peaks: [Double] = []
-    @ObservationIgnored private var session = 0
-    @ObservationIgnored private var announced = 0
-    @ObservationIgnored private var activeDeadline: TimeInterval?
-    @ObservationIgnored private var activeSegmentDuration: TimeInterval?
-    @ObservationIgnored private var remainingWhenPaused: TimeInterval?
+    @ObservationIgnored let permission: PermissionRequest
+    @ObservationIgnored let recorderFactory: VoiceRecorderFactory
+    @ObservationIgnored let audioSession: AudioSessionManaging
+    @ObservationIgnored let cleanupState: VoiceRecorderCleanupState
+    @ObservationIgnored let monotonicNow: @Sendable () -> TimeInterval
+    @ObservationIgnored var peaks: [Double] = []
+    @ObservationIgnored var session = 0
+    @ObservationIgnored var announced = 0
+    @ObservationIgnored var activeDeadline: TimeInterval?
+    @ObservationIgnored var activeSegmentDuration: TimeInterval?
+    @ObservationIgnored var remainingWhenPaused: TimeInterval?
 
-    private var recorder: (any VoiceRecorderDevice)? {
+    var recorder: (any VoiceRecorderDevice)? {
         get { cleanupState.recorder }
         set { cleanupState.recorder = newValue }
     }
-    private var fileURL: URL? {
+    var fileURL: URL? {
         get { cleanupState.fileURL }
         set { cleanupState.fileURL = newValue }
     }
-    private var sessionOwner: UUID? {
+    var sessionOwner: UUID? {
         get { cleanupState.sessionOwner }
         set { cleanupState.sessionOwner = newValue }
     }
-    private var timer: Timer? {
+    var timer: Timer? {
         get { cleanupState.timer }
         set { cleanupState.timer = newValue }
     }
-    private var stopConfirmationTimer: Timer? {
+    var stopConfirmationTimer: Timer? {
         get { cleanupState.stopConfirmationTimer }
         set { cleanupState.stopConfirmationTimer = newValue }
     }
-    private var interruption: NSObjectProtocol? {
+    var interruption: NSObjectProtocol? {
         get { cleanupState.interruption }
         set { cleanupState.interruption = newValue }
     }
@@ -340,126 +95,6 @@ public final class VoiceRecorderModel {
 
     deinit {
         cleanupState.scheduleCleanup()
-    }
-
-    // MARK: - Pure helpers
-
-    nonisolated public static let idle = RecorderState()
-
-    /// True while a microphone, or a request for one, is in use.
-    nonisolated public static func isActive(_ phase: Phase) -> Bool {
-        phase == .requesting || phase == .recording || phase == .paused
-    }
-
-    /// Pure recorder state machine. Cancel from any state goes back to idle, and only stop or limit reach
-    /// done, so a cancelled take can never produce a clip.
-    nonisolated public static func step(_ state: RecorderState, _ event: Event) -> RecorderState {
-        let phase = state.phase
-        func to(_ next: Phase, elapsed: Int? = nil, reason: ErrorReason? = nil) -> RecorderState {
-            RecorderState(phase: next, elapsed: elapsed ?? state.elapsed, reason: reason)
-        }
-        switch event {
-        case .start:
-            return phase == .idle || phase == .done || phase == .error ? to(.requesting, elapsed: 0) : state
-        case .granted:
-            return phase == .requesting ? to(.recording) : state
-        case .denied:
-            return phase == .requesting ? to(.error, reason: .denied) : state
-        case .unsupported:
-            return phase == .idle || phase == .requesting ? to(.error, elapsed: 0, reason: .unsupported) : state
-        case .pause:
-            return phase == .recording ? to(.paused) : state
-        case .resume:
-            return phase == .paused ? to(.recording) : state
-        case .stop, .limit:
-            return phase == .recording || phase == .paused ? to(.done) : state
-        case .tick(let seconds):
-            guard phase == .recording else { return state }
-            let elapsed = seconds.isFinite ? max(0, Int(seconds.rounded(.down))) : state.elapsed
-            return elapsed == state.elapsed ? state : RecorderState(phase: phase, elapsed: elapsed, reason: state.reason)
-        case .fail:
-            return isActive(phase) ? to(.error, reason: .failed) : state
-        case .cancel, .reset:
-            return phase == .idle && state.elapsed == 0 ? state : idle
-        }
-    }
-
-    /// True when a step finished a take, which is the only moment a clip may be handed to the host.
-    nonisolated public static func shouldEmitClip(from previous: RecorderState, to next: RecorderState) -> Bool {
-        isActive(previous.phase) && next.phase == .done
-    }
-
-    /// Shrinks loudness readings (0...1) to at most `AudioWaveform.maximumBarCount` bars, each the loudest
-    /// reading in its slice. Empty input gives `[]`; non-finite readings count as silence.
-    nonisolated public static func downsamplePeaks(_ samples: [Double], count: Int = 64) -> [Double] { // literal-ok: waveform bar count shared with the web
-        let n = samples.count
-        guard n > 0, count > 0 else { return [] }
-        let outputCount = min(count, AudioWaveform.maximumBarCount)
-        return (0..<outputCount).map { i in
-            let start = min(n - 1, i * n / outputCount)
-            let end = max(start + 1, (i + 1) * n / outputCount)
-            var peak = 0.0
-            var j = start
-            while j < end && j < n {
-                let v = samples[j]
-                if v.isFinite { peak = max(peak, min(1, abs(v))) }
-                j += 1
-            }
-            return peak
-        }
-    }
-
-    /// Points the finger may slide left in hold mode before the take is thrown away.
-    nonisolated public static let holdCancelDistance: Double = HoldPolicy.slideCancelDistance
-
-    /// Hold-to-record gesture: sliding left past 80 points means cancel, anything else keeps recording.
-    nonisolated public static func holdGesture(dx: Double) -> HoldOutcome {
-        HoldPolicy.slideCancels(dx: dx) ? .cancel : .record
-    }
-
-    /// Whole seconds left before the limit, never below 0.
-    nonisolated public static func remainingSeconds(elapsed: Double, maxDuration: Double) -> Int {
-        max(0, Int((maxDuration - elapsed).rounded(.up)))
-    }
-
-    /// True in the last 10 seconds of a take, when the clock switches to a countdown. Limits of 10 seconds
-    /// or less never warn.
-    nonisolated public static func isNearLimit(elapsed: Double, maxDuration: Double) -> Bool {
-        maxDuration > 10 && remainingSeconds(elapsed: elapsed, maxDuration: maxDuration) <= 10 // literal-ok: the web warning window
-    }
-
-    /// Clock text, m:ss under an hour and h:mm:ss above; the shared AudioTime format.
-    nonisolated public static func formatClock(_ seconds: Double) -> String {
-        AudioTime.formatAudioTime(seconds)
-    }
-
-    /// Spoken time such as "1 minute 3 seconds"; the shared AudioTime wording.
-    nonisolated public static func spokenClock(_ seconds: Double) -> String {
-        AudioTime.speakAudioTime(seconds)
-    }
-
-    /// Sentence for VoiceOver. Only discrete events are announced, never the running clock.
-    nonisolated public static func announcementText(_ kind: AnnouncementKind, seconds: Double = 0) -> String {
-        switch kind {
-        case .recording: "Recording"
-        case .paused: "Paused"
-        case .cancelled: "Recording cancelled"
-        case .denied: "Microphone access is blocked. Allow it in Settings."
-        case .unsupported: "Voice recording is not supported on this device."
-        case .failed: "Recording failed. Try again."
-        case .releaseToCancel: "Release to cancel"
-        case .limit: "Time limit reached. Recording stopped, \(spokenClock(seconds))"
-        case .stopped: "Recording stopped, \(spokenClock(seconds))"
-        }
-    }
-
-    /// Asks the system for microphone access: `AVAudioApplication` on iOS, `AVCaptureDevice` on the Mac.
-    nonisolated public static let systemPermission: PermissionRequest = {
-        #if os(iOS)
-        return await AVAudioApplication.requestRecordPermission()
-        #else
-        return await AVCaptureDevice.requestAccess(for: .audio)
-        #endif
     }
 
     // MARK: - Intents
@@ -543,198 +178,5 @@ public final class VoiceRecorderModel {
         releaseRecorder(deleteFile: true)
         level = 0
         if Self.isActive(state.phase) { send(.cancel) }
-    }
-
-    // MARK: - Recording
-
-    private func beginRecording() {
-        #if os(macOS)
-        guard AVCaptureDevice.default(for: .audio) != nil else {
-            send(.unsupported)
-            announce(.unsupported)
-            return
-        }
-        #endif
-        do {
-            let owner = UUID()
-            try audioSession.activate(.recording, owner: owner)
-            sessionOwner = owner
-            #if os(iOS)
-            observeInterruptions()
-            #endif
-            let url = FileManager.default.temporaryDirectory.appendingPathComponent("voice-\(UUID().uuidString).m4a")
-            fileURL = url
-            let settings: [String: Any] = [
-                AVFormatIDKey: kAudioFormatMPEG4AAC,
-                AVSampleRateKey: 44_100, // literal-ok: CD-quality sample rate
-                AVNumberOfChannelsKey: 1, // literal-ok: mono voice
-                AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue,
-            ]
-            let recorder = try recorderFactory(url, settings)
-            self.recorder = recorder
-            recorder.isMeteringEnabled = true
-            recorder.onEncodingError = { [weak self, weak recorder] in
-                guard let self, let recorder, self.recorder === recorder else { return }
-                self.fail()
-            }
-            recorder.onFinished = { [weak self, weak recorder] successfully, finishedAt in
-                guard let self, let recorder, self.recorder === recorder else { return }
-                self.handleRecorderFinish(
-                    VoiceRecorderFinishReceipt(successfully: successfully, finishedAt: finishedAt),
-                    from: recorder
-                )
-            }
-            guard recorder.prepareToRecord() else { throw CocoaError(.fileWriteUnknown) }
-            let startedAt = monotonicNow()
-            guard startedAt.isFinite, (startedAt + maxDuration).isFinite else { throw CocoaError(.fileWriteUnknown) }
-            activeDeadline = startedAt + maxDuration
-            activeSegmentDuration = maxDuration
-            remainingWhenPaused = nil
-            guard recorder.record(forDuration: maxDuration) else { throw CocoaError(.fileWriteUnknown) }
-            peaks = []
-            send(.granted)
-            announce(.recording)
-            startPolling()
-        } catch {
-            releaseRecorder(deleteFile: true)
-            send(.fail)
-            announce(.failed)
-        }
-    }
-
-    /// Seconds still allowed in the take, so the device's own limit survives pause and resume.
-    private func remainingTake(_ recorder: any VoiceRecorderDevice) -> TimeInterval {
-        let deviceRemaining = remainingOnDevice(recorder)
-        guard deviceRemaining.isFinite else { return .nan }
-        guard let activeDeadline else { return deviceRemaining }
-        let now = monotonicNow()
-        guard now.isFinite else { return deviceRemaining }
-        return min(deviceRemaining, max(0, activeDeadline - now))
-    }
-
-    private func remainingOnDevice(_ recorder: any VoiceRecorderDevice) -> TimeInterval {
-        let elapsed = recorder.currentTime
-        guard elapsed.isFinite else { return .nan }
-        return max(0, maxDuration - elapsed)
-    }
-
-    private func hasReachedLimit(at time: TimeInterval) -> Bool {
-        guard let activeDeadline, let activeSegmentDuration, time.isFinite else { return false }
-        return abs(time - activeDeadline) <= Self.limitTolerance(for: activeSegmentDuration)
-    }
-
-    private func handleRecorderFinish(_ receipt: VoiceRecorderFinishReceipt, from recorder: any VoiceRecorderDevice) {
-        guard self.recorder === recorder else { return }
-        if receipt.successfully, hasReachedLimit(at: receipt.finishedAt) { finish(.limit) }
-        else { fail() }
-    }
-
-    private func awaitStoppedRecorderCompletion() {
-        guard state.phase == .recording || state.phase == .paused,
-              stopConfirmationTimer == nil else { return }
-        timer?.invalidate()
-        timer = nil
-        let confirmationTimer = Timer(timeInterval: Self.stoppedRecorderDelegateGrace, repeats: false) { [weak self] _ in
-            MainActor.assumeIsolated {
-                guard let self, let recorder = self.recorder else { return }
-                guard let receipt = recorder.takePendingFinish() else { self.fail(); return }
-                self.handleRecorderFinish(receipt, from: recorder)
-            }
-        }
-        RunLoop.main.add(confirmationTimer, forMode: .common)
-        stopConfirmationTimer = confirmationTimer
-    }
-
-    private static func limitTolerance(for segmentDuration: TimeInterval) -> TimeInterval {
-        min(limitCompletionTolerance, segmentDuration * limitCompletionToleranceFraction)
-    }
-
-    private func startPolling() {
-        timer?.invalidate()
-        let timer = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in // literal-ok: 20 Hz metering
-            MainActor.assumeIsolated { self?.poll() }
-        }
-        RunLoop.main.add(timer, forMode: .common)
-        self.timer = timer
-    }
-
-    func poll() {
-        guard let recorder else { return }
-        guard recorder.isRecording else {
-            if state.phase == .recording { awaitStoppedRecorderCompletion() }
-            return
-        }
-        recorder.updateMeters()
-        let heard = AudioLevelMeter.decibelsLevel(Double(recorder.averagePower))
-        peaks.append(heard)
-        let quantized = (heard * 50).rounded() / 50 // literal-ok: 0.02 steps
-        if quantized != level { level = quantized }
-        let elapsed = recorder.currentTime
-        send(.tick(elapsed))
-        if elapsed >= maxDuration { finish(.limit) }
-    }
-
-    private func finish(_ event: Event) {
-        guard state.phase == .recording || state.phase == .paused, let recorder, let url = fileURL else { return }
-        // A device that stopped itself at the limit has already reset its clock, so the limit is the length.
-        let duration = event == .limit ? maxDuration : min(maxDuration, (recorder.currentTime * 10).rounded() / 10) // literal-ok: tenths of a second
-        let previous = state
-        let readings = peaks
-        releaseRecorder(deleteFile: false)
-        level = 0
-        send(event)
-        announce(event == .limit ? .limit : .stopped, seconds: duration)
-        if Self.shouldEmitClip(from: previous, to: state) {
-            let clip = Clip(url: url, duration: duration, peaks: Self.downsamplePeaks(readings))
-            if let onRecorded { onRecorded(clip) }
-            else { try? FileManager.default.removeItem(at: url) }
-        }
-    }
-
-    private func fail() {
-        guard state.phase == .recording || state.phase == .paused else { return }
-        releaseRecorder(deleteFile: true)
-        level = 0
-        send(.fail)
-        announce(.failed)
-    }
-
-    /// Confirms the finish receipt after an interruption; already-paused takes remain available to resume or cancel.
-    func handleInterruptionBegan() {
-        guard state.phase == .recording else { return }
-        awaitStoppedRecorderCompletion()
-    }
-
-    /// Stops the timer and recorder and deactivates the audio session; optionally deletes the file.
-    private func releaseRecorder(deleteFile: Bool) {
-        session += 1
-        activeDeadline = nil
-        activeSegmentDuration = nil
-        remainingWhenPaused = nil
-        let snapshot = cleanupState.takeSnapshot()
-        snapshot.clean(deleteFile: deleteFile)
-        peaks = []
-    }
-
-    #if os(iOS)
-    /// An interruption during recording enters bounded finish confirmation; an already-paused take remains resumable.
-    private func observeInterruptions() {
-        guard interruption == nil else { return }
-        interruption = NotificationCenter.default.addObserver(
-            forName: AVAudioSession.interruptionNotification, object: nil, queue: .main
-        ) { [weak self] note in
-            let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
-            MainActor.assumeIsolated {
-                if raw == AVAudioSession.InterruptionType.began.rawValue { self?.handleInterruptionBegan() }
-            }
-        }
-    }
-    #endif
-
-    private func send(_ event: Event) { state = Self.step(state, event) }
-
-    private func announce(_ kind: AnnouncementKind, seconds: Double = 0) {
-        announced += 1
-        announcement = Announcement(id: announced, text: Self.announcementText(kind, seconds: seconds))
     }
 }

@@ -1,0 +1,193 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.stagger-group",
+  "componentVersion": "1.0.0",
+  "name": "StaggerGroup",
+  "layer": "primitive",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/StaggerGroup/StaggerGroup.tsx",
+    "symbol": "StaggerGroup"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "budget",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 300,
+      "constraints": {},
+      "note": "Maximum total stagger window in milliseconds across all children."
+    },
+    {
+      "id": "delay",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 40,
+      "constraints": {},
+      "note": "Target per-item delay in milliseconds, compressed automatically to fit budget."
+    },
+    {
+      "id": "distance",
+      "type": {
+        "kind": "number"
+      },
+      "required": false,
+      "nullable": false,
+      "default": 6,
+      "constraints": {},
+      "note": "Vertical arrival drift in pixels."
+    },
+    {
+      "id": "triggerKey",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Re-runs staggered entrance when changed."
+    },
+    {
+      "id": "motion",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": true,
+      "constraints": {},
+      "note": "False renders end state immediately."
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {},
+      "note": "Alias to disable motion."
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Appended to the root classes without replacing library classes."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation record; see TypeScript declaration. Named parts: root."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "content",
+        "component"
+      ],
+      "min": 0,
+      "max": 64,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-primary"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "shrinkable-min-inline-0"
+    ],
+    "content": [
+      "semantic-children"
+    ],
+    "motion": [
+      "critically-damped-spring"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "budget",
+        "delay",
+        "distance",
+        "triggerKey",
+        "motion",
+        "disabled",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Bounded stagger entrance across direct children capped within a 300ms total window."
+  },
+  "extensions": {
+    "customization": {
+      "parts": [
+        "root"
+      ],
+      "contract": "presentation-only; controlled semantics and computed geometry remain library-owned"
+    }
+  }
+}

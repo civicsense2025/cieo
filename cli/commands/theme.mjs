@@ -8,8 +8,8 @@ export const USAGE = `Usage: cieo theme [key=value ...] [--print]
 
 Set theme axes in cieo.json and regenerate the theme stylesheet.
 
-Axes (any of): brand, scheme, density, radius
-Example: npx cieo theme brand=lagoon scheme=dark
+Axes (any of): brand, scheme, density, radius, contrast, font, display, ground, elevation, accent, zeta
+Example: npx cieo theme brand=instrument ground=paper radius=pill
 
 Options:
   --print  Print the generated CSS without writing anything.
@@ -17,7 +17,7 @@ Options:
 `;
 
 const FLAGS = { print: 'boolean', help: 'boolean' };
-export const THEME_KEYS = ['brand', 'scheme', 'density', 'radius'];
+export const THEME_KEYS = ['brand', 'scheme', 'density', 'radius', 'contrast', 'font', 'display', 'ground', 'elevation', 'accent', 'zeta'];
 
 function parsePairs(positionals) {
   const pairs = [];
@@ -54,7 +54,7 @@ export default async function run(rest) {
   const { config } = read;
 
   const theme = { ...config.theme };
-  for (const [key, value] of pairs) theme[key] = value;
+  for (const [key, value] of pairs) theme[key] = key === 'zeta' ? Number(value) : value;
   let validated;
   try {
     validated = createTheme(theme);

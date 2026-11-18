@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct SlotFillingFormAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "slotfill", category: "Forms", name: "Slot-filling form",
+    public static let info = MotionAtomInfo(id: "slotfill", category: "AI chat", name: "Slot-filling form",
         summary: "Missing slots stack compact while the first open one offers picks. Each answer inks a check and collapses, and the progress edge trails to a booked terminal.")
 
     private struct Slot {

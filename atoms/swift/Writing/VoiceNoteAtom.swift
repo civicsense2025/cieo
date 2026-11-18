@@ -69,15 +69,19 @@ public struct VoiceNoteAtom: MotionAtomView {
 
     private var tile: some View {
         HStack(spacing: 9) {
-            HStack(spacing: 2.5) {
-                ForEach(bars.indices, id: \.self) { i in
-                    Capsule().fill(.primary)
-                        .frame(width: 3, height: max(0, (drew ? bars[i] : 0) * (playing ? (pulse ? 1.15 : 0.85) : 1)))
-                        .animation(reduce ? nil : .motion(.soft).delay(Double(i) * 0.03), value: drew)
-                        .animation(reduce ? nil : .motion(.snap), value: pulse)
+            if tweak {
+                HStack(spacing: 2.5) {
+                    ForEach(bars.indices, id: \.self) { i in
+                        Capsule().fill(.primary)
+                            .frame(width: 3, height: max(0, (drew ? bars[i] : 0) * (playing ? (pulse ? 1.15 : 0.85) : 1)))
+                            .animation(reduce ? nil : .motion(.soft).delay(Double(i) * 0.03), value: drew)
+                            .animation(reduce ? nil : .motion(.snap), value: pulse)
+                    }
                 }
+                .frame(height: 26)
+            } else {
+                Image(systemName: "waveform").foregroundStyle(.secondary).frame(height: 26)
             }
-            .frame(height: 26)
             Text("0:12").font(.system(size: 12.5)).foregroundStyle(.secondary)
         }
         .padding(.horizontal, 12).frame(width: 190, height: 56, alignment: .leading)

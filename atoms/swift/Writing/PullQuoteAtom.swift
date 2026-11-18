@@ -18,16 +18,15 @@ public struct PullQuoteAtom: MotionAtomView {
                     Text("Mara kept the lamp lit long after the ferry left.")
                         .padding(14).background(.quaternary.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
                         .offset(y: lifting ? -8 : 0)
-                    if placed {
-                        Text("“We start over on the first line.”").italic()
-                            .padding(14).frame(maxWidth: .infinity, alignment: .leading)
-                            .overlay(alignment: .leading) { Rectangle().fill(.primary).frame(width: 3) }
-                            .background(.quaternary.opacity(0.16), in: RoundedRectangle(cornerRadius: 8))
-                            .motionTransition(.presence)
+                    if placed && tweak {
+                        quoteBlock
                     }
                     Text("The orchard deal could wait until morning, she said.")
                         .padding(14).background(.quaternary.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
                         .offset(y: lifting ? 8 : 0)
+                    if placed && !tweak {
+                        quoteBlock
+                    }
                     if !placed {
                         Text("“We start over on the first line.”").italic().font(.system(size: 14))
                             .padding(14).frame(maxWidth: .infinity, alignment: .leading)
@@ -52,6 +51,7 @@ public struct PullQuoteAtom: MotionAtomView {
                 }
                 .animation(reduce ? nil : .motion(.base), value: lifting)
                 .animation(reduce ? nil : .motion(.base), value: placed)
+                .animation(reduce ? nil : .motion(.base), value: tweak)
                 HStack { Spacer(); Button("Reset") { withMotion(.base, reduceMotion: reduce) { placed = false } }.buttonStyle(.bordered).frame(minHeight: 32) }
                 Toggle("Drop quotes inline", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
@@ -59,5 +59,13 @@ public struct PullQuoteAtom: MotionAtomView {
             }
             .frame(maxWidth: 320)
         }
+    }
+
+    private var quoteBlock: some View {
+        Text("“We start over on the first line.”").italic()
+            .padding(14).frame(maxWidth: .infinity, alignment: .leading)
+            .overlay(alignment: .leading) { Rectangle().fill(.primary).frame(width: 3) }
+            .background(.quaternary.opacity(0.16), in: RoundedRectangle(cornerRadius: 8))
+            .motionTransition(.presence)
     }
 }

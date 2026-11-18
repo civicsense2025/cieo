@@ -1,10 +1,21 @@
 // src/primitives/DropdownMenu/DropdownMenu.tsx
 'use client';
+/* DropdownMenu. Menu shell with controllable open state and spring enter/exit presence. */
+import {
+  cloneElement,
+  createContext,
+  isValidElement,
+  useId,
+  useLayoutEffect,
+  useRef,
+  type KeyboardEvent,
+  type MouseEvent,
+  type ReactNode,
+} from 'react';
+import { enabledIn, roveIndex, useDismiss, usePresence } from '../../react/index.js';
+import { useControllableState } from '../../state/react.js';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
-/* DropdownMenu. Menu shell. Trigger toggles it; Escape, outside press and choosing an item close it and return focus. Controlled `open` always wins. */
-import { cloneElement, createContext, isValidElement, useId, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
-import { enabledIn, roveIndex, useDismiss } from '../../react/index.js';
 
 export interface DropdownMenuContextValue {
   /** Closes the menu and returns focus to the trigger. */
@@ -15,7 +26,6 @@ export const DropdownMenuContext = createContext<DropdownMenuContextValue | null
 export interface DropdownMenuProps {
   className?: string;
   slotProps?: { triggerFallback?: PrimitivePartProps; root?: PrimitivePartProps; trigger?: PrimitivePartProps; panel?: PrimitivePartProps };
-
   /** Accessible name for the menu (e.g. "File actions"). Required. */
   label: string;
   /** Open state when controlled. */
@@ -24,6 +34,8 @@ export interface DropdownMenuProps {
   defaultOpen?: boolean;
   /** Called with the next open state. */
   onOpenChange?: (open: boolean) => void;
+  /** False renders the end state instantly. Defaults to true. */
+  motion?: boolean;
   /** Opener control (usually a Button). Exactly one. */
   trigger: ReactNode;
   children: ReactNode;
@@ -31,14 +43,29 @@ export interface DropdownMenuProps {
 
 type TriggerProps = { onClick?: (event: MouseEvent) => void; onKeyDown?: (event: KeyboardEvent) => void };
 
-export function DropdownMenu({ className, slotProps, label, open, defaultOpen = false, onOpenChange, trigger, children }: DropdownMenuProps) {
-  const [internal, setInternal] = useState(defaultOpen);
-  const isOpen = open ?? internal;
+export function DropdownMenu({
+  className,
+  slotProps,
+  label,
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  motion,
+  trigger,
+  children,
+}: DropdownMenuProps) {
+  const [isOpen, setInternal] = useControllableState<boolean>({
+    value: open,
+    defaultValue: defaultOpen,
+  });
   const menuId = useId();
   const rootRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLSpanElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
   const pendingFocus = useRef<'first' | 'last' | null>(null);
+  const { mounted, ref: panelRef } = usePresence<HTMLDivElement>(isOpen, {
+    disabled: motion === false,
+    from: { x: 0, y: -4, scale: 0.98, opacity: 0, blur: 0 },
+  });
 
   function setOpen(next: boolean) {
     if (open === undefined) setInternal(next);
@@ -64,7 +91,10 @@ export function DropdownMenu({ className, slotProps, label, open, defaultOpen = 
 
   function handleTriggerClick(event: MouseEvent) {
     if (isValidElement<TriggerProps>(trigger)) trigger.props.onClick?.(event);
-    if (isOpen) { close(false); return; }
+    if (isOpen) {
+      close(false);
+      return;
+    }
     pendingFocus.current = 'first';
     setOpen(true);
   }
@@ -74,11 +104,18 @@ export function DropdownMenu({ className, slotProps, label, open, defaultOpen = 
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
       pendingFocus.current = event.key === 'ArrowUp' ? 'last' : 'first';
-      if (isOpen) { const items = menuItems(); (event.key === 'ArrowUp' ? items[items.length - 1] : items[0])?.focus(); pendingFocus.current = null; } else setOpen(true);
+      if (isOpen) {
+        const items = menuItems();
+        (event.key === 'ArrowUp' ? items[items.length - 1] : items[0])?.focus();
+        pendingFocus.current = null;
+      } else setOpen(true);
     }
   }
   function handlePanelKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-    if (event.key === 'Tab') { close(false); return; }
+    if (event.key === 'Tab') {
+      close(false);
+      return;
+    }
     const items = menuItems();
     const active = items.findIndex((el) => el === document.activeElement || el.contains(document.activeElement));
     const to = roveIndex(event.key, active, items.length, { orientation: 'vertical' });
@@ -87,16 +124,46 @@ export function DropdownMenu({ className, slotProps, label, open, defaultOpen = 
     items[to]?.focus();
   }
 
-  const aria = { 'aria-haspopup': 'menu' as const, 'aria-expanded': isOpen, 'aria-controls': isOpen ? menuId : undefined };
-  const triggerNode = isValidElement<TriggerProps>(trigger)
-    ? cloneElement(trigger, { ...aria, onClick: handleTriggerClick, onKeyDown: handleTriggerKeyDown } as TriggerProps)
-    : <span role="button" tabIndex={0} {...aria} onClick={handleTriggerClick} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleTriggerClick(e as unknown as MouseEvent); } else handleTriggerKeyDown(e); }} className="cieo-dropdown-menu-trigger-fallback" {...customizePart(slotProps?.triggerFallback, "cieo-dropdown-menu-trigger-fallback")}>{trigger}</span>;
+  const aria = { 'aria-haspopup': 'menu' as const, 'aria-expanded': isOpen, 'aria-controls': mounted ? menuId : undefined };
+  const triggerNode = isValidElement<TriggerProps>(trigger) ? (
+    cloneElement(trigger, { ...aria, onClick: handleTriggerClick, onKeyDown: handleTriggerKeyDown } as TriggerProps)
+  ) : (
+    <span
+      role="button"
+      tabIndex={0}
+      {...aria}
+      onClick={handleTriggerClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleTriggerClick(e as unknown as MouseEvent);
+        } else handleTriggerKeyDown(e);
+      }}
+      className="cieo-dropdown-menu-trigger-fallback"
+      {...customizePart(slotProps?.triggerFallback, 'cieo-dropdown-menu-trigger-fallback')}
+    >
+      {trigger}
+    </span>
+  );
   return (
-    <div ref={rootRef} className="cieo cieo-dropdown-menu" {...customizePart(slotProps?.root, "cieo cieo-dropdown-menu", undefined, className)}>
-      <span ref={triggerRef} className="cieo-dropdown-menu-trigger" {...customizePart(slotProps?.trigger, "cieo-dropdown-menu-trigger")}>{triggerNode}</span>
-      {isOpen ? (
+    <div ref={rootRef} className="cieo cieo-dropdown-menu" {...customizePart(slotProps?.root, 'cieo cieo-dropdown-menu', undefined, className)}>
+      <span ref={triggerRef} className="cieo-dropdown-menu-trigger" {...customizePart(slotProps?.trigger, 'cieo-dropdown-menu-trigger')}>
+        {triggerNode}
+      </span>
+      {mounted ? (
         <DropdownMenuContext.Provider value={{ close: () => close(true) }}>
-          <div ref={panelRef} id={menuId} role="menu" aria-label={label} onKeyDown={handlePanelKeyDown} className="cieo-dropdown-menu-panel" {...customizePart(slotProps?.panel, "cieo-dropdown-menu-panel")}>{children}</div>
+          <div
+            ref={panelRef}
+            id={menuId}
+            role="menu"
+            aria-label={label}
+            aria-hidden={!isOpen || undefined}
+            onKeyDown={handlePanelKeyDown}
+            className="cieo-dropdown-menu-panel"
+            {...customizePart(slotProps?.panel, 'cieo-dropdown-menu-panel')}
+          >
+            {children}
+          </div>
         </DropdownMenuContext.Provider>
       ) : null}
     </div>

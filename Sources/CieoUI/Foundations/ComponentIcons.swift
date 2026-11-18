@@ -10,6 +10,8 @@ public enum ComponentIcon: Sendable, CaseIterable {
     case verified, dismiss, link
     case bell, bellFilled, share, star, starFilled, add, thumbUp, thumbDown
     case sending, delivered, read, muted, pinned
+    // MARK: - Agent, overlay and auth
+    case stop, eye, eyeOff, warning, command
 }
 
 /// Host-owned glyphs. Defaults are SF Symbols; an app with its own icon set installs it once at the root.
@@ -68,6 +70,12 @@ public struct ComponentIcons {
         case .read: "checkmark.circle.fill"
         case .muted: "bell.slash"
         case .pinned: "pin"
+        // MARK: - Agent, overlay and auth
+        case .stop: "stop.fill"
+        case .eye: "eye"
+        case .eyeOff: "eye.slash"
+        case .warning: "exclamationmark.triangle"
+        case .command: "command"
         }
     }
 

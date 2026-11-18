@@ -20,7 +20,7 @@ optional starter component.
 Options:
   --yes            Accept every default without asking.
   --target <t>     Force the target: next, vite, or html.
-  --brand <b>      Brand: iris, studio, lagoon, ember, rose, mono.
+  --brand <b>      Brand: iris, studio, lagoon, ember, rose, mono, instrument.
   --scheme <s>     Appearance: light or dark.
   --dir <path>     Components directory (default components/cieo).
   --with <id>      Copy this starter component (default Dialog).
@@ -55,6 +55,7 @@ const HTML_LINKS = [
   '<link rel="stylesheet" href="node_modules/cieo/tokens/tokens.css">',
   '<link rel="stylesheet" href="node_modules/cieo/design/themes.css">',
   '<link rel="stylesheet" href="node_modules/cieo/design/primitives.css">',
+  '<link rel="stylesheet" href="node_modules/cieo/dist/controls/controls.css">',
   '<link rel="stylesheet" href="cieo-theme.css">',
 ];
 const INSTALL_COMMANDS = {

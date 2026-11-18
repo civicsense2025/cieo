@@ -31,8 +31,14 @@ public struct HeadlineAtom: MotionAtomView {
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
                     .frame(maxWidth: 200)
                 HStack {
-                    Button("Next variant") { withMotion(.base, reduceMotion: reduce) { index = (index + 1) % variants.count } }
-                        .buttonStyle(.bordered).frame(minHeight: 32)
+                    Button("Next variant") {
+                        withMotion(.base, reduceMotion: reduce) {
+                            index = (index + 1) % variants.count
+                            if !tweak { plateTop = 0; plateBottom = 0 }
+                        }
+                    }
+                    .buttonStyle(.bordered).frame(minHeight: 32)
+                    .disabled(tweak && plateBottom > plateTop)
                     Button("Test winner") { pickWinner() }.buttonStyle(.borderedProminent).frame(minHeight: 32)
                 }
             }

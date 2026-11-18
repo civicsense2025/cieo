@@ -1,9 +1,10 @@
 /* ================================================================ core */
-const MOTION_MEDIA = matchMedia('(prefers-reduced-motion: reduce)');
-const REDUCE = MOTION_MEDIA.matches;
+const MOTION_MEDIA = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };
+let REDUCE = MOTION_MEDIA.matches;
+MOTION_MEDIA.addEventListener?.('change', e => { REDUCE = e.matches; });
 // critically damped presets (Studio: calm, no overshoot)
 const S = { snap:{w:34}, base:{w:22}, soft:{w:15}, lazy:{w:9} };
-const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3;
+const EXIT = .1, LAG = .06, BLUR = 4, STAGGER_MAX = .3, ARRIVE = .45;
 // Per-item delay: i * gap, or 0 under reduced motion (read live, so data-motion overrides apply). Given the group
 // size n, the gap shrinks so the whole group lands within STAGGER_MAX, the same rule as Swift's Motion.stagger.
 const staggerAt = (i, gap = .04, n = 0) => motionReduced() ? 0 : i*(n > 1 ? Math.min(gap, STAGGER_MAX/(n - 1)) : gap);
@@ -50,8 +51,8 @@ function motionSettings(el){
 
 function resp(dt, x0, v0, cfg){
   if (dt <= 0) return x0;
-  let w = cfg.w, z = cfg.z ?? 1;
-  if (REDUCE){ w *= 1.8; z = 1; }
+  let w = cfg.w, z = Math.max(.7, Math.min(1, cfg.z ?? 1));
+  if (REDUCE || motionReduced()){ w *= 1.8; z = 1; }
   if (z < 1){
     const wd = w*Math.sqrt(1-z*z), e = Math.exp(-z*w*dt);
     return e*(x0*Math.cos(wd*dt) + ((v0 + z*w*x0)/wd)*Math.sin(wd*dt));
@@ -148,14 +149,28 @@ function scrollState(el){ const s = { top:el.scrollTop, max:0 }, upd = () => { s
 // element a frame asked about recently; frameLayout(el) then hands back that snapshot (at most one frame old) instead of forcing a layout
 // mid-frame after styles were written. An element seen for the first time is read live once. Event handlers and one-off measurements
 // that must see a just-changed DOM should keep reading the element directly.
-const FRAME_LAYOUT = { epoch:0, map:new Map() };
+const FRAME_LAYOUT = { epoch:0, map:new Map(), active:false };
 const snapRead = (el, epoch) => { const r = el.getBoundingClientRect();
   return { epoch, used:epoch, rect:{ left:r.left, top:r.top, right:r.right, bottom:r.bottom, width:r.width, height:r.height },
     ol:el.offsetLeft, ot:el.offsetTop, w:el.offsetWidth, h:el.offsetHeight, cw:el.clientWidth, ch:el.clientHeight, cl:el.clientLeft, ct:el.clientTop,
     sw:el.scrollWidth, sh:el.scrollHeight, sl:el.scrollLeft, st:el.scrollTop }; };
-function frameLayout(el){ let s = FRAME_LAYOUT.map.get(el); if (!s || s.epoch !== FRAME_LAYOUT.epoch) s = snapRead(el, FRAME_LAYOUT.epoch); s.used = FRAME_LAYOUT.epoch; FRAME_LAYOUT.map.set(el, s); return s; }
-(function layTick(){ requestAnimationFrame(layTick); FRAME_LAYOUT.epoch++;
-  for (const [el, s] of FRAME_LAYOUT.map){ if (FRAME_LAYOUT.epoch - s.used > 4) FRAME_LAYOUT.map.delete(el); else if (s.epoch !== FRAME_LAYOUT.epoch){ const f = snapRead(el, FRAME_LAYOUT.epoch); f.used = s.used; FRAME_LAYOUT.map.set(el, f); } } })();
+function scheduleLayTick(){
+  if (FRAME_LAYOUT.active || document.hidden || !FRAME_LAYOUT.map.size) return;
+  FRAME_LAYOUT.active = true;
+  requestAnimationFrame(layTick);
+}
+function layTick(){
+  FRAME_LAYOUT.active = false;
+  if (document.hidden || !FRAME_LAYOUT.map.size) return;
+  FRAME_LAYOUT.epoch++;
+  for (const [el, s] of FRAME_LAYOUT.map){
+    if (FRAME_LAYOUT.epoch - s.used > 4) FRAME_LAYOUT.map.delete(el);
+    else if (s.epoch !== FRAME_LAYOUT.epoch){ const f = snapRead(el, FRAME_LAYOUT.epoch); f.used = s.used; FRAME_LAYOUT.map.set(el, f); }
+  }
+  if (FRAME_LAYOUT.map.size) scheduleLayTick();
+}
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (!document.hidden) scheduleLayTick(); });
+function frameLayout(el){ let s = FRAME_LAYOUT.map.get(el); if (!s || s.epoch !== FRAME_LAYOUT.epoch) s = snapRead(el, FRAME_LAYOUT.epoch); s.used = FRAME_LAYOUT.epoch; FRAME_LAYOUT.map.set(el, s); scheduleLayTick(); return s; }
 const money = v => '$' + v.toFixed(2);
 // measure an element's natural width by rendering a hidden clone
 function measureW(el, text){

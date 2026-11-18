@@ -1,9 +1,9 @@
 import SwiftUI
 
 public extension Animation {
-    /// The same critically damped response as the web springs: stiffness w², damping 2w, mass 1.
-    static func motion(_ preset: SpringPreset = .base) -> Animation {
-        .interpolatingSpring(mass: 1, stiffness: preset.w * preset.w, damping: 2 * preset.w, initialVelocity: 0)
+    /// Spring response matching `preset`: stiffness w², damping 2ζw, mass 1.
+    static func motion(_ preset: SpringPreset = .base, initialVelocity: Double = 0) -> Animation {
+        .interpolatingSpring(mass: 1, stiffness: preset.w * preset.w, damping: 2 * preset.zeta * preset.w, initialVelocity: initialVelocity)
     }
 
     /// The 100 ms ease-in used for content leaving before new content enters.
@@ -12,8 +12,8 @@ public extension Animation {
 
 /// Runs `body` with a motion spring, or without animation when Reduce Motion is on.
 @discardableResult
-public func withMotion<Result>(_ preset: SpringPreset = .base, reduceMotion: Bool, _ body: () throws -> Result) rethrows -> Result {
-    try withAnimation(reduceMotion ? nil : .motion(preset), body)
+public func withMotion<Result>(_ preset: SpringPreset = .base, initialVelocity: Double = 0, reduceMotion: Bool, _ body: () throws -> Result) rethrows -> Result {
+    try withAnimation(reduceMotion ? nil : .motion(preset, initialVelocity: initialVelocity), body)
 }
 
 private struct MotionModifier<V: Equatable>: ViewModifier {

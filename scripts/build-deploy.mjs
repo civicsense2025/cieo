@@ -5,13 +5,21 @@
 // A reference to a missing file fails the build; nothing unreferenced is published.
 // Usage: node scripts/build-deploy.mjs [--out <dir>]
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync, statSync } from 'node:fs';
-import { dirname, extname, isAbsolute, join, relative, resolve, sep } from 'node:path';
+import { dirname, extname, isAbsolute, join, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const ENTRY_PAGES = [
   'site/index.html', 'site/pricing.html', 'site/contact.html', 'site/components/index.html', 'site/composites/index.html',
-  'docs/catalogue.html', 'docs/controls.html', 'docs/workbench.html', 'docs/library.html', 'docs/collection.html',
-  'docs/studio/index.html', 'docs/agent-identity.html',
+  'site/recipes/index.html', 'site/foundations/index.html', 'site/foundations/physics.html', 'site/foundations/choreography.html',
+  'site/foundations/color.html', 'site/foundations/typography.html', 'site/foundations/agents.html',
+  'site/search-index.json', 'docs/controls.html', 'docs/studio/index.html',
+];
+/** Published path: the site folder is served at the root; everything else keeps its repo path, so pages' `../` links still land on it. */
+export const publishedPath = (rel) => (rel.startsWith('site/') ? rel.slice(5) : rel);
+/** Retired single-file bundles keep working through permanent redirects to the route-split sections. */
+export const REDIRECTS = [
+  ['/docs/catalogue.html', '/recipes/'], ['/docs/library.html', '/recipes/'], ['/docs/collection.html', '/recipes/'], ['/docs/workbench.html', '/recipes/'],
+  ['/docs/agent-identity.html', '/foundations/agents.html'], ['/site/*', '/:splat'],
 ];
 const TEXT = new Set(['.html', '.css', '.js', '.mjs']);
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,9 +43,9 @@ export function localRefs(file, source) {
   if (ext === '.html') {
     // Inline script bodies hold demo markup and templates, not references the browser follows.
     const markup = source.replace(/(<script\b[^>]*>)[\s\S]*?<\/script>/gi, '$1</script>');
-    // Root-absolute links in previews are sample content (a breadcrumb to /library); only stylesheets and scripts must resolve.
+    // Root-absolute links in previews are sample content (a breadcrumb to /library); stylesheets, scripts and media must resolve.
     for (const m of markup.matchAll(/<(\w+)\b[^>]*?\b(?:href|src|poster|data-src|data|srcset)=["']([^"']+)["']/g)) {
-      const needed = m[1] === 'link' || m[1] === 'script';
+      const needed = /^(?:link|script|img|audio|video|source)$/i.test(m[1]);
       for (const spec of /srcset=/.test(m[0]) ? m[2].split(',').map((c) => c.trim().split(/\s+/)[0]) : [m[2]]) {
         if (spec.startsWith('/') && !spec.startsWith('//') && !needed) continue;
         found.push(spec);
@@ -86,17 +94,27 @@ export function assertSafeOut(out, repo = root) {
   if (down.includes(sep) || !down.startsWith('.')) throw new Error(`Refusing to delete and rebuild '${out}': use a hidden folder such as .deploy, or one outside the repo`);
 }
 
+function inlineCssImports(repo, rel, seen = new Set()) {
+  if (seen.has(rel)) return '';
+  seen.add(rel);
+  const src = readFileSync(join(repo, rel), 'utf8');
+  return src.replace(/@import\s+(?:url\()?["']([^"']+)["']\)?\s*;/g, (match, spec) => {
+    if (/^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(spec) || spec.startsWith('/')) return match;
+    const nextRel = posix.normalize(posix.join(posix.dirname(rel), spec.split(/[?#]/)[0]));
+    return inlineCssImports(repo, nextRel, seen);
+  });
+}
+
 export function build(out, repo = root) {
   assertSafeOut(out, repo);
   const { files, missing } = collect(repo);
   if (missing.length) throw new Error(`Broken references:\n  ${missing.join('\n  ')}`);
   rmSync(out, { recursive: true, force: true });
-  for (const f of files) { mkdirSync(dirname(join(out, f)), { recursive: true }); cpSync(join(repo, f), join(out, f)); }
-  writeFileSync(join(out, '_redirects'), '/ /site/ 302\n');
+  for (const f of files) { const dest = join(out, publishedPath(f)); mkdirSync(dirname(dest), { recursive: true }); cpSync(join(repo, f), dest); }
+  if (files.includes('design/primitives.css')) writeFileSync(join(out, 'design/primitives.css'), inlineCssImports(repo, 'design/primitives.css'));
+  writeFileSync(join(out, '_redirects'), REDIRECTS.map(([from, to]) => `${from} ${to} 301`).join('\n') + '\n');
   const page = (title, body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title}</title><link rel="stylesheet" href="/design/themes.css"><link rel="stylesheet" href="/tokens/tokens.css"></head><body style="font-family:system-ui,sans-serif;max-width:32rem;margin:4rem auto;padding:0 1rem">${body}</body></html>`;
-  // A host that ignores _redirects still lands on the components index.
-  writeFileSync(join(out, 'index.html'), page('Cieo', '<meta http-equiv="refresh" content="0; url=/site/"><h1>Cieo</h1><p><a href="/site/">Home</a></p>'));
-  writeFileSync(join(out, '404.html'), page('Page not found · Cieo', '<h1>Page not found</h1><p>That page is not in the docs. <a href="/site/">Go home</a> or <a href="/site/components/">browse the library</a> or the <a href="/docs/catalogue.html">catalogue</a>.</p>'));
+  writeFileSync(join(out, '404.html'), page('Page not found · Cieo', '<h1>Page not found</h1><p>That page is not in the docs. <a href="/">Go home</a>, <a href="/components/">browse the library</a> or the <a href="/recipes/">recipes</a>.</p>'));
   writeFileSync(join(out, '_headers'), [
     '/*', '  X-Content-Type-Options: nosniff', '  Referrer-Policy: strict-origin-when-cross-origin', '  Permissions-Policy: camera=(), microphone=(), geolocation=()', '',
     '  Cache-Control: public, max-age=300', '',
@@ -111,7 +129,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const out = resolve(root, i > 0 ? process.argv[i + 1] : '.deploy');
   try {
     const files = build(out);
-    const bytes = files.reduce((n, f) => n + statSync(join(out, f)).size, 0);
+    const bytes = files.reduce((n, f) => n + statSync(join(out, publishedPath(f))).size, 0);
     console.log(`deploy folder: ${files.length} files, ${(bytes / 1048576).toFixed(1)} MB -> ${relative(root, out) || '.'}`);
   } catch (e) { console.error(e.message); process.exit(1); }
 }

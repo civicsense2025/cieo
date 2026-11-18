@@ -1,4 +1,3 @@
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* Divider. Thematic break between sections. Decorative unless given a label. */

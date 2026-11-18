@@ -2,17 +2,24 @@ import SwiftUI
 
 /// A heading with a supporting line and a glyph. The glyph comes from the host's `componentIcons`
 /// through `icon:`; `symbol:` takes an SF Symbol name for callers that need one the glyph set lacks.
-/// An optional action ("Try again", "Undo") sits under the text as its own button.
+/// Supports semantic `Notice.Tone`, optional dismissal, and single or `@ViewBuilder` actions.
 public struct Notice: View {
+    public typealias Tone = NoticeTone
+
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentIcons) private var icons
     @Environment(\.componentMetrics) private var metrics
-    private let title: LocalizedStringKey
-    private let detail: LocalizedStringKey
+    @Environment(\.noticeStyle) private var noticeStyle
+
+    private let title: Text
+    private let detail: Text
     private let glyph: Glyph
+    private let tone: Tone
+    private let onDismiss: (() -> Void)?
     private let actionTitle: LocalizedStringKey?
-    private let action: (() -> Void)?
+    private let singleAction: (() -> Void)?
+    private let customActions: AnyView?
 
     private enum Glyph {
         case icon(ComponentIcon)
@@ -20,50 +27,84 @@ public struct Notice: View {
     }
 
     public init(_ title: LocalizedStringKey, detail: LocalizedStringKey, icon: ComponentIcon = .info) {
-        self.title = title; self.detail = detail; glyph = .icon(icon)
-        actionTitle = nil; action = nil
+        self.title = Text(title); self.detail = Text(detail); glyph = .icon(icon)
+        tone = .neutral; onDismiss = nil; actionTitle = nil; singleAction = nil; customActions = nil
     }
 
     public init(_ title: LocalizedStringKey, detail: LocalizedStringKey, symbol: String) {
-        self.title = title; self.detail = detail; glyph = .symbol(symbol)
-        actionTitle = nil; action = nil
+        self.title = Text(title); self.detail = Text(detail); glyph = .symbol(symbol)
+        tone = .neutral; onDismiss = nil; actionTitle = nil; singleAction = nil; customActions = nil
     }
 
-    /// A notice with one action under its text, such as "Try again". The host owns what the action does.
     public init(_ title: LocalizedStringKey, detail: LocalizedStringKey, icon: ComponentIcon = .info,
                 actionTitle: LocalizedStringKey, action: @escaping () -> Void) {
-        self.title = title; self.detail = detail; glyph = .icon(icon)
-        self.actionTitle = actionTitle; self.action = action
+        self.title = Text(title); self.detail = Text(detail); glyph = .icon(icon)
+        tone = .neutral; onDismiss = nil; self.actionTitle = actionTitle; singleAction = action; customActions = nil
     }
 
     public init(_ title: LocalizedStringKey, detail: LocalizedStringKey, symbol: String,
                 actionTitle: LocalizedStringKey, action: @escaping () -> Void) {
-        self.title = title; self.detail = detail; glyph = .symbol(symbol)
-        self.actionTitle = actionTitle; self.action = action
+        self.title = Text(title); self.detail = Text(detail); glyph = .symbol(symbol)
+        tone = .neutral; onDismiss = nil; self.actionTitle = actionTitle; singleAction = action; customActions = nil
+    }
+
+    public init(
+        _ title: LocalizedStringKey,
+        detail: LocalizedStringKey,
+        icon: ComponentIcon? = nil,
+        tone: Tone,
+        onDismiss: (() -> Void)? = nil
+    ) {
+        self.title = Text(title)
+        self.detail = Text(detail)
+        self.glyph = .icon(icon ?? tone.defaultIcon)
+        self.tone = tone
+        self.onDismiss = onDismiss
+        self.actionTitle = nil
+        self.singleAction = nil
+        self.customActions = nil
+    }
+
+    public init<Actions: View>(
+        _ title: LocalizedStringKey,
+        detail: LocalizedStringKey,
+        icon: ComponentIcon? = nil,
+        tone: Tone = .neutral,
+        onDismiss: (() -> Void)? = nil,
+        @ViewBuilder actions: () -> Actions
+    ) {
+        self.title = Text(title)
+        self.detail = Text(detail)
+        self.glyph = .icon(icon ?? tone.defaultIcon)
+        self.tone = tone
+        self.onDismiss = onDismiss
+        self.actionTitle = nil
+        self.singleAction = nil
+        self.customActions = Actions.self == EmptyView.self ? nil : AnyView(actions())
     }
 
     public var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: metrics.compact) {
+        let action: (() -> Void)? = singleAction ?? onDismiss ?? (customActions != nil ? {} : nil)
+        let config = NoticeStyleConfiguration(tone: tone, onDismiss: onDismiss) {
             InlineGlyph { glyphView }
-                .font(typography.heading)
-                .foregroundStyle(theme.foreground)
-                .accessibilityHidden(true)
+        } content: {
             VStack(alignment: .leading, spacing: metrics.tight) {
-                // The text reads as one element; the action stays a separate button after it.
                 Heading(title, detail: detail, level: .heading, isHeader: false)
                     .accessibilityElement(children: .combine)
-                if let actionTitle, let action {
-                    Button(action: action) { Text(actionTitle).font(typography.strongBody) }
+                if let actionTitle, let singleAction {
+                    Button(action: singleAction) { Text(actionTitle).font(typography.strongBody) }
                         .buttonStyle(.plain)
                         .foregroundStyle(theme.accent)
                         .frame(minHeight: metrics.touchTarget)
                         .contentShape(Rectangle())
                 }
+                if let customActions {
+                    customActions
+                }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        // Without an action the notice reads as one element; with one, the button stays findable.
-        .accessibilityElement(children: action == nil ? .combine : .contain)
+        noticeStyle.makeBody(configuration: config)
+            .accessibilityElement(children: action == nil ? .combine : .contain)
     }
 
     @ViewBuilder

@@ -11,7 +11,7 @@
   "owner": "library-maintainer",
   "aliases": [],
   "source": { "target": "web", "path": "src/primitives/BreadcrumbItem/BreadcrumbItem.tsx", "symbol": "BreadcrumbItem" },
-  "dependencies": [],
+  "dependencies": ["Slot"],
   "nativePrimitives": [],
   "properties": [
     { "id": "current", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": false, "constraints": {} },

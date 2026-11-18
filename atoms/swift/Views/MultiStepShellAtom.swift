@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct MultiStepShellAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "stepshell", category: "Forms", name: "Multi-step form shell",
+    public static let info = MotionAtomInfo(id: "stepshell", category: "Views", name: "Multi-step form shell",
         summary: "The chrome and progress bar never move while panels swap in the direction you travel. The shell height springs to each panel. Going back restores what you typed, and the final step morphs into a success terminal.")
 
     @Environment(\.accessibilityReduceMotion) private var reduce

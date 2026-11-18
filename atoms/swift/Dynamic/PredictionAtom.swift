@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct PredictionAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "prediction", category: "Forms", name: "Prediction question",
+    public static let info = MotionAtomInfo(id: "prediction", category: "Dynamic", name: "Prediction question",
         summary: "A pick presses in, then fills while the odds bar stretches leading-edge-first and the caption swaps to locked. The lock holds as the terminal state.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var locked = -1

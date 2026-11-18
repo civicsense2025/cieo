@@ -36,7 +36,7 @@ public struct CrawlProgressAtom: MotionAtomView {
                 }
                 .frame(height: 8).motion(.lazy, value: crawled)
                 VStack(alignment: .leading, spacing: 4) {
-                    ForEach(Array(lines.enumerated()), id: \.offset) { i, line in
+                    ForEach(Array(lines.enumerated()), id: \.element) { i, line in
                         if i < landed && (verbose || i < 2) {
                             Text("✓ \(line)").font(.footnote).foregroundStyle(.secondary)
                                 .motionTransition(.swap())

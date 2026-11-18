@@ -1,5 +1,3 @@
-// src/primitives/Heading/Heading.tsx
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function Heading({ className, slotProps, level = 2, children }) {

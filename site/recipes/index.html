@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Motion Recipes · Cieo</title>
+<meta name="description" content="Explore 561 interactive closed-form spring motion recipes across 50 categories, lazy-loaded by route and themed by Cieo tokens.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="../theme.css"><link rel="stylesheet" href="../../tokens/tokens.css"><link rel="stylesheet" href="../../design/primitives.css"><link rel="stylesheet" href="../site.css">
+<link rel="stylesheet" href="./recipes.css">
+<style>:root, .cieo-recipes-scope {
+  --bg: var(--cieo-color-canvas);
+  --tile: var(--cieo-color-surface);
+  --card: var(--cieo-color-surface);
+  --raised: var(--cieo-color-sunken);
+  --surface: var(--cieo-color-surface);
+  --ink: var(--cieo-color-text);
+  --muted: var(--cieo-color-muted);
+  --faint: var(--cieo-color-subtle);
+  --line: var(--cieo-color-border);
+  --line-soft: color-mix(in oklab, var(--cieo-color-border) 62%, transparent);
+  --accent: var(--cieo-color-accent);
+  --accent-tint: color-mix(in oklab, var(--cieo-color-accent) 12%, var(--cieo-color-surface));
+  --success: var(--cieo-color-success);
+  --success-tint: color-mix(in oklab, var(--cieo-color-success) 14%, var(--cieo-color-surface));
+  --danger: var(--cieo-color-danger);
+  --danger-tint: color-mix(in oklab, var(--cieo-color-danger) 14%, var(--cieo-color-surface));
+  --warning: var(--cieo-color-warning);
+  --warning-tint: color-mix(in oklab, var(--cieo-color-warning) 14%, var(--cieo-color-surface));
+  --shadow: none;
+  --shadow-soft: 0 1px 2px color-mix(in oklab, var(--cieo-color-text) 6%, transparent), 0 10px 28px color-mix(in oklab, var(--cieo-color-text) 7%, transparent);
+  --sans: var(--cieo-font-sans);
+  --mono: var(--cieo-font-mono);
+}</style>
+</head>
+<body class="cieo cieo-site cieo-recipes-scope">
+<a class="site-skip" href="#main">Skip to content</a><header class="site-header"><a class="site-mark" href="../" aria-label="Cieo home"><svg viewBox="0 0 30 16" width="30" height="16" aria-hidden="true" focusable="false"><path d="M0 15 H30" class="site-mark-base"/><path d="M0.00 15.00 L1.25 14.29 L2.50 12.75 L3.75 10.97 L5.00 9.25 L6.25 7.73 L7.50 6.45 L8.75 5.41 L10.00 4.59 L11.25 3.95 L12.50 3.45 L13.75 3.08 L15.00 2.79 L16.25 2.58 L17.50 2.43 L18.75 2.31 L20.00 2.23 L21.25 2.16 L22.50 2.12 L23.75 2.08 L25.00 2.06 L26.25 2.04 L27.50 2.03 L28.75 2.02 L30.00 2.02" class="site-mark-curve"/></svg><span>Cieo</span></a><nav class="site-nav" aria-label="Site"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/" aria-current="page">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a></nav><button type="button" class="site-search-btn" data-search-open aria-label="Search library, recipes, composites, and foundations" aria-keyshortcuts="Meta+K Control+K"><span>Search</span><kbd aria-hidden="true">⌘K</kbd></button></header>
+<main id="main">
+  <section class="site-wrap site-hero">
+    <p class="site-label">Motion recipes · 50 lazy chunks</p>
+    <h1 class="site-display">Motion recipes.</h1>
+    <p class="site-lead">561 live interface motion specimens solved in closed form (ζ = 1 default; the 0.7 floor allows at most about 5% overshoot). Filter by motion family, dilate clock speed to 0.25× or 0.1×, inspect formulas, or jump straight to the matching <a href="../components/">production component spec</a>.</p>
+  </section>
+  <div class="recipes-toolbar" data-recipes-toolbar role="region" aria-label="Recipe filters and playback controls">
+    <div class="recipes-toolbar-inner">
+      <input class="recipes-search" type="search" data-recipe-search placeholder="Filter 561 recipes, categories, or formulas…" aria-label="Filter motion recipes">
+      <select class="recipes-select" data-recipe-cat aria-label="Filter by category">
+        <option value="*">All categories (561)</option>
+        <option value="Foundations">Foundations (15)</option><option value="Content">Content (15)</option><option value="Data">Data (9)</option><option value="Media">Media (6)</option><option value="Interactive">Interactive (6)</option><option value="Newsletter">Newsletter (15)</option><option value="Chrome">Chrome (14)</option><option value="Commerce">Commerce (16)</option><option value="Admin">Admin (6)</option><option value="Dynamic">Dynamic (12)</option><option value="Inputs">Inputs (8)</option><option value="Overlays">Overlays (14)</option><option value="Navigation">Navigation (6)</option><option value="Layout">Layout (11)</option><option value="Forms">Forms (37)</option><option value="Writing">Writing (45)</option><option value="Design tools">Design tools (5)</option><option value="Email">Email (15)</option><option value="SEO">SEO (13)</option><option value="Social">Social (5)</option><option value="Files and browsing">Files and browsing (5)</option><option value="AI chat">AI chat (10)</option><option value="Scheduling">Scheduling (12)</option><option value="Video calls">Video calls (10)</option><option value="Guidance">Guidance (12)</option><option value="Maps">Maps (10)</option><option value="Views">Views (11)</option><option value="Editor">Editor (8)</option><option value="Storefront">Storefront (10)</option><option value="Workspace">Workspace (5)</option><option value="Landing">Landing (11)</option><option value="Admin kit">Admin kit (10)</option><option value="Workflow">Workflow (9)</option><option value="Status and records">Status and records (7)</option><option value="MCP and agents">MCP and agents (8)</option><option value="Mega menus">Mega menus (10)</option><option value="Headers">Headers (12)</option><option value="Footers">Footers (16)</option><option value="Agent activity">Agent activity (21)</option><option value="Image transitions">Image transitions (14)</option><option value="Carousels">Carousels (12)</option><option value="Galleries">Galleries (10)</option><option value="Scroll stories">Scroll stories (10)</option><option value="Photo effects">Photo effects (12)</option><option value="Documents">Documents (11)</option><option value="Auth">Auth (8)</option><option value="Audio">Audio (4)</option><option value="Comments">Comments (4)</option><option value="Messaging">Messaging (4)</option><option value="Feedback">Feedback (2)</option>
+      </select>
+      <div class="recipes-seg" data-recipe-fam role="group" aria-label="Motion family">
+        <button type="button" data-fam="*" aria-pressed="true" aria-label="All families">All</button>
+        <button type="button" data-fam="M" aria-pressed="false" title="Morph" aria-label="Morph family">M</button>
+        <button type="button" data-fam="S" aria-pressed="false" title="Swap" aria-label="Swap family">S</button>
+        <button type="button" data-fam="D" aria-pressed="false" title="Drag" aria-label="Drag family">D</button>
+        <button type="button" data-fam="E" aria-pressed="false" title="Edges" aria-label="Edges family">E</button>
+        <button type="button" data-fam="X" aria-pressed="false" title="Enter and exit" aria-label="Enter and exit family">X</button>
+        <button type="button" data-fam="T" aria-pressed="false" title="Time" aria-label="Time family">T</button>
+      </div>
+      <div class="recipes-seg" data-recipe-speed role="group" aria-label="Slow-motion time dilation">
+        <button type="button" data-speed="1" aria-pressed="true">1×</button>
+        <button type="button" data-speed="0.25" aria-pressed="false">0.25×</button>
+        <button type="button" data-speed="0.1" aria-pressed="false">0.1×</button>
+      </div>
+      <select class="recipes-select" data-recipe-brand aria-label="Brand theme"><option value="studio">Brand: Studio olive</option><option value="iris">Brand: Electric iris</option><option value="lagoon">Brand: Deep lagoon</option><option value="ember">Brand: Warm ember</option><option value="rose">Brand: Wild rose</option><option value="mono">Brand: Monochrome</option><option value="instrument" selected>Brand: Instrument ink</option></select>
+      <select class="recipes-select" data-recipe-scheme aria-label="Color scheme">
+        <option value="system">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+      <output class="recipes-count" data-recipe-count aria-live="polite">561 recipes</output>
+    </div>
+  </div>
+  <div class="recipes-wrap">
+    <div id="recipe-groups" class="recipe-groups"></div>
+  </div>
+</main>
+<footer class="site-footer"><div class="site-wrap site-footer-grid"><p>Cieo is spring motion and interface parts for the web and SwiftUI. MIT licensed.</p><nav aria-label="Footer"><a href="../foundations/">Foundations</a><a href="../../docs/studio/">Studio</a><a href="../components/">Library</a><a href="../recipes/">Recipes</a><a href="../composites/">Composites</a><a href="../pricing.html">Pricing</a><a href="../contact.html">Contact</a><a href="https://github.com/civicsense2025/cieo">Source</a></nav></div></footer><script type="module" src="../search.js" data-site-up="../"></script>
+<script type="module" src="./recipes.js"></script>
+</body>
+</html>

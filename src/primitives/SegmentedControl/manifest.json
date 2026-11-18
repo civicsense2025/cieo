@@ -18,8 +18,9 @@
     { "id": "value", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Picked segment value when controlled." },
     { "id": "defaultValue", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": { "minLength": 1, "maxLength": 256 }, "note": "Initial picked value when uncontrolled." },
     { "id": "onValueChange", "type": { "kind": "string" }, "required": false, "nullable": false, "constraints": {}, "note": "Source type is (value: string) => void; no function kind exists in the manifest precedent." },
+    { "id": "motion", "type": { "kind": "boolean" }, "required": false, "nullable": false, "default": true, "constraints": {}, "note": "False renders the sliding indicator end state instantly." },
     {"id":"className","type":{"kind":"string"},"required":false,"nullable":false,"constraints":{},"note":"Appended to the root classes without replacing library classes."},
-    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root."}
+    {"id":"slotProps","type":{"kind":"record","fields":[]},"required":false,"nullable":false,"constraints":{},"note":"Typed presentation record; see TypeScript declaration. Named parts: root, indicator."}
   ],
   "slots": [{ "id": "default", "allowed": ["component"], "min": 1, "max": 8, "order": "document" }],
   "state": [],

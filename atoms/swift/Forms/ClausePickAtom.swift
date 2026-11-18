@@ -6,6 +6,7 @@ public struct ClausePickAtom: MotionAtomView {
         summary: "The dot grows in the new clause while the old one shrinks on the same spring. The locked pick holds a filed terminal.")
     @Environment(\.accessibilityReduceMotion) private var reduce
     @State private var pick = 0
+    @State private var showMark = true
     private let options = [("Arbitration", "Disputes settle in Reno."), ("Mediation", "A neutral talks first."), ("Litigation", "Courts decide in public.")]
     public init() {}
 
@@ -24,20 +25,21 @@ public struct ClausePickAtom: MotionAtomView {
                                 }
                                 Text(options[i].0).font(.callout).fontWeight(.medium)
                                 + Text(" — \(options[i].1)").font(.caption).foregroundStyle(.secondary)
-                                + Text(i == pick ? " ✓" : "").font(.caption).foregroundStyle(.green)
+                                + Text(i == pick && showMark ? " ✓" : "").font(.caption).foregroundStyle(.green)
                             }.padding(.vertical, 8)
                         }
                         .buttonStyle(.plain)
                         if i < 2 { Divider() }
                     }
                     ZStack(alignment: .leading) {
-                        Text("Filed under \(options[pick].0) ✓").foregroundStyle(.green).id(pick).motionTransition(.swap())
+                        Text(showMark ? "Filed under \(options[pick].0) ✓" : "Filed under \(options[pick].0)")
+                            .foregroundStyle(showMark ? .green : .secondary).id("\(pick)-\(showMark)").motionTransition(.swap())
                     }
                     .font(.caption).frame(maxWidth: .infinity, minHeight: 22, alignment: .leading).padding(.top, 8)
                 }
                 .padding(16).frame(maxWidth: 340)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("Lock pick with success mark", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Lock pick with success mark", isOn: $showMark).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

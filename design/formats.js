@@ -11,18 +11,24 @@ export function toDTCG(theme) {
     let value = token.value;
     if (token.type === 'color') value = { colorSpace: 'srgb', components: channels(value), alpha: 1, hex: value };
     if (token.type === 'dimension') value = { value: parseFloat(value), unit: value.endsWith('rem') ? 'rem' : 'px' };
+    if (token.type === 'duration') value = { value: parseFloat(value), unit: value.endsWith('ms') ? 'ms' : 's' };
     cieo[name] = { $type: token.type, $value: value, $description: token.description };
   }
-  return { $description: 'Cieo semantic design tokens. Motion remains in tokens/tokens.json.', cieo };
+  return { $description: 'Cieo 4-tier semantic, state-layer, motion and physics design tokens.', cieo };
 }
 /** Preserve units for languages without a Cieo code generator. JSON is the portable contract. */
 export function toPortable(theme) {
-  return { version: 1, colorSpace: 'srgb', dimensionUnits: ['px', 'rem'], referenceFontSize: 16, tokens: toDTCG(theme).cieo };
+  return { version: 1, colorSpace: 'srgb', dimensionUnits: ['px', 'rem'], durationUnits: ['ms', 's'], referenceFontSize: 16, tokens: toDTCG(theme).cieo };
 }
 export function serializeTheme(theme) {
   assertTheme(theme);
   const ordered = Object.fromEntries(Object.entries(theme.options.overrides).sort(([a], [b]) => a.localeCompare(b, 'en')));
-  return JSON.stringify({ version: 1, options: { ...theme.options, overrides: ordered } }, null, 2) + '\n';
+  const components = Object.fromEntries(
+    Object.entries(theme.options.components ?? {})
+      .sort(([a], [b]) => a.localeCompare(b, 'en'))
+      .map(([comp, props]) => [comp, Object.fromEntries(Object.entries(props).sort(([a], [b]) => a.localeCompare(b, 'en')))]),
+  );
+  return JSON.stringify({ version: 1, options: { ...theme.options, components, overrides: ordered } }, null, 2) + '\n';
 }
 export function parseTheme(source) {
   if (typeof source !== 'string' || new TextEncoder().encode(source).byteLength > 32768) throw new TypeError('Theme configuration must be text under 32 KiB.');

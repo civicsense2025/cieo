@@ -18,16 +18,16 @@ public struct DiagramBuildAtom: MotionAtomView {
             VStack(spacing: 14) {
                 GeometryReader { g in
                     let s = g.size.width / 560
-                    TimelineView(.animation) { ctx in
+                    TimelineView(.animation(paused: reduce)) { ctx in
                         let t = reduce ? start + 100 : ctx.date.timeIntervalSinceReferenceDate
                         Canvas { c, _ in
                             c.scaleBy(x: s, y: s)
                             for (i, e) in edges.enumerated() {
                                 let d = max(0, min(1, dataStep(t, start: start + Double(e.from) * 0.18 + 0.12 + (i == 3 ? 0.5 : 0), .soft)))
-                                guard d > 0.02 else { continue }
+                                guard d > 0.02, let tip = e.points.last else { continue }
                                 var p = Path(); p.move(to: e.points[0]); e.points.dropFirst().forEach { p.addLine(to: $0) }
                                 c.stroke(p.trimmedPath(from: 0, to: d), with: .color(.secondary), lineWidth: 1.5)
-                                let tip = e.points.last!, h = e.heading
+                                let h = e.heading
                                 var a = Path()
                                 a.move(to: tip)
                                 a.addLine(to: CGPoint(x: tip.x - 7 * cos(h - 0.45), y: tip.y - 7 * sin(h - 0.45)))

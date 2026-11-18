@@ -13,6 +13,7 @@ public struct CountButton<Icon: View, ActiveIcon: View>: View {
 
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.isEnabled) private var isEnabled
     private let label: String
@@ -58,7 +59,7 @@ public struct CountButton<Icon: View, ActiveIcon: View>: View {
         .buttonStyle(CountButtonStyle { pressed in
             HStack(spacing: metrics.tight) {
                 glyphs
-                    .scaleEffect(pressed && !reduceMotion ? Self.dip : 1)
+                    .scaleEffect(pressed && policy.allowsMotion && !reduceMotion ? Self.dip : 1)
                     .motionAnimation(.snap, value: pressed)
                 if let count {
                     CompactCount(count, unit: unit)

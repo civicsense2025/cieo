@@ -45,7 +45,7 @@ public struct GroupAvatar: View {
             let slots = Self.slotFrames(count: layout.faces.count + (layout.more > 0 ? 1 : 0))
             ZStack(alignment: .topLeading) {
                 Circle().fill(theme.surface)
-                ForEach(Array(layout.faces.enumerated()), id: \.offset) { index, person in
+                ForEach(Array(layout.faces.enumerated()), id: \.element.id) { index, person in
                     Avatar(person, size: .points(slots[index].width * diameter))
                         .offset(x: slots[index].minX * diameter, y: slots[index].minY * diameter)
                 }

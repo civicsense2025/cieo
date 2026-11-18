@@ -1,5 +1,6 @@
 import SwiftUI
 import Cieo
+import CieoUI
 
 private struct FactChip: Identifiable {
     let id = UUID()
@@ -14,11 +15,13 @@ public struct FactCheckAtom: MotionAtomView {
     @State private var chips = [FactChip(name: "Harbor minutes"), FactChip(name: "City budget PDF"), FactChip(name: "Founder interview")]
     @State private var tweak = true
     public init() {}
+    private var verifiedCount: Int { chips.filter(\.verified).count }
+    private var requiredCount: Int { tweak ? 2 : 1 }
 
     public var body: some View {
         AtomStage(hint: "Tap a chip to toggle it") {
             VStack(spacing: 16) {
-                FlowLayoutShim(spacing: 8) {
+                FlowStack(spacing: 8) {
                     ForEach($chips) { $chip in
                         Button {
                             withMotion(.base, reduceMotion: reduce) { chip.verified.toggle() }
@@ -40,6 +43,9 @@ public struct FactCheckAtom: MotionAtomView {
                         .accessibilityLabel("\(chip.name), \(chip.verified ? "verified" : "unverified")")
                     }
                 }
+                SwapText(verifiedCount >= requiredCount ? "Ready to file (\(verifiedCount) verified) ✓" : "Verify at least \(requiredCount) source\(requiredCount == 1 ? "" : "s")")
+                    .font(.system(size: 12.5))
+                    .foregroundStyle(verifiedCount >= requiredCount ? .green : .secondary)
                 Button("Verify all") { verifyAll() }.buttonStyle(.bordered).frame(minHeight: 32)
                 Toggle("Require two sources", isOn: $tweak)
                     .font(.system(size: 12.5)).foregroundStyle(.secondary)
@@ -57,29 +63,5 @@ public struct FactCheckAtom: MotionAtomView {
                 try? await Task.sleep(for: .milliseconds(reduce ? 0 : 90))
             }
         }
-    }
-}
-
-/// Wraps chips like words in a paragraph until a shared flow layout exists.
-private struct FlowLayoutShim: Layout {
-    var spacing: CGFloat = 8
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
-        arrange(width: proposal.width ?? 360, subviews).size
-    }
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
-        let placed = arrange(width: bounds.width, subviews)
-        for (i, f) in placed.frames.enumerated() {
-            subviews[i].place(at: CGPoint(x: bounds.minX + f.minX, y: bounds.minY + f.minY), proposal: ProposedViewSize(f.size))
-        }
-    }
-    private func arrange(width: CGFloat, _ subviews: Subviews) -> (size: CGSize, frames: [CGRect]) {
-        var x = 0.0, y = 0.0, rowH = 0.0, frames: [CGRect] = []
-        for s in subviews {
-            let size = s.sizeThatFits(.unspecified)
-            if x > 0 && x + size.width > width { x = 0; y += rowH + spacing; rowH = 0 }
-            frames.append(CGRect(origin: CGPoint(x: x, y: y), size: size))
-            x += size.width + spacing; rowH = max(rowH, size.height)
-        }
-        return (CGSize(width: width, height: y + rowH), frames)
     }
 }

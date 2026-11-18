@@ -9,7 +9,9 @@
   "packId": "editorial",
   "status": "experimental",
   "owner": "library-maintainer",
-  "aliases": [],
+  "aliases": [
+    "GroupedRoster"
+  ],
   "source": {
     "target": "web",
     "path": "src/primitives/RollCall/RollCall.tsx",

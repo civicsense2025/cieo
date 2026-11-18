@@ -22,14 +22,14 @@ public struct LiveCollaboratorsAtom: MotionAtomView {
                 HStack {
                     Text("Launch plan").font(.caption.weight(.semibold))
                     Spacer()
-                    TimelineView(.animation) { ctx in
+                    TimelineView(.animation(paused: reduce)) { ctx in
                         let t = ctx.date.timeIntervalSinceReferenceDate
                         HStack(spacing: -6) { ForEach(people.indices, id: \.self) { avatar($0, t) } }
                     }
                 }
                 ZStack(alignment: .topLeading) {
                     WritingWords(words: words, space: "doc", font: .caption).frame(maxWidth: .infinity, alignment: .leading)
-                    TimelineView(.animation) { ctx in
+                    TimelineView(.animation(paused: reduce)) { ctx in
                         let t = ctx.date.timeIntervalSinceReferenceDate
                         ZStack(alignment: .topLeading) { ForEach(people.indices, id: \.self) { cursor($0, t) } }
                     }

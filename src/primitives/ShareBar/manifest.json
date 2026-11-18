@@ -9,7 +9,9 @@
   "packId": "editorial",
   "status": "experimental",
   "owner": "library-maintainer",
-  "aliases": [],
+  "aliases": [
+    "ProportionBar"
+  ],
   "source": {
     "target": "web",
     "path": "src/primitives/ShareBar/ShareBar.tsx",

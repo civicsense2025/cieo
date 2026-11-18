@@ -5,10 +5,16 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState, type FormEvent, type TextareaHTMLAttributes } from 'react';
 import { S } from '../core/spring.js';
 import { Digits } from '../react/index.js';
-import { FieldFrame, useField, type FieldOwnProps } from './Field.js';
+import { FieldFrame, useField, type FieldFrameSlots, type FieldOwnProps } from './Field.js';
 import { Driver, px } from './motion.js';
+import { customizeControlPart, type ControlPartProps } from './parts.js';
 
 const useIso = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+export interface TextAreaSlotProps extends FieldFrameSlots {
+  textarea?: ControlPartProps;
+  count?: ControlPartProps;
+}
 
 export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'prefix' | 'rows'> &
   FieldOwnProps & {
@@ -16,10 +22,11 @@ export type TextAreaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'p
     maxRows?: number;
     /** Show a rolling character count (with maxLength, shows count / max). */
     showCount?: boolean;
+    slotProps?: TextAreaSlotProps;
   };
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function TextArea(props, ref) {
-  const { label, description, error, status, validate, onStatusChange, prefix, suffix, className, placeholder, id, minRows = 3, maxRows = 12, showCount, onInput, ...rest } = props;
+  const { label, description, error, status, validate, onStatusChange, prefix, suffix, slotProps, className, placeholder, id, minRows = 3, maxRows = 12, showCount, onInput, ...rest } = props;
   const own = { label, description, error, status, validate, onStatusChange, prefix, suffix };
   const field = useField<HTMLTextAreaElement>(own, rest, id);
   const initial = String(rest.value ?? rest.defaultValue ?? '');
@@ -80,14 +87,14 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
   };
 
   const footer = showCount ? (
-    <span className="cieo-field-count" aria-hidden="true">
+    <span className="cieo-field-count" aria-hidden="true" {...customizeControlPart(slotProps?.count, 'cieo-field-count')}>
       <Digits value={count} />
       {rest.maxLength ? <span>&thinsp;/&thinsp;{rest.maxLength}</span> : null}
     </span>
   ) : null;
 
   return (
-    <FieldFrame kind="textarea" own={own} field={field} floated={!!placeholder} className={className} footer={footer}>
+    <FieldFrame kind="textarea" own={own} field={field} floated={!!placeholder} className={className} slotProps={slotProps} footer={footer}>
       <textarea
         {...rest}
         {...field.control}
@@ -104,6 +111,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function 
           rest.onBlur?.(e);
         }}
         className="cieo-field-control"
+        {...customizeControlPart(slotProps?.textarea, 'cieo-field-control', rest.style)}
       />
     </FieldFrame>
   );

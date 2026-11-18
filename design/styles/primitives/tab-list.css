@@ -1,4 +1,5 @@
 /* design/styles/primitives/tab-list.css */
 @layer cieo.components {
-  :where(.cieo).cieo-tab-list { display: flex; gap: var(--cieo-space-2); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo).cieo-tab-list { position: relative; display: flex; gap: var(--cieo-space-2); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+  :where(.cieo) .cieo-tab-indicator { position: absolute; inset-block-end: -1px; block-size: 2px; background: var(--cieo-tabs-indicator-color, var(--cieo-color-accent)); pointer-events: none; }
 }

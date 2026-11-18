@@ -17,6 +17,7 @@ public struct AnnotationPin: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @ScaledMetric private var diameter: CGFloat = AnnotationPin.defaultDiameter
     @SwiftUI.State private var arrived = false
@@ -53,14 +54,14 @@ public struct AnnotationPin: View {
                     .contentShape(.rect)
             }
             .buttonStyle(.plain)
-            .scaleEffect(arrived ? 1 : Self.popFrom, anchor: .bottom)
-            .opacity(arrived ? 1 : Motion.arriveOpacity)
+            .scaleEffect(arrived || reduceMotion || !policy.allowsMotion ? 1 : Self.popFrom, anchor: .bottom)
+            .opacity(arrived || reduceMotion || !policy.allowsMotion ? 1 : Motion.arriveOpacity)
             .position(x: x * proxy.size.width, y: y * proxy.size.height - hit.height / 2)
             .accessibilityLabel(Self.annotationPinLabel(index, state: state, author: author))
             .accessibilityAddTraits(selected ? .isSelected : [])
         }
-        .onAppear { withMotion(.snap, reduceMotion: reduceMotion) { arrived = true } }
-        .motion(.snap, value: selected)
+        .onAppear { withMotion(.snap, reduceMotion: reduceMotion || !policy.allowsMotion) { arrived = true } }
+        .motionAnimation(.snap, value: selected)
     }
 
     private var pinSize: CGSize {

@@ -15,6 +15,7 @@ export function toNative(theme, target, input = {}) {
   const rows = Object.entries(theme.tokens).sort(([a], [b]) => a.localeCompare(b, 'en')).map(([key, token]) => {
     let value = token.value;
     if (token.type === 'dimension') value = parseFloat(value) * (value.endsWith('rem') ? reference : 1);
+    if (token.type === 'duration') value = Number((parseFloat(value) / (value.endsWith('ms') ? 1000 : 1)).toFixed(6));
     if (token.type === 'fontFamily') value = value.join(', ');
     return { key, value, numeric: typeof value === 'number' };
   });

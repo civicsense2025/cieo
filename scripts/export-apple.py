@@ -19,12 +19,13 @@ let package = Package(
                .library(name: "CieoGallery", targets: ["CieoGallery"]),
                .library(name: "CieoAtoms", targets: ["CieoAtoms"])],
     targets: [.target(name: "Cieo"),
-              .target(name: "CieoAtoms", dependencies: ["Cieo"], path: "atoms/swift"),
+              .target(name: "CieoAtoms", dependencies: ["Cieo", "CieoUI"], path: "atoms/swift"),
               .target(name: "CieoUI", dependencies: ["Cieo"], resources: [.process("Resources")]),
               .target(name: "CieoGallery", dependencies: ["CieoUI", "Cieo", "CieoAtoms"]),
               .testTarget(name: "CieoAtomsTests", dependencies: ["CieoAtoms"]),
               .testTarget(name: "CieoTests", dependencies: ["Cieo"]),
-              .testTarget(name: "CieoUITests", dependencies: ["CieoUI"])])
+              .testTarget(name: "CieoUITests", dependencies: ["CieoUI"]),
+              .testTarget(name: "CieoGalleryTests", dependencies: ["CieoGallery", "CieoUI", "CieoAtoms"])])
 '''
 
 
@@ -42,7 +43,7 @@ def member(root, name):
 
 def inventory():
     data = {"Package.swift": PACKAGE.encode()}
-    for directory in ["Sources/Cieo", "Sources/CieoUI", "Sources/CieoGallery", "Tests/CieoTests", "Tests/CieoUITests", "Tests/CieoAtomsTests", "atoms/swift"]:
+    for directory in ["Sources/Cieo", "Sources/CieoUI", "Sources/CieoGallery", "Tests/CieoTests", "Tests/CieoUITests", "Tests/CieoAtomsTests", "Tests/CieoGalleryTests", "atoms/swift"]:
         for path in sorted((ROOT / directory).rglob("*")):
             if path.is_symlink():
                 raise ValueError("Source symlinks are not portable")

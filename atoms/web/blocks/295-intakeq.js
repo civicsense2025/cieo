@@ -28,7 +28,7 @@ atom({ id:'intakeq', cat:'Scheduling', name:'Intake questions', block:'intake, b
         const c = document.createElement('button'); c.textContent = 'Continue';
         c.style.cssText = 'min-height:34px;border-radius:8px;border:0;background:var(--ink);color:var(--card);cursor:pointer;font-size:13px;font-weight:600';
         c.onclick = () => { if (ans[k]){ need.to(0); next(); }
-          else { sh.release(10, 0, 0, { w:46, z:.22 }); need.to(1); } };
+          else { sh.release(10, 0, 0, { w:46, z:.7 }); need.to(1); } };
         L.appendChild(c);
         const wrap = document.createElement('span');
         wrap.style.cssText = 'position:relative;display:grid;min-height:18px';

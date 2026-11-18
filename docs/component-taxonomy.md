@@ -11,7 +11,7 @@ Every component has one **layer** and one **pack**, both set in its `manifest.js
 
 | Layer | What it is | Examples |
 | --- | --- | --- |
-| Primitive | A foundation with no opinion about a use case: layout, text, icon, overlay. | `Stack`, `Grid`, `Text`, `Icon`, `Overlay` |
+| Primitive | A foundation with no opinion about a use case: layout, text, icon, overlay, slot, motion containers, i18n. | `Stack`, `Grid`, `Text`, `Icon`, `Overlay`, `Slot`, `MotionFrame`, `MorphSurface`, `StaggerGroup`, `I18nProvider` |
 | Atom | One control, indicator or label. | `Badge`, `Avatar`, `Spinner` |
 | Molecule | A small group of atoms that does one job. | `Field`, `Pagination`, `Tooltip` |
 | Organism | A section or whole surface. | `Dialog`, `SideNav`, `Table` |
@@ -39,13 +39,13 @@ Import paths do not change: `cieo/Toast` is still `cieo/Toast`. Packs group the 
 1. A component builds only on its own layer or a lower one. A part may build on its own group (`Tab` on `TabList`).
 2. `core` never depends on a use-case pack. A pack depends on `core` or itself. When a pack part turned out to be used by core (`Mention`, `Portrait`, `ByLine`, `PersonRow`, `ReplyPreview`, `FeedbackPopover`), it moved to core.
 3. Shared helpers for a family live at the primitives root (`auth-shared.tsx`), never inside one finished component, so a field or button never depends on a whole card.
-4. A new component picks its layer and pack in its manifest; the test fails until it does.
+4. A new component picks its layer and pack in its manifest (`schemas/component.schema.json`); the test fails until it does.
 
 ## Names to review
 
-These are named for one use rather than the idea. They are not renamed here because installed apps import them; a rename needs an alias release.
+These components originated under domain-specific names. Their canonical general-purpose aliases are now exported alongside the original symbols from `cieo/primitives` (`src/primitives/index.ts`) so callers can adopt the canonical names without breaking existing imports:
 
-| Today | Idea | Suggested name |
+| Original name | Idea | Canonical alias |
 | --- | --- | --- |
 | `ShareBar` | Proportions drawn as one bar | `ProportionBar` |
 | `RollCall` | Grouped list of people | `GroupedRoster` |

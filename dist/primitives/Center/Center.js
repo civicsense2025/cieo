@@ -1,5 +1,3 @@
-// src/primitives/Center/Center.tsx
-'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function Center({ className, slotProps, maxWidth = '60rem', children }) {

@@ -13,6 +13,7 @@ public struct NotifyToggle: View {
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentIcons) private var icons
     @Environment(\.componentMetrics) private var metrics
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Binding private var isOn: Bool
     private let label: Text
@@ -65,7 +66,7 @@ public struct NotifyToggle: View {
                         .background(theme.accent, in: .circle)
                         .scaleEffect(0.6) // literal-ok: the badge is a fraction of the bell
                         .offset(x: metrics.tight, y: -metrics.tight)
-                        .transition(reduceMotion ? .identity : .scale)
+                        .transition(reduceMotion || !policy.allowsMotion ? .identity : .scale)
                 }
             }
             .foregroundStyle(isOn ? theme.accent : theme.secondary)
@@ -75,7 +76,7 @@ public struct NotifyToggle: View {
         .buttonStyle(.plain)
         .motionAnimation(.snap, value: isOn)
         .onChange(of: isOn) { old, new in
-            if new && !old && !reduceMotion { rings += 1 }
+            if new && !old && policy.allowsMotion && !reduceMotion { rings += 1 }
         }
         .accessibilityLabel(label)
         .accessibilityAddTraits(isOn ? [.isToggle, .isSelected] : [.isToggle])

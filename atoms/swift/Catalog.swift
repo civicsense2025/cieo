@@ -7,12 +7,29 @@ public struct MotionAtomInfo: Sendable {
     public let name: String
     /// One line on what the motion does, same as the web atom's description.
     public let summary: String
+    public let layer: String?
+    public let pack: String?
+    public let families: [String]
+    public let formula: String?
 
-    public init(id: String, category: String, name: String, summary: String) {
+    public init(
+        id: String,
+        category: String,
+        name: String,
+        summary: String,
+        layer: String? = nil,
+        pack: String? = nil,
+        families: [String] = [],
+        formula: String? = nil
+    ) {
         self.id = id
         self.category = category
         self.name = name
         self.summary = summary
+        self.layer = layer
+        self.pack = pack
+        self.families = families
+        self.formula = formula
     }
 }
 

@@ -10,6 +10,8 @@ public struct SigChainAtom: MotionAtomView {
     @State private var k = 0
     @State private var tweak = true
     public init() {}
+    private var requiredIndex: Int { tweak ? signers.count - 1 : 1 }
+    private var complete: Bool { k >= requiredIndex }
 
     public var body: some View {
         AtomStage(hint: "Each seal inks after the line reaches it") {
@@ -25,7 +27,7 @@ public struct SigChainAtom: MotionAtomView {
                                     Circle().fill(i <= k ? Color.primary : Color.clear)
                                         .frame(width: 30, height: 30)
                                         .overlay(Circle().strokeBorder(i <= k ? Color.primary : Color.secondary.opacity(0.35), lineWidth: 2))
-                                    if i < k || (k == signers.count - 1 && i == k) {
+                                    if i < k || (complete && i == k) {
                                         Image(systemName: "checkmark").font(.system(size: 12.5).weight(.bold)).foregroundStyle(.background)
                                             .motionTransition(.swap())
                                     } else {
@@ -40,10 +42,10 @@ public struct SigChainAtom: MotionAtomView {
                         }
                     }
                 }
-                SwapText(k == signers.count - 1 ? states[2] : k > 0 ? states[1] : states[0])
-                    .font(.system(size: 12.5)).foregroundStyle(k == signers.count - 1 ? Color.green : .secondary)
+                SwapText(complete ? states[2] : k > 0 ? states[1] : states[0])
+                    .font(.system(size: 12.5)).foregroundStyle(complete ? Color.green : .secondary)
                 HStack(spacing: 8) {
-                    Button("Advance seal") { advance() }.buttonStyle(.borderedProminent).frame(minHeight: 32).disabled(k == signers.count - 1)
+                    Button("Advance seal") { advance() }.buttonStyle(.borderedProminent).frame(minHeight: 32).disabled(complete)
                     Button("Reset") { withMotion(.base, reduceMotion: reduce) { k = 0 } }.buttonStyle(.bordered).frame(minHeight: 32)
                 }
                 Toggle("Require all seals", isOn: $tweak)

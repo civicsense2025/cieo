@@ -1,0 +1,168 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.morph-surface",
+  "componentVersion": "1.0.0",
+  "name": "MorphSurface",
+  "layer": "primitive",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/MorphSurface/MorphSurface.tsx",
+    "symbol": "MorphSurface"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "layoutId",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Shared Container Transform key across mounts or layout states."
+    },
+    {
+      "id": "stateKey",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Optional state key triggering same-element FLIP measurement."
+    },
+    {
+      "id": "motion",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": true,
+      "constraints": {},
+      "note": "False snaps immediately without FLIP inversion."
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {},
+      "note": "Alias to disable motion."
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Appended to the root classes without replacing library classes."
+    },
+    {
+      "id": "slotProps",
+      "type": {
+        "kind": "record",
+        "fields": []
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Typed presentation record; see TypeScript declaration. Named parts: root."
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "content",
+        "component"
+      ],
+      "min": 0,
+      "max": 64,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [
+    {
+      "id": "root",
+      "overrides": [
+        "color"
+      ],
+      "tokenRoles": [
+        "text-primary"
+      ]
+    }
+  ],
+  "constraints": {
+    "layout": [
+      "shrinkable-min-inline-0"
+    ],
+    "content": [
+      "semantic-children"
+    ],
+    "motion": [
+      "critically-damped-spring"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "layoutId",
+        "stateKey",
+        "motion",
+        "disabled",
+        "className",
+        "slotProps"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [
+        "root"
+      ],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "Interruptible FLIP Container Transform driven by 5-channel SpringRect geometry."
+  },
+  "extensions": {
+    "customization": {
+      "parts": [
+        "root"
+      ],
+      "contract": "presentation-only; controlled semantics and computed geometry remain library-owned"
+    }
+  }
+}

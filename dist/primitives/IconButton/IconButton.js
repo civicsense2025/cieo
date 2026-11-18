@@ -1,6 +1,12 @@
 'use client';
 import { jsx as _jsx } from "react/jsx-runtime";
+import { Slot } from '../Slot/Slot.js';
 import { customizePart } from '../customization.js';
-export function IconButton({ slotProps, label, size = 'md', children, type = 'button', className, ...rest }) {
-    return (_jsx("button", { ...rest, type: type, "aria-label": label, "data-size": size, className: className ? `cieo cieo-icon-button ${className}` : 'cieo cieo-icon-button', ...customizePart(slotProps?.root, className ? `cieo cieo-icon-button ${className}` : 'cieo cieo-icon-button', undefined), children: children }));
+export function IconButton({ slotProps, label, size = 'md', asChild = false, children, type = 'button', className, style, ref, ...rest }) {
+    const cls = className ? `cieo cieo-icon-button ${className}` : 'cieo cieo-icon-button';
+    const customized = customizePart(slotProps?.root, cls, style);
+    if (asChild) {
+        return (_jsx(Slot, { asChild: true, ref: ref, ...rest, "aria-label": label, "data-size": size, className: cls, style: style, ...customized, children: children }));
+    }
+    return (_jsx("button", { ...rest, ref: ref, type: type, "aria-label": label, "data-size": size, className: cls, style: style, ...customized, children: children }));
 }

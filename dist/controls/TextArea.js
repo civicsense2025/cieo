@@ -8,9 +8,10 @@ import { S } from '../core/spring.js';
 import { Digits } from '../react/index.js';
 import { FieldFrame, useField } from './Field.js';
 import { Driver, px } from './motion.js';
+import { customizeControlPart } from './parts.js';
 const useIso = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 export const TextArea = forwardRef(function TextArea(props, ref) {
-    const { label, description, error, status, validate, onStatusChange, prefix, suffix, className, placeholder, id, minRows = 3, maxRows = 12, showCount, onInput, ...rest } = props;
+    const { label, description, error, status, validate, onStatusChange, prefix, suffix, slotProps, className, placeholder, id, minRows = 3, maxRows = 12, showCount, onInput, ...rest } = props;
     const own = { label, description, error, status, validate, onStatusChange, prefix, suffix };
     const field = useField(own, rest, id);
     const initial = String(rest.value ?? rest.defaultValue ?? '');
@@ -71,12 +72,12 @@ export const TextArea = forwardRef(function TextArea(props, ref) {
         grow(false);
         onInput?.(e);
     };
-    const footer = showCount ? (_jsxs("span", { className: "cieo-field-count", "aria-hidden": "true", children: [_jsx(Digits, { value: count }), rest.maxLength ? _jsxs("span", { children: ["\u2009/\u2009", rest.maxLength] }) : null] })) : null;
-    return (_jsx(FieldFrame, { kind: "textarea", own: own, field: field, floated: !!placeholder, className: className, footer: footer, children: _jsx("textarea", { ...rest, ...field.control, ref: setRef, rows: minRows, placeholder: placeholder ?? ' ', onInput: input, onChange: (e) => {
+    const footer = showCount ? (_jsxs("span", { className: "cieo-field-count", "aria-hidden": "true", ...customizeControlPart(slotProps?.count, 'cieo-field-count'), children: [_jsx(Digits, { value: count }), rest.maxLength ? _jsxs("span", { children: ["\u2009/\u2009", rest.maxLength] }) : null] })) : null;
+    return (_jsx(FieldFrame, { kind: "textarea", own: own, field: field, floated: !!placeholder, className: className, slotProps: slotProps, footer: footer, children: _jsx("textarea", { ...rest, ...field.control, ref: setRef, rows: minRows, placeholder: placeholder ?? ' ', onInput: input, onChange: (e) => {
                 rest.onChange?.(e);
                 field.control.onChange(e);
             }, onBlur: (e) => {
                 field.control.onBlur(e);
                 rest.onBlur?.(e);
-            }, className: "cieo-field-control" }) }));
+            }, className: "cieo-field-control", ...customizeControlPart(slotProps?.textarea, 'cieo-field-control', rest.style) }) }));
 });

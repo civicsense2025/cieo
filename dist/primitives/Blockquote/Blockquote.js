@@ -1,5 +1,3 @@
-// src/primitives/Blockquote/Blockquote.tsx
-'use client';
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { customizePart } from '../customization.js';
 export function Blockquote({ className, slotProps, cite, children }) {

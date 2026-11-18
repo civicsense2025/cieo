@@ -1,5 +1,8 @@
 import SwiftUI
 
+/// Canonical alias matching Cieo's cross-platform vocabulary.
+public typealias TagChip = TopicChip
+
 /// What a frame, section or story is about: an accent dot and a topic in sentence case, such as "Permitting".
 /// It replaces an uppercase eyebrow label. The headline under it never repeats it.
 public struct TopicChip: View {

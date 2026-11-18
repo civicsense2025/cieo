@@ -2,16 +2,18 @@ import Cieo
 import SwiftUI
 
 /// A small non-modal comment box with an optional thread above it. It can place itself beside a point and
-/// flip to stay inside its container. The host owns the thread and what submit does; the typed text stays
-/// inside until it is sent.
+/// flip to stay inside its container. The host owns the thread and what submit does; pass `text:` and
+/// `preserveDraftOnSubmit: true` when async host submission may fail so the draft stays intact.
 public struct FeedbackPopover<Thread: View, Actions: View>: View {
     @Environment(\.componentTheme) private var theme
     @Environment(\.componentTypography) private var typography
     @Environment(\.componentMetrics) private var metrics
     @ScaledMetric private var width: CGFloat = 280 // literal-ok: panel width is component geometry
-    @SwiftUI.State private var text = ""
+    @SwiftUI.State private var ownedText = ""
     @FocusState private var focused: Bool
     @Binding private var isPresented: Bool
+    private let externalText: Binding<String>?
+    private let preserveDraftOnSubmit: Bool
     private let placeholder: LocalizedStringKey
     private let submitLabel: LocalizedStringKey
     private let title: LocalizedStringKey?
@@ -23,20 +25,15 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
     private let onSubmit: (String) -> Void
     private let onDismiss: (() -> Void)?
 
-    /// - Parameters:
-    ///   - isPresented: Shows and hides the box; it also closes itself on Escape and after a submit.
-    ///   - onSubmit: Called with the trimmed text, never for blank text.
-    ///   - title: A visible heading that also names the box. Omit it for a box named by its placeholder.
-    ///   - anchor: A point to sit beside, in points within `container`. Omit both to place the box in the
-    ///     normal flow and let the host position it.
-    ///   - thread: The existing thread, drawn above the field.
-    ///   - secondaryActions: Extra actions beside the submit button, such as Resolve.
-    public init(isPresented: Binding<Bool> = .constant(true), placeholder: LocalizedStringKey = "Add a comment",
+    public init(isPresented: Binding<Bool> = .constant(true), text: Binding<String>? = nil,
+                preserveDraftOnSubmit: Bool = false, placeholder: LocalizedStringKey = "Add a comment",
                 submitLabel: LocalizedStringKey = "Comment", title: LocalizedStringKey? = nil,
                 anchor: CGPoint? = nil, container: CGSize? = nil, gap: CGFloat = FeedbackPopover.defaultGap,
                 onSubmit: @escaping (String) -> Void, onDismiss: (() -> Void)? = nil,
                 @ViewBuilder thread: () -> Thread, @ViewBuilder secondaryActions: () -> Actions) {
         _isPresented = isPresented
+        externalText = text
+        self.preserveDraftOnSubmit = preserveDraftOnSubmit
         self.placeholder = placeholder
         self.submitLabel = submitLabel
         self.title = title
@@ -49,6 +46,10 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
         self.secondaryActions = secondaryActions()
     }
 
+    private var textBinding: Binding<String> {
+        externalText ?? $ownedText
+    }
+
     public var body: some View {
         Group {
             if isPresented {
@@ -59,8 +60,10 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
                 }
             }
         }
-        .motion(.base, value: isPresented)
-        .onChange(of: isPresented) { _, open in if !open { text = "" } }
+        .motionAnimation(.base, value: isPresented)
+        .onChange(of: isPresented) { _, open in
+            if !open && !preserveDraftOnSubmit && externalText == nil { ownedText = "" }
+        }
     }
 
     private var panel: some View {
@@ -69,7 +72,7 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
                 Text(title).font(typography.heading).accessibilityAddTraits(.isHeader)
             }
             if Thread.self != EmptyView.self { thread }
-            TextField(placeholder, text: $text, axis: .vertical)
+            TextField(placeholder, text: textBinding, axis: .vertical)
                 .lineLimit(2...6) // literal-ok: field grows from two lines to six
                 .font(typography.field)
                 .focused($focused)
@@ -79,7 +82,7 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
                 secondaryActions
                 ActionButton(submitLabel, action: submit)
                     .keyboardShortcut(.return, modifiers: .command)
-                    .disabled(Self.commentText(text) == nil)
+                    .disabled(Self.commentText(textBinding.wrappedValue) == nil)
             }
         }
         .padding(metrics.medium)
@@ -97,10 +100,10 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
     }
 
     private func submit() {
-        guard let value = Self.commentText(text) else { return }
-        onSubmit(value)
-        text = ""
-        dismiss()
+        guard let next = Self.submissionState(raw: textBinding.wrappedValue, preserveDraft: preserveDraftOnSubmit) else { return }
+        onSubmit(next.submitted)
+        textBinding.wrappedValue = next.nextDraft
+        if next.shouldDismiss { dismiss() }
     }
 
     private func dismiss() {
@@ -127,9 +130,7 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
         Swift.max(0, Swift.min(max.isFinite ? max : 0, v.isFinite ? v : 0))
     }
 
-    /// Where a popover of `size` goes beside `anchor` inside `container`. Prefers right, then left, below,
-    /// above; when none fits it takes the side with the most room. The result is always clamped inside the
-    /// container.
+    /// Where a popover of `size` goes beside `anchor` inside `container`.
     public static func placePopover(anchor: CGPoint, size: CGSize, container: CGSize, gap: CGFloat = defaultGap) -> Placement {
         let room: [Side: CGFloat] = [
             .right: container.width - anchor.x - gap - size.width,
@@ -161,15 +162,23 @@ public struct FeedbackPopover<Thread: View, Actions: View>: View {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? nil : trimmed
     }
+
+    /// Pure transition for submit: preserves `raw` and stays open when `preserveDraft` is true.
+    public static func submissionState(raw: String, preserveDraft: Bool) -> (submitted: String, nextDraft: String, shouldDismiss: Bool)? {
+        guard let submitted = commentText(raw) else { return nil }
+        return preserveDraft ? (submitted, raw, false) : (submitted, "", true)
+    }
 }
 
 public extension FeedbackPopover where Thread == EmptyView, Actions == EmptyView {
     /// A bare comment box with no thread and no extra actions.
-    init(isPresented: Binding<Bool> = .constant(true), placeholder: LocalizedStringKey = "Add a comment",
+    init(isPresented: Binding<Bool> = .constant(true), text: Binding<String>? = nil,
+         preserveDraftOnSubmit: Bool = false, placeholder: LocalizedStringKey = "Add a comment",
          submitLabel: LocalizedStringKey = "Comment", title: LocalizedStringKey? = nil,
          anchor: CGPoint? = nil, container: CGSize? = nil, gap: CGFloat = FeedbackPopover.defaultGap,
          onSubmit: @escaping (String) -> Void, onDismiss: (() -> Void)? = nil) {
-        self.init(isPresented: isPresented, placeholder: placeholder, submitLabel: submitLabel, title: title,
+        self.init(isPresented: isPresented, text: text, preserveDraftOnSubmit: preserveDraftOnSubmit,
+                  placeholder: placeholder, submitLabel: submitLabel, title: title,
                   anchor: anchor, container: container, gap: gap, onSubmit: onSubmit, onDismiss: onDismiss,
                   thread: { EmptyView() }, secondaryActions: { EmptyView() })
     }
@@ -177,12 +186,14 @@ public extension FeedbackPopover where Thread == EmptyView, Actions == EmptyView
 
 public extension FeedbackPopover where Actions == EmptyView {
     /// A comment box with an existing thread above the field.
-    init(isPresented: Binding<Bool> = .constant(true), placeholder: LocalizedStringKey = "Add a comment",
+    init(isPresented: Binding<Bool> = .constant(true), text: Binding<String>? = nil,
+         preserveDraftOnSubmit: Bool = false, placeholder: LocalizedStringKey = "Add a comment",
          submitLabel: LocalizedStringKey = "Comment", title: LocalizedStringKey? = nil,
          anchor: CGPoint? = nil, container: CGSize? = nil, gap: CGFloat = FeedbackPopover.defaultGap,
          onSubmit: @escaping (String) -> Void, onDismiss: (() -> Void)? = nil,
          @ViewBuilder thread: () -> Thread) {
-        self.init(isPresented: isPresented, placeholder: placeholder, submitLabel: submitLabel, title: title,
+        self.init(isPresented: isPresented, text: text, preserveDraftOnSubmit: preserveDraftOnSubmit,
+                  placeholder: placeholder, submitLabel: submitLabel, title: title,
                   anchor: anchor, container: container, gap: gap, onSubmit: onSubmit, onDismiss: onDismiss,
                   thread: thread, secondaryActions: { EmptyView() })
     }
@@ -195,9 +206,8 @@ private struct PopoverSizeKey: PreferenceKey {
     static func reduce(value: inout CGSize?, nextValue: () -> CGSize?) { value = nextValue() ?? value }
 }
 
-/// Places a view beside a point inside a container, measuring it so placement flips to fit, and grows it in
-/// from the anchor.
 private struct PlacedBeside: ViewModifier {
+    @Environment(\.renderPolicy) private var policy
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var measured: CGSize?
     @State private var arrived = false
@@ -205,7 +215,6 @@ private struct PlacedBeside: ViewModifier {
     let container: CGSize
     let gap: CGFloat
 
-    /// Size to assume until the first measurement.
     private static let fallback = CGSize(width: 280, height: 160) // literal-ok: first-frame guess before measuring
     private static let popFrom: CGFloat = 0.96 // literal-ok: arrival scale
 
@@ -214,20 +223,20 @@ private struct PlacedBeside: ViewModifier {
         let placed = FeedbackPopover<EmptyView, EmptyView>.placePopover(anchor: anchor, size: size, container: container, gap: gap)
         let origin = UnitPoint(x: size.width > 0 ? (anchor.x - placed.left) / size.width : 0.5,
                                y: size.height > 0 ? (anchor.y - placed.top) / size.height : 0.5)
+        let instant = arrived || reduceMotion || !policy.allowsMotion
         content
             .fixedSize(horizontal: false, vertical: true)
             .background(GeometryReader { Color.clear.preference(key: PopoverSizeKey.self, value: $0.size) })
             .onPreferenceChange(PopoverSizeKey.self) { measured = $0 }
-            .scaleEffect(arrived ? 1 : Self.popFrom, anchor: origin)
-            .opacity(arrived ? 1 : Motion.arriveOpacity)
+            .scaleEffect(instant ? 1 : Self.popFrom, anchor: origin)
+            .opacity(instant ? 1 : Motion.arriveOpacity)
             .offset(x: placed.left, y: placed.top)
             .frame(width: container.width, height: container.height, alignment: .topLeading)
-            .onAppear { withMotion(.base, reduceMotion: reduceMotion) { arrived = true } }
+            .onAppear { withMotion(.base, reduceMotion: reduceMotion || !policy.allowsMotion) { arrived = true } }
     }
 }
 
 extension View {
-    /// Sits this view beside `anchor` inside a container of the given size.
     func placed(beside anchor: CGPoint, in container: CGSize, gap: CGFloat) -> some View {
         modifier(PlacedBeside(anchor: anchor, container: container, gap: gap))
     }

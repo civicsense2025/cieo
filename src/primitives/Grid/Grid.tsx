@@ -1,5 +1,4 @@
 // src/primitives/Grid/Grid.tsx
-'use client';
 import type { PrimitivePartProps } from '../parts.js';
 import { customizePart } from '../customization.js';
 /* Grid. Twelve-column page grid: GridSpan children take their spans. Host owns the content; this owns columns + gap only. */

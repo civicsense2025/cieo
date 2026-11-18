@@ -1,11 +1,14 @@
 import Foundation
 
-/// A critically damped spring. `w` is the natural frequency in rad/s; nothing overshoots.
+/// A spring preset. `w` is the natural frequency in rad/s; `zeta` is the damping ratio in `0.7...1.0` (`1.0` is critically damped).
 public struct SpringPreset: Hashable, Sendable {
     public let w: Double
-    public init(w: Double) {
+    public let zeta: Double
+
+    public init(w: Double, zeta: Double = 1.0) {
         precondition(w > 0, "SpringPreset needs a positive frequency")
         self.w = w
+        self.zeta = zeta.isFinite ? min(1.0, max(0.7, zeta)) : 1.0
     }
 
     /// Presses, checks, knobs, chevrons, exits.
@@ -19,10 +22,13 @@ public struct SpringPreset: Hashable, Sendable {
 
     /// Seconds until a unit step is within `epsilon` of its target.
     public func settleTime(epsilon: Double = 1e-3) -> Double {
-        var lo = 0.0, hi = 60 / w
+        var lo = 0.0, hi = 60 / (zeta * w)
         for _ in 0..<50 {
             let mid = (lo + hi) / 2
-            if Motion.resp(mid, x0: 1, v0: 0, self) > epsilon { lo = mid } else { hi = mid }
+            let remaining = zeta >= 1.0
+                ? Motion.resp(mid, x0: 1, v0: 0, self)
+                : Motion.envelope(mid, x0: 1, v0: 0, self)
+            if remaining > epsilon { lo = mid } else { hi = mid }
         }
         return hi
     }
@@ -40,12 +46,33 @@ public enum Motion {
 
     /// Offset left after `dt` seconds for a spring released at offset `x0` with velocity `v0`.
     public static func resp(_ dt: Double, x0: Double, v0: Double, _ p: SpringPreset) -> Double {
-        dt <= 0 ? x0 : exp(-p.w * dt) * (x0 + (v0 + p.w * x0) * dt)
+        guard dt > 0 else { return x0 }
+        if p.zeta >= 1.0 {
+            return exp(-p.w * dt) * (x0 + (v0 + p.w * x0) * dt)
+        }
+        let alpha = p.zeta * p.w
+        let wd = p.w * (1 - p.zeta * p.zeta).squareRoot()
+        return exp(-alpha * dt) * (x0 * cos(wd * dt) + ((v0 + alpha * x0) / wd) * sin(wd * dt))
     }
 
     /// Velocity of the same spring after `dt` seconds.
     public static func vel(_ dt: Double, x0: Double, v0: Double, _ p: SpringPreset) -> Double {
-        dt <= 0 ? v0 : exp(-p.w * dt) * (v0 - p.w * (v0 + p.w * x0) * dt)
+        guard dt > 0 else { return v0 }
+        if p.zeta >= 1.0 {
+            return exp(-p.w * dt) * (v0 - p.w * (v0 + p.w * x0) * dt)
+        }
+        let alpha = p.zeta * p.w
+        let wd = p.w * (1 - p.zeta * p.zeta).squareRoot()
+        return exp(-alpha * dt) * (v0 * cos(wd * dt) - ((alpha * v0 + p.w * p.w * x0) / wd) * sin(wd * dt))
+    }
+
+    fileprivate static func envelope(_ dt: Double, x0: Double, v0: Double, _ p: SpringPreset) -> Double {
+        if p.zeta >= 1.0 {
+            return exp(-p.w * dt) * (1 + p.w * dt) * (abs(x0) + abs(v0) / p.w)
+        }
+        let alpha = p.zeta * p.w
+        let wd = p.w * (1 - p.zeta * p.zeta).squareRoot()
+        return exp(-alpha * dt) * hypot(x0, (v0 + alpha * x0) / wd)
     }
 
     /// Per-item delay for `count` items so the whole group fits in `staggerMax`.
@@ -95,7 +122,7 @@ public struct Track: Sendable {
     public mutating func prune(at t: Double) -> Int {
         events.removeAll { e in
             let dt = t - e.t
-            return dt >= 0 && exp(-e.p.w * dt) * (1 + e.p.w * dt) * (abs(e.x0) + abs(e.v0) / e.p.w) <= 1e-3
+            return dt >= 0 && Motion.envelope(dt, x0: e.x0, v0: e.v0, e.p) <= 1e-3
         }
         return events.count
     }
@@ -108,11 +135,10 @@ public extension Track {
     var restTime: Double? {
         var latest: Double?
         for e in events {
-            let amplitude = abs(e.x0) + abs(e.v0) / e.p.w
-            var lo = 0.0, hi = 60 / e.p.w
+            var lo = 0.0, hi = 60 / (e.p.zeta * e.p.w)
             for _ in 0..<40 {
                 let mid = (lo + hi) / 2
-                if exp(-e.p.w * mid) * (1 + e.p.w * mid) * amplitude > 1e-3 { lo = mid } else { hi = mid }
+                if Motion.envelope(mid, x0: e.x0, v0: e.v0, e.p) > 1e-3 { lo = mid } else { hi = mid }
             }
             latest = max(latest ?? -.infinity, e.t + hi)
         }

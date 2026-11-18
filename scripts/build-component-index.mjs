@@ -52,7 +52,7 @@ const index = `<!doctype html>
 <div class="doc-register">
 ${LAYERS.map(([id, title]) => section(id + 's', title, groups[id])).join('\n')}
 ${PACKS.map(packSection).join('\n')}
-<section id="elsewhere" aria-labelledby="elsewhere-h"><h2 id="elsewhere-h">Elsewhere</h2><ul><li><a href="../../docs/controls.html">Form controls (cieo/controls)</a></li><li><a href="../../docs/catalogue.html">Recipe catalogue</a></li><li><a href="../../docs/studio/index.html">Design studio</a></li><li><a href="../composites/index.html">Composites</a></li></ul></section>
+<section id="elsewhere" aria-labelledby="elsewhere-h"><h2 id="elsewhere-h">Elsewhere</h2><ul><li><a href="../foundations/">Foundations</a></li><li><a href="../recipes/">Motion recipes</a></li><li><a href="../../docs/controls.html">Form controls (cieo/controls)</a></li><li><a href="../../docs/studio/index.html">Design studio</a></li><li><a href="../composites/index.html">Composites</a></li></ul></section>
 </div>
 </div>
 </div></main>${siteFooter('../')}</body></html>

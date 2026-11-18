@@ -8,6 +8,7 @@ public struct InitialBoxAtom: MotionAtomView {
     @State private var initials = "MK"
     @State private var stamped = false
     @State private var scale = 1.0
+    @State private var blueInk = true
     public init() {}
 
     public var body: some View {
@@ -18,7 +19,7 @@ public struct InitialBoxAtom: MotionAtomView {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10).fill(Color.secondary).opacity(0.10).foregroundStyle(.secondary)
                         ZStack {
-                            if stamped { Text(initials.uppercased()).font(.system(size: 26).italic()).foregroundStyle(Color.accentColor).id(initials).motionTransition(.swap()).rotationEffect(.degrees(-4)).scaleEffect(scale) }
+                            if stamped { Text(initials.uppercased()).font(.system(size: 26).italic()).foregroundStyle(blueInk ? Color.accentColor : Color.primary).id(initials).motionTransition(.swap()).rotationEffect(.degrees(-4)).scaleEffect(scale) }
                             else { Text("MK").font(.caption).foregroundStyle(.secondary) }
                         }
                     }
@@ -41,7 +42,7 @@ public struct InitialBoxAtom: MotionAtomView {
                 }
                 .padding(16).frame(maxWidth: 320)
                 .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 14))
-                Toggle("Blue ink stamp", isOn: .constant(true)).font(.caption).foregroundStyle(.secondary)
+                Toggle("Blue ink stamp", isOn: $blueInk).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

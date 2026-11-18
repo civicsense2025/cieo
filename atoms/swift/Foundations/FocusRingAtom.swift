@@ -9,6 +9,7 @@ public struct FocusRingAtom: MotionAtomView {
     @State private var ring = Track(0, preset: .snap)
     @State private var theme = "accent"
     @State private var width = 2.0
+    @State private var titleText = "Spring essay"
     private enum Field: Hashable { case title, save, share }
     private let themes = ["accent", "ink", "success", "danger"]
     public init() {}
@@ -25,7 +26,7 @@ public struct FocusRingAtom: MotionAtomView {
                             .scaleEffect(0.97 + 0.03 * ring.value(at: t))
                     }
                     VStack(spacing: 16) {
-                        TextField("Title", text: .constant("Spring essay"))
+                        TextField("Title", text: $titleText)
                             .focused($focused, equals: .title)
                             .softFieldSurface().frame(minHeight: 40)
                         HStack(spacing: 8) {

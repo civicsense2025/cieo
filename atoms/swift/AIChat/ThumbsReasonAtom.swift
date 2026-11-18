@@ -2,7 +2,7 @@ import SwiftUI
 import Cieo
 
 public struct ThumbsReasonAtom: MotionAtomView {
-    public static let info = MotionAtomInfo(id: "thumbsreason", category: "Forms", name: "Thumbs plus reason",
+    public static let info = MotionAtomInfo(id: "thumbsreason", category: "AI chat", name: "Thumbs plus reason",
         summary: "The pressed thumb sinks on snap. The reason field opens its height on soft, and Send swaps the row to a thank-you terminal.")
 
     @Environment(\.accessibilityReduceMotion) private var reduce

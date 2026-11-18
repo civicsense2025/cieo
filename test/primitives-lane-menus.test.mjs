@@ -5,7 +5,7 @@ import { readFileSync, existsSync } from 'node:fs';
 
 const COMPONENTS = [
   { name: 'ToggleButton', id: 'core.toggle-button', level: 'atom', css: 'toggle-button.css', props: ['label', 'pressed', 'value', 'onPressedChange'], markers: ['aria-pressed={isPressed}', 'ToggleButtonGroupContext', 'cieo-toggle-button'] },
-  { name: 'ToggleButtonGroup', id: 'core.toggle-button-group', level: 'molecule', css: 'toggle-button-group.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'ToggleButtonGroupContext.Provider', 'cieo-toggle-button-group'] },
+  { name: 'ToggleButtonGroup', id: 'core.toggle-button-group', level: 'molecule', css: 'toggle-button-group.css', props: ['label', 'multiple', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'ToggleButtonGroupContext.Provider', 'cieo-toggle-button-group'] },
   { name: 'DropdownMenu', id: 'core.dropdown-menu', level: 'molecule', css: 'dropdown-menu.css', props: ['label', 'open', 'defaultOpen', 'onOpenChange'], markers: ['role="menu"', 'onOpenChange?.(next)', 'defaultOpen = false'] },
   { name: 'DropdownMenuItem', id: 'core.dropdown-menu-item', level: 'atom', css: 'dropdown-menu-item.css', props: ['label', 'disabled', 'onSelect'], markers: ['role="menuitem"', 'onSelect?.()', 'disabled = false'] },
   { name: 'DropdownMenuGroup', id: 'core.dropdown-menu-group', level: 'atom', css: 'dropdown-menu-group.css', props: ['label'], markers: ['role="group"', 'cieo-dropdown-menu-group'] },
@@ -15,7 +15,7 @@ const COMPONENTS = [
   { name: 'DropdownMenuDivider', id: 'core.dropdown-menu-divider', level: 'atom', css: 'dropdown-menu-divider.css', props: [], markers: ['role="separator"', 'cieo-dropdown-menu-divider'] },
   { name: 'DropdownMenuSubMenu', id: 'core.dropdown-menu-submenu', level: 'molecule', css: 'dropdown-menu-submenu.css', props: ['label', 'motion', 'entering', 'exiting'], markers: ['role="menu"', 'focus-within', 'cieo-dropdown-menu-submenu-panel'] },
   { name: 'MoreMenu', id: 'core.more-menu', level: 'molecule', css: null, props: ['label'], markers: ['IconButton', 'DropdownMenu', "label = 'More actions'"] },
-  { name: 'SegmentedControl', id: 'core.segmented-control', level: 'molecule', css: 'segmented-control.css', props: ['label', 'value', 'defaultValue', 'onValueChange'], markers: ['role="group"', 'SegmentedControlContext.Provider', 'cieo-segmented-control'] },
+  { name: 'SegmentedControl', id: 'core.segmented-control', level: 'molecule', css: 'segmented-control.css', props: ['label', 'value', 'defaultValue', 'onValueChange', 'motion'], markers: ['role="group"', 'SegmentedControlContext.Provider', 'cieo-segmented-control'] },
   { name: 'SegmentedControlItem', id: 'core.segmented-control-item', level: 'atom', css: 'segmented-control-item.css', props: ['value', 'href'], markers: ['aria-pressed={picked}', 'aria-current', 'SegmentedControlContext'] },
   { name: 'Tab', id: 'core.tab', level: 'atom', css: 'tab.css', props: ['value', 'className', 'slotProps', 'id', 'controls'], markers: ['role="tab"', 'TabContext', 'tabs === null'] },
   { name: 'TabList', id: 'core.tab-list', level: 'molecule', css: 'tab-list.css', props: ['label', 'value', 'defaultValue', 'onValueChange', 'motion', 'className', 'slotProps'], markers: ['role="tablist"', 'export const TabContext', 'cieo-tab-list'] },

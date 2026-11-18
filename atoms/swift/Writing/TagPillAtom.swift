@@ -17,7 +17,7 @@ public struct TagPillAtom: MotionAtomView {
     public init() {}
 
     private var query: String? {
-        guard let r = text.range(of: #"#\w*$"#, options: .regularExpression) else { return nil }
+        guard tweak, let r = text.range(of: #"#\w*$"#, options: .regularExpression) else { return nil }
         return String(text[r].dropFirst()).lowercased()
     }
     private var visible: [Int] { tags.indices.filter { tags[$0].lowercased().hasPrefix(query ?? "") } }

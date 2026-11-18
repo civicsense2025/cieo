@@ -57,7 +57,9 @@ struct MessagingFeedbackExamples: View {
                         GroupAvatar(people: Array(people.prefix(chat.id == "design" ? 3 : 1)))
                     }
                 }
-                Button("Move last to top") { order = [order.last!] + order.dropLast() }
+                Button("Move last to top") {
+                    if let last = order.last { order = [last] + order.dropLast() }
+                }
             }
             Specimen(title: "Annotation layer") {
                 Toggle("Comment mode", isOn: $commenting)
@@ -80,6 +82,5 @@ struct MessagingFeedbackExamples: View {
                 })
             }
         }
-        .padding()
     }
 }

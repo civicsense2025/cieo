@@ -1,0 +1,176 @@
+{
+  "$schema": "../../../schemas/component.schema.json",
+  "schemaVersion": "1.0.0",
+  "id": "core.radio-group",
+  "componentVersion": "1.0.0",
+  "name": "RadioGroup",
+  "layer": "molecule",
+  "artifactKind": "component",
+  "packId": "core",
+  "status": "experimental",
+  "owner": "library-maintainer",
+  "aliases": [],
+  "source": {
+    "target": "web",
+    "path": "src/primitives/RadioGroup/RadioGroup.tsx",
+    "symbol": "RadioGroup"
+  },
+  "dependencies": [],
+  "nativePrimitives": [],
+  "properties": [
+    {
+      "id": "label",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Fieldset legend naming the radio group."
+    },
+    {
+      "id": "name",
+      "type": {
+        "kind": "string"
+      },
+      "required": true,
+      "nullable": false,
+      "constraints": {},
+      "note": "Shared native radio input name."
+    },
+    {
+      "id": "value",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "defaultValue",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "onValueChange",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {},
+      "note": "Source type is (value: string) => void."
+    },
+    {
+      "id": "description",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    },
+    {
+      "id": "disabled",
+      "type": {
+        "kind": "boolean"
+      },
+      "required": false,
+      "nullable": false,
+      "default": false,
+      "constraints": {}
+    },
+    {
+      "id": "className",
+      "type": {
+        "kind": "string"
+      },
+      "required": false,
+      "nullable": false,
+      "constraints": {}
+    }
+  ],
+  "slots": [
+    {
+      "id": "default",
+      "allowed": [
+        "component"
+      ],
+      "min": 1,
+      "max": 16,
+      "order": "document"
+    }
+  ],
+  "state": [],
+  "transitions": [],
+  "events": [],
+  "variants": [],
+  "styleParts": [],
+  "constraints": {
+    "layout": [
+      "wraps-control"
+    ],
+    "content": [
+      "no-fork-of-control"
+    ],
+    "motion": [
+      "control-spring-only"
+    ]
+  },
+  "platforms": [
+    {
+      "id": "web.react",
+      "minimumOS": {},
+      "implementation": "implemented",
+      "properties": [
+        "label",
+        "name",
+        "value",
+        "defaultValue",
+        "onValueChange",
+        "description",
+        "disabled",
+        "className"
+      ],
+      "states": [],
+      "events": [],
+      "parts": [],
+      "actions": {
+        "discover": "implemented",
+        "preview": "planned",
+        "edit": "planned",
+        "export": "planned",
+        "generate": "planned"
+      }
+    }
+  ],
+  "readiness": {
+    "api": "experimental",
+    "documentation": "draft",
+    "release": "unreleased"
+  },
+  "evidence": [],
+  "documentation": {
+    "path": "README.md",
+    "purpose": "First-class primitive contract over the fieldset-backed RadioGroup and Radio controls."
+  },
+  "extensions": {
+    "wraps": "src/controls/Toggles.tsx",
+    "customization": {
+      "status": "delegated",
+      "target": "RadioGroup",
+      "parts": [
+        "root",
+        "legend",
+        "description",
+        "items"
+      ],
+      "reason": "Alias of RadioGroup; preserves its native/owning component props instead of creating a second control contract."
+    }
+  }
+}

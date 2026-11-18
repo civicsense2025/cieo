@@ -31,17 +31,20 @@ public struct LedeAtom: MotionAtomView {
                 HStack(spacing: 8) {
                     Button("Prev") { go(index - 1) }.buttonStyle(.bordered).frame(minHeight: 32).disabled(index == 0)
                     Button("Next") { go(index + 1) }.buttonStyle(.bordered).frame(minHeight: 32).disabled(index == variants.count - 1)
-                    GeometryReader { g in
-                        Capsule().fill(.green)
-                            .frame(width: g.size.width * Double(variants[index].1) / 100)
+                    if tweak {
+                        GeometryReader { g in
+                            Capsule().fill(.green)
+                                .frame(width: g.size.width * Double(variants[index].1) / 100)
+                                .animation(reduce ? nil : .motion(.base), value: index)
+                        }
+                        .frame(height: 6)
+                        Text("\(variants[index].1)").font(.system(size: 12.5)).foregroundStyle(.secondary).monospacedDigit()
+                            .contentTransition(.numericText())
                             .animation(reduce ? nil : .motion(.base), value: index)
+                            .frame(width: 30, alignment: .trailing)
                     }
-                    .frame(height: 6)
-                    Text("\(variants[index].1)").font(.system(size: 12.5)).foregroundStyle(.secondary).monospacedDigit()
-                        .contentTransition(.numericText())
-                        .animation(reduce ? nil : .motion(.base), value: index)
-                        .frame(width: 30, alignment: .trailing)
                 }
+                .animation(reduce ? nil : .motion(.base), value: tweak)
             }
             .frame(maxWidth: 360)
         }

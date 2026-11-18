@@ -23,8 +23,10 @@ public struct OmniboxAtom: MotionAtomView {
             VStack(spacing: 8) {
                 TextField("Address", text: $query).textFieldStyle(.plain).padding(10).background(.quaternary.opacity(0.5), in: .rect(cornerRadius: 10))
                     .font(.system(size: 13.5)).frame(minHeight: 36)
+                    .onChange(of: query) { _, _ in highlight = 0 }
                 VStack(spacing: 0) {
-                    ForEach(Array(matches.enumerated()), id: \.offset) { i, u in
+                    ForEach(matches, id: \.self) { u in
+                        let i = matches.firstIndex(of: u) ?? 0
                         Button { opened = u } label: {
                             HStack(spacing: 8) {
                                 Text("⌕").frame(width: 22, height: 22)
@@ -42,7 +44,7 @@ public struct OmniboxAtom: MotionAtomView {
                         if i < matches.count - 1 { Divider() }
                     }
                 }
-                .animation(reduce ? nil : .motion(.base), value: matches.count)
+                .animation(reduce ? nil : .motion(.base), value: matches)
                 Text(opened.map { "Opened “\($0)” ✓" } ?? "\(matches.count) of \(urls.count) matches")
                     .font(.system(size: 12)).foregroundStyle(.secondary).monospacedDigit()
                     .frame(maxWidth: .infinity, alignment: .leading)

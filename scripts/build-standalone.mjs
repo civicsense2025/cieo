@@ -23,7 +23,7 @@ let html = read('docs/studio/index.html').replace(/<link rel="stylesheet" href="
 html = html.replace('<script type="module" src="./main.js"></script>', `<script type="importmap">${JSON.stringify({ imports }).replaceAll('<', '\\u003c')}</script>\n<script type="module">import 'cieo:docs/studio/main.js';</script>`);
 html = html.replace('href="./index.html"', 'href="#preview"')
   .replace('href="../catalogue.html"', 'href="https://github.com/civicsense2025/cieo/blob/main/docs/catalogue.html"')
-  .replace('href="../design-system.md"', 'href="https://github.com/civicsense2025/cieo/blob/improvements/portable-design-system/docs/design-system.md"');
+  .replace('href="../../site/components/"', 'href="https://github.com/civicsense2025/cieo/blob/main/docs/design-system.md"');
 const output = resolve(process.argv[2] ?? resolve(root, 'Cieo-studio.html'));
 mkdirSync(dirname(output), { recursive: true }); writeFileSync(output, html);
 console.log(`standalone: ${relative(root, output)} (${Buffer.byteLength(html)} bytes)`);

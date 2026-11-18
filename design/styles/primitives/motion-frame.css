@@ -1,0 +1,5 @@
+/* design/styles/primitives/motion-frame.css */
+@layer cieo.components {
+  :where(.cieo).cieo-motion-frame { display: block; min-inline-size: 0; color: var(--cieo-color-text); }
+  :where(.cieo) .cieo-motion-frame-content { min-inline-size: 0; }
+}

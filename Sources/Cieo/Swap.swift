@@ -84,14 +84,20 @@ public struct RollingDigits: View {
         _previous = State(initialValue: value)
     }
 
+    private struct DigitColumn: Identifiable {
+        let id: Int
+        let character: Character
+    }
+
     public var body: some View {
         let chars = Array(value)
+        let columns = chars.enumerated().map { DigitColumn(id: chars.count - $0.offset, character: $0.element) }
         let direction: CGFloat = (Double(value) ?? 0) < (Double(previous) ?? 0) ? -1 : 1
         HStack(spacing: 0) {
-            ForEach(Array(chars.enumerated()), id: \.offset) { item in
+            ForEach(columns) { column in
                 ZStack {
-                    Text(String(item.element))
-                        .id("\(chars.count - item.offset)-\(item.element)")
+                    Text(String(column.character))
+                        .id("\(column.id)-\(column.character)")
                         .motionTransition(.swap(drift: 8 * direction))
                 }
             }
