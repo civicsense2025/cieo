@@ -40,7 +40,7 @@ const previewOf = (dir) => {
   const wrapped = /^\s*<li\b/.test(plain) ? `<ul class="tile-list">${plain}</ul>` : plain;
   return wrapped.replace(/\b(id|for|aria-labelledby|aria-describedby|aria-controls)="([^"]+)"/g, (_, a, v) => `${a}="${v.split(' ').map((t) => `${t}-t-${dir}`).join(' ')}"`);
 };
-const tile = (i) => `<li class="tile"><div class="tile-stage" inert>${previewOf(i.dir)}</div><a class="tile-name" href="./${i.dir}.html">${i.name}</a></li>`;
+const tile = (i) => `<li class="tile"><div class="tile-stage" inert><div class="tile-canvas">${previewOf(i.dir)}</div></div><a class="tile-name" href="./${i.dir}.html">${i.name}</a></li>`;
 const packSection = ([id, title]) => {
   const list = items.filter((i) => i.pack === id);
   return `<section id="pack-${id}" aria-labelledby="pack-${id}-h"><h2 id="pack-${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul class="tiles">${list.map(tile).join('')}</ul></section>`;
@@ -52,7 +52,7 @@ const section = (id, title, list) =>
 const index = `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Components · Cieo</title>${siteStyles('../', true)}</head>
+<title>Components · Cieo</title>${siteStyles('../', true).replace(/(<link rel="stylesheet" href="\.\.\/\.\.\/design\/primitives\.css">)/, '$1<link rel="stylesheet" href="../../dist/controls/controls.css">')}</head>
 <body class="cieo cieo-docsite cieo-site">${siteHeader('../', 'Library')}<main id="main"><div class="doc-shell">
 <nav class="doc-rail" aria-label="On this page"><a href="#primitives">Primitives</a><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a>${PACKS.map(([id, title]) => `<a href="#pack-${id}">${title}</a>`).join('')}</nav>
 <div class="doc-main">
@@ -62,7 +62,7 @@ ${LAYERS.map(([id, title]) => section(id + 's', title, groups[id])).join('\n')}
 ${PACKS.map(packSection).join('\n')}
 </div>
 </div>
-</div></main>${siteFooter('../')}</body></html>
+</div></main>${siteFooter('../')}<script src="../tile-fit.js" defer></script></body></html>
 `;
 
 const writes = [[`${root}/site/components/index.html`, index]];
