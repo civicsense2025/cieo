@@ -3,6 +3,7 @@
 // writes site/components/index.html grouped by layer, and fills data-prev /
 // data-next in every site/components/<Name>.html (alphabetical order).
 // Deterministic, no timestamps. Run: node scripts/build-component-index.mjs [--check]
+import { tileHtml } from './lib/tiles.mjs';
 import { siteFooter, siteHeader, siteStyles } from './lib/site-chrome.mjs';
 import { readdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 
@@ -31,16 +32,7 @@ if (unknownLayer.length) { console.error(`unknown layer on: ${unknownLayer.map((
 const unknownPack = items.filter((i) => i.pack !== 'core' && !PACKS.some(([id]) => id === i.pack));
 if (unknownPack.length) { console.error(`unknown pack on: ${unknownPack.map((i) => i.dir).join(', ')}`); process.exit(1); }
 const groups = Object.fromEntries(LAYERS.map(([id]) => [id, core.filter((i) => i.layer === id)]));
-// A tile is the real part, drawn live and inert, with its name underneath. The whole tile is the link.
-const previewOf = (dir) => {
-  const html = readFileSync(`${root}/site/components/${dir}.html`, 'utf8').match(/<!--preview-->([\s\S]*?)<!--\/preview-->/)?.[1] ?? '';
-  // The same markup appears on every page, so ids and the references to them are made unique per tile.
-  // Landmarks become plain boxes (a tile is not a page region), and list items get a list to live in so the browser keeps the tile intact.
-  const plain = html.replace(/<(\/?)(header|main|footer|nav|aside|section|article|form)\b/g, '<$1div');
-  const wrapped = /^\s*<li\b/.test(plain) ? `<ul class="tile-list">${plain}</ul>` : plain;
-  return wrapped.replace(/\b(id|for|aria-labelledby|aria-describedby|aria-controls)="([^"]+)"/g, (_, a, v) => `${a}="${v.split(' ').map((t) => `${t}-t-${dir}`).join(' ')}"`);
-};
-const tile = (i) => `<li class="tile"><div class="tile-stage" inert><div class="tile-canvas">${previewOf(i.dir)}</div></div><a class="tile-name" href="./${i.dir}.html">${i.name}</a></li>`;
+const tile = (i) => tileHtml(root, i);
 const packSection = ([id, title]) => {
   const list = items.filter((i) => i.pack === id);
   return `<section id="pack-${id}" aria-labelledby="pack-${id}-h"><h2 id="pack-${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul class="tiles">${list.map(tile).join('')}</ul></section>`;

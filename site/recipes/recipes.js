@@ -309,7 +309,7 @@ function applyLiveTheme() {
   const scheme = schemePref === 'system'
     ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     : schemePref;
-  const theme = createTheme({ brand, ground: 'paper', scheme, radius: 'pill', density: 'comfortable', display: 'serif' });
+  const theme = createTheme({ brand, ground: 'paper', scheme, radius: 'pill', density: 'comfortable' });
   const vars = variables(theme);
   for (const [k, v] of Object.entries(vars)) document.documentElement.style.setProperty(k, v);
   document.documentElement.style.colorScheme = scheme;

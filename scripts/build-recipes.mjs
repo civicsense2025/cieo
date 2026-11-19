@@ -730,9 +730,8 @@ ${siteStyles('../')}
 ${siteHeader('../', 'Recipes')}
 <main id="main">
   <section class="site-wrap site-hero">
-    <p class="site-label">Motion recipes · ${categories.length} lazy chunks</p>
     <h1 class="site-display">Motion recipes.</h1>
-    <p class="site-lead">${totalRecipes} live interface motion specimens solved in closed form (ζ = 1 default; the 0.7 floor allows at most about 5% overshoot). Filter by motion family, dilate clock speed to 0.25× or 0.1×, inspect formulas, or jump straight to the matching <a href="../components/">production component spec</a>.</p>
+    <p class="site-lead">${totalRecipes} live motion examples. Slow them down, read the formula, open the part.</p>
   </section>
   <div class="recipes-toolbar" data-recipes-toolbar role="region" aria-label="Recipe filters and playback controls">
     <div class="recipes-toolbar-inner">
