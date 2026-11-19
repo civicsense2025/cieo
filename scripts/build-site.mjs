@@ -9,6 +9,7 @@ import { brands, radii, densities, grounds } from '../design/index.js';
 import { recipeCount } from './lib/recipe-count.mjs';
 import { siteConfig } from './lib/site-config.mjs';
 import { siteFooter, siteHeader, siteStyles, stampChrome, stampMarked } from './lib/site-chrome.mjs';
+import { tileHtml } from './lib/tiles.mjs';
 import { builtFromSection, compositeHead, indexCards } from './lib/composites.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -32,13 +33,12 @@ export function facts(repo = root) {
   };
 }
 
-const LAYER_ROWS = [['primitive', 'Primitives', 'Layout, text, icon and overlay'], ['atom', 'Atoms', 'One control or indicator'], ['molecule', 'Molecules', 'A small group that does one job'], ['organism', 'Organisms', 'A whole section or surface']];
-const PACK_ROWS = [['auth', 'Auth', 'Sign in, sign up, reset and MFA'], ['messaging', 'Messaging', 'Chat and conversations'], ['audio', 'Audio', 'Players, rooms and recording'], ['agent', 'Agents', 'Activity, approvals and tool calls'], ['social', 'Social', 'Comments, polls and reactions'], ['editorial', 'Editorial', 'Rolls, figures, quotes and steps'], ['tools', 'Tools', 'Import, compare, preview and trim']];
+const HOME_PARTS = ['Button', 'Switch', 'Slider', 'SegmentedControl', 'Calendar', 'CommandPalette', 'Table', 'Card'];
 
-function page({ title, description, current, body, scripts = [], bodyClass = '' }) {
+function page({ title, description, current, body, scripts = [], bodyClass = '', controls = false }) {
   return `<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="color-scheme" content="light dark">${siteStyles('./')}</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="color-scheme" content="light dark">${siteStyles('./', false, controls)}</head>
 <body class="cieo cieo-site${bodyClass}">
 ${siteHeader('./', current)}
 <main id="main">
@@ -56,11 +56,11 @@ function home(f) {
     title: 'Cieo: motion that settles',
     description: `Critically damped spring motion for the web and SwiftUI, and ${f.components} interface parts that move the same way.`,
     current: '',
-    scripts: ['./home.js'],
+    scripts: ['./home.js', './tile-fit.js'],
+    controls: true,
     body: `<section class="site-wrap site-hero">
-  <p class="site-label">Spring motion · Interface parts</p>
   <h1 class="site-display">Motion that settles.</h1>
-  <p class="site-lead">Cieo is critically damped spring motion for the web and SwiftUI, and a library of ${f.components} interface parts that move the same way: no overshoot, no bounce, nothing left to tune.</p>
+  <p class="site-lead">Spring motion and ${f.components} interface parts. No overshoot, nothing to tune.</p>
   <div class="site-actions"><a class="site-btn" href="./components/">Browse the library</a><a class="site-btn" data-variant="ring" href="#install">Install</a></div>
 </section>
 <section class="site-wrap" aria-labelledby="instrument-h">
@@ -80,20 +80,9 @@ function home(f) {
     <div><span class="fact-number">AA</span><span class="site-label">Contrast audited</span></div>
   </div>
 </section>
-<section class="site-wrap site-section">
-  <div class="site-section-head"><p class="site-label">Three ideas</p><h2 class="site-title">Less to tune, more to trust.</h2></div>
-  <div class="ideas">
-    <div><h3>One spring, no tuning</h3><p>Every motion is a closed-form critically damped spring set by one number, its natural frequency. It cannot overshoot, so there is no bounce to tune away.</p></div>
-    <div><h3>The same on web and Apple</h3><p>DOM and React on the web, SwiftUI on Apple platforms. The same presets, so a screen feels the same wherever it runs.</p></div>
-    <div><h3>Themed by tokens</h3><p>${f.brands} brands, ${f.corners} corner profiles, ${f.densities} densities and ${f.grounds} grounds. Every combination of color is audited for contrast before it ships.</p></div>
-  </div>
-</section>
-<section class="site-wrap site-section" id="library">
-  <div class="site-section-head"><p class="site-label">The library</p><h2 class="site-title">Foundations first, then use cases.</h2><p class="site-prose">Primitives are the foundation. Atoms, molecules and organisms build on them. Packs gather the parts that only make sense for one kind of product, so you never see sign-in cards while building a docs site.</p></div>
-  <div class="index-split">
-    <div><h3 class="site-label">By layer</h3><ul class="index-list">${LAYER_ROWS.map(([id, name, note]) => `<li><a href="./components/#${id}s"><span class="index-count">${String(f.layers[id] ?? 0).padStart(2, '0')}</span><span class="index-name">${name}</span><span class="index-note">${note}</span></a></li>`).join('')}</ul></div>
-    <div><h3 class="site-label">By use case</h3><ul class="index-list">${PACK_ROWS.map(([id, name, note]) => `<li><a href="./components/#pack-${id}"><span class="index-count">${String(f.packs[id] ?? 0).padStart(2, '0')}</span><span class="index-name">${name}</span><span class="index-note">${note}</span></a></li>`).join('')}</ul></div>
-  </div>
+<section class="site-wrap site-section" id="library" aria-label="The library, live">
+  <ul class="tiles">${HOME_PARTS.map((dir) => tileHtml(root, { dir, name: dir }, './components/')).join('')}</ul>
+  <p class="site-actions"><a class="site-btn" href="./components/">All ${f.components} parts</a></p>
 </section>
 <section class="site-wrap site-section" id="install">
   <div class="site-section-head"><p class="site-label">Install</p><h2 class="site-title">Two lines to the first part.</h2></div>

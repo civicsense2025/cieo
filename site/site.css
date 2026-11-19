@@ -177,3 +177,19 @@ body.cieo-site {
 .copy-button[data-copied] .copy-glyph[data-glyph="copy"] { scale: 0.4; opacity: 0; }
 .copy-button[data-copied] .copy-glyph[data-glyph="done"] { scale: 1; opacity: 1; }
 @media (prefers-reduced-motion: reduce) { .copy-glyph { transition: none; } }
+
+/* Library tiles: each part drawn live (and inert) in a quiet frame, name underneath, the whole tile is the link. */
+ul.tiles { display: grid; margin: 0; padding: 0; list-style: none; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); gap: var(--cieo-space-3); border-block-start: 0; }
+.tiles .tile { position: relative; display: grid; grid-template-rows: 9rem auto; border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); overflow: hidden; transition: scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
+.tiles .tile-stage { display: grid; place-items: center; padding: var(--cieo-space-3); overflow: hidden; contain: layout paint; background: var(--cieo-color-canvas); pointer-events: none; }
+.tiles .tile-canvas { inline-size: max-content; min-inline-size: 9rem; max-inline-size: 22rem; }
+[data-focus] { outline: none; box-shadow: 0 0 0 4px color-mix(in srgb, var(--cieo-color-accent) 16%, transparent); border-radius: var(--cieo-radius-small); }
+.tiles .tile-name { padding: var(--cieo-space-2) var(--cieo-space-3); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+.tiles .tile-name::after { content: ""; position: absolute; inset: 0; }
+.tiles .tile:focus-within { outline: var(--cieo-focus-width) solid var(--cieo-color-focus); outline-offset: var(--cieo-focus-offset); }
+@media (hover: hover) { .tiles .tile:hover { scale: 1.02; border-color: var(--cieo-color-border-strong); } }
+@media (prefers-reduced-motion: reduce) { .tiles .tile { transition: none; } .tiles .tile:hover { scale: none; } }
+.tile-list, .tile-list li { margin: 0; padding: 0; list-style: none; border: 0; display: block; }
+#library .tiles { grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+#library .site-actions { margin-block-start: var(--cieo-space-8); }
+@media (max-width: 40rem) { #library .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

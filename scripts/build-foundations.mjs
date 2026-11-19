@@ -89,16 +89,13 @@ function overviewPage() {
     description: 'Five promises behind every Cieo screen: motion that settles, smooth changes between views, readable color, calm type and shape, and agents you can trust.',
     body: `<header class="doc-head">
       <p class="doc-crumbs"><a href="../">Home</a><span aria-hidden="true">/</span><span>Foundations</span></p>
-      <h1>How Cieo is meant to feel.</h1>
-      <p>Every Cieo button, sheet and form follows the same five promises, on the web and on iPhone. Things move smoothly and stop on their own. Text is always easy to read. Type and shapes stay calm. Automated helpers never say something happened before it did. Pick a chapter: each starts with what it means for the person using your app, then lets you try it.</p>
+      <h1>Foundations</h1>
+      <p>Five ideas, each one you can try.</p>
     </header>
     <section aria-label="Chapters">
       <ul class="index-list">${cards}</ul>
     </section>
-    <section class="fnd-callout">
-      <h2>Prefer to poke at it?</h2>
-      <p>Change a whole look in the <a href="../../docs/studio/">Theme Studio</a>, browse every part in the <a href="../components/">component library</a>, or watch ${recipeCount()} motion examples in the <a href="../recipes/">recipes</a>.</p>
-    </section>`,
+`,
   });
 }
 

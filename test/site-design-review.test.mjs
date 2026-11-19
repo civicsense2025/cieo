@@ -178,13 +178,11 @@ test('recipes: family buttons and tile chips are named in full, and hash changes
 test('copy is honest about bounce, and every page states the same recipe count', () => {
   const pages = [...sitePages, 'docs/studio/index.html'];
   for (const page of pages) assert.doesNotMatch(read(page), /zero bounce|never wobbles|never bounce past/i, page);
-  assert.match(read('site/recipes/index.html'), /ζ = 1 default; the 0\.7 floor allows at most about 5% overshoot/);
   assert.match(read('site/foundations/physics.html'), /most a spring may overshoot is about 5%/);
   const counts = new Set([
     /<span class="fact-number">(\d+)<\/span><span class="site-label">Motion recipes/.exec(read('site/index.html'))?.[1],
     /<li>(\d+) motion recipes/.exec(read('site/pricing.html'))?.[1],
-    /(\d+) live interface motion specimens/.exec(read('site/recipes/index.html'))?.[1],
-    /watch (\d+) motion examples/.exec(read('site/foundations/index.html'))?.[1],
+    /(\d+) live motion examples/.exec(read('site/recipes/index.html'))?.[1],
     String(JSON.parse(read('atoms/web/index.json')).filter((r) => r.file.startsWith('blocks/')).length),
   ]);
   assert.equal(counts.size, 1, `recipe counts disagree: ${[...counts]}`);

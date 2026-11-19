@@ -42,9 +42,9 @@ export function siteFooter(up) {
 }
 
 /** Stylesheets in cascade order: the site theme, the library's component styles, then the site and docs rules. */
-export function siteStyles(up, withDocs = false) {
+export function siteStyles(up, withDocs = false, withControls = false) {
   const root = up === './' ? '../' : `${up}../`;
-  return [`${up}theme.css`, `${root}tokens/tokens.css`, `${root}design/primitives.css`, ...(withDocs ? [`${up}doc.css`] : []), `${up}site.css`]
+  return [`${up}theme.css`, `${root}tokens/tokens.css`, `${root}design/primitives.css`, ...(withControls ? [`${root}dist/controls/controls.css`] : []), ...(withDocs ? [`${up}doc.css`] : []), `${up}site.css`]
     .map((href) => `<link rel="stylesheet" href="${href}">`).join('');
 }
 

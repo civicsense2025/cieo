@@ -79,7 +79,7 @@ export function createPreviewRenderer(root, entries) {
   const focus = (html, dir) => html.replace(new RegExp(`(<[a-z0-9]+\\b[^>]*\\bclass="[^"]*\\bcieo-(?:p-)?${kebab(dir)}(?=[\\s"])[^"]*")`, 'g'), '$1 data-focus');
 
   /** Returns {html} or {error}; never throws, so the caller can fall back to the authored fragment. */
-  return async function render(dir, seen = new Set()) {
+  return async function render(dir, seen = new Set(), extra = {}) {
     try {
       const spec = overrides[dir] ?? {};
       if (spec.inContext) {
@@ -90,7 +90,7 @@ export function createPreviewRenderer(root, entries) {
       }
       const Component = await component(dir);
       if (!Component) return { error: 'no exported component' };
-      const props = await resolve({ ...inferProps(dir), ...(spec.props ?? {}) });
+      const props = await resolve({ ...inferProps(dir), ...(spec.props ?? {}), ...extra });
       const children = spec.children === null ? [] : await resolve(spec.children ?? human(dir));
       let node = createElement(Component, props, ...(Array.isArray(children) ? children : [children]));
       if (spec.scene) {
