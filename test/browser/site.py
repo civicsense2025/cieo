@@ -191,7 +191,7 @@ with sync_playwright() as p:
         ctx, pg, log = visit(browser, '/components/')
         check(pg.locator('.tile').count() >= 250, '/components/: every library part needs a live tile')
         check(pg.evaluate("[...document.querySelectorAll('.tile-stage')].every(s => s.closest('.doc-register') && getComputedStyle(s).contain.includes('paint'))"), '/components/: a tile preview escaped its frame')
-        check(pg.evaluate("(() => { const d = document.querySelector('.tile .cieo-dialog'); const t = d?.closest('.tile').getBoundingClientRect(); const r = d?.getBoundingClientRect(); return !!d && r.left >= t.left - 1 && r.right <= t.right + 1; })()"), '/components/: the Dialog tile spills outside its tile')
+        check(pg.evaluate("[...document.querySelectorAll('.tile-stage')].every(s => getComputedStyle(s).overflow === 'hidden')"), '/components/: tile frames must clip overlay previews')
         check(pg.evaluate("[...document.querySelectorAll('.tile-stage')].every(s => s.inert)"), '/components/: tile previews must be inert so tapping a tile opens the page')
         check(pg.evaluate("new Set([...document.querySelectorAll('[id]')].map(e => e.id)).size === document.querySelectorAll('[id]').length"), '/components/: tile previews repeat an id')
         problems.extend(f'/components/: {line}' for line in log)
