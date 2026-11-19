@@ -452,10 +452,25 @@
    {
     "$el": "p",
     "children": [
-     "Centered content"
+     "Content stays centered at a readable width, however wide the page is."
     ]
    }
-  ]
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "minHeight": "8rem",
+     "border": "1px dashed var(--cieo-color-border)",
+     "padding": "1rem"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
+  }
  },
  "ChatLayout": {
   "props": {
@@ -515,12 +530,7 @@
   ]
  },
  "ChatMessageBubble": {
-  "props": {
-   "variant": "incoming"
-  },
-  "children": [
-   "Your refund is on its way."
-  ]
+  "inContext": "ChatMessage"
  },
  "ChatMessageList": {
   "props": {
@@ -655,7 +665,7 @@
     "$el": "CommandPaletteInput",
     "props": {
      "label": "Filter commands",
-     "placeholder": "Type to filter\u2026"
+     "placeholder": "Type to filter…"
     }
    },
    {
@@ -696,7 +706,7 @@
    {
     "$el": "CommandPaletteFooter",
     "children": [
-     "\u2191\u2193 to navigate \u00b7 \u21b5 to select"
+     "↑↓ to navigate · ↵ to select"
     ]
    }
   ]
@@ -830,6 +840,67 @@
     "props": {
      "label": "Most voted"
     }
+   },
+   {
+    "$el": "DropdownMenuDivider"
+   },
+   {
+    "$el": "DropdownMenuGroup",
+    "props": {
+     "label": "View"
+    },
+    "children": [
+     {
+      "$el": "DropdownMenuCheckboxItem",
+      "props": {
+       "label": "Show archived",
+       "checked": true
+      }
+     }
+    ]
+   },
+   {
+    "$el": "DropdownMenuRadioGroup",
+    "props": {
+     "label": "Density",
+     "defaultValue": "cozy"
+    },
+    "children": [
+     {
+      "$el": "DropdownMenuRadioItem",
+      "props": {
+       "label": "Cozy",
+       "value": "cozy"
+      }
+     },
+     {
+      "$el": "DropdownMenuRadioItem",
+      "props": {
+       "label": "Compact",
+       "value": "compact"
+      }
+     }
+    ]
+   },
+   {
+    "$el": "DropdownMenuSubMenu",
+    "props": {
+     "label": "Export as"
+    },
+    "children": [
+     {
+      "$el": "DropdownMenuItem",
+      "props": {
+       "label": "CSV"
+      }
+     },
+     {
+      "$el": "DropdownMenuItem",
+      "props": {
+       "label": "PDF"
+      }
+     }
+    ]
    }
   ]
  },
@@ -907,19 +978,127 @@
  },
  "Icon": {
   "props": {
-   "label": "Home"
+   "label": "Settings"
   },
   "children": [
-   "\u2605"
-  ]
+   {
+    "$el": "svg",
+    "props": {
+     "viewBox": "0 0 20 20",
+     "width": 20,
+     "height": 20,
+     "fill": "none",
+     "stroke": "currentColor",
+     "strokeWidth": 1.6
+    },
+    "children": [
+     {
+      "$el": "circle",
+      "props": {
+       "cx": 10,
+       "cy": 10,
+       "r": 3
+      }
+     },
+     {
+      "$el": "path",
+      "props": {
+       "d": "M10 2v3M10 15v3M2 10h3M15 10h3"
+      }
+     }
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "Heading",
+     "props": {
+      "level": 3
+     },
+     "children": [
+      "Settings"
+     ]
+    }
+   ]
+  }
  },
  "IconButton": {
   "props": {
-   "label": "Close"
+   "label": "Attach file"
   },
   "children": [
-   "\u00d7"
-  ]
+   {
+    "$el": "svg",
+    "props": {
+     "viewBox": "0 0 20 20",
+     "width": 18,
+     "height": 18,
+     "fill": "none",
+     "stroke": "currentColor",
+     "strokeWidth": 1.6
+    },
+    "children": [
+     {
+      "$el": "path",
+      "props": {
+       "d": "M15 9l-5 5a3 3 0 0 1-4-4l6-6a2 2 0 0 1 3 3l-6 6"
+      }
+     }
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Draft reply"
+   },
+   "children": [
+    {
+     "$el": "p",
+     "children": [
+      "Thanks, I will review it today."
+     ]
+    },
+    {
+     "$el": "div",
+     "props": {
+      "style": {
+       "display": "flex",
+       "gap": "0.75rem",
+       "alignItems": "center",
+       "flexWrap": "wrap"
+      }
+     },
+     "children": [
+      {
+       "$el": "Button",
+       "props": {
+        "variant": "primary"
+       },
+       "children": [
+        "Send"
+       ]
+      },
+      {
+       "$self": true
+      }
+     ]
+    }
+   ]
+  }
  },
  "InputGroup": {
   "props": {
@@ -954,6 +1133,16 @@
     "$el": "LayoutHeader",
     "children": [
      "Civic Tracker"
+    ]
+   },
+   {
+    "$el": "LayoutPanel",
+    "props": {
+     "label": "Filters",
+     "side": "left"
+    },
+    "children": [
+     "Ward, party, status"
     ]
    },
    {
@@ -1142,6 +1331,17 @@
   "props": {
    "value": 60,
    "label": "Upload progress"
+  },
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Uploading ballot.pdf"
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
   }
  },
  "RadioList": {
@@ -1183,13 +1383,13 @@
    "reactions": [
     {
      "id": "like",
-     "emoji": "\ud83d\udc4d",
+     "emoji": "👍",
      "label": "Like",
      "count": 4
     },
     {
      "id": "heart",
-     "emoji": "\u2764\ufe0f",
+     "emoji": "❤️",
      "label": "Love",
      "count": 2
     }
@@ -1339,6 +1539,12 @@
   },
   "children": [
    {
+    "$el": "SideNavCollapseButton",
+    "props": {
+     "expanded": true
+    }
+   },
+   {
     "$el": "SideNavHeading",
     "children": [
      "Guide"
@@ -1370,6 +1576,23 @@
     },
     "children": [
      "API"
+    ]
+   },
+   {
+    "$el": "SideNavSection",
+    "props": {
+     "label": "Reference"
+    },
+    "children": [
+     {
+      "$el": "SideNavItem",
+      "props": {
+       "href": "#tokens"
+      },
+      "children": [
+       "Tokens"
+      ]
+     }
     ]
    }
   ]
@@ -1505,7 +1728,9 @@
   },
   "children": null
  },
- "Tab": {},
+ "Tab": {
+  "inContext": "TabList"
+ },
  "TabList": {
   "props": {
    "label": "Sections",
@@ -1701,6 +1926,25 @@
       ]
      }
     ]
+   },
+   {
+    "$el": "TableFooter",
+    "children": [
+     {
+      "$el": "TableRow",
+      "children": [
+       {
+        "$el": "TableCell",
+        "props": {
+         "colSpan": 3
+        },
+        "children": [
+         "3 voters shown"
+        ]
+       }
+      ]
+     }
+    ]
    }
   ]
  },
@@ -1813,6 +2057,32 @@
     "children": [
      "Pricing"
     ]
+   },
+   {
+    "$el": "TopNavMenu",
+    "props": {
+     "label": "More"
+    },
+    "children": [
+     {
+      "$el": "TopNavItem",
+      "props": {
+       "href": "#blog"
+      },
+      "children": [
+       "Blog"
+      ]
+     },
+     {
+      "$el": "TopNavItem",
+      "props": {
+       "href": "#help"
+      },
+      "children": [
+       "Help"
+      ]
+     }
+    ]
    }
   ]
  },
@@ -1853,8 +2123,1665 @@
   },
   "children": null
  },
-  "HStack": {"props": {}, "children": [{"$el":"Button","children":["Save"]},{"$el":"Button","props":{"variant":"ring"},"children":["Cancel"]},{"$el":"Badge","children":["New"]}]},
-  "VStack": {"props": {}, "children": [{"$el":"div","props":{"style":{"padding":"var(--cieo-space-2) var(--cieo-space-3)","borderRadius":"var(--cieo-radius-small)","background":"var(--cieo-color-sunken)","fontSize":"var(--cieo-text-small)"}},"children":["One"]},{"$el":"div","props":{"style":{"padding":"var(--cieo-space-2) var(--cieo-space-3)","borderRadius":"var(--cieo-radius-small)","background":"var(--cieo-color-sunken)","fontSize":"var(--cieo-text-small)"}},"children":["Two"]},{"$el":"div","props":{"style":{"padding":"var(--cieo-space-2) var(--cieo-space-3)","borderRadius":"var(--cieo-radius-small)","background":"var(--cieo-color-sunken)","fontSize":"var(--cieo-text-small)"}},"children":["Three"]}]},
-  "Divider": {"props": {}, "children": []},
-  "AspectRatio": {"props": {"ratio": 1.6}, "children": [{"$el":"div","props":{"style":{"inlineSize":"100%","blockSize":"100%","background":"var(--cieo-color-sunken)","borderRadius":"var(--cieo-radius-small)"}},"children":[]}]}
+ "HStack": {
+  "props": {},
+  "children": [
+   {
+    "$el": "Button",
+    "children": [
+     "Save"
+    ]
+   },
+   {
+    "$el": "Button",
+    "props": {
+     "variant": "ring"
+    },
+    "children": [
+     "Cancel"
+    ]
+   },
+   {
+    "$el": "Badge",
+    "children": [
+     "New"
+    ]
+   }
+  ]
+ },
+ "VStack": {
+  "props": {},
+  "children": [
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "var(--cieo-space-2) var(--cieo-space-3)",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)",
+      "fontSize": "var(--cieo-text-small)"
+     }
+    },
+    "children": [
+     "One"
+    ]
+   },
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "var(--cieo-space-2) var(--cieo-space-3)",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)",
+      "fontSize": "var(--cieo-text-small)"
+     }
+    },
+    "children": [
+     "Two"
+    ]
+   },
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "var(--cieo-space-2) var(--cieo-space-3)",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)",
+      "fontSize": "var(--cieo-text-small)"
+     }
+    },
+    "children": [
+     "Three"
+    ]
+   }
+  ]
+ },
+ "Divider": {
+  "props": {},
+  "children": [],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "grid",
+     "gap": "0.75rem"
+    }
+   },
+   "children": [
+    {
+     "$el": "p",
+     "children": [
+      "Account"
+     ]
+    },
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "Notifications"
+     ]
+    }
+   ]
+  }
+ },
+ "AspectRatio": {
+  "props": {
+   "ratio": 1.6
+  },
+  "children": [
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "inlineSize": "100%",
+      "blockSize": "100%",
+      "background": "var(--cieo-color-sunken)",
+      "borderRadius": "var(--cieo-radius-small)"
+     }
+    },
+    "children": []
+   }
+  ]
+ },
+ "TableBody": {
+  "inContext": "Table"
+ },
+ "TableCell": {
+  "inContext": "Table"
+ },
+ "TableHeader": {
+  "inContext": "Table"
+ },
+ "TableHeaderCell": {
+  "inContext": "Table"
+ },
+ "TableRow": {
+  "inContext": "Table"
+ },
+ "TableFooter": {
+  "inContext": "Table"
+ },
+ "SideNavHeading": {
+  "inContext": "SideNav"
+ },
+ "SideNavItem": {
+  "inContext": "SideNav"
+ },
+ "SideNavSection": {
+  "inContext": "SideNav"
+ },
+ "SideNavCollapseButton": {
+  "inContext": "SideNav"
+ },
+ "TopNavHeading": {
+  "inContext": "TopNav"
+ },
+ "TopNavItem": {
+  "inContext": "TopNav"
+ },
+ "TopNavMenu": {
+  "inContext": "TopNav"
+ },
+ "TopNavMegaMenuItem": {
+  "inContext": "TopNavMegaMenu"
+ },
+ "TopNavMegaMenuFeaturedCard": {
+  "inContext": "TopNavMegaMenu"
+ },
+ "CommandPaletteFooter": {
+  "inContext": "CommandPalette"
+ },
+ "CommandPaletteGroup": {
+  "inContext": "CommandPalette"
+ },
+ "CommandPaletteInput": {
+  "inContext": "CommandPalette"
+ },
+ "CommandPaletteItem": {
+  "inContext": "CommandPalette"
+ },
+ "CommandPaletteList": {
+  "inContext": "CommandPalette"
+ },
+ "CommandPaletteEmpty": {
+  "inContext": "CommandPalette"
+ },
+ "DropdownMenuDivider": {
+  "inContext": "DropdownMenu"
+ },
+ "DropdownMenuItem": {
+  "inContext": "DropdownMenu"
+ },
+ "DropdownMenuCheckboxItem": {
+  "inContext": "DropdownMenu"
+ },
+ "DropdownMenuGroup": {
+  "inContext": "DropdownMenu"
+ },
+ "DropdownMenuRadioGroup": {
+  "inContext": "DropdownMenu"
+ },
+ "DropdownMenuRadioItem": {
+  "inContext": "DropdownMenu"
+ },
+ "DropdownMenuSubMenu": {
+  "inContext": "DropdownMenu"
+ },
+ "LayoutContent": {
+  "inContext": "Layout"
+ },
+ "LayoutFooter": {
+  "inContext": "Layout"
+ },
+ "LayoutHeader": {
+  "inContext": "Layout"
+ },
+ "LayoutPanel": {
+  "inContext": "Layout"
+ },
+ "SegmentedControlItem": {
+  "inContext": "SegmentedControl"
+ },
+ "BreadcrumbItem": {
+  "inContext": "Breadcrumbs"
+ },
+ "ListItem": {
+  "inContext": "List"
+ },
+ "StackItem": {
+  "inContext": "Stack"
+ },
+ "SelectorOption": {
+  "inContext": "Selector"
+ },
+ "ChatMessageMetadata": {
+  "inContext": "ChatMessage"
+ },
+ "ChatSystemMessage": {
+  "inContext": "ChatLayout"
+ },
+ "ChatComposer": {
+  "inContext": "ChatLayout"
+ },
+ "ChatComposerInput": {
+  "inContext": "ChatLayout"
+ },
+ "MetadataListItem": {
+  "inContext": "MetadataList"
+ },
+ "TypeaheadItem": {
+  "inContext": "Typeahead"
+ },
+ "Step": {
+  "inContext": "StepList"
+ },
+ "ToggleButton": {
+  "inContext": "ToggleButtonGroup"
+ },
+ "InputGroupText": {
+  "inContext": "InputGroup"
+ },
+ "AudioTime": {
+  "inContext": "AudioPlayer"
+ },
+ "GridSpan": {
+  "inContext": "Grid"
+ },
+ "BlockPanel": {
+  "inContext": "Grid"
+ },
+ "AnnotationPin": {
+  "inContext": "AnnotationLayer"
+ },
+ "NavHeadingMenu": {
+  "inContext": "SideNav"
+ },
+ "ByLine": {
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Comment"
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "Agreed — the schedule needs a second look."
+     ]
+    }
+   ]
+  }
+ },
+ "Badge": {
+  "children": [
+   "Active"
+  ],
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Billing summary"
+   },
+   "children": [
+    {
+     "$el": "div",
+     "props": {
+      "style": {
+       "display": "flex",
+       "gap": "0.75rem",
+       "alignItems": "center",
+       "flexWrap": "wrap"
+      }
+     },
+     "children": [
+      {
+       "$el": "Heading",
+       "props": {
+        "level": 3
+       },
+       "children": [
+        "Pro plan"
+       ]
+      },
+      {
+       "$self": true
+      }
+     ]
+    },
+    {
+     "$el": "p",
+     "children": [
+      "$12.00 due May 1."
+     ]
+    }
+   ]
+  }
+ },
+ "Kbd": {
+  "children": [
+   "⌘K"
+  ],
+  "scene": {
+   "$el": "p",
+   "children": [
+    "Press ",
+    {
+     "$self": true
+    },
+    " to open the command palette."
+   ]
+  }
+ },
+ "Code": {
+  "children": [
+   "npm i cieo"
+  ],
+  "scene": {
+   "$el": "p",
+   "children": [
+    "Install it with ",
+    {
+     "$self": true
+    },
+    " and import the Button."
+   ]
+  }
+ },
+ "Citation": {
+  "children": [
+   "[1]"
+  ],
+  "scene": {
+   "$el": "p",
+   "children": [
+    "Turnout rose in 2024",
+    {
+     "$self": true
+    },
+    ", the largest gain in a decade."
+   ]
+  }
+ },
+ "Mention": {
+  "props": {
+   "handle": "ava",
+   "name": "Ava Reyes"
+  },
+  "scene": {
+   "$el": "p",
+   "children": [
+    "Thanks ",
+    {
+     "$self": true
+    },
+    " for the review."
+   ]
+  }
+ },
+ "Token": {
+  "children": [
+   "Public"
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$el": "Token",
+     "children": [
+      "Draft"
+     ]
+    },
+    {
+     "$self": true
+    },
+    {
+     "$el": "Token",
+     "children": [
+      "Archived"
+     ]
+    }
+   ]
+  }
+ },
+ "TopicChip": {
+  "children": [
+   "Schools"
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$el": "TopicChip",
+     "children": [
+      "Voting"
+     ]
+    },
+    {
+     "$self": true
+    },
+    {
+     "$el": "TopicChip",
+     "children": [
+      "Budget"
+     ]
+    }
+   ]
+  }
+ },
+ "Timestamp": {
+  "props": {
+   "dateTime": "2026-11-18T09:41:00Z"
+  },
+  "children": [
+   "Nov 18, 9:41 AM"
+  ],
+  "scene": {
+   "$el": "p",
+   "children": [
+    "Updated ",
+    {
+     "$self": true
+    },
+    " by Ava."
+   ]
+  }
+ },
+ "Timer": {
+  "props": {
+   "seconds": 754
+  },
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$el": "Heading",
+     "props": {
+      "level": 3
+     },
+     "children": [
+      "Debate ends in"
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Text": {
+  "children": [
+   "Cieo is a spring-motion UI kit for civic products."
+  ],
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "About"
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Heading": {
+  "props": {
+   "level": 2
+  },
+  "children": [
+   "Build something quiet"
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "grid",
+     "gap": "0.75rem"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "Everything you need to ship a calm interface."
+     ]
+    }
+   ]
+  }
+ },
+ "Thumbnail": {
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "div",
+     "children": [
+      {
+       "$el": "Heading",
+       "props": {
+        "level": 4
+       },
+       "children": [
+        "Ward map"
+       ]
+      },
+      {
+       "$el": "p",
+       "children": [
+        "Updated today"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Portrait": {
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "div",
+     "children": [
+      {
+       "$el": "Heading",
+       "props": {
+        "level": 4
+       },
+       "children": [
+        "Ava Reyes"
+       ]
+      },
+      {
+       "$el": "p",
+       "children": [
+        "Council member"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "StatusDot": {
+  "props": {
+   "status": "success",
+   "label": "Online"
+  },
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "Agent is online"
+     ]
+    }
+   ]
+  }
+ },
+ "Spinner": {
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "Loading your bills…"
+     ]
+    }
+   ]
+  }
+ },
+ "Blockquote": {
+  "children": [
+   "Every voter deserves a clear ballot."
+  ],
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "From the hearing"
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Button": {
+  "props": {
+   "variant": "primary"
+  },
+  "children": [
+   "Save changes"
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "Button",
+     "children": [
+      "Cancel"
+     ]
+    }
+   ]
+  }
+ },
+ "Banner": {
+  "children": [
+   "Scheduled maintenance tonight at 11 PM."
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "grid",
+     "gap": "0.75rem"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "Page content continues below."
+     ]
+    }
+   ]
+  }
+ },
+ "BigNumber": {
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "p",
+     "children": [
+      "registered voters this month"
+     ]
+    }
+   ]
+  }
+ },
+ "StaggerGroup": {
+  "children": [
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "0.5rem 0.75rem",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)"
+     }
+    },
+    "children": [
+     "Bills"
+    ]
+   },
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "0.5rem 0.75rem",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)"
+     }
+    },
+    "children": [
+     "Votes"
+    ]
+   },
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "0.5rem 0.75rem",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)"
+     }
+    },
+    "children": [
+     "Alerts"
+    ]
+   },
+   {
+    "$el": "div",
+    "props": {
+     "style": {
+      "padding": "0.5rem 0.75rem",
+      "borderRadius": "var(--cieo-radius-small)",
+      "background": "var(--cieo-color-sunken)"
+     }
+    },
+    "children": [
+     "Reports"
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "Slot": {
+  "props": {
+   "asChild": true
+  },
+  "children": [
+   {
+    "$el": "a",
+    "props": {
+     "href": "#"
+    },
+    "children": [
+     "A link styled as a button"
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$el": "Button",
+     "props": {
+      "variant": "primary"
+     },
+     "children": [
+      "Primary"
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "MorphSurface": {
+  "props": {
+   "layoutId": "morph"
+  },
+  "children": [
+   {
+    "$el": "Card",
+    "props": {
+     "title": "Expanding card"
+    },
+    "children": [
+     {
+      "$el": "p",
+      "children": [
+       "This surface morphs between collapsed and open states."
+      ]
+     }
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "ScrollableArea": {
+  "props": {
+   "maxHeight": "7rem"
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Council agenda, item 1: approve the minutes."
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Item 2: school funding amendment."
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Item 3: redistricting hearing schedule."
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Item 4: public comment."
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Item 5: adjourn."
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "ResizeHandle": {
+  "props": {
+   "orientation": "vertical",
+   "label": "Resize sidebar"
+  },
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "minHeight": "6rem",
+     "gap": "0.5rem"
+    }
+   },
+   "children": [
+    {
+     "$el": "div",
+     "props": {
+      "style": {
+       "flex": 1,
+       "padding": "0.75rem",
+       "background": "var(--cieo-color-sunken)",
+       "borderRadius": "var(--cieo-radius-small)"
+      }
+     },
+     "children": [
+      "Sidebar"
+     ]
+    },
+    {
+     "$self": true
+    },
+    {
+     "$el": "div",
+     "props": {
+      "style": {
+       "flex": 2,
+       "padding": "0.75rem",
+       "background": "var(--cieo-color-sunken)",
+       "borderRadius": "var(--cieo-radius-small)"
+      }
+     },
+     "children": [
+      "Content"
+     ]
+    }
+   ]
+  }
+ },
+ "OverflowList": {
+  "props": {
+   "max": 3
+  },
+  "children": [
+   {
+    "$el": "Badge",
+    "children": [
+     "Voting"
+    ]
+   },
+   {
+    "$el": "Badge",
+    "children": [
+     "Budget"
+    ]
+   },
+   {
+    "$el": "Badge",
+    "children": [
+     "Schools"
+    ]
+   },
+   {
+    "$el": "Badge",
+    "children": [
+     "Parks"
+    ]
+   },
+   {
+    "$el": "Badge",
+    "children": [
+     "Transit"
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "TreeList": {
+  "children": [
+   {
+    "$el": "li",
+    "children": [
+     "Council",
+     {
+      "$el": "TreeList",
+      "props": {
+       "depth": 1
+      },
+      "children": [
+       {
+        "$el": "li",
+        "children": [
+         "Budget committee"
+        ]
+       },
+       {
+        "$el": "li",
+        "children": [
+         "Rules committee"
+        ]
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "$el": "li",
+    "children": [
+     "Courts"
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "RichText": {
+  "props": {
+   "text": "Great turnout today — see https://example.org/results for the full count."
+  },
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Comment"
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Markdown": {
+  "props": {
+   "html": "<p>Polls open <strong>7 AM–8 PM</strong>. Bring a photo ID.</p>"
+  },
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Notes"
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "ReferenceText": {
+  "children": [
+   "by 12 votes"
+  ],
+  "scene": {
+   "$el": "p",
+   "children": [
+    "The measure passed ",
+    {
+     "$self": true
+    },
+    "."
+   ]
+  }
+ },
+ "NavIcon": {
+  "children": [
+   {
+    "$el": "svg",
+    "props": {
+     "viewBox": "0 0 20 20",
+     "width": 20,
+     "height": 20,
+     "fill": "none",
+     "stroke": "currentColor",
+     "strokeWidth": 1.6
+    },
+    "children": [
+     {
+      "$el": "path",
+      "props": {
+       "d": "M3 9l7-6 7 6v8H3z"
+      }
+     }
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    },
+    {
+     "$el": "Heading",
+     "props": {
+      "level": 4
+     },
+     "children": [
+      "Home"
+     ]
+    }
+   ]
+  }
+ },
+ "SelectableCard": {
+  "props": {
+   "label": "Pro",
+   "selected": true
+  },
+  "children": [
+   "Unlimited projects"
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$el": "SelectableCard",
+     "props": {
+      "label": "Starter",
+      "selected": false
+     },
+     "children": [
+      "Free, for one project"
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "ClickableCard": {
+  "children": [
+   {
+    "$el": "Heading",
+    "props": {
+     "level": 4
+    },
+    "children": [
+     "Ward 4 results"
+    ]
+   },
+   {
+    "$el": "p",
+    "children": [
+     "Updated 9:41 AM"
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "ActionBar": {
+  "props": {
+   "label": "Bill actions"
+  },
+  "children": [
+   {
+    "$el": "Button",
+    "props": {
+     "variant": "primary"
+    },
+    "children": [
+     "Vote"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Share"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Follow"
+    ]
+   }
+  ],
+  "scene": {
+   "$self": true
+  }
+ },
+ "LegendItem": {
+  "props": {
+   "color": "var(--cieo-color-success)"
+  },
+  "children": [
+   "Registered"
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center",
+     "flexWrap": "wrap"
+    }
+   },
+   "children": [
+    {
+     "$el": "LegendItem",
+     "props": {
+      "color": "var(--cieo-color-accent)"
+     },
+     "children": [
+      "Turnout"
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Overlay": {
+  "inContext": "AlertDialog"
+ },
+ "AvatarGroupOverflow": {
+  "props": {
+   "count": 3
+  },
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "alignItems": "center",
+     "gap": "0.5rem"
+    }
+   },
+   "children": [
+    {
+     "$el": "Avatar",
+     "props": {
+      "name": "Earl Warren",
+      "initials": "EW"
+     }
+    },
+    {
+     "$el": "Avatar",
+     "props": {
+      "name": "Thurgood Marshall",
+      "initials": "TM"
+     }
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "BottomSheetSwitcher": {
+  "props": {
+   "label": "Switch view"
+  },
+  "children": [
+   {
+    "$el": "Button",
+    "props": {
+     "variant": "primary"
+    },
+    "children": [
+     "Day"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Week"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Month"
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "Card",
+   "props": {
+    "title": "Schedule"
+   },
+   "children": [
+    {
+     "$el": "p",
+     "children": [
+      "Tuesday council meeting at 6 PM."
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "FieldStatus": {
+  "props": {
+   "message": "That email is already registered.",
+   "tone": "error"
+  },
+  "scene": {
+   "$el": "Field",
+   "props": {
+    "label": "Email",
+    "htmlFor": "fs-email"
+   },
+   "children": [
+    {
+     "$el": "input",
+     "props": {
+      "id": "fs-email",
+      "type": "email",
+      "className": "cieo-ctl cieo-input",
+      "defaultValue": "ava@example.org"
+     }
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "FormLayout": {
+  "props": {
+   "columns": 2
+  },
+  "children": [
+   {
+    "$el": "Field",
+    "props": {
+     "label": "First name",
+     "htmlFor": "fl-a"
+    },
+    "children": [
+     {
+      "$el": "input",
+      "props": {
+       "id": "fl-a",
+       "className": "cieo-ctl cieo-input"
+      }
+     }
+    ]
+   },
+   {
+    "$el": "Field",
+    "props": {
+     "label": "Last name",
+     "htmlFor": "fl-b"
+    },
+    "children": [
+     {
+      "$el": "input",
+      "props": {
+       "id": "fl-b",
+       "className": "cieo-ctl cieo-input"
+      }
+     }
+    ]
+   },
+   {
+    "$el": "Field",
+    "props": {
+     "label": "Email",
+     "htmlFor": "fl-c"
+    },
+    "children": [
+     {
+      "$el": "input",
+      "props": {
+       "id": "fl-c",
+       "type": "email",
+       "className": "cieo-ctl cieo-input"
+      }
+     }
+    ]
+   },
+   {
+    "$el": "Field",
+    "props": {
+     "label": "Ward",
+     "htmlFor": "fl-d"
+    },
+    "children": [
+     {
+      "$el": "input",
+      "props": {
+       "id": "fl-d",
+       "className": "cieo-ctl cieo-input"
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "I18nProvider": {
+  "props": {
+   "locale": "ar",
+   "dir": "rtl"
+  },
+  "children": [
+   {
+    "$el": "Card",
+    "props": {
+     "title": "مرحبا"
+    },
+    "children": [
+     {
+      "$el": "p",
+      "children": [
+       "Layout and text direction flip together for right-to-left languages."
+      ]
+     },
+     {
+      "$el": "Button",
+      "props": {
+       "variant": "primary"
+      },
+      "children": [
+       "متابعة"
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "MobileNavToggle": {
+  "props": {
+   "expanded": false,
+   "label": "Open menu"
+  },
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "display": "flex",
+     "alignItems": "center",
+     "justifyContent": "space-between",
+     "gap": "1rem"
+    }
+   },
+   "children": [
+    {
+     "$el": "Heading",
+     "props": {
+      "level": 4
+     },
+     "children": [
+      "Cieo"
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Tooltip": {
+  "props": {
+   "text": "Copy link"
+  },
+  "children": [
+   {
+    "$el": "Button",
+    "children": [
+     "Share"
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "paddingBlockStart": "2.5rem",
+     "display": "flex",
+     "gap": "0.75rem",
+     "alignItems": "center"
+    }
+   },
+   "children": [
+    {
+     "$el": "Button",
+     "props": {
+      "variant": "primary"
+     },
+     "children": [
+      "Save"
+     ]
+    },
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "Toolbar": {
+  "props": {
+   "label": "Bill actions",
+   "title": "H.R. 12"
+  },
+  "children": [
+   {
+    "$el": "Button",
+    "props": {
+     "variant": "primary"
+    },
+    "children": [
+     "Vote"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Share"
+    ]
+   },
+   {
+    "$el": "Button",
+    "children": [
+     "Follow"
+    ]
+   }
+  ]
+ },
+ "Popover": {
+  "props": {
+   "open": true,
+   "portal": false,
+   "label": "Filters",
+   "trigger": {
+    "$el": "Button",
+    "children": [
+     "Filters"
+    ]
+   }
+  },
+  "children": [
+   {
+    "$el": "p",
+    "children": [
+     "Show only bills that moved this week."
+    ]
+   }
+  ],
+  "scene": {
+   "$el": "div",
+   "props": {
+    "style": {
+     "minHeight": "7rem"
+    }
+   },
+   "children": [
+    {
+     "$self": true
+    }
+   ]
+  }
+ },
+ "RadioGroup": {
+  "props": {
+   "label": "Delivery speed",
+   "defaultValue": "express"
+  },
+  "children": [
+   {
+    "$el": "Radio",
+    "props": {
+     "value": "standard",
+     "label": "Standard"
+    }
+   },
+   {
+    "$el": "Radio",
+    "props": {
+     "value": "express",
+     "label": "Express"
+    }
+   },
+   {
+    "$el": "Radio",
+    "props": {
+     "value": "overnight",
+     "label": "Overnight"
+    }
+   }
+  ]
+ }
 }

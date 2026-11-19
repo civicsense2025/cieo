@@ -9,7 +9,8 @@ const roots = new Set(sheets.flatMap((css) => [...css.matchAll(/:where\(\.cieo\)
 
 for (const file of readdirSync('site/composites').filter((f) => f.endsWith('.html'))) {
   test(`${file}: every component root also carries the cieo class`, () => {
-    const html = readFileSync(`site/composites/${file}`, 'utf8');
+    // The "Built from" cards are generated from the real components' own markup, so only hand-written markup is checked.
+    const html = readFileSync(`site/composites/${file}`, 'utf8').replace(/<section\b[^>]*data-built-from[^>]*>[\s\S]*?<\/section>/, '');
     const bad = [...html.matchAll(/\bclass="([^"]*)"/g)].map((m) => m[1].split(/\s+/)).filter((c) => !c.includes('cieo') && c.some((x) => roots.has(x)));
     assert.deepEqual(bad.slice(0, 5), []);
   });

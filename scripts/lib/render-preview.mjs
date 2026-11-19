@@ -1,5 +1,7 @@
 // scripts/lib/render-preview.mjs — server-renders the real component so a doc preview carries the exact classes and markup it ships with.
 // Props come from scripts/data/preview-props.json; a component without an entry gets props inferred from its required TypeScript props.
+// A spec may also set "inContext": "Parent" (show the real parent preview, which already contains this part) or
+// "scene": an element tree with {"$self":true} where the component goes, so every part is seen working among its neighbours.
 // Spec values: plain JSON, {"$el":"Name","props":{},"children":[...]} for an element (a primitive name or an HTML tag), "$fn" for a no-op callback.
 import { existsSync, readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
@@ -28,8 +30,10 @@ export function createPreviewRenderer(root, entries) {
     return (await load(dir))[name] ?? null;
   };
 
+  let selfNode = null;
   async function resolve(value) {
     if (value === '$fn') return noop;
+    if (value && typeof value === 'object' && value.$self) return selfNode;
     if (Array.isArray(value)) return Promise.all(value.map(resolve));
     if (value && typeof value === 'object') {
       if ('$el' in value) {
@@ -71,18 +75,32 @@ export function createPreviewRenderer(root, entries) {
     return undefined;
   }
 
+  /** Marks the part being documented inside a scene, so the neighbours read as context and the part reads as the subject. */
+  const focus = (html, dir) => html.replace(new RegExp(`(<[a-z0-9]+\\b[^>]*\\bclass="[^"]*\\bcieo-(?:p-)?${kebab(dir)}(?=[\\s"])[^"]*")`, 'g'), '$1 data-focus');
+
   /** Returns {html} or {error}; never throws, so the caller can fall back to the authored fragment. */
-  return async function render(dir) {
+  return async function render(dir, seen = new Set()) {
     try {
+      const spec = overrides[dir] ?? {};
+      if (spec.inContext) {
+        if (seen.has(dir)) return { error: `context cycle at ${dir}` };
+        seen.add(dir);
+        const parent = await render(spec.inContext, seen);
+        return parent.html ? { html: focus(parent.html, dir), source: 'context' } : parent;
+      }
       const Component = await component(dir);
       if (!Component) return { error: 'no exported component' };
-      const spec = overrides[dir] ?? {};
       const props = await resolve({ ...inferProps(dir), ...(spec.props ?? {}) });
       const children = spec.children === null ? [] : await resolve(spec.children ?? human(dir));
-      const wrap = spec.wrap ? await resolve(spec.wrap) : null;
       let node = createElement(Component, props, ...(Array.isArray(children) ? children : [children]));
-      if (wrap) node = createElement(wrap.type, wrap.props, node);
-      const html = renderToStaticMarkup(node);
+      if (spec.scene) {
+        selfNode = node;
+        node = await resolve(spec.scene);
+      } else if (spec.wrap) {
+        const wrap = await resolve(spec.wrap);
+        node = createElement(wrap.type, wrap.props, node);
+      }
+      const html = spec.scene ? focus(renderToStaticMarkup(node), dir) : renderToStaticMarkup(node);
       return html.trim() ? { html, source: overrides[dir] ? 'data' : 'inferred' } : { error: 'rendered nothing' };
     } catch (e) {
       return { error: String(e.message ?? e).split('\n')[0] };

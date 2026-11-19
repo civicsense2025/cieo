@@ -40,7 +40,7 @@ const previewOf = (dir) => {
   const wrapped = /^\s*<li\b/.test(plain) ? `<ul class="tile-list">${plain}</ul>` : plain;
   return wrapped.replace(/\b(id|for|aria-labelledby|aria-describedby|aria-controls)="([^"]+)"/g, (_, a, v) => `${a}="${v.split(' ').map((t) => `${t}-t-${dir}`).join(' ')}"`);
 };
-const tile = (i) => `<li class="tile"><div class="tile-stage" inert>${previewOf(i.dir)}</div><a class="tile-name" href="./${i.dir}.html">${i.name}</a></li>`;
+const tile = (i) => `<li class="tile"><div class="tile-stage" inert><div class="tile-canvas">${previewOf(i.dir)}</div></div><a class="tile-name" href="./${i.dir}.html">${i.name}</a></li>`;
 const packSection = ([id, title]) => {
   const list = items.filter((i) => i.pack === id);
   return `<section id="pack-${id}" aria-labelledby="pack-${id}-h"><h2 id="pack-${id}-h">${title} <span class="doc-count">${list.length}</span></h2><ul class="tiles">${list.map(tile).join('')}</ul></section>`;
@@ -62,7 +62,7 @@ ${LAYERS.map(([id, title]) => section(id + 's', title, groups[id])).join('\n')}
 ${PACKS.map(packSection).join('\n')}
 </div>
 </div>
-</div></main>${siteFooter('../')}</body></html>
+</div></main>${siteFooter('../')}<script src="../tile-fit.js" defer></script></body></html>
 `;
 
 const writes = [[`${root}/site/components/index.html`, index]];
