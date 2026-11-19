@@ -52,7 +52,7 @@ const section = (id, title, list) =>
 const index = `<!doctype html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Components · Cieo</title>${siteStyles('../', true)}</head>
+<title>Components · Cieo</title>${siteStyles('../', true).replace(/(<link rel="stylesheet" href="\.\.\/\.\.\/design\/primitives\.css">)/, '$1<link rel="stylesheet" href="../../dist/controls/controls.css">')}</head>
 <body class="cieo cieo-docsite cieo-site">${siteHeader('../', 'Library')}<main id="main"><div class="doc-shell">
 <nav class="doc-rail" aria-label="On this page"><a href="#primitives">Primitives</a><a href="#atoms">Atoms</a><a href="#molecules">Molecules</a><a href="#organisms">Organisms</a>${PACKS.map(([id, title]) => `<a href="#pack-${id}">${title}</a>`).join('')}</nav>
 <div class="doc-main">
