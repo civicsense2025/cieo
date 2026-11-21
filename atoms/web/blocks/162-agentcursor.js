@@ -283,7 +283,7 @@ atom({ id:'agentnav', cat:'Agent activity', name:'Agent navigation', block:'Revi
     const whoEl = [$(st, '.agn-wa'), $(st, '.agn-wy')], whoSw = new Swap(0);
     const pl = [gEl('span', 'position:absolute;left:0;top:0;white-space:nowrap'), gEl('span', 'position:absolute;left:0;top:0;white-space:nowrap')]; pl.forEach(e => pathH.appendChild(e));
     const psw = new DSw(0); let pk = 0; const swapPath = (txt, dir, inst) => { pk ^= 1; pl[pk].textContent = txt; if (inst){ psw.cur = pk; psw.prev = null; psw.t = -9; } else psw.to(pk, dir); };
-    const logT = gFit($(st, '.agn-lt'), 'line-height:18px'); $(st, '.agn-lt').style.overflow = 'hidden', rep = $(st, '.agn-rep');
+    const logT = gFit($(st, '.agn-lt'), 'line-height:18px'); $(st, '.agn-lt').style.overflow = 'hidden'; const rep = $(st, '.agn-rep');
     const sw = new DSw('home'), lp = new Track(0, { w:5 }), lo = new Track(0, S.base), sx = new Track(0), bkT = new Track(0), fwT = new Track(0);
     let hist = [], all = [], idx = 0, rev = 0, hold = -9, si = 0;
     const say = s => { live.textContent = s; };

@@ -169,11 +169,6 @@
   align-items: center;
 }
 @media (hover: hover) { .recipe-comp-link:hover { text-decoration: underline; } }
-.tile > footer summary {
-  min-block-size: var(--cieo-touch-target);
-  display: inline-flex;
-  align-items: center;
-}
 .stage {
   position: relative;
   min-block-size: 20rem;
@@ -202,6 +197,9 @@
   font-size: var(--cieo-text-caption);
   color: var(--cieo-color-muted);
   user-select: none;
+  min-block-size: var(--cieo-touch-target);
+  display: inline-flex;
+  align-items: center;
 }
 .tile > footer p {
   margin: var(--cieo-space-2) 0;
