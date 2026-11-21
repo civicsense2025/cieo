@@ -65,6 +65,8 @@ body.cieo-docsite {
 .doc-tabs [role="tab"] { padding: var(--cieo-space-3) 0; border: 0; border-block-end: 2px solid transparent; margin-block-end: -1px; background: none; color: var(--cieo-color-muted); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
 .doc-tabs [role="tab"][aria-selected="true"] { color: var(--cieo-color-text); border-block-end-color: var(--cieo-color-text); }
 .doc-stage { display: grid; place-items: center; min-block-size: 14rem; padding: var(--cieo-space-8) var(--cieo-space-4); background-color: var(--cieo-color-canvas); background-image: radial-gradient(circle at 1px 1px, var(--cieo-color-border) 1px, transparent 0); background-size: var(--cieo-space-2) var(--cieo-space-2); }
+/* An open dropdown panel extends below its trigger; give the stage room so the full menu is visible, not cropped. */
+.doc-stage:has(.cieo-dropdown-menu-panel), .doc-state-stage:has(.cieo-dropdown-menu-panel) { min-block-size: 30rem; align-items: start; padding-block-start: var(--cieo-space-6); }
 .doc-stage > * { max-inline-size: 100%; }
 /* Fixed viewport surfaces sit inside the stage in documentation previews so they never float over the page. */
 .doc-stage :is(.cieo-toast, .cieo-dialog, .cieo-bottom-sheet, .cieo-lightbox),
