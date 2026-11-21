@@ -179,7 +179,7 @@ body.cieo-site {
 @media (prefers-reduced-motion: reduce) { .copy-glyph { transition: none; } }
 
 /* Library tiles: each part drawn live (and inert) in a quiet frame, name underneath, the whole tile is the link. */
-ul.tiles { display: grid; margin: 0; padding: 0; list-style: none; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); gap: var(--cieo-space-3); border-block-start: 0; }
+ul.tiles { display: grid; margin: 0; padding: 0; list-style: none; grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); gap: var(--cieo-space-4); border-block-start: 0; }
 .tiles .tile { position: relative; display: grid; grid-template-rows: minmax(9rem, auto); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); overflow: hidden; transition: scale var(--motion-duration-snap, 200ms) var(--motion-ease-spring, cubic-bezier(.2,.15,.2,1)); }
 .tiles .tile-stage { display: grid; place-items: center; padding: var(--cieo-space-3); overflow: hidden; contain: layout paint; background: var(--cieo-color-canvas); pointer-events: none; }
 .tiles .tile-canvas { inline-size: max-content; min-inline-size: 9rem; max-inline-size: 22rem; }
