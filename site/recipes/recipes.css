@@ -99,8 +99,9 @@
   align-items: baseline;
   justify-content: space-between;
   gap: var(--cieo-space-3);
-  border-block-end: var(--cieo-border-width) solid var(--cieo-color-border);
-  padding-block-end: var(--cieo-space-2);
+  background: var(--cieo-color-sunken);
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  border-radius: var(--cieo-radius-small);
 }
 .recipe-group-head h2 {
   margin: 0;
@@ -119,7 +120,6 @@
 }
 .tile {
   background: var(--cieo-color-surface);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   display: flex;
   flex-direction: column;
@@ -165,6 +165,7 @@
   text-decoration: none;
   font-weight: var(--cieo-weight-medium);
   min-block-size: var(--cieo-touch-target);
+  margin-inline-start: auto;
   display: inline-flex;
   align-items: center;
 }
@@ -187,7 +188,7 @@
 .tile.wide.tall .stage { min-block-size: 32rem; }
 .tile > footer {
   padding: var(--cieo-space-3) var(--cieo-space-4) var(--cieo-space-4);
-  border-block-start: var(--cieo-border-width) solid var(--cieo-color-border);
+  background: var(--cieo-color-sunken);
   display: flex;
   flex-direction: column;
   gap: var(--cieo-space-2);
@@ -211,7 +212,6 @@
   margin: 0;
   font: var(--cieo-text-caption)/1.5 var(--cieo-font-mono);
   background: var(--cieo-color-canvas);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   padding: 8px 10px;
   overflow-x: auto;
@@ -245,6 +245,6 @@
   text-align: center;
   color: var(--cieo-color-muted);
   font-size: var(--cieo-text-small);
-  border: var(--cieo-border-width) dashed var(--cieo-color-border);
+  background: var(--cieo-color-sunken);
   border-radius: var(--cieo-radius-surface);
 }

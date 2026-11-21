@@ -157,6 +157,19 @@ function tokensOf(dir) {
   return [...new Set([...readFileSync(css, 'utf8').matchAll(/var\((--(?:cieo|motion)-[\w-]+)/g)].map((m) => m[1]))].sort();
 }
 
+// A component "has motion" when its stylesheet reads a motion token, or its
+// manifest declares a concrete animation behavior. An explicit lone
+// `no-motion` constraint wins. Drives `data-stage-motion` so the stage toolbar
+// only offers Spring/speed controls where they can affect the preview.
+const MOTION_HINTS = /spring|transition|fade|rise|flip|stagger|drift|morph|ring|roll|swap|presence|reorder|progress|spin|pulse|animate|smooth|soft-height|feedback|strength|opacity-only/i;
+function usesMotion(dir) {
+  const constraints = manifest0(dir).constraints?.motion ?? [];
+  if (constraints.length === 1 && constraints[0] === 'no-motion') return false;
+  const css = `${root}/design/styles/primitives/${kebab(dir)}.css`;
+  if (existsSync(css) && /var\(--(?:cieo-)?motion-/.test(readFileSync(css, 'utf8'))) return true;
+  return constraints.some((x) => MOTION_HINTS.test(x));
+}
+
 const entries = scanPrimitives(root);
 // Previews are the real components server-rendered from dist, so their classes cannot drift from the shipped markup.
 // A component that cannot render standalone keeps its authored fragment and is listed below.
@@ -205,6 +218,7 @@ for (const { dir, values } of entries) {
   const readme = `${root}/src/primitives/${dir}/README.md`;
   const guide = existsSync(readme) ? readmeHtml(readFileSync(readme, 'utf8')) : '';
   const tokens = tokensOf(dir);
+  const motion = usesMotion(dir);
 
   const cust = customizationMap.get(dir) ?? { status: 'named-slots', parts: ['root'] };
   const parts = cust.parts?.length ? cust.parts : ['root'];
@@ -213,22 +227,21 @@ for (const { dir, values } of entries) {
   const cliSnippet = `npx cieo add ${dir}\n/* Root selector: .cieo-${kebab(dir)} (${cust.status})${tokens.length ? `\n   Tokens: ${tokens.slice(0, 5).join(', ')}` : ''} */`;
   const swiftCode = swiftSnippet(dir, manifest);
 
+  const railLink = ([id, label]) => `<a href="#${id}">${label}</a>`;
+  const railGroup = (label, links) => `<details open><summary>${label}</summary>${links.filter(Boolean).map(railLink).join('')}</details>`;
   const rail = [
-    ['usage', 'Usage'],
-    ['anatomy', 'Anatomy'],
-    fsmKind && ['state-machine', 'State machine'],
-    ['props', 'Properties'],
-    guide && ['guide', 'Guide'],
-    ['best', 'Best practices'],
-    tokens.length && ['tokens', 'Tokens'],
-  ].filter(Boolean).map(([id, label]) => `<a href="#${id}">${label}</a>`).join('');
+    railGroup('Preview &amp; code', [['usage', 'Usage']]),
+    railGroup('Anatomy &amp; behavior', [['anatomy', 'Anatomy'], fsmKind && ['state-machine', 'State machine']]),
+    railGroup('Reference', [['props', 'Properties'], tokens.length && ['tokens', 'Tokens']]),
+    railGroup('Guidance', [guide && ['guide', 'Guide'], ['best', 'Best practices']]),
+  ].join('');
 
   const anatomySection = `<section id="anatomy" aria-labelledby="anatomy-h"><h2 id="anatomy-h">Anatomy</h2><figure class="doc-anatomy"><svg data-anatomy-svg viewBox="0 0 520 ${anatomyHeight(parts)}" role="img" aria-label="${esc(title)} anatomy">${renderAnatomySvg(parts)}</svg><ol class="doc-anatomy-list">${parts.map((p, i) => `<li><b>${i + 1}</b><code>slotProps.${esc(p)}</code></li>`).join('')}</ol></figure></section>`;
   const fsmSection = fsmKind
     ? `<section id="state-machine" data-fsm-machine="${fsmKind}" aria-labelledby="fsm-h"><h2 id="fsm-h">State machine</h2><p>Interactive <code>${fsmKind}</code> state transitions and <code>TransitionEnvelope</code> output from <code>cieo/state</code>.</p><div class="doc-fsm" data-fsm-mount></div></section>`
     : '';
 
-  const out = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title} · Cieo</title>${siteStyles('../', true).replace(/(<link rel="stylesheet" href="\.\.\/\.\.\/design\/primitives\.css">)/, '$1<link rel="stylesheet" href="../../dist/controls/controls.css">')}</head><body class="cieo cieo-docsite cieo-site">${siteHeader('../', 'Library')}<main id="main"><div class="doc-shell"><nav class="doc-rail" aria-label="On this page"><span class="doc-label">On this page</span>${rail}</nav><div class="doc-main"><header class="doc-head"><p class="doc-crumbs"><a href="./">Library</a><span aria-hidden="true">/</span><span class="doc-level"><span data-level>${level}</span></span></p><h1>${title}</h1><p><!--summary-->${summary}<!--/summary--></p></header><section id="usage" aria-labelledby="usage-h"><h2 id="usage-h">Usage</h2><div class="cieo-import-banner" data-import-banner><pre><code data-import>${importLine}</code></pre><button type="button" class="doc-button doc-icon-button" data-copy-import aria-label="Copy import" title="Copy import"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><rect x="7" y="7" width="9" height="9" rx="2"/><path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button></div><div class="doc-example"><div class="doc-tabs" role="tablist" aria-label="Example views"><button type="button" role="tab" id="tab-preview" aria-controls="panel-preview" aria-selected="true">Preview</button><button type="button" role="tab" id="tab-code" aria-controls="panel-code" aria-selected="false" tabindex="-1">Web (React)</button><button type="button" role="tab" id="tab-cli" aria-controls="panel-cli" aria-selected="false" tabindex="-1">Web (CLI / CSS)</button><button type="button" role="tab" id="tab-swift" aria-controls="panel-swift" aria-selected="false" tabindex="-1">Apple (SwiftUI)</button></div><div class="doc-stage-bar" data-stage-toolbar data-component="${dir}" data-knobs="${esc(JSON.stringify(knobs))}"></div><div class="doc-stage" role="tabpanel" id="panel-preview" aria-labelledby="tab-preview" data-preview><!--preview-->${preview}<!--/preview-->${statesHtml}</div><pre class="doc-code" role="tabpanel" id="panel-code" aria-labelledby="tab-code" hidden><code data-code><!--code-->${code}<!--/code--></code></pre><pre class="doc-code" role="tabpanel" id="panel-cli" aria-labelledby="tab-cli" hidden><code data-cli>${esc(cliSnippet)}</code></pre><pre class="doc-code" role="tabpanel" id="panel-swift" aria-labelledby="tab-swift" hidden><code data-swift>${esc(swiftCode)}</code></pre></div></section>${anatomySection}${fsmSection}<section id="props" aria-labelledby="props-h"><h2 id="props-h">Properties</h2><div class="doc-table-wrap"><table data-props><thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>${props}</tbody></table></div></section>${guide ? `<section id="guide" aria-labelledby="guide-h"><h2 id="guide-h">Guide</h2><div class="doc-guide">${guide}</div></section>` : ''}<section id="best" aria-labelledby="best-h"><h2 id="best-h">Best practices</h2><div class="doc-verdicts"><div data-do><!--do-->${doing}<!--/do--></div><div data-dont><!--dont-->${dont}<!--/dont--></div></div></section>${tokens.length ? `<section id="tokens" aria-labelledby="tokens-h"><h2 id="tokens-h">Tokens</h2><p>The stylesheet reads these tokens, so a theme restyles the component without overrides.</p><ul class="doc-tokens">${tokens.map((t) => `<li>${t}</li>`).join('')}</ul></section>` : ''}<footer class="doc-foot"><code data-install>npm install github:civicsense2025/cieo#v${version}</code><a data-workbench href="../recipes/">Explore Motion Recipes</a><nav aria-label="Components"><a data-prev${prev}</a><a data-next${next}</a></nav></footer></div></div></main>${siteFooter('../')}<script type="module" src="../doc-playground.js"></script></body></html>`;
+  const out = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${title} · Cieo</title>${siteStyles('../', true).replace(/(<link rel="stylesheet" href="\.\.\/\.\.\/design\/primitives\.css">)/, '$1<link rel="stylesheet" href="../../dist/controls/controls.css">')}</head><body class="cieo cieo-docsite cieo-site">${siteHeader('../', 'Library')}<main id="main"><div class="doc-shell"><nav class="doc-rail" aria-label="On this page"><span class="doc-label">On this page</span>${rail}</nav><div class="doc-main"><header class="doc-head"><p class="doc-crumbs"><a href="./">Library</a><span aria-hidden="true">/</span><span class="doc-level"><span data-level>${level}</span></span></p><h1>${title}</h1><p><!--summary-->${summary}<!--/summary--></p></header><section id="usage" aria-labelledby="usage-h"><h2 id="usage-h">Usage</h2><div class="cieo-import-banner" data-import-banner><pre><code data-import>${importLine}</code></pre><button type="button" class="doc-button doc-icon-button" data-copy-import aria-label="Copy import" title="Copy import"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false"><rect x="7" y="7" width="9" height="9" rx="2"/><path d="M13 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/></svg></button></div><div class="doc-example"><div class="doc-tabs" role="tablist" aria-label="Example views"><button type="button" role="tab" id="tab-preview" aria-controls="panel-preview" aria-selected="true">Preview</button><button type="button" role="tab" id="tab-code" aria-controls="panel-code" aria-selected="false" tabindex="-1">Web (React)</button><button type="button" role="tab" id="tab-cli" aria-controls="panel-cli" aria-selected="false" tabindex="-1">Web (CLI / CSS)</button><button type="button" role="tab" id="tab-swift" aria-controls="panel-swift" aria-selected="false" tabindex="-1">Apple (SwiftUI)</button></div><div class="doc-stage-bar" data-stage-toolbar data-stage-motion="${motion}" data-component="${dir}" data-knobs="${esc(JSON.stringify(knobs))}"></div><div class="doc-stage" role="tabpanel" id="panel-preview" aria-labelledby="tab-preview" data-preview><!--preview-->${preview}<!--/preview-->${statesHtml}</div><pre class="doc-code" role="tabpanel" id="panel-code" aria-labelledby="tab-code" hidden><code data-code><!--code-->${code}<!--/code--></code></pre><pre class="doc-code" role="tabpanel" id="panel-cli" aria-labelledby="tab-cli" hidden><code data-cli>${esc(cliSnippet)}</code></pre><pre class="doc-code" role="tabpanel" id="panel-swift" aria-labelledby="tab-swift" hidden><code data-swift>${esc(swiftCode)}</code></pre></div></section>${anatomySection}${fsmSection}<section id="props" aria-labelledby="props-h"><h2 id="props-h">Properties</h2><div class="doc-table-wrap"><table data-props><thead><tr><th>Name</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody>${props}</tbody></table></div></section>${guide ? `<section id="guide" aria-labelledby="guide-h"><h2 id="guide-h">Guide</h2><div class="doc-guide">${guide}</div></section>` : ''}<section id="best" aria-labelledby="best-h"><h2 id="best-h">Best practices</h2><div class="doc-verdicts"><div data-do><!--do-->${doing}<!--/do--></div><div data-dont><!--dont-->${dont}<!--/dont--></div></div></section>${tokens.length ? `<section id="tokens" aria-labelledby="tokens-h"><h2 id="tokens-h">Tokens</h2><p>The stylesheet reads these tokens, so a theme restyles the component without overrides.</p><ul class="doc-tokens">${tokens.map((t) => `<li>${t}</li>`).join('')}</ul></section>` : ''}<footer class="doc-foot"><code data-install>npm install github:civicsense2025/cieo#v${version}</code><a data-workbench href="../recipes/">Explore Motion Recipes</a><nav aria-label="Components"><a data-prev${prev}</a><a data-next${next}</a></nav></footer></div></div></main>${siteFooter('../')}<script type="module" src="../doc-playground.js"></script></body></html>`;
 
   if (html !== out) {
     dirty = true;
