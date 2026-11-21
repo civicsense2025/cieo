@@ -167,7 +167,7 @@ body.cieo-site {
 
 /* Copy button on code blocks: the kit's icon button, pinned to the block's corner. The two glyphs trade places on a spring. */
 .copy-wrap { position: relative; min-inline-size: 0; }
-.copy-wrap > pre { padding-inline-end: calc(var(--cieo-control-small) + var(--cieo-space-4)); }
+.copy-wrap > pre { padding-inline-end: calc(var(--cieo-touch-target) + var(--cieo-space-4) + var(--cieo-space-2)); }
 .copy-wrap > .copy-button { position: absolute; inset-block-start: var(--cieo-space-2); inset-inline-end: var(--cieo-space-2); min-block-size: var(--cieo-touch-target); min-inline-size: var(--cieo-touch-target); display: inline-flex; align-items: center; justify-content: center; background: transparent; color: inherit; border-color: color-mix(in srgb, currentColor 30%, transparent); }
 .copy-wrap > pre ~ .copy-button { color: var(--cieo-color-canvas); }
 .copy-button { position: relative; }

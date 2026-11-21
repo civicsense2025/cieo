@@ -117,7 +117,7 @@ body.cieo-docsite {
 .doc-main .doc-register li + li { margin-block-start: 0; }
 .doc-main .doc-register h2 { display: flex; align-items: baseline; gap: var(--cieo-space-2); }
 
-/* Interactive Stage Toolbar, Telemetry HUD, SVG Anatomy, and FSM Matrix */
+/* Interactive Stage Toolbar, SVG Anatomy, and FSM Matrix */
 .doc-stage-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--cieo-space-2) var(--cieo-space-3); padding: var(--cieo-space-3) var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-sunken); }
 .doc-knob { display: inline-flex; flex-direction: column; gap: 2px; font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-muted); }
 .doc-knob select { min-block-size: 1.85rem; padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-text-caption) var(--cieo-font-sans); }

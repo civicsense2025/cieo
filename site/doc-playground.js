@@ -270,7 +270,7 @@ if (fsmSection) {
         };
       }
       case 'reorder': {
-        const m = createReorderMachine({ items: ['one', 'two', 'three'] });
+        const m = createReorderMachine({ order: ['one', 'two', 'three'] });
         return {
           label: () => m.getSnapshot().order.join(' → '),
           snapshot: () => m.getSnapshot(),
