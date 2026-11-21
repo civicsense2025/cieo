@@ -74,6 +74,7 @@ if (stage) {
 
 if (toolbar && stage) {
   const compName = toolbar.dataset.component || 'Component';
+  const hasMotion = toolbar.dataset.stageMotion === 'true';
   let knobs = [];
   try { knobs = JSON.parse(toolbar.dataset.knobs || '[]'); } catch { knobs = []; }
 
@@ -95,16 +96,23 @@ if (toolbar && stage) {
     return `<label class="doc-knob"><span>${k.id}</span><select data-prop-knob="${k.id}">${opts}</select></label>`;
   }).join('');
 
-  toolbar.innerHTML = [
+  const controls = [
     selHtml('brand', 'Brand', brandEntries, 'instrument'),
     selHtml('ground', 'Ground', groundEntries, 'paper'),
     selHtml('scheme', 'Scheme', [['system', 'System'], ['light', 'Light'], ['dark', 'Dark']], 'system'),
     selHtml('density', 'Density', densityEntries, 'comfortable'),
     selHtml('radius', 'Corners', radiusEntries, 'pill'),
-    selHtml('preset', 'Spring', [['snap', 'snap (ω 34)'], ['base', 'base (ω 22)'], ['soft', 'soft (ω 15)'], ['lazy', 'lazy (ω 9)']], 'base'),
-    `<div class="doc-speed-group" role="group" aria-label="Time dilation"><button type="button" data-stage-speed="1" aria-pressed="true">1×</button><button type="button" data-stage-speed="0.25" aria-pressed="false">0.25×</button><button type="button" data-stage-speed="0.1" aria-pressed="false">0.1×</button></div>`,
-    knobControls,
-  ].join('');
+  ];
+  // Spring and speed only make sense where the component's own CSS/manifest declares motion;
+  // `data-stage-motion` is pinned by the builder so tests can assert the rule.
+  if (hasMotion) {
+    controls.push(
+      selHtml('preset', 'Spring', [['snap', 'snap (ω 34)'], ['base', 'base (ω 22)'], ['soft', 'soft (ω 15)'], ['lazy', 'lazy (ω 9)']], 'base'),
+      `<div class="doc-speed-group" role="group" aria-label="Time dilation"><button type="button" data-stage-speed="1" aria-pressed="true">1×</button><button type="button" data-stage-speed="0.25" aria-pressed="false">0.25×</button><button type="button" data-stage-speed="0.1" aria-pressed="false">0.1×</button></div>`,
+    );
+  }
+  controls.push(knobControls);
+  toolbar.innerHTML = controls.join('');
 
   let speedScale = 1;
   // Slow motion stretches every motion token the stage reads: durations grow by 1/speed and spring frequencies shrink by speed.
@@ -134,7 +142,7 @@ if (toolbar && stage) {
     for (const [k, v] of Object.entries(vars)) stage.style.setProperty(k, v);
     stage.style.colorScheme = scheme;
 
-    applyTimeScale();
+    if (hasMotion) applyTimeScale();
   };
 
   toolbar.querySelectorAll('select[data-stage-brand], select[data-stage-ground], select[data-stage-scheme], select[data-stage-density], select[data-stage-radius], select[data-stage-preset]')

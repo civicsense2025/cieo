@@ -274,8 +274,9 @@ function buildRecipesCss() {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--cieo-space-3);
-  border-block-end: var(--cieo-border-width) solid var(--cieo-color-border);
-  padding-block-end: var(--cieo-space-2);
+  background: var(--cieo-color-sunken);
+  padding: var(--cieo-space-2) var(--cieo-space-3);
+  border-radius: var(--cieo-radius-small);
 }
 .recipe-group-head h2 {
   margin: 0;
@@ -294,7 +295,6 @@ function buildRecipesCss() {
 }
 .tile {
   background: var(--cieo-color-surface);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   display: flex;
   flex-direction: column;
@@ -340,6 +340,7 @@ function buildRecipesCss() {
   text-decoration: none;
   font-weight: var(--cieo-weight-medium);
   min-block-size: var(--cieo-touch-target);
+  margin-inline-start: auto;
   display: inline-flex;
   align-items: center;
 }
@@ -362,7 +363,7 @@ function buildRecipesCss() {
 .tile.wide.tall .stage { min-block-size: 32rem; }
 .tile > footer {
   padding: var(--cieo-space-3) var(--cieo-space-4) var(--cieo-space-4);
-  border-block-start: var(--cieo-border-width) solid var(--cieo-color-border);
+  background: var(--cieo-color-sunken);
   display: flex;
   flex-direction: column;
   gap: var(--cieo-space-2);
@@ -386,7 +387,6 @@ function buildRecipesCss() {
   margin: 0;
   font: var(--cieo-text-caption)/1.5 var(--cieo-font-mono);
   background: var(--cieo-color-canvas);
-  border: var(--cieo-border-width) solid var(--cieo-color-border);
   border-radius: var(--cieo-radius-surface);
   padding: 8px 10px;
   overflow-x: auto;
@@ -420,7 +420,7 @@ function buildRecipesCss() {
   text-align: center;
   color: var(--cieo-color-muted);
   font-size: var(--cieo-text-small);
-  border: var(--cieo-border-width) dashed var(--cieo-color-border);
+  background: var(--cieo-color-sunken);
   border-radius: var(--cieo-radius-surface);
 }
 `;
@@ -447,6 +447,7 @@ ${loaderEntries}
 
 const CATEGORIES = ${JSON.stringify(manifestData)};
 const FAM_NAMES = { M: 'Morph', S: 'Swap', D: 'Drag', E: 'Edges', X: 'Enter/Exit', T: 'Time' };
+const FAM_LABELS = { M: 'Morph', S: 'Swap', D: 'Drag', E: 'Edges', X: 'Enter', T: 'Time' };
 const COMP_BY_ID = new Map();
 for (const c of CATEGORIES) for (const it of c.items) if (it.component) COMP_BY_ID.set(it.id, it.component);
 
@@ -515,12 +516,15 @@ function createTile(a) {
   const el = document.createElement('article');
   el.className = 'tile' + (a.wide ? ' wide' : '') + (a.tall ? ' tall' : '') + (a.big ? ' big' : '');
   el.id = a.id;
-  const fams = (a.fam || []).map((f) => \`<span role="img" aria-label="\${FAM_NAMES[f] || f}" title="\${FAM_NAMES[f] || f}">\${f}</span>\`).join('');
+  const fams = (a.fam || []).map((f) => \`<span role="img" aria-label="\${FAM_NAMES[f] || f}" title="\${FAM_NAMES[f] || f}">\${FAM_LABELS[f] || f}</span>\`).join('');
   const comp = COMP_BY_ID.get(a.id);
   const compHtml = comp ? \`<a class="recipe-comp-link" href="../components/\${comp}.html">\${comp} spec →</a>\` : '';
-  el.innerHTML = \`<header><h3></h3><div class="fam">\${fams}</div></header><div class="block"><span data-block-name></span>\${compHtml}</div><div class="stage">\${a.html}</div><footer><details><summary>Formula &amp; source (\${a.file || 'atoms/web'})</summary><p data-desc></p><pre data-api></pre></details></footer>\`;
+  el.innerHTML = \`<header><h3></h3><div class="fam">\${fams}</div></header><div class="block"><span data-block-name></span>\${compHtml}</div><div class="stage">\${a.html}</div><footer><details><summary>Formula &amp; source</summary><p data-desc></p><pre data-api></pre></details></footer>\`;
   el.querySelector('h3').textContent = a.name;
-  el.querySelector('[data-block-name]').textContent = a.block || a.cat;
+  const blockLabel = a.block || a.cat || '';
+  const showBlock = blockLabel && !(a.name || '').toLowerCase().includes(blockLabel.toLowerCase());
+  el.querySelector('[data-block-name]').textContent = showBlock ? blockLabel : '';
+  if (!showBlock && !comp) el.querySelector('.block').style.display = 'none';
   el.querySelector('[data-desc]').textContent = a.desc || '';
   el.querySelector('[data-api]').textContent = a.api || '';
   el.__cieoAtom = a;
@@ -728,7 +732,7 @@ function buildRecipesHtml() {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Motion Recipes · Cieo</title>
-<meta name="description" content="Explore ${totalRecipes} interactive closed-form spring motion recipes across ${categories.length} categories, lazy-loaded by route and themed by Cieo tokens.">
+<meta name="description" content="Explore ${totalRecipes} interactive motion recipes across ${categories.length} categories, lazy-loaded by route and themed by Cieo tokens.">
 <meta name="color-scheme" content="light dark">
 ${siteStyles('../')}
 <link rel="stylesheet" href="./recipes.css">
@@ -739,23 +743,23 @@ ${siteHeader('../', 'Recipes')}
 <main id="main">
   <section class="site-wrap site-hero">
     <h1 class="site-display">Motion recipes.</h1>
-    <p class="site-lead">${totalRecipes} live motion examples. Slow them down, read the formula, open the part.</p>
+    <p class="site-lead">${totalRecipes} live motion examples — slow them down, read the formula.</p>
   </section>
   <div class="recipes-toolbar" data-recipes-toolbar role="region" aria-label="Recipe filters and playback controls">
     <div class="recipes-toolbar-inner">
-      <input class="recipes-search" type="search" data-recipe-search placeholder="Filter ${totalRecipes} recipes, categories, or formulas…" aria-label="Filter motion recipes">
+      <input class="recipes-search" type="search" data-recipe-search placeholder="Filter recipes, formulas, or categories…" aria-label="Filter motion recipes">
       <select class="recipes-select" data-recipe-cat aria-label="Filter by category">
-        <option value="*">All categories (${totalRecipes})</option>
+        <option value="*">All categories</option>
         ${catOpts}
       </select>
       <div class="recipes-seg" data-recipe-fam role="group" aria-label="Motion family">
         <button type="button" data-fam="*" aria-pressed="true" aria-label="All families">All</button>
-        <button type="button" data-fam="M" aria-pressed="false" title="Morph" aria-label="Morph family">M</button>
-        <button type="button" data-fam="S" aria-pressed="false" title="Swap" aria-label="Swap family">S</button>
-        <button type="button" data-fam="D" aria-pressed="false" title="Drag" aria-label="Drag family">D</button>
-        <button type="button" data-fam="E" aria-pressed="false" title="Edges" aria-label="Edges family">E</button>
-        <button type="button" data-fam="X" aria-pressed="false" title="Enter and exit" aria-label="Enter and exit family">X</button>
-        <button type="button" data-fam="T" aria-pressed="false" title="Time" aria-label="Time family">T</button>
+        <button type="button" data-fam="M" aria-pressed="false" title="Morph" aria-label="Morph family">Morph</button>
+        <button type="button" data-fam="S" aria-pressed="false" title="Swap" aria-label="Swap family">Swap</button>
+        <button type="button" data-fam="D" aria-pressed="false" title="Drag" aria-label="Drag family">Drag</button>
+        <button type="button" data-fam="E" aria-pressed="false" title="Edges" aria-label="Edges family">Edges</button>
+        <button type="button" data-fam="X" aria-pressed="false" title="Enter and exit" aria-label="Enter and exit family">Enter</button>
+        <button type="button" data-fam="T" aria-pressed="false" title="Time" aria-label="Time family">Time</button>
       </div>
       <div class="recipes-seg" data-recipe-speed role="group" aria-label="Slow-motion time dilation">
         <button type="button" data-speed="1" aria-pressed="true">1×</button>

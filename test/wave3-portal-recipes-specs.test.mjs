@@ -158,3 +158,22 @@ test('6. M3-caliber component spec pages: stage toolbar, slow-mo, multi-platform
   assert.match(btnHtml, /<a data-workbench href="\.\.\/recipes\/">/);
   assert.ok(existsSync('site/doc-playground.js'));
 });
+
+test('7. Part pages group the rail into native toggleable sections and mark only motion parts for the spring controls', () => {
+  const btnHtml = readFileSync('site/components/Button.html', 'utf8');
+  const arHtml = readFileSync('site/components/AspectRatio.html', 'utf8');
+  // Native details/summary: keyboard toggling without custom JS, every group open by default.
+  for (const [html, name] of [[btnHtml, 'Button'], [arHtml, 'AspectRatio']]) {
+    assert.match(html, /<nav class="doc-rail" aria-label="On this page">/, `${name}: rail keeps its label`);
+    const groups = [...html.matchAll(/<details open><summary>([^<]+)<\/summary>/g)]
+      .map((m) => m[1].replace(/&amp;/g, '&'));
+    assert.deepEqual(groups, ['Preview & code', 'Anatomy & behavior', 'Reference', 'Guidance'], `${name}: grouped rail`);
+    for (const id of ['usage', 'anatomy', 'props', 'best']) assert.match(html, new RegExp(`href="#${id}"`), `${name}: anchor ${id}`);
+  }
+  // Spring/speed belong only on parts that read motion tokens; theme controls stay everywhere.
+  assert.match(btnHtml, /data-stage-toolbar data-stage-motion="true"/);
+  assert.match(arHtml, /data-stage-toolbar data-stage-motion="false"/);
+  const js = readFileSync('site/doc-playground.js', 'utf8');
+  assert.match(js, /dataset\.stageMotion/);
+  assert.match(js, /stageMotion === 'true'/);
+});

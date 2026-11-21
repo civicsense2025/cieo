@@ -19,11 +19,17 @@ body.cieo-docsite {
 .doc-rail { display: flex; flex-wrap: nowrap; align-items: center; gap: var(--cieo-space-2); overflow-x: auto; scrollbar-width: none; font-size: var(--cieo-text-small); }
 .doc-rail::-webkit-scrollbar { display: none; }
 .doc-rail .doc-label { flex: none; }
-.doc-rail a { flex: none; padding: var(--cieo-space-1) var(--cieo-space-3); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-pill); text-decoration: none; color: var(--cieo-color-muted); white-space: nowrap; }
+/* Collapsible sections in the sidebar: native details/summary, keyboard-operable, open by default. */
+.doc-rail details { min-inline-size: 0; }
+.doc-rail details > summary { cursor: pointer; color: var(--cieo-color-text); font-weight: var(--cieo-weight-medium); }
+.doc-rail details:not([open]) > summary { color: var(--cieo-color-muted); }
+.doc-rail details > a { display: block; }
+@media (max-width: 59.999rem) { .doc-rail details > a { display: inline-flex; } }
+.doc-rail a { flex: none; padding: var(--cieo-space-1) var(--cieo-space-3); border-radius: var(--cieo-radius-pill); background: var(--cieo-color-surface); text-decoration: none; color: var(--cieo-color-muted); white-space: nowrap; }
 @media (min-width: 60rem) {
   .doc-rail { display: grid; overflow: visible; align-content: start; gap: var(--cieo-space-1); position: sticky; inset-block-start: calc(var(--cieo-space-6) + var(--site-header-h)); font-size: var(--cieo-text-small); }
-  .doc-rail a { padding: var(--cieo-space-1) 0 var(--cieo-space-1) var(--cieo-space-3); border: 0; border-radius: 0; white-space: normal; border-inline-start: var(--cieo-border-width) solid var(--cieo-color-border); text-decoration: none; color: var(--cieo-color-muted); }
-  @media (hover: hover) { .doc-rail a:hover { color: var(--cieo-color-text); border-color: var(--cieo-color-border-strong); } }
+  .doc-rail a { padding: var(--cieo-space-1) 0 var(--cieo-space-1) var(--cieo-space-3); border: 0; border-radius: 0; white-space: normal; text-decoration: none; color: var(--cieo-color-muted); }
+  @media (hover: hover) { .doc-rail a:hover { color: var(--cieo-color-text); } }
 }
 .doc-label { display: block; font-size: var(--cieo-text-caption); letter-spacing: .02em; color: var(--cieo-color-subtle); }
 
@@ -46,7 +52,7 @@ body.cieo-docsite {
 .doc-main :not(pre) > code { padding: 0 .3em; border-radius: var(--cieo-radius-small); background: var(--cieo-color-sunken); font-size: .9em; }
 
 /* Import line: the one thing to copy. */
-.cieo-import-banner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--cieo-space-2) var(--cieo-space-4); padding: var(--cieo-space-3) var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: min(var(--cieo-radius-control), 1rem); background: var(--cieo-color-surface); }
+.cieo-import-banner { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--cieo-space-2) var(--cieo-space-4); padding: var(--cieo-space-3) var(--cieo-space-4); border-radius: min(var(--cieo-radius-control), 1rem); background: var(--cieo-color-sunken); }
 .cieo-import-banner p { grid-column: 1 / -1; margin: 0; font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
 .cieo-import-banner pre { margin: 0; overflow-x: auto; }
 .doc-icon-button { display: inline-flex; align-items: center; justify-content: center; padding: 0; inline-size: var(--cieo-control-small); }
@@ -60,8 +66,8 @@ body.cieo-docsite {
 }
 
 /* Example: a measured stage (a quiet 8px grid) and a code view, switched by real tabs. */
-.doc-example { border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: min(var(--cieo-radius-surface), var(--cieo-radius-control)); background: var(--cieo-color-surface); overflow: hidden; }
-.doc-tabs { display: flex; gap: var(--cieo-space-4); padding-inline: var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); }
+.doc-example { border-radius: min(var(--cieo-radius-surface), var(--cieo-radius-control)); background: var(--cieo-color-surface); overflow: hidden; }
+.doc-tabs { display: flex; gap: var(--cieo-space-4); padding-inline: var(--cieo-space-4); background: var(--cieo-color-sunken); }
 .doc-tabs [role="tab"] { padding: var(--cieo-space-3) 0; border: 0; border-block-end: 2px solid transparent; margin-block-end: -1px; background: none; color: var(--cieo-color-muted); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
 .doc-tabs [role="tab"][aria-selected="true"] { color: var(--cieo-color-text); border-block-end-color: var(--cieo-color-text); }
 .doc-stage { display: grid; place-items: center; min-block-size: 14rem; padding: var(--cieo-space-8) var(--cieo-space-4); background-color: var(--cieo-color-canvas); background-image: radial-gradient(circle at 1px 1px, var(--cieo-color-border) 1px, transparent 0); background-size: var(--cieo-space-2) var(--cieo-space-2); }
@@ -84,8 +90,8 @@ body.cieo-docsite {
 .doc-main td:first-child, .doc-main td:nth-child(2) { font-family: var(--cieo-font-mono); white-space: nowrap; }
 
 /* Guide: README sections as a two-column spec sheet on wide screens. */
-.doc-guide { display: grid; gap: var(--cieo-space-6); }
-.doc-guide > section { display: grid; gap: var(--cieo-space-2); padding-block-start: var(--cieo-space-4); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); }
+.doc-guide { display: grid; gap: var(--cieo-space-6); padding: var(--cieo-space-4); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
+.doc-guide > section { display: grid; gap: var(--cieo-space-2); }
 @media (min-width: 48rem) { .doc-guide > section { grid-template-columns: 11rem minmax(0, 1fr); gap: var(--cieo-space-6); } .doc-guide > section > h3 { font: var(--cieo-text-small)/1.6 var(--cieo-font-mono); color: var(--cieo-color-muted); font-weight: var(--cieo-weight-normal); } .doc-guide > section > :not(h3) { grid-column: 2; } }
 
 /* Do / don't: two verdicts, marked by a rule and a word, never by color alone. */
@@ -101,7 +107,7 @@ body.cieo-docsite {
 .doc-main .doc-tokens li { margin: 0; padding: var(--cieo-space-1) var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-small); font: var(--cieo-text-caption) var(--cieo-font-mono); }
 
 /* Footer */
-.doc-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--cieo-space-4); padding-block-start: var(--cieo-space-6); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
+.doc-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--cieo-space-4); padding-block-start: var(--cieo-space-6); font-size: var(--cieo-text-small); color: var(--cieo-color-muted); }
 .doc-foot nav { display: flex; gap: var(--cieo-space-4); }
 
 /* Index: a dense, scannable register rather than a card grid. */
@@ -127,12 +133,12 @@ body.cieo-docsite {
 .doc-speed-group { display: inline-flex; gap: 2px; padding: 2px; border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); }
 .doc-speed-group button { border: 0; background: none; color: var(--cieo-color-muted); font: var(--cieo-text-caption) var(--cieo-font-mono); padding: 3px 7px; border-radius: var(--cieo-radius-small); cursor: pointer; }
 .doc-speed-group button[aria-pressed="true"] { background: var(--cieo-color-text); color: var(--cieo-color-surface); }
-.doc-anatomy { margin: 0; display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
+.doc-anatomy { margin: 0; display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
 .doc-anatomy svg { inline-size: 100%; max-inline-size: 34rem; block-size: auto; color: var(--cieo-color-text); }
 .doc-anatomy-list { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2) var(--cieo-space-4); margin: 0; padding: 0; list-style: none; font-size: var(--cieo-text-small); }
 .doc-anatomy-list li { display: inline-flex; align-items: center; gap: var(--cieo-space-1); margin: 0; }
 .doc-anatomy-list b { display: inline-grid; place-items: center; inline-size: 1.25rem; block-size: 1.25rem; border-radius: 999px; background: var(--cieo-color-accent); color: var(--cieo-color-on-accent); font: var(--cieo-text-caption) var(--cieo-font-mono); }
-.doc-fsm { display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
+.doc-fsm { display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
 .doc-fsm-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cieo-space-3); }
 .doc-fsm-pill { padding: var(--cieo-space-1) var(--cieo-space-3); border-radius: var(--cieo-radius-control); background: var(--cieo-color-sunken); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); font: var(--cieo-text-small) var(--cieo-font-mono); }
 .doc-fsm-actions { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2); }
@@ -142,6 +148,6 @@ body.cieo-docsite {
 [data-preview] .cieo-p-tooltip-bubble, .tile-stage .cieo-p-tooltip-bubble { opacity: 1; }
 
 /* Other states of a part, drawn live under the main preview. */
-.doc-states { display: flex; flex-wrap: wrap; gap: var(--cieo-space-6) var(--cieo-space-6); margin-block-start: var(--cieo-space-8); padding-block-start: var(--cieo-space-6); border-block-start: var(--cieo-border-width) solid var(--cieo-color-border); }
+.doc-states { display: flex; flex-wrap: wrap; gap: var(--cieo-space-6) var(--cieo-space-6); margin-block-start: var(--cieo-space-8); padding-block-start: var(--cieo-space-6); }
 .doc-state { margin: 0; display: grid; gap: var(--cieo-space-2); justify-items: start; }
 .doc-state figcaption { font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-muted); }
