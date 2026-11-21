@@ -352,7 +352,8 @@ function buildRecipesCss() {
   place-items: center;
   user-select: none;
   -webkit-user-select: none;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin-top: 6px;
   color: var(--cieo-color-text);
   font: var(--cieo-text-small)/1.45 var(--cieo-font-sans);
