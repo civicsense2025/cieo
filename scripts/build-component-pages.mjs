@@ -34,6 +34,15 @@ function part(html, name, legacy) {
   return legacy();
 }
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').replace(/([A-Z])([A-Z][a-z])/g, '$1-$2').toLowerCase();
+const slug = (s) => kebab(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+// React's identifierPrefix handles useId(); static ids in preview props need their own namespace so a page's
+// preview and its live state variants cannot duplicate ids (WCAG 4.1.1). Rewrite ids and every id reference.
+function namespaceIds(html, prefix) {
+  return html.replace(/\sid="([^"]+)"/g, (m, id) => ` id="${prefix}${id}"`)
+    .replace(/\s(for|aria-controls|aria-labelledby|aria-describedby|aria-owns|headers)="([^"]+)"/g,
+      (m, attr, refs) => ` ${attr}="${refs.split(/\s+/).map((r) => prefix + r).join(' ')}"`)
+    .replace(/\shref="#([^"]+)"/g, (m, id) => ` href="#${prefix}${id}"`);
+}
 const version = JSON.parse(readFileSync(`${root}/package.json`, 'utf8')).version;
 
 const customizationMap = new Map(
@@ -168,7 +177,8 @@ for (const { dir, values } of entries) {
   const authored = part(html, 'preview', () => stripTrailingDiv(between(html, '<div data-preview>', '<div role="tablist"'))).replace(/\s+aria-modal="true"/g, '');
   const rendered = renderPreview ? await renderPreview(dir) : { error: 'dist/primitives is missing; run npm run build' };
   if (rendered.error) fallbacks.push(`${dir}: ${rendered.error}`);
-  const preview = (rendered.html ?? authored).replace(/\s+aria-modal="true"/g, '');
+  let preview = (rendered.html ?? authored).replace(/\s+aria-modal="true"/g, '');
+  if (rendered.html) preview = namespaceIds(preview, `pv-${kebab(dir)}-`);
   // Other states, drawn live under the main preview: every value of the first choice prop, and each on/off prop switched on.
   const variantKnobs = extractKnobs(manifest0(dir).properties);
   const states = [];
@@ -177,7 +187,7 @@ for (const { dir, values } of entries) {
     const tries = [...(enumKnob ? enumKnob.options.map((o) => [`${enumKnob.id}: ${o}`, { [enumKnob.id]: o }]) : []), ...variantKnobs.filter((k) => k.kind === 'boolean' && k.def !== 'true').slice(0, 2).map((k) => [k.id, { [k.id]: true }])];
     for (const [label, extra] of tries) {
       const out = await renderPreview(dir, new Set(), extra);
-      if (out.html && out.html !== rendered.html) states.push(`<figure class="doc-state"><div class="doc-state-stage">${out.html.replace(/\s+aria-modal="true"/g, '')}</div><figcaption>${esc(label)}</figcaption></figure>`);
+      if (out.html && out.html !== rendered.html) states.push(`<figure class="doc-state"><div class="doc-state-stage">${namespaceIds(out.html.replace(/\s+aria-modal="true"/g, ''), `pv-${kebab(dir)}-${slug(label)}-`)}</div><figcaption>${esc(label)}</figcaption></figure>`);
     }
   }
   const statesHtml = states.length > 1 ? `<div class="doc-states" aria-label="States">${states.join('')}</div>` : '';
