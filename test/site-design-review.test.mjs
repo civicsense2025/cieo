@@ -101,13 +101,22 @@ test('control edges use the strong border token and selected states are ink, not
   assert.match(block(fnd, '.fnd-tab-pill'), /border: [^;]*--cieo-color-text/);
 });
 
-test('coarse pointers get 44px targets for nav, search and every docs control family', () => {
+test('44px targets are unconditional for nav, search and every docs control family; coarse pointers keep the extras', () => {
   for (const f of ['site/site.css', 'site/doc.css', 'site/foundations/foundations.css', 'site/recipes/recipes.css']) {
     const css = read(f);
     assert.match(css, /@media \(pointer: coarse\)/, `${f} has a coarse-pointer rule`);
     assert.match(css, /min-(?:block-size|height): var\(--cieo-touch-target\)/, `${f} uses the touch-target token`);
   }
-  assert.match(read('site/site.css'), /pointer: coarse\)\s*\{[^}]*\.site-nav a[^}]*\.site-search-btn/s);
+  // WCAG 2.5.8: the 44px project default applies to every pointer type, not only coarse ones.
+  const css = read('site/site.css');
+  for (const sel of ['.site-nav a', '.site-search-btn', '.site-menu-btn', '.site-search-esc', '.segments button', '.copy-wrap > .copy-button']) {
+    assert.match(block(css, sel), /min-block-size: var\(--cieo-touch-target\)/, `${sel} is 44px for every pointer`);
+  }
+  const rec = read('site/recipes/recipes.css');
+  for (const sel of ['.recipes-search', '.recipes-select', '.recipes-seg button']) {
+    assert.match(block(rec, sel), /min-(?:block-size|height): var\(--cieo-touch-target\)/, `${sel} is 44px for every pointer`);
+  }
+  assert.match(css, /pointer: coarse\)\s*\{[^}]*\.site-footer nav a/s, 'coarse pointers still size the footer nav');
 });
 
 test('hover styles apply only where hover exists', () => {

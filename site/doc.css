@@ -65,9 +65,14 @@ body.cieo-docsite {
 .doc-tabs [role="tab"] { padding: var(--cieo-space-3) 0; border: 0; border-block-end: 2px solid transparent; margin-block-end: -1px; background: none; color: var(--cieo-color-muted); font: var(--cieo-weight-medium) var(--cieo-text-small) var(--cieo-font-sans); cursor: pointer; }
 .doc-tabs [role="tab"][aria-selected="true"] { color: var(--cieo-color-text); border-block-end-color: var(--cieo-color-text); }
 .doc-stage { display: grid; place-items: center; min-block-size: 14rem; padding: var(--cieo-space-8) var(--cieo-space-4); background-color: var(--cieo-color-canvas); background-image: radial-gradient(circle at 1px 1px, var(--cieo-color-border) 1px, transparent 0); background-size: var(--cieo-space-2) var(--cieo-space-2); }
+/* An open dropdown panel extends below its trigger; give the stage room so the full menu is visible, not cropped. */
+.doc-stage:has(.cieo-dropdown-menu-panel), .doc-state-stage:has(.cieo-dropdown-menu-panel) { min-block-size: 30rem; align-items: start; padding-block-start: var(--cieo-space-6); }
 .doc-stage > * { max-inline-size: 100%; }
 /* Fixed viewport surfaces sit inside the stage in documentation previews so they never float over the page. */
-.doc-stage :is(.cieo-toast, .cieo-dialog, .cieo-bottom-sheet, .cieo-lightbox) { position: static; translate: none; }
+.doc-stage :is(.cieo-toast, .cieo-dialog, .cieo-bottom-sheet, .cieo-lightbox),
+.doc-state-stage :is(.cieo-toast, .cieo-dialog, .cieo-bottom-sheet, .cieo-lightbox) { position: static; translate: none; }
+/* The popover positioner ships an inline position:fixed until measured; in a static preview it stays in flow. */
+.doc-stage .cieo-p-popover-position, .doc-state-stage .cieo-p-popover-position { position: static !important; }
 .doc-code { margin: 0; padding: var(--cieo-space-4); overflow-x: auto; background: var(--cieo-color-text); color: var(--cieo-color-surface); font-size: var(--cieo-text-small); line-height: 1.7; }
 [role="tabpanel"][hidden] { display: none; }
 
@@ -114,7 +119,7 @@ body.cieo-docsite {
 .doc-main .doc-register li + li { margin-block-start: 0; }
 .doc-main .doc-register h2 { display: flex; align-items: baseline; gap: var(--cieo-space-2); }
 
-/* Interactive Stage Toolbar, Telemetry HUD, SVG Anatomy, and FSM Matrix */
+/* Interactive Stage Toolbar, SVG Anatomy, and FSM Matrix */
 .doc-stage-bar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--cieo-space-2) var(--cieo-space-3); padding: var(--cieo-space-3) var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-sunken); }
 .doc-knob { display: inline-flex; flex-direction: column; gap: 2px; font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-muted); }
 .doc-knob select { min-block-size: 1.85rem; padding: 0 var(--cieo-space-2); border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); color: var(--cieo-color-text); font: var(--cieo-text-caption) var(--cieo-font-sans); }
@@ -122,7 +127,6 @@ body.cieo-docsite {
 .doc-speed-group { display: inline-flex; gap: 2px; padding: 2px; border: var(--cieo-border-width) solid var(--cieo-color-border-strong); border-radius: var(--cieo-radius-small); background: var(--cieo-color-surface); }
 .doc-speed-group button { border: 0; background: none; color: var(--cieo-color-muted); font: var(--cieo-text-caption) var(--cieo-font-mono); padding: 3px 7px; border-radius: var(--cieo-radius-small); cursor: pointer; }
 .doc-speed-group button[aria-pressed="true"] { background: var(--cieo-color-text); color: var(--cieo-color-surface); }
-.doc-telemetry { padding: var(--cieo-space-2) var(--cieo-space-4); border-block-end: var(--cieo-border-width) solid var(--cieo-color-border); background: var(--cieo-color-surface); font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-muted); font-variant-numeric: tabular-nums; }
 .doc-anatomy { margin: 0; display: grid; gap: var(--cieo-space-3); padding: var(--cieo-space-4); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
 .doc-anatomy svg { inline-size: 100%; max-inline-size: 34rem; block-size: auto; color: var(--cieo-color-text); }
 .doc-anatomy-list { display: flex; flex-wrap: wrap; gap: var(--cieo-space-2) var(--cieo-space-4); margin: 0; padding: 0; list-style: none; font-size: var(--cieo-text-small); }

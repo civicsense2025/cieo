@@ -131,7 +131,7 @@ function compactEmbeddedHtmlCss(source) {
 function buildRuntimeModule() {
   const core = readAtom('runtime.core.js');
   const shared = sharedFiles.map((f) => readAtom(f)).join('\n');
-  const raw = `${core}\n${shared}\nexport const recipeCore = {\n  S, EXIT, LAG, BLUR, STAGGER_MAX, ARRIVE, staggerAt, segmented, pollTally,\n  clock, now, clamp, lerp, px, $, $$, motionReduced, motionSettings,\n  resp, prog, Track, edges, Swap, Digits, drag, rb, mix, fade,\n  size, reflow, scrollState, frameLayout, money, measureW,\n  scene, ic, I, pop, openSet, outside, plate, relRect, wordSpans, bandColor, mapBg,\n  get PhotoKit() { return globalThis.PhotoKit; }\n};\n`;
+  const raw = `${core}\n${shared}\nexport const recipeCore = {\n  S, EXIT, LAG, BLUR, STAGGER_MAX, ARRIVE, staggerAt, segmented, pollTally,\n  clock, now, clamp, lerp, px, $, $$, motionReduced, motionSettings,\n  resp, prog, Track, edges, Swap, Digits, drag, rb, mix, fade,\n  size, reflow, scrollState, frameLayout, money, measureW,\n  scene, ic, I, pop, openSet, outside, plate, relRect, wordSpans, bandColor, mapBg,\n  get REDUCE() { return REDUCE; },\n  get PhotoKit() { return globalThis.PhotoKit; }\n};\n`;
   const res = minifySync('runtime.js', raw);
   if (res.errors?.length) throw new Error(`Failed minifying runtime.js: ${res.errors[0].message}`);
   return res.code;
@@ -141,7 +141,7 @@ function buildCategoryChunk(cat) {
   const body = cat.files
     .map((f) => `{\nconst __file = ${JSON.stringify(f)};\n${compactEmbeddedHtmlCss(readAtom(f)).replace(/\batom\s*\(/g, 'atomWithFile(__file, ')}\n}`)
     .join('\n');
-  const src = `export function mountCategory(ctx) {\n  const { atom, S, EXIT, LAG, BLUR, STAGGER_MAX, ARRIVE, staggerAt, segmented, pollTally, clock, now, clamp, lerp, px, $, $$, motionReduced, motionSettings, resp, prog, Track, edges, Swap, Digits, drag, rb, mix, fade, size, reflow, scrollState, frameLayout, money, measureW, scene, ic, I, pop, openSet, outside, plate, relRect, wordSpans, bandColor, mapBg, PhotoKit } = ctx;\n  const atomWithFile = (file, o) => { o.file = file; atom(o); };\n${body}\n}\n`;
+  const src = `export function mountCategory(ctx) {\n  const { atom, S, EXIT, LAG, BLUR, STAGGER_MAX, ARRIVE, staggerAt, segmented, pollTally, clock, now, clamp, lerp, px, $, $$, motionReduced, motionSettings, resp, prog, Track, edges, Swap, Digits, drag, rb, mix, fade, size, reflow, scrollState, frameLayout, money, measureW, scene, ic, I, pop, openSet, outside, plate, relRect, wordSpans, bandColor, mapBg, PhotoKit } = ctx;\n  // Live reduced-motion flag, mirroring runtime.core.js. A spread of recipeCore would freeze the getter's value at mount.\n  const _motion = typeof matchMedia === 'function' ? matchMedia('(prefers-reduced-motion: reduce)') : { matches: false };\n  let REDUCE = _motion.matches;\n  _motion.addEventListener?.('change', e => { REDUCE = e.matches; });\n  const atomWithFile = (file, o) => { o.file = file; atom(o); };\n${body}\n}\n`;
   const res = minifySync(`${cat.slug}.js`, src);
   if (res.errors?.length) throw new Error(`Failed minifying chunk ${cat.slug}: ${res.errors[0].message}`);
   return res.code;
@@ -196,7 +196,7 @@ function buildRecipesCss() {
 .recipes-search {
   flex: 1 1 14rem;
   min-width: 12rem;
-  min-height: 2.25rem;
+  min-height: var(--cieo-touch-target);
   padding: 0 var(--cieo-space-3);
   border: var(--cieo-border-width) solid var(--cieo-color-border-strong);
   border-radius: var(--cieo-radius-control);
@@ -206,7 +206,7 @@ function buildRecipesCss() {
   font-size: var(--cieo-text-small);
 }
 .recipes-select {
-  min-height: 2.25rem;
+  min-height: var(--cieo-touch-target);
   padding: 0 var(--cieo-space-3);
   border: var(--cieo-border-width) solid var(--cieo-color-border-strong);
   border-radius: var(--cieo-radius-control);
@@ -233,6 +233,8 @@ function buildRecipesCss() {
   font-weight: var(--cieo-weight-medium);
   padding: var(--cieo-space-1) var(--cieo-space-2);
   border-radius: var(--cieo-radius-small);
+  min-block-size: var(--cieo-touch-target);
+  min-inline-size: var(--cieo-touch-target);
   cursor: pointer;
 }
 /* Selected is ink on paper, never a faint fill alone. */
@@ -241,9 +243,8 @@ function buildRecipesCss() {
   color: var(--cieo-color-on-accent);
 }
 @media (pointer: coarse) {
-  .recipes-search, .recipes-select, .recipes-seg button { min-height: var(--cieo-touch-target); }
-  .recipes-seg button { min-width: var(--cieo-touch-target); }
-  .recipe-comp-link, .tile > footer summary { display: inline-flex; align-items: center; min-height: var(--cieo-touch-target); }
+  /* Touch targets get a full 44px width as well as height on touch devices. */
+  .recipes-search, .recipes-select { min-inline-size: var(--cieo-touch-target); }
 }
 .recipes-count {
   margin-inline-start: auto;
@@ -338,23 +339,27 @@ function buildRecipesCss() {
   color: var(--cieo-color-accent);
   text-decoration: none;
   font-weight: var(--cieo-weight-medium);
+  min-block-size: var(--cieo-touch-target);
+  display: inline-flex;
+  align-items: center;
 }
 @media (hover: hover) { .recipe-comp-link:hover { text-decoration: underline; } }
 .stage {
   position: relative;
-  height: 300px;
+  min-block-size: 20rem;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   place-items: center;
   user-select: none;
   -webkit-user-select: none;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   margin-top: 6px;
-  color: var(--ink);
-  font: var(--cieo-text-small)/1.45 var(--sans);
+  color: var(--cieo-color-text);
+  font: var(--cieo-text-small)/1.45 var(--cieo-font-sans);
 }
-.tile.tall .stage, .tile.big .stage { height: 380px; }
-.tile.wide.tall .stage { height: 540px; }
+.tile.tall .stage, .tile.big .stage { min-block-size: 24rem; }
+.tile.wide.tall .stage { min-block-size: 32rem; }
 .tile > footer {
   padding: var(--cieo-space-3) var(--cieo-space-4) var(--cieo-space-4);
   border-block-start: var(--cieo-border-width) solid var(--cieo-color-border);
@@ -368,6 +373,9 @@ function buildRecipesCss() {
   font-size: var(--cieo-text-caption);
   color: var(--cieo-color-muted);
   user-select: none;
+  min-block-size: var(--cieo-touch-target);
+  display: inline-flex;
+  align-items: center;
 }
 .tile > footer p {
   margin: var(--cieo-space-2) 0;
@@ -390,13 +398,13 @@ function buildRecipesCss() {
   right: 0;
   text-align: center;
   font-size: var(--cieo-text-caption);
-  color: var(--faint);
+  color: var(--cieo-color-muted);
   pointer-events: none;
 }
-.ro { position: absolute; top: 10px; right: 14px; font-size: var(--cieo-text-caption); color: var(--faint); font-variant-numeric: tabular-nums; }
-.btn { border: var(--cieo-border-width) solid var(--line); background: var(--card); color: var(--ink); border-radius: var(--cieo-radius-control); padding: 6px 12px; font-size: 13px; font-weight: 500; cursor: pointer; }
-.btn.ink { background: var(--ink); color: var(--card); border-color: var(--ink); }
-.card { background: var(--card); border-radius: var(--cieo-radius-surface); }
+.ro { position: absolute; top: 10px; right: 14px; font-size: var(--cieo-text-caption); color: var(--cieo-color-subtle); font-variant-numeric: tabular-nums; }
+.btn { border: var(--cieo-border-width) solid var(--cieo-color-border-strong); background: var(--cieo-color-surface); color: var(--cieo-color-text); border-radius: var(--cieo-radius-control); padding: 6px 12px; font-size: 13px; font-weight: 500; cursor: pointer; }
+.btn.ink { background: var(--cieo-color-text); color: var(--cieo-color-surface); border-color: var(--cieo-color-text); }
+.card { background: var(--cieo-color-surface); border-radius: var(--cieo-radius-surface); }
 .layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
 .digits { display: inline-flex; font-variant-numeric: tabular-nums; }
 .dslot { position: relative; display: inline-block; height: 1.25em; overflow: hidden; vertical-align: bottom; }
@@ -404,7 +412,7 @@ function buildRecipesCss() {
 .pill { position: absolute; border-radius: 999px; }
 .row { display: flex; align-items: center; gap: 10px; }
 .col { display: flex; flex-direction: column; gap: 10px; }
-.muted { color: var(--muted); }
+.muted { color: var(--cieo-color-muted); }
 .small { font-size: 13px; }
 .num { font-variant-numeric: tabular-nums; }
 .recipe-placeholder {

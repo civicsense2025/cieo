@@ -1283,25 +1283,32 @@
    ]
   }
  },
+ "DropZone": {
+  "props": {
+   "label": "Source image",
+   "chooseLabel": "Choose image",
+   "hint": "PNG or JPEG · 25 MB max"
+  }
+ },
  "PaletteSwatches": {
   "props": {
    "label": "Accent color",
    "name": "accent",
    "swatches": [
     {
-     "value": "ink",
-     "label": "Ink",
-     "color": "#17150f"
+     "value": "accent",
+     "label": "Accent",
+     "color": "var(--cieo-color-accent)"
     },
     {
-     "value": "blue",
-     "label": "Blue",
-     "color": "#2865b2"
+     "value": "info",
+     "label": "Info",
+     "color": "var(--cieo-color-info)"
     },
     {
-     "value": "red",
-     "label": "Red",
-     "color": "#b0342f"
+     "value": "danger",
+     "label": "Danger",
+     "color": "var(--cieo-color-danger)"
     }
    ]
   }
@@ -1403,7 +1410,7 @@
     {
      "id": "g1",
      "title": "Yes",
-     "color": "#2f7d4f",
+     "color": "var(--cieo-color-success)",
      "members": [
       {
        "id": "m1",
@@ -1418,7 +1425,7 @@
     {
      "id": "g2",
      "title": "No",
-     "color": "#b0342f",
+     "color": "var(--cieo-color-danger)",
      "members": [
       {
        "id": "m3",
@@ -1520,15 +1527,15 @@
    "segments": [
     {
      "value": 60,
-     "color": "#2865b2"
+     "color": "var(--cieo-color-info)"
     },
     {
      "value": 30,
-     "color": "#b0342f"
+     "color": "var(--cieo-color-danger)"
     },
     {
      "value": 10,
-     "color": "#8a857a"
+     "color": "var(--cieo-color-border-strong)"
     }
    ]
   }
@@ -1739,32 +1746,32 @@
   "children": [
    {
     "$el": "Tab",
-    "props": {
-     "value": "overview"
-    },
-    "children": [
-     "Overview"
-    ]
+    "props": { "value": "overview", "id": "tabs-overview", "controls": "panel-overview" },
+    "children": ["Overview"]
    },
    {
     "$el": "Tab",
-    "props": {
-     "value": "activity"
-    },
-    "children": [
-     "Activity"
-    ]
+    "props": { "value": "activity", "id": "tabs-activity", "controls": "panel-activity" },
+    "children": ["Activity"]
    },
    {
     "$el": "Tab",
-    "props": {
-     "value": "settings"
-    },
-    "children": [
-     "Settings"
-    ]
+    "props": { "value": "settings", "id": "tabs-settings", "controls": "panel-settings" },
+    "children": ["Settings"]
    }
-  ]
+  ],
+  "scene": {
+   "$el": "div",
+   "props": { "style": { "display": "grid", "gap": "10px", "minWidth": "260px" } },
+   "children": [
+    { "$self": true },
+    { "$el": "div", "props": { "style": { "display": "grid", "gap": "8px", "padding": "12px", "background": "var(--cieo-color-sunken)", "borderRadius": "var(--cieo-radius-small)" } }, "children": [
+      { "$el": "div", "props": { "id": "panel-overview", "role": "tabpanel", "aria-labelledby": "tabs-overview", "hidden": true }, "children": ["Overview panel"] },
+      { "$el": "div", "props": { "id": "panel-activity", "role": "tabpanel", "aria-labelledby": "tabs-activity", "hidden": true }, "children": ["Activity panel"] },
+      { "$el": "div", "props": { "id": "panel-settings", "role": "tabpanel", "aria-labelledby": "tabs-settings", "hidden": true }, "children": ["Settings panel"] }
+    ]}
+   ]
+  }
  },
  "TabMenu": {
   "props": {
@@ -1774,32 +1781,32 @@
   "children": [
    {
     "$el": "Tab",
-    "props": {
-     "value": "overview"
-    },
-    "children": [
-     "Overview"
-    ]
+    "props": { "value": "overview", "id": "tabmenu-overview", "controls": "tabmenu-panel-overview" },
+    "children": ["Overview"]
    },
    {
     "$el": "Tab",
-    "props": {
-     "value": "activity"
-    },
-    "children": [
-     "Activity"
-    ]
+    "props": { "value": "activity", "id": "tabmenu-activity", "controls": "tabmenu-panel-activity" },
+    "children": ["Activity"]
    },
    {
     "$el": "Tab",
-    "props": {
-     "value": "settings"
-    },
-    "children": [
-     "Settings"
-    ]
+    "props": { "value": "settings", "id": "tabmenu-settings", "controls": "tabmenu-panel-settings" },
+    "children": ["Settings"]
    }
-  ]
+  ],
+  "scene": {
+   "$el": "div",
+   "props": { "style": { "display": "grid", "gap": "10px", "minWidth": "260px" } },
+   "children": [
+    { "$self": true },
+    { "$el": "div", "props": { "style": { "display": "grid", "gap": "8px", "padding": "12px", "background": "var(--cieo-color-sunken)", "borderRadius": "var(--cieo-radius-small)" } }, "children": [
+      { "$el": "div", "props": { "id": "tabmenu-panel-overview", "role": "tabpanel", "aria-labelledby": "tabmenu-overview", "hidden": true }, "children": ["Overview panel"] },
+      { "$el": "div", "props": { "id": "tabmenu-panel-activity", "role": "tabpanel", "aria-labelledby": "tabmenu-activity", "hidden": true }, "children": ["Activity panel"] },
+      { "$el": "div", "props": { "id": "tabmenu-panel-settings", "role": "tabpanel", "aria-labelledby": "tabmenu-settings", "hidden": true }, "children": ["Settings panel"] }
+    ]}
+   ]
+  }
  },
  "Table": {
   "props": {

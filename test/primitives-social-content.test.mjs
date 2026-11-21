@@ -265,9 +265,17 @@ test('NewItemsPill renders a named button only when there are items', () => {
 
 test('trimUrl stays linear on a long run of closing parentheses', () => {
   const input = 'https://a.com/' + ')'.repeat(50000);
-  const t0 = performance.now();
-  const tokens = tokenizeRichText(input);
-  assert.ok(performance.now() - t0 < 100, 'tokenizing 50k parens must be fast');
+  // The suite runs files in parallel, so one scheduling stall must not fail a linear scan.
+  // Five samples with a median assertion: stricter than best-of-three, still robust to a single stall.
+  const samples = [];
+  let tokens;
+  for (let i = 0; i < 5; i++) {
+    const t0 = performance.now();
+    tokens = tokenizeRichText(input);
+    samples.push(performance.now() - t0);
+  }
+  const median = samples.sort((a, b) => a - b)[2];
+  assert.ok(median < 100, `tokenizing 50k parens must be fast (median ${median.toFixed(1)}ms)`);
   assert.equal(tokens.map((t) => t.value).join(''), input);
 });
 

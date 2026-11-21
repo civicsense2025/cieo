@@ -2,7 +2,6 @@
 import { brands, createTheme, densities, grounds, radii, variables } from '../design/index.js';
 import { rovingTabs } from './roving-tabs.js';
 import { makeCopyButton } from './copy-button.js';
-import { S, settleTime } from '../dist/core/spring.js';
 import {
   createAsyncActionMachine,
   createDisclosureMachine,
@@ -19,8 +18,8 @@ import {
 const tabs = [...document.querySelectorAll('.doc-tabs [role="tab"]')];
 if (tabs.length) {
   const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls')));
-  // The stage toolbar and telemetry belong to the Preview panel only.
-  const previewOnly = [...document.querySelectorAll('[data-stage-toolbar], [data-telemetry]')];
+  // The stage toolbar belongs to the Preview panel only.
+  const previewOnly = [...document.querySelectorAll('[data-stage-toolbar]')];
   const setShown = (el, on) => { el.hidden = !on; el.style.display = on ? '' : 'none'; };
   const select = rovingTabs(tabs, (index) => {
     panels.forEach((panel, j) => { if (panel) setShown(panel, index === j); });
@@ -62,10 +61,9 @@ if (staticCopy) {
   staticCopy.replaceWith(copyBtn);
 }
 
-// 3. Interactive Stage Toolbar + Slow-Mo + Spring Telemetry HUD + Manifest Prop Knobs
+// 3. Interactive Stage Toolbar + Slow-Mo + Manifest Prop Knobs
 const toolbar = document.querySelector('[data-stage-toolbar]');
 const stage = document.querySelector('[data-preview]');
-const telemetry = document.querySelector('[data-telemetry]');
 const codeEl = document.querySelector('[data-code]');
 const baseCode = codeEl ? codeEl.textContent : '';
 
@@ -130,8 +128,6 @@ if (toolbar && stage) {
       : schemeRaw;
     const density = toolbar.querySelector('[data-stage-density]').value;
     const radius = toolbar.querySelector('[data-stage-radius]').value;
-    const presetName = toolbar.querySelector('[data-stage-preset]').value;
-    const cfg = S[presetName] || S.base;
 
     const theme = createTheme({ brand, ground, scheme, density, radius });
     const vars = variables(theme);
@@ -139,11 +135,6 @@ if (toolbar && stage) {
     stage.style.colorScheme = scheme;
 
     applyTimeScale();
-    const baseSettleMs = Math.round(settleTime(cfg) * 1000);
-    const dilatedMs = Math.round(baseSettleMs / speedScale);
-    if (telemetry) {
-      telemetry.textContent = `preset ${presetName} · ω ${cfg.w} rad/s · ζ 1.00 · settle ${dilatedMs} ms (${speedScale}×) · 0.0% overshoot`;
-    }
   };
 
   toolbar.querySelectorAll('select[data-stage-brand], select[data-stage-ground], select[data-stage-scheme], select[data-stage-density], select[data-stage-radius], select[data-stage-preset]')
@@ -279,7 +270,7 @@ if (fsmSection) {
         };
       }
       case 'reorder': {
-        const m = createReorderMachine({ items: ['one', 'two', 'three'] });
+        const m = createReorderMachine({ order: ['one', 'two', 'three'] });
         return {
           label: () => m.getSnapshot().order.join(' → '),
           snapshot: () => m.getSnapshot(),

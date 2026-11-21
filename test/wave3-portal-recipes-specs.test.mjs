@@ -145,10 +145,10 @@ test('5. Foundations portal renders all 6 interactive chapters with single h1 an
   assert.match(readFileSync('site/foundations/agents.html', 'utf8'), /square|antenna/i);
 });
 
-test('6. M3-caliber component spec pages: stage toolbar, slow-mo & telemetry HUD, multi-platform tabs, SVG anatomy, and live FSM matrix', () => {
+test('6. M3-caliber component spec pages: stage toolbar, slow-mo, multi-platform tabs, SVG anatomy, and live FSM matrix', () => {
   const btnHtml = readFileSync('site/components/Button.html', 'utf8');
   assert.match(btnHtml, /data-stage-toolbar/);
-  assert.match(btnHtml, /data-telemetry/);
+  assert.doesNotMatch(btnHtml, /data-telemetry/, 'the physics readout lives on the home instrument, not on every part page');
   assert.match(btnHtml, /Web \(React\)/);
   assert.match(btnHtml, /Web \(CLI \/ CSS\)/);
   assert.match(btnHtml, /Apple \(SwiftUI\)/);
