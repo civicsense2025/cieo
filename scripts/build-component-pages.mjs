@@ -35,11 +35,11 @@ function part(html, name, legacy) {
 }
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').replace(/([A-Z])([A-Z][a-z])/g, '$1-$2').toLowerCase();
 const slug = (s) => kebab(s).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-// React's identifierPrefix handles useId(); static ids in preview props need their own namespace so a page's
-// preview and its live state variants cannot duplicate ids (WCAG 4.1.1). Rewrite ids and every id reference.
+// Static ids in preview props need their own namespace so a page's preview and its live state
+// variants cannot duplicate ids (WCAG 4.1.1). React's useId() ids are rewritten here too.
 function namespaceIds(html, prefix) {
   return html.replace(/\sid="([^"]+)"/g, (m, id) => ` id="${prefix}${id}"`)
-    .replace(/\s(for|aria-controls|aria-labelledby|aria-describedby|aria-owns|headers)="([^"]+)"/g,
+    .replace(/\s(for|aria-controls|aria-labelledby|aria-describedby|aria-owns|aria-activedescendant|aria-errormessage|aria-details|headers|list|form)="([^"]+)"/g,
       (m, attr, refs) => ` ${attr}="${refs.split(/\s+/).map((r) => prefix + r).join(' ')}"`)
     .replace(/\shref="#([^"]+)"/g, (m, id) => ` href="#${prefix}${id}"`);
 }
