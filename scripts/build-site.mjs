@@ -35,10 +35,10 @@ export function facts(repo = root) {
 
 const HOME_PARTS = ['Button', 'Switch', 'Slider', 'SegmentedControl', 'Calendar', 'CommandPalette', 'Table', 'Card'];
 
-function page({ title, description, current, body, scripts = [], bodyClass = '', controls = false }) {
+function page({ title, description, current, body, scripts = [], bodyClass = '', controls = false, styles = [] }) {
   return `<!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="color-scheme" content="light dark">${siteStyles('./', false, controls)}</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="color-scheme" content="light dark">${siteStyles('./', false, controls)}${styles.map((href) => `<link rel="stylesheet" href="${href}">`).join('')}</head>
 <body class="cieo cieo-site${bodyClass}">
 ${siteHeader('./', current)}
 <main id="main">
@@ -52,37 +52,38 @@ ${scripts.map((s) => `<script type="module" src="${s}"></script>`).join('')}
 }
 
 function home(f) {
+  const featured = [
+    { chunk: 'data', id: 'donut' },
+    { chunk: 'data', id: 'bars' },
+    { chunk: 'data', id: 'counter' },
+    { chunk: 'content', id: 'stepper' },
+  ];
   return page({
     title: 'Cieo: motion that settles',
-    description: `Critically damped spring motion for the web and SwiftUI, and ${f.components} interface parts that move the same way.`,
+    description: `Critically damped spring motion for the web and SwiftUI, ${f.recipes} motion recipes and ${f.components} interface parts that all move the same way.`,
     current: '',
-    scripts: ['./home.js', './tile-fit.js'],
+    scripts: ['./home.js', './recipe-preview.js', './tile-fit.js'],
     controls: true,
+    styles: ['./recipes/recipes.css'],
     body: `<section class="site-wrap site-hero">
+  <p class="site-label">Spring motion · ${f.components} parts · ${f.recipes} recipes</p>
   <h1 class="site-display">Motion that settles.</h1>
-  <p class="site-lead">Spring motion and ${f.components} interface parts. No overshoot, nothing to tune.</p>
-  <div class="site-actions"><a class="site-btn" href="./components/">Browse the library</a><a class="site-btn" data-variant="ring" href="#install">Install</a></div>
+  <p class="site-lead">No overshoot, nothing to tune. Every interaction is a closed-form spring, in React and SwiftUI — and ${f.recipes} recipes show the exact motion behind it.</p>
+  <div class="site-actions"><a class="site-btn" href="./recipes/">Explore ${f.recipes} recipes</a><a class="site-btn" data-variant="ring" href="#install">Install</a></div>
 </section>
 <section class="site-wrap" aria-labelledby="instrument-h">
-  <h2 id="instrument-h" class="site-sr">Watch both springs settle</h2>
+  <div class="site-section-head"><p class="site-label">The physics</p><h2 id="instrument-h" class="site-title">One target. Two springs.</h2><p class="site-lead">Same natural frequency, different damping. Move the target and watch one settle while the other rings.</p></div>
   <div class="instrument" data-instrument role="group" aria-label="Two springs chasing one target">
     <div class="lane" data-lane="settle"><div class="lane-head"><b>Cieo · critically damped</b><output>0.0% · v 0.00/s · overshoot 0.0%</output></div><div class="track"><div class="track-ticks"></div><span class="target"></span><span class="marker"></span></div></div>
     <div class="lane" data-lane="bounce"><div class="lane-head"><b>Typical bouncy spring</b><output>0.0% · v 0.00/s · overshoot 0.0%</output></div><div class="track"><div class="track-ticks"></div><span class="target"></span><span class="marker"></span></div></div>
-    <div class="instrument-controls"><div class="segments" role="group" aria-label="Move the target"><button type="button" data-target="0" aria-pressed="false">Left</button><button type="button" data-target="0.5" aria-pressed="false">Middle</button><button type="button" data-target="1" aria-pressed="true">Right</button></div><p class="instrument-note">Same natural frequency, different damping. Cieo settles in <span data-settle>0.42 s</span>. Click a track to set the target.</p></div>
+    <div class="instrument-controls"><div class="segments" role="group" aria-label="Move the target"><button type="button" data-target="0" aria-pressed="false">Left</button><button type="button" data-target="0.5" aria-pressed="false">Middle</button><button type="button" data-target="1" aria-pressed="true">Right</button></div><p class="instrument-note">Cieo settles in <span data-settle>0.42 s</span> with zero overshoot. Click a track to set the target.</p></div>
     <p class="site-sr" data-live aria-live="polite"></p>
   </div>
 </section>
-<section class="site-wrap" style="padding-block-start: var(--cieo-space-16)" aria-label="The library in numbers">
-  <div class="facts">
-    <div><span class="fact-number">${f.components}</span><span class="site-label">Components</span></div>
-    <div><span class="fact-number">${f.recipes}</span><span class="site-label">Motion recipes</span></div>
-    <div><span class="fact-number">${f.brands}</span><span class="site-label">Brands</span></div>
-    <div><span class="fact-number">AA</span><span class="site-label">Contrast audited</span></div>
-  </div>
-</section>
-<section class="site-wrap site-section" id="library" aria-label="The library, live">
-  <ul class="tiles">${HOME_PARTS.map((dir) => tileHtml(root, { dir, name: dir }, './components/')).join('')}</ul>
-  <p class="site-actions"><a class="site-btn" href="./components/">All ${f.components} parts</a></p>
+<section class="site-wrap site-section" aria-labelledby="recipes-h">
+  <div class="site-section-head"><p class="site-label">Motion recipes</p><h2 id="recipes-h" class="site-title">The library, in motion.</h2><p class="site-lead">Each recipe is one closed-form interaction — the live motion, its formula, and the component it belongs to. These four are running.</p></div>
+  <div class="recipe-preview-grid" data-recipe-preview="${esc(JSON.stringify(featured))}"></div>
+  <p class="site-actions"><a class="site-btn" href="./recipes/">Browse all ${f.recipes} recipes</a><a class="site-btn" data-variant="ring" href="./components/">Browse ${f.components} parts</a></p>
 </section>
 <section class="site-wrap site-section" id="install">
   <div class="site-section-head"><p class="site-label">Install</p><h2 class="site-title">Two lines to the first part.</h2></div>

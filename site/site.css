@@ -91,8 +91,19 @@ body.cieo-site {
 .site-section-head { display: grid; gap: var(--cieo-space-3); margin-block-end: var(--cieo-space-10); }
 .site-hero { display: grid; gap: var(--cieo-space-8); padding-block: clamp(var(--cieo-space-16), 12vw, 9rem) var(--cieo-space-16); }
 
+/* Recipe preview: four real, live recipes. Tonal surfaces only — no hairlines between cards. */
+.recipe-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--cieo-space-4); }
+.recipe-preview { display: flex; flex-direction: column; min-inline-size: 0; border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); overflow: hidden; }
+.recipe-preview > header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--cieo-space-1) var(--cieo-space-3); padding: var(--cieo-space-4) var(--cieo-space-4) var(--cieo-space-2); }
+.recipe-preview h3 { margin: 0; font-size: var(--cieo-text-small); font-weight: var(--cieo-weight-strong); }
+.recipe-preview .rp-cat { font: var(--cieo-text-caption) var(--cieo-font-mono); color: var(--cieo-color-subtle); }
+.recipe-preview .rp-stage { position: relative; display: grid; place-items: center; min-block-size: 15rem; padding: var(--cieo-space-4); overflow: auto; background: var(--cieo-color-canvas); color: var(--cieo-color-text); font: var(--cieo-text-small)/1.45 var(--cieo-font-sans); }
+.recipe-preview .rp-link { display: inline-flex; align-items: center; min-block-size: var(--cieo-touch-target); padding: var(--cieo-space-2) var(--cieo-space-4); color: var(--cieo-color-accent); font-size: var(--cieo-text-small); text-decoration: none; }
+@media (hover: hover) { .recipe-preview .rp-link:hover { text-decoration: underline; } }
+.recipe-preview .rp-note { padding: var(--cieo-space-4); color: var(--cieo-color-muted); font-size: var(--cieo-text-small); }
+
 /* The instrument: two springs, one target, measured. */
-.instrument { display: grid; gap: var(--cieo-space-6); padding: var(--cieo-space-6); border: var(--cieo-border-width) solid var(--cieo-color-border); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); box-shadow: 0 0 0 var(--cieo-ring-width) var(--cieo-color-border), 0 var(--cieo-shadow-y) var(--cieo-shadow-blur) color-mix(in srgb, var(--cieo-color-shadow) calc(var(--cieo-shadow-alpha) * 100%), transparent); }
+.instrument { display: grid; gap: var(--cieo-space-6); padding: var(--cieo-space-6); border-radius: var(--cieo-radius-surface); background: var(--cieo-color-surface); }
 @media (max-width: 40rem) { .instrument { padding: var(--cieo-space-4); } }
 .lane { display: grid; gap: var(--cieo-space-2); }
 .lane-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--cieo-space-1) var(--cieo-space-4); font: var(--cieo-text-caption)/1.5 var(--cieo-font-mono); letter-spacing: .04em; }

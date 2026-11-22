@@ -19,8 +19,9 @@ test('the committed pages are exactly what the builder produces', () => {
 test('the numbers on the home page are the repository counts', () => {
   const f = facts(), home = read('site/index.html');
   assert.equal(f.components, readdirSync('src/primitives', { withFileTypes: true }).filter((d) => d.isDirectory()).length);
-  assert.ok(home.includes(`<span class="fact-number">${f.components}</span>`));
-  assert.ok(home.includes(`<span class="fact-number">${f.recipes}</span>`));
+  // Counts now live in the hero kicker and the action links, not a facts band.
+  assert.ok(home.includes(`${f.components} parts · ${f.recipes} recipes`), 'home states the real counts');
+  assert.ok(home.includes(`Explore ${f.recipes} recipes`));
   assert.ok(home.includes(`v${f.version}`));
   const byLayer = Object.values(f.layers).reduce((a, b) => a + b, 0), core = f.components - Object.values(f.packs).reduce((a, b) => a + b, 0);
   assert.equal(byLayer, f.components);

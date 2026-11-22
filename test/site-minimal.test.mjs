@@ -6,11 +6,14 @@ import { readFileSync } from 'node:fs';
 const read = (p) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 const words = (html) => html.replace(/<(script|style|svg)[\s\S]*?<\/\1>|<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
 
-test('the home page shows live parts instead of explaining them', () => {
+test('the home page previews live recipes instead of explaining them', () => {
   const home = read('site/index.html');
-  assert.ok((home.match(/class="tile"/g) ?? []).length >= 8, 'a strip of live parts');
-  assert.doesNotMatch(home, /Three ideas|Foundations first|index-list/);
-  assert.ok(words(home) < 260, `home has ${words(home)} words`);
+  // Four real recipes are mounted into the preview grid by the module; the host and the module must be present.
+  assert.match(home, /class="recipe-preview-grid" data-recipe-preview="[^"]*donut/);
+  assert.match(home, /src="\.\/recipe-preview\.js"/);
+  assert.match(home, /src="\.\/home\.js"/, 'the physics instrument stays');
+  assert.doesNotMatch(home, /class="tile"|Three ideas|Foundations first|index-list/);
+  assert.ok(words(home) < 300, `home has ${words(home)} words`);
 });
 
 test('Foundations and Recipes open with a line, not a paragraph', () => {
