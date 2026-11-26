@@ -1,7 +1,5 @@
 const ownedData = new Set('direction detent sheet-handle morph-id content-key multiple phase-text body summary error agent-name lane-body conversation-row dragging label language list-item name sortable-id sortable-name author detail actions status-text text truncated active agent-id align auth-motion-frame auth-motion-pane auth-motion-phase badge checked chosen closed collapsed columns complete conversation-id copied count depth disabled dismissed empty entering filled focused following gap glyph grow grown half hand-raised has-active-icon hidden hold icon interactive invalid leader leaving level linked loading mine mode motion muted new on open orientation pane paused phase picked pin-id pinned placed placement playing presence pressed previewing query railed readonly reduced-motion results role score seekable selected seq shown side size sort sortable-active sortable-handle sorting span speaking star state status step swap tone type unread value variant view visible warning layout edge grayscale ground compact dragover backdrop fitted'.split(' ').map((key) => `data-${key}`));
 export function customizePart(part, defaultClass, ownedStyle, rootClassName) {
-    if (!part && !rootClassName)
-        return {};
     const result = {};
     if (part) {
         for (const [key, value] of Object.entries(part)) {
