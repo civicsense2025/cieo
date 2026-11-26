@@ -173,6 +173,13 @@ test('the stylesheet uses tokens only and reads motion from the shared motion to
   assert.match(css, /@keyframes /);
 });
 
+test('rules are separated by more space than the controls inside a rule, and the value field shares a line with Remove', () => {
+  const css = readFileSync('design/styles/primitives/filter-builder.css', 'utf8');
+  assert.match(css, /\.cieo-filter-builder-rules \{[^}]*gap: var\(--cieo-space-4\)/, 'space between rules');
+  assert.match(css, /\.cieo-filter-builder-rule \{[^}]*gap: var\(--cieo-space-2\)/, 'space inside a rule');
+  assert.match(css, /\.cieo-filter-builder-value \{[^}]*flex: 1 1 10rem/, 'value field grows and wraps with Remove');
+});
+
 test('the manifest and README follow the primitive contract', () => {
   const m = JSON.parse(readFileSync(`${DIR}/manifest.json`, 'utf8'));
   assert.equal(m.id, 'core.filter-builder');
