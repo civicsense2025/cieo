@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { classifyImport, scanImportSpecifiers, scanRegistrySources } from '../scripts/lib/registry.mjs';
+
+// The CLI keeps its own copy of the package map; a drift would make copied and generated imports disagree.
+test('the CLI and the generator map the same package areas', () => {
+  const areas = (file) => {
+    const body = readFileSync(file, 'utf8').match(/const PACKAGE_AREAS = \{([\s\S]*?)\};/)[1];
+    return Object.fromEntries([...body.matchAll(/['"]?([\w-]+)['"]?:\s*'([^']+)'/g)].map((m) => [m[1], m[2]]));
+  };
+  assert.deepEqual(areas('cli/lib/rewrite.mjs'), areas('scripts/lib/registry.mjs'));
+  assert.equal(areas('cli/lib/rewrite.mjs')['data-grid'], 'cieo/data-grid');
+});
 
 test('classifies each territory', () => {
   assert.deepEqual(classifyImport('react'), { kind: 'peer' });
@@ -14,6 +25,7 @@ test('classifies each territory', () => {
   assert.deepEqual(classifyImport('../../react/index.js'), { kind: 'package', packageImport: 'cieo/react' });
   assert.deepEqual(classifyImport('../../dom/scroll.js'), { kind: 'package', packageImport: 'cieo/dom' });
   assert.deepEqual(classifyImport('../../controls/Select.js'), { kind: 'package', packageImport: 'cieo/controls' });
+  assert.deepEqual(classifyImport('../../data-grid/index.js'), { kind: 'package', packageImport: 'cieo/data-grid' });
   assert.throws(() => classifyImport('../../utils/thing.js'), /Unclassified import '\.\.\/\.\.\/utils\/thing\.js'/);
   assert.throws(() => classifyImport('somewhere-else'), /Unclassified bare import/);
 });

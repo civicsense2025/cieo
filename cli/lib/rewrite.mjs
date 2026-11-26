@@ -6,6 +6,7 @@ const PACKAGE_AREAS = {
   controls: 'cieo/controls',
   design: 'cieo/design',
   agent: 'cieo/agent',
+  'data-grid': 'cieo/data-grid',
   core: 'cieo',
 };
 // Modules with their own package subpath, checked before the area they live in. Mirrored in scripts/lib/registry.mjs.
