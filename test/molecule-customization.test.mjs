@@ -48,5 +48,15 @@ test('customization rejects executable props and protects owned motion geometry'
   const {customizePart}=await import(new URL('primitives/customization.js',dist));
   const part=customizePart({className:'host',style:{transform:'none',padding:24},onClick(){},dangerouslySetInnerHTML:{__html:'bad'},role:'none','aria-hidden':true,'data-motion':'off','data-testid':'probe'},'library',{transform:'translateX(8px)'},'root');
   assert.deepEqual(part,{className:'library root host',style:{transform:'translateX(8px)',padding:24},'data-testid':'probe'});
-  assert.deepEqual(customizePart(undefined,'library'),{});
+  assert.deepEqual(customizePart(undefined),{});
+});
+
+test('customizePart keeps the default class when a primitive passes neither slotProps nor className',async()=>{
+  const {customizePart}=await import(new URL('primitives/customization.js',dist));
+  assert.deepEqual(customizePart(undefined,'library'),{className:'library'});
+  assert.deepEqual(customizePart({},'library'),{className:'library'});
+  assert.deepEqual(customizePart(undefined,'library',{opacity:1}),{className:'library'});
+  assert.deepEqual(customizePart(undefined,undefined),{});
+  assert.deepEqual(customizePart(undefined,''),{});
+  assert.deepEqual(customizePart(undefined,'library',undefined,'root'),{className:'library root'});
 });
