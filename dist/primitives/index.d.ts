@@ -109,6 +109,7 @@ export { placePopover, isSubmitShortcut, commentText, FeedbackPopover, type Popo
 export { Field, type FieldProps } from './Field/Field.js';
 export { FieldStatus, type FieldStatusProps } from './FieldStatus/FieldStatus.js';
 export { FileInput, type FileInputProps } from './FileInput/FileInput.js';
+export { FilterBuilder, type FilterBuilderProps } from './FilterBuilder/FilterBuilder.js';
 export { followLabel, FollowButton, type FollowButtonProps } from './FollowButton/FollowButton.js';
 export { FormLayout, type FormLayoutProps } from './FormLayout/FormLayout.js';
 export { FrameBar, type FrameBarProps } from './FrameBar/FrameBar.js';

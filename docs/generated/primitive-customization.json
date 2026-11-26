@@ -110,6 +110,7 @@
 {"name":"Field","layer":"molecule","status":"named-slots","parts":["root","label","help"],"contentSlots":["default"]},
 {"name":"FieldStatus","layer":"atom","status":"named-slots","parts":["root"],"contentSlots":[]},
 {"name":"FileInput","layer":"atom","status":"named-slots","parts":["root","label","input"],"contentSlots":[]},
+{"name":"FilterBuilder","layer":"molecule","status":"named-slots","parts":["root"],"contentSlots":[]},
 {"name":"FollowButton","layer":"atom","status":"named-slots","parts":["root"],"contentSlots":["default"]},
 {"name":"FormLayout","layer":"molecule","status":"named-slots","parts":["root"],"contentSlots":["default"]},
 {"name":"FrameBar","layer":"molecule","status":"named-slots","parts":["root"],"contentSlots":[]},

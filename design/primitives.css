@@ -103,6 +103,7 @@
 @import './styles/primitives/empty-state.css';
 @import './styles/primitives/feedback-popover.css';
 @import './styles/primitives/field-status.css';
+@import './styles/primitives/filter-builder.css';
 @import './styles/primitives/follow-button.css';
 @import './styles/primitives/formlayout.css';
 @import './styles/primitives/frame-bar.css';

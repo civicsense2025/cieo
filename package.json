@@ -523,6 +523,10 @@
       "types": "./dist/primitives/FileInput/FileInput.d.ts",
       "default": "./dist/primitives/FileInput/FileInput.js"
     },
+    "./FilterBuilder": {
+      "types": "./dist/primitives/FilterBuilder/FilterBuilder.d.ts",
+      "default": "./dist/primitives/FilterBuilder/FilterBuilder.js"
+    },
     "./FollowButton": {
       "types": "./dist/primitives/FollowButton/FollowButton.d.ts",
       "default": "./dist/primitives/FollowButton/FollowButton.js"

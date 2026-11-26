@@ -1,5 +1,8 @@
 # Site changelog
 
+## 2026-11-26
+- New part: FilterBuilder edits a table's filter rules inline. Each rule picks a property, an operator and a value that fits the property's type, and the page shows the rules working.
+
 ## 2026-11-18
 - Code blocks everywhere have an icon copy button; the icon swaps to a check on the kit's spring.
 - Library page is a grid of live, inert previews. Each part is shown in the screen it belongs to, outlined as the subject.

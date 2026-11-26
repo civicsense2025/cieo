@@ -223,7 +223,7 @@ test('canonical taxonomy aliases and schemas/component.schema.json exist and mat
   assert.equal(schema.type, 'object');
   const required = new Set(schema.required);
   const dirs = readdirSync('src/primitives', { withFileTypes: true }).filter((d) => d.isDirectory()).map((d) => d.name);
-  assert.equal(dirs.length, 254);
+  assert.equal(dirs.length, 255);
   for (const dir of dirs) {
     const m = JSON.parse(readFileSync(join('src/primitives', dir, 'manifest.json'), 'utf8'));
     for (const req of required) assert.ok(Object.hasOwn(m, req), `${dir}/manifest.json missing required ${req}`);

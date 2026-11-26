@@ -111,6 +111,7 @@
     "Field",
     "FieldStatus",
     "FileInput",
+    "FilterBuilder",
     "FollowButton",
     "FormLayout",
     "FrameBar",
@@ -255,5 +256,5 @@
     "VerifiedBadge",
     "VoiceRecorder"
   ],
-  "count": 254
+  "count": 255
 }
