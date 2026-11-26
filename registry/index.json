@@ -1416,6 +1416,20 @@
         "parts.ts"
       ]
     },
+    "FilterBuilder": {
+      "files": [
+        "FilterBuilder/FilterBuilder.tsx"
+      ],
+      "registryDependencies": [],
+      "packageImports": [
+        "cieo/controls",
+        "cieo/data-grid"
+      ],
+      "sharedFiles": [
+        "customization.ts",
+        "parts.ts"
+      ]
+    },
     "FollowButton": {
       "files": [
         "FollowButton/FollowButton.tsx"

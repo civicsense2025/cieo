@@ -116,6 +116,7 @@ export { placePopover, isSubmitShortcut, commentText, FeedbackPopover } from './
 export { Field } from './Field/Field.js';
 export { FieldStatus } from './FieldStatus/FieldStatus.js';
 export { FileInput } from './FileInput/FileInput.js';
+export { FilterBuilder } from './FilterBuilder/FilterBuilder.js';
 export { followLabel, FollowButton } from './FollowButton/FollowButton.js';
 export { FormLayout } from './FormLayout/FormLayout.js';
 export { FrameBar } from './FrameBar/FrameBar.js';

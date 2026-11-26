@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { existsSync } from 'node:fs';
 
-const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', state: 'cieo/state', controls: 'cieo/controls', design: 'cieo/design', agent: 'cieo/agent', core: 'cieo' };
+const PACKAGE_AREAS = { react: 'cieo/react', dom: 'cieo/dom', live: 'cieo/live', state: 'cieo/state', controls: 'cieo/controls', design: 'cieo/design', agent: 'cieo/agent', 'data-grid': 'cieo/data-grid', core: 'cieo' };
 // Modules with their own package subpath, checked before the area they live in. Mirrored in cli/lib/rewrite.mjs.
 const PACKAGE_FILES = { 'agent/icons.js': 'cieo/agent-icons', 'state/react.js': 'cieo/state/react' };
 const ROOT_SHARED = { './parts.js': 'parts.ts', './customization.js': 'customization.ts' };

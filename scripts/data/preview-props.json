@@ -929,6 +929,44 @@
    }
   ]
  },
+ "FilterBuilder": {
+  "props": {
+   "properties": [
+    {
+     "id": "title",
+     "name": "Title",
+     "type": "text"
+    },
+    {
+     "id": "pages",
+     "name": "Pages",
+     "type": "number"
+    },
+    {
+     "id": "priority",
+     "name": "Priority",
+     "type": "select",
+     "options": [
+      "Low",
+      "High"
+     ]
+    }
+   ],
+   "value": [
+    {
+     "property": "title",
+     "operator": "contains",
+     "value": "pie"
+    },
+    {
+     "property": "pages",
+     "operator": "gte",
+     "value": "10"
+    }
+   ],
+   "onChange": "$fn"
+  }
+ },
  "Grid": {
   "props": {},
   "children": [
