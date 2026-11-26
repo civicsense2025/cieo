@@ -102,6 +102,17 @@ test('a stored choice that is no longer an option stays visible instead of showi
   assert.ok(optionValues(html).includes('Urgent'));
 });
 
+test('a checkbox rule that has not picked an operator shows a disabled empty choice and no value input', () => {
+  const unset = render({ value: [{ property: 'done', operator: 'unset' }] });
+  const empty = [...unset.matchAll(/<option\b([^>]*)>([^<]*)<\/option>/g)].find((m) => /\bvalue=""/.test(m[1]));
+  assert.ok(empty, 'empty choice');
+  assert.equal(empty[2], 'Choose an operator');
+  assert.match(empty[1], /\bdisabled=""/);
+  assert.deepStrictEqual(operatorValues(unset), ['checked', 'unchecked']);
+  assert.equal(findTag(unset, 'input', { 'aria-label': 'Filter 1 value' }), undefined);
+  assert.equal(optionValues(render({ value: [{ property: 'done', operator: 'checked' }] })).includes(''), false);
+});
+
 test('operators that compare nothing show no value input', () => {
   for (const rule of [{ property: 'title', operator: 'isEmpty' }, { property: 'done', operator: 'checked' }]) {
     assert.equal(findTag(render({ value: [rule] }), 'input', { 'aria-label': 'Filter 1 value' }), undefined, rule.operator);

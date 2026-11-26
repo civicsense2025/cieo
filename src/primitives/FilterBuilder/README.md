@@ -20,7 +20,7 @@ A labeled group holds one list item per rule: a property select, an operator sel
 
 Controlled: `value` is the rule list, and `onChange` receives the next list after an add, a change or a remove. The component keeps no rule state.
 
-A new rule uses the first property, its first operator and no value. A rule without a value hides no rows, so adding a rule never empties a table. The exception is a checkbox rule, which needs no value and filters at once.
+A new rule uses the first property and no value. A rule without a value hides no rows, so adding a rule never empties a table. A checkbox rule also starts without an operator: its operator choice shows as empty until the person picks Is checked or Is unchecked, and until then it hides no rows.
 
 Changing a rule's property keeps its operator when the new type offers it, and keeps its value only when the type stays the same.
 

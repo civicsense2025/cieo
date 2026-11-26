@@ -25,6 +25,7 @@ const OPERATOR_LABELS = {
     after: 'Is after',
     checked: 'Is checked',
     unchecked: 'Is unchecked',
+    unset: 'Choose an operator',
 };
 /* The property select's combobox in a rule. Rules are found by class, not by data attributes, which the customization contract keeps for hosts. */
 function propertyComboboxOf(root, index) {
@@ -69,10 +70,12 @@ export function FilterBuilder({ className, slotProps, properties, value, onChang
         const choices = properties.map((def) => ({ value: def.id, label: def.name }));
         return byId.has(rule.property) ? choices : [{ value: rule.property, label: 'Unknown property' }, ...choices];
     };
+    // The operator the select shows. A rule whose operator its type does not offer (a new checkbox rule) shows an empty choice until the person picks one.
+    const shownOperator = (rule, def) => def && OPERATORS_BY_TYPE[def.type].includes(rule.operator) ? rule.operator : '';
     const operatorChoices = (rule, def) => {
         const offered = def ? OPERATORS_BY_TYPE[def.type] : [];
-        const ops = offered.includes(rule.operator) ? offered : [rule.operator, ...offered];
-        return ops.map((op) => ({ value: op, label: operatorText(op) }));
+        const choices = offered.map((op) => ({ value: op, label: operatorText(op) }));
+        return shownOperator(rule, def) === '' ? [{ value: '', label: operatorText('unset'), disabled: true }, ...choices] : choices;
     };
     // The empty first choice keeps an unfinished rule showing "Choose a value" instead of the first option.
     const choiceOptions = (def, rule) => {
@@ -96,7 +99,7 @@ export function FilterBuilder({ className, slotProps, properties, value, onChang
     const rows = value.map((rule, index) => {
         const def = byId.get(rule.property);
         const n = index + 1;
-        return (_jsxs("li", { className: "cieo-filter-builder-rule", children: [_jsx(Select, { label: `Filter ${n} property`, hideLabel: true, options: propertyChoices(rule), value: rule.property, onValueChange: (id) => replaceAt(index, changeRuleProperty(rule, properties, id)) }), _jsx(Select, { label: `Filter ${n} operator`, hideLabel: true, options: operatorChoices(rule, def), value: rule.operator, onValueChange: (op) => replaceAt(index, { ...rule, operator: op }) }), valueControl(index, rule, def), _jsx(Button, { type: "button", variant: "ghost", size: "sm", "aria-label": `Remove filter ${n}`, onClick: () => remove(index), children: "Remove" })] }, index));
+        return (_jsxs("li", { className: "cieo-filter-builder-rule", children: [_jsx(Select, { label: `Filter ${n} property`, hideLabel: true, options: propertyChoices(rule), value: rule.property, onValueChange: (id) => replaceAt(index, changeRuleProperty(rule, properties, id)) }), _jsx(Select, { label: `Filter ${n} operator`, hideLabel: true, options: operatorChoices(rule, def), value: shownOperator(rule, def), onValueChange: (op) => replaceAt(index, { ...rule, operator: op }) }), valueControl(index, rule, def), _jsx(Button, { type: "button", variant: "ghost", size: "sm", "aria-label": `Remove filter ${n}`, onClick: () => remove(index), children: "Remove" })] }, index));
     });
     return (_jsxs("div", { ref: rootRef, role: "group", "aria-label": label, className: "cieo cieo-filter-builder", ...customizePart(slotProps?.root, 'cieo cieo-filter-builder', undefined, className), children: [value.length > 0 ? (_jsx("ol", { role: "list", className: "cieo-filter-builder-rules", children: rows })) : (_jsx("p", { className: "cieo-filter-builder-empty", children: emptyLabel })), properties.length > 0 ? (_jsx(Button, { type: "button", variant: "secondary", size: "sm", className: "cieo-filter-builder-add", onClick: add, children: addLabel })) : null] }));
 }

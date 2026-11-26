@@ -8,7 +8,9 @@ export type FilterOperator =
   | 'contains' | 'is' | 'isNot' | 'isEmpty' | 'isNotEmpty'
   | 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte'
   | 'before' | 'after'
-  | 'checked' | 'unchecked';
+  | 'checked' | 'unchecked'
+  /* Offered by no property type, so a rule holding it hides nothing. It marks a rule that has not picked an operator yet. */
+  | 'unset';
 
 const TEXT_OPERATORS: readonly FilterOperator[] = ['contains', 'is', 'isNot', 'isEmpty', 'isNotEmpty'];
 

@@ -30,6 +30,7 @@ const OPERATOR_LABELS: Readonly<Record<FilterOperator, string>> = {
   after: 'Is after',
   checked: 'Is checked',
   unchecked: 'Is unchecked',
+  unset: 'Choose an operator',
 };
 
 /* The property select's combobox in a rule. Rules are found by class, not by data attributes, which the customization contract keeps for hosts. */
@@ -101,10 +102,14 @@ export function FilterBuilder({
     return byId.has(rule.property) ? choices : [{ value: rule.property, label: 'Unknown property' }, ...choices];
   };
 
+  // The operator the select shows. A rule whose operator its type does not offer (a new checkbox rule) shows an empty choice until the person picks one.
+  const shownOperator = (rule: FilterRule, def: PropertyDef | undefined): FilterOperator | '' =>
+    def && OPERATORS_BY_TYPE[def.type].includes(rule.operator) ? rule.operator : '';
+
   const operatorChoices = (rule: FilterRule, def: PropertyDef | undefined): SelectOption[] => {
     const offered: readonly FilterOperator[] = def ? OPERATORS_BY_TYPE[def.type] : [];
-    const ops = offered.includes(rule.operator) ? offered : [rule.operator, ...offered];
-    return ops.map((op) => ({ value: op, label: operatorText(op) }));
+    const choices = offered.map((op) => ({ value: op, label: operatorText(op) }));
+    return shownOperator(rule, def) === '' ? [{ value: '', label: operatorText('unset'), disabled: true }, ...choices] : choices;
   };
 
   // The empty first choice keeps an unfinished rule showing "Choose a value" instead of the first option.
@@ -159,7 +164,7 @@ export function FilterBuilder({
           label={`Filter ${n} operator`}
           hideLabel
           options={operatorChoices(rule, def)}
-          value={rule.operator}
+          value={shownOperator(rule, def)}
           onValueChange={(op) => replaceAt(index, { ...rule, operator: op as FilterOperator })}
         />
         {valueControl(index, rule, def)}

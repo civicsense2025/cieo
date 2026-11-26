@@ -1,5 +1,5 @@
 import { type DataRow, type PropertyDef, type PropertyType } from './properties.js';
-export type FilterOperator = 'contains' | 'is' | 'isNot' | 'isEmpty' | 'isNotEmpty' | 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'before' | 'after' | 'checked' | 'unchecked';
+export type FilterOperator = 'contains' | 'is' | 'isNot' | 'isEmpty' | 'isNotEmpty' | 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'before' | 'after' | 'checked' | 'unchecked' | 'unset';
 /** The operators each property type offers. Number also offers is-not-empty, so a number column filters for filled cells the way other types do. */
 export declare const OPERATORS_BY_TYPE: Readonly<Record<PropertyType, readonly FilterOperator[]>>;
 export interface FilterRule {
