@@ -26,6 +26,8 @@ export declare function isEmptyValue(value: CellValue): boolean;
 export declare function numericValue(value: CellValue): number | null;
 /** True for a YYYY-MM-DD calendar day that exists. Matched exactly, so trim the text first. */
 export declare function isIsoDate(text: string): boolean;
+/** The trimmed text when the value is a real YYYY-MM-DD day; otherwise null. */
+export declare function isoDayOf(value: CellValue): string | null;
 /** The trimmed address when it is safe to put in an href; otherwise null. */
 export declare function safeLinkHref(text: string): string | null;
 /** The text a person sees or a CSV writes. A relation shows its label when the resolver knows the id, and the id otherwise. */

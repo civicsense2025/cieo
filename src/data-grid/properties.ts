@@ -75,6 +75,13 @@ export function isIsoDate(text: string): boolean {
   return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
 }
 
+/** The trimmed text when the value is a real YYYY-MM-DD day; otherwise null. */
+export function isoDayOf(value: CellValue): string | null {
+  if (typeof value !== 'string') return null;
+  const day = value.trim();
+  return isIsoDate(day) ? day : null;
+}
+
 /* An absolute http or https URL. Quotes, angle brackets, whitespace and control characters are refused, so the value is safe in an href attribute. */
 const LINK_TEXT = /^https?:\/\/[^\s"'<>\u0000-\u001f\u007f]+$/i;
 

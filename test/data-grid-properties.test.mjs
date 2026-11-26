@@ -2,9 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import {
-  PROPERTY_TYPES, isPropertyType, isEmptyValue, displayText, numericValue, isIsoDate,
+  PROPERTY_TYPES, isPropertyType, isEmptyValue, displayText, numericValue, isIsoDate, isoDayOf,
   safeLinkHref, cellOf, indexProperties, convertValue,
 } from '../dist/data-grid/index.js';
+
+test('isoDayOf returns the trimmed day only for a real YYYY-MM-DD string', () => {
+  assert.equal(isoDayOf(' 2026-11-26 '), '2026-11-26');
+  for (const bad of ['2026-02-30', 'soon', '', undefined, null, 20261126, true]) {
+    assert.equal(isoDayOf(bad), null, String(bad));
+  }
+});
 
 test('the property model has exactly the eight types', () => {
   assert.deepEqual([...PROPERTY_TYPES].sort(), ['checkbox', 'date', 'link', 'number', 'relation', 'select', 'status', 'text']);

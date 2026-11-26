@@ -1,5 +1,5 @@
 /* Sorting for data rows. Missing values sort last in both directions, equal rows keep their input order, and the input array is never changed. Pure TypeScript. */
-import { cellOf, displayText, indexProperties, isEmptyValue, isIsoDate, numericValue, } from './properties.js';
+import { cellOf, displayText, indexProperties, isEmptyValue, isoDayOf, numericValue, } from './properties.js';
 /* One collator for every text comparison. A fixed locale keeps the order the same on every reader's machine. */
 const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
 function compareNumbers(a, b) {
@@ -16,12 +16,6 @@ function optionRank(options) {
             ranks.set(option, index);
     });
     return (value) => ranks.get(displayText('select', value)) ?? options.length;
-}
-function dateKey(value) {
-    if (typeof value !== 'string')
-        return null;
-    const day = value.trim();
-    return isIsoDate(day) ? day : null;
 }
 function orderingFor(def) {
     switch (def.type) {
@@ -46,8 +40,8 @@ function orderingFor(def) {
         }
         case 'date':
             return {
-                missing: (value) => dateKey(value) === null,
-                compare: (a, b) => compareCodeUnits(dateKey(a) ?? '', dateKey(b) ?? ''),
+                missing: (value) => isoDayOf(value) === null,
+                compare: (a, b) => compareCodeUnits(isoDayOf(a) ?? '', isoDayOf(b) ?? ''),
             };
         default:
             // text, link and relation: natural text order.

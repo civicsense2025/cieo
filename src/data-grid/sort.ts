@@ -1,6 +1,6 @@
 /* Sorting for data rows. Missing values sort last in both directions, equal rows keep their input order, and the input array is never changed. Pure TypeScript. */
 import {
-  cellOf, displayText, indexProperties, isEmptyValue, isIsoDate, numericValue,
+  cellOf, displayText, indexProperties, isEmptyValue, isoDayOf, numericValue,
   type CellValue, type DataRow, type PropertyDef,
 } from './properties.js';
 
@@ -38,12 +38,6 @@ function optionRank(options: readonly string[]): (value: CellValue) => number {
   return (value) => ranks.get(displayText('select', value)) ?? options.length;
 }
 
-function dateKey(value: CellValue): string | null {
-  if (typeof value !== 'string') return null;
-  const day = value.trim();
-  return isIsoDate(day) ? day : null;
-}
-
 function orderingFor(def: PropertyDef): Ordering {
   switch (def.type) {
     case 'number':
@@ -67,8 +61,8 @@ function orderingFor(def: PropertyDef): Ordering {
     }
     case 'date':
       return {
-        missing: (value) => dateKey(value) === null,
-        compare: (a, b) => compareCodeUnits(dateKey(a) ?? '', dateKey(b) ?? ''),
+        missing: (value) => isoDayOf(value) === null,
+        compare: (a, b) => compareCodeUnits(isoDayOf(a) ?? '', isoDayOf(b) ?? ''),
       };
     default:
       // text, link and relation: natural text order.
