@@ -65,6 +65,10 @@
       "types": "./dist/controls/index.d.ts",
       "default": "./dist/controls/index.js"
     },
+    "./data-grid": {
+      "types": "./dist/data-grid/index.d.ts",
+      "default": "./dist/data-grid/index.js"
+    },
     "./controls.css": "./dist/controls/controls.css",
     "./tokens.css": "./tokens/tokens.css",
     "./tokens.json": "./tokens/tokens.json",
