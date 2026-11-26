@@ -7,3 +7,4 @@ export { startsAsFormula, neutralizeFormula, restoreFormula } from './formula.js
 export { parseCsv } from './csv-parse.js';
 export { exportCsv } from './csv-export.js';
 export { importCsv, CSV_IMPORT_LIMITS } from './csv-import.js';
+export { applyView } from './view.js';

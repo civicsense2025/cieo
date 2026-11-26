@@ -6,3 +6,4 @@ export { startsAsFormula, neutralizeFormula, restoreFormula } from './formula.js
 export { parseCsv, type CsvParseResult } from './csv-parse.js';
 export { exportCsv } from './csv-export.js';
 export { importCsv, CSV_IMPORT_LIMITS, type CsvImportResult, type CsvImportReport } from './csv-import.js';
+export { applyView, type DataView } from './view.js';
