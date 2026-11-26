@@ -2,3 +2,4 @@
 export { PROPERTY_TYPES, isPropertyType, isEmptyValue, displayText, numericValue, isIsoDate, isoDayOf, safeLinkHref, cellOf, indexProperties, convertValue, } from './properties.js';
 export { sortRows } from './sort.js';
 export { filterRows, OPERATORS_BY_TYPE } from './filter.js';
+export { AGGREGATE_KINDS, aggregateValues, aggregateColumn } from './aggregate.js';
