@@ -26,10 +26,9 @@ const OPERATOR_LABELS = {
     checked: 'Is checked',
     unchecked: 'Is unchecked',
 };
-/* The first control of a rule: the combobox trigger of an enhanced select, otherwise the first native control. Rules and the add control are found by class, not by data attributes, which the customization contract keeps for hosts. */
-function firstControlOf(root, index) {
-    const row = root.querySelectorAll('.cieo-filter-builder-rule')[index];
-    return row?.querySelector('[role="combobox"]') ?? row?.querySelector('select, input, button') ?? null;
+/* The property select's combobox in a rule. Rules are found by class, not by data attributes, which the customization contract keeps for hosts. */
+function propertyComboboxOf(root, index) {
+    return root.querySelectorAll('.cieo-filter-builder-rule')[index]?.querySelector('[role="combobox"]') ?? null;
 }
 export function FilterBuilder({ className, slotProps, properties, value, onChange, label = 'Filters', emptyLabel = 'No filters. Every row is shown.', addLabel = 'Add filter', operatorLabels, }) {
     const rootRef = useRef(null);
@@ -43,8 +42,15 @@ export function FilterBuilder({ className, slotProps, properties, value, onChang
         if (target === null || !root)
             return;
         focusRef.current = null;
-        const el = target === 'add' ? root.querySelector('.cieo-filter-builder-add') : firstControlOf(root, target);
-        el?.focus();
+        // A select swaps its native control for a combobox after its first render, which can take a frame or two, so focus waits for it.
+        const focusWhenReady = (framesLeft) => {
+            const control = target === 'add' ? root.querySelector('.cieo-filter-builder-add') : propertyComboboxOf(root, target);
+            if (control)
+                control.focus();
+            else if (framesLeft > 0)
+                requestAnimationFrame(() => focusWhenReady(framesLeft - 1));
+        };
+        focusWhenReady(30);
     }, [value]);
     const replaceAt = (index, rule) => onChange(value.map((current, i) => (i === index ? rule : current)));
     const add = () => {
@@ -92,5 +98,5 @@ export function FilterBuilder({ className, slotProps, properties, value, onChang
         const n = index + 1;
         return (_jsxs("li", { className: "cieo-filter-builder-rule", children: [_jsx(Select, { label: `Filter ${n} property`, hideLabel: true, options: propertyChoices(rule), value: rule.property, onValueChange: (id) => replaceAt(index, changeRuleProperty(rule, properties, id)) }), _jsx(Select, { label: `Filter ${n} operator`, hideLabel: true, options: operatorChoices(rule, def), value: rule.operator, onValueChange: (op) => replaceAt(index, { ...rule, operator: op }) }), valueControl(index, rule, def), _jsx(Button, { type: "button", variant: "ghost", size: "sm", "aria-label": `Remove filter ${n}`, onClick: () => remove(index), children: "Remove" })] }, index));
     });
-    return (_jsxs("div", { ref: rootRef, role: "group", "aria-label": label, ...customizePart(slotProps?.root, 'cieo cieo-filter-builder', undefined, className), children: [value.length > 0 ? (_jsx("ol", { role: "list", className: "cieo-filter-builder-rules", children: rows })) : (_jsx("p", { className: "cieo-filter-builder-empty", children: emptyLabel })), properties.length > 0 ? (_jsx(Button, { type: "button", variant: "secondary", size: "sm", className: "cieo-filter-builder-add", onClick: add, children: addLabel })) : null] }));
+    return (_jsxs("div", { ref: rootRef, role: "group", "aria-label": label, className: "cieo cieo-filter-builder", ...customizePart(slotProps?.root, 'cieo cieo-filter-builder', undefined, className), children: [value.length > 0 ? (_jsx("ol", { role: "list", className: "cieo-filter-builder-rules", children: rows })) : (_jsx("p", { className: "cieo-filter-builder-empty", children: emptyLabel })), properties.length > 0 ? (_jsx(Button, { type: "button", variant: "secondary", size: "sm", className: "cieo-filter-builder-add", onClick: add, children: addLabel })) : null] }));
 }

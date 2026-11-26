@@ -124,6 +124,11 @@ test('every button has a name, every input is labeled, and every select has a la
   }
 });
 
+test('the group keeps its own classes when the host passes no customization', () => {
+  const root = findTag(render(), 'div', { role: 'group' });
+  assert.match(root, /class="cieo cieo-filter-builder"/);
+});
+
 test('the group takes a host label, class and root slot', () => {
   const html = render({
     label: 'Table filters', className: 'host-x', slotProps: { root: { className: 'host-y' } },

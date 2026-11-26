@@ -32,10 +32,9 @@ const OPERATOR_LABELS: Readonly<Record<FilterOperator, string>> = {
   unchecked: 'Is unchecked',
 };
 
-/* The first control of a rule: the combobox trigger of an enhanced select, otherwise the first native control. Rules and the add control are found by class, not by data attributes, which the customization contract keeps for hosts. */
-function firstControlOf(root: HTMLElement, index: number): HTMLElement | null {
-  const row = root.querySelectorAll<HTMLElement>('.cieo-filter-builder-rule')[index];
-  return row?.querySelector<HTMLElement>('[role="combobox"]') ?? row?.querySelector<HTMLElement>('select, input, button') ?? null;
+/* The property select's combobox in a rule. Rules are found by class, not by data attributes, which the customization contract keeps for hosts. */
+function propertyComboboxOf(root: HTMLElement, index: number): HTMLElement | null {
+  return root.querySelectorAll<HTMLElement>('.cieo-filter-builder-rule')[index]?.querySelector<HTMLElement>('[role="combobox"]') ?? null;
 }
 
 export interface FilterBuilderProps {
@@ -73,8 +72,13 @@ export function FilterBuilder({
     const root = rootRef.current;
     if (target === null || !root) return;
     focusRef.current = null;
-    const el = target === 'add' ? root.querySelector<HTMLElement>('.cieo-filter-builder-add') : firstControlOf(root, target);
-    el?.focus();
+    // A select swaps its native control for a combobox after its first render, which can take a frame or two, so focus waits for it.
+    const focusWhenReady = (framesLeft: number) => {
+      const control = target === 'add' ? root.querySelector<HTMLElement>('.cieo-filter-builder-add') : propertyComboboxOf(root, target);
+      if (control) control.focus();
+      else if (framesLeft > 0) requestAnimationFrame(() => focusWhenReady(framesLeft - 1));
+    };
+    focusWhenReady(30);
   }, [value]);
 
   const replaceAt = (index: number, rule: FilterRule) => onChange(value.map((current, i) => (i === index ? rule : current)));
@@ -167,7 +171,7 @@ export function FilterBuilder({
   });
 
   return (
-    <div ref={rootRef} role="group" aria-label={label} {...customizePart(slotProps?.root, 'cieo cieo-filter-builder', undefined, className)}>
+    <div ref={rootRef} role="group" aria-label={label} className="cieo cieo-filter-builder" {...customizePart(slotProps?.root, 'cieo cieo-filter-builder', undefined, className)}>
       {value.length > 0 ? (
         <ol role="list" className="cieo-filter-builder-rules">{rows}</ol>
       ) : (
