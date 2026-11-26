@@ -3,3 +3,5 @@ export { PROPERTY_TYPES, isPropertyType, isEmptyValue, displayText, numericValue
 export { sortRows } from './sort.js';
 export { filterRows, OPERATORS_BY_TYPE } from './filter.js';
 export { AGGREGATE_KINDS, aggregateValues, aggregateColumn } from './aggregate.js';
+export { startsAsFormula, neutralizeFormula, restoreFormula } from './formula.js';
+export { parseCsv } from './csv-parse.js';

@@ -8,3 +8,5 @@ export {
 export { sortRows, type SortRule, type SortDirection } from './sort.js';
 export { filterRows, OPERATORS_BY_TYPE, type FilterRule, type FilterOperator } from './filter.js';
 export { AGGREGATE_KINDS, aggregateValues, aggregateColumn, type AggregateKind } from './aggregate.js';
+export { startsAsFormula, neutralizeFormula, restoreFormula } from './formula.js';
+export { parseCsv, type CsvParseResult } from './csv-parse.js';
