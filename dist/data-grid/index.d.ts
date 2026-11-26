@@ -4,3 +4,4 @@ export { filterRows, OPERATORS_BY_TYPE, type FilterRule, type FilterOperator } f
 export { AGGREGATE_KINDS, aggregateValues, aggregateColumn, type AggregateKind } from './aggregate.js';
 export { startsAsFormula, neutralizeFormula, restoreFormula } from './formula.js';
 export { parseCsv, type CsvParseResult } from './csv-parse.js';
+export { exportCsv } from './csv-export.js';
